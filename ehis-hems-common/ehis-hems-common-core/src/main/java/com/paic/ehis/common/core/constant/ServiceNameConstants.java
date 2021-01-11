@@ -10,11 +10,11 @@ public class ServiceNameConstants
     /**
      * 认证服务的serviceid
      */
-    public static final String AUTH_SERVICE = "sino-auth";
+    public static final String AUTH_SERVICE = "ehis-hems-auth";
 
     /**
      * 系统模块的serviceid
      */
-    public static final String SYSTEM_SERVICE = "sino-system";
+    public static final String SYSTEM_SERVICE = "ehis-hems-system";
 
 }

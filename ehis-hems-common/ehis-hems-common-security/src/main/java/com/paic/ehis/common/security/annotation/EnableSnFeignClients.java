@@ -16,7 +16,7 @@ public @interface EnableSnFeignClients
 {
     String[] value() default {};
 
-    String[] basePackages() default { "com.sino" };
+    String[] basePackages() default { "com.paic" };
 
     Class<?>[] basePackageClasses() default {};
 

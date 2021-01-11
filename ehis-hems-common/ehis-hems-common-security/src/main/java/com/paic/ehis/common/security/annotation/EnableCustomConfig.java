@@ -17,7 +17,7 @@ import com.paic.ehis.common.security.config.SecurityImportBeanDefinitionRegistra
 // 表示通过aop框架暴露该代理对象,AopContext能够访问
 @EnableAspectJAutoProxy(exposeProxy = true)
 // 指定要扫描的Mapper类的包的路径
-@MapperScan("com.sino.**.mapper")
+@MapperScan("com.paic.ehis.**.mapper")
 // 开启线程异步执行
 @EnableAsync
 // 自动加载类

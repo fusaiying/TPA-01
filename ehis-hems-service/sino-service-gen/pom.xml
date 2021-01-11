@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ehis-hems-service-gen</artifactId>
+    <artifactId>sino-service-gen</artifactId>
 
     <description>
-        ehis-hems-service-gen代码生成
+        sino-service-gen代码生成
     </description>
 
     <dependencies>

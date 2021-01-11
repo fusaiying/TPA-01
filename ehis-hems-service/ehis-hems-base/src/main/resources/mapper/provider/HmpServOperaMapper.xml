@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpServOperaMapper">
+
+    <resultMap type="hmpServOpera" id="HpservcooperationResult">
+        <result property="servcomno" column="SERVCOMNO"/>
+        <result property="chname" column="CHNAME"/>
+        <result property="enname" column="ENNAME"/>
+        <result property="servcomtype" column="SERVCOMTYPE"/>
+        <result property="servcomattribute" column="SERVCOMATTRIBUTE"/>
+        <result property="medicaltype" column="MEDICALTYPE"/>
+        <result property="medicallevel" column="MEDICALLEVEL"/>
+        <result property="department" column="DEPARTMENT"/>
+        <result property="constate" column="CONSTATE"/>
+        <result property="payway" column="PAYWAY"/>
+        <result property="paytype" column="PAYTYPE"/>
+        <result property="qualifiedmdc" column="QUALIFIEDMDC"/>
+        <result property="contact" column="CONTACT"/>
+        <result property="postcode" column="POSTCODE"/>
+        <result property="expensive" column="EXPENSIVE"/>
+        <result property="instructions" column="INSTRUCTIONS"/>
+        <result property="trafficroute" column="TRAFFICROUTE"/>
+        <result property="continent" column="CONTINENT"/>
+        <result property="country" column="COUNTRY"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="district" column="DISTRICT"/>
+        <result property="website" column="WEBSITE"/>
+        <result property="detailedaddress" column="DETAILEDADDRESS"/>
+        <result property="remark" column="REMARK"/>
+        <result property="alternatefield1" column="ALTERNATEFIELD1"/>
+        <result property="alternatefield2" column="ALTERNATEFIELD2"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="makedate" column="MAKEDATE"/>
+        <result property="maketime" column="MAKETIME"/>
+        <result property="modifieddate" column="MODIFIEDDATE"/>
+        <result property="modifiedtime" column="MODIFIEDTIME"/>
+    </resultMap>
+    <sql id="selectHpservcooperationVo">
+        select a.ServComNo, a.ChName, a.EnName, (SELECT b.CodeName FROM Hmp_Code b  WHERE b.CodeType = 'servcomtype' AND b.code = a.servcomtype) AS ServComType, a.ServComAttribute, a.MedicalType, (SELECT b.codename FROM Hmp_Code b WHERE b.CodeType = 'organizationlevel' AND b.Code = a.MedicalLevel) AS MedicalLevel, a.Department, a.Constate, a.PayWay, a.PayType, a.QualifiedMdc, a.Contact, a.PostCode, a.Expensive, a.Instructions, a.TrafficRoute, a.Continent, (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.Country) AS country, (SELECT b.PlaceName FROM Hmp_Address b WHERE b.placecode = a.Province) AS province, (SELECT b.PlaceName FROM Hmp_Address b  WHERE b.placecode = a.city) AS city, (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.District) AS district, a.website, a.DetailedAddress, a.Remark, a.AlternateField1, a.AlternateField2, a.Operator, a.MakeDate, a.MakeTime, a.ModifiedDate, a.ModifiedTime from Hmp_Serv_Opera a
+    </sql>
+
+
+    <sql id="selectHpservcooperationVo1">
+        select ServComno, ChName, EnName, ServComtype, ServcomAttribute, MedicalType, MedicalLevel, Department, Constate, Payway, PayType, QualifiedMdc, Contact, PostCode, Expensive, Instructions, TrafficRoute, Continent, Country, Province, City, District, Website, DetailedAddress, Remark, AlternateField1, AlternateField2, Operator, MakeDate, MakeTime, ModifiedDate, ModifiedTime from Hmp_Serv_Opera a
+    </sql>
+    <!-- 根据条件进行查询 -->
+    <select id="selectHmpServOperaList" parameterType="HmpServOpera" resultMap="HpservcooperationResult">
+        <include refid="selectHpservcooperationVo"/>
+        <where>
+            <if test="servcomno != null  and servcomno != ''">AND a.ServComNo LIKE concat('%', #{servcomno}, '%')</if>
+            <if test="chname != null  and chname != ''">AND a.ChName LIKE concat('%', #{chname}, '%')</if>
+            <if test="enname != null  and enname != ''">AND a.EnName LIKE concat('%', #{enname}, '%')</if>
+            <if test="servcomtype != null  and servcomtype != ''">AND a.ServComType = #{servcomtype}</if>
+            <if test="servcomattribute != null  and servcomattribute != ''">AND a.ServComAttribute = #{servcomattribute}</if>
+            <if test="medicaltype != null  and medicaltype != ''">AND a.MedicalType = #{medicaltype}</if>
+            <if test="medicallevel != null  and medicallevel != ''">AND a.MedicalLevel = #{medicallevel}</if>
+            <if test="department != null  and department != ''">AND a.Department = #{department}</if>
+            <if test="constate != null  and constate != ''">AND a.Constate = #{constate}</if>
+            <if test="payway != null  and payway != ''">AND a.PayWay = #{payway}</if>
+            <if test="paytype != null  and paytype != ''">AND a.PayType = #{paytype}</if>
+            <if test="qualifiedmdc != null  and qualifiedmdc != ''">AND a.QualifiedMdc = #{qualifiedmdc}</if>
+            <if test="contact != null  and contact != ''">AND a.Contact = #{contact}</if>
+            <if test="postcode != null  and postcode != ''">AND a.PostCode = #{postcode}</if>
+            <if test="expensive != null  and expensive != ''">AND a.Expensive = #{expensive}</if>
+            <if test="instructions != null  and instructions != ''">AND a.Instructions = #{instructions}</if>
+            <if test="trafficroute != null  and trafficroute != ''">AND a.TrafficRoute = #{trafficroute}</if>
+            <if test="continent != null  and continent != ''">AND a.Continent = #{continent}</if>
+            <if test="country != null  and country != ''">AND a.Country = #{country}</if>
+            <if test="province != null  and province != ''">AND a.Province = #{province}</if>
+            <if test="city != null  and city != ''">AND a.City = #{city}</if>
+            <if test="district != null  and district != ''">AND a.District = #{district}</if>
+            <if test="website != null  and website != ''">AND a.Website = #{website}</if>
+            <if test="detailedaddress != null  and detailedaddress != ''">AND a.DetailedAddress = #{detailedaddress}
+            </if>
+            <if test="remark != null  and remark != ''">AND REMARK = #{remark}</if>
+            <if test="alternatefield1 != null  and alternatefield1 != ''">AND a.AlternateField1 = #{alternatefield1}
+            </if>
+            <if test="alternatefield2 != null  and alternatefield2 != ''">AND a.AlternateField2 = #{alternatefield2}
+            </if>
+            <if test="operator != null  and operator != ''">AND a.Operator = #{operator}</if>
+            <if test="makedate != null ">AND a.MakeDate = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''">AND a.MakeTime = #{maketime}</if>
+            <if test="modifieddate != null ">AND a.ModifiedDate = #{modifieddate}</if>
+            <if test="modifiedtime != null  and modifiedtime != ''">AND a.ModifiedTime = #{modifiedtime}</if>
+        </where>
+        ORDER BY a.ServComNo DESC
+    </select>
+
+    <select id="selectHmpServOperaById" parameterType="String" resultMap="HpservcooperationResult">
+        <include refid="selectHpservcooperationVo1"/>
+        where SERVCOMNO = #{servcomno}
+    </select>
+
+    <insert id="insertHmpServOpera" parameterType="HmpServOpera">
+        insert into Hmp_Serv_Opera
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="servcomno != null">SERVCOMNO,</if>
+            <if test="chname != null and chname != ''">CHNAME,</if>
+            <if test="enname != null">ENNAME,</if>
+            <if test="servcomtype != null and servcomtype != ''">SERVCOMTYPE,</if>
+            <if test="servcomattribute != null">SERVCOMATTRIBUTE,</if>
+            <if test="medicaltype != null">MEDICALTYPE,</if>
+            <if test="medicallevel != null">MEDICALLEVEL,</if>
+            <if test="department != null">DEPARTMENT,</if>
+            <if test="constate != null">CONSTATE,</if>
+            <if test="payway != null">PAYWAY,</if>
+            <if test="paytype != null">PAYTYPE,</if>
+            <if test="qualifiedmdc != null">QUALIFIEDMDC,</if>
+            <if test="contact != null and contact != ''">CONTACT,</if>
+            <if test="postcode != null">POSTCODE,</if>
+            <if test="expensive != null">EXPENSIVE,</if>
+            <if test="instructions != null">INSTRUCTIONS,</if>
+            <if test="trafficroute != null">TRAFFICROUTE,</if>
+            <if test="continent != null">CONTINENT,</if>
+            <if test="country != null">COUNTRY,</if>
+            <if test="province != null">PROVINCE,</if>
+            <if test="city != null">CITY,</if>
+            <if test="district != null">DISTRICT,</if>
+            <if test="website != null">WEBSITE,</if>
+            <if test="detailedaddress != null and detailedaddress != ''">DETAILEDADDRESS,</if>
+            <if test="remark != null">REMARK,</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1,</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2,</if>
+            <if test="operator != null and operator != ''">OPERATOR,</if>
+            <if test="makedate != null">MAKEDATE,</if>
+            <if test="maketime != null and maketime != ''">MAKETIME,</if>
+            <if test="modifieddate != null">MODIFIEDDATE,</if>
+            <if test="modifiedtime != null">MODIFIEDTIME,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="servcomno != null">#{servcomno},</if>
+            <if test="chname != null and chname != ''">#{chname},</if>
+            <if test="enname != null">#{enname},</if>
+            <if test="servcomtype != null and servcomtype != ''">#{servcomtype},</if>
+            <if test="servcomattribute != null">#{servcomattribute},</if>
+            <if test="medicaltype != null">#{medicaltype},</if>
+            <if test="medicallevel != null">#{medicallevel},</if>
+            <if test="department != null">#{department},</if>
+            <if test="constate != null">#{constate},</if>
+            <if test="payway != null">#{payway},</if>
+            <if test="paytype != null">#{paytype},</if>
+            <if test="qualifiedmdc != null">#{qualifiedmdc},</if>
+            <if test="contact != null and contact != ''">#{contact},</if>
+            <if test="postcode != null">#{postcode},</if>
+            <if test="expensive != null">#{expensive},</if>
+            <if test="instructions != null">#{instructions},</if>
+            <if test="trafficroute != null">#{trafficroute},</if>
+            <if test="continent != null">#{continent},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="website != null">#{website},</if>
+            <if test="detailedaddress != null and detailedaddress != ''">#{detailedaddress},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+            <if test="modifieddate != null">#{modifieddate},</if>
+            <if test="modifiedtime != null">#{modifiedtime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHmpServOpera" parameterType="HmpServOpera">
+        update Hmp_Serv_Opera
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chname != null and chname != ''">CHNAME = #{chname},</if>
+            <if test="enname != null">ENNAME = #{enname},</if>
+            <if test="servcomtype != null and servcomtype != ''">SERVCOMTYPE = #{servcomtype},</if>
+            <if test="servcomattribute != null">SERVCOMATTRIBUTE = #{servcomattribute},</if>
+            <if test="medicaltype != null">MEDICALTYPE = #{medicaltype},</if>
+            <if test="medicallevel != null">MEDICALLEVEL = #{medicallevel},</if>
+            <if test="department != null">DEPARTMENT = #{department},</if>
+            <if test="constate != null">CONSTATE = #{constate},</if>
+            <if test="payway != null">PAYWAY = #{payway},</if>
+            <if test="paytype != null">PAYTYPE = #{paytype},</if>
+            <if test="qualifiedmdc != null">QUALIFIEDMDC = #{qualifiedmdc},</if>
+            <if test="contact != null and contact != ''">CONTACT = #{contact},</if>
+            <if test="postcode != null">POSTCODE = #{postcode},</if>
+            <if test="expensive != null">EXPENSIVE = #{expensive},</if>
+            <if test="instructions != null">INSTRUCTIONS = #{instructions},</if>
+            <if test="trafficroute != null">TRAFFICROUTE = #{trafficroute},</if>
+            <if test="continent != null">CONTINENT = #{continent},</if>
+            <if test="country != null">COUNTRY = #{country},</if>
+            <if test="province != null">PROVINCE = #{province},</if>
+            <if test="city != null">CITY = #{city},</if>
+            <if test="district != null">DISTRICT = #{district},</if>
+            <if test="website != null">WEBSITE = #{website},</if>
+            <if test="detailedaddress != null and detailedaddress != ''">DETAILEDADDRESS = #{detailedaddress},</if>
+            <if test="remark != null">REMARK = #{remark},</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2 = #{alternatefield2},</if>
+            <if test="operator != null and operator != ''">OPERATOR = #{operator},</if>
+            <if test="makedate != null">MAKEDATE = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">MAKETIME = #{maketime},</if>
+            <if test="modifieddate != null">MODIFIEDDATE = #{modifieddate},</if>
+            <if test="modifiedtime != null">MODIFIEDTIME = #{modifiedtime},</if>
+        </trim>
+        where SERVCOMNO = #{servcomno}
+    </update>
+
+    <delete id="deleteHmpServOpera" parameterType="String">
+        delete from Hmp_Serv_Opera where SERVCOMNO = #{servcomno}
+    </delete>
+
+    <delete id="deleteHmpServOperaByIds" parameterType="String">
+        delete from Hmp_Serv_Opera where SERVCOMNO in
+        <foreach item="servcomno" collection="array" open="(" separator="," close=")">
+            #{servcomno}
+        </foreach>
+    </delete>
+
+
+    <!--
+        根据条件查询供应商网络
+        public List<NetworkVO> selectProviderNetwork(HmpServOpera hmpServOpera);
+    -->
+    <resultMap id="BaseNetworkResult" type="NetworkVO">
+        <id property="hmpServOpera.servcomno" column="servcomno" />
+        <result property="hmpServOpera.chname" column="chname" />
+        <result property="hmpServOpera.enname" column="enname" />
+        <result property="hmpServOpera.servcomtype" column="servcomtype" />
+        <result property="hmpServOpera.district" column="district" />
+        <result property="netnum" column="netnum" />
+    </resultMap>
+    <select id="selectProviderNetwork" resultMap="BaseNetworkResult" parameterType="HmpServOpera">
+        SELECT DISTINCT
+            b.ServComNo AS servcomno,
+            b.CHNAME AS chname,
+            b.EnName AS enname,
+            (SELECT PlaceName FROM Hmp_Address d WHERE d.PlaceCode = b.District) AS district,
+            (SELECT CODENAME FROM Hmp_Code WHERE CODETYPE = 'servcomtype'AND code = b.ServComType) AS servcomtype,
+            (SELECT COUNT(*) FROM Hmp_ComWebSite c WHERE b.ServComNo = c.ServComNo and c.AlternateField1 is null) AS netnum
+          FROM Hmp_serv_Opera b
+          <where>
+              <if test="servcomno != '' and servcomno != null">AND b.ServComNo LIKE CONCAT('%', #{servcomno}, '%')</if>
+              <if test="chname != '' and chname != null">AND b.ChName LIKE CONCAT('%', #{chname}, '%')</if>
+              <if test="district != '' and district != null">AND b.District LIKE CONCAT('%', #{district}, '%')</if>
+              <if test="medicallevel != '' and medicallevel != null">AND b.MedicalLevel = #{medicallevel}</if>
+              <if test="servcomtype != '' and servcomtype != null">AND b.ServComType = #{servcomtype}</if>
+          </where>
+    </select>
+
+
+    <!--
+        ==========网点管理==========
+    -->
+    <!--
+        根据供应商编码查询服务网点配置对象
+        public List<HmpComWebSite> selectHmpComWebSiteByNo(HmpComWebSite hmpComWebSite);
+    -->
+    <select id="selectHmpComWebSiteByNo" parameterType="HmpComWebSite" resultType="HmpComWebSite">
+        SELECT
+            ServComNo,
+            WebsiteCode,
+            WebsiteName,
+            LinkPerson,
+            Phone,
+            Email,
+            WorkTime,
+            Continent,
+            Country,
+            Province,
+            City,
+            District,
+            Address,
+            Remark,
+            SupServComName
+        FROM
+            Hmp_ComWebSite
+        WHERE
+            1 = 1
+            AND AlternateField1 IS NULL
+            AND ServComNo = #{servcomno}
+    </select>
+
+    <!--
+        根据服务网点编码删除服务网点配置对象
+        public int deleteHmpComWebSiteByIds(String[] websitecode);
+    -->
+    <delete id="deleteHmpComWebSiteByIds" parameterType="String">
+        DELETE FROM
+            Hmp_ComWebSite a
+        WHERE WebSiteCode
+        IN
+        <foreach item="websitecode" collection="array" open="(" separator="," close=")">
+            #{websitecode}
+        </foreach>
+    </delete>
+
+    <!--
+        根据服务网点对象 修改 服务网点配置对象
+        public int updateHmpComWebSiteById(HmpComWebSite hmpComWebSite);
+    -->
+    <update id="updateHmpComWebSiteById" parameterType="HmpComWebSite">
+        UPDATE
+          Hmp_ComWebSite
+        SET
+            `WebSiteName` = #{websitename},
+            `ServComNo` = #{servcomno},
+            `LinkPerson` = #{linkperson},
+            `Phone` = #{phone},
+            `Email` = #{email},
+            `WorkTime` = #{worktime},
+            `Continent` = #{continent},
+            `Country` = #{country},
+            `Province` = #{province},
+            `City` = #{city},
+            `District` = #{district},
+            `Address` = #{address},
+            `AlternateField1` = #{alternatefield1},
+            `AlternateField2` = #{alternatefield2},
+            `Remark` = #{remark},
+            `Operator` = #{operator},
+            `MakeDate` = #{makedate},
+            `MakeTime` = #{maketime},
+            `SupServComNo` = #{supservcomno},
+            `SupServComName` = #{supservcomname}
+            WHERE
+            `WebSiteCode` = #{websitecode};
+    </update>
+
+    <!--
+        新增 服务网点配置对象
+        public int insertHmpComWebSite(HmpComWebSite hmpComWebSite);
+    -->
+    <insert id="insertHmpComWebSite" parameterType="HmpComWebSite">
+        INSERT INTO
+            Hmp_ComwebSite
+            (`ServComno`, `WebSiteCode`, `WebSiteName`,
+             `LinkPerson`, `Phone`, `Email`,
+             `WorkTime`, `Continent`, `Country`,
+             `Province`, `City`, `District`,
+             `Address`, `AlternateField1`, `AlternateField2`,
+             `Remark`, `Operator`, `MakeDate`,
+             `MakeTime`, `SupServComNo`, `SupServComName`
+            )
+        VALUES
+            (#{servcomno}, #{websitecode}, #{websitename},
+             #{linkperson}, #{phone}, #{email},
+             #{worktime}, #{continent}, #{country},
+             #{province}, #{city}, #{district},
+             #{address}, #{alternatefield1}, #{alternatefield2},
+             #{remark}, #{operator}, #{makedate},
+             #{maketime}, #{supservcomno}, #{supservcomname}
+            )
+    </insert>
+
+    <!--
+        ======== 网点导入 ===========
+     -->
+    <!--
+        根据供应商编码查询服务网点配置对象 （解析码值后）
+        public List<HmpComWebSite> selectHmpComWebSiteByNoTrans(HmpComWebSite hmpComWebSite);
+
+    -->
+    <select id="selectHmpComWebSiteByNoTrans" parameterType="HmpComWebSite" resultType="HmpComWebSite">
+        SELECT
+            (SELECT b.ChName FROM Hmp_Serv_Opera b  WHERE b.ServComNo = a.ServComNo)AS ServComNo,
+            SupServComName,
+            WebSiteCode,
+            WebsiteName,
+            LinkPerson,
+            Phone,
+            Email,
+            WorkTime,
+            (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.Continent) AS Continent,
+            (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.Country) AS Country,
+            (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.Province) AS Province,
+            (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.City) AS City,
+            (SELECT b.PlaceName FROM Hmp_Address b WHERE b.PlaceCode = a.District) AS District,
+            Address,
+            Remark
+        FROM
+            Hmp_ComWebSite a
+        WHERE
+            1 = 1
+            AND AlternateField1 IS NULL
+            AND a.ServComNo = #{servcomno}
+    </select>
+
+
+    <!--
+        批量新增服务网点配置对象
+        public int insertHmpComWebSiteList(List<HmpComWebSite> hmpComWebSites);
+    -->
+    <insert id="insertHmpComWebSiteList" parameterType="HmpComWebSite">
+        INSERT INTO Hmp_ComwebSite
+         (
+            `SERVCOMNO`, `WEBSITECODE`, `WEBSITENAME`, `LINKPERSON`, `PHONE`, `EMAIL`,
+            `WORKTIME`, `CONTINENT`, `COUNTRY`, `PROVINCE`, `CITY`, `DISTRICT`,
+            `ADDRESS`, `ALTERNATEFIELD1`, `ALTERNATEFIELD2`, `REMARK`, `OPERATOR`, `MAKEDATE`,
+            `MAKETIME`, `SUPSERVCOMNO`, `SUPSERVCOMNAME`
+        )
+        VALUES
+        <foreach collection="list" item="hmpComWebSite" separator=",">
+            (#{hmpComWebSite.servcomno}, #{hmpComWebSite.websitecode}, #{hmpComWebSite.websitename},
+            #{hmpComWebSite.linkperson}, #{hmpComWebSite.phone}, #{hmpComWebSite.email},
+            #{hmpComWebSite.worktime}, #{hmpComWebSite.continent}, #{hmpComWebSite.country},
+            #{hmpComWebSite.province}, #{hmpComWebSite.city}, #{hmpComWebSite.district},
+            #{hmpComWebSite.address}, #{hmpComWebSite.alternatefield1}, #{hmpComWebSite.alternatefield2},
+            #{hmpComWebSite.remark}, #{hmpComWebSite.operator}, #{hmpComWebSite.makedate},
+            #{hmpComWebSite.maketime}, #{hmpComWebSite.supservcomno}, #{hmpComWebSite.supservcomname})
+        </foreach>
+    </insert>
+
+
+    <!--    ======= 医生网络-首页 ======     -->
+
+
+    <!-- ========= 服务实施-查询及处理 ============ -->
+
+    <!--
+        根据网点编码查询网点名称
+        HmpComWebSite selectHmpComWebSiteByCode(String websitecode);
+    -->
+    <select id="selectHmpComWebSiteByCode" resultType="HmpComWebSite" parameterType="String">
+        SELECT
+            *
+        FROM
+            hmp_comwebsite
+        WHERE
+            websitecode = #{websitecode}
+    </select>
+
+</mapper>

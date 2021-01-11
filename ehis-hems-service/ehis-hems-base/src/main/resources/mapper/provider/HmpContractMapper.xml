@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpContractMapper">
+    
+    <resultMap type="HmpContract" id="HpcontractResult">
+        <result property="contractno"    column="CONTRACTNO"    />
+        <result property="contractname"    column="CONTRACTNAME"    />
+        <result property="contracttype"    column="CONTRACTTYPE"    />
+        <result property="servcomno"    column="SERVCOMNO"    />
+        <result property="contractobjectname"    column="CONTRACTOBJECTNAME"    />
+        <result property="signdate"    column="SIGNDATE"    />
+        <result property="constate"    column="CONSTATE"    />
+        <result property="contracttermtype"    column="CONTRACTTERMTYPE"    />
+        <result property="cvalidate"    column="CVALIDATE"    />
+        <result property="expirydate"    column="EXPIRYDATE"    />
+        <result property="contractadvance"    column="CONTRACTADVANCE"    />
+        <result property="contractversion"    column="CONTRACTVERSION"    />
+        <result property="contractsort"    column="CONTRACTSORT"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="alternatefield1"    column="ALTERNATEFIELD1"    />
+        <result property="alternatefield2"    column="ALTERNATEFIELD2"    />
+        <result property="operator"    column="OPERATOR"    />
+        <result property="makedate"    column="MAKEDATE"    />
+        <result property="maketime"    column="MAKETIME"    />
+        <result property="modifyoperator"    column="MODIFYOPERATOR"    />
+        <result property="modifydate"    column="MODIFYDATE"    />
+        <result property="modifytime"    column="MODIFYTIME"    />
+    </resultMap>
+    <resultMap type="HmpServOpera" id="ContractObjResult">
+        <result property="servcomno"    column="SERVCOMNO"    />
+        <result property="chname"    column="CHNAME"    />
+    </resultMap>
+
+    <sql id="selectHpcontractVo">
+        select ContractNo, ContractName, ContractType, SERVCOMNO, ContractObjectName, SignDate, ConState, ContractTermType, CvaliDate, CvaliDateBegin, CvaliDateEnd, ExpiryDate, ContractAdvance, CONTRACTVERSION, CONTRACTSORT, Remark, ALTERNATEFIELD1, ALTERNATEFIELD2, OPERATOR, MAKEDATE, MAKETIME, MODIFYOPERATOR, MODIFYDATE, MODIFYTIME from Hmp_Contract
+    </sql>
+
+    <select id="selectHmpContractList" parameterType="HmpContract" resultMap="HpcontractResult">
+        <include refid="selectHpcontractVo"/>
+        <where>
+            <if test="contractno != null  and contractno != ''"> and ContractNo like concat('%', #{contractno}, '%')</if>
+            <if test="contractname != null  and contractname != ''"> and ContractName like concat('%', #{contractname}, '%')</if>
+            <if test="contracttype != null  and contracttype != ''"> and ContractType = #{contracttype}</if>
+            <if test="servcomno != null  and servcomno != ''"> and ServComNo = #{servcomno}</if>
+            <if test="contractobjectname != null  and contractobjectname != ''"> and ContractObjectName like concat('%', #{contractobjectname}, '%')</if>
+            <if test="constate != null  and constate != ''"> and CONSTATE = #{constate}</if>
+            <if test="contracttermtype != null  and contracttermtype != ''"> and ContractTermType = #{contracttermtype}</if>
+            <if test="contractadvance != null and contractadvance != '' "> and CONTRACTADVANCE = #{contractadvance}</if>
+            <if test="contractversion != null  and contractversion != ''"> and CONTRACTVERSION = #{contractversion}</if>
+            <if test="contractsort != null  and contractsort != ''"> and CONTRACTSORT = #{contractsort}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="alternatefield1 != null  and alternatefield1 != ''"> and ALTERNATEFIELD1 = #{alternatefield1}</if>
+            <if test="alternatefield2 != null  and alternatefield2 != ''"> and ALTERNATEFIELD2 = #{alternatefield2}</if>
+            <if test="operator != null  and operator != ''"> and OPERATOR = #{operator}</if>
+            <if test="makedate != null "> and MAKEDATE = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and MAKETIME = #{maketime}</if>
+            <if test="modifyoperator != null  and modifyoperator != ''"> and MODIFYOPERATOR = #{modifyoperator}</if>
+            <if test="modifydate != null "> and MODIFYDATE = #{modifydate}</if>
+            <if test="modifytime != null  and modifytime != ''"> and MODIFYTIME = #{modifytime}</if>
+            <if test="signdatebegin != null and signdatebegin != ''">
+                AND signdate BETWEEN #{signdatebegin} AND #{signdateend}
+            </if>
+            <if test="cvalidatebegin != null and cvalidatebegin != ''">
+                AND cvalidate BETWEEN #{cvalidatebegin} AND #{cvalidateend}
+            </if>
+            <if test="expirydatebegin != null and expirydatebegin != ''">
+                AND expirydate BETWEEN #{expirydatebegin} AND #{expirydateend}
+            </if>
+
+        </where>
+    </select>
+    
+    <select id="selectHmpContractById" parameterType="String" resultMap="HpcontractResult">
+        <include refid="selectHpcontractVo"/>
+        where CONTRACTNO = #{contractno}
+    </select>
+        
+    <insert id="insertHmpContract" parameterType="HmpContract">
+        insert into Hmp_Contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractno != null">CONTRACTNO,</if>
+            <if test="contractname != null and contractname != ''">CONTRACTNAME,</if>
+            <if test="contracttype != null and contracttype != ''">CONTRACTTYPE,</if>
+            <if test="servcomno != null and servcomno != ''">SERVCOMNO,</if>
+            <if test="contractobjectname != null">CONTRACTOBJECTNAME,</if>
+            <if test="signdate != null">SIGNDATE,</if>
+            <if test="constate != null and constate != ''">CONSTATE,</if>
+            <if test="contracttermtype != null">CONTRACTTERMTYPE,</if>
+            <if test="cvalidate != null">CVALIDATE,</if>
+            <if test="cvalidatebegin != null">CVALIDATEBEGIN,</if>
+            <if test="cvalidateend != null">CVALIDATEEND,</if>
+            <if test="expirydate != null">EXPIRYDATE,</if>
+            <if test="contractadvance != null">CONTRACTADVANCE,</if>
+            <if test="contractversion != null">CONTRACTVERSION,</if>
+            <if test="contractsort != null">CONTRACTSORT,</if>
+            <if test="remark != null">REMARK,</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1,</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2,</if>
+            <if test="operator != null and operator != ''">OPERATOR,</if>
+            <if test="makedate != null">MAKEDATE,</if>
+            <if test="maketime != null and maketime != ''">MAKETIME,</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR,</if>
+            <if test="modifydate != null">MODIFYDATE,</if>
+            <if test="modifytime != null and modifytime != ''">MODIFYTIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractno != null">#{contractno},</if>
+            <if test="contractname != null and contractname != ''">#{contractname},</if>
+            <if test="contracttype != null and contracttype != ''">#{contracttype},</if>
+            <if test="servcomno != null and servcomno != ''">#{servcomno},</if>
+            <if test="contractobjectname != null">#{contractobjectname},</if>
+            <if test="signdate != null">#{signdate},</if>
+            <if test="constate != null and constate != ''">#{constate},</if>
+            <if test="contracttermtype != null">#{contracttermtype},</if>
+            <if test="cvalidate != null">#{cvalidate},</if>
+            <if test="cvalidatebegin != null">#{cvalidatebegin},</if>
+            <if test="cvalidateend != null">#{cvalidateend},</if>
+            <if test="expirydate != null">#{expirydate},</if>
+            <if test="contractadvance != null">#{contractadvance},</if>
+            <if test="contractversion != null">#{contractversion},</if>
+            <if test="contractsort != null">#{contractsort},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+            <if test="modifyoperator != null">#{modifyoperator},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">#{modifytime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpContract" parameterType="HmpContract">
+        update Hmp_Contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractname != null and contractname != ''">CONTRACTNAME = #{contractname},</if>
+            <if test="contracttype != null and contracttype != ''">CONTRACTTYPE = #{contracttype},</if>
+            <if test="servcomno != null and servcomno != ''">SERVCOMNO = #{servcomno},</if>
+            <if test="contractobjectname != null">CONTRACTOBJECTNAME = #{contractobjectname},</if>
+            <if test="signdate != null">SIGNDATE = #{signdate},</if>
+            <if test="constate != null and constate != ''">CONSTATE = #{constate},</if>
+            <if test="contracttermtype != null">CONTRACTTERMTYPE = #{contracttermtype},</if>
+            <if test="cvalidate != null">CVALIDATE = #{cvalidate},</if>
+            <if test="cvalidatebegin != null">CVALIDATEBEGIN = #{cvalidatebegin},</if>
+            <if test="cvalidateend != null">CVALIDATEEND = #{cvalidateend},</if>
+            <if test="expirydate != null">EXPIRYDATE = #{expirydate},</if>
+            <if test="contractadvance != null">CONTRACTADVANCE = #{contractadvance},</if>
+            <if test="contractversion != null">CONTRACTVERSION = #{contractversion},</if>
+            <if test="contractsort != null">CONTRACTSORT = #{contractsort},</if>
+            <if test="remark != null">REMARK = #{remark},</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2 = #{alternatefield2},</if>
+            <if test="operator != null and operator != ''">OPERATOR = #{operator},</if>
+            <if test="makedate != null">MAKEDATE = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">MAKETIME = #{maketime},</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR = #{modifyoperator},</if>
+            <if test="modifydate != null">MODIFYDATE = #{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">MODIFYTIME = #{modifytime},</if>
+        </trim>
+        where CONTRACTNO = #{contractno}
+    </update>
+
+    <delete id="deleteHmpContractById" parameterType="String">
+        delete from Hmp_Contract where CONTRACTNO = #{contractno}
+    </delete>
+
+    <delete id="deleteHmpContractByIds" parameterType="String">
+        delete from Hmp_Contract where CONTRACTNO in
+        <foreach item="contractno" collection="array" open="(" separator="," close=")">
+            #{contractno}
+        </foreach>
+    </delete>
+
+    <select id="getContractObj" resultMap="ContractObjResult">
+        select SERVCOMNO, CHNAME from Hmp_Serv_Opera
+    </select>
+
+    <select id="getExpireContract" parameterType="String" resultMap="HpcontractResult">
+        select a.CONTRACTNO, a.CONTRACTNAME, a.EXPIRYDATE, a.CONTRACTADVANCE
+        from Hmp_Contract a
+        where a.contractno is not null
+        and ExpiryDate is not null
+        and ContractAdvance !=0
+        and DATE_SUB(a.ExpiryDate,INTERVAL a.ContractAdvance DAY) &lt;= #{nowday}
+        and a.ExpiryDate>=#{nowday}
+        and
+        <if test="nowday != null and nowday != ''">(a.alternatefield1 != #{nowday} or a.alternatefield1 is null)</if>
+    </select>
+    
+    <update id="updateAlternatefield1" parameterType="HmpContract">
+        update Hmp_Contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+        </trim>
+        where CONTRACTNO = #{contractno}
+    </update>
+
+
+    <!--
+        根据合约名称查合约信息
+        public HmpContract getContractByName(String contractName);
+    -->
+    <select id="getContractByName" resultType="HmpContract" parameterType="String">
+        SELECT * FROM Hmp_Contract WHERE ContractName = #{contractname}
+    </select>
+</mapper>

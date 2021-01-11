@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.ClaimBatchMapper">
+    
+    <resultMap type="com.paic.ehis.system.domain.ClaimBatch" id="ClaimBatchResult">
+        <result property="batchNo"    column="batch_no"    />
+        <result property="source"    column="source"    />
+        <result property="hospitalCode"    column="hospital_code"    />
+        <result property="claimType"    column="claim_type"    />
+        <result property="submitDate"    column="submit_date"    />
+        <result property="caseload"    column="caseload"    />
+        <result property="batchTotal"    column="batch_total"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="currency"    column="currency"    />
+        <result property="contType"    column="cont_type"    />
+        <result property="billRecevieFlag"    column="bill_recevie_flag"    />
+        <result property="priReason"    column="pri_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="batchStatus"    column="batch_status"    />
+        <result property="expressNumber"    column="express_number"    />
+        <result property="receiveDate"    column="receive_date"    />
+        <result property="sendBy"    column="send_by"    />
+        <result property="speccaseType"    column="speccase_type"    />
+        <result property="issuingUnit"    column="issuing_unit"    />
+        <result property="contNo"    column="cont_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimBatchVo">
+        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
+    </sql>
+
+    <select id="selectClaimBatchList" parameterType="com.paic.ehis.system.domain.ClaimBatch" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        <where>  
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="hospitalCode != null  and hospitalCode != ''"> and hospital_code = #{hospitalCode}</if>
+            <if test="claimType != null  and claimType != ''"> and claim_type = #{claimType}</if>
+            <if test="submitDate != null "> and submit_date = #{submitDate}</if>
+            <if test="caseload != null "> and caseload = #{caseload}</if>
+            <if test="batchTotal != null "> and batch_total = #{batchTotal}</if>
+            <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+            <if test="contType != null  and contType != ''"> and cont_type = #{contType}</if>
+            <if test="billRecevieFlag != null  and billRecevieFlag != ''"> and bill_recevie_flag = #{billRecevieFlag}</if>
+            <if test="priReason != null  and priReason != ''"> and pri_reason = #{priReason}</if>
+            <if test="batchStatus != null  and batchStatus != ''"> and batch_status = #{batchStatus}</if>
+            <if test="expressNumber != null  and expressNumber != ''"> and express_number = #{expressNumber}</if>
+            <if test="receiveDate != null "> and receive_date = #{receiveDate}</if>
+            <if test="sendBy != null  and sendBy != ''"> and send_by = #{sendBy}</if>
+            <if test="speccaseType != null  and speccaseType != ''"> and speccase_type = #{speccaseType}</if>
+            <if test="issuingUnit != null  and issuingUnit != ''"> and issuing_unit = #{issuingUnit}</if>
+            <if test="contNo != null  and contNo != ''"> and cont_no = #{contNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        where batch_no = #{batchNo}
+    </select>
+        
+    <insert id="insertClaimBatch" parameterType="com.paic.ehis.system.domain.ClaimBatch">
+        insert into claim_batch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null">batch_no,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="hospitalCode != null and hospitalCode != ''">hospital_code,</if>
+            <if test="claimType != null and claimType != ''">claim_type,</if>
+            <if test="submitDate != null">submit_date,</if>
+            <if test="caseload != null">caseload,</if>
+            <if test="batchTotal != null">batch_total,</if>
+            <if test="organCode != null and organCode != ''">organ_code,</if>
+            <if test="currency != null and currency != ''">currency,</if>
+            <if test="contType != null and contType != ''">cont_type,</if>
+            <if test="billRecevieFlag != null">bill_recevie_flag,</if>
+            <if test="priReason != null">pri_reason,</if>
+            <if test="remark != null">remark,</if>
+            <if test="batchStatus != null and batchStatus != ''">batch_status,</if>
+            <if test="expressNumber != null">express_number,</if>
+            <if test="receiveDate != null">receive_date,</if>
+            <if test="sendBy != null">send_by,</if>
+            <if test="speccaseType != null">speccase_type,</if>
+            <if test="issuingUnit != null">issuing_unit,</if>
+            <if test="contNo != null">cont_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null">#{batchNo},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="hospitalCode != null and hospitalCode != ''">#{hospitalCode},</if>
+            <if test="claimType != null and claimType != ''">#{claimType},</if>
+            <if test="submitDate != null">#{submitDate},</if>
+            <if test="caseload != null">#{caseload},</if>
+            <if test="batchTotal != null">#{batchTotal},</if>
+            <if test="organCode != null and organCode != ''">#{organCode},</if>
+            <if test="currency != null and currency != ''">#{currency},</if>
+            <if test="contType != null and contType != ''">#{contType},</if>
+            <if test="billRecevieFlag != null">#{billRecevieFlag},</if>
+            <if test="priReason != null">#{priReason},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="batchStatus != null and batchStatus != ''">#{batchStatus},</if>
+            <if test="expressNumber != null">#{expressNumber},</if>
+            <if test="receiveDate != null">#{receiveDate},</if>
+            <if test="sendBy != null">#{sendBy},</if>
+            <if test="speccaseType != null">#{speccaseType},</if>
+            <if test="issuingUnit != null">#{issuingUnit},</if>
+            <if test="contNo != null">#{contNo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimBatch" parameterType="com.paic.ehis.system.domain.ClaimBatch">
+        update claim_batch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="hospitalCode != null and hospitalCode != ''">hospital_code = #{hospitalCode},</if>
+            <if test="claimType != null and claimType != ''">claim_type = #{claimType},</if>
+            <if test="submitDate != null">submit_date = #{submitDate},</if>
+            <if test="caseload != null">caseload = #{caseload},</if>
+            <if test="batchTotal != null">batch_total = #{batchTotal},</if>
+            <if test="organCode != null and organCode != ''">organ_code = #{organCode},</if>
+            <if test="currency != null and currency != ''">currency = #{currency},</if>
+            <if test="contType != null and contType != ''">cont_type = #{contType},</if>
+            <if test="billRecevieFlag != null">bill_recevie_flag = #{billRecevieFlag},</if>
+            <if test="priReason != null">pri_reason = #{priReason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="batchStatus != null and batchStatus != ''">batch_status = #{batchStatus},</if>
+            <if test="expressNumber != null">express_number = #{expressNumber},</if>
+            <if test="receiveDate != null">receive_date = #{receiveDate},</if>
+            <if test="sendBy != null">send_by = #{sendBy},</if>
+            <if test="speccaseType != null">speccase_type = #{speccaseType},</if>
+            <if test="issuingUnit != null">issuing_unit = #{issuingUnit},</if>
+            <if test="contNo != null">cont_no = #{contNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where batch_no = #{batchNo}
+    </update>
+
+    <delete id="deleteClaimBatchById" parameterType="String">
+        delete from claim_batch where batch_no = #{batchNo}
+    </delete>
+
+    <delete id="deleteClaimBatchByIds" parameterType="String">
+        delete from claim_batch where batch_no in 
+        <foreach item="batchNo" collection="array" open="(" separator="," close=")">
+            #{batchNo}
+        </foreach>
+    </delete>
+    
+</mapper>

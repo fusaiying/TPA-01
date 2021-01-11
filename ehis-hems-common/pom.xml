@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.paic.ehis</groupId>
+        <artifactId>ehis-hems</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>ehis-hems-common-core</module>
+        <module>ehis-hems-common-log</module>
+        <module>ehis-hems-common-redis</module>
+        <module>ehis-hems-common-swagger</module>
+        <module>ehis-hems-common-security</module>
+        <module>ehis-hems-common-datascope</module>
+    </modules>
+
+    <artifactId>ehis-hems-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        ehis-hems-common通用依赖模块
+    </description>
+
+</project>

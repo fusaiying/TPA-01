@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpProdServComMapper">
+    
+    <resultMap type="HmpProdServCom" id="HmpProdServComResult">
+        <result property="productno"    column="productno"    />
+        <result property="serivcecomtype"    column="serivcecomtype"    />
+        <result property="serivcecomno"    column="serivcecomno"    />
+        <result property="contactcode"    column="contactcode"    />
+        <result property="alternatefield1"    column="alternatefield1"    />
+        <result property="alternatefield2"    column="alternatefield2"    />
+        <result property="operator"    column="operator"    />
+        <result property="makedate"    column="makedate"    />
+        <result property="maketime"    column="maketime"    />
+        <result property="modifydate"    column="modifydate"    />
+        <result property="modifytime"    column="modifytime"    />
+        <result property="servicecomcost"    column="servicecomcost"    />
+        <result property="payamount"    column="payamount"    />
+        <result property="settlementtype"    column="settlementtype"    />
+        <result property="serviceincomeamount"    column="serviceincomeamount"    />
+        <result property="remark"    column="remark"    />
+        <result property="invaild"    column="invaild"    />
+        <result property="currency"    column="currency"    />
+    </resultMap>
+
+    <resultMap type="SysDictData" id="SysDictDataResult">
+        <id     property="dictCode"   column="dict_code"   />
+        <result property="dictSort"   column="dict_sort"   />
+        <result property="dictLabel"  column="dict_label"  />
+        <result property="dictValue"  column="dict_value"  />
+        <result property="dictType"   column="dict_type"   />
+        <result property="cssClass"   column="css_class"   />
+        <result property="listClass"  column="list_class"  />
+        <result property="isDefault"  column="is_default"  />
+        <result property="status"     column="status"      />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <resultMap type="HmpComWebSite" id="HmpComWebSiteResult">
+        <result property="servcomno"    column="servcomno"    />
+        <result property="websitecode"    column="websitecode"    />
+        <result property="websitename"    column="websitename"    />
+        <result property="linkperson"    column="linkperson"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="worktime"    column="worktime"    />
+        <result property="continent"    column="continent"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="address"    column="address"    />
+        <result property="alternatefield1"    column="alternatefield1"    />
+        <result property="alternatefield2"    column="alternatefield2"    />
+        <result property="remark"    column="remark"    />
+        <result property="operator"    column="operator"    />
+        <result property="makedate"    column="makedate"    />
+        <result property="maketime"    column="maketime"    />
+        <result property="supservcomno"    column="supservcomno"    />
+        <result property="supservcomname"    column="supservcomname"    />
+    </resultMap>
+
+    <sql id="selectHmpProdServComVo">
+        select productno, serivcecomtype, serivcecomno, contactcode, alternatefield1, alternatefield2, operator, makedate, maketime, modifydate, modifytime, servicecomcost, payamount, settlementtype, serviceincomeamount, remark, invaild, currency from hmp_prod_servcom
+    </sql>
+
+    <select id="selectHmpProdServComList" parameterType="HmpProdServCom" resultMap="HmpProdServComResult">
+        <include refid="selectHmpProdServComVo"/>
+        <where>  
+            <if test="productno != null  and productno != ''"> and productno = #{productno}</if>
+            <if test="serivcecomtype != null  and serivcecomtype != ''"> and serivcecomtype = #{serivcecomtype}</if>
+            <if test="alternatefield1 != null  and alternatefield1 != ''"> and alternatefield1 = #{alternatefield1}</if>
+            <if test="alternatefield2 != null  and alternatefield2 != ''"> and alternatefield2 = #{alternatefield2}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="makedate != null "> and makedate = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and maketime = #{maketime}</if>
+            <if test="modifydate != null "> and modifydate = #{modifydate}</if>
+            <if test="modifytime != null  and modifytime != ''"> and modifytime = #{modifytime}</if>
+            <if test="servicecomcost != null "> and servicecomcost = #{servicecomcost}</if>
+            <if test="payamount != null "> and payamount = #{payamount}</if>
+            <if test="settlementtype != null  and settlementtype != ''"> and settlementtype = #{settlementtype}</if>
+            <if test="serviceincomeamount != null "> and serviceincomeamount = #{serviceincomeamount}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="invaild != null  and invaild != ''"> and invaild = #{invaild}</if>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpProdServComById" parameterType="String" resultMap="HmpProdServComResult">
+        <include refid="selectHmpProdServComVo"/>
+        where productno = #{productno}
+    </select>
+        
+    <insert id="insertHmpProdServCom" parameterType="HmpProdServCom">
+        insert into hmp_prod_servcom
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productno != null">productno,</if>
+            <if test="serivcecomtype != null">serivcecomtype,</if>
+            <if test="serivcecomno != null">serivcecomno,</if>
+            <if test="contactcode != null">contactcode,</if>
+            <if test="alternatefield1 != null">alternatefield1,</if>
+            <if test="alternatefield2 != null">alternatefield2,</if>
+            <if test="operator != null and operator != ''">operator,</if>
+            <if test="makedate != null">makedate,</if>
+            <if test="maketime != null and maketime != ''">maketime,</if>
+            <if test="modifydate != null">modifydate,</if>
+            <if test="modifytime != null and modifytime != ''">modifytime,</if>
+            <if test="servicecomcost != null">servicecomcost,</if>
+            <if test="payamount != null">payamount,</if>
+            <if test="settlementtype != null">settlementtype,</if>
+            <if test="serviceincomeamount != null">serviceincomeamount,</if>
+            <if test="remark != null">remark,</if>
+            <if test="invaild != null">invaild,</if>
+            <if test="currency != null">currency,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productno != null">#{productno},</if>
+            <if test="serivcecomtype != null">#{serivcecomtype},</if>
+            <if test="serivcecomno != null">#{serivcecomno},</if>
+            <if test="contactcode != null">#{contactcode},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">#{modifytime},</if>
+            <if test="servicecomcost != null">#{servicecomcost},</if>
+            <if test="payamount != null">#{payamount},</if>
+            <if test="settlementtype != null">#{settlementtype},</if>
+            <if test="serviceincomeamount != null">#{serviceincomeamount},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="invaild != null">#{invaild},</if>
+            <if test="currency != null">#{currency},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpProdServCom" parameterType="HmpProdServCom">
+        update hmp_prod_servcom
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serivcecomtype != null">serivcecomtype = #{serivcecomtype},</if>
+            <if test="serivcecomno != null">serivcecomno = #{serivcecomno},</if>
+            <if test="contactcode != null">contactcode = #{contactcode},</if>
+            <if test="alternatefield1 != null">alternatefield1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">alternatefield2 = #{alternatefield2},</if>
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="makedate != null">makedate = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">maketime = #{maketime},</if>
+            <if test="modifydate != null">modifydate = #{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">modifytime = #{modifytime},</if>
+            <if test="servicecomcost != null">servicecomcost = #{servicecomcost},</if>
+            <if test="payamount != null">payamount = #{payamount},</if>
+            <if test="settlementtype != null">settlementtype = #{settlementtype},</if>
+            <if test="serviceincomeamount != null">serviceincomeamount = #{serviceincomeamount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="invaild != null">invaild = #{invaild},</if>
+            <if test="currency != null">currency = #{currency},</if>
+        </trim>
+        where productno = #{productno}
+    </update>
+
+    <delete id="deleteHmpProdServComById" parameterType="String">
+        delete from hmp_prod_servcom where productno = #{productno}
+    </delete>
+
+    <delete id="deleteHmpProdServComByIds" parameterType="String">
+        delete from hmp_prod_servcom where productno in
+        <foreach item="productno" collection="array" open="(" separator="," close=")">
+            #{productno}
+        </foreach>
+    </delete>
+
+    <select id="selectSerivceComNo" parameterType="HmpProdServCom" resultMap="SysDictDataResult">
+        select distinct a.servcomno dict_value,a.chname dict_label from hmp_serv_opera a
+        where 1=1
+        and a.servcomtype = #{serivcecomtype}
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectServiceNetWorkList" parameterType="HmpProdServCom" resultMap="HmpComWebSiteResult">
+        select distinct c.websitecode, c.websitename from hmp_comwebsite c
+        where 1=1
+        and c.servcomno = #{serivcecomno}
+        and c.alternatefield1 is null
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <insert id="betchInsertHmpProdServCom">
+        insert into hmp_prod_servcom
+        (productno,serivcecomtype,serivcecomno,contactcode,alternatefield1,alternatefield2,operator,makedate,
+        maketime,modifydate,modifytime,servicecomcost,payamount,settlementtype,serviceincomeamount,remark,invaild,currency
+        ) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.productno},#{item.serivcecomtype},#{item.serivcecomno},#{item.contactcode},#{item.alternatefield1},#{item.alternatefield2},#{item.operator}
+            ,#{item.makedate},#{item.maketime},#{item.modifydate},#{item.modifytime},#{item.servicecomcost},#{item.payamount},#{item.settlementtype},#{item.serviceincomeamount}
+            ,#{item.remark},#{item.invaild},#{item.currency})
+        </foreach>
+    </insert>
+
+    <select id="queryServiceOrg" parameterType="String" resultMap="HmpProdServComResult">
+        <include refid="selectHmpProdServComVo"/>
+        where productno = #{productNo}
+    </select>
+
+    <select id="queryServiceNetWork" parameterType="String" resultMap="HmpComWebSiteResult">
+        select distinct c.websitecode, c.websitename from hmp_comwebsite c
+        where 1=1
+        and c.websitecode in (select contactcode from hmp_prod_servcom where productno = #{productNo})
+        and c.alternatefield1 is null
+    </select>
+    
+</mapper>

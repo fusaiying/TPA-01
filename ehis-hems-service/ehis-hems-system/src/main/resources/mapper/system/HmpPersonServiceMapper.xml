@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpPersonServiceMapper">
+    
+    <resultMap type="HmpPersonService" id="HmpPersonServiceResult">
+        <result property="personcode"    column="personcode"    />
+        <result property="name"    column="name"    />
+        <result property="sax"    column="sax"    />
+        <result property="idcardtype"    column="idcardtype"    />
+        <result property="idcardno"    column="idcardno"    />
+        <result property="phone"    column="phone"    />
+        <result property="productcode"    column="productcode"    />
+        <result property="servicecode"    column="servicecode"    />
+        <result property="servicecomcode"    column="servicecomcode"    />
+        <result property="contno"    column="contno"    />
+        <result property="servcardno"    column="servcardno"    />
+        <result property="applymode"    column="applymode"    />
+        <result property="applydate"    column="applydate"    />
+        <result property="managecom"    column="managecom"    />
+        <result property="status"    column="status"    />
+        <result property="operator"    column="operator"    />
+        <result property="makedate"    column="makedate"    />
+        <result property="maketime"    column="maketime"    />
+        <result property="modifydate"    column="modifydate"    />
+        <result property="modifytime"    column="modifytime"    />
+    </resultMap>
+
+    <sql id="selectHmpPersonServiceVo">
+        select personcode, name, sax, idcardtype, idcardno, phone, productcode, servicecode, servicecomcode, contno, servcardno, applymode, applydate, managecom, status, operator, makedate, maketime, modifydate, modifytime from hmp_person_service
+    </sql>
+
+    <select id="selectHmpPersonServiceList" parameterType="HmpPersonService" resultMap="HmpPersonServiceResult">
+        select personcode, name,
+        (select dict_label from sys_dict_data where dict_type = 'sys_user_sex' and dict_value = sax) sax,
+        (select dict_label from sys_dict_data where dict_type = 'service_idcard_type' and dict_value = idcardtype) idcardtype,
+        idcardno, phone,
+        (select productname from hmp_prod_info a where a.productno = productcode) productcode,
+        (select distinct projectname from hmp_serv_project a where a.projectcode = servicecode) servicecode,
+        (select chname from hmp_serv_opera a where a.servcomno = servicecomcode) servicecomcode,
+        contno, servcardno, applymode, applydate, managecom, status, operator, makedate, maketime, modifydate, modifytime from hmp_person_service
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sax != null  and sax != ''"> and sax = #{sax}</if>
+            <if test="idcardtype != null  and idcardtype != ''"> and idcardtype = #{idcardtype}</if>
+            <if test="idcardno != null  and idcardno != ''"> and idcardno = #{idcardno}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="productcode != null  and productcode != ''"> and productcode = #{productcode}</if>
+            <if test="servicecode != null  and servicecode != ''"> and servicecode = #{servicecode}</if>
+            <if test="servicecomcode != null  and servicecomcode != ''"> and servicecomcode = #{servicecomcode}</if>
+            <if test="contno != null  and contno != ''"> and contno = #{contno}</if>
+            <if test="servcardno != null  and servcardno != ''"> and servcardno = #{servcardno}</if>
+            <if test="applymode != null  and applymode != ''"> and applymode = #{applymode}</if>
+            <if test="managecom != null  and managecom != ''"> and managecom = #{managecom}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="params.beginTime != null and params.endTime != null"> and applydate between #{params.beginTime} and #{params.endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpPersonServiceById" parameterType="String" resultMap="HmpPersonServiceResult">
+        <include refid="selectHmpPersonServiceVo"/>
+        where personcode = #{personcode}
+    </select>
+        
+    <insert id="insertHmpPersonService" parameterType="HmpPersonService">
+        insert into hmp_person_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personcode != null">personcode,</if>
+            <if test="name != null">name,</if>
+            <if test="sax != null">sax,</if>
+            <if test="idcardtype != null">idcardtype,</if>
+            <if test="idcardno != null">idcardno,</if>
+            <if test="phone != null">phone,</if>
+            <if test="productcode != null">productcode,</if>
+            <if test="servicecode != null">servicecode,</if>
+            <if test="servicecomcode != null">servicecomcode,</if>
+            <if test="contno != null">contno,</if>
+            <if test="servcardno != null">servcardno,</if>
+            <if test="applymode != null">applymode,</if>
+            <if test="applydate != null">applydate,</if>
+            <if test="managecom != null">managecom,</if>
+            <if test="status != null">status,</if>
+            <if test="operator != null">operator,</if>
+            <if test="makedate != null">makedate,</if>
+            <if test="maketime != null">maketime,</if>
+            <if test="modifydate != null">modifydate,</if>
+            <if test="modifytime != null">modifytime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personcode != null">#{personcode},</if>
+            <if test="name != null">#{name},</if>
+            <if test="sax != null">#{sax},</if>
+            <if test="idcardtype != null">#{idcardtype},</if>
+            <if test="idcardno != null">#{idcardno},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="productcode != null">#{productcode},</if>
+            <if test="servicecode != null">#{servicecode},</if>
+            <if test="servicecomcode != null">#{servicecomcode},</if>
+            <if test="contno != null">#{contno},</if>
+            <if test="servcardno != null">#{servcardno},</if>
+            <if test="applymode != null">#{applymode},</if>
+            <if test="applydate != null">#{applydate},</if>
+            <if test="managecom != null">#{managecom},</if>
+            <if test="status != null">#{status},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null">#{maketime},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpPersonService" parameterType="HmpPersonService">
+        update hmp_person_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="sax != null">sax = #{sax},</if>
+            <if test="idcardtype != null">idcardtype = #{idcardtype},</if>
+            <if test="idcardno != null">idcardno = #{idcardno},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="productcode != null">productcode = #{productcode},</if>
+            <if test="servicecode != null">servicecode = #{servicecode},</if>
+            <if test="servicecomcode != null">servicecomcode = #{servicecomcode},</if>
+            <if test="contno != null">contno = #{contno},</if>
+            <if test="servcardno != null">servcardno = #{servcardno},</if>
+            <if test="applymode != null">applymode = #{applymode},</if>
+            <if test="applydate != null">applydate = #{applydate},</if>
+            <if test="managecom != null">managecom = #{managecom},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="makedate != null">makedate = #{makedate},</if>
+            <if test="maketime != null">maketime = #{maketime},</if>
+            <if test="modifydate != null">modifydate = #{modifydate},</if>
+            <if test="modifytime != null">modifytime = #{modifytime},</if>
+        </trim>
+        where personcode = #{personcode}
+    </update>
+
+    <delete id="deleteHmpPersonServiceById" parameterType="String">
+        delete from hmp_person_service where personcode = #{personcode}
+    </delete>
+
+    <delete id="deleteHmpPersonServiceByIds" parameterType="String">
+        delete from hmp_person_service where personcode in 
+        <foreach item="personcode" collection="array" open="(" separator="," close=")">
+            #{personcode}
+        </foreach>
+    </delete>
+
+    <select id="selectHmpPersonServiceListByOnwer" parameterType="SysUser" resultMap="HmpPersonServiceResult">
+        select h.personcode, name,
+        (select dict_label from sys_dict_data where dict_type = 'sys_user_sex' and dict_value = h.sax) sax,
+        (select dict_label from sys_dict_data where dict_type = 'service_idcard_type' and dict_value = h.idcardtype) idcardtype,
+        h.idcardno, h.phone,
+        (select productname from hmp_prod_info a where a.productno = h.productcode) productcode,
+        (select distinct projectname from hmp_serv_project a where a.projectcode = h.servicecode) servicecode,
+        (select chname from hmp_serv_opera a where a.servcomno = h.servicecomcode) servicecomcode,
+        h.contno, h.servcardno, h.applymode, h.applydate, h.managecom, h.status, h.operator, h.makedate, h.maketime, h.modifydate, h.modifytime
+        from hmp_person_service h, hmp_person_srev_touser i
+        where h.personcode = i.personcode and i.usercode = #{userName}
+    </select>
+
+    <select id="selectHmpPersonServiceAndChineseById" parameterType="String" resultMap="HmpPersonServiceResult">
+        select personcode, name,
+        (select dict_label from sys_dict_data where dict_type = 'sys_user_sex' and dict_value = sax) sax,
+        (select dict_label from sys_dict_data where dict_type = 'service_idcard_type' and dict_value = idcardtype) idcardtype,
+        idcardno, phone,
+        (select productname from hmp_prod_info a where a.productno = h.productcode) productcode,
+        (select distinct projectname from hmp_serv_project a where a.projectcode = servicecode) servicecode,
+        (select chname from hmp_serv_opera a where a.servcomno = servicecomcode) servicecomcode,
+        contno, servcardno, applymode, applydate, managecom, '有效' status, operator, makedate, maketime, modifydate, modifytime from hmp_person_service h
+        where personcode = #{personcode}
+    </select>
+    
+</mapper>

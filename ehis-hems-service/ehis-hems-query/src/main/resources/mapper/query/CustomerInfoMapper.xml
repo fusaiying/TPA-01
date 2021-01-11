@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.query.mapper.CustomerInfoMapper">
+    <select id="getCustomerInfo" parameterType="com.paic.ehis.query.domain.vo.CustomerInfoQryWorkpoolPSchema"
+            resultType="com.paic.ehis.query.domain.CustomerInfo">
+        SELECT DISTINCT
+        ( SELECT f1.ivip FROM Hmp_Cust_Vip f1 WHERE f1.customerno = b.customerno ) iVip,
+        ( SELECT f1.hvip FROM Hmp_Cust_Vip f1 WHERE f1.customerno = b.customerno ) hVip,
+        b.purname purName,
+        b.mobile purMobile,
+        b.idno idNo,
+        b.contno contNo,
+        ( SELECT codename FROM Hmp_Code WHERE codetype = 'balancetype' AND CODE = c.paytype ) payType,
+        d.username userName,
+        d.mobile userMobile,
+        d.idno userIdno,
+        a.planno productPackageNo,
+        a.planname productPackageName,
+        a.productno productNo,
+        a.productname productName,
+        a.servicestartdate salstartDate,
+        a.serviceenddate salendDate,
+        ( SELECT ld.codename FROM Hmp_Code ld, hp_product_information e WHERE ld.CODE = e.productstate AND ld.codetype =
+        'statte' ) productState,
+        a.times times,
+        a.servicetimes serviceTimes,
+        a.surplustimes surplusTimes,
+        b.serviceCardNo serviceCardNo,
+        (select codename
+        from Hmp_Code
+        where codetype = 'sexflag'
+        and code = b.PurSex) purSex,
+        b.Birthday purBirthday,
+        b.Email purEmail,
+        a.grouporderno groupOrderNo,
+        a.personalorderno personalOrderno,
+        b.riskcode riskCode,
+        f.servicename serviceName,
+        a.makedate makeDate,
+        (select codename from Hmp_Code where codetype = 'orderstatus' and code = b.orderstatus) orderStatus,
+        (select codename
+        from Hmp_Code
+        where codetype = 'sexflag'
+        and code = d.userSex) userSex,
+        d.Birthday userBirthday,
+        d.Email userEmail
+        FROM
+        Hmp_Prod_Planinfo a
+        LEFT JOIN Hmp_Pers_Order b ON a.personalorderno = b.personalorderno
+        LEFT JOIN Hmp_Grop_Order c ON b.grouporderno = c.grouporderno
+        LEFT JOIN Hmp_User_Info d ON a.personalorderno = d.personalorderno
+        LEFT JOIN Hmp_Risk_Log f ON a.personalorderno = f.serialno
+        AND f.dealtype IN ( '01', '10' )
+        WHERE
+        1 = 1
+        AND b.orderstatus != '05'
+        and b.purname like concat('%','三','%')
+        <if test="purName!='' and purName !=null ">and b.purname=#{purName}</if>
+        <if test="mobile!='' and mobile !=null ">and b.mobile=#{mobile}</if>
+        <if test="idNo!='' and idNo !=null ">and b.idno=#{idNo}</if>
+        <if test="conNo!='' and conNo !=null ">and b.contno=#{conNo}</if>
+        <if test="insuranceName!='' and insuranceName !=null ">and b.riskcode=#{insuranceName}</if>
+        <if test="productPackageNo!='' and productPackageNo !=null ">and a.planno=#{productPackageNo}</if>
+        <if test="productNo!='' and productNo !=null ">and a.productno=#{productNo}</if>
+        <if test="serviceCardNo!='' and serviceCardNo !=null ">and b.serviceCardNo=#{serviceCardNo}</if>
+        <if test="groupClient!='' and groupClient !=null ">and c.channelno=#{groupClient}</if>
+        <if test="chnllchName!='' and chnllchName !=null ">and c.channelno1=#{chnllchName}</if>
+        <if test="orderNo!='' and orderNo !=null ">and a.PersonalOrderNo=#{orderNo}</if>
+        <if test="orderStatus!='' and orderStatus !=null ">and b.orderstatus=#{orderStatus}</if>
+        <if test="makeDate!='' and makeDate !=null ">and a.makedate = date || "'" || #{makeDate} || "'"</if>
+        <if test="orderStartDate!='' and orderStartDate !=null ">and b.orderstartdate = date || "'" || #{orderStartDate}
+            || "'"
+        </if>
+        <if test="serviceName!='' and serviceName !=null ">and (f.servicename like || "'%" || #{serviceName} || "%'" or
+            f.addservicename like || "'%" || #{serviceName} || "%'")
+        </if>
+
+    </select>
+</mapper>

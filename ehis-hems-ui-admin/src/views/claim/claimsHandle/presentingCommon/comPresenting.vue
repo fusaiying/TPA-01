@@ -1,0 +1,835 @@
+<template>
+  <div class="app-container">
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
+        <span>批次交单信息</span>
+        <span style="float: right;">
+          <el-button v-if="isSaveSub" :disabled="eSaveSub" type="primary" size="mini"
+                     @click="saveSubmit">保存提交</el-button>
+          <el-button v-if="isSaveOrSub" :disabled="eSaveOrSub" type="primary" size="mini" @click="save">保存</el-button>
+          <el-button v-if="isSaveOrSub" :disabled="eSaveOrSub" type="primary" size="mini" @click="submit">提交</el-button>
+          <el-button v-if="isReview" :disabled="eReview" type="primary" size="mini" @click="review">复核完毕</el-button>
+          <el-button v-if="canPrint" :disabled="isPrint" type="primary" size="mini" @click="print">条码打印</el-button>
+          <el-button type="primary" size="mini" @click="goBack">返回</el-button>
+        </span>
+      </div>
+      <el-form ref="searchForm" :model="searchForm" style="padding-bottom: 30px;" label-width="110px" :rules="rules"
+               label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="批次号：" prop="batchno">
+              <el-input disabled v-model="searchForm.batchno" class="item-width" clearable size="mini"
+                        placeholder="D2020112200001"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="理赔类型：" prop="claimtype">
+              <el-select :disabled="isShow" v-model="searchForm.claimtype" class="item-width" placeholder="请选择"
+                         @change="typeChange">
+                <el-option key="01" label="直结"
+                           value="01"/>
+                <el-option key="02" label="事后"
+                           value="02"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="交单日期：" prop="submitdate">
+              <el-date-picker
+                :disabled="this.$route.query.status==='add'|| isShow"
+                v-model="searchForm.submitdate"
+                class="item-width"
+                type="date"
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="就诊医院：" prop="hospitalname">
+              <el-input :disabled="isShow" v-model="searchForm.hospitalname" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+              <el-button :disabled="isShow" type="primary" style="background-color: #17b417" size="mini" @click="search"
+                         icon="el-icon-search"></el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="批次总金额：" prop="batchtotal">
+              <el-input :disabled="isShow" v-model="searchForm.batchtotal" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="账户币种：" prop="currency">
+              <el-select :disabled="isShow" v-model="searchForm.currency" class="item-width" placeholder="请选择">
+                <el-option key="01" label="人民币"
+                           value="01"/>
+                <el-option key="02" label="美元"
+                           value="02"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="个险/团险：" prop="conttype">
+              <el-select :disabled="isShow" v-model="searchForm.conttype" class="item-width" placeholder="请选择">
+                <el-option key="G" label="团险"
+                           value="G"/>
+                <el-option key="P" label="个险险"
+                           value="P"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="案件数：" prop="casenum">
+              <el-input :disabled="isShow" v-model="searchForm.casenum" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="机构：" prop="organcode">
+              <el-input disabled v-model="searchForm.organcode" class="item-width" clearable size="mini"
+                        placeholder="上海分公司"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="发票是否收到：" prop="billrecevieflag">
+              <el-select :disabled="isShow" v-model="searchForm.billrecevieflag" class="item-width" placeholder="请选择">
+                <el-option key="01" label="是"
+                           value="01"/>
+                <el-option key="02" label="否"
+                           value="02"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="isAfter" label="优先原因：" prop="prireason">
+              <el-select :disabled="isShow" v-model="searchForm.prireason" class="item-width" placeholder="请选择">
+                <el-option key="01" label="vip"
+                           value="01"/>
+                <el-option key="02" label="vvip"
+                           value="02"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="isAfter" label="快递号：" prop="expressnumber">
+              <el-input :disabled="isShow" v-model="searchForm.expressnumber" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="isAfter" label="收单日期：" prop="receivedate">
+              <el-date-picker
+                :disabled="isShow"
+                v-model="searchForm.receivedate"
+                class="item-width"
+                type="date"
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="isAfter" label="交件人：" prop="sendby">
+              <el-select :disabled="isShow" v-model="searchForm.sendby" class="item-width" placeholder="请选择">
+                <el-option key="张三" label="张三"
+                           value="张三"/>
+                <el-option key="李四" label="李四"
+                           value="李四"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="特殊案件：" prop="speccasetype">
+              <el-select :disabled="isShow" v-model="searchForm.speccasetype" class="item-width" placeholder="请选择">
+                <el-option key="张三" label="张三"
+                           value="张三"/>
+                <el-option key="李四" label="李四"
+                           value="李四"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="false" label="投保单位：" prop="Issuingunit">
+              <el-select :disabled="isShow" v-model="searchForm.Issuingunit" class="item-width" placeholder="请选择">
+                <el-option key="张三" label="张三"
+                           value="张三"/>
+                <el-option key="李四" label="李四"
+                           value="李四"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="false" label="保单号：" prop="contno">
+              <el-input :disabled="isShow" v-model="searchForm.contno" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="批次备注：" prop="remark">
+              <el-input :disabled="isShow" style="width: 638px;" type="textarea" row="2" maxlength="1000"
+                        v-model="searchForm.remark" class="item-width" clearable size="mini"
+                        placeholder="请输入批次备注"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <!--<el-divider/>-->
+      <div class="clearfix">
+        <span v-if="isDirect">医院账户</span>
+        <span v-if="isAfter">事后案件台账</span>
+      </div>
+      <el-divider/>
+      <el-table
+        v-if="isDirect"
+        :data="tableData"
+        :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        size="small"
+        highlight-current-row
+        tooltip-effect="dark"
+        style="width: 100%;">
+        <el-table-column align="center" prop="name" min-width="120" label="医院名称" show-overflow-tooltip/>
+        <el-table-column align="center" prop="idcardno" min-width="160" label="账户名" show-overflow-tooltip/>
+        <el-table-column align="center" prop="idcardno" min-width="160" label="开户行" show-overflow-tooltip/>
+        <el-table-column align="center" prop="claimno" min-width="160" label="账号" show-overflow-tooltip/>
+        <el-table-column align="center" prop="billcount" label="医院地址" min-width="90" show-overflow-tooltip/>
+        <el-table-column align="center" prop="name" min-width="120" label="银行信息描述" show-overflow-tooltip/>
+      </el-table>
+      <el-table
+        v-if="isAfter"
+        :data="afterTable"
+        :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        size="small"
+        highlight-current-row
+        tooltip-effect="dark"
+        style="width: 100%;">
+        <el-table-column align="center" prop="rptno" min-width="120" label="报案号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input disabled size="mini" v-if="show" v-model="scope.row.rptno"
+                      placeholder="请输入"></el-input>
+            <span v-show="!show" class="form-span">{{scope.row.rptno}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="idno" min-width="160" label="证件号码" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input size="mini" v-if="show" v-model="scope.row.idno"
+                      placeholder="请输入"></el-input>
+            <span v-show="!show" class="form-span">{{scope.row.idno}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="name" min-width="100" label="被保险人" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input size="mini" v-if="show" v-model="scope.row.name"
+                      placeholder="请输入"></el-input>
+            <span v-show="!show" class="form-span">{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="claimmaterials" label="理赔材料" min-width="180" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-select multiple size="mini" v-model="scope.row.claimmaterials" class="item-width" placeholder="请选择">
+              <el-option key="1" label="理赔申请书"
+                         value="1"/>
+              <el-option key="2" label="身份证"
+                         value="2"/>
+              <el-option key="3" label="保险卡"
+                         value="3"/>
+              <el-option key="4" label="银行卡"
+                         value="4"/>
+              <el-option key="5" label="诊断证明"
+                         value="5"/>
+              <el-option key="6" label="病历"
+                         value="6"/>
+              <el-option key="7" label="检查报告"
+                         value="7"/>
+              <el-option key="8" label="处方"
+                         value="8"/>
+              <el-option key="9" label="票据、发票"
+                         value="9"/>
+              <el-option key="10" label="明细、清单"
+                         value="10"/>
+            </el-select>
+            <span v-show="!show" class="form-span">{{scope.row.claimmaterials}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="remark" min-width="120" label="备注" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input size="mini" maxlength="1000" v-if="show" v-model="scope.row.remark"
+                      placeholder="请输入"></el-input>
+            <span v-show="!show" class="form-span">{{scope.row.remark}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="otherinfo" min-width="120" label="其他(案件去向)" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-input size="mini" v-if="show" v-model="scope.row.otherinfo"
+                      placeholder="请输入"></el-input>
+            <span v-show="!show" class="form-span">{{scope.row.otherinfo}}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-divider v-if="isShowFooter"/>
+      <el-form v-if="isShowFooter" ref="recordForm" :model="recordForm" style="padding-bottom: 30px;"
+               label-width="100px"
+               :rule="recordRule"
+               label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="审核结论：" prop="conclusion">
+              <el-select :disabled="eShowFooter" v-model="recordForm.conclusion" class="item-width" placeholder="请选择"
+                         @change="changeRecord">
+                <el-option key="1" label="通过"
+                           value="1"/>
+                <el-option key="2" label="不通过"
+                           value="2"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="isRecord" label="不通过类型：" prop="nopasstype">
+              <el-select :disabled="eShowFooter" v-model="recordForm.nopasstype" class="item-width" placeholder="请选择">
+                <el-option key="1" label="不合格"
+                           value="1"/>
+                <el-option key="2" label="不合规"
+                           value="2"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="结论说明：" prop="remark">
+              <el-input :disabled="eShowFooter" style="width: 638px;" type="textarea" row="2" maxlength="1000"
+                        v-model="recordForm.remark"
+                        class="item-width" clearable size="mini"
+                        placeholder="请输入结论说明"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+    </el-card>
+  </div>
+</template>
+
+<script>
+  import {
+    addBatchAndStanding,
+    addBatch,
+    getBatch,
+    addBatchAndStandingPresent,
+    updateClaimBatch,
+    selectRecordByBatchno
+  } from '@/api/claim/presentingReview'
+
+  export default {
+    components: {},
+    data() {
+      const checkBatchtotal = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (!value) {
+          callback(new Error("批次总金额必填"));
+        } else {
+          if (value < 0) {
+            callback(new Error("批次总名额不为正数，请检查"));
+          } else if (!regx.test(value)) {
+            callback(new Error("批次总名额最多保留两位小数，请检查"));
+          } else {
+            callback();
+          }
+        }
+      }
+      const checkCasenum = (rule, value, callback) => {
+        const regx = /^[1-9]{1}[\d]*$/
+        if (!value) {
+          callback(new Error("案件数额必填"));
+        } else {
+          if (!regx.test(value)) {
+            callback(new Error("案件数不为正整数，请检查"));
+          } else {
+            callback();
+          }
+        }
+      }
+      return {
+        eShowFooter: false,
+        eReview: false,
+        eSaveSub: false,
+        eSaveOrSub: false,
+        canPrint: true,
+        isPrint: true,
+        isReview: false,//复核完毕
+        isSaveOrSub: false,//提交或保存
+        isSaveSub: false,//提交保存
+        show: false,//事后案件台账
+        isAfter: false,//事后
+        isDirect: false,//直结
+        isShowFooter: false,//结论
+        isRecord: false,//审核结论
+        isShow: false,
+        querys: null,
+        // 查询参数
+        queryParams: {
+          pageNum: 1,
+          pageSize: 10,
+        },
+        rules: {
+          claimtype: {trigger: ['blur', 'change'], required: true, message: '理赔类型必填'}, // 理赔类型
+          submitdate: {trigger: 'blur', required: true, message: '交单日期必填'}, // 交单日期
+          hospitalname: {trigger: ['blur', 'change'], required: true, message: '就诊医院必填'}, // 就诊医院
+          batchtotal: [{validator: checkBatchtotal, required: true, trigger: 'blur'}], // 批次总名额
+          currency: {trigger: ['blur', 'change'], required: true, message: '账单币种必填'}, // 账单币种
+          conttype: {trigger: ['blur', 'change'], required: true, message: '个险/团险必填'}, // 个险/团险
+          casenum: [{validator: checkCasenum, required: true, trigger: 'blur'}], // 案件数
+          organcode: {trigger: ['blur', 'change'], required: true, message: '机构必填'}, // 机构
+          expressnumber: {trigger: 'blur', required: true, message: '快递号必填'}, // 快递号
+          receivedate: {trigger: 'blur', required: true, message: '接单日期必填'}, // 接单日期
+          sendby: {trigger: ['blur', 'change'], required: true, message: '交件人必填'}, // 交件人
+        },
+        recordRule: {
+          conclusion: {trigger: ['blur', 'change'], required: true, message: '审核结论必填'}, // 审核结论
+          nopasstype: {trigger: 'blur', required: true, message: '不通过类型必填'}, // 不通过类型
+        },
+        afterTableTotal: 0,
+        afterTable: [],
+        tableData: [],
+        loading: false,
+        isinit: 'Y',
+        hasBlock: false,
+        caseLoading: false,
+        page: 1,
+        total: 0,
+        finishTotal: 0,
+        pageSize: 10,
+        finishPage: 1,
+        finishPageSize: 10,
+        pageSizes: [5, 10, 20, 30, 50, 100],
+        activeName: '01',
+        completedTableData: [],
+        pendingTableData: [],
+        searchForm: {
+          source: '03',//交单来源 01线下 02线上 03线下
+          batchno: undefined,//批次号
+          claimtype: undefined,//理赔类型
+          submitdate: undefined,//交单日期
+          hospitalcode: '01',//就诊医院id
+          hospitalname: undefined,//就诊医院名称
+          batchtotal: undefined,//批次总金额
+          currency: undefined,//账户币种
+          conttype: undefined,//个险/团险
+          casenum: undefined,//案件数
+          organcode: '01',//机构
+          billrecevieflag: undefined,//是否收到发票
+          prireason: undefined,//优先原因
+          expressnumber: undefined,//快递号
+          receivedate: undefined,//收单日期
+          sendby: undefined,//交件人
+          remark: undefined,//批次备注
+          speccasetype: undefined,//特殊案件类型
+          Issuingunit: undefined,//投保单位
+          contno: undefined,//保单号
+        },
+        recordForm: {
+          conclusion: undefined,//结论
+          nopasstype: undefined,//不通过类型
+          remark: undefined,//备注
+        },
+        changeSerchData: {},
+      }
+    },
+    created() {
+    },
+    async mounted() {
+      let date = new Date()
+      this.searchForm.submitdate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+      if (this.$route.query.data) {
+        this.querys = JSON.parse(decodeURI(this.$route.query.data))
+        await getBatch(this.querys.batchno).then(res => {
+          this.searchForm = res.data
+          if (this.searchForm.claimtype === '01') { //直结 特殊案件码表待定  E生宝贝
+            this.isSaveSub = true
+            this.isSaveOrSub = false
+            this.isDirect = true
+            this.isAfter = false
+          } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
+            this.isSaveSub = false
+            this.isSaveOrSub = true
+            this.isDirect = false
+            this.isAfter = true
+          }
+        })
+        if (this.querys.status === 'show') {
+          this.isAfter = false
+          this.isSaveSub = false
+          this.isPrint = false
+          this.isSaveOrSub = false
+          this.isShow = true
+          this.eShowFooter = true
+          selectRecordByBatchno(this.searchForm.batchno).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data === 123) {
+                this.isShowFooter = false
+              } else {
+                this.recordForm = res.rows
+                this.isShowFooter = true
+              }
+            } else {
+              this.isShowFooter = false
+            }
+          })
+          //查看时是直结调用查询医院接口
+          if (this.searchForm.claimtype === '01') {
+
+          } else {//查看时是事后调用查询事后案件台账
+
+          }
+        } else if (this.querys.status === 'edit') {
+          this.eShowFooter = true
+          selectRecordByBatchno(this.searchForm.batchno).then(res => {
+            if (res != null && res.code === 200) {
+              if (res.data === 123) {
+                this.isShowFooter = false
+              } else {
+                this.recordForm = res.rows
+                this.isShowFooter = true
+              }
+            } else {
+              this.isShowFooter = false
+            }
+          })
+          //查看时是直结调用查询医院接口
+          if (this.searchForm.claimtype === '01') {
+
+          } else {//查看时是事后调用查询事后案件台账
+
+          }
+        } else if (this.querys.status === 'editReview') {
+          this.isShowFooter = true
+          this.isSaveSub = false
+          this.isReview = true
+          //查看时是直结调用查询医院接口
+          if (this.searchForm.claimtype === '01') {
+
+          } else {//查看时是事后调用查询事后案件台账
+
+          }
+        }
+      }
+    },
+    methods: {
+      resetForm() {
+        this.$refs.searchForm.resetFields()
+      }
+      ,
+      goBack() {
+        this.$router.go(-1)
+      },
+      //理赔类型改变
+      typeChange() {
+        if (this.searchForm.claimtype === '01') {//直结 特殊案件码表待定  E生宝贝
+          this.isSaveSub = true
+          this.isSaveOrSub = false
+          this.isDirect = true
+          this.isAfter = false
+          this.searchForm.prireason = undefined
+          this.searchForm.expressnumber = undefined
+          this.searchForm.receivedate = undefined
+          this.searchForm.sendby = undefined
+        } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
+          this.isSaveSub = false
+          this.isSaveOrSub = true
+          this.isAfter = true
+          this.isDirect = false
+        }
+      },
+      save() {
+        this.hasBlock = false
+        this.$refs.searchForm.validate((valid) => {
+          if (valid) {
+            let num = 0;
+            if (this.searchForm.casenum != null) {
+              num = this.searchForm.casenum
+            }
+            if (num >= this.afterTableTotal) {
+              //筛选已填写身份证号的  后面都必须填写
+              let table = this.afterTable.filter(item => {
+                return item.idno != null && item.idno !== ''
+              })
+              console.log(table);
+              table.forEach((v, i) => {
+                for (const val in v) {
+                  if (v[val] === "" || v[val] === null) {
+                    for (const childrenVal in v) {
+                      if (`${childrenVal}` === "claimmaterials") {
+                        if (v[childrenVal].length <= 0) {
+                          this.hasBlock = true;
+                          return this.$message.warning(
+                            "理赔材料不能为空"
+                          );
+                        }
+                      }
+                      if (v[childrenVal] === "" || v[childrenVal] === null) {
+                        console.log(table[i].claimmaterials);
+                        //el-table中列绑定的字段
+                        if (`${childrenVal}` === "name") {
+                          this.hasBlock = true;
+                          // el-table中列表头内容
+                          return this.$message.warning(
+                            "被保人不能为空"
+                          );
+                        } else if (`${childrenVal}` === "claimmaterials") {
+                          this.hasBlock = true;
+                          return this.$message.warning(
+                            "理赔材料不能为空"
+                          );
+                        } else if (`${childrenVal}` === "remark") {
+                          this.hasBlock = true;
+                          return this.$message.warning(
+                            "备注不能为空"
+                          );
+                        } else if (`${childrenVal}` === "otherinfo") {
+                          this.hasBlock = true;
+                          return this.$message.warning(
+                            "其他（案件去向）不能为空"
+                          );
+                        }
+                      }
+                    }
+                  }
+                }
+              });
+              //前面都通过则继续进行
+              if (!this.hasBlock) {
+                //请求接口保存table获取afterTable  给afterTableTotal赋值
+                //then里面的
+                let data = {
+                  claimBatch: this.searchForm, //
+                  standingData: table//
+                }
+                addBatchAndStanding(data).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    if (res.data.standingData != null) {
+                      this.afterTable = res.data.standingData
+                      this.afterTableTotal = res.data.standingData.length
+                    } else {
+                      this.afterTable = []
+                    }
+                    this.searchForm = res.data.claimBatch
+                    this.show = true;
+                    for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
+                      let data = {
+                        rptno: '',
+                        idno: '',
+                        name: '',
+                        claimmaterials: '',
+                        remark: '',
+                        otherinfo: '',
+                      }
+                      this.afterTable.push(data);
+                    }
+                  } else {
+                    this.$message.error('保存失败！')
+                  }
+                })
+              }
+            } else {
+              return this.$message.warning(
+                "修改案件数量不能少于以保存的案件数量!"
+              );
+            }
+          } else {
+            return false
+          }
+        })
+
+
+      },
+      saveSubmit() {
+        this.$refs.searchForm.validate((valid) => {
+          if (valid) {
+            let claimBatch = this.searchForm
+            addBatch(claimBatch).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                //更新数据
+                if (res.data != null) {
+                  this.searchForm = res.data
+                }
+                this.eSaveSub = true
+                this.isSaveSub = true
+                this.isPrint = true
+                this.isSaveOrSub = false
+                this.isShow = true
+                this.eShowFooter = true
+              } else {
+                this.$message.error(
+                  "保存提交失败!"
+                );
+              }
+            })
+          } else {
+            return false
+          }
+        })
+      },
+      //医院查询
+      search() {
+
+      },
+      changeRecord() {
+        if (this.recordForm.conclusion === '1') {
+          this.isRecord = false
+        } else {
+          this.isRecord = true
+        }
+      },
+      print() {
+      },
+      submit() {
+        if (this.searchForm.batchno != null) {
+          this.hasBlock = false
+          this.$refs.searchForm.validate((valid) => {
+            if (valid) {
+              this.afterTable.forEach((v, i) => {
+                for (const val in v) {
+                  if (`${val}` === "claimmaterials") {
+                    if (v[val].length <= 0) {
+                      this.hasBlock = true;
+                      return this.$message.warning(
+                        "理赔材料不能为空"
+                      );
+                    }
+                  }
+                    if (v[val] === "" || v[val] === null) {
+                      for (const childrenVal in v) {
+                        if (v[childrenVal] === "" || v[childrenVal] === null) {
+                          //el-table中列绑定的字段
+                          if (`${childrenVal}` === "name") {
+                            this.hasBlock = true;
+                            // el-table中列表头内容
+                            return this.$message.warning(
+                              "被保人不能为空"
+                            );
+                          } else if (`${childrenVal}` === "claimmaterials") {
+                            this.hasBlock = true;
+                            return this.$message.warning(
+                              "理赔材料不能为空"
+                            );
+                          } else if (`${childrenVal}` === "remark") {
+                            this.hasBlock = true;
+                            return this.$message.warning(
+                              "备注不能为空"
+                            );
+                          } else if (`${childrenVal}` === "otherinfo") {
+                            this.hasBlock = true;
+                            return this.$message.warning(
+                              "其他（案件去向）不能为空"
+                            );
+                          }
+                        }
+                      }
+                    }
+                  }
+
+              })
+              //前面都通过则继续进行
+              if (!this.hasBlock) {
+                //请求接口保存table获取afterTable  给afterTableTotal赋值
+                //then里面的
+                let data = {
+                  claimBatch: this.searchForm, //
+                  standingData: this.afterTable//
+                }
+                addBatchAndStandingPresent(data).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    if (res.data.standingData != null) {
+                      this.afterTable = res.data.standingData
+                      this.afterTableTotal = res.data.standingData.length
+                    }
+                    this.show = true
+                    this.isSaveSub = false
+                    this.isPrint = false
+                    this.eSaveOrSub = true
+                    this.isShow = true
+                    this.eShowFooter = true
+                  } else {
+                    this.$message.error('保存失败！')
+                  }
+                })
+              }
+            } else {
+              return false
+            }
+          })
+        } else {
+          return this.$message.warning(
+            "请先保存！"
+          )
+        }
+
+      },
+      review() {
+        this.$refs.searchForm.validate((valid) => {
+          if (valid) {
+            this.$refs.recordForm.validate((valid) => {
+              if (valid) {
+                let data = {
+                  claimBatch: this.searchForm, //
+                  claimBatchRecord: this.recordForm//
+                }
+                updateClaimBatch(data).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '复核成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    this.show = true
+                    this.isPrint = false
+                    this.eReview = true
+                    this.isShow = true
+                  } else {
+                    this.$message.error('复核失败！')
+                  }
+                })
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .item-width {
+    width: 220px;
+  }
+
+  .baseInfo_class .el-tag--small {
+    margin-right: 10px !important;
+  }
+</style>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpAddressMapper">
+    <!--
+        根据名称查询编码
+        List<HmpAddress> selectHmpAddressByName(String name);
+    -->
+    <select id="selectHmpAddressByName" parameterType="String" resultType="HmpAddress">
+        SELECT * FROM Hmp_address WHERE PlaceName = #{placename} ORDER BY PlaceType
+    </select>
+</mapper>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.HmpOrdOwnInfoMapper">
+    
+    <resultMap type="HmpOrdOwnInfo" id="HmpOrdOwnInfoResult">
+        <result property="appno"    column="APPNO"    />
+        <result property="grouporderno"    column="GROUPORDERNO"    />
+        <result property="personalorderno"    column="PERSONALORDERNO"    />
+        <result property="servicecardno"    column="SERVICECARDNO"    />
+        <result property="salesmanno"    column="SALESMANNO"    />
+        <result property="applicationdate"    column="APPLICATIONDATE"    />
+        <result property="orderstartdate"    column="ORDERSTARTDATE"    />
+        <result property="orderenddate"    column="ORDERENDDATE"    />
+        <result property="advancepay"    column="ADVANCEPAY"    />
+        <result property="issendcard"    column="ISSENDCARD"    />
+        <result property="purname"    column="PURNAME"    />
+        <result property="pursex"    column="PURSEX"    />
+        <result property="idtype"    column="IDTYPE"    />
+        <result property="idno"    column="IDNO"    />
+        <result property="birthday"    column="BIRTHDAY"    />
+        <result property="phone"    column="PHONE"    />
+        <result property="mobile"    column="MOBILE"    />
+        <result property="email"    column="EMAIL"    />
+        <result property="postcode"    column="POSTCODE"    />
+        <result property="chargemethod"    column="CHARGEMETHOD"    />
+        <result property="bankaccountname"    column="BANKACCOUNTNAME"    />
+        <result property="bankname"    column="BANKNAME"    />
+        <result property="bankbranch"    column="BANKBRANCH"    />
+        <result property="bankaccount"    column="BANKACCOUNT"    />
+        <result property="bankaddress"    column="BANKADDRESS"    />
+        <result property="billpattern"    column="BILLPATTERN"    />
+        <result property="ordermark"    column="ORDERMARK"    />
+        <result property="orderfrom"    column="ORDERFROM"    />
+        <result property="orderstatus"    column="ORDERSTATUS"    />
+        <result property="actualcurrency"    column="ACTUALCURRENCY"    />
+        <result property="actualmoney"    column="ACTUALMONEY"    />
+        <result property="payintegral"    column="PAYINTEGRAL"    />
+        <result property="paycurrency"    column="PAYCURRENCY"    />
+        <result property="paydate"    column="PAYDATE"    />
+        <result property="accdate"    column="ACCDATE"    />
+        <result property="alternatefield1"    column="ALTERNATEFIELD1"    />
+        <result property="alternatefield2"    column="ALTERNATEFIELD2"    />
+        <result property="operator"    column="OPERATOR"    />
+        <result property="makedate"    column="MAKEDATE"    />
+        <result property="maketime"    column="MAKETIME"    />
+        <result property="modifyoperator"    column="MODIFYOPERATOR"    />
+        <result property="modifydate"    column="MODIFYDATE"    />
+        <result property="modifytime"    column="MODIFYTIME"    />
+        <result property="contno"    column="CONTNO"    />
+        <result property="riskcode"    column="RISKCODE"    />
+        <result property="supplier"    column="SUPPLIER"    />
+        <result property="conttel"    column="CONTTEL"    />
+        <result property="signdate"    column="SIGNDATE"    />
+        <result property="chargemethod2"    column="CHARGEMETHOD2"    />
+        <result property="worktime"    column="WORKTIME"    />
+        <result property="relatedcode"    column="RELATEDCODE"    />
+        <result property="taxpayertype"    column="TAXPAYERTYPE"    />
+        <result property="invoicetype"    column="INVOICETYPE"    />
+        <result property="collectionflag"    column="COLLECTIONFLAG"    />
+        <result property="billnumber"    column="BILLNUMBER"    />
+        <result property="channelno1"    column="CHANNELNO1"    />
+        <result property="saleplatform"    column="SALEPLATFORM"    />
+        <result property="balanceflag"    column="BALANCEFLAG"    />
+        <result property="printtimes"    column="PRINTTIMES"    />
+        <result property="customerno"    column="CUSTOMERNO"    />
+        <result property="commission"    column="COMMISSION"    />
+        <result property="servicecharge"    column="SERVICECHARGE"    />
+        <result property="enddate"    column="ENDDATE"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectHmpOrdOwnInfoVo">
+        select APPNO, GROUPORDERNO, PERSONALORDERNO, SERVICECARDNO, SALESMANNO, APPLICATIONDATE, ORDERSTARTDATE, ORDERENDDATE, ADVANCEPAY, ISSENDCARD, PURNAME, PURSEX, IDTYPE, IDNO, BIRTHDAY, PHONE, MOBILE, EMAIL, POSTCODE, CHARGEMETHOD, BANKACCOUNTNAME, BANKNAME, BANKBRANCH, BANKACCOUNT, BANKADDRESS, BILLPATTERN, ORDERMARK, ORDERFROM, ORDERSTATUS, ACTUALCURRENCY, ACTUALMONEY, PAYINTEGRAL, PAYCURRENCY, PAYDATE, ACCDATE, ALTERNATEFIELD1, ALTERNATEFIELD2, OPERATOR, MAKEDATE, MAKETIME, MODIFYOPERATOR, MODIFYDATE, MODIFYTIME, CONTNO, RISKCODE, SUPPLIER, CONTTEL, SIGNDATE, CHARGEMETHOD2, WORKTIME, RELATEDCODE, TAXPAYERTYPE, INVOICETYPE, COLLECTIONFLAG, BILLNUMBER, CHANNELNO1, SALEPLATFORM, BALANCEFLAG, PRINTTIMES, CUSTOMERNO, COMMISSION, SERVICECHARGE, ENDDATE, REMARK from hmp_ord_owninfo
+    </sql>
+
+    <select id="selectHmpOrdOwnInfoList" parameterType="HmpOrdOwnInfo" resultMap="HmpOrdOwnInfoResult">
+        <include refid="selectHmpOrdOwnInfoVo"/>
+        <where>  
+            <if test="personalorderno != null  and personalorderno != ''"> and PERSONALORDERNO like concat('%', #{personalorderno}, '%')</if>
+            <if test="servicecardno != null  and servicecardno != ''"> and SERVICECARDNO = #{servicecardno}</if>
+            <if test="salesmanno != null  and salesmanno != ''"> and SALESMANNO = #{salesmanno}</if>
+            <if test="applicationdate != null "> and APPLICATIONDATE = #{applicationdate}</if>
+            <if test="orderstartdate != null "> and ORDERSTARTDATE = #{orderstartdate}</if>
+            <if test="orderenddate != null "> and ORDERENDDATE = #{orderenddate}</if>
+            <if test="advancepay != null  and advancepay != ''"> and ADVANCEPAY = #{advancepay}</if>
+            <if test="issendcard != null  and issendcard != ''"> and ISSENDCARD = #{issendcard}</if>
+            <if test="purname != null  and purname != ''"> and PURNAME like concat('%', #{purname}, '%')</if>
+            <if test="pursex != null  and pursex != ''"> and PURSEX = #{pursex}</if>
+            <if test="idtype != null  and idtype != ''"> and IDTYPE = #{idtype}</if>
+            <if test="idno != null  and idno != ''"> and IDNO = #{idno}</if>
+            <if test="birthday != null "> and BIRTHDAY = #{birthday}</if>
+            <if test="phone != null  and phone != ''"> and PHONE = #{phone}</if>
+            <if test="mobile != null  and mobile != ''"> and MOBILE = #{mobile}</if>
+            <if test="email != null  and email != ''"> and EMAIL = #{email}</if>
+            <if test="postcode != null  and postcode != ''"> and POSTCODE = #{postcode}</if>
+            <if test="chargemethod != null  and chargemethod != ''"> and CHARGEMETHOD = #{chargemethod}</if>
+            <if test="bankaccountname != null  and bankaccountname != ''"> and BANKACCOUNTNAME like concat('%', #{bankaccountname}, '%')</if>
+            <if test="bankname != null  and bankname != ''"> and BANKNAME like concat('%', #{bankname}, '%')</if>
+            <if test="bankbranch != null  and bankbranch != ''"> and BANKBRANCH = #{bankbranch}</if>
+            <if test="bankaccount != null  and bankaccount != ''"> and BANKACCOUNT = #{bankaccount}</if>
+            <if test="bankaddress != null  and bankaddress != ''"> and BANKADDRESS = #{bankaddress}</if>
+            <if test="billpattern != null  and billpattern != ''"> and BILLPATTERN = #{billpattern}</if>
+            <if test="ordermark != null  and ordermark != ''"> and ORDERMARK = #{ordermark}</if>
+            <if test="orderfrom != null  and orderfrom != ''"> and ORDERFROM = #{orderfrom}</if>
+            <if test="orderstatus != null  and orderstatus != ''"> and ORDERSTATUS = #{orderstatus}</if>
+            <if test="actualcurrency != null  and actualcurrency != ''"> and ACTUALCURRENCY = #{actualcurrency}</if>
+            <if test="actualmoney != null  and actualmoney != ''"> and ACTUALMONEY = #{actualmoney}</if>
+            <if test="payintegral != null  and payintegral != ''"> and PAYINTEGRAL = #{payintegral}</if>
+            <if test="paycurrency != null  and paycurrency != ''"> and PAYCURRENCY = #{paycurrency}</if>
+            <if test="paydate != null "> and PAYDATE = #{paydate}</if>
+            <if test="accdate != null "> and ACCDATE = #{accdate}</if>
+            <if test="alternatefield1 != null  and alternatefield1 != ''"> and ALTERNATEFIELD1 = #{alternatefield1}</if>
+            <if test="alternatefield2 != null  and alternatefield2 != ''"> and ALTERNATEFIELD2 = #{alternatefield2}</if>
+            <if test="operator != null  and operator != ''"> and OPERATOR = #{operator}</if>
+            <if test="makedate != null "> and MAKEDATE = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and MAKETIME = #{maketime}</if>
+            <if test="modifyoperator != null  and modifyoperator != ''"> and MODIFYOPERATOR = #{modifyoperator}</if>
+            <if test="modifydate != null "> and MODIFYDATE = #{modifydate}</if>
+            <if test="modifytime != null  and modifytime != ''"> and MODIFYTIME = #{modifytime}</if>
+            <if test="contno != null  and contno != ''"> and CONTNO = #{contno}</if>
+            <if test="riskcode != null  and riskcode != ''"> and RISKCODE = #{riskcode}</if>
+            <if test="supplier != null  and supplier != ''"> and SUPPLIER = #{supplier}</if>
+            <if test="conttel != null  and conttel != ''"> and CONTTEL = #{conttel}</if>
+            <if test="signdate != null "> and SIGNDATE = #{signdate}</if>
+            <if test="chargemethod2 != null  and chargemethod2 != ''"> and CHARGEMETHOD2 = #{chargemethod2}</if>
+            <if test="worktime != null  and worktime != ''"> and WORKTIME = #{worktime}</if>
+            <if test="relatedcode != null  and relatedcode != ''"> and RELATEDCODE = #{relatedcode}</if>
+            <if test="taxpayertype != null  and taxpayertype != ''"> and TAXPAYERTYPE = #{taxpayertype}</if>
+            <if test="invoicetype != null  and invoicetype != ''"> and INVOICETYPE = #{invoicetype}</if>
+            <if test="collectionflag != null  and collectionflag != ''"> and COLLECTIONFLAG = #{collectionflag}</if>
+            <if test="billnumber != null  and billnumber != ''"> and BILLNUMBER = #{billnumber}</if>
+            <if test="channelno1 != null  and channelno1 != ''"> and CHANNELNO1 = #{channelno1}</if>
+            <if test="saleplatform != null  and saleplatform != ''"> and SALEPLATFORM = #{saleplatform}</if>
+            <if test="balanceflag != null  and balanceflag != ''"> and BALANCEFLAG = #{balanceflag}</if>
+            <if test="printtimes != null  and printtimes != ''"> and PRINTTIMES = #{printtimes}</if>
+            <if test="customerno != null  and customerno != ''"> and CUSTOMERNO = #{customerno}</if>
+            <if test="commission != null "> and COMMISSION = #{commission}</if>
+            <if test="servicecharge != null "> and SERVICECHARGE = #{servicecharge}</if>
+            <if test="enddate != null "> and ENDDATE = #{enddate}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpOrdOwnInfoById" parameterType="String" resultMap="HmpOrdOwnInfoResult">
+        <include refid="selectHmpOrdOwnInfoVo"/>
+        where PERSONALORDERNO = #{personalorderno}
+    </select>
+        
+    <insert id="insertHmpOrdOwnInfo" parameterType="HmpOrdOwnInfo">
+        insert into hmp_ord_owninfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appno != null">APPNO,</if>
+            <if test="grouporderno != null">GROUPORDERNO,</if>
+            <if test="personalorderno != null">PERSONALORDERNO,</if>
+            <if test="servicecardno != null">SERVICECARDNO,</if>
+            <if test="salesmanno != null">SALESMANNO,</if>
+            <if test="applicationdate != null">APPLICATIONDATE,</if>
+            <if test="orderstartdate != null">ORDERSTARTDATE,</if>
+            <if test="orderenddate != null">ORDERENDDATE,</if>
+            <if test="advancepay != null">ADVANCEPAY,</if>
+            <if test="issendcard != null">ISSENDCARD,</if>
+            <if test="purname != null">PURNAME,</if>
+            <if test="pursex != null">PURSEX,</if>
+            <if test="idtype != null">IDTYPE,</if>
+            <if test="idno != null">IDNO,</if>
+            <if test="birthday != null">BIRTHDAY,</if>
+            <if test="phone != null">PHONE,</if>
+            <if test="mobile != null">MOBILE,</if>
+            <if test="email != null">EMAIL,</if>
+            <if test="postcode != null">POSTCODE,</if>
+            <if test="chargemethod != null and chargemethod != ''">CHARGEMETHOD,</if>
+            <if test="bankaccountname != null">BANKACCOUNTNAME,</if>
+            <if test="bankname != null">BANKNAME,</if>
+            <if test="bankbranch != null">BANKBRANCH,</if>
+            <if test="bankaccount != null">BANKACCOUNT,</if>
+            <if test="bankaddress != null">BANKADDRESS,</if>
+            <if test="billpattern != null">BILLPATTERN,</if>
+            <if test="ordermark != null">ORDERMARK,</if>
+            <if test="orderfrom != null">ORDERFROM,</if>
+            <if test="orderstatus != null">ORDERSTATUS,</if>
+            <if test="actualcurrency != null">ACTUALCURRENCY,</if>
+            <if test="actualmoney != null">ACTUALMONEY,</if>
+            <if test="payintegral != null">PAYINTEGRAL,</if>
+            <if test="paycurrency != null">PAYCURRENCY,</if>
+            <if test="paydate != null">PAYDATE,</if>
+            <if test="accdate != null">ACCDATE,</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1,</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2,</if>
+            <if test="operator != null and operator != ''">OPERATOR,</if>
+            <if test="makedate != null">MAKEDATE,</if>
+            <if test="maketime != null and maketime != ''">MAKETIME,</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR,</if>
+            <if test="modifydate != null">MODIFYDATE,</if>
+            <if test="modifytime != null">MODIFYTIME,</if>
+            <if test="contno != null">CONTNO,</if>
+            <if test="riskcode != null">RISKCODE,</if>
+            <if test="supplier != null">SUPPLIER,</if>
+            <if test="conttel != null">CONTTEL,</if>
+            <if test="signdate != null">SIGNDATE,</if>
+            <if test="chargemethod2 != null">CHARGEMETHOD2,</if>
+            <if test="worktime != null">WORKTIME,</if>
+            <if test="relatedcode != null">RELATEDCODE,</if>
+            <if test="taxpayertype != null">TAXPAYERTYPE,</if>
+            <if test="invoicetype != null">INVOICETYPE,</if>
+            <if test="collectionflag != null">COLLECTIONFLAG,</if>
+            <if test="billnumber != null">BILLNUMBER,</if>
+            <if test="channelno1 != null">CHANNELNO1,</if>
+            <if test="saleplatform != null">SALEPLATFORM,</if>
+            <if test="balanceflag != null">BALANCEFLAG,</if>
+            <if test="printtimes != null">PRINTTIMES,</if>
+            <if test="customerno != null">CUSTOMERNO,</if>
+            <if test="commission != null">COMMISSION,</if>
+            <if test="servicecharge != null">SERVICECHARGE,</if>
+            <if test="enddate != null">ENDDATE,</if>
+            <if test="remark != null">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appno != null">#{appno},</if>
+            <if test="grouporderno != null">#{grouporderno},</if>
+            <if test="personalorderno != null">#{personalorderno},</if>
+            <if test="servicecardno != null">#{servicecardno},</if>
+            <if test="salesmanno != null">#{salesmanno},</if>
+            <if test="applicationdate != null">#{applicationdate},</if>
+            <if test="orderstartdate != null">#{orderstartdate},</if>
+            <if test="orderenddate != null">#{orderenddate},</if>
+            <if test="advancepay != null">#{advancepay},</if>
+            <if test="issendcard != null">#{issendcard},</if>
+            <if test="purname != null">#{purname},</if>
+            <if test="pursex != null">#{pursex},</if>
+            <if test="idtype != null">#{idtype},</if>
+            <if test="idno != null">#{idno},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="email != null">#{email},</if>
+            <if test="postcode != null">#{postcode},</if>
+            <if test="chargemethod != null and chargemethod != ''">#{chargemethod},</if>
+            <if test="bankaccountname != null">#{bankaccountname},</if>
+            <if test="bankname != null">#{bankname},</if>
+            <if test="bankbranch != null">#{bankbranch},</if>
+            <if test="bankaccount != null">#{bankaccount},</if>
+            <if test="bankaddress != null">#{bankaddress},</if>
+            <if test="billpattern != null">#{billpattern},</if>
+            <if test="ordermark != null">#{ordermark},</if>
+            <if test="orderfrom != null">#{orderfrom},</if>
+            <if test="orderstatus != null">#{orderstatus},</if>
+            <if test="actualcurrency != null">#{actualcurrency},</if>
+            <if test="actualmoney != null">#{actualmoney},</if>
+            <if test="payintegral != null">#{payintegral},</if>
+            <if test="paycurrency != null">#{paycurrency},</if>
+            <if test="paydate != null">#{paydate},</if>
+            <if test="accdate != null">#{accdate},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+            <if test="modifyoperator != null">#{modifyoperator},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+            <if test="contno != null">#{contno},</if>
+            <if test="riskcode != null">#{riskcode},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="conttel != null">#{conttel},</if>
+            <if test="signdate != null">#{signdate},</if>
+            <if test="chargemethod2 != null">#{chargemethod2},</if>
+            <if test="worktime != null">#{worktime},</if>
+            <if test="relatedcode != null">#{relatedcode},</if>
+            <if test="taxpayertype != null">#{taxpayertype},</if>
+            <if test="invoicetype != null">#{invoicetype},</if>
+            <if test="collectionflag != null">#{collectionflag},</if>
+            <if test="billnumber != null">#{billnumber},</if>
+            <if test="channelno1 != null">#{channelno1},</if>
+            <if test="saleplatform != null">#{saleplatform},</if>
+            <if test="balanceflag != null">#{balanceflag},</if>
+            <if test="printtimes != null">#{printtimes},</if>
+            <if test="customerno != null">#{customerno},</if>
+            <if test="commission != null">#{commission},</if>
+            <if test="servicecharge != null">#{servicecharge},</if>
+            <if test="enddate != null">#{enddate},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpOrdOwnInfo" parameterType="HmpOrdOwnInfo">
+        update hmp_ord_owninfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="grouporderno != null">GROUPORDERNO = #{grouporderno},</if>
+            <if test="personalorderno != null">PERSONALORDERNO = #{personalorderno},</if>
+            <if test="servicecardno != null">SERVICECARDNO = #{servicecardno},</if>
+            <if test="salesmanno != null">SALESMANNO = #{salesmanno},</if>
+            <if test="applicationdate != null">APPLICATIONDATE = #{applicationdate},</if>
+            <if test="orderstartdate != null">ORDERSTARTDATE = #{orderstartdate},</if>
+            <if test="orderenddate != null">ORDERENDDATE = #{orderenddate},</if>
+            <if test="advancepay != null">ADVANCEPAY = #{advancepay},</if>
+            <if test="issendcard != null">ISSENDCARD = #{issendcard},</if>
+            <if test="purname != null">PURNAME = #{purname},</if>
+            <if test="pursex != null">PURSEX = #{pursex},</if>
+            <if test="idtype != null">IDTYPE = #{idtype},</if>
+            <if test="idno != null">IDNO = #{idno},</if>
+            <if test="birthday != null">BIRTHDAY = #{birthday},</if>
+            <if test="phone != null">PHONE = #{phone},</if>
+            <if test="mobile != null">MOBILE = #{mobile},</if>
+            <if test="email != null">EMAIL = #{email},</if>
+            <if test="postcode != null">POSTCODE = #{postcode},</if>
+            <if test="chargemethod != null and chargemethod != ''">CHARGEMETHOD = #{chargemethod},</if>
+            <if test="bankaccountname != null">BANKACCOUNTNAME = #{bankaccountname},</if>
+            <if test="bankname != null">BANKNAME = #{bankname},</if>
+            <if test="bankbranch != null">BANKBRANCH = #{bankbranch},</if>
+            <if test="bankaccount != null">BANKACCOUNT = #{bankaccount},</if>
+            <if test="bankaddress != null">BANKADDRESS = #{bankaddress},</if>
+            <if test="billpattern != null">BILLPATTERN = #{billpattern},</if>
+            <if test="ordermark != null">ORDERMARK = #{ordermark},</if>
+            <if test="orderfrom != null">ORDERFROM = #{orderfrom},</if>
+            <if test="orderstatus != null">ORDERSTATUS = #{orderstatus},</if>
+            <if test="actualcurrency != null">ACTUALCURRENCY = #{actualcurrency},</if>
+            <if test="actualmoney != null">ACTUALMONEY = #{actualmoney},</if>
+            <if test="payintegral != null">PAYINTEGRAL = #{payintegral},</if>
+            <if test="paycurrency != null">PAYCURRENCY = #{paycurrency},</if>
+            <if test="paydate != null">PAYDATE = #{paydate},</if>
+            <if test="accdate != null">ACCDATE = #{accdate},</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2 = #{alternatefield2},</if>
+            <if test="operator != null and operator != ''">OPERATOR = #{operator},</if>
+            <if test="makedate != null">MAKEDATE = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">MAKETIME = #{maketime},</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR = #{modifyoperator},</if>
+            <if test="modifydate != null">MODIFYDATE = #{modifydate},</if>
+            <if test="modifytime != null">MODIFYTIME = #{modifytime},</if>
+            <if test="contno != null">CONTNO = #{contno},</if>
+            <if test="riskcode != null">RISKCODE = #{riskcode},</if>
+            <if test="supplier != null">SUPPLIER = #{supplier},</if>
+            <if test="conttel != null">CONTTEL = #{conttel},</if>
+            <if test="signdate != null">SIGNDATE = #{signdate},</if>
+            <if test="chargemethod2 != null">CHARGEMETHOD2 = #{chargemethod2},</if>
+            <if test="worktime != null">WORKTIME = #{worktime},</if>
+            <if test="relatedcode != null">RELATEDCODE = #{relatedcode},</if>
+            <if test="taxpayertype != null">TAXPAYERTYPE = #{taxpayertype},</if>
+            <if test="invoicetype != null">INVOICETYPE = #{invoicetype},</if>
+            <if test="collectionflag != null">COLLECTIONFLAG = #{collectionflag},</if>
+            <if test="billnumber != null">BILLNUMBER = #{billnumber},</if>
+            <if test="channelno1 != null">CHANNELNO1 = #{channelno1},</if>
+            <if test="saleplatform != null">SALEPLATFORM = #{saleplatform},</if>
+            <if test="balanceflag != null">BALANCEFLAG = #{balanceflag},</if>
+            <if test="printtimes != null">PRINTTIMES = #{printtimes},</if>
+            <if test="customerno != null">CUSTOMERNO = #{customerno},</if>
+            <if test="commission != null">COMMISSION = #{commission},</if>
+            <if test="servicecharge != null">SERVICECHARGE = #{servicecharge},</if>
+            <if test="enddate != null">ENDDATE = #{enddate},</if>
+            <if test="remark != null">REMARK = #{remark},</if>
+        </trim>
+        where APPNO = #{appno}
+    </update>
+
+    <delete id="deleteHmpOrdOwnInfoById" parameterType="String">
+        delete from hmp_ord_owninfo where APPNO = #{appno}
+    </delete>
+
+    <delete id="deleteHmpOrdOwnInfoByIds" parameterType="String">
+        delete from hmp_ord_owninfo where APPNO in
+        <foreach item="appno" collection="array" open="(" separator="," close=")">
+            #{appno}
+        </foreach>
+    </delete>
+    
+</mapper>

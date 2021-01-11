@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.ClaimCaseMapper">
+    
+    <resultMap type="com.paic.ehis.system.domain.ClaimCase" id="ClaimCaseResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseVo">
+        select rpt_no, batch_no, status, create_by, create_time, update_by, update_time from claim_case
+    </sql>
+
+    <select id="selectClaimCaseList" parameterType="com.paic.ehis.system.domain.ClaimCase" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        <where>  
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseById" parameterType="String" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        where rpt_no = #{rptNo}
+    </select>
+        
+    <insert id="insertClaimCase" parameterType="com.paic.ehis.system.domain.ClaimCase">
+        insert into claim_case
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null">rpt_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null">#{rptNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCase" parameterType="com.paic.ehis.system.domain.ClaimCase">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
+    <delete id="deleteClaimCaseById" parameterType="String">
+        delete from claim_case where rpt_no = #{rptNo}
+    </delete>
+
+    <delete id="deleteClaimCaseByIds" parameterType="String">
+        delete from claim_case where rpt_no in 
+        <foreach item="rptNo" collection="array" open="(" separator="," close=")">
+            #{rptNo}
+        </foreach>
+    </delete>
+    
+</mapper>

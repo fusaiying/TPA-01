@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpServConproMapper">
+    <!--
+        新增服务项目
+        int insertHmpServConpro(HmpServConpro hmpServConpro);
+    -->
+    <insert id="insertHmpServConpro" parameterType="HmpServConpro">
+        INSERT INTO
+           Hmp_serv_conpro
+        (ContactNo, ProjectCode, PayWay, ContactPrice, remark, Operator,MakeDate,
+        MakeTime, ModifiedDate, ModifiedTime, alternatefield1, alternatefield2)
+        VALUES
+        <foreach collection="list" item="hmpServConpro" separator=",">
+            ( #{hmpServConpro.contactno},
+              #{hmpServConpro.projectcode},
+              #{hmpServConpro.payway},
+              #{hmpServConpro.contactprice},
+              #{hmpServConpro.remark},
+              #{hmpServConpro.operator},
+              #{hmpServConpro.makedate},
+              #{hmpServConpro.maketime},
+              #{hmpServConpro.modifieddate},
+              #{hmpServConpro.modifiedtime},
+              #{hmpServConpro.alternatefield1},
+              #{hmpServConpro.alternatefield2})
+        </foreach>
+
+    </insert>
+
+    <!--
+        根据合约名查询服务项目
+        List<HmpServConpro> selectHmpServConproByNo(String contactno);
+    -->
+    <select id="selectHmpServConproByNo" parameterType="String" resultType="HmpServConpro">
+        SELECT
+            *
+        FROM
+            Hmp_Serv_Conpro
+        WHERE contactno = #{contactno}
+    </select>
+
+    <!--
+        根据合约号码  删除合约项目
+        int deleteHmpServConproByNo(String contactno);
+    -->
+    <delete id="deleteHmpServConproByNo" parameterType="String">
+        DELETE FROM
+            Hmp_Serv_Conpro
+        WHERE
+            contactno = #{contactno}
+    </delete>
+</mapper>

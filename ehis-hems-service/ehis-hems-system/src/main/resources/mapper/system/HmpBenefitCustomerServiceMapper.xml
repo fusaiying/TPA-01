@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpBenefitCustomerServiceMapper">
+    
+    <resultMap type="HmpBenefitCustomerService" id="HmpBenefitCustomerServiceResult">
+        <result property="customerid"    column="customerid"    />
+        <result property="productcode"    column="productcode"    />
+        <result property="productname"    column="productname"    />
+        <result property="servicecode"    column="servicecode"    />
+        <result property="startdate"    column="startdate"    />
+        <result property="enddate"    column="enddate"    />
+        <result property="servicename"    column="servicename"    />
+        <result property="servicesource"    column="servicesource"    />
+        <result property="upperlimit"    column="upperlimit"    />
+        <result property="limitunit"    column="limitunit"    />
+        <result property="balance"    column="balance"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHmpBenefitCustomerServiceVo">
+        select customerid, productcode, productname, servicecode, startdate, enddate, servicename, servicesource, upperlimit, limitunit, balance, create_by, create_time, update_by, update_time from hmp_benefit_customer_service
+    </sql>
+
+    <select id="selectHmpBenefitCustomerServiceList" parameterType="HmpBenefitCustomerService" resultMap="HmpBenefitCustomerServiceResult">
+        <include refid="selectHmpBenefitCustomerServiceVo"/>
+        <where>
+            <if test="customerid != null and customerid != ''">and customerid like concat('%', #{customerid}, '%')</if>
+            <if test="productname != null  and productname != ''"> and productname like concat('%', #{productname}, '%')</if>
+            <if test="startdate != null "> and startdate = #{startdate}</if>
+            <if test="enddate != null "> and enddate = #{enddate}</if>
+            <if test="servicename != null  and servicename != ''"> and servicename like concat('%', #{servicename}, '%')</if>
+            <if test="servicesource != null  and servicesource != ''"> and servicesource = #{servicesource}</if>
+            <if test="upperlimit != null "> and upperlimit = #{upperlimit}</if>
+            <if test="limitunit != null  and limitunit != ''"> and limitunit = #{limitunit}</if>
+            <if test="balance != null "> and balance = #{balance}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpBenefitCustomerServiceById" parameterType="String" resultMap="HmpBenefitCustomerServiceResult">
+        <include refid="selectHmpBenefitCustomerServiceVo"/>
+        where customerid = #{customerid}
+    </select>
+        
+    <insert id="insertHmpBenefitCustomerService" parameterType="HmpBenefitCustomerService">
+        insert into hmp_benefit_customer_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerid != null">customerid,</if>
+            <if test="productcode != null">productcode,</if>
+            <if test="productname != null">productname,</if>
+            <if test="servicecode != null">servicecode,</if>
+            <if test="startdate != null">startdate,</if>
+            <if test="enddate != null">enddate,</if>
+            <if test="servicename != null">servicename,</if>
+            <if test="servicesource != null and servicesource != ''">servicesource,</if>
+            <if test="upperlimit != null">upperlimit,</if>
+            <if test="limitunit != null">limitunit,</if>
+            <if test="balance != null">balance,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerid != null">#{customerid},</if>
+            <if test="productcode != null">#{productcode},</if>
+            <if test="productname != null">#{productname},</if>
+            <if test="servicecode != null">#{servicecode},</if>
+            <if test="startdate != null">#{startdate},</if>
+            <if test="enddate != null">#{enddate},</if>
+            <if test="servicename != null">#{servicename},</if>
+            <if test="servicesource != null and servicesource != ''">#{servicesource},</if>
+            <if test="upperlimit != null">#{upperlimit},</if>
+            <if test="limitunit != null">#{limitunit},</if>
+            <if test="balance != null">#{balance},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpBenefitCustomerService" parameterType="HmpBenefitCustomerService">
+        update hmp_benefit_customer_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productcode != null">productcode = #{productcode},</if>
+            <if test="productname != null">productname = #{productname},</if>
+            <if test="servicecode != null">servicecode = #{servicecode},</if>
+            <if test="startdate != null">startdate = #{startdate},</if>
+            <if test="enddate != null">enddate = #{enddate},</if>
+            <if test="servicename != null">servicename = #{servicename},</if>
+            <if test="servicesource != null and servicesource != ''">servicesource = #{servicesource},</if>
+            <if test="upperlimit != null">upperlimit = #{upperlimit},</if>
+            <if test="limitunit != null">limitunit = #{limitunit},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where customerid = #{customerid}
+    </update>
+
+    <delete id="deleteHmpBenefitCustomerServiceById" parameterType="String">
+        delete from hmp_benefit_customer_service where customerid = #{customerid}
+    </delete>
+
+    <delete id="deleteHmpBenefitCustomerServiceByIds" parameterType="String">
+        delete from hmp_benefit_customer_service where customerid in 
+        <foreach item="customerid" collection="array" open="(" separator="," close=")">
+            #{customerid}
+        </foreach>
+    </delete>
+
+    <select id="selectHmpBenefitCustomerServiceListUseChinese" parameterType="HmpBenefitCustomerService" resultMap="HmpBenefitCustomerServiceResult">
+        select customerid, productcode, productname, servicecode, startdate, enddate, servicename, servicesource, upperlimit, limitunit, balance, create_by, create_time, update_by, update_time from hmp_benefit_customer_service
+        <where>
+            <if test="customerid != null and customerid != ''">and customerid = #{customerid}</if>
+            <if test="productname != null  and productname != ''"> and productname like concat('%', #{productname}, '%')</if>
+            <if test="startdate != null "> and startdate = #{startdate}</if>
+            <if test="enddate != null "> and enddate = #{enddate}</if>
+            <if test="servicename != null  and servicename != ''"> and servicename like concat('%', #{servicename}, '%')</if>
+            <if test="servicesource != null  and servicesource != ''"> and servicesource = #{servicesource}</if>
+            <if test="upperlimit != null "> and upperlimit = #{upperlimit}</if>
+            <if test="limitunit != null  and limitunit != ''"> and limitunit = #{limitunit}</if>
+            <if test="balance != null "> and balance = #{balance}</if>
+        </where>
+    </select>
+    
+</mapper>

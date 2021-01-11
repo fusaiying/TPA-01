@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.productPackageExamineMapper">
+    
+    <resultMap type="productPackageExamine" id="productPackageExamineResult">
+        <result property="productpackageno"    column="PRODUCTPACKAGENO"    />
+        <result property="productpackagename"    column="PRODUCTPACKAGENAME"    />
+        <result property="normalprice"    column="NORMALPRICE"    />
+        <result property="taxprice"    column="TAXPRICE"    />
+        <result property="sendcontract"    column="SENDCONTRACT"    />
+        <result property="salstartdate"    column="SALSTARTDATE"    />
+        <result property="salenddate"    column="SALENDDATE"    />
+        <result property="cardtype"    column="CARDTYPE"    />
+        <result property="prooftype"    column="PROOFTYPE"    />
+        <result property="alternatefield1"    column="ALTERNATEFIELD1"    />
+        <result property="alternatefield2"    column="ALTERNATEFIELD2"    />
+        <result property="operator"    column="OPERATOR"    />
+        <result property="makedate"    column="MAKEDATE"    />
+        <result property="maketime"    column="MAKETIME"    />
+        <result property="modifyoperator"    column="MODIFYOPERATOR"    />
+        <result property="modifydate"    column="MODIFYDATE"    />
+        <result property="modifytime"    column="MODIFYTIME"    />
+        <result property="userflag"    column="USERFLAG"    />
+        <result property="productstate2"    column="PRODUCTSTATE2"    />
+        <result property="issendsms"    column="ISSENDSMS"    />
+        <result property="maxusernum"    column="MAXUSERNUM"    />
+        <result property="isreplaceuser"    column="ISREPLACEUSER"    />
+        <result property="exterpackagename"    column="EXTERPACKAGENAME"    />
+    </resultMap>
+
+    <sql id="selectproductPackageExamineVo">
+        select PRODUCTPACKAGENO, PRODUCTPACKAGENAME, NORMALPRICE, TAXPRICE, SENDCONTRACT, SALSTARTDATE, SALENDDATE, CARDTYPE, PROOFTYPE, ALTERNATEFIELD1, ALTERNATEFIELD2, OPERATOR, MAKEDATE, MAKETIME, MODIFYOPERATOR, MODIFYDATE, MODIFYTIME, USERFLAG, PRODUCTSTATE2, ISSENDSMS, MAXUSERNUM, ISREPLACEUSER, EXTERPACKAGENAME from hpproductpackageinfo
+    </sql>
+
+    <select id="selectproductPackageExamineList" parameterType="productPackageExamine" resultMap="productPackageExamineResult">
+        <include refid="selectproductPackageExamineVo"/>
+        <where>  
+            <if test="productpackagename != null  and productpackagename != ''"> and PRODUCTPACKAGENAME like concat('%', #{productpackagename}, '%')</if>
+            <if test="normalprice != null "> and NORMALPRICE = #{normalprice}</if>
+            <if test="sendcontract != null  and sendcontract != ''"> and SENDCONTRACT = #{sendcontract}</if>
+            <if test="cardtype != null  and cardtype != ''"> and CARDTYPE = #{cardtype}</if>
+            <if test="productstate2 != null  and productstate2 != ''"> and PRODUCTSTATE2 = #{productstate2}</if>
+        </where>
+    </select>
+    
+    <select id="selectproductPackageExamineById" parameterType="String" resultMap="productPackageExamineResult">
+        <include refid="selectproductPackageExamineVo"/>
+        where PRODUCTPACKAGENO = #{productpackageno}
+    </select>
+        
+    <insert id="insertproductPackageExamine" parameterType="productPackageExamine">
+        insert into hpproductpackageinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productpackageno != null">PRODUCTPACKAGENO,</if>
+            <if test="productpackagename != null and productpackagename != ''">PRODUCTPACKAGENAME,</if>
+            <if test="normalprice != null">NORMALPRICE,</if>
+            <if test="taxprice != null">TAXPRICE,</if>
+            <if test="sendcontract != null">SENDCONTRACT,</if>
+            <if test="salstartdate != null">SALSTARTDATE,</if>
+            <if test="salenddate != null">SALENDDATE,</if>
+            <if test="cardtype != null">CARDTYPE,</if>
+            <if test="prooftype != null">PROOFTYPE,</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1,</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2,</if>
+            <if test="operator != null">OPERATOR,</if>
+            <if test="makedate != null">MAKEDATE,</if>
+            <if test="maketime != null">MAKETIME,</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR,</if>
+            <if test="modifydate != null">MODIFYDATE,</if>
+            <if test="modifytime != null">MODIFYTIME,</if>
+            <if test="userflag != null">USERFLAG,</if>
+            <if test="productstate2 != null">PRODUCTSTATE2,</if>
+            <if test="issendsms != null">ISSENDSMS,</if>
+            <if test="maxusernum != null">MAXUSERNUM,</if>
+            <if test="isreplaceuser != null">ISREPLACEUSER,</if>
+            <if test="exterpackagename != null">EXTERPACKAGENAME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productpackageno != null">#{productpackageno},</if>
+            <if test="productpackagename != null and productpackagename != ''">#{productpackagename},</if>
+            <if test="normalprice != null">#{normalprice},</if>
+            <if test="taxprice != null">#{taxprice},</if>
+            <if test="sendcontract != null">#{sendcontract},</if>
+            <if test="salstartdate != null">#{salstartdate},</if>
+            <if test="salenddate != null">#{salenddate},</if>
+            <if test="cardtype != null">#{cardtype},</if>
+            <if test="prooftype != null">#{prooftype},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null">#{maketime},</if>
+            <if test="modifyoperator != null">#{modifyoperator},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+            <if test="userflag != null">#{userflag},</if>
+            <if test="productstate2 != null">#{productstate2},</if>
+            <if test="issendsms != null">#{issendsms},</if>
+            <if test="maxusernum != null">#{maxusernum},</if>
+            <if test="isreplaceuser != null">#{isreplaceuser},</if>
+            <if test="exterpackagename != null">#{exterpackagename},</if>
+         </trim>
+    </insert>
+
+    <update id="updateproductPackageExamine" parameterType="productPackageExamine">
+        update hpproductpackageinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productpackagename != null and productpackagename != ''">PRODUCTPACKAGENAME = #{productpackagename},</if>
+            <if test="normalprice != null">NORMALPRICE = #{normalprice},</if>
+            <if test="taxprice != null">TAXPRICE = #{taxprice},</if>
+            <if test="sendcontract != null">SENDCONTRACT = #{sendcontract},</if>
+            <if test="salstartdate != null">SALSTARTDATE = #{salstartdate},</if>
+            <if test="salenddate != null">SALENDDATE = #{salenddate},</if>
+            <if test="cardtype != null">CARDTYPE = #{cardtype},</if>
+            <if test="prooftype != null">PROOFTYPE = #{prooftype},</if>
+            <if test="alternatefield1 != null">ALTERNATEFIELD1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">ALTERNATEFIELD2 = #{alternatefield2},</if>
+            <if test="operator != null">OPERATOR = #{operator},</if>
+            <if test="makedate != null">MAKEDATE = #{makedate},</if>
+            <if test="maketime != null">MAKETIME = #{maketime},</if>
+            <if test="modifyoperator != null">MODIFYOPERATOR = #{modifyoperator},</if>
+            <if test="modifydate != null">MODIFYDATE = #{modifydate},</if>
+            <if test="modifytime != null">MODIFYTIME = #{modifytime},</if>
+            <if test="userflag != null">USERFLAG = #{userflag},</if>
+            <if test="productstate2 != null">PRODUCTSTATE2 = #{productstate2},</if>
+            <if test="issendsms != null">ISSENDSMS = #{issendsms},</if>
+            <if test="maxusernum != null">MAXUSERNUM = #{maxusernum},</if>
+            <if test="isreplaceuser != null">ISREPLACEUSER = #{isreplaceuser},</if>
+            <if test="exterpackagename != null">EXTERPACKAGENAME = #{exterpackagename},</if>
+        </trim>
+        where PRODUCTPACKAGENO = #{productpackageno}
+    </update>
+
+    <delete id="deleteproductPackageExamineById" parameterType="String">
+        delete from hpproductpackageinfo where PRODUCTPACKAGENO = #{productpackageno}
+    </delete>
+
+    <delete id="deleteproductPackageExamineByIds" parameterType="String">
+        delete from hpproductpackageinfo where PRODUCTPACKAGENO in 
+        <foreach item="productpackageno" collection="array" open="(" separator="," close=")">
+            #{productpackageno}
+        </foreach>
+    </delete>
+    
+</mapper>

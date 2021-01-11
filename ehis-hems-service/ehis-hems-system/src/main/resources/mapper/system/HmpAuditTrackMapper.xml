@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpAuditTrackMapper">
+    
+    <resultMap type="HmpAuditTrack" id="HmpAuditTrackResult">
+        <result property="auditno"    column="auditno"    />
+        <result property="productno"    column="productno"    />
+        <result property="productname"    column="productname"    />
+        <result property="managecom"    column="managecom"    />
+        <result property="auditresult"    column="auditresult"    />
+        <result property="reason"    column="reason"    />
+        <result property="operator"    column="operator"    />
+        <result property="makedate"    column="makedate"    />
+        <result property="maketime"    column="maketime"    />
+    </resultMap>
+
+    <sql id="selectHmpAuditTrackVo">
+        select auditno, productno, productname, managecom, auditresult, reason, operator, makedate, maketime from hmp_audit_track
+    </sql>
+
+    <select id="selectHmpAuditTrackList" parameterType="HmpAuditTrack" resultMap="HmpAuditTrackResult">
+        <include refid="selectHmpAuditTrackVo"/>
+        <where>  
+            <if test="productno != null  and productno != ''"> and productno = #{productno}</if>
+            <if test="productname != null  and productname != ''"> and productname like concat('%', #{productname}, '%')</if>
+            <if test="managecom != null  and managecom != ''"> and managecom = #{managecom}</if>
+            <if test="auditresult != null  and auditresult != ''"> and auditresult = #{auditresult}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="makedate != null "> and makedate = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and maketime = #{maketime}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpAuditTrackById" parameterType="String" resultMap="HmpAuditTrackResult">
+        <include refid="selectHmpAuditTrackVo"/>
+        where auditno = #{auditno}
+    </select>
+        
+    <insert id="insertHmpAuditTrack" parameterType="HmpAuditTrack">
+        insert into hmp_audit_track
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="auditno != null">auditno,</if>
+            <if test="productno != null and productno != ''">productno,</if>
+            <if test="productname != null">productname,</if>
+            <if test="managecom != null">managecom,</if>
+            <if test="auditresult != null and auditresult != ''">auditresult,</if>
+            <if test="reason != null and reason != ''">reason,</if>
+            <if test="operator != null and operator != ''">operator,</if>
+            <if test="makedate != null">makedate,</if>
+            <if test="maketime != null and maketime != ''">maketime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="auditno != null">#{auditno},</if>
+            <if test="productno != null and productno != ''">#{productno},</if>
+            <if test="productname != null">#{productname},</if>
+            <if test="managecom != null">#{managecom},</if>
+            <if test="auditresult != null and auditresult != ''">#{auditresult},</if>
+            <if test="reason != null and reason != ''">#{reason},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpAuditTrack" parameterType="HmpAuditTrack">
+        update hmp_audit_track
+        <trim prefix="set" suffixOverrides=",">
+            <if test="productno != null and productno != ''">productno = #{productno},</if>
+            <if test="productname != null">productname = #{productname},</if>
+            <if test="managecom != null">managecom = #{managecom},</if>
+            <if test="auditresult != null and auditresult != ''">auditresult = #{auditresult},</if>
+            <if test="reason != null and reason != ''">reason = #{reason},</if>
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="makedate != null">makedate = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">maketime = #{maketime},</if>
+        </trim>
+        where auditno = #{auditno}
+    </update>
+
+    <delete id="deleteHmpAuditTrackById" parameterType="String">
+        delete from hmp_audit_track where auditno = #{auditno}
+    </delete>
+
+    <delete id="deleteHmpAuditTrackByIds" parameterType="String">
+        delete from hmp_audit_track where auditno in
+        <foreach item="auditno" collection="array" open="(" separator="," close=")">
+            #{auditno}
+        </foreach>
+    </delete>
+    
+</mapper>

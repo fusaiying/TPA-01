@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.HmpkgsmsconfiginfoMapper">
+    
+    <resultMap type="Hmpkgsmsconfiginfo" id="HmpkgsmsconfiginfoResult">
+        <result property="serialno"    column="SERIALNO"    />
+        <result property="productpackageno"    column="PRODUCTPACKAGENO"    />
+        <result property="smsmodeno"    column="SMSMODENO"    />
+        <result property="smstype"    column="SMSTYPE"    />
+        <result property="makedate"    column="MAKEDATE"    />
+        <result property="maketime"    column="MAKETIME"    />
+        <result property="operator"    column="OPERATOR"    />
+        <result property="modifydate"    column="MODIFYDATE"    />
+        <result property="modifytime"    column="MODIFYTIME"    />
+        <result property="modifyoperator"    column="MODIFYOPERATOR"    />
+    </resultMap>
+
+    <sql id="selectHmpkgsmsconfiginfoVo">
+        select SERIALNO, PRODUCTPACKAGENO, SMSMODENO, SMSTYPE, MAKEDATE, MAKETIME, OPERATOR, MODIFYDATE, MODIFYTIME, MODIFYOPERATOR from hmpkgsmsconfiginfo
+    </sql>
+
+    <select id="selectHmpkgsmsconfiginfoList" parameterType="Hmpkgsmsconfiginfo" resultMap="HmpkgsmsconfiginfoResult">
+        <include refid="selectHmpkgsmsconfiginfoVo"/>
+        <where>  
+            <if test="productpackageno != null  and productpackageno != ''"> and PRODUCTPACKAGENO = #{productpackageno}</if>
+            <if test="smsmodeno != null  and smsmodeno != ''"> and SMSMODENO = #{smsmodeno}</if>
+            <if test="smstype != null  and smstype != ''"> and SMSTYPE = #{smstype}</if>
+            <if test="makedate != null "> and MAKEDATE = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and MAKETIME = #{maketime}</if>
+            <if test="operator != null  and operator != ''"> and OPERATOR = #{operator}</if>
+            <if test="modifydate != null "> and MODIFYDATE = #{modifydate}</if>
+            <if test="modifytime != null  and modifytime != ''"> and MODIFYTIME = #{modifytime}</if>
+            <if test="modifyoperator != null  and modifyoperator != ''"> and MODIFYOPERATOR = #{modifyoperator}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpkgsmsconfiginfoById" parameterType="Long" resultMap="HmpkgsmsconfiginfoResult">
+        <include refid="selectHmpkgsmsconfiginfoVo"/>
+        where SERIALNO = #{serialno}
+    </select>
+        
+    <insert id="insertHmpkgsmsconfiginfo" parameterType="Hmpkgsmsconfiginfo" useGeneratedKeys="true" keyProperty="serialno">
+        insert into hmpkgsmsconfiginfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productpackageno != null and productpackageno != ''">PRODUCTPACKAGENO,</if>
+            <if test="smsmodeno != null and smsmodeno != ''">SMSMODENO,</if>
+            <if test="smstype != null and smstype != ''">SMSTYPE,</if>
+            <if test="makedate != null">MAKEDATE,</if>
+            <if test="maketime != null and maketime != ''">MAKETIME,</if>
+            <if test="operator != null and operator != ''">OPERATOR,</if>
+            <if test="modifydate != null">MODIFYDATE,</if>
+            <if test="modifytime != null and modifytime != ''">MODIFYTIME,</if>
+            <if test="modifyoperator != null and modifyoperator != ''">MODIFYOPERATOR,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productpackageno != null and productpackageno != ''">#{productpackageno},</if>
+            <if test="smsmodeno != null and smsmodeno != ''">#{smsmodeno},</if>
+            <if test="smstype != null and smstype != ''">#{smstype},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null and maketime != ''">#{maketime},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">#{modifytime},</if>
+            <if test="modifyoperator != null and modifyoperator != ''">#{modifyoperator},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpkgsmsconfiginfo" parameterType="Hmpkgsmsconfiginfo">
+        update hmpkgsmsconfiginfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productpackageno != null and productpackageno != ''">PRODUCTPACKAGENO = #{productpackageno},</if>
+            <if test="smsmodeno != null and smsmodeno != ''">SMSMODENO = #{smsmodeno},</if>
+            <if test="smstype != null and smstype != ''">SMSTYPE = #{smstype},</if>
+            <if test="makedate != null">MAKEDATE = #{makedate},</if>
+            <if test="maketime != null and maketime != ''">MAKETIME = #{maketime},</if>
+            <if test="operator != null and operator != ''">OPERATOR = #{operator},</if>
+            <if test="modifydate != null">MODIFYDATE = #{modifydate},</if>
+            <if test="modifytime != null and modifytime != ''">MODIFYTIME = #{modifytime},</if>
+            <if test="modifyoperator != null and modifyoperator != ''">MODIFYOPERATOR = #{modifyoperator},</if>
+        </trim>
+        where SERIALNO = #{serialno}
+    </update>
+
+    <delete id="deleteHmpkgsmsconfiginfoById" parameterType="Long">
+        delete from hmpkgsmsconfiginfo where SERIALNO = #{serialno}
+    </delete>
+
+    <delete id="deleteHmpkgsmsconfiginfoByIds" parameterType="String">
+        delete from hmpkgsmsconfiginfo where SERIALNO in 
+        <foreach item="serialno" collection="array" open="(" separator="," close=")">
+            #{serialno}
+        </foreach>
+    </delete>
+    
+</mapper>

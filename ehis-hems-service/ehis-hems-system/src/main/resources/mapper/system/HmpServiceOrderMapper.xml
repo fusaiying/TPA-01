@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpServiceOrderMapper">
+    
+    <resultMap type="HmpServiceOrder" id="HmpServiceOrderResult">
+        <result property="ordercode"    column="ordercode"    />
+        <result property="customerid"    column="customerid"    />
+        <result property="ordersource"    column="ordersource"    />
+        <result property="productcode"    column="productcode"    />
+        <result property="servicecode"    column="servicecode"    />
+        <result property="appointmenttime"    column="appointmenttime"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="supplieroutlets"    column="supplieroutlets"    />
+        <result property="supplierdoctor"    column="supplierdoctor"    />
+        <result property="orderstatus"    column="orderstatus"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="SysDictData" id="SysDictDataResult">
+        <id     property="dictCode"   column="dict_code"   />
+        <result property="dictSort"   column="dict_sort"   />
+        <result property="dictLabel"  column="dict_label"  />
+        <result property="dictValue"  column="dict_value"  />
+        <result property="dictType"   column="dict_type"   />
+        <result property="cssClass"   column="css_class"   />
+        <result property="listClass"  column="list_class"  />
+        <result property="isDefault"  column="is_default"  />
+        <result property="status"     column="status"      />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectHmpServiceOrderVo">
+        select ordercode, customerid, ordersource, productcode, servicecode, appointmenttime, supplier, supplieroutlets, supplierdoctor, orderstatus, create_by, create_time, update_by, update_time from hmp_service_order
+    </sql>
+
+    <select id="selectHmpServiceOrderList" parameterType="HmpServiceOrder" resultMap="HmpServiceOrderResult">
+        <include refid="selectHmpServiceOrderVo"/>
+        <where>  
+            <if test="customerid != null  and customerid != ''"> and customerid = #{customerid}</if>
+            <if test="ordersource != null  and ordersource != ''"> and ordersource = #{ordersource}</if>
+            <if test="productcode != null  and productcode != ''"> and productcode = #{productcode}</if>
+            <if test="servicecode != null  and servicecode != ''"> and servicecode = #{servicecode}</if>
+            <if test="appointmenttime != null "> and appointmenttime = #{appointmenttime}</if>
+            <if test="supplier != null  and supplier != ''"> and supplier = #{supplier}</if>
+            <if test="supplieroutlets != null  and supplieroutlets != ''"> and supplieroutlets = #{supplieroutlets}</if>
+            <if test="supplierdoctor != null  and supplierdoctor != ''"> and supplierdoctor = #{supplierdoctor}</if>
+            <if test="orderstatus != null  and orderstatus != ''"> and orderstatus = #{orderstatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpServiceOrderById" parameterType="String" resultMap="HmpServiceOrderResult">
+        <include refid="selectHmpServiceOrderVo"/>
+        where ordercode = #{ordercode}
+    </select>
+        
+    <insert id="insertHmpServiceOrder" parameterType="HmpServiceOrder">
+        insert into hmp_service_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ordercode != null">ordercode,</if>
+            <if test="customerid != null">customerid,</if>
+            <if test="ordersource != null">ordersource,</if>
+            <if test="productcode != null">productcode,</if>
+            <if test="servicecode != null">servicecode,</if>
+            <if test="appointmenttime != null">appointmenttime,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="supplieroutlets != null">supplieroutlets,</if>
+            <if test="supplierdoctor != null">supplierdoctor,</if>
+            <if test="orderstatus != null and orderstatus != ''">orderstatus,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ordercode != null">#{ordercode},</if>
+            <if test="customerid != null">#{customerid},</if>
+            <if test="ordersource != null">#{ordersource},</if>
+            <if test="productcode != null">#{productcode},</if>
+            <if test="servicecode != null">#{servicecode},</if>
+            <if test="appointmenttime != null">#{appointmenttime},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="supplieroutlets != null">#{supplieroutlets},</if>
+            <if test="supplierdoctor != null">#{supplierdoctor},</if>
+            <if test="orderstatus != null and orderstatus != ''">#{orderstatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpServiceOrder" parameterType="HmpServiceOrder">
+        update hmp_service_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerid != null">customerid = #{customerid},</if>
+            <if test="ordersource != null">ordersource = #{ordersource},</if>
+            <if test="productcode != null">productcode = #{productcode},</if>
+            <if test="servicecode != null">servicecode = #{servicecode},</if>
+            <if test="appointmenttime != null">appointmenttime = #{appointmenttime},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="supplieroutlets != null">supplieroutlets = #{supplieroutlets},</if>
+            <if test="supplierdoctor != null">supplierdoctor = #{supplierdoctor},</if>
+            <if test="orderstatus != null and orderstatus != ''">orderstatus = #{orderstatus},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where ordercode = #{ordercode}
+    </update>
+
+    <delete id="deleteHmpServiceOrderById" parameterType="String">
+        delete from hmp_service_order where ordercode = #{ordercode}
+    </delete>
+
+    <delete id="deleteHmpServiceOrderByIds" parameterType="String">
+        delete from hmp_service_order where ordercode in 
+        <foreach item="ordercode" collection="array" open="(" separator="," close=")">
+            #{ordercode}
+        </foreach>
+    </delete>
+
+    <select id="selectServiceComByProduct" parameterType="String" resultMap="SysDictDataResult">
+        select distinct a.servcomno dict_value,a.chname dict_label from hmp_serv_opera a, hmp_prod_servcom c
+        where 1=1
+        and a.servcomno = c.serivcecomno
+        and c.productno = #{productcode}
+    </select>
+
+    <select id="selectServiceWebByCom" parameterType="String" resultMap="SysDictDataResult">
+        select distinct c.websitecode, c.websitename from hmp_comwebsite c
+        where 1=1
+        and c.servcomno = #{serviceCom}
+        and c.alternatefield1 is null
+    </select>
+
+    <!--
+        根据工单编码查询服务订单
+        HmpServiceOrder selectHmpServiceOrderByCode(String ordercode);
+    -->
+    <select id="selectHmpServiceOrderByCode" resultType="HmpServiceOrder" parameterType="String">
+        SELECT
+            *
+        FROM
+            Hmp_Service_Order
+        WHERE
+            OrderCode = #{ordercode}
+    </select>
+
+    <!--
+        更改服务工单状态
+        int updateHmpServiceOrderStatus(HmpServiceOrder hmpServiceOrder);
+    -->
+    <update id="updateHmpServiceOrderStatus" parameterType="HmpServiceOrder">
+        UPDATE
+            Hmp_Service_Order
+        SET
+            `orderstatus` = #{orderstatus},
+            `update_by` = #{updateBy},
+            `update_time` = #{updateTime}
+        WHERE
+            `ordercode` = #{ordercode};
+    </update>
+    
+</mapper>

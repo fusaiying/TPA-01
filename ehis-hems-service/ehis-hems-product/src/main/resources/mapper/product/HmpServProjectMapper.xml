@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.HmpServProjectMapper">
+
+    <resultMap type="HmpServProject" id="HmpServProjectResult">
+        <result property="projectcode" column="projectcode"/>
+        <result property="nodecode" column="nodecode"/>
+        <result property="projectname" column="projectname"/>
+        <result property="projecttype" column="projecttype"/>
+        <result property="status" column="status"/>
+        <result property="nodename" column="nodename"/>
+        <result property="validflag" column="validflag"/>
+        <result property="endflag" column="endflag"/>
+        <result property="cancelflag" column="cancelflag"/>
+        <result property="rollbackflag" column="rollbackflag"/>
+        <result property="processflag" column="processflag"/>
+        <result property="operator" column="operator"/>
+        <result property="makedate" column="makedate"/>
+        <result property="maketime" column="maketime"/>
+        <result property="modifydate" column="modifydate"/>
+        <result property="modifytime" column="modifytime"/>
+    </resultMap>
+
+    <resultMap id="HmpServOperaResult" type="HmpServOpera">
+        <result property="servcomno" column="SERVCOMNO"/>
+        <result property="chname" column="CHNAME"/>
+        <result property="enname" column="ENNAME"/>
+        <result property="servcomtype" column="SERVCOMTYPE"/>
+        <result property="servcomattribute" column="SERVCOMATTRIBUTE"/>
+        <result property="medicaltype" column="MEDICALTYPE"/>
+        <result property="medicallevel" column="MEDICALLEVEL"/>
+        <result property="department" column="DEPARTMENT"/>
+        <result property="constate" column="CONSTATE"/>
+        <result property="payway" column="PAYWAY"/>
+        <result property="paytype" column="PAYTYPE"/>
+        <result property="qualifiedmdc" column="QUALIFIEDMDC"/>
+        <result property="contact" column="CONTACT"/>
+        <result property="postcode" column="POSTCODE"/>
+        <result property="expensive" column="EXPENSIVE"/>
+        <result property="instructions" column="INSTRUCTIONS"/>
+        <result property="trafficroute" column="TRAFFICROUTE"/>
+        <result property="continent" column="CONTINENT"/>
+        <result property="country" column="COUNTRY"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="district" column="DISTRICT"/>
+        <result property="website" column="WEBSITE"/>
+        <result property="detailedaddress" column="DETAILEDADDRESS"/>
+        <result property="remark" column="REMARK"/>
+        <result property="alternatefield1" column="ALTERNATEFIELD1"/>
+        <result property="alternatefield2" column="ALTERNATEFIELD2"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="makedate" column="MAKEDATE"/>
+        <result property="maketime" column="MAKETIME"/>
+        <result property="modifieddate" column="MODIFIEDDATE"/>
+        <result property="modifiedtime" column="MODIFIEDTIME"/>
+    </resultMap>
+
+    <sql id="selectHmpServProjectVo">
+        select projectcode, nodecode, projectname, projecttype, status, nodename, validflag, endflag, cancelflag, rollbackflag, processflag, operator, makedate, maketime, modifydate, modifytime from hmp_serv_project
+    </sql>
+
+    <select id="selectHmpServProjectList" parameterType="HmpServProject" resultMap="HmpServProjectResult">
+        select distinct projectcode, projectname,
+        (select b.dict_label from sys_dict_data b where b.dict_type = 'product_service_imple_type' and b.dict_value =
+        projecttype) projecttype,
+        status, operator, makedate, maketime from hmp_serv_project
+        <where>
+            <if test="projectname != null  and projectname != ''">and projectname like concat('%', #{projectname},
+                '%')
+            </if>
+            <if test="projectcode != null  and projectcode != ''">and projectcode like concat('%', #{projectcode},
+                '%')
+            </if>
+            <if test="projecttype != null  and projecttype != ''">and projecttype = #{projecttype}</if>
+        </where>
+    </select>
+
+    <select id="selectHmpServProjectById" parameterType="String" resultMap="HmpServProjectResult">
+        <include refid="selectHmpServProjectVo"/>
+        where projectcode = #{projectcode}
+    </select>
+
+    <insert id="insertHmpServProject" parameterType="HmpServProject">
+        insert into hmp_serv_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectcode != null">projectcode,</if>
+            <if test="nodecode != null">nodecode,</if>
+            <if test="projectname != null">projectname,</if>
+            <if test="projecttype != null">projecttype,</if>
+            <if test="status != null">status,</if>
+            <if test="nodename != null">nodename,</if>
+            <if test="validflag != null">validflag,</if>
+            <if test="endflag != null">endflag,</if>
+            <if test="cancelflag != null">cancelflag,</if>
+            <if test="rollbackflag != null">rollbackflag,</if>
+            <if test="processflag != null">processflag,</if>
+            <if test="operator != null">operator,</if>
+            <if test="makedate != null">makedate,</if>
+            <if test="maketime != null">maketime,</if>
+            <if test="modifydate != null">modifydate,</if>
+            <if test="modifytime != null">modifytime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectcode != null">#{projectcode},</if>
+            <if test="nodecode != null">#{nodecode},</if>
+            <if test="projectname != null">#{projectname},</if>
+            <if test="projecttype != null">#{projecttype},</if>
+            <if test="status != null">#{status},</if>
+            <if test="nodename != null">#{nodename},</if>
+            <if test="validflag != null">#{validflag},</if>
+            <if test="endflag != null">#{endflag},</if>
+            <if test="cancelflag != null">#{cancelflag},</if>
+            <if test="rollbackflag != null">#{rollbackflag},</if>
+            <if test="processflag != null">#{processflag},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null">#{maketime},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHmpServProject" parameterType="HmpServProject">
+        update hmp_serv_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nodecode != null">nodecode = #{nodecode},</if>
+            <if test="projectname != null">projectname = #{projectname},</if>
+            <if test="projecttype != null">projecttype = #{projecttype},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="nodename != null">nodename = #{nodename},</if>
+            <if test="validflag != null">validflag = #{validflag},</if>
+            <if test="endflag != null">endflag = #{endflag},</if>
+            <if test="cancelflag != null">cancelflag = #{cancelflag},</if>
+            <if test="rollbackflag != null">rollbackflag = #{rollbackflag},</if>
+            <if test="processflag != null">processflag = #{processflag},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="makedate != null">makedate = #{makedate},</if>
+            <if test="maketime != null">maketime = #{maketime},</if>
+            <if test="modifydate != null">modifydate = #{modifydate},</if>
+            <if test="modifytime != null">modifytime = #{modifytime},</if>
+        </trim>
+        where projectcode = #{projectcode}
+    </update>
+
+    <delete id="deleteHmpServProjectById" parameterType="String">
+        delete from hmp_serv_project where projectcode = #{projectcode}
+    </delete>
+
+    <delete id="deleteHmpServProjectByIds" parameterType="String">
+        delete from hmp_serv_project where projectcode in
+        <foreach item="projectcode" collection="array" open="(" separator="," close=")">
+            #{projectcode}
+        </foreach>
+    </delete>
+
+    <select id="selectHmpServProjectListByProjectCode" parameterType="String" resultMap="HmpServProjectResult">
+        <include refid="selectHmpServProjectVo"/>
+        where projectcode = #{projectCode}
+    </select>
+
+
+    <!--
+      查询服务项目  用于下拉
+      应用于供应商合约
+      public List<HmpServProject> selectHmpServProjectOptions();
+    -->
+    <resultMap id="baseResultOptions" type="HmpServProject">
+        <id property="projectcode" column="ProjectCode"></id>
+        <result property="projectname" column="ProjectName"></result>
+    </resultMap>
+    <select id="selectHmpServProjectOptions" resultMap="baseResultOptions">
+        SELECT DISTINCT
+            ProjectCode, ProjectName
+        FROM
+            Hmp_Serv_Project
+        ORDER BY
+            ProjectCode
+        ASC
+    </select>
+
+
+    <select id="queryServiceOrgByProjectCode" parameterType="String" resultMap="HmpServOperaResult">
+        select * from hmp_serv_opera a
+            where exists (select c.servcomno from hmp_contract c
+	            where c.servcomno = a.servcomno and exists(select b.contactno from hmp_serv_conpro b where b.contactno = c.contractno and b.projectcode = #{projectCode}))
+    </select>
+
+    <select id="selectHmpServProjectByProductNo" parameterType="String" resultType="HmpServProject">
+        select distinct a.projectcode,a.projectname,a.projecttype from hmp_serv_project a where exists(select b.alternatefield1 from hmp_prod_servcom b where b.alternatefield1=a.projectcode and b.productno= #{productNo} )
+    </select>
+
+    <select id="selectHmpServOperaById" parameterType="String" resultType="HmpServOpera">
+        select * from hmp_serv_opera where servcomno = #{servComNo}
+    </select>
+
+
+    <!--
+        根据服务项目编码和节点编码 修改服务项目
+        int updateHmpServOperaById(HmpServProject project);
+    -->
+    <update id="updateHmpServOperaById" parameterType="HmpServProject">
+        UPDATE
+            Hmp_Serv_Project
+        SET
+            `projectname` = #{projectname},
+            `projecttype` = #{projecttype},
+            `status` = #{status},
+            `nodename` = #{nodename},
+            `validflag` = #{validflag},
+            `endflag` = #{endflag},
+            `cancelflag` = #{cancelflag},
+            `rollbackflag` = #{rollbackflag},
+            `processflag` = #{processflag},
+            `operator` = #{operator},
+            `modifydate` = #{modifydate},
+            `modifytime` = #{modifytime}
+            WHERE
+                `projectcode` = #{projectcode}
+                AND `nodecode` = #{nodecode};
+    </update>
+
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseProviderSettleMapper">
+
+    <resultMap type="BaseProviderSettle" id="BaseProviderSettleResult">
+        <result property="providerCode"    column="provider_code"    />
+        <result property="currency"    column="currency"    />
+        <result property="claimFlag"    column="claim_flag"    />
+        <result property="noticeDay"    column="notice_day"    />
+        <result property="effectTime"    column="effect_time"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseProviderSettleVo">
+        select provider_code, currency, claim_flag, notice_day, effect_time, status, create_by, create_time, update_by, update_time from base_provider_settle
+    </sql>
+
+    <select id="selectBaseProviderSettleList" parameterType="BaseProviderSettle" resultMap="BaseProviderSettleResult">
+        <include refid="selectBaseProviderSettleVo"/>
+        <where>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+            <if test="claimFlag != null  and claimFlag != ''"> and claim_flag = #{claimFlag}</if>
+            <if test="noticeDay != null  and noticeDay != ''"> and notice_day = #{noticeDay}</if>
+            <if test="effectTime != null "> and effect_time = #{effectTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseProviderSettleById" parameterType="String" resultMap="BaseProviderSettleResult">
+        <include refid="selectBaseProviderSettleVo"/>
+        where provider_code = #{providerCode}  and status = 'Y'
+    </select>
+
+    <insert id="insertBaseProviderSettle" parameterType="BaseProviderSettle">
+        insert into base_provider_settle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="providerCode != null">provider_code,</if>
+            <if test="currency != null">currency,</if>
+            <if test="claimFlag != null">claim_flag,</if>
+            <if test="noticeDay != null">notice_day,</if>
+            <if test="effectTime != null">effect_time,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="currency != null">#{currency},</if>
+            <if test="claimFlag != null">#{claimFlag},</if>
+            <if test="noticeDay != null">#{noticeDay},</if>
+            <if test="effectTime != null">#{effectTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseProviderSettle" parameterType="BaseProviderSettle">
+        update base_provider_settle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="currency != null">currency = #{currency},</if>
+            <if test="claimFlag != null">claim_flag = #{claimFlag},</if>
+            <if test="noticeDay != null">notice_day = #{noticeDay},</if>
+            <if test="effectTime != null">effect_time = #{effectTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where provider_code = #{providerCode}
+    </update>
+
+    <delete id="deleteBaseProviderSettleById" parameterType="String">
+        delete from base_provider_settle where provider_code = #{providerCode}
+    </delete>
+
+    <delete id="deleteBaseProviderSettleByIds" parameterType="String">
+        delete from base_provider_settle where provider_code in
+        <foreach item="providerCode" collection="array" open="(" separator="," close=")">
+            #{providerCode}
+        </foreach>
+    </delete>
+    
+</mapper>

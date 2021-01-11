@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpServProjectMapper">
+    <!--
+        根据服务项目编码查询服务项目
+        public String selectHmpServProjectNameByCode(String projectCode);
+    -->
+    <select id="selectHmpServProjectNameByCode" resultType="HmpServProject" parameterType="String">
+        SELECT DISTINCT
+            ProjectCode, ProjectName
+        FROM
+           Hmp_Serv_Project
+        WHERE
+           ProjectCode = #{projectcode}
+    </select>
+
+    <!--
+        根据服务名称获取服务项目
+        public HmpServProject selectHmpServProjectCodeByName(String projectname);
+    -->
+    <select id="selectHmpServProjectCodeByName" resultType="HmpServProject" parameterType="String">
+        SELECT DISTINCT
+          ProjectCode, ProjectName
+        FROM
+          Hmp_Serv_Project
+        WHERE
+          ProjectName = #{projectname}
+    </select>
+    
+</mapper>

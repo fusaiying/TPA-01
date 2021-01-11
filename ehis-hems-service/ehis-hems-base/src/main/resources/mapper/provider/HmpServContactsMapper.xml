@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpServContactsMapper">
+
+    <!-- 返回结果集 -->
+    <resultMap id="BaseContactsResult" type="HmpServContacts">
+        <id property="contactno" column="CONTACTNO"/>
+        <id property="servcomno" column="SERVCOMNO"/>
+        <result property="name" column="NAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="title" column="TITLE"/>
+        <result property="phone" column="PHONE"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="fax" column="FAX"/>
+        <result property="alternatefield1" column="ALTERNATEFIELD1"/>
+        <result property="alternatefield2" column="ALTERNATEFIELD2"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="makedate" column="MAKEDATE"/>
+        <result property="maketime" column="MAKETIME"/>
+    </resultMap>
+    
+    <!--
+        新增联系人
+        int insertHmpServContacts(List<HmpServContacts> hmpServContacts);
+    -->
+    <insert id="insertHmpServContacts" parameterType="list">
+        INSERT INTO
+         hmp_serv_contacts ( `ContactNo`, `ServComNo`, `Name`, `Email`, `Title`, `Phone`, `Mobile`, `Fax`, `AlternateField1`, `AlternateField2`, `Operator`, `MakeDate`, `MakeTime` )
+        VALUES
+            <foreach collection="list" item="hmpServContacts" separator=",">
+                ( #{hmpServContacts.contactno}, #{hmpServContacts.servcomno}, #{hmpServContacts.name}, #{hmpServContacts.email}, #{hmpServContacts.title}, #{hmpServContacts.phone}, #{hmpServContacts.mobile}, #{hmpServContacts.fax}, #{hmpServContacts.alternatefield1}, #{hmpServContacts.alternatefield2}, #{hmpServContacts.operator}, #{hmpServContacts.makedate}, #{hmpServContacts.maketime} )
+            </foreach>
+    </insert>
+
+    <!--
+        根据供应商编码查询联系人信息
+        List<HmpServContacts> selectHmpServContacts(String servcomno);
+    -->
+    <select id="selectHmpServContacts" resultMap="BaseContactsResult" parameterType="String">
+        SELECT
+         ContactNo, ServComNo, `Name`, Email, Title, Phone, Mobile, Fax, AlternateField1, AlternateField2, Operator, MakeDate, MakeTime
+        FROM
+         Hmp_Serv_Contacts
+        WHERE
+         ServComNo = #{servcomno}
+    </select>
+
+
+    <!--
+        根据供应商编码修改联系人信息
+        int updateHmpServContacts(List<HmpServContacts> hmpServContacts);
+    -->
+    <update id="updateHmpServContacts" parameterType="HmpServContacts">
+       <foreach collection="list" item="hmpServContacts">
+           <if test="hmpServContacts.contactno != null or hmpServContacts.contactno != ''">
+               UPDATE
+                Hmp_Serv_Contacts
+               SET
+               `Name` = #{hmpServContacts.name},
+               `Email` = #{hmpServContacts.email},
+               `Title` = #{hmpServContacts.title},
+               `Phone` = #{hmpServContacts.phone},
+               `Mobile` = #{hmpServContacts.mobile},
+               `Fax` = #{hmpServContacts.fax},
+               `AlternateField1` = #{hmpServContacts.alternatefield1},
+               `AlternateField2` = #{hmpServContacts.alternatefield2},
+               `Operator` = #{hmpServContacts.operator},
+               `MakeDate` = #{hmpServContacts.makedate},
+               `MakeTime` = #{hmpServContacts.maketime}
+               WHERE
+               `CONTACTNO` = #{hmpServContacts.contactno}
+               AND `SERVCOMNO` = #{hmpServContacts.servcomno};
+           </if>
+       </foreach>
+    </update>
+
+    <!--
+        根据供应商编码查询联系人信息
+        int deleteHmpServContacts(String servcomno);
+     -->
+    <delete id="deleteHmpServContacts" parameterType="String">
+        DELETE FROM
+          hmp_serv_contacts
+        WHERE
+           ServComNo = #{servcomno}
+    </delete>
+</mapper>

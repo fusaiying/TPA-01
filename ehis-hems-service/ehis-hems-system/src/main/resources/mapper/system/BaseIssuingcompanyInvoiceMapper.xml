@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.BaseIssuingcompanyInvoiceMapper">
+    
+    <resultMap type="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice" id="BaseIssuingcompanyInvoiceResult">
+        <result property="companyCode"    column="company_code"    />
+        <result property="invoiceName"    column="invoice_name"    />
+        <result property="ratepayerNumber"    column="ratepayer_number"    />
+        <result property="account"    column="account"    />
+        <result property="address"    column="address"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseIssuingcompanyInvoiceVo">
+        select company_code, invoice_name, ratepayer_number, account, address, telephone, status, create_by, create_time, update_by, update_time from base_issuingcompany_invoice
+    </sql>
+
+    <select id="selectBaseIssuingcompanyInvoiceList" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice" resultMap="BaseIssuingcompanyInvoiceResult">
+        <include refid="selectBaseIssuingcompanyInvoiceVo"/>
+        <where>  
+            <if test="invoiceName != null  and invoiceName != ''"> and invoice_name like concat('%', #{invoiceName}, '%')</if>
+            <if test="ratepayerNumber != null  and ratepayerNumber != ''"> and ratepayer_number = #{ratepayerNumber}</if>
+            <if test="account != null  and account != ''"> and account = #{account}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseIssuingcompanyInvoiceById" parameterType="String" resultMap="BaseIssuingcompanyInvoiceResult">
+        <include refid="selectBaseIssuingcompanyInvoiceVo"/>
+        where company_code = #{companyCode}
+    </select>
+        
+    <insert id="insertBaseIssuingcompanyInvoice" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice">
+        insert into base_issuingcompany_invoice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null">company_code,</if>
+            <if test="invoiceName != null and invoiceName != ''">invoice_name,</if>
+            <if test="ratepayerNumber != null and ratepayerNumber != ''">ratepayer_number,</if>
+            <if test="account != null and account != ''">account,</if>
+            <if test="address != null">address,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="invoiceName != null and invoiceName != ''">#{invoiceName},</if>
+            <if test="ratepayerNumber != null and ratepayerNumber != ''">#{ratepayerNumber},</if>
+            <if test="account != null and account != ''">#{account},</if>
+            <if test="address != null">#{address},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseIssuingcompanyInvoice" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice">
+        update base_issuingcompany_invoice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="invoiceName != null and invoiceName != ''">invoice_name = #{invoiceName},</if>
+            <if test="ratepayerNumber != null and ratepayerNumber != ''">ratepayer_number = #{ratepayerNumber},</if>
+            <if test="account != null and account != ''">account = #{account},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where company_code = #{companyCode}
+    </update>
+
+    <delete id="deleteBaseIssuingcompanyInvoiceById" parameterType="String">
+        delete from base_issuingcompany_invoice where company_code = #{companyCode}
+    </delete>
+
+    <delete id="deleteBaseIssuingcompanyInvoiceByIds" parameterType="String">
+        delete from base_issuingcompany_invoice where company_code in 
+        <foreach item="companyCode" collection="array" open="(" separator="," close=")">
+            #{companyCode}
+        </foreach>
+    </delete>
+    
+</mapper>

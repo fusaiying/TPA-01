@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseBankMapper">
+
+    <resultMap type="BaseBank" id="BaseBankResult">
+        <result property="id"    column="id"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="accountNo"    column="account_no"    />
+        <result property="accountName"    column="account_name"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="bankDetail"    column="bank_detail"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseBankVo">
+        select id, provider_code, bank_code, bank_name, account_no, account_name, account_type, bank_detail, remark, status, create_by, create_time, update_by, update_time from base_bank
+    </sql>
+
+    <select id="selectBaseBankList" parameterType="BaseBank" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="accountNo != null  and accountNo != ''"> and account_no = #{accountNo}</if>
+            <if test="accountName != null  and accountName != ''"> and account_name like concat('%', #{accountName}, '%')</if>
+            <if test="accountType != null  and accountType != ''"> and account_type = #{accountType}</if>
+            <if test="bankDetail != null  and bankDetail != ''"> and bank_detail = #{bankDetail}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseBankById" parameterType="String" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBaseBank" parameterType="BaseBank">
+        insert into base_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="bankCode != null and bankCode != ''">bank_code,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="accountNo != null">account_no,</if>
+            <if test="accountName != null">account_name,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="bankDetail != null">bank_detail,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">#{bankCode},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="accountNo != null">#{accountNo},</if>
+            <if test="accountName != null">#{accountName},</if>
+            <if test="accountType != null">#{accountType},</if>
+            <if test="bankDetail != null">#{bankDetail},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseBank" parameterType="BaseBank">
+        update base_bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">bank_code = #{bankCode},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="accountName != null">account_name = #{accountName},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="bankDetail != null">bank_detail = #{bankDetail},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseBankById" parameterType="String">
+        delete from base_bank where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseBankByIds" parameterType="String">
+        delete from base_bank where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBaseBankByCode" parameterType="String" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        where provider_code = #{providerCode} and status ='Y'
+    </select>
+
+    <delete id="deleteBaseBankByCode" parameterType="String">
+        delete from base_bank where provider_code = #{providerCode}
+    </delete>
+    
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpBenefitCustomerMapper">
+    
+    <resultMap type="HmpBenefitCustomer" id="HmpBenefitCustomerResult">
+        <result property="customerid"    column="customerid"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="idtype"    column="idtype"    />
+        <result property="idcardno"    column="idcardno"    />
+        <result property="occupation"    column="occupation"    />
+        <result property="socialsecurityno"    column="socialsecurityno"    />
+        <result property="nationality"    column="nationality"    />
+        <result property="effectivedate"    column="effectivedate"    />
+        <result property="expirationdate"    column="expirationdate"    />
+        <result property="longterm"    column="longterm"    />
+        <result property="occupation2"    column="occupation2"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHmpBenefitCustomerVo">
+        select customerid, name, sex, birthday, idtype, idcardno, occupation, socialsecurityno, nationality, effectivedate, expirationdate, longterm, occupation2, create_by, create_time, update_by, update_time from hmp_benefit_customer
+    </sql>
+
+    <select id="selectHmpBenefitCustomerList" parameterType="HmpBenefitCustomer" resultMap="HmpBenefitCustomerResult">
+        <include refid="selectHmpBenefitCustomerVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="idtype != null  and idtype != ''"> and idtype = #{idtype}</if>
+            <if test="idcardno != null  and idcardno != ''"> and idcardno = #{idcardno}</if>
+            <if test="occupation != null  and occupation != ''"> and occupation = #{occupation}</if>
+            <if test="socialsecurityno != null  and socialsecurityno != ''"> and socialsecurityno = #{socialsecurityno}</if>
+            <if test="nationality != null  and nationality != ''"> and nationality = #{nationality}</if>
+            <if test="effectivedate != null "> and effectivedate = #{effectivedate}</if>
+            <if test="expirationdate != null "> and expirationdate = #{expirationdate}</if>
+            <if test="longterm != null  and longterm != ''"> and longterm = #{longterm}</if>
+            <if test="occupation2 != null  and occupation2 != ''"> and occupation2 = #{occupation2}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpBenefitCustomerById" parameterType="String" resultMap="HmpBenefitCustomerResult">
+        <include refid="selectHmpBenefitCustomerVo"/>
+        where customerid = #{customerid}
+    </select>
+        
+    <insert id="insertHmpBenefitCustomer" parameterType="HmpBenefitCustomer">
+        insert into hmp_benefit_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerid != null">customerid,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null">sex,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="idtype != null">idtype,</if>
+            <if test="idcardno != null and idcardno != ''">idcardno,</if>
+            <if test="occupation != null">occupation,</if>
+            <if test="socialsecurityno != null">socialsecurityno,</if>
+            <if test="nationality != null">nationality,</if>
+            <if test="effectivedate != null">effectivedate,</if>
+            <if test="expirationdate != null">expirationdate,</if>
+            <if test="longterm != null">longterm,</if>
+            <if test="occupation2 != null">occupation2,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerid != null">#{customerid},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="idtype != null">#{idtype},</if>
+            <if test="idcardno != null and idcardno != ''">#{idcardno},</if>
+            <if test="occupation != null">#{occupation},</if>
+            <if test="socialsecurityno != null">#{socialsecurityno},</if>
+            <if test="nationality != null">#{nationality},</if>
+            <if test="effectivedate != null">#{effectivedate},</if>
+            <if test="expirationdate != null">#{expirationdate},</if>
+            <if test="longterm != null">#{longterm},</if>
+            <if test="occupation2 != null">#{occupation2},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpBenefitCustomer" parameterType="HmpBenefitCustomer">
+        update hmp_benefit_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="idtype != null">idtype = #{idtype},</if>
+            <if test="idcardno != null and idcardno != ''">idcardno = #{idcardno},</if>
+            <if test="occupation != null">occupation = #{occupation},</if>
+            <if test="socialsecurityno != null">socialsecurityno = #{socialsecurityno},</if>
+            <if test="nationality != null">nationality = #{nationality},</if>
+            <if test="effectivedate != null">effectivedate = #{effectivedate},</if>
+            <if test="expirationdate != null">expirationdate = #{expirationdate},</if>
+            <if test="longterm != null">longterm = #{longterm},</if>
+            <if test="occupation2 != null">occupation2 = #{occupation2},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where customerid = #{customerid}
+    </update>
+
+    <delete id="deleteHmpBenefitCustomerById" parameterType="String">
+        delete from hmp_benefit_customer where customerid = #{customerid}
+    </delete>
+
+    <delete id="deleteHmpBenefitCustomerByIds" parameterType="String">
+        delete from hmp_benefit_customer where customerid in 
+        <foreach item="customerid" collection="array" open="(" separator="," close=")">
+            #{customerid}
+        </foreach>
+    </delete>
+
+    <select id="selectHmpBenefitCustomerListUseChinese" parameterType="HmpBenefitCustomer" resultMap="HmpBenefitCustomerResult">
+        select customerid, name, sex, birthday,
+        (select dict_label from sys_dict_data where dict_type = 'id_type' and dict_value = idtype) idtype,
+        idcardno, occupation, socialsecurityno, nationality, effectivedate, expirationdate, longterm, occupation2, create_by, create_time, update_by, update_time
+        from hmp_benefit_customer
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="idtype != null  and idtype != ''"> and idtype = #{idtype}</if>
+            <if test="idcardno != null  and idcardno != ''"> and idcardno = #{idcardno}</if>
+            <if test="occupation != null  and occupation != ''"> and occupation = #{occupation}</if>
+            <if test="socialsecurityno != null  and socialsecurityno != ''"> and socialsecurityno = #{socialsecurityno}</if>
+            <if test="nationality != null  and nationality != ''"> and nationality = #{nationality}</if>
+            <if test="effectivedate != null "> and effectivedate = #{effectivedate}</if>
+            <if test="expirationdate != null "> and expirationdate = #{expirationdate}</if>
+            <if test="longterm != null  and longterm != ''"> and longterm = #{longterm}</if>
+            <if test="occupation2 != null  and occupation2 != ''"> and occupation2 = #{occupation2}</if>
+        </where>
+    </select>
+    
+</mapper>

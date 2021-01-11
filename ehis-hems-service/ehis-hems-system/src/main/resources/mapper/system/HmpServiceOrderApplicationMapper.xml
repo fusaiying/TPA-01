@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.HmpServiceOrderApplicationMapper">
+    
+    <resultMap type="HmpServiceOrderApplication" id="HmpServiceOrderApplicationResult">
+        <result property="applicationcode"    column="applicationcode"    />
+        <result property="ordercode"    column="ordercode"    />
+        <result property="user"    column="user"    />
+        <result property="useridtype"    column="useridtype"    />
+        <result property="useridcode"    column="useridcode"    />
+        <result property="usersex"    column="usersex"    />
+        <result property="userbirthday"    column="userbirthday"    />
+        <result property="usermobile"    column="usermobile"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactsidtype"    column="contactsidtype"    />
+        <result property="contactsidcode"    column="contactsidcode"    />
+        <result property="contactsmobile"    column="contactsmobile"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectHmpServiceOrderApplicationVo">
+        select applicationcode, ordercode, user, useridtype, useridcode, usersex, userbirthday, usermobile, contacts, contactsidtype, contactsidcode, contactsmobile, status, create_by, create_time, update_by, update_time from hmp_service_order_application
+    </sql>
+
+    <select id="selectHmpServiceOrderApplicationList" parameterType="HmpServiceOrderApplication" resultMap="HmpServiceOrderApplicationResult">
+        <include refid="selectHmpServiceOrderApplicationVo"/>
+        <where>  
+            <if test="ordercode != null  and ordercode != ''"> and ordercode = #{ordercode}</if>
+            <if test="user != null  and user != ''"> and user = #{user}</if>
+            <if test="useridtype != null  and useridtype != ''"> and useridtype = #{useridtype}</if>
+            <if test="useridcode != null  and useridcode != ''"> and useridcode = #{useridcode}</if>
+            <if test="usersex != null  and usersex != ''"> and usersex = #{usersex}</if>
+            <if test="userbirthday != null "> and userbirthday = #{userbirthday}</if>
+            <if test="usermobile != null  and usermobile != ''"> and usermobile = #{usermobile}</if>
+            <if test="contacts != null  and contacts != ''"> and contacts = #{contacts}</if>
+            <if test="contactsidtype != null  and contactsidtype != ''"> and contactsidtype = #{contactsidtype}</if>
+            <if test="contactsidcode != null  and contactsidcode != ''"> and contactsidcode = #{contactsidcode}</if>
+            <if test="contactsmobile != null  and contactsmobile != ''"> and contactsmobile = #{contactsmobile}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpServiceOrderApplicationById" parameterType="String" resultMap="HmpServiceOrderApplicationResult">
+        <include refid="selectHmpServiceOrderApplicationVo"/>
+        where applicationcode = #{applicationcode}
+    </select>
+        
+    <insert id="insertHmpServiceOrderApplication" parameterType="HmpServiceOrderApplication">
+        insert into hmp_service_order_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applicationcode != null">applicationcode,</if>
+            <if test="ordercode != null and ordercode != ''">ordercode,</if>
+            <if test="user != null">user,</if>
+            <if test="useridtype != null">useridtype,</if>
+            <if test="useridcode != null">useridcode,</if>
+            <if test="usersex != null">usersex,</if>
+            <if test="userbirthday != null">userbirthday,</if>
+            <if test="usermobile != null">usermobile,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="contactsidtype != null">contactsidtype,</if>
+            <if test="contactsidcode != null">contactsidcode,</if>
+            <if test="contactsmobile != null">contactsmobile,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applicationcode != null">#{applicationcode},</if>
+            <if test="ordercode != null and ordercode != ''">#{ordercode},</if>
+            <if test="user != null">#{user},</if>
+            <if test="useridtype != null">#{useridtype},</if>
+            <if test="useridcode != null">#{useridcode},</if>
+            <if test="usersex != null">#{usersex},</if>
+            <if test="userbirthday != null">#{userbirthday},</if>
+            <if test="usermobile != null">#{usermobile},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="contactsidtype != null">#{contactsidtype},</if>
+            <if test="contactsidcode != null">#{contactsidcode},</if>
+            <if test="contactsmobile != null">#{contactsmobile},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpServiceOrderApplication" parameterType="HmpServiceOrderApplication">
+        update hmp_service_order_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ordercode != null and ordercode != ''">ordercode = #{ordercode},</if>
+            <if test="user != null">user = #{user},</if>
+            <if test="useridtype != null">useridtype = #{useridtype},</if>
+            <if test="useridcode != null">useridcode = #{useridcode},</if>
+            <if test="usersex != null">usersex = #{usersex},</if>
+            <if test="userbirthday != null">userbirthday = #{userbirthday},</if>
+            <if test="usermobile != null">usermobile = #{usermobile},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="contactsidtype != null">contactsidtype = #{contactsidtype},</if>
+            <if test="contactsidcode != null">contactsidcode = #{contactsidcode},</if>
+            <if test="contactsmobile != null">contactsmobile = #{contactsmobile},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where applicationcode = #{applicationcode}
+    </update>
+
+    <delete id="deleteHmpServiceOrderApplicationById" parameterType="String">
+        delete from hmp_service_order_application where applicationcode = #{applicationcode}
+    </delete>
+
+    <delete id="deleteHmpServiceOrderApplicationByIds" parameterType="String">
+        delete from hmp_service_order_application where applicationcode in 
+        <foreach item="applicationcode" collection="array" open="(" separator="," close=")">
+            #{applicationcode}
+        </foreach>
+    </delete>
+
+    <!--
+        根据工单编号查询出服务申请信息
+        HmpServiceOrderApplication selectHmpServiceOrderAppByOrdercode(String ordercode);
+    -->
+    <select id="selectHmpServiceOrderAppByOrdercode" resultType="HmpServiceOrderApplication" parameterType="String">
+        SELECT
+            *
+        FROM
+            Hmp_Service_Order_Application
+        WHERE
+            ordercode = #{ordercode}
+    </select>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.ClaimBatchRecordMapper">
+    
+    <resultMap type="com.paic.ehis.system.domain.ClaimBatchRecord" id="ClaimBatchRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="operation"    column="operation"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="nopassType"    column="nopass_type"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimBatchRecordVo">
+        select record_id, batch_no, operation, conclusion, nopass_type, remark, status, create_by, create_time, update_by, update_time from claim_batch_record
+    </sql>
+
+    <select id="selectClaimBatchRecordList" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord" resultMap="ClaimBatchRecordResult">
+        <include refid="selectClaimBatchRecordVo"/>
+        <where>  
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
+            <if test="nopassType != null  and nopassType != ''"> and nopass_type = #{nopassType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimBatchRecordById" parameterType="Long" resultMap="ClaimBatchRecordResult">
+        <include refid="selectClaimBatchRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertClaimBatchRecord" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into claim_batch_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="operation != null and operation != ''">operation,</if>
+            <if test="conclusion != null">conclusion,</if>
+            <if test="nopassType != null">nopass_type,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="conclusion != null">#{conclusion},</if>
+            <if test="nopassType != null">#{nopassType},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimBatchRecord" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord">
+        update claim_batch_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
+            <if test="conclusion != null">conclusion = #{conclusion},</if>
+            <if test="nopassType != null">nopass_type = #{nopassType},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteClaimBatchRecordById" parameterType="Long">
+        delete from claim_batch_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteClaimBatchRecordByIds" parameterType="String">
+        delete from claim_batch_record where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+    
+</mapper>

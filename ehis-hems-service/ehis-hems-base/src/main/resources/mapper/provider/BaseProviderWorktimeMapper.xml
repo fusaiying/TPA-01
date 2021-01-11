@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseProviderWorktimeMapper">
+
+    <resultMap type="BaseProviderWorktime" id="BaseProviderWorktimeResult">
+        <result property="id"    column="id"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="timeNode"    column="time_node"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="nodeRemark"    column="node_remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseProviderWorktimeVo">
+        select id, provider_code, time_node, start_time, end_time, node_remark, status, create_by, create_time, update_by, update_time from base_provider_worktime
+    </sql>
+
+    <select id="selectBaseProviderWorktimeList" parameterType="BaseProviderWorktime" resultMap="BaseProviderWorktimeResult">
+        <include refid="selectBaseProviderWorktimeVo"/>
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="timeNode != null  and timeNode != ''"> and time_node = #{timeNode}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="nodeRemark != null  and nodeRemark != ''"> and node_remark = #{nodeRemark}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseProviderWorktimeById" parameterType="String" resultMap="BaseProviderWorktimeResult">
+        <include refid="selectBaseProviderWorktimeVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBaseProviderWorktimeBycode" parameterType="String" resultMap="BaseProviderWorktimeResult">
+        <include refid="selectBaseProviderWorktimeVo"/>
+        where provider_code = #{providerode}
+    </select>
+
+    <insert id="insertBaseProviderWorktime" parameterType="BaseProviderWorktime">
+        insert into base_provider_worktime
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="timeNode != null">time_node,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="nodeRemark != null">node_remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="timeNode != null">#{timeNode},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="nodeRemark != null">#{nodeRemark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseProviderWorktime" parameterType="BaseProviderWorktime">
+        update base_provider_worktime
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
+            <if test="timeNode != null">time_node = #{timeNode},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="nodeRemark != null">node_remark = #{nodeRemark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseProviderWorktimeById" parameterType="String">
+         delete from base_provider_worktime where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseProviderWorktimeByIds" parameterType="String">
+        delete from base_provider_worktime where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

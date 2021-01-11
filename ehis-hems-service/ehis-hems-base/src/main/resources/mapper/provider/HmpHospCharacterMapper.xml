@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HmpHospCharacterMapper">
+    <!-- 返回结果集 -->
+    <resultMap type="HmpHospCharacter" id="CharacterResult">
+        <id property="servcomno" column="SERVCOMNO"/>
+        <result property="bednum" column="BEDNUM"/>
+        <result property="outpatient" column="OUTPATIENT"/>
+        <result property="average" column="AVERAGE"/>
+        <result property="hospitaldeps" column="HOSPITALDEPS"/>
+        <result property="workingtime" column="WORKINGTIME"/>
+    </resultMap>
+    <!--
+        根据合作机构编码查询医疗特色信息
+        HmpHospCharacter selectHmpHospCharacterByNo(String servcomno);
+     -->
+    <select id="selectHmpHospCharacterByNo" resultMap="CharacterResult">
+        select
+            a.ServComno,
+            a.BedNum,
+            a.OutPatient,
+            a.Average,
+            a.HospitalDeps,
+            a.Feature,
+            a.WorkingTime
+        FROM
+            Hmp_Hosp_Character a
+        WHERE
+            a.ServComNo = #{servcomno}
+
+    </select>
+
+    <!--
+        新增医疗特色信息
+        int insertHmpHospCharacter(HmpHospCharacter hmpHospCharacter);
+    -->
+    <insert id="insertHmpHospCharacter" parameterType="HmpHospCharacter">
+        INSERT INTO
+            Hmp_Hosp_Character (ServComno, BedNum, OutPatient, Average, HospitalDeps, Feature, WorkingTime, Operator, MakeDate, MakeTime)
+        VALUES
+	        (#{servcomno}, #{bednum}, #{outpatient}, #{average}, #{hospitaldeps}, #{feature}, #{workingtime}, #{operator}, #{makedate}, #{maketime});
+    </insert>
+
+    <!--
+        修改医疗特色信息
+        int updateHmpHospCharacter(HmpHospCharacter hmpHospCharacter);
+    -->
+    <update id="updateHmpHospCharacter" parameterType="HmpHospCharacter">
+        UPDATE Hmp_Hosp_Character
+        SET
+            BedNum = #{bednum},
+            OutPatient = #{outpatient},
+            Average = #{average},
+            HospitalDeps = #{hospitaldeps},
+            Feature = #{feature},
+            WorkingTime = #{workingtime}
+        WHERE
+            servcomno = #{servcomno}
+    </update>
+</mapper>

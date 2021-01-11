@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.HmpFileInfoMapper">
+    
+    <resultMap type="HmpFileInfo" id="HmpFileInfoResult">
+        <result property="filecode"    column="filecode"    />
+        <result property="filename"    column="filename"    />
+        <result property="filepath"    column="filepath"    />
+        <result property="filesource"    column="filesource"    />
+        <result property="alternatefield1"    column="alternatefield1"    />
+        <result property="alternatefield2"    column="alternatefield2"    />
+        <result property="operator"    column="operator"    />
+        <result property="makedate"    column="makedate"    />
+        <result property="maketime"    column="maketime"    />
+        <result property="modifydate"    column="modifydate"    />
+        <result property="modifytime"    column="modifytime"    />
+    </resultMap>
+
+    <sql id="selectHmpFileInfoVo">
+        select filecode, filename, filepath, filesource, alternatefield1, alternatefield2, operator, makedate, maketime, modifydate, modifytime from hmp_file_info
+    </sql>
+
+    <select id="selectHmpFileInfoList" parameterType="HmpFileInfo" resultMap="HmpFileInfoResult">
+        <include refid="selectHmpFileInfoVo"/>
+        <where>
+            <if test="filecode != null  and filecode != ''"> and filecode = #{filecode}</if>
+            <if test="filename != null  and filename != ''"> and filename like concat('%', #{filename}, '%')</if>
+            <if test="filepath != null  and filepath != ''"> and filepath = #{filepath}</if>
+            <if test="filesource != null  and filesource != ''"> and filesource = #{filesource}</if>
+            <if test="alternatefield1 != null  and alternatefield1 != ''"> and alternatefield1 = #{alternatefield1}</if>
+            <if test="alternatefield2 != null  and alternatefield2 != ''"> and alternatefield2 = #{alternatefield2}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="makedate != null "> and makedate = #{makedate}</if>
+            <if test="maketime != null  and maketime != ''"> and maketime = #{maketime}</if>
+            <if test="modifydate != null "> and modifydate = #{modifydate}</if>
+            <if test="modifytime != null  and modifytime != ''"> and modifytime = #{modifytime}</if>
+        </where>
+    </select>
+    
+    <select id="selectHmpFileInfoById" parameterType="String" resultMap="HmpFileInfoResult">
+        <include refid="selectHmpFileInfoVo"/>
+        where filecode = #{filecode}
+    </select>
+        
+    <insert id="insertHmpFileInfo" parameterType="HmpFileInfo" useGeneratedKeys="true" keyProperty="filecode">
+        insert into hmp_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="filecode != null">filecode,</if>
+            <if test="filename != null">filename,</if>
+            <if test="filepath != null">filepath,</if>
+            <if test="filesource != null">filesource,</if>
+            <if test="alternatefield1 != null">alternatefield1,</if>
+            <if test="alternatefield2 != null">alternatefield2,</if>
+            <if test="operator != null">operator,</if>
+            <if test="makedate != null">makedate,</if>
+            <if test="maketime != null">maketime,</if>
+            <if test="modifydate != null">modifydate,</if>
+            <if test="modifytime != null">modifytime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="filecode != null">#{filecode},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="filepath != null">#{filepath},</if>
+            <if test="filesource != null">#{filesource},</if>
+            <if test="alternatefield1 != null">#{alternatefield1},</if>
+            <if test="alternatefield2 != null">#{alternatefield2},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="makedate != null">#{makedate},</if>
+            <if test="maketime != null">#{maketime},</if>
+            <if test="modifydate != null">#{modifydate},</if>
+            <if test="modifytime != null">#{modifytime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHmpFileInfo" parameterType="HmpFileInfo">
+        update hmp_file_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filename != null">filename = #{filename},</if>
+            <if test="filepath != null">filepath = #{filepath},</if>
+            <if test="filesource != null">filesource = #{filesource},</if>
+            <if test="alternatefield1 != null">alternatefield1 = #{alternatefield1},</if>
+            <if test="alternatefield2 != null">alternatefield2 = #{alternatefield2},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="makedate != null">makedate = #{makedate},</if>
+            <if test="maketime != null">maketime = #{maketime},</if>
+            <if test="modifydate != null">modifydate = #{modifydate},</if>
+            <if test="modifytime != null">modifytime = #{modifytime},</if>
+        </trim>
+        where filecode = #{filecode}
+    </update>
+
+    <delete id="deleteHmpFileInfoById" parameterType="String">
+        delete from hmp_file_info where filecode = #{filecode}
+    </delete>
+
+    <delete id="deleteHmpFileInfoByIds" parameterType="String">
+        delete from hmp_file_info where filecode in
+        <foreach item="filecode" collection="array" open="(" separator="," close=")">
+            #{filecode}
+        </foreach>
+    </delete>
+    
+</mapper>

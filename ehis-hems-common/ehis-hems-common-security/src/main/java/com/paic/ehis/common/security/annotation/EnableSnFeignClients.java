@@ -16,7 +16,7 @@ public @interface EnableSnFeignClients
 {
     String[] value() default {};
 
-    String[] basePackages() default { "com.paic" };
+    String[] basePackages() default { "com.paic.ehis" };
 
     Class<?>[] basePackageClasses() default {};
 

@@ -24,7 +24,7 @@
         <module>ehis-hems-product</module>
         <module>ehis-hems-query</module>
         <module>ehis-hems-system</module>
-        <module>sino-service-gen</module>
+        <module>ehis-hems-gen</module>
     </modules>
 
     <artifactId>ehis-hems-service</artifactId>

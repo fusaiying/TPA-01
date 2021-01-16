@@ -11,10 +11,10 @@
 
     <modules>
         <module>ehis-hems-base</module>
-        <module>ehis-hems-claima</module>
+        <module>ehis-hems-claimapt</module>
         <module>ehis-hems-claimcal</module>
         <module>ehis-hems-claimflow</module>
-        <module>ehis-hems-claimm</module>
+        <module>ehis-hems-claimmgt</module>
         <module>ehis-hems-cs</module>
         <module>ehis-hems-file</module>
         <module>ehis-hems-finance</module>

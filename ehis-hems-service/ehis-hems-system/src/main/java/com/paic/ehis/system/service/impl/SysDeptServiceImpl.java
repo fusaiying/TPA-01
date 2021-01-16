@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.domain.vo.TreeSelect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.datascope.annotation.DataScope;
+import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.mapper.SysDeptMapper;
 import com.paic.ehis.system.service.ISysDeptService;
 

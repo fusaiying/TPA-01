@@ -1,11 +1,12 @@
 package com.paic.ehis.system.service.impl;
 
 import java.util.List;
+
+import com.paic.ehis.system.domain.HmpAuditTrack;
+import com.paic.ehis.system.mapper.HmpAuditTrackMapper;
+import com.paic.ehis.system.service.IHmpAuditTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.mapper.HmpAuditTrackMapper;
-import com.paic.ehis.system.domain.HmpAuditTrack;
-import com.paic.ehis.system.service.IHmpAuditTrackService;
 
 /**
  * 产品审核轨迹Service业务层处理
@@ -14,7 +15,7 @@ import com.paic.ehis.system.service.IHmpAuditTrackService;
  * @date 2020-11-04
  */
 @Service
-public class HmpAuditTrackServiceImpl implements IHmpAuditTrackService 
+public class HmpAuditTrackServiceImpl implements IHmpAuditTrackService
 {
     @Autowired
     private HmpAuditTrackMapper hmpAuditTrackMapper;

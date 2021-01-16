@@ -28,7 +28,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 /**
  * 客户权益查询Controller
  * 
- * @author paic.ehis
+ * @author sino
  * @date 2020-11-23
  */
 @RestController

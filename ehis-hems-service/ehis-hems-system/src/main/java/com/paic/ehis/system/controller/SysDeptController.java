@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.domain.vo.DeptVo;
-import com.paic.ehis.system.service.ISysDeptService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,8 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysDept;
+import com.paic.ehis.system.service.ISysDeptService;
 
 /**
  * 部门信息

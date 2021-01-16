@@ -8,77 +8,79 @@ import com.paic.ehis.common.core.annotation.Excel;
 
 /**
  * 出单公司信息 对象 base_issuingcompany
- * 
+ *
  * @author sino
  * @date 2021-01-05
  */
-public class BaseIssuingcompany extends BaseEntity
-{
+public class BaseIssuingcompany extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 出单公司编码 */
-    private String companyCode;
+    /**
+     * 出单公司编码
+     */
+    private String companycode;
 
-    /** 出单公司名称 */
+    /**
+     * 出单公司名称
+     */
     @Excel(name = "出单公司名称")
-    private String companyName;
+    private String companyname;
 
-    /** 出单公司简写名称 */
+    /**
+     * 出单公司简写名称
+     */
     @Excel(name = "出单公司简写名称")
-    private String simpleName;
+    private String simplename;
 
-    /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
+    /**
+     * 状态（Y-有效，N-无效）
+     */
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
-    public void setCompanyCode(String companyCode) 
-    {
-        this.companyCode = companyCode;
+    public String getCompanycode() {
+        return companycode;
     }
 
-    public String getCompanyCode() 
-    {
-        return companyCode;
-    }
-    public void setCompanyName(String companyName) 
-    {
-        this.companyName = companyName;
+    public void setCompanycode(String companycode) {
+        this.companycode = companycode;
     }
 
-    public String getCompanyName() 
-    {
-        return companyName;
-    }
-    public void setSimpleName(String simpleName) 
-    {
-        this.simpleName = simpleName;
+    public String getCompanyname() {
+        return companyname;
     }
 
-    public String getSimpleName() 
-    {
-        return simpleName;
-    }
-    public void setStatus(String status) 
-    {
-        this.status = status;
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
     }
 
-    public String getStatus() 
-    {
+    public String getSimplename() {
+        return simplename;
+    }
+
+    public void setSimplename(String simplename) {
+        this.simplename = simplename;
+    }
+
+    public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("companyCode", getCompanyCode())
-            .append("companyName", getCompanyName())
-            .append("simpleName", getSimpleName())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("companycode", getCompanycode())
+                .append("companyname", getCompanyname())
+                .append("simplename", getSimplename())
+                .append("status", getStatus())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

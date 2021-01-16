@@ -5,8 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.system.mapper.BaseIcd10Mapper">
     
     <resultMap type="com.paic.ehis.system.domain.BaseIcd10" id="BaseIcd10Result">
-        <result property="icdCode"    column="icd_code"    />
-        <result property="icdName"    column="icd_name"    />
+        <result property="icdNo"    column="icd_no"    />
+        <result property="icdcode"    column="icd_code"    />
+        <result property="icdmname"    column="icd_name"    />
         <result property="icdClass"    column="icd_class"    />
         <result property="source"    column="source"    />
         <result property="status"    column="status"    />
@@ -17,29 +18,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseIcd10Vo">
-        select icd_code, icd_name, icd_class, source, status, create_by, create_time, update_by, update_time from base_icd10
+        select icd_no, icd_code, icd_name, icd_class, source, status, create_by, create_time, update_by, update_time from base_icd10
     </sql>
 
     <select id="selectBaseIcd10List" parameterType="com.paic.ehis.system.domain.BaseIcd10" resultMap="BaseIcd10Result">
         <include refid="selectBaseIcd10Vo"/>
-        <where>  
-            <if test="icdName != null  and icdName != ''"> and icd_name like concat('%', #{icdName}, '%')</if>
-            <if test="icdClass != null  and icdClass != ''"> and icd_class = #{icdClass}</if>
-            <if test="source != null  and source != ''"> and source = #{source}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+        <where>
+            <if test="icdcode != null  and icdcode != ''"> and icd_code = #{icdcode}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="icdmname != null  and icdmname != ''"> and icd_name like concat('%',#{icdmname},'%')</if>
         </where>
     </select>
     
     <select id="selectBaseIcd10ById" parameterType="String" resultMap="BaseIcd10Result">
         <include refid="selectBaseIcd10Vo"/>
-        where icd_code = #{icdCode}
+        where icd_code = #{icdcode} and status = 'Y'
     </select>
-        
+
+    <select id="selectBaseIcd10ByName" parameterType="String" resultMap="BaseIcd10Result">
+        <include refid="selectBaseIcd10Vo"/>
+        where icd_name = #{icdmname} and status = 'Y'
+    </select>
+
     <insert id="insertBaseIcd10" parameterType="com.paic.ehis.system.domain.BaseIcd10">
         insert into base_icd10
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="icdCode != null">icd_code,</if>
-            <if test="icdName != null and icdName != ''">icd_name,</if>
+            <if test="icdNo != null">icd_no,</if>
+            <if test="icdcode != null">icd_code,</if>
+            <if test="icdmname != null and icdmname != ''">icd_name,</if>
             <if test="icdClass != null and icdClass != ''">icd_class,</if>
             <if test="source != null and source != ''">source,</if>
             <if test="status != null">status,</if>
@@ -49,8 +55,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="icdCode != null">#{icdCode},</if>
-            <if test="icdName != null and icdName != ''">#{icdName},</if>
+            <if test="icdNo != null">#{icdNo},</if>
+            <if test="icdcode != null">#{icdcode},</if>
+            <if test="icdmname != null and icdmname != ''">#{icdmname},</if>
             <if test="icdClass != null and icdClass != ''">#{icdClass},</if>
             <if test="source != null and source != ''">#{source},</if>
             <if test="status != null">#{status},</if>
@@ -64,7 +71,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBaseIcd10" parameterType="com.paic.ehis.system.domain.BaseIcd10">
         update base_icd10
         <trim prefix="SET" suffixOverrides=",">
-            <if test="icdName != null and icdName != ''">icd_name = #{icdName},</if>
+            <if test="icdNo != null and icdNo != ''">icd_no = #{icdNo},</if>
+            <if test="icdmname != null and icdmname != ''">icd_name = #{icdmname},</if>
             <if test="icdClass != null and icdClass != ''">icd_class = #{icdClass},</if>
             <if test="source != null and source != ''">source = #{source},</if>
             <if test="status != null">status = #{status},</if>
@@ -73,17 +81,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where icd_code = #{icdCode}
+        where icd_code = #{icdcode}
     </update>
 
     <delete id="deleteBaseIcd10ById" parameterType="String">
-        delete from base_icd10 where icd_code = #{icdCode}
+        delete from base_icd10 where icd_code = #{icdcode}
     </delete>
 
     <delete id="deleteBaseIcd10ByIds" parameterType="String">
         delete from base_icd10 where icd_code in 
-        <foreach item="icdCode" collection="array" open="(" separator="," close=")">
-            #{icdCode}
+        <foreach item="icdcode" collection="array" open="(" separator="," close=")">
+            #{icdcode}
         </foreach>
     </delete>
     

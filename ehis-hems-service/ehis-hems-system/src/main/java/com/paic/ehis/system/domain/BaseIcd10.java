@@ -1,10 +1,13 @@
 package com.paic.ehis.system.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.Date;
 
 /**
  * ICD10数据 对象 base_icd10
@@ -16,83 +19,117 @@ public class BaseIcd10 extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    //@Excel(name = "流水号")
+    private String icdNo;
+
     /** ICD10编码 */
-    private String icdCode;
+    @Excel(name = "ICD10编码")
+    private String icdcode;
 
     /** ICD10名称 */
     @Excel(name = "ICD10名称")
-    private String icdName;
+    private String icdmname;
 
-    /** ICD10大类 */
-    @Excel(name = "ICD10大类")
-    private String icdClass;
-
-    /** 来源（1-基础库，2-人工录入） */
-    @Excel(name = "来源", readConverterExp = "1=-基础库，2-人工录入")
-    private String source;
-
-    /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
+    /** 状态（1-有效，2-无效） */
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
-    public void setIcdCode(String icdCode) 
-    {
-        this.icdCode = icdCode;
+    /** 来源（1-基础库，2-人工录入） */
+    @Excel(name = "来源", readConverterExp = "1=基础库,2=人工录入")
+    private String source;
+
+    /** 创建者 */
+    @Excel(name = "创建人")
+    private String createBy;
+
+    /** 创建时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "创建日期",dateFormat =  "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    /*大类*/
+    @Override
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public String getIcdCode() 
-    {
-        return icdCode;
-    }
-    public void setIcdName(String icdName) 
-    {
-        this.icdName = icdName;
+    @Override
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
-    public String getIcdName() 
-    {
-        return icdName;
+    @Override
+    public Date getCreateTime() {
+        return createTime;
     }
-    public void setIcdClass(String icdClass) 
-    {
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getIcdNo() {
+        return icdNo;
+    }
+
+    public void setIcdNo(String icdNo) {
+        this.icdNo = icdNo;
+    }
+
+    private String icdClass;
+
+    public String getIcdClass() {
+        return icdClass;
+    }
+
+    public void setIcdClass(String icdClass) {
         this.icdClass = icdClass;
     }
 
-    public String getIcdClass() 
-    {
-        return icdClass;
-    }
-    public void setSource(String source) 
-    {
-        this.source = source;
+    public String getIcdcode() {
+        return icdcode;
     }
 
-    public String getSource() 
-    {
-        return source;
+    public void setIcdcode(String icdcode) {
+        this.icdcode = icdcode;
     }
-    public void setStatus(String status) 
-    {
+
+    public String getIcdmname() {
+        return icdmname;
+    }
+
+    public void setIcdmname(String icdmname) {
+        this.icdmname = icdmname;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getStatus() 
-    {
-        return status;
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("icdCode", getIcdCode())
-            .append("icdName", getIcdName())
-            .append("icdClass", getIcdClass())
-            .append("source", getSource())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("icdcode", getIcdcode())
+                .append("icdmname", getIcdmname())
+                .append("status", getStatus())
+                .append("source", getSource())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("icdNo", getIcdNo())
+                .toString();
     }
 }

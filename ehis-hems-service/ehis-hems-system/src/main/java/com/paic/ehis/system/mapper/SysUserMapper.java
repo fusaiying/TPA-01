@@ -1,11 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
+import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 用户表 数据层
@@ -122,4 +124,7 @@ public interface SysUserMapper
     List<JSONObject> queryComcodeUsers(String dept_id);
 
     List<JSONObject> queryUpperComcodeUsers(String username);
+
+    /** 任务改派查询改派操作人 */
+    List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
 }

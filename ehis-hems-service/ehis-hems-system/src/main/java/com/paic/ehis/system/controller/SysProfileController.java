@@ -1,7 +1,5 @@
 package com.paic.ehis.system.controller;
 
-import com.paic.ehis.system.api.domain.SysUser;
-import com.paic.ehis.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +11,8 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.service.ISysUserService;
 
 /**
  * 个人信息 业务处理

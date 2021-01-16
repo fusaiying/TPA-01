@@ -1,11 +1,12 @@
 package com.paic.ehis.system.service.impl;
 
 import java.util.List;
+
+import com.paic.ehis.system.domain.HmpPersonSrevTouser;
+import com.paic.ehis.system.mapper.HmpPersonSrevTouserMapper;
+import com.paic.ehis.system.service.IHmpPersonSrevTouserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.mapper.HmpPersonSrevTouserMapper;
-import com.paic.ehis.system.domain.HmpPersonSrevTouser;
-import com.paic.ehis.system.service.IHmpPersonSrevTouserService;
 
 /**
  * 就诊人服务与员工关联Service业务层处理
@@ -14,7 +15,7 @@ import com.paic.ehis.system.service.IHmpPersonSrevTouserService;
  * @date 2020-11-12
  */
 @Service
-public class HmpPersonSrevTouserServiceImpl implements IHmpPersonSrevTouserService 
+public class HmpPersonSrevTouserServiceImpl implements IHmpPersonSrevTouserService
 {
     @Autowired
     private HmpPersonSrevTouserMapper hmpPersonSrevTouserMapper;

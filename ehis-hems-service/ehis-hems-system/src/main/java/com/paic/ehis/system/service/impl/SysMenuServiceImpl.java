@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.domain.SysMenu;
 import com.paic.ehis.system.domain.vo.MetaVo;
 import com.paic.ehis.system.domain.vo.RouterVo;

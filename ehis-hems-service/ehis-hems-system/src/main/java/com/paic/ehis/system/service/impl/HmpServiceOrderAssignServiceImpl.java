@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HmpServiceOrderAssignServiceImpl implements IHmpServiceOrderAssignService{
+public class HmpServiceOrderAssignServiceImpl implements IHmpServiceOrderAssignService {
 
     @Autowired
     private HmpServiceOrderAssignMapper hmpServiceOrderAssignMapper;

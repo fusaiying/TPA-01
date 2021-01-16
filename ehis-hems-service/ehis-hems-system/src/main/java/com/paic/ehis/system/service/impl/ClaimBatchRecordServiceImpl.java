@@ -1,12 +1,15 @@
 package com.paic.ehis.system.service.impl;
 
 import java.util.List;
+
+import com.paic.ehis.system.domain.ClaimBatchRecord;
+import com.paic.ehis.system.mapper.ClaimBatchRecordMapper;
+import com.paic.ehis.system.service.IClaimBatchRecordService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.mapper.ClaimBatchRecordMapper;
-import com.paic.ehis.system.domain.ClaimBatchRecord;
-import com.paic.ehis.system.service.IClaimBatchRecordService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 理赔批次流程记录 Service业务层处理
@@ -15,7 +18,7 @@ import com.paic.ehis.system.service.IClaimBatchRecordService;
  * @date 2021-01-05
  */
 @Service
-public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService 
+public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
 {
     @Autowired
     private ClaimBatchRecordMapper claimBatchRecordMapper;
@@ -71,6 +74,27 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
     }
 
     /**
+     * 交单复核个人池获取案件
+     *
+     * @param batchnoes 理赔批次流程id数组
+     * @return 结果
+     */
+    @Override
+    @Transactional
+    public int updateClaimBatchByReview(String[] batchnoes) {
+        int i = 0;
+        ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
+        claimBatchRecord.setOperation("04");
+        claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimBatchRecord.setUpdateTime(DateUtils.getNowDate());
+        for (String batchno : batchnoes) {
+            claimBatchRecord.setBatchno(batchno);
+            i = claimBatchRecordMapper.updateClaimBatchRecordByReview(claimBatchRecord);
+        }
+        return i;
+    }
+
+    /**
      * 批量删除理赔批次流程记录 
      * 
      * @param recordIds 需要删除的理赔批次流程记录 ID
@@ -92,5 +116,16 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
     public int deleteClaimBatchRecordById(Long recordId)
     {
         return claimBatchRecordMapper.deleteClaimBatchRecordById(recordId);
+    }
+
+    /************************************************/
+    /**
+     *
+     * @param batchno'批次号'
+     * @return
+     */
+    @Override
+    public List<ClaimBatchRecord> selectSysClaimBatchRecordListByBatchno(String batchno) {
+        return claimBatchRecordMapper.selectSysClaimBatchRecordListByBatchno(batchno);
     }
 }

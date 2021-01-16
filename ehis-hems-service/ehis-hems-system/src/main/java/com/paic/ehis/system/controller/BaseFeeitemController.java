@@ -3,6 +3,9 @@ package com.paic.ehis.system.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paic.ehis.system.domain.BaseFeeitem;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.system.domain.BaseFeeitem;
 import com.paic.ehis.system.service.IBaseFeeitemService;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -53,21 +55,21 @@ public class BaseFeeitemController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:feeitem:export')")
     @Log(title = "费用项信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, BaseFeeitem baseFeeitem) throws IOException
+    public void export(HttpServletResponse response,BaseFeeitem baseFeeitem) throws IOException
     {
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
-        ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);
-        util.exportExcel(response, list, "feeitem");
+            ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);
+            util.exportExcel(response, list, "feeitem");
     }
 
     /**
      * 获取费用项信息 详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:feeitem:query')")
-    @GetMapping(value = "/{feeitemCode}")
-    public AjaxResult getInfo(@PathVariable("feeitemCode") String feeitemCode)
+    @GetMapping(value = "/{feeitemcode}")
+    public AjaxResult getInfo(@PathVariable("feeitemcode") String feeitemcode)
     {
-        return AjaxResult.success(baseFeeitemService.selectBaseFeeitemById(feeitemCode));
+        return AjaxResult.success(baseFeeitemService.selectBaseFeeitemByCode(feeitemcode));
     }
 
     /**
@@ -78,6 +80,14 @@ public class BaseFeeitemController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BaseFeeitem baseFeeitem)
     {
+        BaseFeeitem baseFeeitemByCode= baseFeeitemService.selectBaseFeeitemByCode(baseFeeitem.getFeeitemcode());
+        if (StringUtils.isNotNull(baseFeeitemByCode)){
+            return AjaxResult.error(500,"新增费用项'" + baseFeeitem.getFeeitemcode() + "'失败，该费用项编码已存在");
+        }
+        BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
+        if (StringUtils.isNotNull(baseFeeitemByName)){
+            return AjaxResult.error(500,"新增费用项'" + baseFeeitem.getFeeitemname() + "'失败，该费用项名称已存在");
+        }
         return toAjax(baseFeeitemService.insertBaseFeeitem(baseFeeitem));
     }
 
@@ -89,6 +99,10 @@ public class BaseFeeitemController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseFeeitem baseFeeitem)
     {
+        BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
+        if (StringUtils.isNotNull(baseFeeitemByName)){
+            return AjaxResult.error(500,"修改费用项'" + baseFeeitem.getFeeitemname() + "'失败，该费用项名称已存在");
+        }
         return toAjax(baseFeeitemService.updateBaseFeeitem(baseFeeitem));
     }
 

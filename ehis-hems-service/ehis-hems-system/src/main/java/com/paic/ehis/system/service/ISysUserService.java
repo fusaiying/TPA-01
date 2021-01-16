@@ -1,10 +1,12 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
+import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
+
+import java.util.List;
 
 /**
  * 用户 业务层
@@ -183,4 +185,7 @@ public interface ISysUserService
     List<JSONObject> queryComcodeUsers(String dept_id);
 
     List<JSONObject> queryUpperComcodeUsers(String username);
+
+    /** 查询任务改派修改后的操作人 */
+    List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
 }

@@ -58,6 +58,10 @@ public class BatchVo implements Serializable {
 //    @Excel(name = "批次总金额")
     private BigDecimal batchtotal;
 
+    /** 账单币种 */
+    @Excel(name = "批次总金额")
+    private String currency;
+
     /** 操作人 */
     @Excel(name = "操作人")
     private String updateBy;
@@ -66,12 +70,8 @@ public class BatchVo implements Serializable {
     @Excel(name = "交单机构")
     private String organcode;
 
-    /** 账单币种 */
-    @Excel(name = "批次总金额")
-    private String currency;
-
     /** 批次状态 01-处理中 02-交单复核 03-交单完成 04-交单退回 05-交单无效 */
-    @Excel(name = "批次状态 01-处理中 02-交单复核 03-交单完成 04-交单退回 05-交单无效")
+    @Excel(name = "批次状态 01=处理中 02=交单复核 03=交单完成 04=交单退回 05=交单无效")
     private String batchstatus;
 
     /** 就诊医院中文名 */

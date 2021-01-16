@@ -1,7 +1,10 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.system.domain.dto.IssuingcompanyRuleDTO;
+import com.paic.ehis.system.domain.vo.IssuingcompanyRuleVO;
 
 /**
  * 出单公司规则 Service接口
@@ -14,10 +17,10 @@ public interface IBaseIssuingcompanyRuleService
     /**
      * 查询出单公司规则 
      * 
-     * @param ruleNo 出单公司规则 ID
+     * @param ruleno 出单公司规则 ID
      * @return 出单公司规则 
      */
-    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleById(String ruleNo);
+    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleById(String ruleno);
 
     /**
      * 查询出单公司规则 列表
@@ -25,7 +28,15 @@ public interface IBaseIssuingcompanyRuleService
      * @param baseIssuingcompanyRule 出单公司规则 
      * @return 出单公司规则 集合
      */
-    public List<BaseIssuingcompanyRule> selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule);
+    public List<IssuingcompanyRuleVO> selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule);
+
+    /**
+     * 新增或修改出单公司规则
+     *
+     * @param IssuingcompanyRuleDTO 出单公司规则
+     * @return 出单公司规则
+     */
+    public int addAndModifyBaseIssuingcompanyRule(IssuingcompanyRuleDTO IssuingcompanyRuleDTO);
 
     /**
      * 新增出单公司规则 

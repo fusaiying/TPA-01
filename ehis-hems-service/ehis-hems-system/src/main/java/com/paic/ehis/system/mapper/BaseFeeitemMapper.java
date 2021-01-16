@@ -17,7 +17,15 @@ public interface BaseFeeitemMapper
      * @param feeitemCode 费用项信息 ID
      * @return 费用项信息 
      */
-    public BaseFeeitem selectBaseFeeitemById(String feeitemCode);
+    public BaseFeeitem selectBaseFeeitemByCode(String feeitemCode);
+
+    /**
+     * 查询费用项信息
+     *
+     * @param feeitemName 费用项信息 ID
+     * @return 费用项信息
+     */
+    public BaseFeeitem selectBaseFeeitemByName(String feeitemName);
 
     /**
      * 查询费用项信息 列表

@@ -19,6 +19,8 @@ public interface BaseIcd10Mapper
      */
     public BaseIcd10 selectBaseIcd10ById(String icdCode);
 
+    public BaseIcd10 selectBaseIcd10ByName(String icdmname);
+
     /**
      * 查询ICD10数据 列表
      * 
@@ -26,6 +28,7 @@ public interface BaseIcd10Mapper
      * @return ICD10数据 集合
      */
     public List<BaseIcd10> selectBaseIcd10List(BaseIcd10 baseIcd10);
+
 
     /**
      * 新增ICD10数据 

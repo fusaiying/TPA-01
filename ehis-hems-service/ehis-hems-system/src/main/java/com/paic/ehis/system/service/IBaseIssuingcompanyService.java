@@ -3,6 +3,8 @@ package com.paic.ehis.system.service;
 import java.util.List;
 
 import com.paic.ehis.system.domain.BaseIssuingcompany;
+import com.paic.ehis.system.domain.dto.IssuingAndCompanyDTO;
+import com.paic.ehis.system.domain.vo.IssuingCompanyVo;
 
 /**
  * 出单公司信息 Service接口
@@ -59,4 +61,6 @@ public interface IBaseIssuingcompanyService
      * @return 结果
      */
     public int deleteBaseIssuingcompanyById(String companyCode);
+
+    public IssuingCompanyVo insertBaseIssuingcompanyTwo(IssuingAndCompanyDTO issuingAndCompanyDTO);
 }

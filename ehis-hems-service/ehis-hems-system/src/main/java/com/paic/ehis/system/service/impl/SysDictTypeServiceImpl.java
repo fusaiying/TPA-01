@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
-import com.paic.ehis.system.domain.vo.DictTypeVo;
-import com.paic.ehis.system.mapper.SysDictDataMapper;
-import com.paic.ehis.system.mapper.SysDictTypeMapper;
-import com.paic.ehis.system.service.ISysDictTypeService;
 import com.paic.ehis.system.domain.dto.SysDictsDataDTO;
+import com.paic.ehis.system.domain.vo.DictTypeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +14,9 @@ import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.domain.SysDictData;
 import com.paic.ehis.system.domain.SysDictType;
+import com.paic.ehis.system.mapper.SysDictDataMapper;
+import com.paic.ehis.system.mapper.SysDictTypeMapper;
+import com.paic.ehis.system.service.ISysDictTypeService;
 import com.paic.ehis.system.utils.DictUtils;
 
 /**

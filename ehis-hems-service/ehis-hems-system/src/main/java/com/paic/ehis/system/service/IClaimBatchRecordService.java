@@ -1,6 +1,7 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.ClaimBatchRecord;
 
 /**
@@ -44,6 +45,14 @@ public interface IClaimBatchRecordService
     public int updateClaimBatchRecord(ClaimBatchRecord claimBatchRecord);
 
     /**
+     * 交单复核个人池获取案件
+     *
+     * @param batchnoes 理赔批次流程id数组
+     * @return 结果
+     */
+    public int updateClaimBatchByReview(String[] batchnoes);
+
+    /**
      * 批量删除理赔批次流程记录 
      * 
      * @param recordIds 需要删除的理赔批次流程记录 ID
@@ -58,4 +67,12 @@ public interface IClaimBatchRecordService
      * @return 结果
      */
     public int deleteClaimBatchRecordById(Long recordId);
+
+    /**********************************************/
+    /**
+     *
+     * @param batchno'批次号'
+     * @return
+     */
+    public List<ClaimBatchRecord> selectSysClaimBatchRecordListByBatchno(String batchno);//
 }

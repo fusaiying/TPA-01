@@ -1,7 +1,6 @@
 package com.paic.ehis.system.mapper;
 
 import java.util.List;
-
 import com.paic.ehis.system.domain.BaseIssuingcompanyInvoice;
 
 /**

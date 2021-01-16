@@ -8,13 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.system.api.domain.SysDept;
-import com.paic.ehis.system.api.domain.SysRole;
-import com.paic.ehis.system.api.domain.SysUser;
-import com.paic.ehis.system.api.model.UserInfo;
-import com.paic.ehis.system.service.ISysPermissionService;
-import com.paic.ehis.system.service.ISysPostService;
-import com.paic.ehis.system.service.ISysRoleService;
-import com.paic.ehis.system.service.ISysUserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +35,13 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysRole;
+import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.model.UserInfo;
+import com.paic.ehis.system.service.ISysPermissionService;
+import com.paic.ehis.system.service.ISysPostService;
+import com.paic.ehis.system.service.ISysRoleService;
+import com.paic.ehis.system.service.ISysUserService;
 
 /**
  * 用户信息

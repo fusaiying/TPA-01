@@ -2,8 +2,8 @@ package com.paic.ehis.system.service;
 
 import java.util.List;
 
-import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.domain.HmpPersonService;
+import com.paic.ehis.system.api.domain.SysUser;
 
 /**
  * 就诊人服务信息Service接口

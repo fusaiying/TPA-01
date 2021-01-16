@@ -1,7 +1,9 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.ClaimCaseStanding;
+import com.paic.ehis.system.domain.vo.ClaimCaseStandingVo;
 
 /**
  * 报案台账信息 Service接口
@@ -58,4 +60,21 @@ public interface IClaimCaseStandingService
      * @return 结果
      */
     public int deleteClaimCaseStandingById(String rptNo);
+
+    /*********************************************************/
+    /**
+     * 新增报案台账信息
+     *
+     * @param claimCaseStandingVo 报案台账信息
+     * @return 结果
+     */
+    public ClaimCaseStandingVo insertSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
+
+    /**
+     * 修改报案台账信息
+     *
+     * @param claimCaseStandingVo 报案台账信息
+     * @return 结果
+     */
+    public ClaimCaseStandingVo updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
 }

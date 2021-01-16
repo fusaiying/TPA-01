@@ -5,6 +5,10 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.system.domain.BaseIssuingcompany;
+import com.paic.ehis.system.domain.BaseIssuingcompanyInvoice;
+import com.paic.ehis.system.domain.dto.IssuingAndCompanyDTO;
+import com.paic.ehis.system.domain.vo.IssuingCompanyVo;
+import com.paic.ehis.system.service.IBaseIssuingcompanyInvoiceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +40,9 @@ public class BaseIssuingcompanyController extends BaseController
     @Autowired
     private IBaseIssuingcompanyService baseIssuingcompanyService;
 
+    @Autowired
+    private IBaseIssuingcompanyInvoiceService iBaseIssuingcompanyInvoiceService;
+
     /**
      * 查询出单公司信息 列表
      */
@@ -65,21 +72,48 @@ public class BaseIssuingcompanyController extends BaseController
      * 获取出单公司信息 详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:issuingcompany:query')")
-    @GetMapping(value = "/{companyCode}")
-    public AjaxResult getInfo(@PathVariable("companyCode") String companyCode)
+    @GetMapping(value = "/{companycode}")
+    public AjaxResult getInfo(@PathVariable("companycode") String companyCode)
     {
         return AjaxResult.success(baseIssuingcompanyService.selectBaseIssuingcompanyById(companyCode));
     }
 
-    /**
-     * 新增出单公司信息 
+    /**使用
+     * 新增出单公司信息
+     * 传入数据：出单公司名称companyname、出单公司简写名称simplename
+     * 传出数据：出单公司名称companyname、出单公司简写名称simplename、出单公司编码companycode
      */
     @PreAuthorize("@ss.hasPermi('system:issuingcompany:add')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody BaseIssuingcompany baseIssuingcompany)
-    {
-        return toAjax(baseIssuingcompanyService.insertBaseIssuingcompany(baseIssuingcompany));
+    @PostMapping("/addissuingAndCompanyDTO")
+    public AjaxResult add(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
+//        //IssuingAndCompanyDTO
+//        BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
+//        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();//出单公司开票
+//
+//        IssuingCompanyVo issuingCompanyVo = new IssuingCompanyVo();
+//
+//        String str = "C" + PubFun.createMySqlMaxNoUseCache("FILINGCODE",10,5);
+//        issuingCompanyVo.setCompanycode(str);//公司出单编码
+//        issuingCompanyVo.setSimplename(baseIssuingcompany.getSimplename());
+//        issuingCompanyVo.setCompanyname(baseIssuingcompany.getCompanyname());
+//
+//        baseIssuingcompany.setCompanycode(issuingCompanyVo.getCompanycode());
+//        baseIssuingcompanyService.insertBaseIssuingcompany(baseIssuingcompany);
+//
+//        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice1 = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();
+//        //String invoicename = baseIssuingcompanyInvoice1.getInvoicename();
+//        //if(invoicename != null && invoicename != ""){//非空-有值
+//        //Objects.nonNull(baseIssuingcompanyInvoice1) && Objects.equals(baseIssuingcompanyInvoice1,"")
+//        if (Objects.nonNull(baseIssuingcompanyInvoice1) && Objects.equals(baseIssuingcompanyInvoice1,"")){
+//            System.out.println(str+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+//            baseIssuingcompanyInvoice.setCompanycode(issuingCompanyVo.getCompanycode());
+//            int i = iBaseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
+//        }
+//
+//        return AjaxResult.success(issuingCompanyVo);
+        IssuingCompanyVo issuingCompanyVo = baseIssuingcompanyService.insertBaseIssuingcompanyTwo(issuingAndCompanyDTO);
+        return AjaxResult.success(issuingCompanyVo);
     }
 
     /**
@@ -88,8 +122,20 @@ public class BaseIssuingcompanyController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:issuingcompany:edit')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody BaseIssuingcompany baseIssuingcompany)
+    public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO)
     {
+        //issuingAndCompanyDTO
+        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();//出单公司开票
+        BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
+
+        if(baseIssuingcompanyInvoice.getInvoicename()!=null || baseIssuingcompanyInvoice.getInvoicename() != ""){//非空-有值
+            baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
+            iBaseIssuingcompanyInvoiceService.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
+        }else {
+            baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
+            iBaseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
+        }
+
         return toAjax(baseIssuingcompanyService.updateBaseIssuingcompany(baseIssuingcompany));
     }
 

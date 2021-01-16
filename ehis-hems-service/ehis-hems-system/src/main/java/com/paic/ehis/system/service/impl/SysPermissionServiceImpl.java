@@ -2,11 +2,10 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.service.ISysMenuService;
 import com.paic.ehis.system.service.ISysPermissionService;
 import com.paic.ehis.system.service.ISysRoleService;

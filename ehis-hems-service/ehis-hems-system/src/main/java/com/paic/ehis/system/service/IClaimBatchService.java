@@ -1,7 +1,13 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.ClaimBatch;
+import com.paic.ehis.system.domain.StandingAndBatck;
+import com.paic.ehis.system.domain.dto.BatchDTO;
+import com.paic.ehis.system.domain.dto.BatchRecordDTO;
+import com.paic.ehis.system.domain.dto.ClaimBatchDTO;
+import com.paic.ehis.system.domain.vo.BatchVo;
 
 /**
  * 理赔批次 Service接口
@@ -28,6 +34,42 @@ public interface IClaimBatchService
     public List<ClaimBatch> selectClaimBatchList(ClaimBatch claimBatch);
 
     /**
+     * 查询已退回理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO);
+    /**
+     * 查询已处理理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO);
+    /**
+     * 查询直结复核理赔批次公共池 列表
+     *
+     * @param batchRecordDTO 理赔批次
+     * @return 交单复核理赔批次 集合
+     */
+    public List<BatchVo> selectReviewPublicList(BatchRecordDTO batchRecordDTO);
+    /**
+     * 查询直结复核理赔批次待处理个人池 列表
+     *
+     * @param
+     * @return 交单复核理赔批次 集合
+     */
+    public List<BatchVo> selectUntreatedPersonalList();
+    /**
+     * 查询直结复核理赔批次已处理个人池 列表
+     *
+     * @param
+     * @return 交单复核理赔批次 集合
+     */
+    public List<BatchVo> selectProcessedPersonalList();
+
+    /**
      * 新增理赔批次 
      * 
      * @param claimBatch 理赔批次 
@@ -38,10 +80,20 @@ public interface IClaimBatchService
     /**
      * 修改理赔批次 
      * 
-     * @param claimBatch 理赔批次 
+     * @param claimBatchDTO 理赔批次
      * @return 结果
      */
-    public int updateClaimBatch(ClaimBatch claimBatch);
+    public int updateClaimBatch(ClaimBatchDTO claimBatchDTO);//
+
+    public ClaimBatch updateClaimBatchTwo(ClaimBatch claimBatch);//
+
+    /**
+     * 修改理赔批次
+     *
+     * @param batchno 理赔批次
+     * @return 结果
+     */
+    public int updateClaimBatchstatus (String batchno);
 
     /**
      * 批量删除理赔批次 
@@ -58,4 +110,31 @@ public interface IClaimBatchService
      * @return 结果
      */
     public int deleteClaimBatchById(String batchNo);
+
+    /********************************************************/
+    /**事后
+     * 新增理赔批次
+     *
+     * @param  standingAndBatck 理赔批次
+     * @return 结果
+     */
+    public StandingAndBatck insertSysClaimBatch(StandingAndBatck standingAndBatck);//
+
+    /**直结
+     * 新增理赔批次
+     *
+     * @param claimBatch 理赔批次
+     * @return 结果
+     */
+    public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch);//
+
+    /**
+     * 修改理赔批次
+     *
+     * @param standingAndBatck 理赔批次
+     * @return 结果
+     */
+    public StandingAndBatck updateSysClaimBatch(StandingAndBatck standingAndBatck);//
+
+    public StandingAndBatck updateSysClaimBatchPresent(StandingAndBatck standingAndBatck);//
 }

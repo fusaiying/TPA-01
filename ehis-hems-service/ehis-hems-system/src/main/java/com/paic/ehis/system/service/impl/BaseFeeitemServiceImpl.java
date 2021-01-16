@@ -2,12 +2,13 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.system.domain.BaseFeeitem;
 import com.paic.ehis.system.mapper.BaseFeeitemMapper;
+import com.paic.ehis.system.service.IBaseFeeitemService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.domain.BaseFeeitem;
-import com.paic.ehis.system.service.IBaseFeeitemService;
 
 /**
  * 费用项信息 Service业务层处理
@@ -16,7 +17,7 @@ import com.paic.ehis.system.service.IBaseFeeitemService;
  * @date 2021-01-05
  */
 @Service
-public class BaseFeeitemServiceImpl implements IBaseFeeitemService 
+public class BaseFeeitemServiceImpl implements IBaseFeeitemService
 {
     @Autowired
     private BaseFeeitemMapper baseFeeitemMapper;
@@ -28,9 +29,21 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
      * @return 费用项信息 
      */
     @Override
-    public BaseFeeitem selectBaseFeeitemById(String feeitemCode)
+    public BaseFeeitem selectBaseFeeitemByCode(String feeitemCode)
     {
-        return baseFeeitemMapper.selectBaseFeeitemById(feeitemCode);
+        return baseFeeitemMapper.selectBaseFeeitemByCode(feeitemCode);
+    }
+
+    /**
+     * 查询费用项信息
+     *
+     * @param feeitemName 费用项信息 ID
+     * @return 费用项信息
+     */
+    @Override
+    public BaseFeeitem selectBaseFeeitemByName(String feeitemName)
+    {
+        return baseFeeitemMapper.selectBaseFeeitemByName(feeitemName);
     }
 
     /**
@@ -42,6 +55,7 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     @Override
     public List<BaseFeeitem> selectBaseFeeitemList(BaseFeeitem baseFeeitem)
     {
+        baseFeeitem.setStatus("Y");
         return baseFeeitemMapper.selectBaseFeeitemList(baseFeeitem);
     }
 
@@ -54,7 +68,11 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     @Override
     public int insertBaseFeeitem(BaseFeeitem baseFeeitem)
     {
+        baseFeeitem.setStatus("Y");
+        baseFeeitem.setCreateBy(SecurityUtils.getUsername());
         baseFeeitem.setCreateTime(DateUtils.getNowDate());
+        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
+        baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.insertBaseFeeitem(baseFeeitem);
     }
 
@@ -67,6 +85,7 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     @Override
     public int updateBaseFeeitem(BaseFeeitem baseFeeitem)
     {
+        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
         baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.updateBaseFeeitem(baseFeeitem);
     }

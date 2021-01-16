@@ -1,6 +1,7 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.BaseFeeitem;
 
 /**
@@ -17,7 +18,14 @@ public interface IBaseFeeitemService
      * @param feeitemCode 费用项信息 ID
      * @return 费用项信息 
      */
-    public BaseFeeitem selectBaseFeeitemById(String feeitemCode);
+    public BaseFeeitem selectBaseFeeitemByCode(String feeitemCode);
+    /**
+     * 查询费用项信息
+     *
+     * @param feeitemName 费用项信息 名称
+     * @return 费用项信息
+     */
+    public BaseFeeitem selectBaseFeeitemByName(String feeitemName);
 
     /**
      * 查询费用项信息 列表

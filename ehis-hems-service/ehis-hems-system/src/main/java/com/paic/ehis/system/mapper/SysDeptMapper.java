@@ -2,8 +2,9 @@ package com.paic.ehis.system.mapper;
 
 import java.util.List;
 
-import com.paic.ehis.system.api.domain.SysDept;
 import org.apache.ibatis.annotations.Param;
+
+import com.paic.ehis.system.api.domain.SysDept;
 
 /**
  * 部门管理 数据层

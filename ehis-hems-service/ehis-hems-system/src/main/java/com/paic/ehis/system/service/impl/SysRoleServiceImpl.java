@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.paic.ehis.system.api.domain.SysRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +13,7 @@ import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.utils.SpringUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.datascope.annotation.DataScope;
+import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.domain.SysRoleDept;
 import com.paic.ehis.system.domain.SysRoleMenu;
 import com.paic.ehis.system.mapper.SysRoleDeptMapper;

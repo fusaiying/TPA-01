@@ -1,33 +1,32 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
-import com.paic.ehis.system.api.domain.SysDept;
-import com.paic.ehis.system.api.domain.SysRole;
-import com.paic.ehis.system.api.domain.SysUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.paic.ehis.system.domain.vo.UserVo;
+import com.paic.ehis.system.mapper.*;
 import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.datascope.annotation.DataScope;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysDept;
+import com.paic.ehis.system.api.domain.SysRole;
+import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.domain.SysPost;
 import com.paic.ehis.system.domain.SysUserPost;
 import com.paic.ehis.system.domain.SysUserRole;
-import com.paic.ehis.system.mapper.SysPostMapper;
-import com.paic.ehis.system.mapper.SysRoleMapper;
-import com.paic.ehis.system.mapper.SysUserMapper;
-import com.paic.ehis.system.mapper.SysUserPostMapper;
-import com.paic.ehis.system.mapper.SysUserRoleMapper;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.mapper.*;
 import com.paic.ehis.system.service.ISysConfigService;
 import com.paic.ehis.system.service.ISysUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户 业务层处理
@@ -477,5 +476,15 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public List<JSONObject> queryUpperComcodeUsers(String username) {
         return userMapper.queryUpperComcodeUsers(username);
+    }
+
+    @Override
+    public List<UserVo> selectSysUser(SysUserDTO sysUserDTO) {
+        SysUserDTO sysUserDTO1 = new SysUserDTO();
+        BeanUtils.copyProperties(sysUserDTO,sysUserDTO1);
+        sysUserDTO1.setStatus("0");
+        sysUserDTO1.setDelFlag("0");
+        List<UserVo> list = userMapper.selectSysUser(sysUserDTO1);
+        return list;
     }
 }

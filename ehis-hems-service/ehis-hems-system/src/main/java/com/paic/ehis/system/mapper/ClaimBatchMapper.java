@@ -1,7 +1,11 @@
 package com.paic.ehis.system.mapper;
 
 import java.util.List;
+
+import com.paic.ehis.system.domain.vo.BatchVo;
 import com.paic.ehis.system.domain.ClaimBatch;
+import com.paic.ehis.system.domain.dto.BatchDTO;
+import com.paic.ehis.system.domain.dto.BatchRecordDTO;
 
 /**
  * 理赔批次 Mapper接口
@@ -26,6 +30,31 @@ public interface ClaimBatchMapper
      * @return 理赔批次 集合
      */
     public List<ClaimBatch> selectClaimBatchList(ClaimBatch claimBatch);
+
+    /**
+     * 查询已退回理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO);
+
+    /**
+     * 查询已处理理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO);
+
+    /**
+     * 查询交单复核理赔批次 列表
+     *
+     * @param batchRecordDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectStraightAndReview(BatchRecordDTO batchRecordDTO);
+
 
     /**
      * 新增理赔批次 

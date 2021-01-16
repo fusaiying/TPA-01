@@ -23,7 +23,7 @@ public class BaseIssuingcompanyRiskrela extends BaseEntity
     private String riskCode;
 
     /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
     public void setCompanyCode(String companyCode) 

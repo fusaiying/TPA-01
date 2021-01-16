@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
         <where>  
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="riskCode != null">and risk_code = #{riskCode}</if>
         </where>
     </select>
     

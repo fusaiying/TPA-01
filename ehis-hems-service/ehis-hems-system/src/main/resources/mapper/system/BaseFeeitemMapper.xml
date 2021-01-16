@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.system.mapper.BaseFeeitemMapper">
     
     <resultMap type="com.paic.ehis.system.domain.BaseFeeitem" id="BaseFeeitemResult">
-        <result property="feeitemCode"    column="feeitem_code"    />
-        <result property="feeitemName"    column="feeitem_name"    />
+        <result property="feeitemcode"    column="feeitem_code"    />
+        <result property="feeitemname"    column="feeitem_name"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -20,22 +20,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseFeeitemList" parameterType="com.paic.ehis.system.domain.BaseFeeitem" resultMap="BaseFeeitemResult">
         <include refid="selectBaseFeeitemVo"/>
-        <where>  
-            <if test="feeitemName != null  and feeitemName != ''"> and feeitem_name like concat('%', #{feeitemName}, '%')</if>
+        <where>
+            <if test="feeitemcode != null  and feeitemcode != ''"> and feeitem_code = #{feeitemcode}</if>
+            <if test="feeitemname != null  and feeitemname != ''"> and feeitem_name like concat('%', #{feeitemname}, '%')</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
     
-    <select id="selectBaseFeeitemById" parameterType="String" resultMap="BaseFeeitemResult">
+    <select id="selectBaseFeeitemByName" parameterType="String" resultMap="BaseFeeitemResult">
         <include refid="selectBaseFeeitemVo"/>
-        where feeitem_code = #{feeitemCode}
+        where status = 'Y' and feeitem_name = #{feeitemCode}
+    </select>
+
+    <select id="selectBaseFeeitemByCode" parameterType="String" resultMap="BaseFeeitemResult">
+        <include refid="selectBaseFeeitemVo"/>
+        where status = 'Y' and feeitem_code = #{feeitemName}
     </select>
         
     <insert id="insertBaseFeeitem" parameterType="com.paic.ehis.system.domain.BaseFeeitem">
         insert into base_feeitem
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="feeitemCode != null">feeitem_code,</if>
-            <if test="feeitemName != null and feeitemName != ''">feeitem_name,</if>
+            <if test="feeitemcode != null">feeitem_code,</if>
+            <if test="feeitemname != null and feeitemname != ''">feeitem_name,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -43,8 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="feeitemCode != null">#{feeitemCode},</if>
-            <if test="feeitemName != null and feeitemName != ''">#{feeitemName},</if>
+            <if test="feeitemcode != null">#{feeitemcode},</if>
+            <if test="feeitemname != null and feeitemname != ''">#{feeitemname},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -56,24 +62,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBaseFeeitem" parameterType="com.paic.ehis.system.domain.BaseFeeitem">
         update base_feeitem
         <trim prefix="SET" suffixOverrides=",">
-            <if test="feeitemName != null and feeitemName != ''">feeitem_name = #{feeitemName},</if>
+            <if test="feeitemname != null and feeitemname != ''">feeitem_name = #{feeitemname},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where feeitem_code = #{feeitemCode}
+        where feeitem_code = #{feeitemcode}
     </update>
 
     <delete id="deleteBaseFeeitemById" parameterType="String">
-        delete from base_feeitem where feeitem_code = #{feeitemCode}
+        delete from base_feeitem where feeitem_code = #{feeitemcode}
     </delete>
 
     <delete id="deleteBaseFeeitemByIds" parameterType="String">
         delete from base_feeitem where feeitem_code in 
-        <foreach item="feeitemCode" collection="array" open="(" separator="," close=")">
-            #{feeitemCode}
+        <foreach item="feeitemcode" collection="array" open="(" separator="," close=")">
+            #{feeitemcode}
         </foreach>
     </delete>
     

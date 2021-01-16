@@ -36,7 +36,7 @@ public class BaseIssuingcompanyAttachfile extends BaseEntity
     private String filePath;
 
     /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
     public void setId(Long id) 

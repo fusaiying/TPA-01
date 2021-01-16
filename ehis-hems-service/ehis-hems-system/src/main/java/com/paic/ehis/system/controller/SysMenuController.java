@@ -2,8 +2,6 @@ package com.paic.ehis.system.controller;
 
 import java.util.List;
 
-import com.paic.ehis.system.domain.SysMenu;
-import com.paic.ehis.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +22,8 @@ import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.domain.LoginUser;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.domain.SysMenu;
+import com.paic.ehis.system.service.ISysMenuService;
 
 /**
  * 菜单信息

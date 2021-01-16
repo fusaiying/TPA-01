@@ -3,6 +3,9 @@ package com.paic.ehis.system.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paic.ehis.system.domain.BaseIcd10;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.system.domain.BaseIcd10;
 import com.paic.ehis.system.service.IBaseIcd10Service;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -78,7 +80,17 @@ public class BaseIcd10Controller extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BaseIcd10 baseIcd10)
     {
-        return toAjax(baseIcd10Service.insertBaseIcd10(baseIcd10));
+        String icdcode = baseIcd10.getIcdcode();
+        String icdmname = baseIcd10.getIcdmname();
+        BaseIcd10 baseIcd101 = baseIcd10Service.selectBaseIcd10ById(icdcode);
+        BaseIcd10 baseIcd102 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
+        if (StringUtils.isNotNull(baseIcd101)) {
+            return AjaxResult.error("新增ICD'" + icdcode + "'失败，ICD10编码已存在!");
+        }else if (StringUtils.isNotNull(baseIcd102)){
+            return AjaxResult.error("新增ICD'" + icdmname + "'失败，ICD10名称已存在!");
+        }else {
+            return toAjax(baseIcd10Service.insertBaseIcd10(baseIcd10));
+        }
     }
 
     /**
@@ -89,7 +101,13 @@ public class BaseIcd10Controller extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIcd10 baseIcd10)
     {
-        return toAjax(baseIcd10Service.updateBaseIcd10(baseIcd10));
+        String icdmname = baseIcd10.getIcdmname();
+        BaseIcd10 baseIcd102 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
+        if (StringUtils.isNotNull(baseIcd102)){
+            return AjaxResult.error("修改ICD'" + icdmname + "'失败，ICD10名称已存在!");
+        }else {
+            return toAjax(baseIcd10Service.updateBaseIcd10(baseIcd10));
+        }
     }
 
     /**
@@ -101,5 +119,16 @@ public class BaseIcd10Controller extends BaseController
     public AjaxResult remove(@PathVariable String[] icdCodes)
     {
         return toAjax(baseIcd10Service.deleteBaseIcd10ByIds(icdCodes));
+    }
+
+    /**
+     * 单个删除
+     */
+    @PreAuthorize("@ss.hasPermi('system:icd10:edit')")
+    @Log(title = "ICD10数据 ", businessType = BusinessType.UPDATE)
+    @PostMapping("/removeOne")
+    public AjaxResult removeOne(@RequestBody BaseIcd10 baseIcd10)
+    {
+        return toAjax(baseIcd10Service.updateBaseIcd10One(baseIcd10));
     }
 }

@@ -2,12 +2,12 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.system.domain.BaseIssuingcompanyRiskrela;
 import com.paic.ehis.system.mapper.BaseIssuingcompanyRiskrelaMapper;
+import com.paic.ehis.system.service.IBaseIssuingcompanyRiskrelaService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.domain.BaseIssuingcompanyRiskrela;
-import com.paic.ehis.system.service.IBaseIssuingcompanyRiskrelaService;
 
 /**
  * 出单公司产品关联 Service业务层处理
@@ -16,7 +16,7 @@ import com.paic.ehis.system.service.IBaseIssuingcompanyRiskrelaService;
  * @date 2021-01-05
  */
 @Service
-public class BaseIssuingcompanyRiskrelaServiceImpl implements IBaseIssuingcompanyRiskrelaService 
+public class BaseIssuingcompanyRiskrelaServiceImpl implements IBaseIssuingcompanyRiskrelaService
 {
     @Autowired
     private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
@@ -55,6 +55,7 @@ public class BaseIssuingcompanyRiskrelaServiceImpl implements IBaseIssuingcompan
     public int insertBaseIssuingcompanyRiskrela(BaseIssuingcompanyRiskrela baseIssuingcompanyRiskrela)
     {
         baseIssuingcompanyRiskrela.setCreateTime(DateUtils.getNowDate());
+        baseIssuingcompanyRiskrela.setStatus("Y");
         return baseIssuingcompanyRiskrelaMapper.insertBaseIssuingcompanyRiskrela(baseIssuingcompanyRiskrela);
     }
 

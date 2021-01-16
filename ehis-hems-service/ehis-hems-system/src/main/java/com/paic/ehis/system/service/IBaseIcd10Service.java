@@ -1,6 +1,7 @@
 package com.paic.ehis.system.service;
 
 import java.util.List;
+
 import com.paic.ehis.system.domain.BaseIcd10;
 
 /**
@@ -20,12 +21,21 @@ public interface IBaseIcd10Service
     public BaseIcd10 selectBaseIcd10ById(String icdCode);
 
     /**
+     * 查询ICD10数据
+     *
+     * @param icdmname ICD10数据 name
+     * @return ICD10数据
+     */
+    public BaseIcd10 selectBaseIcd10ByName(String icdmname);
+
+    /**
      * 查询ICD10数据 列表
      * 
      * @param baseIcd10 ICD10数据 
      * @return ICD10数据 集合
      */
     public List<BaseIcd10> selectBaseIcd10List(BaseIcd10 baseIcd10);
+
 
     /**
      * 新增ICD10数据 
@@ -58,4 +68,11 @@ public interface IBaseIcd10Service
      * @return 结果
      */
     public int deleteBaseIcd10ById(String icdCode);
+
+    /**
+     * 删除单个
+     * @param baseIcd10
+     * @return
+     */
+    public int updateBaseIcd10One(BaseIcd10 baseIcd10);
 }

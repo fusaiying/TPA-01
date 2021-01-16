@@ -5,11 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.system.mapper.ClaimBatchRecordMapper">
     
     <resultMap type="com.paic.ehis.system.domain.ClaimBatchRecord" id="ClaimBatchRecordResult">
-        <result property="recordId"    column="record_id"    />
-        <result property="batchNo"    column="batch_no"    />
+        <result property="recordid"    column="record_id"    />
+        <result property="batchno"    column="batch_no"    />
         <result property="operation"    column="operation"    />
         <result property="conclusion"    column="conclusion"    />
-        <result property="nopassType"    column="nopass_type"    />
+        <result property="nopasstype"    column="nopass_type"    />
         <result property="remark"    column="remark"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
@@ -25,26 +25,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimBatchRecordList" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord" resultMap="ClaimBatchRecordResult">
         <include refid="selectClaimBatchRecordVo"/>
         <where>  
-            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
             <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
             <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
-            <if test="nopassType != null  and nopassType != ''"> and nopass_type = #{nopassType}</if>
+            <if test="nopasstype != null  and nopasstype != ''"> and nopass_type = #{nopasstype}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
     
     <select id="selectClaimBatchRecordById" parameterType="Long" resultMap="ClaimBatchRecordResult">
         <include refid="selectClaimBatchRecordVo"/>
-        where record_id = #{recordId}
+        where record_id = #{recordid} and status="Y"
     </select>
         
-    <insert id="insertClaimBatchRecord" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord" useGeneratedKeys="true" keyProperty="recordId">
+    <insert id="insertClaimBatchRecord" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord" useGeneratedKeys="true" keyProperty="recordid">
         insert into claim_batch_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="batchno != null and batchno != ''">batch_no,</if>
             <if test="operation != null and operation != ''">operation,</if>
             <if test="conclusion != null">conclusion,</if>
-            <if test="nopassType != null">nopass_type,</if>
+            <if test="nopasstype != null">nopass_type,</if>
             <if test="remark != null">remark,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
@@ -53,10 +53,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="batchno != null and batchno != ''">#{batchno},</if>
             <if test="operation != null and operation != ''">#{operation},</if>
             <if test="conclusion != null">#{conclusion},</if>
-            <if test="nopassType != null">#{nopassType},</if>
+            <if test="nopasstype != null">#{nopasstype},</if>
             <if test="remark != null">#{remark},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
@@ -69,10 +69,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateClaimBatchRecord" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord">
         update claim_batch_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="batchno != null and batchno != ''">batch_no = #{batchno},</if>
             <if test="operation != null and operation != ''">operation = #{operation},</if>
             <if test="conclusion != null">conclusion = #{conclusion},</if>
-            <if test="nopassType != null">nopass_type = #{nopassType},</if>
+            <if test="nopasstype != null">nopass_type = #{nopasstype},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
@@ -80,18 +80,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where record_id = #{recordId}
+        where record_id = #{recordid}
+    </update>
+
+    <update id="updateClaimBatchRecordByReview" parameterType="com.paic.ehis.system.domain.ClaimBatchRecord">
+        update claim_batch_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+        </where>
     </update>
 
     <delete id="deleteClaimBatchRecordById" parameterType="Long">
-        delete from claim_batch_record where record_id = #{recordId}
+        delete from claim_batch_record where record_id = #{recordid}
     </delete>
 
     <delete id="deleteClaimBatchRecordByIds" parameterType="String">
         delete from claim_batch_record where record_id in 
-        <foreach item="recordId" collection="array" open="(" separator="," close=")">
-            #{recordId}
+        <foreach item="recordid" collection="array" open="(" separator="," close=")">
+            #{recordid}
         </foreach>
     </delete>
+
+    <select id="selectSysClaimBatchRecordListByBatchno" parameterType="String" resultType="com.paic.ehis.system.domain.ClaimBatchRecord">
+        select conclusion,nopass_type,remark from claim_batch_record
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            and operation = "03" and status="Y"
+        </where>
+    </select>
     
 </mapper>

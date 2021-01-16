@@ -190,4 +190,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryUpperComcodeUsers" parameterType="String" resultType="com.paic.ehis.system.domain.vo.UserVo">
 		select a.user_id id,a.user_name username from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and role_sort = (select (case (c.role_sort-1) when 0 then 1 else (c.role_sort-1) end) from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and a.user_name = #{username})
 	</select>
+
+	<select id="selectSysUser" parameterType="com.paic.ehis.system.domain.dto.SysUserDTO" resultMap="SysUserResult">
+		select user_id,user_name from sys_user
+		<where>
+			<if test="status != null and status != ''"> and status = #{status}</if>
+			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag}</if>
+		</where>
+	</select>
 </mapper> 

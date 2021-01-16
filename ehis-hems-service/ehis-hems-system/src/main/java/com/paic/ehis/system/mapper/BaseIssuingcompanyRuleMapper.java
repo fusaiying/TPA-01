@@ -14,10 +14,18 @@ public interface BaseIssuingcompanyRuleMapper
     /**
      * 查询出单公司规则 
      * 
-     * @param ruleNo 出单公司规则 ID
+     * @param ruleno 出单公司规则 ID
      * @return 出单公司规则 
      */
-    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleById(String ruleNo);
+    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleById(String ruleno);
+
+    /**
+     * 查询出单公司规则
+     *
+     * @param baseIssuingcompanyRule 出单公司规则
+     * @return 出单公司规则
+     */
+    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleByProduct(BaseIssuingcompanyRule baseIssuingcompanyRule);
 
     /**
      * 查询出单公司规则 列表

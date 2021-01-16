@@ -14,10 +14,10 @@ public interface ClaimBatchRecordMapper
     /**
      * 查询理赔批次流程记录 
      * 
-     * @param recordId 理赔批次流程记录 ID
+     * @param recordid 理赔批次流程记录 ID
      * @return 理赔批次流程记录 
      */
-    public ClaimBatchRecord selectClaimBatchRecordById(Long recordId);
+    public ClaimBatchRecord selectClaimBatchRecordById(Long recordid);
 
     /**
      * 查询理赔批次流程记录 列表
@@ -43,6 +43,16 @@ public interface ClaimBatchRecordMapper
      */
     public int updateClaimBatchRecord(ClaimBatchRecord claimBatchRecord);
 
+
+    /**
+     * 交单复核个人池获取案件
+     *
+     * @param claimBatchRecord 理赔批次流程id数组
+     * @return 结果
+     */
+    public int updateClaimBatchRecordByReview(ClaimBatchRecord claimBatchRecord);
+
+
     /**
      * 删除理赔批次流程记录 
      * 
@@ -58,4 +68,12 @@ public interface ClaimBatchRecordMapper
      * @return 结果
      */
     public int deleteClaimBatchRecordByIds(Long[] recordIds);
+
+    /******************************************/
+    /**
+     *
+     * @param batchno'批次号'
+     * @return
+     */
+    public List<ClaimBatchRecord> selectSysClaimBatchRecordListByBatchno(String batchno);
 }

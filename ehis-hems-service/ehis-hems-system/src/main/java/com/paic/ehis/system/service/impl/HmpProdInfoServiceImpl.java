@@ -2,14 +2,14 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.List;
 
-import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.domain.HmpProdInfo;
 import com.paic.ehis.system.domain.HmpProdSalCom;
 import com.paic.ehis.system.domain.SysDictData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.paic.ehis.system.mapper.HmpProdInfoMapper;
 import com.paic.ehis.system.service.IHmpProdInfoService;
+import com.paic.ehis.common.core.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 产品定义Service业务层处理

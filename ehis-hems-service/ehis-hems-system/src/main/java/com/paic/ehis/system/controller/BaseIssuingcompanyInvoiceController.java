@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.system.domain.BaseIssuingcompanyInvoice;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,7 +80,13 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
-        return toAjax(baseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice));
+        String companycode = baseIssuingcompanyInvoice.getCompanycode();//出单公司编码
+        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice1 = baseIssuingcompanyInvoiceService.selectBaseIssuingcompanyInvoiceById(companycode);
+        if (StringUtils.isNotNull(baseIssuingcompanyInvoice1)) {
+            return toAjax(baseIssuingcompanyInvoiceService.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice));
+        }else {
+            return toAjax(baseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice));
+        }
     }
 
     /**

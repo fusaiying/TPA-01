@@ -3,9 +3,6 @@ package com.paic.ehis.system.controller;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.system.domain.SysDictType;
-import com.paic.ehis.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +22,8 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.system.domain.SysDictType;
+import com.paic.ehis.system.service.ISysDictTypeService;
 
 /**
  * 数据字典信息

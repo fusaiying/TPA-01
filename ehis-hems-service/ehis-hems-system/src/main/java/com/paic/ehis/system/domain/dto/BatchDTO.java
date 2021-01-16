@@ -1,6 +1,7 @@
 package com.paic.ehis.system.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paic.ehis.common.core.annotation.Excel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -51,6 +52,9 @@ public class BatchDTO implements Serializable {
     private Date updatestartTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateendTime;
+
+    /** 状态（Y-有效，N-无效） */
+    private String status;
 
     /** 报案号 */
     private String rptno;

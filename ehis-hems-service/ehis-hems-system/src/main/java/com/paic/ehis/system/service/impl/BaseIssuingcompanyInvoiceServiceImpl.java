@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.paic.ehis.system.domain.BaseIssuingcompanyInvoice;
 import com.paic.ehis.system.mapper.BaseIssuingcompanyInvoiceMapper;
+import com.paic.ehis.system.service.IBaseIssuingcompanyInvoiceService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.service.IBaseIssuingcompanyInvoiceService;
 
 /**
  * 出单公司开票信息 Service业务层处理
@@ -16,7 +17,7 @@ import com.paic.ehis.system.service.IBaseIssuingcompanyInvoiceService;
  * @date 2021-01-05
  */
 @Service
-public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompanyInvoiceService 
+public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompanyInvoiceService
 {
     @Autowired
     private BaseIssuingcompanyInvoiceMapper baseIssuingcompanyInvoiceMapper;
@@ -54,7 +55,11 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     @Override
     public int insertBaseIssuingcompanyInvoice(BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
+        baseIssuingcompanyInvoice.setStatus("Y");
+        baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
+        baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyInvoiceMapper.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
     }
 
@@ -67,6 +72,7 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     @Override
     public int updateBaseIssuingcompanyInvoice(BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
+        baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyInvoiceMapper.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
     }

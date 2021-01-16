@@ -29,6 +29,10 @@ public class TableSupport
      */
     public static final String IS_ASC = "isAsc";
 
+    private static String orderByColumn;
+
+    private static String sort;
+
     /**
      * 封装分页对象
      */
@@ -45,5 +49,41 @@ public class TableSupport
     public static PageDomain buildPageRequest()
     {
         return getPageDomain();
+    }
+
+
+
+    /**
+     * 自定义封装分页对象
+     */
+    public static PageDomain getSortPageDomain()
+    {
+        PageDomain pageDomain = new PageDomain();
+        pageDomain.setPageNum(ServletUtils.getParameterToInt(PAGE_NUM));
+        pageDomain.setPageSize(ServletUtils.getParameterToInt(PAGE_SIZE));
+        pageDomain.setOrderByColumn(orderByColumn);
+        pageDomain.setIsAsc(sort);
+        return pageDomain;
+    }
+
+    public static PageDomain buildSortPageRequest()
+    {
+        return getSortPageDomain();
+    }
+
+    public static String getOrderByColumn() {
+        return orderByColumn;
+    }
+
+    public static void setOrderByColumn(String orderByColumn) {
+        TableSupport.orderByColumn = orderByColumn;
+    }
+
+    public static String getSort() {
+        return sort;
+    }
+
+    public static void setSort(String sort) {
+        TableSupport.sort = sort;
     }
 }

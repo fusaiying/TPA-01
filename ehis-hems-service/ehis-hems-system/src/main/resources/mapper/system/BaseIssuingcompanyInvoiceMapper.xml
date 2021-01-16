@@ -5,9 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.system.mapper.BaseIssuingcompanyInvoiceMapper">
     
     <resultMap type="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice" id="BaseIssuingcompanyInvoiceResult">
-        <result property="companyCode"    column="company_code"    />
-        <result property="invoiceName"    column="invoice_name"    />
-        <result property="ratepayerNumber"    column="ratepayer_number"    />
+        <result property="companycode"    column="company_code"    />
+        <result property="invoicename"    column="invoice_name"    />
+        <result property="ratepayernumber"    column="ratepayer_number"    />
         <result property="account"    column="account"    />
         <result property="address"    column="address"    />
         <result property="telephone"    column="telephone"    />
@@ -25,8 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBaseIssuingcompanyInvoiceList" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice" resultMap="BaseIssuingcompanyInvoiceResult">
         <include refid="selectBaseIssuingcompanyInvoiceVo"/>
         <where>  
-            <if test="invoiceName != null  and invoiceName != ''"> and invoice_name like concat('%', #{invoiceName}, '%')</if>
-            <if test="ratepayerNumber != null  and ratepayerNumber != ''"> and ratepayer_number = #{ratepayerNumber}</if>
+            <if test="invoicename != null  and invoicename != ''"> and invoice_name like concat('%', #{invoicename}, '%')</if>
+            <if test="ratepayernumber != null  and ratepayernumber != ''"> and ratepayer_number = #{ratepayernumber}</if>
             <if test="account != null  and account != ''"> and account = #{account}</if>
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
@@ -36,15 +36,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectBaseIssuingcompanyInvoiceById" parameterType="String" resultMap="BaseIssuingcompanyInvoiceResult">
         <include refid="selectBaseIssuingcompanyInvoiceVo"/>
-        where company_code = #{companyCode}
+        where company_code = #{companycode} and status="Y"
     </select>
         
     <insert id="insertBaseIssuingcompanyInvoice" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice">
         insert into base_issuingcompany_invoice
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="companyCode != null">company_code,</if>
-            <if test="invoiceName != null and invoiceName != ''">invoice_name,</if>
-            <if test="ratepayerNumber != null and ratepayerNumber != ''">ratepayer_number,</if>
+            <if test="companycode != null">company_code,</if>
+            <if test="invoicename != null and invoicename != ''">invoice_name,</if>
+            <if test="ratepayernumber != null and ratepayernumber != ''">ratepayer_number,</if>
             <if test="account != null and account != ''">account,</if>
             <if test="address != null">address,</if>
             <if test="telephone != null">telephone,</if>
@@ -55,9 +55,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="companyCode != null">#{companyCode},</if>
-            <if test="invoiceName != null and invoiceName != ''">#{invoiceName},</if>
-            <if test="ratepayerNumber != null and ratepayerNumber != ''">#{ratepayerNumber},</if>
+            <if test="companycode != null">#{companycode},</if>
+            <if test="invoicename != null and invoicename != ''">#{invoicename},</if>
+            <if test="ratepayernumber != null and ratepayernumber != ''">#{ratepayernumber},</if>
             <if test="account != null and account != ''">#{account},</if>
             <if test="address != null">#{address},</if>
             <if test="telephone != null">#{telephone},</if>
@@ -72,8 +72,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBaseIssuingcompanyInvoice" parameterType="com.paic.ehis.system.domain.BaseIssuingcompanyInvoice">
         update base_issuingcompany_invoice
         <trim prefix="SET" suffixOverrides=",">
-            <if test="invoiceName != null and invoiceName != ''">invoice_name = #{invoiceName},</if>
-            <if test="ratepayerNumber != null and ratepayerNumber != ''">ratepayer_number = #{ratepayerNumber},</if>
+            <if test="invoicename != null and invoicename != ''">invoice_name = #{invoicename},</if>
+            <if test="ratepayernumber != null and ratepayernumber != ''">ratepayer_number = #{ratepayernumber},</if>
             <if test="account != null and account != ''">account = #{account},</if>
             <if test="address != null">address = #{address},</if>
             <if test="telephone != null">telephone = #{telephone},</if>
@@ -83,17 +83,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where company_code = #{companyCode}
+        where company_code = #{companycode}
     </update>
 
     <delete id="deleteBaseIssuingcompanyInvoiceById" parameterType="String">
-        delete from base_issuingcompany_invoice where company_code = #{companyCode}
+        delete from base_issuingcompany_invoice where company_code = #{companycode}
     </delete>
 
     <delete id="deleteBaseIssuingcompanyInvoiceByIds" parameterType="String">
         delete from base_issuingcompany_invoice where company_code in 
-        <foreach item="companyCode" collection="array" open="(" separator="," close=")">
-            #{companyCode}
+        <foreach item="companycode" collection="array" open="(" separator="," close=")">
+            #{companycode}
         </foreach>
     </delete>
     

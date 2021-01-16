@@ -2,12 +2,12 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.system.domain.BaseIssuingcompanyAttachfile;
 import com.paic.ehis.system.mapper.BaseIssuingcompanyAttachfileMapper;
+import com.paic.ehis.system.service.IBaseIssuingcompanyAttachfileService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.domain.BaseIssuingcompanyAttachfile;
-import com.paic.ehis.system.service.IBaseIssuingcompanyAttachfileService;
 
 /**
  * 出单公司附件信息 Service业务层处理
@@ -16,7 +16,7 @@ import com.paic.ehis.system.service.IBaseIssuingcompanyAttachfileService;
  * @date 2021-01-05
  */
 @Service
-public class BaseIssuingcompanyAttachfileServiceImpl implements IBaseIssuingcompanyAttachfileService 
+public class BaseIssuingcompanyAttachfileServiceImpl implements IBaseIssuingcompanyAttachfileService
 {
     @Autowired
     private BaseIssuingcompanyAttachfileMapper baseIssuingcompanyAttachfileMapper;
@@ -55,6 +55,7 @@ public class BaseIssuingcompanyAttachfileServiceImpl implements IBaseIssuingcomp
     public int insertBaseIssuingcompanyAttachfile(BaseIssuingcompanyAttachfile baseIssuingcompanyAttachfile)
     {
         baseIssuingcompanyAttachfile.setCreateTime(DateUtils.getNowDate());
+        baseIssuingcompanyAttachfile.setStatus("Y");
         return baseIssuingcompanyAttachfileMapper.insertBaseIssuingcompanyAttachfile(baseIssuingcompanyAttachfile);
     }
 

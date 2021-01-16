@@ -3,9 +3,6 @@ package com.paic.ehis.system.controller;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.system.api.domain.SysOperLog;
-import com.paic.ehis.system.service.ISysOperLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +18,8 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.SysOperLog;
+import com.paic.ehis.system.service.ISysOperLogService;
 
 /**
  * 操作日志记录

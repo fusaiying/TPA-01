@@ -18,72 +18,84 @@ public class BaseIssuingcompanyRule extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 规则编码 */
-    private String ruleNo;
+    @Excel(name = "规则编码")
+    private String ruleno;
 
     /** 出单公司编码 */
     @Excel(name = "出单公司编码")
-    private String companyCode;
+    private String companycode;
 
     /** 产品编码 */
     @Excel(name = "产品编码")
-    private String riskCode;
+    private String riskcode;
 
     /** 结算类型 01-服务费 02-保费比例% */
     @Excel(name = "结算类型 01-服务费 02-保费比例%")
-    private String settlementType;
+    private String settlementtype;
 
     /** 结算值 */
     @Excel(name = "结算值")
-    private BigDecimal settlementValue;
+    private BigDecimal settlementvalue;
+
+    /** 出单公司名称 */
+    private String companyname;
+
+    public String getCompanyname() {
+        return companyname;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
 
     /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
-    public void setRuleNo(String ruleNo) 
+    public void setRuleno(String ruleno)
     {
-        this.ruleNo = ruleNo;
+        this.ruleno = ruleno;
     }
 
-    public String getRuleNo() 
+    public String getRuleno()
     {
-        return ruleNo;
+        return ruleno;
     }
-    public void setCompanyCode(String companyCode) 
+    public void setCompanycode(String companyCode)
     {
-        this.companyCode = companyCode;
-    }
-
-    public String getCompanyCode() 
-    {
-        return companyCode;
-    }
-    public void setRiskCode(String riskCode) 
-    {
-        this.riskCode = riskCode;
+        this.companycode = companyCode;
     }
 
-    public String getRiskCode() 
+    public String getCompanycode()
     {
-        return riskCode;
+        return companycode;
     }
-    public void setSettlementType(String settlementType) 
+    public void setRiskcode(String riskCode)
     {
-        this.settlementType = settlementType;
-    }
-
-    public String getSettlementType() 
-    {
-        return settlementType;
-    }
-    public void setSettlementValue(BigDecimal settlementValue) 
-    {
-        this.settlementValue = settlementValue;
+        this.riskcode = riskCode;
     }
 
-    public BigDecimal getSettlementValue() 
+    public String getRiskcode()
     {
-        return settlementValue;
+        return riskcode;
+    }
+    public void setSettlementtype(String settlementType)
+    {
+        this.settlementtype = settlementType;
+    }
+
+    public String getSettlementtype()
+    {
+        return settlementtype;
+    }
+    public void setSettlementvalue(BigDecimal settlementValue)
+    {
+        this.settlementvalue = settlementValue;
+    }
+
+    public BigDecimal getSettlementvalue()
+    {
+        return settlementvalue;
     }
     public void setStatus(String status) 
     {
@@ -98,11 +110,11 @@ public class BaseIssuingcompanyRule extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("ruleNo", getRuleNo())
-            .append("companyCode", getCompanyCode())
-            .append("riskCode", getRiskCode())
-            .append("settlementType", getSettlementType())
-            .append("settlementValue", getSettlementValue())
+            .append("ruleNo", getRuleno())
+            .append("companyCode", getCompanycode())
+            .append("riskCode", getRiskcode())
+            .append("settlementType", getSettlementtype())
+            .append("settlementValue", getSettlementvalue())
             .append("status", getStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

@@ -1,10 +1,13 @@
 package com.paic.ehis.system.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.Date;
 
 /**
  * 费用项信息 对象 base_feeitem
@@ -17,33 +20,62 @@ public class BaseFeeitem extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 费用项编码 */
-    private String feeitemCode;
+    @Excel(name = "费用项编码")
+    private String feeitemcode;
 
     /** 费用项名称 */
     @Excel(name = "费用项名称")
-    private String feeitemName;
+    private String feeitemname;
 
     /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
     private String status;
 
-    public void setFeeitemCode(String feeitemCode) 
-    {
-        this.feeitemCode = feeitemCode;
+    /** 创建时间 */
+    @Excel(name ="创建日期",dateFormat = "yyyy-MM-dd" )
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
+
+    /** 创建者 */
+    @Excel(name ="创建者" )
+    private String createBy;
+
+    @Override
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public String getFeeitemCode() 
-    {
-        return feeitemCode;
-    }
-    public void setFeeitemName(String feeitemName) 
-    {
-        this.feeitemName = feeitemName;
+    @Override
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
-    public String getFeeitemName() 
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setFeeitemcode(String feeitemcode)
     {
-        return feeitemName;
+        this.feeitemcode = feeitemcode;
+    }
+
+    public String getFeeitemcode()
+    {
+        return feeitemcode;
+    }
+    public void setFeeitemname(String feeitemname)
+    {
+        this.feeitemname = feeitemname;
+    }
+
+    public String getFeeitemname()
+    {
+        return feeitemname;
     }
     public void setStatus(String status) 
     {
@@ -58,8 +90,8 @@ public class BaseFeeitem extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("feeitemCode", getFeeitemCode())
-            .append("feeitemName", getFeeitemName())
+            .append("feeitemcode", getFeeitemcode())
+            .append("feeitemname", getFeeitemname())
             .append("status", getStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

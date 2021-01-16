@@ -31,8 +31,18 @@ public class ClaimCaseStandingVo extends BaseEntity {
     private List<String> claimmaterials;
 
     /** 其他（案件去向） */
-    @Excel(name = "其他", readConverterExp = "案=件去向")
+    @Excel(name = "其他", readConverterExp = "案件去向")
     private String otherinfo;
+
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getBatchno() {
         return batchno;
@@ -88,6 +98,7 @@ public class ClaimCaseStandingVo extends BaseEntity {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("status", getStatus())
                 .append("batchno", getBatchno())
                 .append("rptno", getRptno())
                 .append("idno", getIdno())

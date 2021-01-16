@@ -1,5 +1,6 @@
 package com.paic.ehis.system.domain.vo;
 
+import com.paic.ehis.common.core.annotation.Excel;
 import lombok.Data;
 
 import java.io.Serializable;

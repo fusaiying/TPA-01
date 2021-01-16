@@ -1,12 +1,13 @@
 package com.paic.ehis.system.service.impl;
 
 import java.util.List;
+
+import com.paic.ehis.system.domain.HmpBenefitCustomer;
+import com.paic.ehis.system.mapper.HmpBenefitCustomerMapper;
+import com.paic.ehis.system.service.IHmpBenefitCustomerService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.mapper.HmpBenefitCustomerMapper;
-import com.paic.ehis.system.domain.HmpBenefitCustomer;
-import com.paic.ehis.system.service.IHmpBenefitCustomerService;
 
 /**
  * 客户信息Service业务层处理
@@ -15,7 +16,7 @@ import com.paic.ehis.system.service.IHmpBenefitCustomerService;
  * @date 2020-11-17
  */
 @Service
-public class HmpBenefitCustomerServiceImpl implements IHmpBenefitCustomerService 
+public class HmpBenefitCustomerServiceImpl implements IHmpBenefitCustomerService
 {
     @Autowired
     private HmpBenefitCustomerMapper hmpBenefitCustomerMapper;

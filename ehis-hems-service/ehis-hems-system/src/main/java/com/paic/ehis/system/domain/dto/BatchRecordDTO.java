@@ -1,6 +1,7 @@
 package com.paic.ehis.system.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paic.ehis.common.core.annotation.Excel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -28,6 +29,9 @@ public class BatchRecordDTO implements Serializable {
 
     /** 交单机构编码 */
     private String organcode;
+
+    /** 状态（Y-有效，N-无效） */
+    private String status;
 
     /** 操作人 */
     private String updateBy;

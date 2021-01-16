@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.ClaimCaseInvestigationMapper">
+    
+    <resultMap type="ClaimCaseInvestigation" id="ClaimCaseInvestigationResult">
+        <result property="invNo"    column="inv_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="invType"    column="inv_type"    />
+        <result property="invReason"    column="inv_reason"    />
+        <result property="invOrganCode"    column="inv_organ_code"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="invView"    column="inv_view"    />
+        <result property="isHistory"    column="is_history"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseInvestigationVo">
+        select inv_no, rpt_no, inv_type, inv_reason, inv_organ_code, organ_code, policy_no, inv_view, is_history, status, create_by, create_time, update_by, update_time from claim_case_investigation
+    </sql>
+
+    <select id="selectClaimCaseInvestigationList" parameterType="ClaimCaseInvestigation" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="invType != null  and invType != ''"> and inv_type = #{invType}</if>
+            <if test="invReason != null  and invReason != ''"> and inv_reason = #{invReason}</if>
+            <if test="invOrganCode != null  and invOrganCode != ''"> and inv_organ_code = #{invOrganCode}</if>
+            <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="invView != null  and invView != ''"> and inv_view = #{invView}</if>
+            <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseInvestigationById" parameterType="Long" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        where inv_no = #{invNo}
+    </select>
+        
+    <insert id="insertClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
+        insert into claim_case_investigation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="invNo != null">inv_no,</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="invType != null and invType != ''">inv_type,</if>
+            <if test="invReason != null and invReason != ''">inv_reason,</if>
+            <if test="invOrganCode != null and invOrganCode != ''">inv_organ_code,</if>
+            <if test="organCode != null and organCode != ''">organ_code,</if>
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="invView != null and invView != ''">inv_view,</if>
+            <if test="isHistory != null and isHistory != ''">is_history,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="invNo != null">#{invNo},</if>
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="invType != null and invType != ''">#{invType},</if>
+            <if test="invReason != null and invReason != ''">#{invReason},</if>
+            <if test="invOrganCode != null and invOrganCode != ''">#{invOrganCode},</if>
+            <if test="organCode != null and organCode != ''">#{organCode},</if>
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="invView != null and invView != ''">#{invView},</if>
+            <if test="isHistory != null and isHistory != ''">#{isHistory},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
+        update claim_case_investigation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="invType != null and invType != ''">inv_type = #{invType},</if>
+            <if test="invReason != null and invReason != ''">inv_reason = #{invReason},</if>
+            <if test="invOrganCode != null and invOrganCode != ''">inv_organ_code = #{invOrganCode},</if>
+            <if test="organCode != null and organCode != ''">organ_code = #{organCode},</if>
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="invView != null and invView != ''">inv_view = #{invView},</if>
+            <if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where inv_no = #{invNo}
+    </update>
+
+    <delete id="deleteClaimCaseInvestigationById" parameterType="Long">
+        delete from claim_case_investigation where inv_no = #{invNo}
+    </delete>
+
+    <delete id="deleteClaimCaseInvestigationByIds" parameterType="String">
+        delete from claim_case_investigation where inv_no in 
+        <foreach item="invNo" collection="array" open="(" separator="," close=")">
+            #{invNo}
+        </foreach>
+    </delete>
+    
+</mapper>

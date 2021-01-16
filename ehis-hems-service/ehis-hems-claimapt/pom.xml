@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ehis-hems-claima</artifactId>
+    <artifactId>ehis-hems-claimapt</artifactId>
 
     <description>
-        ehis-hems-claima 理赔交单
+        ehis-hems-claimapt 理赔交单
     </description>
 
     <dependencies>

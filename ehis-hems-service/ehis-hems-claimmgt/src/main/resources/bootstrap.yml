@@ -1,12 +1,12 @@
 # Tomcat
 server:
-  port: 9202
+  port: 9209
 
 # Spring
 spring: 
   application:
     # 应用名称
-    name: ehis-hems-claima
+    name: ehis-hems-claimmgt
   profiles:
     # 环境配置
     active: dev
@@ -26,4 +26,3 @@ spring:
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         #命名空间地址
         namespace: 99a47c0f-399f-492a-adc7-d91b7f41b668
-

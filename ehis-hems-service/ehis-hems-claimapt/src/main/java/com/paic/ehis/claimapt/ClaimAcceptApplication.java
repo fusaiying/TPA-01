@@ -1,4 +1,4 @@
-package com.paic.ehis.claimaccept;
+package com.paic.ehis.claimapt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;

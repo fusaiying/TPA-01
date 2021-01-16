@@ -6,7 +6,7 @@ server:
 spring: 
   application:
     # 应用名称
-    name: ehis-hems-sysytem
+    name: ehis-hems-system
   profiles:
     # 环境配置
     active: dev
@@ -25,5 +25,5 @@ spring:
         # 共享配置
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         #命名空间地址
-        namespace: 99a47c0f-399f-492a-adc7-d91b7f41b668
+        namespace: 2aa08e3e-93a4-4f9a-b1e4-cf6cce778de8
 

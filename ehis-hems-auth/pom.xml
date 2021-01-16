@@ -47,13 +47,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 		
-        <!-- Sino Common Security-->
+        <!-- Ehis-Hems Common Security-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-security</artifactId>
         </dependency>
         
-        <!-- Sino Common Redis-->
+        <!-- Ehis-Hems Common Redis-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-redis</artifactId>

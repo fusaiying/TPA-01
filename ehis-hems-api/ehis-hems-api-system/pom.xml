@@ -17,7 +17,7 @@
 
     <dependencies>
 		
-        <!-- Sino Common Core-->
+        <!-- Ehis-Hems Common Core-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-core</artifactId>

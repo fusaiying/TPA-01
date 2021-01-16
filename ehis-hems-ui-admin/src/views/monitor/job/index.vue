@@ -167,7 +167,7 @@
                 <el-tooltip placement="top">
                   <div slot="content">
                     Bean调用示例：taskDemo.sinoParams('sinosoft')
-                    <br/>Class类调用示例：com.sino.quartz.task.SinoTask.sinoParams('sinosoft')
+                    <br/>Class类调用示例：com.paic.ehis.quartz.task.SinoTask.sinoParams('sinosoft')
                     <br/>参数说明：支持字符串，布尔类型，长整型，浮点型，整型
                   </div>
                   <i class="el-icon-question"></i>

@@ -17,7 +17,7 @@
 
     <dependencies>
 		
-        <!-- Sino Common Security -->
+        <!-- Ehis-Hems Common Security -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-security</artifactId>

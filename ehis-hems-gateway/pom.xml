@@ -65,7 +65,7 @@
             <artifactId>kaptcha</artifactId>
         </dependency>
 
-        <!-- Sino Common Redis-->
+        <!-- Ehis-Hems Common Redis-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-redis</artifactId>

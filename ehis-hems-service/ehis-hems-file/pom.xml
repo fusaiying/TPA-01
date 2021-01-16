@@ -54,31 +54,31 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         
-        <!-- Sino Common Security -->
+        <!-- Ehis-Hems Common Security -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-security</artifactId>
         </dependency>
         
-        <!-- Sino Common Datascope -->
+        <!-- Ehis-Hems Common Datascope -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-datascope</artifactId>
         </dependency>
         
-        <!-- Sino Common Log -->
+        <!-- Ehis-Hems Common Log -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-log</artifactId>
         </dependency>
         
-        <!-- Sino Common Swagger -->
+        <!-- Ehis-Hems Common Swagger -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-swagger</artifactId>
         </dependency>
         
-        <!-- Sino Common Redis-->
+        <!-- Ehis-Hems Common Redis-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-redis</artifactId>

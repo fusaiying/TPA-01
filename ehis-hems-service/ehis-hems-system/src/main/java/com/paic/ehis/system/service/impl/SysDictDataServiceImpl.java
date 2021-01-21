@@ -2,7 +2,6 @@ package com.paic.ehis.system.service.impl;
 
 import java.util.List;
 
-import com.paic.ehis.system.domain.HmpAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.system.domain.SysDictData;
@@ -107,35 +106,6 @@ public class SysDictDataServiceImpl implements ISysDictDataService
             DictUtils.clearDictCache();
         }
         return row;
-    }
-
-    /**
-     * 查询所有的 州
-     * @return
-     */
-    @Override
-    public List<HmpAddress> selectContinent() {
-        return dictDataMapper.selectContinent();
-    }
-
-    /**
-     * 查询指定州下的国家
-     * @param continent
-     * @return
-     */
-    @Override
-    public List<HmpAddress> selectContryByContinent(String continent) {
-        return dictDataMapper.selectContryByContinent(continent);
-    }
-
-    /**
-     * 根据地区名称查询地区编码
-     * @param placename
-     * @return
-     */
-    @Override
-    public HmpAddress selectPlaceCodeByPlaceName(String placename) {
-        return dictDataMapper.selectPlaceCodeByPlaceName(placename);
     }
 
 }

@@ -125,35 +125,6 @@ public class SysDictDataController extends BaseController
         return toAjax(dictDataService.deleteDictDataByIds(dictCodes));
     }
 
-    /**
-     * 查询 州
-     * @return
-     */
-    @GetMapping(value="/continent")
-    public AjaxResult continent() {
-        return AjaxResult.success(dictDataService.selectContinent());
-    }
-
-
-    /**
-     * 查询指定州下的国家
-     */
-    @GetMapping(value = "/country/{continent}")
-    public AjaxResult selectCountryByContinent(@PathVariable("continent") String continent)
-    {
-        return AjaxResult.success(dictDataService.selectContryByContinent(continent));
-    }
-
-    /**
-     * 根据地区名称查询地区编码
-     * @param placename
-     * @return
-     */
-    @GetMapping(value = "/code/{placename}")
-    public AjaxResult selectPlaceCodeByPlaceName(@PathVariable("placename") String placename) {
-        return AjaxResult.success(dictDataService.selectPlaceCodeByPlaceName(placename));
-    }
-
     @ApiOperation("查询字典详情不分页")
     @PostMapping(value = "/queryAllByName")
     public List<DictDetailDTO> getDictDetailsByDictName(@RequestBody String dictName){

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseIssuingcompanyRuleMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseIssuingcompanyRule" id="BaseIssuingcompanyRuleResult">
+        <result property="ruleno"    column="rule_no"    />
+        <result property="companycode"    column="company_code"    />
+        <result property="riskcode"    column="risk_code"    />
+        <result property="settlementtype"    column="settlement_type"    />
+        <result property="settlementvalue"    column="settlement_value"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="companyname"    column="companyname"    />
+    </resultMap>
+
+    <sql id="selectBaseIssuingcompanyRuleVo">
+        select rule_no, company_code, risk_code, settlement_type, settlement_value, status, create_by, create_time, update_by, update_time from base_issuingcompany_rule
+    </sql>
+
+    <select id="selectBaseIssuingcompanyRuleList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule" resultMap="BaseIssuingcompanyRuleResult">
+        <include refid="selectBaseIssuingcompanyRuleVo"/>
+        <where>  
+            <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
+            <if test="riskcode != null  and riskcode != ''"> and risk_code = #{riskcode}</if>
+            <if test="settlementtype != null  and settlementtype != ''"> and settlement_type = #{settlementtype}</if>
+            <if test="settlementvalue != null "> and settlement_value = #{settlementvalue}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseIssuingcompanyRuleById" parameterType="String" resultMap="BaseIssuingcompanyRuleResult">
+        <include refid="selectBaseIssuingcompanyRuleVo"/>
+        where status = 'Y' and rule_no = #{ruleno}
+    </select>
+    <select id="selectBaseIssuingcompanyRuleByProduct" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule" resultMap="BaseIssuingcompanyRuleResult">
+        SELECT
+        rule_no,
+        rule.company_code,
+        risk_code,
+        settlement_type,
+        settlement_value,
+        rule.create_by,
+        rule.create_time,
+        rule.update_by,
+        rule.update_time,
+        company_name
+        FROM
+        base_issuingcompany_rule rule
+        LEFT JOIN base_issuingcompany company ON rule.company_code = company.company_code
+        <where>
+            <if test="riskcode != null  and riskcode != ''"> and risk_code = #{riskcode}</if>
+            <if test="companycode != null  and companycode != ''"> and rule.company_code = #{companycode}</if>
+            <if test="status != null  and status != ''"> and rule.status = #{status}</if>
+        </where>
+    </select>
+        
+    <insert id="insertBaseIssuingcompanyRule" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule">
+        insert into base_issuingcompany_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleno != null">rule_no,</if>
+            <if test="companycode != null and companycode != ''">company_code,</if>
+            <if test="riskcode != null and riskcode != ''">risk_code,</if>
+            <if test="settlementtype != null and settlementtype != ''">settlement_type,</if>
+            <if test="settlementvalue != null">settlement_value,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleno != null">#{ruleno},</if>
+            <if test="companycode != null and companycode != ''">#{companycode},</if>
+            <if test="riskcode != null and riskcode != ''">#{riskcode},</if>
+            <if test="settlementtype != null and settlementtype != ''">#{settlementtype},</if>
+            <if test="settlementvalue != null">#{settlementvalue},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseIssuingcompanyRule" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule">
+        update base_issuingcompany_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companycode != null and companycode != ''">company_code = #{companycode},</if>
+            <if test="riskcode != null and riskcode != ''">risk_code = #{riskcode},</if>
+            <if test="settlementtype != null and settlementtype != ''">settlement_type = #{settlementtype},</if>
+            <if test="settlementvalue != null">settlement_value = #{settlementvalue},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rule_no = #{ruleno}
+    </update>
+
+    <delete id="deleteBaseIssuingcompanyRuleById" parameterType="String">
+        delete from base_issuingcompany_rule where rule_no = #{ruleno}
+    </delete>
+
+    <delete id="deleteBaseIssuingcompanyRuleByIds" parameterType="String">
+        delete from base_issuingcompany_rule where rule_no in 
+        <foreach item="ruleno" collection="array" open="(" separator="," close=")">
+            #{ruleno}
+        </foreach>
+    </delete>
+    
+</mapper>

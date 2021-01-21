@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseIssuingcompanyMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseIssuingcompany" id="BaseIssuingcompanyResult">
+        <result property="companycode"    column="company_code"    />
+        <result property="companyname"    column="company_name"    />
+        <result property="simplename"    column="simple_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseIssuingcompanyVo">
+        select company_code, company_name, simple_name, status, create_by, create_time, update_by, update_time from base_issuingcompany
+    </sql>
+
+    <select id="selectBaseIssuingcompanyList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany" resultMap="BaseIssuingcompanyResult">
+        <include refid="selectBaseIssuingcompanyVo"/>
+        <where>
+            <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
+            <if test="companyname != null  and companyname != ''"> and company_name like concat('%', #{companyname}, '%')</if>
+            <if test="simplename != null  and simplename != ''"> and simple_name = #{simplename}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by update_time desc
+    </select>
+    
+    <select id="selectBaseIssuingcompanyById" parameterType="String" resultMap="BaseIssuingcompanyResult">
+        <include refid="selectBaseIssuingcompanyVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+        
+    <insert id="insertBaseIssuingcompany" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany">
+        insert into base_issuingcompany
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companycode != null">company_code,</if>
+            <if test="companyname != null and companyname != ''">company_name,</if>
+            <if test="simplename != null and simplename != ''">simple_name,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companycode != null">#{companycode},</if>
+            <if test="companyname != null and companyname != ''">#{companyname},</if>
+            <if test="simplename != null and simplename != ''">#{simplename},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseIssuingcompany" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany">
+        update base_issuingcompany
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyname != null and companyname != ''">company_name = #{companyname},</if>
+            <if test="simplename != null and simplename != ''">simple_name = #{simplename},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where company_code = #{companycode}
+    </update>
+
+    <delete id="deleteBaseIssuingcompanyById" parameterType="String">
+        delete from base_issuingcompany where company_code = #{companycode}
+    </delete>
+
+    <delete id="deleteBaseIssuingcompanyByIds" parameterType="String">
+        delete from base_issuingcompany where company_code in 
+        <foreach item="companycode" collection="array" open="(" separator="," close=")">
+            #{companycode}
+        </foreach>
+    </delete>
+    
+</mapper>

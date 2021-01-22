@@ -242,7 +242,7 @@
           icdcode: this.formSearch.icdcode,
           icdmname: this.formSearch.icdmname,
         }
-        this.download('system/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
+        this.download('provider/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
           ...query
         }, `icd_${new Date().getTime()}.xlsx`)
       }

@@ -167,7 +167,7 @@
         }
         listFeeitem(this.queryParams).then(res => {
           if (res.rows.length>0){
-            this.download('system/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
+            this.download('provider/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
               ...query
             }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({

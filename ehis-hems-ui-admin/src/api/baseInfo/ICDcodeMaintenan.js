@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 获取列表
 export function getICDList(query) {
   return request({
-    url: '/system/icd10/list',
+    url: '/provider/icd10/list',
     method: 'get',
     params: query
   })
@@ -11,7 +11,7 @@ export function getICDList(query) {
 // 新增页面
 export function addICDCode(data) {
   return request({
-    url: '/system/icd10',
+    url: '/provider/icd10',
     method: 'post',
     data: data
   })
@@ -20,7 +20,7 @@ export function addICDCode(data) {
 // 编辑页面
 export function updateICDCode(data) {
   return request({
-    url: '/system/icd10',
+    url: '/provider/icd10',
     method: 'put',
     data: data
   })
@@ -29,7 +29,7 @@ export function updateICDCode(data) {
 // 删除页面
 export function deleteICDCode(icdcode) {
   return request({
-    url: '/system/icd10/' + icdcode,
+    url: '/provider/icd10/' + icdcode,
     method: 'delete'
   })
 }
@@ -37,7 +37,7 @@ export function deleteICDCode(icdcode) {
 //单个删除
 export function removeOneICDCode(data) {
     return request({
-      url: '/system/icd10/removeOne',
+      url: '/provider/icd10/removeOne',
       method: 'post',
       data: data
     })

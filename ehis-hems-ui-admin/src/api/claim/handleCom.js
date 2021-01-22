@@ -304,7 +304,7 @@ export function editBill(billId) {
 //获取费用项
 export function getFee() {
   return request({
-    url: '/system/feeitem/list',
+    url: '/provider/feeitem/list',
     method: 'get'
   })
 }

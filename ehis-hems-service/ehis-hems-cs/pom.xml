@@ -12,7 +12,7 @@
     <artifactId>ehis-hems-cs</artifactId>
 
     <description>
-        ehis-hems-cs 理赔交单
+        ehis-hems-cs 客服模块
     </description>
 
     <dependencies>
@@ -78,6 +78,16 @@
             <artifactId>ehis-hems-common-swagger</artifactId>
         </dependency>
 
+        <!-- Ehis-Hems Common Redis-->
+        <dependency>
+            <groupId>com.paic.ehis</groupId>
+            <artifactId>ehis-hems-common-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

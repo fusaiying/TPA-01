@@ -4,12 +4,12 @@
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
+<!--v-model双向绑定-->
           <el-col :span="8">
             <el-form-item label="服务项目：" prop="Service">
-              <el-select v-model="sendForm.Service" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+              <el-select v-model="sendForm.service" class="item-width" placeholder="请选择">
+                <el-option v-for="item in serves" :key="item.value" :label="item.label"
+                           :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -23,9 +23,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理人：" prop="Acceptor">
-              <el-input v-model="sendForm.Acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="受理日期：" prop="acceptorTime">
               <el-date-picker
@@ -40,13 +42,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理人：" prop="Handler">
-              <el-input v-model="sendForm.Handler" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.handler" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理日期：" prop="HandlerTime">
               <el-date-picker
-                v-model="sendForm.HandlerTime"
+                v-model="sendForm.handlerTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -55,6 +57,8 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="工单号：" prop="workNumber">
               <el-input v-model="sendForm.workNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -70,6 +74,8 @@
               <el-input v-model="sendForm.secondNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="insuredName">
               <el-input v-model="sendForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -85,6 +91,8 @@
               <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="联系人电话：" prop="phone">
               <el-input v-model="sendForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -110,9 +118,11 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+          </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="sendForm.Service" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.priority" class="item-width" placeholder="请选择">
                 <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -120,15 +130,16 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="vip标识：" prop="vip">
-              <el-select v-model="sendForm.Service" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.vip" class="item-width" placeholder="请选择">
                 <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
-          </el-col>  <el-col :span="8">
+          </el-col>
+          <el-col :span="8">
           <el-form-item label="状态：" prop="state">
-            <el-select v-model="sendForm.Service" class="item-width" placeholder="请选择">
-              <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
+            <el-select v-model="sendForm.state" class="item-width" placeholder="请选择">
+              <el-option v-for="item in states" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -147,8 +158,8 @@
       <div slot="header" class="clearfix">
         <span>待处理（{{ totalCount }}）</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="sendMany">新增</el-button>
-           <el-button type="primary" size="mini" @click="sendMany">获取</el-button>
+            <el-button type="primary" size="mini" @click="add">新增</el-button>
+           <el-button type="primary" size="mini" @click="add">获取</el-button>
         </span>
         <el-divider/>
         <el-table
@@ -160,31 +171,31 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="riskCode" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskName" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskNature" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskClass" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskStatus" label="分单号" show-overflow-tooltip/>
-          <el-table-column prop="conclusionExplanation" align="center" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="受理时间" align="center" show-overflow-tooltip>
+          <el-table-column align="center" width="140" prop="workNumber" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="channel" label="受理渠道" show-overflow-tooltip/>
+          <el-table-column align="center" prop="Service" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="secondNumber" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
+          <el-table-column prop="beInsuredName" align="center" label="被保人" show-overflow-tooltip/>
+          <el-table-column prop="insuredName" align="center" label="投保人" show-overflow-tooltip/>
+          <el-table-column prop="acceptorTime" label="受理时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="HandlerTime" label="修改时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="updateBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="Acceptor" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="Handler" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="vip" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
+          <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="sendOne(scope.row)">获取</el-button>
@@ -208,6 +219,7 @@
       <div slot="header" class="clearfix">
         <span>处理中（{{ totalCount }}）</span>
         <el-divider/>
+        <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -217,32 +229,31 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
 <!--          <el-table-column type="selection" align="center" name/> sd-->
-          <el-table-column align="center" width="140" prop="riskCode" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskName" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskNature" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskClass" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" :formatter="getRiskStatus" prop="riskStatus" label="分单号"
-                           show-overflow-tooltip/>
-          <el-table-column prop="conclusionExplanation" align="center" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="受理时间" align="center" show-overflow-tooltip>
+          <el-table-column align="center" width="140" prop="workNumber" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="channel" label="受理渠道" show-overflow-tooltip/>
+          <el-table-column align="center" prop="Service" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="secondNumber" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
+          <el-table-column prop="beInsuredName" align="center" label="被保人" show-overflow-tooltip/>
+          <el-table-column prop="insuredName" align="center" label="投保人" show-overflow-tooltip/>
+          <el-table-column prop="acceptorTime" label="受理时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="HandlerTime" label="修改时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="updateBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="Acceptor" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="Handler" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="vip" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
+          <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="sendOne(scope.row)">获取</el-button>
@@ -285,58 +296,74 @@
         dialogFormVisible: false,
         updateBy: undefined,
         sendForm: {
-          Service: undefined,
-          channel: undefined,
-          Acceptor: undefined,
-          acceptorTime: undefined,
-          Handler: undefined,
-          HandlerTime: undefined,
-          workNumber: undefined,
-          policyNumber: undefined,
-          secondNumber: undefined,
-          insuredName: undefined,
-          beInsuredName: undefined,
-          beInsuredNo: undefined,
-          organization: undefined,
-          appointmentTime:undefined,
-          priority:undefined,
-          vip:undefined,
-          phone:undefined
+          service: "1",
+          channel: "",
+          acceptor: "",
+          acceptorTime:"",
+          handler: "",
+          handlerTime: "",
+          workNumber: "",
+          policyNumber: "",
+          secondNumber: "",
+          insuredName: "",
+          beInsuredName: "",
+          beInsuredNo: "",
+          organization: "",
+          appointmentTime:"",
+          priority:"",
+          vip:"",
+          phone:"",
+          state:""
         },
         caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
         queryParams: {
           pageNum: 1,
-          pageSize: 10,
+          pageSize: 10
+
+
         },
         loading: true,
         workPoolData: [],
         isinit: 'Y',
         totalCount: 0,
         changeSerchData: {},
-        dataonLineListSelections: [],
-        product_statusOptions: [],
+        states: [],
+        serves: [{
+          value: '1',
+          label: '服务1'
+        }, {
+          value: '2',
+          label: '服务2'
+        }, {
+          value: '3',
+          label: '服务3'
+        }, {
+          value: '4',
+          label: '服务4'
+        }],
         sysUserOptions: [],
       }
     },
-    // mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
-    async mounted() {
-      await this.getDictsList(dictss).then(response => {
-        console.log('response: ',dictss,response)
-        this.dictList = response.data
-      })
-      this.product_statusOptions = this.dictList.find(item => {
-        return item.dictType === 'product_status'
-      }).dictDate
-
+    created() {
+      debugger;
       this.searchHandle()
-      selectSysUser().then(res => {
-        this.sysUserOptions = res.data
-      })
+      this.getDicts("sys_oper_type").then(response => {
+        this.states = response.data;
+        console.log("response:",response)
+      });
+
     },
+
     methods: {
-      clickForm() {
-        console.log('查询：',this.sendForm)
+      //增加按钮
+      add(row) {
+        this.$router.push({
+          path: '/customService/demand-edit',
+          isEmpty: false
+        })
+      },
+      resetForm() {
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
@@ -344,9 +371,26 @@
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,
-          workNumber: "1"
-
+          Service: this.sendForm.Service,
+          channel: this.sendForm.channel,
+          Acceptor: this.sendForm.Acceptor,
+          acceptorTime: this.sendForm.acceptorTime,
+          Handler: this.sendForm.Handler,
+          HandlerTime: this.sendForm.HandlerTime,
+          workNumber: this.sendForm.workNumber,
+          policyNumber: this.sendForm.policyNumber,
+          secondNumber: this.sendForm.secondNumber,
+          insuredName: this.sendForm.insuredName,
+          beInsuredName: this.sendForm.beInsuredName,
+          beInsuredNo: this.sendForm.beInsuredName,
+          organization: this.sendForm.organization,
+          appointmentTime:this.sendForm.appointmentTime,
+          priority:this.sendForm.priority,
+          vip:this.sendForm.vip,
+          phone:this.sendForm.phone,
+          state:this.sendForm.state
         }
+        debugger;
         console.log('query: ',query)
         demandListAndPublicPool(query).then(res => {
           console.log('------------: ',res)

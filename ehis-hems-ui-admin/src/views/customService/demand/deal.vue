@@ -2,11 +2,11 @@
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
-      <el-divider></el-divider>
+      <el-divider/>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-<!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
+          <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
             <el-form-item label="保单号：" prop="Service"  >
               <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" placeholder="请输入"/>
@@ -188,92 +188,72 @@
       </el-form>
 
     </el-card>
+
+
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
 
-      <span style="color: blue">服务受理信息</span>
+        <span style="color: blue">信息需求-理赔类</span>
         <el-divider/>
         <el-row>
-      <el-form-item label="受理渠道" prop="ruleForm.channle">
-        <el-radio-group v-model="sendForm.radio">
-          <el-radio   :label="1">电话中心</el-radio>
-          <el-radio   :label="2">在线客服</el-radio>
-          <el-radio   :label="3">邮箱</el-radio>
-          <el-radio   :label="4">网站</el-radio>
-          <el-radio   :label="5">柜面</el-radio>
-          <el-radio   :label="6">寿险</el-radio>
-          <el-radio   :label="7">微信</el-radio>
-          <el-radio   :label="8">监管</el-radio>
-          <el-radio   :label="9">媒体</el-radio>
-        </el-radio-group>
-      </el-form-item>
-        </el-row>
-        <el-row>
-        <el-col :span="8">
-        <el-form-item label="服务项目：" prop="Service">
-          <el-select v-model="ruleForm.service" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-            <el-option v-for="item in serves" :key="item.value" :label="item.label"
-                       :value="item.value"/>
-          </el-select>
-        </el-form-item>
-        </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人电话：" prop="phone">
-              <el-input v-model="ruleForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
+              <el-input v-model="ruleForm.phone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="来电号码：" prop="phone">
+              <el-input v-model="ruleForm.phone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="受理渠道：" prop="phone">
+              <el-input v-model="ruleForm.phone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
+              <el-select v-model="ruleForm.priority" class="item-width" disabled="true" >
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="来电人姓名：" prop="phone">
+              <el-input v-model="ruleForm.phone" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="来电人与被保人关系：" prop="priority" >
+              <el-select v-model="ruleForm.priority" class="item-width" disabled="true">
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
 
-          </el-row>
+        </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="来电人：" prop="phone">
-              <el-input v-model="ruleForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="来电人与被保人关系：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :span="8">
             <el-form-item label="联系人：" prop="lxperson">
-              <el-input v-model="ruleForm.lxperson" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.lxperson" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-
-        </el-row>
-        <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
+            <el-form-item label="联系人性别：" prop="priority" >
+              <el-select v-model="ruleForm.priority" class="item-width" disabled="true">
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="练习人与被保人关系：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
+            <el-form-item label="联系人与被保人关系：" prop="priority" >
+              <el-select v-model="ruleForm.priority" class="item-width" disabled="true">
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -282,75 +262,230 @@
         </el-row>
 
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人语言：" prop="priority" disabled="true" >
+              <el-select v-model="ruleForm.priority" class="item-width" disabled>
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
 
           <el-col :span="8">
             <el-form-item label="联系人移动电话：" prop="phone">
-              <el-input v-model="ruleForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.phone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="E-MAIL：" prop="phone">
+              <el-input v-model="ruleForm.phone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
 
         </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="E-MAIL：" prop="phone">
-              <el-input v-model="ruleForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+        <el-row >
+          <el-col :span="5">
+            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
+              国家区号:+<el-input v-model="ruleForm.areacode" class="item-width" readonly style="width: 75px"/>
+              区号<el-input v-model="ruleForm.phone" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="ruleForm.phone" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="ruleForm.phone" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item label="所在地："  prop="phone">
+            <el-input v-model="ruleForm.phone" class="width-full"  size="mini" readonly/>
+          </el-form-item>
+
+        </el-row>
+        <el-row>
+
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
-              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
+              <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-          <el-form-item label="是否涉及银行转账" prop="bank" >
-            <el-radio-group v-model="ruleForm.bank">
-              <el-radio   :label="1">是</el-radio>
-              <el-radio   :label="2">否</el-radio>
+            <el-form-item label="是否涉及银行转账" prop="bank" >
+              <el-radio-group v-model="ruleForm.bank" disabled>
+                <el-radio   :label="1">是</el-radio>
+                <el-radio   :label="2">否</el-radio>
 
-            </el-radio-group>
-          </el-form-item>
+              </el-radio-group>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-          <el-form-item label="开户行：" v-show="ruleForm.bank=='1'" prop="bankaa">
-            <el-input size="mini" v-model="ruleForm.bankaa"></el-input>
-          </el-form-item>
+            <el-form-item label="开户行：" v-show="ruleForm.bank=='1'" prop="bankaa">
+              <el-input size="mini" v-model="ruleForm.bankaa" readonly></el-input>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="开户地：" v-show="ruleForm.bank=='1'" prop="bankbb">
-              <el-input size="mini" v-model="ruleForm.bankbb"></el-input>
+              <el-input size="mini" v-model="ruleForm.bankbb" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="账号：" v-show="ruleForm.bank=='1'" prop="bankcc">
-              <el-input size="mini" v-model="ruleForm.bankcc"></el-input>
+              <el-input size="mini" v-model="ruleForm.bankcc" readonly></el-input>
             </el-form-item>
           </el-col>
 
-            <el-col :span="8">
-              <el-form-item label="户名：" v-show="ruleForm.bank=='1'" prop="bankdd">
-                <el-input size="mini" v-model="ruleForm.bankdd"></el-input>
-              </el-form-item>
-            </el-col>
+          <el-col :span="8">
+            <el-form-item label="户名：" v-show="ruleForm.bank=='1'" prop="bankdd">
+              <el-input size="mini" v-model="ruleForm.bankdd" readonly></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-form-item label="业务内容：" prop="textarea">
-        <el-input
-          type="textarea"
-          :rows="2"
-          placeholder="请输入内容"
-          v-model="ruleForm.textarea">
-        </el-input>
+          <el-input
+            type="textarea"
+            :rows="2"
+            readonly
+            v-model="ruleForm.textarea">
+          </el-input>
         </el-form-item>
       </el-form>
     </el-card>
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
+        <span style="color: blue">业务流转情况</span>
+        <el-divider/>
+        <el-table
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          :data="workPoolData"
+          size="small"
+          highlight-current-row
+          tooltip-effect="dark"
+          style=" width: 100%;">
+          <el-table-column align="center" width="140" prop="workNumber" label="状态" show-overflow-tooltip/>
+          <el-table-column align="center" prop="channel" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" prop="Service" label="受/处理人" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNumber" label="UM账号" show-overflow-tooltip/>
+          <el-table-column prop="acceptorTime" label="时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.updateTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="Acceptor" align="center" label="说明" show-overflow-tooltip/>
+          <el-table-column prop="Handler" align="center" label="处理意见" show-overflow-tooltip/>
+          <el-table-column prop="vip" align="center" label="流转部门" show-overflow-tooltip/>
+          <el-table-column prop="priority" align="center" label="流传原因" show-overflow-tooltip/>
+        </el-table>
+
+        <pagination
+          v-show="totalCount>0"
+          :total="totalCount"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="searchHandle"
+        />
+      </div>
+    </el-card>
+
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
+        <span style="color: blue">HCS服务预约预修改记录</span>
+        <el-divider/>
+        <el-table
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          :data="workPoolData"
+          size="small"
+          highlight-current-row
+          tooltip-effect="dark"
+          style=" width: 100%;"
+          @selection-change="handleSelectionChange">
+          <el-table-column type="selection" align="center" content="全选"/>
+          <el-table-column prop="acceptorTime" label="修改时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.updateTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="Acceptor" align="center" label="修改序列号" show-overflow-tooltip/>
+          <el-table-column prop="Handler" align="center" label="预约渠道" show-overflow-tooltip/>
+          <el-table-column prop="vip" align="center"  style="width: available" label="修改内容描述" show-overflow-tooltip/>
+        </el-table>
+        <pagination
+          v-show="totalCount>0"
+          :total="totalCount"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="searchHandle"
+        />
+      </div>
+    </el-card>
+
+    <el-card>
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+                 label-position="right" size="mini">
+        <span style="color: blue">服务处理</span>
+          <el-divider/>
+       <el-row>
+        <el-col :span="8">
+        <el-form-item label="业务处理情况" prop="bank" >
+          <el-radio-group v-model="ruleForm.bank">
+            <el-radio   :label="1">成功</el-radio>
+            <el-radio   :label="2">响应</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        </el-col>
+        </el-row>
+          <el-row>
+        <el-form-item label="处理说明：" prop="textarea">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="ruleForm.textarea">
+          </el-input>
+        </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="客户反馈" prop="bank" >
+              <el-radio-group v-model="ruleForm.bank">
+                <el-radio   :label="1">满意</el-radio>
+                <el-radio   :label="2">接受</el-radio>
+                <el-radio   :label="3">不接受</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="结案类型：" prop="Service">
+                <el-select v-model="ruleForm.service" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+                  <el-option v-for="item in serves" :key="item.value" :label="item.label"
+                             :value="item.value"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-form-item label="安抚或通融发生费用成本：" prop="textarea">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="不超过500字符："
+                v-model="ruleForm.textarea">
+              </el-input>
+            </el-form-item>
+          </el-row>
+
+        </el-form>
+
+
+    </el-card>
+
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
         <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+       <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -369,11 +504,11 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-form-item>
-          <el-button  type="primary" style="float: right" size="mini" @click="upload">提交</el-button>
-          <el-button type="primary" style="float: right" size="mini" @click="upload">关闭</el-button>
-        </el-form-item>
-
+       <el-button  type="primary" style="float: right" size="mini" @click="upload">转办</el-button>
+        <el-button  type="primary" style="float: right" size="mini" @click="upload">协办</el-button>
+       <el-button  type="primary" style="float: right" size="mini" @click="upload">保单信息查询</el-button>
+      <el-button  type="primary" style="float: right" size="mini" @click="upload">暂存</el-button>
+       <el-button type="primary" style="float: right" size="mini" @click="upload">提交</el-button>
 
 
 
@@ -421,15 +556,15 @@
           Service: [
             {required: true, message: "服务项目不能为空", trigger: "blur"}
           ],
-           priority: [
+          priority: [
             {required: true, message: "优先级不能为空", trigger: "blur"}
           ],
           lxperson: [
             {required: true, message: "联系人不能为空", trigger: "blur"}
           ],
-           orderNum: [
-              {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-            ],
+          orderNum: [
+            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+          ],
           orderNum: [
             {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
           ],
@@ -539,7 +674,7 @@
       //下载
       download(){},
       //提交页面数据
-       submit(){},
+      submit(){},
       resetForm() {
         this.$refs.sendForm.resetFields()
       },

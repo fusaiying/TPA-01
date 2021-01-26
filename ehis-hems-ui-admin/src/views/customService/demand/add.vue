@@ -43,7 +43,8 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>查询结果（{{ totalCount }}）</span>
+        <span style="color: blue">查询结果（{{ totalCount }}）</span>
+        <el-divider></el-divider>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -62,7 +63,7 @@
           <el-table-column prop="Handler" align="center" label="证件号码" show-overflow-tooltip/>
           <el-table-column prop="vip" align="center" label="手机" show-overflow-tooltip/>
           <el-table-column prop="priority" align="center" label="联系地址" show-overflow-tooltip/>
-          <el-table-column align="center" label="处理" width="140">
+          <el-table-column align="center" fixed="right" label="处理" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="acceptButton(scope.row)">受理</el-button>
             </template>

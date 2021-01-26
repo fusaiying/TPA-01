@@ -78,7 +78,7 @@
         <div slot="header" class="clearfix">
         <span>本次协谈处理</span>
         <span style="float: right;">
-          <el-button type="primary" size="mini" @click="dealFun(rptNo,clussionForm)">确认</el-button>
+          <el-button  v-if="dealBtn" type="primary" size="mini" @click="dealFun(rptNo,clussionForm)">确认</el-button>
         </span>
       </div>
 
@@ -123,6 +123,7 @@
     data() {
       return {
 
+        dealBtn :true,
         baseInfo: {
           rptNo:'',
           caseStatus: '',
@@ -178,6 +179,7 @@
     },
       methods: {
         dealFun(rptNo,conclusionForm){
+          let vm = this;
           this.$confirm('确认提交本次协谈处理?', "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
@@ -190,7 +192,8 @@
             param.isHistory = 'Y';
             updateDiss(param).then(res => {
               if(res.code == '200') {
-                this.$message({
+                vm.dealBtn = false;
+                vm.$message({
                   message: '处理成功！',
                   type: 'success',
                   center: true,
@@ -206,7 +209,6 @@
         getBaseInfo(){
           baseInfo(this.rptNo).then(res => {
             if(res.code == '200') {
-              console.log(res);
               this.baseInfo = res.data;
             }
           });

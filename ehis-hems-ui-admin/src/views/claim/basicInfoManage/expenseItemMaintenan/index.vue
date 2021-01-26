@@ -33,8 +33,7 @@
           <span>费用项列表（{{ totalCount }}）</span>
           <span style="float: right;">
             <el-button icon="el-icon-plus" type="primary" size="mini" @click="addFeeitem">新增</el-button>
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
-            <!--            <el-button icon="el-icon-download" type="warning" size="mini">导出</el-button>-->
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-table
@@ -76,11 +75,12 @@
 </template>
 
 <script>
-  import {listFeeitem} from '@/api/baseInfo/expenseitemMaintenan.js'
+  import {listFeeitem} from '@/api/baseInfo/expenseitemMaintenan'
 
   export default {
     data() {
       return {
+        isListExport:false,
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -167,6 +167,7 @@
         }
         listFeeitem(this.queryParams).then(res => {
           if (res.rows.length>0){
+            this.isListExport=true
             this.download('provider/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
               ...query
             }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
@@ -183,7 +184,7 @@
             )
           }
         }).catch(res => {
-          this.loading = false
+          this.loading = true
         })
       }
     }

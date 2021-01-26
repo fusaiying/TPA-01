@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseServiceProcessMapper">
+
+    <resultMap type="BaseServiceProcess" id="BaseServiceProcessResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="processNode"    column="process_node"    />
+        <result property="cancelFlag"    column="cancel_flag"    />
+        <result property="sendmessageFlag"    column="sendmessage_flag"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="updateNum"    column="update_num"    />
+        <result property="distribute"    column="distribute"    />
+        <result property="aging"    column="aging"    />
+        <result property="selfused"    column="selfused"    />
+        <result property="recordFlag"    column="record_flag"    />
+        <result property="frequency"    column="frequency"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseServiceProcessVo">
+        select serial_no, service_code, process_node, cancel_flag, sendmessage_flag, update_flag, update_num, distribute, aging, selfused, record_flag, frequency, status, create_by, create_time, update_by, update_time from base_service_process
+    </sql>
+
+    <select id="selectBaseServiceProcessList" parameterType="BaseServiceProcess" resultMap="BaseServiceProcessResult">
+        <include refid="selectBaseServiceProcessVo"/>
+        <where>
+            <if test="processNode != null  and processNode != ''"> and process_node = #{processNode}</if>
+            <if test="cancelFlag != null  and cancelFlag != ''"> and cancel_flag = #{cancelFlag}</if>
+            <if test="sendmessageFlag != null  and sendmessageFlag != ''"> and sendmessage_flag = #{sendmessageFlag}</if>
+            <if test="updateFlag != null  and updateFlag != ''"> and update_flag = #{updateFlag}</if>
+            <if test="updateNum != null  and updateNum != ''"> and update_num = #{updateNum}</if>
+            <if test="distribute != null  and distribute != ''"> and distribute = #{distribute}</if>
+            <if test="aging != null  and aging != ''"> and aging = #{aging}</if>
+            <if test="selfused != null  and selfused != ''"> and selfused = #{selfused}</if>
+            <if test="recordFlag != null  and recordFlag != ''"> and record_flag = #{recordFlag}</if>
+            <if test="frequency != null  and frequency != ''"> and frequency = #{frequency}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseServiceProcessById" parameterType="String" resultMap="BaseServiceProcessResult">
+        <include refid="selectBaseServiceProcessVo"/>
+        where service_code = #{serviceCode} and status = 'Y'
+    </select>
+
+    <insert id="insertBaseServiceProcess" parameterType="BaseServiceProcess">
+        insert into base_service_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="serviceCode != null">service_code,</if>
+            <if test="processNode != null">process_node,</if>
+            <if test="cancelFlag != null">cancel_flag,</if>
+            <if test="sendmessageFlag != null">sendmessage_flag,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="updateNum != null">update_num,</if>
+            <if test="distribute != null">distribute,</if>
+            <if test="aging != null">aging,</if>
+            <if test="selfused != null">selfused,</if>
+            <if test="recordFlag != null">record_flag,</if>
+            <if test="frequency != null">frequency,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="serviceCode != null">#{serviceCode},</if>
+            <if test="processNode != null">#{processNode},</if>
+            <if test="cancelFlag != null">#{cancelFlag},</if>
+            <if test="sendmessageFlag != null">#{sendmessageFlag},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="updateNum != null">#{updateNum},</if>
+            <if test="distribute != null">#{distribute},</if>
+            <if test="aging != null">#{aging},</if>
+            <if test="selfused != null">#{selfused},</if>
+            <if test="recordFlag != null">#{recordFlag},</if>
+            <if test="frequency != null">#{frequency},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseServiceProcess" parameterType="BaseServiceProcess">
+        update base_service_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="processNode != null">process_node = #{processNode},</if>
+            <if test="cancelFlag != null">cancel_flag = #{cancelFlag},</if>
+            <if test="sendmessageFlag != null">sendmessage_flag = #{sendmessageFlag},</if>
+            <if test="updateFlag != null">update_flag = #{updateFlag},</if>
+            <if test="updateNum != null">update_num = #{updateNum},</if>
+            <if test="distribute != null">distribute = #{distribute},</if>
+            <if test="aging != null">aging = #{aging},</if>
+            <if test="selfused != null">selfused = #{selfused},</if>
+            <if test="recordFlag != null">record_flag = #{recordFlag},</if>
+            <if test="frequency != null">frequency = #{frequency},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where service_code = #{serviceCode}
+    </update>
+
+    <delete id="deleteBaseServiceProcessById" parameterType="String">
+        delete from base_service_process where service_code = #{serviceCode}
+    </delete>
+
+    <delete id="deleteBaseServiceProcessByIds" parameterType="String">
+        delete from base_service_process where service_code in
+        <foreach item="serviceCode" collection="array" open="(" separator="," close=")">
+            #{serviceCode}
+        </foreach>
+    </delete>
+
+    <update id="updateBaseServiceProcessById" parameterType="String">
+        update base_service_process set status = 'N'
+        where service_code = #{serviceCode} and status = 'Y'
+    </update>
+
+    <update id="updateProcessNewServiceCode" >
+        update base_service_process set service_code = #{newServiceCode}
+        where service_code = #{serviceCode} and status = 'Y'
+    </update>
+</mapper>

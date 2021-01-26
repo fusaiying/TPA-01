@@ -21,6 +21,9 @@ public class BaseBankVo
 
     private BaseProviderSettle baseProviderSettle;
 
+    private String providerCode;
 
-    private List<BaseBank> BaseBankVo;
+    private String orgFlag;
+
+    private List<BaseBank> baseBankVo;
 }

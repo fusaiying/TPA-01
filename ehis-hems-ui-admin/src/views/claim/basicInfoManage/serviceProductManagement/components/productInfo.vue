@@ -2,8 +2,11 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>产品基本信息</span>
+      <span style="float: right;">
+          <el-button size="mini" type="primary" @click="baseFormSaveHandle">保存</el-button>
+        </span>
     </div>
-    <el-form ref="baseForm" :model="baseForm" label-width="170px" :rules="baseInfoRule" :disabled="disableFlag"
+    <el-form ref="baseForm" :model="baseForm" label-width="170px" :rules="baseInfoRule" :disabled="disableFlag && status=='edit'"
              label-position="right" size="mini">
       <el-row>
         <el-col :span="8">
@@ -78,7 +81,8 @@
 
 <script>
 
-import {checkField,getProductInfo} from '@/api/baseInfo/serviceProductManagement'
+import {checkField,getProductInfo,insertProductInfo} from '@/api/baseInfo/serviceProductManagement'
+
 
 export default {
   props: {
@@ -99,6 +103,10 @@ export default {
       default: ''
     },
     productCode: {
+      type: String,
+      default: ''
+    },
+    status: {
       type: String,
       default: ''
     },
@@ -227,7 +235,7 @@ export default {
             callback();
           }
           else {
-            callback()
+            callback(new Error("产品期限不能为空"))
           }
         }
       }
@@ -254,6 +262,7 @@ export default {
       copyOutProductChname: '',
       copyProductChname: '',
       copyProductEnname: '',
+      otherProductCode:'',
 
       baseForm: {},
 
@@ -305,21 +314,54 @@ export default {
 
     delHandle(index, row) {
     },
+    baseFormSaveHandle(){
+      this.$refs['baseForm'].validate(valid => {
+        if(valid){
+          insertProductInfo(this.baseForm).then(res => {
+            if (res.code == '200') {
+              this.$message({
+                message: '保存成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              this.otherProductCode=res.data.productCode
+              this.baseForm.productCode=res.data.productCode
+              this.copyOutProductEnname=this.baseForm.outProductEnname
+              this.copyOutProductChname=this.baseForm.outProductChname
+              this.copyProductChname=this.baseForm.productChname
+              this.copyProductEnname=this.baseForm.productEnname
+              this.$emit('saveFlag')
+            } else {
+              this.$message({
+                message: '保存失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          })
+
+
+        }
+
+      })
+    },
 
 
     // 校验数据
     async validateForm() {
-      let flag = null
-      console.log(this.baseForm)
-      await this.$refs['baseForm'].validate(valid => {
-        console.log('--------------------')
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
+      let flag
+      await new  Promise((resolve, reject) => {
+        this.$refs['baseForm'].validate(valid => {
+          if (valid) {
+            flag = true
+          } else {
+            flag = false
+          }
+        })
+        resolve(flag)
       })
-      console.log(1)
       return flag
     }
 

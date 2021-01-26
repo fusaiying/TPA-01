@@ -13,28 +13,22 @@
           <el-button type="primary" size="mini" @click="changeDialogVisable">返回</el-button>
         </span>
       </div>
-      <form>
-        <el-row  style="margin: 0 40px;">
+      <form  v-for="(item,index) in HistoryData">
+        <el-row style="margin: 20px 10px;">
           <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ surveyInfo.contractNo }}</span>
+            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ item.discId }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ (surveyInfo.servcomNo) }}</span>
+            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ (item.createTime) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ surveyInfo.contractName }}</span>
+            <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
           </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
           <el-col :span="8">
-            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (surveyInfo.contractType) }}</span>
+            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
           </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
           <el-col :span="8">
-            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (surveyInfo.contracttermType) }}</span>
+            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
           </el-col>
         </el-row>
       </form>
@@ -44,33 +38,54 @@
 </template>
 <script>
 
+  import {  historyDisInfo } from '@/api/negotiation/api'
+
   export default {
     props: {
       value: {
         type: Boolean,
         default: false
       },
+      fixInfo: Object,
     },
     watch: {
       value: function (newValue) {
-        this.dialogVisable = newValue
+        this.dialogVisable = newValue;
+        if(this.dialogVisable) {
+          this.getHistoryDisInfo();
+        }
+      },
+      fixInfo: function (newValue) {
+        this.fixInfoData = newValue;
+        this.rptNo = this.fixInfoData.rptNo;
       },
     },
     data() {
       return {
         dialogVisable:false,
-        surveyInfo: {
-
-        },
+        HistoryData :[],
+        fixInfoData : '',
+        rptNo :'',
+        clusionSelect:[],
       }
     },
 
     mounted() {
-      this.getDetail();
+
+    },
+    created: function() {
+
     },
     methods: {
-      getDetail(){
-
+      getHistoryDisInfo(){
+        historyDisInfo(this.rptNo).then(res => {
+          if(res.code == '200') {
+            this.HistoryData = res.rows;
+          }
+        });
+      },
+      getConclusionName(value) {
+        return this.selectDictLabel(this.clusionSelect,value)
       },
       //关闭对话框
       changeDialogVisable() {

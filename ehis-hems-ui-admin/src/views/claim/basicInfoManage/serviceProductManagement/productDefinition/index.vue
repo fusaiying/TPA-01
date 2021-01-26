@@ -39,19 +39,19 @@
         <div style="text-align: right; margin-right: 10px;">
           <el-button
             size="mini"
-            type="primary"
-
+            type="success"
+            icon="el-icon-search"
             @click="searchHandle"
           >查询
           </el-button>
-          <el-button size="mini"   @click="resetForm">重置</el-button>
+          <el-button size="mini"  type="primary" icon="el-icon-refresh-left" @click="resetForm">重置</el-button>
         </div>
       </el-form>
       <el-divider/>
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>产品定义列表</span>
-          <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini"
+          <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini" icon="el-icon-plus"
                      @click="addHandle">新增
           </el-button>
         </div>
@@ -159,7 +159,7 @@ export default {
       this.index = index
     },
     delConfirm(){
-
+      this.dialogVisible = false
       let delProductCode= this.tableData[this.index].productCode
       deleteProductInfo(delProductCode).then(res => {
         if (res !=null && res.code == '200') {

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseServiceApplyorimplMapper">
+
+    <resultMap type="BaseServiceApplyorimpl" id="BaseServiceApplyorimplResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="processNode"    column="process_node"    />
+        <result property="businessName"    column="business_name"    />
+        <result property="businessCode"    column="business_code"    />
+        <result property="isrecond"    column="isrecond"    />
+        <result property="recondType"    column="recond_type"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseServiceApplyorimplVo">
+        select serial_no, service_code, process_node, business_name, business_code, isrecond, recond_type, status, remark, create_by, create_time, update_by, update_time from base_service_applyorimpl
+    </sql>
+
+    <select id="selectBaseServiceApplyorimplList" parameterType="BaseServiceApplyorimpl" resultMap="BaseServiceApplyorimplResult">
+        <include refid="selectBaseServiceApplyorimplVo"/>
+        <where>
+            <if test="processNode != null  and processNode != ''"> and process_node = #{processNode}</if>
+            <if test="businessName != null  and businessName != ''"> and business_name like concat('%', #{businessName}, '%')</if>
+            <if test="businessCode != null  and businessCode != ''"> and business_code = #{businessCode}</if>
+            <if test="isrecond != null  and isrecond != ''"> and isrecond = #{isrecond}</if>
+            <if test="recondType != null  and recondType != ''"> and recond_type = #{recondType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseServiceApplyorimplById" parameterType="String" resultMap="BaseServiceApplyorimplResult">
+        <include refid="selectBaseServiceApplyorimplVo"/>
+        where service_code = #{serviceCode} and status = 'Y'
+    </select>
+
+    <insert id="insertBaseServiceApplyorimpl" parameterType="BaseServiceApplyorimpl">
+        insert into base_service_applyorimpl
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="serviceCode != null">service_code,</if>
+            <if test="processNode != null">process_node,</if>
+            <if test="businessName != null and businessName != ''">business_name,</if>
+            <if test="businessCode != null">business_code,</if>
+            <if test="isrecond != null">isrecond,</if>
+            <if test="recondType != null and recondType != ''">recond_type,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="serviceCode != null">#{serviceCode},</if>
+            <if test="processNode != null">#{processNode},</if>
+            <if test="businessName != null and businessName != ''">#{businessName},</if>
+            <if test="businessCode != null">#{businessCode},</if>
+            <if test="isrecond != null">#{isrecond},</if>
+            <if test="recondType != null and recondType != ''">#{recondType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseServiceApplyorimpl" parameterType="BaseServiceApplyorimpl">
+        update base_service_applyorimpl
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="processNode != null">process_node = #{processNode},</if>
+            <if test="businessName != null and businessName != ''">business_name = #{businessName},</if>
+            <if test="businessCode != null">business_code = #{businessCode},</if>
+            <if test="isrecond != null">isrecond = #{isrecond},</if>
+            <if test="recondType != null and recondType != ''">recond_type = #{recondType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where service_code = #{serviceCode}
+    </update>
+
+    <delete id="deleteBaseServiceApplyorimplById" parameterType="String">
+        delete from base_service_applyorimpl where service_code = #{serviceCode}
+    </delete>
+
+    <delete id="deleteBaseServiceApplyorimplByIds" parameterType="String">
+        delete from base_service_applyorimpl where service_code in
+        <foreach item="serviceCode" collection="array" open="(" separator="," close=")">
+            #{serviceCode}
+        </foreach>
+    </delete>
+
+    <update id="updateBaseServiceApplyorimplById" parameterType="String">
+        update base_service_applyorimpl set status = 'N'
+        where service_code = #{serviceCode} and status = 'Y'
+    </update>
+
+    <update id="updateFieldNewServiceCode">
+        update base_service_applyorimpl set service_code = #{newServiceCode}
+        where service_code = #{serviceCode} and status = 'Y'
+    </update>
+</mapper>

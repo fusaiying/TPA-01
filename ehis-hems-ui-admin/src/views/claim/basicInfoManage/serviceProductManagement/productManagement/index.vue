@@ -28,7 +28,7 @@
           <el-col :span="8">
             <el-form-item label="状态：" prop="bussinessStatus">
               <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
+                <el-option v-for="item in product_management_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                            :key="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -39,12 +39,13 @@
         <div style="text-align: right; margin-right: 10px;">
           <el-button
             size="mini"
-            type="primary"
+            type="success"
+            icon="el-icon-search"
 
             @click="searchHandle"
           >查询
           </el-button>
-          <el-button size="mini"   @click="resetForm">重置</el-button>
+          <el-button size="mini"  type="primary" icon="el-icon-refresh-left" @click="resetForm">重置</el-button>
         </div>
       </el-form>
       <el-divider/>
@@ -65,7 +66,7 @@
           <el-table-column label="产品名称" prop="productChname" align="center"/>
           <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center"/>
           <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center"/>
-          <el-table-column label="状态" prop="bussinessStatus" :formatter="getBussinessStatus" align="center">
+          <el-table-column label="状态" prop="bussinessStatus"  align="center">
             <template slot-scope="scope">
                 <span v-if="scope.row.bussinessStatus=='03'" style="padding-right: 6px">产品上线</span>
               <span v-if="scope.row.bussinessStatus=='04'" style="padding-right: 6px" >产品下线</span>
@@ -149,15 +150,15 @@ export default {
 
 
       productTypeOptions:[],
-      product_bussiness_statusOptions: [],
+      product_management_statusOptions: [],
       productTimeTimeOptions:[]
     }
   },
   created() {
   //获取产品定义信息
     this.getData()
-    this.getDicts("product_bussiness_status").then(response => {
-      this.product_bussiness_statusOptions = response.data;
+    this.getDicts("product_management_status").then(response => {
+      this.product_management_statusOptions = response.data;
     });
     this.getDicts("productType").then(response => {
       this.productTypeOptions = response.data;
@@ -174,9 +175,9 @@ export default {
     getProductInfo(row){
       return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
     },
-    getBussinessStatus(row){
+/*    getBussinessStatus(row){
       return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
-    },
+    },*/
 
     changeDialogVisable(){
       this.$refs.remarkForm.resetFields()
@@ -186,6 +187,7 @@ export default {
       else{
         this.tableData[this.checkIndex].bussinessStatus = '03'
       }
+      this.saveFlag=false
        this.dialogVisable=false
     },
 
@@ -196,7 +198,7 @@ export default {
             insertMangerInfo(productData).then(res=>{
               if (res !=null && res.code == '200') {
                 this.$message({
-                  message: '提交成功！',
+                  message: '操作成功！',
                   type: 'success',
                   center: true,
                   showClose: true
@@ -204,7 +206,7 @@ export default {
                   this.saveFlag=true
               } else {
                 this.$message({
-                  message: '提交失败!',
+                  message: '操作失败!',
                   type: 'error',
                   center: true,
                   showClose: true
@@ -224,7 +226,7 @@ export default {
         insertMangerInfo(productData).then(res=>{
           if (res !=null && res.code == '200') {
             this.$message({
-              message: '提交成功！',
+              message: '操作成功！',
               type: 'success',
               center: true,
               showClose: true
@@ -232,7 +234,7 @@ export default {
 
           } else {
             this.$message({
-              message: '提交失败!',
+              message: '操作失败!',
               type: 'error',
               center: true,
               showClose: true

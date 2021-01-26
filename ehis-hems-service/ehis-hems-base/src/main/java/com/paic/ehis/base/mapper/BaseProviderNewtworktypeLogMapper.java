@@ -1,8 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktype_log(医疗网络类型记录)Mapper接口

@@ -7,7 +7,7 @@
           <el-col :span="8">
             <el-form-item label="医院名称：" prop="chname1">
               <el-input v-model="formSearch.chname1" class="item-width" clearable size="mini"
-                        placeholder="请输入(模糊查询)"/>
+                        placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">

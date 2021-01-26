@@ -43,11 +43,22 @@ export function getServiceInfo() {
   })
 }
 /**
- * 产品定义保存
+ * 产品定义总保存
  */
 export function saveProductInfo(data) {
   return request({
     url: '/product/info/saveProductInfo',
+    method: 'post',
+    data
+
+  })
+}
+/**
+ * 产品定义信息保存
+ */
+export function insertProductInfo(data) {
+  return request({
+    url: '/product/info/insertProductInfo',
     method: 'post',
     data
 
@@ -64,6 +75,18 @@ export function insertCheckInfo(data) {
 
   })
 }
+/**
+ *
+ */
+export function updateSupplierStatus(data) {
+  return request({
+    url: '/product/info/updateSupplierStatus',
+    method: 'post',
+    data
+
+  })
+}
+
 /**
  * 产品基本信息查询
  */
@@ -158,6 +181,17 @@ export function mangerList(data) {
 export function insertMangerInfo(data) {
   return request({
     url: 'product/info/insertMangerInfo',
+    method: 'post',
+     data
+
+  })
+}
+/**
+ * 审核供应商查询
+ */
+export function selectProductSupplier(data) {
+  return request({
+    url: 'product/info/selectProductSupplier',
     method: 'post',
      data
 

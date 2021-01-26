@@ -1,7 +1,8 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderSettle;
+
+import java.util.List;
 
 /**
  * base_provider_settle(服务商结算信息)Service接口
@@ -17,7 +18,7 @@ public interface IBaseProviderSettleService
      * @param providercode base_provider_settle(服务商结算信息)ID
      * @return base_provider_settle(服务商结算信息)
      */
-    public List<BaseProviderSettle> selectBaseProviderSettleById(String providercode);
+    public BaseProviderSettle selectBaseProviderSettleById(String providercode);
 
     /**
      * 查询base_provider_settle(服务商结算信息)列表

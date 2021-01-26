@@ -1,11 +1,13 @@
 package com.paic.ehis.base.service.impl;
 
-import com.paic.ehis.base.domain.*;
-import com.paic.ehis.base.mapper.*;
-import com.paic.ehis.base.service.SupplierInfoService;
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.base.base.utility.PinYinUtils;
+import com.paic.ehis.base.domain.*;
+import com.paic.ehis.base.mapper.*;
+import com.paic.ehis.base.service.SupplierInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,85 +34,123 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     private PrivateHmpProviderMapper privateHmpProviderMapper;
 
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public int addBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
-        String servcomNo = baseSupplierInfo.getServcomNo();
+    public BaseSupplierInfo addBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
+        String serialNo = baseSupplierInfo.getSerialNo();
         String username = SecurityUtils.getUsername();
-        Date nowDate = new Date();
-        //如果 servcomNo 为空代表新增，不为空代表修改
-        if (StringUtils.isEmpty(servcomNo)) {
+        Date nowDate = DateUtils.getNowDate();
+        if (StringUtils.isEmpty(serialNo)) {
             LocalDate date = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            servcomNo ="PR" +date.format(formatter)+PubFun.createMySqlMaxNoUseCache("BaseSupplierInfo", 0, 4);
-            baseSupplierInfo.setServcomNo(servcomNo);
+            serialNo = "PR" + date.format(formatter) + PubFun.createMySqlMaxNoUseCache("BaseSupplierInfo", 0, 4);
+            baseSupplierInfo.setSerialNo(serialNo);
             baseSupplierInfo.setCreateBy(username);
             baseSupplierInfo.setCreateTime(nowDate);
             baseSupplierInfo.setUpdateBy(username);
             baseSupplierInfo.setUpdateTime(nowDate);
+            baseSupplierInfo.setStatus("Y");
             baseSupplierInfoMapper.insertBaseSupplierInfo(baseSupplierInfo);
-        } else {
-            baseBankMapper.deleteBaseBankById(servcomNo);
-            baseContactsMapper.deleteBaseContactsById(servcomNo);
-            baseSupplierOutletsMapper.deleteBaseSupplierOutletsById(servcomNo);
-            baseSupplierReceipMapper.deleteBaseSupplierReceipById(servcomNo);
-            baseSupplierInfoMapper.selectBaseSupplierInfoById(servcomNo);
-            if (baseSupplierInfo == null) {
-                return 0;
+            String supplierCode = serialNo;
+            List<BaseSupplierReceip> baseSupplierReceipList=baseSupplierInfo.getBaseSupplierReceipList();
+            if (!baseSupplierReceipList.isEmpty()) {
+                baseSupplierInfo.getBaseSupplierReceipList().forEach(item -> {
+                    item.setSerialNo(PubFun.createMySqlMaxNoUseCache("derialno", 10, 9));
+                    item.setStatus("Y");
+                    item.setSupplierCode(supplierCode);
+                    item.setCreateBy(username);
+                    item.setCreateTime(nowDate);
+                    item.setUpdateBy(username);
+                    item.setUpdateTime(nowDate);
+                });
+                privateHmpProviderMapper.insertReceiptAll(baseSupplierReceipList);
             }
-            baseSupplierInfo.setServcomNo(servcomNo);
-            baseSupplierInfo.setUpdateBy(username);
-            baseSupplierInfo.setUpdateTime(nowDate);
-            baseSupplierInfoMapper.updateBaseSupplierInfo(baseSupplierInfo);
-        }
-        String finalServcomno = servcomNo;
-        List<BaseBank> baseBankList = baseSupplierInfo.getBaseBankList();
-        if (!baseBankList.isEmpty()) {
-            baseSupplierInfo.getBaseBankList().forEach(item -> {
-                item.setId(finalServcomno);
-                item.setCreateBy(username);
-                item.setCreateTime(nowDate);
-                item.setUpdateBy(username);
-                item.setUpdateTime(nowDate);
-            });
-            privateHmpProviderMapper.insertBankAll(baseBankList);
-        }
-        List<BaseContacts> baseContactsList = baseSupplierInfo.getBaseContactsList();
-        if (!baseContactsList.isEmpty()) {
+
+            List<BaseBank> baseBankList = baseSupplierInfo.getBaseBankList();
+            if (!baseBankList.isEmpty()) {
+                baseSupplierInfo.getBaseBankList().forEach(item -> {
+                    item.setSerialNo(PubFun.createMySqlMaxNoUseCache("bankSer",12,12));
+                    item.setStatus("Y");
+                    item.setCreateTime(nowDate);
+                    item.setUpdateTime(nowDate);
+                    item.setProviderCode(supplierCode);
+                });
+                privateHmpProviderMapper.insertBankAll(baseBankList);
+            }
+
+            List<BaseContacts> baseContactsList = baseSupplierInfo.getBaseContactsList();
+            if (!baseContactsList.isEmpty()) {
             baseSupplierInfo.getBaseContactsList().forEach(item -> {
-                item.setSerialNo(PubFun.createMySqlMaxNoUseCache("suppliercontacts", 0, 12));
+                if ("01".equals(item.getPlaceType())){
+                    String name=item.getName();
+                    item.setPassword(PinYinUtils.toPinYin(name)+"123456");
+                }
+                item.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
                 item.setSupplierType("01");
-                item.setSupplierCode(finalServcomno);
+                item.setStatus("Y");
+                item.setSupplierCode(supplierCode);
                 item.setCreateBy(username);
                 item.setCreateTime(nowDate);
                 item.setUpdateBy(username);
                 item.setUpdateTime(nowDate);
             });
             privateHmpProviderMapper.insertContactsAll(baseContactsList);
+            }
+
+        }else {
+            baseSupplierInfoMapper.updateBaseSupplierInfo(baseSupplierInfo);
+            String providerCode = baseSupplierInfo.getSerialNo();
+            List<BaseSupplierReceip> baseSupplierReceipList = baseSupplierInfo.getBaseSupplierReceipList();
+            baseSupplierReceipMapper.updatebaseSupplierReceipStatus(providerCode);
+            if (!baseSupplierReceipList.isEmpty()) {
+                baseSupplierInfo.getBaseSupplierReceipList().forEach(item -> {
+                    item.setSupplierCode(providerCode);
+                    item.setSerialNo(PubFun.createMySqlMaxNoUseCache("derialno", 10, 9));
+                    item.setStatus("Y");
+                    item.setCreateBy(username);
+                    item.setCreateTime(nowDate);
+                    item.setUpdateBy(username);
+                    item.setUpdateTime(nowDate);
+                });
+                privateHmpProviderMapper.insertReceiptAll(baseSupplierReceipList);
+            }
+
+            List<BaseBank> baseBankList = baseSupplierInfo.getBaseBankList();
+            baseBankMapper.updatebaseBankStatus(providerCode);
+            if (!baseBankList.isEmpty()) {
+                baseSupplierInfo.getBaseBankList().forEach(item -> {
+                    item.setSerialNo(PubFun.createMySqlMaxNoUseCache("bankSer",12,12));
+                    item.setProviderCode(providerCode);
+                    item.setStatus("Y");
+                    item.setCreateTime(nowDate);
+                    item.setUpdateTime(nowDate);
+                });
+                privateHmpProviderMapper.insertBankAll(baseBankList);
+            }
+
+            List<BaseContacts> baseContactsList = baseSupplierInfo.getBaseContactsList();
+            baseContactsMapper.updateBaseContactsStatus(providerCode);
+            if (!baseContactsList.isEmpty()) {
+                baseSupplierInfo.getBaseContactsList().forEach(item -> {
+                    if ("01".equals(item.getPlaceType())) {
+                        String name = item.getName();
+                        item.setPassword(PinYinUtils.toPinYin(name) + "123456");
+                    }
+                    item.setSupplierCode(providerCode);
+                    item.setStatus("Y");
+                    item.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
+                    item.setSupplierType("01");
+                    item.setCreateBy(username);
+                    item.setCreateTime(nowDate);
+                    item.setUpdateBy(username);
+                    item.setUpdateTime(nowDate);
+                });
+                privateHmpProviderMapper.insertContactsAll(baseContactsList);
+            }
         }
-        List<BaseSupplierReceip> baseSupplierReceipList = baseSupplierInfo.getBaseSupplierReceipList();
-        if (!baseSupplierReceipList.isEmpty()) {
-            baseSupplierInfo.getBaseSupplierReceipList().forEach(item -> {
-                item.setSupplierCode(finalServcomno);
-                item.setCreateBy(username);
-                item.setCreateTime(nowDate);
-                item.setUpdateBy(username);
-                item.setUpdateTime(nowDate);
-            });
-            privateHmpProviderMapper.insertReceiptAll(baseSupplierReceipList);
-        }
-        List<BaseSupplierOutlets> baseSupplierOutletsList = baseSupplierInfo.getBaseSupplierOutletsList();
-        if (!baseSupplierOutletsList.isEmpty()) {
-            baseSupplierInfo.getBaseSupplierOutletsList().forEach(item -> {
-                item.setServcomNo(finalServcomno);
-                item.setCreateBy(username);
-                item.setCreateTime(nowDate);
-                item.setUpdateBy(username);
-                item.setUpdateTime(nowDate);
-            });
-            privateHmpProviderMapper.insertOutletsAll(baseSupplierOutletsList);
-        }
-        return 1;
+        return baseSupplierInfo;
     }
 }
+
+
+

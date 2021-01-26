@@ -19,8 +19,10 @@ public class BaseContactsVo
 
     /** 所属单位编码 */
     @Excel(name = "所属单位编码")
-    private String suppliercode;
+    private String providerCode;
 
-    private List<BaseContacts> aseContacts;
+    private String orgFlag;
+
+    private List<BaseContacts> contacts;
 
 }

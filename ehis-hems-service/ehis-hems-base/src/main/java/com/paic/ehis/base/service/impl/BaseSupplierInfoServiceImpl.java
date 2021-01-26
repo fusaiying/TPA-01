@@ -1,16 +1,17 @@
 package com.paic.ehis.base.service.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
-
-import com.paic.ehis.base.service.IBaseSupplierInfoService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
-import com.paic.ehis.base.domain.BaseSupplierInfo;
-import com.paic.ehis.base.mapper.BaseSupplierInfoMapper;
+import com.paic.ehis.base.domain.*;
+import com.paic.ehis.base.mapper.*;
+import com.paic.ehis.base.service.IBaseSupplierInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -24,6 +25,14 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
 {
     @Autowired
     private BaseSupplierInfoMapper baseSupplierInfoMapper;
+    @Autowired
+    private BaseBankMapper baseBankMapper;
+    @Autowired
+    private BaseContactsMapper baseContactsMapper;
+    @Autowired
+    private BaseSupplierReceipMapper baseSupplierReceipMapper;
+    @Autowired
+    private BaseSupplierOutletsMapper baseSupplierOutletsMapper;
 
     /**
      * 查询base_supplier_info（供应商基础信息）
@@ -34,7 +43,14 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
     @Override
     public BaseSupplierInfo selectBaseSupplierInfoById(String servcomNo)
     {
-        return baseSupplierInfoMapper.selectBaseSupplierInfoById(servcomNo);
+
+        BaseSupplierInfo baseSupplierInfo = baseSupplierInfoMapper.selectBaseSupplierInfoById(servcomNo);
+        List<String> str = new ArrayList<String>();
+        str.add(baseSupplierInfo.getProvince());
+        str.add(baseSupplierInfo.getCity());
+        str.add(baseSupplierInfo.getDistrict());
+        baseSupplierInfo.setDetail(str.toArray());
+        return baseSupplierInfo;
     }
 
     /**
@@ -45,12 +61,34 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
      */
     @Override
     public List<BaseSupplierInfo> selectBaseSupplierInfoList(BaseSupplierInfo baseSupplierInfo) throws Exception
-    {
+    {   /*if (StringUtils.isNull(baseSupplierInfo.getChname())&&
+            StringUtils.isNull(baseSupplierInfo.getEnname())&&
+            StringUtils.isNull(baseSupplierInfo.getServcomType())&&
+            StringUtils.isNull(baseSupplierInfo.getBussinessStatus())&&
+            StringUtils.isNull(baseSupplierInfo.getSerialNo())&&
+            StringUtils.isNull(baseSupplierInfo.getProvince())&&
+            StringUtils.isNull(baseSupplierInfo.getCity())&&
+            StringUtils.isNull(baseSupplierInfo.getDetail())
+    ) */
+        if(baseSupplierInfo==null){
         Map map = Dateutils.getCurrontTime1();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baseSupplierInfo.setdBefore1(sdf.parse(String.valueOf(map.get("defaultStartDate"))));
         baseSupplierInfo.setdNow1(sdf.parse(String.valueOf(map.get("defaultEndDate"))));
         return baseSupplierInfoMapper.selectBaseSupplierInfoList(baseSupplierInfo);
+    }else {
+        return baseSupplierInfoMapper.selectBaseSupplierInfoList2(baseSupplierInfo);
+    }
+    }
+
+    @Override
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList1(BaseSupplierInfo baseSupplierInfo) {
+        return baseSupplierInfoMapper.selectBaseSupplierInfoList1(baseSupplierInfo);
+    }
+
+    @Override
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList2(BaseSupplierInfo baseSupplierInfo) {
+        return baseSupplierInfoMapper.selectBaseSupplierInfoList2(baseSupplierInfo);
     }
 
     /**
@@ -63,6 +101,7 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
     public int insertBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo)
     {
         baseSupplierInfo.setCreateTime(DateUtils.getNowDate());
+
         return baseSupplierInfoMapper.insertBaseSupplierInfo(baseSupplierInfo);
     }
 
@@ -78,6 +117,8 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
         baseSupplierInfo.setUpdateTime(DateUtils.getNowDate());
         return baseSupplierInfoMapper.updateBaseSupplierInfo(baseSupplierInfo);
     }
+
+
 
     /**
      * 批量删除base_supplier_info（供应商基础信息）
@@ -102,4 +143,11 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
     {
         return baseSupplierInfoMapper.deleteBaseSupplierInfoById(servcomNo);
     }
+
+    // 获取所有
+    @Override
+    public List<BaseSupplierInfo> getAllBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
+        return baseSupplierInfoMapper.selectBaseSupplierInfoList(baseSupplierInfo);
+    }
+
 }

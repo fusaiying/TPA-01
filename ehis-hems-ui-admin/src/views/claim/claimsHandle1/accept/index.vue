@@ -42,7 +42,7 @@
       <div>
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
         </span>
         <el-divider/>
       </div>
@@ -99,6 +99,7 @@
     },
     data() {
       return {
+        isListExport:false,
         total: 0,
         finishTotal: 0,
         hangUpTotal: 0,
@@ -206,6 +207,7 @@
         if (this.activeName==='01'){
           getBackList(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportProcessingList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
@@ -221,6 +223,7 @@
         }else if (this.activeName==='02'){
           getFinishList(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportProcessedList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
@@ -236,6 +239,7 @@
         }else if (this.activeName==='03'){
           getHangUpList(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportSuspensionList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm

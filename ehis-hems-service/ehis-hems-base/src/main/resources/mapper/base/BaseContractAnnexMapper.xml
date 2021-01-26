@@ -4,6 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.base.mapper.BaseContractAnnexMapper">
     <resultMap type="com.paic.ehis.base.domain.BaseContractAnnex" id="BaseContractAnnexResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="contractNo"    column="contract_no"    />
         <result property="supplierCode"    column="supplier_code"    />
         <result property="annexName"    column="annex_name"    />
@@ -19,12 +20,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseContractAnnexVo">
-        select contract_no, supplier_code, annex_name, annex_type, upload_man, upload_time, remak, status, create_by, create_time, update_by, update_time from base_contract_annex
+        select  serial_no contract_no, supplier_code, annex_name, annex_type, upload_man, upload_time, remak, status, create_by, create_time, update_by, update_time from base_contract_annex
     </sql>
 
     <select id="selectBaseContractAnnexList" parameterType="BaseContractAnnex" resultMap="BaseContractAnnexResult">
         <include refid="selectBaseContractAnnexVo"/>
-        <where>  
+        <where>
+            <if test="serialNo !=null and serialNo != ''"> and serial_no = #{serialNo}</if>
             <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
             <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
             <if test="annexName != null  and annexName != ''"> and annex_name like concat('%', #{annexName}, '%')</if>
@@ -44,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBaseContractAnnex" parameterType="BaseContractAnnex">
         insert into base_contract_annex
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
             <if test="contractNo != null and contractNo != ''">contract_no,</if>
             <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
             <if test="annexName != null and annexName != ''">annex_name,</if>
@@ -58,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="contractNo != null and contractNo != ''">#{contractNo},</if>
             <if test="supplierCode != null and supplierCode != ''">#{supplierCode},</if>
             <if test="annexName != null and annexName != ''">#{annexName},</if>
@@ -76,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBaseContractAnnex" parameterType="BaseContractAnnex">
         update base_contract_annex
         <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNo !=null and serialNo != ''">serial_no = #{serialNo},</if>
             <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
             <if test="annexName != null and annexName != ''">annex_name = #{annexName},</if>
             <if test="annexType != null">annex_type = #{annexType},</if>
@@ -92,11 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBaseContractAnnexById" parameterType="String">
-        delete from base_contract_annex where contract_no = #{contractNo}
+        update  base_contract_annex  set status="N" where contract_no = #{contractNo}
     </delete>
 
     <delete id="deleteBaseContractAnnexByIds" parameterType="String">
-        delete from base_contract_annex where contract_no in 
+        update base_contract_annex   set status="N"where contract_no in
         <foreach item="contractNo" collection="array" open="(" separator="," close=")">
             #{contractNo}
         </foreach>

@@ -1,12 +1,13 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.Date;
 
 /**
  * base_provider_dept(服务商科室)对象 base_provider_dep
@@ -14,12 +15,13 @@ import com.paic.ehis.common.core.annotation.Excel;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseProviderDep extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 主键id */
-    private String id;
+    /** 流水号 */
+    private String serialNo;
 
     /** 服务商编码 */
     @Excel(name = "服务商编码")
@@ -58,28 +60,27 @@ public class BaseProviderDep extends BaseEntity
     private String spprocurementFlag;
 
     /** 出诊起始时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "出诊起始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "出诊起始时间", width = 30, dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
     private Date callstarttime;
 
     /** 出诊截至时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "出诊截至时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "出诊截至时间", width = 30, dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
     private Date callendtime;
 
     /** 状态 */
     @Excel(name = "状态")
     private String status;
 
-    public void setId(String id) 
-    {
-        this.id = id;
-    }
+    /** 状态 */
+    @Excel(name = "变更标志")
+    private String updateFlag;
 
-    public String getId() 
-    {
-        return id;
-    }
+    private String visitingTypeName;
+
+    private String orgFlag;
+
     public void setProviderCode(String providerCode) 
     {
         this.providerCode = providerCode;
@@ -192,7 +193,6 @@ public class BaseProviderDep extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
             .append("providerCode", getProviderCode())
             .append("visitingType", getVisitingType())
             .append("firstDept", getFirstDept())

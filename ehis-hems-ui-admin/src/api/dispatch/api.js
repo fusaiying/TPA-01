@@ -30,7 +30,7 @@ export function getDspatchUser(query) {
 //查询出单信息
 export function getIssuingcompanyList(query) {
   return request({
-    url: '/provider/issuingcompany/list',
+    url: '/system/issuingcompany/list',
     method: 'get',
     params: query
   })

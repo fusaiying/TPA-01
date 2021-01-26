@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseServiceInfoMapper">
+
+    <resultMap type="BaseServiceInfo" id="BaseServiceInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="alias"    column="alias"    />
+        <result property="servertypeCode"    column="servertype_code"    />
+        <result property="servertypeName"    column="servertype_name"    />
+        <result property="orgin"    column="orgin"    />
+        <result property="status"    column="status"    />
+        <result property="originalCode"    column="original_code"    />
+        <result property="originalName"    column="original_name"    />
+        <result property="clause"    column="clause"    />
+        <result property="state"    column="state"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseServiceInfoVo">
+        select serial_no, service_code, service_name, category_code, category_name,
+         alias, servertype_code, servertype_name, orgin, status, original_code,
+         original_name, clause, state, create_by, create_time, update_by, update_time
+        from base_service_info
+    </sql>
+
+    <select id="selectBaseServiceInfoList" parameterType="BaseServiceInfo" resultMap="BaseServiceInfoResult">
+        select serial_no, service_code, service_name, category_code,
+        (select distinct category from base_service_category_kind where codeI = base_service_info.category_code) category_name,
+        alias, servertype_code,
+        (select variety from base_service_category_kind where codeII = base_service_info.servertype_code) servertype_name,
+        (select dict_label from sys_dict_data where dict_type='project_origin' and dict_value=base_service_info.orgin ) orgin,
+        (select dict_label from sys_dict_data where dict_type='project_status' and dict_value = base_service_info.status) status,
+        original_code, original_name, clause, state, create_by, create_time, update_by, update_time from base_service_info
+        <where>
+            1 = 1
+            <if test="serviceName != null  and serviceName != ''"> and service_name like concat('%', #{serviceName}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="alias != null  and alias != ''"> and alias like concat('%', #{alias}, '%')</if>
+            <if test="servertypeCode != null  and servertypeCode != ''"> and servertype_code = #{servertypeCode}</if>
+            <if test="servertypeName != null  and servertypeName != ''"> and servertype_name like concat('%', #{servertypeName}, '%')</if>
+            <if test="orgin != null  and orgin != ''"> and orgin = #{orgin}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="originalCode != null  and originalCode != ''"> and original_code = #{originalCode}</if>
+            <if test="originalName != null  and originalName != ''"> and original_name like concat('%', #{originalName}, '%')</if>
+            <if test="clause != null  and clause != ''"> and clause = #{clause}</if>
+             and state = 'Y'
+        </where>
+        order by create_time DESC
+    </select>
+
+    <select id="selectBaseServiceInfoById" parameterType="String" resultMap="BaseServiceInfoResult">
+        <include refid="selectBaseServiceInfoVo"/>
+        where service_code = #{serviceCode}
+    </select>
+
+    <insert id="insertBaseServiceInfo" parameterType="BaseServiceInfo">
+        insert into base_service_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="serviceCode != null">service_code,</if>
+            <if test="serviceName != null">service_name,</if>
+            <if test="categoryCode != null">category_code,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="alias != null">alias,</if>
+            <if test="servertypeCode != null">servertype_code,</if>
+            <if test="servertypeName != null">servertype_name,</if>
+            <if test="orgin != null">orgin,</if>
+            <if test="status != null">status,</if>
+            <if test="originalCode != null">original_code,</if>
+            <if test="originalName != null">original_name,</if>
+            <if test="clause != null">clause,</if>
+            <if test="state != null">state,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="serviceCode != null">#{serviceCode},</if>
+            <if test="serviceName != null">#{serviceName},</if>
+            <if test="categoryCode != null">#{categoryCode},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="alias != null">#{alias},</if>
+            <if test="servertypeCode != null">#{servertypeCode},</if>
+            <if test="servertypeName != null">#{servertypeName},</if>
+            <if test="orgin != null">#{orgin},</if>
+            <if test="status != null">#{status},</if>
+            <if test="originalCode != null">#{originalCode},</if>
+            <if test="originalName != null">#{originalName},</if>
+            <if test="clause != null">#{clause},</if>
+            <if test="state != null">#{state},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseServiceInfo" parameterType="BaseServiceInfo">
+        update base_service_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
+            <if test="serviceName != null">service_name = #{serviceName},</if>
+            <if test="categoryCode != null">category_code = #{categoryCode},</if>
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="alias != null">alias = #{alias},</if>
+            <if test="servertypeCode != null">servertype_code = #{servertypeCode},</if>
+            <if test="servertypeName != null">servertype_name = #{servertypeName},</if>
+            <if test="orgin != null">orgin = #{orgin},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="originalCode != null">original_code = #{originalCode},</if>
+            <if test="originalName != null">original_name = #{originalName},</if>
+            <if test="clause != null">clause = #{clause},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteBaseServiceInfoById" parameterType="String">
+        delete from base_service_info where service_code = #{serviceCode}
+    </delete>
+
+    <delete id="deleteBaseServiceInfoByIds" parameterType="String">
+        delete from base_service_info where service_code in
+        <foreach item="serviceCode" collection="array" open="(" separator="," close=")">
+            #{serviceCode}
+        </foreach>
+    </delete>
+
+    <select id="selectServiceByName" parameterType="String" resultMap="BaseServiceInfoResult">
+        <include refid="selectBaseServiceInfoVo"/>
+        where service_name = #{serviceName}
+    </select>
+
+    <update id="updateBaseServiceInfoById" parameterType="String">
+        update base_service_info set state = 'N'
+        where service_code = #{serviceCode}
+    </update>
+
+    <select id="selectServerMaxNo" parameterType="String" resultType="String">
+        SELECT substring(max(service_code),8) maxno FROM base_service_info
+        where service_code like concat(#{serverCode}, '%')
+    </select>
+
+
+    <select id="selectBaseServiceInfoAllList" parameterType="BaseServiceInfo" resultMap="BaseServiceInfoResult">
+         select serial_no, service_code , service_name,category_name,servertype_code,servertype_name,status  from base_service_info
+        <where> 1 = 1
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <update id="updateBaseServiceInfoByCodeAndState" parameterType="BaseServiceInfo">
+        update base_service_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceName != null">service_name = #{serviceName},</if>
+            <if test="categoryCode != null">category_code = #{categoryCode},</if>
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="alias != null">alias = #{alias},</if>
+            <if test="servertypeCode != null">servertype_code = #{servertypeCode},</if>
+            <if test="servertypeName != null">servertype_name = #{servertypeName},</if>
+            <if test="orgin != null">orgin = #{orgin},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="originalCode != null">original_code = #{originalCode},</if>
+            <if test="originalName != null">original_name = #{originalName},</if>
+            <if test="clause != null">clause = #{clause},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where service_code = #{serviceCode} and state = 'Y'
+    </update>
+
+    <select id="selectBaseServiceInfoByAlias" parameterType="String" resultMap="BaseServiceInfoResult">
+        <include refid="selectBaseServiceInfoVo"/>
+        where alias = #{alias}
+    </select>
+
+    <select id="selectBaseServiceInfoByorName" parameterType="String" resultMap="BaseServiceInfoResult">
+        <include refid="selectBaseServiceInfoVo"/>
+        where original_name = #{originalName}
+    </select>
+
+</mapper>

@@ -99,6 +99,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$router.push({path: '/claims-handle/pbclaim'});
                 }
               })
             }).catch(() => {

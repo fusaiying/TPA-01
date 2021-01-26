@@ -9,7 +9,7 @@ public class ProviderInfo {
     /**
      * 供应商基础信息
      */
-    private HmpServOpera hmpServOpera;
+    private com.paic.ehis.base.domain.HmpServOpera hmpServOpera;
     /**
      * 医疗特色信息
      */
@@ -17,13 +17,13 @@ public class ProviderInfo {
     /**
      * 联系人
      */
-    private List<HmpServContacts> hmpServContactsList;
+    private List<com.paic.ehis.base.domain.HmpServContacts> hmpServContactsList;
 
-    public HmpServOpera getHmpServOpera() {
+    public com.paic.ehis.base.domain.HmpServOpera getHmpServOpera() {
         return hmpServOpera;
     }
 
-    public void setHmpServOpera(HmpServOpera hmpServOpera) {
+    public void setHmpServOpera(com.paic.ehis.base.domain.HmpServOpera hmpServOpera) {
         this.hmpServOpera = hmpServOpera;
     }
 
@@ -35,11 +35,11 @@ public class ProviderInfo {
         this.hmpHospCharacter = hmpHospCharacter;
     }
 
-    public List<HmpServContacts> getHmpServContactsList() {
+    public List<com.paic.ehis.base.domain.HmpServContacts> getHmpServContactsList() {
         return hmpServContactsList;
     }
 
-    public void setHmpServContactsList(List<HmpServContacts> hmpServContactsList) {
+    public void setHmpServContactsList(List<com.paic.ehis.base.domain.HmpServContacts> hmpServContactsList) {
         this.hmpServContactsList = hmpServContactsList;
     }
 

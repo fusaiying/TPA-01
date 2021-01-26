@@ -106,7 +106,7 @@
         <span>批次工作池</span>
         <span style="float: right;">
             <el-button type="primary" size="mini" @click="addPresenting('add')">新增交单</el-button>
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
@@ -150,6 +150,7 @@
     },
     data() {
       return {
+        isListExport:false,
         caseNumber: false,//查询条件（报案号）是否显示
         backNum: 1,
         backSize: 10,
@@ -317,6 +318,7 @@
         if (this.activeName === '01') {
           getBackToList(this.queryParams).then(res => {
            if (res.rows.length>0){
+             this.isListExport=true
              let subDate=''
              if (this.queryParams.submitdate.length>0){
                subDate='&submitstartdate='+this.queryParams.submitdate[0]+'&submitenddate='+this.queryParams.submitdate[1]
@@ -342,6 +344,7 @@
         } else {//已处理
           getDealWithList(this.queryParams).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               let subDate=''
               if (this.queryParams.submitdate.length>0){
                 subDate='&submitstartdate='+this.queryParams.submitdate[0]+'&submitenddate='+this.queryParams.submitdate[1]

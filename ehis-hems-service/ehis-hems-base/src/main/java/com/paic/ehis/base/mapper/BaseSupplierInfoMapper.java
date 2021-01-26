@@ -29,6 +29,10 @@ public interface BaseSupplierInfoMapper
      */
     public List<BaseSupplierInfo> selectBaseSupplierInfoList(BaseSupplierInfo baseSupplierInfo);
 
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList1(BaseSupplierInfo baseSupplierInfo);
+
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList2(BaseSupplierInfo baseSupplierInfo);
+
     /**
      * 新增base_supplier_info（供应商基础信息）
      * 
@@ -60,4 +64,6 @@ public interface BaseSupplierInfoMapper
      * @return 结果
      */
     public int deleteBaseSupplierInfoByIds(String[] servcomNos);
+
+    public int updatebaseSupplierInfoStatus(String serialNo);
 }

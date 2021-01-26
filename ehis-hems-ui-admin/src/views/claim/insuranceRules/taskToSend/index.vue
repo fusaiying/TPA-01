@@ -13,8 +13,10 @@
           <el-col :span="8">
             <el-form-item label="状态：" prop="riskStatus">
               <el-select v-model="sendForm.riskStatus" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                <el-option key="02" label="规则设置"
+                           value="02"/>
+                <el-option key="03" label="规则审核"
+                           value="03"/>
               </el-select>
             </el-form-item>
           </el-col>

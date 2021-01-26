@@ -3,7 +3,7 @@
   <!--产品基本信息-->
   <div >
     <product-info ref="productInfoForm"   :parProductChname="parProductChname" :parProductEnname="parProductEnname" :disableFlag="disabledFlag"
-                  :parOutProductChname="parOutProductChname" :parOutProductEnname="parOutProductEnname" :productCode="productCode"
+                  :parOutProductChname="parOutProductChname" :parOutProductEnname="parOutProductEnname" :productCode="productCode" @saveFlag="changeDisabledFlag"
  ></product-info>
   </div>
     <!--服务项目-->
@@ -19,8 +19,8 @@
 
   <div
     style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  border-bottom: 1px solid #e6ebf5;color: #303133;float: right; ">
-    <el-button size="mini" type="primary" @click="submitHandle">提交审核</el-button>
-    <el-button size="mini" type="primary" @click="saveAll">保存</el-button>
+    <el-button size="mini" type="primary" @click="submitHandle" :disabled="disabledFlag">提交审核</el-button>
+    <el-button size="mini" type="primary" @click="saveAll" :disabled="disabledFlag">保存</el-button>
     <el-button size="mini" type="primary" @click="goBack">关闭</el-button>
   </div>
 
@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+
       disabledFlag: false,
       parProductChname: '',
       parProductEnname: '',
@@ -64,11 +65,12 @@ export default {
     init(){
       //新增
       if(this.$route.query.status=='add'){
-
+      this.disabledFlag=true
       }
       else if( this.$route.query.status=='edit'){
 
         console.log('bianji')
+
         this.productCode=this.$route.query.productCode
 
 
@@ -79,62 +81,67 @@ export default {
     getSaveFlag(val){
       console.log(val)
     },
+    changeDisabledFlag(){
+      this.productCode=this.$refs.productInfoForm.otherProductCode
+      this.disabledFlag=false
+    },
 
 
     //提交审核
     submitHandle(){
+      this.$refs['productInfoForm'].validateForm().then(res=>{
+        let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
+        if(res){
 
-      let produactInfoFlag=this.$refs['productInfoForm'].validateForm()
-      let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
-      if(produactInfoFlag){
-        if(servicesAvailableFlag=='01'){
+          if(servicesAvailableFlag=='01'){
 
-          let productInfoData= this.$refs.productInfoForm.baseForm
-          let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
-          let allData ={
-            productInfoData: productInfoData,
-            servicesAvailableData: servicesAvailableData
-          }
-          checkProductInfo(allData).then(res => {
-            if (res.code == '200') {
-              this.$message({
-                message: '提交审核成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              this.parProductChname=productInfoData.productChname
-              this.parProductEnname=productInfoData.productEnname
-              this.parOutProductChname=productInfoData.outProductChname
-              this.parOutProductEnname=productInfoData.outProductEnname
-              //给产品编码赋值
-
-            } else {
-              this.$message({
-                message: '提交审核失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
+            let productInfoData= this.$refs.productInfoForm.baseForm
+            let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
+            let allData ={
+              productInfoData: productInfoData,
+              servicesAvailableData: servicesAvailableData
             }
-          })
+            checkProductInfo(allData).then(res => {
+              if (res.code == '200') {
+                this.$message({
+                  message: '提交审核成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.parProductChname=productInfoData.productChname
+                this.parProductEnname=productInfoData.productEnname
+                this.parOutProductChname=productInfoData.outProductChname
+                this.parOutProductEnname=productInfoData.outProductEnname
+                //给产品编码赋值
+
+              } else {
+                this.$message({
+                  message: '提交审核失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              }
+            })
+          }
+          else if (servicesAvailableFlag=='02'){
+            this.$message.warning('至少添加一条服务项目信息')
+          }
+          else if (servicesAvailableFlag=='03'){
+            this.$message.warning('未选择供应商')
+          }
+          else if (servicesAvailableFlag=='04'){
+            this.$message.warning('服务项目必录项未必录')
+          }
+        }
+        else {
+          this.$message.warning('产品基本信息必录项未必录')
+        }
+      })
 
 
-        }
-        else if (servicesAvailableFlag=='02'){
-          this.$message.warning('至少添加一条服务项目信息')
-        }
-        else if (servicesAvailableFlag=='03'){
-          this.$message.warning('未选择供应商')
-        }
-        else if (servicesAvailableFlag=='04'){
-          this.$message.warning('服务项目必录项未必录')
-        }
 
-      }
-      else {
-        this.$message.warning('产品基本信息必录项未必录')
-      }
 
 
 
@@ -142,55 +149,64 @@ export default {
     },
     //保存
     saveAll(){
-      let produactInfoFlag=this.$refs['productInfoForm'].validateForm()
-      console.log(produactInfoFlag)
-      let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
-      if(produactInfoFlag){
-        if(servicesAvailableFlag=='01'){
-         let productInfoData= this.$refs.productInfoForm.baseForm
-          let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
-          let allData ={
-            productInfoData: productInfoData,
-            servicesAvailableData: servicesAvailableData
-          }
-          saveProductInfo(allData).then(res => {
-            if (res.code == '200') {
-              this.$message({
-                message: '保存成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              this.parProductChname=productInfoData.productChname
-              this.parProductEnname=productInfoData.productEnname
-              this.parOutProductChname=productInfoData.outProductChname
-              this.parOutProductEnname=productInfoData.outProductEnname
-            } else {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
+      this.$refs['productInfoForm'].validateForm().then((res)=>{
+        let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
+          if(res){
+
+            if(servicesAvailableFlag=='01' || servicesAvailableFlag=='03') {
+              let productInfoData = this.$refs.productInfoForm.baseForm
+              let servicesAvailableData = this.$refs.servicesAvailableForm.serviceProForm
+              let allData = {
+                productInfoData: productInfoData,
+                servicesAvailableData: servicesAvailableData
+              }
+              saveProductInfo(allData).then(res => {
+                if (res.code == '200') {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.parProductChname = productInfoData.productChname
+                  this.parProductEnname = productInfoData.productEnname
+                  this.parOutProductChname = productInfoData.outProductChname
+                  this.parOutProductEnname = productInfoData.outProductEnname
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
               })
             }
-          })
 
 
-        }
-        else if (servicesAvailableFlag=='02'){
-          this.$message.warning('至少添加一条服务项目信息')
-        }
-        else if (servicesAvailableFlag=='03'){
-          this.$message.warning('未选择供应商')
-        }
-        else if (servicesAvailableFlag=='04'){
-          this.$message.warning('服务项目必录项未必录')
-        }
+
+            else if (servicesAvailableFlag=='02'){
+              this.$message.warning('至少添加一条服务项目信息')
+            }
+            /*      else if (servicesAvailableFlag=='03'){
+                    this.$message.warning('未选择供应商')
+                  }*/
+            else if (servicesAvailableFlag=='04'){
+              this.$message.warning('服务项目必录项未必录')
+            }
+
+          }
+          else {
+            this.$message.warning('产品基本信息必录项未必录')
+          }
+
 
       }
-      else {
-        this.$message.warning('产品基本信息必录项未必录')
-      }
+
+
+      )
+
+
 
 
 

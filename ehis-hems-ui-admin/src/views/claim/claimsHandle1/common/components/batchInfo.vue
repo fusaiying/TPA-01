@@ -36,7 +36,7 @@
     },
     data() {
       return {
-        /*baseInfo:{
+    /*    baseInfo:{
           submitdate:undefined,
           claimtype:undefined,
           conttype:undefined,

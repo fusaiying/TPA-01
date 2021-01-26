@@ -1,5 +1,6 @@
 package com.paic.ehis.base.domain.vo;
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.base.domain.BaseProviderDep;
 import lombok.Data;
 
@@ -16,9 +17,9 @@ public class BaseProviderDepVo
 {
     private static final long serialVersionUID = 1L;
 
-   /* *//** 服务商编码 *//*
+   /** 服务商编码 */
     @Excel(name = "服务商编码")
-    private String providercode;*/
-
-    private List<BaseProviderDep> BaseProviderDeps;
+    private String providerCode;
+    private String orgFlag;
+    private List<BaseProviderDep> form;
 }

@@ -3,6 +3,7 @@ package com.paic.ehis.base.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,9 +15,13 @@ import java.util.Date;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseContractAnnex extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 流水号 */
+    private String serialNo;
 
     /** 合约编码 */
     @Excel(name = "合约编码")
@@ -48,7 +53,7 @@ public class BaseContractAnnex extends BaseEntity
     private String remak;
 
     /** 状态 */
-    @Excel(name = "状态")
+    @Excel(name = "状态",readConverterExp = "Y=有效，N=无效")
     private String status;
 
     public void setContractNo(String contractNo) 

@@ -107,6 +107,14 @@ export function listRemark(query) {
   })
 }
 
+//# 查询理算页面查询案件备注 列表（参数  rptNo）
+export function adjustRemarkList(query) {
+  return request({
+    url: '/system/remark/adjustRemarkList',
+    method: 'get',
+    params: query
+  })
+}
 //需要将前端的报案号，也发给我
 // 新增案件受理信息
 export function addAccept(data) {
@@ -235,6 +243,14 @@ export function listRemarkRptNo(rptNo) {
     method: 'get',
   })
 }
+//查询案件领款人 详细（可能有多条）
+export function getHospital(rptNo) {
+  return request({
+    url: '/system/payee/getInfohospitalCode',
+    method: 'post',
+    params:rptNo
+  })
+}
 
 
 // 查询案件备注详细 详细（可能有多条）
@@ -286,6 +302,7 @@ export function getBillList(rptNo) {
     params: rptNo
   })
 }
+
 //保存账单明细列表
 export function saveBill(data) {
   return request({
@@ -294,28 +311,32 @@ export function saveBill(data) {
     data: data
   })
 }
+
 //编辑查询账单明细列表
 export function editBill(billId) {
   return request({
-    url: '/system/bill/'+billId,
+    url: '/system/bill/' + billId,
     method: 'get',
   })
 }
+
 //获取费用项
 export function getFee() {
   return request({
-    url: '/provider/feeitem/list',
+    url: '/system/feeitem/list',
     method: 'get'
   })
 }
+
 //查询医院
 export function getHospitalInfo(data) {
   return request({
-    url: '/provider/org/selectHospitalInfo',
+    url: '/provider/org/selectHospitalInfoNew',
     method: 'get',
-    params:data
+    params: data
   })
 }
+
 //理算
 //个人池处理中
 // 查询案件信息 详细
@@ -323,7 +344,7 @@ export function listConditionsForTheAdjustmentUnder(data) {
   return request({
     url: '/system/case/listConditionsForTheAdjustmentUnder',
     method: 'get',
-    params:data
+    params: data
   })
 }
 
@@ -333,7 +354,7 @@ export function listConditionsForTheAdjustmentOver(data) {
   return request({
     url: '/system/case/listConditionsForTheAdjustmentOver',
     method: 'get',
-    params:data
+    params: data
   })
 }
 
@@ -343,6 +364,78 @@ export function listConditionsForTheAdjustmentHang(data) {
   return request({
     url: '/system/case/listConditionsForTheAdjustmentHang',
     method: 'get',
-    params:data
+    params: data
+  })
+}
+
+//删除账单明细
+export function deleteBill(billId) {
+  return request({
+    url: '/system/bill/' + billId,
+    method: 'delete',
+  })
+}
+
+//录入完毕删除账单明细
+export function changeBillStatus(rptNo) {
+  return request({
+    url: '/system/bill/changeStatus',
+    method: 'get',
+    params: rptNo
+  })
+}
+
+
+//# 默认页面账单载入查询  (主参：rptNo)
+export function infoList(data) {
+  return request({
+    url: '/system/calBill/infoList',
+    method: 'get',
+    params: data
+  })
+}
+
+//# 下拉查询页面账单费用项详情 (主参：rptNo、billId)
+export function itemList(data) {
+  return request({
+    url: '/system/item/itemList',
+    method: 'get',
+    params: data
+  })
+}
+
+//# 一键展开页面账单查询 按钮	(主参：rptNo、billId)
+export function detailsList(data) {
+  return request({
+    url: '/system/calBill/detailsList',
+    method: 'get',
+    params: data
+  })
+}
+
+//# 费用项账单保单号及险种查询 下拉框	(主参：rptNo)
+export function insurancePolicyList(data) {
+  return request({
+    url: '/system/item/InsurancePolicyList',
+    method: 'get',
+    params: data
+  })
+}
+
+//# 费用项账单责任明细查询 下拉框	(主参：riskCode、feeItemCode)
+export function responsibilityDetailsList(data) {
+  return request({
+    url: '/system/item/responsibilityDetailsList',
+    method: 'get',
+    params: data
+  })
+}
+
+//#费用项账单   保存  按钮
+export function billDetailsSave(data) {
+  return request({
+    url: '/system/bill',
+    method: 'put',
+    data: data
   })
 }

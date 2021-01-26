@@ -5,13 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper">
     
     <resultMap type="BaseProviderNewtworktype" id="BaseProviderNewtworktypeResult">
-        <result property="serNo"    column="ser_no"    />
+        <result property="serialNo"    column="serial_no"    />
         <result property="supplierCode"    column="supplier_code"    />
         <result property="networktypeCode"    column="networktype_code"    />
         <result property="productCode"    column="product_code"    />
         <result property="productName"    column="product_name"    />
-        <result property="oldChoose"    column="old_choose"    />
-        <result property="newChoose"    column="new_choose"    />
+        <result property="oldChoose"    column="oldChoose"    />
+        <result property="newChoose"    column="newChoose"    />
         <result property="newDate"    column="new_date"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseProviderNewtworktypeVo">
-        select ser_no, supplier_code, networktype_code, product_code, product_name, old_choose, new_choose, new_date, status, create_by, create_time, update_by, update_time from base_provider_newtworktype
+        select serial_no, supplier_code, networktype_code, product_code, product_name, old_choose, new_choose, new_date, status, create_by, create_time, update_by, update_time from base_provider_newtworktype
     </sql>
 
     <select id="selectBaseProviderNewtworktypeList" parameterType="BaseProviderNewtworktype" resultMap="BaseProviderNewtworktypeResult">
@@ -39,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>-->
         SELECT
         t.networktype_name,
-        n.ser_no,
+        n.serial_no,
         n.supplier_code,
-        n.networktype_code,
+        t.networktype_code,
         n.product_code,
         n.product_name,
         IFNULL(n.old_choose,'01') as oldChoose,
@@ -60,13 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectBaseProviderNewtworktypeById" parameterType="String" resultMap="BaseProviderNewtworktypeResult">
         <include refid="selectBaseProviderNewtworktypeVo"/>
-        where ser_no = #{serNo}
+        where serial_no = #{serialNo}
     </select>
         
     <insert id="insertBaseProviderNewtworktype" parameterType="BaseProviderNewtworktype">
         insert into base_provider_newtworktype
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="serNo != null">ser_no,</if>
+            <if test="serialNo != null">serial_no,</if>
             <if test="supplierCode != null">supplier_code,</if>
             <if test="networktypeCode != null">networktype_code,</if>
             <if test="productCode != null">product_code,</if>
@@ -81,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="serNo != null">#{serNo},</if>
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="supplierCode != null">#{supplierCode},</if>
             <if test="networktypeCode != null">#{networktypeCode},</if>
             <if test="productCode != null">#{productCode},</if>
@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where ser_no = #{serNo}
+        where serial_no = #{serialNo}
     </update>
 
     <delete id="deleteBaseProviderNewtworktypeById" parameterType="String">
@@ -121,10 +121,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBaseProviderNewtworktypeByIds" parameterType="String">
-        delete from base_provider_newtworktype where ser_no in 
-        <foreach item="serNo" collection="array" open="(" separator="," close=")">
-            #{serNo}
+        delete from base_provider_newtworktype where serial_no in
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
         </foreach>
     </delete>
+
+    <select id="getCodes" parameterType="String" resultType="String">
+        select networktype_code from base_provider_newtworktype where supplier_code = #{supplierCode}
+
+    </select>
     
 </mapper>

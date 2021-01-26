@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierCode"    column="supplier_code"    />
         <result property="supplierType"    column="supplier_type"    />
         <result property="placeType"    column="place_type"    />
+        <result property="placeTypeName"    column="placeTypeName"    />
         <result property="name"    column="name"    />
         <result property="email"    column="email"    />
         <result property="role"    column="role"    />
@@ -18,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workingEnd"    column="working_end"    />
         <result property="accountNo"    column="account_no"    />
         <result property="password"    column="password"    />
+        <result property="updateFlag"    column="update_flag"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -26,11 +28,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseContactsVo">
-        select serial_no, supplier_code, supplier_type, place_type, name, email, role, phone, mobile, working_start, working_end, account_no, password, status, create_by, create_time, update_by, update_time from base_contacts
+        select serial_no,update_flag, supplier_code, supplier_type, place_type,
+         (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'place_type' and dict_value = base_contacts_bak.place_type)  placeTypeName,
+         name, email, role, phone, mobile, working_start, working_end, account_no, password, status, create_by, create_time, update_by, update_time from base_contacts_bak
     </sql>
 
-    <select id="selectBaseContactsList" parameterType="BaseContacts" resultMap="BaseContactsResult">
-        <include refid="selectBaseContactsVo"/>
+    <sql id="selectBaseContactsVoNew">
+        select serial_no, update_flag,supplier_code, supplier_type, place_type,
+         (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'place_type' and dict_value = base_contacts.place_type)  placeTypeName,
+         name, email, role, phone, mobile, working_start, working_end, account_no, password, status, create_by, create_time, update_by, update_time from base_contacts
+    </sql>
+
+    <select id="selectBaseContactsList" parameterType="com.paic.ehis.base.domain.BaseContacts" resultMap="BaseContactsResult">
+        <include refid="selectBaseContactsVoNew"/>
         <where>
             <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
             <if test="supplierType != null  and supplierType != ''"> and supplier_type = #{supplierType}</if>
@@ -54,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertBaseContacts" parameterType="BaseContacts">
-        insert into base_contacts
+        insert into base_contacts_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
             <if test="supplierCode != null">supplier_code,</if>
@@ -69,6 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workingEnd != null">working_end,</if>
             <if test="accountNo != null">account_no,</if>
             <if test="password != null">password,</if>
+            <if test="updateFlag != null">update_flag,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -89,6 +106,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workingEnd != null">#{workingEnd},</if>
             <if test="accountNo != null">#{accountNo},</if>
             <if test="password != null">#{password},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseContactsNew" parameterType="BaseContacts">
+        insert into base_contacts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="supplierCode != null">supplier_code,</if>
+            <if test="supplierType != null">supplier_type,</if>
+            <if test="placeType != null">place_type,</if>
+            <if test="name != null">name,</if>
+            <if test="email != null">email,</if>
+            <if test="role != null">role,</if>
+            <if test="phone != null">phone,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="workingStart != null">working_start,</if>
+            <if test="workingEnd != null">working_end,</if>
+            <if test="accountNo != null">account_no,</if>
+            <if test="password != null">password,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="supplierCode != null">#{supplierCode},</if>
+            <if test="supplierType != null">#{supplierType},</if>
+            <if test="placeType != null">#{placeType},</if>
+            <if test="name != null">#{name},</if>
+            <if test="email != null">#{email},</if>
+            <if test="role != null">#{role},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="workingStart != null">#{workingStart},</if>
+            <if test="workingEnd != null">#{workingEnd},</if>
+            <if test="accountNo != null">#{accountNo},</if>
+            <if test="password != null">#{password},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -98,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBaseContacts" parameterType="BaseContacts">
-        update base_contacts
+        update base_contacts_bak
         <trim prefix="SET" suffixOverrides=",">
             <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
             <if test="supplierType != null">supplier_type = #{supplierType},</if>
@@ -121,12 +186,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where serial_no = #{serialNo}
     </update>
 
+
+
+    <update id="updateBaseContactsStatus" parameterType="String" >
+        update base_contacts set status = 'N'
+        where status='Y'and supplier_code = #{supplierCode}
+    </update>
+
     <delete id="deleteBaseContactsById" parameterType="String">
-        delete from base_contacts where serial_no = #{serialNo}
+        delete from base_contacts_bak where serial_no = #{serialNo}
     </delete>
 
     <delete id="deleteBaseContactsByIds" parameterType="String">
-        delete from base_contacts where serial_no in
+        delete from base_contacts_bak where serial_no in
         <foreach item="serialNo" collection="array" open="(" separator="," close=")">
             #{serialNo}
         </foreach>
@@ -134,10 +206,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseContactsByCode" parameterType="String" resultMap="BaseContactsResult">
         <include refid="selectBaseContactsVo"/>
-        where supplier_code = #{supplierCode}
+        where supplier_code = #{supplierCode}  and status ='Y' and update_flag = '0'
+    </select>
+
+    <select id="selectBaseContactsByCodeNew" parameterType="String" resultMap="BaseContactsResult">
+        <include refid="selectBaseContactsVoNew"/>
+        where supplier_code = #{supplierCode}  and status ='Y' and update_flag = '0'
     </select>
 
     <delete id="deleteBaseContactsByCode" parameterType="String">
-        delete from base_contacts where supplier_code = #{supplierCode}
+        delete from base_contacts_bak where supplier_code = #{supplierCode}
     </delete>
+
+    <update id="updateBaseContactsByCode" parameterType="BaseContacts">
+        update base_contacts_bak set update_flag = '1'
+        where update_flag = '0'  and supplier_code = #{supplierCode}
+    </update>
+
+    <update id="updateBaseContactsByCodeNew" parameterType="BaseContacts">
+        update base_contacts set update_flag = '1' ,status = 'N'
+        where status = 'Y'  and supplier_code = #{supplierCode}
+    </update>
 </mapper>

@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseProviderApplyMapper">
 
     <resultMap type="BaseProviderApply" id="BaseProviderApplyResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="providerCode"    column="provider_code"    />
         <result property="appointmentCall"    column="appointment_call"    />
         <result property="outpatientInfo"    column="outpatient_info"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="phone"    column="phone"    />
         <result property="fax"    column="fax"    />
         <result property="sendWayStr"    column="send_way_str"    />
-        <result property="inviteremark"    column="inviteremark"    />
+        <result property="inviteRemark"    column="invite_remark"    />
         <result property="fastmailRemark"    column="fastmail_remark"    />
         <result property="receptionFlag"    column="reception_flag"    />
         <result property="selfpaymentFlag"    column="selfpayment_flag"    />
@@ -35,6 +36,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="arrestpointName"    column="arrestpoint_name"    />
         <result property="arrestpointPhone"    column="arrestpoint_phone"    />
         <result property="outpatientAddress"    column="outpatient_address"    />
+        <result property="interLocking"    column="inter_locking"    />
+        <result property="leadTime"    column="lead_time"    />
+        <result property="hotline2"    column="hotline2"    />
+        <result property="policiesOpen"    column="policies_open"    />
         <result property="appointreminders"    column="appointreminders"    />
         <result property="preauthsendway"    column="preauthsendway"    />
         <result property="clinicmedicalrecord"    column="clinicmedicalrecord"    />
@@ -42,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="hospitaldeposit"    column="hospitaldeposit"    />
         <result property="emergencyinfo"    column="emergencyinfo"    />
         <result property="remarks"    column="remarks"    />
+        <result property="updateFlag"    column="update_flag"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -50,7 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseProviderApplyVo">
-        select provider_code, appointment_call, outpatient_info, hotline, outpatient_day, hospitalize_day, outpatientearly_str, confirm_deliverytime, holiday_time, send_type_str, mail, phone, fax, send_way_str, invite_remark, fastmail_remark, reception_flag, selfpayment_flag, continent_flag, continent, payment, nondirectcustomer, straightknotflag, makeappointment, vipappointment, lead_flag, arrestpoint_tel, arrestpoint_name, arrestpoint_phone, outpatient_address, appointreminders, preauthsendway, clinicmedicalrecord, medicalrecords, hospitaldeposit, emergencyinfo, remarks, status, create_by, create_time, update_by, update_time from base_provider_apply
+        select serial_no, lead_time, hotline2, policies_open, inter_locking,provider_code, appointment_call, outpatient_info, hotline, outpatient_day, hospitalize_day, outpatientearly_str, confirm_deliverytime, holiday_time, send_type_str, mail, phone, fax, send_way_str, invite_remark, fastmail_remark, reception_flag, selfpayment_flag, continent_flag, continent, payment, nondirectcustomer, straightknotflag, makeappointment, vipappointment, lead_flag, arrestpoint_tel, arrestpoint_name, arrestpoint_phone, outpatient_address, appointreminders, preauthsendway, clinicmedicalrecord, medicalrecords, hospitaldeposit, emergencyinfo, remarks, status, create_by, create_time, update_by, update_time from base_provider_apply_bak
+    </sql>
+
+    <sql id="selectBaseProviderApplyVoNew">
+        select serial_no, lead_time, hotline2, policies_open, inter_locking,update_flag, provider_code, appointment_call, outpatient_info, hotline, outpatient_day, hospitalize_day, outpatientearly_str, confirm_deliverytime, holiday_time, send_type_str, mail, phone, fax, send_way_str, invite_remark, fastmail_remark, reception_flag, selfpayment_flag, continent_flag, continent, payment, nondirectcustomer, straightknotflag, makeappointment, vipappointment, lead_flag, arrestpoint_tel, arrestpoint_name, arrestpoint_phone, outpatient_address, appointreminders, preauthsendway, clinicmedicalrecord, medicalrecords, hospitaldeposit, emergencyinfo, remarks, status, create_by, create_time, update_by, update_time from base_provider_apply
     </sql>
 
     <select id="selectBaseProviderApplyList" parameterType="BaseProviderApply" resultMap="BaseProviderApplyResult">
@@ -102,12 +112,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseProviderApplyById" parameterType="String" resultMap="BaseProviderApplyResult">
         <include refid="selectBaseProviderApplyVo"/>
-        where provider_code = #{providerCode}
+        where provider_code = #{providerCode} and update_flag = '0' and status = 'Y'
+    </select>
+
+    <select id="selectBaseProviderApplyByIdNew" parameterType="String" resultMap="BaseProviderApplyResult">
+        <include refid="selectBaseProviderApplyVoNew"/>
+        where provider_code = #{providerCode} and update_flag = '0' and status = 'Y'
     </select>
 
     <insert id="insertBaseProviderApply" parameterType="BaseProviderApply">
-        insert into base_provider_apply
+        insert into base_provider_apply_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
             <if test="providerCode != null">provider_code,</if>
             <if test="appointmentCall != null">appointment_call,</if>
             <if test="outpatientInfo != null">outpatient_info,</if>
@@ -138,6 +154,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="arrestpointName != null">arrestpoint_name,</if>
             <if test="arrestpointPhone != null">arrestpoint_phone,</if>
             <if test="outpatientAddress != null">outpatient_address,</if>
+            <if test="interLocking != null">inter_locking,</if>
+            <if test="leadTime != null">lead_time,</if>
+            <if test="hotline2 != null">hotline2,</if>
+            <if test="policiesOpen != null">policies_open,</if>
             <if test="appointreminders != null">appointreminders,</if>
             <if test="preauthsendway != null">preauthsendway,</if>
             <if test="clinicmedicalrecord != null">clinicmedicalrecord,</if>
@@ -145,6 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hospitaldeposit != null">hospitaldeposit,</if>
             <if test="emergencyinfo != null">emergencyinfo,</if>
             <if test="remarks != null">remarks,</if>
+            <if test="updateFlag != null">update_flag,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -152,6 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="providerCode != null">#{providerCode},</if>
             <if test="appointmentCall != null">#{appointmentCall},</if>
             <if test="outpatientInfo != null">#{outpatientInfo},</if>
@@ -161,7 +183,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="outpatientearlyStr != null">#{outpatientearlyStr},</if>
             <if test="confirmDeliverytime != null">#{confirmDeliverytime},</if>
             <if test="holidayTime != null">#{holidayTime},</if>
-            <if test="sendTypeStr != null">#{sendTypeStr},</if>
+            <if test="sendTypeStr != null and sendTypeStr != ''">#{sendTypeStr},</if>
             <if test="mail != null">#{mail},</if>
             <if test="phone != null">#{phone},</if>
             <if test="fax != null">#{fax},</if>
@@ -182,6 +204,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="arrestpointName != null">#{arrestpointName},</if>
             <if test="arrestpointPhone != null">#{arrestpointPhone},</if>
             <if test="outpatientAddress != null">#{outpatientAddress},</if>
+            <if test="interLocking != null">#{interLocking},</if>
+            <if test="leadTime != null">#{leadTime},</if>
+            <if test="hotline2 != null">#{hotline2},</if>
+            <if test="policiesOpen != null">#{policiesOpen},</if>
             <if test="appointreminders != null">#{appointreminders},</if>
             <if test="preauthsendway != null">#{preauthsendway},</if>
             <if test="clinicmedicalrecord != null">#{clinicmedicalrecord},</if>
@@ -189,6 +215,112 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hospitaldeposit != null">#{hospitaldeposit},</if>
             <if test="emergencyinfo != null">#{emergencyinfo},</if>
             <if test="remarks != null">#{remarks},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseProviderApplyNew" parameterType="BaseProviderApply">
+        insert into base_provider_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="appointmentCall != null">appointment_call,</if>
+            <if test="outpatientInfo != null">outpatient_info,</if>
+            <if test="hotline != null">hotline,</if>
+            <if test="outpatientDay != null">outpatient_day,</if>
+            <if test="hospitalizeDay != null">hospitalize_day,</if>
+            <if test="outpatientearlyStr != null">outpatientearly_str,</if>
+            <if test="confirmDeliverytime != null">confirm_deliverytime,</if>
+            <if test="holidayTime != null">holiday_time,</if>
+            <if test="sendTypeStr != null and sendTypeStr != ''">send_type_str,</if>
+            <if test="mail != null">mail,</if>
+            <if test="phone != null">phone,</if>
+            <if test="fax != null">fax,</if>
+            <if test="sendWayStr != null">send_way_str,</if>
+            <if test="inviteRemark != null">invite_remark,</if>
+            <if test="fastmailRemark != null">fastmail_remark,</if>
+            <if test="receptionFlag != null">reception_flag,</if>
+            <if test="selfpaymentFlag != null">selfpayment_flag,</if>
+            <if test="continentFlag != null">continent_flag,</if>
+            <if test="continent != null">continent,</if>
+            <if test="payment != null">payment,</if>
+            <if test="nondirectcustomer != null">nondirectcustomer,</if>
+            <if test="straightknotflag != null">straightknotflag,</if>
+            <if test="makeappointment != null">makeappointment,</if>
+            <if test="vipappointment != null">vipappointment,</if>
+            <if test="leadFlag != null">lead_flag,</if>
+            <if test="arrestpointTel != null">arrestpoint_tel,</if>
+            <if test="arrestpointName != null">arrestpoint_name,</if>
+            <if test="arrestpointPhone != null">arrestpoint_phone,</if>
+            <if test="outpatientAddress != null">outpatient_address,</if>
+            <if test="interLocking != null">inter_locking,</if>
+            <if test="leadTime != null">lead_time,</if>
+            <if test="hotline2 != null">hotline2,</if>
+            <if test="policiesOpen != null">policies_open,</if>
+            <if test="appointreminders != null">appointreminders,</if>
+            <if test="preauthsendway != null">preauthsendway,</if>
+            <if test="clinicmedicalrecord != null">clinicmedicalrecord,</if>
+            <if test="medicalrecords != null">medicalrecords,</if>
+            <if test="hospitaldeposit != null">hospitaldeposit,</if>
+            <if test="emergencyinfo != null">emergencyinfo,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="appointmentCall != null">#{appointmentCall},</if>
+            <if test="outpatientInfo != null">#{outpatientInfo},</if>
+            <if test="hotline != null">#{hotline},</if>
+            <if test="outpatientDay != null">#{outpatientDay},</if>
+            <if test="hospitalizeDay != null">#{hospitalizeDay},</if>
+            <if test="outpatientearlyStr != null">#{outpatientearlyStr},</if>
+            <if test="confirmDeliverytime != null">#{confirmDeliverytime},</if>
+            <if test="holidayTime != null">#{holidayTime},</if>
+            <if test="sendTypeStr != null and sendTypeStr != ''">#{sendTypeStr},</if>
+            <if test="mail != null">#{mail},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="fax != null">#{fax},</if>
+            <if test="sendWayStr != null">#{sendWayStr},</if>
+            <if test="inviteRemark != null">#{inviteRemark},</if>
+            <if test="fastmailRemark != null">#{fastmailRemark},</if>
+            <if test="receptionFlag != null">#{receptionFlag},</if>
+            <if test="selfpaymentFlag != null">#{selfpaymentFlag},</if>
+            <if test="continentFlag != null">#{continentFlag},</if>
+            <if test="continent != null">#{continent},</if>
+            <if test="payment != null">#{payment},</if>
+            <if test="nondirectcustomer != null">#{nondirectcustomer},</if>
+            <if test="straightknotflag != null">#{straightknotflag},</if>
+            <if test="makeappointment != null">#{makeappointment},</if>
+            <if test="vipappointment != null">#{vipappointment},</if>
+            <if test="leadFlag != null">#{leadFlag},</if>
+            <if test="arrestpointTel != null">#{arrestpointTel},</if>
+            <if test="arrestpointName != null">#{arrestpointName},</if>
+            <if test="arrestpointPhone != null">#{arrestpointPhone},</if>
+            <if test="outpatientAddress != null">#{outpatientAddress},</if>
+            <if test="interLocking != null">#{interLocking},</if>
+            <if test="leadTime != null">#{leadTime},</if>
+            <if test="hotline2 != null">#{hotline2},</if>
+            <if test="policiesOpen != null">#{policiesOpen},</if>
+            <if test="appointreminders != null">#{appointreminders},</if>
+            <if test="preauthsendway != null">#{preauthsendway},</if>
+            <if test="clinicmedicalrecord != null">#{clinicmedicalrecord},</if>
+            <if test="medicalrecords != null">#{medicalrecords},</if>
+            <if test="hospitaldeposit != null">#{hospitaldeposit},</if>
+            <if test="emergencyinfo != null">#{emergencyinfo},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -198,7 +330,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBaseProviderApply" parameterType="BaseProviderApply">
-        update base_provider_apply
+        update base_provider_apply_bak
         <trim prefix="SET" suffixOverrides=",">
             <if test="appointmentCall != null">appointment_call = #{appointmentCall},</if>
             <if test="outpatientInfo != null">outpatient_info = #{outpatientInfo},</if>
@@ -249,12 +381,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where provider_code = #{providerCode}
     </update>
 
+    <update id="updateBaseProviderApplyByCode" parameterType="BaseProviderApply">
+        update base_provider_apply_bak set update_flag = '1'
+        where provider_code = #{providerCode} and  update_flag = '0'
+    </update>
+
+    <update id="updateBaseProviderApplyByCodeNew" parameterType="BaseProviderApply">
+        update base_provider_apply set update_flag = '1' , status = 'N'
+        where  provider_code = #{providerCode} and status = 'Y'
+    </update>
+
     <delete id="deleteBaseProviderApplyById" parameterType="String">
-        delete from  base_provider_apply where provider_code = #{providerCode}
+        delete from  base_provider_apply_bak where provider_code = #{providerCode}
     </delete>
 
     <delete id="deleteBaseProviderApplyByIds" parameterType="String">
-        delete from base_provider_apply where provider_code in
+        delete from base_provider_apply_bak where provider_code in
         <foreach item="providerCode" collection="array" open="(" separator="," close=")">
             #{providerCode}
         </foreach>

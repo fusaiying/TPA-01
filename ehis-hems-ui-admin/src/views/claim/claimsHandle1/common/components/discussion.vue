@@ -8,77 +8,87 @@
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
             <div style="float: right;">
-              <el-button v-if="isButtonShow" type="primary" size="mini" >保存 </el-button>
-              <el-button v-if="isButtonShow" type="primary" size="mini" >审核完毕</el-button>
-              <el-button size="mini" type="primary">退回受理</el-button>
+              <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
+              <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
+              </el-button>
+              <el-button v-if="node!=='sport'" size="mini" type="primary" @click="backClaimCase">退回受理</el-button>
+
+              <el-button v-if="isButtonShow && node==='sport'" type="primary" @click="caseCheckOver" size="mini">抽检完毕
+              </el-button>
+              <el-button v-if="node==='sport'" type="primary" @click="backToCalculate" size="mini">退回审核</el-button>
             </div>
           </div>
         </div>
         <el-divider/>
 
-        <el-form v-if="isActiveSpan1" ref="conclusionForm" :model="conclusionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="rules"
+        <!-- 赔付结论 start -->
+        <el-form v-if="isActiveSpan1" ref="conclusionForm" :model="conclusionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="conRules"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">AAFFFFFFFFFFFFFFFFFFFFF</span>
+              <span class="info_span_col to_right">账单金额：</span><span class="info_span">300 CNY</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span">DD</span>
+              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">6000 CNY</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span">FFFFFFF</span>
+              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmount }}</span>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span_col">{{ conclusionInfo.contractNo }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span_col">{{ conclusionInfo.amount}}</span>
+              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span_col">{{ conclusionInfo.contractName }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.contractName }}</span>
+            </el-col>
+          </el-row>
+
+
+          <el-row>
+            <el-col :span="8">
+            <!--  <span class="info_span_col to_right">账单币种：</span>-->
+              <el-form-item label="账单币种：" prop="billCurrency">
+                <el-select  size="mini" v-model="conclusionForm.billCurrency" class= "el-select item-width el-select--mini" placeholder="请选择">
+                  <el-option  v-for="dict in currencys" :key="dict.dictValue"  :label="dict.dictLabel"  :value="dict.dictValue" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span money_class">{{ conclusionInfo.contractName }}</span>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额：</span><span class="info_span_col">{{ conclusionInfo.contractNo }}</span>
+              <el-form-item label="赔付结论：" prop="payConclusion">
+                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择">
+                  <el-option v-for="dict in conclusionSelect" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">追讨金额：</span><span class="info_span_col">{{ conclusionInfo.amount}}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span_col">{{ conclusionInfo.amount}}</span>
-            </el-col>
-          </el-row>
 
-          <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单币种：</span><span class="info_span_col">{{ conclusionInfo.contractNo }}</span>
+              <el-form-item label="拒赔原因：" prop="refusedReason">
+              <el-select  size="mini" v-model="conclusionForm.refusedReason" class= "el-select item-width el-select--mini" placeholder="请选择">
+                <el-option v-for="dict in rejectedReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
+              </el-select>
+              </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">汇率：</span><span class="info_span_col">{{ conclusionInfo.amount}}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span_col">{{ conclusionInfo.contractName }}</span>
-            </el-col>
-          </el-row>
 
-          <el-row>
-            <el-col :span="8">
-              <span class="info_span_col to_right">赔付结论：</span><span class="info_span_col">{{ conclusionInfo.contractNo }}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">拒赔原因：</span><span class="info_span_col">{{ conclusionInfo.amount}}</span>
-            </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="12">
               <el-form-item label="客户备注：" prop="remark">
                 <el-input  style="width:100%" col="2" type="textarea" row="4" maxlength="1000"
-                          v-model="conclusionForm.customerRemark" class="item-width" clearable size="mini"
+                          v-model="conclusionForm.remark" class="item-width" clearable size="mini"
                           placeholder=""/>
               </el-form-item>
             </el-col>
@@ -86,52 +96,52 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="核赔依据：" prop="remark">
+              <el-form-item label="核赔依据：" prop="claimCheck">
                 <el-input style="width:100%" col="2" type="textarea" row="4" maxlength="1000"
-                          v-model="conclusionForm.fileRemark" class="item-width" clearable size="mini"
+                          v-model="conclusionForm.claimCheck" class="item-width" clearable size="mini"
                           placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
 
-          <!--保存 关闭 start-->
-         <!-- <el-row >
-            <el-col :span="6" :offset="20">
-
-            </el-col>
-          </el-row>-->
-          <!--保存 关闭 end-->
-
         </el-form>
+        <!-- 赔付结论 end -->
 
-        <el-form v-if="isActiveSpan2" ref="discussionForm" :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="rules"
-                 label-position="right" size="mini">
+        <!-- 协谈 start -->
+        <el-form v-if="isActiveSpan2" ref="discussionForm" :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
           <el-row>
-
             <el-col :span="20" :xs="24">
-                <el-form-item label="协谈类型：" prop="fileType">
-                  <el-select v-model="discussionForm.discussType" class="item-width" size="mini" placeholder="请选择">
+                <el-form-item label="协谈类型：" prop="discType">
+                  <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择">
+                    <el-option v-for="item in negotiationTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                   </el-select>
                   <el-select v-model="discussionForm.idCard" class="item-width" size="mini" placeholder="请选择">
                   </el-select>
                 </el-form-item>
             </el-col>
-
           </el-row>
 
           <el-row>
             <el-col :span="20">
-              <el-form-item label="转出意见：" prop="remark">
-                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000"
-                          v-model="discussionForm.remark" clearable size="mini"
-                          placeholder=""/>
+              <el-form-item label="转出意见：" prop="disView">
+                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
 
-        </el-form>
+          <!--保存 start-->
+          <el-row >
+            <el-col :span="6" :offset="12">
+              <el-button type="primary" size="mini" @click="discussionSave">保存</el-button>
+            </el-col>
+          </el-row>
+          <!--保存 end-->
 
-        <el-form v-if="isActiveSpan3" ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="rules"
+        </el-form>
+        <!-- 协谈 end -->
+
+        <!-- 调查 start -->
+        <el-form v-if="isActiveSpan3" ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
@@ -168,15 +178,17 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="提调类型：" prop="Type">
-                <el-select v-model="surveyForm.Type" class="item-width" size="mini" placeholder="请选择">
+              <el-form-item label="提调类型：" prop="invType">
+                <el-select v-model="surveyForm.invType" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="item in dispatchTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="提调原因：" prop="reason">
-                <el-select v-model="surveyForm.reason" class="item-width" size="mini" placeholder="请选择">
+              <el-form-item label="提调原因：" prop="invReason">
+                <el-select v-model="surveyForm.invReason" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="item in initiateReasons" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -184,15 +196,17 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="调查机构：" prop="surProvider">
-                <el-select v-model="surveyForm.surProvider" class="item-width" size="mini" placeholder="请选择">
+              <el-form-item label="调查机构：" prop="invOrganCode">
+                <el-select v-model="surveyForm.invOrganCode" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="item in inquiryOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="提调机构：" prop="provider">
-                <el-select v-model="surveyForm.provider" class="item-width" size="mini" placeholder="请选择">
+              <el-form-item label="提调机构：" prop="organCode">
+                <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -205,15 +219,26 @@
             </el-col>
           </el-row>
 
-          <el-col :span="8">
-            <el-form-item label="提调事项：  "prop="contractNo" key="contractNo2">
-              <el-input maxlength="50" v-model="surveyForm.tdx" class="item-width"  clearable size="mini"
-                        placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
+          <el-row>
+            <el-col :span="23">
+              <el-form-item label="提调事项：" :style="{width:'100%'}" prop="invView">
+                <el-input v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
+          <!--保存 start-->
+          <el-row >
+            <el-col :span="6" :offset="20">
+              <el-button type="primary" size="mini" @click="inQuireSaveFun" >保存</el-button>
+              <el-button type="primary" size="mini"  @click="inQuireConfirmFun">确认提调</el-button>
+              <el-button type="primary" size="mini"  @click="formReset('surveyForm')">重置</el-button>
+            </el-col>
+          </el-row>
+          <!--保存 end-->
 
         </el-form>
+        <!-- 调查 end -->
       </div>
     </el-card>
 
@@ -221,24 +246,86 @@
 
 <script>
 
+  let that = this;
+  import { addDiscussion,
+          updateCal,
+          finishClaimCase ,
+          backToClaimCase,
+          inQuireConfirm,
+          inQuireSave,
+          calInfo,
+          verifyProReset,
+          verifyCurrency,
+          addRecoveryInfo,
+  } from '@/api/handel/common/api'
+  import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
+
   export default {
     components: {
     },
+    props: {
+      value: {
+        type: Boolean,
+        default: false
+      },
+      fixInfo:Object,
+      node:String
+    },
+    watch: {
+      value: function (newValue) {
+      },
+      fixInfo: function (newValue) {
+        this.fixInfoData = newValue;
+        this.rptNo = this.fixInfoData.rptNo;
+        this.batchNo = this.fixInfoData.batchNo;
+        if(this.rptNo != '') {
+          this.getCalInfo()
+        }
+      },
+    },
     data() {
       return {
+        rptNo:'',
+        batchNo:'',
+        fixInfoData:'',
         isButtonShow:true,
         //赔付结论信息 start
         conclusionInfo:{
+                        // 账单金额
+                         // 折扣金额
+          payAmount:'', // 赔付金额
+          refusedAmount:'', //拒赔金额
+          debtAmount:'', // 追讨金额
+                         // 本次支付差额
+          exchangeRate:'', // 汇率
+                          //外币给付金额
 
         },
         conclusionForm:{
-
+          billCurrency:'',
+          payConclusion:'',
+          refusedReason:'',
+          remark:'',
+          claimCheck:'',
         },
         //赔付结论信息 end
+        conRules: {
+          billCurrency: {trigger: ['change'], required: true, message: '账单币种必填'},
+          payConclusion: {trigger: ['change'], required: true, message: '赔付结论必填'},
+          refusedReason: {trigger: ['change'], required: true, message: '拒赔原因必填'},
+          remark: {trigger: ['change'], required: true, message: '客户备注必填'},
+          claimCheck: {trigger: ['change'], required: true, message: '核赔依据必填'},
+
+        },
 
         //协谈信息 start
         discussionForm:{
-
+          discType:'',
+          disView:'',
+        },
+        disRules: {
+          discType: {trigger: ['change'], required: true, message: '协谈类型必填'},
+          disView: {trigger: ['change'], required: true, message: '转出意见必填'},
         },
         //协谈信息 end
 
@@ -247,7 +334,20 @@
 
         },
         surveyForm:{
-
+          invType:'',
+          invReason:'',
+          invOrganCode:'',
+          organCode:'',
+          policyNo:'',
+          invView:'',
+        },
+        surRules: {
+          invType: {trigger: ['change'], required: true, message: '提调类型必填'},
+          invReason: {trigger: ['change'], required: true, message: '提调原因必填'},
+          invOrganCode: {trigger: ['change'], required: true, message: '调查机构必填'},
+          organCode: {trigger: ['change'], required: true, message: '提调机构必填'},
+        /*  policyNo: {trigger: ['change'], required: true, message: '保单号必填'},*/
+          invView: {trigger: ['change'], required: true, message: '提调事项必填'},
         },
 
         //tab 切换
@@ -256,37 +356,353 @@
         isActiveSpan2:false,
         isActiveSpan3:false,
 
+        //协谈类型
+        negotiationTypes:[],
+        //提调类型
+        dispatchTypes:[],
+        //提调原因
+        initiateReasons:[],
+        //调查机构
+        inquiryOrg:[],
+        //提调机构
+        initiateOrg:[],
+        //币种
+        currencys :[],
+        //赔付结论
+        conclusionSelect:[],
+        //拒赔原因
+        rejectedReasons :[],
+
       }
     },
+
     created() {
     },
     mounted() {
-    },
-    watch: {
+      this.getDicts("rejected_reasons").then(response => {
+        this.rejectedReasons = response.data;
+      });
+      //赔付结论 conclusion
+      this.getDicts("conclusion").then(response => {
+        this.conclusionSelect = response.data;
+      });
+      this.getDicts("currency").then(response => {
+        this.currencys = response.data;
+      });
+      //协谈类型
+      this.getDicts("negotiation_type").then(response => {
+        this.negotiationTypes = response.data;
+      });
+      //提调类型
+      this.getDicts("dispatch_type").then(response => {
+        this.dispatchTypes = response.data;
+      });
+      //提调原因
+      this.getDicts("initiate_reasons").then(response => {
+        this.initiateReasons = response.data;
+      });
+      //调查机构
+      this.getDicts("inquiry_org").then(response => {
+        this.inquiryOrg = response.data;
+      });
+      //提调机构
+      this.getDicts("initiate_org").then(response => {
+        this.initiateOrg = response.data;
+      });
     },
     computed: {
     },
     methods: {
+
+      discussionSave(){
+
+        this.$refs.discussionForm.validate((valid) => {
+          if (valid) {
+            if(this.rptNo == '') {
+              return false;
+            }
+
+            const params = {
+              rptNo : this.rptNo,
+              discType:this.discussionForm.discType,
+              disView:this.discussionForm.disView
+            };
+
+
+            addDiscussion(params).then(res => {
+              console.log(res);
+              if (res.code == '200') {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                });
+              } else {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                });
+              }
+            });
+            }
+          })
+      },
+
+      // 赔付结论保存
+      updateCalInfo(){
+          this.$refs.conclusionForm.validate((valid) => {
+            if (valid) {
+              if(this.rptNo == '') {
+                return false;
+              }
+              const params = {
+                rptNo : this.rptNo,
+                billCurrency:this.conclusionForm.billCurrency,
+                payConclusion:this.conclusionForm.payConclusion,
+                refusedReason:this.conclusionForm.refusedReason,
+                remark:this.conclusionForm.remark,
+                claimCheck:this.conclusionForm.claimCheck,
+                // calAmount:'0',
+                // payAmount:this.conclusionInfo.payAmount,
+                // refusedAmount:this.conclusionInfo.refusedAmount,
+                // debtAmount:this.conclusionInfo.debtAmount,
+              };
+
+              updateCal(params).then(res => {
+                console.log(res);
+                if (res.code == '200') {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  });
+                } else {
+                  this.$message({
+                    message: '保存失败！',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  });
+                }
+              });
+            }
+          })
+      },
+
+      // 赔付结论  审核完毕
+      examineSave(){
+        if(this.rptNo == '') {
+          return false;
+        }
+
+        //币种一致
+        const param = {
+          rptNo : this.rptNo,
+          batchNo: this.batchNo,
+          billCurrency: this.conclusionForm.billCurrency,
+        };
+        verifyCurrency(param).then(res => {
+          let vm = this;
+          if(res.code == '200' && res.msg != '操作成功') {
+            this.$confirm(res.msg, "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "info"
+            }).then(function () {
+              vm.verifyProReset();
+            }).then(() => {
+            }).catch(function (error) {
+              console.log(error)
+            });
+          } else if (res.code == '200' ){
+            vm.verifyProReset();
+          }
+        });
+      },
+
+      verifyProReset(){
+        const params = {
+          rptNo : this.rptNo,
+          batchNo: this.batchNo,
+          claimCheck:this.conclusionForm.claimCheck,
+          remark:this.conclusionForm.remark,
+        };
+
+        verifyProReset(params).then(res => {
+          let vm = this;
+          if(res.code == '200' && res.msg != '操作成功') {
+            this.$confirm(res.msg, "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "info"
+            }).then(function () {
+              vm.addRecoveryInfo();
+            }).then(() => {
+            }).catch(function (error) {
+              console.log(error)
+            });
+          } else if (res.code == '200' ){
+            vm.addRecoveryInfo();
+          }
+        });
+      },
+      addRecoveryInfo(){
+
+        if(this.conclusionInfo.debtAmount > 0) {
+          const params = {
+            rptNo : this.rptNo,
+            insuredNo: 'wXID999999999996',
+            debtAmount:this.conclusionInfo.debtAmount,
+          };
+
+          addRecoveryInfo(params).then(res => {
+            console.log(res);
+          });
+        }
+
+        const params = {
+          rptNo : this.rptNo,
+        };
+        // 审核完毕
+        finishClaimCase(params).then(res => {
+          if (res.code == '200') {
+            this.$message({
+              message: '审核成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            });
+          } else {
+            this.$message({
+              message: '审核失败！',
+              type: 'error',
+              center: true,
+              showClose: true
+            });
+          }
+        });
+      },
+      // 赔付结论  退回受理
+      backClaimCase(){
+        if(this.rptNo == '') {
+          return false;
+        }
+        const params = {};
+        params.rptNo = this.rptNo;
+        params.claimCheck = this.conclusionForm.claimCheck;
+        params.remark = this.conclusionForm.remark;
+
+        backToClaimCase(params).then(res => {
+          console.log(res);
+          if (res.code == '200') {
+            this.$message({
+              message: '退回成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            });
+          } else {
+            this.$message({
+              message: '退回失败！',
+              type: 'error',
+              center: true,
+              showClose: true
+            });
+          }
+        });
+      },
+      //调查保存
+      inQuireSaveFun(){
+        this.$refs.surveyForm.validate((valid) => {
+          if (valid) {
+            if(this.rptNo == '') {
+              return false;
+            }
+            const params = this.surveyForm;
+            params.rptNo = this.rptNo;
+            params.policyNo = 'teststttt';
+
+            inQuireSave(params).then(res => {
+              console.log(res);
+              if (res.code == '200') {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                });
+              } else {
+                this.$message({
+                  message: '保存失败！',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                });
+              }
+            });
+          }
+        })
+      },
+      // 调查 确认提调
+      inQuireConfirmFun(){
+        if(this.rptNo == '') {
+          return false;
+        }
+        const params = {};
+        params.rptNo = this.rptNo;
+
+        inQuireConfirm(params).then(res => {
+          console.log(res);
+          if (res.code == '200') {
+            this.$message({
+              message: '提调成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            });
+          } else {
+            this.$message({
+              message: '提调失败！',
+              type: 'error',
+              center: true,
+              showClose: true
+            });
+          }
+        });
+      },
+      getCalInfo() {
+        calInfo(this.rptNo).then(res => {
+          console.log(res);
+          if(res.code == '200') {
+            this.conclusionInfo = res.data;
+          }
+        });
+      },
+      formReset(fromName){
+        this.$refs[fromName].resetFields()
+      },
       activeFun(obj){
 
-       // console.log(obj);
         let id = obj.id;
-
         switch(obj.toElement.id) {
           case 'span1':
-            this.isButtonShow=true
+            this.isButtonShow=true;
             this.isActiveSpan1 = true;
             this.isActiveSpan2 = false;
             this.isActiveSpan3 = false;
             break;
           case 'span2':
-            this.isButtonShow=false
+            this.isButtonShow=false;
             this.isActiveSpan1 = false;
             this.isActiveSpan2 = true;
             this.isActiveSpan3 = false;
             break;
           case 'span3':
-            this.isButtonShow=false
+            this.isButtonShow=false;
             this.isActiveSpan1 = false;
             this.isActiveSpan2 = false;
             this.isActiveSpan3 = true;
@@ -294,9 +710,67 @@
           default :
         }
 
-
       },
+      //抽检完毕
+      caseCheckOver() {
+        let data = {
+          rptNo: this.fixInfo.rptNo
+        }
+        editCaseCheck(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.$message({
+              message: '抽检成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            });
+          }
+        }).catch(res => {
+          this.$message({
+            message: '抽检失败！',
+            type: 'error',
+            center: true,
+            showClose: true
+          });
+        })
+      },
+      //退回审核
+      backToCalculate() {
+        this.$confirm(`是否退回审核?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            rptNo: this.fixInfo.rptNo
+          }
+          editCaseCheckBack(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '退回审核成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              });
+              this.$router.push({path: '/claims-handle/review'});
+            }else {
+              this.$message({
+                message: '退回审核失败！',
+                type: 'error',
+                center: true,
+                showClose: true
+              });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消！'
+          })
+        })
+      }
     }
+
   }
 </script>
 
@@ -304,7 +778,13 @@
   .item-width {
     width: 220px;
   }
+  .long-input /deep/ .el-form-item__content {
+    width: calc(100% - 150px);
+  }
 
+  .money_class{
+    color: #2CC38E
+  }
   /deep/.el-tabs__item.is-disabled {
     color: #303133;
     cursor:default

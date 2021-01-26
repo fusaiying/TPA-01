@@ -1,13 +1,15 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
-import com.paic.ehis.base.service.IBaseSupplierOutletsService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.base.domain.BaseSupplierOutlets;
 import com.paic.ehis.base.mapper.BaseSupplierOutletsMapper;
+import com.paic.ehis.base.mapper.OutletsMapper;
+import com.paic.ehis.base.service.IBaseSupplierOutletsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -21,6 +23,15 @@ public class BaseSupplierOutletsServiceImpl implements IBaseSupplierOutletsServi
 {
     @Autowired
     private BaseSupplierOutletsMapper baseSupplierOutletsMapper;
+    @Autowired
+    private OutletsMapper outletsMapper;
+
+    @Override
+    public List<BaseSupplierOutlets> selectOutletsList(BaseSupplierOutlets baseSupplierOutlets){
+
+        return outletsMapper.selectOutletsList(baseSupplierOutlets);
+    }
+
 
     /**
      * 查询base_supplier_outlets（服务网点配置）
@@ -56,6 +67,8 @@ public class BaseSupplierOutletsServiceImpl implements IBaseSupplierOutletsServi
     public int insertBaseSupplierOutlets(BaseSupplierOutlets baseSupplierOutlets)
     {
         baseSupplierOutlets.setCreateTime(DateUtils.getNowDate());
+        baseSupplierOutlets.setUpdateTime(DateUtils.getNowDate());
+        baseSupplierOutlets.setSerialNo(PubFun.createMySqlMaxNoUseCache("derialno", 10, 9));
         return baseSupplierOutletsMapper.insertBaseSupplierOutlets(baseSupplierOutlets);
     }
 
@@ -70,6 +83,13 @@ public class BaseSupplierOutletsServiceImpl implements IBaseSupplierOutletsServi
     {
         baseSupplierOutlets.setUpdateTime(DateUtils.getNowDate());
         return baseSupplierOutletsMapper.updateBaseSupplierOutlets(baseSupplierOutlets);
+    }
+
+    @Override
+    public int updateBaseSupplierOutletsStatus( BaseSupplierOutlets baseSupplierOutlets)
+    {
+        String websiteCode=baseSupplierOutlets.getWebsiteCode();
+        return baseSupplierOutletsMapper.updateBaseSupplierOutletsStatus(websiteCode);
     }
 
     /**

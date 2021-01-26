@@ -64,16 +64,31 @@ public class BaseContractServiceController extends BaseController
         return AjaxResult.success(baseContractServiceService.selectBaseContractServiceById(contractNo));
     }
 
+
+
+
+
     /**
      * 新增base_contract_service（合约服务项目）
      */
     @PreAuthorize("@ss.hasPermi('system:service:add')")
     @Log(title = "base_contract_service（合约服务项目）", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("add")
     public AjaxResult add(@RequestBody BaseContractService baseContractService)
     {
-        return toAjax(baseContractServiceService.insertBaseContractService(baseContractService));
+        return AjaxResult.success(baseContractServiceService.insertBaseContractService(baseContractService));
     }
+
+    @PreAuthorize("@ss.hasPermi('system:service:addlist')")
+
+    //批量新增
+    @PostMapping("/addList")
+    public AjaxResult addlist(@RequestBody List<BaseContractService> baseContractServiceList)
+    {
+        return toAjax(baseContractServiceService.insertForeach(baseContractServiceList));
+    }
+
+
 
     /**
      * 修改base_contract_service（合约服务项目）
@@ -95,5 +110,15 @@ public class BaseContractServiceController extends BaseController
     public AjaxResult remove(@PathVariable String[] contractNos)
     {
         return toAjax(baseContractServiceService.deleteBaseContractServiceByIds(contractNos));
+    }
+
+    /**
+     * 根据合约编码删除base_contract_service
+     */
+    @PreAuthorize("@ss.hasPermi('system:service:serialNo')")
+    @DeleteMapping("/once/{serialNo}")
+    public AjaxResult removeById(@PathVariable String serialNo)
+    {
+        return toAjax(baseContractServiceService.deleteBaseContractServiceById(serialNo));
     }
 }

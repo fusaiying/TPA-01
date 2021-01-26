@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseServiceCategoryKindMapper">
+    
+    <resultMap type="BaseServiceCategoryKind" id="BaseServiceCategoryKindResult">
+        <result property="codei"    column="codeI"    />
+        <result property="category"    column="category"    />
+        <result property="codeii"    column="codeII"    />
+        <result property="variety"    column="variety"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="SysDictData" id="SysDictDataResult">
+        <result property="dictCode"    column="dict_code"    />
+        <result property="dictSort"    column="dict_sort"    />
+        <result property="dictLabel"    column="dict_label"    />
+        <result property="dictValue"    column="dict_value"    />
+        <result property="dictType"    column="dict_type"    />
+        <result property="cssClass"    column="css_class"    />
+        <result property="listClass"    column="list_class"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBaseServiceCategoryKindVo">
+        select codeI, category, codeII, variety, create_by, create_time, update_by, update_time from base_service_category_kind
+    </sql>
+
+    <select id="selectBaseServiceCategoryKindList" parameterType="BaseServiceCategoryKind" resultMap="BaseServiceCategoryKindResult">
+        <include refid="selectBaseServiceCategoryKindVo"/>
+        <where>  
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="variety != null  and variety != ''"> and variety = #{variety}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseServiceCategoryKindById" parameterType="String" resultMap="BaseServiceCategoryKindResult">
+        <include refid="selectBaseServiceCategoryKindVo"/>
+        where codeI = #{codei}
+    </select>
+        
+    <insert id="insertBaseServiceCategoryKind" parameterType="BaseServiceCategoryKind">
+        insert into base_service_category_kind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="codei != null">codeI,</if>
+            <if test="category != null and category != ''">category,</if>
+            <if test="codeii != null">codeII,</if>
+            <if test="variety != null and variety != ''">variety,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="codei != null">#{codei},</if>
+            <if test="category != null and category != ''">#{category},</if>
+            <if test="codeii != null">#{codeii},</if>
+            <if test="variety != null and variety != ''">#{variety},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseServiceCategoryKind" parameterType="BaseServiceCategoryKind">
+        update base_service_category_kind
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="category != null and category != ''">category = #{category},</if>
+            <if test="codeii != null">codeII = #{codeii},</if>
+            <if test="variety != null and variety != ''">variety = #{variety},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where codeI = #{codei}
+    </update>
+
+    <delete id="deleteBaseServiceCategoryKindById" parameterType="String">
+        delete from base_service_category_kind where codeI = #{codei}
+    </delete>
+
+    <delete id="deleteBaseServiceCategoryKindByIds" parameterType="String">
+        delete from base_service_category_kind where codeI in 
+        <foreach item="codei" collection="array" open="(" separator="," close=")">
+            #{codei}
+        </foreach>
+    </delete>
+
+    <select id="selectCategoryType" resultMap="SysDictDataResult">
+        select distinct a.codeI dict_value,a.category dict_label from base_service_category_kind a;
+    </select>
+
+    <select id="selectServerType" parameterType="String" resultMap="SysDictDataResult">
+        select a.codeII dict_value,a.variety dict_label from base_service_category_kind a where a.codeI= #{category}
+    </select>
+    
+</mapper>

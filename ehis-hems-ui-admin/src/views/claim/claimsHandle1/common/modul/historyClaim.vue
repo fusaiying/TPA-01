@@ -21,17 +21,17 @@
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}">
-          <el-table-column prop="contractNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-          <el-table-column prop="contractName" label="报案号" width="150%" align="center" show-overflow-tooltip />
-          <el-table-column prop="" label="案件状态" align="center"  show-overflow-tooltip />
-          <el-table-column prop="servcomNo" label="被保险人"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contractType" label="证件号码"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="分单号"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="就诊日期"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="赔付结论"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="给付金额"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="审核人"  align="center" show-overflow-tooltip />
-          <el-table-column prop="contracttermType" label="有无调查"  align="center" show-overflow-tooltip />
+          <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
+          <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+          <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" align="center"  show-overflow-tooltip />
+          <el-table-column prop="name" label="被保险人"  align="center" show-overflow-tooltip />
+          <el-table-column prop="idNo" label="证件号码"  align="center" show-overflow-tooltip />
+          <el-table-column prop="policyItemNo" label="分单号"  align="center" show-overflow-tooltip />
+          <el-table-column prop="accDate" label="就诊日期"  align="center" show-overflow-tooltip />
+          <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论"  align="center" show-overflow-tooltip />
+          <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
+          <el-table-column prop="operator" label="审核人"  align="center" show-overflow-tooltip />
+          <el-table-column prop="investigation" label="有无调查"  align="center" show-overflow-tooltip />
         </el-table>
         <!--分页组件-->
         <pagination
@@ -46,21 +46,31 @@
 </template>
 
 <script>
-/*  import { } from '@/api/contractManage/contractManagement'*/
+  import { claimInformation } from '@/api/handel/common/api'
   export default {
     props: {
       value: {
         type: Boolean,
         default: false
       },
+      fixInfo:Object
     },
     watch: {
       value: function (newValue) {
-        this.dialogVisable = newValue
+        this.dialogVisable = newValue;
+        if(this.dialogVisable) {
+          this.initData();
+        }
+      },
+      fixInfo: function (newValue) {
+        this.fixInfoData = newValue;
+        this.rptNo = this.fixInfoData.rptNo;
       },
     },
     data() {
       return {
+        fixInfoData : '',
+        rptNo :'',
         dialogVisable: false,
         tableData: [],
         totalNum: 0,
@@ -71,26 +81,57 @@
         },
 
         loading: false,
+        claimStatusSelect:[],
+        conclusionSelect:[],
       }
     },
     mounted(){
-     /* this.getDicts("contract_limit_type").then(response => {
-        this.contractLimitTypes = response.data;
-      });*/
+      //案件状态 claim_status
+      this.getDicts("claim_status").then(response => {
+        this.claimStatusSelect = response.data;
+      });
+      //赔付结论 conclusion
+      this.getDicts("conclusion").then(response => {
+        this.conclusionSelect = response.data;
+      });
     },
     computed: {
 
     },
-
     created: function() {
-      this.initData();
+
     },
     methods: {
       initData(){
+        if(this.rptNo == '') {
+          return false;
+        }
 
+        this.loading = true;
+        const params = {};
+        params.pageNum = this.pageInfo.currentPage;
+        params.pageSize = this.pageInfo.pageSize;
+        params.rptNo = this.rptNo;
+
+        claimInformation(params).then(res => {
+          console.log(res);
+          if (res.code == '200') {
+            this.totalNum = res.total;
+            this.tableData = res.rows;
+          }
+          this.loading = false
+        });
+      },
+      getClaimStatusName(row,col){
+        return this.selectDictLabel(this.claimStatusSelect, row.caseStatus)
+      },
+      getConclusionName(row,col){
+        return this.selectDictLabel(this.conclusionSelect, row.payConclusion)
       },
       exportData(){
-
+        const params = {};
+        params.rptNo = this.rptNo;
+        this.download('system/case/exportClaimInformation', params, `FYX_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框
       changeDialogVisable() {

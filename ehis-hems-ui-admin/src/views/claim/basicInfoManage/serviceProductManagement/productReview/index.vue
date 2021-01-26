@@ -25,26 +25,27 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
+<!--          <el-col :span="8">
             <el-form-item label="状态：" prop="bussinessStatus">
               <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
                 <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                            :key="item.dictValue"/>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
 
 
         </el-row>
         <div style="text-align: right; margin-right: 10px;">
           <el-button
             size="mini"
-            type="primary"
+            type="success"
+            icon="el-icon-search"
 
             @click="searchHandle"
           >查询
           </el-button>
-          <el-button size="mini"   @click="resetForm">重置</el-button>
+          <el-button size="mini"  type="primary" icon="el-icon-refresh-left"  @click="resetForm">重置</el-button>
         </div>
       </el-form>
       <el-divider/>
@@ -110,7 +111,7 @@ export default {
       },
 
 
-      tableData: [{productCode: 'xx'}],
+      tableData: [],
       totalCount: 0,
       loading: false,
 
@@ -119,7 +120,7 @@ export default {
 
       productTypeOptions:[],
 
-      product_bussiness_statusOptions: [],
+      product_review_statusOptions: [],
       productTimeTimeOptions:[]
     }
   },
@@ -127,8 +128,8 @@ export default {
   //获取产品定义信息
     this.getData()
 
-    this.getDicts("product_bussiness_status").then(response => {
-      this.product_bussiness_statusOptions = response.data;
+    this.getDicts("product_review_status").then(response => {
+      this.product_review_statusOptions = response.data;
     });
     this.getDicts("productType").then(response => {
       this.productTypeOptions = response.data;
@@ -148,7 +149,7 @@ export default {
       return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
     },
     getBussinessStatus(row){
-      return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
+      return this.selectDictLabel(this.product_review_statusOptions, row.bussinessStatus)
     },
 
     //查询

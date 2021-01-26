@@ -183,19 +183,19 @@
               <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
               <el-table-column align="center" prop="policyItemNo" label="分单号" show-overflow-tooltip/>
               <el-table-column align="center" prop="name" label="被保人" show-overflow-tooltip/>
-              <el-table-column align="center" prop="riskName" label="险种名称" show-overflow-tooltip/>
+              <el-table-column align="center" prop="appName" label="投保人" show-overflow-tooltip/>
               <el-table-column align="center"  label="有限日期" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span v-if="scope.row">{{ scope.row.validStartDate }}~{{ scope.row.validEndDate }}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="policyRiskType" label="保单险类" show-overflow-tooltip/>
+              <el-table-column align="center" prop="policyRiskType" label="保单险类" :formatter="getPolicyRiskType" show-overflow-tooltip/>
               <el-table-column align="center" prop="policyStatus" label="保单状态" show-overflow-tooltip :formatter="getPolicy_status"/>
               <el-table-column align="center" prop="specialAgreement" label="特约信息" show-overflow-tooltip/>
               <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
               <el-table-column align="center" prop="policyType" label="保单类型" show-overflow-tooltip :formatter="getPolicy_type"/>
               <el-table-column align="center" prop="ssFlag" label="社保标记" show-overflow-tooltip :formatter="getSocialinsurance1"/>
-              <el-table-column label="操作" align="center" width="100" show-overflow-tooltip fixed="right">
+<!--              <el-table-column label="操作" align="center" width="100" show-overflow-tooltip fixed="right">
                 <template slot-scope="scope">
                     <span>
                       <el-button type="text" size="mini"
@@ -204,7 +204,7 @@
                                   @click="delHandle(scope.$index, scope.row)">下载</el-button>
                     </span>
                 </template>
-              </el-table-column>
+              </el-table-column>-->
 
 
             </el-table>
@@ -216,6 +216,7 @@
         <el-table-column  align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
         <el-table-column align="center" prop="sex" label="性别" :formatter="getSex"  show-overflow-tooltip/>
         <el-table-column align="center" prop="birthday" label="出生日期" show-overflow-tooltip/>
+        <el-table-column align="center" prop="UHCGVIPNo" label="UHCG会员号" show-overflow-tooltip/>
       </el-table>
       <!--    <el-pagination
             :total="queryPolicyDataPaging.totalPages"
@@ -353,6 +354,7 @@ export default {
       rgtSexOptions: [],
       policy_typeOptions: [],
       socialinsurance1Options: [],
+      insurance_typeOptions: [],
 
       getRowKeys(row) {
         return row.id
@@ -364,11 +366,13 @@ export default {
   watch: {
     value: function (newValue) {
       this.dialogVisable = newValue
-
+      this.getDataList()
     },
     fixInfo: function (newVal){
 
       this.copyFixInfo=newVal
+      console.log('------------')
+      console.log(this.copyFixInfo)
     },
 
   },
@@ -402,9 +406,15 @@ export default {
     this.getDicts("socialinsurance1").then(response => {
       this.socialinsurance1Options = response.data;
     });
-    this.getDataList()
+    this.getDicts("insurance_type").then(response => {
+      this.insurance_typeOptions = response.data;
+    });
+    //this.getDataList()
   },
   methods: {
+    getPolicyRiskType(row, col) {
+      return this.selectDictLabel(this.insurance_typeOptions, row.policyRiskType)
+    },
     getPolicy_status (row, col) {
       return this.selectDictLabel(this.policy_statusOptions, row.policyStatus)
     },
@@ -445,6 +455,7 @@ export default {
                   center: true,
                   showClose: true
                 })
+                this.$router.push({path: '/claims-handle/pbclaim'});
               }
             })
           }).catch(() => {

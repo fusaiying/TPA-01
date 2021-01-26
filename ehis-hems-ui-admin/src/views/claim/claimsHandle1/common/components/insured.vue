@@ -5,19 +5,24 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;被保人信息</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;被保人信息</i>
         <span style="float: right;">
-         <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed" size="mini" @click="policySearch">查询</el-button>
-         <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed" size="mini" @click="saveHandle">保存</el-button>
+         <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed" size="mini"
+                    @click="policySearch">查询</el-button>
+         <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed" size="mini"
+                    @click="saveHandle">保存</el-button>
       </span>
       </div>
 
     </div>
-    <el-form v-show="collapsed" ref="baseForm" :rules="tableFormRules" :disabled="(node === 'accept' && status === 'show')||node==='input'"
+    <el-form v-show="collapsed" ref="baseForm" :rules="tableFormRules"
+             :disabled="(node === 'accept' && status === 'show')||node==='input' || node==='calculateReview'"
              :model="baseForm"
              style="padding-bottom: 30px;" label-width="150px" size="mini" class="baseInfo_class">
       <el-row>
         <el-col :span="8">
           <el-form-item label="客户号：" prop="insuredNo">
-            <span class="size">{{ baseForm.insuredNo }}</span>
+            <el-input v-model="baseForm.insuredNo" class="item-width" clearable
+                      size="mini" disabled/>
+<!--            <span class="size">{{ baseForm.insuredNo }}</span>-->
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -175,30 +180,34 @@
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="name" label="被保人" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskName" label="险种名称" show-overflow-tooltip/>
-          <el-table-column align="center"  label="有效日期" show-overflow-tooltip>
+          <el-table-column align="center" prop="appName" label="投保人" show-overflow-tooltip/>
+          <el-table-column align="center" label="有效日期" show-overflow-tooltip>
             <template slot-scope="scope">
               <span v-if="scope.row">{{ scope.row.validStartDate }}~{{ scope.row.validEndDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyRiskType" label="保单险类" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyStatus" label="保单状态" :formatter="getPolicy_status" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyRiskType" label="保单险类" :formatter="getPolicyRiskType" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyStatus" label="保单状态" :formatter="getPolicy_status"
+                           show-overflow-tooltip/>
           <el-table-column align="center" prop="specialAgreement" label="特约信息" show-overflow-tooltip/>
           <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyType" label="保单类型" :formatter="getPolicy_type" show-overflow-tooltip/>
-          <el-table-column align="center" prop="ssFlag" label="社保标记" :formatter="getSocialinsurance1" show-overflow-tooltip/>
-          <el-table-column label="操作" width="120" align="center">
+          <el-table-column align="center" prop="policyType" label="保单类型" :formatter="getPolicy_type"
+                           show-overflow-tooltip/>
+          <el-table-column align="center" prop="ssFlag" label="社保标记" :formatter="getSocialinsurance1"
+                           show-overflow-tooltip/>
+<!--          <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="preview(scope.row)">预览</el-button>
               <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="download(scope.row)">下载
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column>-->
         </el-table>
       </el-row>
     </el-form>
     <!-- 保单信息查询模态框 -->
-    <insured-modal :value="dialogPolicy" :dictList="dictList" :node="node" @infoShow="insuredInfoShow"  @getPropData="getPropData" :fixInfo="fixInfo"
+    <insured-modal :value="dialogPolicy" :dictList="dictList" :node="node" @infoShow="insuredInfoShow"
+                   @getPropData="getPropData" :fixInfo="fixInfo"
                    @lightShow="lightListDeal" @closeDialogVisable="closeDialogVisable"/>
   </el-card>
 </template>
@@ -211,7 +220,7 @@
 
   import {addInsuredAndPolicy} from '@/api/claim/handleCom'
 
-  let dictss = [{dictType: 'rgtSex'}, {dictType: 'card_type'},{dictType: 'insurance_type'},{dictType: 'policy_status'}, {dictType: 'policy_type'},{dictType: 'socialinsurance1'}]
+  let dictss = [{dictType: 'rgtSex'}, {dictType: 'card_type'}, {dictType: 'insurance_type'}, {dictType: 'policy_status'}, {dictType: 'policy_type'}, {dictType: 'socialinsurance1'}]
   export default {
     components: {
       insuredModal
@@ -220,39 +229,39 @@
     props: {
       fixInfo: {
         type: Object,
-        default: function (){
+        default: function () {
           return {}
         }
       },
-      status:String,
-      node:String,
-      sonInsuredData:{
+      status: String,
+      node: String,
+      sonInsuredData: {
         type: Object,
-        default:function (){
+        default: function () {
           return {}
         }
       },
     },
     watch: {
-      fixInfo: function (newVal){
-        this.copyFixInfo=newVal
+      fixInfo: function (newVal) {
+        this.copyFixInfo = newVal
       },
       sonInsuredData: {
-        handler: function (newVal){
-        this.init()
+        handler: function (newVal) {
+          this.init()
         },
-        deep: true
+        deep: true,
 
       },
-/*      sonInsuredData: function (newVal){
-        if (newVal!==null && newVal!==undefined){
-          this.baseForm=newVal.claimCaseInsured
-          this.tableData=newVal.policyInfominData
-          this.region.push(this.baseForm.province)
-          this.region.push(this.baseForm.city)
-          this.region.push(this.baseForm.district)
-        }
-      }*/
+      /*      sonInsuredData: function (newVal){
+              if (newVal!==null && newVal!==undefined){
+                this.baseForm=newVal.claimCaseInsured
+                this.tableData=newVal.policyInfominData
+                this.region.push(this.baseForm.province)
+                this.region.push(this.baseForm.city)
+                this.region.push(this.baseForm.district)
+              }
+            }*/
     },
 
     data() {
@@ -306,6 +315,27 @@
           callback()
         }
       }
+      const checkDateRange = (rule, value, callback) => {
+        if(this.baseForm.checked){
+          callback()
+        }
+        else{
+          if(this.baseForm.dateRange!=null && this.baseForm.dateRange.length==2){
+
+            if(this.baseForm.dateRange[0] !=null && this.baseForm.dateRange[0]!='' && this.baseForm.dateRange[1]!=null && this.baseForm.dateRange[1]!=''){
+              callback()
+            }
+            else {
+
+              callback(new Error('证件有效期不能为空!'))
+            }
+          }
+          else {
+
+            callback(new Error('证件有效期不能为空!'))
+          }
+        }
+      }
       let checkValid2 = (rule, value, callback) => {
         /* if (value) {
            let str = value.replace(/(^\s*)|(\s*$)/g, "")
@@ -318,26 +348,28 @@
            callback(new Error('不能为空！'))
          }*/
       }
+
       return {
-        isInsuredSave:false,
+        hasInsuredId:false,
+        isInsuredSave: false,
         copyFixInfo: {},
-        minLoading:false,
+        minLoading: false,
         collapsed: true,
         dialogPolicy: false,
         showFlag: false,
         searchForm: {},
         tableFormRules: {
-          insuredNo:{required: true, message: '客户号不能为空!', trigger: 'blur'},
-          name:{required: true, message: '姓名不能为空!', trigger: 'blur'},
-          idType:{required: true, message: '证件类型不能为空!', trigger: 'blur'},
-          idNo:{required: true, message: '证件号码不能为空!', trigger: 'blur'},
-          sex:{required: true, message: '性别不能为空!', trigger: 'blur'},
-          birthday:{required: true, message: '出生日期不能为空!', trigger: 'blur'},
-          dateRange:{required: true, message: '证件有效期不能为空!', trigger: 'blur'},
+          insuredNo: {required: true, message: '客户号不能为空!', trigger: 'blur'},
+          name: {required: true, message: '姓名不能为空!', trigger: 'blur'},
+          idType: {required: true, message: '证件类型不能为空!', trigger: 'blur'},
+          idNo: {required: true, message: '证件号码不能为空!', trigger: 'blur'},
+          sex: {required: true, message: '性别不能为空!', trigger: 'blur'},
+          birthday: {required: true, message: '出生日期不能为空!', trigger: 'blur'},
+          dateRange: {required: true,validator: checkDateRange,  trigger: ['blur','change']},
 
-           email: {validator: validateEmail, trigger: 'blur'},
-           phone: {validator: checkValid, trigger: 'blur'},
-           checkMobie: {validator: checkPhone, trigger: 'blur'},
+          email: {validator: validateEmail, trigger: 'blur'},
+          phone: {validator: checkValid, trigger: 'blur'},
+          checkMobie: {validator: checkPhone, trigger: 'blur'},
 
           /* isReceipt: {required: true, message: '不能为空!', trigger: 'change'},
            nationality: {required: true, message: '不能为空!', trigger: 'change'},
@@ -366,11 +398,11 @@
           idType: undefined,
           idNo: undefined,
           sex: undefined,
-          birthDate: undefined,
+          birthday: undefined,
           occupation: undefined,
           nationality: undefined,
-          dateRange: [],
-          idStartDate :undefined,
+          dateRange: [], //
+          idStartDate: '',
           idEndDate: undefined,
           mobile: undefined,
           province: undefined,
@@ -378,23 +410,25 @@
           district: undefined,
           email: undefined,
           phone: undefined,
-          checked: false,
+          address:undefined,
+          checked: false, //
         },
+
         tableData: [],
         insuredAndPolicy: [],
         lightList: [],
         saveform: {
           tableData: []
         },
-        dictList:[],
+        dictList: [],
         rgtSexOptions: [],
         card_typeOptions: [],
         insurance_typeOptions: [],
         policy_statusOptions: [],
         policy_typeOptions: [],
         socialinsurance1Options: [],
-        occupationOptions: [{dictLable: '01',dictValue:'老师'},{dictLable: '02',dictValue:'销售'}],
-        nativeplaceOptions: [{dictLable: '01',dictValue:'中国'},{dictLable: '02',dictValue:'韩国'}],
+        occupationOptions: [{dictLable: '01', dictValue: '老师'}, {dictLable: '02', dictValue: '销售'}],
+        nativeplaceOptions: [{dictLable: '01', dictValue: '中国'}, {dictLable: '02', dictValue: '韩国'}],
       }
     },
     computed: {
@@ -432,58 +466,133 @@
       }).dictDate
 
 
-
-
-
-      if (this.node === 'report') {
+/*      if (this.node === 'report') {
         this.tableFormRules.dateRange = {required: false, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
       } else {
         this.tableFormRules.dateRange = {required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
-      }
+      }*/
       this.getAddressData()
     },
     created() {
 
     },
     methods: {
-      init(){
+      init() {
         this.getAddressData()
         const subFormSearch = JSON.parse(JSON.stringify(this.sonInsuredData))
-        this.baseForm=subFormSearch.claimCaseInsured
 
-        this.baseForm.dateRange=[]
-        this.baseForm.dateRange[0]=subFormSearch.idStartDate
-        this.baseForm.dateRange[1]=subFormSearch.idEndDate
-        this.region=[]
-        this.region[0]= this.baseForm.province
-        this.region[1]= this.baseForm.city
-        this.region[2]= this.baseForm.district
-        this.tableData=subFormSearch.policyInfominData
-    /*    this.$nextTick(() =>{
+          let baseFormData = subFormSearch.claimCaseInsured
+//this.baseForm.checked=false
+          this.$set(this.baseForm, 'checked', false)
+          this.baseForm.insuredNo = baseFormData.insuredNo
+          this.baseForm.name = baseFormData.name
+          this.baseForm.idType = baseFormData.idType
+          this.baseForm.idNo = baseFormData.idNo
+          this.baseForm.sex = baseFormData.sex
+          this.baseForm.birthday = baseFormData.birthday
+          this.baseForm.occupation = baseFormData.occupation
+          this.baseForm.nationality = baseFormData.nationality
+          this.baseForm.idStartDate = baseFormData.idStartDate
+          this.baseForm.idEndDate = baseFormData.idEndDate
+          this.baseForm.mobile = baseFormData.mobile
+          this.baseForm.province = baseFormData.province
+          this.baseForm.city = baseFormData.city
+          this.baseForm.district = baseFormData.district
+          this.baseForm.phone = baseFormData.phone
+          this.baseForm.email = baseFormData.email
+          this.baseForm.address = baseFormData.address
+          this.baseForm.dateRange = []
 
-        })*/
+
+          /* this.baseForm.dateRange[0] =  this.baseForm.idStartDate
+        this.baseForm.dateRange[1] =  this.baseForm.idStartDate*/
+
+          //this.baseForm.idEndDate = '9999-12-31'
+          if (this.baseForm.idEndDate == '9999-12-31') {
+            this.$set(this.baseForm, 'checked', true)
+            this.baseForm.dateRange = []
+          } else {
+            this.$set(this.baseForm, 'checked', false)
+            this.baseForm.dateRange[0] = this.baseForm.idStartDate
+            this.baseForm.dateRange[1] = this.baseForm.idEndDate
+          }
 
 
+          this.region = []
+          this.region[0] = this.baseForm.province
+          this.region[1] = this.baseForm.city
+          this.region[2] = this.baseForm.district
+          this.tableData = subFormSearch.policyInfominData
+
+        /*    this.$nextTick(() =>{
+
+            })*/
+
+        //别删  通过是否有id来判断是否保存过
+        if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
+          this.hasInsuredId=true
+        }
       },
-      getPropData(val){
+      getPropData(val) {
         const subFormSearch = JSON.parse(JSON.stringify(val))
+        let baseFormData = subFormSearch.caseInsuredData
 
-        this.baseForm=subFormSearch.caseInsuredData
 
-        let i=subFormSearch.caseInsuredData.province
-        this.region=[]
-        this.region.push(subFormSearch.caseInsuredData.province)
-        this.region.push(subFormSearch.caseInsuredData.city)
-        this.region.push(subFormSearch.caseInsuredData.district)
-       /* this.baseForm.region=this.region*/
-      /*  this.baseForm.region[1]=subFormSearch.caseInsuredData.city
-        this.baseForm.region[2]=subFormSearch.caseInsuredData.district*/
+        this.baseForm.insuredNo=baseFormData.insuredNo
+        this.baseForm.name=baseFormData.name
+        this.baseForm.idType=baseFormData.idType
+        this.baseForm.idNo=baseFormData.idNo
+        this.baseForm.sex=baseFormData.sex
+        this.baseForm.birthday=baseFormData.birthday
+        this.baseForm.occupation=baseFormData.occupation
+        this.baseForm.nationality=baseFormData.nationality
+        this.baseForm.idStartDate=baseFormData.idStartDate
+        this.baseForm.idEndDate=baseFormData.idEndDate
+        this.baseForm.mobile=baseFormData.mobile
+        this.baseForm.province=baseFormData.province
+        this.baseForm.city=baseFormData.city
+        this.baseForm.district=baseFormData.district
+        this.baseForm.phone=baseFormData.phone
+        this.baseForm.email=baseFormData.email
+        this.baseForm.address=baseFormData.address
+        this.baseForm.dateRange = []
+        if (this.baseForm.idEndDate =='9999-12-31') {
+          this.$set(this.baseForm, 'checked', true)
+          this.baseForm.dateRange = []
+        }
+        else {
+          this.$set(this.baseForm, 'checked', false)
 
-        this.tableData=subFormSearch.policyInfoData
+          if(baseFormData.idStartDate!=null && baseFormData.idStartDate==''){
+            this.baseForm.dateRange[0] = baseFormData.idStartDate
+          }
+        else {
+            this.baseForm.dateRange[0] = undefined
+          }
+        if(baseFormData.idEndDate!=null && baseFormData.idEndDate==''){
+            this.baseForm.dateRange[1] = baseFormData.idEndDate
+          }
+        else {
+            this.baseForm.dateRange[1] = undefined
+          }
+        }
+
+
+        this.region = []
+        this.region[0] = this.baseForm.province
+        this.region[1] = this.baseForm.city
+        this.region[2] = this.baseForm.district
+
+
+        /* this.baseForm.region=this.region*/
+        /*  this.baseForm.region[1]=subFormSearch.caseInsuredData.city
+          this.baseForm.region[2]=subFormSearch.caseInsuredData.district*/
+
+        this.tableData = subFormSearch.policyInfoData
       },
 
-      closeDialogVisable(){
-        this.dialogPolicy=false
+      closeDialogVisable() {
+        this.dialogPolicy = false
       },
 
 
@@ -498,30 +607,39 @@
       },
 
       rulesFlag() {
-        if(this.baseForm.checked===true){
-          this.baseForm.dateRange[0]=''
-          this.baseForm.dateRange[1]='9999-12-31'
-        }else {
-          this.baseForm.dateRange=[]
+
+
+        if (this.baseForm.checked) {
+          this.baseForm.dateRange = []
+          this.baseForm.idEndDate = '9999-12-31'
+          this.baseForm.idStartDate=''
+         /* this.baseForm.dateRange[0] = ''
+          this.baseForm.dateRange[1] = '9999-12-31'*/
+        } else {
+          this.baseForm.dateRange = []
+          this.baseForm.idEndDate = ''
+          this.baseForm.idStartDate=''
         }
 
-       /* if (this.node === 'report') {
-          if (value === true) {
-            this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-            this.baseForm.dateRange = null
-          } else {
-            this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-          }
-        } else {
-          if (value === true) {
-            this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-            this.baseForm.dateRange = null
-         /!*   this.$refs.baseForm.validate((valid) => {
-            })*!/
-          } else {
-            this.tableFormRules.dateRange = {required: true, message: '不能为空!', trigger: ['blur', 'change']}
-          }
-        }*/
+
+
+        /* if (this.node === 'report') {
+           if (value === true) {
+             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
+             this.baseForm.dateRange = null
+           } else {
+             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
+           }
+         } else {
+           if (value === true) {
+             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
+             this.baseForm.dateRange = null
+          /!*   this.$refs.baseForm.validate((valid) => {
+             })*!/
+           } else {
+             this.tableFormRules.dateRange = {required: true, message: '不能为空!', trigger: ['blur', 'change']}
+           }
+         }*/
       },
 
 
@@ -549,47 +667,49 @@
 
 
         this.$refs.baseForm.validate((valid) => {
-              if(valid){
-                let policyNoList=[]
-                if(this.tableData.length>0){
-                  this.tableData.forEach(item => {
-                    policyNoList.push(item.policyNo)
-                  })
-                }
-                const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
-                subFormSearch.province = this.region[0]
-                subFormSearch.city = this.region[1]
-                subFormSearch.district = this.region[2]
-                subFormSearch.rptNo=this.copyFixInfo.rptNo
-                subFormSearch.idStartDate=this.baseForm.dateRange[0]
-                subFormSearch.idEndDate=this.baseForm.dateRange[1]
-                let insuredInfoData={
-                  policyNos: policyNoList,
-                  claimCaseInsured: subFormSearch
-                }
-                addInsuredAndPolicy(insuredInfoData).then(res => {
-                  if (res!=null && res.code === 200) {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                    this.isInsuredSave=true
-                    this.$emit('emitSaveFlag')
-                  } else {
-                    this.$message({
-                      message: '保存失败!',
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  }
+          if (valid) {
+            let policyNoList = []
+
+            if (this.tableData.length > 0) {
+              this.tableData.forEach(item => {
+                policyNoList.push(item.policyNo)
+              })
+            }
+            const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
+
+
+            subFormSearch.province = this.region[0]
+            subFormSearch.city = this.region[1]
+            subFormSearch.district = this.region[2]
+            subFormSearch.rptNo = this.copyFixInfo.rptNo
+            subFormSearch.idStartDate = this.baseForm.idStartDate
+            subFormSearch.idEndDate = this.baseForm.idEndDate
+            let insuredInfoData = {
+              policyNos: this.tableData,
+              claimCaseInsured: subFormSearch
+            }
+            addInsuredAndPolicy(insuredInfoData).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.isInsuredSave = true
+                this.$emit('emitSaveFlag')
+              } else {
+                this.$message({
+                  message: '保存失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
                 })
               }
-              else {
-                this.$message.warning('必录项未必录!')
-              }
+            })
+          } else {
+            this.$message.warning('必录项未必录!')
+          }
 
 
         })
@@ -617,8 +737,11 @@
         }
       },
 
-      getPolicy_status (row, col) {
+      getPolicy_status(row, col) {
         return this.selectDictLabel(this.policy_statusOptions, row.policyStatus)
+      },
+      getPolicyRiskType(row, col) {
+        return this.selectDictLabel(this.insurance_typeOptions, row.policyRiskType)
       },
       getPolicy_type(row, col) {
         return this.selectDictLabel(this.policy_typeOptions, row.policyType)

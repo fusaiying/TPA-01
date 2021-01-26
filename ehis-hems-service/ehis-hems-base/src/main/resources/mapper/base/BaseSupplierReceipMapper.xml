@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseSupplierReceipMapper">
     
     <resultMap type="com.paic.ehis.base.domain.BaseSupplierReceip" id="BaseSupplierReceipResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="supplierCode"    column="supplier_code"    />
         <result property="companyTitle"    column="company_title"    />
         <result property="dutynum"    column="dutynum"    />
@@ -20,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseSupplierReceipVo">
-        select supplier_code, company_title, dutynum, bill_info, acc_num, phone, address, status, create_by, create_time, update_by, update_time from base_supplier_receip
+        select serial_no,supplier_code, company_title, dutynum, bill_info, acc_num, phone, address, status, create_by, create_time, update_by, update_time from base_supplier_receip
     </sql>
 
     <select id="selectBaseSupplierReceipList" parameterType="com.paic.ehis.base.domain.BaseSupplierReceip" resultMap="BaseSupplierReceipResult">
@@ -38,12 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectBaseSupplierReceipById" parameterType="String" resultMap="BaseSupplierReceipResult">
         <include refid="selectBaseSupplierReceipVo"/>
-        where supplier_code = #{supplierCode}
+        where supplier_code = #{supplierCode} and status = 'Y'
     </select>
         
     <insert id="insertBaseSupplierReceip" parameterType="com.paic.ehis.base.domain.BaseSupplierReceip">
         insert into base_supplier_receip
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
             <if test="supplierCode != null">supplier_code,</if>
             <if test="companyTitle != null">company_title,</if>
             <if test="dutynum != null and dutynum != ''">dutynum,</if>
@@ -58,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="supplierCode != null">#{supplierCode},</if>
             <if test="companyTitle != null">#{companyTitle},</if>
             <if test="dutynum != null and dutynum != ''">#{dutynum},</if>
@@ -89,6 +92,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where supplier_code = #{supplierCode}
+    </update>
+    <update id="updatebaseSupplierReceipStatus" parameterType="String">
+        update base_supplier_receip set status = 'N'
+        where status='Y'and supplier_code = #{supplierCode}
     </update>
 
     <delete id="deleteBaseSupplierReceipById" parameterType="String">

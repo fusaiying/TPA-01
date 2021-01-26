@@ -1,11 +1,11 @@
 package com.paic.ehis.base.domain;
 
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 import java.util.List;
 
@@ -19,6 +19,9 @@ import java.util.List;
 public class BaseProviderService extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 服务商编码 */
+    private String serialNo;
 
     /** 服务商编码 */
     private String providerCode;
@@ -142,6 +145,52 @@ public class BaseProviderService extends BaseEntity
     /** 状态 */
     @Excel(name = "状态")
     private String status;
+
+    /** 状态 */
+    @Excel(name = "变更标志")
+    private String updateFlag;
+
+
+    /** 是否虚拟机构 */
+    @Excel(name = "是否虚拟机构")
+    private String virtualOrg;
+
+    @Excel(name = "是否全国前十")
+    private String topten;
+
+    /** 是否专科医院 */
+    @Excel(name = "是否专科医院")
+    private String specializedHospital;
+
+    /** 是否当地前三 */
+    @Excel(name = "是否当地前三")
+    private String topthird;
+
+    /** 是否全国专科前五 */
+    @Excel(name = "是否全国专科前五")
+    private String topfive;
+
+    /** 二证齐全是否发预授权书 */
+    @Excel(name = "二证齐全是否发预授权书")
+    private String continentFlag;
+
+    /** 二证齐全说明 */
+    @Excel(name = "二证齐全说明")
+    private String continent;
+
+    /** 预授权书发送及确认方式 */
+    @Excel(name = "预授权书发送及确认方式")
+    private String preauthsendway;
+
+    /** 导检/陪检/驻点 */
+    @Excel(name = "导检/陪检/驻点")
+    private String leadFlag;
+
+
+    private String orgFlag;
+
+
+
 
     public void setProviderCode(String providerCode) 
     {

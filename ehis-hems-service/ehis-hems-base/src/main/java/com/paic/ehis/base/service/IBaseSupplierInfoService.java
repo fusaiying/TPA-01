@@ -29,6 +29,10 @@ public interface IBaseSupplierInfoService
      */
     public List<BaseSupplierInfo> selectBaseSupplierInfoList(BaseSupplierInfo baseSupplierInfo) throws Exception;
 
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList1(BaseSupplierInfo baseSupplierInfo);
+
+    public List<BaseSupplierInfo> selectBaseSupplierInfoList2(BaseSupplierInfo baseSupplierInfo);
+
     /**
      * 新增base_supplier_info（供应商基础信息）
      * 
@@ -60,4 +64,7 @@ public interface IBaseSupplierInfoService
      * @return 结果
      */
     public int deleteBaseSupplierInfoById(String servcomNo);
+
+    public List<BaseSupplierInfo> getAllBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo);
+
 }

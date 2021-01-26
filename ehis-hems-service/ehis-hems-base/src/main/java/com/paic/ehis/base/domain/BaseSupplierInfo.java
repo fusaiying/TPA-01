@@ -2,10 +2,11 @@ package com.paic.ehis.base.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 import java.util.Date;
 import java.util.List;
@@ -16,21 +17,24 @@ import java.util.List;
  * @author sino
  * @date 2020-12-31
  */
-
+@Data
 public class BaseSupplierInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 前一个月日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dBefore1;
 
     /** 现在日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dNow1;
 
     /** 供应商编码 */
-    private String servcomNo;
+    private String serialNo;
+
+    /**业务状态*/
+    private String bussinessStatus;
 
     /** 服务机构中文名称 */
     @Excel(name = "服务机构中文名称")
@@ -68,17 +72,44 @@ public class BaseSupplierInfo extends BaseEntity
     @Excel(name = "详细地址")
     private String detailedAddress;
 
+
+    /** 详细地址 */
+    @Excel(name = "详细地址1")
+    private Object[] detail;
+
+    /** 详细地址 */
+    @Excel(name = "详细地址1")
+    private List<String> detailStr;
+
     /** 状态 */
     @Excel(name = "状态")
     private String status;
 
-    private List<BaseBank> baseBankList;
+    private String addressdetail;
 
-    private List<BaseContacts> baseContactsList;
+    private List<com.paic.ehis.base.domain.BaseBank> baseBankList;
 
-    private List<BaseSupplierOutlets> baseSupplierOutletsList;
+    private List<com.paic.ehis.base.domain.BaseContacts> baseContactsList;
 
-    private List<BaseSupplierReceip> baseSupplierReceipList;
+    private List<com.paic.ehis.base.domain.BaseSupplierOutlets> baseSupplierOutletsList;
+
+    private List<com.paic.ehis.base.domain.BaseSupplierReceip> baseSupplierReceipList;
+
+    public String getBussinessStatus() {
+        return bussinessStatus;
+    }
+
+    public void setBussinessStatus(String bussinessStatus) {
+        this.bussinessStatus = bussinessStatus;
+    }
+
+    public String getAddressdetail() {
+        return addressdetail;
+    }
+
+    public void setAddressdetail(String addressdetail) {
+        this.addressdetail = addressdetail;
+    }
 
     public Date getdBefore1() {
         return dBefore1;
@@ -96,46 +127,64 @@ public class BaseSupplierInfo extends BaseEntity
         this.dNow1 = dNow1;
     }
 
-    public List<BaseBank> getBaseBankList() {
+    public List<com.paic.ehis.base.domain.BaseBank> getBaseBankList() {
         return baseBankList;
     }
 
-    public void setBaseBankList(List<BaseBank> baseBankList) {
+    public void setBaseBankList(List<com.paic.ehis.base.domain.BaseBank> baseBankList) {
         this.baseBankList = baseBankList;
     }
 
-    public List<BaseContacts> getBaseContactsList() {
+    public List<com.paic.ehis.base.domain.BaseContacts> getBaseContactsList() {
         return baseContactsList;
     }
 
-    public void setBaseContactsList(List<BaseContacts> baseContactsList) {
+    public void setBaseContactsList(List<com.paic.ehis.base.domain.BaseContacts> baseContactsList) {
         this.baseContactsList = baseContactsList;
     }
 
-    public List<BaseSupplierOutlets> getBaseSupplierOutletsList() {
+    public List<com.paic.ehis.base.domain.BaseSupplierOutlets> getBaseSupplierOutletsList() {
         return baseSupplierOutletsList;
     }
 
-    public void setBaseSupplierOutletsList(List<BaseSupplierOutlets> baseSupplierOutletsList) {
+    public void setBaseSupplierOutletsList(List<com.paic.ehis.base.domain.BaseSupplierOutlets> baseSupplierOutletsList) {
         this.baseSupplierOutletsList = baseSupplierOutletsList;
     }
 
-    public List<BaseSupplierReceip> getBaseSupplierReceipList() {
+    public Object[] getDetail() {
+        return detail;
+    }
+
+    public void setDetail(Object[] detail) {
+        this.detail = detail;
+    }
+
+    public List<String> getDetailStr() {
+        return detailStr;
+    }
+
+    public List<com.paic.ehis.base.domain.BaseSupplierReceip> getBaseSupplierReceipList() {
         return baseSupplierReceipList;
     }
 
-    public void setBaseSupplierReceipList(List<BaseSupplierReceip> baseSupplierReceipList) {
+    public void setBaseSupplierReceipList(List<com.paic.ehis.base.domain.BaseSupplierReceip> baseSupplierReceipList) {
         this.baseSupplierReceipList = baseSupplierReceipList;
     }
 
-    public void setServcomNo(String servcomNo)
-    {
-        this.servcomNo = servcomNo;
+    public void setDetailStr(List<String> detailStr) {
+        this.detailStr = detailStr;
     }
 
-    public String getServcomNo() 
+
+
+    public void setSerialNo(String serialNo)
     {
-        return servcomNo;
+        this.serialNo = serialNo;
+    }
+
+    public String getSerialNo()
+    {
+        return serialNo;
     }
     public void setChname(String chname) 
     {
@@ -231,7 +280,7 @@ public class BaseSupplierInfo extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("servcomNo", getServcomNo())
+            .append("serialNo", getSerialNo())
             .append("chname", getChname())
             .append("enname", getEnname())
             .append("servcomType", getServcomType())

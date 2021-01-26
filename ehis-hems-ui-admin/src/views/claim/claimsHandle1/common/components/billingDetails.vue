@@ -5,7 +5,7 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;账单明细</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;账单明细</i>
         <div style="float: right;">
-          <el-button v-if="status==='edit' || node==='calculateReview'" :disabled="!collapsed" type="primary"
+          <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview') " :disabled="!collapsed" type="primary"
                      size="mini" @click="saveBill">保存
           </el-button>
         </div>
@@ -28,7 +28,11 @@
             <span>{{ selectDictLabel(	treat_typeOptions, scope.row.treatmentType) }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="hospitalCode" label="治疗医院" show-overflow-tooltip/>
+        <el-table-column align="center" prop="hospitalCode" label="治疗医院" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ selectHospitalName(	hospitalOptions, scope.row.hospitalCode) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="createBy" label="治疗日期" show-overflow-tooltip>
           <!--显示发票的治疗日期区间，格式YYYY-MM-DD - YYYY-MM-DD-->
           <template slot-scope="scope">
@@ -59,7 +63,7 @@
         :total="total"
         :page.sync="pageNum"
         :limit.sync="pageSize"
-        @pagination=""
+        @pagination="getBillList"
       />
 
       <el-form v-if="node === 'input' || isFormShow" ref="baseForm" :rules="baseFormRule" :model="baseForm"
@@ -285,7 +289,7 @@
         </el-col>
       </el-form>
       <el-form v-if="node === 'input' || isFormShow || isCostShow" ref="costForm" :rules="accountRules"
-               :model="costForm" size="small">
+               :model="costForm" size="small" >
         <el-table ref="costFormTable" :data="costForm.costData"
                   :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row
                   size="small" style="width: 100%;">
@@ -413,17 +417,18 @@
                    @click="addRow()"> + 添加
         </el-button>
       </el-form>
+      </div>
       <hospital :value="hospitalDialog" @closeHospital="closeHospital" @getPropData="getPropData"/>
-    </div>
   </el-card>
 </template>
 
 <script>
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
 
-  let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'},
-    {dictType: 'input_status'},{dictType: 'first_attribute'}, {dictType: 'second_attribute_a'},{dictType: 'second_attribute_b'},]
-  import {getBillList, saveBill, editBill, getFee,getHospitalInfo} from '@/api/claim/handleCom'
+  let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
+    {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'},]
+  import {getBillList, saveBill, editBill, getFee, getHospitalInfo, deleteBill} from '@/api/claim/handleCom'
+  import breakOff from "../../../claimsHandle/common/modul/breakOff";
 
   export default {
     components: {Hospital},
@@ -472,6 +477,20 @@
           callback();
         }
       }
+      const checkNums = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("请录入正数"));
+          } else if (!regx.test(value)) {
+            callback(new Error("请保留两位小数"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      }
       const checkVisNumber = (rule, value, callback) => {
         const regx = /^[1-9][0-9]*$/
         if (value) {
@@ -493,19 +512,43 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            if (this.baseForm.isShareDisAmount === '01') {
-              this.costForm.costData[index].hosDiscountAmount = this.costForm.costData[index].billDetailAmount / this.baseForm.billAmount * this.baseForm.hosDiscountAmount
+            let dataSum=0
+            for (let i = 0; i <=index; i++) {
+              dataSum=dataSum+parseFloat(this.costForm.costData[i].billDetailAmount)
             }
-            if (this.baseForm.isShareAp === '01') {
-              this.costForm.costData[index].advancePayment = parseInt(this.baseForm.ssAdvancePayment) + parseInt(this.baseForm.tpAdvancePayment)
-            }
-            if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '')) {
-              this.costForm.costData[index].copay = this.costForm.costData[index].billDetailAmount / this.baseForm.billAmount * this.baseForm.copay
-            } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '')) {
-              this.costForm.costData[index].copay = this.costForm.costData[index].billDetailAmount / this.baseForm.billAmount * this.baseForm.transSerialCopay
-            }
+            if (dataSum<=parseFloat(this.baseForm.billAmount)){
+              if (this.baseForm.isShareAp === '01') {
+                this.costForm.costData[index].advancePayment = parseInt(this.baseForm.ssAdvancePayment) + parseInt(this.baseForm.tpAdvancePayment)
+              }
+              if (this.baseForm.isShareDisAmount === '01') {
+                let hosDiscountAmountNum=0
+                for (let i = 0; i < this.costForm.costData.length-1; i++) {
+                  this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.hosDiscountAmount).toFixed(2)
+                  hosDiscountAmountNum=hosDiscountAmountNum+parseFloat(this.costForm.costData[i].hosDiscountAmount)
+                }
 
-            callback();
+                this.costForm.costData[this.costForm.costData.length-1].hosDiscountAmount=(this.baseForm.hosDiscountAmount - hosDiscountAmountNum).toFixed(2)
+              }
+              if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '')) {
+                let copayNum=0
+                for (let i = 0; i < this.costForm.costData.length-1; i++) {
+                  this.costForm.costData[i].copay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.copay).toFixed(2)
+                  copayNum=copayNum+ parseFloat(this.costForm.costData[i].copay)
+                }
+                this.costForm.costData[this.costForm.costData.length-1].copay=(this.baseForm.copay-copayNum).toFixed(2)
+              } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '')) {
+                let copayNum=0
+                for (let i = 0; i < this.costForm.costData.length-1; i++) {
+                  this.costForm.costData[i].copay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.transSerialCopay).toFixed(2)
+                  copayNum=copayNum+ parseFloat(this.costForm.costData[i].copay)
+                }
+                this.costForm.costData[this.costForm.costData.length-1].copay=(this.baseForm.transSerialCopay-copayNum).toFixed(2)
+              }
+
+              callback();
+            }else {
+              callback(new Error("录入费用金额有误，请检查！"));
+            }
           }
         } else {
           callback(new Error("请录入费用金额"));
@@ -612,6 +655,7 @@
       }
 
       return {
+        isBillInfoSave: false,
         feeOptions: [],
         hospitalDialog: false,
         collapsed: true,
@@ -629,6 +673,7 @@
         pageNum: 1,
         pageSize: 10,
         baseForm: {
+          billId: undefined,
           rptNo: '',
           hospitalCode: undefined,
           hospitalName: undefined,
@@ -655,6 +700,7 @@
           copay: undefined,
           isShareCopay: '01',
           hosDiscountAmount: undefined,
+          flag: undefined,
           isShareDisAmount: '01',
           icdCode: undefined,
           icdCodes: [{
@@ -684,12 +730,14 @@
         accountRules: {
           feeItemCode: [{required: true, message: '请选择费用项名称', trigger: 'blur'}],
           billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: 'blur'}],
-          selfAmount: [{validator: checkNum, trigger: 'blur'}],
-          partSelfAmount: [{validator: checkNum, trigger: 'blur'}],
-          unableAmount: [{validator: checkNum, trigger: 'blur'}],
-          advancePayment: [{validator: checkNum, trigger: 'blur'}],
+          selfAmount: [{validator: checkNums, trigger: 'blur'}],
+          partSelfAmount: [{validator: checkNums, trigger: 'blur'}],
+          unableAmount: [{validator: checkNums, trigger: 'blur'}],
+          advancePayment: [{validator: checkNums, trigger: 'blur'}],
           visNumber: [{validator: checkVisNumber, trigger: 'blur'}],
           remark: [{validator: checkRemark, trigger: 'blur'}],
+          hosDiscountAmount: [{validator: checkNums, trigger: 'blur'}],
+          copay: [{validator: checkNums, trigger: 'blur'}],
         },
         dictList: [],
         departmentOptions: [],
@@ -700,6 +748,8 @@
         first_attributeOptions: [],
         second_attribute_aOptions: [],
         second_attribute_bOptions: [],
+        sys_yes_noOptions: [],
+        hospitalOptions: [],
       };
     },
     async mounted() {
@@ -730,12 +780,19 @@
       this.second_attribute_bOptions = this.dictList.find(item => {
         return item.dictType === 'second_attribute_b'
       }).dictDate
+      this.sys_yes_noOptions = this.dictList.find(item => {
+        return item.dictType === 'sys_yes_no'
+      }).dictDate
       getFee().then(res => {
         if (res != null && res.code === 200) {
           this.feeOptions = res.rows
         }
       })
-
+      getHospitalInfo().then(res => {
+        if (res != null && res !== '') {
+          this.hospitalOptions = res.rows
+        }
+      })
 
     },
     methods: {
@@ -749,28 +806,91 @@
         // this.$set(this.payeeInfo.data[index],'payamount',null)
       },
       deleteInfo(row) {
-        delRemark(row.remarkId).then(res => {
-
+        this.$confirm(`是否确定删除?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteBill(row.billId).then(res => {
+            if (res !== null && res.code === 200) {
+              this.$message({
+                message: '删除成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              this.$emit("refresh-item", 'bill')
+            } else {
+              this.$message({
+                message: '删除失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          }).catch(res => {
+          })
+          this.$emit("refresh-item", 'bill')
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消！'
+          })
         })
       },
       addOrEdit(status, row) {
         editBill(row.billId).then(res => {
-          if (res != null && res.code === '200') {
+          if (res != null && res.code === 200) {
             this.isFormShow = true
-            this.baseForm = res.data.bill
+            this.baseForm.billId = res.data.bill.billId
+            this.baseForm.rptNo = res.data.bill.rptNo
+            this.baseForm.hospitalCode = res.data.bill.hospitalCode
+            this.baseForm.department = res.data.bill.department
+            this.baseForm.isDesHospital = res.data.bill.isDesHospital
+            this.baseForm.accType = res.data.bill.accType
+            this.baseForm.billCurrency = res.data.bill.billCurrency
+            this.baseForm.billAmount = res.data.bill.billAmount
+            this.baseForm.visNumber = res.data.bill.visNumber
+            this.baseForm.treatmentType = res.data.bill.treatmentType
+            this.baseForm.treatmentStartDate = res.data.bill.treatmentStartDate
+            this.baseForm.treatmentEndDate = res.data.bill.treatmentEndDate
+            this.baseForm.treatmentDays = res.data.bill.treatmentDays
+            this.baseForm.invoiceNo = res.data.bill.invoiceNo
+            this.baseForm.billNo = res.data.bill.billNo
+            this.baseForm.billType = res.data.bill.billType
+            this.baseForm.ssAdvancePayment = res.data.bill.ssAdvancePayment
+            this.baseForm.tpAdvancePayment = res.data.bill.tpAdvancePayment
+            this.baseForm.isShareAp = res.data.bill.isShareAp
+            this.baseForm.transSerialNo = res.data.bill.transSerialNo
+            this.baseForm.transSerialCopay = res.data.bill.transSerialCopay
+            this.baseForm.copay = res.data.bill.copay
+            this.baseForm.isShareCopay = res.data.bill.isShareCopay
+            this.baseForm.hosDiscountAmount = res.data.bill.hosDiscountAmount
+            this.baseForm.isShareDisAmount = res.data.bill.isShareDisAmount
+            this.baseForm.icdCode = res.data.bill.icdCode
+            this.baseForm.icdCodes = res.data.bill.icdCodes
+            this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
+
             this.costForm.costData = res.data.billDetail
-            if (res.data.bill.hospitalCode!=null && res.data.bill.hospitalCode!==''){
-              let data ={
-                providerCode:res.data.bill.hospitalCode
+            if (this.baseForm.icdCodes.length === 0) {
+              this.baseForm.icdCodes = [{
+                icdCode: ''
+              }]
+            }
+            if (res.data.bill.hospitalCode != null && res.data.bill.hospitalCode !== '') {
+              let data = {
+                providerCode: res.data.bill.hospitalCode
               }
-              getHospitalInfo(data).then(res=>{
-                if (res!=null && res!=='' ){
-                  this.baseForm.firstAttribute=res.rows[0].firstAttribute
-                  this.baseForm.secondAttribute=res.rows[0].secondAttribute
+              getHospitalInfo(data).then(res => {
+                if (res != null && res !== '') {
+                  this.baseForm.hospitalName = res.rows[0].chname1
+                  this.baseForm.firstAttribute = res.rows[0].firstAttribute
+                  this.baseForm.secondAttribute = res.rows[0].secondAttribute
+                  this.baseForm.flag = res.rows[0].flag
                 }
               })
-            }
 
+            }
           }
         }).catch(res => {
         })
@@ -797,18 +917,18 @@
         this.costForm.costData.push(field)
       },
       deleteRow(index, row) {
-         this.$confirm(`是否确定删除?`, '提示', {
-           confirmButtonText: '确定',
-           cancelButtonText: '取消',
-           type: 'warning'
-         }).then(() => {
-           this.costForm.costData.splice(index, 1)
-         }).catch(() => {
-           this.$message({
-             type: 'info',
-             message: '已取消！'
-           })
-         })
+        this.$confirm(`是否确定删除?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.costForm.costData.splice(index, 1)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消！'
+          })
+        })
       },
       addIcd() {
         this.baseForm.icdCodes.push({
@@ -837,8 +957,9 @@
         this.baseForm = {
           rptNo: '',
           hospitalCode: undefined,
-          a: undefined,//医院性质
-          b: undefined,//医院等级
+          hospitalName: undefined,
+          firstAttribute: undefined,//医院性质
+          bsecondAttribute: undefined,//医院等级
           department: undefined,
           isDesHospital: undefined,
           accType: undefined,
@@ -860,6 +981,7 @@
           copay: undefined,
           isShareCopay: '01',
           hosDiscountAmount: undefined,
+          flag: undefined,
           isShareDisAmount: '01',
           icdCode: undefined,
           icdCodes: [{
@@ -867,6 +989,7 @@
           }],
           clinicalDiagnosis: undefined,
         }
+        this.costForm.costData=[]
         this.isFormShow = true
         this.isCostShow = false
       },
@@ -887,35 +1010,95 @@
           if (valid) {
             this.$refs.costForm.validate((valid) => {
               if (valid) {
-                let data = {
-                  bill: this.baseForm,
-                  billDetail: this.costForm.costData
+                let feeSum = 0
+                let number =0
+                for (let i = 0; i < this.costForm.costData.length; i++) {
+                   number = parseInt(this.costForm.costData[i].billDetailAmount) - parseInt(this.costForm.costData[i].hosDiscountAmount) - parseInt(this.costForm.costData[i].selfAmount)
+                    - parseInt(this.costForm.costData[i].partSelfAmount) - parseInt(this.costForm.costData[i].unableAmount) - parseInt(this.costForm.costData[i].advancePayment) - parseInt(this.costForm.costData[i].copay)
+                  if (number < 0) {
+                    return this.$message.warning(
+                      "录入的金额有误,请检查！"
+                    )
+                  }
+                  break
                 }
-                saveBill(data).then(res => {
-                  if (res !== null && res.code === 200) {
+                this.costForm.costData.forEach(item=>{
+                  feeSum=feeSum+parseInt(item.billDetailAmount)
+                })
+                if (number >= 0 && feeSum!==parseInt(this.baseForm.billAmount)){
+                  return this.$message.warning(
+                    "录入的费用金额与账单金额不一致,请检查！")
+                }else if (number >= 0 && feeSum===parseInt(this.baseForm.billAmount)){
+                  let data = {
+                    bill: this.baseForm,
+                    billDetail: this.costForm.costData
+                  }
+                  saveBill(data).then(res => {
+                    if (res !== null && res.code === 200) {
+                      this.$message({
+                        message: '保存成功！',
+                        type: 'success',
+                        center: true,
+                        showClose: true
+                      })
+                      this.isBillInfoSave = true
+                    }
+                    let data = {
+                      rptNo: this.fixInfo.rptNo
+                    }
+                    getBillList(data).then(res => {
+                      if (res !== null && res.code === 200) {
+                        this.tableData = res.rows
+                      }
+                    }).catch(res => {
+                    })
+                    this.baseForm = {
+                      billId: undefined,
+                      rptNo: '',
+                      hospitalCode: undefined,
+                      hospitalName: undefined,
+                      firstAttribute: undefined,//医院性质
+                      secondAttribute: undefined,//医院等级
+                      department: undefined,
+                      isDesHospital: undefined,
+                      accType: undefined,
+                      billCurrency: undefined,
+                      billAmount: undefined,
+                      visNumber: undefined,
+                      treatmentType: undefined,
+                      treatmentStartDate: undefined,
+                      treatmentEndDate: undefined,
+                      treatmentDays: undefined,
+                      invoiceNo: undefined,
+                      billNo: undefined,
+                      billType: undefined,//
+                      ssAdvancePayment: undefined,
+                      tpAdvancePayment: undefined,
+                      isShareAp: '01',
+                      transSerialNo: undefined,
+                      transSerialCopay: undefined,
+                      copay: undefined,
+                      isShareCopay: '01',
+                      hosDiscountAmount: undefined,
+                      flag: undefined,
+                      isShareDisAmount: '01',
+                      icdCode: undefined,
+                      icdCodes: [{
+                        icdCode: ''
+                      }],
+                      clinicalDiagnosis: undefined,
+                    },
+                      this.costForm.costData = []
+                  }).catch(res => {
                     this.$message({
-                      message: '保存成功！',
-                      type: 'success',
+                      message: '保存失败!',
+                      type: 'error',
                       center: true,
                       showClose: true
                     })
-                  }
-                  let data={
-                    rptNo:this.fixInfo.rptNo
-                  }
-                  getBillList(data).then(res=>{
-                    if (res !== null && res.code === 200) {
-                      this.tableData=res.rows
-                    }
-                  }).catch(res=>{})
-                }).catch(res => {
-                  this.$message({
-                    message: '保存失败!',
-                    type: 'error',
-                    center: true,
-                    showClose: true
                   })
-                })
+                }
+
               } else {
                 return this.$message.warning(
                   "费用项信息录入不完整，请检查！"
@@ -929,6 +1112,19 @@
           }
         })
       },
+      getBillList(){
+        let data = {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          rptNo: this.fixInfo.rptNo
+        }
+        getBillList(data).then(res => {
+          if (res !== null && res.code === 200) {
+            this.tableData = res.rows
+          }
+        }).catch(res => {
+        })
+      },
       selectFee(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
@@ -940,10 +1136,21 @@
         return actions.join('');
       },
       getPropData(val) {
-        this.baseForm.hospitalCode=val.providerCode
-        this.baseForm.hospitalName=val.chname1
-        this.baseForm.firstAttribute=val.firstAttribute
-        this.baseForm.secondAttribute=val.secondAttribute
+        this.baseForm.hospitalCode = val.providerCode
+        this.baseForm.hospitalName = val.chname1
+        this.baseForm.firstAttribute = val.firstAttribute
+        this.baseForm.secondAttribute = val.secondAttribute
+        this.baseForm.flag = val.flag
+      },
+      selectHospitalName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].providerCode === ('' + value)) {
+            actions.push(datas[key].chname1);
+            return true;
+          }
+        })
+        return actions.join('');
       }
     }
   };

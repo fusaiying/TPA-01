@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getNegotiationName(row,col) {
-      return this.selectDictLabel(this.deliverySource, row.discType)
+      return this.selectDictLabel(this.negotiationTypes, row.discType)
     },
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)

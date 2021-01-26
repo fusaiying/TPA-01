@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="serviceProForm" :rules="serviceProFormRules" :model="serviceProForm" size="small" :disabled="disabledFlag">
+  <el-form ref="serviceProForm" :rules="serviceProFormRules" :model="serviceProForm" size="small"
+           :disabled="disabledFlag">
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>服务项目</span>
@@ -7,12 +8,15 @@
       <el-table ref="contactTable" :data="serviceProForm.form"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
-        <el-table-column align="center" min-width="50" type="selection" width="120px" v-if="disabledFlag"></el-table-column>
-        <el-table-column prop="serviceCodeName" align="center" header-align="center" label="服务项目名称" show-overflow-tooltip >
+        <el-table-column align="center" min-width="50" type="selection" width="120px"
+                         v-if="disabledFlag && status=='edit'"></el-table-column>
+        <el-table-column prop="serviceCodeName" align="center" header-align="center" label="服务项目名称"
+                         show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item v-if="!scope.row.id" :prop="'form.'+scope.$index +'.serviceCodeName'"
+            <el-form-item v-if="!scope.row.id && scope.row.showFlag" :prop="'form.'+scope.$index +'.serviceCodeName'"
                           :rules="serviceProFormRules.serviceCodeName" style="display: inline-flex !important;">
-              <el-select v-model="scope.row.serviceCodeName" placeholder="请选择" size="mini" clearable @change="setOtherValue(scope.$index,scope.row)" style="width: 220px">
+              <el-select v-model="scope.row.serviceCodeName" placeholder="请选择" size="mini" clearable
+                         @change="setOtherValue(scope.$index,scope.row)" style="width: 220px">
                 <!--                <el-option v-for="option in contacttype"  :label="option.label"
                                            :value="option.value"/>
                                 <el-option/>-->
@@ -21,7 +25,7 @@
                   v-for="item in serviceInfo"
                   :key="item.serviceCodeName"
                   :label="item.serviceCodeName"
-                  :value="item.serviceCodeName" >
+                  :value="item.serviceCodeName">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -30,10 +34,10 @@
         </el-table-column>
         <el-table-column prop="categoryCodeName" align="center" header-align="center" label="类别" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.serviceCodeName'"
-                          :rules="serviceProFormRules.categoryCodeName" style="display: inline-flex !important; ">
-              <span style="font-size: 12px">{{ scope.row.categoryCodeName }}</span>
-            </el-form-item>
+<!--            <el-form-item :prop="'form.'+scope.$index +'.serviceCodeName'"
+                          :rules="serviceProFormRules.categoryCodeName" style="display: inline-flex !important; ">-->
+              <span >{{ scope.row.categoryCodeName }}</span>
+<!--            </el-form-item>-->
 
             <!--            <span v-if="scope.row.serviceCodeName">{{ scope.row.categoryCodeName }}</span>-->
             <!--            <span v-if="!scope.row.serviceCodeName"></span>-->
@@ -41,10 +45,10 @@
         </el-table-column>
         <el-table-column prop="typeCodeName" align="center" header-align="center" label="种类" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.typeCodeName'"
-                          :rules="serviceProFormRules.typeCodeName" style="display: inline-flex !important;">
-              <span style="font-size: 12px">{{ scope.row.typeCodeName }}</span>
-            </el-form-item>
+<!--            <el-form-item :prop="'form.'+scope.$index +'.typeCodeName'"
+                          :rules="serviceProFormRules.typeCodeName" style="display: inline-flex !important;">-->
+              <span >{{ scope.row.typeCodeName }}</span>
+<!--            </el-form-item>-->
 
             <!--            <span v-if="scope.row.serviceCodeName">{{ scope.row.typeCodeName }}</span>-->
             <!--            <span v-else>{{ scope.row.typeCodeName }}</span>-->
@@ -63,7 +67,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <span v-else>{{  getDeductWay(scope.row)}}</span>
+            <span v-else>{{ getDeductWay(scope.row) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="costPrice" align="center" header-align="center" label="成本价格" show-overflow-tooltip>
@@ -78,12 +82,12 @@
 
         <el-table-column prop="number" align="center" header-align="center" label="配置供应商" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!disabledFlag"
+            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id"
                           :rules="serviceProFormRules.number" style="display: inline-flex !important;">
               <a style="color: #3CB4E5;text-decoration: underline"
                  @click="opendialogVisible(scope.$index,scope.row)">{{ scope.row.number | getNumber }}</a>
             </el-form-item>
-            <span v-if="disabledFlag">{{ scope.row.number | getNumber }}</span>
+            <span v-else>{{ scope.row.number | getNumber }}</span>
 
 
           </template>
@@ -136,42 +140,46 @@
                   :data="supplierInfo.supplierData"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
                   size="small"
+                  v-loading="loading"
                   highlight-current-row
                   tooltip-effect="dark"
                   @select="handleSelectionChange"
+                  @select-all="checkAll"
                   style="width: 100%;">
 
-          <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>
-          <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码"/>
-          <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称"/>
-          <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域"/>
-          <el-table-column key="4" align="center" min-width="100" prop="endDate" label="合约止期"/>
-          <el-table-column key="5" align="center" min-width="150" label="服务价格">
+          <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>
+          <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码"
+                           show-overflow-tooltip/>
+          <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称" show-overflow-tooltip/>
+          <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域"
+                           show-overflow-tooltip/>
+          <el-table-column key="4" align="center" min-width="100" prop="endDate" label="合约止期" show-overflow-tooltip/>
+          <el-table-column key="5" align="center" min-width="150" label="服务价格" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.minPrice }}-{{ scope.row.maxPrice }}</span>
             </template>
           </el-table-column>
-          <el-table-column key="6" align="center" prop="priorityOrder" label="优先级次序" min-width="120">
+          <el-table-column key="6" align="center" prop="priority" label="优先级次序" min-width="120" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-form-item v-if="!scope.row.id" :prop="'supplierData.'+scope.$index +'.priorityOrder'"
-                            :rules="supplierInfoRules.priorityOrder" style="display: inline-flex !important;">
-                <el-input v-model="scope.row.priorityOrder" placeholder="请输入" size="mini"/>
+              <el-form-item v-if="!scope.row.id" :prop="'supplierData.'+scope.$index +'.priority'"
+                            :rules="supplierInfoRules.priority" style="display: inline-flex !important;">
+                <el-input v-model="scope.row.priority" placeholder="请输入" size="mini"/>
               </el-form-item>
-              <span v-else>{{ scope.row.priorityOrder }}</span>
+              <span v-else>{{ scope.row.priority }}</span>
             </template>
           </el-table-column>
         </el-table>
-<!--        &lt;!&ndash;分页组件&ndash;&gt;
-        <pagination
-          v-show="totalCount>0"
-          :total="totalCount"
-          :page.sync="formSearch.pageNum"
-          :limit.sync="formSearch.pageSize"
-          @pagination="getData"
-        />-->
+        <!--        &lt;!&ndash;分页组件&ndash;&gt;
+                <pagination
+                  v-show="totalCount>0"
+                  :total="totalCount"
+                  :page.sync="formSearch.pageNum"
+                  :limit.sync="formSearch.pageSize"
+                  @pagination="getData"
+                />-->
       </el-form>
 
-        <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
      <el-button size="mini" type="primary" @click="saveHandle">保存</el-button>
         <el-button size="mini" @click="supplierDialogVisible=false">关闭</el-button>
 
@@ -181,10 +189,15 @@
   </el-form>
 
 
-
 </template>
 <script>
-import {getServiceInfo, getProductServiceList, selectSupplier,insertSupplier} from '@/api/baseInfo/serviceProductManagement'
+import {
+  getServiceInfo,
+  getProductServiceList,
+  selectSupplier,
+  insertSupplier,
+  updateSupplierStatus
+} from '@/api/baseInfo/serviceProductManagement'
 
 
 export default {
@@ -193,41 +206,44 @@ export default {
       type: String,
       default: ''
     },
-    disabledFlag: Boolean
+    status: {
+      type: String,
+      default: ''
+    },
+    disabledFlag: Boolean,
+
 
   },
 
 
   data() {
-   const checkPriorityOrder= (rules, value, callback) => {
+    const checkPriority = (rules, value, callback) => {
 
-     const  index = rules.field.replace('supplierData.','').replace('.priorityOrder','')
+      const index = rules.field.replace('supplierData.', '').replace('.priority', '')
 
-      let flag=this.indexList.find(item =>{
-        return item==index
+      let flag = this.indexList.find(item => {
+        return item == index
       })
 
-     if(flag!=null && flag>=0) {
+      if (flag != null && flag >= 0) {
 
-       let reg = /^(\d+|\d+\.)$/
-       if(value!=null && value!='') {
+        let reg = /^(\d+|\d+\.)$/
+        if (value != null && value != '') {
 
-         if (value <= 0) {
-           callback(new Error("只能输入正整数"));
-         } else if (!reg.test(value)) {
-           callback(new Error("只能输入正整数"));
-         } else {
-           callback();
-         }
-       }
-       else {
-         callback(new Error("已选中供应商,此项不能为空"))
-       }
-     }
-     else {
-       callback()
-     }
-   }
+          if (value <= 0) {
+            callback(new Error("只能输入正整数"));
+          } else if (!reg.test(value)) {
+            callback(new Error("只能输入正整数"));
+          } else {
+            callback();
+          }
+        } else {
+          callback(new Error("已选中供应商,此项不能为空"))
+        }
+      } else {
+        callback()
+      }
+    }
 
     const checkCostPrice = (rules, value, callback) => {
 
@@ -245,6 +261,7 @@ export default {
     }
 
     return {
+      loading: false,
       serviceProForm: {
         form: []
       },
@@ -277,11 +294,11 @@ export default {
         /*        categoryCodeName: [{required: true, message: '类别不能为空', trigger: 'blur'}],
                 typeCodeName: [{required: true, message: '种类不能为空', trigger: 'blur'}],*/
         deductWay: [{required: true, message: '扣减方式不能为空', trigger: 'change'}],
-        costPrice: [{required: true,validator: checkCostPrice, trigger: 'blur'}],
+        costPrice: [{required: true, validator: checkCostPrice, trigger: 'blur'}],
         /*   number: [{required: true, message: '配置供应商不能为空', trigger: 'blur'}],*/
       },
       supplierInfoRules: {
-        priorityOrder:[{required: true, validator:checkPriorityOrder, trigger: 'blur'}]
+        priority: [{required: true, validator: checkPriority, trigger: 'blur'}]
       },
 
 
@@ -317,45 +334,43 @@ export default {
 
 
   methods: {
-    getDeductWay(row){
-      return this.selectDictLabel(this.deductWayOptions, row.deductWay )
+    getDeductWay(row) {
+      return this.selectDictLabel(this.deductWayOptions, row.deductWay)
+    },
+    checkAll(val) {
+
+      this.multipleSelection = []
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+      this.indexList = []
+      this.multipleSelection.forEach(item => {
+        this.indexList.push(item.index)
+      })
     },
     //选中供应商的个数
-    handleSelectionChange(val,row) {
-console.log(val)
+    handleSelectionChange(val, row) {
       console.log(row.index)
-      this.multipleSelection=[]
+      this.multipleSelection = []
       this.multipleSelection = val;
-      this.indexList=[]
-      this.multipleSelection.forEach(item=>{
+      console.log(this.multipleSelection)
+      this.indexList = []
+      this.multipleSelection.forEach(item => {
         this.indexList.push(item.index)
       })
 
       //清空未选中的优先级次序
-/*      this.supplierInfo.supplierData.forEach(item =>{
-        let num=0
-        this.multipleSelection.forEach(option=>{
-          if (item===option){
+      this.supplierInfo.supplierData.forEach(item => {
+        let num = 0
+        this.indexList.forEach(option => {
+          if (item.index === option) {
             num++
           }
         })
-        if (num===0){
-          item.priorityOrder=''
+        if (num === 0) {
+          item.priority = ''
         }
-      })*/
-
-      let obj=this.multipleSelection.filter(item=>{
-        return item==row
       })
-      //选中了
-      if(obj.length>0){
 
-
-      }
-      //没有选中
-      else{
-
-      }
 
     },
 
@@ -367,102 +382,161 @@ console.log(val)
     },
 
     //改变服务项目名称 给类别等字段赋值
-    setOtherValue(index,data) {
-      console.log(data)
-      let  obj=this.serviceInfo.find(item=>{
-        return item.serviceCodeName==data.serviceCodeName
-      })
-      console.log(obj)
-      if(obj!=undefined && obj!=null){
-        data.categoryCodeName=obj.categoryCodeName
-        data.typeCodeName=obj.typeCodeName
-        data.categoryCode=obj.categoryCode
-        data.categoryName=obj.categoryName
-        data.serviceCode=obj.serviceCode
-        data.serviceName=obj.serviceName
-        data.typeCode=obj.servertypeCode
-        data.typeName=obj.servertypeName
+    setOtherValue(index, data) {
+      if (data.serviceCodeName != null && data.serviceCodeName != '') {
+        //判断表格中是否存在次服务
+        let objService = this.serviceProForm.form.filter(item => {
+          return item.serviceCodeName == data.serviceCodeName
+        })
+        //不存在
+        if (objService.length == 1) {
+          //根据选中的找到对应的数据
+          let obj = this.serviceInfo.find(item => {
+            return item.serviceCodeName == data.serviceCodeName
+          })
+          let query = {
+            productCode: this.productCode,
+            serviceCode: obj.serviceCode
+          }
 
 
 
+          updateSupplierStatus(query).then(res => {
+          })
+          if (obj != undefined && obj != null) {
+            data.categoryCodeName = obj.categoryCodeName
+            data.typeCodeName = obj.typeCodeName
+            data.categoryCode = obj.categoryCode
+            data.categoryName = obj.categoryName
+            data.serviceCode = obj.serviceCode
+            data.serviceName = obj.serviceName
+            data.typeCode = obj.servertypeCode
+            data.typeName = obj.servertypeName
+            data.deductWay = ''
+            data.costPrice = ''
+            data.number = ''
 
+
+          } else {
+            data.categoryCodeName = ''
+            data.typeCodeName = ''
+            data.categoryCode = ''
+            data.categoryName = ''
+            data.serviceCode = ''
+            data.serviceName = ''
+            data.typeCode = ''
+            data.typeName = ''
+            data.deductWay = ''
+            data.costPrice = ''
+            data.number = ''
+          }
+        } else {
+          data.serviceCodeName = ''
+          data.categoryCodeName = ''
+          data.typeCodeName = ''
+          data.categoryCode = ''
+          data.categoryName = ''
+          data.serviceCode = ''
+          data.serviceName = ''
+          data.typeCode = ''
+          data.typeName = ''
+          data.deductWay = ''
+          data.costPrice = ''
+          data.number = ''
+          this.$message.warning('此服务项目名称已存在')
+
+        }
+      } else {
+        data.categoryCodeName = ''
+        data.typeCodeName = ''
+        data.categoryCode = ''
+        data.categoryName = ''
+        data.serviceCode = ''
+        data.serviceName = ''
+        data.typeCode = ''
+        data.typeName = ''
+        data.deductWay = ''
+        data.costPrice = ''
+        data.number = ''
       }
-      else{
-        data.categoryCodeName=''
-        data.typeCodeName=''
-        data.categoryCode=''
-        data.categoryName=''
-        data.serviceCode=''
-        data.serviceName=''
-        data.typeCode=''
-        data.typeName=''
-      }
-
-      /*data.categoryCodeName=item.categoryCodeName
-      data.typeCodeName=item.typeCodeName*/
 
     },
 
 
     //供应商弹出框
-    opendialogVisible(index, row) {
+    async opendialogVisible(index, row) {
       this.serviceTableIndex = index
 
       //调用查询供应商接口
-/*      let query={
-        productCode: this.productCode,
-        serviceCode: row.serviceCode
-      }*/
-      this.formSearch.productCode=this.productCode
-      this.formSearch.serviceCode=row.serviceCode
-      if(this.formSearch.serviceCode!=null && this.formSearch.serviceCode!='') {
+      /*      let query={
+              productCode: this.productCode,
+              serviceCode: row.serviceCode
+            }*/
+      this.formSearch.productCode = this.productCode
+      this.formSearch.serviceCode = row.serviceCode
+      if (this.formSearch.serviceCode != null && this.formSearch.serviceCode != '') {
         this.supplierDialogVisible = true
-        this.getData(this.formSearch)
-        //找到有数据的优先次序
-        let rows = this.supplierInfo.supplierData.filter(item => {
-          return item.priorityOrder != null && item.priorityOrder != ''
-        })
-        console.log(rows)
+        //供应商查询页面
+        await new Promise((resolve, reject) => {
+          this.loading = true
+          selectSupplier(this.formSearch).then(res => {
+            this.supplierInfo.supplierData = res.data;
+            this.supplierInfo.supplierData.map((item, index) => {
+              item.index = index
+            })
+            this.loading = false
+            this.totalCount = res.total;
+            resolve(this.supplierInfo.supplierData)
+          })
+        }).then(res => {
+          //找到有数据的优先次序
+          let rows = this.supplierInfo.supplierData.filter(item => {
+            return item.priority != null && item.priority != ''
+          })
 
-        this.multipleSelection = rows
-        this.indexList = []
-        this.multipleSelection.forEach(item => {
-          this.indexList.push(item.index)
+          this.multipleSelection = rows
+          this.indexList = []
+          this.multipleSelection.forEach(item => {
+            this.indexList.push(item.index)
+          })
+          this.checkSelection()
         })
 
-        this.$nextTick(() => {
-          if (rows) {
-            rows.forEach(row => {
-              console.log('xuanzhogn')
-              let a=row.index
-              let data=this.supplierInfo.supplierData[a]
-              this.$refs.medicalRecordTable.toggleRowSelection(data,true);
-            });
-          } else {
-            this.$refs.medicalRecordTable.clearSelection();
-          }
-        })
-      }
-      else {
+
+      } else {
         this.$message.warning('请先选择服务项目名称')
       }
 
-      //默认选中
 
 
+
+    },
+//默认选中
+    checkSelection() {
+      this.$nextTick(() => {
+        if (this.multipleSelection.length > 0) {
+          this.multipleSelection.forEach(row => {
+            this.$refs.medicalRecordTable.toggleRowSelection(row, true);
+          });
+
+        } else {
+          this.$refs.medicalRecordTable.clearSelection();
+        }
+      })
     },
 
     //供应商查询页面
     getData(query) {
-
+      this.loading = true
       selectSupplier(query).then(res => {
         this.supplierInfo.supplierData = res.data;
-        this.supplierInfo.supplierData.map((item,index)=>{
-           item.index=index
+        this.supplierInfo.supplierData.map((item, index) => {
+          item.index = index
         })
-       // this.totalCount = res.total;
+        this.loading = false
+        this.totalCount = res.total;
       })
-      console.log(2)
+
     },
 
 
@@ -477,6 +551,7 @@ console.log(val)
             this.serviceProForm.form.map((data, index) => {
               data.id = index + 1
               data.isSet = false
+              data.showFlag = true
             })
           }
         })
@@ -488,13 +563,14 @@ console.log(val)
         //调用供应商保存的接口
         //
         this.$refs.supplierInfo.validate(valid => {
-          if(valid){
-            let supplierData={
+          if (valid) {
+            let supplierData = {
               productCode: this.productCode,
-              productSupplierInfos: this.multipleSelection
+              productSupplierInfos: this.multipleSelection,
+              serviceCode: this.serviceProForm.form[this.serviceTableIndex].serviceCode
             }
             insertSupplier(supplierData).then(res => {
-              if (res !=null && res.code == '200') {
+              if (res != null && res.code == '200') {
                 this.$message({
                   message: '保存成功！',
                   type: 'success',
@@ -511,15 +587,12 @@ console.log(val)
                   showClose: true
                 })
               }
-          })
-          }
-          else {
+            })
+          } else {
             this.$message.warning('请填写完必要信息！')
           }
 
         })
-
-
 
 
       } else {
@@ -545,12 +618,16 @@ console.log(val)
         deductWay: '',
         costPrice: '',
         number: '',
-        isSet: true
+        isSet: true,
+        showFlag: true
       }
+
       this.serviceProForm.form.push(field)
     },
     editHandle(index, row) {
+
       this.serviceProForm.form[index].id = ''
+      this.serviceProForm.form[index].showFlag = false
       this.serviceProForm.form[index].isSet = true
     },
 
@@ -559,18 +636,33 @@ console.log(val)
       let flag = null
       if (this.serviceProForm.form != null && this.serviceProForm.form.length > 0) {
         this.$refs['serviceProForm'].validate(valid => {
+          if(valid){
+            if (this.serviceProForm.form.filter(item => {
+              return item.number == '' || item.number==0
+            }).length > 0) {
+              flag = '03'
+            }
+            else {
+              flag='01'
+            }
+          }
+          else {
+            flag = '04'
+          }
 
-          if (this.serviceProForm.form.filter(item => {return item.number == ''}).length > 0) {
+/*
+          if (this.serviceProForm.form.filter(item => {
+            return item.number == ''
+          }).length > 0) {
             flag = '03'
           }
           else {
-
             if (valid) {
               flag = '01'
             } else {
               flag = '04'
             }
-          }
+          }*/
         })
       } else {
         flag = '02'

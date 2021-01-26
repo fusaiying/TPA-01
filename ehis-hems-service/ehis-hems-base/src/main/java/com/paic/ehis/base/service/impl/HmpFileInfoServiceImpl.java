@@ -1,8 +1,8 @@
 package com.paic.ehis.base.service.impl;
 
+import com.paic.ehis.base.domain.HmpFileInfo;
 import com.paic.ehis.base.mapper.HmpFileInfoMapper;
 import com.paic.ehis.base.service.IHmpFileInfoService;
-import com.paic.ehis.base.domain.HmpFileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

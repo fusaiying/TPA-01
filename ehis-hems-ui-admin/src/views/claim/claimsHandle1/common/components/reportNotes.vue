@@ -21,10 +21,18 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="remark" label="备注内容" show-overflow-tooltip/>
-      <el-table-column align="center" prop="station" label="添加岗位" show-overflow-tooltip/>
+      <el-table-column align="center" prop="station" label="添加岗位" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ selectDictLabel(job_typeOptions, scope.row.remarkType) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="createBy" label="添加人" show-overflow-tooltip/>
-      <el-table-column align="center" prop="createTime" label="添加时间" show-overflow-tooltip/>
-      <el-table-column align="center" v-if="claimtype==='02' && status==='edit'" label="操作" width="140">
+      <el-table-column align="center" prop="createTime" label="添加时间" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" v-if="batchInfo.claimtype==='02' && status==='edit'" label="操作" width="140">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
           <el-button size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
@@ -65,13 +73,13 @@
 </template>
 
 <script>
-  let dictss = [{dictType: 'claim_note'}]
+  let dictss = [{dictType: 'claim_note'},{dictType: 'job_type'}]
   import {delRemark, addRemark,updateRemark,getRemarkRptNo} from '@/api/claim/handleCom'
 
   export default {
     props: {
-      claimtype:String,
-      reportData: Array,
+      batchInfo:Object,
+      reportDatas: Array,
       status: String,
       node: String,
       claimno: String,
@@ -92,10 +100,13 @@
       finalamount: String
     },
     watch: {
-
+      reportDatas:function (newValue) {
+        this.reportData=newValue
+      }
     },
     data() {
       return {
+        reportData:[],
         isAddOrEdit:'',
         dialogFormVisible: false,
         activeNames: ["1"],
@@ -116,6 +127,7 @@
         },
         dictList: [],
         claim_noteOptions: [],
+        job_typeOptions: [],
       };
     },
     async mounted() {
@@ -124,6 +136,9 @@
       })
       this.claim_noteOptions = this.dictList.find(item => {
         return item.dictType === 'claim_note'
+      }).dictDate
+      this.job_typeOptions = this.dictList.find(item => {
+        return item.dictType === 'job_type'
       }).dictDate
 
     },
@@ -136,11 +151,11 @@
       },
       saveRemark() {
         if (this.node==='accept'){
-          this.baseForm.claimCaseAccept='01'
+          this.baseForm.station='01'
         }else if (this.node==='input'){
-          this.baseForm.claimCaseAccept='02'
+          this.baseForm.station='02'
         }else if(this.node==='calculateReview'){
-          this.baseForm.claimCaseAccept='03'
+          this.baseForm.station='03'
         }
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
@@ -206,27 +221,70 @@
 
       },
       deleteInfo(row) {
-        delRemark(row.remarkId).then(res => {
-
+        this.$confirm(`是否确定删除?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          delRemark(row.remarkId).then(res => {
+            if (res !== null && res.code === 200) {
+              this.$message({
+                message: '删除成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              getRemarkRptNo(this.fixInfo.rptNo).then(res => {
+                if (res != null && res.code === 200) {
+                  this.reportData = res.data
+                }
+              }).catch(res => {
+              })
+            } else {
+              this.$message({
+                message: '删除失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          }).catch(res => {
+          })
+          this.$emit("refresh-item", 'report')
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消！'
+          })
         })
+
       },
       addOrEdit(status,row){
-        this.baseForm= {
-          rptNo:'',
-          remarkType: '',
-          remark: '',
-          station: '',
-          createBy: '',
-          createTime: '',
-          claimCaseAccept:'',
-        }
         this.dialogFormVisible=true
         if (status==='add'){
+          this.baseForm= {
+            rptNo:'',
+            remarkType: '',
+            remark: '',
+            station: '',
+            createBy: '',
+            createTime: '',
+            claimCaseAccept:'',
+          }
           this.isAddOrEdit='add'
 
         }else if (status==='edit'){
           this.isAddOrEdit='edit'
-          this.baseForm=row
+          this.baseForm.rptNo=row.rptNo
+          this.baseForm.remarkType=row.remarkType
+          this.baseForm.station=row.station
+          this.baseForm.createBy=row.createBy
+          this.baseForm.createTime=row.createTime
+          this.baseForm.claimCaseAccept=''
+          this.baseForm.remark=row.remark
+          this.baseForm.status=row.status
+          this.baseForm.remarkId=row.remarkId
+          this.baseForm.remarkType=row.remarkType
         }
       },
     }

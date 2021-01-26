@@ -39,7 +39,7 @@
       <div>
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
         </span>
         <el-divider/>
       </div>
@@ -85,6 +85,7 @@
     },
     data() {
       return {
+        isListExport:false,
         total: 0,
         finishTotal: 0,
         backNum: 1,
@@ -172,6 +173,7 @@
         if (this.activeName==='01'){
           processingList(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/bill/exportProcess'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
@@ -187,6 +189,7 @@
         }else if (this.activeName==='02'){
           accomplishList(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/bill/exportAccomplish'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm

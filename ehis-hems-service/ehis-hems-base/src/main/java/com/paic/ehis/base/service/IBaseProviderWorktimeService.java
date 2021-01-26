@@ -1,7 +1,8 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderWorktime;
+
+import java.util.List;
 
 /**
  * base_provider_worktime(服务商服务时间信息)Service接口

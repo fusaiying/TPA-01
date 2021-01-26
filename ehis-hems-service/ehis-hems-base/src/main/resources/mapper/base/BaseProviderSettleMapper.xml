@@ -5,11 +5,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseProviderSettleMapper">
 
     <resultMap type="BaseProviderSettle" id="BaseProviderSettleResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="providerCode"    column="provider_code"    />
         <result property="currency"    column="currency"    />
+        <result property="currencyName"    column="currencyName"    />
         <result property="claimFlag"    column="claim_flag"    />
+        <result property="claimFlagName"    column="claimFlagName"    />
         <result property="noticeDay"    column="notice_day"    />
         <result property="effectTime"    column="effect_time"    />
+        <result property="updateFlag"    column="update_flag"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -18,12 +22,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseProviderSettleVo">
-        select provider_code, currency, claim_flag, notice_day, effect_time, status, create_by, create_time, update_by, update_time from base_provider_settle
+        select serial_no,update_flag,provider_code, currency,
+         (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'currency' and dict_value = base_provider_settle_bak.currency)  currencyName,
+	claim_flag,
+(SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'yes_or_no' and dict_value = base_provider_settle_bak.claim_flag)  claimFlagName,
+         notice_day, effect_time, status, create_by, create_time, update_by, update_time from base_provider_settle_bak
+    </sql>
+
+    <sql id="selectBaseProviderSettleVoNew">
+        select serial_no,update_flag,provider_code, currency,
+         (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'currency' and dict_value = base_provider_settle.currency)  currencyName,
+	claim_flag,
+(SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'yes_or_no' and dict_value = base_provider_settle.claim_flag)  claimFlagName,
+         notice_day, effect_time, status, create_by, create_time, update_by, update_time from base_provider_settle
     </sql>
 
     <select id="selectBaseProviderSettleList" parameterType="BaseProviderSettle" resultMap="BaseProviderSettleResult">
         <include refid="selectBaseProviderSettleVo"/>
         <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
             <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
             <if test="claimFlag != null  and claimFlag != ''"> and claim_flag = #{claimFlag}</if>
             <if test="noticeDay != null  and noticeDay != ''"> and notice_day = #{noticeDay}</if>
@@ -34,17 +63,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseProviderSettleById" parameterType="String" resultMap="BaseProviderSettleResult">
         <include refid="selectBaseProviderSettleVo"/>
-        where provider_code = #{providerCode}  and status = 'Y'
+        where provider_code = #{providerCode}  and status = 'Y' and update_flag = '0'
+    </select>
+
+    <select id="selectBaseProviderSettleByIdNew" parameterType="String" resultMap="BaseProviderSettleResult">
+        <include refid="selectBaseProviderSettleVoNew"/>
+        where provider_code = #{providerCode}  and status = 'Y' and update_flag = '0'
     </select>
 
     <insert id="insertBaseProviderSettle" parameterType="BaseProviderSettle">
-        insert into base_provider_settle
+        insert into base_provider_settle_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
             <if test="providerCode != null">provider_code,</if>
             <if test="currency != null">currency,</if>
             <if test="claimFlag != null">claim_flag,</if>
             <if test="noticeDay != null">notice_day,</if>
             <if test="effectTime != null">effect_time,</if>
+            <if test="updateFlag != null">update_flag,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -52,11 +88,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="providerCode != null">#{providerCode},</if>
             <if test="currency != null">#{currency},</if>
             <if test="claimFlag != null">#{claimFlag},</if>
             <if test="noticeDay != null">#{noticeDay},</if>
             <if test="effectTime != null">#{effectTime},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertBaseProviderSettleNew" parameterType="BaseProviderSettle">
+        insert into base_provider_settle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="currency != null">currency,</if>
+            <if test="claimFlag != null">claim_flag,</if>
+            <if test="noticeDay != null">notice_day,</if>
+            <if test="effectTime != null">effect_time,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="currency != null">#{currency},</if>
+            <if test="claimFlag != null">#{claimFlag},</if>
+            <if test="noticeDay != null">#{noticeDay},</if>
+            <if test="effectTime != null">#{effectTime},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -66,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBaseProviderSettle" parameterType="BaseProviderSettle">
-        update base_provider_settle
+        update base_provider_settle_bak
         <trim prefix="SET" suffixOverrides=",">
             <if test="currency != null">currency = #{currency},</if>
             <if test="claimFlag != null">claim_flag = #{claimFlag},</if>
@@ -81,12 +151,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where provider_code = #{providerCode}
     </update>
 
+    <update id="updateBaseProviderSettleByCode" parameterType="String">
+        update base_provider_settle_bak set update_flag = '1'
+          where provider_code = #{providerCode} and update_flag = '0'
+    </update>
+
+    <update id="updateBaseProviderSettleByCodeNew" parameterType="String">
+        update base_provider_settle set update_flag = '1' , status = 'N'
+        where provider_code = #{providerCode} and status = 'Y'
+    </update>
+
     <delete id="deleteBaseProviderSettleById" parameterType="String">
-        delete from base_provider_settle where provider_code = #{providerCode}
+        delete from base_provider_settle_bak where provider_code = #{providerCode}
     </delete>
 
     <delete id="deleteBaseProviderSettleByIds" parameterType="String">
-        delete from base_provider_settle where provider_code in
+        delete from base_provider_settle_bak where provider_code in
         <foreach item="providerCode" collection="array" open="(" separator="," close=")">
             #{providerCode}
         </foreach>

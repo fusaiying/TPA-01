@@ -7,18 +7,18 @@ public class NetworkVO {
     /**
      * 供应商
      */
-    private HmpServOpera hmpServOpera;
+    private com.paic.ehis.base.domain.HmpServOpera hmpServOpera;
 
     /**
      * 网点数量
      */
     private Integer netnum;
 
-    public HmpServOpera getHmpServOpera() {
+    public com.paic.ehis.base.domain.HmpServOpera getHmpServOpera() {
         return hmpServOpera;
     }
 
-    public void setHmpServOpera(HmpServOpera hmpServOpera) {
+    public void setHmpServOpera(com.paic.ehis.base.domain.HmpServOpera hmpServOpera) {
         this.hmpServOpera = hmpServOpera;
     }
 

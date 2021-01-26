@@ -1,16 +1,23 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.paic.ehis.base.domain.vo.*;
-import com.paic.ehis.base.mapper.BaseProviderInfoMapper;
-import com.paic.ehis.base.service.IBaseProviderInfoService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.base.domain.BaseCheckInfo;
+import com.paic.ehis.base.domain.BaseProviderInfo;
+import com.paic.ehis.base.domain.vo.*;
+import com.paic.ehis.base.mapper.BaseProviderInfoMapper;
+import com.paic.ehis.base.service.*;
+import com.paic.ehis.base.service.IBaseProviderInfoService;
+import net.sourceforge.pinyin4j.PinyinHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.domain.BaseProviderInfo;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * base_provider_info(服务商基本信息)Service业务层处理
@@ -19,10 +26,29 @@ import com.paic.ehis.base.domain.BaseProviderInfo;
  * @date 2020-12-25
  */
 @Service
+@Transactional
 public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
 {
     @Autowired
     private BaseProviderInfoMapper baseProviderInfoMapper;
+
+    @Autowired
+    private IBaseProviderServiceService baseProviderServiceService;
+
+    @Autowired
+    private IBaseProviderApplyService baseProviderApplyService;
+
+    @Autowired
+    private IBaseBankService baseBankService;
+
+    @Autowired
+    private IBaseContactsService baseContactsService;
+
+    @Autowired
+    private IBaseProviderDepService baseProviderDepService;
+
+    @Autowired
+    private IBaseSupplierContractService baseSupplierContractService;
 
     /**
      * 查询base_provider_info(服务商基本信息)
@@ -39,13 +65,26 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     /**
      * 查询base_provider_info(服务商基本信息)
      *
-     * @param baseProviderInfo base_provider_info(服务商基本信息)ID
+     * @param ProviderInfo base_provider_info(服务商基本信息)ID
      * @return base_provider_info(服务商基本信息)
      */
     @Override
-    public BaseProviderInfo selectBaseProviderInfo(BaseProviderInfo baseProviderInfo)
+    public BaseProviderInfo selectBaseProviderInfo(BaseProviderInfo ProviderInfo)
     {
-        return baseProviderInfoMapper.selectBaseProviderInfo(baseProviderInfo);
+        BaseProviderInfo baseProviderInfo = null;
+        if("01".equals(ProviderInfo.getOrgFlag())){
+            baseProviderInfo = baseProviderInfoMapper.selectBaseProviderInfoById(ProviderInfo.getProviderCode());
+        }else if("02".equals(ProviderInfo.getOrgFlag())){
+            baseProviderInfo = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(ProviderInfo.getProviderCode());
+        }
+        if(baseProviderInfo != null){
+            if(StringUtils.isNotBlank(baseProviderInfo.getType2Str())){
+                baseProviderInfo.setType2(Arrays.asList((baseProviderInfo.getType2Str().split(","))));
+            }else{
+                baseProviderInfo.setType2(new ArrayList());
+            }
+        }
+        return baseProviderInfo;
     }
 
 
@@ -59,6 +98,32 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     public List<BaseProviderInfo> selectBaseProviderInfoList(BaseProviderInfo baseProviderInfo)
     {
         return baseProviderInfoMapper.selectBaseProviderInfoList(baseProviderInfo);
+    }
+
+    @Override
+    public List<BaseProviderInfo> selectBaseProviderInfoListNew(BaseProviderInfo baseProviderInfo)
+    {
+        return baseProviderInfoMapper.selectBaseProviderInfoListNew(baseProviderInfo);
+    }
+
+    @Override
+    public List<BaseProviderInfo> selectProvideInfoList(BaseProviderInfo baseProviderInfo)
+    {
+
+        return baseProviderInfoMapper.selectProvideInfoList(baseProviderInfo);
+    }
+
+
+    /**
+     * 查询base_provider_info(服务商基本信息)列表
+     *
+     * @param baseProviderInfo base_provider_info(服务商基本信息)
+     * @return base_provider_info(服务商基本信息)
+     */
+    @Override
+    public List<BaseProviderInfo> selectBaseProviderInfoCheckList(BaseProviderInfo baseProviderInfo)
+    {
+        return baseProviderInfoMapper.selectBaseProviderInfoCheckList(baseProviderInfo);
     }
 
     @Override
@@ -153,11 +218,70 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     public BaseProviderInfo insertBaseProviderInfo(BaseProviderInfo baseProviderInfo)
     {
         BaseProviderInfo baseProvider =new BaseProviderInfo();
-        baseProviderInfo.setCreateTime(DateUtils.getNowDate());
-        baseProviderInfo.setProviderCode("M"+ PubFun.createMySqlMaxNoUseCache("providercode",10,9));
-        baseProviderInfo.setStatus("1");
-        baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
-        baseProvider.setProviderCode(baseProviderInfo.getProviderCode());
+        /*if(StringUtils.isNotBlank(baseProviderInfo.getProviderCode())){
+            //服务商编码不为为空时
+            if("01".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
+            }else if("02".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+            }
+            baseProviderInfo.setCreateTime(DateUtils.getNowDate());
+            baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
+            baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
+            baseProviderInfo.setStatus("Y");
+            baseProviderInfo.setUpdateFlag("0");
+            if("01".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfo.setBussinessStatus("01");  //新建状态
+                baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
+            }else if("02".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfo.setBussinessStatus("03");  //有效状态
+                baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
+            }
+        }else{*/ //服务商编码为空时新增服务商基本信息
+            baseProviderInfo.setCreateTime(DateUtils.getNowDate());
+            baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
+            baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
+           if("01".equals(baseProviderInfo.getOrgFlag())){
+               baseProviderInfo.setProviderCode("H"+ PubFun.createMySqlMaxNoUseCache("hospitalCode",10,9));
+           }else if("02".equals(baseProviderInfo.getOrgFlag())){
+               baseProviderInfo.setProviderCode("M"+ PubFun.createMySqlMaxNoUseCache("otherOrgCode",10,9));
+           }
+
+            baseProviderInfo.setStatus("Y");
+            baseProviderInfo.setUpdateFlag("0");
+            if("01".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfo.setBussinessStatus("01");  //新建状态
+                //查询省的中文名称
+                String provincesName = baseProviderInfoMapper.selectName(baseProviderInfo.getProvince());
+                provincesName = provincesName.substring(0,2);
+                if("内蒙".equals(provincesName)){
+                    provincesName = "内蒙古";
+                }
+                if("黑龙".equals(provincesName)){
+                    provincesName = "黑龙江";
+                }
+                String provincesNameen = getPinYinHeadChar(provincesName);
+                //获取流水号
+                String provincesNo = baseProviderInfoMapper.selectNum(baseProviderInfo.getProvince());
+                if(provincesNo !=null && provincesNo !=""){
+                    provincesNo = String.format("%0" + 5 + "d", Integer.parseInt(provincesNo) + 1);
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+provincesNo);
+                }else{
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
+                }
+                baseProviderInfo.setType2Str(StringUtils.join(baseProviderInfo.getType2(), ","));
+                baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
+            }else if("02".equals(baseProviderInfo.getOrgFlag())){
+                baseProviderInfo.setBussinessStatus("03");  //有效状态
+                baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
+            }
+            baseProvider.setProviderCode(baseProviderInfo.getProviderCode());
+        //}
+
         return baseProvider;
     }
 
@@ -170,8 +294,56 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     @Override
     public int updateBaseProviderInfo(BaseProviderInfo baseProviderInfo)
     {
+        //服务商编码不为为空时
+        int count = 0;
+        String province = baseProviderInfoMapper.selectName1(baseProviderInfo.getProviderCode());
+        if("01".equals(baseProviderInfo.getOrgFlag())){
+            baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
+        }else if("02".equals(baseProviderInfo.getOrgFlag())){
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+        }
+        baseProviderInfo.setCreateTime(DateUtils.getNowDate());
         baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
-        return baseProviderInfoMapper.updateBaseProviderInfo(baseProviderInfo);
+        baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
+        baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+        BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+        if(baseProviderInfoNew != null){
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+        }
+
+        baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
+        baseProviderInfo.setStatus("Y");
+        baseProviderInfo.setUpdateFlag("0");
+        if("01".equals(baseProviderInfo.getOrgFlag())){
+            //通过编码查询省的信息
+            if(!province.equals(baseProviderInfo.getProvince())){
+                //查询省的中文名称
+                String provincesName = baseProviderInfoMapper.selectName(baseProviderInfo.getProvince());
+                provincesName = provincesName.substring(0,2);
+                if("内蒙".equals(provincesName)){
+                    provincesName = "内蒙古";
+                }
+                if("黑龙".equals(provincesName)){
+                    provincesName = "黑龙江";
+                }
+                String provincesNameen = getPinYinHeadChar(provincesName);
+                //获取流水号
+                String provincesNo = baseProviderInfoMapper.selectNum(baseProviderInfo.getProvince());
+                if(provincesNo !=null && provincesNo !=""){
+                    provincesNo = String.format("%0" + 5 + "d", Integer.parseInt(provincesNo) + 1);
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+provincesNo);
+                }else{
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
+                }
+            }
+            baseProviderInfo.setType2Str(StringUtils.join(baseProviderInfo.getType2(), ","));
+            baseProviderInfo.setBussinessStatus("01");  //新建状态
+            count = baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
+        }else if("02".equals(baseProviderInfo.getOrgFlag())){
+            baseProviderInfo.setBussinessStatus("03");  //有效状态
+            count =baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
+        }
+        return count;
     }
 
     /**
@@ -197,4 +369,178 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     {
         return baseProviderInfoMapper.deleteBaseProviderInfoById(providercode);
     }
+
+
+    @Override
+    public int insertCheckInfo(ProviderInfoVo providerInfoVo)
+    {
+        //基础信息保存并提交审核
+        int i =0;
+        BaseProviderInfo baseProviderInfo = providerInfoVo.getBaseInfo();
+        String province = baseProviderInfoMapper.selectName1(baseProviderInfo.getProviderCode());
+        if("01".equals(baseProviderInfo.getOrgFlag())){
+            baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
+            BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+            if(baseProviderInfoNew != null){
+                baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+            }
+            baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
+            baseProviderInfo.setStatus("Y");
+                //查询省的中文名称
+                String provincesName = baseProviderInfoMapper.selectName(baseProviderInfo.getProvince());
+                provincesName = provincesName.substring(0,2);
+                if("内蒙".equals(provincesName)){
+                    provincesName = "内蒙古";
+                }
+                if("黑龙".equals(provincesName)){
+                    provincesName = "黑龙江";
+                }
+                String provincesNameen = getPinYinHeadChar(provincesName);
+                //获取流水号
+                String provincesNo = baseProviderInfoMapper.selectNum(baseProviderInfo.getProvince());
+                if(provincesNo !=null && provincesNo !=""){
+                    provincesNo = String.format("%0" + 5 + "d", Integer.parseInt(provincesNo) + 1);
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+provincesNo);
+                }else{
+                    baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
+                }
+
+            baseProviderInfo.setCreateTime(DateUtils.getNowDate());
+            baseProviderInfo.setBussinessStatus("02");
+            baseProviderInfo.setUpdateFlag("0");
+            i = baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
+        }else if("02".equals(baseProviderInfo.getOrgFlag())){
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+            baseProviderInfo.setCreateTime(DateUtils.getNowDate());
+            baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
+            baseProviderInfo.setStatus("Y");
+            baseProviderInfo.setBussinessStatus("03");
+            baseProviderInfo.setUpdateFlag("0");
+            i = baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
+        }
+
+        //服务信息保存并提交审核
+        if(providerInfoVo.getServiceInfo() !=null){
+            baseProviderServiceService.insertBaseProviderService(providerInfoVo.getServiceInfo());
+        }
+        //申请信息保存并提交审核
+        if(providerInfoVo.getReserveInfo() !=null){
+            baseProviderApplyService.insertBaseProviderApply(providerInfoVo.getReserveInfo());
+        }
+        //账户信息的保存
+        if(providerInfoVo.getClosingInfo() != null){
+            baseBankService.insertBaseBank(providerInfoVo.getClosingInfo());
+        }
+        //联系人信息保存
+        if(providerInfoVo.getContactInfo() != null){
+            baseContactsService.insertBaseContacts(providerInfoVo.getContactInfo());
+        }
+        //科室信息保存
+        if(providerInfoVo.getDepartmentInfo() !=null){
+            baseProviderDepService.insertBaseProviderDep(providerInfoVo.getDepartmentInfo());
+        }
+        return  i;
+    }
+
+    @Override
+    public int insertChecDatak(ProviderInfoVo providerInfoVo)
+    {
+
+        String providerCode = providerInfoVo.getProviderCode();
+        if("01".equals(providerInfoVo.getCheckResult())){//审核通过
+            //备份表中的数据修改状态
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerCode);
+            //数据挪到正式表中
+            this.insertBaseProviderInfoNew(providerCode);
+            baseProviderServiceService.insertBaseProviderServiceNew(providerCode);
+            baseProviderApplyService.insertBaseProviderApplyNew(providerCode);
+            baseBankService.insertBaseBankNew(providerCode);
+            baseContactsService.insertBaseContactsNew(providerCode);
+            baseProviderDepService.insertBaseProviderDepNew(providerCode);
+            baseSupplierContractService.insertBaseSupplierContractNew(providerCode);
+        }else if("02".equals(providerInfoVo.getCheckResult())){ //审核拒绝，审核状态改成新建状态
+            //备份表中的数据修改状态
+            baseProviderInfoMapper.updateBaseProviderInfoStatus(providerCode);
+        }
+        //审核表里增加数据
+        BaseCheckInfo baseCheckInfo = new BaseCheckInfo();
+        baseCheckInfo.setCheckAdvice(providerInfoVo.getCheckAdvice());
+        baseCheckInfo.setCheckResult(providerInfoVo.getCheckResult());
+        baseCheckInfo.setProviderCode(providerCode);
+
+        baseCheckInfo.setCreateTime(DateUtils.getNowDate());
+        baseCheckInfo.setUpdateTime(DateUtils.getNowDate());
+        baseCheckInfo.setCreateBy(SecurityUtils.getUsername());
+        baseCheckInfo.setUpdateBy(SecurityUtils.getUsername());
+        baseCheckInfo.setStatus("Y");
+        //baseCheckInfo.setCreateBy();   //操作人信息
+        baseCheckInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseCheckSer",12,12));
+        int i=baseProviderInfoMapper.insertCheckInfo(baseCheckInfo);
+        return  i;
+    }
+
+
+    public int insertBaseProviderInfoNew(String providerCode)
+    {
+        BaseProviderInfo baseProviderInfo = baseProviderInfoMapper.selectBaseProviderInfoById(providerCode);
+        BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(providerCode);
+
+        if(baseProviderInfoNew != null){
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(providerCode);
+        }
+        return baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
+    }
+
+
+    @Override
+    public List<BaseCheckInfo> selectBaseProviderCheckList(String providerCode)
+    {
+        return baseProviderInfoMapper.selectBaseProviderCheckList(providerCode);
+    }
+
+
+    @Override
+    public List<BaseProviderInfo> selectBaseProviderInfoByNames(BaseProviderInfo baseProviderInfo)
+    {
+        return baseProviderInfoMapper.selectBaseProviderInfo(baseProviderInfo);
+    }
+
+    @Override
+    public List<BaseProviderInfo> selectBaseProviderInfoByNamesNew(BaseProviderInfo baseProviderInfo)
+    {
+        return baseProviderInfoMapper.selectBaseProviderInfoNew(baseProviderInfo);
+    }
+
+
+    @Override
+    public  List<BaseProviderInfo> selectBaseProviderInfos(BaseProviderInfo baseProviderInfo) {
+        return baseProviderInfoMapper.selectBaseProviderInfos(baseProviderInfo);
+    }
+
+    @Override
+    public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo) {
+        return baseProviderInfoMapper.selectHospitalInfo(baseProviderInfo);
+    }
+
+
+    /**
+    * 得到中文首字母（清华大学 -> QHDX）
+    * @param str 需要转化的中文字符串
+    * @return 大写首字母缩写的字符串
+    */
+public  String getPinYinHeadChar(String str) {
+    StringBuilder convert = new StringBuilder();
+    for (int j = 0; j < str.length(); j++) {
+        char word = str.charAt(j);
+        String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
+        if (pinyinArray != null) {
+            convert.append(pinyinArray[0].charAt(0));
+        } else {
+            convert.append(word);
+        }
+    }
+    return convert.toString().toUpperCase();
+}
+
+
 }

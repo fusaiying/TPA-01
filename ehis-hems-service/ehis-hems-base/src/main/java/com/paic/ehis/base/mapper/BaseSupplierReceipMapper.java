@@ -60,4 +60,6 @@ public interface BaseSupplierReceipMapper
      * @return 结果
      */
     public int deleteBaseSupplierReceipByIds(String[] suppliercodes);
+
+    public  int updatebaseSupplierReceipStatus(String supplierCode);
 }

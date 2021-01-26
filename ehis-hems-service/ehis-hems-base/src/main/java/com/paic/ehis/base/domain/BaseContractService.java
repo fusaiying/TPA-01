@@ -2,6 +2,7 @@ package com.paic.ehis.base.domain;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,24 +14,28 @@ import java.math.BigDecimal;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseContractService extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 流水号 */
+    private String serialNo;
 
     /** 合约编码 */
     @Excel(name = "合约编码")
     private String contractNo;
 
     /** 供应商编码 */
-    @Excel(name = "供应商编码")
+    @Excel(name = "供应商项目名称")
     private String supplierCode;
 
     /** 服务项目编码 */
-    @Excel(name = "服务项目编码")
+    @Excel(name = "服务项目名称")
     private String serviceCode;
 
     /** 结算方式 */
-    @Excel(name = "结算方式")
+    @Excel(name = "结算方式",readConverterExp = "01=按case(工单)，02=按人头(保单)，03=按一口价")
     private String settleType;
 
     /** 服务项目价格下限 */
@@ -42,7 +47,7 @@ public class BaseContractService extends BaseEntity
     private BigDecimal maxPrice;
 
     /** 结算币种 */
-    @Excel(name = "结算币种")
+    @Excel(name = "结算币种",readConverterExp = "01-加币，02-港币，03-美元，04-日元，05-欧元，06-英镑，07-澳元，08-新币")
     private String settleCurrency;
 
     /** 日限次数 */
@@ -54,8 +59,13 @@ public class BaseContractService extends BaseEntity
     private String remak;
 
     /** 状态 */
-    @Excel(name = "状态")
+    @Excel(name = "状态",readConverterExp = "Y=有效，N=无效")
     private String status;
+
+    /** 供应商项目名称 */
+    @Excel(name = "供应商项目名称")
+    private String supplierServiceName;
+
 
     public void setContractNo(String contractNo) 
     {

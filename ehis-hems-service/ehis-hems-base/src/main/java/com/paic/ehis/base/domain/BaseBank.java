@@ -1,10 +1,11 @@
 package com.paic.ehis.base.domain;
 
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 /**
  * base_bank（银行信息）对象 base_bank
@@ -12,12 +13,13 @@ import com.paic.ehis.common.core.annotation.Excel;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseBank extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
-    private String id;
+    private String serialNo;
 
     /** 服务商编码 */
     @Excel(name = "服务商编码")
@@ -51,14 +53,43 @@ public class BaseBank extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
-    public void setId(String id) 
-    {
-        this.id = id;
+    /** 账户状态 */
+    @Excel(name = "账户状态")
+    private String bussinessStatus;
+
+    /** 账户状态 */
+    @Excel(name = "账户状态")
+    private String businessCode;
+
+
+    private String updateFlag;
+
+    private String accountTypeName;
+
+    public String getBussinessStatus() {
+        return bussinessStatus;
     }
 
-    public String getId() 
+    public void setBussinessStatus(String bussinessStatus) {
+        this.bussinessStatus = bussinessStatus;
+    }
+
+    public void setSerialNo(String serialNo)
     {
-        return id;
+        this.serialNo = serialNo;
+    }
+
+    public String getUpdateFlag() {
+        return updateFlag;
+    }
+
+    public void setUpdateFlag(String updateFlag) {
+        this.updateFlag = updateFlag;
+    }
+
+    public String getSerialNo()
+    {
+        return serialNo;
     }
     public void setProviderCode(String providerCode)
     {
@@ -136,7 +167,7 @@ public class BaseBank extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
+            .append("serialNo", getSerialNo())
             .append("providerCode", getProviderCode())
             .append("bankCode", getBankCode())
             .append("bankName", getBankName())
@@ -146,6 +177,7 @@ public class BaseBank extends BaseEntity
             .append("bankDetail", getBankDetail())
             .append("remark", getRemark())
             .append("status", getStatus())
+                .append("bussinessStatus", getBussinessStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

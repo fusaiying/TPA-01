@@ -39,7 +39,7 @@
       <div>
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
         </span>
         <el-divider/>
       </div>
@@ -96,6 +96,7 @@
     },
     data() {
       return {
+        isListExport:false,
         total: 0,
         finishTotal: 0,
         hangUpTotal: 0,
@@ -201,6 +202,7 @@
         if (this.activeName==='01'){
           listConditionsForTheAdjustmentUnder(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportConditionsForTheAdjustmentUnder'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
@@ -216,6 +218,7 @@
         }else if (this.activeName==='02'){
           listConditionsForTheAdjustmentOver(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportConditionsForTheAdjustmentOver'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
@@ -231,6 +234,7 @@
         }else if (this.activeName==='03'){
           listConditionsForTheAdjustmentHang(this.searchForm).then(res => {
             if (res.rows.length>0){
+              this.isListExport=true
               this.download('system/case/exportConditionsForTheAdjustmentHang'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm

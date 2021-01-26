@@ -1,7 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderDep;
+
+import java.util.List;
 
 /**
  * base_provider_dept(服务商科室)Mapper接口
@@ -35,12 +36,36 @@ public interface BaseProviderDepMapper {
     public int insertBaseProviderDep(BaseProviderDep baseProviderDep);
 
     /**
+     * 新增base_provider_dept(服务商科室)
+     *
+     * @param baseProviderDep base_provider_dept(服务商科室)
+     * @return 结果
+     */
+    public int insertBaseProviderDepNew(BaseProviderDep baseProviderDep);
+
+    /**
      * 修改base_provider_dept(服务商科室)
      *
      * @param baseProviderDep base_provider_dept(服务商科室)
      * @return 结果
      */
     public int updateBaseProviderDep(BaseProviderDep baseProviderDep);
+
+    /**
+     * 修改base_provider_dept(服务商科室)
+     *
+     * @param providerCode base_provider_dept(服务商科室)
+     * @return 结果
+     */
+    public int updateBaseProviderDepByCode(String providerCode);
+
+    /**
+     * 修改base_provider_dept(服务商科室)
+     *
+     * @param providerCode base_provider_dept(服务商科室)
+     * @return 结果
+     */
+    public int updateBaseProviderDepByCodeNew(String providerCode);
 
     /**
      * 删除base_provider_dept(服务商科室)
@@ -66,6 +91,14 @@ public interface BaseProviderDepMapper {
      * @return base_provider_dept(服务商科室)
      */
     public List<BaseProviderDep> selectBaseProviderDepByCode(String providercode);
+
+    /**
+     * 查询base_provider_dept(服务商科室)
+     *
+     * @param providercode base_provider_dept(服务商科室)ID
+     * @return base_provider_dept(服务商科室)
+     */
+    public List<BaseProviderDep> selectBaseProviderDepByCodeNew(String providercode);
 
     /**
      * 删除base_provider_dept(服务商科室)

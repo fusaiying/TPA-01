@@ -2,13 +2,13 @@
   <div class="app-container">
     <!--产品基本信息-->
     <div >
-      <product-info ref="productInfoForm"   :parProductChname="parProductChname" :parProductEnname="parProductEnname" :disableFlag="disabledFlag"
+      <product-info ref="productInfoForm"   :parProductChname="parProductChname" :parProductEnname="parProductEnname" :disableFlag="disabledFlag" :status="status"
                     :parOutProductChname="parOutProductChname" :parOutProductEnname="parOutProductEnname" :productCode="productCode"
       ></product-info>
     </div>
     <!--服务项目-->
     <div >
-      <services-available ref="servicesAvailableForm" :productCode="productCode" :disabledFlag="disabledFlag" ></services-available>
+      <services-available ref="servicesAvailableForm" :productCode="productCode" :disabledFlag="disabledFlag" :status="status"></services-available>
     </div>
 <!--供应商信息-->
     <div >
@@ -27,17 +27,17 @@
 
           <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>
           <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码"/>
-          <el-table-column key="2" align="center" min-width="100" prop="supplierName" label="供应商名称"/>
-          <el-table-column key="3" align="center" prop="applicableArea" min-width="150" label="适用区域"/>
-          <el-table-column key="4" align="center" min-width="100" prop="contractPeriod" label="合约止期"/>
+          <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称"/>
+          <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域"/>
+          <el-table-column key="4" align="center" min-width="100" prop="endDate" label="合约止期"/>
           <el-table-column key="5" align="center" min-width="150" label="服务价格">
             <template slot-scope="scope">
               <span>{{ scope.row.minPrice }}-{{ scope.row.maxPrice }}</span>
             </template>
           </el-table-column>
-          <el-table-column key="6" align="center" prop="priorityOrder" label="优先级次序" min-width="120">
+          <el-table-column key="6" align="center" prop="priority" label="优先级次序" min-width="120">
             <template slot-scope="scope">
-              <span >{{ scope.row.priorityOrder }}</span>
+              <span >{{ scope.row.priority }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -47,7 +47,7 @@
 
     <!--服务手册列表信息-->
     <div>
-      <service-manual-list :productCode="productCode" :disabledFlag="disabledFlag"></service-manual-list>
+      <service-manual-list :productCode="productCode" :disabledFlag="disabledFlag" :status="status"></service-manual-list>
     </div>
 
     <!--审核日志-->
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import {selectSupplier} from '@/api/baseInfo/serviceProductManagement'
+import {selectProductSupplier} from '@/api/baseInfo/serviceProductManagement'
 import productInfo   from './../components/productInfo'
 import servicesAvailable   from './../components/servicesAvailable'
 import serviceManualList   from './../components/serviceManualList'
@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-
+      status:'edit',
       disabledFlag: false,
       parProductChname: '',
       parProductEnname: '',
@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     init(){
-      //新增
+
       if(this.$route.query.status=='review'){
         this.disabledFlag=true
         this.productCode=this.$route.query.productCode
@@ -112,7 +112,7 @@ export default {
         let query={
           productCode: this.$route.query.productCode
         }
-        selectSupplier(query).then(res => {
+        selectProductSupplier(query).then(res => {
           this.supplierInfo.supplierData = res.data;
         })
 

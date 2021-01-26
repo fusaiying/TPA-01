@@ -57,7 +57,15 @@
         <el-table-column key="3" align="center" prop="bankName" min-width="160" label="结算银行" show-overflow-tooltip/>
         <el-table-column key="5" align="center" prop="accountNo" label="账户号" min-width="120" show-overflow-tooltip/>
         <el-table-column key="6" align="center" prop="bankDetail" label="银行信息描述" min-width="120" show-overflow-tooltip/>
-      </el-table>
+      </el-table>        <!--分页组件-->
+      <pagination
+        v-show="totalCount>0"
+        :total="totalCount"
+        :page.sync="searchForm.pageNum"
+        :limit.sync="searchForm.pageSize"
+        @pagination="getData"
+      />
+
     </el-card>
   </el-dialog>
 </template>
@@ -79,11 +87,14 @@
     data() {
       return {
         rowData: {},
+        totalCount: 0,
         radio: undefined,
         dialogVisable:false,
         tableData: [],
         searchForm: {
           chname1: '',
+          pageNum:1,
+          pageSize:10
         },
       }
     },
@@ -101,9 +112,27 @@
       },
       // 查询
       searchHandle() {
+        this.searchForm.pageNum=1
+        this.searchForm.pageSize=10
+        this.getData()
+/*        getHospitalInfo(this.searchForm).then(res=>{
+          if (res!=null && res!=='' ){
+            this.tableData=res.rows
+            this.totalCount=res.total
+            if (res.rows.length<1) {
+              return this.$message.warning(
+                "没有查询到数据！"
+              )
+            }
+          }
+        })*/
+      },
+
+      getData(){
         getHospitalInfo(this.searchForm).then(res=>{
           if (res!=null && res!=='' ){
             this.tableData=res.rows
+            this.totalCount=res.total
             if (res.rows.length<1) {
               return this.$message.warning(
                 "没有查询到数据！"

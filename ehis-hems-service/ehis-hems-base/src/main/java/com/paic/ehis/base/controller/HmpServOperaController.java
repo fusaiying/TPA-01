@@ -1,33 +1,33 @@
 package com.paic.ehis.base.controller;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.domain.*;
-import com.paic.ehis.base.service.*;
 import com.paic.ehis.common.core.utils.PathUtil;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.file.FileUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.base.domain.*;
+import com.paic.ehis.base.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 供应商管理Controller
  *
- * @author paic.ehis
+ * @author sino
  * @date 2020-09-21
  */
 @RestController
@@ -244,7 +244,7 @@ public class HmpServOperaController extends BaseController {
             return AjaxResult.error("操作失败-`" + hmpFileInfo.getFilename() + "`文件名已存在！");
         }
         //文件保存地址
-        String url = PathUtil.projectPath.substring(6, PathUtil.projectPath.length()) + "paic.ehis_file/paic.ehis_provider/" + servcomno + "/";
+        String url = PathUtil.projectPath.substring(6, PathUtil.projectPath.length()) + "sino_file/sino_provider/" + servcomno + "/";
         //保存文件
         boolean flag = FileUtils.saveFileByMultipartFile(file, url);
         if (!flag) {

@@ -1,16 +1,20 @@
 package com.paic.ehis.base.service.impl;
 
-import com.paic.ehis.base.service.IBaseSupplierContractService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.BaseSupplierContract;
+import com.paic.ehis.base.mapper.BaseContractServiceMapper;
 import com.paic.ehis.base.mapper.BaseSupplierContractMapper;
+import com.paic.ehis.base.service.IBaseSupplierContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +25,13 @@ import java.util.Map;
  * @date 2020-12-31
  */
 @Service
-public class BaseSupplierContractServiceImpl implements IBaseSupplierContractService
+public class BaseSupplierContractServiceImpl implements IBaseSupplierContractService 
 {
     @Autowired
     private BaseSupplierContractMapper baseSupplierContractMapper;
 
+    @Autowired
+    private BaseContractServiceMapper baseContractServiceMapper;
     /**
      * 查询base_supplier_contract（供应商合约）
      * 
@@ -73,35 +79,71 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     return baseSupplierContractMapper.selectBaseSupplierMonth(baseSupplierContract);
     }
 
+//根据服务机构id查询合约信息
+    @Override
+    public List<BaseSupplierContract> selectBaseproviderCode(String providerCode) {
+        return baseSupplierContractMapper.selectBaseproviderCode(providerCode);
+    }
+
+
 
 
     /**
-     * 新增base_supplier_contract（供应商合约）
+     * 新增base_supplier_contract（供应商合约/服务商合约）
      * 
      * @param baseSupplierContract base_supplier_contract（供应商合约）
      * @return 结果
      */
     @Override
-    public int insertBaseSupplierContract(BaseSupplierContract baseSupplierContract)
-    {
-         String contractno = baseSupplierContract.getContractNo();
-        //判断合约编码为空就是新增，不为空就是修改
-        if (StringUtils.isEmpty(contractno)) {
-            contractno = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 7);
-            baseSupplierContract.setContractNo(contractno);
-            baseSupplierContract.setCreateTime(DateUtils.getNowDate());
-            return baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
+    public BaseSupplierContract  insertBaseSupplierContract(BaseSupplierContract baseSupplierContract) {
+
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
+
+        baseSupplierContract.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractSerialNo", 0, 11));
+      //  baseSupplierContract.setBussinessStatus("01");//状态
+        baseSupplierContract.setStatus("Y");
+        baseSupplierContract.setCreateBy(username);
+        baseSupplierContract.setUpdateBy(username);
+        baseSupplierContract.setCreateTime(nowDate);
+        baseSupplierContract.setUpdateTime(nowDate);
+
+        String flag = baseSupplierContract.getFlag();
+        if ("01".equals(flag)) {//判断是供应商合约编码
+            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 7);
+            baseSupplierContract.setContractNo(contractNo);
+            baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
+
+            //需要将 供应商服务项目 临时数据更新挂在该合约下
+            if(StringUtils.isNotBlank(baseSupplierContract.getConSerId())){
+                Map<String,Object> map = new HashMap<>();
+                map.put("preContractNo",baseSupplierContract.getConSerId());
+                map.put("contractNo",contractNo);
+                baseContractServiceMapper.updateBaseContractServiceByContractNo(map);
+            }
+            return baseSupplierContract;
         }
-        else {
-            baseSupplierContractMapper.deleteBaseSupplierContractById(contractno);
-            if(contractno == null){  return 0; }
-            baseSupplierContract.setContractNo(contractno);
-            baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
-            baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);
+        else if("02".equals(flag)) {//判断是服务商合约编码
+            baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
         }
-        return 1;
+        return  baseSupplierContract;
     }
 
+    @Override
+    public int insertBaseSupplierContractNew(String providerCode){
+        int count = 0;
+        List<BaseSupplierContract> baseSupplierContracts = baseSupplierContractMapper.selectSupplierContractByCode(providerCode);
+        List<BaseSupplierContract> baseSupplierContractsNew = baseSupplierContractMapper.selectBaseproviderCode(providerCode);
+        if(baseSupplierContractsNew.isEmpty()){ //存在则修改已存在的数据
+            baseSupplierContractMapper.updateBaseContactsByCodeNew(providerCode);
+        }
+        for(BaseSupplierContract baseSupplierContract :baseSupplierContracts){
+            baseSupplierContract.setCreateTime(DateUtils.getNowDate());
+            int i =baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
+            count += i;
+        }
+        return count;
+    }
     /**
      * 修改base_supplier_contract（供应商合约）
      * 
@@ -111,6 +153,8 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     @Override
     public int updateBaseSupplierContract(BaseSupplierContract baseSupplierContract)
     {
+        baseSupplierContract.setUpdateBy(SecurityUtils.getUsername());
+        baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
         return baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);
     }

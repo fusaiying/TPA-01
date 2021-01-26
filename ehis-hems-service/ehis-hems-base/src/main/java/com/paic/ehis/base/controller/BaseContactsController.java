@@ -1,27 +1,20 @@
 package com.paic.ehis.base.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.service.IBaseContactsService;
-import com.paic.ehis.base.domain.BaseContacts;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
-
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.base.domain.BaseContacts;
+import com.paic.ehis.base.service.IBaseContactsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * base_contacts（联系人信息）Controller
@@ -80,6 +73,17 @@ public class BaseContactsController extends BaseController
     public AjaxResult add(@RequestBody BaseContacts baseContacts)
     {
         return toAjax(baseContactsService.insertBaseContacts(baseContacts));
+    }
+
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody List<BaseContacts> baseContactsVo)
+    {
+        return toAjax(baseContactsService.addBaseContacts(baseContactsVo));
+    }
+
+    @PutMapping
+    public AjaxResult delete(@PathVariable String supplierCode){
+        return toAjax(baseContactsService.updateBaseContactsStatus(supplierCode));
     }
 
     /**

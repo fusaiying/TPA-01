@@ -99,7 +99,7 @@
       <div slot="header" class="clearfix">
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
@@ -144,6 +144,7 @@
     },
     data() {
       return {
+        isListExport:false,
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -184,14 +185,14 @@
         this.loading = false
       })
       //获取直结复核理赔批次待处理个人池
-      getUntreatedList(this.queryParams).then(res => {
+      getUntreatedList().then(res => {
         this.backData = res.rows
         this.backTotal = res.total
       }).finally(() => {
         this.loading = false
       })
       //获取直结复核公共池获取到未处理个人池
-      getProcessedList(this.queryParams).then(res => {
+      getProcessedList().then(res => {
         this.dealData = res.rows
         this.dealTotal = res.total
       }).finally(() => {
@@ -280,9 +281,30 @@
       //清单导出
       listExport() {
         if (this.activeName === '02') {//已处理
-          this.download('system/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
+          getUntreatedList().then(res => {
+            if (res.rows.length>0){
+              this.isListExport=true
+              this.download('system/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
+            }else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+          })
         } else {//待处理
-          this.download('system/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
+          getProcessedList().then(res => {
+            if (res.rows.length>0){
+              this.isListExport=true
+              this.download('system/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
+            }else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+            this.loading = false
+          })
         }
       },
       open() {

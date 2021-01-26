@@ -1,13 +1,14 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
-import com.paic.ehis.base.service.IBaseProviderNewtworktypetDataService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.base.domain.BaseProviderNewtworktypetData;
+import com.paic.ehis.base.mapper.BaseProviderNewtworktypetDataMapper;
+import com.paic.ehis.base.service.IBaseProviderNewtworktypetDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.mapper.BaseProviderNewtworktypetDataMapper;
-import com.paic.ehis.base.domain.BaseProviderNewtworktypetData;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet_data(医疗网络类型信息)Service业务层处理
@@ -16,7 +17,8 @@ import com.paic.ehis.base.domain.BaseProviderNewtworktypetData;
  * @date 2021-01-04
  */
 @Service
-public class BaseProviderNewtworktypetDataServiceImpl implements IBaseProviderNewtworktypetDataService
+@Transactional
+public class BaseProviderNewtworktypetDataServiceImpl implements IBaseProviderNewtworktypetDataService 
 {
     @Autowired
     private BaseProviderNewtworktypetDataMapper baseProviderNewtworktypetDataMapper;

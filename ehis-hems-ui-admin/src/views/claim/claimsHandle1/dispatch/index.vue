@@ -117,15 +117,15 @@
           >
             <el-table-column type="selection" width="50" align="center"/>
             <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="source" label="交单来源" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="source" :formatter="getDeliverySourceName" label="交单来源" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="name" label="被保人姓名" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="claimType" label="理赔类型" :formatter="getClaimTypeName"  width="150%" align="center" show-overflow-tooltip />
 
             <el-table-column prop="companyCode" label="出单公司"  :formatter="getCompanyName" align="center" show-overflow-tooltip />
-            <el-table-column prop="" label="监控时效" align="center" show-overflow-tooltip />
+            <el-table-column prop="monitoringTime" label="监控时效" align="center" show-overflow-tooltip />
             <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center" show-overflow-tooltip />
-            <el-table-column prop="updateBy" label="操作人"  align="center" show-overflow-tooltip />
+            <el-table-column prop="operator" label="操作人"  align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;"  v-if="scope.row.caseStatus=='01'"  @click="viewStream(scope.row)">
@@ -221,10 +221,15 @@
                 },
               dialogVisable: false,
               rptNos : '',
+              deliverySource:[],
 
             }
         },
       mounted(){
+        //交单来源
+        this.getDicts("delivery_source").then(response => {
+          this.deliverySource = response.data;
+        });
         this.getDicts("claimType").then(response => {
           this.claimTypeSelect = response.data;
         });
@@ -242,6 +247,9 @@
         this.initData();
       },
       methods: {
+        getDeliverySourceName(row,col) {
+          return this.selectDictLabel(this.deliverySource, row.source)
+        },
         getIssuingcompanySelect (){  //getIssuingcompanyList
           const params = {
             pageNum:1,
@@ -321,7 +329,7 @@
             submitstartdate:startTime,
             submitenddate:endTime,
             caseStatus:this.form.caseStatus,
-            updateBy:this.form.operator,
+            operator:this.form.operator,
 
             orderByColumn:'cc.create_time',
             isAsc:'desc'

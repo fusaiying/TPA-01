@@ -1,27 +1,23 @@
 package com.paic.ehis.base.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.domain.BaseSupplierOutlets;
-import com.paic.ehis.base.service.IBaseSupplierOutletsService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.base.domain.BaseProviderInfo;
+import com.paic.ehis.base.domain.BaseSupplierOutlets;
+import com.paic.ehis.base.domain.vo.BaseSupplierOutletsDTO;
+import com.paic.ehis.base.service.IBaseSupplierOutletsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * base_supplier_outlets（服务网点配置）Controller
@@ -35,6 +31,13 @@ public class BaseSupplierOutletsController extends BaseController
 {
     @Autowired
     private IBaseSupplierOutletsService baseSupplierOutletsService;
+    @GetMapping("/list1")
+    public TableDataInfo selectOutletsList(BaseSupplierOutlets baseSupplierOutlets)
+    {
+        startPage();
+        List<BaseSupplierOutlets> list = baseSupplierOutletsService.selectOutletsList(baseSupplierOutlets);
+        return getDataTable(list);
+    }
 
     /**
      * 查询base_supplier_outlets（服务网点配置）列表
@@ -77,9 +80,24 @@ public class BaseSupplierOutletsController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:outlets:add')")
     @Log(title = "base_supplier_outlets（服务网点配置）", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody BaseSupplierOutlets baseSupplierOutlets)
+    public AjaxResult add(@RequestBody BaseSupplierOutletsDTO so)
     {
-        return toAjax(baseSupplierOutletsService.insertBaseSupplierOutlets(baseSupplierOutlets));
+        BaseSupplierOutlets baseSupplierOutlets = new BaseSupplierOutlets();
+        List<BaseProviderInfo> baseProviderInfoList = so.getBaseProviderInfoList();
+        int count=0;
+        for (BaseProviderInfo baseProviderInfo:baseProviderInfoList){
+            baseSupplierOutlets.setSerialNo(PubFun.createMySqlMaxNoUseCache("derialno", 10, 9));
+            baseSupplierOutlets.setStatus("Y");
+            baseSupplierOutlets.setSupplierCode(so.getSerialNo());
+            baseSupplierOutlets.setAddressdetail(baseProviderInfo.getAddressdetail());
+            baseSupplierOutlets.setWebsitecType(baseProviderInfo.getOrgFlag());
+            baseSupplierOutlets.setWebsitecName(baseProviderInfo.getChname1());
+            baseSupplierOutlets.setWebsiteCode(baseProviderInfo.getProviderCode());
+            baseSupplierOutletsService.insertBaseSupplierOutlets(baseSupplierOutlets);
+            count ++;
+        }
+
+        return toAjax(count);
     }
 
     /**
@@ -91,6 +109,11 @@ public class BaseSupplierOutletsController extends BaseController
     public AjaxResult edit(@RequestBody BaseSupplierOutlets baseSupplierOutlets)
     {
         return toAjax(baseSupplierOutletsService.updateBaseSupplierOutlets(baseSupplierOutlets));
+    }
+
+    @PutMapping("/updatestatus")
+    public AjaxResult updateBaseSupplierOutletsStatus(@RequestBody BaseSupplierOutlets baseSupplierOutlets){
+        return toAjax(baseSupplierOutletsService.updateBaseSupplierOutletsStatus(baseSupplierOutlets));
     }
 
     /**

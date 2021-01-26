@@ -64,7 +64,7 @@
         <div slot="header" class="clearfix">
         <span>本次问题件处理</span>
         <span style="float: right;">
-          <el-button type="primary" size="mini" @click="dealFun(rptNo,clussionForm.conclusionView)">确认</el-button>
+          <el-button v-if="dealBtn" type="primary" size="mini" @click="dealFun(rptNo,clussionForm.conclusionView)">确认</el-button>
         </span>
       </div>
 
@@ -106,6 +106,7 @@
     data() {
       return {
 
+        dealBtn :true,
         baseInfo: {
           rptNo:'',
           caseStatus: '',
@@ -177,7 +178,7 @@
         const param = {};
         param.rptNo = this.rptNo;
         baseInfo(param).then(res => {
-          if(res.code == '200' && res.rows != null) {
+          if(res.code == '200' && res.rows.length >0) {
             this.baseInfo = res.rows[0];
           }
         });
@@ -186,8 +187,7 @@
         const param = {};
         param.rptNo = this.rptNo;
         historicalProblem(param).then(res => {
-          if(res.code == '200' && res.rows != null) {
-            // console.log(res);
+          if(res.code == '200' && res.rows.length >0) {
             this.HistoryData = res.rows;
           }
         });
@@ -198,12 +198,13 @@
         param.pageNum = 1;
         param.pageSize = 1;
         PendingData(param).then(res => {
-          if(res.code == '200' && res.rows != null) {
+          if(res.code == '200' && res.rows.length >0) {
             this.dealInfo = res.rows[0];
           }
         });
       },
       dealFun(rptNo,conclusionView){
+        let vm = this;
         this.$confirm('确认处理本次问题件?', "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -215,7 +216,8 @@
           param.isHistory = 'Y';
           updateProblem(param).then(res => {
             if(res.code == '200') {
-              this.$message({
+              vm.dealBtn = false;
+              vm.$message({
                 message: '处理成功！',
                 type: 'success',
                 center: true,

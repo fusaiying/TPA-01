@@ -5,7 +5,7 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;受理信息</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;受理信息</i>
         <span style="float: right;">
-        <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed" size="mini" @click="save">保存</el-button>
+        <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview')" type="primary" :disabled="!collapsed" size="mini" @click="save">保存</el-button>
       </span>
       </div>
     </div>
@@ -49,7 +49,10 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="出险类型：" prop="accType">
-            <el-input v-model="baseForm.accType" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择">
+              <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
+                         :value="option.dictValue"/>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -151,7 +154,8 @@
   import {getAddress} from '@/api/supplierManager/supplier'
   import {addAccept} from '@/api/claim/handleCom'
 
-  let dictss = [{dictType: 'application_reason'}, {dictType: 'preAuthFlag'}, {dictType: 'priority_reason'}, {dictType: 'accident_status'}, {dictType: 'current_state'},]
+  let dictss = [{dictType: 'application_reason'}, {dictType: 'preAuthFlag'}, {dictType: 'priority_reason'},
+    {dictType: 'accident_status'}, {dictType: 'current_state'},{dictType: 'incidenttype'},]
   export default {
     mixins: [],
     props: {
@@ -169,10 +173,13 @@
         if (newVal!==null && newVal!==undefined){
           if (newVal.claimCaseAccept!=null){
             this.baseForm=newVal.claimCaseAccept
+            this.$set(this.baseForm,'applyTypes',newVal.applyTypes)
             this.region[0]=newVal.claimCaseAccept.accProvince
             this.region[1]=newVal.claimCaseAccept.accCity
             this.region[2]=newVal.claimCaseAccept.accDistrict
-            this.baseForm.applyTypes=newVal.applyTypes
+            if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
+              this.hasAcceptId=true
+            }
           }
           let date = new Date()
           let mon=''
@@ -288,6 +295,7 @@
         }
       }
       return {
+        hasAcceptId:false,
         isAcceptInfoSave:false,
         baseInfoData:{},
         firstSerIllnessDateShow: false,
@@ -296,6 +304,7 @@
         baseForm: {
           applyTypes: [],
           claimAmount: undefined,
+          rptNo: undefined,
           accDate: undefined,
           firstSerIllnessDate: undefined,
           accType: undefined,
@@ -333,6 +342,7 @@
         priority_reasonOptions: [],
         accident_statusOptions: [],
         current_stateOptions: [],
+        incidenttypeOptions: [],
       }
     },
     async mounted() {
@@ -353,6 +363,9 @@
       }).dictDate
       this.current_stateOptions = this.dictList.find(item => {
         return item.dictType === 'current_state'
+      }).dictDate
+      this.incidenttypeOptions = this.dictList.find(item => {
+        return item.dictType === 'incidenttype'
       }).dictDate
     },
 

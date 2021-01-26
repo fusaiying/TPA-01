@@ -14,7 +14,7 @@ import java.util.List;
 public interface BaseBankMapper 
 {
     /**
-     * 查询base_bank（银行信息）
+     * 查询base_bank（银行信息） com.paic.ehis.base.mapper
      * 
      * @param id base_bank（银行信息）ID
      * @return base_bank（银行信息）
@@ -29,6 +29,8 @@ public interface BaseBankMapper
      */
     public List<BaseBank> selectBaseBankList(BaseBank baseBank);
 
+    public List<BaseBank> selectBaseBankList1(BaseBank baseBank);
+
     /**
      * 新增base_bank（银行信息）
      * 
@@ -36,6 +38,16 @@ public interface BaseBankMapper
      * @return 结果
      */
     public int insertBaseBank(BaseBank baseBank);
+
+
+    public int insertBaseBank1(BaseBank baseBank);
+    /**
+     * 新增base_bank（银行信息）
+     *
+     * @param baseBank base_bank（银行信息）
+     * @return 结果
+     */
+    public int insertBaseBankNew(BaseBank baseBank);
 
     /**
      * 修改base_bank（银行信息）
@@ -76,4 +88,31 @@ public interface BaseBankMapper
      * @return base_bank（银行信息）
      */
     public List<BaseBank> selectBaseBankByCode(String providercode);
+
+    /**
+     * 查询base_bank（银行信息）
+     *
+     * @param providercode base_bank（银行信息）
+     * @return base_bank（银行信息）
+     */
+    public List<BaseBank> selectBaseBankByCodeNew(String providercode);
+
+
+    /**
+     * 修改base_bank（银行信息）
+     *
+     * @param providerCode base_bank（银行信息）
+     * @return 结果
+     */
+    public int updateBaseBankByCode(String providerCode);
+
+    /**
+     * 修改base_bank（银行信息）
+     *
+     * @param providerCode base_bank（银行信息）
+     * @return 结果
+     */
+    public int updateBaseBankByCodeNew(String providerCode);
+    public  int updatebaseBankStatus(String providerCode);
+
 }

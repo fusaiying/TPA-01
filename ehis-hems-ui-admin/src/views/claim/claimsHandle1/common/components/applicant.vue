@@ -5,7 +5,7 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;申请人信息</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;申请人信息</i>
         <span style="float: right;">
-        <el-button v-if="status==='edit' && node==='accept'" type="primary" :disabled="!collapsed"
+        <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview') " type="primary" :disabled="!collapsed"
                    :loading="saveHandleLoading" size="mini"
                    @click="saveHandle">保存</el-button>
       </span>
@@ -142,10 +142,18 @@
 
         })
         if (newVal !== null && newVal !== undefined) {
-          this.region[0] = newVal.rgtProvince
-          this.region[1] = newVal.rgtCity
-          this.region[2] = newVal.rgtDistrict
+          let regionArr=[]
+          regionArr[0] = newVal.rgtProvince
+          regionArr[1] = newVal.rgtCity
+          regionArr[2] = newVal.rgtDistrict
           this.baseForm = newVal
+
+         // this.$set(this,'baseForm',newVal)
+          this.$set(this,'region',regionArr)
+
+          if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
+            this.hasApplicantId=true
+          }
         }
       }
 
@@ -197,6 +205,7 @@
       }
       return {
         isApplicantSave: false,
+        hasApplicantId: false,
         copyFixInfo: {},
         batchInfo: {},
         collapsed: true,

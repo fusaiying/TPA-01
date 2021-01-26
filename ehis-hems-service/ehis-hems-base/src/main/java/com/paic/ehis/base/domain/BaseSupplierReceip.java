@@ -1,10 +1,10 @@
 package com.paic.ehis.base.domain;
 
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 /**
  * base_supplier_receipt(供应商开票信息)对象 base_supplier_receip
@@ -15,6 +15,8 @@ import com.paic.ehis.common.core.annotation.Excel;
 public class BaseSupplierReceip extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+    /** 供应商编码 */
+    private String serialNo;
 
     /** 供应商编码 */
     private String supplierCode;
@@ -44,8 +46,18 @@ public class BaseSupplierReceip extends BaseEntity
     private String address;
 
     /** 状态 */
-    @Excel(name = "状态")
+    @Excel(name = "状态",readConverterExp = "01=-有效，02-无效")
     private String status;
+
+    public void setSerialNo(String serialNo)
+    {
+        this.serialNo = serialNo;
+    }
+
+    public String getSerialNo()
+    {
+        return serialNo;
+    }
 
     public void setSupplierCode(String supplierCode) 
     {
@@ -123,6 +135,7 @@ public class BaseSupplierReceip extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("serialNo", getSerialNo())
             .append("supplierCode", getSupplierCode())
             .append("companyTitle", getCompanyTitle())
             .append("dutynum", getDutynum())

@@ -1,13 +1,10 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
-import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.List;
 
 /**
  * base_provider_apply(服务商预约信息)对象 base_provider_apply
@@ -19,6 +16,9 @@ import com.paic.ehis.common.core.annotation.Excel;
 public class BaseProviderApply extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 流水号 */
+    private String serialNo;
 
     /** 服务商编码 */
     private String providerCode;
@@ -52,9 +52,8 @@ public class BaseProviderApply extends BaseEntity
     private String outpatientearlyStr;
 
     /** 体检确认单发送时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "体检确认单发送时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date confirmDeliverytime;
+    @Excel(name = "体检确认单发送时间")
+    private String confirmDeliverytime;
 
     /** 法定假日营业时间 */
     @Excel(name = "法定假日营业时间")
@@ -248,4 +247,20 @@ public class BaseProviderApply extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
+    @Excel(name = "变更标志")
+    private String updateFlag;
+
+    @Excel(name = "是否连锁机构(结算)")
+    private String interLocking;
+
+    @Excel(name = "预约提前时间")
+    private String leadTime;
+
+    @Excel(name = "咨询电话")
+    private String hotline2;
+
+    @Excel(name = "是否对所有保单开放")
+    private String policiesOpen;
+
+    private String orgFlag;
 }

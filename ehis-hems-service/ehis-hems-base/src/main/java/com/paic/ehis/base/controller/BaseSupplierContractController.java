@@ -7,7 +7,10 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseSupplierContract;
+import com.paic.ehis.base.domain.BaseSupplierContractBak;
+import com.paic.ehis.base.service.IBaseSupplierContractBakService;
 import com.paic.ehis.base.service.IBaseSupplierContractService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,9 @@ public class BaseSupplierContractController extends BaseController
 {
     @Autowired
     private IBaseSupplierContractService baseSupplierContractService;
+
+    @Autowired
+    private IBaseSupplierContractBakService iBaseSupplierContractBakService;
 
     /**
      * 查询base_supplier_contract（供应商合约）列表
@@ -87,6 +93,13 @@ public class BaseSupplierContractController extends BaseController
          return getDataTable(month);
 
      }
+    //根据服务机构id获取合约信息
+     @PreAuthorize("@ss.hasPermi('system:contract:code')")
+     @GetMapping(value = "/code/{providercode}")
+     public AjaxResult providerCodeinfo(@PathVariable("providercode") String providercode)
+     {
+         return AjaxResult.success(baseSupplierContractService.selectBaseproviderCode(providercode));
+     }
 
 
 
@@ -98,10 +111,24 @@ public class BaseSupplierContractController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierContract baseSupplierContract)
     {
-        return toAjax(baseSupplierContractService.insertBaseSupplierContract(baseSupplierContract));
+        AjaxResult result = null;
+
+
+        String hospContractCode=baseSupplierContract.getHospContractCode();
+        if ("01".equals(hospContractCode)) {
+            result = AjaxResult.success(baseSupplierContractService.insertBaseSupplierContract(baseSupplierContract));
+
+        }else if("02".equals(hospContractCode)){
+            BaseSupplierContractBak bakBean = new BaseSupplierContractBak();
+            BeanUtils.copyProperties(baseSupplierContract,bakBean);
+            result =  AjaxResult.success(iBaseSupplierContractBakService.insertBaseSupplierContractBak(bakBean));
+        }
+        return result;
     }
 
+
     /**
+
      * 修改base_supplier_contract（供应商合约）
      */
     @PreAuthorize("@ss.hasPermi('system:contract:edit')")
@@ -109,7 +136,16 @@ public class BaseSupplierContractController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierContract baseSupplierContract)
     {
-        return toAjax(baseSupplierContractService.updateBaseSupplierContract(baseSupplierContract));
+        AjaxResult ajaxResult = null;
+        String hospContractCode = baseSupplierContract.getHospContractCode();
+        if ("01".equals(hospContractCode)) {
+             ajaxResult = toAjax(baseSupplierContractService.updateBaseSupplierContract(baseSupplierContract));
+        } else if("02".equals(hospContractCode)){
+            BaseSupplierContractBak bakBean = new BaseSupplierContractBak();
+            BeanUtils.copyProperties(baseSupplierContract,bakBean);
+            ajaxResult = toAjax(iBaseSupplierContractBakService.updateBaseSupplierContractBak(bakBean));
+        }
+        return ajaxResult;
     }
 
     /**

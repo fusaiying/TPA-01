@@ -1,9 +1,9 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.base.domain.HmpContract;
 import com.paic.ehis.base.domain.HmpServOpera;
+
+import java.util.List;
 
 /**
  * 供应商合约Mapper接口

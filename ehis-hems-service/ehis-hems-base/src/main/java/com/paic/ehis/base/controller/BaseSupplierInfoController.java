@@ -1,26 +1,19 @@
 package com.paic.ehis.base.controller;
 
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.domain.BaseSupplierInfo;
-import com.paic.ehis.base.service.IBaseSupplierInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.base.domain.BaseSupplierInfo;
+import com.paic.ehis.base.service.IBaseSupplierInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * base_supplier_info（供应商基础信息）Controller
@@ -43,6 +36,20 @@ public class BaseSupplierInfoController extends BaseController
     public TableDataInfo list(BaseSupplierInfo baseSupplierInfo) throws Exception {
         startPage();
         List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList(baseSupplierInfo);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/list1")
+    public TableDataInfo list1(BaseSupplierInfo baseSupplierInfo) {
+        startPage();
+        List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList1(baseSupplierInfo);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/list2")
+    public TableDataInfo list2(BaseSupplierInfo baseSupplierInfo) {
+        startPage();
+        List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList2(baseSupplierInfo);
         return getDataTable(list);
     }
 
@@ -100,5 +107,17 @@ public class BaseSupplierInfoController extends BaseController
     public AjaxResult remove(@PathVariable String[] servcomNos)
     {
         return toAjax(baseSupplierInfoService.deleteBaseSupplierInfoByIds(servcomNos));
+    }
+
+    /**
+     * 查询base_supplier_info（供应商基础信息）所有列表
+     */
+    @PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/allList")
+    public AjaxResult getAllBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
+
+        List<BaseSupplierInfo> list = baseSupplierInfoService.getAllBaseSupplierInfo(baseSupplierInfo);
+
+        return AjaxResult.success(list);
     }
 }

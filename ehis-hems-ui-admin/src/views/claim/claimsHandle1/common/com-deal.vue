@@ -19,25 +19,31 @@
         <span style="margin-right: 10px">
           <span style="color:#409EFF;font-size:12px">批次号：{{ fixInfo.batchNo }}　</span>
         </span>
-        <span style="margin-right: 10px">
+        <!--<span style="margin-right: 10px">
           <span style="color:#409EFF;font-size:12px">归档号：{{ fixInfo.filingNo }}　</span>
-        </span>
+        </span>-->
         <span style="margin-right: 10px">
           <span
             style="color:#409EFF;font-size:12px">申请来源：{{ selectDictLabel(delivery_sourceOption, fixInfo.source)  }}　</span>
         </span>
         <el-form style="float: right; padding: 3px 0">
           <span>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openAppealInfo">申述信息</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini"
+                       @click="openAppealInfo">申述信息</el-button>
             <el-button type="primary" size="mini" @click="">影像查看</el-button>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openHistoryClaim">历史理赔</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini"
+                       @click="openHistoryClaim">历史理赔</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="">保障查看</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openHistorySurvey">调查(?)</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openHistoryDiscussion">协谈(2)</el-button>
-            <el-button type="primary" v-if="querys.node==='accept'" size="mini" @click="selectHistoricalProblem">问题件</el-button>
-            <el-button type="primary" v-if="querys.node==='accept' || querys.node==='calculateReview'" :disabled="querys.status==='show'" size="mini" @click="openRemoveDialog">撤件</el-button>
-            <el-button type="primary" v-if="querys.node==='accept'" :disabled="querys.status==='show'" size="mini" @click="acceptOver">受理完毕</el-button>
-            <el-button type="primary" v-if="querys.node==='input'" :disabled="querys.status==='show'" size="mini" @click="">录入完毕</el-button>
+            <el-button type="primary" v-if="querys.node==='accept'" size="mini"
+                       @click="selectHistoricalProblem">问题件</el-button>
+            <el-button type="primary" v-if="querys.node==='accept' || querys.node==='calculateReview'"
+                       :disabled="querys.status==='show'" size="mini" @click="openRemoveDialog">撤件</el-button>
+            <el-button type="primary" v-if="querys.node==='accept'" :disabled="querys.status==='show'" size="mini"
+                       @click="acceptOver">受理完毕</el-button>
+            <el-button type="primary" v-if="querys.node==='input'" :disabled="querys.status==='show'" size="mini"
+                       @click="changeBillStatus">录入完毕</el-button>
             <el-button size="mini" @click="goBack">返回</el-button>
           </span>
         </el-form>
@@ -50,59 +56,73 @@
       </div>
       <!-- 被保人信息 -->
       <div id="#anchor-2" class="batchInfo_class" style="margin-top: 10px;">
-        <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status" ref="insuredForm" :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag"/>
+        <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status" ref="insuredForm"
+                     :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag"/>
       </div>
       <!-- 申请人信息 -->
       <div id="#anchor-12" class="batchInfo_class" style="margin-top: 10px;">
-        <applicant-com :sonRegisterData="sonRegisterData" :node="querys.node" :status="querys.status" ref="applicantInfoForm" :applicantData="applicantData" :fixInfo="fixInfo" @getApplicantData="getApplicantData"/>
+        <applicant-com :sonRegisterData="sonRegisterData" :node="querys.node" :status="querys.status"
+                       ref="applicantInfoForm" :applicantData="applicantData" :fixInfo="fixInfo"
+                       @getApplicantData="getApplicantData"/>
       </div>
       <!-- 领款人信息 -->
       <div id="#anchor-11" class="batchInfo_class" style="margin-top: 10px;">
-        <payeeInfo :sonPayeeInfoData="sonPayeeInfoData" ref="payeeInfoForm" :baseInfo="batchInfo" :fixInfo="fixInfo" @getApplicantData="getApplicantData"
-                   @refresh-item="refreshList"  :applicantData="applicantData" :node="querys.node" :status="querys.status"/>
+        <payeeInfo :sonPayeeInfoData="sonPayeeInfoData" ref="payeeInfoForm" :baseInfo="batchInfo" :fixInfo="fixInfo"
+                   @getApplicantData="getApplicantData"
+                   @refresh-item="refreshList" :applicantData="applicantData" :node="querys.node"
+                   :status="querys.status"/>
       </div>
       <!-- 受理信息 -->
-      <div  id="#anchor-13" class="batchInfo_class" style="margin-top: 10px;">
-        <acceptInfo :sonAcceptInfoData="sonAcceptInfoData" ref="acceptInfoForm" :claimtype="this.querys.claimtype" :baseInfo="batchInfo" :isSave="isSave"
+      <div id="#anchor-13" class="batchInfo_class" style="margin-top: 10px;">
+        <acceptInfo :sonAcceptInfoData="sonAcceptInfoData" ref="acceptInfoForm" :claimtype="querys.claimtype"
+                    :baseInfo="batchInfo" :isSave="isSave"
                     :node="querys.node" :status="querys.status" :fixInfo="fixInfo"/>
       </div>
       <!-- 账单明细 -->
-      <div v-if="querys.node==='input' || querys.node==='calculateReview'" id="#anchor-15" class="batchInfo_class" style="margin-top: 10px;">
-        <billing-details ref="billingInfoForm" :sonBillingInfoData="sonBillingInfoData" :claimtype="this.querys.claimtype" :fixInfo="fixInfo" :isSave="isSave"
-                    :node="querys.node" :status="querys.status"/>
+      <div v-if="querys.node==='input' || querys.node==='calculateReview'" id="#anchor-15" class="batchInfo_class"
+           style="margin-top: 10px;">
+        <billing-details ref="billingInfoForm" :sonBillingInfoData="sonBillingInfoData" :claimtype="querys.claimtype"
+                         :fixInfo="fixInfo"
+                         :node="querys.node" :status="querys.status" @refresh-item="refreshList"/>
       </div>
       <!-- 案件理算 -->
-      <div v-if="querys.node==='input' || querys.node==='calculateReview'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
-        <case-calculate/>
+      <div v-if="querys.node==='calculateReview'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
+        <case-calculate :sonCalculateData="sonCalculateData" :sonCalculateSelectData="sonCalculateSelectData"
+                        :fixInfo="fixInfo"/>
       </div>
       <!--赔案备注-->
       <div id="#anchor-16" class="batchInfo_class" style="margin-top: 10px;">
-        <reportNotes :reportData="reportData" :fixInfo="fixInfo"  :node="querys.node" :status="querys.status" :claimtype="this.querys.claimtype"/>
+        <reportNotes :reportDatas="reportData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"
+                     :batchInfo="batchInfo"/>
       </div>
       <!--问题件-->
       <div v-if="querys.node==='accept'" id="#anchor-14" class="batchInfo_class" style="margin-top: 10px;">
         <problemCase :sonProblemData="sonProblemData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"/>
       </div>
       <!--赔付结论-->
-      <div v-if="querys.node==='calculateReview'" id="#anchor-17" class="batchInfo_class" style="margin-top: 10px;">
-        <pay-conclusion/>
-      </div>
       <div v-if="querys.node==='calculateReview'" class="batchInfo_class" style="margin-top: 10px;">
-        <discussion/>
+        <pay-conclusion :fixInfo="fixInfo"/>
+      </div>
+      <!--赔付结论-->
+      <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class" style="margin-top: 10px;">
+        <discussion :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
-    <history-problem-case :historicalProblemData="historicalProblemData" :value="historicalProblemDialog" @closeHistoricalProblem="closeHistoricalProblem"/>
+    <history-problem-case :fixInfo="fixInfo" :historicalProblemData="historicalProblemData"
+                          :value="historicalProblemDialog" @closeHistoricalProblem="closeHistoricalProblem"/>
     <!-- 撤件模态框 -->
     <remove-case :value="removeDialog" :node="querys.node" @closeRemoveDialog="closeRemoveDialog" :fixInfo="fixInfo"/>
     <!-- 申述信息 -->
     <appeal-info :value="appealDialog" :fixInfo="fixInfo" @closeAppealDialog="closeAppealDialog"/>
     <!-- 历史理赔 -->
-    <history-claim :value="historyClaimDialog" @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
+    <history-claim :value="historyClaimDialog" :fixInfo="fixInfo" @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
     <!-- 历史协谈 -->
-    <history-discussion :value="historyDiscussionDialog" @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
+    <history-discussion :value="historyDiscussionDialog" :fixInfo="fixInfo"
+                        @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
     <!-- 历史调查 -->
-    <history-survey :value="historySurveyDialog" @closeHistorySurveyDialog="closeHistorySurveyDialog"/>
+    <history-survey :value="historySurveyDialog" :fixInfo="fixInfo"
+                    @closeHistorySurveyDialog="closeHistorySurveyDialog"/>
   </div>
 </template>
 <script>
@@ -127,8 +147,24 @@
   import historyDiscussion from './modul/historyDiscussion' //历史协谈
   import historySurvey from './modul/historySurvey' //历史调查
 
-  import {getCase, getBatch, selectHistoricalProblem, getProblemRptNo,editCaseAndRecordInfoSuspend,getRegister,
-    getInsured,listRemarkRptNo,getAccept,getRemarkRptNo,getBillList} from '@/api/claim/handleCom'
+  import {
+    getCase,
+    getBatch,
+    selectHistoricalProblem,
+    getProblemRptNo,
+    editCaseAndRecordInfoSuspend,
+    getRegister,
+    getInsured,
+    listRemarkRptNo,
+    getHospital,
+    getAccept,
+    getRemarkRptNo,
+    getBillList,
+    changeBillStatus,
+    infoList,
+    insurancePolicyList,
+    adjustRemarkList
+  } from '@/api/claim/handleCom'
 
   let dictss = [{dictType: 'delivery_source'},]
   export default {
@@ -162,14 +198,17 @@
     },
     data() {
       return {
-        sonInsuredData:{
+        sonInsuredData: {
           claimCaseInsured: '',
-          policyInfominData: []},
-        sonRegisterData:{},
-        sonPayeeInfoData:[],
-        sonBillingInfoData:[],
-        sonAcceptInfoData:{},
-        sonProblemData:[],
+          policyInfominData: []
+        },
+        sonRegisterData: {},
+        sonPayeeInfoData: [],
+        sonBillingInfoData: [],
+        sonAcceptInfoData: {},
+        sonProblemData: [],
+        sonCalculateData: [],
+        sonCalculateSelectData: [],
         historicalProblemData: [],
         historicalProblemDialog: false,
         removeDialog: false,
@@ -249,76 +288,159 @@
         getBatch(this.querys.batchNo).then(res => {
           if (res != null && res.code === 200) {
             this.batchInfo = res.data
+            this.querys.claimType=res.data.claimtype
           }
         }).catch(res => {
         })
         selectHistoricalProblem(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
-            this.historicalProblemData=res.rows
+          if (res != null && res.code === 200) {
+            this.historicalProblemData = res.rows
           }
         })
         getInsured(this.querys.rptNo).then(res => {
 
-          if (res!=null && res.code===200){
-            if(res.data.claimCaseInsured!=null && res.data.claimCaseInsured!=='') {
+          if (res != null && res.code === 200) {
+            if (res.data.claimCaseInsured != null && res.data.claimCaseInsured !== '') {
               this.sonInsuredData.claimCaseInsured = res.data.claimCaseInsured
+              this.isSave = true
             }
-            if(res.data.policyInfominData!=null && res.data.policyInfominData.length>0) {
+            if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {
               this.sonInsuredData.policyInfominData = res.data.policyInfominData
             }
           }
         })
         getRegister(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
-            this.sonRegisterData=res.data
+          if (res != null && res.code === 200) {
+            this.sonRegisterData = res.data[0]
           }
         })
         getAccept(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
-            this.sonAcceptInfoData=res.data
+          if (res != null && res.code === 200) {
+            this.sonAcceptInfoData = res.data
           }
         })
         getProblemRptNo(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
+          if (res != null && res.code === 200) {
             this.sonProblemData = res.data
           }
         })
-        listRemarkRptNo(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
-            this.sonPayeeInfoData=res.data
-          }
-        })
-        getRemarkRptNo(this.querys.rptNo).then(res => {
-          if (res!=null && res.code===200){
-            this.reportData=res.data
-          }
-        })
 
-        let data={
-          rptNo:this.querys.rptNo
+        if (this.querys.claimType==='01'){
+          let data={
+            rptNo:this.querys.rptNo
+          }
+          getHospital(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.sonPayeeInfoData = res.data
+            }
+          })
+        }else {
+          listRemarkRptNo(this.querys.rptNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.sonPayeeInfoData = res.data
+            }
+          })
+        }
+        let data = {
+          rptNo: this.querys.rptNo
+        }
+        if (this.querys.node === 'calculateReview') {
+          adjustRemarkList(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.reportData = res.data
+            }
+          })
+        } else {
+          getRemarkRptNo(this.querys.rptNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.reportData = res.data
+            }
+          })
         }
         getBillList(data).then(res => {
-          if (res!=null && res.code===200){
-            this.sonBillingInfoData=res.rows
+          if (res != null && res.code === 200) {
+            this.sonBillingInfoData = res.rows
+          }
+        })
+        infoList(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.sonCalculateData = res.rows
+          }
+        })
+        insurancePolicyList(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.sonCalculateSelectData = res.rows
           }
         })
       }
-      if (this.querys.node==='accept'){
+
+      if (this.querys.node === 'accept') {
         this.btnArr = this.acceptArr
-      }else if(this.querys.node==='input'){
+      } else if (this.querys.node === 'input') {
         this.btnArr = this.inputArr
-      }else if (this.querys.node==='calculateReview'){
+      } else if (this.querys.node === 'calculateReview') {
         this.btnArr = this.calculateArr
       }
 
     },
 
     methods: {
-      refreshList(item){
-        if (item==='payeeInfo'){
-          listRemarkRptNo(this.querys.rptNo).then(res => {
-            if (res!=null && res.code===200){
-              this.sonPayeeInfoData=res.data
+      //录入完毕
+      changeBillStatus() {
+        let isBillInfoSave = this.$refs.billingInfoForm.isBillInfoSave
+        if (isBillInfoSave) {
+          let data = {
+            rptNo: this.querys.rptNo
+          }
+          changeBillStatus(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '提交成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              /*this.$router.replace('/login')*/
+            }
+          }).catch(res => {
+            this.$message({
+              message: '提交失败!',
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          })
+        } else {
+          return this.$message.warning(
+            "请保存账单明细信息！"
+          )
+        }
+      },
+      refreshList(item) {
+        if (item === 'payeeInfo') {
+          if (this.querys.claimType==='01'){
+            let data={
+              rptNo:this.querys.rptNo
+            }
+            getHospital(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.sonPayeeInfoData = res.data
+              }
+            })
+          }else {
+            listRemarkRptNo(this.querys.rptNo).then(res => {
+              if (res != null && res.code === 200) {
+                this.sonPayeeInfoData = res.data
+              }
+            })
+          }
+        } else if (item === 'bill') {
+          let data = {
+            rptNo: this.querys.rptNo
+          }
+          getBillList(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.sonBillingInfoData = res.rows
             }
           })
         }
@@ -329,22 +451,25 @@
       getApplicantData() {
         this.applicantData = this.$refs.insuredForm.baseForm
       },
-      acceptOver(){
+      acceptOver() {
         //this.$refs.headerChild.属性insuredForm applicantCom acceptInfo
 
         //被保人信息是否保存，否则阻断提示：“请保存被保人信息。”，同时字段框红高亮显示；
         //申请人信息是否保存，否则阻断提示：“请保存申请人信息。”，同时字段框红高亮显示；
         //申请信息是否保存，否则阻断提示：“请保存申请信息”，同时字段框红高亮显示；
-      //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
+        //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
         let isInsuredSave = this.$refs.insuredForm.isInsuredSave
-        let isApplicantSave=this.$refs.applicantInfoForm.isApplicantSave
-        let isAcceptInfoSave=this.$refs.acceptInfoForm.isAcceptInfoSave
-        if (isInsuredSave && isApplicantSave && isAcceptInfoSave){
+        let hasInsuredId = this.$refs.insuredForm.hasInsuredId
+        let isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
+        let hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
+        let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
+        let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
+        if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
           let data = {
-            rptNo:this.querys.rptNo
+            rptNo: this.querys.rptNo
           }
-          editCaseAndRecordInfoSuspend(data).then(res=>{
-            if(res!=null && res.code===200){
+          editCaseAndRecordInfoSuspend(data).then(res => {
+            if (res != null && res.code === 200) {
               this.$message({
                 message: '提交成功！',
                 type: 'success',
@@ -353,7 +478,7 @@
               })
               this.$router.go(-1)
             }
-          }).catch(res=>{
+          }).catch(res => {
             this.$message({
               message: '提交失败!',
               type: 'error',
@@ -361,16 +486,16 @@
               showClose: true
             })
           })
-        }else {
-          if (!isInsuredSave){
+        } else {
+          if (!(isInsuredSave || hasInsuredId)) {
             return this.$message.warning(
               "请保存被保人信息！"
             )
-          }else if (!isApplicantSave){
+          } else if (!(isApplicantSave || hasApplicantId)) {
             return this.$message.warning(
               "请保存申请人信息！"
             )
-          }else if (!isAcceptInfoSave){
+          } else if (!(isAcceptInfoSave || hasAcceptId)) {
             return this.$message.warning(
               "请保存申请信息！"
             )
@@ -381,17 +506,17 @@
       goBack() {
         this.$router.go(-1)
       },
-      openAppealInfo(){
-        this.appealDialog=true
+      openAppealInfo() {
+        this.appealDialog = true
       },
-      openHistoryClaim(){
-        this.historyClaimDialog=true
+      openHistoryClaim() {
+        this.historyClaimDialog = true
       },
-      openHistorySurvey(){
-        this.historySurveyDialog=true
+      openHistorySurvey() {
+        this.historySurveyDialog = true
       },
-      openHistoryDiscussion(){
-        this.historyDiscussionDialog=true
+      openHistoryDiscussion() {
+        this.historyDiscussionDialog = true
       },
       selectHistoricalProblem() {
         this.historicalProblemDialog = true
@@ -411,7 +536,7 @@
       closeHistoryClaimDialog() {
         this.historyClaimDialog = false
       },
-    closeHistoryDiscussionDialog() {
+      closeHistoryDiscussionDialog() {
         this.historyDiscussionDialog = false
       },
       closeHistorySurveyDialog() {

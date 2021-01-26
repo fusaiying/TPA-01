@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>服务手册列表信息</span>
-        <span style="float: right;" v-if="!disabledFlag">
+        <span style="float: right;" v-if="!disabledFlag || status==''" :disabled="disabledFlag">
 <el-upload
   action="https://jsonplaceholder.typicode.com/posts/"
   :show-file-list="false"
@@ -12,7 +12,7 @@
   :limit="3"
   :file-list="fileList">
 
-           <el-button size="mini" type="primary">点击上传</el-button>
+           <el-button size="mini" type="primary" :disabled="disabledFlag">点击上传</el-button>
 </el-upload>
         </span>
       </div>
@@ -64,7 +64,11 @@ export default {
       type: String,
       default: ''
     },
-    disabledFlag: Boolean
+    disabledFlag: Boolean,
+    status: {
+      type: String,
+      default: ''
+    },
   },
 /*  watch: {
     productCode: function (newValue){

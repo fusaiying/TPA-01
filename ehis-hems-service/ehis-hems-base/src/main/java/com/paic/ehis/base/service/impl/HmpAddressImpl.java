@@ -1,8 +1,8 @@
 package com.paic.ehis.base.service.impl;
 
+import com.paic.ehis.base.domain.HmpAddress;
 import com.paic.ehis.base.mapper.HmpAddressMapper;
 import com.paic.ehis.base.service.IHmpAddressService;
-import com.paic.ehis.base.domain.HmpAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

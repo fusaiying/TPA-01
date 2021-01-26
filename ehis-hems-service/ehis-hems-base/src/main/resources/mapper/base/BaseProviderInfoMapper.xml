@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseProviderInfoMapper">
 
     <resultMap type="BaseProviderInfo" id="BaseProviderInfoResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="providerCode"    column="provider_code"    />
         <result property="interHosp"    column="inter_hosp"    />
         <result property="virtualOrg"    column="virtual_org"    />
@@ -50,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="introduction"    column="introduction"    />
         <result property="chremarks"    column="chremarks"    />
         <result property="enremarks"    column="enremarks"    />
+        <result property="updateFlag"    column="update_flag"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -60,10 +62,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="statusName"    column="statusName"    />
         <result property="claimHospitalName"    column="claim_hospital_name"    />
         <result property="claimHospitalCode"    column="claim_hospital_code"    />
+        <result property="orgFlag"    column="org_flag"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="areacode"    column="areacode"    />
+        <result property="type2Str"    column="type2_str"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bankDetail"    column="bank_detail"    />
+        <result property="accountName"    column="account_name"    />
     </resultMap>
 
+
+    <resultMap type="BaseCheckInfo" id="BaseCheckInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="checkAdvice"    column="check_advice"    />
+        <result property="checkResult"    column="check_result"    />
+        <result property="checkResultName"    column="checkResultName"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
     <sql id="selectBaseProviderInfoVo">
-        select provider_code, inter_hosp, virtual_org, chname1, enname1, other_name,claim_hospital_code,claim_hospital_name, chregister, enregister, website, continent, country, province, city, district, chaddreess, enaddress, first_attribute, second_attribute, phone, type, usedname, consultphone, email, zipcode, portraiture, beds, international, topten, specialized_hospital, topthird, appoint_hospital, topfive, armyhosptial, inhosptial, special, flag, rehabilitation_hospital, longitude, latitude, landmarks, carpark, transitroute, introduction, chremarks, enremarks, status, create_by, create_time, update_by, update_time,concat_ws('-',(SELECT DISTINCT
+        select serial_no,org_flag,bussiness_status,type2_str,areacode,update_flag,provider_code, inter_hosp, virtual_org, chname1, enname1, other_name,claim_hospital_code,claim_hospital_name, chregister, enregister, website, continent, country, province, city, district, chaddreess, enaddress, first_attribute, second_attribute, phone, type, usedname, consultphone, email, zipcode, portraiture, beds, international, topten, specialized_hospital, topthird, appoint_hospital, topfive, armyhosptial, inhosptial, special, flag, rehabilitation_hospital, longitude, latitude, landmarks, carpark, transitroute, introduction, chremarks, enremarks, status, create_by, create_time, update_by, update_time,concat_ws('-',(SELECT DISTINCT
+				placename from sn_base_address
+			WHERE
+				placecode = base_provider_info_bak.province ),(SELECT DISTINCT
+				placename from sn_base_address
+			WHERE
+				placecode = base_provider_info_bak.city ),(SELECT DISTINCT
+				placename from sn_base_address
+			WHERE
+				placecode = base_provider_info_bak.district ))  addressdetail,
+	    (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'bussiness_status' and dict_value = base_provider_info_bak.bussiness_status)  statusName,
+		(SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'org_flag' and dict_value = base_provider_info_bak.org_flag)  typeName
+				 from base_provider_info_bak
+    </sql>
+
+
+    <sql id="selectBaseProviderInfoVoNew">
+        select serial_no,org_flag,type2_str,areacode,bussiness_status,update_flag,provider_code, inter_hosp, virtual_org, chname1, enname1, other_name,claim_hospital_code,claim_hospital_name, chregister, enregister, website, continent, country, province, city, district, chaddreess, enaddress, first_attribute, second_attribute, phone, type, usedname, consultphone, email, zipcode, portraiture, beds, international, topten, specialized_hospital, topthird, appoint_hospital, topfive, armyhosptial, inhosptial, special, flag, rehabilitation_hospital, longitude, latitude, landmarks, carpark, transitroute, introduction, chremarks, enremarks, status, create_by, create_time, update_by, update_time,concat_ws('-',(SELECT DISTINCT
 				placename from sn_base_address
 			WHERE
 				placecode = base_provider_info.province ),(SELECT DISTINCT
@@ -73,25 +119,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				placename from sn_base_address
 			WHERE
 				placecode = base_provider_info.district ))  addressdetail,
-	    (SELECT DISTINCT
-				label from sn_base_dict_detail
+	     (SELECT DISTINCT
+				dict_label from sys_dict_data
 			WHERE
-				dict_id = '19' and value = base_provider_info.status)  statusName,
+				dict_type = 'bussiness_status' and dict_value = base_provider_info.bussiness_status)  statusName,
 		(SELECT DISTINCT
-				label from sn_base_dict_detail
+				dict_label from sys_dict_data
 			WHERE
-				dict_id = '19' and value = base_provider_info.status)  typeName
+				dict_type = 'org_flag' and dict_value = base_provider_info.org_flag)  typeName
 				 from base_provider_info
     </sql>
 
-    <select id="selectBaseProviderInfoList" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+    <select id="selectBaseProviderInfoList1" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
         <include refid="selectBaseProviderInfoVo"/>
         <where>
             <if test="interHosp != null  and interHosp != ''"> and inter_hosp = #{interHosp}</if>
             <if test="virtualOrg != null  and virtualOrg != ''"> and virtual_org = #{virtualOrg}</if>
-            <if test="chname1 != null  and chname1 != ''"> and chname1 = #{chname1}</if>
+            <if test="chname1 != null  and chname1 != ''"> and chname1 like concat('%', #{chname1}, '%')</if>
             <if test="enname1 != null  and enname1 != ''"> and enname1 = #{enname1}</if>
-            <if test="otherName != null  and otherName != ''"> and other_name like concat('%', #{otherName}, '%')</if>
+            <if test="otherName != null  and otherName != ''"> and other_name = #{other_name}</if>
             <if test="chregister != null  and chregister != ''"> and chregister = #{chregister}</if>
             <if test="enregister != null  and enregister != ''"> and enregister = #{enregister}</if>
             <if test="website != null  and website != ''"> and website = #{website}</if>
@@ -131,7 +177,276 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
             <if test="chremarks != null  and chremarks != ''"> and chremarks = #{chremarks}</if>
             <if test="enremarks != null  and enremarks != ''"> and enremarks = #{enremarks}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
+            and status = 'Y' and update_flag = '0' order by create_time desc
+        </where>
+    </select>
+
+    <select id="selectBaseProviderInfoList" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        SELECT DISTINCT
+        a.org_flag,
+        a.bussiness_status,
+        a.addressdetail,
+        a.typeName,
+        a.statusName,
+        a.provider_code,
+        a.create_time,
+        a.chname1
+        FROM
+
+        (SELECT
+
+        serial_no,
+        org_flag,
+        type2_str,
+        areacode,
+        bussiness_status,
+        update_flag,
+        provider_code,
+        inter_hosp,
+        virtual_org,
+        chname1,
+        enname1,
+        other_name,
+        claim_hospital_code,
+        claim_hospital_name,
+        chregister,
+        enregister,
+        website,
+        continent,
+        country,
+        province,
+        city,
+        district,
+        chaddreess,
+        enaddress,
+        first_attribute,
+        second_attribute,
+        phone,
+        type,
+        usedname,
+        consultphone,
+        email,
+        zipcode,
+        portraiture,
+        beds,
+        international,
+        topten,
+        specialized_hospital,
+        topthird,
+        appoint_hospital,
+        topfive,
+        armyhosptial,
+        inhosptial,
+        special,
+        flag,
+        rehabilitation_hospital,
+        longitude,
+        latitude,
+        landmarks,
+        carpark,
+        transitroute,
+        introduction,
+        chremarks,
+        enremarks,
+        STATUS,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        concat_ws(
+        '-',
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info.province
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info.city
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info.district
+        )
+        ) addressdetail,
+        (
+        SELECT DISTINCT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_type = 'bussiness_status'
+        AND dict_value = base_provider_info.bussiness_status
+        ) statusName,
+        (
+        SELECT DISTINCT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_type = 'org_flag'
+        AND dict_value = base_provider_info.org_flag
+        ) typeName
+        FROM
+        base_provider_info
+        WHERE
+        update_flag = '0'
+        UNION all
+        SELECT
+        serial_no,
+        org_flag,
+        type2_str,
+        areacode,
+        bussiness_status,
+        update_flag,
+        provider_code,
+        inter_hosp,
+        virtual_org,
+        chname1,
+        enname1,
+        other_name,
+        claim_hospital_code,
+        claim_hospital_name,
+        chregister,
+        enregister,
+        website,
+        continent,
+        country,
+        province,
+        city,
+        district,
+        chaddreess,
+        enaddress,
+        first_attribute,
+        second_attribute,
+        phone,
+        type,
+        usedname,
+        consultphone,
+        email,
+        zipcode,
+        portraiture,
+        beds,
+        international,
+        topten,
+        specialized_hospital,
+        topthird,
+        appoint_hospital,
+        topfive,
+        armyhosptial,
+        inhosptial,
+        special,
+        flag,
+        rehabilitation_hospital,
+        longitude,
+        latitude,
+        landmarks,
+        carpark,
+        transitroute,
+        introduction,
+        chremarks,
+        enremarks,
+        STATUS,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        concat_ws(
+        '-',
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info_bak.province
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info_bak.city
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = base_provider_info_bak.district
+        )
+        ) addressdetail,
+        (
+        SELECT DISTINCT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_type = 'bussiness_status'
+        AND dict_value = base_provider_info_bak.bussiness_status
+        ) statusName,
+        (
+        SELECT DISTINCT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_type = 'org_flag'
+        AND dict_value = base_provider_info_bak.org_flag
+        ) typeName
+        FROM
+        base_provider_info_bak
+        WHERE
+        update_flag = '0'
+        ) a
+        <where>
+            <if test="chname1 != null  and chname1 != ''"> and a.chname1 like concat('%', #{chname1}, '%')</if>
+            <if test="enname1 != null  and enname1 != ''"> and a.enname1 = #{enname1}</if>
+            <if test="province != null  and province != ''"> and a.province = #{province}</if>
+            <if test="city != null  and city != ''"> and a.city = #{city}</if><if test="district != null  and district != ''"> and a.district = #{district}</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
+            <if test="orgFlag != null  and orgFlag != ''"> and a.org_flag = #{orgFlag}</if>
+            and status ='Y' and bussiness_status in ('01','03','04') and update_flag = '0'order by create_time desc
+        </where>
+    </select>
+
+
+    <select id="selectBaseProviderInfoListNew" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        <include refid="selectBaseProviderInfoVoNew"/>
+        <where>
+            <if test="chname1 != null  and chname1 != ''"> and (chname1 like concat('%', #{chname1}, '%') or enname1 like concat('%', #{chname1}, '%'))</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if><if test="district != null  and district != ''"> and a.district = #{district}</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
+            and status ='Y' and update_flag = '0' order by create_time desc
+        </where>
+    </select>
+
+
+    <select id="selectBaseProviderCheckList" parameterType="baseCheckInfo" resultMap="BaseCheckInfoResult">
+        select serial_no,provider_code,check_result,
+        (SELECT DISTINCT
+        dict_label from sys_dict_data
+        WHERE
+        dict_type = 'check_result' and dict_value = base_provider_checkinfo.check_result)  checkResultName,
+        check_advice, status, create_by, create_time, update_by,update_time  from base_provider_checkinfo
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
         </where>
     </select>
 
@@ -152,12 +467,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseProviderInfoById" parameterType="String" resultMap="BaseProviderInfoResult">
         <include refid="selectBaseProviderInfoVo"/>
-        where provider_code = #{providerCode}
+        where provider_code = #{providerCode} and update_flag ='0' and status ='Y'
+    </select>
+
+    <select id="selectBaseProviderInfoByIdNew" parameterType="String" resultMap="BaseProviderInfoResult">
+        <include refid="selectBaseProviderInfoVoNew"/>
+        where provider_code = #{providerCode} and update_flag ='0' and status ='Y'
     </select>
 
     <select id="selectBaseProviderInfo" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
         <include refid="selectBaseProviderInfoVo"/>
         <where>
+            <if test="chname1  != null  and chname1  != ''"> and chname1 = #{chname1}</if>
+            <if test="enname1 != null  and enname1 != ''"> and enname1 = #{enname1}</if>
             <if test="otherName != null  and otherName != ''"> and other_name = #{otherName}</if>
             <if test="chregister != null  and chregister != ''"> and chregister = #{chregister}</if>
             <if test="enregister != null  and enregister != ''"> and enregister = #{enregister}</if>
@@ -166,9 +488,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectBaseProviderInfoNew" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        <include refid="selectBaseProviderInfoVoNew"/>
+        <where>
+            <if test="chname1  != null  and chname1  != ''"> and chname1 = #{chname1}</if>
+            <if test="enname1 != null  and enname1 != ''"> and enname1 = #{enname1}</if>
+            <if test="otherName != null  and otherName != ''"> and other_name = #{otherName}</if>
+            <if test="chregister != null  and chregister != ''"> and chregister = #{chregister}</if>
+            <if test="enregister != null  and enregister != ''"> and enregister = #{enregister}</if>
+            <if test="usedname != null  and usedname != ''"> and usedname = #{usedname}</if>
+            <if test="claimHospitalName != null  and claimHospitalName != ''"> and claim_hospital_name = #{claimHospitalName}</if>
+        </where>
+    </select>
+
+    <select id="selectProvideInfoList"   parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+       SELECT
+	provider_code,
+	chname1,
+	org_flag,
+	concat_ws(
+	'-',
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = base_provider_info.province ),
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = base_provider_info.city ),
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = base_provider_info.district )
+	) addressdetail
+FROM
+	base_provider_info
+WHERE
+	NOT EXISTS ( SELECT 1 FROM base_supplier_outlets so WHERE base_provider_info.provider_code = so.website_code and so.status='Y')
+        <if test="chname1 != null  and chname1 != ''"> and chname1 = #{chname1}</if>
+        <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
+        <if test="province != null  and province != ''"> and province = #{province}</if>
+        <if test="city != null  and city != ''"> and city = #{city}</if>
+        <if test="district != null  and district != ''"> and district = #{district}</if>
+    </select>
+
     <insert id="insertBaseProviderInfo" parameterType="BaseProviderInfo">
-        insert into base_provider_info
+        insert into base_provider_info_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
             <if test="providerCode != null">provider_code,</if>
             <if test="interHosp != null and interHosp != ''">inter_hosp,</if>
             <if test="virtualOrg != null">virtual_org,</if>
@@ -214,13 +573,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="introduction != null and introduction != ''">introduction,</if>
             <if test="chremarks != null">chremarks,</if>
             <if test="enremarks != null">enremarks,</if>
+            <if test="areacode != null">areacode,</if>
+            <if test="type2Str != null">type2_str,</if>
+            <if test="orgFlag != null">org_flag,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="bussinessStatus != null">bussiness_status,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
-            <if test="updateBy != null">update_by,</if>
-            <if test="updateTime != null">update_time,</if>
+            <if test="claimHospitalName != null">claim_hospital_name,</if>
+            <if test="claimHospitalCode != null">claim_hospital_code,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="providerCode != null">#{providerCode},</if>
             <if test="interHosp != null and interHosp != ''">#{interHosp},</if>
             <if test="virtualOrg != null">#{virtualOrg},</if>
@@ -266,16 +631,142 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="introduction != null and introduction != ''">#{introduction},</if>
             <if test="chremarks != null">#{chremarks},</if>
             <if test="enremarks != null">#{enremarks},</if>
+            <if test="areacode != null">#{areacode},</if>
+            <if test="type2Str != null">#{type2Str},</if>
+            <if test="orgFlag != null">#{orgFlag},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="bussinessStatus != null">#{bussinessStatus},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
-            <if test="updateBy != null">#{updateBy},</if>
-            <if test="updateTime != null">#{updateTime},</if>
+            <if test="claimHospitalName != null">#{claimHospitalName},</if>
+            <if test="claimHospitalCode != null">#{claimHospitalCode},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseProviderInfoNew" parameterType="BaseProviderInfo">
+        insert into base_provider_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="interHosp != null and interHosp != ''">inter_hosp,</if>
+            <if test="virtualOrg != null">virtual_org,</if>
+            <if test="chname1 != null">chname1,</if>
+            <if test="enname1 != null">enname1,</if>
+            <if test="otherName != null and otherName != ''">other_name,</if>
+            <if test="chregister != null">chregister,</if>
+            <if test="enregister != null">enregister,</if>
+            <if test="website != null">website,</if>
+            <if test="continent != null">continent,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="district != null">district,</if>
+            <if test="chaddreess != null and chaddreess != ''">chaddreess,</if>
+            <if test="enaddress != null and enaddress != ''">enaddress,</if>
+            <if test="firstAttribute != null">first_attribute,</if>
+            <if test="secondAttribute != null">second_attribute,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="usedname != null and usedname != ''">usedname,</if>
+            <if test="consultphone != null and consultphone != ''">consultphone,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="zipcode != null">zipcode,</if>
+            <if test="portraiture != null">portraiture,</if>
+            <if test="beds != null and beds != ''">beds,</if>
+            <if test="international != null and international != ''">international,</if>
+            <if test="topten != null">topten,</if>
+            <if test="specializedHospital != null">specialized_hospital,</if>
+            <if test="topthird != null">topthird,</if>
+            <if test="appointHospital != null and appointHospital != ''">appoint_hospital,</if>
+            <if test="topfive != null and topfive != ''">topfive,</if>
+            <if test="armyhosptial != null">armyhosptial,</if>
+            <if test="inhosptial != null and inhosptial != ''">inhosptial,</if>
+            <if test="special != null">special,</if>
+            <if test="flag != null">flag,</if>
+            <if test="rehabilitationHospital != null">rehabilitation_hospital,</if>
+            <if test="longitude != null and longitude != ''">longitude,</if>
+            <if test="latitude != null and latitude != ''">latitude,</if>
+            <if test="landmarks != null and landmarks != ''">landmarks,</if>
+            <if test="carpark != null and carpark != ''">carpark,</if>
+            <if test="transitroute != null and transitroute != ''">transitroute,</if>
+            <if test="introduction != null and introduction != ''">introduction,</if>
+            <if test="chremarks != null">chremarks,</if>
+            <if test="enremarks != null">enremarks,</if>
+            <if test="areacode != null">areacode,</if>
+            <if test="type2Str != null">type2_str,</if>
+            <if test="orgFlag != null">org_flag,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="bussinessStatus != null">bussiness_status,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="claimHospitalName != null">claim_hospital_name,</if>
+            <if test="claimHospitalCode != null">claim_hospital_code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="interHosp != null and interHosp != ''">#{interHosp},</if>
+            <if test="virtualOrg != null">#{virtualOrg},</if>
+            <if test="chname1 != null">#{chname1},</if>
+            <if test="enname1 != null">#{enname1},</if>
+            <if test="otherName != null and otherName != ''">#{otherName},</if>
+            <if test="chregister != null">#{chregister},</if>
+            <if test="enregister != null">#{enregister},</if>
+            <if test="website != null">#{website},</if>
+            <if test="continent != null">#{continent},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="chaddreess != null and chaddreess != ''">#{chaddreess},</if>
+            <if test="enaddress != null and enaddress != ''">#{enaddress},</if>
+            <if test="firstAttribute != null">#{firstAttribute},</if>
+            <if test="secondAttribute != null">#{secondAttribute},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="usedname != null and usedname != ''">#{usedname},</if>
+            <if test="consultphone != null and consultphone != ''">#{consultphone},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="zipcode != null">#{zipcode},</if>
+            <if test="portraiture != null">#{portraiture},</if>
+            <if test="beds != null and beds != ''">#{beds},</if>
+            <if test="international != null and international != ''">#{international},</if>
+            <if test="topten != null">#{topten},</if>
+            <if test="specializedHospital != null">#{specializedHospital},</if>
+            <if test="topthird != null">#{topthird},</if>
+            <if test="appointHospital != null and appointHospital != ''">#{appointHospital},</if>
+            <if test="topfive != null and topfive != ''">#{topfive},</if>
+            <if test="armyhosptial != null">#{armyhosptial},</if>
+            <if test="inhosptial != null and inhosptial != ''">#{inhosptial},</if>
+            <if test="special != null">#{special},</if>
+            <if test="flag != null">#{flag},</if>
+            <if test="rehabilitationHospital != null">#{rehabilitationHospital},</if>
+            <if test="longitude != null and longitude != ''">#{longitude},</if>
+            <if test="latitude != null and latitude != ''">#{latitude},</if>
+            <if test="landmarks != null and landmarks != ''">#{landmarks},</if>
+            <if test="carpark != null and carpark != ''">#{carpark},</if>
+            <if test="transitroute != null and transitroute != ''">#{transitroute},</if>
+            <if test="introduction != null and introduction != ''">#{introduction},</if>
+            <if test="chremarks != null">#{chremarks},</if>
+            <if test="enremarks != null">#{enremarks},</if>
+            <if test="areacode != null">#{areacode},</if>
+            <if test="type2Str != null">#{type2Str},</if>
+            <if test="orgFlag != null">#{orgFlag},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="bussinessStatus != null">#{bussinessStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="claimHospitalName != null">#{claimHospitalName},</if>
+            <if test="claimHospitalCode != null">#{claimHospitalCode},</if>
         </trim>
     </insert>
 
     <update id="updateBaseProviderInfo" parameterType="BaseProviderInfo">
-        update base_provider_info
+        update base_provider_info_bak
         <trim prefix="SET" suffixOverrides=",">
             <if test="interHosp != null and interHosp != ''">inter_hosp = #{interHosp},</if>
             <if test="virtualOrg != null">virtual_org = #{virtualOrg},</if>
@@ -330,15 +821,158 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where provider_code = #{providerCode}
     </update>
 
+    <update id="updateBaseProviderInfoByproviderCode" parameterType="String">
+        update base_provider_info_bak set bussiness_status = '03'
+        where provider_code = #{providerCode} and update_flag = '0' and bussiness_status = '02'
+    </update>
+
+
+    <update id="updateBaseProviderInfoStatus" parameterType="String">
+        update base_provider_info_bak set bussiness_status = '01'
+        where provider_code = #{providerCode} and update_flag = '0' and bussiness_status = '02'
+    </update>
+
+    <update id="updateBaseProviderInfoByCode" parameterType="BaseProviderInfo">
+        update base_provider_info_bak set update_flag = '1'
+        where provider_code = #{providerCode} and update_flag = '0'
+    </update>
+
+
+    <update id="updateBaseProviderInfoByproviderCodeNew" parameterType="String">
+        update base_provider_info set update_flag = '1',status = 'N'
+        where provider_code = #{providerCode} and Status = 'Y'
+    </update>
+
     <delete id="deleteBaseProviderInfoById" parameterType="String">
-        delete from base_provider_info where provider_code = #{providerCode}
+        delete from base_provider_info_bak where provider_code = #{providerCode}
     </delete>
 
     <delete id="deleteBaseProviderInfoByIds" parameterType="String">
-        delete from base_provider_info where provider_code in
+        delete from base_provider_info_bak where provider_code in
         <foreach item="providerCode" collection="array" open="(" separator="," close=")">
             #{providerCode}
         </foreach>
     </delete>
-    
+
+
+    <select id="selectBaseProviderInfoCheckList" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        <include refid="selectBaseProviderInfoVo"/>
+        <where>
+            <if test="interHosp != null  and interHosp != ''"> and inter_hosp = #{interHosp}</if>
+            <if test="virtualOrg != null  and virtualOrg != ''"> and virtual_org = #{virtualOrg}</if>
+            <if test="chname1 != null  and chname1 != ''"> and chname1 like concat('%', #{chname1}, '%')</if>
+            <if test="enname1 != null  and enname1 != ''"> and enname1 = #{enname1}</if>
+            <if test="otherName != null  and otherName != ''"> and other_name like concat('%', #{otherName}, '%')</if>
+            <if test="chregister != null  and chregister != ''"> and chregister = #{chregister}</if>
+            <if test="enregister != null  and enregister != ''"> and enregister = #{enregister}</if>
+            <if test="website != null  and website != ''"> and website = #{website}</if>
+            <if test="continent != null  and continent != ''"> and continent = #{continent}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="chaddreess != null  and chaddreess != ''"> and chaddreess = #{chaddreess}</if>
+            <if test="enaddress != null  and enaddress != ''"> and enaddress = #{enaddress}</if>
+            <if test="firstAttribute != null  and firstAttribute != ''"> and first_attribute = #{firstAttribute}</if>
+            <if test="secondAttribute != null  and secondAttribute != ''"> and second_attribute = #{secondAttribute}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="usedname != null  and usedname != ''"> and usedname like concat('%', #{usedname}, '%')</if>
+            <if test="consultphone != null  and consultphone != ''"> and consultphone = #{consultphone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="zipcode != null  and zipcode != ''"> and zipcode = #{zipcode}</if>
+            <if test="portraiture != null  and portraiture != ''"> and portraiture = #{portraiture}</if>
+            <if test="beds != null  and beds != ''"> and beds = #{beds}</if>
+            <if test="international != null  and international != ''"> and international = #{international}</if>
+            <if test="topten != null  and topten != ''"> and topten = #{topten}</if>
+            <if test="specializedHospital != null  and specializedHospital != ''"> and specialized_hospital = #{specializedHospital}</if>
+            <if test="topthird != null  and topthird != ''"> and topthird = #{topthird}</if>
+            <if test="appointHospital != null  and appointHospital != ''"> and appoint_hospital = #{appointHospital}</if>
+            <if test="topfive != null  and topfive != ''"> and topfive = #{topfive}</if>
+            <if test="armyhosptial != null  and armyhosptial != ''"> and armyhosptial = #{armyhosptial}</if>
+            <if test="inhosptial != null  and inhosptial != ''"> and inhosptial = #{inhosptial}</if>
+            <if test="special != null  and special != ''"> and special = #{special}</if>
+            <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
+            <if test="rehabilitationHospital != null  and rehabilitationHospital != ''"> and rehabilitation_hospital = #{rehabilitationHospital}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+            <if test="landmarks != null  and landmarks != ''"> and landmarks = #{landmarks}</if>
+            <if test="carpark != null  and carpark != ''"> and carpark = #{carpark}</if>
+            <if test="transitroute != null  and transitroute != ''"> and transitroute = #{transitroute}</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+            <if test="chremarks != null  and chremarks != ''"> and chremarks = #{chremarks}</if>
+            <if test="enremarks != null  and enremarks != ''"> and enremarks = #{enremarks}</if>
+            and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01'
+        </where>
+    </select>
+
+
+    <insert id="insertCheckInfo" parameterType="BaseCheckInfo">
+        insert into base_provider_checkinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="checkResult != null and checkResult != ''">check_result,</if>
+            <if test="checkAdvice != null and checkAdvice != ''">check_advice,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="checkResult != null and checkResult != ''">#{checkResult},</if>
+            <if test="checkAdvice != null and checkAdvice != ''">#{checkAdvice},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <select id="selectName" parameterType="String" resultType="String">
+       select placename from sn_base_address where placecode = #{province,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectName1" parameterType="String" resultType="String">
+       select province from base_provider_info_bak where provider_code = #{providerCode,jdbcType=VARCHAR} and status ='Y' and update_flag = '0'
+     </select>
+
+    <select id="selectNum" parameterType="String" resultType="String">
+       select right(max(claim_hospital_code),5) maxno FROM base_provider_info_bak where
+       province = #{province,jdbcType=VARCHAR} and status = 'Y' and update_flag = '0'
+    </select>
+
+    <select id="selectBaseProviderInfos" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        select serial_no, provider_code,inter_hosp,virtual_org,chname1,enname1,status from base_provider_info
+       <!-- <where>
+           /* and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01'*/
+        </where>-->
+    </select>
+
+    <select id="selectHospitalInfo" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        SELECT
+        bb.bank_code,
+        bb.bank_name,
+        bb.bank_detail,
+        bb.account_name,
+        bpi.provider_code,
+        bpi.chaddreess,
+        bpi.flag,
+        bpi.first_attribute,
+        bpi.second_attribute,
+        bpi.chname1,
+        bb.create_time
+        FROM
+        base_bank bb
+        LEFT JOIN base_provider_info bpi ON bpi.provider_code = bb.provider_code and bpi.status='Y' and bpi.update_flag = '0'
+        <where>
+            <if test="chname1 != null  and chname1 != ''"> and (bpi.chname1 like concat('%', #{chname1}, '%') or bpi.enname1 like concat('%', #{chname1}, '%'))</if>
+            <if test="providerCode != null  and providerCode != ''"> and bpi.provider_code = #{providerCode}</if>
+            and bb.status ='Y' and bb.bussiness_status = '01' order by create_time desc
+        </where>
+    </select>
 </mapper>

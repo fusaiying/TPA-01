@@ -1,7 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderNewtworktype;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet(医疗网络类型)Mapper接口
@@ -58,4 +59,7 @@ public interface BaseProviderNewtworktypeMapper
      * @return 结果
      */
     public int deleteBaseProviderNewtworktypeByIds(String[] serNos);
+
+
+    public List<String> getCodes(String supplierCode);
 }

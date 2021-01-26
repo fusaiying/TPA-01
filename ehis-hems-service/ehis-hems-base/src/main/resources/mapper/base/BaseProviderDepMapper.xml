@@ -5,9 +5,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.base.mapper.BaseProviderDepMapper">
 
     <resultMap type="BaseProviderDep" id="BaseProviderDepResult">
-        <result property="id"    column="id"    />
+        <result property="serialNo"    column="serial_no"    />
         <result property="providerCode"    column="provider_code"    />
         <result property="visitingType"    column="visiting_type"    />
+        <result property="visitingTypeName"    column="visitingTypeName"    />
         <result property="firstDept"    column="first_dept"    />
         <result property="secondDept"    column="second_dept"    />
         <result property="visitingFloor"    column="visiting_floor"    />
@@ -17,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="spprocurementFlag"    column="spprocurement_flag"    />
         <result property="callstarttime"    column="callstarttime"    />
         <result property="callendtime"    column="callendtime"    />
+        <result property="updateFlag"    column="update_flag"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -25,7 +27,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseProviderDepVo">
-        select id, provider_code, visiting_type, first_dept, second_dept, visiting_floor, charactdept_flag, straightknot_flag, cartevital_flag, spprocurement_flag, callstarttime, callendtime, create_by, create_time, update_by, update_time, status from base_provider_dep
+        select serial_no, update_flag,provider_code, visiting_type,
+        (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'visiting_type' and dict_value = base_provider_dep_bak.visiting_type)  visitingTypeName,
+        first_dept, second_dept, visiting_floor, charactdept_flag, straightknot_flag, cartevital_flag, spprocurement_flag, callstarttime, callendtime, create_by, create_time, update_by, update_time, status from base_provider_dep_bak
+    </sql>
+
+    <sql id="selectBaseProviderDepVoNew">
+        select serial_no, update_flag,provider_code, visiting_type,
+        (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'visiting_type' and dict_value = base_provider_dep.visiting_type)  visitingTypeName,
+        first_dept, second_dept, visiting_floor, charactdept_flag, straightknot_flag, cartevital_flag, spprocurement_flag, callstarttime, callendtime, create_by, create_time, update_by, update_time, status from base_provider_dep
     </sql>
 
     <select id="selectBaseProviderDepList" parameterType="BaseProviderDep" resultMap="BaseProviderDepResult">
@@ -42,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="spprocurementFlag != null  and spprocurementFlag != ''"> and spprocurement_flag = #{spprocurementFlag}</if>
             <if test="callstarttime != null "> and callstarttime = #{callstarttime}</if>
             <if test="callendtime != null "> and callendtime = #{callendtime}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+             and status = 'Y' and update_flag ='0'
         </where>
     </select>
 
@@ -52,9 +68,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertBaseProviderDep" parameterType="BaseProviderDep">
-        insert into base_provider_dep
+        insert into base_provider_dep_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
+            <if test="serialNo != null">serial_no,</if>
             <if test="providerCode != null and providerCode != ''">provider_code,</if>
             <if test="visitingType != null">visiting_type,</if>
             <if test="firstDept != null and firstDept != ''">first_dept,</if>
@@ -71,9 +87,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="status != null">status,</if>
+            <if test="updateFlag != null">update_flag,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id},</if>
+            <if test="serialNo != null">#{serialNo},</if>
             <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
             <if test="visitingType != null">#{visitingType},</if>
             <if test="firstDept != null and firstDept != ''">#{firstDept},</if>
@@ -90,11 +107,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="status != null">#{status},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseProviderDepNew" parameterType="BaseProviderDep">
+        insert into base_provider_dep
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="visitingType != null">visiting_type,</if>
+            <if test="firstDept != null and firstDept != ''">first_dept,</if>
+            <if test="secondDept != null">second_dept,</if>
+            <if test="visitingFloor != null">visiting_floor,</if>
+            <if test="charactdeptFlag != null">charactdept_flag,</if>
+            <if test="straightknotFlag != null">straightknot_flag,</if>
+            <if test="cartevitalFlag != null and cartevitalFlag != ''">cartevital_flag,</if>
+            <if test="spprocurementFlag != null and spprocurementFlag != ''">spprocurement_flag,</if>
+            <if test="callstarttime != null">callstarttime,</if>
+            <if test="callendtime != null">callendtime,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+            <if test="updateFlag != null">update_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="visitingType != null">#{visitingType},</if>
+            <if test="firstDept != null and firstDept != ''">#{firstDept},</if>
+            <if test="secondDept != null">#{secondDept},</if>
+            <if test="visitingFloor != null">#{visitingFloor},</if>
+            <if test="charactdeptFlag != null">#{charactdeptFlag},</if>
+            <if test="straightknotFlag != null">#{straightknotFlag},</if>
+            <if test="cartevitalFlag != null and cartevitalFlag != ''">#{cartevitalFlag},</if>
+            <if test="spprocurementFlag != null and spprocurementFlag != ''">#{spprocurementFlag},</if>
+            <if test="callstarttime != null">#{callstarttime},</if>
+            <if test="callendtime != null">#{callendtime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
         </trim>
     </insert>
 
     <update id="updateBaseProviderDep" parameterType="BaseProviderDep">
-        update base_provider_dep
+        update base_provider_dep_bak
         <trim prefix="SET" suffixOverrides=",">
             <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
             <if test="visitingType != null">visiting_type = #{visitingType},</if>
@@ -117,23 +180,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBaseProviderDepById" parameterType="String">
-        delete from base_provider_dep where id = #{id}
+        delete from base_provider_dep_bak where id = #{id}
     </delete>
 
     <delete id="deleteBaseProviderDepByIds" parameterType="String">
-        delete from base_provider_dep where id in
+        delete from base_provider_dep_bak where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
+    <update id="updateBaseProviderDepByCode" parameterType="BaseProviderDep">
+        update base_provider_dep_bak set update_flag = '1'
+        where provider_code = #{providerCode} and update_flag = '0'
+    </update>
+
+    <update id="updateBaseProviderDepByCodeNew" parameterType="BaseProviderDep">
+        update base_provider_dep set update_flag = '1',status = 'N'
+        where provider_code = #{providerCode} and status = 'Y'
+    </update>
 
     <select id="selectBaseProviderDepByCode" parameterType="String" resultMap="BaseProviderDepResult">
         <include refid="selectBaseProviderDepVo"/>
-        where provider_code = #{providerCode}
+        where provider_code = #{providerCode} and status = 'Y' and update_flag = '0'
+    </select>
+
+    <select id="selectBaseProviderDepByCodeNew" parameterType="String" resultMap="BaseProviderDepResult">
+        <include refid="selectBaseProviderDepVoNew"/>
+        where provider_code = #{providerCode} and status = 'Y' and update_flag = '0'
     </select>
 
     <delete id="deleteBaseProviderDepByCode" parameterType="String">
-        delete from base_provider_dep where provider_code = #{providerCode}
+        delete from base_provider_dep_bak where provider_code = #{providerCode}
     </delete>
 </mapper>

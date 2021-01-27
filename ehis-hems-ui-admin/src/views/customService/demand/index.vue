@@ -4,19 +4,19 @@
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-<!--v-model双向绑定-->
+<!--v-model双向绑定 v-model的值为当前被选中的el-option的 value 属性值-->
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="Service">
+            <el-form-item label="服务项目：" prop="service">
               <el-select v-model="sendForm.service" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.value" :label="item.label"
-                           :value="item.value"/>
+                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="channel">
               <el-select v-model="sendForm.channel" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -101,7 +101,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organization">
               <el-select v-model="sendForm.organization" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -123,7 +123,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
               <el-select v-model="sendForm.priority" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -131,7 +131,7 @@
           <el-col :span="8">
             <el-form-item label="vip标识：" prop="vip">
               <el-select v-model="sendForm.vip" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -156,12 +156,12 @@
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>待处理（{{ totalCount }}）</span>
+        <span style="color: blue">待处理（{{ totalCount }}）</span>
         <span style="float: right;">
             <el-button type="primary" size="mini" @click="add">新增</el-button>
            <el-button type="primary" size="mini" @click="add">获取</el-button>
         </span>
-        <el-divider/>
+        <el-divider style=""/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -196,11 +196,11 @@
           <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
           <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
           <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" label="操作" width="140">
+          <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">获取</el-button>
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">修改</el-button>
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">取消</el-button>
+              <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
+              <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
+              <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
 
             </template>
           </el-table-column>
@@ -254,11 +254,12 @@
           <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
           <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
           <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" label="操作" width="140">
+          <!--fixed="right"控制固定某一列-->
+          <el-table-column align="center" label="操作" fixed="right" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">获取</el-button>
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">修改</el-button>
-              <el-button size="mini" type="text" @click="sendOne(scope.row)">取消</el-button>
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
+              <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
+              <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
 
             </template>
           </el-table-column>
@@ -273,6 +274,42 @@
         />
       </div>
     </el-card>
+
+    <!--再次来电弹出框-->
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form"  label-width="80px">
+        <el-card class="box-card" style="margin-top: 10px;">
+          <div slot="header" class="clearfix">
+            <el-divider/>
+            <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
+            <el-table
+              :header-cell-style="{color:'black',background:'#f8f8ff'}"
+              :data="workPoolData"
+              size="small"
+              highlight-current-row
+              tooltip-effect="dark"
+              style=" width: 100%;"
+             >
+              <el-table-column align="center" width="140" prop="state" label="序号" show-overflow-tooltip/>
+              <el-table-column align="center" prop="channel" label="工单号" show-overflow-tooltip/>
+              <el-table-column align="center" prop="Service" label="受理时间" show-overflow-tooltip/>
+              <el-table-column align="center" prop="policyNumber" label="被保人姓名" show-overflow-tooltip/>
+              <el-table-column align="center"  prop="secondNumber" label="说明" show-overflow-tooltip/>
+<!--              <el-button size="mini" type="text" @click="sendOne(scope.row)">关闭</el-button>-->
+              <!--fixed="right"控制固定某一列-->
+            </el-table>
+            <pagination
+              v-show="totalCount>0"
+              :total="totalCount"
+              :page.sync="queryParams.pageNum"
+              :limit.sync="queryParams.pageSize"
+              @pagination="searchHandle"
+            />
+          </div>
+        </el-card>
+
+      </el-form>
+    </el-dialog>
 
   </div>
 </template>
@@ -292,11 +329,15 @@
     },
     data() {
       return {
+        open:"",//是否弹出
+        title:"",//弹出框名称
+        cs_service_item:[],//服务项目
+        secondPhone:[],
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
         sendForm: {
-          service: "1",
+          service: "",//服务信息
           channel: "",
           acceptor: "",
           acceptorTime:"",
@@ -346,16 +387,60 @@
       }
     },
     created() {
-      debugger;
       this.searchHandle()
-      this.getDicts("sys_oper_type").then(response => {
-        this.states = response.data;
-        console.log("response:",response)
+      this.getDicts("cs_service_item").then(response => {
+        this.cs_service_item = response.data;
+        console.log("服务项目:",response)
       });
+      this.handlePhone()
 
     },
 
     methods: {
+      //修改按钮
+      modifyButton(){
+        this.$router.push({
+          path: '/customService/modify',
+          isEmpty: false
+        })
+      },
+      //取消按钮
+      cancleBytton(){
+        this.$router.push({
+          path: '/customService/cancle',
+          isEmpty: false
+        })
+      },
+      //获取按钮
+      obtainButton(){},
+      //处理按钮
+      dealButton(){
+          this.$router.push({
+            path: '/customService/deal',
+            isEmpty: false
+          })
+      },
+      /** 第二次来电弹出框 */
+      handlePhone() {
+        this.reset();
+          this.searchHandle().then(response => {
+            this.workPoolData = response.rows;
+            this.totalCount = res.total;
+            this.title="第二次来电弹出框";
+            this.open="true";
+          //   for (var i = 0; i < res.total; i++) {
+          //
+          //   if (response.rows[i].state == 1) {
+          //     this.open = true;
+          //     this.title = "再次来电提醒";
+          //     this.secondPhone.add(response.rows[i].state) ;
+          //   }
+          //
+          // };
+
+        });
+      },
+
       //增加按钮
       add(row) {
         this.$router.push({
@@ -366,12 +451,13 @@
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
+      //查询
       searchHandle() {
         debugger;
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,
-          Service: this.sendForm.Service,
+          service: this.sendForm.service,
           channel: this.sendForm.channel,
           Acceptor: this.sendForm.Acceptor,
           acceptorTime: this.sendForm.acceptorTime,
@@ -397,6 +483,7 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total
+            console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

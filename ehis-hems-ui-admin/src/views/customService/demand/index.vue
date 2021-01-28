@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
+      <second-phone :work-pool-data="workPoolData"></second-phone>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
@@ -157,10 +158,10 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color: blue">待处理（{{ totalCount }}）</span>
-        <span style="float: right;">
+        <div style="text-align: right; margin-right: 8px;">
             <el-button type="primary" size="mini" @click="add">新增</el-button>
            <el-button type="primary" size="mini" @click="add">获取</el-button>
-        </span>
+        </div>
         <el-divider style=""/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -276,40 +277,40 @@
     </el-card>
 
     <!--再次来电弹出框-->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form"  label-width="80px">
-        <el-card class="box-card" style="margin-top: 10px;">
-          <div slot="header" class="clearfix">
-            <el-divider/>
-            <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
-            <el-table
-              :header-cell-style="{color:'black',background:'#f8f8ff'}"
-              :data="workPoolData"
-              size="small"
-              highlight-current-row
-              tooltip-effect="dark"
-              style=" width: 100%;"
-             >
-              <el-table-column align="center" width="140" prop="state" label="序号" show-overflow-tooltip/>
-              <el-table-column align="center" prop="channel" label="工单号" show-overflow-tooltip/>
-              <el-table-column align="center" prop="Service" label="受理时间" show-overflow-tooltip/>
-              <el-table-column align="center" prop="policyNumber" label="被保人姓名" show-overflow-tooltip/>
-              <el-table-column align="center"  prop="secondNumber" label="说明" show-overflow-tooltip/>
-<!--              <el-button size="mini" type="text" @click="sendOne(scope.row)">关闭</el-button>-->
-              <!--fixed="right"控制固定某一列-->
-            </el-table>
-            <pagination
-              v-show="totalCount>0"
-              :total="totalCount"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="searchHandle"
-            />
-          </div>
-        </el-card>
+<!--    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>-->
+<!--      <el-form ref="form" :model="form"  label-width="80px">-->
+<!--        <el-card class="box-card" style="margin-top: 10px;">-->
+<!--          <div slot="header" class="clearfix">-->
+<!--            <el-divider/>-->
+<!--            &lt;!&ndash;：data赋值的地方，下面prop对应好就自己遍历赋值了&ndash;&gt;-->
+<!--            <el-table-->
+<!--              :header-cell-style="{color:'black',background:'#f8f8ff'}"-->
+<!--              :data="workPoolData"-->
+<!--              size="small"-->
+<!--              highlight-current-row-->
+<!--              tooltip-effect="dark"-->
+<!--              style=" width: 100%;"-->
+<!--             >-->
+<!--              <el-table-column align="center" width="140" prop="state" label="序号" show-overflow-tooltip/>-->
+<!--              <el-table-column align="center" prop="channel" label="工单号" show-overflow-tooltip/>-->
+<!--              <el-table-column align="center" prop="Service" label="受理时间" show-overflow-tooltip/>-->
+<!--              <el-table-column align="center" prop="policyNumber" label="被保人姓名" show-overflow-tooltip/>-->
+<!--              <el-table-column align="center"  prop="secondNumber" label="说明" show-overflow-tooltip/>-->
+<!--&lt;!&ndash;              <el-button size="mini" type="text" @click="sendOne(scope.row)">关闭</el-button>&ndash;&gt;-->
+<!--              &lt;!&ndash;fixed="right"控制固定某一列&ndash;&gt;-->
+<!--            </el-table>-->
+<!--            <pagination-->
+<!--              v-show="totalCount>0"-->
+<!--              :total="totalCount"-->
+<!--              :page.sync="queryParams.pageNum"-->
+<!--              :limit.sync="queryParams.pageSize"-->
+<!--              @pagination="searchHandle"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </el-card>-->
 
-      </el-form>
-    </el-dialog>
+<!--      </el-form>-->
+<!--    </el-dialog>-->
 
   </div>
 </template>
@@ -317,9 +318,11 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+  import secondPhone from "../common/modul/secondPhone";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components:{secondPhone},
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -422,7 +425,7 @@
       },
       /** 第二次来电弹出框 */
       handlePhone() {
-        this.reset();
+     //   this.reset();
           this.searchHandle().then(response => {
             this.workPoolData = response.rows;
             this.totalCount = res.total;

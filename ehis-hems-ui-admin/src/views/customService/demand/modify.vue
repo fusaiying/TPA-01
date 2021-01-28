@@ -303,9 +303,10 @@
           </el-form-item>
         </el-row>
       </el-form>
-
-      <el-button  type="primary" style="float: right" size="mini" @click="upload">保存</el-button>
-      <el-button  type="primary" style="float: right" size="mini" @click="upload">关闭</el-button>
+      <div style="text-align: right; margin-right: 1px;">
+      <el-button  type="primary" size="mini" @click="upload">保存</el-button>
+      <el-button  type="primary"size="mini" @click="upload">关闭</el-button>
+      </div>
     </el-card>
 
 

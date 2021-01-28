@@ -504,15 +504,16 @@
             </template>
           </el-table-column>
         </el-table>
-       <el-button  type="primary" style="float: right" size="mini" @click="upload">转办</el-button>
-        <el-button  type="primary" style="float: right" size="mini" @click="upload">协办</el-button>
-       <el-button  type="primary" style="float: right" size="mini" @click="upload">保单信息查询</el-button>
-      <el-button  type="primary" style="float: right" size="mini" @click="upload">暂存</el-button>
-       <el-button type="primary" style="float: right" size="mini" @click="upload">提交</el-button>
-
-
-
-
+      </div>
+      <div style="text-align: right; margin-right: 1px;">
+        <transfer ref="transfer"></transfer>
+        <up-load ref="upload"></up-load>
+        <co-organizer ref="coOrganizer"></co-organizer>
+        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
+        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
+        <el-button  type="primary" size="mini" @click="upload">暂存</el-button>
+        <el-button type="primary" size="mini" @click="upload">提交</el-button>
       </div>
     </el-card>
 
@@ -524,9 +525,16 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+  import transfer from "../common/modul/transfer";
+  import upLoad from "../common/modul/upload";
+  import coOrganizer from "../common/modul/coOrganizer";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: { transfer ,
+                  upLoad,
+                  coOrganizer,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -670,11 +678,15 @@
 
     methods: {
       //上传附件
-      upload(){},
+      upload(){ this.$refs.upload.open();},
       //下载
       download(){},
       //提交页面数据
       submit(){},
+      //转办
+      transfer(){ this.$refs.transfer.open();},
+      //协办
+      coOrganizer(){ this.$refs.coOrganizer.open();},
       resetForm() {
         this.$refs.sendForm.resetFields()
       },

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.AcceptDetailInfoMapper">
+    
+    <resultMap type="AcceptDetailInfo" id="AcceptDetailInfoResult">
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="channelCode"    column="channel_code"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="callPersonId"    column="call_person_id"    />
+        <result property="callRelationBy"    column="call_relation_by"    />
+        <result property="priorityLevel"    column="priority_level"    />
+        <result property="contactsPersonId"    column="contacts_person_id"    />
+        <result property="contactsRelationBy"    column="contacts_relation_by"    />
+        <result property="callCenterId"    column="call_center_id"    />
+        <result property="email"    column="email"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="content"    column="content"    />
+        <result property="complaintPersonId"    column="complaint_person_id"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="prop0"    column="prop0"    />
+        <result property="prop1"    column="prop1"    />
+        <result property="prop2"    column="prop2"    />
+        <result property="prop3"    column="prop3"    />
+        <result property="prop4"    column="prop4"    />
+        <result property="prop5"    column="prop5"    />
+        <result property="prop6"    column="prop6"    />
+        <result property="prop7"    column="prop7"    />
+        <result property="prop8"    column="prop8"    />
+        <result property="prop9"    column="prop9"    />
+        <result property="prop10"    column="prop10"    />
+        <result property="prop11"    column="prop11"    />
+        <result property="prop12"    column="prop12"    />
+        <result property="prop13"    column="prop13"    />
+        <result property="prop14"    column="prop14"    />
+        <result property="prop15"    column="prop15"    />
+        <result property="prop16"    column="prop16"    />
+        <result property="prop17"    column="prop17"    />
+        <result property="prop18"    column="prop18"    />
+        <result property="prop19"    column="prop19"    />
+        <result property="prop20"    column="prop20"    />
+        <result property="prop21"    column="prop21"    />
+        <result property="prop22"    column="prop22"    />
+        <result property="prop23"    column="prop23"    />
+        <result property="prop24"    column="prop24"    />
+        <result property="prop25"    column="prop25"    />
+    </resultMap>
+
+    <sql id="selectAcceptDetailInfoVo">
+        select work_order_no, channel_code, item_code, call_person_id, call_relation_by, priority_level, contacts_person_id, contacts_relation_by, call_center_id, email, organ_code, content, complaint_person_id, status, create_by, create_time, update_by, update_time, prop0, prop1, prop2, prop3, prop4, prop5, prop6, prop7, prop8, prop9, prop10, prop11, prop12, prop13, prop14, prop15, prop16, prop17, prop18, prop19, prop20, prop21, prop22, prop23, prop24, prop25 from accept_detail_info
+    </sql>
+
+    <select id="selectAcceptDetailInfoList" parameterType="AcceptDetailInfo" resultMap="AcceptDetailInfoResult">
+        <include refid="selectAcceptDetailInfoVo"/>
+        <where>  
+            <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+            <if test="callPersonId != null  and callPersonId != ''"> and call_person_id = #{callPersonId}</if>
+            <if test="callRelationBy != null  and callRelationBy != ''"> and call_relation_by = #{callRelationBy}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
+            <if test="contactsPersonId != null  and contactsPersonId != ''"> and contacts_person_id = #{contactsPersonId}</if>
+            <if test="contactsRelationBy != null  and contactsRelationBy != ''"> and contacts_relation_by = #{contactsRelationBy}</if>
+            <if test="callCenterId != null  and callCenterId != ''"> and call_center_id = #{callCenterId}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="complaintPersonId != null  and complaintPersonId != ''"> and complaint_person_id = #{complaintPersonId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="prop0 != null  and prop0 != ''"> and prop0 = #{prop0}</if>
+            <if test="prop1 != null  and prop1 != ''"> and prop1 = #{prop1}</if>
+            <if test="prop2 != null  and prop2 != ''"> and prop2 = #{prop2}</if>
+            <if test="prop3 != null  and prop3 != ''"> and prop3 = #{prop3}</if>
+            <if test="prop4 != null  and prop4 != ''"> and prop4 = #{prop4}</if>
+            <if test="prop5 != null  and prop5 != ''"> and prop5 = #{prop5}</if>
+            <if test="prop6 != null  and prop6 != ''"> and prop6 = #{prop6}</if>
+            <if test="prop7 != null  and prop7 != ''"> and prop7 = #{prop7}</if>
+            <if test="prop8 != null  and prop8 != ''"> and prop8 = #{prop8}</if>
+            <if test="prop9 != null  and prop9 != ''"> and prop9 = #{prop9}</if>
+            <if test="prop10 != null  and prop10 != ''"> and prop10 = #{prop10}</if>
+            <if test="prop11 != null  and prop11 != ''"> and prop11 = #{prop11}</if>
+            <if test="prop12 != null  and prop12 != ''"> and prop12 = #{prop12}</if>
+            <if test="prop13 != null  and prop13 != ''"> and prop13 = #{prop13}</if>
+            <if test="prop14 != null  and prop14 != ''"> and prop14 = #{prop14}</if>
+            <if test="prop15 != null  and prop15 != ''"> and prop15 = #{prop15}</if>
+            <if test="prop16 != null  and prop16 != ''"> and prop16 = #{prop16}</if>
+            <if test="prop17 != null  and prop17 != ''"> and prop17 = #{prop17}</if>
+            <if test="prop18 != null  and prop18 != ''"> and prop18 = #{prop18}</if>
+            <if test="prop19 != null  and prop19 != ''"> and prop19 = #{prop19}</if>
+            <if test="prop20 != null  and prop20 != ''"> and prop20 = #{prop20}</if>
+            <if test="prop21 != null  and prop21 != ''"> and prop21 = #{prop21}</if>
+            <if test="prop22 != null  and prop22 != ''"> and prop22 = #{prop22}</if>
+            <if test="prop23 != null  and prop23 != ''"> and prop23 = #{prop23}</if>
+            <if test="prop24 != null  and prop24 != ''"> and prop24 = #{prop24}</if>
+            <if test="prop25 != null  and prop25 != ''"> and prop25 = #{prop25}</if>
+        </where>
+    </select>
+
+    <select id="selectDemandTList" parameterType="String" resultMap="AcceptDetailInfoResult">
+    SELECT
+	prop0,
+	prop1,
+	prop7,
+	prop8,
+	prop10,
+	prop11
+    FROM
+	accept_detail_info
+	where work_order_no = #{workOrderNo}
+    </select>
+
+
+    
+    <select id="selectAcceptDetailInfoById" parameterType="String" resultMap="AcceptDetailInfoResult">
+        <include refid="selectAcceptDetailInfoVo"/>
+        where work_order_no = #{workOrderNo}
+    </select>
+        
+    <insert id="insertAcceptDetailInfo" parameterType="AcceptDetailInfo">
+        insert into accept_detail_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="channelCode != null">channel_code,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="callPersonId != null">call_person_id,</if>
+            <if test="callRelationBy != null">call_relation_by,</if>
+            <if test="priorityLevel != null">priority_level,</if>
+            <if test="contactsPersonId != null">contacts_person_id,</if>
+            <if test="contactsRelationBy != null">contacts_relation_by,</if>
+            <if test="callCenterId != null">call_center_id,</if>
+            <if test="email != null">email,</if>
+            <if test="organCode != null">organ_code,</if>
+            <if test="content != null">content,</if>
+            <if test="complaintPersonId != null">complaint_person_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="prop0 != null">prop0,</if>
+            <if test="prop1 != null">prop1,</if>
+            <if test="prop2 != null">prop2,</if>
+            <if test="prop3 != null">prop3,</if>
+            <if test="prop4 != null">prop4,</if>
+            <if test="prop5 != null">prop5,</if>
+            <if test="prop6 != null">prop6,</if>
+            <if test="prop7 != null">prop7,</if>
+            <if test="prop8 != null">prop8,</if>
+            <if test="prop9 != null">prop9,</if>
+            <if test="prop10 != null">prop10,</if>
+            <if test="prop11 != null">prop11,</if>
+            <if test="prop12 != null">prop12,</if>
+            <if test="prop13 != null">prop13,</if>
+            <if test="prop14 != null">prop14,</if>
+            <if test="prop15 != null">prop15,</if>
+            <if test="prop16 != null">prop16,</if>
+            <if test="prop17 != null">prop17,</if>
+            <if test="prop18 != null">prop18,</if>
+            <if test="prop19 != null">prop19,</if>
+            <if test="prop20 != null">prop20,</if>
+            <if test="prop21 != null">prop21,</if>
+            <if test="prop22 != null">prop22,</if>
+            <if test="prop23 != null">prop23,</if>
+            <if test="prop24 != null">prop24,</if>
+            <if test="prop25 != null">prop25,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="channelCode != null">#{channelCode},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="callPersonId != null">#{callPersonId},</if>
+            <if test="callRelationBy != null">#{callRelationBy},</if>
+            <if test="priorityLevel != null">#{priorityLevel},</if>
+            <if test="contactsPersonId != null">#{contactsPersonId},</if>
+            <if test="contactsRelationBy != null">#{contactsRelationBy},</if>
+            <if test="callCenterId != null">#{callCenterId},</if>
+            <if test="email != null">#{email},</if>
+            <if test="organCode != null">#{organCode},</if>
+            <if test="content != null">#{content},</if>
+            <if test="complaintPersonId != null">#{complaintPersonId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="prop0 != null">#{prop0},</if>
+            <if test="prop1 != null">#{prop1},</if>
+            <if test="prop2 != null">#{prop2},</if>
+            <if test="prop3 != null">#{prop3},</if>
+            <if test="prop4 != null">#{prop4},</if>
+            <if test="prop5 != null">#{prop5},</if>
+            <if test="prop6 != null">#{prop6},</if>
+            <if test="prop7 != null">#{prop7},</if>
+            <if test="prop8 != null">#{prop8},</if>
+            <if test="prop9 != null">#{prop9},</if>
+            <if test="prop10 != null">#{prop10},</if>
+            <if test="prop11 != null">#{prop11},</if>
+            <if test="prop12 != null">#{prop12},</if>
+            <if test="prop13 != null">#{prop13},</if>
+            <if test="prop14 != null">#{prop14},</if>
+            <if test="prop15 != null">#{prop15},</if>
+            <if test="prop16 != null">#{prop16},</if>
+            <if test="prop17 != null">#{prop17},</if>
+            <if test="prop18 != null">#{prop18},</if>
+            <if test="prop19 != null">#{prop19},</if>
+            <if test="prop20 != null">#{prop20},</if>
+            <if test="prop21 != null">#{prop21},</if>
+            <if test="prop22 != null">#{prop22},</if>
+            <if test="prop23 != null">#{prop23},</if>
+            <if test="prop24 != null">#{prop24},</if>
+            <if test="prop25 != null">#{prop25},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAcceptDetailInfo" parameterType="AcceptDetailInfo">
+        update accept_detail_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelCode != null">channel_code = #{channelCode},</if>
+            <if test="itemCode != null">item_code = #{itemCode},</if>
+            <if test="callPersonId != null">call_person_id = #{callPersonId},</if>
+            <if test="callRelationBy != null">call_relation_by = #{callRelationBy},</if>
+            <if test="priorityLevel != null">priority_level = #{priorityLevel},</if>
+            <if test="contactsPersonId != null">contacts_person_id = #{contactsPersonId},</if>
+            <if test="contactsRelationBy != null">contacts_relation_by = #{contactsRelationBy},</if>
+            <if test="callCenterId != null">call_center_id = #{callCenterId},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="organCode != null">organ_code = #{organCode},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="complaintPersonId != null">complaint_person_id = #{complaintPersonId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="prop0 != null">prop0 = #{prop0},</if>
+            <if test="prop1 != null">prop1 = #{prop1},</if>
+            <if test="prop2 != null">prop2 = #{prop2},</if>
+            <if test="prop3 != null">prop3 = #{prop3},</if>
+            <if test="prop4 != null">prop4 = #{prop4},</if>
+            <if test="prop5 != null">prop5 = #{prop5},</if>
+            <if test="prop6 != null">prop6 = #{prop6},</if>
+            <if test="prop7 != null">prop7 = #{prop7},</if>
+            <if test="prop8 != null">prop8 = #{prop8},</if>
+            <if test="prop9 != null">prop9 = #{prop9},</if>
+            <if test="prop10 != null">prop10 = #{prop10},</if>
+            <if test="prop11 != null">prop11 = #{prop11},</if>
+            <if test="prop12 != null">prop12 = #{prop12},</if>
+            <if test="prop13 != null">prop13 = #{prop13},</if>
+            <if test="prop14 != null">prop14 = #{prop14},</if>
+            <if test="prop15 != null">prop15 = #{prop15},</if>
+            <if test="prop16 != null">prop16 = #{prop16},</if>
+            <if test="prop17 != null">prop17 = #{prop17},</if>
+            <if test="prop18 != null">prop18 = #{prop18},</if>
+            <if test="prop19 != null">prop19 = #{prop19},</if>
+            <if test="prop20 != null">prop20 = #{prop20},</if>
+            <if test="prop21 != null">prop21 = #{prop21},</if>
+            <if test="prop22 != null">prop22 = #{prop22},</if>
+            <if test="prop23 != null">prop23 = #{prop23},</if>
+            <if test="prop24 != null">prop24 = #{prop24},</if>
+            <if test="prop25 != null">prop25 = #{prop25},</if>
+        </trim>
+        where work_order_no = #{workOrderNo}
+    </update>
+
+    <delete id="deleteAcceptDetailInfoById" parameterType="String">
+        delete from accept_detail_info where work_order_no = #{workOrderNo}
+    </delete>
+
+    <delete id="deleteAcceptDetailInfoByIds" parameterType="String">
+        delete from accept_detail_info where work_order_no in 
+        <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
+            #{workOrderNo}
+        </foreach>
+    </delete>
+    
+</mapper>

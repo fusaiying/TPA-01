@@ -327,7 +327,7 @@ export default {
             })
           }
         } else {
-          return false
+          this.$message.warning('服务信息必录项未必录')
         }
 
       })

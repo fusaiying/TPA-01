@@ -48,7 +48,8 @@
           <span class="info_span_col to_right">汇率：</span><span class="info_span">{{ conclusionInfo.amount}}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">外币给付金额：</span><span class="info_span">{{ conclusionInfo.contractName }}</span>
+          <span class="info_span_col to_right">外币给付金额：</span><span
+          class="info_span">{{ conclusionInfo.contractName }}</span>
         </el-col>
       </el-row>
 
@@ -66,7 +67,7 @@
         <el-col :span="12">
           <el-form-item label="客户备注：" prop="remark">
             <el-input disabled style="width:100%" col="2" type="textarea" row="4" maxlength="1000"
-                      v-model="conclusionForm.customerRemark" class="item-width" clearable size="mini"
+                      v-model="conclusionInfo.customerRemark" class="item-width" clearable size="mini"
                       placeholder=""/>
           </el-form-item>
         </el-col>
@@ -76,7 +77,7 @@
         <el-col :span="12">
           <el-form-item label="核赔依据：" prop="remark">
             <el-input disabled style="width:100%" col="2" type="textarea" row="4" maxlength="1000"
-                      v-model="conclusionForm.fileRemark" class="item-width" clearable size="mini"
+                      v-model="conclusionInfo.fileRemark" class="item-width" clearable size="mini"
                       placeholder=""/>
           </el-form-item>
         </el-col>
@@ -85,38 +86,46 @@
   </el-card>
 </template>
 <script>
+  import {calInfo} from '@/api/handel/common/api'
 
   export default {
+    props: {
+      fixInfo: Object,
+    },
     components: {},
     data() {
       return {
-        isButtonShow: true,
-        //赔付结论信息 start
         conclusionInfo: {},
-        conclusionForm: {},
-        //赔付结论信息 end
 
-        //协谈信息 start
-        discussionForm: {},
-        //协谈信息 end
-
-        //调查信息 start
-        surveyInfo: {},
-        surveyForm: {},
       }
     },
     mounted() {
+
     },
-    watch: {},
+    watch: {
+      fixInfo: function (newVal) {
+        this.getCalInfo()
+
+      }
+    },
     computed: {},
-    methods: {}
+    methods: {
+      getCalInfo() {
+        calInfo(this.fixInfo.rptNo).then(res => {
+          if (res.code === 200) {
+            this.conclusionInfo = res.data;
+          }
+        })
+      },
+    }
   }
 </script>
 <style scoped>
   .item-width {
     width: 220px;
   }
-  /deep/.info_span_col {
+
+  /deep/ .info_span_col {
     text-align: right;
     vertical-align: middle;
     float: left;
@@ -127,7 +136,8 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
-  /deep/.to_right {
+
+  /deep/ .to_right {
     width: 130px;
     text-align: right;
   }

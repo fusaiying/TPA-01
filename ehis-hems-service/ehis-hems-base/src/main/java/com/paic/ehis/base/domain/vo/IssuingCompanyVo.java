@@ -15,6 +15,8 @@ public class IssuingCompanyVo implements Serializable {
 
     private String simplename;
 
+    private String riskName;
+
     public String getCompanycode() {
         return companycode;
     }
@@ -39,12 +41,22 @@ public class IssuingCompanyVo implements Serializable {
         this.simplename = simplename;
     }
 
+
+    public String getRiskName() {
+        return riskName;
+    }
+
+    public void setRiskName(String riskName) {
+        this.riskName = riskName;
+    }
+
     @Override
     public String toString() {
         return "IssuingCompanyVo{" +
                 "companycode='" + companycode + '\'' +
                 ", companyname='" + companyname + '\'' +
                 ", simplename='" + simplename + '\'' +
+                ", riskName='" + riskName + '\'' +
                 '}';
     }
 }

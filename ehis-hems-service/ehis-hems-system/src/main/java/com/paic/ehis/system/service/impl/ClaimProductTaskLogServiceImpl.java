@@ -95,9 +95,19 @@ public class ClaimProductTaskLogServiceImpl implements IClaimProductTaskLogServi
         historyLogQurey.setIsHistory("Y");                                                                                       //从审核退回定义判断代码块中取出
         historyLogQurey.setRiskStatus("02");                                                                                    // 为获取定义完成过来的轨迹信息
         List<ClaimProductTaskLog> logs02 = claimProductTaskLogMapper.selectClaimProductTaskLogList(historyLogQurey);            //  flint：
-        if (!"03".equals(claimProductTaskLog.getRiskStatus())) {                //: flint 如果是提交审核，则轨迹表UpdateBy为空
+                      //: flint 如果是提交审核，则轨迹表UpdateBy为空
             claimProductTaskLog.setUpdateBy(logs02.get(0).getUpdateBy());
             claimProductTaskLog.setUpdateTime(DateUtils.getNowDate());
+
+        if ("03".equals(claimProductTaskLog.getRiskStatus())) {
+            historyLogQurey.setIsHistory("Y");                                                                                       //从审核退回定义判断代码块中取出
+            historyLogQurey.setRiskStatus("03");                                                                                    // 为获取定义完成过来的轨迹信息
+            List<ClaimProductTaskLog> logs03 = claimProductTaskLogMapper.selectClaimProductTaskLogList(historyLogQurey);
+            if (logs03.size()>0) {//如果存在数据则不为第一次通过
+                claimProductTaskLog.setUpdateBy(logs03.get(0).getUpdateBy());
+            }else {
+            claimProductTaskLog.setUpdateBy(null);
+            }
         }
         //如果是从审核退回定义
         if ("02".equals(claimProductTaskLog.getRiskStatus())) {

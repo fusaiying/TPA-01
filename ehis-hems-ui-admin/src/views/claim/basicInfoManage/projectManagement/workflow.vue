@@ -424,7 +424,7 @@
                         class="item-width"
                         clearable
                         size="mini"
-                        placeholder="请输入"/>
+                        placeholder="请输入，单位：分钟"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -687,24 +687,24 @@
         // 基础数据
         serviceapply: {
           processNode: '01',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
-          updateFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
+          updateFlag: '02',
           updateNum: undefined,
           distribute: undefined,
           aging: undefined,
-          selfused: undefined,
-          recordFlag: undefined,
+          selfused: '02',
+          recordFlag: '02',
           frequency: undefined,
           status: 'Y'
         },
         allocationForm: {
           processNode: '02',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
-          updateFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
+          updateFlag: '02',
           updateNum: undefined,
-          distribute: undefined,
+          distribute: '02',
           aging: undefined,
           selfused: undefined,
           recordFlag: undefined,
@@ -713,8 +713,8 @@
         },
         orderForm: {
           processNode: '03',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
           updateFlag: undefined,
           updateNum: undefined,
           distribute: undefined,
@@ -726,14 +726,14 @@
         },
         implement: {
           processNode: '04',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
           updateFlag: undefined,
           updateNum: undefined,
           distribute: undefined,
           aging: undefined,
           selfused: undefined,
-          recordFlag: undefined,
+          recordFlag: '02',
           frequency: undefined,
           status: 'Y'
         },

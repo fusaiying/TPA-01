@@ -16,13 +16,13 @@ export function editDestroy(data) {
   return request({
     url: '/system/casefiling/editDestroy',
     method: 'post',
-    params: data
+    data
   })
 }
 
 
 //新增案件归档
-export function add(data) {
+export function addInfo(data) {
   return request({
     url: '/system/casefiling/add',
     method: 'post',
@@ -41,11 +41,11 @@ export function editCaseFiling(data) {
 }
 
 //查询案件归档详细信息
-export function getInfoCaseFilingList(data) {
+export function getInfoCaseFilingList(query) {
   return request({
     url: '/system/casefiling/getInfoCaseFilingList',
     method: 'get',
-    data: data
+    params: query
   })
 }
 
@@ -54,7 +54,7 @@ export function updateCaseFilingInfo(data) {
   return request({
     url: '/system/casefiling/updateCaseFilingInfo',
     method: 'post',
-    data: data
+    data
   })
 }
 

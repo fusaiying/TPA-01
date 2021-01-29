@@ -55,6 +55,8 @@ public class BaseProviderSettle extends BaseEntity
 
     private String claimFlagName;
 
+    private String orgFlag;
+
     public void setProviderCode(String providerCode) 
     {
         this.providerCode = providerCode;

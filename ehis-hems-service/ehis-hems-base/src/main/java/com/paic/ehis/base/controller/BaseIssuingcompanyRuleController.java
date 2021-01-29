@@ -1,22 +1,19 @@
 package com.paic.ehis.base.controller;
 
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.base.domain.ClaimProduct;
 import com.paic.ehis.base.domain.dto.IssuingcompanyRuleDTO;
-import com.paic.ehis.base.domain.vo.IssuingcompanyRuleVO;
 import com.paic.ehis.base.service.IBaseIssuingcompanyRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -40,14 +37,24 @@ public class BaseIssuingcompanyRuleController extends BaseController
     public TableDataInfo list(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         startPage();
-        List<IssuingcompanyRuleVO> list = baseIssuingcompanyRuleService.selectBaseIssuingcompanyRuleList(baseIssuingcompanyRule);
-        return getDataTable(list);
+        return baseIssuingcompanyRuleService.selectBaseIssuingcompanyRuleList(baseIssuingcompanyRule);
+    }
+
+    /**
+     * 查询出单公司下属产品 列表
+     */
+    @PreAuthorize("@ss.hasPermi('system:rule:list')")
+    @GetMapping("/riskList")
+    public TableDataInfo riskList(BaseIssuingcompanyRule baseIssuingcompanyRule)
+    {
+        List<ClaimProduct> claimProducts = baseIssuingcompanyRuleService.selectBaseIssuingCompanyRiskList(baseIssuingcompanyRule);
+        return getDataTable(claimProducts);
     }
 
     /**
      * 导出出单公司规则 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:rule:export')")
+    /*@PreAuthorize("@ss.hasPermi('system:rule:export')")
     @Log(title = "出单公司规则 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompanyRule baseIssuingcompanyRule) throws IOException
@@ -55,7 +62,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
         List<IssuingcompanyRuleVO> list = baseIssuingcompanyRuleService.selectBaseIssuingcompanyRuleList(baseIssuingcompanyRule);
         ExcelUtil<IssuingcompanyRuleVO> util = new ExcelUtil<IssuingcompanyRuleVO>(IssuingcompanyRuleVO.class);
         util.exportExcel(response, list, "rule");
-    }
+    }*/
 
     /**
      * 获取出单公司规则 详细信息
@@ -74,8 +81,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:rule:query')")
     @PostMapping ("/query")
     public AjaxResult getInfo(IssuingcompanyRuleDTO issuingcompanyRuleDTO) {
-        int rows = baseIssuingcompanyRuleService.addAndModifyBaseIssuingcompanyRule(issuingcompanyRuleDTO);
-        return toAjax(rows);
+        return toAjax( baseIssuingcompanyRuleService.addAndModifyBaseIssuingcompanyRule(issuingcompanyRuleDTO));
     }
 
     /**

@@ -47,7 +47,7 @@
                                clearable size="mini"
                                @change="getSelectSData($event,scope.row,scope.$index)"
                                placeholder="请选择">
-                      <el-option v-for="option in selectFData" :key="option.policyNo"
+                      <el-option v-for="option in scope.row.selectFData" :key="option.policyNo"
                                  :label="option.policyNo+'-'+option.riskName"
                                  :value="option.riskCode"/>
                     </el-select>
@@ -59,7 +59,7 @@
                                clearable size="mini"
                                @change="changeMinData($event,scope.row,scope.$index)"
                                placeholder="请选择">
-                      <el-option v-for="option in selectSData" :key="option.dutyDetailCode"
+                      <el-option v-for="option in scope.row.selectSData" :key="option.dutyDetailCode"
                                  :label="option.dutyDetailName"
                                  :value="option.dutyDetailCode"/>
                     </el-select>
@@ -67,10 +67,10 @@
                   <span class="size" v-if="scope.row.isEdit">{{scope.row.policyNo}}-{{scope.row.riskName}}|{{scope.row.dutyDetailName}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" prop="dutyDetailCode" label="费用项金额" width="90" show-overflow-tooltip/>
-              <el-table-column align="center" prop="dutyDetailName" label="折扣金额" show-overflow-tooltip/>
-              <el-table-column align="center" prop="applyReason" label="自费金额" show-overflow-tooltip/>
-              <el-table-column align="center" prop="applyReason" label="部分自费" show-overflow-tooltip/>
+              <el-table-column align="center" prop="billDetailAmount" label="费用项金额" width="90" show-overflow-tooltip/>
+              <el-table-column align="center" prop="hosDiscountAmount" label="折扣金额" show-overflow-tooltip/>
+              <el-table-column align="center" prop="selfAmount" label="自费金额" show-overflow-tooltip/>
+              <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/>
               <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip/>
               <el-table-column align="center" prop="unableAmount" label="不合理金额" width="90" show-overflow-tooltip/>
               <el-table-column align="center" prop="deduUsed" label="免赔额" show-overflow-tooltip/>
@@ -90,7 +90,7 @@
         <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="hosDiscountAmount" label="折扣金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="unableAmount" label="不合理金额" show-overflow-tooltip/>
-        <el-table-column align="center" prop="ensureRegion" label="免赔额" show-overflow-tooltip/><!---->
+        <el-table-column align="center" prop="deduUsed" label="免赔额" show-overflow-tooltip/><!---->
         <el-table-column align="center" prop="calAmount" label="理算金额" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-link style="font-size: 11px" type="primary" @click="openAdjustmentDialog(scope.$index)">{{
@@ -167,15 +167,15 @@
 <script>
   import {getAddress} from '@/api/supplierManager/supplier'
   import {
-    addAccept,
     infoList,
     itemList,
     detailsList,
     responsibilityDetailsList,
-    billDetailsSave
+    billDetailsSave,
+    insurancePolicyList,
+    calSummary
   } from '@/api/claim/handleCom'
   import adjustmentDetail from '../modul/adjustmentDetail'
-  import Logo from "../../../../../layout/components/Sidebar/Logo"; //理算明细
   let dictss = [{dictType: 'application_reason'}, {dictType: 'preAuthFlag'}, {dictType: 'priority_reason'},
     {dictType: 'accident_status'}, {dictType: 'current_state'}, {dictType: 'conclusion'},]
   export default {
@@ -188,7 +188,6 @@
       fixInfo: Object,
       node: String,
       sonCalculateData: Array,
-      sonCalculateSelectData: Array,
     },
     watch: {
       sonCalculateData: function (newValue) {
@@ -196,13 +195,11 @@
           newValue.forEach(item => {
             item.isEdit = true
           })
-         /* this.caseForm.caseData = newValue*/
+          this.caseForm.caseData = newValue
         }
       },
-      sonCalculateSelectData: function (newValue) {
-        if (newValue != null && newValue.length > 0) {
-         /* this.selectFData = newValue*/
-        }
+      fixInfo:function (newVal) {
+        this.getCalSummary()
       }
     },
     filters: {
@@ -232,54 +229,13 @@
     },
     data() {
       return {
+        calSummaryData:{},
         loading: true,
         dialogVisable: false,
         index: undefined,
         expands: [],
-        selectFData: [
-          {
-            riskCode: 'C000101',
-            policyNo: '01',
-            riskName: '啊啊啊啊',
-          }, {
-            riskCode: 'C000102',
-            policyNo: '02',
-            riskName: '嘻嘻嘻嘻',
-          }
-        ],
-        selectSData: [],
         caseForm: {
-          caseData: [{
-            isEdit: true,
-            id: '1',
-            remark: 'aa',
-            billAmount: '哈哈哈',
-            calAmount: '125',
-            minData: [{
-              feeItemName: '00001',
-              feeItemCode:'ADDCN001',
-              policyNo: '001',
-              riskName: '啊啊啊啊',
-              isEdit: true,
-              riskCode: '001',
-              dutyDetailCode: '001',
-              dutyDetailName: '无敌'
-            }],
-          }, {
-            isEdit: true,
-            id: '2',
-            remark: '',
-            minData: [{
-              feeItemCode:'ADDCN003',
-              policyNo: '002',
-              riskName: '啊啊啊啊',
-              feeItemName: '00001',
-              isEdit: true,
-              riskCode: '002',
-              dutyDetailName: '无敌',
-              dutyDetailCode: '001'
-            }],
-          }]
+          caseData: []
         },
         caseRules: {
           payAmount: [{required: true, message: '赔付金额不能为空', trigger: 'blur'}],//赔付金额
@@ -344,7 +300,7 @@
         this.$refs.caseForm.validate((valid) => {
           if (valid) {
             billDetailsSave(this.caseForm.caseData).then(res => {
-              if(res!=null && res.code===200){
+              if (res != null && res.code === 200) {
                 this.$message({
                   message: '保存成功！',
                   type: 'success',
@@ -369,7 +325,7 @@
                 }
               }).catch(res => {
               })
-            }).catch(res=>{
+            }).catch(res => {
               this.$message({
                 message: '保存失败!',
                 type: 'error',
@@ -392,6 +348,8 @@
             if (res != null && res.code === 200 && res.rows.length > 0) {
               res.rows.forEach(item => {
                 item.isEdit = true
+                item.selectFData=[]
+                item.selectSData=[]
               })
               this.caseForm.caseData.forEach((temp, index) => {
                 if (temp.billId === row.billId) {
@@ -422,15 +380,17 @@
         }
         detailsList(data).then(res => {
           if (res != null && res.code === 200 && res.rows.length > 0) {
-            res.rows.forEach(item => {
+            this.caseForm.caseData = res.rows
+            this.caseForm.caseData.forEach(item => {
               item.isEdit = true
               if (item.minData.length > 0) {
                 item.minData.forEach(option => {
                   option.isEdit = true
+                  option.selectFData=[]
+                  option.selectSData=[]
                 })
               }
             })
-            this.caseForm.caseData = res.rows
           }
           this.loading = false
         }).catch(res => {
@@ -451,7 +411,26 @@
         row.isEdit = false
       },
       rowMinClick(row, column, event) {
+        let data = {
+          rptNo: this.fixInfo.rptNo
+        }
+        insurancePolicyList(data).then(res => {
+          if (res != null && res.code === 200) {
+            row.selectFData = res.rows
+          }
+        })
+        let item = {
+          riskCode: row.riskCode,
+          feeItemCode: row.feeItemCode
+        }
+        responsibilityDetailsList(item).then(res => {
+          if (res != null && res.code === 200) {
+            row.selectSData = res.rows
+          }
+        }).catch(res => {
+        })
         row.isEdit = false
+
       },
       getSum(param) {
         const {columns, data} = param;
@@ -463,11 +442,26 @@
             return;
           }
           switch (column.property) {
-            case "ensureRegion":
-              sums[index] = (100).toFixed(2) + '元';
+            case "billAmount":
+              sums[index] = (this.calSummaryData.sumBillAmount).toFixed(2) ;// 账单金额
               break;
-            case "payAmount":
-              sums[index] = 100 + '元';
+            case "hosDiscountAmount":
+              sums[index] = (this.calSummaryData.sumHosDiscountAmount).toFixed(2) ;//折扣金额
+              break;
+            case "unableAmount":
+              sums[index] = (this.calSummaryData.sumUnableAmount).toFixed(2) ;//不合理金额
+              break;
+            case "advancePayment":
+              sums[index] = (this.calSummaryData.sumAdvancePayment).toFixed(2) ;//先期给付
+              break;
+            case "calAmount":
+              sums[index] = (this.calSummaryData.calAmount).toFixed(2) ;//理算金额
+              break;
+            case "selfAmount":
+              sums[index] = (this.calSummaryData.sumSelfAmount).toFixed(2) ;//自费金额
+              break;
+            case "partSelfAmount":
+              sums[index] = (this.calSummaryData.sumPartSelfAmount).toFixed(2) ;//部分自费金额
               break;
             default:
               break;
@@ -475,9 +469,9 @@
         });
         return sums;
       },
-      getSelectSData(riskCode,row,index) {
+      getSelectSData(riskCode, row, index) {
         let fData = {};
-        fData = this.selectFData.find((item)=>{
+        fData = row.selectFData.find((item) => {
           return item.riskCode === riskCode;//筛选出匹配数据
         });
         this.caseForm.caseData[index].minData.policyNo = fData.policyNo
@@ -488,7 +482,7 @@
         }
         responsibilityDetailsList(data).then(res => {
           if (res != null && res.code === 200) {
-            this.$set(this,'selectSData',res.rows)
+            row.selectSData= res.rows
           }
         }).catch(res => {
         })
@@ -496,21 +490,24 @@
       },
       changeMinData(dutyDetailCode, row, index) {
         let sData = {};
-        sData = this.selectSData.find((item)=>{
+        sData = row.selectSData.find((item) => {
           return item.dutyDetailCode === dutyDetailCode;//筛选出匹配数据
         });
         this.caseForm.caseData[index].minData.dutyDetailCode = sData.dutyDetailCode
         this.caseForm.caseData[index].minData.dutyDetailName = sData.dutyDetailName
         this.caseForm.caseData[index].minData.dutyCode = sData.dutyCode
         this.caseForm.caseData[index].minData.planCode = sData.planCode
-      }
-
-
-      /*  columnStyle({ row, column, rowIndex, columnIndex }) {
-          if ((columnIndex ===1||columnIndex ===2 || columnIndex ===0)&& (rowIndex===1 || rowIndex===2)) {
-            return 'background:red;'
+      },
+      getCalSummary(){
+        let data={
+          rptNo:this.fixInfo.rptNo
+        }
+        calSummary(data).then(res=>{
+          if (res!=null && res.code===200){
+            this.calSummaryData=res.data
           }
-        },*/
+        })
+      }
     }
   }
 </script>

@@ -1,6 +1,6 @@
 export default {
   login: {
-    title: '中科软健康管理平台',
+    title: '高端医疗服务系统',
     logIn: '登录',
     username: '账号',
     password: '密码',

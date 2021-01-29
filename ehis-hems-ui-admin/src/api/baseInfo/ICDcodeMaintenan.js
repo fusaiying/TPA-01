@@ -3,8 +3,8 @@ import request from '@/utils/request'
 export function getICDList(query) {
   return request({
     url: '/provider/icd10/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

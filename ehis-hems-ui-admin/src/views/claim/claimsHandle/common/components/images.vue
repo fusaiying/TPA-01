@@ -588,7 +588,7 @@
       },
       clickClose() {
         // class="el-image-viewer__btn el-image-viewer__close"
-       
+
       },
       generateLabel(name) {
         let buttonBox = document.getElementsByClassName('el-image-viewer__actions__inner')[0]
@@ -631,7 +631,7 @@
           let _this = this
           element.onclick = function next() {
             _this.stopBodyScroll(false)
-          } 
+          }
 
           // 左
           let left = document.getElementsByClassName('el-icon-arrow-left has')[0] // 左

@@ -53,10 +53,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="renewFlag"    column="renew_flag"    />
+        <result property="liaison"    column="liaison"    />
     </resultMap>
 
     <sql id="selectBaseSupplierContractVo">
-        select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag from base_supplier_contract
+        select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison from base_supplier_contract
     </sql>
 
     <select id="selectBaseSupplierContractList" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
@@ -124,14 +125,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where contract_no = #{contractNo}
     </select>
 
-
  <!--若供应商下已签订合约，合约列表中供应商对应的合约编码、合约名称、合约起止日期均有值，
-    且当供应商下存在多条合约信息时仅显示该供应商下合约终止日期最晚的一条合约信息（即供应商下创建时间最晚的一条合约信息）
--->
+    且当供应商下存在多条合约信息时仅显示该供应商下合约终止日期最晚的一条合约信息（即供应商下创建时间最晚的一条合约信息）-->
     <select id="selectBaseSupplierLast" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
         select *from base_supplier_contract order by end_date desc limit 0,1;
     </select>
-
 
     <!--供应商合约管理主查询页面需默认显示截止当前时间合约签约时间在三个月内且合约状态为“有效”的数据-->
     <select id="selectBaseSupplierMonth" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
@@ -143,13 +141,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select  * from base_supplier_contract where provider_code=#{providerCode}
     </select>
 
-
     <!--根据服务机构id查询合约备份信息-->
     <select id="selectSupplierContractByCode" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
         select  * from base_supplier_contract_bak where provider_code=#{providerCode}
     </select>
-
-
 
     <insert id="insertBaseSupplierContract" parameterType="BaseSupplierContract">
         insert into base_supplier_contract
@@ -202,6 +197,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="renewFlag != null  and renewFlag != ''">renew_flag,</if>
+            <if test="liaison != null  and liaison != ''">liaison,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -252,13 +248,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="renewFlag != null and renewFlag != ''">#{renewFlag},</if>
-
+            <if test="liaison != null  and liaison != ''">#{liaison},</if>
         </trim>
     </insert>
 
     <update id="updateBaseContactsByCodeNew" parameterType="String">
         update base_supplier_contract_bak set status = 'N' where provider_code=#{providerCode}
-
     </update>
 
     <update id="updateBaseSupplierContract" parameterType="BaseSupplierContract">
@@ -315,6 +310,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endDate == null">end_date = #{endDate},</if>
             <if test="renewFlag != null and renewFlag != ''">renew_flag = #{renewFlag},</if>
             <if test="renewFlag == null or renewFlag == ''">renew_flag = #{renewFlag},</if>
+            <if test="liaison != null  and liaison != ''">liaison = #{liaison},</if>
         </trim>
         where contract_no = #{contractNo}
     </update>

@@ -30,8 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by update_time desc
     </select>
-    
+
     <select id="selectBaseIcd10ById" parameterType="String" resultMap="BaseIcd10Result">
+        <include refid="selectBaseIcd10Vo"/>
+        where icd_code = #{icdcode} and status = 'Y'
+    </select>
+
+    <select id="selectBaseIcd10ByIdOne" parameterType="String" resultMap="BaseIcd10Result">
         <include refid="selectBaseIcd10Vo"/>
         where icd_code = #{icdcode} and status = 'Y'
     </select>
@@ -72,7 +77,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBaseIcd10" parameterType="com.paic.ehis.base.domain.BaseIcd10">
         update base_icd10
         <trim prefix="SET" suffixOverrides=",">
+            <if test="icdcode != null">icd_code = #{icdcode},</if>
+            <if test="icdmname != null">icd_name = #{icdmname},</if>
+            <if test="source != null">source = #{source},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where icd_no = #{icdNo}
     </update>
@@ -87,5 +99,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{icdcode}
         </foreach>
     </delete>
-    
+
+    <update id="updateBaseIcd10One" parameterType="com.paic.ehis.base.domain.BaseIcd10">
+        update base_icd10
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="icdCode != null">icd_code = #{icdCode},</if>
+            <if test="icdName != null">icd_name = #{icdName},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where icd_no = #{icdNo}
+    </update>
+
 </mapper>

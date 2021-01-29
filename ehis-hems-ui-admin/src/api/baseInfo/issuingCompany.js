@@ -90,3 +90,11 @@ export function getRiskrela(companycode) {
     method: 'get'
   })
 }
+// 根据出单公司编码查询产品名称
+export function riskList(data) {
+  return request({
+    url: 'provider/rule/riskList',
+    method: 'get',
+    params: data
+  })
+}

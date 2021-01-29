@@ -55,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into base_contract_service
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
-            <if test="contractNo != null and contractNo != ''">contract_no,</if>
             <if test="supplierServiceName != null and supplierServiceName != ''">supplier_service_name,</if>
+            <if test="contractNo != null and contractNo != ''">contract_no,</if>
             <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
             <if test="serviceCode != null and serviceCode != ''">service_code,</if>
             <if test="settleType != null">settle_type,</if>
@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
     </insert>
-<!--批量新增服务项目数据-->
+    <!--批量新增服务项目数据-->
     <insert id="insertForeach" parameterType="BaseContractService" >
     insert into  base_contract_service(serial_no, supplier_service_name, supplier_code, service_code, settle_type, min_price, max_price, settle_currency, limitnum, remak, status, create_by, create_time, update_by, update_time )
     values

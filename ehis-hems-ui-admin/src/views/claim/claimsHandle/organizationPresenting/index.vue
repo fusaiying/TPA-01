@@ -68,12 +68,8 @@
           <el-col :span="8">
             <el-form-item label="操作人：" prop="updateBy">
               <el-select v-model="queryParams.updateBy" class="item-width" placeholder="请选择">
-                <el-option key="张三" label="张三"
-                           value="张三"/>
-                <el-option key="李四" label="李四"
-                           value="李四"/>
-                <el-option key="admin" label="admin"
-                           value="admin"/>
+                <el-option v-for="item in sysUserOptions" :key="item.userName" :label="item.userName"
+                           :value="item.userName"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -142,6 +138,7 @@
 
 <script>
   import claimsTable from './components/claimsTable'
+  import {selectSysUser} from '@/api/insuranceRules/ruleDefin'
   import {getBackToList, getDealWithList} from '@/api/claim/presentingReview'
  let dictss=[{dictType: 'claimType'},]
   export default {
@@ -171,8 +168,8 @@
           rptno: '',
         },
         loading: true,
-        dealData: [],//已退回
-        backData: [],//已处理数据
+        backData: [],//已退回数据
+        dealData: [],//已处理
         apply_sourcetypeOptions: [],
         isinit: 'Y',
         page: 1,
@@ -184,7 +181,8 @@
         activeName: '01',
         changeSerchData: {},
         dictList:[],
-        claimTypeOptions:[]
+        claimTypeOptions:[],
+        sysUserOptions:[]
       }
     },
     created() {
@@ -224,7 +222,9 @@
       }).finally(() => {
         this.loading = false
       })
-
+      selectSysUser().then(res => {
+        this.sysUserOptions = res.data
+      })
     },
     methods: {
       resetForm() {

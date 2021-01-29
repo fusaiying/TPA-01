@@ -36,7 +36,7 @@
           <span>ICD列表（{{ totalCount }}）</span>
           <span style="float: right;">
             <el-button icon="el-icon-plus" type="primary" size="mini" @click="editHandle">新增</el-button>
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport" :disabled="isListExport">清单导出</el-button>
             <!--            <el-button icon="el-icon-download" type="warning" size="mini">导出</el-button>-->
           </span>
         </div>
@@ -143,6 +143,7 @@
 
           icdmname: [{ validator: checkChineseName, trigger: 'blur' }]
         },
+        isListExport: false,
         dialogVisible: false,
         modalValue: false,
         icdcode: '',
@@ -178,6 +179,9 @@
         getICDList(this.formSearch).then(response => {
           this.tableData = response.rows;
           this.totalCount = response.total;
+          if(this.totalCount===0){
+            this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+          }
           this.loading = false;
         }).catch(res => {
           this.loading = false
@@ -242,9 +246,32 @@
           icdcode: this.formSearch.icdcode,
           icdmname: this.formSearch.icdmname,
         }
-        this.download('provider/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
-          ...query
-        }, `icd_${new Date().getTime()}.xlsx`)
+        //
+        getICDList(this.formSearch).then(res => {
+          if (res.rows.length>0){
+            this.isListExport=true
+            this.download('provider/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
+              ...query
+            }, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
+              this.$message({
+                message: res,
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            })
+          }else {
+            return this.$message.warning(
+              "没有查询到能导出的数据！"
+            )
+          }
+        }).catch(res => {
+
+        })
+
+
+
+
       }
     }
   }

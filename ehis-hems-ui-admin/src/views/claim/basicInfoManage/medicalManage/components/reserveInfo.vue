@@ -592,7 +592,7 @@ export default {
           }*/
 
         } else {
-          return false
+         this.$message.warning('预约信息必录项未必录')
         }
 
       })

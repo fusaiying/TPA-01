@@ -902,7 +902,7 @@ WHERE
             <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
             <if test="chremarks != null  and chremarks != ''"> and chremarks = #{chremarks}</if>
             <if test="enremarks != null  and enremarks != ''"> and enremarks = #{enremarks}</if>
-            and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01'
+            and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01' order by create_time desc
         </where>
     </select>
 

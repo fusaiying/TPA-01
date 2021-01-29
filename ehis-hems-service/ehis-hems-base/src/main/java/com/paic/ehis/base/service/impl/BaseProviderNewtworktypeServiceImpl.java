@@ -91,6 +91,7 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
         int count = 0;
         List<String> networktypenames = baseProviderNewtworktypeMapper.getCodes(baseProviderNetworktypeVO.getProviderCode());
         for(BaseProviderNewtworktype baseProviderNewtworktype :baseProviderNetworktypeVO.getMedicalTypeData()){
+            BaseProviderNewtworktypeLog baseProviderNewtworktypeLog = new BaseProviderNewtworktypeLog();
             String oldChoose= baseProviderNewtworktype.getOldChoose();
             baseProviderNewtworktype.setOldChoose(baseProviderNewtworktype.getNewChoose());
             baseProviderNewtworktype.setNewChoose(oldChoose);
@@ -102,6 +103,7 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
                     //List<String>  arr2= baseProviderNewtworktype.getNewChoose();
                     //baseProviderNewtworktype.setNewChooseStr(StringUtils.join(arr2, ","));
                     baseProviderNewtworktypeMapper.updateBaseProviderNewtworktype(baseProviderNewtworktype);
+                    baseProviderNewtworktypeLog.setFailureTime(DateUtils.getNowDate());
                 }else{  //新增数据记录
                     baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
                     baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
@@ -120,14 +122,12 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
             }
 
             //保存修改记录
-            BaseProviderNewtworktypeLog baseProviderNewtworktypeLog = new BaseProviderNewtworktypeLog();
             baseProviderNewtworktypeLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("Ser",12,12));
-            baseProviderNewtworktypeLog.setNewChoose(baseProviderNewtworktype.getNewChoose());
+            baseProviderNewtworktypeLog.setNewChoose(baseProviderNewtworktype.getOldChoose());
             baseProviderNewtworktypeLog.setNewDate(baseProviderNewtworktype.getNewDate());
             baseProviderNewtworktypeLog.setSupplierCode(baseProviderNetworktypeVO.getProviderCode());
             baseProviderNewtworktypeLog.setStatus("Y");
             baseProviderNewtworktypeLog.setNetworktypeCode(baseProviderNewtworktype.getNetworktypeCode());
-            baseProviderNewtworktypeLog.setFailureTime(DateUtils.getNowDate());
             baseProviderNewtworktypeLog.setCreateBy(SecurityUtils.getUsername());
             baseProviderNewtworktypeLog.setUpdateBy(SecurityUtils.getUsername());
             baseProviderNewtworktypeLog.setCreateTime(DateUtils.getNowDate());

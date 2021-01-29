@@ -37,7 +37,9 @@ public interface IBaseContractServiceService
      */
     public BaseContractService insertBaseContractService(BaseContractService baseContractService);
 
-    //批量新增
+    /**
+     * 批量新增
+     */
     public int insertForeach(@Param("baseContractServiceList")List<BaseContractService> baseContractServiceList);
 
     /**
@@ -62,8 +64,5 @@ public interface IBaseContractServiceService
      * @return 结果
      */
     public int deleteBaseContractServiceById(String serialNo);
-
-
-
 
 }

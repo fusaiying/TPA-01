@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,13 @@ public class BaseProviderSettleServiceImpl implements IBaseProviderSettleService
     @Override
     public List<BaseProviderSettle> selectBaseProviderSettleList(BaseProviderSettle baseProviderSettle)
     {
-        return baseProviderSettleMapper.selectBaseProviderSettleList(baseProviderSettle);
+        List<BaseProviderSettle> BaseProviderSettles = new ArrayList();
+        if("01".equals(baseProviderSettle.getOrgFlag())){
+            BaseProviderSettles = baseProviderSettleMapper.selectBaseProviderSettleList(baseProviderSettle);
+        }else if("02".equals(baseProviderSettle.getOrgFlag())){
+            BaseProviderSettles = baseProviderSettleMapper.selectBaseProviderSettleListNew(baseProviderSettle);
+        }
+        return BaseProviderSettles;
     }
 
     /**

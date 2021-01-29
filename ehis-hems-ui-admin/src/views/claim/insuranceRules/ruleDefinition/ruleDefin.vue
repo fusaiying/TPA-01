@@ -327,7 +327,6 @@
 </template>
 <script>
   import Cookies from "js-cookie";//  npm install js-cookie --save
-
   let that
   import moment from 'moment'
   import claimsTable from './components/claimsTable'

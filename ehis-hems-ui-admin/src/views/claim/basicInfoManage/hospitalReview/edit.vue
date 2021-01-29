@@ -346,7 +346,7 @@
         </div>
         <!--结算信息-->
         <div >
-          <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList"
+          <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList" :status="activeName"
                              :closingTableShow="closingTableShow" :annexupload="annexupload"
                              :closingFrom="closingFrom"></hosp-closing-info>
         </div>
@@ -406,7 +406,7 @@ let dictss = [{dictType: 'inter_hosp'},{dictType: 'virtual_org'},{dictType: 'fir
   {dictType: 'spprocurement_flag'},{dictType: 'classification'},{dictType: 'cooperationStatus_flag'},{dictType: 'servicelocator_flag'},
   {dictType: 'speciallanguage'},{dictType: 'networkHospitalType'},{dictType: 'type'},{dictType: 'payment'},
   {dictType: 'classification_type'},{dictType: 'leadFlag'},{dictType: 'place_type'},{dictType: 'currency'},{dictType: 'accountacc_status'},
-  {dictType: 'account_type_new'},{dictType: 'comprehensive_subtype'},{dictType: 'bussiness_status'}]
+  {dictType: 'account_type_new'},{dictType: 'comprehensive_subtype'},{dictType: 'bussiness_status'},{dictType: 'bussiness_status_review'}]
 
 export default {
   components: {
@@ -644,7 +644,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status'
+      return item.dictType == 'bussiness_status_review'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'
@@ -894,6 +894,13 @@ export default {
 
 .el-radio {
   padding: 3px;
+}
+/deep/ .el-select__tags {
+  width: 100%;
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseIssuingcompanyAttachfileMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseIssuingcompanyAttachfile" id="BaseIssuingcompanyAttachfileResult">
+        <result property="id"    column="id"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileSuffix"    column="file_suffix"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseIssuingcompanyAttachfileVo">
+        select id, company_code, file_name, file_suffix, file_path, status, create_by, create_time, update_by, update_time from base_issuingcompany_attachfile
+    </sql>
+
+    <select id="selectBaseIssuingcompanyAttachfileList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyAttachfile" resultMap="BaseIssuingcompanyAttachfileResult">
+        <include refid="selectBaseIssuingcompanyAttachfileVo"/>
+        <where>  
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileSuffix != null  and fileSuffix != ''"> and file_suffix = #{fileSuffix}</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseIssuingcompanyAttachfileById" parameterType="Long" resultMap="BaseIssuingcompanyAttachfileResult">
+        <include refid="selectBaseIssuingcompanyAttachfileVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBaseIssuingcompanyAttachfile" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyAttachfile" useGeneratedKeys="true" keyProperty="id">
+        insert into base_issuingcompany_attachfile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="fileSuffix != null and fileSuffix != ''">file_suffix,</if>
+            <if test="filePath != null and filePath != ''">file_path,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="fileSuffix != null and fileSuffix != ''">#{fileSuffix},</if>
+            <if test="filePath != null and filePath != ''">#{filePath},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseIssuingcompanyAttachfile" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyAttachfile">
+        update base_issuingcompany_attachfile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            <if test="fileSuffix != null and fileSuffix != ''">file_suffix = #{fileSuffix},</if>
+            <if test="filePath != null and filePath != ''">file_path = #{filePath},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBaseIssuingcompanyAttachfileById" parameterType="Long">
+        delete from base_issuingcompany_attachfile where id = #{id}
+    </delete>
+
+    <delete id="deleteBaseIssuingcompanyAttachfileByIds" parameterType="String">
+        delete from base_issuingcompany_attachfile where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

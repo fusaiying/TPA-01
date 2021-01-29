@@ -67,7 +67,7 @@ export default {
        /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
         // name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         // englishName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        icdcode: [{ required: true, message: 'ICD编码不可为空', trigger: 'blur' }]
+        icdcode: [{ required: true, message: 'ICD编码不能为空', trigger: 'blur' }]
       },
       loading: false
     }
@@ -105,12 +105,22 @@ export default {
             // 编辑时保存
             updateICDCode(this.baseForm).then(res => {
               if (res.code === 200) {
-                this.$message({
-                  message: '修改成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
+                if(res.data!=121) {
+                  this.$message({
+                    message: '修改成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.push({
+                    path: '/basic-info/icd',
+                  })
+                }
+                  else {
+                  this.$message.warning('ICD已存在，请核实')
+                  }
+
               } else {
                 this.$message({
                   message: '修改失败！',
@@ -124,15 +134,25 @@ export default {
             //  新增时保存
             addICDCode(this.baseForm).then(res => {
               if (res!=null && res.code === 200) {
-                this.$message({
-                  message: '新增成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else {
+                if(res.data!=121) {
+                  this.$message({
+                    message: '新增成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.push({
+                    path: '/basic-info/icd',
+                  })
+                }
+                else {
+                  this.$message.warning('ICD已存在，请核实')
+                }
 
               }
+
+
             })
           }
         } else {

@@ -3,7 +3,7 @@
       <div slot="header" class="clearfix">
         <span>批次信息</span>
       </div>
-      <el-row v-loading="dutyLoading" style="margin: 0 40px;padding-bottom: 20px">
+      <el-row style="margin: 0 40px;padding-bottom: 20px">
         <el-col :span="8">
           <span class="info_span to_right">交单日期：</span><span class="info_span">{{ baseInfo.submitdate }}</span>
         </el-col>
@@ -23,13 +23,13 @@
           <span class="info_span to_right">批次总金额：</span><span class="info_span">{{ baseInfo.batchtotal }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span to_right">特殊案件：</span><span class="info_span">{{ baseInfo.speccasetype }}</span>
+          <span class="info_span to_right">特殊案件：</span><span class="info_span">{{ selectDictLabel(special_caseOptions, baseInfo.speccasetype) }}</span>
         </el-col>
       </el-row>
     </el-card>
 </template>
 <script>
-  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'},]
+  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'}, {dictType: 'special_case'},]
   export default {
     props: {
       baseInfo:Object
@@ -44,10 +44,10 @@
           casenum:undefined,
           batchtotal:undefined,
         },*/
-        dutyLoading:false,
         dictList:[],
         claimTypeOptions:[],
         insurance_typeOptions:[],
+        special_caseOptions:[],
       }
     },
     async mounted() {
@@ -59,6 +59,9 @@
       }).dictDate
       this.insurance_typeOptions = this.dictList.find(item => {
         return item.dictType === 'insurance_type'
+      }).dictDate
+      this.special_caseOptions = this.dictList.find(item => {
+        return item.dictType === 'special_case'
       }).dictDate
     },
     methods:{
@@ -107,9 +110,8 @@
   .el-checkbox-group /deep/ .el-checkbox {
     display: block;
   }
-
-  .to_right {
-    width: 100px;
+  /deep/.to_right {
+    width: 130px;
     text-align: right;
   }
 

@@ -18,9 +18,14 @@ public interface BaseIcd10Mapper
      * @param icdCode ICD10数据 ID
      * @return ICD10数据 
      */
-    public BaseIcd10 selectBaseIcd10ById(String icdCode);
+    public List<BaseIcd10> selectBaseIcd10ById(String icdCode);
 
-    public BaseIcd10 selectBaseIcd10ByName(String icdmname);
+    /**
+     *
+     * @param icdmname
+     * @return
+     */
+    public  List<BaseIcd10> selectBaseIcd10ByName(String icdmname);
 
     /**
      * 查询ICD10数据 列表
@@ -45,6 +50,13 @@ public interface BaseIcd10Mapper
      * @param baseIcd10 ICD10数据 
      * @return 结果
      */
+    public int updateBaseIcd10One(BaseIcd10 baseIcd10);
+
+    /**
+     *
+     * @param baseIcd10
+     * @return
+     */
     public int updateBaseIcd10(BaseIcd10 baseIcd10);
 
     /**
@@ -62,4 +74,11 @@ public interface BaseIcd10Mapper
      * @return 结果
      */
     public int deleteBaseIcd10ByIds(String[] icdCodes);
+
+    /**
+     *
+     * @param icdcode
+     * @return
+     */
+    public BaseIcd10 selectBaseIcd10ByIdOne(String icdcode);
 }

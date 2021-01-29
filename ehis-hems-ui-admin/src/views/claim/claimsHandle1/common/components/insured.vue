@@ -611,7 +611,8 @@
 
         if (this.baseForm.checked) {
           this.baseForm.dateRange = []
-          this.baseForm.idEndDate = '9999-12-31'
+          /*this.baseForm.idEndDate = '9999-12-31'*/
+          this.$set(this.baseForm,'isEndData','9999-12-31')
           this.baseForm.idStartDate=''
          /* this.baseForm.dateRange[0] = ''
           this.baseForm.dateRange[1] = '9999-12-31'*/
@@ -644,6 +645,9 @@
 
 
       handleChange() {
+        this.baseForm.province = this.region[0]
+        this.baseForm.city = this.region[1]
+        this.baseForm.district = this.region[2]
       },
       preview() {
       },
@@ -664,8 +668,6 @@
       },
       //保存
       saveHandle() {
-
-
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             let policyNoList = []
@@ -682,6 +684,10 @@
             subFormSearch.city = this.region[1]
             subFormSearch.district = this.region[2]
             subFormSearch.rptNo = this.copyFixInfo.rptNo
+            if(this.baseForm.dateRange.length>=2){
+              this.baseForm.idStartDate= this.baseForm.dateRange[0]
+                this.baseForm.idEndDate  =this.baseForm.dateRange[1]
+            }
             subFormSearch.idStartDate = this.baseForm.idStartDate
             subFormSearch.idEndDate = this.baseForm.idEndDate
             let insuredInfoData = {

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName">
-      <el-tab-pane :label="label.label01" name="01">
+      <el-tab-pane :label="label.label01" name="01" v-if="hospShow">
         <!--基本信息-->
         <div >
           <el-card class="box-card">
@@ -20,7 +20,7 @@
                               placeholder="系统自动生成"/>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="10">
                   <el-form-item label="是否互联网医院：" prop="interHosp">
                     <el-select v-model="baseForm.interHosp" class="item-width" placeholder="请选择(默认否)" clearable>
                       <el-option v-for="item in inter_hospOptions" :label="item.dictLabel" :value="item.dictValue"
@@ -369,7 +369,7 @@
 
 
       </el-tab-pane>
-      <el-tab-pane :label="label.label02" name="02">
+      <el-tab-pane :label="label.label02" name="02" v-if="otherShow">
 
         <!--基本信息-->
         <div >
@@ -1022,7 +1022,9 @@ export default {
       secondAttributeOptions: [],
       yes_or_noOptions: [],
       comprehensive_subtypeOptions: [],
-      hospContractSaveFlag: false
+      hospContractSaveFlag: false,
+      hospShow: true,
+      otherShow:true
 
 
 
@@ -1082,6 +1084,12 @@ export default {
 
   if(this.$route.query.status!=null && this.$route.query.status==='edit'){
     this.isAdd=false
+    if(this.$route.query.orgflag=='01'){
+      this.otherShow=false
+    }
+    if(this.$route.query.orgflag=='02'){
+      this.hospShow=false
+    }
 
   }
   else {
@@ -1468,8 +1476,12 @@ export default {
             })
           }
         }
+        else {
+          this.$message.warning('基本信息必录项未必录')
+        }
 
       })
+
     },
     //级联改变
     handleChange(value) {
@@ -1660,6 +1672,10 @@ export default {
                         type: 'success',
                         center: true,
                         showClose: true
+                      })
+                      this.$store.dispatch("tagsView/delView", this.$route);
+                      this.$router.push({
+                        path: '/basic-info/medicalManage/medicalManage',
                       })
                     } else {
                       this.$message({
@@ -1920,6 +1936,10 @@ export default {
                       center: true,
                       showClose: true
                     })
+                    this.$store.dispatch("tagsView/delView", this.$route);
+                    this.$router.push({
+                      path: '/basic-info/medicalManage/medicalManage',
+                    })
                   } else {
                     this.$message({
                       message: '保存失败!',
@@ -2056,6 +2076,13 @@ export default {
 
 .el-radio {
   padding: 3px;
+}
+/deep/ .el-select__tags {
+  width: 100%;
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import {listFeeitem, addFeeitem, updateFeeitem} from '@/api/baseInfo/expenseitemMaintenan.js'
+  import {listFeeitem, addFeeitem, updateFeeitem} from '@/api/baseInfo/expenseitemMaintenan'
 
   export default {
     data() {
@@ -121,47 +121,49 @@
             const params = this.baseForm
             if (this.$route.query.feeitemcode) {
               updateFeeitem(params).then(res => {
-                if (res != null && res.code === 200) {
+                if (res != null && res.code === 200 && res.data===1) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
                     center: true,
                     showClose: true
                   })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }else if (res != null && res.code === 200 && res.data===0){
+                  return this.$message.warning(
+                    "费用项已存在，请核实！"
+                  )
                 }
+
               }).catch(error => {
-                this.$message({
-                  message: error,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+
               })
             } else {
               addFeeitem(params).then(res => {
-                if (res != null && res.code === 200) {
+                if (res != null && res.code === 200 && res.data===1) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
                     center: true,
                     showClose: true
                   })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }else if (res != null && res.code === 200 && res.data===0){
+                  return this.$message.warning(
+                    "费用项已存在，请核实！"
+                  )
                 }
               }).catch(error => {
-                this.$message({
-                  message: error,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+
               })
             }
           } else {
             return false
           }
         })
-      }
-      ,
+      },
       goBack() {
         this.$router.go(-1)
       }

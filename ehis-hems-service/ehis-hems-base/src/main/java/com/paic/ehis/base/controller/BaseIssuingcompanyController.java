@@ -7,10 +7,8 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseIssuingcompany;
-import com.paic.ehis.base.domain.BaseIssuingcompanyInvoice;
 import com.paic.ehis.base.domain.dto.IssuingAndCompanyDTO;
 import com.paic.ehis.base.domain.vo.IssuingCompanyVo;
-import com.paic.ehis.base.service.IBaseIssuingcompanyInvoiceService;
 import com.paic.ehis.base.service.IBaseIssuingcompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,8 +31,6 @@ public class BaseIssuingcompanyController extends BaseController
     @Autowired
     private IBaseIssuingcompanyService baseIssuingcompanyService;
 
-    @Autowired
-    private IBaseIssuingcompanyInvoiceService iBaseIssuingcompanyInvoiceService;
 
     /**
      * 查询出单公司信息 列表
@@ -72,7 +68,7 @@ public class BaseIssuingcompanyController extends BaseController
     }
 
     /**使用
-     * 新增出单公司信息
+     * 新增出单公司信息+修改
      * 传入数据：出单公司名称companyname、出单公司简写名称simplename
      * 传出数据：出单公司名称companyname、出单公司简写名称simplename、出单公司编码companycode
      */
@@ -80,32 +76,7 @@ public class BaseIssuingcompanyController extends BaseController
     @Log(title = "出单公司信息 ", businessType = BusinessType.INSERT)
     @PostMapping("/addissuingAndCompanyDTO")
     public AjaxResult add(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
-//        //IssuingAndCompanyDTO
-//        BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
-//        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();//出单公司开票
-//
-//        IssuingCompanyVo issuingCompanyVo = new IssuingCompanyVo();
-//
-//        String str = "C" + PubFun.createMySqlMaxNoUseCache("FILINGCODE",10,5);
-//        issuingCompanyVo.setCompanycode(str);//公司出单编码
-//        issuingCompanyVo.setSimplename(baseIssuingcompany.getSimplename());
-//        issuingCompanyVo.setCompanyname(baseIssuingcompany.getCompanyname());
-//
-//        baseIssuingcompany.setCompanycode(issuingCompanyVo.getCompanycode());
-//        baseIssuingcompanyService.insertBaseIssuingcompany(baseIssuingcompany);
-//
-//        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice1 = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();
-//        //String invoicename = baseIssuingcompanyInvoice1.getInvoicename();
-//        //if(invoicename != null && invoicename != ""){//非空-有值
-//        //Objects.nonNull(baseIssuingcompanyInvoice1) && Objects.equals(baseIssuingcompanyInvoice1,"")
-//        if (Objects.nonNull(baseIssuingcompanyInvoice1) && Objects.equals(baseIssuingcompanyInvoice1,"")){
-//            System.out.println(str+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
-//            baseIssuingcompanyInvoice.setCompanycode(issuingCompanyVo.getCompanycode());
-//            int i = iBaseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
-//        }
-//
-//        return AjaxResult.success(issuingCompanyVo);
-        IssuingCompanyVo issuingCompanyVo = baseIssuingcompanyService.insertBaseIssuingcompanyTwo(issuingAndCompanyDTO);
+        IssuingCompanyVo issuingCompanyVo = baseIssuingcompanyService.insertBaseIssuingcompanyRest(issuingAndCompanyDTO);
         return AjaxResult.success(issuingCompanyVo);
     }
 
@@ -117,18 +88,7 @@ public class BaseIssuingcompanyController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO)
     {
-        //issuingAndCompanyDTO
-        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice = issuingAndCompanyDTO.getBaseIssuingcompanyInvoice();//出单公司开票
-        BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
-
-        if(baseIssuingcompanyInvoice.getInvoicename()!=null || baseIssuingcompanyInvoice.getInvoicename() != ""){//非空-有值
-            baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
-            iBaseIssuingcompanyInvoiceService.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
-        }else {
-            baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
-            iBaseIssuingcompanyInvoiceService.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
-        }
-
+        BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();
         return toAjax(baseIssuingcompanyService.updateBaseIssuingcompany(baseIssuingcompany));
     }
 

@@ -11,7 +11,7 @@
       <el-table ref="departmentTable" :data="departmentForm.form"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
-        <el-table-column label="就诊类型" prop="visitingType" align="center" >
+        <el-table-column label="就诊类型" prop="visitingType" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id " :prop="'form.' + scope.$index + '.visitingType'"
                           :rules="departmentFormRules.visitingType">
@@ -25,7 +25,7 @@
             <span v-else>{{ scope.row.visitingTypeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="一级科室" prop="firstDept" align="center" >
+        <el-table-column label="一级科室" prop="firstDept" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.firstDept'"
                           :rules="departmentFormRules.firstDept">
@@ -34,7 +34,7 @@
             <span v-else>{{ scope.row.firstDept }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="二级科室" prop="secondDept" align="center" >
+        <el-table-column label="二级科室" prop="secondDept" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.secondDept'"
                           :rules="departmentFormRules.secondDept">
@@ -43,7 +43,7 @@
             <span v-else>{{ scope.row.secondDept }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="就诊楼层" prop="visitingFloor" align="center" >
+        <el-table-column label="就诊楼层" prop="visitingFloor" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.visitingFloor'"
                           :rules="departmentFormRules.visitingFloor">
@@ -52,7 +52,7 @@
             <span v-else>{{ scope.row.visitingFloor }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center" width="160">
+        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center" width="160" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.charactdeptFlag" class="item-width" placeholder="请选择" clearable
@@ -66,7 +66,7 @@
             <span v-else>{{getCharactdeptFlag(scope.row.charactdeptFlag) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否直结" prop="straightknotFlag" align="center" width="160">
+        <el-table-column label="是否直结" prop="straightknotFlag" align="center" width="160" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.straightknotFlag" class="item-width" placeholder="请选择" clearable
@@ -79,7 +79,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.straightknotFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center" width="160">
+        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center" width="160" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id ">
               <el-select v-model="scope.row.cartevitalFlag" class="item-width" placeholder="请选择" clearable
@@ -92,7 +92,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.cartevitalFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" width="160">
+        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" width="160" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.spprocurementFlag" class="item-width" placeholder="请选择" clearable
@@ -105,7 +105,7 @@
             <span v-else>{{  getCharactdeptFlag(scope.row.spprocurementFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="出诊时间" align="center" width="400">
+        <el-table-column label="出诊时间" align="center" width="400" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callstarttime'"
                           :rules="departmentFormRules.callstarttime" align="center">
@@ -123,7 +123,7 @@
             <span v-else>{{ scope.row.callstarttime }}-{{ scope.row.callendtime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="100" >
+        <el-table-column label="操作" align="center" width="100"  fixed="right">
           <template slot-scope="scope">
                     <span>
                       <el-button type="text" size="mini" v-if="departmentTableShow && !scope.row.isSet"
@@ -314,7 +314,7 @@ export default {
 
          }*/
             } else {
-              return false
+              this.$message.warning('科室信息必录项未必录')
             }
         }
         else {

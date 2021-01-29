@@ -43,7 +43,9 @@ public interface BaseContractServiceMapper
      */
     public int insertBaseContractService(BaseContractService baseContractService);
 
-    //批量新增
+    /**
+     * 批量新增
+     */
     public int insertForeach(@Param("baseContractServiceList")List<BaseContractService> baseContractServiceList);
 
     /**

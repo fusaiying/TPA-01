@@ -7,36 +7,36 @@
         <el-form ref="form" :model="form" style="padding-bottom: 30px;padding-top: 30px" label-width="130px" label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="机构：" prop="rptNo">
-                <el-input v-model="form.rptNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+              <el-form-item label="机构：" prop="deptCode">
+                <el-input v-model="form.deptCode" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="理赔类型：" prop="companyCode">
-                <el-select v-model="form.companyCode" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              <el-form-item label="理赔类型：" prop="claimType">
+                <el-select v-model="form.claimType" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="批次号：" prop="claimType">
-                <el-input v-model="form.rptNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+              <el-form-item label="批次号：" prop="batchNo">
+                <el-input v-model="form.batchNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label=" 报案号：" prop="name" >
-                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+              <el-form-item label=" 报案号：" prop="rptNo" >
+                <el-input v-model="form.rptNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label=" 盒号：" prop="name" >
-                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+              <el-form-item label=" 盒号：" prop="caseBoxNo" >
+                <el-input v-model="form.caseBoxNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -56,8 +56,7 @@
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
             <span>归档信息</span>
-            <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini"@click="addRecovery">新增</el-button>
-            <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini"@click="openListDialog">详情</el-button>
+            <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini"@click="addRecovery(null,'add')">新增</el-button>
           </div>
           <el-table
             :data="tableData"
@@ -67,20 +66,20 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}"
           >
-            <el-table-column prop="rptNo" label="盒号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="source" label="报案号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="name" label="批次号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="机构" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="claimType" label="新增时间"  width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="companyCode" label="末次修改时间"  align="center" show-overflow-tooltip />
-            <el-table-column prop="" label="末次修改人" align="center" show-overflow-tooltip />
-            <el-table-column prop="caseStatus" label="已归档案件数" align="center" show-overflow-tooltip />
-            <el-table-column prop="updateBy" label="是否销毁"  align="center" show-overflow-tooltip />
+            <el-table-column prop="caseBoxNo" label="盒号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="rptStartNo" :formatter="getFullRptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="deptCode" label="机构" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="createTime" label="新增时间"  width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="updateTime" label="末次修改时间"  align="center" show-overflow-tooltip />
+            <el-table-column prop="updateBy" label="末次修改人" align="center" show-overflow-tooltip />
+            <el-table-column prop="casenum" label="已归档案件数" align="center" show-overflow-tooltip />
+            <el-table-column prop="status" :formatter="getYesOrNo" label="是否销毁"  align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;"  v-if="scope.row.caseStatus=='01'"  @click="viewStream(scope.row)">
-                  工作流查看
-                </el-button>
+                <el-button  size="small" type="text" @click="addRecovery(scope.row,'edit')">编辑</el-button>
+                <el-button  size="small" type="text" @click="openListDialog(scope.row,'show')">明细</el-button>
+                <el-button :disabled="scope.row.status == 'N' ? 'disabled' : false" size="small" type="text" @click="destroyFun(scope.row)">销毁</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -94,7 +93,7 @@
           />
         </div>
 
-        <!-- 追讨白名单维护弹框 start -->
+        <!-- 案件归档 start -->
         <el-dialog
           :visible.sync="dialogVisible"
           :dialog-visible="dialogVisible"
@@ -104,66 +103,67 @@
           title=""
           width="27%">
           <el-card class="box-card">
-          <el-form ref="recoveryForm" :model="recoveryForm" style="border:0;" label-width="110px" label-position="right" size="mini">
+          <el-form ref="pbaceCaseForm" :model="pbaceCaseForm" style="border:0;" label-width="110px" label-position="right" size="mini">
             <el-row>
               <el-col :span="8">
-                <el-form-item label="机构：" prop="operator">
+                <el-form-item label="机构：" prop="deptCode">
+                  上分
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="理赔类型：" prop="operator">
-                  <el-select v-model="recoveryForm.operator" class="item-width" size="mini" placeholder="请选择">
-                    <el-option v-for="option in operatorSelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+                <el-form-item label="理赔类型：" prop="claimType">
+                  <el-select  :disabled="read ? 'disabled' : false"  v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
+                    <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="批次号：" prop="operator">
-                  <el-input v-model="recoveryForm.operator" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+              <el-col :span="8">  <!--:readonly="read ? 'readonly' : false"-->
+                <el-form-item label="批次号：" prop="batchNo">
+                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="盒号：" prop="operator">
-                  <el-input v-model="recoveryForm.operator" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-form-item label="盒号：" prop="caseBoxNo">
+                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.caseBoxNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="报案号起止：" prop="operator">
-                  <el-input v-model="recoveryForm.operator" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-form-item label="报案号起止：" prop="rptStartNo">
+                  <el-input v-model="pbaceCaseForm.rptStartNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="" prop="operator">
-                  <el-input v-model="recoveryForm.operator" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-form-item label="" prop="rptEndNo">
+                  <el-input v-model="pbaceCaseForm.rptEndNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
           </el-form>
           <span style="margin-right:25px; margin-bottom: 25px;float: right;" class="dialog-footer">
-            <el-button size="mini"  type="primary">确认</el-button>
+            <el-button size="mini" @click="saveInfo" type="primary">确认</el-button>
           </span>
           </el-card>
         </el-dialog>
 
-        <!-- 追讨白名单维护弹框 end -->
+        <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :rptNo="rptNo" @closeListDialog="closeListDialog"/>
+    <case-list :value="listDialog" :editPower="editPower" :batchNo="batchNo" :rptNo="rptNo" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>
@@ -171,26 +171,34 @@
 <script>
 
    import caseList from './components/caseList'
-
-   import { caseFilingList } from '@/api/placeCase/api'
+   import moment from 'moment'
+   import { caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
 
     export default {
+      filters: {
+        changeDate: function(value) {
+          if (value !== null) {
+            return moment(value).format('YYYY-MM-DD')
+          }
+        }
+      },
       components: {
         caseList
       },
         data() {
             return {
+               read:false,
                 form: {
-                  rptNo: '',
-                  companyCode: '',
-                  name: '',
-                  idNo:'',
+                  deptCode: '',
+                  claimType: '',
+                  batchNo: '',
+                  rptNo:'',
+                  caseBoxNo:'',
                 },
                 companySelect:[],
                 operatorSelect:[],
                 tableData: [],
                 totalNum: 0,
-                idKey: 'rptNo', // 标识列表数据中每一行的唯一键的名称
                 pageInfo: {
                     currentPage: 1,
                     pageSize: 10,
@@ -199,19 +207,34 @@
                 loading: false,
                 defaultData : true,
                 dialogVisible:false,
-                recoveryForm : {
-                  operator :'',
+                pbaceCaseForm : {
+                  deptCode :'',
+                  claimType:'',
+                  batchNo:'',
+                  rptStartNo:'',
+                  rptEndNo:'',
+                  rpttNo:'',
+                  caseBoxNo:'',
                 },
               dialogVisable: false,
               listDialog:false,
+              searchBtn:false,
               rptNo : '',
-
+              batchNo :'',
+              claimTypes:[],
+              yssOrNo:[],
+              editPower:true,
             }
         },
       mounted(){
-        // this.getDicts("queue_claim_status").then(response => {
-        //   this.caseStatusSelect = response.data;
-        // });
+        // sys_yes_no
+        this.getDicts("sys_yes_no").then(response => {
+          this.ysOrNo = response.data;
+        });
+        // claimType
+        this.getDicts("claimType").then(response => {
+          this.claimTypes = response.data;
+        });
       },
       computed: {
 
@@ -221,7 +244,13 @@
         this.initData();
       },
       methods: {
-        openListDialog(){
+        openListDialog(row,type){
+          if(row.status == 'N') {
+            this.editPower = false;
+          } else {
+            this.editPower = true;
+          }
+          this.batchNo  = row.batchNo;
           this.listDialog = true
         },
         closeListDialog() {
@@ -240,30 +269,40 @@
         //查询
         gettableData () {
 
+          let createStartStr  = '';
+          let createEndStr = '';
+          if(!this.searchBtn) {
+            let currentDate = new  Date();
+            createEndStr   = (this.dateFormat('yyyy-MM-dd',currentDate))  +" 23:59:59";
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
+          }
 
           const params = {
-            pageNum:this.pageInfo.currentPage,
-            pageSize:this.pageInfo.pageSize,
-
-            // rptNo:this.form.rptNo,
-            // companyCode:this.form.companyCode,
-            // name: this.form.name,
-            // idNo:this.form.idNo,
-
+            pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
+            pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
+            deptCode:this.form.deptCode ,
+            claimType:this.form.claimType ,
+            batchNo: this.form.batchNo ,
+            rptNo:this.form.rptNo ,
+            caseBoxNo:this.form.caseBoxNo ,
+            createStartStr : createStartStr,
+            createEndStr : createEndStr,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
 
-
           caseFilingList(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+            this.totalNum = response.total;
+            this.tableData = response.rows;
+            this.loading = false;
+            this.searchBtn = false;
           }).catch(error => {
             console.log(error);
           });
         },
         searchByFormParms(){
+          this.searchBtn = true;
           this.gettableData();
         },
         viewStream(row) {
@@ -273,13 +312,102 @@
           //
           // })
         },
-        addRecovery() {
+        addRecovery(row,type) {
 
-          // if(this.rptNos == '') {
-          //   this.$message.warning('请先选择需要处理的数据！');
-          //   return false;
-          // }
+          // pbaceCaseForm
+          //this.pbaceCaseForm.deptCode = '';
+          this.pbaceCaseForm.claimType = '';
+          this.pbaceCaseForm.batchNo = '';
+          this.pbaceCaseForm.rptStartNo = '';
+          this.pbaceCaseForm.rptEndNo = '';
+          this.pbaceCaseForm.caseBoxNo = '';
+
+          if(type == 'edit') {
+            this.read = true;
+            this.pbaceCaseForm.claimType = row.claimType;
+            this.pbaceCaseForm.batchNo = row.batchNo;
+            this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+            this.pbaceCaseForm.rptStartNo = row.rptStartNo;
+            this.pbaceCaseForm.rptEndNo = row.rptEndNo;
+            this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+          }
+
           this.dialogVisible = true;
+        },
+        saveInfo(){
+         let params = this.pbaceCaseForm;
+         if(this.read) {  // 更新
+           editCaseFiling(params).then(response => {
+             if(response.code == 200) {
+               this.dialogVisible = false;
+               this.$message.success('更新成功！');
+               this.gettableData();
+             } else {
+               this.dialogVisible = false;
+               this.$message.error('更新失败！');
+             }
+           }).catch(error => {
+             console.log(error);
+           });
+         } else {  // 新增
+           params.deptCode = '0000';
+           addInfo(params).then(response => {
+             if(response.code == 200) {
+               this.dialogVisible = false;
+               this.$message.success('新增成功！');
+               this.gettableData();
+             } else {
+               this.dialogVisible = false;
+               this.$message.error('新增失败！');
+             }
+           }).catch(error => {
+             console.log(error);
+           });
+         }
+        },
+        destroyFun(row){
+          // editDestroy
+
+          this.pbaceCaseForm.batchNo = row.batchNo;
+          this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+
+          const param = {
+            batchNo : row.batchNo,
+            caseBoxNo : row.caseBoxNo
+          };
+          // param.batchNo = row.batchNo;
+          // param.caseBoxNo = row.caseBoxNo;
+
+          let vm = this;
+          this.$confirm('确定销毁该记录?', "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(function () {
+
+            editDestroy(param).then(res => {
+              if(res.code == '200') {
+                vm.gettableData();
+                vm.$message({
+                  message: '销毁成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                });
+              } else {
+                vm.$message({
+                  message: '销毁失败！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                });
+              }
+            });
+          }).then(() => {
+          }).catch(function (error) {
+            console.log(error)
+          });
+
         },
         handleClose() {
           this.dialogVisible = false;
@@ -288,28 +416,30 @@
           //this.open = false;
           this.dialogVisible = false;
         },
-        /*updateOperator(){
-
-          if(this.recoveryForm.operator == '') {
-            return false;
-          }
-          const params = {
-            rptNo: this.rptNos,
-            updateBy: this.recoveryForm.operator
+        getFullRptNo(row,col){
+          return  row.rptStartNo + " - " +row.rptEndNo;
+        },
+        getYesOrNo(row,col){
+          return row.status == 'N' ? '是' : '否'
+        },
+        dateFormat(fmt,date) {
+          let o = {
+            "M+" : date.getMonth()+1,                 //月份
+            "d+" : date.getDate(),                    //日
+            "h+" : date.getHours(),                   //小时
+            "m+" : date.getMinutes(),                 //分
+            "s+" : date.getSeconds(),                 //秒
           };
-          dispatchUpdate(params).then(response => {
-            if(response.code == 200) {
-              this.dialogVisible = false;
-              this.$message.success('调度成功！');
-              this.gettableData();
-            } else {
-              this.dialogVisible = false;
-              this.$message.error('调度失败！');
+          if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+          }
+          for(let k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
             }
-          }).catch(error => {
-            console.log(error);
-          });
-        },*/
+          }
+          return fmt;
+        },
       }
     }
 </script>

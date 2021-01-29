@@ -13,15 +13,15 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="出单公司名称：" prop="companycode ">
-              <el-input v-model="formSearch.companycode" class="item-width" disabled clearable size="mini"
+            <el-form-item label="出单公司名称：" prop="companyname">
+              <el-input v-model="formSearch.companyname" class="item-width" disabled clearable size="mini"
                         placeholder="平安寿险"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="riskcode">
-              <el-select multiple v-model="formSearch.riskcode" class="item-width" placeholder="请选择" clearable @change="cleanOther">
-                <el-option v-for="item in riskName" :label="item.label" :value="item.value" :key="item.value"/>
+              <el-select multiple v-model="formSearch.riskcode" class="item-width" placeholder="请选择" clearable @change="cleanOther"  >
+                <el-option v-for="item in riskName" :label="item.riskName" :value="item.riskCode" :key="item.riskCode"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -65,8 +65,8 @@
           tooltip-effect="dark"
           style="width: 100%;">
           <el-table-column label="规则编码" prop="ruleno" align="center"/>
-          <el-table-column label="出单公司" prop="companycode" align="center"/>
-          <el-table-column label="产品名称" prop="riskcode" align="center"/>
+          <el-table-column label="出单公司" prop="companyname" align="center"/>
+          <el-table-column label="产品名称" prop="riskName" align="center"/>
           <el-table-column label="结算类型" prop="accounttype" align="center" :formatter="getAccounttypeOptions">
 
           </el-table-column>
@@ -98,7 +98,7 @@
           :close-on-click-modal="false"
           title="提示"
           width="30%">
-          <span>{{'是否需要更改'+this.riskcode  + '险种结算规则' }}</span>
+          <span>{{'是否需要更改'+this.productName  + '险种结算规则' }}</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="updateConfirm">确 定</el-button>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-  import {listRule,getRule} from '@/api/baseInfo/issuingCompany.js'
+  import {listRule,getRule,riskList} from '@/api/baseInfo/issuingCompany.js'
 
   export default {
     data() {
@@ -148,24 +148,13 @@
       }
       return {
         accounttypeOptions: [],
-        riskName: [{
-          value: 9,
-          label: "产品9"
-        },
-          {
-            value: '12',
-            label: "产品12"
-          },
-          {
-            value: 13,
-            label: "产品13"
-          }
-        ],
+        riskName: [],
 
         //服务费/人 显示按钮
-        accounttypeShow: true,
+        accounttypeShow: false,
         //保费比例% 显示按钮
-        premrateShow: true,
+        premrateShow: false,
+
 
         rules: {
           companycode: [{required: true, message: '出单公司不能为空', trigger: 'blur'}],
@@ -176,6 +165,7 @@
         },
 
         formSearch: {
+          companyname: undefined,
           companycode : undefined,
           riskcode : [],
           accounttype : undefined,
@@ -203,7 +193,7 @@
         tableData: [],
         queryData:{
           pageNum: 1,
-          pagesize: 10,
+          pageSize: 10,
           companycode: undefined
 
         },
@@ -211,7 +201,8 @@
         loading: true,
         dialogVisible: false,
         modalValue: false,
-        riskcode: []
+        riskcode: [],
+        productName: []
 
       }
     },
@@ -219,8 +210,17 @@
       if (this.$route.query.companycode) {
         //根据companycode
         this.formSearch.companycode = this.$route.query.companycode;
+        this.formSearch.companyname=this.$route.query.companyname
         //根据companycode 查询sys_claim_base_issuingcompany_rule的内容 给tableData赋值
         this.getData();
+        let query={
+          companycode: this.formSearch.companycode
+        }
+        riskList(query).then(res=>{
+          if(res!=null && res.code=='200' && res.rows.length>0){
+            this.riskName=res.rows
+          }
+        })
       }
       this.getDicts("accounttype").then(response => {
         this.accounttypeOptions = response.data;
@@ -272,6 +272,7 @@
           if (valid) {
             let flag = true;
             this.riskcode.length=0;
+            this.productName.length=0
             for (let i = 0; i < this.formSearch.riskcode.length; i++) {
 
               let temp = this.tableData.filter(item => {
@@ -282,6 +283,12 @@
                 if (temp[0].accounttype!=null) {
                   flag = false;
                   this.riskcode.push(temp[0].riskcode);
+                  //
+                 let name= this.riskName.find(item => {
+                    return item.riskCode==temp[0].riskcode
+                  })
+
+                  this.productName.push(name.riskName)
                 }
               }
             }
@@ -363,7 +370,7 @@
       },
       goBack() {
         this.$router.go(-1)
-      }
+      },
     }
   }
 </script>
@@ -376,5 +383,13 @@
   /*element原有样式修改*/
   .el-form-item /deep/ label {
     font-weight: normal;
+  }
+
+  /deep/ .el-select__tags {
+    width: 100%;
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 </style>

@@ -115,9 +115,13 @@
                   <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="item in negotiationTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                   </el-select>
-                  <el-select v-model="discussionForm.idCard" class="item-width" size="mini" placeholder="请选择">
-                  </el-select>
                 </el-form-item>
+
+              <el-form-item  prop="discSubType">
+                <el-select v-model="discussionForm.discSubType" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="item in negotiationSubTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -322,10 +326,12 @@
         discussionForm:{
           discType:'',
           disView:'',
+          discSubType:'',
         },
         disRules: {
           discType: {trigger: ['change'], required: true, message: '协谈类型必填'},
           disView: {trigger: ['change'], required: true, message: '转出意见必填'},
+          discSubType: {trigger: ['change'], required: true, message: '协谈细类必填'},
         },
         //协谈信息 end
 
@@ -372,6 +378,8 @@
         conclusionSelect:[],
         //拒赔原因
         rejectedReasons :[],
+        //协谈细类
+        negotiationSubTypes:[]
 
       }
     },
@@ -392,6 +400,10 @@
       //协谈类型
       this.getDicts("negotiation_type").then(response => {
         this.negotiationTypes = response.data;
+      });
+      //协谈细类
+      this.getDicts("negotiation_sub_type").then(response => {
+        this.negotiationSubTypes = response.data;
       });
       //提调类型
       this.getDicts("dispatch_type").then(response => {
@@ -425,9 +437,9 @@
             const params = {
               rptNo : this.rptNo,
               discType:this.discussionForm.discType,
-              disView:this.discussionForm.disView
+              disView:this.discussionForm.disView,
+              discSubType:this.discussionForm.discSubType,
             };
-
 
             addDiscussion(params).then(res => {
               console.log(res);

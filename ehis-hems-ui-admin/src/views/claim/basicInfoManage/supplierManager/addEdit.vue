@@ -4,6 +4,9 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>基本信息</span>
+        <span style="float: right;">
+            <el-button size="mini" type="primary" @click="saveAll">保存</el-button>
+        </span>
       </div>
       <el-form ref="supplier" :rules="supplierRule" :inline="true" :model="supplier"
                style="padding-bottom: 30px;" label-position="right" label-width="135px" size="small">
@@ -25,6 +28,8 @@
                         clearable/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item prop="servcomType" label="供应商类型：">
               <el-select v-model="supplier.servcomType" class="item-width" :placeholder="placeType1">
@@ -49,6 +54,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="所属地区：" prop="region">
               <el-cascader :options="regions" v-model="region" class="item-width" :placeholder="placeType1"
@@ -63,6 +70,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item :style="{width:'100%'}" :class="['long-input']" prop="detailedAddress"
                           label="详细地址：">
@@ -366,7 +375,6 @@
         <!--     <el-divider/>-->
         <div style="text-align: right; margin-right: 10px;margin-top: 50px">
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
-          <el-button size="mini" type="success" @click="saveAll">保存</el-button>
           <el-button size="mini" type="primary" @click="closeAll">关闭</el-button>
         </div>
       </div>
@@ -981,7 +989,7 @@
         this.accountForm.account.forEach(item => {
           item.providerCode = this.supplier.serialNo
         })
-        if (this.hasBlock) {
+        if (this.hasBlock && this.supplier.serialNo!=null && this.supplier.serialNo!=='') {
           if (this.supplier.serialNo !== null && this.supplier.serialNo !== '')
             if (this.accountForm.account.length > 0) {
               let flag = true

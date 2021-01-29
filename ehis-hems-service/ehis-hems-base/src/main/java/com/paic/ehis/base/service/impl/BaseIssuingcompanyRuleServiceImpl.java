@@ -1,9 +1,14 @@
 package com.paic.ehis.base.service.impl;
 
+import com.github.pagehelper.PageInfo;
+import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.base.domain.ClaimProduct;
 import com.paic.ehis.base.domain.dto.IssuingcompanyRuleDTO;
 import com.paic.ehis.base.domain.vo.IssuingcompanyRuleVO;
 import com.paic.ehis.base.mapper.BaseIssuingcompanyRuleMapper;
@@ -11,6 +16,7 @@ import com.paic.ehis.base.service.IBaseIssuingcompanyRuleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,10 +53,10 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
      * @return 出单公司规则 
      */
     @Override
-    public List<IssuingcompanyRuleVO> selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule)
+    public TableDataInfo selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         baseIssuingcompanyRule.setStatus("Y");
-        List<BaseIssuingcompanyRule> baseIssuingcompanyRules = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRuleList(baseIssuingcompanyRule);
+        List<BaseIssuingcompanyRule> baseIssuingcompanyRules = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRuleByProduct(baseIssuingcompanyRule);
         List<IssuingcompanyRuleVO> issuingcompanyRuleVOS = new ArrayList<>();
         for (BaseIssuingcompanyRule issuingcompanyRule : baseIssuingcompanyRules) {
             IssuingcompanyRuleVO issuingcompanyRuleVO = new IssuingcompanyRuleVO();
@@ -64,7 +70,13 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
             }
             issuingcompanyRuleVOS.add(issuingcompanyRuleVO);
         }
-        return issuingcompanyRuleVOS;
+
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(issuingcompanyRuleVOS);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(new PageInfo(baseIssuingcompanyRules).getTotal());
+        return rspData;
     }
 
     /**
@@ -73,6 +85,7 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
      * @param issuingcompanyRuleDTO 出单公司规则
      * @return 出单公司规则
      */
+    @Transactional
     @Override
     public int addAndModifyBaseIssuingcompanyRule(IssuingcompanyRuleDTO issuingcompanyRuleDTO) {
         String[] riskcodes = issuingcompanyRuleDTO.getRiskcode().split(",");
@@ -89,20 +102,20 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
         int rows = 0;
         for (String riskcode : riskcodes) {
             issuingcompanyRule.setRiskcode(riskcode);
-            BaseIssuingcompanyRule companyRule = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRuleByProduct(issuingcompanyRule);
+            BaseIssuingcompanyRule companyRule = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRule(issuingcompanyRule);
             if (StringUtils.isNotNull(companyRule)){
                 issuingcompanyRule.setRuleno(companyRule.getRuleno());
                 issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-                rows = baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(issuingcompanyRule);
+                rows += baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(issuingcompanyRule);
             }else{
                 issuingcompanyRule.setStatus("Y");
-                issuingcompanyRule.setRuleno("RM"+DateUtils.dateTimeNow()+rows);
+                issuingcompanyRule.setRuleno("S"+ PubFun.createMySqlMaxNoUseCache("service_fee_rule",10,4));
                 issuingcompanyRule.setCreateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setCreateTime(DateUtils.getNowDate());
                 issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
-                rows = baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(issuingcompanyRule);
+                rows += baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(issuingcompanyRule);
             }
 
         }
@@ -163,5 +176,18 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     public int deleteBaseIssuingcompanyRuleById(String ruleNo)
     {
         return baseIssuingcompanyRuleMapper.deleteBaseIssuingcompanyRuleById(ruleNo);
+    }
+
+    /**
+     * 查询出单公司规则 列表
+     *
+     * @param baseIssuingcompanyRule 出单公司规则
+     * @return 出单公司规则
+     */
+    @Override
+    public List<ClaimProduct> selectBaseIssuingCompanyRiskList(BaseIssuingcompanyRule baseIssuingcompanyRule)
+    {
+        baseIssuingcompanyRule.setStatus("Y");
+        return baseIssuingcompanyRuleMapper.selectBaseIssuingCompanyRiskList(baseIssuingcompanyRule);
     }
 }

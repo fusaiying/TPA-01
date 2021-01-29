@@ -36,7 +36,6 @@ WHERE
    placename from sn_base_address
 WHERE
    placecode = base_supplier_info.district ))  addressdetail
-
 FROM
 	base_supplier_info
     </sql>

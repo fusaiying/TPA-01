@@ -62,10 +62,10 @@ public class ClaimRuleInfo extends BaseEntity
     private String status;
 
     /** 条件列表 */
-    private List<com.paic.ehis.system.domain.ClaimRuleConstraint> constraintList;
+    private List<ClaimRuleConstraint> constraintList;
 
     /** 关联对象列表 */
-    private List<com.paic.ehis.system.domain.ClaimRuleRelationInfo> relationInfoList;
+    private List<ClaimRuleRelationInfo> relationInfoList;
 
 
     public void setRuleNo(String ruleNo) 
@@ -167,18 +167,18 @@ public class ClaimRuleInfo extends BaseEntity
     {
         return status;
     }
-    public void setConstraintList(List<com.paic.ehis.system.domain.ClaimRuleConstraint> constraintList) {
+    public void setConstraintList(List<ClaimRuleConstraint> constraintList) {
         this.constraintList = constraintList;
     }
 
-    public List<com.paic.ehis.system.domain.ClaimRuleConstraint> getConstraintList() {
+    public List<ClaimRuleConstraint> getConstraintList() {
         return constraintList;
     }
-    public List<com.paic.ehis.system.domain.ClaimRuleRelationInfo> getRelationInfoList() {
+    public List<ClaimRuleRelationInfo> getRelationInfoList() {
         return relationInfoList;
     }
 
-    public void setRelationInfoList(List<com.paic.ehis.system.domain.ClaimRuleRelationInfo> relationInfoList) {
+    public void setRelationInfoList(List<ClaimRuleRelationInfo> relationInfoList) {
         this.relationInfoList = relationInfoList;
     }
 

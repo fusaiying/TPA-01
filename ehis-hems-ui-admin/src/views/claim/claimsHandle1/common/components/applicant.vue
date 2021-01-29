@@ -147,6 +147,7 @@
           regionArr[1] = newVal.rgtCity
           regionArr[2] = newVal.rgtDistrict
           this.baseForm = newVal
+          console.log(regionArr)
 
          // this.$set(this,'baseForm',newVal)
           this.$set(this,'region',regionArr)
@@ -352,7 +353,9 @@
       ,
       // 申请人选择被保人关系为本人时，自动带入被保人信息
       changeInfo(value) {
-        this.$emit('getApplicantData')
+        //this.$emit('getApplicantData')
+        let applicantData=this.$parent.getApplicantDatas();
+        this.batchInfo=applicantData
         if (value === '1') {
           this.baseForm.rgtName = this.batchInfo.name
           this.baseForm.rgtBirthday = this.batchInfo.birthday
@@ -370,10 +373,19 @@
         /*  this.region[0] = this.batchInfo.province
           this.region[1] = this.batchInfo.city
           this.region[2] = this.batchInfo.district*/
+          let regionArr=[]
+          regionArr[0] = this.batchInfo.province
+          regionArr[1] = this.batchInfo.city
+          regionArr[2] = this.batchInfo.district
 
-          this.region.push(this.batchInfo.province)
+
+          // this.$set(this,'baseForm',newVal)
+          this.$set(this,'region',regionArr)
+
+
+        /*  this.region.push(this.batchInfo.province)
           this.region.push(this.batchInfo.city)
-          this.region.push(this.batchInfo.district)
+          this.region.push(this.batchInfo.district)*/
         } else {
           this.baseForm.rgtName = undefined
           this.baseForm.rgtBirthday = undefined

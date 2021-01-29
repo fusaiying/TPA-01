@@ -36,6 +36,8 @@ public interface BaseProviderSettleMapper
      */
     public List<BaseProviderSettle> selectBaseProviderSettleList(BaseProviderSettle baseProviderSettle);
 
+    public List<BaseProviderSettle> selectBaseProviderSettleListNew(BaseProviderSettle baseProviderSettle);
+
     /**
      * 新增base_provider_settle(服务商结算信息)
      * 

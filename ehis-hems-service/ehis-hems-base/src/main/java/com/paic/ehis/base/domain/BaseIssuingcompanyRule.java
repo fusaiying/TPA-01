@@ -40,6 +40,21 @@ public class BaseIssuingcompanyRule extends BaseEntity
     /** 出单公司名称 */
     private String companyname;
 
+    /** 出单公司名称 */
+    private String riskName;
+
+    /** 状态（Y-有效，N-无效） */
+    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
+    private String status;
+
+    public String getRiskName() {
+        return riskName;
+    }
+
+    public void setRiskName(String riskName) {
+        this.riskName = riskName;
+    }
+
     public String getCompanyname() {
         return companyname;
     }
@@ -47,10 +62,6 @@ public class BaseIssuingcompanyRule extends BaseEntity
     public void setCompanyname(String companyname) {
         this.companyname = companyname;
     }
-
-    /** 状态（Y-有效，N-无效） */
-    @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
-    private String status;
 
     public void setRuleno(String ruleno)
     {

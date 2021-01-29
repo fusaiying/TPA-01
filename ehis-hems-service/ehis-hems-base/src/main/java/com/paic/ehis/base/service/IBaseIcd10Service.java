@@ -18,7 +18,7 @@ public interface IBaseIcd10Service
      * @param icdCode ICD10数据 ID
      * @return ICD10数据 
      */
-    public BaseIcd10 selectBaseIcd10ById(String icdCode);
+    public List<BaseIcd10> selectBaseIcd10ById(String icdCode);
 
     /**
      * 查询ICD10数据
@@ -26,7 +26,7 @@ public interface IBaseIcd10Service
      * @param icdmname ICD10数据 name
      * @return ICD10数据
      */
-    public BaseIcd10 selectBaseIcd10ByName(String icdmname);
+    public List<BaseIcd10> selectBaseIcd10ByName(String icdmname);
 
     /**
      * 查询ICD10数据 列表

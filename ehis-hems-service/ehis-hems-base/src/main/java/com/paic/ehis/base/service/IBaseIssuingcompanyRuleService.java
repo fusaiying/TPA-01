@@ -1,8 +1,9 @@
 package com.paic.ehis.base.service;
 
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.base.domain.ClaimProduct;
 import com.paic.ehis.base.domain.dto.IssuingcompanyRuleDTO;
-import com.paic.ehis.base.domain.vo.IssuingcompanyRuleVO;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface IBaseIssuingcompanyRuleService
      * @param baseIssuingcompanyRule 出单公司规则 
      * @return 出单公司规则 集合
      */
-    public List<IssuingcompanyRuleVO> selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule);
+    public TableDataInfo selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule);
 
     /**
      * 新增或修改出单公司规则
@@ -69,4 +70,13 @@ public interface IBaseIssuingcompanyRuleService
      * @return 结果
      */
     public int deleteBaseIssuingcompanyRuleById(String ruleNo);
+
+    /**
+     * 查询出单公司下属产品 列表
+     *
+     * @param baseIssuingcompanyRule 出单公司规则
+     * @return 险种 集合
+     */
+    public List<ClaimProduct> selectBaseIssuingCompanyRiskList(BaseIssuingcompanyRule baseIssuingcompanyRule);
+
 }

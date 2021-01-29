@@ -32,7 +32,7 @@ export function addBatchAndStanding(data) {
 export function getStanding(batchNo) {
   return request({
     url: '/system/case/postHocAccountingOfCases',
-    method: 'post',
+    method: 'get',
     params: batchNo
   })
 }

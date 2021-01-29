@@ -78,7 +78,9 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
      return baseContractService1;
     }
 
-    //批量新增
+    /**
+     * 批量新增
+     */
     @Override
     public int insertForeach(List<BaseContractService> baseContractServiceList){
         int result = 0;

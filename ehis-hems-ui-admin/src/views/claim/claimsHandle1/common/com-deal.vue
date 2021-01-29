@@ -87,8 +87,7 @@
       </div>
       <!-- 案件理算 -->
       <div v-if="querys.node==='calculateReview'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
-        <case-calculate :sonCalculateData="sonCalculateData" :sonCalculateSelectData="sonCalculateSelectData"
-                        :fixInfo="fixInfo"/>
+        <case-calculate :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"/>
       </div>
       <!--赔案备注-->
       <div id="#anchor-16" class="batchInfo_class" style="margin-top: 10px;">
@@ -208,7 +207,6 @@
         sonAcceptInfoData: {},
         sonProblemData: [],
         sonCalculateData: [],
-        sonCalculateSelectData: [],
         historicalProblemData: [],
         historicalProblemDialog: false,
         removeDialog: false,
@@ -311,7 +309,7 @@
         })
         getRegister(this.querys.rptNo).then(res => {
           if (res != null && res.code === 200) {
-            this.sonRegisterData = res.data[0]
+            this.sonRegisterData = res.data
           }
         })
         getAccept(this.querys.rptNo).then(res => {
@@ -331,7 +329,7 @@
           }
           getHospital(data).then(res => {
             if (res != null && res.code === 200) {
-              this.sonPayeeInfoData = res.data
+              this.sonPayeeInfoData = res.rows
             }
           })
         }else {
@@ -365,11 +363,6 @@
         infoList(data).then(res => {
           if (res != null && res.code === 200) {
             this.sonCalculateData = res.rows
-          }
-        })
-        insurancePolicyList(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.sonCalculateSelectData = res.rows
           }
         })
       }
@@ -450,6 +443,10 @@
       },
       getApplicantData() {
         this.applicantData = this.$refs.insuredForm.baseForm
+      },
+      getApplicantDatas() {
+       let applicantData = this.$refs.insuredForm.baseForm
+        return applicantData
       },
       acceptOver() {
         //this.$refs.headerChild.属性insuredForm applicantCom acceptInfo

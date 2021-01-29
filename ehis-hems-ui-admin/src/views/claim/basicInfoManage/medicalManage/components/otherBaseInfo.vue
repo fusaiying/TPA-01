@@ -398,7 +398,7 @@ export default {
             })
           }
         } else {
-          return false
+          this.$message.warning('基本信息必录项未必录')
         }
 
       })

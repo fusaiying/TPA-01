@@ -61,6 +61,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectBaseProviderSettleListNew" parameterType="BaseProviderSettle" resultMap="BaseProviderSettleResult">
+        <include refid="selectBaseProviderSettleVoNew"/>
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+            <if test="claimFlag != null  and claimFlag != ''"> and claim_flag = #{claimFlag}</if>
+            <if test="noticeDay != null  and noticeDay != ''"> and notice_day = #{noticeDay}</if>
+            <if test="effectTime != null "> and effect_time = #{effectTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
     <select id="selectBaseProviderSettleById" parameterType="String" resultMap="BaseProviderSettleResult">
         <include refid="selectBaseProviderSettleVo"/>
         where provider_code = #{providerCode}  and status = 'Y' and update_flag = '0'

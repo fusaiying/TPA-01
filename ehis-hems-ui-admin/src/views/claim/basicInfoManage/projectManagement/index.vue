@@ -66,9 +66,7 @@
       <el-card class="projectList_card">
         <div slot="header">
           <span>服务项目列表({{ projectListNum }})</span>
-        </div>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+          <span style="float: right;">
             <el-button
               type="primary"
               icon="el-icon-plus"
@@ -77,8 +75,8 @@
               @click="handleAdd"
             >新增
             </el-button>
-          </el-col>
-        </el-row>
+          </span>
+        </div>
         <el-table :data="projectList"
                   ref="multipleTable"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"

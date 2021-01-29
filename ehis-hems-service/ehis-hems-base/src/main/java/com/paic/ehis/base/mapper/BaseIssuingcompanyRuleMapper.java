@@ -1,6 +1,7 @@
 package com.paic.ehis.base.mapper;
 
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
+import com.paic.ehis.base.domain.ClaimProduct;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface BaseIssuingcompanyRuleMapper
      * @param baseIssuingcompanyRule 出单公司规则
      * @return 出单公司规则
      */
-    public BaseIssuingcompanyRule selectBaseIssuingcompanyRuleByProduct(BaseIssuingcompanyRule baseIssuingcompanyRule);
+    public List<BaseIssuingcompanyRule> selectBaseIssuingcompanyRuleByProduct(BaseIssuingcompanyRule baseIssuingcompanyRule);
 
     /**
      * 查询出单公司规则 列表
@@ -35,6 +36,14 @@ public interface BaseIssuingcompanyRuleMapper
      * @return 出单公司规则 集合
      */
     public List<BaseIssuingcompanyRule> selectBaseIssuingcompanyRuleList(BaseIssuingcompanyRule baseIssuingcompanyRule);
+
+    /**
+     * 查询出单公司规则
+     *
+     * @param baseIssuingcompanyRule 出单公司规则
+     * @return 出单公司规则
+     */
+    public BaseIssuingcompanyRule selectBaseIssuingcompanyRule(BaseIssuingcompanyRule baseIssuingcompanyRule);
 
     /**
      * 新增出单公司规则 
@@ -67,4 +76,12 @@ public interface BaseIssuingcompanyRuleMapper
      * @return 结果
      */
     public int deleteBaseIssuingcompanyRuleByIds(String[] ruleNos);
+
+    /**
+     * 查询出单公司规则 列表
+     *
+     * @param baseIssuingcompanyRule 出单公司规则
+     * @return 出单公司规则 集合
+     */
+    public List<ClaimProduct> selectBaseIssuingCompanyRiskList(BaseIssuingcompanyRule baseIssuingcompanyRule);
 }

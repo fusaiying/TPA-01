@@ -113,7 +113,9 @@
           chname: undefined,
           enname: undefined,
           bussinessStatus: undefined,
-          serialNo: undefined
+          serialNo: undefined,
+          orderByColumn:'create_time',
+          isAsc:'desc'
         },
         totalCount: 0,
         pendingTableData: [],
@@ -176,6 +178,9 @@
         this.searchForm.province=''
         this.searchForm.city=''
         this.searchForm.district=''
+        this.searchForm.orderByColumn='create_time'
+        this.searchForm.isAsc='desc'
+
         this.region = []
       },
       initData() {

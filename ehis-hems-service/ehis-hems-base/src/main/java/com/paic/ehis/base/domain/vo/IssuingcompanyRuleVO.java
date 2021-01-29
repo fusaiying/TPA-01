@@ -39,5 +39,6 @@ public class IssuingcompanyRuleVO implements Serializable {
     /** 出单公司名称 */
     private String companyname;
 
-
+    /** 险种名称 */
+    private String riskName;
 }

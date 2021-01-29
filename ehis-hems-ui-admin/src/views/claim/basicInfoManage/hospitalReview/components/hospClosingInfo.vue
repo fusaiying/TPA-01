@@ -226,7 +226,8 @@ export default {
       formSearch: {
         pageNum: 1,
         pageSize: 10,
-        providerCode: undefined
+        providerCode: undefined,
+        orgFlag: undefined
       },
       closingLogData: [],
       dialogVisible: false,
@@ -282,7 +283,9 @@ export default {
     },
 
     getData(){
+
       this.formSearch.providerCode=this.providerCode
+      this.formSearch.orgFlag=this.status
       selectsettleInfo(this.formSearch).then(res => {
         this.closingLogData=res.rows
         this.totalCount=res.total

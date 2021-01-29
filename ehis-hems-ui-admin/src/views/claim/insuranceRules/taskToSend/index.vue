@@ -4,7 +4,6 @@
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="产品编码：" prop="riskCode">
               <el-input v-model="sendForm.riskCode" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -32,6 +31,8 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="riskName">
               <el-input v-model="sendForm.riskName" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -135,10 +136,24 @@
 
           <el-col :span="10">
             <el-form-item label="操作人：" prop="updateBy">
-              <el-select v-model="updateBy" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in sysUserOptions" :key="item.userName" :label="item.userName"
-                           :value="item.userName"/>
+              <el-select
+                v-model="updateBy"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请选择操作人"
+                :remote-method="remoteMethod"
+                :loading="userLoading"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in sysUserOptions"
+                  :key="ind"
+                  :label="item.userName"
+                  :value="item.userName">
+                </el-option>
               </el-select>
+
             </el-form-item>
           </el-col>
         </el-row>
@@ -157,7 +172,7 @@
   import moment from 'moment'
   import {selectClaimProductList, updateClaimProductList, selectSysUser} from '@/api/insuranceRules/ruleDefin'
 
-  let dictss = [{dictType: 'product_status'},{dictType: 'approvalconclusion'},]
+  let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'},]
   export default {
     filters: {
       changeDate: function (value) {
@@ -168,7 +183,8 @@
     },
     data() {
       return {
-        riskCodes:[],
+        userLoading: false,
+        riskCodes: [],
         dialogFormVisible: false,
         updateBy: undefined,
         sendForm: {
@@ -208,9 +224,6 @@
         return item.dictType === 'approvalconclusion'
       }).dictDate
       this.searchHandle()
-      selectSysUser().then(res => {
-        this.sysUserOptions = res.data
-      })
     },
     methods: {
       resetForm() {
@@ -267,7 +280,7 @@
               })
               this.updateBy = undefined
               this.searchHandle()
-              this.dialogFormVisible=false
+              this.dialogFormVisible = false
             }
           }).catch(res => {
             this.updateBy = undefined
@@ -279,23 +292,23 @@
           )
         }
       },
-      sendOne(row){
+      sendOne(row) {
+        this.updateBy = ''
         this.dialogFormVisible = true
-        this.riskCodes=[]
+        this.riskCodes = []
         this.riskCodes.push(row.riskCode)
       },
       sendMany() {
+        this.updateBy=''
         if (this.dataonLineListSelections.length <= 0) {
           return this.$message.warning(
             "请先选择需要改派的数据！"
           )
         } else {
           this.dialogFormVisible = true
-          if (this.updateBy != null && this.updateBy !== '') {
-            this.riskCodes = []
-            for (let i = 0; i < this.dataonLineListSelections.length; i++) {
-              this.riskCodes.push(this.dataonLineListSelections[i].riskCode)
-            }
+          this.riskCodes = []
+          for (let i = 0; i < this.dataonLineListSelections.length; i++) {
+            this.riskCodes.push(this.dataonLineListSelections[i].riskCode)
           }
         }
       },
@@ -304,6 +317,16 @@
       },
       getRiskStatus(row) {
         return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+      },
+      remoteMethod(query) {
+        let data = {
+          userName: query
+        }
+        if (query !== '' && query != null) {
+          selectSysUser(data).then(res => {
+            this.sysUserOptions = res.data
+          })
+        }
       }
     }
   }

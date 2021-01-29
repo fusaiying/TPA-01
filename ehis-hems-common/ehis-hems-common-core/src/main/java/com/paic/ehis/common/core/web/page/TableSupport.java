@@ -1,6 +1,9 @@
 package com.paic.ehis.common.core.web.page;
 
 import com.paic.ehis.common.core.utils.ServletUtils;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
+
+import java.util.Map;
 
 /**
  * 表格数据处理
@@ -46,12 +49,27 @@ public class TableSupport
         return pageDomain;
     }
 
+    public static PageDomain getPageDomain(BaseEntity baseEntity)
+    {
+        PageDomain pageDomain = new PageDomain();
+        Map<String,Object> tMap = baseEntity.getParams();
+        pageDomain.setPageNum(Integer.parseInt(tMap.get(PAGE_NUM).toString()));
+        pageDomain.setPageSize(Integer.parseInt(tMap.get(PAGE_SIZE).toString()));
+        pageDomain.setOrderByColumn(tMap.get(ORDER_BY_COLUMN) == null ? null : tMap.get(ORDER_BY_COLUMN).toString());
+        pageDomain.setIsAsc(tMap.get(IS_ASC) == null ? null : tMap.get(IS_ASC).toString());
+        return pageDomain;
+    }
+
     public static PageDomain buildPageRequest()
     {
         return getPageDomain();
     }
 
 
+    public static PageDomain buildPageRequest(BaseEntity baseEntity)
+    {
+        return getPageDomain(baseEntity);
+    }
 
     /**
      * 自定义封装分页对象

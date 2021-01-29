@@ -274,9 +274,11 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
                     baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
                 }
                 baseProviderInfo.setType2Str(StringUtils.join(baseProviderInfo.getType2(), ","));
+                baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(baseProviderInfo.getProviderCode());
                 baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
             }else if("02".equals(baseProviderInfo.getOrgFlag())){
                 baseProviderInfo.setBussinessStatus("03");  //有效状态
+                baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
                 baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
             }
             baseProvider.setProviderCode(baseProviderInfo.getProviderCode());

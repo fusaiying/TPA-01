@@ -153,6 +153,7 @@
        <el-row >
          <el-col :span="6" :offset="20">
            <el-button
+             v-if="fsSub"
              type="primary"
              size="mini"
              @click="saveBaseInfo"
@@ -224,7 +225,7 @@
 
           <el-col :span="8">
             <el-form-item  label="合约甲方：" prop="contractPartyA">
-              <el-input maxlength="100" :disabled="isShow"  v-model="providerForm.contractPartyA" @blur="checkContractParty('A',true)" class="item-width" clearable size="mini"
+              <el-input maxlength="100" :disabled="isShow"  v-model="providerForm.contractPartyA"  class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -238,7 +239,7 @@
 
           <el-col :span="8">
             <el-form-item label="合约丙方：" prop="contractPartyC">
-              <el-input maxlength="100" :disabled="isShow" v-model="providerForm.contractPartyC" @blur="checkContractParty('C',true)" class="item-width" clearable size="mini"
+              <el-input maxlength="100" :disabled="isShow" v-model="providerForm.contractPartyC" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -440,22 +441,22 @@
           </el-col>
 
         <el-col :span="8">
-          <el-form-item label="联系人：" prop="relp">
-            <el-input maxlength="20" :disabled="isShow" v-model="providerForm.relp" class="item-width" clearable size="mini"
+          <el-form-item label="联系人：" prop="liaison">
+            <el-input maxlength="20" :disabled="isShow" v-model="providerForm.liaison" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
 
         <el-col :span="8">
           <el-form-item label="手机：" prop="phone">
-            <el-input maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')" :disabled="isShow" v-model="providerForm.phone" class="item-width" @blur="checkPhone()" clearable size="mini"
+            <el-input maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')" :disabled="isShow" v-model="providerForm.phone" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
 
         <el-col :span="8">
           <el-form-item label="盒脊编号：" prop="boxRidgeCode">
-            <el-input :disabled="isShow" v-model="providerForm.boxRidgeCode" @blur="checkboxRidgeCode()" class="item-width" clearable size="mini"
+            <el-input :disabled="isShow" v-model="providerForm.boxRidgeCode" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
@@ -470,14 +471,14 @@
 
         <el-col :span="8">
           <el-form-item label="电子邮件：" prop="email">
-            <el-input maxlength="100" :disabled="isShow" v-model="providerForm.email" class="item-width"  @blur="checkEmail()" clearable size="mini"
+            <el-input maxlength="100" :disabled="isShow" v-model="providerForm.email" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
 
         <el-col :span="8">
           <el-form-item label="最后维护人：" prop="exPer">
-            <el-input :disabled="isShow" v-model="providerForm.exPer" class="item-width" clearable size="mini"
+            <el-input disabled="disabled" v-model="providerForm.exPer" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
@@ -485,6 +486,7 @@
         <el-col :span="8">
           <el-form-item label="最后维护时间：" prop="exEndate">
             <el-date-picker
+              disabled="disabled"
               v-model="providerForm.exEndate"
               class="item-width" size="mini"
               value-format="yyyy-MM-dd"
@@ -500,6 +502,7 @@
         <el-row >
           <el-col :span="6" :offset="20">
             <el-button
+              v-if="fpSub"
               type="primary"
               size="mini"
               @click="saveBaseInfo"
@@ -610,21 +613,18 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="supplierCode" label="供应商名称" align="center">
+        <el-table-column prop="supplierCode" label="供应商项目名称" align="center">
           <template slot-scope="scope">
-            <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.supplierCode" :prop="'serverInfo.' + scope.$index + '.supplierCode'">
-              <el-select filterable style="width: 150px" size="mini" v-model="scope.row.supplierCode" class= "el-select item-width el-select--mini" placeholder="请选择">
-                <el-option
-                  v-for="dict in supplierInfoSelects"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="dict.dictValue"
-                />
-              </el-select>
+            <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.supplierServiceName" :prop="'serverInfo.' + scope.$index + '.supplierServiceName'">
+              <el-input size="mini"   v-model="scope.row.supplierServiceName" placeholder="请输入"  ></el-input>
             </el-form-item>
 
             <template  v-else slot-scope="scope">
-              <span>{{getSuppName(scope.$index, scope.row)}}</span>
+<!--
+              <span>{{getSuppName(scope.$index, scope.row.supplierServiceName)}}</span>
+-->
+              <span>{{(scope.row.supplierServiceName)}}</span>
+
             </template>
           </template>
         </el-table-column>
@@ -977,18 +977,24 @@
       };
       const  checkReSupplierCode = (rule, value, callback) => {
         if (!value) {
-          callback(new Error("供应商不可为空"));
+          callback(new Error("供应商项目名称不可为空"));
         } else {
+
+          let regx = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/g;
+          if (!regx.test(value)) {
+            callback(new Error("支持录入字母数字中文"));
+          }
+
           let listData = this.serverForm.serverInfo;
          // console.log(listData);
           let count = 0;
           for(let i=0; i<listData.length; i++){
-            if(listData[i].supplierCode == value){
+            if(listData[i].supplierServiceName == value){
               count ++;
             }
           }
           if(count > 1) {
-            callback(new Error("供应商不可重复添加"));
+            callback(new Error("供应商项目名称重复"));
           } else {
             callback();
           }
@@ -1000,9 +1006,13 @@
           callback(new Error("合约乙方必填"));
         } else if(value != this.preContractPartyB){
 
-          let reg = /^[\u4e00-\u9fa5]+$/
-          if (!reg.test(value)) {
-            callback(new Error("合约乙方仅支持录入中文"));
+          // let reg = /^[\u4e00-\u9fa5]+$/
+          // if (!reg.test(value)) {
+          //   callback(new Error("合约乙方仅支持录入中文"));
+          // }
+          let reg = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]");
+          if(reg.test(value)){
+            callback(new Error("合约乙方禁止录入特殊字符"));
           }
 
           const param = {
@@ -1035,6 +1045,96 @@
           callback();
         }
       };
+      const  checkcontractPartyA = (rule, value, callback) => {
+        if (!value) {
+          callback();
+        } else if(value != this.preContractPartyB){
+
+          // let reg = /^[\u4e00-\u9fa5]+$/
+          // if (!reg.test(value)) {
+          //   callback(new Error("合约乙方仅支持录入中文"));
+          // }
+          let reg = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]");
+          if(reg.test(value)){
+            callback(new Error("合约甲方禁止录入特殊字符"));
+          }
+
+          const param = {
+            pageNum:1,
+            pageSize:1,
+            contractPartyB:value,
+          };
+          if(this.onlyAddPro) {
+            getSupplierContractBakDetail(param).then(response => {
+              if(response.total == 1) {
+                callback(new Error("合约甲方已经存在"));
+              } else {
+                callback();
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+          } else {
+            getSupplierContractList(param).then(response => {
+              if(response.total == 1) {
+                callback(new Error("合约甲方已经存在"));
+              } else {
+                callback();
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+          }
+        } else {
+          callback();
+        }
+      };
+
+      const  checkcontractPartyC = (rule, value, callback) => {
+        if (!value) {
+          callback();
+        } else if(value != this.preContractPartyC){
+
+          // let reg = /^[\u4e00-\u9fa5]+$/
+          // if (!reg.test(value)) {
+          //   callback(new Error("合约乙方仅支持录入中文"));
+          // }
+          let reg = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]");
+          if(reg.test(value)){
+            callback(new Error("合约丙方禁止录入特殊字符"));
+          }
+
+          const param = {
+            pageNum:1,
+            pageSize:1,
+            contractPartyB:value,
+          };
+          if(this.onlyAddPro) {
+            getSupplierContractBakDetail(param).then(response => {
+              if(response.total == 1) {
+                callback(new Error("合约丙方已经存在"));
+              } else {
+                callback();
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+          } else {
+            getSupplierContractList(param).then(response => {
+              if(response.total == 1) {
+                callback(new Error("合约丙方已经存在"));
+              } else {
+                callback();
+              }
+            }).catch(error => {
+              console.log(error);
+            });
+          }
+        } else {
+          callback();
+        }
+      };
+
       const checkNum = (rule, value, callback) => {
         const regx = /^[1-9]{1}[\d]*$/
         if (!value) {
@@ -1248,15 +1348,49 @@
           }
         }
       };
-      // const checkPhoneNum = (rule, value, callback) => {
-      //   if(this.countItem) {
-      //     if (!value) {
-      //       callback(new Error("手机号不可为空"));
-      //     } else {
-      //       callback();
-      //     }
-      //   }
-      // };
+      const checkboxRidgeCode = (rule, value, callback) => {
+          if (!value) {
+            callback();
+          } else {
+            if('' != value) {
+              let regx = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/g;
+              if (!regx.test(value)) {
+                callback(new Error("盒脊编号支持录入字母数字中文"));
+              } else {
+                callback();
+              }
+            }
+        }
+      };
+
+      const checkEmail = (rule, value, callback) => {
+        if (!value) {
+          callback();
+        } else {
+          if('' != value) {
+            let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+            if (!reg.test(value.toLocaleLowerCase())) {
+              callback(new Error("电子邮件格式不正确"));
+            } else {
+              callback();
+            }
+          }
+        }
+      };
+      const checkPhone = (rule, value, callback) => {
+        if (!value) {
+          callback();
+        } else {
+          if('' != value) {
+            if (value.trim().length != 11) {
+              callback(new Error("手机号格式不正确"));
+            } else {
+              callback();
+            }
+          }
+        }
+      };
+
       const checkExistInfo = (rule, value, callback) => {
         if(this.pageOpe == 'add' && !this.formTab) {
           if (!value) {
@@ -1279,7 +1413,7 @@
           callback();
         }
       };
-      const checkExpiryDate = (rule, value, callback) => {
+      const checkEndDate = (rule, value, callback) => {
         if(!this.adsFlag) {
           if (!value) {
             callback(new Error("合约有效期结束日期必填"));
@@ -1297,6 +1431,18 @@
         } else {
           callback();
         }
+      };
+      const checkExpiryReason = (rule, value, callback) => {
+        if(this.providerForm.expiryDate != '') {
+          if (!value) {
+            callback(new Error("合约终止原因必填"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+
       };
       return {
         hisContractTotalNum:0,
@@ -1356,9 +1502,19 @@
           contractName: {trigger: ['change','blur'],validator: checkReContractName, required: true},
           contractType: {trigger: [ 'change'], required: true, message: '合约类型必填'},
           cvaliDate: {trigger: ['change','blur'], required: true, message: '合约有效期必填'},
-          endDate: {trigger: ['change','blur'],validator: checkExpiryDate, required: true},
-          contractPartyB: {trigger: ['change'], validator: checkcontractPartyB,required: true},
-          expiryDate : {trigger: ['change','blur'], required: true, message: '合约终止日期必填'},
+          endDate: {trigger: ['change','blur'],validator: checkEndDate, required: true},
+          contractPartyA: {trigger: ['change','blur'], validator: checkcontractPartyA,required: false},
+          contractPartyB: {trigger: ['change','blur'], validator: checkcontractPartyB,required: true},
+          contractPartyC: {trigger: ['change','blur'], validator: checkcontractPartyC,required: false},
+          phone: {trigger: ['change','blur'], validator: checkPhone,required: false},
+          boxRidgeCode: {trigger: ['change','blur'], validator: checkboxRidgeCode,required: false},
+
+          email: {trigger: ['change','blur'], validator: checkEmail,required: false},
+
+
+
+          reason : {trigger: ['change','blur'], required: false,  validator: checkExpiryReason, message: '合约终止原因必填'},
+
           treatmentDiscount: [{validator: checkTreatmentDiscount, required: true, trigger: ['change','blur']}],
           examineDiscount: [{validator: checkExamineDiscount, required: true, trigger: ['change','blur']}],
           bedDiscount: [{validator: checkBedDiscount, required: true, trigger: ['change','blur']}],
@@ -1377,24 +1533,13 @@
         },
         serverInfoRules: {
            serviceCode: [{required: true, message: '服务项名称', trigger: 'blur'}],
-           supplierCode: [{required: true,validator: checkReSupplierCode,  trigger: ['change','blur']}],
+           supplierServiceName: [{required: true,validator: checkReSupplierCode,  trigger: ['change','blur']}],
            minPrice: [{required: true, message: '最小价格', trigger: ['change','blur']}],
            maxPrice: [{required: true,validator: checkMaxPrice, trigger: ['change','blur']}],
            limitnum: [{required: true, message: '日限次数', trigger: 'blur'}],
            settleType: [{required: true, message: '结算方式', trigger: 'blur'}],
            settleCurrency: [{required: true, message: '结算币种', trigger: 'blur'}],
         },
-        // recordRule: {
-        //   servcomNo: {trigger: ['change'], required: true, message: '供应商必填'},
-        //   contractName: { required: true, message: '合约名称必填'},
-        //   contractType: {trigger: [ 'change'], required: true, message: '合约类型必填'},
-        //   contracttermType: {trigger: [ 'change'], required: true, message: '合约期限类型必填'},
-        //   contractsort: {trigger: 'change', required: true, message: '合约分类必填'},
-        //   contractadvance: [{validator: checkNum, required: true, trigger: 'blur'}],
-        //   status: {trigger: 'change', required: true, message: '状态必填'},
-        //   effectiveSDate: { required: true, message: '合约有效期'},
-        //
-        // },
         dialogVisible: false,
         dateRange:'',
         afterTableTotal: 0,
@@ -1430,6 +1575,7 @@
           effectiveSDate:'',
          // signDate:'',
           conSerId:'',
+          supplierServiceName:'',
         },
         providerForm :{
           serialNo:'',
@@ -1464,7 +1610,7 @@
           cooperativeUnit:'',
           endDate:'',
           reason:'',
-          relp:'',
+          liaison:'',
           phone:'',
           boxRidgeCode:'',
           tel:'',
@@ -1506,17 +1652,12 @@
         preContractPartyC:'',
         preContractName:'',
 
-        contractPartyASbu :true,
-        contractPartyASbuMES :'',
-        contractPartyCSub :true,
-        contractPartyCSbuMES :'',
-        emailSub :true,
-        phoneSub :true,
         conSerId : '',
         onceTypes:[],
         directContractTypes:[],
         supplierContractTypes:[],
-        boxRidgeSub:true,
+        fsSub:true,
+        fpSub:true,
       }
     },
     created() {
@@ -1616,151 +1757,6 @@
         }
         this.getSupplierContractListByChangeType(type);
       },
-     async checkContractParty (type,mess){
-
-
-        let value = '';
-        let message = '';
-        let check = false;
-        let result = false;
-        let contractPartya = '';
-        let contractPartyb = '';
-        let contractPartyc = '';
-        switch(type) {
-          case 'A':
-            value = this.providerForm.contractPartyA;
-            if(value != '' && this.preContractPartyA != value){
-              check = true;
-              message = '合约甲方已经存在';
-            }
-            contractPartya = value;
-            break;
-          case 'B':
-            value = this.providerForm.contractPartyB;
-            if(value != '' && this.preContractPartyB != value){
-              check = true;
-              message = '合约乙方已经存在';
-
-            }
-            contractPartyb = value;
-            break;
-          case 'C':
-            value = this.providerForm.contractPartyC;
-            if(value != '' && this.preContractPartyC != value){
-              check = true;
-              message = '合约丙方已经存在';
-            }
-            contractPartyc = value;
-            break;
-          default :
-            contractPartyb = value;
-        }
-
-        if(check) {
-
-          let reg = /^[\u4e00-\u9fa5]+$/
-          if (!reg.test(value)) {
-            let msg = '';
-            if(type == 'A') {
-              msg = '合约甲方仅支持录入中文';
-              this.contractPartyASbuMES = msg;
-              this.contractPartyASbu = false;
-            }
-            if(type == 'C') {
-              msg = '合约丙方仅支持录入中文';
-              this.contractPartyCSbuMES = msg;
-              this.contractPartyCSub = false;
-            }
-            this.$message.warning(msg);
-            return true;
-          };
-
-          const param = {
-            pageNum:1,
-            pageSize:1,
-            // bussinessStatus:'01',
-            contractPartyA:contractPartya,
-            contractPartyB:contractPartyb,
-            contractPartyC:contractPartyc
-          }; // this.onlyAddPro
-          if(this.onlyAddPro) {
-            await  getSupplierContractBakDetail(param).then(response => {
-                    if(response.total == 1) {
-                      result = true;
-                    }
-                  }).catch(error => {
-                    console.log(error);
-                  });
-          } else {
-            await  getSupplierContractList(param).then(response => {
-              if(response.total == 1) {
-                result = true;
-                    }
-                  }).catch(error => {
-                    console.log(error);
-                  });
-          }
-          if(!result) {
-            if(type == 'A') {
-              this.contractPartyASbu = true;
-            }
-            if(type == 'C') {
-              this.contractPartyCSub = true;
-            }
-          }
-          else if(result && mess) {
-            if(type == 'A') {
-              this.contractPartyASbuMES = message;
-              this.contractPartyASbu = false;
-            }
-            if(type == 'C') {
-              this.contractPartyCSbuMES = message;
-
-              this.contractPartyCSub = false;
-            }
-           this.$message.warning(message);
-           return false;
-          }
-        }
-       return result;
-
-      },
-      checkboxRidgeCode(){
-        let value = this.providerForm.boxRidgeCode;
-        if('' != value) {
-            let regx = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/g;
-            if (!regx.test(value)) {
-              this.$message.warning("盒脊编号支持录入字母数字中文");
-              this.boxRidgeSub = false;
-            } else {
-              this.boxRidgeSub = true;
-             }
-        }
-      },
-      checkPhone(){
-        let value = this.providerForm.phone;
-        if('' != value) {
-          if (value.trim().length != 11) {
-            this.$message.warning('手机号格式不正确');
-            this.phoneSub = false;
-            return false;
-          } else {
-            this.phoneSub = true;
-          }
-        }
-      },
-      checkEmail(){
-        let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-        // let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-        let value = this.providerForm.email;
-        if(value != '' && !reg.test(value.toLocaleLowerCase())) {
-          this.$message.warning('电子邮件格式不正确');
-          this.emailSub = false;
-          return false;
-        } else {
-          this.emailSub = true;
-        }
-      },
       changePrice(name){
         this.providerForm[name] = this.providerForm[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
         this.providerForm[name] = this.providerForm[name].replace(/\.{2,}/g,".") //清除第二个小数点
@@ -1768,14 +1764,6 @@
         this.providerForm[name] = this.providerForm[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
         this.providerForm[name] = this.providerForm[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
         this.providerForm[name] = this.providerForm[name].indexOf(".") > 0? this.providerForm[name].split(".")[0].substring(0, 11) + "." + this.providerForm[name].split(".")[1]: this.providerForm[name].substring(0, 11); //限制只能输入7位正整数
-      },
-      changeMaxPrice(v){
-        // this.serverForm[name] = this.serverForm[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
-        // this.serverForm[name] = this.serverForm[name].replace(/\.{2,}/g,".") //清除第二个小数点
-        // this.serverForm[name] = this.serverForm[name].replace(/^\./g,""); //验证第一个字符是数字而不是字符
-        // this.serverForm[name] = this.serverForm[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-        // this.serverForm[name] = this.serverForm[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
-        // this.serverForm[name] = this.serverForm[name].indexOf(".") > 0? this.serverForm[name].split(".")[0].substring(0, 11) + "." + this.serverForm[name].split(".")[1]: this.serverForm[name].substring(0, 11); //限制只能输入7位正整数
       },
       changeFlagType(value){
         if(value.indexOf('01') > -1){
@@ -2008,6 +1996,10 @@
       },
       saveBaseInfo() {
         if(this.formTab) {
+          if(this.pageOpe == 'add') {
+            this.fsSub = false;
+          }
+          //fsSub
           this.$refs.searchForm.validate((valid) => {
             if (valid) {
 
@@ -2016,7 +2008,8 @@
                     message: '请至少添加一条供应商服务项目！',
                     type: 'warning'
                   });
-                  return false;
+                this.fsSub = true;
+                return false;
               }
 
               let baseSupplierContract = {
@@ -2045,6 +2038,7 @@
               * */
 
               if(this.pageOpe == 'add' && !this.serverInfoSave) {
+
                 addSupplierContract(baseSupplierContract).then(res => {
                   if (res != null && res.code === 200) {
                     this.queryContractNo = res.data.contractNo;
@@ -2059,6 +2053,7 @@
                     });
                     this.getSupplierContractListByChangeType(1);
                   } else {
+                    this.fsSub = true;
                     this.$message.error('保存失败！')
                   }
                 })
@@ -2079,36 +2074,20 @@
               }
 
             } else {
+              this.fsSub = true;
               return false
             }
           })
         }  else {
+
+          if(this.pageOpe == 'add') {
+            this.fpSub = false;
+          }
           this.$refs.providerForm.validate((valid) => {
             if (valid) {
               // 如果是从服务机构管理页面进入的 插入临时表
               if(this.onlyAddPro) {
                 this.providerForm.hospContractCode = '02';
-              }
-              //检查  合约甲方 丙方
-              if(this.providerForm.contractPartyA != '' && !this.contractPartyASbu) {
-                this.$message.warning(this.contractPartyASbuMES);
-                return false;
-              }
-              if(this.providerForm.contractPartyC != '' &&  !this.contractPartyCSub) {
-                this.$message.warning(this.contractPartyCSbuMES);
-                return false;
-              }
-              if(!this.phoneSub) {
-                this.$message.warning('手机号不正确');
-                return false;
-              }
-              if(!this.emailSub) {
-                this.$message.warning('邮件格式不正确');
-                return false;
-              }
-              if(!this.boxRidgeSub) {
-                this.$message.warning('盒脊编号支持录字母数字中文');
-                return false;
               }
               let baseSupplierContract = {
                 flag:'02',
@@ -2141,7 +2120,7 @@
                 straight : this.providerForm.straightT.toString(),
                 endDate : this.providerForm.endDate,
                 reason : this.providerForm.reason,
-                relp : this.providerForm.relp,
+                liaison : this.providerForm.liaison,
                 phone : this.providerForm.phone,
                 boxRidgeCode : this.providerForm.boxRidgeCode,
                 tel : this.providerForm.tel,
@@ -2166,6 +2145,7 @@
                       center: true,
                       showClose: true
                     });
+                    this.fpSub = false;
                     if(this.onlyAddPro) {
                       this.$router.push({
                         path: '/basic-info/medical/edit',
@@ -2180,6 +2160,7 @@
                     }
                     this.getSupplierContractListByChangeType(2);
                   } else {
+                    this.fpSub = true;
                     this.$message.error('保存失败！')
                   }
                 })
@@ -2214,6 +2195,7 @@
               }
 
             } else {
+              this.fpSub = true;
               return false
             }
           })
@@ -2373,6 +2355,7 @@
               this.providerForm.boxRidgeCode = detailData.boxRidgeCode;
               this.providerForm.exEndate = detailData.updateTime;
               this.providerForm.exPer = detailData.updateBy;
+              this.providerForm.liaison = detailData.liaison;
 
               if(detailData.renewFlag == null  || detailData.renewFlag == '') {
                 this.providerForm.ads = [''];
@@ -2511,6 +2494,8 @@
           if (valid) {
 
             let listDta = this.serverForm.serverInfo;
+
+            console.log(listDta);
 
             // for(let i=0; i<listDta.length; i++){
             //   if(parseFloat(listDta[i].minPrice) > parseFloat(listDta[i].maxPrice)){

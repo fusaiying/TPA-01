@@ -15,7 +15,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
-        <result property="companyname"    column="companyname"    />
+        <result property="companyname"    column="company_name"    />
+        <result property="riskName"    column="risk_name"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.base.domain.ClaimProduct" id="ClaimProductResult">
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
     </resultMap>
 
     <sql id="selectBaseIssuingcompanyRuleVo">
@@ -41,21 +47,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         rule_no,
         rule.company_code,
-        risk_code,
+        rule.risk_code,
+        product.risk_name,
         settlement_type,
         settlement_value,
         rule.create_by,
         rule.create_time,
         rule.update_by,
         rule.update_time,
-        company_name
+        company.company_name
         FROM
         base_issuingcompany_rule rule
-        LEFT JOIN base_issuingcompany company ON rule.company_code = company.company_code
+        LEFT JOIN base_issuingcompany company ON rule.company_code = company.company_code and company.status='Y'
+        LEFT JOIN claim_product product on product.risk_code= rule.risk_code and product.status='Y'
         <where>
             <if test="riskcode != null  and riskcode != ''"> and risk_code = #{riskcode}</if>
             <if test="companycode != null  and companycode != ''"> and rule.company_code = #{companycode}</if>
             <if test="status != null  and status != ''"> and rule.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseIssuingcompanyRule" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule" resultMap="BaseIssuingcompanyRuleResult">
+        <include refid="selectBaseIssuingcompanyRuleVo"/>
+        <where>
+            <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
+            <if test="riskcode != null  and riskcode != ''"> and risk_code = #{riskcode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
         
@@ -113,5 +130,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ruleno}
         </foreach>
     </delete>
-    
+
+    <select id="selectBaseIssuingCompanyRiskList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRule" resultMap="ClaimProductResult">
+        SELECT
+        biri.risk_code,
+        cp.risk_name
+        FROM
+        `base_issuingcompany_riskrela` biri
+        LEFT JOIN claim_product cp ON cp.risk_code = biri.risk_code
+        AND cp.STATUS = 'Y'
+        <where>
+            <if test="companycode != null  and companycode != ''"> and biri.company_code = #{companycode}</if>
+            <if test="status != null  and status != ''"> and biri.status = #{status}</if>
+        </where>
+    </select>
 </mapper>

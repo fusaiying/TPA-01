@@ -64,10 +64,6 @@ public class BaseContractServiceController extends BaseController
         return AjaxResult.success(baseContractServiceService.selectBaseContractServiceById(contractNo));
     }
 
-
-
-
-
     /**
      * 新增base_contract_service（合约服务项目）
      */
@@ -81,14 +77,14 @@ public class BaseContractServiceController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:service:addlist')")
 
-    //批量新增
+    /**
+     * 批量新增
+     */
     @PostMapping("/addList")
     public AjaxResult addlist(@RequestBody List<BaseContractService> baseContractServiceList)
     {
         return toAjax(baseContractServiceService.insertForeach(baseContractServiceList));
     }
-
-
 
     /**
      * 修改base_contract_service（合约服务项目）

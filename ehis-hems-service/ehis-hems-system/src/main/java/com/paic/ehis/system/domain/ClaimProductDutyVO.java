@@ -24,7 +24,7 @@ public class ClaimProductDutyVO
     private String planCode;
 
     /** 子列表 */
-    private List<ClaimProductDutyDetailVO> children;
+    private List<com.paic.ehis.system.domain.ClaimProductDutyDetailVO> children;
 
     public String getValue() {
         return value;
@@ -50,11 +50,11 @@ public class ClaimProductDutyVO
         this.planCode = planCode;
     }
 
-    public List<ClaimProductDutyDetailVO> getChildren() {
+    public List<com.paic.ehis.system.domain.ClaimProductDutyDetailVO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<ClaimProductDutyDetailVO> children) {
+    public void setChildren(List<com.paic.ehis.system.domain.ClaimProductDutyDetailVO> children) {
         this.children = children;
     }
 

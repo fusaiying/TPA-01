@@ -212,9 +212,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="supplierCode" label="供应商名称" align="center">
+          <el-table-column prop="supplierServiceName" label="供应商项目名称" align="center">
             <template slot-scope="scope">
-              <span>{{getSuppName(scope.$index, scope.row)}}</span>
+              <span>{{scope.row.supplierServiceName}}</span>
             </template>
           </el-table-column>
 

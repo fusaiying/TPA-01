@@ -124,7 +124,7 @@
         :total="ruleTotalCount"
         :page.sync="rulPageInfo.pageNum"
         :limit.sync="rulPageInfo.pageSize"
-        @pagination=""
+        @pagination="listRule"
       />
     </el-card>
     <el-card v-if="node === 'ruleReview'" class="box-card" style="margin-top: 10px;">
@@ -292,7 +292,7 @@
         listRule(querys).then(res => {
           if (res != null && res.code === 200) {
             this.ruleTableData = res.rows
-            this.resTotalCount = res.total
+            this.ruleTotalCount = res.total
           }
         }).catch(res => {
         })

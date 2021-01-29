@@ -42,6 +42,9 @@ public interface ClaimProductMapper
     /**查询任务改派产品信息列表*/
     public List<ClaimProductDTO> selectClaimProduct(ClaimProductDTO claimProductDTO);
 
+    /**查询任务改派产品信息列表(没有输入数据)*/
+    public List<ClaimProductDTO> selectClaimProductNew(ClaimProductDTO claimProductDTO);
+
     /**
      * 新增产品信息
      * 
@@ -103,6 +106,13 @@ public interface ClaimProductMapper
      * @return 福利对象 集合
      */
     public List<ClaimProductPlanVO> getAll(String riskCode);
+
+    /**
+     *
+     * @param riskCode
+     * @return
+     */
+    public ClaimProduct selectClaimProductByIdOne(String riskCode);
 
     /**
      * 获取出单公司列表

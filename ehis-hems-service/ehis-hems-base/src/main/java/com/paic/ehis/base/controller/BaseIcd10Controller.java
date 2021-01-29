@@ -1,6 +1,5 @@
 package com.paic.ehis.base.controller;
 
-import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -34,10 +33,10 @@ public class BaseIcd10Controller extends BaseController
      * 查询ICD10数据 列表
      */
     @PreAuthorize("@ss.hasPermi('system:icd10:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(BaseIcd10 baseIcd10)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseIcd10 baseIcd10)
     {
-        startPage();
+        startPage(baseIcd10);
         List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd10);
         return getDataTable(list);
     }
@@ -75,12 +74,14 @@ public class BaseIcd10Controller extends BaseController
     {
         String icdcode = baseIcd10.getIcdcode();
         String icdmname = baseIcd10.getIcdmname();
-        BaseIcd10 baseIcd101 = baseIcd10Service.selectBaseIcd10ById(icdcode);
-        BaseIcd10 baseIcd102 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
-        if (StringUtils.isNotNull(baseIcd101)) {
-            return AjaxResult.error("新增ICD'" + icdcode + "'失败，该ICD10编码已存在!");
-        }else if (StringUtils.isNotNull(baseIcd102)){
-            return AjaxResult.error("新增ICD'" + icdmname + "'失败，该ICD10名称已存在!");
+        //查询code值
+        List<BaseIcd10> baseIcd10s = baseIcd10Service.selectBaseIcd10ById(icdcode);
+        //查询机构名
+        List<BaseIcd10> baseIcd10s1 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
+        if (baseIcd10s.size() != 0) {
+            return AjaxResult.success(121);
+        }else if (baseIcd10s1.size() != 0){
+            return AjaxResult.success(121);
         }else {
             return toAjax(baseIcd10Service.insertBaseIcd10(baseIcd10));
         }
@@ -94,13 +95,14 @@ public class BaseIcd10Controller extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIcd10 baseIcd10)
     {
-        String icdmname = baseIcd10.getIcdmname();
-        BaseIcd10 baseIcd102 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
-        if (StringUtils.isNotNull(baseIcd102)){
-            return AjaxResult.error("修改ICD'" + icdmname + "'失败，该ICD10名称已存在!");
-        }else {
-            return toAjax(baseIcd10Service.updateBaseIcd10(baseIcd10));
+        List<BaseIcd10> baseIcd10sByCode = baseIcd10Service.selectBaseIcd10ById(baseIcd10.getIcdcode());
+        if (!baseIcd10sByCode.get(0).getIcdmname().equals(baseIcd10.getIcdmname())){
+            List<BaseIcd10> baseIcd10s = baseIcd10Service.selectBaseIcd10ByName(baseIcd10.getIcdmname());
+            if (baseIcd10s.size() != 0) {
+                return AjaxResult.success(121);
+            }
         }
+        return toAjax(baseIcd10Service.updateBaseIcd10(baseIcd10));
     }
 
     /**

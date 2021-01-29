@@ -4,36 +4,37 @@
       <el-form ref="searchForm" :model="searchForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
           <el-col :span="8">
-            <el-form-item label="报案号：" prop="rptNo">
-              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="报案号：" prop="rptno">
+              <el-input v-model="searchForm.rptno" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="证件号码：" prop="idNo">
-              <el-input v-model="searchForm.idNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="证件号码：" prop="idno">
+              <el-input v-model="searchForm.idno" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保险人：" prop="insuredName">
-              <el-input v-model="searchForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="被保险人：" prop="name">
+              <el-input v-model="searchForm.name" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="快递号：" prop="expressnumber">
+              <el-input v-model="searchForm.expressnumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="快递号：" prop="insuredName">
-              <el-input v-model="searchForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="交件人：" prop="sendby">
+              <el-input v-model="searchForm.sendby" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="交件人：" prop="idNo">
-              <el-input v-model="searchForm.idNo" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="接单日期：" prop="endCaseDate">
+            <el-form-item label="接单日期：" prop="receiveDate">
               <el-date-picker
-                v-model="searchForm.endCaseDate"
+                v-model="searchForm.receiveDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -42,14 +43,26 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
-            <el-form-item label="机构：" prop="whiteStatus">
-              <el-input v-model="searchForm.whiteStatus" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="机构：" prop="organcode">
+              <el-select v-model="searchForm.organcode" class="item-width" placeholder="请选择"
+                         @change="getUsers">
+                <el-option v-for="option in deptOptions" :key="option.deptId"
+                           :label="option.deptName"
+                           :value="option.deptId"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="操作人：" prop="policyItemNo">
-              <el-input v-model="searchForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="操作人：" prop="createBy">
+              <el-select v-model="searchForm.createBy" class="item-width" placeholder="请选择"
+                         @change="">
+                <el-option v-for="option in userOptions" :key="option"
+                           :label="option"
+                           :value="option"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -59,7 +72,7 @@
             type="success"
             icon="el-icon-search"
             @click="
-
+              search('form')
             "
           >查询
           </el-button>
@@ -69,46 +82,96 @@
       <el-divider/>
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span>追讨工作池</span>
+          <span>台账信息列表（{{totalCount}}）</span>
           <span style="float: right;">
             <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
           </span>
         </div>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="tableData"
-          size="small"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;">
-          <el-table-column align="center" prop="rptNo" label="报案号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
-          <el-table-column align="center" prop="insuredName" label="被保险人" show-overflow-tooltip/>
-          <el-table-column align="center" prop="insuredName" label="理赔材料" width="90" show-overflow-tooltip/>
-          <el-table-column align="center" prop="idNo" label="备注" show-overflow-tooltip/>
-          <el-table-column align="center" prop="treatmentEndDate" label="其他(案件去向)" show-overflow-tooltip/>
-          <el-table-column align="center" prop="appntName" label="快递号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="contNo" label="接单日期" show-overflow-tooltip/>
-          <el-table-column align="center" prop="debtAmount" label="交件人" width="100" show-overflow-tooltip/>
-          <el-table-column align="center" prop="colAmount" label="出单公司" show-overflow-tooltip/>
-          <el-table-column align="center" prop="residualAmount" label="机构" width="100" show-overflow-tooltip/>
-          <el-table-column align="center" prop="endCaseTime" label="操作人" show-overflow-tooltip/>
-          <el-table-column align="center" prop="colStatus" label="状态"
-                           show-overflow-tooltip/>
-          <el-table-column align="center" label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="">编辑</el-button>
-              <el-button size="mini" type="text" @click="">保存</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
+        <el-form ref="standingForm" :rules="standingRules" :model="standingForm" size="small">
+          <el-table
+            :header-cell-style="{color:'black',background:'#f8f8ff'}"
+            :data="standingForm.tableData"
+            size="small"
+            highlight-current-row
+            tooltip-effect="dark"
+            style=" width: 100%;">
+            <el-table-column align="center" prop="rptno" width="90" label="报案号" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.rptno'"
+                              :rules="standingRules.rptno" style="display: inline-flex !important;">
+                  <el-input v-model="scope.row.rptno" placeholder="请输入" size="mini"/>
+                </el-form-item>
+                <span v-if="scope.row.isEdit">{{ scope.row.rptno}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="idno" width="90" label="证件号码" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.idno'"
+                              :rules="standingRules.idno" style="display: inline-flex !important;">
+                  <el-input v-model="scope.row.idno" placeholder="请输入" size="mini"/>
+                </el-form-item>
+                <span v-if="scope.row.isEdit">{{ scope.row.idno}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="name" width="90" label="被保险人" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.name'"
+                              :rules="standingRules.name" style="display: inline-flex !important;">
+                  <el-input v-model="scope.row.name" placeholder="请输入" size="mini"/>
+                </el-form-item>
+                <span v-if="scope.row.isEdit">{{ scope.row.name}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="claimmaterialList" label="理赔材料" width="130" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-select v-if="!scope.row.isEdit" multiple size="mini" v-model="scope.row.claimmaterialList"
+                           placeholder="请选择">
+                  <el-option v-for="option in claim_materialOptions" :key="option.dictValue"
+                             :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+                <span class="form-span" v-if="scope.row.isEdit">{{getClaimmaterials(scope.row.claimmaterialList)}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="remark" width="90" label="备注" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.remark'"
+                              :rules="standingRules.remark" style="display: inline-flex !important;">
+                  <el-input v-model="scope.row.remark" placeholder="请输入" size="mini"/>
+                </el-form-item>
+                <span v-if="scope.row.isEdit">{{ scope.row.remark}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="otherinfo" width="110" label="其他(案件去向)" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.otherinfo'"
+                              :rules="standingRules.otherinfo" style="display: inline-flex !important;">
+                  <el-input v-model="scope.row.otherinfo" placeholder="请输入" size="mini"/>
+                </el-form-item>
+                <span v-if="scope.row.isEdit">{{ scope.row.otherinfo}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="expressnumber" label="快递号" show-overflow-tooltip/>
+            <el-table-column align="center" prop="receivedate" label="接单日期" show-overflow-tooltip/>
+            <el-table-column align="center" prop="sendby" label="交件人" width="100" show-overflow-tooltip/>
+            <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
+            <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip/>
+            <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
+            <el-table-column align="center" label="操作" fixed="right">
+              <template slot-scope="scope">
+                <el-button v-if="scope.row.isEdit" size="mini" type="text" @click="scope.row.isEdit=false">编辑
+                </el-button>
+                <el-button v-if="!scope.row.isEdit" size="mini" type="text" @click="save(scope.row)">保存</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form>
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination=""
+          @pagination="search('table')"
         />
       </div>
     </el-card>
@@ -116,59 +179,83 @@
 </template>
 
 <script>
-  import {listInfo} from '@/api/supplierManager/supplier'
+  import {listNew, editStanding, getUser, getDept} from '@/api/claim/standingBookSearch'
 
-  let dictss = [{dictType: 'linkman_type'}, {dictType: 'account_Types'}, {dictType: 'accountacc_status'}, {dictType: 'service_type'}, {dictType: 'supplier_type'},]
+  let dictss = [{dictType: 'claim_material'}]
   export default {
     data() {
       return {
-        isListExport:false,
+        isListExport: false,
         queryParams: {
           pageNum: 1,
           pageSize: 10,
         },
-        tableData:[],
+
+        standingForm: {
+          tableData: [
+            {
+              idNo: '001',
+              isEdit: true,
+              claimmaterials: ['1', '2', '3']
+            }
+          ]
+        },
+        standingRules: {
+          idno: [{required: true, message: '请输入', trigger: 'blur'}],
+        },
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          province: undefined, // 省
-          city: undefined, // 市
-          district: undefined, // 区
-          servcomType: undefined,
-          chname: undefined,
-          enname: undefined,
-          bussinessStatus: undefined,
-          serialNo: undefined
+          rptno: '',
+          idno: '',
+          name: '',
+          expressnumber: '',
+          sendby: '',
+          receiveDate: [],
+          receiveStartDate: '',
+          receiveEndDate: '',
+          organcode: undefined,//机构
+          createBy: ''//操作人
         },
         totalCount: 0,
         dictList: [],
-        linkman_typeOptions: [],
-        accountTypeOptions: [],
-        accountacc_statusOptions: [],
-        service_typeOptions: [],
-        supplier_typeOptions: [],
+        claim_materialOptions: [],
+        deptOptions: [],
+        userOptions: [],
       }
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
         this.dictList = response.data
       })
-      this.linkman_typeOptions = this.dictList.find(item => {
-        return item.dictType === 'linkman_type'
+      this.claim_materialOptions = this.dictList.find(item => {
+        return item.dictType === 'claim_material'
       }).dictDate
-      this.accountTypeOptions = this.dictList.find(item => {
-        return item.dictType === 'account_Types'
-      }).dictDate
-      this.accountacc_statusOptions = this.dictList.find(item => {
-        return item.dictType === 'accountacc_status'
-      }).dictDate
-      this.service_typeOptions = this.dictList.find(item => {
-        return item.dictType === 'service_type'
-      }).dictDate
-      this.supplier_typeOptions = this.dictList.find(item => {
-        return item.dictType === 'supplier_type'
-      }).dictDate
+      listNew(this.searchForm).then(res => {
+        if (res != null && res.code === 200) {
+          this.standingForm.tableData = res.rows
+          this.standingForm.tableData.forEach(item=>{
+            item.isEdit=true
+          })
+          this.totalCount = res.total
+        }
+      }).catch(res => {
+      })
+      getDept().then(res => {
 
+          this.deptOptions = res.deptlist
+          this.searchForm.organcode = res.deptId
+        let data={
+            organcode:res.deptId
+        }
+          getUser(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.userOptions = res.data
+            }
+          })
+
+      }).catch(res => {
+      })
     },
     methods: {
       handleChange(value) {
@@ -177,18 +264,108 @@
       resetForm() {
         this.$refs.searchForm.resetFields()
       },
-      search() {
-
+      search(val) {
+        let data={
+          pageNum: 1,
+          pageSize: 10,
+          rptno: this.searchForm.rptno,
+          idno: this.searchForm.idno,
+          name: this.searchForm.name,
+          expressnumber: this.searchForm.expressnumber,
+          sendby: this.searchForm.sendby,
+          receiveStartDate: this.searchForm.receiveDate?this.searchForm.receiveDate[0]:'',
+          receiveEndDate: this.searchForm.receiveDate?this.searchForm.receiveDate[1]:'',
+          organcode: this.searchForm.organcode,//机构
+          createBy: this.searchForm.createBy//操作人
+        }
+        console.log(this.searchForm.receiveDate);
+        if (val === 'table') {
+          data.pageSize = this.queryParams.pageSize
+          this.data.pageNum = this.queryParams.pageNum
+        } else {
+          data.pageNum = 1
+          data.pageSize = 10
+        }
+        listNew(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.standingForm.tableData = res.rows
+            this.standingForm.tableData.forEach(item=>{
+              item.isEdit=true
+            })
+            this.totalCount = res.total
+            if (res.deptlist.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+        })
       },
-      addSupplier(status) {
+      listExport() {
+        this.searchForm.pageNum = 1
+        this.searchForm.pageSize = 10
+        listNew(this.searchForm).then(res => {
 
-      }
-      ,
-      editClick(value, status) {
+          if (res.rows.length>0){
+            this.isListExport=true
+            let subDate=''
+            if (this.searchForm.receiveDate.length>0){
+              subDate='&receiveStartDate='+this.searchForm.receiveDate[0]+'&receiveEndDate='+this.searchForm.receiveDate[1]
+            }
+            this.download('system/standing/exportNew'+'?expressnumber='+this.searchForm.expressnumber+'&sendby='+this.searchForm.sendby
+              +'&organcode='+this.searchForm.organcode+'&createBy='+this.searchForm.createBy+subDate, {
+              ...this.searchForm
+            }, `FYX_${new Date().getTime()}.xlsx`)
+          }else {
+            return this.$message.warning(
+              "没有查询到能导出的数据！"
+            )
+          }
+        }).catch(res => {
 
+        })
       },
-      listExport(){
-
+      getClaimmaterials(value) {
+        let material = ''
+        if (value!=null && value.length > 0) {
+          for (let i = 0; i < value.length; i++) {
+            if (i === value.length - 1) {
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
+            } else {
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i]) + '，'
+            }
+          }
+        }
+        return material
+      },
+      save(row) {
+        row.isEdit = true
+        editStanding(row).then(res => {
+          if (res != null && res.code === 200) {
+            this.$message({
+              message: '保存成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          }
+        }).catch(res=>{
+          this.$message({
+            message: '保存失败!',
+            type: 'error',
+            center: true,
+            showClose: true
+          })
+        })
+        this.search('form')
+      },
+      getUsers(val) {
+        getUser(val).then(res => {
+          if (res != null && res.code === 200) {
+            this.userOptions = res.rows
+          }
+        })
       }
     }
   }

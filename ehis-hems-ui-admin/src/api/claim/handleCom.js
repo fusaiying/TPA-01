@@ -115,6 +115,7 @@ export function adjustRemarkList(query) {
     params: query
   })
 }
+
 //需要将前端的报案号，也发给我
 // 新增案件受理信息
 export function addAccept(data) {
@@ -243,12 +244,13 @@ export function listRemarkRptNo(rptNo) {
     method: 'get',
   })
 }
+
 //查询案件领款人 详细（可能有多条）
 export function getHospital(rptNo) {
   return request({
     url: '/system/payee/getInfohospitalCode',
     method: 'post',
-    params:rptNo
+    params: rptNo
   })
 }
 
@@ -417,8 +419,9 @@ export function detailsList(data) {
 export function insurancePolicyList(data) {
   return request({
     url: '/system/item/InsurancePolicyList',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
+    // params: data
   })
 }
 
@@ -437,5 +440,14 @@ export function billDetailsSave(data) {
     url: '/system/bill',
     method: 'put',
     data: data
+  })
+}
+
+//理算审核 案件汇总信息  (主参：rptNo)
+export function calSummary(data) {
+  return request({
+    url: 'system/cal/calSummary',
+    method: 'get',
+    params: data
   })
 }

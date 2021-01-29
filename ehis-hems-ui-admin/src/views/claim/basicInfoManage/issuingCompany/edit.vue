@@ -22,7 +22,7 @@
           <el-col :span="8">
             <el-form-item label="出单公司编码：" prop="companycode">
               <el-input disabled v-model="baseForm.companycode" class="item-width" clearable size="mini"
-                        placeholder="P00001"/>
+                        placeholder=""/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -40,9 +40,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="关联产品：" prop="leval">
-              <el-input v-model="this.riskrela" class="item-width" disabled clearable size="mini"
-                        placeholder="产品A,产品B,产品C"/>
+            <el-form-item label="关联产品：" prop="riskName">
+              <el-input v-model="baseForm.riskName" class="item-width" disabled clearable size="mini"
+                        placeholder=""/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -150,12 +150,12 @@
   // 导入组件
   import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
   import {
+    getIssuingcompany,
     listIssuingcompany,
     addissuingAndCompanyDTO,
     updateIssuingcompany,
     getInvoice,
     updateInvoice,
-    getRiskrela,
     addInvoice
   } from '@/api/baseInfo/issuingCompany'
   import moment from 'moment'
@@ -186,9 +186,6 @@
         },
         hasBlock: false,
         isCompanyShow: false,
-        //关联产品
-        riskrelaList:[],
-        riskrela:'',
         rowData: [{
           invoicename: '',
           ratepayernumber: '',
@@ -204,7 +201,9 @@
         },
         fileList: [],
         //基本信息
-        baseForm: {},
+        baseForm: {
+          companycode: ''
+        },
         //关联产品
         //totalCount: 0,
         loading: false,
@@ -214,7 +213,7 @@
         file: [],
         //开票信息
         tableData: [{
-          companycode:'',
+          companycode: '',
           invoicename: '',
           ratepayernumber: '',
           account: '',
@@ -234,22 +233,21 @@
           pageNum: 1,
           pageSize: 5,
         }
-        listIssuingcompany(this.baseForm).then(res => {
-          this.baseForm = res.rows[0]
+        getIssuingcompany(this.baseForm.companycode).then(res => {
+          this.baseForm = res.data
         })
         getInvoice(this.$route.query.companycode).then(res => {
-          if (res.data!=null){
+          if (res.data != null) {
             let data = [];
             data.push(res.data)
             this.tableData = data;
-          }else {
+          } else {
             this.show = true
             this.editFlag = false
             this.isCancel = false
           }
           this.loading = false
         })
-        this.getRiskrela();
       } else {
         this.editFlag = false
         this.canUpload = false
@@ -257,15 +255,6 @@
       }
     },
     methods: {
-      getRiskrela(){
-        getRiskrela(this.$route.query.companycode).then(res => {
-          let riskrelaList=[];
-          for (let i = 0; i <res.data.length ; i++) {
-            riskrelaList.push(res.data[i].riskcode)
-          }
-          this.riskrela=riskrelaList.join(',')
-        })
-     },
       ifBlock() {
         //el-table中绑定的数组对象
         this.tableData.forEach((v, i) => {
@@ -312,64 +301,43 @@
           if (valid) {
             let data = this.tableData[0]
             this.hasBlock = false;
-            if ((data.invoicename!==null && data.invoicename!=='')||
-              (data.ratepayernumber!==null && data.ratepayernumber!=='')||
-              (data.account!==null && data.account!=='')||
-              (data.address!==null && data.address!=='')||
-              (data.telephone!==null && data.telephone!=='')){
-               this.ifBlock()
+            if ((data.invoicename !== null && data.invoicename !== '') ||
+              (data.ratepayernumber !== null && data.ratepayernumber !== '') ||
+              (data.account !== null && data.account !== '') ||
+              (data.address !== null && data.address !== '') ||
+              (data.telephone !== null && data.telephone !== '')) {
+              this.ifBlock()
             }
-            if (!this.hasBlock){
+            if (!this.hasBlock) {
               let params = {
-                baseIssuingcompany:this.baseForm,
-                baseIssuingcompanyInvoice:this.tableData[0]
+                baseIssuingcompany: this.baseForm,
+                baseIssuingcompanyInvoice: this.tableData[0]
               }
-              if (this.baseForm.companycode) {
-                updateIssuingcompany(params).then(res => {
-                  if (res!= null && res.code === 200) {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                  } else {
-                    this.$message.error('保存失败！')
-                  }
-                }).catch(error => {
+              addissuingAndCompanyDTO(params).then(res => {
+                if (res != null && res.code === 200) {
                   this.$message({
-                    message: error,
-                    type: 'error',
+                    message: '保存成功！',
+                    type: 'success',
                     center: true,
                     showClose: true
                   })
-                })
-              } else {
-                addissuingAndCompanyDTO(params).then(res => {
-                  if (res != null && res.code === 200) {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                    this.baseForm=res.data
-                    if (this.baseForm.companycode){
-                      this.tableData[0].companycode=this.baseForm.companycode
-                    }
-                    this.canUpload = true
-                  } else {
-                    this.$message.error('保存失败！')
+                  this.baseForm = res.data
+                  if (this.baseForm.companycode) {
+                    this.tableData[0].companycode = this.baseForm.companycode
                   }
-                }).catch(error => {
-                  this.$message({
-                    message: '保存异常',
-                    type: 'error',
-                    center: true,
-                    showClose: true
-                  })
+                  this.canUpload = true
+                } else {
+                  this.$message.error('保存失败！')
+                }
+              }).catch(error => {
+                this.$message({
+                  message: '保存异常',
+                  type: 'error',
+                  center: true,
+                  showClose: true
                 })
-              }
+              })
+
             }
           } else {
             return false
@@ -446,7 +414,7 @@
                 showClose: true
               })
             })
-          }else {
+          } else {
             if (this.canUpload) {
               addInvoice(this.tableData[0]).then(res => {
                 if (res != null && res.code === 200) {

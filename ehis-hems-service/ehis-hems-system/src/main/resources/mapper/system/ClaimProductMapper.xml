@@ -57,6 +57,7 @@
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="updateBy != null"> AND update_by = #{updateBy}</if>
         </where>
+        order by update_time desc
     </select>
     <select id="selectClaimProductProcessedList" parameterType="com.paic.ehis.system.domain.dto.ProcessedProductDTO" resultMap="ClaimProductResult">
         SELECT
@@ -104,11 +105,12 @@
             <if test="riskName != null  and riskName != ''"> and product.risk_name like concat('%', #{riskName}, '%')</if>
             <if test="status != null  and status != ''"> and product.status = #{status}</if>
         </where>
+        order by update_time desc
     </select>
 
     <select id="selectClaimProductById" parameterType="String" resultMap="ClaimProductResult">
         <include refid="selectClaimProductVo"/>
-        where risk_code = #{riskCode}
+        where risk_code = #{riskCode} and status = 'Y'
     </select>
 
     <insert id="insertClaimProduct" parameterType="com.paic.ehis.system.domain.ClaimProduct">
@@ -277,13 +279,13 @@
             <if test="riskName != null  and riskName != ''"> and act.risk_name like concat('%', #{riskName}, '%')</if>
             <if test="riskStatus != null and riskStatus != ''"> and act.risk_status = #{riskStatus}</if>
             <if test="updateBy != null and updateBy != ''"> and log.update_by = #{updateBy}</if>
-            <if test="updateStartTime != null and updateEndTime != null"> and act.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
+            <if test="updateStartTime != null and updateEndTime != null"> and log.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
             <if test="synchronizeStartTime != null and synchronizeEndTime != null"> and act.synchronize_time between #{synchronizeStartTime} and DATE_ADD(#{synchronizeEndTime},INTERVAL 1 DAY)</if>
             <if test="isHistory != null  and isHistory != ''"> and log.is_history = #{isHistory}</if>
         </where>
     </select>
 
-
+    <!-- lihy -->
     <select id="selectClaimProduct" parameterType="com.paic.ehis.system.domain.dto.ClaimProductDTO" resultMap="ClaimProductDTOResult">
         SELECT
         act.risk_code, act.risk_name, act.risk_nature,
@@ -294,16 +296,28 @@
         claim_product act
         inner	join   claim_product_task_log log on log.risk_code=act.risk_code
         <where>
-            <if test="riskStatus = null and riskStatus = ''"> and act.risk_status IN ('02','03')</if>
             <if test="status != null  and status != ''"> and act.status = #{status}</if>
             <if test="riskCode != null  and riskCode != ''"> and act.risk_code = #{riskCode}</if>
             <if test="riskName != null  and riskName != ''"> and act.risk_name like concat('%', #{riskName}, '%')</if>
             <if test="riskStatus != null and riskStatus != ''"> and act.risk_status = #{riskStatus}</if>
             <if test="updateBy != null and updateBy != ''"> and log.update_by = #{updateBy}</if>
-            <if test="updateStartTime != null and updateEndTime != null"> and act.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
+            <if test="updateStartTime != null and updateEndTime != null"> and log.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
             <if test="synchronizeStartTime != null and synchronizeEndTime != null"> and act.synchronize_time between #{synchronizeStartTime} and DATE_ADD(#{synchronizeEndTime},INTERVAL 1 DAY)</if>
             <if test="isHistory != null  and isHistory != ''"> and log.is_history = #{isHistory}</if>
         </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimProductNew" parameterType="com.paic.ehis.system.domain.dto.ClaimProductDTO" resultMap="ClaimProductDTOResult">
+        SELECT
+        act.risk_code, act.risk_name, act.risk_nature,
+        act.risk_class, act.risk_status,act.examine_conclusion,
+        act.synchronize_time,case when log.update_time is null then log.create_time else log.update_time end as update_time,
+        log.update_by
+        FROM
+        claim_product act
+        inner	join   claim_product_task_log log on log.risk_code=act.risk_code
+        where act.risk_status in ('02','03') and act.status = 'Y' and log.is_history = 'N'
     </select>
 
 
@@ -371,6 +385,11 @@
         <result property="dutyCode" column="duty_code"/>
         <result property="dutyDetailCode" column="duty_detail_code"/>
     </resultMap>
+
+    <select id="selectClaimProductByIdOne" parameterType="String" resultMap="ClaimProductResult">
+        <include refid="selectClaimProductVo"/>
+        where risk_code = #{riskCode} and status = 'Y'
+    </select>
 
     <select id="selectCompanyNameList" resultType="java.lang.String" parameterType="java.lang.String">
         select b.company_name from base_issuingcompany_riskrela a,base_issuingcompany b

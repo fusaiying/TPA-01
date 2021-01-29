@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: '中科软健康管理平台',
+      title: '高端医疗服务系统',
       logo: logoImg
     }
   }

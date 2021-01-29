@@ -46,7 +46,6 @@
                           :rules="contactInfoFormRules.phone" style="display: inline-flex !important;">
             <el-input  v-model="scope.row.phone" placeholder="请输入" size="mini" @change="nameChange(scope.$index)"/>
             </el-form-item>
-
             <span v-else>{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
@@ -191,7 +190,7 @@ export default {
         phone: [{validator: checkFormMobilephone, trigger: 'blur'}],
         mobile: [{validator: checkFormOfficephone, trigger: 'blur'}],
         name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
-        email: [{required: true, message: '请输入邮编', trigger: 'blur'}],
+        email: [{required: true, message: '请输入邮箱', trigger: 'blur'}],
         workingStart: [{required: true, message: '请输入工作开始时间', trigger: 'blur'}],
         workingEnd: [{required: true, message: '请输入工作结束时间', trigger: 'blur'}],
         role: [{required: true, message: '请输入登录名', trigger: 'blur'}],
@@ -281,7 +280,7 @@ export default {
 
           }*/
           } else {
-            return false
+           this.$message.warning('联系信息必录项未必录')
           }
         }
         else {

@@ -75,13 +75,13 @@ public class BaseFeeitemController extends BaseController
     {
         BaseFeeitem baseFeeitemByCode= baseFeeitemService.selectBaseFeeitemByCode(baseFeeitem.getFeeitemcode());
         if (StringUtils.isNotNull(baseFeeitemByCode)){
-            return AjaxResult.error(500,"新增费用项'" + baseFeeitem.getFeeitemcode() + "'失败，该费用项编码已存在");
+            return AjaxResult.success(0);
         }
         BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
         if (StringUtils.isNotNull(baseFeeitemByName)){
-            return AjaxResult.error(500,"新增费用项'" + baseFeeitem.getFeeitemname() + "'失败，该费用项名称已存在");
+            return AjaxResult.success(0);
         }
-        return toAjax(baseFeeitemService.insertBaseFeeitem(baseFeeitem));
+        return AjaxResult.success(baseFeeitemService.insertBaseFeeitem(baseFeeitem));
     }
 
     /**
@@ -92,11 +92,14 @@ public class BaseFeeitemController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseFeeitem baseFeeitem)
     {
-        BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
-        if (StringUtils.isNotNull(baseFeeitemByName)){
-            return AjaxResult.error(500,"修改费用项'" + baseFeeitem.getFeeitemname() + "'失败，该费用项名称已存在");
+        BaseFeeitem feeitem = baseFeeitemService.selectBaseFeeitemByCode(baseFeeitem.getFeeitemcode());
+        if (!feeitem.getFeeitemname().equals(baseFeeitem.getFeeitemname())){
+            BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
+            if (StringUtils.isNotNull(baseFeeitemByName)) {
+               return AjaxResult.success( 0);
+            }
         }
-        return toAjax(baseFeeitemService.updateBaseFeeitem(baseFeeitem));
+        return AjaxResult.success(baseFeeitemService.updateBaseFeeitem(baseFeeitem));
     }
 
     /**

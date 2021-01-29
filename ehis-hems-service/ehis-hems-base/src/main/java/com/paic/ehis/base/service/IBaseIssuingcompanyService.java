@@ -2,6 +2,7 @@ package com.paic.ehis.base.service;
 
 import com.paic.ehis.base.domain.BaseIssuingcompany;
 import com.paic.ehis.base.domain.dto.IssuingAndCompanyDTO;
+import com.paic.ehis.base.domain.vo.IssuingBaseVO;
 import com.paic.ehis.base.domain.vo.IssuingCompanyVo;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface IBaseIssuingcompanyService
      * @param companyCode 出单公司信息 ID
      * @return 出单公司信息 
      */
-    public BaseIssuingcompany selectBaseIssuingcompanyById(String companyCode);
+    public IssuingBaseVO selectBaseIssuingcompanyById(String companyCode);
 
     /**
      * 查询出单公司信息 列表
@@ -62,5 +63,11 @@ public interface IBaseIssuingcompanyService
      */
     public int deleteBaseIssuingcompanyById(String companyCode);
 
-    public IssuingCompanyVo insertBaseIssuingcompanyTwo(IssuingAndCompanyDTO issuingAndCompanyDTO);
+    /**
+     * 新增+修改
+     * 出单公司信息 + 开票信息
+     * @param issuingAndCompanyDTO
+     * @return
+     */
+    public IssuingCompanyVo insertBaseIssuingcompanyRest(IssuingAndCompanyDTO issuingAndCompanyDTO);
 }

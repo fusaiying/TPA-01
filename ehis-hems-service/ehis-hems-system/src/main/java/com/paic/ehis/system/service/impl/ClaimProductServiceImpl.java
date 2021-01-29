@@ -128,10 +128,21 @@ public class ClaimProductServiceImpl implements IClaimProductService
     @Override
     public List<ClaimProductDTO> selectClaimProduct(ClaimProductDTO claimProductDTO)
     {
+        if(StringUtils.isNotNull(claimProductDTO.getRiskCode())
+                || StringUtils.isNotNull(claimProductDTO.getUpdateBy())
+                || StringUtils.isNotNull(claimProductDTO.getRiskName())
+                || StringUtils.isNotNull(claimProductDTO.getRiskStatus())
+                || StringUtils.isNotNull(claimProductDTO.getSynchronizeStartTime())
+                || StringUtils.isNotNull(claimProductDTO.getSynchronizeEndTime())
+                || StringUtils.isNotNull(claimProductDTO.getUpdateStartTime())
+                || StringUtils.isNotNull(claimProductDTO.getUpdateEndTime())
+        ){
         claimProductDTO.setStatus("Y");
         claimProductDTO.setIsHistory("N");
         List<ClaimProductDTO> claimProductDTOS1 = claimProductMapper.selectClaimProduct(claimProductDTO);
         return claimProductDTOS1;
+        }
+        return claimProductMapper.selectClaimProductNew(claimProductDTO);
     }
 
     /**修改任务改派操作人*/

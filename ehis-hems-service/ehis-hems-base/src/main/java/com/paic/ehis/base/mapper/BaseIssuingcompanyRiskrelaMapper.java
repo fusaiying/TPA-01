@@ -59,4 +59,18 @@ public interface BaseIssuingcompanyRiskrelaMapper
      * @return 结果
      */
     public int deleteBaseIssuingcompanyRiskrelaByIds(String[] companyCodes);
+
+    /**
+     *
+     * @param companyCode
+     * @return
+     */
+    public BaseIssuingcompanyRiskrela selectBaseIssuingcompanyRiskrelaByIdOne(String companyCode);
+
+    /**
+     *
+     * @param companyCode
+     * @return
+     */
+    public List<BaseIssuingcompanyRiskrela> selectBaseIssuingcompanyRiskrelaByIdTwo(String companyCode);
 }

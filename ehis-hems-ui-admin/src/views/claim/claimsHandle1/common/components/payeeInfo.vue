@@ -271,11 +271,18 @@
           this.baseForm.payeeMobile = this.insuredData.mobile,
           this.baseForm.payeeNationality = this.insuredData.nationality,
           this.baseForm.payeeIdType = this.insuredData.idType,
-          this.baseForm.payeeIdNo = this.insuredData.idNo,
-          this.baseForm.idEndDate = this.insuredData.dateRange ? this.insuredData.dateRange[1] : ''
-      },
-      baseInfo: function (newValue) {
-        this.insuredData = newValue
+          this.baseForm.payeeIdNo = this.insuredData.idNo
+        if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
+          this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate==='9999-12-31'){
+            this.$set(this.baseForm,'checked',true)
+          }
+        }else {
+          this.$set(this.baseForm,'idEndDate',this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
+        }
+        if (this.baseForm.idEndDate === '9999-12-31') {
+          this.checked = true
+        }
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue
@@ -516,7 +523,7 @@
           payeeNationality: this.insuredData.nationality,
           payeeIdType: this.insuredData.idType,
           payeeIdNo: this.insuredData.idNo,
-          idEndDate: this.insuredData.dateRange ? this.insuredData.dateRange[1] : '',
+          idEndDate: '',
           payeeBank: undefined,
           payeeRatio: '100',
           payeeOccupation: undefined,
@@ -527,6 +534,14 @@
           city: undefined,
           district: undefined,
           address: undefined,
+        }
+        if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
+          this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate==='9999-12-31'){
+            this.$set(this.baseForm,'checked',true)
+          }
+        }else {
+          this.$set(this.baseForm,'idEndDate',this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
         }
         if (this.baseForm.idEndDate === '9999-12-31') {
           this.checked = true

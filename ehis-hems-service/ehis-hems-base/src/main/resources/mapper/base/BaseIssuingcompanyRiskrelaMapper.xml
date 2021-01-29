@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectBaseIssuingcompanyRiskrelaById" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
         <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
-        where company_code = #{companyCode}
+        where company_code = #{companyCode} and status='Y'
     </select>
         
     <insert id="insertBaseIssuingcompanyRiskrela" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyRiskrela">
@@ -76,5 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{companyCode}
         </foreach>
     </delete>
-    
+
+    <select id="selectBaseIssuingcompanyRiskrelaByIdOne" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+
+    <select id="selectBaseIssuingcompanyRiskrelaByIdTwo" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+
 </mapper>

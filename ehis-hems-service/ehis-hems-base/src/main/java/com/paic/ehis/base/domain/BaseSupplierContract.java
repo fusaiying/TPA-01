@@ -22,6 +22,9 @@ public class BaseSupplierContract extends BaseEntity
     private static final long serialVersionUID = 1L;
 
 
+    /** 联系人 */
+    private String liaison;
+
     /** 自动续约 */
     private String renewFlag;
 
@@ -608,6 +611,14 @@ public class BaseSupplierContract extends BaseEntity
 
     public void setConSerId(String conSerId) {
         this.conSerId = conSerId;
+    }
+
+    public String getLiaison() {
+        return liaison;
+    }
+
+    public void setLiaison(String liaison) {
+        this.liaison = liaison;
     }
 
     @Override

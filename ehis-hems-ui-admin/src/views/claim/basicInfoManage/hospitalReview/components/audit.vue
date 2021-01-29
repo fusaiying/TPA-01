@@ -134,6 +134,11 @@ props:{
                 center: true,
                 showClose: true
               })
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.push({
+                path: '/basic-info/hospitalReview/index',
+              })
+
             } else {
               this.$message({
                 message: '审核失败!',

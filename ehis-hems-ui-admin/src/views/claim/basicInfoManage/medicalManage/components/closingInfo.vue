@@ -268,7 +268,8 @@ export default {
       formSearch: {
         pageNum: 1,
         pageSize: 10,
-        providerCode: undefined
+        providerCode: undefined,
+        orgFlag: undefined,
       },
       closingLogData: [],
       dialogVisible: false,
@@ -390,7 +391,7 @@ export default {
             }*/
 
             } else {
-              return false
+              this.$message.warning('结算信息必录项未必录')
             }
 
           })
@@ -411,10 +412,12 @@ export default {
     checkRecord() {
       this.dialogVisible = true
       //调用查询方法
+
       this.getData()
     },
 
     getData() {
+      this.formSearch.orgFlag=this.status
       this.formSearch.providerCode = this.providerCode
       selectsettleInfo(this.formSearch).then(res => {
         this.closingLogData = res.rows

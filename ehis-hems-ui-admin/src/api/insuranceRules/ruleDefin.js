@@ -193,10 +193,11 @@ export function getListNew(data) {
 }
 
 //任务改派查询改派操作人接口
-export function selectSysUser() {
+export function selectSysUser(data) {
   return request({
     url: '/system/product/selectSysUser',
     method: 'get',
+    params:data
   })
 }
 

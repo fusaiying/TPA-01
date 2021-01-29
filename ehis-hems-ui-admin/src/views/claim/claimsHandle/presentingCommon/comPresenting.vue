@@ -238,7 +238,7 @@
                          :value="option.dictValue"/>
             </el-select>
             <span v-show="!show"
-                  class="form-span">{{selectDictLabel(claim_materialOptions, scope.row.claimmaterials)}}</span>
+                  class="form-span">{{getClaimmaterials(scope.row.claimmaterials)}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="remark" min-width="120" label="备注" show-overflow-tooltip>
@@ -438,6 +438,7 @@
         special_caseOptions: [],
         claim_materialOptions: [],
         examine_resultOptions: [],
+        hospitalOptions: [],
       }
     },
 
@@ -507,9 +508,24 @@
           })
           //查看时是直结调用查询医院接口
           if (this.searchForm.claimtype === '01') {
-
+            if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
+              let data = {
+                //医院编码
+                providerCode: this.searchForm.hospitalcode
+              }
+              //医院
+              getHospitalInfo(data).then(res => {
+                if (res != null && res !== '') {
+                  this.tableData = res.rows
+                }
+              }).catch(res=>{})
+            }
           } else {//查看时是事后调用查询事后案件台账
-
+            getStanding(this.querys.batchno).then(res=>{
+              if (res!=null && res.code===200){
+                this.afterTable=res.rows
+              }
+            }).catch(res=>{})
           }
         } else if (this.querys.status === 'edit') {
           this.eShowFooter = true
@@ -523,41 +539,59 @@
           })
           //查看时是直结调用查询医院接口
           if (this.searchForm.claimtype === '01') {
-
+            if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
+              let data = {
+                //医院编码
+                providerCode: this.searchForm.hospitalcode
+              }
+              //医院
+              getHospitalInfo(data).then(res => {
+                if (res != null && res !== '') {
+                  this.tableData = res.rows
+                }
+              }).catch(res=>{})
+            }
           } else {//查看时是事后调用查询事后案件台账
-
+            getStanding(this.querys.batchno).then(res=>{
+              if (res!=null && res.code===200){
+                this.afterTable=res.rows
+              }
+            }).catch(res=>{})
           }
         } else if (this.querys.status === 'editReview') {
           this.isShowFooter = true
           this.isSaveSub = false
           this.isReview = true
-          /* //查看时是直结调用查询医院接口
+           //查看时是直结调用查询医院接口
            if (this.searchForm.claimtype === '01') {
-
+             if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
+               let data = {
+                 //医院编码
+                 providerCode: this.searchForm.hospitalcode
+               }
+               //医院
+               getHospitalInfo(data).then(res => {
+                 if (res != null && res !== '') {
+                   this.tableData = res.rows
+                 }
+               }).catch(res=>{})
+             }
            } else {//查看时是事后调用查询事后案件台账
-
-           }*/
+             getStanding(this.querys.batchno).then(res=>{
+               if (res!=null && res.code===200){
+                 this.afterTable=res.rows
+               }
+             }).catch(res=>{})
+           }
         }
-        if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
-          let data = {
-            //医院编码
-            providerCode: this.searchForm.hospitalcode
-          }
-          //医院
-          getHospitalInfo(data).then(res => {
-            if (res != null && res !== '') {
-              this.tableData = res.rows
-            }
-          }).catch(res=>{})
-        }
-        getStanding(this.querys.batchno).then(res=>{
-          if (res!=null && res.code===200){
-            this.afterTable=res.rows
-          }
-        }).catch(res=>{})
       }
       selectSysUser().then(res => {
         this.sysUserOptions = res.data
+      })
+      getHospitalInfo().then(res => {
+        if (res != null && res !== '') {
+          this.hospitalOptions = res.rows
+        }
       })
     },
     methods: {
@@ -667,6 +701,7 @@
                       this.afterTable = []
                     }
                     this.searchForm = res.data.claimBatch
+                    this.$set(this.searchForm,'hospitalname',this.selectHospitalName(this.hospitalOptions,res.data.claimBatch.hospitalcode ))
                     this.show = true;
                     for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
                       let data = {
@@ -710,7 +745,8 @@
                 })
                 //更新数据
                 if (res.data != null) {
-                  this.searchForm = res.data
+                  this.searchForm=res.data
+                  this.$set(this.searchForm,'hospitalname',this.selectHospitalName(this.hospitalOptions,res.data.hospitalcode ))
                 }
                 this.eSaveSub = true
                 this.isSaveSub = true
@@ -867,6 +903,29 @@
         this.searchForm.hospitalcode = val.providerCode
         this.tableData = []
         this.tableData.push(val)
+      },
+      getClaimmaterials(value) {
+        let material = ''
+        if (value.length > 0) {
+          for (let i = 0; i < value.length; i++) {
+            if (i===value.length-1){
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
+            }else {
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])+'，'
+            }
+          }
+        }
+        return material
+      },
+      selectHospitalName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].providerCode === ('' + value)) {
+            actions.push(datas[key].chname1);
+            return true;
+          }
+        })
+        return actions.join('');
       }
     }
   }

@@ -303,9 +303,10 @@
           </el-form-item>
         </el-row>
       </el-form>
-
-      <el-button  type="primary" style="float: right" size="mini" @click="upload">保存</el-button>
-      <el-button  type="primary" style="float: right" size="mini" @click="upload">关闭</el-button>
+      <div style="text-align: right; margin-right: 1px;">
+      <el-button  type="primary" size="mini" @click="upload">保存</el-button>
+      <el-button  type="primary"size="mini" @click="upload">关闭</el-button>
+      </div>
     </el-card>
 
 
@@ -359,12 +360,12 @@
           orderNum: [
             {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
           ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
+          // orderNum: [
+          //   {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          // ],
+          // orderNum: [
+          //   {required: true, message: "出单机构不能为空", trigger: "blur"}
+          // ],
           bankaa: [
             {required: true, message: "开户行不能为空", trigger: "blur"}
           ],

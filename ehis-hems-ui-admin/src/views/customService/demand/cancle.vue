@@ -2,6 +2,7 @@
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
+      <el-divider/>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
@@ -194,6 +195,7 @@
                label-position="right" size="mini">
 
         <span style="color: blue">信息需求-理赔类</span>
+        <el-divider/>
         <el-row>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
@@ -353,7 +355,8 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>业务流转情况</span>
+        <span style="color: blue">业务流转情况</span>
+        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -391,7 +394,8 @@
     <el-card>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
-        <span>服务处理</span>
+        <span style="color: blue">服务处理</span>
+        <el-divider/>
         <el-row>
           <el-col :span="8">
             <el-form-item label="业务处理情况" prop="bank" >
@@ -417,7 +421,7 @@
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue" >取消处理</span>
-        <el-divider style="color: blue"  ></el-divider>
+        <el-divider style="color: blue" ></el-divider>
         <el-row>
           <el-form-item label="取消原因" prop="bank" >
             <el-radio-group v-model="ruleForm.bank">
@@ -439,6 +443,12 @@
           </el-form-item>
         </el-row>
       </el-form>
+      <el-row :gutter="20" align="right">
+        <div style="text-align: right; margin-right: 1px;">
+        <el-button type="primary"  size="mini" @click="upload()">提交</el-button>
+        <el-button type="primary"  size="mini" @click="upload()">关闭</el-button>
+         </div>
+      </el-row>
 
 
     </el-card>
@@ -494,12 +504,12 @@
           orderNum: [
             {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
           ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
+          // orderNum: [
+          //   {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          // ],
+          // orderNum: [
+          //   {required: true, message: "出单机构不能为空", trigger: "blur"}
+          // ],
           bankaa: [
             {required: true, message: "开户行不能为空", trigger: "blur"}
           ],

@@ -4,7 +4,7 @@ import request from '@/utils/request'
 export function inspectionQueryBy(query) {
   return request({
     //后台接口调用地址
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/inspectionSendData',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function inspectionQueryBy(query) {
 //# 查询未处理的质检数据
 export function inspectionListAndPublicPool(query) {
   return request({
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/inspectionPublicData',
     method: 'get',
     params: query
   })
@@ -22,7 +22,7 @@ export function inspectionListAndPublicPool(query) {
 //# 查询处理中的质检数据
 export function inspectionListAndPersonalPool(query) {
   return request({
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/inspectionPersonData',
     method: 'get',
     params: query
   })
@@ -40,18 +40,26 @@ export function selectSysUser() {
 export function selectConfirmationQuery(query) {
   return request({
     //后台接口调用地址
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/listAndPublicPool',
     method: 'get',
     params: query
   })
 }
 
 //# 发起质检操作
-export function inspectionSendByIds(workOrderNos) {
+  export function inspectionSendByIds(sendIds) {
+    return request({
+      url: '/cs/spotCheck/sendIds',
+      method: 'put',
+      data: sendIds
+    })
+  }
+
+//# 获取待质检操作
+export function inspectionGetByIds(getIds) {
   return request({
-    //后台接口调用地址
-    url: '/cs/demand/internal/listAndPublicPool',
-    method: 'get',
-    params: workOrderNos
+    url: '/cs/spotCheck/getIds',
+    method: 'put',
+    data: getIds
   })
 }

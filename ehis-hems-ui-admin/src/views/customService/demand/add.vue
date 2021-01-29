@@ -34,7 +34,18 @@
 
 
         <div style="text-align: right; margin-right: 1px;">
-          <el-button size="mini" type="primary" @click="searchHandle">查询</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-search"
+            @click="
+              isinit='N',
+              page=1,
+              finishPage=1,
+              searchHandle()
+            "
+          >查询
+          </el-button>
           <el-button size="mini" type="primary" @click="acceptButton">跳过</el-button>
         </div>
       </el-form>

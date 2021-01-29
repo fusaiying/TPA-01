@@ -174,7 +174,8 @@
 
         </span>
         <el-divider/>
-        <inspectionsSendTable v-loading="inspectionsSendTableLading" :table-data="workPoolData" @getSelect="getSelect"/>
+        <!-- 引用控件 子页面中调用该页面的方法要用 @methodName 定义 -->
+        <inspectionsSendTable v-loading="inspectionsSendTableLading" :table-data="workPoolData" @getSelect="getSelect" @postHandle="postHandle"/>
         <!--分页控件 -->
         <pagination
           v-show="totalCount>0"
@@ -273,7 +274,14 @@ export default {
   // 异步初始化数据加载
   //生命函数：mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
   async mounted() {
-    // 字典数据获取
+
+    //指定获取某一类型的字典数据
+    // this.getDicts("cs_service_item").then(response => {
+    //   this.service_itemOptions = response.data;
+    //   console.log("服务项目:", response)
+    // });
+
+    // 字典数据统一获取
     await this.getDictsList(dictss).then(response => {
       this.dictList = response.data
     })
@@ -314,6 +322,7 @@ export default {
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
+
         serviceItemCode: this.sendQueryForm.serviceItem,
         channelCode: this.sendQueryForm.channel,
         acceptorName: this.sendQueryForm.acceptorName,
@@ -364,12 +373,15 @@ export default {
               "未查询到数据！"
             )
           }
-        }else{
-          //清除table加载状态
-          this.inspectionsSendTableLading=false;
         }
+        // else{
+        //   //清除table加载状态
+        //   this.inspectionsSendTableLading=false;
+        // }
       }).catch(res => {
       //异常处理
+
+      }).finally(() => {
         //清除table加载状态
         this.inspectionsSendTableLading=false;
       })
@@ -382,7 +394,7 @@ export default {
     batchSendHandle() {
       this.sendLoading = true
       if (this.selList.length < 1) {
-        this.$message({ message: '请选择需要质检的记录，进行批量获取操作', type: 'warning' })
+        this.$message({ message: '请选择需要进行质检的记录，进行批量发起操作', type: 'warning' })
         this.sendLoading = false
         return
       }
@@ -395,7 +407,7 @@ export default {
       if (workOrderNos.length<1){
         this.sendLoading = false
         return this.$message.warning(
-          "请选择需要质检的记录，进行批量获取操作。"
+          "请选择需要进行质检的记录，进行批量发起操作"
         )
       }else {
         //后台方法调用及返回结果处理
@@ -412,20 +424,20 @@ export default {
     postHandle(ids){
       inspectionSendByIds(ids).then(res=>{
         if (res!=null && res.code===200){
+          this.sendLoading = false
+          //数据重新加载
+          this.searchHandle();
           this.$message({
-            message: '获取成功！',
+            message: '发起质检成功！',
             type: 'success',
             center: true,
             showClose: true
           })
         }
-        this.sendLoading = false
-
       }).catch(res => {
-        this.$message.error('获取失败！')
+        this.$message.error('发起质检失败！')
         this.sendLoading = false
       })
-      this.searchHandle();
     }
   }
 }

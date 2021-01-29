@@ -264,7 +264,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="练习人与被保人关系：" prop="priority">
+            <el-form-item label="联系人与被保人关系：" prop="priority">
               <el-select v-model="ruleForm.priority" class="item-width" placeholder="请选择">
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -350,7 +350,16 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+        <el-row>
+        <span style="color: blue">附件信息</span>
+                <div  style="text-align: right; margin-right: 1px;">
+                 <up-load ref="upload"  > </up-load>
+                  <el-button size="mini" type="primary" @click="upload()" >上传附件</el-button>
+                </div>
+        </el-row>
+        <el-divider/>
+<!--          <el-button  type="primary" style="float: right" size="mini" @click="tan">上传附件</el-button></span>-->
+        <up-load  :dialogVisable="dialogVisable"></up-load>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
@@ -369,15 +378,11 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-form-item>
-          <el-button  type="primary" style="float: right" size="mini" @click="upload">提交</el-button>
-          <el-button type="primary" style="float: right" size="mini" @click="upload">关闭</el-button>
-        </el-form-item>
 
-
-
-
-
+      </div>
+      <div style="text-align: right; margin-right: 1px;">
+        <el-button  type="primary" size="mini" @click="upload">提交</el-button>
+        <el-button  type="primary"size="mini" @click="upload">关闭</el-button>
       </div>
     </el-card>
 
@@ -389,9 +394,12 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+  import upLoad from "../common/modul/upload";
+
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: { upLoad },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -402,6 +410,16 @@
     data() {
 
       return {
+        acceptArr: [
+          {label: '批次信息', name: '#anchor-21'},
+          {label: '被保人信息', name: '#anchor-2'},
+          {label: '申请人信息', name: '#anchor-12'},
+          {label: '领款人信息', name: '#anchor-11'},
+          {label: '受理信息', name: '#anchor-13'},
+          {label: '赔案备注', name: '#anchor-16'},
+          {label: '问题件', name: '#anchor-14'},
+        ],
+
         //需要填入数据的部分
         ruleForm:{
           radio:"",
@@ -430,12 +448,12 @@
            orderNum: [
               {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
             ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
+          // orderNum: [
+          //   {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          // ],
+          // orderNum: [
+          //   {required: true, message: "出单机构不能为空", trigger: "blur"}
+          // ],
           bankaa: [
             {required: true, message: "开户行不能为空", trigger: "blur"}
           ],
@@ -466,9 +484,9 @@
           //   }
           // ]
         },
-
         readonly: true,
-        dialogFormVisible: false,
+        dialogVisable: "",//上传附件用
+        historicalProblemData:Array,//上传附件用
         updateBy: undefined,
         sendForm: {
           channle:"",
@@ -534,9 +552,10 @@
     },
 
     methods: {
-      //上传附件
-      upload(){},
-      //下载
+     //上传附件
+      upload(){
+        this.$refs.upload.open();
+      },
       download(){},
       //提交页面数据
        submit(){},
@@ -595,6 +614,9 @@
 </script>
 
 <style scoped>
+  .batchInfo_class .el-tag--small {
+    margin-right: 10px !important;
+  }
   .item-width {
     width: 220px;
   }

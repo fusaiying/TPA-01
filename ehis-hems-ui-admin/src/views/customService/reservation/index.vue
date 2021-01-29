@@ -285,7 +285,7 @@
     </el-card>
 
     <!--再次来电弹出框-->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="isOpen" width="600px" append-to-body>
       <el-form ref="form" :model="form"  label-width="80px">
         <el-card class="box-card" style="margin-top: 10px;">
           <div slot="header" class="clearfix">
@@ -338,7 +338,7 @@
     },
     data() {
       return {
-        open:"",//是否弹出
+        isOpen:false,//是否弹出
         title:"",//弹出框名称
         secondPhone:[],
         riskCodes:[],
@@ -418,7 +418,7 @@
           this.workPoolData = response.rows;
           this.totalCount = res.total;
           this.title="第二次来电弹出框";
-          this.open="true";
+          this.isOpen=true;
           //   for (var i = 0; i < res.total; i++) {
           //
           //   if (response.rows[i].state == 1) {

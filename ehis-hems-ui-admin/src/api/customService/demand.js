@@ -17,3 +17,20 @@ export function demandListAndPersonalPool(query) {
     params: query
   })
 }
+//#二次来电查询
+export function selectCallAgain() {
+  return request({
+    url: '/cs/again/selectCallAgain',
+    method: 'get',
+  })
+}
+
+//#获取接口
+export function demandObtain(query) {
+  return request({
+    url: '/cs/demand/obtain',
+    method: 'get',
+    params:query
+  })
+}
+

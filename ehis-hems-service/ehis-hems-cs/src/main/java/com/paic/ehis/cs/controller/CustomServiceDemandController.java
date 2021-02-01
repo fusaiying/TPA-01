@@ -42,7 +42,7 @@ public class CustomServiceDemandController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PutMapping("/obtain")
     public AjaxResult edit(String workOrderNo)
     {
         return toAjax(iDemandAcceptVoService.updateStatus(workOrderNo));

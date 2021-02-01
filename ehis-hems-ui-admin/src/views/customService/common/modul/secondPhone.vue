@@ -1,10 +1,8 @@
 <template>
-  <div>
 <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-  <el-form  label-width="80px">
-    <el-card class="box-card" style="margin-top: 10px;">
+  <el-form  label-width="80px" style="margin-top: 1px;">
+    <el-card class="box-card" style="margin-top: 1px;">
       <div slot="header" class="clearfix">
-        <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -14,11 +12,15 @@
           tooltip-effect="dark"
           style=" width: 100%;"
         >
-          <el-table-column align="center" width="140" prop="state" label="序号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="channel" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="Service" label="受理时间" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNumber" label="被保人姓名" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="secondNumber" label="说明" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="callSerialNum" label="序号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.acceptTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="insuredName" label="被保人姓名" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="remark" label="说明" show-overflow-tooltip/>
           <!--fixed="right"控制固定某一列-->
         </el-table>
         <pagination
@@ -29,38 +31,42 @@
           @pagination="searchHandle"
         />
       </div>
+
     </el-card>
 
   </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="open = false" type="primary">关 闭</el-button>
+  </span>
 </el-dialog>
-  </div>
 </template>
 <script>
-  import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+  import {selectCallAgain} from '@/api/customService/demand'
+  import moment from "moment";
 
   export default {
-    name:'secondPhone',
-    //接受父传值
-    props: {
-      workPoolData: [],
-      value: {
-        type: Boolean,
-        default: false
-      },
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      }
     },
+    name:'secondPhone',
 
 
     data() {
       return {
-        open:"true",
+        open:true,
         queryParams: {
           pageNum: 1,
           pageSize: 10
 
 
         },
+        title:"再次来电工单提醒",
+        totalCount:0,
         workPoolData:[],
-        dialogVisable: false,
         coOrganizerForm: {
           attachmentType: "",
           attachmentTypes: "",
@@ -74,12 +80,10 @@
       this.searchHandle()
     },
     methods: {
+
       searchHandle() {
-        debugger;
-        let query = {}
-        console.log('query: ',query)
-        demandListAndPublicPool(query).then(res => {
-          console.log('------------: ',res)
+        selectCallAgain().then(res => {
+          console.log('第二次来电',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total
@@ -94,11 +98,6 @@
 
         })
       },
-      //关闭对话框
-      changeDialogVisable() {
-        //清空对话框中的数据
-        this.$emit('closeHistoricalProblem')
-      }
     }
   }
 </script>

@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.constant;
 /**
  * 返回状态码
  * 
- * @author admin
+ *
  */
 public class HttpStatus
 {

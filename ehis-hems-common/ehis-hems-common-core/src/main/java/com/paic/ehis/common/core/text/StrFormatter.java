@@ -5,7 +5,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 /**
  * 字符串格式化
  * 
- * @author admin
+ *
  */
 public class StrFormatter
 {

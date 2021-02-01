@@ -5,7 +5,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 /**
  * 分页数据
  * 
- * @author admin
+ *
  */
 public class PageDomain
 {

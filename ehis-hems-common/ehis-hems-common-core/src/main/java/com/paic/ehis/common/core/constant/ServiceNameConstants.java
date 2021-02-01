@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.constant;
 /**
  * 服务名称
  * 
- * @author admin
+ *
  */
 public class ServiceNameConstants
 {
@@ -17,4 +17,8 @@ public class ServiceNameConstants
      */
     public static final String SYSTEM_SERVICE = "ehis-hems-system";
 
+    /**
+     * 文件服务的serviceid
+     */
+    public static final String FILE_SERVICE = "ehis-hems-file";
 }

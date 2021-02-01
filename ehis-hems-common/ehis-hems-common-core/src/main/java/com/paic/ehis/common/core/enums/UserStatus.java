@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.enums;
 /**
  * 用户状态
  * 
- * @author admin
+ *
  */
 public enum UserStatus
 {

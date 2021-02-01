@@ -1,15 +1,15 @@
 package com.paic.ehis.common.core.exception;
 
 /**
- * 演示模式异常
+ * 权限异常
  * 
  *
  */
-public class DemoModeException extends RuntimeException
+public class PreAuthorizeException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
-    public DemoModeException()
+    public PreAuthorizeException()
     {
     }
 }

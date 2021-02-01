@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 自定义异常
  * 
- * @author admin
+ *
  */
 public class CustomException extends RuntimeException
 {

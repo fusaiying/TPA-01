@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 验证码错误异常类
  * 
- * @author admin
+ *
  */
 public class CaptchaException extends RuntimeException
 {

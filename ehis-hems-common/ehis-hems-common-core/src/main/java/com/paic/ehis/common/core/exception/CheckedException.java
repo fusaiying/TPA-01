@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 检查异常
  * 
- * @author admin
+ *
  */
 public class CheckedException extends RuntimeException
 {

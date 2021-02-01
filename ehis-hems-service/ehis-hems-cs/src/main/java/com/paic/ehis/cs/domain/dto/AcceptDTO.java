@@ -34,6 +34,16 @@ public class AcceptDTO implements Serializable {
     @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date acceptTimeEnd;
 
+
+
+    /** 受理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date acceptTime;
+
+
+
+
     /** 处理人 仅争对获取操作的人 */
     @Excel(name = "处理人 仅争对获取操作的人")
     private String modifyBy;

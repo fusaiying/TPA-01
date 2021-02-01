@@ -5,14 +5,15 @@ import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
 import java.util.List;
 
 public interface DemandAcceptVoMapper {
-    public List<DemandAcceptVo> selectDemandAcceptVoList(DemandAcceptVo demandAcceptVo);
+    public List<DemandAcceptVo> selectDemandAcceptVoList(AcceptDTO acceptDTO);
 
-    public List<DemandAcceptVo> selectDemandAcceptVoList2(DemandAcceptVo demandAcceptVo);
+    public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
 
     public int updateStatus(String workOrderNo);
 

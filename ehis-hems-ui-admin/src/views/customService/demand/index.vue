@@ -172,31 +172,31 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workNumber" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="channel" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="Service" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="secondNumber" label="分单号" show-overflow-tooltip/>
-          <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="beInsuredName" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="insuredName" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="acceptorTime" label="受理时间" align="center" show-overflow-tooltip>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
+          <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
+          <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
+          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="HandlerTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="Acceptor" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="Handler" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="vip" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip/>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
@@ -218,12 +218,12 @@
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>处理中（{{ totalCount }}）</span>
+        <span>处理中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="workPoolData"
+          :data="workPersonPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
@@ -369,8 +369,10 @@
         },
         loading: true,
         workPoolData: [],
+        workPersonPoolData:[],
         isinit: 'Y',
         totalCount: 0,
+        totalPersonCount:0,
         changeSerchData: {},
         states: [],
         serves: [{
@@ -391,6 +393,7 @@
     },
     created() {
       this.searchHandle()
+      this.searchPersonHandle()
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
         console.log("服务项目:",response)
@@ -453,6 +456,24 @@
       },
       resetForm() {
         this.$refs.sendForm.resetFields()
+      },
+      //个人池
+      searchPersonHandle(){
+        demandListAndPersonalPool().then(res => {
+          console.log('个人池：',res)
+          if (res != null && res.code === 200) {
+            this.workPersonPoolData = res.rows
+            this.totalPersonCount = res.total
+            console.log('response',res.total)
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
       },
       //查询
       searchHandle() {

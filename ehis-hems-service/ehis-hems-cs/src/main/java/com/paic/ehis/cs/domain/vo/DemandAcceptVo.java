@@ -137,6 +137,106 @@ public class DemandAcceptVo extends BaseEntity {
     /** 有无附件*/
     private String attachmentFlag;
 
+    private String Content;
+    private String CallName;
+    private String CallMobilePhone;
+    private long ContactsSex;
+    private String ContactsName;
+    private String ContactsLanguage;
+    private String ContactsMobilePhone;
+    private String ContactsCountry;
+    private String ContactsQuhao;
+    private String ContactsNumber;
+    private String ContactsSecondNumber;
+
+    public String getContent() {
+        return Content;
+    }
+
+    public void setContent(String content) {
+        Content = content;
+    }
+
+    public String getCallName() {
+        return CallName;
+    }
+
+    public void setCallName(String callName) {
+        CallName = callName;
+    }
+
+    public String getCallMobilePhone() {
+        return CallMobilePhone;
+    }
+
+    public void setCallMobilePhone(String callMobilePhone) {
+        CallMobilePhone = callMobilePhone;
+    }
+
+    public long getContactsSex() {
+        return ContactsSex;
+    }
+
+    public void setContactsSex(long contactsSex) {
+        ContactsSex = contactsSex;
+    }
+
+    public String getContactsName() {
+        return ContactsName;
+    }
+
+    public void setContactsName(String contactsName) {
+        ContactsName = contactsName;
+    }
+
+    public String getContactsLanguage() {
+        return ContactsLanguage;
+    }
+
+    public void setContactsLanguage(String contactsLanguage) {
+        ContactsLanguage = contactsLanguage;
+    }
+
+    public String getContactsMobilePhone() {
+        return ContactsMobilePhone;
+    }
+
+    public void setContactsMobilePhone(String contactsMobilePhone) {
+        ContactsMobilePhone = contactsMobilePhone;
+    }
+
+    public String getContactsCountry() {
+        return ContactsCountry;
+    }
+
+    public void setContactsCountry(String contactsCountry) {
+        ContactsCountry = contactsCountry;
+    }
+
+    public String getContactsQuhao() {
+        return ContactsQuhao;
+    }
+
+    public void setContactsQuhao(String contactsQuhao) {
+        ContactsQuhao = contactsQuhao;
+    }
+
+    public String getContactsNumber() {
+        return ContactsNumber;
+    }
+
+    public void setContactsNumber(String contactsNumber) {
+        ContactsNumber = contactsNumber;
+    }
+
+    public String getContactsSecondNumber() {
+        return ContactsSecondNumber;
+    }
+
+    public void setContactsSecondNumber(String contactsSecondNumber) {
+        ContactsSecondNumber = contactsSecondNumber;
+    }
+
     public String getWorkOrderNo() {
         return workOrderNo;
     }

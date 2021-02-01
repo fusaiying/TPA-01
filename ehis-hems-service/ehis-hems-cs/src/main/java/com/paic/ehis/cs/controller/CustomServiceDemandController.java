@@ -6,15 +6,13 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.cs.domain.AcceptDetailInfo;
+import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.ServiceInfoVo;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
@@ -28,17 +26,17 @@ public class CustomServiceDemandController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
-    public TableDataInfo listAndPublicPool(DemandAcceptVo demandAcceptVo) {
+    public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
         startPage();
-        List<DemandAcceptVo> list = iDemandAcceptVoService.selectDemandAcceptList(demandAcceptVo);
+        List<DemandAcceptVo> list = iDemandAcceptVoService.selectDemandAcceptList(acceptDTO);
         return getDataTable(list);
     }
 
    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPersonalPool")
-    public TableDataInfo listAndPersonalPool(DemandAcceptVo demandAcceptVo) {
+    public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {
         startPage();
-        List<DemandAcceptVo> list = iDemandAcceptVoService.selectDemandAcceptList2(demandAcceptVo);
+        List<DemandAcceptVo> list = iDemandAcceptVoService.selectDemandAcceptList2(acceptDTO);
         return getDataTable(list);
     }
 

@@ -35,7 +35,7 @@
         <result property="complaintPersonId" column="complaint_person_id"/>
     </resultMap>
 
-    <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.vo.DemandAcceptVo" resultMap="DemandAcceptVoResult">
+    <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
 SELECT
 a.work_order_no,
 a.business_type,
@@ -80,10 +80,29 @@ WHERE
 a.work_order_no = b.work_order_no
 and a.business_type='信息需求'
 and a.status='01'
+        <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null"> and work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and mobile_phone = #{mobilePhone}</if>
+        <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>
 	</select>
 
 
-    <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.vo.DemandAcceptVo" resultMap="DemandAcceptVoResult">
+    <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
 SELECT
 a.work_order_no,
 a.business_type,
@@ -128,6 +147,24 @@ WHERE
 a.work_order_no = b.work_order_no
 and a.business_type='信息需求'
 and a.status='02'
+        <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and accept_by = #{acceptBy}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null"> and work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and mobile_phone = #{mobilePhone}</if>
+        <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>
 	</select>
 
     <update id="updateStatus" parameterType="String" >

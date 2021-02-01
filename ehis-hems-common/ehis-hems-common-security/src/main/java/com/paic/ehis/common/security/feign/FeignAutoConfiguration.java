@@ -1,20 +1,20 @@
 package com.paic.ehis.common.security.feign;
 
+import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import feign.RequestInterceptor;
 
 /**
- * Feign配置注册
+ * Feign 配置注册
  *
- * @author admin
+ *
  **/
 @Configuration
-public class OAuth2FeignConfig
+public class FeignAutoConfiguration
 {
     @Bean
     public RequestInterceptor requestInterceptor()
     {
-        return new OAuth2FeignRequestInterceptor();
+        return new FeignRequestInterceptor();
     }
 }

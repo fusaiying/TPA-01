@@ -12,12 +12,11 @@
     <artifactId>ehis-hems-api-system</artifactId>
 
     <description>
-        ehis-hems-api-system系统接口模块
+        系统接口模块
     </description>
 
     <dependencies>
 		
-        <!-- Ehis-Hems Common Core-->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-core</artifactId>

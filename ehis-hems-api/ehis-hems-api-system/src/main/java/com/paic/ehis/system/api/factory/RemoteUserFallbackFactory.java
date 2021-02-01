@@ -1,17 +1,17 @@
 package com.paic.ehis.system.api.factory;
 
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.system.api.RemoteUserService;
-import com.paic.ehis.system.api.model.UserInfo;
+import com.paic.ehis.system.api.model.LoginUser;
+import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import com.paic.ehis.common.core.domain.R;
-import feign.hystrix.FallbackFactory;
 
 /**
  * 用户服务降级处理
  * 
- * @author admin
+ *
  */
 @Component
 public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserService>
@@ -25,9 +25,9 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
         return new RemoteUserService()
         {
             @Override
-            public R<UserInfo> getUserInfo(String username)
+            public R<LoginUser> getUserInfo(String username)
             {
-                return null;
+                return R.fail("获取用户失败:" + throwable.getMessage());
             }
         };
     }

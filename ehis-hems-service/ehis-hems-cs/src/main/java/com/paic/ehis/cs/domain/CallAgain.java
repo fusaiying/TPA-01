@@ -4,6 +4,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-01-21
  */
+@Data
 public class CallAgain extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -45,67 +47,73 @@ public class CallAgain extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
-
-    public void setCallSerialNum(String callSerialNum) 
+    /** 受理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date acceptTime;
+    /** 被保人 */
+    @Excel(name = "被保人")
+    private String insuredName;
+    public void setCallSerialNum(String callSerialNum)
     {
         this.callSerialNum = callSerialNum;
     }
 
-    public String getCallSerialNum() 
+    public String getCallSerialNum()
     {
         return callSerialNum;
     }
-    public void setWorkOrderNo(String workOrderNo) 
+    public void setWorkOrderNo(String workOrderNo)
     {
         this.workOrderNo = workOrderNo;
     }
 
-    public String getWorkOrderNo() 
+    public String getWorkOrderNo()
     {
         return workOrderNo;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setCreatedBy(String createdBy) 
+    public void setCreatedBy(String createdBy)
     {
         this.createdBy = createdBy;
     }
 
-    public String getCreatedBy() 
+    public String getCreatedBy()
     {
         return createdBy;
     }
-    public void setCreatedTime(Date createdTime) 
+    public void setCreatedTime(Date createdTime)
     {
         this.createdTime = createdTime;
     }
 
-    public Date getCreatedTime() 
+    public Date getCreatedTime()
     {
         return createdTime;
     }
-    public void setUpdatedBy(String updatedBy) 
+    public void setUpdatedBy(String updatedBy)
     {
         this.updatedBy = updatedBy;
     }
 
-    public String getUpdatedBy() 
+    public String getUpdatedBy()
     {
         return updatedBy;
     }
-    public void setUpdatedTime(Date updatedTime) 
+    public void setUpdatedTime(Date updatedTime)
     {
         this.updatedTime = updatedTime;
     }
 
-    public Date getUpdatedTime() 
+    public Date getUpdatedTime()
     {
         return updatedTime;
     }

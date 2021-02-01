@@ -60,4 +60,11 @@ public interface ICallAgainService
      * @return 结果
      */
     public int deleteCallAgainById(String callSerialNum);
+
+    /**
+     * 查询再次来电工单提醒
+     * @param callAgain
+     * @return
+     */
+    List<CallAgain> selectCallAgain(CallAgain callAgain);
 }

@@ -105,4 +105,17 @@ public class CallAgainController extends BaseController
     {
         return toAjax(callAgainService.deleteCallAgainByIds(callSerialNums));
     }
+    /**
+     * 查询再次来电工单提醒
+     */
+    @PreAuthorize("@ss.hasPermi('system:again:list')")
+    @GetMapping("/selectCallAgain")
+    public TableDataInfo selectCallAgain(CallAgain callAgain)
+    {
+        startPage();
+        List<CallAgain> list = callAgainService.selectCallAgain(callAgain);
+        return getDataTable(list);
+    }
+
+
 }

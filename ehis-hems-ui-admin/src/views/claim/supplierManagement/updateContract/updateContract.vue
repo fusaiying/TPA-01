@@ -1164,12 +1164,12 @@
     margin-left: 10px;
     margin-right: 10px;
   }
-  .box-card /deep/ .el-card__body{
+  .box-card ::v-deep .el-card__body{
     padding: 0;
     padding-top: 10px;
     padding-bottom: 10px;
   }
-  .topCard /deep/ .el-card__body{
+  .topCard ::v-deep .el-card__body{
     padding: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -1177,7 +1177,7 @@
   .container{
     margin-bottom: 33px;
   }
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
   .el-form-item{
@@ -1187,15 +1187,15 @@
     float: right;
     margin: 10px 20px 10px;
   }
-  .el-tabs /deep/ .el-tabs__item{
+  .el-tabs ::v-deep .el-tabs__item{
     width: 180px;
     text-align: center;
     color:rgba(85,85,85,0.5);
   }
-  .el-tabs /deep/ .el-tabs__item.is-active {
+  .el-tabs ::v-deep .el-tabs__item.is-active {
     color: #409EFF;
   }
-  .el-tabs /deep/ .el-tabs__item:hover {
+  .el-tabs ::v-deep .el-tabs__item:hover {
     color: #409EFF;
   }
   .el-table{
@@ -1207,13 +1207,13 @@
   .short-select .el-select{
     width: 100%;
   }
-  .short-select /deep/ .el-form-item__content{
+  .short-select ::v-deep .el-form-item__content{
     width: calc(100% - 130px);
   }
-  .short-input /deep/ .el-form-item__content{
+  .short-input ::v-deep .el-form-item__content{
     width: calc(100% - 130px);
   }
-  .short-input /deep/ .el-date-editor{
+  .short-input ::v-deep .el-date-editor{
     width: 100%;
   }
   .el-cascader{
@@ -1229,26 +1229,26 @@
   .el-tb-edit .current-row .el-form-item+span{
     display: none;
   }
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
   .el-form-item{
     margin-right: 0;
   }
-  .timeInput /deep/ .el-input__inner{
+  .timeInput ::v-deep .el-input__inner{
     margin: 0;
     padding: 0;
   }
   .el-divider{
     margin: 10px 0;
   }
-  .el-collapse-item /deep/ .el-collapse-item__header{
+  .el-collapse-item ::v-deep .el-collapse-item__header{
     font-size: 16px;
   }
   .el-tooltip__popper{
     display: none;
   }
-  .el-table /deep/.el-tooltip{
+  .el-table ::v-deep.el-tooltip{
     padding:0;
   }
   .el-divider{
@@ -1259,10 +1259,10 @@
     margin-left: 20px;
     margin-right: 20px;
   }
-  .el-form /deep/ .el-form-item {
+  .el-form ::v-deep .el-form-item {
     margin-bottom: 16px;
   }
-  .el-table /deep/ .cell {
+  .el-table ::v-deep .cell {
     padding: 0;
   }
 </style>

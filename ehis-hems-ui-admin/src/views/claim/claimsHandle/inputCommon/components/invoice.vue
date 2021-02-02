@@ -587,7 +587,7 @@
     width: 155px;
   }
 
-  /deep/ .el-select__tags-text {
+  ::v-deep .el-select__tags-text {
     width: 39px;
     display: inline-block;
     overflow: hidden;
@@ -595,7 +595,7 @@
     white-space: nowrap;
   }
 
-  .form_div /deep/ .el-form-item__label {
+  .form_div ::v-deep .el-form-item__label {
     padding-right: 0;
   }
 </style>

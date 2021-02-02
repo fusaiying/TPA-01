@@ -2792,7 +2792,7 @@
   }
 </script>
 <style scoped>
-  .newfirsttaial /deep/ .el-tabs__item .is-top {
+  .newfirsttaial ::v-deep .el-tabs__item .is-top {
     border-right: 1px solid black;
   }
 
@@ -2858,12 +2858,12 @@
     text-align: center;
   }
 
-  /* .card-top /deep/ .el-tabs__header {
+  /* .card-top ::v-deep .el-tabs__header {
      position: fixed;
      z-index: 999;
      width: 96%;
    }
-   .el-card /deep/ .el-card__body{
+   .el-card ::v-deep .el-card__body{
      padding:10px;
    }
    .top-card-heard{
@@ -2873,7 +2873,7 @@
      margin-top:40px;
      margin-left: 10px;
    }*/
-  .card-top /deep/ .el-tabs__header {
+  .card-top ::v-deep .el-tabs__header {
     position: fixed;
     right: 30px;
     z-index: 9;
@@ -2881,12 +2881,12 @@
     transition: width 0.28s !important;
   }
 
-  .hideSidebar .card-top /deep/ .el-tabs__header {
+  .hideSidebar .card-top ::v-deep .el-tabs__header {
     width: calc(100% - 114px) !important;
     transition: width 0.25s !important;
   }
 
-  .el-card /deep/ .el-card__body {
+  .el-card ::v-deep .el-card__body {
     padding: 10px;
   }
 
@@ -2922,7 +2922,7 @@
     z-index: 99999;
   }
 
-  /deep/ .el-tabs__nav-scroll {
+  ::v-deep .el-tabs__nav-scroll {
     background: #f6f6f6;
   }
 </style>

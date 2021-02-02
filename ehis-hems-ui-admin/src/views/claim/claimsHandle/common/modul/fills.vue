@@ -811,13 +811,13 @@ export default {
   .arr-right {
     right: 5px;
   }
-  .el-row /deep/ .el-col-8 {
+  .el-row ::v-deep .el-col-8 {
     height: 40px;
   }
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 10.5%;
   }
   span {

@@ -591,11 +591,11 @@
   }
 </script>
 <style scoped>
-  /deep/ .el-card__body {
+  ::v-deep .el-card__body {
     padding: 0;
   }
 
-  /deep/ .el-form-item__label {
+  ::v-deep .el-form-item__label {
     padding: 0;
   }
 </style>
@@ -625,19 +625,19 @@
     border: none;
   }
 
-  .basic-box /deep/ .el-form-item__label {
+  .basic-box ::v-deep .el-form-item__label {
     font-size: 12px;
   }
 
-  .el-col-7 /deep/ .el-form-item {
+  .el-col-7 ::v-deep .el-form-item {
     margin-bottom: 10px;
   }
 
-  .el-col-12 /deep/ .el-form-item {
+  .el-col-12 ::v-deep .el-form-item {
     margin-bottom: 4px;
   }
 
-  .el-col-7 /deep/ .el-form-item__label,
+  .el-col-7 ::v-deep .el-form-item__label,
   .form-item-span {
     font-size: 12px;
   }
@@ -650,11 +650,11 @@
     border: none;
   }
 
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 10%;
   }
 
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     padding-bottom: 10px;
     margin-bottom: 10px;
     color: #555;

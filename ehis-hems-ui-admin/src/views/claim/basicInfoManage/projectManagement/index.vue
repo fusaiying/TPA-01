@@ -271,7 +271,7 @@
 
 <style scoped>
   /*自定义样式*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
   .projectList_div{

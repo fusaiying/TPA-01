@@ -1294,20 +1294,20 @@ export default {
 .el-collapse {
   border: none;
 }
-.el-tabs /deep/ .el-tabs__item {
+.el-tabs ::v-deep .el-tabs__item {
   width: 10%;
 }
-.el-table /deep/ .el-table__expanded-cell {
+.el-table ::v-deep .el-table__expanded-cell {
   padding: 20px;
 }
-.el-collapse /deep/ .el-collapse-item__header {
+.el-collapse ::v-deep .el-collapse-item__header {
   padding-bottom: 10px;
   margin-bottom: 10px;
   color: #555;
   font-weight: 360;
   font-size: 14px;
 }
-.el-radio /deep/ .el-radio__label {
+.el-radio ::v-deep .el-radio__label {
   display: none;
 }
 .list_span {
@@ -1339,7 +1339,7 @@ export default {
   white-space: pre-wrap;
   word-break: break-word;
 }
-/* /deep/ .el-select__tags-text {
+/* ::v-deep .el-select__tags-text {
   min-width: 30px;
   display: inline-block;
   overflow: hidden;

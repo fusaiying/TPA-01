@@ -306,17 +306,17 @@
     border: none;
   }
 
-  .el-textarea /deep/ .el-form-item__content {
+  .el-textarea ::v-deep .el-form-item__content {
     line-height: 1;
   }
 
-  .el-textarea /deep/ .el-input__count {
+  .el-textarea ::v-deep .el-input__count {
     height: 20px;
     line-height: 20px;
     right: 18px
   }
 
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     font-size: 16px;
     color: #555;
     padding-bottom: 10px;

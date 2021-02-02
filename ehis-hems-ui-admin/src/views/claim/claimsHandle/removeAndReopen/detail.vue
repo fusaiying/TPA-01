@@ -174,7 +174,7 @@
               </el-tab-pane>
               <el-tab-pane :label="`既往垫付(${advanceTableData.length})`" name="03">
                 <claimsTable :tableData="advanceTableData" :status="detaiActiveName"></claimsTable>
-              </el-tab-pane>            
+              </el-tab-pane>
             </el-tabs>
             <div class="tab-title" style="margin-top: 20px;">
               <span>抽检结论</span>
@@ -305,14 +305,14 @@ export default {
   .insured-info .el-form-item {
     margin-bottom: 6px;
   }
-  .simple-card /deep/ .el-card__body {
+  .simple-card ::v-deep .el-card__body {
     padding: 0;
     padding-top: 20px;
   }
-  .simple-card /deep/ .el-card__header {
+  .simple-card ::v-deep .el-card__header {
     background: #eee;;
   }
-  .top-card /deep/ .el-card__body {
+  .top-card ::v-deep .el-card__body {
     padding: 10px 20px;
   }
 </style>

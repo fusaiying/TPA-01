@@ -144,7 +144,7 @@ export default {
   .item-width {
     width: 160px;
   }
-  .el-form-item /deep/.el-form-item__label {
+  .el-form-item ::v-deep.el-form-item__label {
     padding-right: 0;
   }
 </style>

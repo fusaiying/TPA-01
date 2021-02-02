@@ -1655,12 +1655,12 @@
 
   }
   /*tabs下横线加长*/
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     /* padding-bottom: 50px;*//*分页高度*/
     text-align: center;
     width: 200px;
   }
-  .el-tabs /deep/ .el-tabs__active-bar {
+  .el-tabs ::v-deep .el-tabs__active-bar {
     width: 200px;
   }
   .el-collapse-item /title/ {
@@ -1671,7 +1671,7 @@
     padding-right: 6px;
   }
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 
@@ -1685,7 +1685,7 @@
     margin: 10px;
     padding: 0 20px;
   }
-  .box-card /deep/ .el-card__body{
+  .box-card ::v-deep .el-card__body{
     padding: 0;
   }
   .list_item {

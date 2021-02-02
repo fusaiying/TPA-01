@@ -253,7 +253,7 @@ export default {
 .el-collapse {
   border: none;
 }
-.el-collapse /deep/ .el-collapse-item__header {
+.el-collapse ::v-deep .el-collapse-item__header {
   font-size: 16px;
   color: #555;
   padding-bottom: 10px;

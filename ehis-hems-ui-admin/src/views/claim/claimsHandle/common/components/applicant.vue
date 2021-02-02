@@ -844,19 +844,19 @@ export default {
   left: 33.3%;
   top: 95px;
 }
-.el-form /deep/ .el-form-item__label {
+.el-form ::v-deep .el-form-item__label {
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
 }
-.read-only.el-cascader /deep/ .el-input.is-disabled .el-input__inner{
+.read-only.el-cascader ::v-deep .el-input.is-disabled .el-input__inner{
   border: none;
   color: #333;
   padding: 0;
   background: transparent;
   width: 100%;
 }
-.read-only.el-cascader /deep/ .el-icon-arrow-down:before {
+.read-only.el-cascader ::v-deep .el-icon-arrow-down:before {
   display: none;
 }
 .long-select{

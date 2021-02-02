@@ -1405,18 +1405,18 @@
   .item_width {
     width: 240px;
   }
-  .el-tabs /deep/ .el-tabs__active-bar {
+  .el-tabs ::v-deep .el-tabs__active-bar {
     width: 100px;
   }
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 120px;
   }
-  .el-form /deep/ .el-form-item__label {
+  .el-form ::v-deep .el-form-item__label {
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
   }
-  .inner-header /deep/.el-card__header {
+  .inner-header ::v-deep.el-card__header {
     padding: 10px 20px;
   }
   .show1 {

@@ -381,11 +381,11 @@
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 
-  /deep/ .el-select__tags {
+  ::v-deep .el-select__tags {
     width: 100%;
     display: inline-block;
     max-width: 200px;

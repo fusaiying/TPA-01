@@ -148,13 +148,13 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
 
 /*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
+::v-deep .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

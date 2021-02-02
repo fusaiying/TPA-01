@@ -115,7 +115,7 @@
 </script>
 
 <style scoped>
-  /deep/ .row-expand-cover .el-table__expand-column .el-icon {
+  ::v-deep .row-expand-cover .el-table__expand-column .el-icon {
     visibility: hidden;
   }
 

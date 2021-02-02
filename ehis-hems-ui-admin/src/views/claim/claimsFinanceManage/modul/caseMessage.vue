@@ -123,10 +123,10 @@
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
-  /deep/.info_span_col {
+  ::v-deep.info_span_col {
     text-align: right;
     vertical-align: middle;
     float: left;
@@ -137,7 +137,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
-  /deep/.to_right {
+  ::v-deep.to_right {
     width: 130px;
     text-align: right;
   }

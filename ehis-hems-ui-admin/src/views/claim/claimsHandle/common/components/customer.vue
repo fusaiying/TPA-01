@@ -429,7 +429,7 @@ export default {
   border: none;
 }
 
-.el-collapse /deep/ .el-collapse-item__header {
+.el-collapse ::v-deep .el-collapse-item__header {
   padding-bottom: 10px;
   margin-bottom: 10px;
   color: #555;

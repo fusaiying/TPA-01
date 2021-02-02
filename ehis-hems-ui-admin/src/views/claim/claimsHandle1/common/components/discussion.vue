@@ -790,28 +790,28 @@
   .item-width {
     width: 220px;
   }
-  .long-input /deep/ .el-form-item__content {
+  .long-input ::v-deep .el-form-item__content {
     width: calc(100% - 150px);
   }
 
   .money_class{
     color: #2CC38E
   }
-  /deep/.el-tabs__item.is-disabled {
+  ::v-deep.el-tabs__item.is-disabled {
     color: #303133;
     cursor:default
   }
-  /deep/.el-tabs__item.is-active {
+  ::v-deep.el-tabs__item.is-active {
     color: #409EFF;
   }
   .span-tab {
     padding-right: 3%;
   }
-  /deep/.span-tab:hover {
+  ::v-deep.span-tab:hover {
     color: #1890ff;
     cursor: pointer;
   }
-  /deep/.span-tab {
+  ::v-deep.span-tab {
     height: 40px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -823,11 +823,11 @@
     color: #303133;
     position: relative;
   }
-  /deep/.span-tab.is-active {
+  ::v-deep.span-tab.is-active {
     color: #1890ff;
   }
 
-  /deep/.span-tab1 {
+  ::v-deep.span-tab1 {
     padding: 0 20px;
     height: 40px;
     -webkit-box-sizing: border-box;
@@ -841,13 +841,13 @@
     position: relative;
   }
 
-  /deep/.el-divider--horizontal {
+  ::v-deep.el-divider--horizontal {
     display: block;
     height: 1px;
     width: 100%;
     margin: 0 0;
   }
-  /deep/.info_span_col {
+  ::v-deep.info_span_col {
     text-align: right;
     vertical-align: middle;
     float: left;
@@ -858,7 +858,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
-  /deep/.to_right {
+  ::v-deep.to_right {
     width: 130px;
     text-align: right;
   }

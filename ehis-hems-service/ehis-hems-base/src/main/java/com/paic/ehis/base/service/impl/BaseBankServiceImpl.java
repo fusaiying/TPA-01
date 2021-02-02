@@ -2,13 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseBank;
 import com.paic.ehis.base.domain.BaseProviderSettle;
 import com.paic.ehis.base.domain.vo.BaseBankVo;
 import com.paic.ehis.base.mapper.BaseBankMapper;
 import com.paic.ehis.base.mapper.BaseProviderSettleMapper;
 import com.paic.ehis.base.service.IBaseBankService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +32,7 @@ public class BaseBankServiceImpl implements IBaseBankService
     @Autowired
     private BaseProviderSettleMapper baseProviderSettleMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询base_bank（银行信息）
@@ -111,8 +110,8 @@ public class BaseBankServiceImpl implements IBaseBankService
         baseProviderSettle.setSerialNo(PubFun.createMySqlMaxNoUseCache("settleSer",12,12));
         baseProviderSettle.setCreateTime(DateUtils.getNowDate());
         baseProviderSettle.setUpdateTime(DateUtils.getNowDate());
-        baseProviderSettle.setCreateBy(securityUtils.getUsername());
-        baseProviderSettle.setUpdateBy(securityUtils.getUsername());
+        baseProviderSettle.setCreateBy(SecurityUtils.getUsername());
+        baseProviderSettle.setUpdateBy(SecurityUtils.getUsername());
         baseProviderSettle.setStatus("Y");
         baseProviderSettle.setUpdateFlag("0");
         baseProviderSettle.setProviderCode(baseBanks.getProviderCode());
@@ -136,8 +135,8 @@ public class BaseBankServiceImpl implements IBaseBankService
                 baseBank.setStatus("Y");
                 baseBank.setCreateTime(DateUtils.getNowDate());
                 baseBank.setUpdateTime(DateUtils.getNowDate());
-                baseBank.setCreateBy(securityUtils.getUsername());
-                baseBank.setUpdateBy(securityUtils.getUsername());
+                baseBank.setCreateBy(SecurityUtils.getUsername());
+                baseBank.setUpdateBy(SecurityUtils.getUsername());
                 if("01".equals(baseBanks.getOrgFlag())){
                     baseBankMapper.insertBaseBank1(baseBank);
                 }else if("02".equals(baseBanks.getOrgFlag())){

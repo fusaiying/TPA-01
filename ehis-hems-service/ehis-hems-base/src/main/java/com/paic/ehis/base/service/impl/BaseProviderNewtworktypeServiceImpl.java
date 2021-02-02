@@ -2,13 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderNewtworktype;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
 import com.paic.ehis.base.domain.vo.BaseProviderNetworktypeVO;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper;
 import com.paic.ehis.base.service.IBaseProviderNewtworktypeService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +31,7 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
     @Autowired
     private BaseProviderNewtworktypeLogMapper baseProviderNewtworktypeLogMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_provider_newtworktypet(医疗网络类型)
      * 
@@ -108,16 +107,16 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
                     baseProviderNewtworktypeLog.setFailureTime(DateUtils.getNowDate());
                 }else{  //新增数据记录
                     baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
-                    baseProviderNewtworktype.setCreateBy(securityUtils.getUsername());
-                    baseProviderNewtworktype.setUpdateBy(securityUtils.getUsername());
+                    baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
+                    baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
                     baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
                     baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
                     baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
                 }
             }else{//新增数据记录
                 baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
-                baseProviderNewtworktype.setCreateBy(securityUtils.getUsername());
-                baseProviderNewtworktype.setUpdateBy(securityUtils.getUsername());
+                baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
+                baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
                 baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
                 baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
                 baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
@@ -130,8 +129,8 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
             baseProviderNewtworktypeLog.setSupplierCode(baseProviderNetworktypeVO.getProviderCode());
             baseProviderNewtworktypeLog.setStatus("Y");
             baseProviderNewtworktypeLog.setNetworktypeCode(baseProviderNewtworktype.getNetworktypeCode());
-            baseProviderNewtworktypeLog.setCreateBy(securityUtils.getUsername());
-            baseProviderNewtworktypeLog.setUpdateBy(securityUtils.getUsername());
+            baseProviderNewtworktypeLog.setCreateBy(SecurityUtils.getUsername());
+            baseProviderNewtworktypeLog.setUpdateBy(SecurityUtils.getUsername());
             baseProviderNewtworktypeLog.setCreateTime(DateUtils.getNowDate());
             baseProviderNewtworktypeLog.setUpdateTime(DateUtils.getNowDate());
             int i = baseProviderNewtworktypeLogMapper.insertBaseProviderNewtworktypeLog(baseProviderNewtworktypeLog);

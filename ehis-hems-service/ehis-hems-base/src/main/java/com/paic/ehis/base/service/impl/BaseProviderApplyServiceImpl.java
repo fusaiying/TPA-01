@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderApply;
 import com.paic.ehis.base.domain.BaseProviderWorktime;
 import com.paic.ehis.base.mapper.BaseProviderApplyMapper;
@@ -34,8 +34,7 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
     @Autowired
     private BaseProviderWorktimeMapper baseProviderWorktimeMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询base_provider_apply(服务商预约信息)
@@ -150,8 +149,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
 
         baseProviderApply.setCreateTime(DateUtils.getNowDate());
         baseProviderApply.setUpdateTime(DateUtils.getNowDate());
-        baseProviderApply.setCreateBy(securityUtils.getUsername());
-        baseProviderApply.setUpdateBy(securityUtils.getUsername());
+        baseProviderApply.setCreateBy(SecurityUtils.getUsername());
+        baseProviderApply.setUpdateBy(SecurityUtils.getUsername());
         baseProviderApply.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerApplySer",12,12));
         baseProviderApply.setUpdateFlag("0");
         baseProviderApply.setStatus("Y");
@@ -171,8 +170,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
             baseProviderWorktime.setNodeRemark(baseProviderApply.getWorkremark());
             baseProviderWorktime.setCreateTime(DateUtils.getNowDate());
             baseProviderWorktime.setUpdateTime(DateUtils.getNowDate());
-            baseProviderWorktime.setCreateBy(securityUtils.getUsername());
-            baseProviderWorktime.setUpdateBy(securityUtils.getUsername());
+            baseProviderWorktime.setCreateBy(SecurityUtils.getUsername());
+            baseProviderWorktime.setUpdateBy(SecurityUtils.getUsername());
             baseProviderWorktime.setTimeNode("work");
             baseProviderWorktime.setUpdateFlag("0");
             baseProviderWorktime.setStatus("Y");
@@ -191,8 +190,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
             baseProviderWorktime.setNodeRemark(baseProviderApply.getSaturdayremark());
             baseProviderWorktime.setCreateTime(DateUtils.getNowDate());
             baseProviderWorktime.setUpdateTime(DateUtils.getNowDate());
-            baseProviderWorktime.setCreateBy(securityUtils.getUsername());
-            baseProviderWorktime.setUpdateBy(securityUtils.getUsername());
+            baseProviderWorktime.setCreateBy(SecurityUtils.getUsername());
+            baseProviderWorktime.setUpdateBy(SecurityUtils.getUsername());
             baseProviderWorktime.setTimeNode("saturday");
             baseProviderWorktime.setUpdateFlag("0");
             baseProviderWorktime.setStatus("Y");
@@ -211,8 +210,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
             baseProviderWorktime.setNodeRemark(baseProviderApply.getSundayremark());
             baseProviderWorktime.setCreateTime(DateUtils.getNowDate());
             baseProviderWorktime.setUpdateTime(DateUtils.getNowDate());
-            baseProviderWorktime.setCreateBy(securityUtils.getUsername());
-            baseProviderWorktime.setUpdateBy(securityUtils.getUsername());
+            baseProviderWorktime.setCreateBy(SecurityUtils.getUsername());
+            baseProviderWorktime.setUpdateBy(SecurityUtils.getUsername());
             baseProviderWorktime.setTimeNode("sunday");
             baseProviderWorktime.setUpdateFlag("0");
             baseProviderWorktime.setStatus("Y");
@@ -231,8 +230,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
             baseProviderWorktime.setNodeRemark(baseProviderApply.getEmergencycallremark());
             baseProviderWorktime.setCreateTime(DateUtils.getNowDate());
             baseProviderWorktime.setUpdateTime(DateUtils.getNowDate());
-            baseProviderWorktime.setCreateBy(securityUtils.getUsername());
-            baseProviderWorktime.setUpdateBy(securityUtils.getUsername());
+            baseProviderWorktime.setCreateBy(SecurityUtils.getUsername());
+            baseProviderWorktime.setUpdateBy(SecurityUtils.getUsername());
             baseProviderWorktime.setTimeNode("emergencycall");
             baseProviderWorktime.setUpdateFlag("0");
             baseProviderWorktime.setStatus("Y");
@@ -251,8 +250,8 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
             baseProviderWorktime.setNodeRemark(baseProviderApply.getNightemergencyremark());
             baseProviderWorktime.setCreateTime(DateUtils.getNowDate());
             baseProviderWorktime.setUpdateTime(DateUtils.getNowDate());
-            baseProviderWorktime.setCreateBy(securityUtils.getUsername());
-            baseProviderWorktime.setUpdateBy(securityUtils.getUsername());
+            baseProviderWorktime.setCreateBy(SecurityUtils.getUsername());
+            baseProviderWorktime.setUpdateBy(SecurityUtils.getUsername());
             baseProviderWorktime.setTimeNode("nightemergency");
             baseProviderWorktime.setUpdateFlag("0");
             baseProviderWorktime.setStatus("Y");

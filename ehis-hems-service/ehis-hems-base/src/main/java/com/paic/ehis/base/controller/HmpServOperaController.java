@@ -2,6 +2,7 @@ package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PathUtil;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.file.FileUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
@@ -10,7 +11,6 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +47,7 @@ public class HmpServOperaController extends BaseController {
 
     @Autowired
     private IHmpAddressService hmpAddressService;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询供应商管理1列表
@@ -224,7 +223,7 @@ public class HmpServOperaController extends BaseController {
     @PostMapping("/uploadFile")
     public AjaxResult importData(MultipartFile file, @RequestParam("servcomno") String servcomno, @RequestParam("filedesc") String filedesc) throws Exception {
         // 获取登录用户名称
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         // 根据供应商编码获取供应商信息
         HmpServOpera hmpServOpera = hmpServOperaService.selectHmpServOperaById(servcomno);
         // 文件信息
@@ -304,7 +303,7 @@ public class HmpServOperaController extends BaseController {
      * @return
      */
     public String getOperator() {
-        return securityUtils.getUsername();
+        return SecurityUtils.getUsername();
     }
 
     /**

@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.PinYinUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.mapper.*;
@@ -32,15 +32,14 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     private BaseSupplierReceipMapper baseSupplierReceipMapper;
     @Autowired
     private PrivateHmpProviderMapper privateHmpProviderMapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseSupplierInfo addBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
         String serialNo = baseSupplierInfo.getSerialNo();
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         Date nowDate = DateUtils.getNowDate();
         if (StringUtils.isEmpty(serialNo)) {
             LocalDate date = LocalDate.now();

@@ -5,6 +5,7 @@ import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.enums.UserStatus;
 import com.paic.ehis.common.core.exception.BaseException;
+import com.paic.ehis.common.core.utils.RSAHelper;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.api.RemoteLogService;

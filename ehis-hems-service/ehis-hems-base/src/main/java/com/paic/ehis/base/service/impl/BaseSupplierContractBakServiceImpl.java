@@ -2,13 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.BaseSupplierContract;
 import com.paic.ehis.base.domain.BaseSupplierContractBak;
 import com.paic.ehis.base.mapper.BaseSupplierContractBakMapper;
 import com.paic.ehis.base.mapper.BaseSupplierContractMapper;
 import com.paic.ehis.base.service.IBaseSupplierContractBakService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +32,7 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
     @Autowired
     private BaseSupplierContractMapper baseSupplierContractMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_supplier_contract_bak（供应商合约）
      * 
@@ -119,13 +118,13 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
         List<BaseSupplierContract> baseSupplierContracts=baseSupplierContractMapper.selectBaseproviderCode(baseSupplierContractBak.getProviderCode());
         int count=0;
         if(!baseSupplierContracts.isEmpty()){
-            baseSupplierContractBak.setUpdateBy(securityUtils.getUsername());
+            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
             baseSupplierContractBak.setUpdateTime(new Date());
             count=baseSupplierContractBakMapper.updateBaseSupplierContractBak(baseSupplierContractBak);
         }else {
-            baseSupplierContractBak.setCreateBy(securityUtils.getUsername());
+            baseSupplierContractBak.setCreateBy(SecurityUtils.getUsername());
             baseSupplierContractBak.setCreateTime(new Date());
-            baseSupplierContractBak.setUpdateBy(securityUtils.getUsername());
+            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
             baseSupplierContractBak.setUpdateTime(new Date());
             count=baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
         }return count;

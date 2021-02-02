@@ -6,9 +6,12 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
+import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +26,8 @@ import java.util.List;
 public class CustomServiceDemandController extends BaseController {
     @Autowired
     private IDemandAcceptVoService iDemandAcceptVoService;
+    @Autowired
+    private IWorkHandleInfoService iWorkHandleInfoService;
 
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
@@ -32,7 +37,7 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
-   @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPersonalPool")
     public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {
         startPage();
@@ -59,5 +64,13 @@ public class CustomServiceDemandController extends BaseController {
         demandAcceptVo.setBusinessType("信息需求");
         demandAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
         return toAjax(iDemandAcceptVoService.insertServiceInfo(demandAcceptVo));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/insertServiceProcessing")
+    public AjaxResult insertServiceProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
+    {
+        return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
     }
 }

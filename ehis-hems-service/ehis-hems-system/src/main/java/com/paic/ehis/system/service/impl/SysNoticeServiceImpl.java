@@ -1,18 +1,17 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.paic.ehis.system.domain.SysNotice;
 import com.paic.ehis.system.mapper.SysNoticeMapper;
 import com.paic.ehis.system.service.ISysNoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 公告 服务层实现
  * 
- * @author admin
+ *
  */
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService

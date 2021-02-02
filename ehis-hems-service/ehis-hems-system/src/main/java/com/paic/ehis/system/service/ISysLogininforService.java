@@ -1,12 +1,13 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
 import com.paic.ehis.system.domain.SysLogininfor;
+
+import java.util.List;
 
 /**
  * 系统访问日志情况信息 服务层
  * 
- * @author admin
+ *
  */
 public interface ISysLogininforService
 {

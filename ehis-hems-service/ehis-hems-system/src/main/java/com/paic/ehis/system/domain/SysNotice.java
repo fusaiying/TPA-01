@@ -1,16 +1,16 @@
 package com.paic.ehis.system.domain;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.paic.ehis.common.core.web.domain.BaseEntity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 通知公告表 sys_notice
  * 
- * @author admin
+ *
  */
 public class SysNotice extends BaseEntity
 {

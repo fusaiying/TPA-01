@@ -1,15 +1,14 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
+import com.paic.ehis.system.domain.SysDictData;
 import org.apache.ibatis.annotations.Param;
 
-import com.paic.ehis.system.domain.SysDictData;
+import java.util.List;
 
 /**
  * 字典表 数据层
  * 
- * @author admin
+ *
  */
 public interface SysDictDataMapper
 {
@@ -94,5 +93,4 @@ public interface SysDictDataMapper
      * @return 结果
      */
     public int updateDictDataType(@Param("oldDictType") String oldDictType, @Param("newDictType") String newDictType);
-
 }

@@ -408,21 +408,19 @@
       },
       //获取按钮
       obtainButton(s){
-        if(s.workNumber==null&&this.ids.length===0){
+        if(s.workOrderNo==null&&this.ids.length===0){
           alert("请先选中一行！")
         }else {
         if (s.workOrderNo!=null) {
-          console.log(s)
-          console.log("工单号",s.workOrderNo)
-          let workOrderNo=s.workNumber
+          let workOrderNo=s.workOrderNo
           demandObtain(workOrderNo).then(res => {
-            console.log('获取按钮', res.rows)
             if (res != null && res.code === 200) {
-              console.log('获取', res.msg)
             }
           }).catch(res => {
 
           })
+          this.searchHandle()
+
         }else {
           let workOrderNo=this.ids
           console.log("ids:",a)
@@ -439,10 +437,12 @@
       }
         },
       //处理按钮
-      dealButton(){
+      dealButton(s){
           this.$router.push({
             path: '/customService/deal',
-            isEmpty: false
+            query:{
+              workOrderNo:s.workOrderNo,
+            }
           })
       },
       // 多选框选中数据

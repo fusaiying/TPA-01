@@ -425,11 +425,15 @@
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
+          <div style="text-align: right; margin-right: 8px;">
+            <el-button type="primary" size="mini" @click="add">新增</el-button>
+            <el-button type="primary" size="mini" @click="obtainButton">获取</el-button>
+          </div>
           <el-divider/>
        <el-row>
         <el-col :span="8">
-        <el-form-item label="业务处理情况" prop="bank" >
-          <el-radio-group v-model="ruleForm.bank">
+        <el-form-item label="业务处理情况" prop="businessProcess" >
+          <el-radio-group v-model="ruleForm.businessProcess">
             <el-radio   :label="1">成功</el-radio>
             <el-radio   :label="2">响应</el-radio>
           </el-radio-group>
@@ -437,18 +441,18 @@
         </el-col>
         </el-row>
           <el-row>
-        <el-form-item label="处理说明：" prop="textarea">
+        <el-form-item label="处理说明：" prop="remark">
           <el-input
             type="textarea"
             :rows="2"
             placeholder="请输入内容"
-            v-model="ruleForm.textarea">
+            v-model="ruleForm.remark">
           </el-input>
         </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="客户反馈" prop="bank" >
-              <el-radio-group v-model="ruleForm.bank">
+            <el-form-item label="客户反馈" prop="customerFeedback" >
+              <el-radio-group v-model="ruleForm.customerFeedback">
                 <el-radio   :label="1">满意</el-radio>
                 <el-radio   :label="2">接受</el-radio>
                 <el-radio   :label="3">不接受</el-radio>
@@ -458,8 +462,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="结案类型：" prop="Service">
-                <el-select v-model="ruleForm.service" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+              <el-form-item label="结案类型：" prop="closeType">
+                <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
                   <el-option v-for="item in serves" :key="item.value" :label="item.label"
                              :value="item.value"/>
                 </el-select>
@@ -524,7 +528,7 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+  import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd} from '@/api/customService/demand'
   import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
   import coOrganizer from "../common/modul/coOrganizer";
@@ -545,19 +549,16 @@
     data() {
 
       return {
+        //传过来的工单号
+        workOrderNo:"",
         //需要填入数据的部分
         ruleForm:{
-          radio:"",
-          service:"",
-          phone:"",
-          priority:"",
-          lxperson:"",
-          bankaa: "",
-          bankbb: "",
-          bankcc: "",
-          bankdd: "",
-          bank:"2",
-          textarea:"",
+          workOrderNo:"",
+          businessProcess:"",
+          remark:"",
+          customerFeedback:"",
+          closeType:"",
+          costsIncurred:""
         },
         // 表单校验
         rules: {
@@ -594,46 +595,17 @@
           textarea: [
             {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
-          // email: [
-          //   {
-          //     type: "email",
-          //     message: "'请输入正确的邮箱地址",
-          //     trigger: ["blur", "change"]
-          //   }
-          // ],
-          // phone: [
-          //   {
-          //     pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-          //     message: "请输入正确的手机号码",
-          //     trigger: "blur"
-          //   }
-          // ]
+
         },
 
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
+        //新增的数据传输
         sendForm: {
-          channle:"",
-          textarea:"",
-          service: "1",
-          channel: "",
-          acceptor: "",
-          acceptorTime:"",
-          handler: "",
-          handlerTime: "",
-          workNumber: "",
-          policyNumber: "",
-          secondNumber: "",
-          insuredName: "",
-          beInsuredName: "",
-          beInsuredNo: "",
-          organization: "",
-          appointmentTime:"",
-          priority:"",
-          vip:"",
-          phone:"",
-          state:""
+          workOrderNo:'',
+          businessProcess:'',
+
         },
         caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
@@ -666,6 +638,7 @@
       }
     },
     created() {
+      this.workOrderNo=this.$route.query.workOrderNo;
       debugger;
       window.aaa = this;
       this.searchHandle()
@@ -677,6 +650,26 @@
     },
 
     methods: {
+      //新增按钮
+
+      add(){
+        let addQueryParams=this.ruleForm
+        addQueryParams.workOrderNo=this.workOrderNo
+        console.log("sdas",this.workOrderNo)
+        dealAdd(addQueryParams).then(res => {
+          console.log("增加",addQueryParams)
+          if (res != null && res.code === 200) {
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "提交失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
       //上传附件
       upload(){ this.$refs.upload.open();},
       //下载
@@ -691,7 +684,6 @@
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
-        debugger;
         let query = {
           pageNum: this.queryParams.pageNum,
           pageSize: this.queryParams.pageSize,

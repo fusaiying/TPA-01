@@ -1,17 +1,17 @@
 package com.paic.ehis.gateway.config;
 
+import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
 import com.paic.ehis.gateway.handler.SentinelFallbackHandler;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import com.alibaba.csp.sentinel.adapter.gateway.sc.SentinelGatewayFilter;
 
 /**
  * 网关限流配置
  * 
- * @author admin
+ *
  */
 @Configuration
 public class GatewayConfig

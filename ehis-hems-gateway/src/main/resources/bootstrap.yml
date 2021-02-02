@@ -16,20 +16,14 @@ spring:
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: http://106.54.127.177:8848
-        #命名空间
-        namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6
+        server-addr: 127.0.0.1:8848
       config:
         # 配置中心地址
-        server-addr: http://106.54.127.177:8848
-#        server-addr: http://127.0.0.1:8848
+        server-addr: 127.0.0.1:8848
         # 配置文件格式
         file-extension: yml
         # 共享配置
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
-        #命名空间地址
-        namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6
-
     sentinel:
       # 取消控制台懒加载
       eager: true
@@ -40,9 +34,8 @@ spring:
       datasource:
         ds1:
           nacos:
-            server-addr: http://106.54.127.177:8848
-#            server-addr: http://127.0.0.1:8848
-            dataId: sentinel-sino-gateway
+            server-addr: 127.0.0.1:8848
+            dataId: sentinel-ehis-hems-gateway
             groupId: DEFAULT_GROUP
             data-type: json
             rule-type: flow

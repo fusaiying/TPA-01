@@ -54,10 +54,10 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         
-        <dependency>
+       <!-- <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-datasource</artifactId>
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>com.paic.ehis</groupId>

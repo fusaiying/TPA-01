@@ -35,7 +35,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 查询文件信息列表
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpFileInfo hmpFileInfo)
     {
@@ -47,7 +46,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 导出文件信息列表
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:export')")
     @Log(title = "文件信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpFileInfo hmpFileInfo) throws IOException
@@ -60,7 +58,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 导出文件信息列表
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:download')")
     @Log(title = "下载文件", businessType = BusinessType.EXPORT)
     @PostMapping("/download")
     public void download(HttpServletResponse response,@RequestBody HmpFileInfo hmpFileInfo) throws IOException
@@ -77,7 +74,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 获取文件信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:query')")
     @GetMapping(value = "/{fileCode}")
     public AjaxResult getInfo(@PathVariable("fileCode") String fileCode)
     {
@@ -87,7 +83,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 新增文件信息
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:add')")
     @Log(title = "文件信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody HmpFileInfo hmpFileInfo)
@@ -98,7 +93,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 修改文件信息
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:edit')")
     @Log(title = "文件信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody HmpFileInfo hmpFileInfo)
@@ -109,7 +103,6 @@ public class HmpFileInfoController extends BaseController
     /**
      * 删除文件信息
      */
-    @PreAuthorize("@ss.hasPermi('system:fileInfo:remove')")
     @Log(title = "文件信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{fileCodes}")
     public AjaxResult remove(@PathVariable String[] fileCodes)

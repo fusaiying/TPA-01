@@ -1,13 +1,13 @@
 package com.paic.ehis.gen.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.gen.domain.GenTable;
+
+import java.util.List;
 
 /**
  * 业务 数据层
  * 
- * @author admin
+ *
  */
 public interface GenTableMapper
 {
@@ -34,6 +34,13 @@ public interface GenTableMapper
      * @return 数据库表集合
      */
     public List<GenTable> selectDbTableListByNames(String[] tableNames);
+
+    /**
+     * 查询所有表信息
+     * 
+     * @return 表信息集合
+     */
+    public List<GenTable> selectGenTableAll();
 
     /**
      * 查询表ID业务信息

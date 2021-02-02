@@ -1,13 +1,14 @@
 package com.paic.ehis.gen.util;
 
-import java.util.Properties;
-import org.apache.velocity.app.Velocity;
 import com.paic.ehis.common.core.constant.Constants;
+import org.apache.velocity.app.Velocity;
+
+import java.util.Properties;
 
 /**
  * VelocityEngine工厂
  * 
- * @author admin
+ *
  */
 public class VelocityInitializer
 {

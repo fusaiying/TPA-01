@@ -1,13 +1,13 @@
 package com.paic.ehis.gen.service;
 
-import java.util.List;
-
 import com.paic.ehis.gen.domain.GenTableColumn;
+
+import java.util.List;
 
 /**
  * 业务字段 服务层
  * 
- * @author admin
+ *
  */
 public interface IGenTableColumnService
 {

@@ -38,7 +38,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 查询产品包信息列表
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:list')")
     @GetMapping("/list")
     public TableDataInfo list(Hpproductpackageinfo hpproductpackageinfo)
     {
@@ -50,7 +49,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 导出产品包信息列表
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:export')")
     @Log(title = "产品包信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Hpproductpackageinfo hpproductpackageinfo) throws IOException
@@ -63,7 +61,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 获取产品包信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:query')")
     @GetMapping(value = "/{productpackageno}")
     public AjaxResult getInfo(@PathVariable("productpackageno") String productpackageno)
     {
@@ -73,7 +70,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 新增产品包信息
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:add')")
     @Log(title = "产品包信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Hpproductpackageinfo hpproductpackageinfo)
@@ -84,7 +80,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 修改产品包信息
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:edit')")
     @Log(title = "产品包信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Hpproductpackageinfo hpproductpackageinfo)
@@ -95,7 +90,6 @@ public class HpproductpackageinfoController extends BaseController
     /**
      * 删除产品包信息
      */
-    @PreAuthorize("@ss.hasPermi('product:productpacketinfo:remove')")
     @Log(title = "产品包信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{productpackagenos}")
     public AjaxResult remove(@PathVariable String[] productpackagenos)

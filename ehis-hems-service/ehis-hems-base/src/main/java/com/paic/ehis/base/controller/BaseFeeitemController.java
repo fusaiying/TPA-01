@@ -10,7 +10,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseFeeitem;
 import com.paic.ehis.base.service.IBaseFeeitemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 查询费用项信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseFeeitem baseFeeitem)
     {
@@ -45,7 +44,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 导出费用项信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:export')")
     @Log(title = "费用项信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response,BaseFeeitem baseFeeitem) throws IOException
@@ -58,7 +56,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 获取费用项信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:query')")
     @GetMapping(value = "/{feeitemcode}")
     public AjaxResult getInfo(@PathVariable("feeitemcode") String feeitemcode)
     {
@@ -68,7 +65,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 新增费用项信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:add')")
     @Log(title = "费用项信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseFeeitem baseFeeitem)
@@ -87,7 +83,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 修改费用项信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:edit')")
     @Log(title = "费用项信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseFeeitem baseFeeitem)
@@ -105,7 +100,6 @@ public class BaseFeeitemController extends BaseController
     /**
      * 删除费用项信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:feeitem:remove')")
     @Log(title = "费用项信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{feeitemCodes}")
     public AjaxResult remove(@PathVariable String[] feeitemCodes)

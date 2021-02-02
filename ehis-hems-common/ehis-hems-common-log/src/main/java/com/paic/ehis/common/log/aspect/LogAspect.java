@@ -1,13 +1,13 @@
 package com.paic.ehis.common.log.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.ServletUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.ip.IpUtils;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessStatus;
 import com.paic.ehis.common.log.service.AsyncLogService;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.system.api.domain.SysOperLog;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -43,6 +43,8 @@ public class LogAspect
     
     @Autowired
     private AsyncLogService asyncLogService;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     // 配置织入点
     @Pointcut("@annotation(com.paic.ehis.common.log.annotation.Log)")
@@ -94,7 +96,7 @@ public class LogAspect
             operLog.setJsonResult(JSON.toJSONString(jsonResult));
 
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
-            String username = SecurityUtils.getUsername();
+            String username = securityUtils.getUsername();
             if (StringUtils.isNotBlank(username))
             {
                 operLog.setOperName(username);

@@ -14,7 +14,7 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,11 +48,12 @@ public class HmpContractController extends BaseController {
 
     @Autowired
     private IHmpServProjectService hmpServProjectService;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     /**
      * 查询供应商合约列表
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpContract hmpContract) throws ParseException {
         startPage();
@@ -63,7 +64,6 @@ public class HmpContractController extends BaseController {
     /**
      * 导出供应商合约列表
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:export')")
     @Log(title = "供应商合约", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpContract hmpContract) throws IOException {
@@ -75,7 +75,6 @@ public class HmpContractController extends BaseController {
     /**
      * 获取供应商合约详细信息
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:query')")
     @GetMapping(value = "/{contractno}")
     public AjaxResult getInfo(@PathVariable("contractno") String contractno) {
         return AjaxResult.success(hmpContractService.selectHmpContractById(contractno));
@@ -84,7 +83,6 @@ public class HmpContractController extends BaseController {
     /**
      * 新增供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:add')")
     @Log(title = "供应商合约 - 新增", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ContractVO contractVO) {
@@ -99,7 +97,7 @@ public class HmpContractController extends BaseController {
         // 状态01 可用
         hmpContract.setConstate("01");
         // 操作员
-        hmpContract.setOperator(SecurityUtils.getUsername());
+        hmpContract.setOperator(securityUtils.getUsername());
 
         DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM);
         Date date = new Date();
@@ -161,7 +159,6 @@ public class HmpContractController extends BaseController {
     /**
      * 修改供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:edit')")
     @Log(title = "供应商合约", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ContractVO contractVO) {
@@ -219,7 +216,6 @@ public class HmpContractController extends BaseController {
     /**
      * 删除供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:remove')")
     @Log(title = "供应商合约", businessType = BusinessType.DELETE)
     @DeleteMapping("/{contractnos}")
     public AjaxResult remove(@PathVariable String[] contractnos) {
@@ -252,7 +248,7 @@ public class HmpContractController extends BaseController {
     @PostMapping("/uploadFile")
     public AjaxResult importData(MultipartFile file, @RequestParam("contractno") String contractno, @RequestParam("filedesc") String filedesc) throws Exception {
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         // 根据合约信息
         HmpContract hmpContract = hmpContractService.selectHmpContractById(contractno);
         // 文件信息
@@ -317,7 +313,7 @@ public class HmpContractController extends BaseController {
      * @return
      */
     public String getOperator() {
-        return SecurityUtils.getUsername();
+        return securityUtils.getUsername();
     }
 
     /**

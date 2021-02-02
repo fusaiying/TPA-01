@@ -15,7 +15,7 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -174,7 +174,7 @@ public class HmpProdInfoController extends BaseController {
     public AjaxResult addProduct(@RequestBody ProductInfo product)
     {
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         //转化请求中的数据为实体类
         HmpProdInfo productInfo = product.getProdInfo();
@@ -356,7 +356,7 @@ public class HmpProdInfoController extends BaseController {
     public AjaxResult saveServiceCity(@RequestBody ProductInfo product)
     {
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         //转化请求中的数据为实体类
         //Object info = paramMap.get("productInfo");
@@ -443,7 +443,7 @@ public class HmpProdInfoController extends BaseController {
     {
 
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         if(file.isEmpty()){
             return AjaxResult.error("上传文件为空！");
@@ -532,7 +532,7 @@ public class HmpProdInfoController extends BaseController {
         }
 
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         //审核信息入库
         HmpAuditTrack auditTrack = productInfo.getAudit();
@@ -574,7 +574,7 @@ public class HmpProdInfoController extends BaseController {
         }
 
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         //审核信息入库
         HmpAuditTrack auditTrack = productInfo.getAudit();
@@ -658,7 +658,7 @@ public class HmpProdInfoController extends BaseController {
         }
 
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         //更改产品状态、操作员
         productInfoDB.setProductstate("04");
         productInfoDB.setModifyoperator(username);
@@ -690,7 +690,7 @@ public class HmpProdInfoController extends BaseController {
         }
 
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         //更改产品状态、操作员
         productInfoDB.setProductstate("02");
         productInfoDB.setModifyoperator(username);
@@ -720,7 +720,7 @@ public class HmpProdInfoController extends BaseController {
     @PostMapping("/productUpdate")
     public AjaxResult productUpdate(@RequestBody ProductInfo product){
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         //转化请求中的数据为实体类
         HmpProdInfo productInfo = product.getProdInfo();
@@ -772,7 +772,7 @@ public class HmpProdInfoController extends BaseController {
     @PostMapping("/updateProject")
     public AjaxResult updateProject(@RequestBody ProductInfo product){
         //获取登录用户名
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
 
         HmpProdInfo prodInfo = product.getProdInfo();
         String productNo = prodInfo.getProductno();

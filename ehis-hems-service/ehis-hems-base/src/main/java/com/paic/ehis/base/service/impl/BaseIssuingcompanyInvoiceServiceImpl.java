@@ -22,6 +22,8 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     @Autowired
     private BaseIssuingcompanyInvoiceMapper baseIssuingcompanyInvoiceMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询出单公司开票信息 
      * 
@@ -56,9 +58,9 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     public int insertBaseIssuingcompanyInvoice(BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
         baseIssuingcompanyInvoice.setStatus("Y");
-        baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyInvoice.setCreateBy(securityUtils.getUsername());
         baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyInvoice.setUpdateBy(securityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyInvoiceMapper.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
     }
@@ -72,7 +74,7 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     @Override
     public int updateBaseIssuingcompanyInvoice(BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
-        baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyInvoice.setUpdateBy(securityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyInvoiceMapper.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
     }

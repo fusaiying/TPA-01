@@ -2,6 +2,7 @@ package com.paic.ehis.common.core.utils.file;
 
 import com.paic.ehis.common.core.utils.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -253,4 +254,47 @@ public class FileUtils extends org.apache.commons.io.FileUtils
         String encode = URLEncoder.encode(s, StandardCharsets.UTF_8.toString());
         return encode.replaceAll("\\+", "%20");
     }
+
+    public static boolean saveFileByMultipartFile(MultipartFile file, String url){
+        if(file.isEmpty() || StringUtils.isEmpty(url)){
+            return false;
+        }
+        url = url + file.getOriginalFilename();
+        File targetFile = new File(url);
+        if(!targetFile.exists()){
+            String dirUrl = targetFile.getAbsolutePath();
+            if(dirUrl.contains(File.separator)){
+                dirUrl = dirUrl.substring(0,dirUrl.lastIndexOf(File.separator));
+            }else{
+                return false;
+            }
+            File dir = new File(dirUrl);
+            if(!dir.exists()){
+                boolean mkdirs = dir.mkdirs();
+                if(!mkdirs){
+                    return false;
+                }
+            }
+            try {
+                file.transferTo(targetFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }else {
+            boolean delete = targetFile.delete();
+            if(!delete){
+                return false;
+            }
+            try {
+                file.transferTo(targetFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+    }
+
+
 }

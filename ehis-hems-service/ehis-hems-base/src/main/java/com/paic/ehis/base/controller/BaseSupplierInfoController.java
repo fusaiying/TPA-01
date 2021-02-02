@@ -9,7 +9,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseSupplierInfo;
 import com.paic.ehis.base.service.IBaseSupplierInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 查询base_supplier_info（供应商基础信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseSupplierInfo baseSupplierInfo) throws Exception {
         startPage();
@@ -56,7 +55,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 导出base_supplier_info（供应商基础信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierInfo baseSupplierInfo) throws Exception
@@ -69,7 +67,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 获取base_supplier_info（供应商基础信息）详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{servcomNo}")
     public AjaxResult getInfo(@PathVariable("servcomNo") String servcomNo)
     {
@@ -79,7 +76,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 新增base_supplier_info（供应商基础信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierInfo baseSupplierInfo)
@@ -90,7 +86,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 修改base_supplier_info（供应商基础信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierInfo baseSupplierInfo)
@@ -101,7 +96,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 删除base_supplier_info（供应商基础信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{servcomNos}")
     public AjaxResult remove(@PathVariable String[] servcomNos)
@@ -112,7 +106,6 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 查询base_supplier_info（供应商基础信息）所有列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/allList")
     public AjaxResult getAllBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
 

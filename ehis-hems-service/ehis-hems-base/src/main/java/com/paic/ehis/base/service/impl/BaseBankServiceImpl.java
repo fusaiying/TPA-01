@@ -32,6 +32,9 @@ public class BaseBankServiceImpl implements IBaseBankService
     @Autowired
     private BaseProviderSettleMapper baseProviderSettleMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     /**
      * 查询base_bank（银行信息）
      * 
@@ -108,8 +111,8 @@ public class BaseBankServiceImpl implements IBaseBankService
         baseProviderSettle.setSerialNo(PubFun.createMySqlMaxNoUseCache("settleSer",12,12));
         baseProviderSettle.setCreateTime(DateUtils.getNowDate());
         baseProviderSettle.setUpdateTime(DateUtils.getNowDate());
-        baseProviderSettle.setCreateBy(SecurityUtils.getUsername());
-        baseProviderSettle.setUpdateBy(SecurityUtils.getUsername());
+        baseProviderSettle.setCreateBy(securityUtils.getUsername());
+        baseProviderSettle.setUpdateBy(securityUtils.getUsername());
         baseProviderSettle.setStatus("Y");
         baseProviderSettle.setUpdateFlag("0");
         baseProviderSettle.setProviderCode(baseBanks.getProviderCode());
@@ -133,8 +136,8 @@ public class BaseBankServiceImpl implements IBaseBankService
                 baseBank.setStatus("Y");
                 baseBank.setCreateTime(DateUtils.getNowDate());
                 baseBank.setUpdateTime(DateUtils.getNowDate());
-                baseBank.setCreateBy(SecurityUtils.getUsername());
-                baseBank.setUpdateBy(SecurityUtils.getUsername());
+                baseBank.setCreateBy(securityUtils.getUsername());
+                baseBank.setUpdateBy(securityUtils.getUsername());
                 if("01".equals(baseBanks.getOrgFlag())){
                     baseBankMapper.insertBaseBank1(baseBank);
                 }else if("02".equals(baseBanks.getOrgFlag())){

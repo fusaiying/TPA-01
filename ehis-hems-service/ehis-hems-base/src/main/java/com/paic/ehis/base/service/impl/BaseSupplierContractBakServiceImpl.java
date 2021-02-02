@@ -32,6 +32,8 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
     @Autowired
     private BaseSupplierContractMapper baseSupplierContractMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_supplier_contract_bak（供应商合约）
      * 
@@ -117,13 +119,13 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
         List<BaseSupplierContract> baseSupplierContracts=baseSupplierContractMapper.selectBaseproviderCode(baseSupplierContractBak.getProviderCode());
         int count=0;
         if(!baseSupplierContracts.isEmpty()){
-            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
+            baseSupplierContractBak.setUpdateBy(securityUtils.getUsername());
             baseSupplierContractBak.setUpdateTime(new Date());
             count=baseSupplierContractBakMapper.updateBaseSupplierContractBak(baseSupplierContractBak);
         }else {
-            baseSupplierContractBak.setCreateBy(SecurityUtils.getUsername());
+            baseSupplierContractBak.setCreateBy(securityUtils.getUsername());
             baseSupplierContractBak.setCreateTime(new Date());
-            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
+            baseSupplierContractBak.setUpdateBy(securityUtils.getUsername());
             baseSupplierContractBak.setUpdateTime(new Date());
             count=baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
         }return count;

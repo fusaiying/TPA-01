@@ -11,7 +11,7 @@ import com.paic.ehis.base.domain.dto.IssuingAndCompanyDTO;
 import com.paic.ehis.base.domain.vo.IssuingCompanyVo;
 import com.paic.ehis.base.service.IBaseIssuingcompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,6 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 查询出单公司信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseIssuingcompany baseIssuingcompany)
     {
@@ -47,7 +46,6 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 导出出单公司信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:export')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompany baseIssuingcompany) throws IOException
@@ -60,7 +58,6 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 获取出单公司信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:query')")
     @GetMapping(value = "/{companycode}")
     public AjaxResult getInfo(@PathVariable("companycode") String companyCode)
     {
@@ -72,7 +69,6 @@ public class BaseIssuingcompanyController extends BaseController
      * 传入数据：出单公司名称companyname、出单公司简写名称simplename
      * 传出数据：出单公司名称companyname、出单公司简写名称simplename、出单公司编码companycode
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:add')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.INSERT)
     @PostMapping("/addissuingAndCompanyDTO")
     public AjaxResult add(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
@@ -83,7 +79,6 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 修改出单公司信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:edit')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO)
@@ -95,7 +90,6 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 删除出单公司信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:issuingcompany:remove')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{companyCodes}")
     public AjaxResult remove(@PathVariable String[] companyCodes)

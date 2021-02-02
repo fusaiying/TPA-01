@@ -32,13 +32,15 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     private BaseSupplierReceipMapper baseSupplierReceipMapper;
     @Autowired
     private PrivateHmpProviderMapper privateHmpProviderMapper;
+    @Autowired
+    private SecurityUtils securityUtils;
 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public BaseSupplierInfo addBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
         String serialNo = baseSupplierInfo.getSerialNo();
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         Date nowDate = DateUtils.getNowDate();
         if (StringUtils.isEmpty(serialNo)) {
             LocalDate date = LocalDate.now();

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 	
-    <artifactId>ehis-hems-modules-system</artifactId>
+    <artifactId>ehis-hems-system</artifactId>
 
     <description>
         系统模块

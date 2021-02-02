@@ -25,6 +25,8 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_contract_service（合约服务项目）
      * 
@@ -84,7 +86,7 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
     @Override
     public int insertForeach(List<BaseContractService> baseContractServiceList){
         int result = 0;
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         Date nowDate = new Date();
         for(BaseContractService bean : baseContractServiceList ) {
             bean.setUpdateBy(username);

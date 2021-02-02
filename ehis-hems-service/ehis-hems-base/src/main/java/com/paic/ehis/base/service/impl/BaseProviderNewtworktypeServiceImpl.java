@@ -31,6 +31,8 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
     @Autowired
     private BaseProviderNewtworktypeLogMapper baseProviderNewtworktypeLogMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_provider_newtworktypet(医疗网络类型)
      * 
@@ -106,16 +108,16 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
                     baseProviderNewtworktypeLog.setFailureTime(DateUtils.getNowDate());
                 }else{  //新增数据记录
                     baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
-                    baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
-                    baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
+                    baseProviderNewtworktype.setCreateBy(securityUtils.getUsername());
+                    baseProviderNewtworktype.setUpdateBy(securityUtils.getUsername());
                     baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
                     baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
                     baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
                 }
             }else{//新增数据记录
                 baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
-                baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
-                baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
+                baseProviderNewtworktype.setCreateBy(securityUtils.getUsername());
+                baseProviderNewtworktype.setUpdateBy(securityUtils.getUsername());
                 baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
                 baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
                 baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
@@ -128,8 +130,8 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
             baseProviderNewtworktypeLog.setSupplierCode(baseProviderNetworktypeVO.getProviderCode());
             baseProviderNewtworktypeLog.setStatus("Y");
             baseProviderNewtworktypeLog.setNetworktypeCode(baseProviderNewtworktype.getNetworktypeCode());
-            baseProviderNewtworktypeLog.setCreateBy(SecurityUtils.getUsername());
-            baseProviderNewtworktypeLog.setUpdateBy(SecurityUtils.getUsername());
+            baseProviderNewtworktypeLog.setCreateBy(securityUtils.getUsername());
+            baseProviderNewtworktypeLog.setUpdateBy(securityUtils.getUsername());
             baseProviderNewtworktypeLog.setCreateTime(DateUtils.getNowDate());
             baseProviderNewtworktypeLog.setUpdateTime(DateUtils.getNowDate());
             int i = baseProviderNewtworktypeLogMapper.insertBaseProviderNewtworktypeLog(baseProviderNewtworktypeLog);

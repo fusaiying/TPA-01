@@ -1,17 +1,17 @@
 package com.paic.ehis.system.api.factory;
 
-import com.paic.ehis.system.api.domain.SysOperLog;
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.system.api.RemoteLogService;
+import com.paic.ehis.system.api.domain.SysOperLog;
+import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import com.paic.ehis.common.core.domain.R;
-import feign.hystrix.FallbackFactory;
 
 /**
  * 日志服务降级处理
  * 
- * @author admin
+ *
  */
 @Component
 public class RemoteLogFallbackFactory implements FallbackFactory<RemoteLogService>

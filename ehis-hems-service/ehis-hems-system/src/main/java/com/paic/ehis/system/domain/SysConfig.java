@@ -1,17 +1,18 @@
 package com.paic.ehis.system.domain;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.annotation.Excel.ColumnType;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * 参数配置表 sys_config
  * 
- * @author admin
+ *
  */
 public class SysConfig extends BaseEntity
 {

@@ -1,9 +1,9 @@
 # Tomcat
-server: 
+server:
   port: 9200
 
 # Spring
-spring: 
+spring:
   application:
     # 应用名称
     name: ehis-hems-auth
@@ -26,4 +26,3 @@ spring:
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         #命名空间地址
         namespace: 99a47c0f-399f-492a-adc7-d91b7f41b668
-

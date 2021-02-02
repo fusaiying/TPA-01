@@ -139,10 +139,10 @@ export default {
 }
 </script>
 <style scoped>
-.el-form-item /deep/ .el-form-item__error {
+.el-form-item ::v-deep .el-form-item__error {
   padding-left: 30px;
 }
-.item-reson /deep/ .el-form-item__error {
+.item-reson ::v-deep .el-form-item__error {
   padding-left: 0;
 }
 </style>

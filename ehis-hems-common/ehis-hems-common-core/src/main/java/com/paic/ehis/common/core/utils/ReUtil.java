@@ -1,13 +1,13 @@
 package com.paic.ehis.common.core.utils;
 
+import com.paic.ehis.common.core.text.Convert;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.paic.ehis.common.core.text.Convert;
 
 public class ReUtil
 {

@@ -517,7 +517,7 @@
   z-index: 999;
   width: 97.2%
 }
-.box-card /deep/.el-card__body {
+.box-card ::v-deep.el-card__body {
   height: calc(100% - 55px)
 }
 .block {

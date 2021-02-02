@@ -50,6 +50,8 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     @Autowired
     private IBaseSupplierContractService baseSupplierContractService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_provider_info(服务商基本信息)
      * 
@@ -227,8 +229,8 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
             }
             baseProviderInfo.setCreateTime(DateUtils.getNowDate());
             baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
-            baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
-            baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setCreateBy(securityUtils.getUsername());
+            baseProviderInfo.setUpdateBy(securityUtils.getUsername());
             baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
             baseProviderInfo.setStatus("Y");
             baseProviderInfo.setUpdateFlag("0");
@@ -242,8 +244,8 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         }else{*/ //服务商编码为空时新增服务商基本信息
             baseProviderInfo.setCreateTime(DateUtils.getNowDate());
             baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
-            baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
-            baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+            baseProviderInfo.setCreateBy(securityUtils.getUsername());
+            baseProviderInfo.setUpdateBy(securityUtils.getUsername());
             baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
            if("01".equals(baseProviderInfo.getOrgFlag())){
                baseProviderInfo.setProviderCode("H"+ PubFun.createMySqlMaxNoUseCache("hospitalCode",10,9));
@@ -306,8 +308,8 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         }
         baseProviderInfo.setCreateTime(DateUtils.getNowDate());
         baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
-        baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
-        baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
+        baseProviderInfo.setCreateBy(securityUtils.getUsername());
+        baseProviderInfo.setUpdateBy(securityUtils.getUsername());
         BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
         if(baseProviderInfoNew != null){
             baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
@@ -472,8 +474,8 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
 
         baseCheckInfo.setCreateTime(DateUtils.getNowDate());
         baseCheckInfo.setUpdateTime(DateUtils.getNowDate());
-        baseCheckInfo.setCreateBy(SecurityUtils.getUsername());
-        baseCheckInfo.setUpdateBy(SecurityUtils.getUsername());
+        baseCheckInfo.setCreateBy(securityUtils.getUsername());
+        baseCheckInfo.setUpdateBy(securityUtils.getUsername());
         baseCheckInfo.setStatus("Y");
         //baseCheckInfo.setCreateBy();   //操作人信息
         baseCheckInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseCheckSer",12,12));

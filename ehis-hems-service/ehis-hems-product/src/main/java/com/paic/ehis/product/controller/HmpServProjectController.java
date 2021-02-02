@@ -11,7 +11,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.product.domain.HmpServOpera;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,7 +91,7 @@ public class HmpServProjectController extends BaseController {
     @PostMapping("/saveProject")
     public AjaxResult saveProject(@RequestBody List<HmpServProject> servProjects) {
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         if (servProjects.size() > 0) {
             Date makedate = new Date();
             String maketime = PubFun.getCurrentTime();

@@ -217,7 +217,7 @@ export default {
 .item-width {
   width: 200px;
 }
-.el-table /deep/ .el-table__expanded-cell {
+.el-table ::v-deep .el-table__expanded-cell {
   padding: 20px;
 }
 .expand_span {

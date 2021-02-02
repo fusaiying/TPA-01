@@ -679,11 +679,11 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
-/deep/ .el-table__header-wrapper .el-checkbox__input::after {
+::v-deep .el-table__header-wrapper .el-checkbox__input::after {
   content: '全选';
   position: absolute;
   font-weight: bolder;
@@ -692,7 +692,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
+::v-deep .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

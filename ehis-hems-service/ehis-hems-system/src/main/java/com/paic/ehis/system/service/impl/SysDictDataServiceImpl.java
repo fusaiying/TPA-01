@@ -1,18 +1,18 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.paic.ehis.system.domain.SysDictData;
 import com.paic.ehis.system.mapper.SysDictDataMapper;
 import com.paic.ehis.system.service.ISysDictDataService;
 import com.paic.ehis.system.utils.DictUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 字典 业务层处理
  * 
- * @author admin
+ *
  */
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService
@@ -107,5 +107,4 @@ public class SysDictDataServiceImpl implements ISysDictDataService
         }
         return row;
     }
-
 }

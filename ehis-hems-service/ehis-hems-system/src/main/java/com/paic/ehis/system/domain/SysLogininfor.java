@@ -1,15 +1,16 @@
 package com.paic.ehis.system.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.annotation.Excel.ColumnType;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 
+import java.util.Date;
+
 /**
  * 系统访问记录表 sys_logininfor
  * 
- * @author admin
+ *
  */
 public class SysLogininfor extends BaseEntity
 {

@@ -2550,7 +2550,7 @@
   .item-width {
     width: 220px;
   }
-  .long-input /deep/ .el-form-item__content {
+  .long-input ::v-deep .el-form-item__content {
     width: calc(100% - 150px);
   }
 

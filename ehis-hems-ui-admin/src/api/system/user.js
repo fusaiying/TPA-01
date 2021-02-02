@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { praseStrEmpty } from "@/utils/sinoutils";
+import { praseStrEmpty } from "@/utils/custmUtil";
 
 // 查询用户列表
 export function listUser(query) {

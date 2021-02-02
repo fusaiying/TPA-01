@@ -3036,28 +3036,28 @@
   .top-instance {
     top: 84px;
   }
-  .nav-bar /deep/ .el-tabs--border-card>.el-tabs__content {
+  .nav-bar ::v-deep .el-tabs--border-card>.el-tabs__content {
     padding: 0
   }
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: auto;
     font-size: 12px;
     padding: 0 12px;
   }
-  .nav-bar /deep/ .el-card__body,
-  .top-card /deep/ .el-card__body {
+  .nav-bar ::v-deep .el-card__body,
+  .top-card ::v-deep .el-card__body {
     padding: 10px 20px;
   }
-  .basic-box /deep/ .el-form-item__label {
+  .basic-box ::v-deep .el-form-item__label {
     font-size: 12px;
   }
-  .el-col-7 /deep/ .el-form-item {
+  .el-col-7 ::v-deep .el-form-item {
     margin-bottom: 10px;
   }
-  .el-col-12 /deep/ .el-form-item {
+  .el-col-12 ::v-deep .el-form-item {
     margin-bottom: 4px;
   }
-  .el-col-7 /deep/ .el-form-item__label,
+  .el-col-7 ::v-deep .el-form-item__label,
   .form-item-span {
     font-size: 12px;
   }

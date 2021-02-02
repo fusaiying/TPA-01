@@ -539,10 +539,10 @@ export default {
     margin-bottom: 20px;
     line-height: 50px;
   }
-  .return_class /deep/ .el-table__empty-block {
+  .return_class ::v-deep .el-table__empty-block {
     min-height: 45px;
   }
-  .return_class /deep/ .el-table__empty-text {
+  .return_class ::v-deep .el-table__empty-text {
     min-height: 45px;
     line-height: 45px;
   }

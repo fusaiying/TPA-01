@@ -549,13 +549,13 @@
     width: 220px;
   }
 
-  /deep/.el-table .warning-row {
+  ::v-deep.el-table .warning-row {
     background: oldlace;
   }
   .font_grey {
     color: #BFBFBF;
   }
-  /*/deep/.el-dialog{*/
+  /*::v-deep.el-dialog{*/
   /*  display: flex;*/
   /*  flex-direction: column;*/
   /*  margin:0 !important;*/
@@ -567,7 +567,7 @@
   /*  max-height:calc(100% - 30px);*/
   /*  max-width:calc(100% - 30px);*/
   /*}*/
-  /*/deep/.el-dialog .el-dialog__body{*/
+  /*::v-deep.el-dialog .el-dialog__body{*/
   /*  flex:1;*/
   /*  overflow: auto;*/
   /*}*/

@@ -8,12 +8,13 @@ import java.math.BigDecimal;
 
 /**
  * 自定义导出Excel数据注解
+ * 
  *
- * @author admin
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Excel {
+public @interface Excel
+{
     /**
      * 导出时在excel中排序
      */
@@ -100,32 +101,59 @@ public @interface Excel {
     public boolean isStatistics() default false;
 
     /**
-     * 字段类型（0：导出导入；1：仅导出；2：仅导入）
+     * 导出字段对齐方式（0：默认；1：靠左；2：居中；3：靠右）
      */
-    Type type() default Type.ALL;
+    Align align() default Align.AUTO;
 
-    public enum Type {
-        ALL(0), EXPORT(1), IMPORT(2);
+    public enum Align
+    {
+        AUTO(0), LEFT(1), CENTER(2), RIGHT(3);
         private final int value;
 
-        Type(int value) {
+        Align(int value)
+        {
             this.value = value;
         }
 
-        public int value() {
+        public int value()
+        {
             return this.value;
         }
     }
 
-    public enum ColumnType {
-        NUMERIC(0), STRING(1);
+    /**
+     * 字段类型（0：导出导入；1：仅导出；2：仅导入）
+     */
+    Type type() default Type.ALL;
+
+    public enum Type
+    {
+        ALL(0), EXPORT(1), IMPORT(2);
         private final int value;
 
-        ColumnType(int value) {
+        Type(int value)
+        {
             this.value = value;
         }
 
-        public int value() {
+        public int value()
+        {
+            return this.value;
+        }
+    }
+
+    public enum ColumnType
+    {
+        NUMERIC(0), STRING(1), IMAGE(2);
+        private final int value;
+
+        ColumnType(int value)
+        {
+            this.value = value;
+        }
+
+        public int value()
+        {
             return this.value;
         }
     }

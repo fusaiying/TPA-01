@@ -1243,10 +1243,10 @@ export default {
 .arr-right {
   right: 5px;
 }
-.el-tabs /deep/ .el-tabs__item {
+.el-tabs ::v-deep .el-tabs__item {
   width: 10.5%;
 }
-.el-collapse /deep/ .el-collapse-item__header {
+.el-collapse ::v-deep .el-collapse-item__header {
   padding-bottom: 10px;
   margin-bottom: 10px;
   color: #555;
@@ -1298,11 +1298,11 @@ export default {
 .block .el-image {
   margin: 0 auto;
 }
-.el-image-viewer__mask /deep/ .el-image-viewer__close {
+.el-image-viewer__mask ::v-deep .el-image-viewer__close {
   top: 60px;
   right: 30px;
 }
-.el-tabs__item  /deep/ .is-top is-active {
+.el-tabs__item  ::v-deep .is-top is-active {
   padding: 0 5px;
 }
 .time-wrapper {

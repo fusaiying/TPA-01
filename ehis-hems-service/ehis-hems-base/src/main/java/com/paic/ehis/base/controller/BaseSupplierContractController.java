@@ -12,7 +12,7 @@ import com.paic.ehis.base.service.IBaseSupplierContractBakService;
 import com.paic.ehis.base.service.IBaseSupplierContractService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +38,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 查询base_supplier_contract（供应商合约）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseSupplierContract baseSupplierContract)
     {
@@ -50,7 +49,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 导出base_supplier_contract（供应商合约）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:export')")
     @Log(title = "base_supplier_contract（供应商合约）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierContract baseSupplierContract) throws IOException
@@ -63,7 +61,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 获取base_supplier_contract（供应商合约）详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:query')")
     @GetMapping(value = "/{contractNo}")
     public AjaxResult getInfo(@PathVariable("contractNo") String contractNo)
     {
@@ -75,7 +72,6 @@ public class BaseSupplierContractController extends BaseController
     *且当供应商下存在多条合约信息时仅显示该供应商下合约终止日期最晚的一条合约信息（即供应商下创建时间最晚的一条合约信息）
     */
 
-    @PreAuthorize("@ss.hasPermi('system:contract:last')")
     @GetMapping(value = "/last/{servcomno}")
     public  AjaxResult lastInfo(@PathVariable("servcomno") String servcomno)
     {
@@ -85,7 +81,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 供应商合约管理主查询页面需默认显示截止当前时间合约签约时间在三个月内且合约状态为“有效”的数据
      */
-     @PreAuthorize("@ss.hasPermi('system:contract:month')")
      @GetMapping("/month")
      public TableDataInfo lista(BaseSupplierContract baseSupplierContract) throws Exception
      {
@@ -98,7 +93,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 根据服务机构id查询合约信息
      */
-     @PreAuthorize("@ss.hasPermi('system:contract:code')")
      @GetMapping(value = "/code/{providercode}")
      public AjaxResult providerCodeinfo(@PathVariable("providercode") String providercode)
      {
@@ -108,7 +102,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 新增base_supplier_contract（供应商合约）
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:add')")
     @Log(title = "base_supplier_contract（供应商合约）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierContract baseSupplierContract)
@@ -132,7 +125,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 修改base_supplier_contract（供应商合约）
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:edit')")
     @Log(title = "base_supplier_contract（供应商合约）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierContract baseSupplierContract)
@@ -152,7 +144,6 @@ public class BaseSupplierContractController extends BaseController
     /**
      * 删除base_supplier_contract（供应商合约）
      */
-    @PreAuthorize("@ss.hasPermi('system:contract:remove')")
     @Log(title = "base_supplier_contract（供应商合约）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{contractNos}")
     public AjaxResult remove(@PathVariable String[] contractNos)

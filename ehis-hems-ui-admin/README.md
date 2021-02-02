@@ -1,11 +1,9 @@
 ## 开发
 
 ```bash
-# 克隆项目
-git clone https://gitee.com/y_project/Sino-Vue
 
 # 进入项目目录
-cd sino-ui
+cd 
 
 # 安装依赖
 npm install

@@ -1,18 +1,19 @@
 package com.paic.ehis.system.api.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.web.domain.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 部门表 sys_dept
  * 
- * @author admin
+ *
  */
 public class SysDept extends BaseEntity
 {

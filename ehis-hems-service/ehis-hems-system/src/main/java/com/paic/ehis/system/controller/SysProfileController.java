@@ -1,23 +1,29 @@
 package com.paic.ehis.system.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.ServletUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.security.service.TokenService;
+import com.paic.ehis.system.api.RemoteFileService;
+import com.paic.ehis.system.api.domain.SysFile;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.api.model.LoginUser;
 import com.paic.ehis.system.service.ISysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * 个人信息 业务处理
  * 
- * @author admin
+ *
  */
 @RestController
 @RequestMapping("/user/profile")
@@ -25,6 +31,12 @@ public class SysProfileController extends BaseController
 {
     @Autowired
     private ISysUserService userService;
+    
+    @Autowired
+    private TokenService tokenService;
+    
+    @Autowired
+    private RemoteFileService remoteFileService;
 
     /**
      * 个人信息
@@ -32,7 +44,7 @@ public class SysProfileController extends BaseController
     @GetMapping
     public AjaxResult profile()
     {
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         SysUser user = userService.selectUserByUserName(username);
         AjaxResult ajax = AjaxResult.success(user);
         ajax.put("roleGroup", userService.selectUserRoleGroup(username));
@@ -49,6 +61,13 @@ public class SysProfileController extends BaseController
     {
         if (userService.updateUserProfile(user) > 0)
         {
+            LoginUser loginUser = tokenService.getLoginUser();
+            // 更新缓存用户信息
+            loginUser.getSysUser().setNickName(user.getNickName());
+            loginUser.getSysUser().setPhonenumber(user.getPhonenumber());
+            loginUser.getSysUser().setEmail(user.getEmail());
+            loginUser.getSysUser().setSex(user.getSex());
+            tokenService.setLoginUser(loginUser);
             return AjaxResult.success();
         }
         return AjaxResult.error("修改个人信息异常，请联系管理员");
@@ -61,7 +80,7 @@ public class SysProfileController extends BaseController
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(String oldPassword, String newPassword)
     {
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         SysUser user = userService.selectUserByUserName(username);
         String password = user.getPassword();
         if (!SecurityUtils.matchesPassword(oldPassword, password))
@@ -74,8 +93,41 @@ public class SysProfileController extends BaseController
         }
         if (userService.resetUserPwd(username, SecurityUtils.encryptPassword(newPassword)) > 0)
         {
+            // 更新缓存用户密码
+            LoginUser loginUser = tokenService.getLoginUser();
+            loginUser.getSysUser().setPassword(SecurityUtils.encryptPassword(newPassword));
+            tokenService.setLoginUser(loginUser);
             return AjaxResult.success();
         }
         return AjaxResult.error("修改密码异常，请联系管理员");
+    }
+    
+    /**
+     * 头像上传
+     */
+    @Log(title = "用户头像", businessType = BusinessType.UPDATE)
+    @PostMapping("/avatar")
+    public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws IOException
+    {
+        if (!file.isEmpty())
+        {
+            LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+            R<SysFile> fileResult = remoteFileService.upload(file);
+            if (StringUtils.isNull(fileResult) || StringUtils.isNull(fileResult.getData()))
+            {
+                return AjaxResult.error("文件服务异常，请联系管理员");
+            }
+            String url = fileResult.getData().getUrl();
+            if (userService.updateUserAvatar(loginUser.getUsername(), url))
+            {
+                AjaxResult ajax = AjaxResult.success();
+                ajax.put("imgUrl", url);
+                // 更新缓存用户头像
+                loginUser.getSysUser().setAvatar(url);
+                tokenService.setLoginUser(loginUser);
+                return ajax;
+            }
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
     }
 }

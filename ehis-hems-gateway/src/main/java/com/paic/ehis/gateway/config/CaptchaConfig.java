@@ -1,23 +1,25 @@
 package com.paic.ehis.gateway.config;
 
-import java.util.Properties;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Properties;
 
 import static com.google.code.kaptcha.Constants.*;
 
 /**
  * 验证码配置
+ * 
  *
- * @author admin
  */
 @Configuration
-public class CaptchaConfig {
+public class CaptchaConfig
+{
     @Bean(name = "captchaProducer")
-    public DefaultKaptcha getKaptchaBean() {
+    public DefaultKaptcha getKaptchaBean()
+    {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         Properties properties = new Properties();
         // 是否有边框 默认为true 我们可以自己设置yes，no
@@ -42,9 +44,10 @@ public class CaptchaConfig {
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
     }
-
+    
     @Bean(name = "captchaProducerMath")
-    public DefaultKaptcha getKaptchaBeanMath() {
+    public DefaultKaptcha getKaptchaBeanMath()
+    {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         Properties properties = new Properties();
         // 是否有边框 默认为true 我们可以自己设置yes，no
@@ -52,13 +55,13 @@ public class CaptchaConfig {
         // 边框颜色 默认为Color.BLACK
         properties.setProperty(KAPTCHA_BORDER_COLOR, "105,179,90");
         // 验证码文本字符颜色 默认为Color.BLACK
-        properties.setProperty(KAPTCHA_TEXTPRODUCER_FONT_COLOR, "black");
+        properties.setProperty(KAPTCHA_TEXTPRODUCER_FONT_COLOR, "blue");
         // 验证码图片宽度 默认为200
         properties.setProperty(KAPTCHA_IMAGE_WIDTH, "160");
         // 验证码图片高度 默认为50
         properties.setProperty(KAPTCHA_IMAGE_HEIGHT, "60");
         // 验证码文本字符大小 默认为40
-        properties.setProperty(KAPTCHA_TEXTPRODUCER_FONT_SIZE, "40");
+        properties.setProperty(KAPTCHA_TEXTPRODUCER_FONT_SIZE, "35");
         // KAPTCHA_SESSION_KEY
         properties.setProperty(KAPTCHA_SESSION_CONFIG_KEY, "kaptchaCodeMath");
         // 验证码文本生成器

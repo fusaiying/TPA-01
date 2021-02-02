@@ -1,13 +1,13 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.SysDictData;
+
+import java.util.List;
 
 /**
  * 字典 业务层
  * 
- * @author admin
+ *
  */
 public interface ISysDictDataService
 {
@@ -54,7 +54,7 @@ public interface ISysDictDataService
 
     /**
      * 修改保存字典数据信息
-     *
+     * 
      * @param dictData 字典数据信息
      * @return 结果
      */

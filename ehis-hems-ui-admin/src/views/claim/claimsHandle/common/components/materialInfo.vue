@@ -740,7 +740,7 @@
   .item-width {
     width: 200px;
   }
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 10%;
     font-weight: 400;
   }
@@ -749,14 +749,14 @@
     border: none;
   }
 
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     padding-bottom: 10px;
     margin-bottom: 10px;
     color: #555;
     font-weight: 360;
     font-size: 14px;
   }
-  .material-table /deep/ .el-form-item--mini {
+  .material-table ::v-deep .el-form-item--mini {
     margin-bottom: 0;
   }
   .show-little {

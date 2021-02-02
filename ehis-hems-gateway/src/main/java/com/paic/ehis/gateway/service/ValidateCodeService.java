@@ -1,13 +1,14 @@
 package com.paic.ehis.gateway.service;
 
-import java.io.IOException;
 import com.paic.ehis.common.core.exception.CaptchaException;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+
+import java.io.IOException;
 
 /**
  * 验证码处理
  * 
- * @author admin
+ *
  */
 public interface ValidateCodeService
 {

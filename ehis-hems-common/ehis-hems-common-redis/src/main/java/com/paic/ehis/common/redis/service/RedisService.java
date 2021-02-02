@@ -1,20 +1,19 @@
 package com.paic.ehis.common.redis.service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 /**
  * spring redis 工具类
  * 
- * @author admin
+ *
  **/
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
 @Component
@@ -42,7 +41,7 @@ public class RedisService
      * @param timeout 时间
      * @param timeUnit 时间颗粒度
      */
-    public <T> void setCacheObject(final String key, final T value, final Integer timeout, final TimeUnit timeUnit)
+    public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit)
     {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
@@ -136,10 +135,15 @@ public class RedisService
      * @param dataSet 缓存的数据
      * @return 缓存数据的对象
      */
-    public <T> long setCacheSet(final String key, final Set<T> dataSet)
+    public <T> BoundSetOperations<String, T> setCacheSet(final String key, final Set<T> dataSet)
     {
-        Long count = redisTemplate.opsForSet().add(key, dataSet);
-        return count == null ? 0 : count;
+        BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
+        Iterator<T> it = dataSet.iterator();
+        while (it.hasNext())
+        {
+            setOperation.add(it.next());
+        }
+        return setOperation;
     }
 
     /**

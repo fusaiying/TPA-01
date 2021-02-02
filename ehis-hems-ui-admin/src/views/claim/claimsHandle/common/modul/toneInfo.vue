@@ -933,7 +933,7 @@
     width: 200px;
   }
 
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 20px 0;
   }
 
@@ -982,7 +982,7 @@
     padding: 5px;
   }
 
-  #toneinfoClass /deep/ .el-tabs--top .el-tabs__item.is-top:last-child {
+  #toneinfoClass ::v-deep .el-tabs--top .el-tabs__item.is-top:last-child {
     margin-left: 50px;
   }
 </style>

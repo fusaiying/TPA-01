@@ -1,13 +1,13 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.SysConfig;
+
+import java.util.List;
 
 /**
  * 参数配置 服务层
  * 
- * @author admin
+ *
  */
 public interface ISysConfigService
 {

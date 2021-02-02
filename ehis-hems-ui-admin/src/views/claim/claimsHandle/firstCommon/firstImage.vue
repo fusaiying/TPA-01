@@ -738,7 +738,7 @@
       },
       clickClose() {
         // class="el-image-viewer__btn el-image-viewer__close"
-       
+
       },
       generateLabel(name) {
         let buttonBox = document.getElementsByClassName('el-image-viewer__actions__inner')[0]
@@ -780,7 +780,7 @@
           let _this = this
           element.onclick = function next() {
             _this.stopBodyScroll(false)
-          } 
+          }
 
           // 左
           let left = document.getElementsByClassName('el-icon-arrow-left has')[0] // 左
@@ -909,10 +909,10 @@
   .el-collapse {
     border: none;
   }
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 10.5%;
   }
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     padding-bottom: 10px;
     margin-bottom: 10px;
     color: #555;
@@ -923,11 +923,11 @@
     position: absolute;
     right: 0;
   }
-  .fix-upload /deep/ .el-upload--picture-card {
+  .fix-upload ::v-deep .el-upload--picture-card {
     width: 110px;
     height: 110px;
   }
-  .el-upload /deep/ .el-icon-plus {
+  .el-upload ::v-deep .el-icon-plus {
     position: relative;
     top: -10px;
   }

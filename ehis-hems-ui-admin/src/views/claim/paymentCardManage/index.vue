@@ -270,11 +270,11 @@
   .item-width {
     width: 200px;
   }
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 

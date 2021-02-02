@@ -32,6 +32,8 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
 
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_supplier_contract（供应商合约）
      * 
@@ -94,7 +96,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     @Override
     public BaseSupplierContract  insertBaseSupplierContract(BaseSupplierContract baseSupplierContract) {
 
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         Date nowDate = new Date();
 
         baseSupplierContract.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractSerialNo", 0, 11));
@@ -150,7 +152,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     @Override
     public int updateBaseSupplierContract(BaseSupplierContract baseSupplierContract)
     {
-        baseSupplierContract.setUpdateBy(SecurityUtils.getUsername());
+        baseSupplierContract.setUpdateBy(securityUtils.getUsername());
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
         return baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);

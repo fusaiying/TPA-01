@@ -8,7 +8,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseDocInfo;
 import com.paic.ehis.base.service.IBaseDocInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 查询base_doctor(医生信息)列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseDocInfo baseDocInfo)
     {
@@ -41,7 +40,6 @@ public class BaseDocInfoController extends BaseController
     }
 
     //查询页面需默认显示截止当前时间在一个月内且合约状态为“有效”的数据
-    @PreAuthorize("@ss.hasPermi('system:contract:month')")
     @GetMapping("/month")
     public TableDataInfo lista(BaseDocInfo baseDocInfo) throws Exception
     {
@@ -50,7 +48,6 @@ public class BaseDocInfoController extends BaseController
         return getDataTable(month);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:info:datalist')")
     @GetMapping("/dataList")
     public AjaxResult datalist()
     {
@@ -63,7 +60,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 导出base_doctor(医生信息)列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "base_doctor(医生信息)", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseDocInfo baseDocInfo) throws Exception
@@ -76,7 +72,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 获取base_doctor(医生信息)详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{docCode}")
     public AjaxResult getInfo(@PathVariable("docCode") String docCode)
     {
@@ -86,7 +81,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 新增base_doctor(医生信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "base_doctor(医生信息)", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     public AjaxResult add(@RequestBody BaseDocInfo baseDocInfo)
@@ -97,7 +91,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 修改base_doctor(医生信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "base_doctor(医生信息)", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseDocInfo baseDocInfo)
@@ -109,7 +102,6 @@ public class BaseDocInfoController extends BaseController
     /**
      * 删除base_doctor(医生信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "base_doctor(医生信息)", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{docCodes}")
     public AjaxResult remove(@PathVariable String[] docCodes)
@@ -117,7 +109,6 @@ public class BaseDocInfoController extends BaseController
         return toAjax(baseDocInfoService.deleteBaseDocInfoByIds(docCodes));
     }
     //单体删除
-    @PreAuthorize("@ss.hasPermi('system:info:removeone')")
     @DeleteMapping("/oneDoc/{docCode}")
     public AjaxResult removeOne(@PathVariable String docCode)
     {

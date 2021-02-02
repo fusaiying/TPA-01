@@ -11,7 +11,7 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseManualInfo;
 import com.paic.ehis.base.service.IBaseManualInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,10 +31,11 @@ public class BaseManualInfoController extends BaseController
     @Autowired
     private IBaseManualInfoService baseManualInfoService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询服务手册列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseManualInfo baseManualInfo)
     {
@@ -46,7 +47,6 @@ public class BaseManualInfoController extends BaseController
     /**
      * 导出服务手册列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "服务手册", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseManualInfo baseManualInfo) throws IOException
@@ -59,7 +59,6 @@ public class BaseManualInfoController extends BaseController
     /**
      * 获取服务手册详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{manualCode}")
     public AjaxResult getInfo(@PathVariable("manualCode") String manualCode)
     {
@@ -69,12 +68,11 @@ public class BaseManualInfoController extends BaseController
     /**
      * 新增服务手册
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "服务手册", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseManualInfo baseManualInfo)
     {
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         baseManualInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("manualSer",10,20));
         baseManualInfo.setManualCode("FW"+PubFun.getCurrentDate()+PubFun.createMySqlMaxNoUseCache("manualCode",10,10));
         baseManualInfo.setCreateBy(username);
@@ -85,7 +83,6 @@ public class BaseManualInfoController extends BaseController
     /**
      * 修改服务手册
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "服务手册", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseManualInfo baseManualInfo)
@@ -96,7 +93,6 @@ public class BaseManualInfoController extends BaseController
     /**
      * 删除服务手册
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "服务手册", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{manualCode}")
     public AjaxResult remove(@PathVariable String manualCode)

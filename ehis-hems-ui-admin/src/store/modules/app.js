@@ -6,8 +6,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium',
-  language: Cookies.get('language') || 'zh'
+  size: Cookies.get('size') || 'medium'
 }
 
 const mutations = {
@@ -31,28 +30,21 @@ const mutations = {
   SET_SIZE: (state, size) => {
     state.size = size
     Cookies.set('size', size)
-  },
-  SET_LANGUAGE: (state, language) => {
-    state.language = language
-    Cookies.set('language', language)
   }
 }
 
 const actions = {
-  toggleSideBar({commit}) {
+  toggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
   },
-  closeSideBar({commit}, {withoutAnimation}) {
+  closeSideBar({ commit }, { withoutAnimation }) {
     commit('CLOSE_SIDEBAR', withoutAnimation)
   },
-  toggleDevice({commit}, device) {
+  toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
   },
-  setSize({commit}, size) {
+  setSize({ commit }, size) {
     commit('SET_SIZE', size)
-  },
-  setLanguage({commit}, language) {
-    commit('SET_LANGUAGE', language)
   }
 }
 

@@ -21,6 +21,8 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
 {
     @Autowired
     private BaseFeeitemMapper baseFeeitemMapper;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     /**
      * 查询费用项信息 
@@ -69,9 +71,9 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     public int insertBaseFeeitem(BaseFeeitem baseFeeitem)
     {
         baseFeeitem.setStatus("Y");
-        baseFeeitem.setCreateBy(SecurityUtils.getUsername());
+        baseFeeitem.setCreateBy(securityUtils.getUsername());
         baseFeeitem.setCreateTime(DateUtils.getNowDate());
-        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
+        baseFeeitem.setUpdateBy(securityUtils.getUsername());
         baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.insertBaseFeeitem(baseFeeitem);
     }
@@ -85,7 +87,7 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     @Override
     public int updateBaseFeeitem(BaseFeeitem baseFeeitem)
     {
-        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
+        baseFeeitem.setUpdateBy(securityUtils.getUsername());
         baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.updateBaseFeeitem(baseFeeitem);
     }

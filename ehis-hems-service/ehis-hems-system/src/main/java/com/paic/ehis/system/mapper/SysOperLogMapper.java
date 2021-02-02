@@ -1,13 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.system.api.domain.SysOperLog;
+
+import java.util.List;
 
 /**
  * 操作日志 数据层
  * 
- * @author admin
+ *
  */
 public interface SysOperLogMapper
 {

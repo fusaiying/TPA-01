@@ -831,32 +831,32 @@
     white-space: nowrap;
   }
 
-  .el-table /deep/ .warning-row {
+  .el-table ::v-deep .warning-row {
     background: oldlace;
   }
 
-  .el-table /deep/ .success-row {
+  .el-table ::v-deep .success-row {
     background: rgba(135, 206, 250, .8);
   }
 
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 5px 20px 0px 20px !important;
   }
 
-  /deep/ .el-table__row {
+  ::v-deep .el-table__row {
     height: 35px;
     line-height: 35px;
   }
 
-  /deep/ .el-table td {
+  ::v-deep .el-table td {
     padding: 0px 0px;
   }
 
-  /deep/ .el-dialog__footer {
+  ::v-deep .el-dialog__footer {
     padding: 0px 20px 20px 0px;
   }
 
-  .acount-class /deep/ .el-form-item {
+  .acount-class ::v-deep .el-form-item {
     margin-bottom: 0;
   }
 

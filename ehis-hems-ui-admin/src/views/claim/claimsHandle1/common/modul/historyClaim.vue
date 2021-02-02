@@ -146,7 +146,7 @@
     width: 220px;
   }
 
-  /deep/.el-table .warning-row {
+  ::v-deep.el-table .warning-row {
     background: oldlace;
   }
 

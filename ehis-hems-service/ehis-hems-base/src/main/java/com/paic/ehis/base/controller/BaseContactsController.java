@@ -9,7 +9,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseContacts;
 import com.paic.ehis.base.service.IBaseContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +32,6 @@ public class BaseContactsController extends BaseController
     /**
      * 查询base_contacts（联系人信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseContacts baseContacts)
     {
@@ -44,7 +43,6 @@ public class BaseContactsController extends BaseController
     /**
      * 导出base_contacts（联系人信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:export')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseContacts baseContacts) throws IOException
@@ -57,7 +55,6 @@ public class BaseContactsController extends BaseController
     /**
      * 获取base_contacts（联系人信息）详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:query')")
     @GetMapping(value = "/{serialno}")
     public AjaxResult getInfo(@PathVariable("serialno") String serialno)
     {
@@ -67,7 +64,6 @@ public class BaseContactsController extends BaseController
     /**
      * 新增base_contacts（联系人信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:add')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseContacts baseContacts)
@@ -100,7 +96,6 @@ public class BaseContactsController extends BaseController
     /**
      * 删除base_contacts（联系人信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:remove')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{serialnos}")
     public AjaxResult remove(@PathVariable String[] serialnos)

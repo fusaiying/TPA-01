@@ -1,15 +1,14 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
+import com.paic.ehis.system.api.domain.SysDept;
 import org.apache.ibatis.annotations.Param;
 
-import com.paic.ehis.system.api.domain.SysDept;
+import java.util.List;
 
 /**
  * 部门管理 数据层
  * 
- * @author admin
+ *
  */
 public interface SysDeptMapper
 {
@@ -25,9 +24,10 @@ public interface SysDeptMapper
      * 根据角色ID查询部门树信息
      * 
      * @param roleId 角色ID
+     * @param deptCheckStrictly 部门树选择项是否关联显示
      * @return 选中部门列表
      */
-    public List<Integer> selectDeptListByRoleId(Long roleId);
+    public List<Integer> selectDeptListByRoleId(@Param("roleId") Long roleId, @Param("deptCheckStrictly") boolean deptCheckStrictly);
 
     /**
      * 根据部门ID查询信息

@@ -560,13 +560,13 @@ export default {
 .el-collapse {
   border: none;
 }
-.el-tabs /deep/ .el-tabs__item {
+.el-tabs ::v-deep .el-tabs__item {
   width: 120px;
 }
-.el-form /deep/ .el-form-item {
+.el-form ::v-deep .el-form-item {
   margin-bottom: 0;
 }
-.el-collapse /deep/ .el-collapse-item__header {
+.el-collapse ::v-deep .el-collapse-item__header {
   padding-bottom: 10px;
   margin-bottom: 10px;
   color: #555;

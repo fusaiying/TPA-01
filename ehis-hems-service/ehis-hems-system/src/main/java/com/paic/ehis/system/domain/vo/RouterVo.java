@@ -1,12 +1,13 @@
 package com.paic.ehis.system.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 /**
  * 路由配置信息
  * 
- * @author admin
+ *
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RouterVo

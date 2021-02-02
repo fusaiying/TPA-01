@@ -43,10 +43,10 @@ public class MySQLSysMaxNoIncrementer extends AbstractColumnMaxValueIncrementer 
 
             try {
                 /*
-                * 如果useNewConnection为true, 获取一个未被管理的连接，让我们的操作在一个独立的事务中
-                * 如果useNewConnection为false，使用当前事务的连接, 但依赖发号表是无事务的表.
-                * 需要直接使用JDBC风格的代码，因为我们需要确保insert操作和select操作是在一个connection下进行的 (不然的话我们无法保证last_insert_id()返回正确的值)
-                */
+                 * 如果useNewConnection为true, 获取一个未被管理的连接，让我们的操作在一个独立的事务中
+                 * 如果useNewConnection为false，使用当前事务的连接, 但依赖发号表是无事务的表.
+                 * 需要直接使用JDBC风格的代码，因为我们需要确保insert操作和select操作是在一个connection下进行的 (不然的话我们无法保证last_insert_id()返回正确的值)
+                 */
                 if (this.useNewConnection) {
                     con = this.getDataSource().getConnection();
                     if (con.getAutoCommit()) {

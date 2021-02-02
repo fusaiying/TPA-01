@@ -34,6 +34,8 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     @Autowired
     private BaseIssuingcompanyRuleMapper baseIssuingcompanyRuleMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询出单公司规则 
      * 
@@ -105,15 +107,15 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
             BaseIssuingcompanyRule companyRule = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRule(issuingcompanyRule);
             if (StringUtils.isNotNull(companyRule)){
                 issuingcompanyRule.setRuleno(companyRule.getRuleno());
-                issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
+                issuingcompanyRule.setUpdateBy(securityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
                 rows += baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(issuingcompanyRule);
             }else{
                 issuingcompanyRule.setStatus("Y");
                 issuingcompanyRule.setRuleno("S"+ PubFun.createMySqlMaxNoUseCache("service_fee_rule",10,4));
-                issuingcompanyRule.setCreateBy(SecurityUtils.getUsername());
+                issuingcompanyRule.setCreateBy(securityUtils.getUsername());
                 issuingcompanyRule.setCreateTime(DateUtils.getNowDate());
-                issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
+                issuingcompanyRule.setUpdateBy(securityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
                 rows += baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(issuingcompanyRule);
             }
@@ -133,9 +135,9 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     public int insertBaseIssuingcompanyRule(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         baseIssuingcompanyRule.setStatus("Y");
-        baseIssuingcompanyRule.setCreateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyRule.setCreateBy(securityUtils.getUsername());
         baseIssuingcompanyRule.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyRule.setUpdateBy(securityUtils.getUsername());
         baseIssuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(baseIssuingcompanyRule);
     }
@@ -150,7 +152,7 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     public int updateBaseIssuingcompanyRule(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         baseIssuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
-        baseIssuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyRule.setUpdateBy(securityUtils.getUsername());
         return baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(baseIssuingcompanyRule);
     }
 

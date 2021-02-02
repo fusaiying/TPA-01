@@ -1,10 +1,5 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -12,11 +7,15 @@ import com.paic.ehis.system.domain.SysPost;
 import com.paic.ehis.system.mapper.SysPostMapper;
 import com.paic.ehis.system.mapper.SysUserPostMapper;
 import com.paic.ehis.system.service.ISysPostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 岗位信息 服务层处理
  * 
- * @author admin
+ *
  */
 @Service
 public class SysPostServiceImpl implements ISysPostService

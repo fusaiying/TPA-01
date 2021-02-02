@@ -27,6 +27,8 @@ public class BaseProviderServiceServiceImpl implements IBaseProviderServiceServi
 {
     @Autowired
     private BaseProviderServiceMapper baseProviderServiceMapper;
+    @Autowired
+    private SecurityUtils securityUtils;
 
     /**
      * 查询base_provider_service(服务商服务信息)
@@ -103,8 +105,8 @@ public class BaseProviderServiceServiceImpl implements IBaseProviderServiceServi
         baseProviderService.setServicelocatorStr(StringUtils.join(arr2, ","));  // 数组转字符串(逗号分隔)(推荐)
         baseProviderService.setCreateTime(DateUtils.getNowDate());
         baseProviderService.setUpdateTime(DateUtils.getNowDate());
-        baseProviderService.setCreateBy(SecurityUtils.getUsername());
-        baseProviderService.setUpdateBy(SecurityUtils.getUsername());
+        baseProviderService.setCreateBy(securityUtils.getUsername());
+        baseProviderService.setUpdateBy(securityUtils.getUsername());
         baseProviderService.setUpdateFlag("0");
         baseProviderService.setStatus("Y");
         baseProviderService.setSerialNo(PubFun.createMySqlMaxNoUseCache("serviceSer",12,12));

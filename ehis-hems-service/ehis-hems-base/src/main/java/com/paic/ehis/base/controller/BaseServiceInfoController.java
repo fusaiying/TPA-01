@@ -42,6 +42,8 @@ public class BaseServiceInfoController extends BaseController
     @Autowired
     private IBaseServiceApplyorimplService applyorimplService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_service_info（服务项目）列表
      */
@@ -82,7 +84,7 @@ public class BaseServiceInfoController extends BaseController
     public AjaxResult add(@RequestBody BaseServiceInfo baseServiceInfo)
     {
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         if ("".equals(baseServiceInfo.getServiceCode()) || baseServiceInfo.getServiceCode() == null) {
             // 服务项目名称判重
             String servicename = baseServiceInfo.getServiceName();
@@ -244,7 +246,7 @@ public class BaseServiceInfoController extends BaseController
         serviceProcessService.updateBaseServiceProcessById(servicecode);
         applyorimplService.updateBaseServiceApplyorimplById(servicecode);
         // 获取登录用户名称
-        String username = SecurityUtils.getUsername();
+        String username = securityUtils.getUsername();
         // 更新服务项目基本信息 状态变成02
         String status = serviceProcess.getStatus();
         BaseServiceInfo baseServiceInfo = new BaseServiceInfo();

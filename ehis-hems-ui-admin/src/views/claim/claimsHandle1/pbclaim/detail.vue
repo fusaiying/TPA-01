@@ -259,7 +259,7 @@
     width: 120px;
     text-align: right;
   }
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
 </style>

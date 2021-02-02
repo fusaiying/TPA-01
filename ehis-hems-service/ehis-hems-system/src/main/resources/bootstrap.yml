@@ -3,7 +3,7 @@ server:
   port: 9201
 
 # Spring
-spring: 
+spring:
   application:
     # 应用名称
     name: ehis-hems-system
@@ -26,4 +26,3 @@ spring:
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         #命名空间地址
         namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6
-

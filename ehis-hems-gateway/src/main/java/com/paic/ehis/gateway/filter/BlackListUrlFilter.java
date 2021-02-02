@@ -1,20 +1,21 @@
 package com.paic.ehis.gateway.filter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
+import com.alibaba.fastjson.JSON;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import com.alibaba.fastjson.JSON;
-import com.paic.ehis.common.core.web.domain.AjaxResult;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 黑名单过滤器
  * 
- * @author admin
+ *
  */
 @Component
 public class BlackListUrlFilter extends AbstractGatewayFilterFactory<BlackListUrlFilter.Config>

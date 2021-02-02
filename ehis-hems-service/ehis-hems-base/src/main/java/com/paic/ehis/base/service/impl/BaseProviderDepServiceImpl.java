@@ -27,6 +27,8 @@ public class BaseProviderDepServiceImpl implements IBaseProviderDepService
     @Autowired
     private BaseProviderDepMapper baseProviderDepMapper;
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_provider_dept(服务商科室)
      * 
@@ -80,8 +82,8 @@ public class BaseProviderDepServiceImpl implements IBaseProviderDepService
             for(BaseProviderDep baseProviderDep :baseProviderDepVo.getForm()){
                 baseProviderDep.setCreateTime(DateUtils.getNowDate());
                 baseProviderDep.setUpdateTime(DateUtils.getNowDate());
-                baseProviderDep.setCreateBy(SecurityUtils.getUsername());
-                baseProviderDep.setUpdateBy(SecurityUtils.getUsername());
+                baseProviderDep.setCreateBy(securityUtils.getUsername());
+                baseProviderDep.setUpdateBy(securityUtils.getUsername());
                 baseProviderDep.setUpdateFlag("0");
                 baseProviderDep.setStatus("Y");
                 baseProviderDep.setProviderCode(baseProviderDepVo.getProviderCode());

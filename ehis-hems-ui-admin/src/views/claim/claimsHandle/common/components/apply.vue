@@ -497,7 +497,7 @@ export default {
 .item-width {
   width: 200px;
 }
-.el-form /deep/ .el-form-item__label {
+.el-form ::v-deep .el-form-item__label {
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;

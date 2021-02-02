@@ -12,12 +12,11 @@
     <artifactId>ehis-hems-common-datascope</artifactId>
 	
     <description>
-        ehis-hems-common-datascope权限范围
+        权限范围
     </description>
 
     <dependencies>
 		
-        <!-- Ehis-Hems Common Security -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-security</artifactId>

@@ -1,8 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.paic.ehis.common.security.service.UserDetailsServiceImpl,\
-  com.paic.ehis.common.security.service.PermissionService,\
-  com.paic.ehis.common.security.config.MethodSecurityConfig,\
-  com.paic.ehis.common.security.handler.CustomAccessDeniedHandler,\
+  com.paic.ehis.common.security.service.TokenService,\
+  com.paic.ehis.common.security.aspect.PreAuthorizeAspect,\
   com.paic.ehis.common.security.handler.GlobalExceptionHandler
-
-  

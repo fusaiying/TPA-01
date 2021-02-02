@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {Notification, MessageBox, Message} from 'element-ui'
+import { Notification, MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import {getToken} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
-import {tansParams} from "@/utils/sinoutils";
+import { tansParams } from "@/utils/custmUtil";
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 创建axios实例
@@ -11,7 +11,7 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: process.env.VUE_APP_BASE_API,
   // 超时
-  timeout: 50000
+  timeout: 10000
 })
 
 // request拦截器
@@ -21,10 +21,32 @@ service.interceptors.request.use(config => {
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
+  // get请求映射params参数
+  if (config.method === 'get' && config.params) {
+    let url = config.url + '?';
+    for (const propName of Object.keys(config.params)) {
+      const value = config.params[propName];
+      var part = encodeURIComponent(propName) + "=";
+      if (value !== null && typeof(value) !== "undefined") {
+        if (typeof value === 'object') {
+          for (const key of Object.keys(value)) {
+            let params = propName + '[' + key + ']';
+            var subPart = encodeURIComponent(params) + "=";
+            url += subPart + encodeURIComponent(value[key]) + "&";
+          }
+        } else {
+          url += part + encodeURIComponent(value) + "&";
+        }
+      }
+    }
+    url = url.slice(0, -1);
+    config.params = {};
+    config.url = url;
+  }
   return config
 }, error => {
-  console.log(error)
-  Promise.reject(error)
+    console.log(error)
+    Promise.reject(error)
 })
 
 // 响应拦截器
@@ -34,25 +56,22 @@ service.interceptors.response.use(res => {
     // 获取错误信息
     const msg = errorCode[code] || res.data.msg || errorCode['default']
     if (code === 401) {
-      MessageBox.confirm(
-        '登录状态已过期，您可以继续留在该页面，或者重新登录',
-        '系统提示',
-        {
+      MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
         }
       ).then(() => {
         store.dispatch('LogOut').then(() => {
-          location.reload() // 为了重新实例化vue-router对象 避免bug
+          location.href = '/index';
         })
-      }).catch((e) => {})
+      })
     } else if (code === 500) {
       Message({
         message: msg,
         type: 'error'
       })
-      return Promise.reject(new Error(msg)).catch((e) => {})
+      return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       Notification.error({
         title: msg
@@ -64,12 +83,14 @@ service.interceptors.response.use(res => {
   },
   error => {
     console.log('err' + error)
-    let {message} = error;
+    let { message } = error;
     if (message == "Network Error") {
       message = "后端接口连接异常";
-    } else if (message.includes("timeout")) {
+    }
+    else if (message.includes("timeout")) {
       message = "系统接口请求超时";
-    } else if (message.includes("Request failed with status code")) {
+    }
+    else if (message.includes("Request failed with status code")) {
       message = "系统接口" + message.substr(message.length - 3) + "异常";
     }
     Message({
@@ -82,35 +103,14 @@ service.interceptors.response.use(res => {
 )
 
 // 通用下载方法
-// export function download(url, params, filename) {
-//   console.log(params);
-//   return service.post(url, params, {
-//     transformRequest: [(params) => {
-//       return tansParams(params)
-//     }],
-//     responseType: 'blob'
-//   }).then((data) => {
-//     const content = data
-//     const blob = new Blob([content])
-//     if ('download' in document.createElement('a')) {
-//       const elink = document.createElement('a')
-//       elink.download = filename
-//       elink.style.display = 'none'
-//       elink.href = URL.createObjectURL(blob)
-//       document.body.appendChild(elink)
-//       elink.click()
-//       URL.revokeObjectURL(elink.href)
-//       document.body.removeChild(elink)
-//     } else {
-//       navigator.msSaveBlob(blob, filename)
-//     }
-//   }).catch((r) => {
-//     console.error(r)
-//   })
-// }
 export function download(url, params, filename) {
-  console.log(params);
   return service.post(url, params, {
+    transformRequest: [(params) => {
+      return tansParams(params)
+    }],
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
     responseType: 'blob'
   }).then((data) => {
     const content = data

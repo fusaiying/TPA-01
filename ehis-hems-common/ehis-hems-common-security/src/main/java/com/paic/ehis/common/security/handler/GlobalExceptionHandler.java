@@ -1,26 +1,22 @@
 package com.paic.ehis.common.security.handler;
 
+import com.paic.ehis.common.core.exception.BaseException;
+import com.paic.ehis.common.core.exception.CustomException;
+import com.paic.ehis.common.core.exception.DemoModeException;
+import com.paic.ehis.common.core.exception.PreAuthorizeException;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import com.paic.ehis.common.core.constant.HttpStatus;
-import com.paic.ehis.common.core.exception.BaseException;
-import com.paic.ehis.common.core.exception.CustomException;
-import com.paic.ehis.common.core.exception.DemoModeException;
-import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.core.web.domain.AjaxResult;
 
 /**
  * 全局异常处理器
  * 
- * @author admin
+ *
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler
@@ -33,7 +29,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(BaseException.class)
     public AjaxResult baseException(BaseException e)
     {
-        return AjaxResult.error(e.getMessage());
+        return AjaxResult.error(e.getDefaultMessage());
     }
 
     /**
@@ -47,34 +43,6 @@ public class GlobalExceptionHandler
             return AjaxResult.error(e.getMessage());
         }
         return AjaxResult.error(e.getCode(), e.getMessage());
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public AjaxResult handlerNoFoundException(Exception e)
-    {
-        log.error(e.getMessage(), e);
-        return AjaxResult.error(HttpStatus.NOT_FOUND, "路径不存在，请检查路径是否正确");
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public AjaxResult handleAuthorizationException(AccessDeniedException e)
-    {
-        log.error(e.getMessage());
-        return AjaxResult.error(HttpStatus.FORBIDDEN, "没有权限，请联系管理员授权");
-    }
-
-    @ExceptionHandler(AccountExpiredException.class)
-    public AjaxResult handleAccountExpiredException(AccountExpiredException e)
-    {
-        log.error(e.getMessage(), e);
-        return AjaxResult.error(e.getMessage());
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public AjaxResult handleUsernameNotFoundException(UsernameNotFoundException e)
-    {
-        log.error(e.getMessage(), e);
-        return AjaxResult.error(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
@@ -105,7 +73,16 @@ public class GlobalExceptionHandler
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
         return AjaxResult.error(message);
     }
-
+    
+    /**
+     * 权限异常
+     */
+    @ExceptionHandler(PreAuthorizeException.class)
+    public AjaxResult preAuthorizeException(PreAuthorizeException e)
+    {
+        return AjaxResult.error("没有权限，请联系管理员授权");
+    }
+    
     /**
      * 演示模式异常
      */

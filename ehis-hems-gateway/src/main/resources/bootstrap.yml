@@ -19,10 +19,10 @@ spring:
         server-addr: http://106.54.127.177:8848
         #命名空间
         namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6
+
       config:
         # 配置中心地址
         server-addr: http://106.54.127.177:8848
-#        server-addr: http://127.0.0.1:8848
         # 配置文件格式
         file-extension: yml
         # 共享配置
@@ -41,8 +41,7 @@ spring:
         ds1:
           nacos:
             server-addr: http://106.54.127.177:8848
-#            server-addr: http://127.0.0.1:8848
-            dataId: sentinel-sino-gateway
+            dataId: sentinel-ehis-hems-gateway
             groupId: DEFAULT_GROUP
             data-type: json
             rule-type: flow

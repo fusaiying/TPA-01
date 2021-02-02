@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 工具类异常
  * 
- * @author admin
+ *
  */
 public class UtilException extends RuntimeException
 {

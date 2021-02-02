@@ -1245,7 +1245,7 @@
     margin-bottom: 33px;
   }
 
-  .long-input /deep/ .el-form-item__content {
+  .long-input ::v-deep .el-form-item__content {
     width: calc(100% - 150px);
   }
 
@@ -1267,7 +1267,7 @@
     display: none;
   }
 
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 

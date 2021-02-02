@@ -31,6 +31,8 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
     private BaseContactsMapper baseContactsMapper;
 
 
+    @Autowired
+    private SecurityUtils securityUtils;
     /**
      * 查询base_contacts（联系人信息）
      * 
@@ -81,8 +83,8 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
             for(BaseContacts baseContact :baseContactsVo.getContacts()){
                 baseContact.setCreateTime(DateUtils.getNowDate());
                 baseContact.setUpdateTime(DateUtils.getNowDate());
-                baseContact.setCreateBy(SecurityUtils.getUsername());
-                baseContact.setUpdateBy(SecurityUtils.getUsername());
+                baseContact.setCreateBy(securityUtils.getUsername());
+                baseContact.setUpdateBy(securityUtils.getUsername());
                 baseContact.setSupplierCode(baseContactsVo.getProviderCode());
                 if("02".equals(baseContact.getPlaceType())){
                     baseContact.setAccountNo("PA"+PubFun.createMySqlMaxNoUseCache("accountNoSer",10,8));

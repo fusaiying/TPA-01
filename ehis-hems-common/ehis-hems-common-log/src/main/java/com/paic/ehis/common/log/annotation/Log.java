@@ -1,17 +1,14 @@
 package com.paic.ehis.common.log.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.log.enums.OperatorType;
+
+import java.lang.annotation.*;
 
 /**
  * 自定义操作日志记录注解
  * 
- * @author admin
+ *
  *
  */
 @Target({ ElementType.PARAMETER, ElementType.METHOD })

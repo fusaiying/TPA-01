@@ -714,15 +714,15 @@
     border: none;
   }
 
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     width: 10%;
   }
 
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 20px;
   }
 
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     padding-bottom: 10px;
     margin-bottom: 10px;
     color: #555;

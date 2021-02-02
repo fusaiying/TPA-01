@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 基础异常
  * 
- * @author admin
+ *
  */
 public class BaseException extends RuntimeException
 {

@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.constant;
 /**
  * 任务调度通用常量
  * 
- * @author admin
+ *
  */
 public class ScheduleConstants
 {

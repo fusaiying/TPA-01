@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.paic.ehis.system.api.factory.RemoteUserFallbackFactory,\
-  com.paic.ehis.system.api.factory.RemoteLogFallbackFactory
+  com.paic.ehis.system.api.factory.RemoteLogFallbackFactory, \
+  com.paic.ehis.system.api.factory.RemoteFileFallbackFactory

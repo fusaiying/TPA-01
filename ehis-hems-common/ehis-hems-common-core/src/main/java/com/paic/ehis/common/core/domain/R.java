@@ -1,13 +1,13 @@
 package com.paic.ehis.common.core.domain;
 
-import java.io.Serializable;
-
 import com.paic.ehis.common.core.constant.Constants;
+
+import java.io.Serializable;
 
 /**
  * 响应信息主体
  *
- * @author admin
+ *
  */
 public class R<T> implements Serializable
 {

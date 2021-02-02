@@ -141,10 +141,10 @@ export default {
 }
 </script>
 <style scoped>
-  .el-row /deep/ .el-col-8 {
+  .el-row ::v-deep .el-col-8 {
     height: 40px;
   }
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
   span {

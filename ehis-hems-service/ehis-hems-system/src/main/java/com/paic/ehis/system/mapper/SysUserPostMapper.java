@@ -1,13 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.SysUserPost;
+
+import java.util.List;
 
 /**
  * 用户与岗位关联表 数据层
  * 
- * @author admin
+ *
  */
 public interface SysUserPostMapper
 {

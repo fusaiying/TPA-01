@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.BaseSupplierContract;
 import com.paic.ehis.base.mapper.BaseContractServiceMapper;
@@ -32,8 +32,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
 
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_supplier_contract（供应商合约）
      * 
@@ -96,7 +95,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     @Override
     public BaseSupplierContract  insertBaseSupplierContract(BaseSupplierContract baseSupplierContract) {
 
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
 
         baseSupplierContract.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractSerialNo", 0, 11));
@@ -152,7 +151,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     @Override
     public int updateBaseSupplierContract(BaseSupplierContract baseSupplierContract)
     {
-        baseSupplierContract.setUpdateBy(securityUtils.getUsername());
+        baseSupplierContract.setUpdateBy(SecurityUtils.getUsername());
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
         return baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);

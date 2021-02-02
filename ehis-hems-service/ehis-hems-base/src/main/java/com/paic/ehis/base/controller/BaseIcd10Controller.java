@@ -35,7 +35,7 @@ public class BaseIcd10Controller extends BaseController
     @PostMapping("/list")
     public TableDataInfo list(@RequestBody BaseIcd10 baseIcd10)
     {
-        startPage(baseIcd10);
+        //startPage(baseIcd10);
         List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd10);
         return getDataTable(list);
     }

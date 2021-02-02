@@ -2,11 +2,11 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderDep;
 import com.paic.ehis.base.domain.vo.BaseProviderDepVo;
 import com.paic.ehis.base.mapper.BaseProviderDepMapper;
 import com.paic.ehis.base.service.IBaseProviderDepService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +27,7 @@ public class BaseProviderDepServiceImpl implements IBaseProviderDepService
     @Autowired
     private BaseProviderDepMapper baseProviderDepMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_provider_dept(服务商科室)
      * 
@@ -82,8 +81,8 @@ public class BaseProviderDepServiceImpl implements IBaseProviderDepService
             for(BaseProviderDep baseProviderDep :baseProviderDepVo.getForm()){
                 baseProviderDep.setCreateTime(DateUtils.getNowDate());
                 baseProviderDep.setUpdateTime(DateUtils.getNowDate());
-                baseProviderDep.setCreateBy(securityUtils.getUsername());
-                baseProviderDep.setUpdateBy(securityUtils.getUsername());
+                baseProviderDep.setCreateBy(SecurityUtils.getUsername());
+                baseProviderDep.setUpdateBy(SecurityUtils.getUsername());
                 baseProviderDep.setUpdateFlag("0");
                 baseProviderDep.setStatus("Y");
                 baseProviderDep.setProviderCode(baseProviderDepVo.getProviderCode());

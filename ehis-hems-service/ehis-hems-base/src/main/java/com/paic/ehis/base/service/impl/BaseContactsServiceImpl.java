@@ -2,12 +2,12 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.PinYinUtils;
 import com.paic.ehis.base.domain.BaseContacts;
 import com.paic.ehis.base.domain.vo.BaseContactsVo;
 import com.paic.ehis.base.mapper.BaseContactsMapper;
 import com.paic.ehis.base.service.IBaseContactsService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -31,8 +31,6 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
     private BaseContactsMapper baseContactsMapper;
 
 
-    @Autowired
-    private SecurityUtils securityUtils;
     /**
      * 查询base_contacts（联系人信息）
      * 
@@ -83,8 +81,8 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
             for(BaseContacts baseContact :baseContactsVo.getContacts()){
                 baseContact.setCreateTime(DateUtils.getNowDate());
                 baseContact.setUpdateTime(DateUtils.getNowDate());
-                baseContact.setCreateBy(securityUtils.getUsername());
-                baseContact.setUpdateBy(securityUtils.getUsername());
+                baseContact.setCreateBy(SecurityUtils.getUsername());
+                baseContact.setUpdateBy(SecurityUtils.getUsername());
                 baseContact.setSupplierCode(baseContactsVo.getProviderCode());
                 if("02".equals(baseContact.getPlaceType())){
                     baseContact.setAccountNo("PA"+PubFun.createMySqlMaxNoUseCache("accountNoSer",10,8));

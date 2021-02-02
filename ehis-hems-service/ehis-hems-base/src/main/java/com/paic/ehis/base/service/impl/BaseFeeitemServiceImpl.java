@@ -1,10 +1,10 @@
 package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseFeeitem;
 import com.paic.ehis.base.mapper.BaseFeeitemMapper;
 import com.paic.ehis.base.service.IBaseFeeitemService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,7 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
 {
     @Autowired
     private BaseFeeitemMapper baseFeeitemMapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询费用项信息 
@@ -71,9 +70,9 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     public int insertBaseFeeitem(BaseFeeitem baseFeeitem)
     {
         baseFeeitem.setStatus("Y");
-        baseFeeitem.setCreateBy(securityUtils.getUsername());
+        baseFeeitem.setCreateBy(SecurityUtils.getUsername());
         baseFeeitem.setCreateTime(DateUtils.getNowDate());
-        baseFeeitem.setUpdateBy(securityUtils.getUsername());
+        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
         baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.insertBaseFeeitem(baseFeeitem);
     }
@@ -87,7 +86,7 @@ public class BaseFeeitemServiceImpl implements IBaseFeeitemService
     @Override
     public int updateBaseFeeitem(BaseFeeitem baseFeeitem)
     {
-        baseFeeitem.setUpdateBy(securityUtils.getUsername());
+        baseFeeitem.setUpdateBy(SecurityUtils.getUsername());
         baseFeeitem.setUpdateTime(DateUtils.getNowDate());
         return baseFeeitemMapper.updateBaseFeeitem(baseFeeitem);
     }

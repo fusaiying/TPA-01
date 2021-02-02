@@ -1,13 +1,13 @@
 package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseManualInfo;
 import com.paic.ehis.base.service.IBaseManualInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,6 @@ public class BaseManualInfoController extends BaseController
     @Autowired
     private IBaseManualInfoService baseManualInfoService;
 
-    @Autowired
-    private SecurityUtils securityUtils;
     /**
      * 查询服务手册列表
      */
@@ -72,7 +70,7 @@ public class BaseManualInfoController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BaseManualInfo baseManualInfo)
     {
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         baseManualInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("manualSer",10,20));
         baseManualInfo.setManualCode("FW"+PubFun.getCurrentDate()+PubFun.createMySqlMaxNoUseCache("manualCode",10,10));
         baseManualInfo.setCreateBy(username);

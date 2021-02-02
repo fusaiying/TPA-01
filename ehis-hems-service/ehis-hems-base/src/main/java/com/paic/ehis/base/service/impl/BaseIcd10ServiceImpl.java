@@ -2,10 +2,10 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIcd10;
 import com.paic.ehis.base.mapper.BaseIcd10Mapper;
 import com.paic.ehis.base.service.IBaseIcd10Service;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,7 @@ import java.util.List;
 public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
     @Autowired
     private BaseIcd10Mapper baseIcd10Mapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询ICD10数据
@@ -70,9 +69,9 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
         String number = "I" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 5);
         baseIcd10.setIcdNo(number);
         baseIcd10.setSource("2");//来源 否 基础库
-        baseIcd10.setCreateBy(securityUtils.getUsername());
+        baseIcd10.setCreateBy(SecurityUtils.getUsername());
         baseIcd10.setCreateTime(DateUtils.getNowDate());
-        baseIcd10.setUpdateBy(securityUtils.getUsername());
+        baseIcd10.setUpdateBy(SecurityUtils.getUsername());
         baseIcd10.setUpdateTime(DateUtils.getNowDate());
         baseIcd10.setStatus("Y");//状态
         return baseIcd10Mapper.insertBaseIcd10(baseIcd10);
@@ -90,7 +89,7 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
         BaseIcd10 baseIcd101 = baseIcd10Mapper.selectBaseIcd10ByIdOne(baseIcd10.getIcdcode());//查询以往数据只有一条
         if (baseIcd101 != null) {
             baseIcd10.setIcdNo(baseIcd101.getIcdNo());
-            baseIcd10.setUpdateBy(securityUtils.getUsername());
+            baseIcd10.setUpdateBy(SecurityUtils.getUsername());
             baseIcd10.setUpdateTime(DateUtils.getNowDate());
             i=baseIcd10Mapper.updateBaseIcd10(baseIcd10);
         }

@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseContractService;
 import com.paic.ehis.base.mapper.BaseContractServiceMapper;
 import com.paic.ehis.base.service.IBaseContractServiceService;
@@ -25,8 +25,7 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_contract_service（合约服务项目）
      * 
@@ -86,7 +85,7 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
     @Override
     public int insertForeach(List<BaseContractService> baseContractServiceList){
         int result = 0;
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
         for(BaseContractService bean : baseContractServiceList ) {
             bean.setUpdateBy(username);

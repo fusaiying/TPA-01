@@ -2,6 +2,7 @@ package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PathUtil;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.file.FileUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
@@ -10,7 +11,6 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +48,7 @@ public class HmpContractController extends BaseController {
 
     @Autowired
     private IHmpServProjectService hmpServProjectService;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询供应商合约列表
@@ -97,7 +96,7 @@ public class HmpContractController extends BaseController {
         // 状态01 可用
         hmpContract.setConstate("01");
         // 操作员
-        hmpContract.setOperator(securityUtils.getUsername());
+        hmpContract.setOperator(SecurityUtils.getUsername());
 
         DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM);
         Date date = new Date();
@@ -248,7 +247,7 @@ public class HmpContractController extends BaseController {
     @PostMapping("/uploadFile")
     public AjaxResult importData(MultipartFile file, @RequestParam("contractno") String contractno, @RequestParam("filedesc") String filedesc) throws Exception {
         // 获取登录用户名称
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         // 根据合约信息
         HmpContract hmpContract = hmpContractService.selectHmpContractById(contractno);
         // 文件信息
@@ -313,7 +312,7 @@ public class HmpContractController extends BaseController {
      * @return
      */
     public String getOperator() {
-        return securityUtils.getUsername();
+        return SecurityUtils.getUsername();
     }
 
     /**

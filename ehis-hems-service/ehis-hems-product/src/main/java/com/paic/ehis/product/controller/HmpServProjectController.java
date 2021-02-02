@@ -6,10 +6,10 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.product.service.IHmpServProjectService;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.product.domain.HmpServOpera;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +40,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 public class HmpServProjectController extends BaseController {
     @Autowired
     private IHmpServProjectService hmpServProjectService;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询服务项目列表
@@ -88,7 +87,7 @@ public class HmpServProjectController extends BaseController {
     @PostMapping("/saveProject")
     public AjaxResult saveProject(@RequestBody List<HmpServProject> servProjects) {
         // 获取登录用户名称
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         if (servProjects.size() > 0) {
             Date makedate = new Date();
             String maketime = PubFun.getCurrentTime();

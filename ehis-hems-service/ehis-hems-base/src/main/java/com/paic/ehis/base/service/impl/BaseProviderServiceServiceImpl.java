@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderService;
 import com.paic.ehis.base.mapper.BaseProviderServiceMapper;
 import com.paic.ehis.base.service.IBaseProviderServiceService;
@@ -27,8 +27,7 @@ public class BaseProviderServiceServiceImpl implements IBaseProviderServiceServi
 {
     @Autowired
     private BaseProviderServiceMapper baseProviderServiceMapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询base_provider_service(服务商服务信息)
@@ -105,8 +104,8 @@ public class BaseProviderServiceServiceImpl implements IBaseProviderServiceServi
         baseProviderService.setServicelocatorStr(StringUtils.join(arr2, ","));  // 数组转字符串(逗号分隔)(推荐)
         baseProviderService.setCreateTime(DateUtils.getNowDate());
         baseProviderService.setUpdateTime(DateUtils.getNowDate());
-        baseProviderService.setCreateBy(securityUtils.getUsername());
-        baseProviderService.setUpdateBy(securityUtils.getUsername());
+        baseProviderService.setCreateBy(SecurityUtils.getUsername());
+        baseProviderService.setUpdateBy(SecurityUtils.getUsername());
         baseProviderService.setUpdateFlag("0");
         baseProviderService.setStatus("Y");
         baseProviderService.setSerialNo(PubFun.createMySqlMaxNoUseCache("serviceSer",12,12));

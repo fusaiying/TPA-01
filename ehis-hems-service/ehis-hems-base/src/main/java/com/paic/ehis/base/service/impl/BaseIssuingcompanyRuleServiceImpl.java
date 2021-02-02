@@ -4,9 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
 import com.paic.ehis.base.domain.ClaimProduct;
 import com.paic.ehis.base.domain.dto.IssuingcompanyRuleDTO;
@@ -34,8 +34,6 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     @Autowired
     private BaseIssuingcompanyRuleMapper baseIssuingcompanyRuleMapper;
 
-    @Autowired
-    private SecurityUtils securityUtils;
     /**
      * 查询出单公司规则 
      * 
@@ -107,15 +105,15 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
             BaseIssuingcompanyRule companyRule = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRule(issuingcompanyRule);
             if (StringUtils.isNotNull(companyRule)){
                 issuingcompanyRule.setRuleno(companyRule.getRuleno());
-                issuingcompanyRule.setUpdateBy(securityUtils.getUsername());
+                issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
                 rows += baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(issuingcompanyRule);
             }else{
                 issuingcompanyRule.setStatus("Y");
                 issuingcompanyRule.setRuleno("S"+ PubFun.createMySqlMaxNoUseCache("service_fee_rule",10,4));
-                issuingcompanyRule.setCreateBy(securityUtils.getUsername());
+                issuingcompanyRule.setCreateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setCreateTime(DateUtils.getNowDate());
-                issuingcompanyRule.setUpdateBy(securityUtils.getUsername());
+                issuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
                 issuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
                 rows += baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(issuingcompanyRule);
             }
@@ -135,9 +133,9 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     public int insertBaseIssuingcompanyRule(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         baseIssuingcompanyRule.setStatus("Y");
-        baseIssuingcompanyRule.setCreateBy(securityUtils.getUsername());
+        baseIssuingcompanyRule.setCreateBy(SecurityUtils.getUsername());
         baseIssuingcompanyRule.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompanyRule.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyRuleMapper.insertBaseIssuingcompanyRule(baseIssuingcompanyRule);
     }
@@ -152,7 +150,7 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
     public int updateBaseIssuingcompanyRule(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
         baseIssuingcompanyRule.setUpdateTime(DateUtils.getNowDate());
-        baseIssuingcompanyRule.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompanyRule.setUpdateBy(SecurityUtils.getUsername());
         return baseIssuingcompanyRuleMapper.updateBaseIssuingcompanyRule(baseIssuingcompanyRule);
     }
 

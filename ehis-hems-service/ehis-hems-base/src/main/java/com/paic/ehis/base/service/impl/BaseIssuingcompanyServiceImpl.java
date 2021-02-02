@@ -2,7 +2,6 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompany;
 import com.paic.ehis.base.domain.BaseIssuingcompanyInvoice;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRiskrela;
@@ -15,6 +14,7 @@ import com.paic.ehis.base.mapper.BaseIssuingcompanyMapper;
 import com.paic.ehis.base.mapper.BaseIssuingcompanyRiskrelaMapper;
 import com.paic.ehis.base.mapper.ClaimProductMapper;
 import com.paic.ehis.base.service.IBaseIssuingcompanyService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +40,7 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
 
     @Autowired
     private ClaimProductMapper claimProductMapper;
-    @Autowired
-    private SecurityUtils securityUtils;
+
 
     /**
      * 查询出单公司信息
@@ -99,9 +98,9 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
     public int insertBaseIssuingcompany(BaseIssuingcompany baseIssuingcompany) {
         //传入数据：出单公司名称companyname、出单公司简写名称simplename
         baseIssuingcompany.setStatus("Y");//状态
-        baseIssuingcompany.setCreateBy(securityUtils.getUsername());
+        baseIssuingcompany.setCreateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompany.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompany.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyMapper.insertBaseIssuingcompany(baseIssuingcompany);
     }
@@ -114,7 +113,7 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
      */
     @Override
     public int updateBaseIssuingcompany(BaseIssuingcompany baseIssuingcompany) {
-        baseIssuingcompany.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompany.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setUpdateTime(DateUtils.getNowDate());
         return baseIssuingcompanyMapper.updateBaseIssuingcompany(baseIssuingcompany);
     }
@@ -148,16 +147,16 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
 
         baseIssuingcompany.setStatus("Y");
-        baseIssuingcompany.setCreateBy(securityUtils.getUsername());
+        baseIssuingcompany.setCreateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompany.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompany.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setUpdateTime(DateUtils.getNowDate());
 
         baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
         baseIssuingcompanyInvoice.setStatus("Y");
-        baseIssuingcompanyInvoice.setCreateBy(securityUtils.getUsername());
+        baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
-        baseIssuingcompanyInvoice.setUpdateBy(securityUtils.getUsername());
+        baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
 
         IssuingCompanyVo issuingCompanyVo = new IssuingCompanyVo();

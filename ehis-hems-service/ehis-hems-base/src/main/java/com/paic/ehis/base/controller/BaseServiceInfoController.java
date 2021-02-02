@@ -1,13 +1,13 @@
 package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseServiceApplyorimpl;
 import com.paic.ehis.base.domain.BaseServiceInfo;
 import com.paic.ehis.base.domain.BaseServiceProcess;
@@ -42,8 +42,7 @@ public class BaseServiceInfoController extends BaseController
     @Autowired
     private IBaseServiceApplyorimplService applyorimplService;
 
-    @Autowired
-    private SecurityUtils securityUtils;
+
     /**
      * 查询base_service_info（服务项目）列表
      */
@@ -84,7 +83,7 @@ public class BaseServiceInfoController extends BaseController
     public AjaxResult add(@RequestBody BaseServiceInfo baseServiceInfo)
     {
         // 获取登录用户名称
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         if ("".equals(baseServiceInfo.getServiceCode()) || baseServiceInfo.getServiceCode() == null) {
             // 服务项目名称判重
             String servicename = baseServiceInfo.getServiceName();
@@ -246,7 +245,7 @@ public class BaseServiceInfoController extends BaseController
         serviceProcessService.updateBaseServiceProcessById(servicecode);
         applyorimplService.updateBaseServiceApplyorimplById(servicecode);
         // 获取登录用户名称
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         // 更新服务项目基本信息 状态变成02
         String status = serviceProcess.getStatus();
         BaseServiceInfo baseServiceInfo = new BaseServiceInfo();

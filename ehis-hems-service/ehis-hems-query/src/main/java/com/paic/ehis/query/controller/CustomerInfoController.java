@@ -27,7 +27,6 @@ public class CustomerInfoController  extends BaseController {
     @Autowired
     private CustomerInfoService customerInfoService;
 
-    @PreAuthorize("@ss.hasPermi('query:customerInfo:list')")
     @GetMapping("/list")
     public TableDataInfo customerInfoQuery(CustomerInfoQryWorkpoolPSchema customerInfoQryWorkpoolPSchema){
         startPage();

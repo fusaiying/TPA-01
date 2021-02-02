@@ -44,7 +44,7 @@ public class SysProfileController extends BaseController
     @GetMapping
     public AjaxResult profile()
     {
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         SysUser user = userService.selectUserByUserName(username);
         AjaxResult ajax = AjaxResult.success(user);
         ajax.put("roleGroup", userService.selectUserRoleGroup(username));
@@ -80,7 +80,7 @@ public class SysProfileController extends BaseController
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(String oldPassword, String newPassword)
     {
-        String username = securityUtils.getUsername();
+        String username = SecurityUtils.getUsername();
         SysUser user = userService.selectUserByUserName(username);
         String password = user.getPassword();
         if (!SecurityUtils.matchesPassword(oldPassword, password))

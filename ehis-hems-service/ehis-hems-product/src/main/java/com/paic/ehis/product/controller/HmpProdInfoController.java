@@ -53,10 +53,12 @@ public class HmpProdInfoController extends BaseController {
     @Autowired
     private IHmpServProjectService hmpServProjectService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     /**
      * 查询产品定义列表
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpProdInfo hmpProdInfo)
     {
@@ -146,7 +148,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 导出产品定义列表
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:export')")
     @Log(title = "产品定义", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody HmpProdInfo hmpProdInfo) throws IOException
@@ -168,7 +169,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 新增产品定义
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:addProduct')")
     @Log(title = "产品定义", businessType = BusinessType.INSERT)
     @PostMapping("/addProduct")
     public AjaxResult addProduct(@RequestBody ProductInfo product)
@@ -330,7 +330,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 删除产品定义
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:remove')")
     @Log(title = "产品定义", businessType = BusinessType.DELETE)
     @DeleteMapping("/{productnos}")
     public AjaxResult remove(@PathVariable String[] productnos)
@@ -350,7 +349,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 添加保存服务地区
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:saveServiceCity')")
     @Log(title = "产品定义添加服务地区", businessType = BusinessType.INSERT)
     @PostMapping("/saveServiceCity")
     public AjaxResult saveServiceCity(@RequestBody ProductInfo product)
@@ -417,7 +415,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 产品提交审核
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:productAudit')")
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit")
     public AjaxResult productAudit(@RequestBody HmpProdInfo productInfo)
@@ -437,7 +434,6 @@ public class HmpProdInfoController extends BaseController {
     }
 
     @Log(title = "产品服务条款导入", businessType = BusinessType.IMPORT)
-    @PreAuthorize("@ss.hasPermi('system:definition:uploadFile')")
     @PostMapping("/uploadFile")
     public AjaxResult importData(MultipartFile file, @RequestParam String productNo, @RequestParam String fileDesc) throws Exception
     {
@@ -506,7 +502,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 产品审核完毕
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:productAudit2')")
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit2")
     public AjaxResult productAudit2(@RequestBody ProductInfo productInfo)
@@ -558,7 +553,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 财务复核审核完毕
      */
-    @PreAuthorize("@ss.hasPermi('system:definition:productAudit3')")
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit3")
     public AjaxResult productAudit3(@RequestBody ProductInfo productInfo)
@@ -638,7 +632,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 产品上线
      */
-    @PreAuthorize("@ss.hasPermi('product:definition:online')")
     @PostMapping("/productPublish")
     public AjaxResult productPublish(@RequestBody HmpProdInfo productInfo){
         String productNo = productInfo.getProductno();
@@ -670,7 +663,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 重新审核
      */
-    @PreAuthorize("@ss.hasAnyPermi('product:definition:reaudit')")
     @PostMapping("/productReAuditTrack")
     public AjaxResult productReAuditTrack(@RequestBody HmpProdInfo productInfo){
         String productNo = productInfo.getProductno();
@@ -716,7 +708,6 @@ public class HmpProdInfoController extends BaseController {
     /**
      * 更新产品信息、服务机构、服务网点
      */
-    @PreAuthorize("@ss.hasAnyPermi('product:definition:productupdate')")
     @PostMapping("/productUpdate")
     public AjaxResult productUpdate(@RequestBody ProductInfo product){
         // 获取登录用户名称

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.FieldMap;
@@ -111,15 +112,18 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     @Override
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-        workHandleInfo.setHandleId(serviceProcessingVo.getHandleId());
-        workHandleInfo.setFlag(serviceProcessingVo.getFlag());
-        workHandleInfo.setStatus(serviceProcessingVo.getStatus());
+
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+        workHandleInfo.setHandleType(serviceProcessingVo.getHandleType());
+        workHandleInfo.setFlag("处理");
+        workHandleInfo.setStatus("Y");
+
+
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
         workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        workHandleInfo.setHandleType(serviceProcessingVo.getHandleType());
+        //workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
         String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";
         //ServiceProcessingVo serviceProcessingVo=new ServiceProcessingVo();

@@ -1,6 +1,6 @@
 package com.paic.ehis.auth;
 
-import com.paic.ehis.common.security.annotation.EnableRyFeignClients;
+import com.paic.ehis.common.security.annotation.EnableSnFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
@@ -9,7 +9,7 @@ import org.springframework.cloud.client.SpringCloudApplication;
  * 
  *
  */
-@EnableRyFeignClients
+@EnableSnFeignClients
 @SpringCloudApplication
 public class AuthApplication
 {

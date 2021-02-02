@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import ParentView from '@/components/ParentView';
 
 /**
  * Note: 路由配置项
@@ -17,7 +18,7 @@ import Layout from '@/layout'
  * redirect: noRedirect           // 当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
  * name:'router-name'             // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
  * meta : {
-    roles: ['admin','editor']    // 设置该路由进入的权限，支持多个权限叠加
+    noCache: true                // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
     title: 'title'               // 设置该路由在侧边栏和面包屑中展示的名字
     icon: 'svg-name'             // 设置该路由的图标，对应路径src/assets/icons/svg
     breadcrumb: false            // 如果设置为false，则不会在breadcrumb面包屑中显示
@@ -79,7 +80,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/dict',
     component: Layout,
@@ -118,64 +118,7 @@ export const constantRoutes = [
         meta: { title: '修改生成配置' }
       }
     ]
-  },
-  // 服务项目列表-新增/编辑
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'projectManagement/add/:projectno(\\w+)',
-        component: (resolve) => require(['@/views/claim/basicInfoManage/projectManagement/info'], resolve),
-        name: 'ProjectInfo',
-        meta: { title: '服务项目信息', icon: '' }
-      }
-    ]
-  },
-  // 服务项目列表-服务流程配置
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'projectManagement/workflow/:projectno(\\w+)',
-        component: (resolve) => require(['@/views/claim/basicInfoManage/projectManagement/workflow'], resolve),
-        name: 'ProjectWorkFlow',
-        meta: { title: '流程配置', icon: '' }
-      }
-    ]
-  },
-  // 服务项目列表-服务流程配置-消息模板
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'projectManagement/messageTemp/',
-        component: () => import('@/views/claim/basicInfoManage/projectManagement/messageTemplate'),
-        name: 'messageTemplate',
-        meta: { title: '消息模板', noCache: true }
-      }
-    ]
-  },
-  // 医生管理-新增  /basicInfo/doctor/add/0
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'doctor/add/:docno(\\w+)',
-        component: () => import('@/views/claim/basicInfoManage/doctor/info'),
-        name: 'doctorInfo',
-        meta: { title: '医生信息新增/编辑', noCache: true }
-      }
-    ]
-  },
-
+  }
 ]
 
 export default new Router({

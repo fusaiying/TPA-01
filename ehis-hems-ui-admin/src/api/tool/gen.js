@@ -8,7 +8,6 @@ export function listTable(query) {
     params: query
   })
 }
-
 // 查询db数据库列表
 export function listDbTable(query) {
   return request({
@@ -64,6 +63,14 @@ export function delTable(tableId) {
 export function genCode(tableName) {
   return request({
     url: '/code/gen/genCode/' + tableName,
+    method: 'get'
+  })
+}
+
+// 同步数据库
+export function synchDb(tableName) {
+  return request({
+    url: '/code/gen/synchDb/' + tableName,
     method: 'get'
   })
 }

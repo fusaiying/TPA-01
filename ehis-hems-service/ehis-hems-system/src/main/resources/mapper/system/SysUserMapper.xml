@@ -68,14 +68,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="phonenumber != null and phonenumber != ''">
 			AND u.phonenumber like concat('%', #{phonenumber}, '%')
 		</if>
-		<if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-			AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+		<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
 		</if>
-		<if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-			AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+		<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 		</if>
 		<if test="deptId != null and deptId != 0">
-			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) ))
+			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
 		</if>
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
@@ -141,8 +141,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
  			<if test="userName != null and userName != ''">user_name = #{userName},</if>
  			<if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
- 			<if test="email != null and email != ''">email = #{email},</if>
- 			<if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
+ 			<if test="email != null ">email = #{email},</if>
+ 			<if test="phonenumber != null ">phonenumber = #{phonenumber},</if>
  			<if test="sex != null and sex != ''">sex = #{sex},</if>
  			<if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
  			<if test="password != null and password != ''">password = #{password},</if>
@@ -178,24 +178,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{userId}
         </foreach> 
  	</delete>
-
-	<select id="selectManageCom" resultMap="deptResult">
-		select a.dept_id,a.dept_name from sys_dept a
-	</select>
 	
-	<select id="queryComcodeUsers" resultType="com.paic.ehis.system.domain.vo.ComcodeUsersVo" parameterType="String">
-		select a.user_id id,a.user_name username,a.status enabled,GROUP_CONCAT(distinct c.role_name) name,c.role_sort level,d.dept_id comcode from sys_user a,sys_user_role b,sys_role c,sys_dept d where a.user_id = b.user_id and b.role_id = c.role_id and a.dept_id = d.dept_id and d.status = '0' and a.dept_id = #{dept_id} GROUP BY a.user_id
-	</select>
-
-	<select id="queryUpperComcodeUsers" parameterType="String" resultType="com.paic.ehis.system.domain.vo.UserVo">
-		select a.user_id id,a.user_name username from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and role_sort = (select (case (c.role_sort-1) when 0 then 1 else (c.role_sort-1) end) from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and a.user_name = #{username})
-	</select>
-
-	<select id="selectSysUser" parameterType="com.paic.ehis.system.domain.dto.SysUserDTO" resultMap="SysUserResult">
-		select user_id,user_name from sys_user
-		<where>
-			<if test="status != null and status != ''"> and status = #{status}</if>
-			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag}</if>
-		</where>
-	</select>
 </mapper> 

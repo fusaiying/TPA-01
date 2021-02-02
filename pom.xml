@@ -39,6 +39,7 @@
         <velocity.version>1.7</velocity.version>
         <fastjson.version>1.2.73</fastjson.version>
         <poi.version>4.1.2</poi.version>
+        <druid.version>1.2.4</druid.version>
         <common-pool.version>2.6.2</common-pool.version>
         <lombok.version>1.18.10</lombok.version>
         <hutool.version>5.1.0</hutool.version>

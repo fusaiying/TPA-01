@@ -58,7 +58,12 @@
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-datasource</artifactId>
         </dependency>-->
-        
+        <!-- Druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-datascope</artifactId>

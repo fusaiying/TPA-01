@@ -3,7 +3,7 @@ package com.paic.ehis.common.log.enums;
 /**
  * 操作人类别
  * 
- * @author admin
+ *
  */
 public enum OperatorType
 {

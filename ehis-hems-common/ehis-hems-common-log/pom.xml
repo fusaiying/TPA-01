@@ -12,12 +12,11 @@
     <artifactId>ehis-hems-common-log</artifactId>
 	
     <description>
-        ehis-hems-common-log日志记录
+        日志记录
     </description>
 
     <dependencies>
 		
-        <!-- Ehis-Hems Common Security -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-security</artifactId>

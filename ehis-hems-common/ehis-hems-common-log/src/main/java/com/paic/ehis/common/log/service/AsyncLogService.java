@@ -1,15 +1,15 @@
 package com.paic.ehis.common.log.service;
 
+import com.paic.ehis.system.api.RemoteLogService;
+import com.paic.ehis.system.api.domain.SysOperLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.system.api.RemoteLogService;
-import com.paic.ehis.system.api.domain.SysOperLog;
 
 /**
  * 异步调用日志服务
  * 
- * @author admin
+ *
  */
 @Service
 public class AsyncLogService

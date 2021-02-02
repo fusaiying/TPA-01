@@ -7,24 +7,24 @@
         <el-row>
 <!--v-model双向绑定 v-model的值为当前被选中的el-option的 value 属性值-->
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="service">
-              <el-select v-model="sendForm.service" class="item-width" placeholder="请选择">
+            <el-form-item label="服务项目：" prop="itemCode">
+              <el-select v-model="sendForm.itemCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="channel">
-              <el-select v-model="sendForm.channel" class="item-width" placeholder="请选择">
+            <el-form-item label="受理渠道：" prop="channelCode">
+              <el-select v-model="sendForm.channelCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理人：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="受理人：" prop="acceptBy">
+              <el-input v-model="sendForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           </el-row>
@@ -42,8 +42,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理人：" prop="Handler">
-              <el-input v-model="sendForm.handler" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="处理人：" prop="modifyBy">
+              <el-input v-model="sendForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -61,47 +61,47 @@
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="工单号：" prop="workNumber">
-              <el-input v-model="sendForm.workNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="工单号：" prop="workOrderNo">
+              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保单号：" prop="policyNumber">
-              <el-input v-model="sendForm.policyNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="保单号：" prop="policyNo">
+              <el-input v-model="sendForm.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号：" prop="secondNumber">
-              <el-input v-model="sendForm.secondNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="分单号：" prop="policyItemNo">
+              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投保人姓名：" prop="insuredName">
+            <el-form-item label="投保人姓名：" prop="holderName">
+              <el-input v-model="sendForm.holderName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人姓名：" prop="insuredName">
               <el-input v-model="sendForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人姓名：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
+              <el-input v-model="sendForm.idNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人电话：" prop="phone">
-              <el-input v-model="sendForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人电话：" prop="mobilePhone">
+              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="sendForm.organization" class="item-width" placeholder="请选择">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -122,24 +122,24 @@
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="sendForm.priority" class="item-width" placeholder="请选择">
+            <el-form-item label="优先级：" prop="priorityLevel">
+              <el-select v-model="sendForm.priorityLevel" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="vip标识：" prop="vip">
-              <el-select v-model="sendForm.vip" class="item-width" placeholder="请选择">
+            <el-form-item label="vip标识：" prop="vipFlag">
+              <el-select v-model="sendForm.vipFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-          <el-form-item label="状态：" prop="state">
-            <el-select v-model="sendForm.state" class="item-width" placeholder="请选择">
+          <el-form-item label="状态：" prop="status">
+            <el-select v-model="sendForm.status" class="item-width" placeholder="请选择">
               <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -160,7 +160,7 @@
         <span style="color: blue">待处理（{{ totalCount }}）</span>
         <div style="text-align: right; margin-right: 8px;">
             <el-button type="primary" size="mini" @click="add">新增</el-button>
-           <el-button type="primary" size="mini" @click="add">获取</el-button>
+           <el-button type="primary" size="mini" @click="obtainButton">获取</el-button>
         </div>
         <el-divider style=""/>
         <el-table
@@ -211,8 +211,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
         />
       </div>
@@ -274,8 +274,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
         />
       </div>
@@ -313,34 +313,36 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
-        sendForm: {
-          service: "",//服务信息
-          channel: "",
-          acceptor: "",
-          acceptorTime:"",
-          handler: "",
-          handlerTime: "",
-          workNumber: "",
-          policyNumber: "",
-          secondNumber: "",
-          insuredName: "",
-          beInsuredName: "",
-          beInsuredNo: "",
-          organization: "",
-          appointmentTime:"",
-          priority:"",
-          vip:"",
-          phone:"",
-          state:""
+        sendForm: {//传值给后台
+          pageNum: 1,
+          pageSize: 10,
+          itemCode: "",//服务信息
+          channelCode: "",//受理渠道
+          acceptBy: "",//受理人
+          modifyBy: "",//处理人
+          acceptorTime:[],//受理时间数组
+          appointmentTime:[],//预约时间数组
+          handlerTime:[],//处理时间数组
+          workOrderNo: "",//工单编号
+          policyNo: "",//保单号
+          policyItemNo: "",//分单号
+          holderName: "",//投保人
+          insuredName: "",//被保人
+          idNumber: "",//证件号
+          organCode: "",//出单机构
+          priorityLevel:"",//优先级
+          vipFlag:"",//VIP标识
+          mobilePhone:"",//移动电话
+          status:"",//状态
+          // acceptTimeStart:"",//开始受理时间
+          // acceptTimeEnd:"",//结束受理时间
+          // modifyTimeStart:"",//开始修改时间
+          // modifyTimeEnd:"",//结束修改时间
+          // complaintTimeStart:"",//开始预约时间
+          // complaintTimeEnd:""//结束预约时间
+
         },
         caseNumber: false,//查询条件（报案号）是否显示
-        // 查询参数
-        queryParams: {
-          pageNum: 1,
-          pageSize: 10
-
-
-        },
         loading: true,
         workPoolData: [],
         workPersonPoolData:[],
@@ -348,7 +350,6 @@
         totalCount: 0,
         totalPersonCount: 0,
         changeSerchData: {},
-        states: [],
         serves: [{
           value: '1',
           label: '服务1'
@@ -406,31 +407,37 @@
         })
       },
       //获取按钮
-      obtainButton(){
-        if (this.workPoolData[scope.$index]!=null) {
-          let query={
-
-          }
-          demandObtain(query).then(res => {
-            console.log('共公池', res.rows)
+      obtainButton(s){
+        if(s.workNumber==null&&this.ids.length===0){
+          alert("请先选中一行！")
+        }else {
+        if (s.workOrderNo!=null) {
+          console.log(s)
+          console.log("工单号",s.workOrderNo)
+          let workOrderNo=s.workNumber
+          demandObtain(workOrderNo).then(res => {
+            console.log('获取按钮', res.rows)
             if (res != null && res.code === 200) {
-              this.workPoolData = res.rows
-              this.totalCount = res.total
-              console.log('response', res.total)
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
+              console.log('获取', res.msg)
             }
           }).catch(res => {
 
           })
         }else {
-          alert("请先选中一行！")
+          let workOrderNo=this.ids
+          console.log("ids:",a)
+          demandObtain(workOrderNo).then(res => {
+            console.log('获取按钮', res.rows)
+            if (res != null && res.code === 200) {
+              console.log('获取', res.msg)
+            }
+          }).catch(res => {
+
+          })
         }
 
-      },
+      }
+        },
       //处理按钮
       dealButton(){
           this.$router.push({
@@ -440,7 +447,7 @@
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
-        this.ids = selection.map(item => item.userId);
+        this.ids = selection.map(item => item.workOrderNo);
 
       },
 
@@ -454,50 +461,18 @@
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
-      //个人池
-      // searchPersonHandle(){
-      //   demandListAndPersonalPool().then(res => {
-      //     console.log('个人池：',res)
-      //     if (res != null && res.code === 200) {
-      //       this.workPersonPoolData = res.rows
-      //       this.totalPersonCount = res.total
-      //       console.log('response',res.total)
-      //       if (res.rows.length <= 0) {
-      //         return this.$message.warning(
-      //           "未查询到数据！"
-      //         )
-      //       }
-      //     }
-      //   }).catch(res => {
-      //
-      //   })
-      // },
-      //公共池查询
+      //查询按钮
       searchHandle() {
-        let query = {
-          pageNum: this.queryParams.pageNum,
-          pageSize: this.queryParams.pageSize,
-          service: this.sendForm.service,
-          channel: this.sendForm.channel,
-          Acceptor: this.sendForm.Acceptor,
-          acceptorTime: this.sendForm.acceptorTime,
-          Handler: this.sendForm.Handler,
-          HandlerTime: this.sendForm.HandlerTime,
-          workNumber: this.sendForm.workNumber,
-          policyNumber: this.sendForm.policyNumber,
-          secondNumber: this.sendForm.secondNumber,
-          insuredName: this.sendForm.insuredName,
-          beInsuredName: this.sendForm.beInsuredName,
-          beInsuredNo: this.sendForm.beInsuredName,
-          organization: this.sendForm.organization,
-          appointmentTime:this.sendForm.appointmentTime,
-          priority:this.sendForm.priority,
-          vip:this.sendForm.vip,
-          phone:this.sendForm.phone,
-          state:this.sendForm.state
+        let queryParams;
+        if (this.sendForm.acceptorTime.length > 0) {
+          queryParams = JSON.parse(JSON.stringify(this.sendForm));
+          queryParams.acceptTimeStart=acceptorTime[0]
+          queryParams.acceptTimeEnd=acceptorTime[1]
+        } else {
+          queryParams = this.sendForm;
         }
-        console.log("查询条件",query)
-        demandListAndPublicPool(query).then(res => {
+        console.log("条件查询",queryParams)
+        demandListAndPublicPool(queryParams).then(res => {
           console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
@@ -512,7 +487,7 @@
         }).catch(res => {
 
         })
-        demandListAndPersonalPool(query).then(res => {
+        demandListAndPersonalPool(this.sendForm).then(res => {
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
@@ -529,9 +504,9 @@
         })
       },
 
-      getRiskStatus(row) {
-        return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
-      }
+      // getRiskStatus(row) {
+      //   return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+      // }
     }
   }
 </script>

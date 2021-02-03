@@ -87,13 +87,13 @@ public class BaseSupplierInfo extends BaseEntity
 
     private String addressdetail;
 
-    private List<BaseBank> baseBankList;
+    private List<com.paic.ehis.base.domain.BaseBank> baseBankList;
 
     private List<com.paic.ehis.base.domain.BaseContacts> baseContactsList;
 
-    private List<BaseSupplierOutlets> baseSupplierOutletsList;
+    private List<com.paic.ehis.base.domain.BaseSupplierOutlets> baseSupplierOutletsList;
 
-    private List<BaseSupplierReceip> baseSupplierReceipList;
+    private List<com.paic.ehis.base.domain.BaseSupplierReceip> baseSupplierReceipList;
 
     public String getBussinessStatus() {
         return bussinessStatus;
@@ -127,11 +127,11 @@ public class BaseSupplierInfo extends BaseEntity
         this.dNow1 = dNow1;
     }
 
-    public List<BaseBank> getBaseBankList() {
+    public List<com.paic.ehis.base.domain.BaseBank> getBaseBankList() {
         return baseBankList;
     }
 
-    public void setBaseBankList(List<BaseBank> baseBankList) {
+    public void setBaseBankList(List<com.paic.ehis.base.domain.BaseBank> baseBankList) {
         this.baseBankList = baseBankList;
     }
 
@@ -143,11 +143,11 @@ public class BaseSupplierInfo extends BaseEntity
         this.baseContactsList = baseContactsList;
     }
 
-    public List<BaseSupplierOutlets> getBaseSupplierOutletsList() {
+    public List<com.paic.ehis.base.domain.BaseSupplierOutlets> getBaseSupplierOutletsList() {
         return baseSupplierOutletsList;
     }
 
-    public void setBaseSupplierOutletsList(List<BaseSupplierOutlets> baseSupplierOutletsList) {
+    public void setBaseSupplierOutletsList(List<com.paic.ehis.base.domain.BaseSupplierOutlets> baseSupplierOutletsList) {
         this.baseSupplierOutletsList = baseSupplierOutletsList;
     }
 
@@ -163,11 +163,11 @@ public class BaseSupplierInfo extends BaseEntity
         return detailStr;
     }
 
-    public List<BaseSupplierReceip> getBaseSupplierReceipList() {
+    public List<com.paic.ehis.base.domain.BaseSupplierReceip> getBaseSupplierReceipList() {
         return baseSupplierReceipList;
     }
 
-    public void setBaseSupplierReceipList(List<BaseSupplierReceip> baseSupplierReceipList) {
+    public void setBaseSupplierReceipList(List<com.paic.ehis.base.domain.BaseSupplierReceip> baseSupplierReceipList) {
         this.baseSupplierReceipList = baseSupplierReceipList;
     }
 

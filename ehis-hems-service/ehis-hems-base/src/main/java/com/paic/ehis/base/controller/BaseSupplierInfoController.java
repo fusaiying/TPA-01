@@ -31,23 +31,24 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 查询base_supplier_info（供应商基础信息）列表
      */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseSupplierInfo baseSupplierInfo) throws Exception {
-        startPage();
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseSupplierInfo baseSupplierInfo) throws Exception {
+        startPage(baseSupplierInfo);
         List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList(baseSupplierInfo);
         return getDataTable(list);
     }
 
-    @GetMapping("/list1")
-    public TableDataInfo list1(BaseSupplierInfo baseSupplierInfo) {
-        startPage();
+    @PostMapping("/list1")
+    public TableDataInfo list1(@RequestBody BaseSupplierInfo baseSupplierInfo) {
+        startPage(baseSupplierInfo);
         List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList1(baseSupplierInfo);
         return getDataTable(list);
     }
 
-    @GetMapping("/list2")
-    public TableDataInfo list2(BaseSupplierInfo baseSupplierInfo) {
-        startPage();
+    @PostMapping("/list2")
+    public TableDataInfo list2(@RequestBody BaseSupplierInfo baseSupplierInfo) {
+        startPage(baseSupplierInfo);
         List<BaseSupplierInfo> list = baseSupplierInfoService.selectBaseSupplierInfoList2(baseSupplierInfo);
         return getDataTable(list);
     }
@@ -55,6 +56,7 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 导出base_supplier_info（供应商基础信息）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierInfo baseSupplierInfo) throws Exception
@@ -67,6 +69,7 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 获取base_supplier_info（供应商基础信息）详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{servcomNo}")
     public AjaxResult getInfo(@PathVariable("servcomNo") String servcomNo)
     {
@@ -76,16 +79,18 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 新增base_supplier_info（供应商基础信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public AjaxResult add(@RequestBody BaseSupplierInfo baseSupplierInfo)
     {
-        return toAjax(baseSupplierInfoService.insertBaseSupplierInfo(baseSupplierInfo));
+        return AjaxResult.success(baseSupplierInfoService.insertBaseSupplierInfo(baseSupplierInfo));
     }
 
     /**
      * 修改base_supplier_info（供应商基础信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierInfo baseSupplierInfo)
@@ -96,6 +101,7 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 删除base_supplier_info（供应商基础信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "base_supplier_info（供应商基础信息）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{servcomNos}")
     public AjaxResult remove(@PathVariable String[] servcomNos)
@@ -106,6 +112,7 @@ public class BaseSupplierInfoController extends BaseController
     /**
      * 查询base_supplier_info（供应商基础信息）所有列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/allList")
     public AjaxResult getAllBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo) {
 

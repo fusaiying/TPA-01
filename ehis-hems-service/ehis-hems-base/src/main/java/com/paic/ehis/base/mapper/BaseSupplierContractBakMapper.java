@@ -60,6 +60,11 @@ public interface BaseSupplierContractBakMapper
     public int updateBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak);
 
     /**
+     *修改服务机构历史合约
+     */
+    public int updateHistory(BaseSupplierContractBak baseSupplierContractBak);
+
+    /**
      * 删除base_supplier_contract_bak（供应商合约）
      * 
      * @param serialNo base_supplier_contract_bak（供应商合约）ID
@@ -74,4 +79,6 @@ public interface BaseSupplierContractBakMapper
      * @return 结果
      */
     public int deleteBaseSupplierContractBakByIds(String[] serialNos);
+
+
 }

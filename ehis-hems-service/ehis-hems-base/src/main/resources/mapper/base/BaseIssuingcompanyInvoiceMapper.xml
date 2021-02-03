@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectBaseIssuingcompanyInvoiceById" parameterType="String" resultMap="BaseIssuingcompanyInvoiceResult">
         <include refid="selectBaseIssuingcompanyInvoiceVo"/>
-        where company_code = #{companycode} and status="Y"
+        where company_code = #{companycode} and status='Y'
     </select>
         
     <insert id="insertBaseIssuingcompanyInvoice" parameterType="com.paic.ehis.base.domain.BaseIssuingcompanyInvoice">

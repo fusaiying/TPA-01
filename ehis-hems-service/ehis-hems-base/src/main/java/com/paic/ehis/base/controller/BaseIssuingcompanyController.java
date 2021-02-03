@@ -35,10 +35,11 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 查询出单公司信息 列表
      */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseIssuingcompany baseIssuingcompany)
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:list')")
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseIssuingcompany baseIssuingcompany)
     {
-        startPage();
+        startPage(baseIssuingcompany);
         List<BaseIssuingcompany> list = baseIssuingcompanyService.selectBaseIssuingcompanyList(baseIssuingcompany);
         return getDataTable(list);
     }
@@ -46,18 +47,33 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 导出出单公司信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:export')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, BaseIssuingcompany baseIssuingcompany) throws IOException
+    public void export(@RequestBody HttpServletResponse response, BaseIssuingcompany baseIssuingcompany) throws IOException
     {
-        List<BaseIssuingcompany> list = baseIssuingcompanyService.selectBaseIssuingcompanyList(baseIssuingcompany);
+        BaseIssuingcompany baseIssuingcompany1 = new BaseIssuingcompany();
+        String companycode = baseIssuingcompany.getCompanycode();
+        String companyname = baseIssuingcompany.getCompanyname();
+        String simplename = baseIssuingcompany.getSimplename();
+
+        String utf8Code = new String(companycode.getBytes( "UTF-8"));
+        String utf8Name = new String(companyname.getBytes( "UTF-8"));
+        String utf8SimpleName = new String(simplename.getBytes( "UTF-8"));
+
+        baseIssuingcompany1.setCompanycode(utf8Code);
+        baseIssuingcompany1.setCompanyname(utf8Name);
+        baseIssuingcompany1.setSimplename(utf8SimpleName);
+
+        List<BaseIssuingcompany> list = baseIssuingcompanyService.selectBaseIssuingcompanyList(baseIssuingcompany1);
         ExcelUtil<BaseIssuingcompany> util = new ExcelUtil<BaseIssuingcompany>(BaseIssuingcompany.class);
-        util.exportExcel(response, list, "issuingcompany");
+        util.exportExcel(response, list, "出单公司信息表");
     }
 
     /**
      * 获取出单公司信息 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:query')")
     @GetMapping(value = "/{companycode}")
     public AjaxResult getInfo(@PathVariable("companycode") String companyCode)
     {
@@ -69,6 +85,7 @@ public class BaseIssuingcompanyController extends BaseController
      * 传入数据：出单公司名称companyname、出单公司简写名称simplename
      * 传出数据：出单公司名称companyname、出单公司简写名称simplename、出单公司编码companycode
      */
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:add')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.INSERT)
     @PostMapping("/addissuingAndCompanyDTO")
     public AjaxResult add(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
@@ -79,6 +96,7 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 修改出单公司信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:edit')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO)
@@ -90,6 +108,7 @@ public class BaseIssuingcompanyController extends BaseController
     /**
      * 删除出单公司信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:issuingcompany:remove')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{companyCodes}")
     public AjaxResult remove(@PathVariable String[] companyCodes)

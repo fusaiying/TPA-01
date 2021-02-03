@@ -27,7 +27,7 @@ public class BaseContractService extends BaseEntity
     private String contractNo;
 
     /** 供应商编码 */
-    @Excel(name = "供应商项目名称")
+    @Excel(name = "供应商编码")
     private String supplierCode;
 
     /** 服务项目编码 */

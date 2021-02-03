@@ -34,9 +34,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select  doc_code, doc_name,  start_time, end_time, doc_phone, status, remark,
         group_concat(comment,fiest_dept, second_dept) as doc_dept from base_doc_info
         <where>
+            1 = 1
             <if test="docName != null  and docName != ''"> and doc_name like concat('%', #{docName}, '%')</if>
             <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
-            <if test="fiestDept != null  and fiestDept != ''"> and( fiest_dept = #{fiestDept} or second_dept = #{secondDept} or comment = #{comment}) </if>
+            <if test="fiestDept != null  and fiestDept != ''"> and( fiest_dept like concat('%', #{fiestDept},'%') or second_dept like concat('%',#{secondDept},'%') or comment like concat('%',#{comment},'%')) </if>
             <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
             <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
             <if test="docPhone != null  and docPhone != ''"> and doc_phone = #{docPhone}</if>

@@ -1,19 +1,18 @@
 package com.paic.ehis.base.service.impl;
 
-import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
-import com.paic.ehis.base.domain.BaseSupplierContract;
 import com.paic.ehis.base.domain.BaseSupplierContractBak;
 import com.paic.ehis.base.mapper.BaseSupplierContractBakMapper;
 import com.paic.ehis.base.mapper.BaseSupplierContractMapper;
 import com.paic.ehis.base.service.IBaseSupplierContractBakService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +30,6 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
 
     @Autowired
     private BaseSupplierContractMapper baseSupplierContractMapper;
-
-
     /**
      * 查询base_supplier_contract_bak（供应商合约）
      * 
@@ -95,14 +92,22 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
     @Override
     public BaseSupplierContractBak insertBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak)
     {
-      //  baseSupplierContractBak.setContractNo("SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContractBak", 0, 7));
-
-        baseSupplierContractBak.setCreateTime(DateUtils.getNowDate());
+        baseSupplierContractBak.setCreateBy(SecurityUtils.getUsername());
+        baseSupplierContractBak.setCreateTime(new Date());
+        baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
+        baseSupplierContractBak.setUpdateTime(new Date());
         baseSupplierContractBak.setStatus("Y");
         baseSupplierContractBak.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractBakSerialNo", 0, 11));
+//        String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 9);
+//        baseSupplierContractBak.setContractNo(contractNo);
+
+        String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 10);
+        //生成合约名称
+        String name = this.generatorContractName(contractNo,"contract_type",baseSupplierContractBak.getContractType());
+        baseSupplierContractBak.setContractName(name);
+        baseSupplierContractBak.setContractNo(contractNo);
 
         baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
-
         return baseSupplierContractBak;
     }
 
@@ -113,22 +118,35 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
      * @return 结果
      */
     @Override
-    public int updateBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak)
+    public BaseSupplierContractBak updateBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak)
     {
-        List<BaseSupplierContract> baseSupplierContracts=baseSupplierContractMapper.selectBaseproviderCode(baseSupplierContractBak.getProviderCode());
-        int count=0;
-        if(!baseSupplierContracts.isEmpty()){
-            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
-            baseSupplierContractBak.setUpdateTime(new Date());
-            count=baseSupplierContractBakMapper.updateBaseSupplierContractBak(baseSupplierContractBak);
-        }else {
-            baseSupplierContractBak.setCreateBy(SecurityUtils.getUsername());
-            baseSupplierContractBak.setCreateTime(new Date());
-            baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
-            baseSupplierContractBak.setUpdateTime(new Date());
-            count=baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
-        }return count;
+
+        String contractNo = baseSupplierContractBak.getContractNo();
+        //生成合约名称
+        String name = this.generatorContractName(contractNo,"contract_type",baseSupplierContractBak.getContractType());
+        baseSupplierContractBak.setContractName(name);
+        baseSupplierContractBak.setCreateBy(SecurityUtils.getUsername());
+        baseSupplierContractBak.setCreateTime(new Date());
+        baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
+        baseSupplierContractBak.setUpdateTime(new Date());
+        baseSupplierContractBak.setStatus("Y");
+//            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 9);
+//            baseSupplierContractBak.setContractNo(contractNo);
+//            baseSupplierContractBak.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractBakSerialNo", 0, 11));
+        int result = baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
+        return baseSupplierContractBak;
     }
+
+    /**
+     *修改服务机构历史合约
+     */
+    public int updateHistory(BaseSupplierContractBak baseSupplierContractBak)
+    {
+        baseSupplierContractBak.setUpdateBy(SecurityUtils.getUsername());
+        baseSupplierContractBak.setUpdateTime(new Date());
+        return  baseSupplierContractBakMapper.updateHistory(baseSupplierContractBak);
+    }
+
 
     /**
      * 批量删除base_supplier_contract_bak（供应商合约）
@@ -152,5 +170,14 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
     public int deleteBaseSupplierContractBakById(String serialNo)
     {
         return baseSupplierContractBakMapper.deleteBaseSupplierContractBakById(serialNo);
+    }
+
+    private String generatorContractName(String id, String dictType, String dictValue){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("dictType",dictType);
+        map.put("dictValue",dictValue);
+        return baseSupplierContractMapper.generatorContractName(map);
     }
 }

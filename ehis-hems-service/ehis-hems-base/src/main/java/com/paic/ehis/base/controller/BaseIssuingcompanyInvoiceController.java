@@ -33,6 +33,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 查询出单公司开票信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
     {
@@ -44,6 +45,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 导出出单公司开票信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:export')")
     @Log(title = "出单公司开票信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompanyInvoice baseIssuingcompanyInvoice) throws IOException
@@ -56,6 +58,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 获取出单公司开票信息 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:query')")
     @GetMapping(value = "/{companyCode}")
     public AjaxResult getInfo(@PathVariable("companyCode") String companyCode)
     {
@@ -65,6 +68,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 新增出单公司开票信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:add')")
     @Log(title = "出单公司开票信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
@@ -81,6 +85,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 修改出单公司开票信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:edit')")
     @Log(title = "出单公司开票信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIssuingcompanyInvoice baseIssuingcompanyInvoice)
@@ -91,6 +96,7 @@ public class BaseIssuingcompanyInvoiceController extends BaseController
     /**
      * 删除出单公司开票信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:invoice:remove')")
     @Log(title = "出单公司开票信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{companyCodes}")
     public AjaxResult remove(@PathVariable String[] companyCodes)

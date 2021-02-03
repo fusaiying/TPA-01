@@ -1,10 +1,10 @@
 package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompanyInvoice;
 import com.paic.ehis.base.mapper.BaseIssuingcompanyInvoiceMapper;
 import com.paic.ehis.base.service.IBaseIssuingcompanyInvoiceService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
 {
     @Autowired
     private BaseIssuingcompanyInvoiceMapper baseIssuingcompanyInvoiceMapper;
-
 
     /**
      * 查询出单公司开票信息 
@@ -75,7 +74,15 @@ public class BaseIssuingcompanyInvoiceServiceImpl implements IBaseIssuingcompany
     {
         baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
-        return baseIssuingcompanyInvoiceMapper.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
+        String companycode = baseIssuingcompanyInvoice.getCompanycode();
+        BaseIssuingcompanyInvoice baseIssuingcompanyInvoice1 = baseIssuingcompanyInvoiceMapper.selectBaseIssuingcompanyInvoiceById(companycode);
+        if (baseIssuingcompanyInvoice1 != null){//不是第一次提交
+            return baseIssuingcompanyInvoiceMapper.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
+        }//第一次提交的话
+        baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
+        baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
+        baseIssuingcompanyInvoice.setStatus("Y");
+        return baseIssuingcompanyInvoiceMapper.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
     }
 
     /**

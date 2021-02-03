@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.vo.*;
@@ -49,7 +49,6 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
 
     @Autowired
     private IBaseSupplierContractService baseSupplierContractService;
-
 
     /**
      * 查询base_provider_info(服务商基本信息)
@@ -275,11 +274,11 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
                     baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
                 }
                 baseProviderInfo.setType2Str(StringUtils.join(baseProviderInfo.getType2(), ","));
-                baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(baseProviderInfo.getProviderCode());
+               //baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
                 baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
             }else if("02".equals(baseProviderInfo.getOrgFlag())){
                 baseProviderInfo.setBussinessStatus("03");  //有效状态
-                baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
+                //baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
                 baseProviderInfoMapper.insertBaseProviderInfoNew(baseProviderInfo);
             }
             baseProvider.setProviderCode(baseProviderInfo.getProviderCode());

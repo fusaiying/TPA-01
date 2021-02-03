@@ -32,6 +32,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 查询base_supplier_receipt(供应商开票信息)列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseSupplierReceip baseSupplierReceip)
     {
@@ -43,6 +44,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 导出base_supplier_receipt(供应商开票信息)列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:export')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierReceip baseSupplierReceip) throws IOException
@@ -55,6 +57,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 获取base_supplier_receipt(供应商开票信息)详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:query')")
     @GetMapping(value = "/{suppliercode}")
     public AjaxResult getInfo(@PathVariable("suppliercode") String suppliercode)
     {
@@ -64,6 +67,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 新增base_supplier_receipt(供应商开票信息)
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:add')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierReceip baseSupplierReceip)
@@ -74,6 +78,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 修改base_supplier_receipt(供应商开票信息)
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:edit')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierReceip baseSupplierReceip)
@@ -84,6 +89,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 删除base_supplier_receipt(供应商开票信息)
      */
+    //@PreAuthorize("@ss.hasPermi('system:receip:remove')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{suppliercodes}")
     public AjaxResult remove(@PathVariable String[] suppliercodes)

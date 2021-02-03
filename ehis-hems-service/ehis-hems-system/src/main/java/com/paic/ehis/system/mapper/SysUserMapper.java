@@ -1,6 +1,10 @@
 package com.paic.ehis.system.mapper;
 
+import com.alibaba.fastjson.JSONObject;
+import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -8,7 +12,7 @@ import java.util.List;
 /**
  * 用户表 数据层
  * 
- *
+ * @author admin
  */
 public interface SysUserMapper
 {
@@ -19,6 +23,10 @@ public interface SysUserMapper
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserList(SysUser sysUser);
+
+    public int selectDept(String username);
+
+    public List<String> selectuserName(int deptId);
 
     /**
      * 通过用户名查询用户
@@ -109,4 +117,18 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 查询部门信息
+     *
+     * @return
+     */
+    public List<SysDept> selectManageCom();
+
+    List<JSONObject> queryComcodeUsers(String dept_id);
+
+    List<JSONObject> queryUpperComcodeUsers(String username);
+
+    /** 任务改派查询改派操作人 */
+    List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
 }

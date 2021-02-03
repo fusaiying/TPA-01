@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderService;
 import com.paic.ehis.base.mapper.BaseProviderServiceMapper;
 import com.paic.ehis.base.service.IBaseProviderServiceService;
@@ -27,7 +27,6 @@ public class BaseProviderServiceServiceImpl implements IBaseProviderServiceServi
 {
     @Autowired
     private BaseProviderServiceMapper baseProviderServiceMapper;
-
 
     /**
      * 查询base_provider_service(服务商服务信息)

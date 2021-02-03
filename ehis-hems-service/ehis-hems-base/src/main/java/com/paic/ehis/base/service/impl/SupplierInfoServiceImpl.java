@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.PinYinUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.mapper.*;
@@ -32,7 +32,6 @@ public class SupplierInfoServiceImpl implements SupplierInfoService {
     private BaseSupplierReceipMapper baseSupplierReceipMapper;
     @Autowired
     private PrivateHmpProviderMapper privateHmpProviderMapper;
-
 
 
     @Override

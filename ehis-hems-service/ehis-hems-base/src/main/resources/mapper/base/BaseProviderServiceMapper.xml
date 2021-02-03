@@ -48,14 +48,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="topfive"    column="topfive"    />
         <result property="virtualOrg"    column="virtual_org"    />
         <result property="leadFlag"    column="lead_flag"    />
+        <result property="weekendsWorking"    column="weekends_working"    />
     </resultMap>
 
     <sql id="selectBaseProviderServiceVo">
-        select serial_no,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service_bak
+        select serial_no,weekends_working,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service_bak
     </sql>
 
     <sql id="selectBaseProviderServiceVoNew">
-        select serial_no,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service
+        select serial_no,weekends_working,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service
     </sql>
 
     <select id="selectBaseProviderServiceList" parameterType="BaseProviderService" resultMap="BaseProviderServiceResult">
@@ -103,6 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into base_provider_service_bak
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
+            <if test="weekendsWorking != null">weekends_working,</if>
             <if test="providerCode != null">provider_code,</if>
             <if test="networkType != null and networkType != ''">network_type,</if>
             <if test="category != null">category,</if>
@@ -148,6 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
+            <if test="weekendsWorking != null">#{weekendsWorking},</if>
             <if test="providerCode != null">#{providerCode},</if>
             <if test="networkType != null and networkType != ''">#{networkType},</if>
             <if test="category != null">#{category},</if>
@@ -197,6 +200,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into base_provider_service
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
+            <if test="weekendsWorking != null">weekends_working,</if>
             <if test="providerCode != null">provider_code,</if>
             <if test="networkType != null and networkType != ''">network_type,</if>
             <if test="category != null">category,</if>
@@ -242,6 +246,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
+            <if test="weekendsWorking != null">#{weekendsWorking},</if>
             <if test="providerCode != null">#{providerCode},</if>
             <if test="networkType != null and networkType != ''">#{networkType},</if>
             <if test="category != null">#{category},</if>

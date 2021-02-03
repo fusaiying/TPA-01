@@ -32,6 +32,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 查询出单公司附件信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseIssuingcompanyAttachfile baseIssuingcompanyAttachfile)
     {
@@ -43,6 +44,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 导出出单公司附件信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:export')")
     @Log(title = "出单公司附件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompanyAttachfile baseIssuingcompanyAttachfile) throws IOException
@@ -55,6 +57,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 获取出单公司附件信息 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -64,6 +67,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 新增出单公司附件信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:add')")
     @Log(title = "出单公司附件信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseIssuingcompanyAttachfile baseIssuingcompanyAttachfile)
@@ -74,6 +78,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 修改出单公司附件信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:edit')")
     @Log(title = "出单公司附件信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIssuingcompanyAttachfile baseIssuingcompanyAttachfile)
@@ -84,6 +89,7 @@ public class BaseIssuingcompanyAttachfileController extends BaseController
     /**
      * 删除出单公司附件信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:attachfile:remove')")
     @Log(title = "出单公司附件信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

@@ -2,13 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderNewtworktype;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
 import com.paic.ehis.base.domain.vo.BaseProviderNetworktypeVO;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper;
 import com.paic.ehis.base.service.IBaseProviderNewtworktypeService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,6 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
 
     @Autowired
     private BaseProviderNewtworktypeLogMapper baseProviderNewtworktypeLogMapper;
-
 
     /**
      * 查询base_provider_newtworktypet(医疗网络类型)

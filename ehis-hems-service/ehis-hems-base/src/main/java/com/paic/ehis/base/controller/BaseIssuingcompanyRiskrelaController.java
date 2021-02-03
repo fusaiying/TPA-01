@@ -32,6 +32,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 查询出单公司产品关联 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseIssuingcompanyRiskrela baseIssuingcompanyRiskrela)
     {
@@ -43,6 +44,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 导出出单公司产品关联 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:export')")
     @Log(title = "出单公司产品关联 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompanyRiskrela baseIssuingcompanyRiskrela) throws IOException
@@ -55,6 +57,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 获取出单公司产品关联 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:query')")
     @GetMapping(value = "/{companyCode}")
     public AjaxResult getInfo(@PathVariable("companyCode") String companyCode)
     {
@@ -64,6 +67,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 新增出单公司产品关联 
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:add')")
     @Log(title = "出单公司产品关联 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseIssuingcompanyRiskrela baseIssuingcompanyRiskrela)
@@ -74,6 +78,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 修改出单公司产品关联 
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:edit')")
     @Log(title = "出单公司产品关联 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIssuingcompanyRiskrela baseIssuingcompanyRiskrela)
@@ -84,6 +89,7 @@ public class BaseIssuingcompanyRiskrelaController extends BaseController
     /**
      * 删除出单公司产品关联 
      */
+    //@PreAuthorize("@ss.hasPermi('system:riskrela:remove')")
     @Log(title = "出单公司产品关联 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{companyCodes}")
     public AjaxResult remove(@PathVariable String[] companyCodes)

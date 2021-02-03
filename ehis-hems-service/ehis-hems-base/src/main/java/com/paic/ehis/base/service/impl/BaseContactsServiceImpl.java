@@ -2,12 +2,12 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.PinYinUtils;
 import com.paic.ehis.base.domain.BaseContacts;
 import com.paic.ehis.base.domain.vo.BaseContactsVo;
 import com.paic.ehis.base.mapper.BaseContactsMapper;
 import com.paic.ehis.base.service.IBaseContactsService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -85,8 +85,8 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
                 baseContact.setUpdateBy(SecurityUtils.getUsername());
                 baseContact.setSupplierCode(baseContactsVo.getProviderCode());
                 if("02".equals(baseContact.getPlaceType())){
-                    baseContact.setAccountNo("PA"+PubFun.createMySqlMaxNoUseCache("accountNoSer",10,8));
-                    baseContact.setPassword(ToPinyin(baseContact.getRole())+"123456");
+                    baseContact.setRole("PA"+PubFun.createMySqlMaxNoUseCache("accountNoSer",10,8));
+                    baseContact.setPassword(ToPinyin(baseContact.getName())+"123456");
                 }
                 baseContact.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
                 baseContact.setProviderCode(baseContactsVo.getProviderCode());

@@ -1,7 +1,7 @@
 package com.paic.ehis.base.mapper;
 
 import com.paic.ehis.base.domain.BaseIssuingcompanyRiskrela;
-
+import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
 import java.util.List;
 
 /**

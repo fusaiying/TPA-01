@@ -67,7 +67,7 @@ import {preView} from '@/api/claim/fileDeal'
 //import images from '../../../claimsHandle/common/mixins/images'
 import {toClient} from '@/utils/commenMethods.js'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-import Bus from '../../../claimsHandle1/bus/bus'
+import Bus from '../../../claimsHandle/bus/bus'
 
 export default {
  // inject: ['getImageInfo'],

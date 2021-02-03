@@ -115,9 +115,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.businessName'" :rules="applyfieldListRule.businessName">
                 <el-select v-model="scope.row.businessName" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in fieldNameOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue+' - '+dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue+' - '+dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -129,9 +129,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.recondType'" :rules="applyfieldListRule.recondType">
                 <el-select v-model="scope.row.recondType" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in recondTypeOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue + ' - ' +dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue + ' - ' +dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -143,9 +143,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.isrecond'" :rules="applyfieldListRule.isrecond">
                 <el-select v-model="scope.row.isrecond" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in booleanOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue + ' - ' +dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue + ' - ' +dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -585,14 +585,14 @@
 <script>
   import {selectDictLabel} from "@/utils/sinoutils";
   import {getServiceProcess, saveServiceProcess,} from "@/api/provider/project"
-  import breakOff from "../../claimsHandle/common/modul/breakOff";
+
 
   export default {
     name: "workFlow",
     data() {
       const checkServiceApply = (rules, value, callback) => {
         if ((this.serviceapply.cancelFlag == undefined || this.serviceapply.cancelFlag == "") && (this.serviceapply.sendmessageFlag == undefined || this.serviceapply.sendmessageFlag == "")
-            && (this.serviceapply.updateFlag == undefined || this.serviceapply.updateFlag == "") && (this.serviceapply.selfused == undefined || this.serviceapply.selfused == "")){
+          && (this.serviceapply.updateFlag == undefined || this.serviceapply.updateFlag == "") && (this.serviceapply.selfused == undefined || this.serviceapply.selfused == "")){
           callback(new Error('至少填一项'))
         } else {
           callback()
@@ -640,8 +640,8 @@
           updateFlag: [{validator: checkServiceApply, trigger: 'change'}],
           selfused: [{validator: checkServiceApply, trigger: 'change'}],
           updateNum: [{validator: checkUpdateNum, trigger: 'blur'},
-                      {pattern: /^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
-                      ]
+            {pattern: /^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
+          ]
         },
         applyfieldListRule: {
           businessName:  [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -658,19 +658,19 @@
           cancelFlag: [{validator: checkOrder, trigger: 'change'}],
           sendmessageFlag: [{validator: checkOrder, trigger: 'change'}],
           aging: [{validator: checkOrder, trigger: 'blur'},
-                  {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur' },
-                  ],
+            {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur' },
+          ],
         },
         implementRule: {
           cancelFlag: [{validator: checkImplement, trigger: 'change'}],
           sendmessageFlag: [{validator: checkImplement, trigger: 'change'}],
           recordFlag: [{validator: checkImplement, trigger: 'change'}],
           frequency: [{validator: checkFrequency, trigger: 'blur'},
-                      {pattern:/^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
-                      ],
+            {pattern:/^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
+          ],
           aging: [{validator: checkImplement, trigger: 'blur'},
-                  {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur'},
-                  ],
+            {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur'},
+          ],
         },
         imfieldListRule: {
           businessName:  [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -775,9 +775,21 @@
       };
     },
     created() {
-      const servicecode = this.$route.params && this.$route.params.projectno;
-      this.servicecode = servicecode;
-      this.getProjectProcess(this.servicecode);
+      if (this.$route.query.flag){
+        const servicecode = this.$route.query.code;
+        this.servicecode = servicecode;
+        this.getProjectProcess(this.servicecode);
+      } else {
+        const paramsData = this.$route.query.paramsData;
+        this.servicecode = paramsData.code;
+        this.serviceapply = paramsData.card1;
+        this.applyfieldList = paramsData.card2;
+        this.allocationForm = paramsData.card3;
+        this.orderForm = paramsData.card4;
+        this.implement = paramsData.card5;
+        this.imfieldList = paramsData.card6;
+        this.userForm = paramsData.card7;
+      }
       this.getDicts("sys_yes_no").then(response => {
         this.booleanOptions = response.data;
       });
@@ -959,7 +971,30 @@
       },
       // 消息模板
       MessageTemplate() {
-        this.$router.push({path: '/basicInfo/projectManagement/messageTemp'});
+        const paramsData = {
+          code:this.servicecode,
+          card1:this.serviceapply,
+          card2:this.applyfieldList,
+          card3:this.allocationForm,
+          card4:this.orderForm,
+          card5:this.implement,
+          card6:this.imfieldList,
+          card7:this.userForm
+        }
+        console.log("paramsData:",paramsData)
+        this.$router.push({
+          path: '/basic-info/projectManagement/messageTemplate',
+          query: {
+            code:this.servicecode,
+            card1:this.serviceapply,
+            card2:this.applyfieldList,
+            card3:this.allocationForm,
+            card4:this.orderForm,
+            card5:this.implement,
+            card6:this.imfieldList,
+            card7:this.userForm
+          }
+        });
       },
       // 服务申请-业务字段 添加
       addApplyFieldOneRow() {
@@ -1188,7 +1223,7 @@
         }
         if (!flag && msg == ""){
           return this.$message.warning(
-              "请先录入必录项！"
+            "请先录入必录项！"
           )
         }
         if (flag) {

@@ -17,7 +17,7 @@
             :on-exceed="handleExceed"
             :file-list="fileList">
             <el-button size="small" type="primary">上传</el-button>
-<!--&lt;!&ndash;            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>&ndash;&gt;-->
           </el-upload>
         </span>
       </div>
@@ -26,7 +26,7 @@
                 size="mini"
                 tooltip-effect="dark"
                 class="projectList_table"
-                >
+      >
         <el-table-column label="服务手册编码" align="center" prop="manualCode" show-overflow-tooltip/>
         <el-table-column label="服务手册名称" align="center" prop="manualName" show-overflow-tooltip/>
         <el-table-column label="操作人" align="center" prop="createBy" show-overflow-tooltip/>

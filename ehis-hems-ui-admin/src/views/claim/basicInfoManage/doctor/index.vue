@@ -27,12 +27,12 @@
               />
             </el-form-item>
           </el-col>
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="所属地区：" prop="region">-->
-<!--              <el-cascader :options="regions" v-model="region" class="item-width" placeholder="请选择"-->
-<!--                           @change="handleChange"/>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
+          <!--          <el-col :span="8">-->
+          <!--            <el-form-item label="所属地区：" prop="region">-->
+          <!--              <el-cascader :options="regions" v-model="region" class="item-width" placeholder="请选择"-->
+          <!--                           @change="handleChange"/>-->
+          <!--            </el-form-item>-->
+          <!--          </el-col>-->
         </el-row>
         <el-row>
           <el-form-item class="queryForm_button">

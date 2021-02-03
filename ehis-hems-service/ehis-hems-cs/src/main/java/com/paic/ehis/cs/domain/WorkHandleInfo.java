@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 工单处理信息 对象 work_handle_info
  * 
  * @author sino
- * @date 2021-01-30
+ * @date 2021-02-02
  */
 public class WorkHandleInfo extends BaseEntity
 {

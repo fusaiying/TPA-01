@@ -52,7 +52,7 @@ a.modify_by,
 a.modify_time,
 a.vip_flag,
 a.organ_code,
-a.STATUS,
+a.status,
 a.create_by create_by1,
 a.create_time create_time1,
 a.update_by update_by1,
@@ -75,30 +75,32 @@ b.update_by update_by2,
 b.update_time update_time2
 FROM
 work_order_accept a,
-accept_detail_info b
+accept_detail_info b,
+person_info c
 WHERE
 a.work_order_no = b.work_order_no
+  and a.insured_no=c.person_id
 and a.business_type='信息需求'
 and a.status='01'
-        <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
-        <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
-        <if test="acceptBy != null  and acceptBy != ''"> and accept_by = #{acceptBy}</if>
-        <if test="acceptTime != null "> and accept_time = #{acceptTime}</if>
+        <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="modifyBy != null  and modifyBy != ''"> and modify_by = #{modifyBy}</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="workOrderNo != null"> and work_order_no= #{workOrderNo}</if>
-        <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
-        <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
-        <if test="insuredName != null  and insuredName != ''"> and insured_name like concat('%', #{insuredName}, '%')</if>
-        <if test="holderName != null  and holderName != ''"> and holder_name like concat('%', #{holderName}, '%')</if>
-        <if test="vipFlag != null  and vipFlag != ''"> and vip_flag = #{vipFlag}</if>
-        <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
-        <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
-        <if test="status != null  and status != ''"> and status = #{status}</if>
-        <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
-        <if test="mobilePhone != null  and mobilePhone != ''"> and mobile_phone = #{mobilePhone}</if>
-        <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
 	</select>
 
 
@@ -142,29 +144,32 @@ b.update_by update_by2,
 b.update_time update_time2
 FROM
 work_order_accept a,
-accept_detail_info b
+accept_detail_info b,
+person_info c
 WHERE
 a.work_order_no = b.work_order_no
-and a.business_type='信息需求'
+and a.insured_no=c.person_id
+  and a.business_type='信息需求'
 and a.status='02'
-        <if test="channelCode != null  and channelCode != ''"> and channel_code = #{channelCode}</if>
-        <if test="itemCode != null  and itemCode != ''"> and item_code = #{itemCode}</if>
-        <if test="acceptBy != null  and acceptBy != ''"> and accept_by = #{acceptBy}</if>
+        <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="modifyBy != null  and modifyBy != ''"> and modify_by = #{modifyBy}</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-        <if test="workOrderNo != null"> and work_order_no= #{workOrderNo}</if>
-        <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
-        <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
-        <if test="insuredName != null  and insuredName != ''"> and insured_name like concat('%', #{insuredName}, '%')</if>
-        <if test="holderName != null  and holderName != ''"> and holder_name like concat('%', #{holderName}, '%')</if>
-        <if test="vipFlag != null  and vipFlag != ''"> and vip_flag = #{vipFlag}</if>
-        <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
-        <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
-        <if test="status != null  and status != ''"> and status = #{status}</if>
-        <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
-        <if test="mobilePhone != null  and mobilePhone != ''"> and mobile_phone = #{mobilePhone}</if>
-        <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>
+        <if test="workOrderNo != null and workOrderNo != ''"> and a.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+       <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
 	</select>
 
     <update id="updateStatus" parameterType="String" >

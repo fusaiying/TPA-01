@@ -30,6 +30,14 @@ public interface CallAgainMapper
     public List<CallAgain> selectCallAgainList(CallAgain callAgain);
 
     /**
+     * 查询再次来电工单提醒
+     * @param callAgain
+     * @return
+     */
+    public List<CallAgain> selectCallAgain(CallAgain callAgain);
+
+
+    /**
      * 新增再次来电信息 
      * 
      * @param callAgain 再次来电信息 

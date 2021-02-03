@@ -244,5 +244,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{handleId}
         </foreach>
     </delete>
-    
+    <resultMap type="com.paic.ehis.cs.domain.vo.ServiceProcessingVo" id="ServiceProcessingVo">
+        <result property="handleId"    column="handle_id"    />
+        <result property="handleType"    column="handle_type"    />
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="flag"    column="flag"    />
+        <result property="status"    column="status"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    <insert id="insertServiceProcessing" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" >
+        insert into work_handle_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="handleId != null">handle_id,</if>
+            <if test="handleType != null and handleType != ''">handle_type,</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="flag != null">flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="handleProp1 != null">handle_prop1,</if>
+            <if test="handleProp2 != null">handle_prop2,</if>
+            <if test="handleProp3 != null">handle_prop3,</if>
+            <if test="handleProp30 != null">handle_prop30,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="handleId != null">#{handleId},</if>
+            <if test="handleType != null and handleType != ''">#{handleType},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="flag != null">#{flag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="handleProp1 != null">#{handleProp1},</if>
+            <if test="handleProp2 != null">#{handleProp2},</if>
+            <if test="handleProp3 != null">#{handleProp3},</if>
+            <if test="handleProp30 != null">#{handleProp30},</if>
+        </trim>
+    </insert>
 </mapper>

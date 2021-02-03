@@ -1,18 +1,20 @@
 package com.paic.ehis.cs.service;
 
-import com.paic.ehis.cs.domain.WorkHandleInfo;
-
 import java.util.List;
-
+import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
  * 工单处理信息 Service接口
  * 
  * @author sino
- * @date 2021-01-30
+ * @date 2021-02-02
  */
 public interface IWorkHandleInfoService 
 {
+
+
+
     /**
      * 查询工单处理信息 
      * 
@@ -60,4 +62,12 @@ public interface IWorkHandleInfoService
      * @return 结果
      */
     public int deleteWorkHandleInfoById(Long handleId);
+
+    /**
+     * 修改服务处理页面
+     * @param serviceProcessingVo
+     * @return
+     */
+    public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo);
+
 }

@@ -92,4 +92,14 @@ public class CallAgainServiceImpl implements ICallAgainService
     {
         return callAgainMapper.deleteCallAgainById(callSerialNum);
     }
+
+    /**
+     * 查询再次来电工单提醒
+     * @param callAgain
+     * @return
+     */
+    @Override
+    public List<CallAgain> selectCallAgain(CallAgain callAgain) {
+        return callAgainMapper.selectCallAgain(callAgain);
+    }
 }

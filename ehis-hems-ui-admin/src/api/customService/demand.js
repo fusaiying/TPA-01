@@ -17,3 +17,19 @@ export function demandListAndPersonalPool(query) {
     params: query
   })
 }
+//#二次来电查询
+export function selectCallAgain() {
+  return request({
+    url: '/cs/again/selectCallAgain',
+    method: 'get',
+  })
+}
+
+//#处理页面新增
+export function dealAdd(data) {
+  return request({
+    url: '/cs/demand/insertServiceProcessing',
+    method: 'put',
+    data: data
+  })
+}

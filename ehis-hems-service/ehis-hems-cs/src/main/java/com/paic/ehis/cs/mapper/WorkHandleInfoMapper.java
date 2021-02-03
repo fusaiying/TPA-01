@@ -1,15 +1,14 @@
 package com.paic.ehis.cs.mapper;
 
-import com.paic.ehis.cs.domain.WorkHandleInfo;
-
 import java.util.List;
-
+import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
  * 工单处理信息 Mapper接口
  * 
  * @author sino
- * @date 2021-01-30
+ * @date 2021-02-02
  */
 public interface WorkHandleInfoMapper 
 {
@@ -60,4 +59,12 @@ public interface WorkHandleInfoMapper
      * @return 结果
      */
     public int deleteWorkHandleInfoByIds(Long[] handleIds);
+
+
+    /**
+     * 修改服务处理页面
+     * @param workHandleInfo
+     * @return
+     */
+    public int insertServiceProcessing(WorkHandleInfo workHandleInfo);
 }

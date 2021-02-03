@@ -11,11 +11,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="状态：" prop="riskStatus">
-              <el-select v-model="sendForm.riskStatus" class="item-width" placeholder="请选择">
-                <el-option key="02" label="规则设置"
-                           value="02"/>
-                <el-option key="03" label="规则审核"
-                           value="03"/>
+              <el-select  v-model="sendForm.riskStatus" class="item-width" placeholder="请选择">
+                <el-option v-if="product_statusOptions.length>0" :key="product_statusOptions[1].dictValue" :label="product_statusOptions[1].dictLabel"
+                           :value="product_statusOptions[1].dictValue"/>
+                <el-option v-if="product_statusOptions.length>0" :key="product_statusOptions[2].dictValue" :label="product_statusOptions[2].dictLabel"
+                           :value="product_statusOptions[2].dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>

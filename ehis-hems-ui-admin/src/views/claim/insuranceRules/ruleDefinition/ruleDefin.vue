@@ -895,9 +895,9 @@
 
               //特殊医院30   item.code待定
               this.specialHosList.forEach(item=>{
-                 let constraint = this.pushConstraint('30', item.value, item.label, undefined)
-                 constraintList.push(constraint)
-               })
+                let constraint = this.pushConstraint('30', item.value, item.label, undefined)
+                constraintList.push(constraint)
+              })
               //关联对象列表
               let relationList = [] //pushRelation
               let relations = this.getSimpleCheckedNodes(this.$refs.welfareTree.store)
@@ -1186,7 +1186,7 @@
               plan= plan+ data.planName + '>' + data.dutyName + ':' + data.dutyDetailName + '>' + data.feeitemName
             }
           })
-        return plan
+          return plan
 
         }
       }

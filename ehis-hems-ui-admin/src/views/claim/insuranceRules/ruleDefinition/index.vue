@@ -58,9 +58,9 @@
       <el-form ref="searchForm" :model="formSearch" style="padding-bottom: 30px;" label-width="110px" label-position="right" size="mini" @submit.native.prevent>
         <el-row>
           <el-col :span="8">
-              <el-form-item label="产品编码：" prop="riskCode">
-                <el-input v-model="formSearch.riskCode" class="item-width" clearable size="mini" placeholder="请录入"/>
-              </el-form-item>
+            <el-form-item label="产品编码：" prop="riskCode">
+              <el-input v-model="formSearch.riskCode" class="item-width" clearable size="mini" placeholder="请录入"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="riskName">
@@ -109,169 +109,190 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
-import claimsTable from './components/claimsTable'
-import {searchPublicPool,searchProcessedList,searchUntreatedList,acquireDefinition} from '@/api/insuranceRules/ruleDefin'
-let dictss = [{dictType: 'product_status'}]
-export default {
+  import moment from 'moment'
+  import claimsTable from './components/claimsTable'
+  import {searchPublicPool,searchProcessedList,searchUntreatedList,acquireDefinition} from '@/api/insuranceRules/ruleDefin'
+  let dictss = [{dictType: 'product_status'}]
+  export default {
 
-  components: {
-    claimsTable
-  },
-  filters: {
-    changeDate: function(value) {
-      if (value !== null) {
-        return moment(value).format('YYYY-MM-DD')
-      }
-    }
-  },
-  data() {
-    return {
-      collapsed: false,
-      pubApplyLoading: false,
-      publicLoading: false,
-      pubTotalCount: 0,
-      pubPageInfo: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      pubTableData: [],
-      formSearch: {
-        riskCode:undefined,
-        riskName:undefined,
-      },
-      activeName: '01',
-      pendingTableData: [],
-      completedTableData: [],
-      pendingTotal: 0,
-      completedTotal: 0,
-      pendPageInfo: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      completPageInfo: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      personListLading: false,
-      allRiskList: [],
-      chooseList: [],
-      pubForm: {
-        insurancecode: '',
-        insurancename: ''
-      },
-      pageChangeParams: {},
-      searchLoad1: false,
-      searchLoad2: false,
-      product_statusOptions:[],
-      dictList:[],
-      dataonLineListSelections:[],
-    }
-
-  },
-  async mounted() {
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    this.product_statusOptions = this.dictList.find(item => {
-      return item.dictType === 'product_status'
-    }).dictDate
-    this.getPublicData()
-    this.searchPending('B')
-    this.searchCompleted('B')
-  },
-  methods: {
-    flash(){
-      if (this.activeName==='01'){
-        this.searchPending('B')
-      }
+    components: {
+      claimsTable
     },
-    getPublicData() {
-      this.ruleLoading = true
-      this.pubParams = {
-        pageNum: this.pubPageInfo.pageNum,
-        pageSize: this.pubPageInfo.pageSize,
-      }
-      searchPublicPool(this.pubParams).then(res => {
-        this.pubTableData = res.rows
-        this.pubTotalCount = res.total
-        this.ruleLoading = false
-      }).catch(res => {
-        this.ruleLoading = false
-      })
-    },
-    // 获取待处理个人池数据
-    searchPending(status) {
-      this.personListLading = true
-      let params = {
-        pageNum: this.pendPageInfo.pageNum,
-        pageSize: this.pendPageInfo.pageSize,
-        riskCode: this.formSearch.riskCode,
-        riskName: this.formSearch.riskName
-      }
-      searchUntreatedList(params).then(res => {
-        if (res != null && res.code === 200) {
-          this.pendingTableData = res.rows
-          this.pendingTotal = res.total
-          this.personListLading=false
-          if (status==='A' && res.rows.length<=0){
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+    filters: {
+      changeDate: function(value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
         }
-      }).catch(res => {
-        this.personListLading = false
-      })
-    },
-    // 获取已处理个人池数据
-    searchCompleted(status) {
-      this.personListLading = true
-      let params = {
-        pageNum: this.completPageInfo.pageNum,
-        pageSize: this.completPageInfo.pageSize,
-        riskCode: this.formSearch.riskCode,
-        riskName: this.formSearch.riskName
       }
-      searchProcessedList(params).then(res => {
-        if (res != null && res.code === 200) {
-          this.completedTableData = res.rows
-          this.completedTotal = res.total
+    },
+    data() {
+      return {
+        collapsed: false,
+        pubApplyLoading: false,
+        publicLoading: false,
+        pubTotalCount: 0,
+        pubPageInfo: {
+          pageNum: 1,
+          pageSize: 10
+        },
+        pubTableData: [],
+        formSearch: {
+          riskCode:undefined,
+          riskName:undefined,
+        },
+        activeName: '01',
+        pendingTableData: [],
+        completedTableData: [],
+        pendingTotal: 0,
+        completedTotal: 0,
+        pendPageInfo: {
+          pageNum: 1,
+          pageSize: 10
+        },
+        completPageInfo: {
+          pageNum: 1,
+          pageSize: 10
+        },
+        personListLading: false,
+        allRiskList: [],
+        chooseList: [],
+        pubForm: {
+          insurancecode: '',
+          insurancename: ''
+        },
+        pageChangeParams: {},
+        searchLoad1: false,
+        searchLoad2: false,
+        product_statusOptions:[],
+        dictList:[],
+        dataonLineListSelections:[],
+      }
+
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.product_statusOptions = this.dictList.find(item => {
+        return item.dictType === 'product_status'
+      }).dictDate
+      this.getPublicData()
+      this.searchPending('B')
+      this.searchCompleted('B')
+    },
+    methods: {
+      flash(){
+        if (this.activeName==='01'){
+          this.searchPending('B')
+        }
+      },
+      getPublicData() {
+        this.ruleLoading = true
+        this.pubParams = {
+          pageNum: this.pubPageInfo.pageNum,
+          pageSize: this.pubPageInfo.pageSize,
+        }
+        searchPublicPool(this.pubParams).then(res => {
+          this.pubTableData = res.rows
+          this.pubTotalCount = res.total
+          this.ruleLoading = false
+        }).catch(res => {
+          this.ruleLoading = false
+        })
+      },
+      // 获取待处理个人池数据
+      searchPending(status) {
+        this.personListLading = true
+        let params = {
+          pageNum: this.pendPageInfo.pageNum,
+          pageSize: this.pendPageInfo.pageSize,
+          riskCode: this.formSearch.riskCode,
+          riskName: this.formSearch.riskName
+        }
+        searchUntreatedList(params).then(res => {
+          if (res != null && res.code === 200) {
+            this.pendingTableData = res.rows
+            this.pendingTotal = res.total
+            this.personListLading=false
+            if (status==='A' && res.rows.length<=0){
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
           this.personListLading = false
-          if (status==='A' && res.rows.length<=0){
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+        })
+      },
+      // 获取已处理个人池数据
+      searchCompleted(status) {
+        this.personListLading = true
+        let params = {
+          pageNum: this.completPageInfo.pageNum,
+          pageSize: this.completPageInfo.pageSize,
+          riskCode: this.formSearch.riskCode,
+          riskName: this.formSearch.riskName
         }
-      }).catch(res => {
-        this.personListLading = false
-      })
-    },
-    getPersonData() {
-      if (this.activeName === '01') {
-        this.searchPending('A')
-      } else if (this.activeName === '02') {
-        this.searchCompleted('A')
-      }
-    },
-    triggerHandle() {
-      this.collapsed = !this.collapsed
-    },
-    // 批量获取
-    batchApply() {
-      let riskCodes=[]
-      for(let i = 0; i< this.dataonLineListSelections.length; i++){
-        riskCodes.push(this.dataonLineListSelections[i].riskCode)
-        console.log(this.dataonLineListSelections[i].riskCode);
-      }
-      if (riskCodes.length<1){
-        return this.$message.warning(
-          "请选择需要获取的记录，进行批量获取操作。"
-        )
-      }else {
+        searchProcessedList(params).then(res => {
+          if (res != null && res.code === 200) {
+            this.completedTableData = res.rows
+            this.completedTotal = res.total
+            this.personListLading = false
+            if (status==='A' && res.rows.length<=0){
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+          this.personListLading = false
+        })
+      },
+      getPersonData() {
+        if (this.activeName === '01') {
+          this.searchPending('A')
+        } else if (this.activeName === '02') {
+          this.searchCompleted('A')
+        }
+      },
+      triggerHandle() {
+        this.collapsed = !this.collapsed
+      },
+      // 批量获取
+      batchApply() {
+        let riskCodes=[]
+        for(let i = 0; i< this.dataonLineListSelections.length; i++){
+          riskCodes.push(this.dataonLineListSelections[i].riskCode)
+          console.log(this.dataonLineListSelections[i].riskCode);
+        }
+        if (riskCodes.length<1){
+          return this.$message.warning(
+            "请选择需要获取的记录，进行批量获取操作。"
+          )
+        }else {
+          acquireDefinition(riskCodes).then(res=>{
+            console.log(riskCodes);
+            if (res!=null && res.code===200){
+              this.$message({
+                message: '获取成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            }
+            this.getPublicData()
+            this.searchPending('B')
+            this.searchCompleted('B')
+          }).catch(res => {
+            this.$message.error('获取失败！')
+          })
+        }
+
+      },
+      // 获取
+      applyHandle(row) {
+        let riskCodes=[row.riskCode]
         acquireDefinition(riskCodes).then(res=>{
-          console.log(riskCodes);
           if (res!=null && res.code===200){
             this.$message({
               message: '获取成功！',
@@ -286,45 +307,24 @@ export default {
         }).catch(res => {
           this.$message.error('获取失败！')
         })
-      }
-
-    },
-    // 获取
-    applyHandle(row) {
-      let riskCodes=[row.riskCode]
-      acquireDefinition(riskCodes).then(res=>{
-        if (res!=null && res.code===200){
-          this.$message({
-            message: '获取成功！',
-            type: 'success',
-            center: true,
-            showClose: true
-          })
+      },
+      handleSelectionChange(val) {
+        this.dataonLineListSelections = val
+      },
+      resetForm() {
+        this.$refs.searchForm.resetFields()
+      },
+      getRiskStatus(row){
+        return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+      },
+      refreshList(item){
+        if(item === 200){
+          this.searchPending('B')
+          this.searchCompleted('B')
         }
-        this.getPublicData()
-        this.searchPending('B')
-        this.searchCompleted('B')
-      }).catch(res => {
-        this.$message.error('获取失败！')
-      })
-    },
-    handleSelectionChange(val) {
-      this.dataonLineListSelections = val
-    },
-    resetForm() {
-      this.$refs.searchForm.resetFields()
-    },
-    getRiskStatus(row){
-      return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
-    },
-    refreshList(item){
-      if(item === 200){
-        this.searchPending('B')
-        this.searchCompleted('B')
       }
     }
   }
-}
 </script>
 <style scoped>
   .item-width {

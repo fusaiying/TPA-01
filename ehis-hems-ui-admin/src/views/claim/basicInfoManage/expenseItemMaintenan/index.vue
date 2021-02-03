@@ -45,14 +45,14 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="费用项编码" prop="feeitemcode" align="center"/>
-          <el-table-column label="费用项中文名称" prop="feeitemname" align="center"/>
-          <el-table-column label="创建日期" prop="createTime" align="center">
+          <el-table-column label="费用项编码" prop="feeitemcode" align="center" show-overflow-tooltip/>
+          <el-table-column label="费用项中文名称" prop="feeitemname" align="center" show-overflow-tooltip/>
+          <el-table-column label="创建日期" prop="createTime" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.createTime, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="创建人" prop="createBy" align="center"/>
+          <el-table-column label="创建人" prop="createBy" align="center" show-overflow-tooltip/>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateEditHandle(scope.row)">编辑
@@ -168,7 +168,7 @@
         listFeeitem(this.queryParams).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('provider/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
+            this.download('system/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
               ...query
             }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({

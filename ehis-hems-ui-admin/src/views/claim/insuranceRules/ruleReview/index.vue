@@ -198,7 +198,7 @@
       }).catch(res => {
         this.personListLading = false
       })
-      listAndPublicPool(this.pubParams).then(res => {
+      listAndPublicPool(params).then(res => {
         this.pubTableData = res.rows
         this.pubTotalCount = res.total
         this.ruleLoading = false

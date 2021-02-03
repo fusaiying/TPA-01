@@ -1,17 +1,12 @@
 <template>
-  <el-form ref="otherServiceForm" :rules="otherSerivceFormRules" :model="otherServiceForm" :disabled="disabledFlag"
+  <el-form ref="otherServiceForm"  :model="otherServiceForm" :disabled="disabledFlag"
            label-width="170px" size="mini" class="baseInfo_class">
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>服务信息</span>
-        <span style="float: right;">
-          <el-button size="mini" type="primary" @click="saveHandle">保存</el-button>
-        </span>
       </div>
-
       <el-row>
         <el-col :span="8">
-
           <el-form-item label="机构评分：" prop="grade">
             <el-input v-model="otherServiceForm.grade" class="item-width" clearable size="mini"
                       placeholder="请输入"/>
@@ -56,27 +51,27 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-            <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
-                         :key="item.dictValue"/>
-              <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
-            </el-select>
-            <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                      style="width: 450px" maxlength="500"
-                      placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <!--
-                  <el-col :span="10">
-                    <el-form-item prop="continent">
-                      <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                                style="width: 450px" maxlength="500"
-                                placeholder="请输入"/>
+            <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+              <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                           :key="item.dictValue"/>
+                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
+              </el-select>
+              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
+                        style="width: 450px" maxlength="500"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+<!--
+          <el-col :span="10">
+            <el-form-item prop="continent">
+              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
+                        style="width: 450px" maxlength="500"
+                        placeholder="请输入"/>
 
-                    </el-form-item>
-                  </el-col>
-        -->
+            </el-form-item>
+          </el-col>
+-->
 
 
 
@@ -204,40 +199,9 @@ export default {
 
 
   data() {
-    const checkGrade = (rules, value, callback) => {
-      const regx = /^\+?(?:\d(?:\.\d)?|10(?:\.0)?)$/
-      if (!regx.test(value)) {
-        callback(new Error('评分在0-10，最多保留一位小数！'))
-      } else {
-        callback()
-      }
-    }
-    const checkContinentFlag = (rules, value, callback) => {
-      if(value){
-        if(this.otherServiceForm.continent!=null && this.otherServiceForm.continent!=''){
-          callback()
-        }
-        else {
-          callback(new Error('二证齐全是否发预授权书不能为空'))
-        }
-      }
-      else {
-        callback(new Error('二证齐全是否发预授权书不能为空'))
-      }
 
-
-    }
     return {
 
-      otherSerivceFormRules: {
-        displaynetwork: [{required: true, message: '不能为空！', trigger: 'change'}],
-        grade: [{required: true,validator: checkGrade, trigger: 'blur'}],
-        category: [{required: true, message: '不能为空！', trigger: 'change'}],
-        cooperationStatus: [{required: true, message: '不能为空！', trigger: 'change'}],
-        continentFlag: [{required: true,validator: checkContinentFlag, trigger: 'change'}],
-        speciallanguage: [{required: true, message: '不能为空！', trigger: 'change'}],
-        preauthsendway: [{required: true, message: '不能为空！', trigger: 'blur'}]
-      },
       yes_or_noOptions: [],
       servicelocator_flagOptions: [],
       virtual_orgOptions: [],
@@ -259,7 +223,6 @@ export default {
   ,
   methods: {
     changeDisabled(val, event) {
-
       if (val.dictValue == '10' && event.target.checked) {
         this.speciallanguageOptions.forEach(item => {
           if (item.index < 10) {
@@ -297,85 +260,8 @@ export default {
         }).dictDate
 
       }
-    },
+      },
 
-    saveHandle() {
-      this.$refs.otherServiceForm.validate((valid) => {
-        this.otherServiceForm.providerCode = this.providerCode
-        if (valid) {
-          //存在调用服务信息保存的接口
-          if (this.otherServiceForm.providerCode) {
-
-            const subFormSearch = JSON.parse(JSON.stringify(this.otherServiceForm))
-            subFormSearch.orgFlag=this.status
-            addserviceInfo(subFormSearch).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          }
-        } else {
-          this.$message.warning('服务信息必录项未必录')
-        }
-
-      })
-
-    },
-    resetForm() {
-
-      /* this.otherServiceForm.grade=''
-       this.otherServiceForm.category=''
-       this.otherServiceForm.emil=''
-       this.otherServiceForm.coopDepInfo=''
-       this.otherServiceForm.code=''
-       this.otherServiceForm.cooperationStatus=''
-       this.otherServiceForm.continentFlag=''
-       this.otherServiceForm.continent=''
-
-       this.otherServiceForm.virtualOrg=''
-       this.otherServiceForm.isEnabled=''
-       this.otherServiceForm.displaynetwork=''
-       this.otherServiceForm.officialwebsite=''
-       this.otherServiceForm.weekendsOpen=''
-
-       this.otherServiceForm.processFlow=''
-
-       this.otherServiceForm.sellingpoint=''
-       this.otherServiceForm.preauthsendway=''
-       this.otherServiceForm.foreignnote=''
-
-       this.otherServiceForm.internalnote=''*/
-
-      /*this.otherServiceForm.servicelocator=[]
-      this.otherServiceForm.speciallanguage=[]*/
-      this.$refs.otherServiceForm.resetFields()
-      this.otherServiceForm.continent=''
-
-    },
-    // 校验数据
-    validateForm() {
-      let flag = null
-      this.$refs['otherServiceForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
-      })
-      return flag
-    }
   }
 }
 </script>

@@ -52,7 +52,7 @@
             <span v-else>{{ scope.row.visitingFloor }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center" width="160" show-overflow-tooltip>
+        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.charactdeptFlag" class="item-width" placeholder="请选择" clearable
@@ -66,7 +66,7 @@
             <span v-else>{{getCharactdeptFlag(scope.row.charactdeptFlag) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否直结" prop="straightknotFlag" align="center" width="160" show-overflow-tooltip>
+        <el-table-column label="是否直结" prop="straightknotFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.straightknotFlag" class="item-width" placeholder="请选择" clearable
@@ -79,7 +79,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.straightknotFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center" width="160" show-overflow-tooltip>
+        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id ">
               <el-select v-model="scope.row.cartevitalFlag" class="item-width" placeholder="请选择" clearable
@@ -92,7 +92,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.cartevitalFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" width="160" show-overflow-tooltip>
+        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.spprocurementFlag" class="item-width" placeholder="请选择" clearable
@@ -105,24 +105,24 @@
             <span v-else>{{  getCharactdeptFlag(scope.row.spprocurementFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="出诊时间" align="center" width="400" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callstarttime'"
-                          :rules="departmentFormRules.callstarttime" align="center">
-              <el-date-picker v-model="scope.row.callstarttime" type="datetime" placeholder="选择出诊开始时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
-      style="width: 190px;"/>
+        <!--        <el-table-column label="出诊时间" align="center" width="400" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callstarttime'"
+                                  :rules="departmentFormRules.callstarttime" align="center">
+                      <el-date-picker v-model="scope.row.callstarttime" type="datetime" placeholder="选择出诊开始时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 190px;"/>
 
-            </el-form-item>
-            <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callendtime'"
-                          :rules="departmentFormRules.callendtime" align="center">
-              <el-date-picker v-model="scope.row.callendtime" type="datetime" placeholder="选择出诊结束时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
+                    </el-form-item>
+                    <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callendtime'"
+                                  :rules="departmentFormRules.callendtime" align="center">
+                      <el-date-picker v-model="scope.row.callendtime" type="datetime" placeholder="选择出诊结束时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
 
-                              style="width: 190px;padding-left: 10px"/>
+                                      style="width: 190px;padding-left: 10px"/>
 
-            </el-form-item>
-            <span v-else>{{ scope.row.callstarttime }}-{{ scope.row.callendtime }}</span>
-          </template>
-        </el-table-column>
+                    </el-form-item>
+                    <span v-else>{{ scope.row.callstarttime }}-{{ scope.row.callendtime }}</span>
+                  </template>
+                </el-table-column>-->
         <el-table-column label="操作" align="center" width="100"  fixed="right">
           <template slot-scope="scope">
                     <span>
@@ -141,6 +141,18 @@
       </el-button>
 
     </el-card>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :modal="modalValue"
+      :close-on-click-modal="false"
+      title="提示"
+      width="30%">
+      <span>{{ '删除当前行科室信息？' }}</span>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="delConfirm">确 定</el-button>
+        </span>
+    </el-dialog>
   </el-form>
 </template>
 <script>
@@ -210,6 +222,9 @@ export default {
     }
 
     return {
+      index: '',
+      dialogVisible: false,
+      modalValue: false,
       //出诊开始时间下标
       indexContacts: [],
       departmentFormRules: {
@@ -261,61 +276,61 @@ export default {
     saveHandle() {
       this.$refs.departmentForm.validate((valid) => {
         if(this.departmentForm.form!=null && this.departmentForm.form.length>0) {
-            if (valid) {
-              //存在调用科室信息保存的接口
-              if (this.providerCode) {
-                //调用新增的接口
-                /*  if(isAdd){*/
-                let formData = {
-                  providerCode: this.providerCode,
-                  form: this.departmentForm.form,
-                  orgFlag: this.status
-                }
-                adddepInfo(formData).then(res => {
-                  if (res.code == '200') {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-
-                  } else {
-                    this.$message({
-                      message: '保存失败!',
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  }
-                })
+          if (valid) {
+            //存在调用科室信息保存的接口
+            if (this.providerCode) {
+              //调用新增的接口
+              /*  if(isAdd){*/
+              let formData = {
+                providerCode: this.providerCode,
+                form: this.departmentForm.form,
+                orgFlag: this.status
               }
-              /* //修改的接口
-           else{
-             updatedepInfo(this.departmentFrom.form).then(res => {
-               if (res.code=='200') {
-                 this.$message({
-                   message: '修改成功！',
-                   type: 'success',
-                   center: true,
-                   showClose: true
-                 })
+              adddepInfo(formData).then(res => {
+                if (res.code == '200') {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
 
-               } else  {
-                 this.$message({
-                   message: '修改失败!',
-                   type: 'error',
-                   center: true,
-                   showClose: true
-                 })
-               }
-             })
-           }
-
-         }*/
-            } else {
-              this.$message.warning('科室信息必录项未必录')
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+              })
             }
+            /* //修改的接口
+         else{
+           updatedepInfo(this.departmentFrom.form).then(res => {
+             if (res.code=='200') {
+               this.$message({
+                 message: '修改成功！',
+                 type: 'success',
+                 center: true,
+                 showClose: true
+               })
+
+             } else  {
+               this.$message({
+                 message: '修改失败!',
+                 type: 'error',
+                 center: true,
+                 showClose: true
+               })
+             }
+           })
+         }
+
+       }*/
+          } else {
+            this.$message.warning('科室信息必录项未必录')
+          }
         }
         else {
           this.$message({
@@ -327,10 +342,15 @@ export default {
 
       })
     },
-    //科室删除按钮  是否调用了数据库的接口
+
+    delConfirm() {
+      this.dialogVisible = false
+      this.departmentForm.form.splice(this.index,1)
+    },
 
     delHandle(index, row) {
-      this.departmentForm.form.splice(index, 1)
+      this.dialogVisible = true
+      this.index = index
     },
     editHandle(index, row) {
       this.departmentForm.form[index].id = ''
@@ -402,7 +422,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

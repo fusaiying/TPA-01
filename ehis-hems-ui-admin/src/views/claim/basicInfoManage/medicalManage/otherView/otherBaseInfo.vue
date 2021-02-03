@@ -2,11 +2,8 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>基本信息</span>
-      <span style="float: right;">
-          <el-button size="mini" type="primary" @click="saveHandle">保存</el-button>
-        </span>
     </div>
-    <el-form ref="otherBaseForm" :rules="otherBaseFormRules" :model="otherBaseForm" style="padding-bottom: 30px;"
+    <el-form ref="otherBaseForm"  :model="otherBaseForm" style="padding-bottom: 30px;" :disabled="true"
              label-width="170px" size="mini" class="baseInfo_class">
       <el-row>
         <el-col :span="8">
@@ -191,126 +188,17 @@ export default {
     },
     providerCode: String,
     status: String,
-    isAdd: Boolean,
-    otherChname1: String,
-    otherEnname1: String,
+
   },
-  watch: {
-    otherChname1: function (newValue){
-      this.copyChname1=newValue
-    },
-    otherEnname1: function (newValue){
-      this.copyEnname1=newValue
-    }
-  },
+
 
   data() {
-    const checkLatitude = (rules, value, callback) => {
-      if(value){
-        let reg= /^(\-|\+?)\d+(\.\d+)?$/
-        if (!reg.test(value)) {
-          callback(new Error("只能输入数字"));
-        }
-        else {
-          callback()
-        }
-      }
-      else {
-        callback('不能为空')
-      }
 
-    }
-    const checkLongitude = (rules, value, callback) => {
-      if(value){
-        let reg= /^(\-|\+?)\d+(\.\d+)?$/
-        if (!reg.test(value)) {
-          callback(new Error("只能输入数字"));
-        }
-        else {
-          callback()
-        }
-      }
-      else {
-        callback('不能为空')
-      }
-
-    }
-    const checkAddreess = (rules, value, callback) => {
-      if (this.otherBaseForm.address!=null && this.otherBaseForm.address.length>0) {
-        callback()
-      } else {
-        callback(new Error('省市区不能为空！'))
-      }
-    }
-    const checkChname1 = (rules, value, callback) => {
-      if (value) {
-        let query = {
-          chname1: this.otherBaseForm.chname1
-        }
-        if (this.copyChname1 !== value) {
-          //调用查询的接口
-          checkfieldNew(query).then(res => {
-            if (res != null && res.code == '200' && res.data.length>0) {
-              callback(new Error('中文展示名称已存在'))
-            } else {
-              callback()
-            }
-          })
-        } else {
-          callback()
-        }
-      } else {
-        callback(new Error('中文展示名称不能为空'))
-
-      }
-
-    }
-    const checkEnname1 = (rules, value, callback) => {
-      if (value) {
-        let query = {
-          enname1: this.otherBaseForm.enname1
-        }
-        if (this.copyEnname1 !== value) {
-          //调用查询的接口
-          checkfieldNew(query).then(res => {
-            if (res != null && res.code == '200' && res.data.length>0) {
-              callback(new Error('英文展示名称已存在'))
-            } else {
-              callback()
-            }
-          })
-        } else {
-          callback()
-        }
-      } else {
-        callback(new Error('英文展示名称不能为空'))
-
-      }
-
-    }
     return {
-      copyChname1: '',
-      copyEnname1: '',
+
       otherProviderCode: '',
       regions: [],
       bussiness_statusOptions: [],
-      otherBaseFormRules: {
-        bussinessStatus: [{required: true, message: '不能为空！', trigger: 'change'}],
-        confirmDeliverytime: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        longitude: [{required: true,validator: checkLongitude, trigger: 'blur'}],
-        latitude: [{required: true, validator: checkLatitude,  trigger: 'blur'}],
-        chname1: [{required: true,  validator: checkChname1,  trigger: 'blur'}],
-        enname1: [{required: true, validator: checkEnname1, trigger: 'blur'}],
-        website: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        continent: [{required: true, message: '不能为空！', trigger: 'change'}],
-        country: [{required: true, message: '不能为空！', trigger: 'change'}],
-        address: [{required: true,validator: checkAddreess, trigger: 'change'}],
-        chaddreess: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        enaddress: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        landmarks: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        carpark: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        introduction: [{required: true, message: '不能为空！', trigger: 'blur'}]
-      },
     }
   },
 
@@ -330,103 +218,11 @@ export default {
       })
     },
 
-    saveHandle() {
-      this.$refs.otherBaseForm.validate((valid) => {
-        if (valid) {
-          const subFormSearch = JSON.parse(JSON.stringify(this.otherBaseForm))
-          if (this.otherBaseForm.address) {
-            if(this.otherBaseForm.address[0]) {
-              subFormSearch.province = this.otherBaseForm.address[0]
-            }
-            if(this.otherBaseForm.address[2]) {
-              subFormSearch.district = this.otherBaseForm.address[2]
-            }
-            if(this.otherBaseForm.address[1]) {
-              subFormSearch.city = this.otherBaseForm.address[1]
-            }
-          }
-          subFormSearch.orgFlag = this.status
-          //存在调用基本信息保存的接口
-          if (this.providerCode) {
-            updateInfo(subFormSearch).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.copyChname1=this.otherBaseForm.chname1
-                this.copyEnname1=this.otherBaseForm.enname1
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          } else {
-            subFormSearch.orgFlag = this.status
-            //不存在调用新增的接口
-            addInfo(subFormSearch).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.otherProviderCode = res.data.providerCode
-                this.otherBaseForm.providerCode = this.otherProviderCode
-                this.copyChname1=this.otherBaseForm.chname1
-                this.copyEnname1=this.otherBaseForm.enname1
-                //
-                this.$emit('baseSave')
-
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          }
-        } else {
-          this.$message.warning('基本信息必录项未必录')
-        }
-
-      })
-
-    },
     handleChange() {
     },
-    resetForm() {
-      this.otherBaseForm.areacode=''
-      this.$refs.otherBaseForm.resetFields()
 
-    },
 
-    // 校验数据
-    async  validateForm () {
-      let flag
-      await new Promise((resolve, reject)=> {
-        this.$refs['otherBaseForm'].validate(valid => {
-          if (valid) {
-            flag = true
-            resolve(flag)
-          } else {
-            flag = false
-            resolve(flag)
-          }
-        })
-      })
-      return flag
 
-    }
 
   }
 }

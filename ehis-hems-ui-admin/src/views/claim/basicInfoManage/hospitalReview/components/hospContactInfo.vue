@@ -8,7 +8,7 @@
       <el-table ref="contactTable" :data="contactInfoForm.contacts"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
-        <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型">
+        <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'contacts.'+scope.$index +'.placeType'"
                           :rules="contactInfoFormRules.placeType" style="display: inline-flex !important;">
@@ -27,14 +27,14 @@
             <span v-else>{{scope.row.placeTypeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" align="center" header-align="center" label="姓名">
+        <el-table-column prop="name" align="center" header-align="center" label="姓名" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input v-if="!scope.row.id" v-model="scope.row.name" placeholder="请输入" size="mini"/>
 
             <span v-else>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="phone" align="center" header-align="center" label="手机">
+        <el-table-column prop="phone" align="center" header-align="center" label="手机" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.phone" placeholder="请输入" size="mini"/>
@@ -42,14 +42,14 @@
             <span v-else>{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="mobile" align="center" header-align="center" label="电话">
+        <el-table-column prop="mobile" align="center" header-align="center" label="电话" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.mobile" placeholder="请输入" size="mini"/>
             <span v-else>{{ scope.row.mobile }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="email" align="center" header-align="center" label="邮箱">
+        <el-table-column prop="email" align="center" header-align="center" label="邮箱" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.email" placeholder="请输入" size="mini"/>
@@ -57,7 +57,7 @@
             <span v-else>{{ scope.row.email }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="workingTime" align="center" header-align="center" label="工作时间" width="400px">
+        <el-table-column prop="workingTime" align="center" header-align="center" label="工作时间" width="400px" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input v-if="!scope.row.id" v-model="scope.row.workingStart" placeholder="请输入" size="mini"
                       style="width: 150px"/>
@@ -67,7 +67,7 @@
           </template>
 
         </el-table-column>
-        <el-table-column prop="role" align="center" header-align="center" label="登录名">
+        <el-table-column prop="role" align="center" header-align="center" label="登录名" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.role" placeholder="请输入" size="mini"/>
@@ -209,7 +209,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

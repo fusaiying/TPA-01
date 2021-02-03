@@ -64,7 +64,7 @@ export default {
       totalCount: 0,
       baseFormRules: {
         icdmname: [{ validator: checkChineseName, trigger: 'blur' }],
-       /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
+        /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
         // name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         // englishName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         icdcode: [{ required: true, message: 'ICD编码不能为空', trigger: 'blur' }]
@@ -79,9 +79,9 @@ export default {
       /*const params = this.baseForm
       params.pageNo = 0
       params.pageSize = 0*/
-     this.baseForm.icdcode = this.$route.query.icdcode,
+      this.baseForm.icdcode = this.$route.query.icdcode,
         this.baseForm.icdmname=this.$route.query.icdmname
-   /*   this.getByICDCode(params)*/
+      /*   this.getByICDCode(params)*/
     }else {
       this.isShow=false
     }
@@ -117,9 +117,9 @@ export default {
                     path: '/basic-info/icd',
                   })
                 }
-                  else {
+                else {
                   this.$message.warning('ICD已存在，请核实')
-                  }
+                }
 
               } else {
                 this.$message({
@@ -160,13 +160,13 @@ export default {
         }
       })
     },
-   /* //  打开方式为编辑时获取数据
-    getByICDCode(params) {
-      getICDList(params).then(res => {
-        this.baseForm = res.data.list[0]
-        this.loading = false
-      })
-    },*/
+    /* //  打开方式为编辑时获取数据
+     getByICDCode(params) {
+       getICDList(params).then(res => {
+         this.baseForm = res.data.list[0]
+         this.loading = false
+       })
+     },*/
     goBack() {
       this.$router.go(-1)
     }
@@ -175,11 +175,11 @@ export default {
 </script>
 
 <style scoped>
-  .item-width {
-    width: 200px;
-  }
-  /*element原有样式修改*/
-  .el-form-item ::v-deep label {
-    font-weight: normal;
-  }
+.item-width {
+  width: 200px;
+}
+/*element原有样式修改*/
+.el-form-item ::v-deep label {
+  font-weight: normal;
+}
 </style>

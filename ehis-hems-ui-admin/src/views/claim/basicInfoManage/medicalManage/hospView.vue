@@ -347,23 +347,13 @@
         <!--结算信息-->
         <div >
           <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList" :status="activeName"
-                              :closingTableShow="closingTableShow" :annexupload="annexupload"
-                              :closingFrom="closingFrom"></hosp-closing-info>
+                             :closingTableShow="closingTableShow" :annexupload="annexupload"
+                             :closingFrom="closingFrom"></hosp-closing-info>
         </div>
-        <!--附件信息-->
-        <div >
-          <annex-info :disabledFlag="annexFlag" :suppliercode="providerCode" :specialAnnexFlag="specialAnnexFlag"></annex-info>
+        <div
+          style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  color: #303133;float: right; ">
+          <el-button size="mini" type="primary" @click="goBack">关闭</el-button>
         </div>
-
-        <!--历史合约-->
-        <!--        <div class="app-container">
-                <history-contract :contractLogTableData="contractLogTableData"></history-contract>
-          </div>-->
-        <!--审核-->
-        <div >
-          <audit  :providerCode="providerCode"></audit>
-        </div>
-
 
       </el-tab-pane>
     </el-tabs>
@@ -391,14 +381,14 @@ import {
 } from '@/api/baseInfo/medicalManage.js'
 
 
-import annexInfo from '../medicalManage/components/annexInfo'
-import  historyContract from './components/historyContract'
-import  audit from './components/audit'
-import  hospServiceInfo from './components/hospServiceInfo'
-import  hospDepartmentInfo from './components/hospDepartmentInfo'
-import  hospReserveInfo from './components/hospReserveInfo'
-import  hospContactInfo from './components/hospContactInfo'
-import  hospClosingInfo from './components/hospClosingInfo'
+
+import  historyContract from '../hospitalReview/components/historyContract'
+import  audit from '../hospitalReview/components/audit'
+import  hospServiceInfo from '../hospitalReview/components/hospServiceInfo'
+import  hospDepartmentInfo from '../hospitalReview/components/hospDepartmentInfo'
+import  hospReserveInfo from '../hospitalReview/components/hospReserveInfo'
+import  hospContactInfo from '../hospitalReview/components/hospContactInfo'
+import  hospClosingInfo from '../hospitalReview/components/hospClosingInfo'
 
 
 let dictss = [{dictType: 'inter_hosp'},{dictType: 'virtual_org'},{dictType: 'first_attribute'},{dictType: 'second_attribute_a'},
@@ -410,7 +400,6 @@ let dictss = [{dictType: 'inter_hosp'},{dictType: 'virtual_org'},{dictType: 'fir
 
 export default {
   components: {
-    annexInfo,
     historyContract,
     audit,
     hospServiceInfo,
@@ -520,7 +509,6 @@ export default {
       },
 
       serviceForm: {
-        weekendsWorking:undefined,
         excludingFee: undefined,
         topten: undefined,
         specializedHospital: undefined,
@@ -768,15 +756,15 @@ export default {
       }).catch(res => {
       })
 
-      /*      //历史合约的接口
-            getHistoryConlist(this.providerCode).then(res => {
-              this.contractLogTableData = res.data
-            }).catch(res => {
-            })*/
-      /*   //审核日志的接口
-         selectCheckInfo(this.providerCode).then(res=> {
-           this.reviewLogTableData=res.data
-         })*/
+/*      //历史合约的接口
+      getHistoryConlist(this.providerCode).then(res => {
+        this.contractLogTableData = res.data
+      }).catch(res => {
+      })*/
+   /*   //审核日志的接口
+      selectCheckInfo(this.providerCode).then(res=> {
+        this.reviewLogTableData=res.data
+      })*/
 
 
     }
@@ -856,7 +844,9 @@ export default {
 
 
     goBack() {
-      this.$router.go(-1);
+      this.$router.push({
+        path: '/basic-info/medicalManage/medicalManage',
+      })
     }
 
 

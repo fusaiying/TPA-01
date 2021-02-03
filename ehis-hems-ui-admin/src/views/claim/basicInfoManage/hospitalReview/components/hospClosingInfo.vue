@@ -3,7 +3,7 @@
 
 
     <el-form ref="closingFrom" :model="closingFrom.baseProviderSettle" size="mini" label-width="170px"
-              class="baseInfo_class">
+             class="baseInfo_class">
       <el-card class="box-card" style="margin-top: 10px;">
         <div slot="header" class="clearfix">
           <span>结算信息</span>
@@ -63,7 +63,7 @@
         <el-table ref="closingTable" :data="closingFrom.baseBankVo"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
                   size="mini" highlight-current-row style="width: 100%;">
-          <el-table-column prop="accountType" align="center" label="账号类型" header-align="center">
+          <el-table-column prop="accountType" align="center" label="账号类型" header-align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountType'"
                             :rules="closingFromRules.accountType">
@@ -75,7 +75,7 @@
               <span v-else>{{ scope.row.accountTypeName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountName" align="center" header-align="center" label="银行账号名称">
+          <el-table-column prop="accountName" align="center" header-align="center" label="银行账号名称" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountName'"
                             :rules="closingFromRules.accountName">
@@ -84,7 +84,7 @@
               <span v-else>{{ scope.row.accountName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号">
+          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountNo'"
                             :rules="closingFromRules.accountNo">
@@ -93,7 +93,7 @@
               <span v-else>{{ scope.row.accountNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankCode" align="center" header-align="center" label="开户银行代码">
+          <el-table-column prop="bankCode" align="center" header-align="center" label="开户银行代码" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankCode'"
                             :rules="closingFromRules.bankCode">
@@ -102,7 +102,7 @@
               <span v-else>{{ scope.row.bankCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankName" align="center" header-align="center" label="开户银行名称">
+          <el-table-column prop="bankName" align="center" header-align="center" label="开户银行名称" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankName'"
                             :rules="closingFromRules.bankName">
@@ -111,7 +111,7 @@
               <span v-else>{{ scope.row.bankName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankDetail" align="center" header-align="center" label="银行信息描述">
+          <el-table-column prop="bankDetail" align="center" header-align="center" label="银行信息描述" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankDetail'"
                             :rules="closingFromRules.bankDetail">
@@ -120,7 +120,7 @@
               <span v-else>{{ scope.row.bankDetail }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bussinessStatus" align="center" header-align="center" label="账号状态">
+          <el-table-column prop="bussinessStatus" align="center" header-align="center" label="账号状态" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bussinessStatus'"
                             :rules="closingFromRules.bussinessStatus">
@@ -159,26 +159,26 @@
       title=""
       width="70%">
 
-        <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span style="font-size: 20px">结算信息维护记录</span>
-        </div>
-        <el-table ref="medicalRecordTable"
-                  v-loading="loading"
-                  :data="closingLogData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
+      <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">结算信息维护记录</span>
+      </div>
+      <el-table ref="medicalRecordTable"
+                v-loading="loading"
+                :data="closingLogData"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
 
 
-          <el-table-column key="1" align="center" prop="currencyName" min-width="150" label="结算币种"/>
-          <el-table-column key="2" align="center" min-width="100" prop="claimFlagName" label="是否仅结算理赔责任"/>
-          <el-table-column key="3" align="center" prop="effectTime" min-width="150" label="生效日期"/>
-          <el-table-column key="4" align="center" min-width="100" prop="noticeDay" label="支付通知时间"/>
-          <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
-          <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
-        </el-table>
+        <el-table-column key="1" align="center" prop="currencyName" min-width="150" label="结算币种"/>
+        <el-table-column key="2" align="center" min-width="100" prop="claimFlagName" label="是否仅结算理赔责任"/>
+        <el-table-column key="3" align="center" prop="effectTime" min-width="150" label="生效日期"/>
+        <el-table-column key="4" align="center" min-width="100" prop="noticeDay" label="支付通知时间"/>
+        <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
+        <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
+      </el-table>
 
       <!--分页组件-->
       <pagination
@@ -347,7 +347,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

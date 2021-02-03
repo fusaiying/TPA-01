@@ -49,19 +49,15 @@ public class ServiceProcessingVo  extends BaseEntity {
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
     /**业务处理情况*/
-    @Excel(name="业务处理情况:01-成功，02-失败")
     private String businessProcess;
 
     /**客户反馈*/
-    @Excel(name="客户反馈")
     private String customerFeedback;
 
     /**结案类型*/
-    @Excel(name="结案类型")
     private String closeType;
 
     /**安抚或通融发生费用成本*/
-    @Excel(name="安抚或通融发生费用成本")
     private String costsIncurred;
 
 

@@ -114,8 +114,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
 
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
-        workHandleInfo.setHandleType(serviceProcessingVo.getHandleType());
-        workHandleInfo.setFlag("处理");
+        workHandleInfo.setHandleType("处理");
+        //workHandleInfo.setFlag();
         workHandleInfo.setStatus("Y");
 
 
@@ -123,20 +123,28 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
         workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        //workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-        String sourceName="ServiceProcessingVo";
-        String targetTableName="work_handle_info";
-        //ServiceProcessingVo serviceProcessingVo=new ServiceProcessingVo();
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        workHandleInfo.setRemark(serviceProcessingVo.getRemark());
+
+
+
+       /* List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
             map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
-            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
-            serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
-        }
-
+            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+            workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);
+        }*/
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+            workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
         return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
     }
 }

@@ -471,12 +471,12 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-form-item label="安抚或通融发生费用成本：" prop="textarea">
+            <el-form-item label="安抚或通融发生费用成本：" prop="costsIncurred">
               <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="不超过500字符："
-                v-model="ruleForm.textarea">
+                v-model="ruleForm.costsIncurred">
               </el-input>
             </el-form-item>
           </el-row>

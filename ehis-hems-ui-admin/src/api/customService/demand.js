@@ -25,12 +25,11 @@ export function selectCallAgain() {
   })
 }
 
-//#获取接口
-export function demandObtain(query) {
+//#处理页面新增
+export function dealAdd(data) {
   return request({
-    url: '/cs/demand/obtain',
-    method: 'get',
-    params:query
+    url: '/cs/demand/insertServiceProcessing',
+    method: 'put',
+    data: data
   })
 }
-

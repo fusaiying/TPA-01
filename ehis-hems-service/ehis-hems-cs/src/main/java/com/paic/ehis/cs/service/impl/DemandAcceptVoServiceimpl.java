@@ -95,6 +95,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return demandAcceptVoMapper.updateStatus(workOrderNo);
     }
 
+    @Override
+    public int updateStatusM(String[] workOrderNos) {
+        return demandAcceptVoMapper.updateStatusM(workOrderNos);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int insertServiceInfo(DemandAcceptVo demandAcceptVo) {

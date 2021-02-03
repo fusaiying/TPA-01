@@ -17,6 +17,8 @@ public interface DemandAcceptVoMapper {
 
     public int updateStatus(String workOrderNo);
 
+    public int updateStatusM(String[] workOrderNos);
+
     //插入工单表
     public int insertWorkOrderAccept(WorkOrderAccept WorkOrderAccept);
     //插入详细表

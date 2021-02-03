@@ -13,6 +13,8 @@ public interface IDemandAcceptVoService {
 
     public int updateStatus(String workOrderNo);
 
+    public int updateStatusM(String[] workOrderNos);
+
     public int insertServiceInfo(DemandAcceptVo demandAcceptVo);
 
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo);

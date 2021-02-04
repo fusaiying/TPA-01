@@ -70,7 +70,7 @@
 
       data() {
         return {
-
+          cs_service_item:[],
           rules: {
             attachmentTypes: [{
               required: true, message: "UM账号必填", trigger: "blur"

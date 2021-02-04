@@ -86,7 +86,7 @@
 
     data() {
       return {
-
+        serves:[],
         rules: {
           attachmentTypes: [{
             required: true, message: "UM账号必填", trigger: "blur"
@@ -100,7 +100,7 @@
           ]
         },
 
-
+        cs_service_item:[],
         dialogVisable: false,
         coOrganizerForm: {
           attachmentType: "",

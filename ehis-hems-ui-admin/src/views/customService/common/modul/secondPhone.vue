@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       open:true,
+      cs_service_item:[],
       queryParams: {
         pageNum: 1,
         pageSize: 10

@@ -30,17 +30,18 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-01-21
  */
 @RestController
-@RequestMapping("/modification")
+@RequestMapping("/Hms")
 public class HcsModificationController extends BaseController
 {
     @Autowired
     private IHcsModificationService hcsModificationService;
 
+
     /**
      * 查询HCS预约修改 列表
      */
     @PreAuthorize("@ss.hasPermi('system:modification:list')")
-    @GetMapping("/list")
+    @GetMapping("/HmsSearch")
     public TableDataInfo list(HcsModification hcsModification)
     {
         startPage();

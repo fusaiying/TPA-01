@@ -273,10 +273,10 @@
 
         <pagination
           v-show="totalCount>0"
-          :total="totalCount"
+          :total="totalPersonCount"
           :page.sync="sendForm.pageNum"
           :limit.sync="sendForm.pageSize"
-          @pagination="searchHandle"
+          @pagination="searchHandle1"
         />
       </div>
     </el-card>
@@ -286,7 +286,7 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain} from '@/api/customService/demand'
+  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
   import secondPhone from "../common/modul/secondPhone";
 
   export default {
@@ -367,7 +367,7 @@
       }
     },
     created() {
-      this.searchHandle()
+      this.searchHandles()
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
       });
@@ -393,17 +393,27 @@
 
     methods: {
       //修改按钮
-      modifyButton(){
+      modifyButton(s){
         this.$router.push({
           path: '/customService/modify',
-          isEmpty: false
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
         })
       },
       //取消按钮
-      cancleBytton(){
+      cancleBytton(s){
         this.$router.push({
           path: '/customService/cancle',
-          isEmpty: false
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
         })
       },
       //获取按钮
@@ -419,21 +429,20 @@
           }).catch(res => {
 
           })
-          this.searchHandle()
+
 
         }else {
-          let workOrderNo=this.ids
-          console.log("ids:",a)
-          demandObtain(workOrderNo).then(res => {
-            console.log('获取按钮', res.rows)
+           const workOrderNos=this.ids
+           console.log("ids:",workOrderNos)
+           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              console.log('获取', res.msg)
+              alert("success")
             }
           }).catch(res => {
 
           })
         }
-
+          this.searchHandles()
       }
         },
       //处理按钮
@@ -442,6 +451,9 @@
             path: '/customService/deal',
             query:{
               workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
             }
           })
       },
@@ -461,7 +473,7 @@
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
-      //查询按钮
+      //待处理查询
       searchHandle() {
         let queryParams;
         if (this.sendForm.acceptorTime.length > 0) {
@@ -471,7 +483,6 @@
         } else {
           queryParams = this.sendForm;
         }
-        console.log("条件查询",queryParams)
         demandListAndPublicPool(queryParams).then(res => {
           console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
@@ -487,6 +498,17 @@
         }).catch(res => {
 
         })
+      },
+      //处理中查询
+      searchHandle1() {
+        let queryParams;
+        if (this.sendForm.acceptorTime.length > 0) {
+          queryParams = JSON.parse(JSON.stringify(this.sendForm));
+          queryParams.acceptTimeStart=acceptorTime[0]
+          queryParams.acceptTimeEnd=acceptorTime[1]
+        } else {
+          queryParams = this.sendForm;
+        }
         demandListAndPersonalPool(this.sendForm).then(res => {
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
@@ -504,9 +526,11 @@
         })
       },
 
-      // getRiskStatus(row) {
-      //   return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
-      // }
+      //查询按钮
+      searchHandles() {
+        this.searchHandle()
+        this.searchHandle1()
+      },
     }
   }
 </script>

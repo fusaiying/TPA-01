@@ -29,7 +29,6 @@ public class CustomServiceDemandController extends BaseController {
     @Autowired
     private IWorkHandleInfoService iWorkHandleInfoService;
 
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
         startPage();
@@ -45,10 +44,10 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
     @PutMapping("/obtain")
-    public AjaxResult edit(String workOrderNo)
+    public AjaxResult edit(@RequestBody String workOrderNo)
     {
         return toAjax(iDemandAcceptVoService.updateStatus(workOrderNo));
     }
@@ -56,14 +55,14 @@ public class CustomServiceDemandController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
     @PutMapping("/many")
-    public AjaxResult edit(String[] workOrderNos)
+    public AjaxResult edit( @RequestBody String[] workOrderNos)
     {
         return toAjax(iDemandAcceptVoService.updateStatusM(workOrderNos));
     }
 
 
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
-    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
     public AjaxResult serviceAdd(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
     {

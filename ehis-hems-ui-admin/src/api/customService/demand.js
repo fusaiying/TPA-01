@@ -25,6 +25,23 @@ export function selectCallAgain() {
   })
 }
 
+//#获取接口
+export function demandObtain(data) {
+  return request({
+    url: '/cs/demand/obtain',
+    method: 'put',
+    data: data
+  })
+}
+//#批量获取
+export function demandObtainMany(data) {
+  return request({
+    url: '/cs/demand/many',
+    method: 'put',
+    data: data
+  })
+}
+
 //#处理页面新增
 export function dealAdd(data) {
   return request({
@@ -33,3 +50,33 @@ export function dealAdd(data) {
     data: data
   })
 }
+
+//#HMSSearch查询
+export function HMSSearch(query) {
+  return request({
+    url: '/cs/Hms/HmsSearch',
+    method: 'get',
+    params: query
+  })
+}
+//#轨迹表查询
+export function FlowLogSearch(query) {
+  return request({
+    url: '/cs/FlowLog/searchFlowLog',
+    method: 'get',
+    params: query
+  })
+}
+
+//# addDetail页面添加
+export function addInsert(data) {
+  return request({
+    url: '/cs/demand/serviceAdd',
+    method: 'put',
+    data: data
+  })
+}
+
+
+
+

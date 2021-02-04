@@ -58,6 +58,7 @@
 
     data() {
       return {
+        cs_service_item:[],
         open:"true",
         queryParams: {
           pageNum: 1,

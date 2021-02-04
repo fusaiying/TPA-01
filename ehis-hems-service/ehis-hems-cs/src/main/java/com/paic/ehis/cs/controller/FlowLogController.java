@@ -30,7 +30,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-01-29
  */
 @RestController
-@RequestMapping("/log")
+@RequestMapping("/FlowLog")
 public class FlowLogController extends BaseController
 {
     @Autowired
@@ -40,7 +40,7 @@ public class FlowLogController extends BaseController
      * 查询业务流转信息 列表
      */
     @PreAuthorize("@ss.hasPermi('system:log:list')")
-    @GetMapping("/list")
+    @GetMapping("/searchFlowLog")
     public TableDataInfo list(FlowLog flowLog)
     {
         startPage();

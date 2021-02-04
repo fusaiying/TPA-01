@@ -136,105 +136,116 @@ public class DemandAcceptVo extends BaseEntity {
 
     /** 有无附件*/
     private String attachmentFlag;
+    /** 业务内容*/
+    private String content;
+    /** 来电人姓名*/
+    private String callName;
+    /** 来电人号码*/
+    private String callMobilePhone;
+    /** 联系人性别*/
+    private long contactsSex;
+    /** 联系人姓名*/
+    private String contactsName;
+    /** 联系人语言*/
+    private String contactsLanguage;
+    /** 联系人电话*/
+    private String contactsMobilePhone;
+    /** 联系人国家*/
+    private String contactsCountry;
+    /** 联系人区号*/
+    private String contactsQuhao;
+    /** 联系人号码*/
+    private String contactsNumber;
+    /** 联系人分机号*/
+    private String contactsSecondNumber;
 
-    private String Content;
-    private String CallName;
-    private String CallMobilePhone;
-    private long ContactsSex;
-    private String ContactsName;
-    private String ContactsLanguage;
-    private String ContactsMobilePhone;
-    private String ContactsCountry;
-    private String ContactsQuhao;
-    private String ContactsNumber;
-    private String ContactsSecondNumber;
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public String getCallName() {
-        return CallName;
+        return callName;
     }
 
     public void setCallName(String callName) {
-        CallName = callName;
+        this.callName = callName;
     }
 
     public String getCallMobilePhone() {
-        return CallMobilePhone;
+        return callMobilePhone;
     }
 
     public void setCallMobilePhone(String callMobilePhone) {
-        CallMobilePhone = callMobilePhone;
+        this.callMobilePhone = callMobilePhone;
     }
 
     public long getContactsSex() {
-        return ContactsSex;
+        return contactsSex;
     }
 
     public void setContactsSex(long contactsSex) {
-        ContactsSex = contactsSex;
+        this.contactsSex = contactsSex;
     }
 
     public String getContactsName() {
-        return ContactsName;
+        return contactsName;
     }
 
     public void setContactsName(String contactsName) {
-        ContactsName = contactsName;
+        this.contactsName = contactsName;
     }
 
     public String getContactsLanguage() {
-        return ContactsLanguage;
+        return contactsLanguage;
     }
 
     public void setContactsLanguage(String contactsLanguage) {
-        ContactsLanguage = contactsLanguage;
+        this.contactsLanguage = contactsLanguage;
     }
 
     public String getContactsMobilePhone() {
-        return ContactsMobilePhone;
+        return contactsMobilePhone;
     }
 
     public void setContactsMobilePhone(String contactsMobilePhone) {
-        ContactsMobilePhone = contactsMobilePhone;
+        this.contactsMobilePhone = contactsMobilePhone;
     }
 
     public String getContactsCountry() {
-        return ContactsCountry;
+        return contactsCountry;
     }
 
     public void setContactsCountry(String contactsCountry) {
-        ContactsCountry = contactsCountry;
+        this.contactsCountry = contactsCountry;
     }
 
     public String getContactsQuhao() {
-        return ContactsQuhao;
+        return contactsQuhao;
     }
 
     public void setContactsQuhao(String contactsQuhao) {
-        ContactsQuhao = contactsQuhao;
+        this.contactsQuhao = contactsQuhao;
     }
 
     public String getContactsNumber() {
-        return ContactsNumber;
+        return contactsNumber;
     }
 
     public void setContactsNumber(String contactsNumber) {
-        ContactsNumber = contactsNumber;
+        this.contactsNumber = contactsNumber;
     }
 
     public String getContactsSecondNumber() {
-        return ContactsSecondNumber;
+        return contactsSecondNumber;
     }
 
     public void setContactsSecondNumber(String contactsSecondNumber) {
-        ContactsSecondNumber = contactsSecondNumber;
+        this.contactsSecondNumber = contactsSecondNumber;
     }
 
     public String getWorkOrderNo() {

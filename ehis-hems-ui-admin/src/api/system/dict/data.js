@@ -8,7 +8,6 @@ export function listData(query) {
     params: query
   })
 }
-
 // 查询字典数据详细
 export function getData(dictCode) {
   return request({
@@ -24,6 +23,16 @@ export function getDicts(dictType) {
     method: 'get'
   })
 }
+
+// 批量查询字典数据
+export function getDictsList(data) {
+  return request({
+    url: '/system/dict/data/type/list',
+    method: 'post',
+    data: data
+  })
+}
+
 
 // 新增字典数据
 export function addData(data) {

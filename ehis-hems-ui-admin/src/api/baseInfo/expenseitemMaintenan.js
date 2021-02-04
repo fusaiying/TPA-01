@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function listFeeitem(query) {
   return request({
     url: '/provider/feeitem/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -29,7 +29,7 @@ export function addFeeitem(data) {
 // 修改费用项信息
 export function updateFeeitem(data) {
   return request({
-    url: '/provider/feeitem',
+    url: '/system/feeitem',
     method: 'put',
     data: data
   })

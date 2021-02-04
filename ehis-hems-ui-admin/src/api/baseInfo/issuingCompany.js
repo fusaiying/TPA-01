@@ -45,14 +45,14 @@ export function delIssuingcompany(companycode) {
 //  查询出单公司开票信息
 export function getInvoice(companycode) {
   return request({
-    url: '/system/invoice/' + companycode,
+    url: '/provider/invoice/' + companycode,
     method: 'get'
   })
 }
 // 新增出单公司开票信息
 export function addInvoice(data) {
   return request({
-    url: '/system/invoice',
+    url: '/provider/invoice',
     method: 'post',
     data: data
   })
@@ -60,7 +60,7 @@ export function addInvoice(data) {
 // 修改出单公司开票信息
 export function updateInvoice(data) {
   return request({
-    url: '/system/invoice',
+    url: '/provider/invoice',
     method: 'put',
     data: data
   })
@@ -68,7 +68,7 @@ export function updateInvoice(data) {
   // 查询出单公司规则列表
 export function listRule(query) {
     return request({
-      url: '/system/rule/list',
+      url: '/provider/rule/list',
       method: 'post',
       data: query
     })
@@ -77,7 +77,7 @@ export function listRule(query) {
   // 新增和修改出单公司规则
   export function getRule(ruleno) {
     return request({
-      url: '/system/rule/query',
+      url: '/provider/rule/query',
       method: 'post',
       params: ruleno
     })
@@ -86,14 +86,14 @@ export function listRule(query) {
 // 查询出单公司产品关联详细
 export function getRiskrela(companycode) {
   return request({
-    url: '/system/riskrela/' + companycode,
+    url: '/provider/riskrela/' + companycode,
     method: 'get'
   })
 }
 // 根据出单公司编码查询产品名称
 export function riskList(data) {
   return request({
-    url: 'system/rule/riskList',
+    url: 'provider/rule/riskList',
     method: 'get',
     params: data
   })

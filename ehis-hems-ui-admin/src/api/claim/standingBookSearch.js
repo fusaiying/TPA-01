@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+// 初始化查询：
+export function listFirst(data) {
+  return request({
+    url: '/system/standing/listFirst',
+    method: 'get',
+    params:data
+  })
+}
 // 查询：
 export function listNew(data) {
   return request({

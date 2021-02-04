@@ -5,15 +5,16 @@ import request from '@/utils/request'
 export function listCaseCheck(data) {
   return request({
     url: '/system/case/caseCheck',
-    method: 'get',
+    method: 'post',
     data: data
   })
 }
+
 //案件抽检工作池-已处理
 export function listConditionsForTheAdjustmentOverNew(data) {
   return request({
     url: '/system/case/listConditionsForTheAdjustmentOverNew',
-    method: 'get',
+    method: 'post',
     data: data
   })
 }

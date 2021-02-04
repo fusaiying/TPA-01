@@ -269,7 +269,8 @@ export function getProblemRptNo(rptNo) {
     url: '/system/problem/s/' + rptNo,
     method: 'get'
   })
-}// 新增问题件
+}
+// 新增问题件
 export function addProblem(data) {
   return request({
     url: '/system/problem',
@@ -323,10 +324,11 @@ export function editBill(billId) {
 }
 
 //获取费用项
-export function getFee() {
+export function getFee(data) {
   return request({
     url: '/system/feeitem/list',
-    method: 'get'
+    method: 'post',
+    data:data
   })
 }
 
@@ -334,8 +336,8 @@ export function getFee() {
 export function getHospitalInfo(data) {
   return request({
     url: '/provider/org/selectHospitalInfoNew',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -437,7 +439,7 @@ export function responsibilityDetailsList(data) {
 //#费用项账单   保存  按钮
 export function billDetailsSave(data) {
   return request({
-    url: '/system/bill',
+    url: '/system/calBill',
     method: 'put',
     data: data
   })

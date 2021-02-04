@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function getList(data) {
   return request({
     url: '/provider/org/getList',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -184,8 +184,8 @@ export function checkfieldNew(data) {
 export function getNewtworktypeList(data) {
   return request({
     url: 'provider/org/getNewtworktypeList',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 //修改医疗网络类型
@@ -232,8 +232,8 @@ export function updateStatus(data) {
 export function getCheckUpList(data) {
   return request({
     url: 'provider/org/getCheckUpList',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 

@@ -25,6 +25,15 @@ export function getDicts(dictType) {
   })
 }
 
+// 批量查询字典数据
+export function getDictsList(data) {
+  return request({
+    url: '/system/dict/data/type/list',
+    method: 'post',
+    data: data
+  })
+}
+
 // 新增字典数据
 export function addData(data) {
   return request({
@@ -50,3 +59,28 @@ export function delData(dictCode) {
     method: 'delete'
   })
 }
+
+// 查询 州
+export function selectContinent() {
+  return request({
+    url: '/system/dict/data/continent',
+    method: 'get',
+  })
+}
+
+// 查询 国家
+export function selectCountryByContinent(continent) {
+  return request({
+    url: '/system/dict/data/country/' + continent,
+    method: 'get',
+  });
+}
+
+// 根据地区名称查询地区编码
+export function selectPlaceCodeByPlaceName(placename) {
+  return request({
+    url: '/system/dict/data/code/' + placename,
+    method: 'get',
+  });
+}
+

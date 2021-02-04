@@ -49,7 +49,7 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
                 return chain.filter(exchange);
             }
 
-            try
+         /*   try
             {
                 String rspStr = resolveBodyFromRequest(request);
                 JSONObject obj = JSONObject.parseObject(rspStr);
@@ -61,7 +61,7 @@ public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object>
                 response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
                 return exchange.getResponse().writeWith(
                         Mono.just(response.bufferFactory().wrap(JSON.toJSONBytes(AjaxResult.error(e.getMessage())))));
-            }
+            }*/
             return chain.filter(exchange);
         };
     }

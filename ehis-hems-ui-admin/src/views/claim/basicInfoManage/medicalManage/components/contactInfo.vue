@@ -247,11 +247,12 @@ export default {
           resolve(this.isNetHospFlag)
         })
       }).then(res=>{
+        let obj=this.$parent.$parent.$parent.getServiceInfoData()
         this.$refs.contactInfoForm.validate((valid) => {
           if(this.contactInfoForm.contacts!=null && this.contactInfoForm.contacts.length>0) {
             //找到是否有平安服务人员联系人
             let flag=true
-
+            let placeTypeFlag
             if(this.isNetHospFlag){
               let obj=this.contactInfoForm.contacts.find(item=>{
                 return item.placeType=='03'
@@ -269,26 +270,60 @@ export default {
               flag=true
             }
             if(flag) {
-              if (valid) {
-                if (this.supplierCode) {
-                  this.contactInfoForm.contacts.supplierCode = this.supplierCode
-                  /*  if(this.isAdd){*/
-                  let formData = {
-                    providerCode: this.supplierCode,
-                    contacts: this.contactInfoForm.contacts,
-                    orgFlag: this.status
+              if(obj.leadFlag=='03') {
+                //联系信息是否有驻点人员信息
+                let placeType = this.contactInfoForm.contacts.find(item => {
+                  return item.placeType == '01'
+                })
+                if (placeType != null && placeType != '') {
+                  placeTypeFlag = true
+                } else {
+                  placeTypeFlag = false
+                }
+              }
+              else {
+                placeTypeFlag = true
+              }
+              if(placeTypeFlag){
+                if (valid) {
+                  if (this.supplierCode) {
+                    this.contactInfoForm.contacts.supplierCode = this.supplierCode
+                    /*  if(this.isAdd){*/
+                    let formData = {
+                      providerCode: this.supplierCode,
+                      contacts: this.contactInfoForm.contacts,
+                      orgFlag: this.status
+                    }
+                    addcontactsInfo(formData).then(res => {
+                      if (res.code == '200') {
+                        this.$message({
+                          message: '保存成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        })
+                      } else {
+                        this.$message({
+                          message: '保存失败!',
+                          type: 'error',
+                          center: true,
+                          showClose: true
+                        })
+                      }
+                    })
                   }
-                  addcontactsInfo(formData).then(res => {
+                  /*else{
+                  updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
                     if (res.code == '200') {
                       this.$message({
-                        message: '保存成功！',
+                        message: '修改成功！',
                         type: 'success',
                         center: true,
                         showClose: true
                       })
-                    } else {
+                    } else  {
                       this.$message({
-                        message: '保存失败!',
+                        message: '修改失败!' ,
                         type: 'error',
                         center: true,
                         showClose: true
@@ -296,33 +331,22 @@ export default {
                     }
                   })
                 }
-                /*else{
-                updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
-                  if (res.code == '200') {
-                    this.$message({
-                      message: '修改成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                  } else  {
-                    this.$message({
-                      message: '修改失败!' ,
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  }
-                })
+
+              }*/
+                } else {
+                  this.$message.warning('联系信息必录项未必录')
+                }
+              }
+              else{
+                this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息')
               }
 
-            }*/
-              } else {
-                this.$message.warning('联系信息必录项未必录')
-              }
+
+
+
             }
             else {
-              this.$message.warning('网络医院为是，联系信息中联系人至少有一位平安服务人员')
+              this.$message.warning('网络医院为是，至少有一位平安服务人员联系人信息')
             }
           }
           else {
@@ -381,9 +405,13 @@ export default {
     async validateForm () {
       let flag
       let hospFlag
+      let placeTypeFlag
       let query={
         providerCode: this.supplierCode
       }
+      let obj=this.$parent.$parent.$parent.getServiceInfoData()
+      console.log('校验')
+      console.log(obj)
       await new Promise((resolve, reject) => {
         getNewtworktypeList(query).then(res => {
           this.medicalTypeData = res.rows
@@ -411,19 +439,37 @@ export default {
             else {
               hospFlag=false
             }
-
           }
           else {
             hospFlag=true
           }
           if(hospFlag) {
-            this.$refs['contactInfoForm'].validate(valid => {
-              if (valid) {
-                flag = '01'
+            if(obj.leadFlag=='03') {
+              //联系信息是否有驻点人员信息
+              let placeType = this.contactInfoForm.contacts.find(item => {
+                return item.placeType == '01'
+              })
+              if (placeType != null && placeType != '') {
+                placeTypeFlag = true
               } else {
-                flag = '03'
+                placeTypeFlag = false
               }
-            })
+            }
+            else {
+              placeTypeFlag=true
+            }
+            if(placeTypeFlag){
+              this.$refs['contactInfoForm'].validate(valid => {
+                if (valid) {
+                  flag = '01'
+                } else {
+                  flag = '03'
+                }
+              })
+            }
+            else {
+              flag='05'
+            }
           }
           else {
             flag = '04'

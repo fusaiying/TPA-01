@@ -1260,7 +1260,6 @@ export default {
         } else {
           this.historyContractBtnShow = false,
             this.saveFlag = true
-
         }
       }
       /*  getNewtworktypeList().then(res =>{

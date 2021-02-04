@@ -4,16 +4,16 @@ import request from '@/utils/request'
 export function processingList(data) {
   return request({
     url: '/system/bill/processingList',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 //已处理工作池
 export function accomplishList(data) {
   return request({
     url: '/system/bill/accomplishList',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 

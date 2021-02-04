@@ -1,9 +1,7 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-
 import Element from 'element-ui'
-import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import './assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/sino.scss' // sino css
@@ -13,7 +11,7 @@ import store from './store'
 import router from './router'
 import permission from './directive/permission'
 import { download } from '@/utils/request'
-
+import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";

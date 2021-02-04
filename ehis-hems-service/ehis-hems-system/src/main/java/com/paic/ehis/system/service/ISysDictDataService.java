@@ -1,5 +1,6 @@
 package com.paic.ehis.system.service;
 
+import com.paic.ehis.system.domain.HmpAddress;
 import com.paic.ehis.system.domain.SysDictData;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * 字典 业务层
  * 
- *
+ * @author admin
  */
 public interface ISysDictDataService
 {
@@ -59,4 +60,24 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
+    /**
+     * 查询所有的州
+     * @return
+     */
+    public List<HmpAddress> selectContinent();
+
+
+    /**
+     * 查询指定州下的国家
+     * @return
+     */
+    public List<HmpAddress> selectContryByContinent(String continent);
+
+    /**
+     * 根据地区名称查询地区编码
+     * @param placename
+     * @return
+     */
+    public HmpAddress selectPlaceCodeByPlaceName(String placename);
 }

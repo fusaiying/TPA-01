@@ -120,5 +120,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			sysdate()
  		)
 	</insert>
-	
+
+	<!-- 查询 州 -->
+	<select id="selectContinent" resultType="HmpAddress">
+		SELECT PlaceCode, PlaceName FROM Hmp_Address WHERE PlaceType = '01'
+	</select>
+
+	<!--查询指定州下的国家 -->
+	<select id="selectContryByContinent" resultType="HmpAddress" parameterType="String">
+		SELECT PlaceCode, PlaceName FROM Hmp_Address WHERE UpPlaceCode = #{continent}
+	</select>
+
+
+	<!--根据地区名称查询地区编码 -->
+	<select id="selectPlaceCodeByPlaceName" resultType="HmpAddress" parameterType="String">
+		SELECT PlaceCode, PlaceName FROM Hmp_Address WHERE PlaceName = #{placename}
+	</select>
+
+
+
 </mapper> 

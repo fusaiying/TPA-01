@@ -1,5 +1,6 @@
 package com.paic.ehis.system.mapper;
 
+import com.paic.ehis.system.domain.HmpAddress;
 import com.paic.ehis.system.domain.SysDictData;
 import org.apache.ibatis.annotations.Param;
 
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * 字典表 数据层
  * 
- *
+ * @author admin
  */
 public interface SysDictDataMapper
 {
@@ -93,4 +94,30 @@ public interface SysDictDataMapper
      * @return 结果
      */
     public int updateDictDataType(@Param("oldDictType") String oldDictType, @Param("newDictType") String newDictType);
+
+    /**
+     * 查询 州
+     * @return
+     */
+    public List<HmpAddress> selectContinent();
+
+    /**
+     * 查询指定州下的国家
+     * @return
+     */
+    public List<HmpAddress> selectContryByContinent(String continent);
+
+    /**
+     * 根据地区名称查询地区编码
+     * @param placename
+     * @return
+     */
+    public HmpAddress selectPlaceCodeByPlaceName(String placename);
+
+    /**
+     * 查询所有的国家
+     * @return
+     */
+    public List<HmpAddress> selectAllContry();
+
 }

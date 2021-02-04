@@ -189,4 +189,9 @@
   .item-width {
     width: 220px;
   }
+
+  /*element原有样式修改*/
+  .el-form-item ::v-deep label {
+    font-weight: normal;
+  }
 </style>

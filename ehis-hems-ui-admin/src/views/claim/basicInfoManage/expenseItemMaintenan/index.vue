@@ -89,9 +89,7 @@
           feeitemname: '',
           status: undefined
         },
-        tableData: [{
-          name: 'xxx'
-        }],
+        tableData: [],
         totalCount: 0,
         pageInfo: {
           page: 1,
@@ -105,19 +103,30 @@
       }
     },
     mounted() {
-      this.searchHandle()
+      listFeeitem(this.queryParams).then(res => {
+        this.tableData = res.rows
+        this.totalCount = res.total
+        this.loading = false
+      }).catch(res => {
+        this.loading = false
+      })
     },
     methods: {
       // 查询
       searchHandle() {
         this.queryParams.pageNum = 1
         this.queryParams.pageSize = 10
-        this.getData()
+        if ((this.queryParams.feeitemcode===null || this.queryParams.feeitemcode==='') && (this.queryParams.feeitemname===null || this.queryParams.feeitemname==='')){
+          return this.$message.warning(
+            "至少输入一个查询条件！"
+          )
+        }else {
+          this.getData()
+        }
+
       },
       // 获取数据
       getData() {
-        console.log(this.queryParams);
-
         this.loading = true
         listFeeitem(this.queryParams).then(res => {
           this.tableData = res.rows
@@ -168,7 +177,7 @@
         listFeeitem(this.queryParams).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('system/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
+            this.download('system/feeitem/export', {
               ...query
             }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({

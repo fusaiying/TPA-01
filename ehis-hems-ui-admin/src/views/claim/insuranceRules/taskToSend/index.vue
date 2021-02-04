@@ -223,7 +223,14 @@
       this.approvalconclusionOptions = this.dictList.find(item => {
         return item.dictType === 'approvalconclusion'
       }).dictDate
-      this.searchHandle()
+      selectClaimProductList(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.workPoolData = res.rows
+          this.totalCount = res.total
+        }
+      }).catch(res => {
+
+      })
     },
     methods: {
       resetForm() {
@@ -331,7 +338,6 @@
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 220px;

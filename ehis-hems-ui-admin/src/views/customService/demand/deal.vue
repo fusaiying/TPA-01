@@ -240,7 +240,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人：" prop="lxperson">
-              <el-input v-model="workPoolData.contactsPerson" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsRelationBy" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -426,8 +426,8 @@
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
           <div style="text-align: right; margin-right: 8px;">
-            <el-button type="primary" size="mini" @click="add">新增</el-button>
-            <el-button type="primary" size="mini" @click="deal">取消</el-button>
+            <el-button type="primary" size="mini" @click="modify">修改</el-button>
+            <el-button type="primary" size="mini" @click="cancle">取消</el-button>
           </div>
           <el-divider/>
        <el-row>
@@ -549,6 +549,7 @@
     data() {
 
       return {
+        ids:[],//多选框
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -591,6 +592,7 @@
         updateBy: undefined,
         //新增的数据传输
         sendForm: {
+          sign:"",//控制暂存还是提交用
           workOrderNo:'',
           businessProcess:'',
         },
@@ -705,9 +707,6 @@
         this.$refs.sendForm.resetFields()
       },
 
-      handleSelectionChange(val) {
-        this.dataonLineListSelections = val
-      },
       //查询轨迹表
       searchFlowLog() {
         let workOrderNo=this.queryParams
@@ -749,6 +748,42 @@
         }).catch(res => {
 
         })
+      },
+      //修改按钮
+      modify() {
+        if (this.ids.length==0){
+          alert("先选中一行")
+        }else {if(this.ids.length>2){
+          alert("选中一行")
+        }else {
+          this.$router.push({
+            path: '/customService/modify',
+            query: {
+              workOrderNo: this.queryParams.workOrderNo,
+              policyNo: this.queryParams.policyNo,
+              policyItemNo: this.queryParams.policyItemNo,
+              status: this.queryParams.status
+            }
+          })
+        }
+        }
+      },
+      //取消按钮
+      cancle() {
+        this.$router.push({
+          path: '/customService/cancle',
+          query:{
+            workOrderNo:this.queryParams.workOrderNo,
+            policyNo:this.queryParams.policyNo,
+            policyItemNo:this.queryParams.policyItemNo,
+            status:this.queryParams.status
+          }
+        })
+      },
+      // 多选框选中数据
+      handleSelectionChange(selection) {
+        this.ids = selection.map(item => item.workOrderNo);
+
       },
 
     }

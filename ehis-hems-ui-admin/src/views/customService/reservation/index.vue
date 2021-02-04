@@ -149,7 +149,7 @@
 
         </el-row>
         <div style="text-align: right; margin-right: 1px;">
-          <el-button size="mini" type="primary" @click="searchHandle">查询</el-button>
+          <el-button size="mini" type="primary" @click="searchHandles">查询</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>
@@ -174,8 +174,13 @@
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column prop="acceptTime" label="预约日期" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.acceptTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="policyNo" label="预约医院" show-overflow-tooltip/>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -193,9 +198,8 @@
           </el-table-column>
 
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
           <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
@@ -233,6 +237,12 @@
 <!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column prop="modifyTime" label="预约日期" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.modifyTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="policyNo" label="预约医院" show-overflow-tooltip/>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -248,16 +258,9 @@
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
           <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <!--fixed="right"控制固定某一列-->

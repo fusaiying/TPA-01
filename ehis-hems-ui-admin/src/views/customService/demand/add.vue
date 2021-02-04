@@ -35,7 +35,7 @@
 
         <div style="text-align: right; margin-right: 1px;">
           <el-button size="mini" type="primary" @click="searchHandle">查询</el-button>
-          <el-button size="mini" type="primary" @click="acceptButton">跳过</el-button>
+          <el-button size="mini" type="primary" @click="jumpButton">跳过</el-button>
         </div>
       </el-form>
       <!--<el-divider/>-->
@@ -54,8 +54,8 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="secondNumber" label="分单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="center" label="姓名" show-overflow-tooltip/>
           <el-table-column prop="beInsuredName" align="center" label="性别 " show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="出生日期" show-overflow-tooltip/>
@@ -144,13 +144,24 @@
     },
 
     methods: {
-      //增加按钮
-      acceptButton(row) {
+      //跳过
+      jumpButton() {
         this.$router.push({
           path: '/customService/demand-editDetail',
           isEmpty: false
         })
       },
+      //受理
+      acceptButton(s) {
+        this.$router.push({
+          path: '/customService/demand-editDetail',
+          query:{
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+          }
+        })
+      },
+
       resetForm() {
         this.$refs.sendForm.resetFields()
       },

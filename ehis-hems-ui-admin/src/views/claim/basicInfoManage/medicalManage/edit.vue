@@ -1324,6 +1324,11 @@ export default {
 
   },
   methods: {
+    getServiceInfoData(){
+      return this.$refs.serviceInfo.serviceForm
+
+    },
+
     handleClick(){
       this.baseForm.beds = this.baseForm.beds.replace(/[^\w]/g, '');
     },
@@ -1708,6 +1713,9 @@ export default {
                 }
                 else if(contactInfoFlag=='04'){
                   this.$message.warning('网络医院为是，联系信息中联系人至少有一位平安服务人员！')
+                }
+                else if(contactInfoFlag=='05'){
+                  this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息！')
                 }
                 else {
                   this.$message.warning('联系信息必录项未必录！')

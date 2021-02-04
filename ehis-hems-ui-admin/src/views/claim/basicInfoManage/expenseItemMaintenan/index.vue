@@ -174,7 +174,11 @@
           feeitemcode: this.queryParams.feeitemcode,
           feeitemname:  this.queryParams.feeitemname,
         }
-        listFeeitem(this.queryParams).then(res => {
+        let data={
+          pageNum: 1,
+          pageSize: 10,
+        }
+        listFeeitem(data).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
             this.download('system/feeitem/export', {
@@ -199,7 +203,6 @@
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 200px;

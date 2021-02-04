@@ -2,10 +2,10 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIcd10;
 import com.paic.ehis.base.mapper.BaseIcd10Mapper;
 import com.paic.ehis.base.service.IBaseIcd10Service;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ import java.util.List;
 public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
     @Autowired
     private BaseIcd10Mapper baseIcd10Mapper;
-
 
     /**
      * 查询ICD10数据
@@ -124,6 +123,7 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
      * @param baseIcd10
      * @return
      */
+    @Override
     public int updateBaseIcd10One(BaseIcd10 baseIcd10) {
         baseIcd10.setStatus("N");
         return baseIcd10Mapper.updateBaseIcd10(baseIcd10);

@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderApply;
 import com.paic.ehis.base.domain.BaseProviderWorktime;
 import com.paic.ehis.base.mapper.BaseProviderApplyMapper;
@@ -33,8 +33,6 @@ public class BaseProviderApplyServiceImpl implements IBaseProviderApplyService
 
     @Autowired
     private BaseProviderWorktimeMapper baseProviderWorktimeMapper;
-
-
 
     /**
      * 查询base_provider_apply(服务商预约信息)

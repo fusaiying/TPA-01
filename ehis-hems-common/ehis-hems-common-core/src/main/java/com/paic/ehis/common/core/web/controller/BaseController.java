@@ -7,6 +7,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 import com.paic.ehis.common.core.web.page.PageDomain;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  * web层通用数据处理
  * 
- *
+ * @author admin
  */
 public class BaseController
 {
@@ -51,6 +52,36 @@ public class BaseController
     protected void startPage()
     {
         PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 设置请求分页数据
+     */
+    protected void startPage(BaseEntity baseEntity)
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest(baseEntity);
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 设置请求分页数据
+     */
+    protected void startSortPage()
+    {
+        PageDomain pageDomain = TableSupport.buildSortPageRequest();
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))

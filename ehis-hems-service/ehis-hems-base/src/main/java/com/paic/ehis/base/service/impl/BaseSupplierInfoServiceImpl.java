@@ -1,6 +1,9 @@
 package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.mapper.*;
@@ -9,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -98,11 +104,26 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
      * @return 结果
      */
     @Override
-    public int insertBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo)
-    {
-        baseSupplierInfo.setCreateTime(DateUtils.getNowDate());
-
-        return baseSupplierInfoMapper.insertBaseSupplierInfo(baseSupplierInfo);
+    public BaseSupplierInfo insertBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo)
+    {   String serialNo = baseSupplierInfo.getSerialNo();
+        String username = SecurityUtils.getUsername();
+        Date nowDate = DateUtils.getNowDate();
+        if (StringUtils.isEmpty(serialNo)) {
+            LocalDate date = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            serialNo = "PR" + date.format(formatter) + PubFun.createMySqlMaxNoUseCache("BaseSupplierInfo", 0, 4);
+            baseSupplierInfo.setSerialNo(serialNo);
+            baseSupplierInfo.setCreateBy(username);
+            baseSupplierInfo.setCreateTime(nowDate);
+            baseSupplierInfo.setUpdateBy(username);
+            baseSupplierInfo.setUpdateTime(nowDate);
+            baseSupplierInfo.setStatus("Y");
+            baseSupplierInfoMapper.insertBaseSupplierInfo(baseSupplierInfo);
+        }else{
+            baseSupplierInfo.setUpdateTime(DateUtils.getNowDate());
+             baseSupplierInfoMapper.updateBaseSupplierInfo(baseSupplierInfo);
+        }
+        return baseSupplierInfo;
     }
 
     /**

@@ -14,6 +14,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.base.domain.BaseIssuingcompanyRule" id="BaseIssuingcompanyRuleResult">
+        <result property="companycode"    column="company_code"    />
+        <result property="riskcode"    column="risk_code"    />
+        <result property="settlementtype"    column="settlement_type"    />
+        <result property="settlementvalue"    column="settlement_value"    />
+        <result property="companyname"    column="company_name"    />
+        <result property="riskName"    column="risk_name"    />
+    </resultMap>
+
     <sql id="selectBaseIssuingcompanyRiskrelaVo">
         select company_code, risk_code, status, create_by, create_time, update_by, update_time from base_issuingcompany_riskrela
     </sql>
@@ -86,5 +95,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
         where company_code = #{companyCode} and status='Y'
     </select>
-
 </mapper>

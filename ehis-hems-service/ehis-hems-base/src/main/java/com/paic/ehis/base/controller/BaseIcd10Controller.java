@@ -32,10 +32,11 @@ public class BaseIcd10Controller extends BaseController
     /**
      * 查询ICD10数据 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:list')")
     @PostMapping("/list")
     public TableDataInfo list(@RequestBody BaseIcd10 baseIcd10)
     {
-        //startPage(baseIcd10);
+        startPage(baseIcd10);
         List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd10);
         return getDataTable(list);
     }
@@ -43,18 +44,30 @@ public class BaseIcd10Controller extends BaseController
     /**
      * 导出ICD10数据 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:export')")
     @Log(title = "ICD10数据 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIcd10 baseIcd10) throws IOException
     {
-        List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd10);
+        BaseIcd10 baseIcd101 = new BaseIcd10();
+        String icdmName = baseIcd10.getIcdmname();
+        String icdCode = baseIcd10.getIcdcode();
+
+        String utf8IcdmName = new String(icdmName.getBytes( "UTF-8"));
+        String utf8IcdCode = new String(icdCode.getBytes( "UTF-8"));
+
+        baseIcd101.setIcdmname(utf8IcdmName);
+        baseIcd101.setIcdcode(utf8IcdCode);
+
+        List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd101);
         ExcelUtil<BaseIcd10> util = new ExcelUtil<BaseIcd10>(BaseIcd10.class);
-        util.exportExcel(response, list, "icd10");
+        util.exportExcel(response, list, "icd10数据");
     }
 
     /**
      * 获取ICD10数据 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:query')")
     @GetMapping(value = "/{icdCode}")
     public AjaxResult getInfo(@PathVariable("icdCode") String icdCode)
     {
@@ -64,6 +77,7 @@ public class BaseIcd10Controller extends BaseController
     /**
      * 新增ICD10数据 
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:add')")
     @Log(title = "ICD10数据 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseIcd10 baseIcd10)
@@ -86,6 +100,7 @@ public class BaseIcd10Controller extends BaseController
     /**
      * 修改ICD10数据 
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:edit')")
     @Log(title = "ICD10数据 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIcd10 baseIcd10)
@@ -103,6 +118,7 @@ public class BaseIcd10Controller extends BaseController
     /**
      * 删除ICD10数据 
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:remove')")
     @Log(title = "ICD10数据 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{icdCodes}")
     public AjaxResult remove(@PathVariable String[] icdCodes)
@@ -111,8 +127,10 @@ public class BaseIcd10Controller extends BaseController
     }
 
     /**
+     * 将status变为无效
      * 单个删除
      */
+    //@PreAuthorize("@ss.hasPermi('system:icd10:edit')")
     @Log(title = "ICD10数据 ", businessType = BusinessType.UPDATE)
     @PostMapping("/removeOne")
     public AjaxResult removeOne(@RequestBody BaseIcd10 baseIcd10)

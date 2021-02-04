@@ -13,7 +13,7 @@ public class ProviderInfo {
     /**
      * 医疗特色信息
      */
-    private HmpHospCharacter hmpHospCharacter;
+    private com.paic.ehis.base.domain.HmpHospCharacter hmpHospCharacter;
     /**
      * 联系人
      */
@@ -27,11 +27,11 @@ public class ProviderInfo {
         this.hmpServOpera = hmpServOpera;
     }
 
-    public HmpHospCharacter getHmpHospCharacter() {
+    public com.paic.ehis.base.domain.HmpHospCharacter getHmpHospCharacter() {
         return hmpHospCharacter;
     }
 
-    public void setHmpHospCharacter(HmpHospCharacter hmpHospCharacter) {
+    public void setHmpHospCharacter(com.paic.ehis.base.domain.HmpHospCharacter hmpHospCharacter) {
         this.hmpHospCharacter = hmpHospCharacter;
     }
 

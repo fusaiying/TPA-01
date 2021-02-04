@@ -2,6 +2,7 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompany;
 import com.paic.ehis.base.domain.BaseIssuingcompanyInvoice;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRiskrela;
@@ -14,7 +15,6 @@ import com.paic.ehis.base.mapper.BaseIssuingcompanyMapper;
 import com.paic.ehis.base.mapper.BaseIssuingcompanyRiskrelaMapper;
 import com.paic.ehis.base.mapper.ClaimProductMapper;
 import com.paic.ehis.base.service.IBaseIssuingcompanyService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,6 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
     @Autowired
     private ClaimProductMapper claimProductMapper;
 
-
     /**
      * 查询出单公司信息
      *
@@ -53,7 +52,7 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         //查信息出单公司
         IssuingBaseVO issuingBaseVO = new IssuingBaseVO();
         String join =null;
-                BaseIssuingcompany baseIssuingcompany = baseIssuingcompanyMapper.selectBaseIssuingcompanyById(companyCode);
+        BaseIssuingcompany baseIssuingcompany = baseIssuingcompanyMapper.selectBaseIssuingcompanyById(companyCode);
         if (baseIssuingcompany !=null) {
             //查关联表
             List<String> objectsOne = new ArrayList<>();
@@ -67,13 +66,13 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
                 join = String.join(",", objectsOne);//拼接
                 //完成返回前端赋值
             }
-        }
+
         issuingBaseVO.setRiskName(join);
         issuingBaseVO.setCompanycode(baseIssuingcompany.getCompanycode());
         issuingBaseVO.setCompanyname(baseIssuingcompany.getCompanyname());
         issuingBaseVO.setSimplename(baseIssuingcompany.getSimplename());
         issuingBaseVO.setStatus(baseIssuingcompany.getStatus());
-
+        }
         return issuingBaseVO;
     }
 
@@ -168,7 +167,6 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
             baseIssuingcompany.setCompanycode(str);
             baseIssuingcompanyMapper.insertBaseIssuingcompany(baseIssuingcompany);
         } else {//不是第一次提交出单公司
-
             baseIssuingcompanyMapper.updateBaseIssuingcompany(baseIssuingcompany);
         }
 

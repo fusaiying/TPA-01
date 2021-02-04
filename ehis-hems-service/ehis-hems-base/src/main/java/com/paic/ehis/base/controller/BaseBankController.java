@@ -33,6 +33,7 @@ public class BaseBankController extends BaseController
     /**
      * 查询base_bank（银行信息）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseBank baseBank)
     {
@@ -52,6 +53,7 @@ public class BaseBankController extends BaseController
     /**
      * 导出base_bank（银行信息）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:export')")
     @Log(title = "base_bank（银行信息）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseBank baseBank) throws IOException
@@ -64,6 +66,7 @@ public class BaseBankController extends BaseController
     /**
      * 获取base_bank（银行信息）详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
@@ -73,6 +76,7 @@ public class BaseBankController extends BaseController
     /**
      * 新增base_bank（银行信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:add')")
     @Log(title = "base_bank（银行信息）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseBankVo baseBank)
@@ -89,6 +93,7 @@ public class BaseBankController extends BaseController
     /**
      * 修改base_bank（银行信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:edit')")
     @Log(title = "base_bank（银行信息）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseBank baseBank)
@@ -99,6 +104,7 @@ public class BaseBankController extends BaseController
     /**
      * 删除base_bank（银行信息）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bank:remove')")
     @Log(title = "base_bank（银行信息）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable String[] ids)

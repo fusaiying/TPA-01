@@ -16,7 +16,7 @@ spring:
         # 服务注册地址
         server-addr: http://106.54.127.177:8848
         #命名空间
-        namespace: 99a47c0f-399f-492a-adc7-d91b7f41b668
+        namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6
       config:
         # 配置中心地址
         server-addr: http://106.54.127.177:8848
@@ -25,4 +25,4 @@ spring:
         # 共享配置
         shared-dataids: application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
         #命名空间地址
-        namespace: 99a47c0f-399f-492a-adc7-d91b7f41b668
+        namespace: 20336242-fde0-4bfb-b1b6-b995bdd9f2c6

@@ -1,20 +1,25 @@
 package com.paic.ehis.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.constant.UserConstants;
 import com.paic.ehis.common.core.exception.CustomException;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.datascope.annotation.DataScope;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.domain.SysPost;
 import com.paic.ehis.system.domain.SysUserPost;
 import com.paic.ehis.system.domain.SysUserRole;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.mapper.*;
 import com.paic.ehis.system.service.ISysConfigService;
 import com.paic.ehis.system.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +30,7 @@ import java.util.List;
 /**
  * 用户 业务层处理
  * 
- *
+ * @author admin
  */
 @Service
 public class SysUserServiceImpl implements ISysUserService
@@ -62,6 +67,13 @@ public class SysUserServiceImpl implements ISysUserService
     {
         return userMapper.selectUserList(user);
     }
+
+    @Override
+    public int selectDept(String username) {
+        String name = SecurityUtils.getUsername();
+        return userMapper.selectDept(name);
+    }
+
 
     /**
      * 通过用户名查询用户
@@ -360,7 +372,6 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    @Transactional
     public int deleteUserById(Long userId)
     {
         // 删除用户与角色关联
@@ -377,17 +388,12 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    @Transactional
     public int deleteUserByIds(Long[] userIds)
     {
         for (Long userId : userIds)
         {
             checkUserAllowed(new SysUser(userId));
         }
-        // 删除用户与角色关联
-        userRoleMapper.deleteUserRole(userIds);
-        // 删除用户与岗位关联
-        userPostMapper.deleteUserPost(userIds);
         return userMapper.deleteUserByIds(userIds);
     }
 
@@ -458,4 +464,38 @@ public class SysUserServiceImpl implements ISysUserService
         return successMsg.toString();
     }
 
+    /**
+     * 查询部门信息
+     *
+     * @return
+     */
+    @Override
+    public List<SysDept> selectManageCom() {
+        return userMapper.selectManageCom();
+    }
+
+    @Override
+    public List<JSONObject> queryComcodeUsers(String dept_id) {
+        return userMapper.queryComcodeUsers(dept_id);
+    }
+
+    @Override
+    public List<JSONObject> queryUpperComcodeUsers(String username) {
+        return userMapper.queryUpperComcodeUsers(username);
+    }
+
+    @Override
+    public List<UserVo> selectSysUser(SysUserDTO sysUserDTO) {
+        SysUserDTO sysUserDTO1 = new SysUserDTO();
+        BeanUtils.copyProperties(sysUserDTO,sysUserDTO1);
+        sysUserDTO1.setStatus("0");
+        sysUserDTO1.setDelFlag("0");
+        List<UserVo> list = userMapper.selectSysUser(sysUserDTO1);
+        return list;
+    }
+
+    @Override
+    public List<String> selectuserName(int deptId) {
+        return userMapper.selectuserName(deptId);
+    }
 }

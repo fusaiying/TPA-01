@@ -153,6 +153,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update base_contract_service
         <trim prefix="SET" suffixOverrides=",">
             <if test="contractNo != null and contractNo != ''">contract_no = #{contractNo},</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
         </trim>
         where contract_no = #{preContractNo}
     </update>

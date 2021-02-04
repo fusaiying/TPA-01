@@ -22,6 +22,9 @@ public class BaseSupplierContract extends BaseEntity
     private static final long serialVersionUID = 1L;
 
 
+    /** 机构类别 */
+    private String providerType;
+
     /** 联系人 */
     private String liaison;
 
@@ -84,14 +87,14 @@ public class BaseSupplierContract extends BaseEntity
     @Excel(name = "合约生效日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date cvaliDate;
 
-    /** 合约终止日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "合约终止日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date endDate;
-
     /** 合约截止日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "合约截止日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date endDate;
+
+    /** 合约终止日期  */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "合约终止日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date expiryDate;
 
     /** 提前协商天数 */
@@ -619,6 +622,14 @@ public class BaseSupplierContract extends BaseEntity
 
     public void setLiaison(String liaison) {
         this.liaison = liaison;
+    }
+
+    public String getProviderType() {
+        return providerType;
+    }
+
+    public void setProviderType(String providerType) {
+        this.providerType = providerType;
     }
 
     @Override

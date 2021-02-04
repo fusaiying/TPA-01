@@ -12,6 +12,6 @@ public class Adress {
 
     private String provincename;
 
-    private List<City> cities;
+    private List<com.paic.ehis.base.domain.vo.City> cities;
 
 }

@@ -20,7 +20,6 @@ public class BaseProviderWorktime extends BaseEntity
 
     /** 流水号 */
     private String SerialNo;
-    private String endTime;
 
     /** 服务商编码 */
     @Excel(name = "服务商编码")

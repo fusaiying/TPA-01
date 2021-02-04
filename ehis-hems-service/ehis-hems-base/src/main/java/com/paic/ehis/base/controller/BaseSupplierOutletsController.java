@@ -42,6 +42,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 查询base_supplier_outlets（服务网点配置）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseSupplierOutlets baseSupplierOutlets)
     {
@@ -53,6 +54,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 导出base_supplier_outlets（服务网点配置）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:export')")
     @Log(title = "base_supplier_outlets（服务网点配置）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierOutlets baseSupplierOutlets) throws IOException
@@ -65,6 +67,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 获取base_supplier_outlets（服务网点配置）详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:query')")
     @GetMapping(value = "/{servcomno}")
     public AjaxResult getInfo(@PathVariable("servcomno") String servcomno)
     {
@@ -74,6 +77,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 新增base_supplier_outlets（服务网点配置）
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:add')")
     @Log(title = "base_supplier_outlets（服务网点配置）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierOutletsDTO so)
@@ -99,6 +103,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 修改base_supplier_outlets（服务网点配置）
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:edit')")
     @Log(title = "base_supplier_outlets（服务网点配置）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierOutlets baseSupplierOutlets)
@@ -114,6 +119,7 @@ public class BaseSupplierOutletsController extends BaseController
     /**
      * 删除base_supplier_outlets（服务网点配置）
      */
+    //@PreAuthorize("@ss.hasPermi('system:outlets:remove')")
     @Log(title = "base_supplier_outlets（服务网点配置）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{servcomnos}")
     public AjaxResult remove(@PathVariable String[] servcomnos)

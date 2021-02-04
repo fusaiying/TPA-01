@@ -1,13 +1,13 @@
 package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseServiceApplyorimpl;
 import com.paic.ehis.base.domain.BaseServiceInfo;
 import com.paic.ehis.base.domain.BaseServiceProcess;
@@ -42,14 +42,13 @@ public class BaseServiceInfoController extends BaseController
     @Autowired
     private IBaseServiceApplyorimplService applyorimplService;
 
-
     /**
      * 查询base_service_info（服务项目）列表
      */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseServiceInfo baseServiceInfo)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseServiceInfo baseServiceInfo)
     {
-        startPage();
+        startPage(baseServiceInfo);
         List<BaseServiceInfo> list = baseServiceInfoService.selectBaseServiceInfoList(baseServiceInfo);
         return getDataTable(list);
     }

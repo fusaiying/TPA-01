@@ -2,8 +2,8 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.BaseSupplierContract;
 import com.paic.ehis.base.mapper.BaseContractServiceMapper;
@@ -32,7 +32,6 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
 
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
-
     /**
      * 查询base_supplier_contract（供应商合约）
      * 
@@ -108,8 +107,12 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
 
         String flag = baseSupplierContract.getFlag();
         if ("01".equals(flag)) {//判断是供应商合约编码
-            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 7);
+            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 10);
             baseSupplierContract.setContractNo(contractNo);
+
+            //供应商的合约名称是录入的
+//            String name = this.generatorContractName(contractNo, "supplier_contract_type", baseSupplierContract.getContractType());
+//            baseSupplierContract.setContractName(name);
             baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
 
             //需要将 供应商服务项目 临时数据更新挂在该合约下
@@ -117,11 +120,17 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
                 Map<String,Object> map = new HashMap<>();
                 map.put("preContractNo",baseSupplierContract.getConSerId());
                 map.put("contractNo",contractNo);
+                map.put("supplierCode",baseSupplierContract.getServcomNo());
                 baseContractServiceMapper.updateBaseContractServiceByContractNo(map);
             }
             return baseSupplierContract;
         }
         else if("02".equals(flag)) {//判断是服务商合约编码
+            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 10);
+            //生成合约名称
+            String name = this.generatorContractName(contractNo,"contract_type",baseSupplierContract.getContractType());
+            baseSupplierContract.setContractName(name);
+            baseSupplierContract.setContractNo(contractNo);
             baseSupplierContractMapper.insertBaseSupplierContract(baseSupplierContract);
         }
         return  baseSupplierContract;
@@ -149,12 +158,21 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
      * @return 结果
      */
     @Override
-    public int updateBaseSupplierContract(BaseSupplierContract baseSupplierContract)
+    public BaseSupplierContract updateBaseSupplierContract(BaseSupplierContract baseSupplierContract)
     {
+
+        //生成合约名称 （更新操作，服务机构的合约需要重新生成合约名称）
+        String contractNo = baseSupplierContract.getContractNo();
+        if(baseSupplierContract.getFlag().equals("02")) {
+            String name = this.generatorContractName(contractNo,"contract_type",baseSupplierContract.getContractType());
+            baseSupplierContract.setContractName(name);
+        }
+
         baseSupplierContract.setUpdateBy(SecurityUtils.getUsername());
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
-        return baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);
+        int result = baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);
+        return baseSupplierContract;
     }
 
     /**
@@ -179,5 +197,14 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     public int deleteBaseSupplierContractById(String contractNo)
     {
         return baseSupplierContractMapper.deleteBaseSupplierContractById(contractNo);
+    }
+
+    private String generatorContractName(String id, String dictType, String dictValue){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("dictType",dictType);
+        map.put("dictValue",dictValue);
+        return baseSupplierContractMapper.generatorContractName(map);
     }
 }

@@ -51,10 +51,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="renewFlag"    column="renew_flag"    />
+        <result property="liaison"    column="liaison"    />
+        <result property="providerType"    column="provider_Type"    />
     </resultMap>
 
     <sql id="selectBaseSupplierContractBakVo">
-        select serial_no, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time from base_supplier_contract_bak
+        select serial_no, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison,provider_Type from base_supplier_contract_bak
     </sql>
 
     <select id="selectBaseSupplierContractBakList" parameterType="BaseSupplierContractBak" resultMap="BaseSupplierContractBakResult">
@@ -179,6 +182,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="renewFlag != null  and renewFlag != ''">renew_flag,</if>
+            <if test="liaison != null  and liaison != ''">liaison,</if>
+            <if test="providerType != null  and providerType != ''">provider_Type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -227,6 +233,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="renewFlag != null and renewFlag != ''">#{renewFlag},</if>
+            <if test="liaison != null  and liaison != ''">#{liaison},</if>
+            <if test="providerType != null  and providerType != ''">#{providerType},</if>
          </trim>
     </insert>
 
@@ -278,6 +287,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <update id="updateHistory" parameterType="BaseSupplierContractBak">
+        update base_supplier_contract_bak
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractNo != null and contractNo != ''">contract_no = #{contractNo},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="servcomNo != null">servcom_no = #{servcomNo},</if>
+            <if test="providerCode != null">provider_code = #{providerCode},</if>
+            <if test="providerName != null">provider_name = #{providerName},</if>
+            <if test="contracttermType != null">contractterm_type = #{contracttermType},</if>
+            <if test="signDate != null">sign_date = #{signDate},</if>
+            <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="expiryDate != null">expiry_date = #{expiryDate},</if>
+            <if test="contractadvance != null">contractadvance = #{contractadvance},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="contractPartyA != null">contract_party_a = #{contractPartyA},</if>
+            <if test="contractPartyB != null">contract_party_b = #{contractPartyB},</if>
+            <if test="connectedContract != null">connected_contract = #{connectedContract},</if>
+            <if test="contractPartyC != null">contract_party_c = #{contractPartyC},</if>
+            <if test="deposit != null">deposit = #{deposit},</if>
+            <if test="cooperativeUnit != null">cooperative_unit = #{cooperativeUnit},</if>
+            <if test="straight != null">straight = #{straight},</if>
+            <if test="flag != null">flag = #{flag},</if>
+            <if test="contractControlFlag != null">contract_control_flag = #{contractControlFlag},</if>
+            <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>
+            <if test="examineDiscount != null">examine_discount = #{examineDiscount},</if>
+            <if test="bedDiscount != null">bed_discount = #{bedDiscount},</if>
+            <if test="allowance != null">allowance = #{allowance},</if>
+            <if test="specialDiscount != null">special_discount = #{specialDiscount},</if>
+            <if test="costs != null">costs = #{costs},</if>
+            <if test="project != null">project = #{project},</if>
+            <if test="discountinfo != null">discountinfo = #{discountinfo},</if>
+            <if test="averageCost != null">average_cost = #{averageCost},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="advicenum != null">advicenum = #{advicenum},</if>
+            <if test="averageCostExcept != null">average_cost_except = #{averageCostExcept},</if>
+            <if test="contractsort != null">contractsort = #{contractsort},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="boxRidgeCode != null">box_ridge_code = #{boxRidgeCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="renewFlag == null or renewFlag == ''">renew_flag = #{renewFlag},</if>
+            <if test="liaison != null  and liaison != ''">liaison = #{liaison},</if>
+            <if test="providerType != null  and providerType != ''">provider_Type = #{providerType},</if>
         </trim>
         where serial_no = #{serialNo}
     </update>

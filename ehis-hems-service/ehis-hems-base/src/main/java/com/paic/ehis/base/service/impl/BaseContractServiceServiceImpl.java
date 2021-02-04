@@ -2,11 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseContractService;
+import com.paic.ehis.base.domain.BaseSupplierContract;
 import com.paic.ehis.base.mapper.BaseContractServiceMapper;
 import com.paic.ehis.base.service.IBaseContractServiceService;
+import com.paic.ehis.base.service.IBaseSupplierContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
     @Autowired
     private BaseContractServiceMapper baseContractServiceMapper;
 
+    @Autowired
+    private IBaseSupplierContractService baseSupplierContractService;
 
     /**
      * 查询base_contract_service（合约服务项目）
@@ -84,6 +88,18 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
      */
     @Override
     public int insertForeach(List<BaseContractService> baseContractServiceList){
+
+        String supliCode = "";
+        BaseContractService inexBean = null;
+        if(baseContractServiceList.size() > 1) {
+            inexBean = baseContractServiceList.get(1);
+        } else {
+            inexBean = baseContractServiceList.get(0);
+        }
+        BaseSupplierContract exist = baseSupplierContractService.selectBaseSupplierContractById(inexBean.getContractNo());
+        if(null != exist) {
+            supliCode = exist.getServcomNo();
+        }
         int result = 0;
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
@@ -92,6 +108,9 @@ public class BaseContractServiceServiceImpl implements IBaseContractServiceServi
             bean.setUpdateTime(nowDate);
             if(StringUtils.isBlank(bean.getStatus())) {
                 bean.setStatus("Y");
+            }
+            if(StringUtils.isNotBlank(supliCode)) {
+                bean.setSupplierCode(supliCode);
             }
             if(StringUtils.isNotBlank(bean.getSerialNo())) {
                 result =  baseContractServiceMapper.updateBaseContractService(bean);

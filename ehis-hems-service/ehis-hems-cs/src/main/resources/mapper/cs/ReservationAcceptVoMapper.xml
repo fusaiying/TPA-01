@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.ReservationAcceptVoMapper">
+    <resultMap type="com.paic.ehis.cs.domain.vo.ReservationAcceptVo" id="ReservationAcceptVoResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="businessType" column="business_type"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="insuredName" column="insured_name"/>
+        <result property="holderName" column="holder_name"/>
+        <result property="acceptBy" column="accept_by"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="callRelationBy" column="call_relation_by"/>
+        <result property="priorityLevel" column="priority_level"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="contactsRelationBy" column="contacts_relation_by"/>
+        <result property="email" column="email"/>
+        <result property="organCode" column="organ_code"/>
+    </resultMap>
+    <select id="selectReservationAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        b.prop0,
+        b.prop1,
+        b.prop2,
+        b.prop3,
+        b.prop4,
+        b.prop5,
+        b.prop6,
+        b.prop7,
+        b.prop8,
+        b.prop9,
+        b.prop10,
+        b.prop11,
+        b.prop12,
+        b.prop16,
+        b.prop17,
+        b.prop18
+        FROM
+        work_order_accept a,
+        accept_detail_info b,
+        person_info c
+        WHERE
+        a.work_order_no = b.work_order_no
+        AND a.insured_no = c.person_id
+        AND a.business_type = '预约'
+        AND a.STATUS = '01'
+        <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+    </select>
+
+    <select id="selectReservationAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        b.prop0,
+        b.prop1,
+        b.prop2,
+        b.prop3,
+        b.prop4,
+        b.prop5,
+        b.prop6,
+        b.prop7,
+        b.prop8,
+        b.prop9,
+        b.prop10,
+        b.prop11,
+        b.prop12,
+        b.prop16,
+        b.prop17,
+        b.prop18
+        FROM
+        work_order_accept a,
+        accept_detail_info b,
+        person_info c
+        WHERE
+        a.work_order_no = b.work_order_no
+        AND a.insured_no = c.person_id
+        AND a.business_type = '预约'
+        AND a.STATUS = '02'
+        <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+    </select>
+
+    <update id="updateStatusM" parameterType="String" >
+        update work_order_accept set status = '02'
+        where status='01'and business_type='预约' and work_order_no in
+        <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
+            #{workOrderNo}
+        </foreach>
+    </update>
+
+
+</mapper>

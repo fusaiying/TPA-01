@@ -39,7 +39,7 @@ public interface IBaseSupplierInfoService
      * @param baseSupplierInfo base_supplier_info（供应商基础信息）
      * @return 结果
      */
-    public int insertBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo);
+    public BaseSupplierInfo insertBaseSupplierInfo(BaseSupplierInfo baseSupplierInfo);
 
     /**
      * 修改base_supplier_info（供应商基础信息）

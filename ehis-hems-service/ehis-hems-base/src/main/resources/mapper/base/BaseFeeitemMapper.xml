@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBaseFeeitemByCode" parameterType="String" resultMap="BaseFeeitemResult">
         <include refid="selectBaseFeeitemVo"/>
-        where status = 'Y' and feeitem_code = #{feeitemName}
+        where status = 'Y' and feeitem_code = #{feeitemCode}
     </select>
         
     <insert id="insertBaseFeeitem" parameterType="com.paic.ehis.base.domain.BaseFeeitem">

@@ -137,7 +137,14 @@
       this.product_statusOptions = this.dictList.find(item => {
         return item.dictType === 'product_status'
       }).dictDate
-      this.searchHandle()
+      selectProductQuery(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.workPoolData = res.rows
+          this.totalCount = res.total
+        }
+      }).catch(res => {
+
+      })
     },
     methods: {
       resetForm() {
@@ -188,5 +195,10 @@
 <style scoped>
   .item-width {
     width: 220px;
+  }
+
+  /*element原有样式修改*/
+  .el-form-item ::v-deep label {
+    font-weight: normal;
   }
 </style>

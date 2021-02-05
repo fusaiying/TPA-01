@@ -347,21 +347,21 @@
         <!--结算信息-->
         <div >
           <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList" :status="activeName"
-                             :closingTableShow="closingTableShow" :annexupload="annexupload"
-                             :closingFrom="closingFrom"></hosp-closing-info>
+                              :closingTableShow="closingTableShow" :annexupload="annexupload"
+                              :closingFrom="closingFrom"></hosp-closing-info>
         </div>
         <!--附件信息-->
-                <div >
-                  <annex-info :disabledFlag="annexFlag" :suppliercode="providerCode" :specialAnnexFlag="specialAnnexFlag"></annex-info>
-                </div>
+        <div >
+          <annex-info :disabledFlag="annexFlag" :suppliercode="providerCode" :specialAnnexFlag="specialAnnexFlag"></annex-info>
+        </div>
 
-      <!--历史合约-->
-<!--        <div class="app-container">
-        <history-contract :contractLogTableData="contractLogTableData"></history-contract>
-  </div>-->
+        <!--历史合约-->
+        <!--        <div class="app-container">
+                <history-contract :contractLogTableData="contractLogTableData"></history-contract>
+          </div>-->
         <!--审核-->
         <div >
-         <audit  :providerCode="providerCode"></audit>
+          <audit  :providerCode="providerCode"></audit>
         </div>
 
 
@@ -520,6 +520,7 @@ export default {
       },
 
       serviceForm: {
+        weekendsWorking:undefined,
         excludingFee: undefined,
         topten: undefined,
         specializedHospital: undefined,
@@ -767,15 +768,15 @@ export default {
       }).catch(res => {
       })
 
-/*      //历史合约的接口
-      getHistoryConlist(this.providerCode).then(res => {
-        this.contractLogTableData = res.data
-      }).catch(res => {
-      })*/
-   /*   //审核日志的接口
-      selectCheckInfo(this.providerCode).then(res=> {
-        this.reviewLogTableData=res.data
-      })*/
+      /*      //历史合约的接口
+            getHistoryConlist(this.providerCode).then(res => {
+              this.contractLogTableData = res.data
+            }).catch(res => {
+            })*/
+      /*   //审核日志的接口
+         selectCheckInfo(this.providerCode).then(res=> {
+           this.reviewLogTableData=res.data
+         })*/
 
 
     }

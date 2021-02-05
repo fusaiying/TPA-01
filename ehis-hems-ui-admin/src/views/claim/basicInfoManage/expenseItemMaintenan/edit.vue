@@ -27,7 +27,7 @@
           <el-col :span="8">
             <el-form-item label="费用项中文名称：" prop="feeitemname">
               <el-input v-model="baseForm.feeitemname" class="item-width" clearable size="mini" placeholder="请输入"
-                        @change="nameChange"/>
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -95,7 +95,9 @@
           pageSize: 5,
         }
         listFeeitem(this.baseForm).then(res => {
-          this.baseForm = res.rows[0]
+          if (res!=null && res.code===200 && res.rows.length>0){
+            this.baseForm = res.rows[0]
+          }
           this.loading = false
         })
       } else {
@@ -103,10 +105,7 @@
       }
     },
     methods: {
-      nameChange() {
-        this.$refs.baseForm.validateField(['feeitemname'])
-      }
-      ,
+
       resetForm() {
         if (this.$route.query.feeitemcode) {
           this.baseForm.feeitemname = ''

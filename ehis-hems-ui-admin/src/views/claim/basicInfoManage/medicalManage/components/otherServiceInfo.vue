@@ -56,27 +56,27 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-            <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-              <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
-              </el-select>
-              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                        style="width: 450px" maxlength="500"
-                        placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-<!--
-          <el-col :span="10">
-            <el-form-item prop="continent">
-              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                        style="width: 450px" maxlength="500"
-                        placeholder="请输入"/>
+          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+            <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                         :key="item.dictValue"/>
+              <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
+            </el-select>
+            <el-input v-model="otherServiceForm.continent" class="item-width" clearable
+                      style="width: 450px" maxlength="500"
+                      placeholder="请输入"/>
+          </el-form-item>
+        </el-col>
+        <!--
+                  <el-col :span="10">
+                    <el-form-item prop="continent">
+                      <el-input v-model="otherServiceForm.continent" class="item-width" clearable
+                                style="width: 450px" maxlength="500"
+                                placeholder="请输入"/>
 
-            </el-form-item>
-          </el-col>
--->
+                    </el-form-item>
+                  </el-col>
+        -->
 
 
 
@@ -136,7 +136,7 @@
 
       </el-row>
       <el-col :span="24">
-        <el-form-item label="特殊语种服务：" prop="speciallanguage">
+        <el-form-item label="特殊服务语种：" prop="speciallanguage">
           <el-checkbox-group v-model="otherServiceForm.speciallanguage">
             <el-checkbox :label="item.dictValue" :key="item.dictValue" v-for="item in  speciallanguageOptions" @click.native="changeDisabled(item,$event)" :disabled="item.isShow" >{{item.dictLabel}}</el-checkbox>
           </el-checkbox-group>
@@ -213,17 +213,17 @@ export default {
       }
     }
     const checkContinentFlag = (rules, value, callback) => {
-     if(value){
-       if(this.otherServiceForm.continent!=null && this.otherServiceForm.continent!=''){
-         callback()
-       }
-       else {
-         callback(new Error('二证齐全是否发预授权书不能为空'))
-       }
-     }
-     else {
-       callback(new Error('二证齐全是否发预授权书不能为空'))
-     }
+      if(value){
+        if(this.otherServiceForm.continent!=null && this.otherServiceForm.continent!=''){
+          callback()
+        }
+        else {
+          callback(new Error('二证齐全是否发预授权书不能为空'))
+        }
+      }
+      else {
+        callback(new Error('二证齐全是否发预授权书不能为空'))
+      }
 
 
     }
@@ -297,7 +297,7 @@ export default {
         }).dictDate
 
       }
-      },
+    },
 
     saveHandle() {
       this.$refs.otherServiceForm.validate((valid) => {
@@ -391,7 +391,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

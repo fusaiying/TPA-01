@@ -99,6 +99,12 @@
       }
     },
     mounted() {
+      getHospitalInfo(this.searchForm).then(res=>{
+        if (res!=null && res!=='' ){
+          this.tableData=res.rows
+          this.totalCount=res.total
+        }
+      })
     },
     computed: {},
     methods: {
@@ -115,17 +121,17 @@
         this.searchForm.pageNum=1
         this.searchForm.pageSize=10
         this.getData()
-/*        getHospitalInfo(this.searchForm).then(res=>{
-          if (res!=null && res!=='' ){
-            this.tableData=res.rows
-            this.totalCount=res.total
-            if (res.rows.length<1) {
-              return this.$message.warning(
-                "没有查询到数据！"
-              )
-            }
-          }
-        })*/
+        /*        getHospitalInfo(this.searchForm).then(res=>{
+                  if (res!=null && res!=='' ){
+                    this.tableData=res.rows
+                    this.totalCount=res.total
+                    if (res.rows.length<1) {
+                      return this.$message.warning(
+                        "没有查询到数据！"
+                      )
+                    }
+                  }
+                })*/
       },
 
       getData(){

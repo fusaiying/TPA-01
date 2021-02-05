@@ -522,6 +522,7 @@ WHERE
         <if test="province != null  and province != ''"> and province = #{province}</if>
         <if test="city != null  and city != ''"> and city = #{city}</if>
         <if test="district != null  and district != ''"> and district = #{district}</if>
+        and base_provider_info.status='Y'
     </select>
 
     <insert id="insertBaseProviderInfo" parameterType="BaseProviderInfo">
@@ -947,10 +948,14 @@ WHERE
     </select>
 
     <select id="selectBaseProviderInfos" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
-        select serial_no, provider_code,inter_hosp,virtual_org,chname1,enname1,status from base_provider_info
-       <!-- <where>
-           /* and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01'*/
-        </where>-->
+        select serial_no, provider_code,inter_hosp,virtual_org,chname1,enname1,status,org_flag from base_provider_info
+       <where>
+           <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
+           <if test="bussinessStatus != null and bussinessStatus != ''"> and bussiness_Status = #{bussinessStatus}</if>
+           <if test="status != null  and status != ''"> and status = #{status}</if>
+           <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
+
+       </where>
     </select>
 
     <select id="selectHospitalInfo" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">

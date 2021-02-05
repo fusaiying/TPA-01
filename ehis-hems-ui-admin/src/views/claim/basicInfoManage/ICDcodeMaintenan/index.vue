@@ -49,17 +49,17 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="ICD编码" prop="icdcode" align="center"/>
-          <el-table-column label="ICD中文名称" prop="icdmname" align="center"/>
-          <el-table-column label="基础库标志" prop="source" align="center" :formatter="getBaseSource" />
+          <el-table-column label="ICD编码" prop="icdcode" align="center" show-overflow-tooltip/>
+          <el-table-column label="ICD中文名称" prop="icdmname" align="center" show-overflow-tooltip/>
+          <el-table-column label="基础库标志" prop="source" align="center" :formatter="getBaseSource" show-overflow-tooltip/>
 
 
-          <el-table-column label="创建日期" prop="createTime" align="center">
+          <el-table-column label="创建日期" prop="createTime" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.createTime, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="创建人" prop="createBy" align="center"/>
+          <el-table-column label="创建人" prop="createBy" align="center" show-overflow-tooltip/>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateEditHandle(scope.row)">编辑
@@ -77,17 +77,17 @@
           @pagination="getData"
         />
         <!--分页组件-->
-       <!-- <div>
-          <el-pagination
-            :total="totalCount"
-            :current-page="pageInfo.page"
-            :page-size="pageInfo.pageSize"
-            :page-sizes="[10, 20, 30, 40]"
-            style="margin-top: 8px; text-align: right;"
-            layout="sizes, prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"/>
-        </div>-->
+        <!-- <div>
+           <el-pagination
+             :total="totalCount"
+             :current-page="pageInfo.page"
+             :page-size="pageInfo.pageSize"
+             :page-sizes="[10, 20, 30, 40]"
+             style="margin-top: 8px; text-align: right;"
+             layout="sizes, prev, pager, next"
+             @size-change="handleSizeChange"
+             @current-change="handleCurrentChange"/>
+         </div>-->
         <el-dialog
           :visible.sync="dialogVisible"
           :modal="modalValue"
@@ -153,7 +153,13 @@
       }
     },
     mounted() {
-      this.getData();
+      getICDList(this.formSearch).then(response => {
+        this.tableData = response.rows;
+        this.totalCount = response.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
       this.getDicts("base_library_mark").then(response => {
         this.base_library_markOptions = response.data;
       });
@@ -250,7 +256,7 @@
         getICDList(this.formSearch).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('provider/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
+            this.download('system/icd10/export'+'?icdcode='+this.formSearch.icdcode+'&icdmname='+this.formSearch.icdmname, {
               ...query
             }, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({

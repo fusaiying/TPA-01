@@ -5,7 +5,7 @@
       <div slot="header" class="clearfix">
         <span>基本信息</span>
         <span style="float: right;">
-            <el-button size="mini" type="primary" @click="saveAll">保存</el-button>
+            <el-button size="mini" type="primary" @click="saveInfo">保存</el-button>
         </span>
       </div>
       <el-form ref="supplier" :rules="supplierRule" :inline="true" :model="supplier"
@@ -80,7 +80,8 @@
           </el-col>
           <el-col :span="24">
             <el-form-item :style="{width:'100%'}" :class="['long-input']" prop="remark" label="备注：">
-              <el-input type="textarea" :rows="5" v-model="supplier.remark" :placeholder="placeType2" maxlength="2000"  clearable/>
+              <el-input type="textarea" :rows="5" v-model="supplier.remark" :placeholder="placeType2" maxlength="2000"
+                        clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -149,7 +150,7 @@
                              :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
-              <span v-if="!scope.row.isShow">{{scope.row.placeType}}</span>
+              <span v-if="!scope.row.isShow">{{selectDictLabel(linkman_typeOptions, scope.row.placeType)}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="name" align="center" header-align="center" label="姓名" min-width="2"
@@ -375,6 +376,7 @@
         <!--     <el-divider/>-->
         <div style="text-align: right; margin-right: 10px;margin-top: 50px">
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
+          <el-button size="mini" type="primary" @click="saveAll">保存</el-button>
           <el-button size="mini" type="primary" @click="closeAll">关闭</el-button>
         </div>
       </div>
@@ -459,7 +461,7 @@
 <script>
   import {
     getAddress, getInfo, getReceip, listContacts, listBank, listProviderInfo, saveAll,
-    saveContacts, saveBank, getService, saveService, deleteService, getListInfo
+    saveContacts, saveBank, getService, saveService, deleteService, getListInfo, addInfo
   } from '@/api/supplierManager/supplier'
   import service from "../../../../utils/request";
 
@@ -532,19 +534,8 @@
         if (!value) {
           callback(new Error('请输入英文供应商名称'))
         } else {
-            if (this.supplier.serialNo != null && this.supplier.serialNo !== '') {
-              if (value !== this.ennameFlag) {
-                getListInfo(query).then(res => {
-                  if (res != null && res.code === 200 && res.total > 0) {
-                    callback(new Error('供应商英文名称已存在！'))
-                  } else {
-                    callback()
-                  }
-                })
-              } else {
-                callback()
-              }
-            } else {
+          if (this.supplier.serialNo != null && this.supplier.serialNo !== '') {
+            if (value !== this.ennameFlag) {
               getListInfo(query).then(res => {
                 if (res != null && res.code === 200 && res.total > 0) {
                   callback(new Error('供应商英文名称已存在！'))
@@ -552,6 +543,17 @@
                   callback()
                 }
               })
+            } else {
+              callback()
+            }
+          } else {
+            getListInfo(query).then(res => {
+              if (res != null && res.code === 200 && res.total > 0) {
+                callback(new Error('供应商英文名称已存在！'))
+              } else {
+                callback()
+              }
+            })
           }
         }
       }
@@ -559,6 +561,18 @@
         if (this.region === null || this.region.length === 0) {
           callback(new Error('请选择所属地区'))
         } else {
+          callback()
+        }
+      }
+      const checkRole = (rules, value, callback) => {
+        const index = rules.field.replace('contacts.', '').replace('.role', '')
+        if (!value) {
+          if (this.contactForm.contacts[index].placeType==='01'){
+            callback(new Error('请输入登录名'))
+          }else {
+            callback()
+          }
+        }else {
           callback()
         }
       }
@@ -630,18 +644,18 @@
         accountForm: {
           account: [] // 账户信息
         },
-/*        receiptRules: {
-          companyTitle: [{required: true, message: '请输入开票名称', trigger: 'blur'}],
-          dutynum: [{required: true, message: '请输入纳税人识别号名称', trigger: 'blur'}],
-          accNum: [{required: true, message: '请输入账号', trigger: 'blur'}],
-          address: [{required: true, message: '请输入地址', trigger: 'blur'}],
-          billInfo: [{required: true, message: '请输入开票信息', trigger: 'blur'}],
-          phone: [{required: true, message: '请输入电话', trigger: 'blur'}],
-        },//开票信息表单验证*/
+        /*        receiptRules: {
+                  companyTitle: [{required: true, message: '请输入开票名称', trigger: 'blur'}],
+                  dutynum: [{required: true, message: '请输入纳税人识别号名称', trigger: 'blur'}],
+                  accNum: [{required: true, message: '请输入账号', trigger: 'blur'}],
+                  address: [{required: true, message: '请输入地址', trigger: 'blur'}],
+                  billInfo: [{required: true, message: '请输入开票信息', trigger: 'blur'}],
+                  phone: [{required: true, message: '请输入电话', trigger: 'blur'}],
+                },//开票信息表单验证*/
         constactRules: {
           placeType: [{required: true, message: '请输入联系人类型', trigger: 'blur'}],
           name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
-          role: [{required: true, message: '请输入登录名', trigger: 'blur'}],
+          role:  [{validator: checkRole, trigger: 'blur'}],
           phone: [{validator: checkFormMobilephone, trigger: 'blur'}],
           mobile: [{validator: checkFormOfficephone, trigger: 'blur'}],
         },
@@ -729,7 +743,7 @@
         })
         //查询开票信息
         getReceip(serialNo).then(res => {
-          if (res != null && res.code === 200) {
+          if (res != null && res.code === 200 && res.data) {
             this.receiptForm = res.data
           }
         })
@@ -891,7 +905,8 @@
               )
             }
           }
-        }).catch(() => {})
+        }).catch(() => {
+        })
 
       },
       search() {
@@ -989,7 +1004,7 @@
         this.accountForm.account.forEach(item => {
           item.providerCode = this.supplier.serialNo
         })
-        if (this.hasBlock && this.supplier.serialNo!=null && this.supplier.serialNo!=='') {
+        if (this.hasBlock && this.supplier.serialNo != null && this.supplier.serialNo !== '') {
           if (this.supplier.serialNo !== null && this.supplier.serialNo !== '')
             if (this.accountForm.account.length > 0) {
               let flag = true
@@ -1209,6 +1224,45 @@
           }
         }).catch(() => {
 
+        })
+      },
+      saveInfo() {
+        this.$refs.supplier.validate((valid) => {
+          if (valid) {
+            let data = {
+              serialNo: this.supplier.serialNo, // 供应商编码
+              servcomType: this.supplier.servcomType, // 供应商类型
+              bussinessStatus: this.supplier.bussinessStatus, // 状态，是否有效
+              chname: this.supplier.chname, // 中文名
+              enname: this.supplier.enname, // 英文名
+              continent: this.supplier.continent,//洲
+              country: this.supplier.country,//国家
+              province: this.supplier.province, // 省
+              city: this.supplier.city, // 市
+              district: this.supplier.district, // 区
+              detailedAddress: this.supplier.detailedAddress, // 地址
+              remark: this.supplier.remark, // 备注
+            }
+            addInfo(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.ennameFlag = this.supplier.enname
+                this.chnameFlag = this.supplier.chname
+                this.supplier.serialNo = res.data.serialNo
+              } else {
+                this.$message.error(
+                  "保存提交失败!"
+                );
+              }
+            })
+          }else {
+            return this.$message.warning("请填写完必要信息！");
+          }
         })
       }
     }

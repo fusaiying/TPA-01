@@ -123,22 +123,28 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-col :span="5">
-            <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-              <el-select v-model="reserveInfoForm.continentFlag" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item prop="continent">
-              <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
-                        style="padding-left: 15px;width: 450px" maxlength="500"
-                        placeholder="请输入"/>
 
-            </el-form-item>
-          </el-col>
+          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+            <el-select v-model="reserveInfoForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                         :key="item.dictValue"/>
+            </el-select>
+
+            <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
+                      style="width: 60%" maxlength="500"
+                      placeholder="请输入"/>
+          </el-form-item>
+
+          <!--          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+                      <el-select v-model="reserveInfoForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+                        <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                                   :key="item.dictValue"/>
+                      </el-select>
+                      <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
+                                style="width: 60%" maxlength="500"
+                                placeholder="请输入"/>
+                    </el-form-item>
+                    -->
 
         </el-col>
         <el-col :span="8">
@@ -298,7 +304,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否提供直接卡：">
+          <el-form-item label="是否提供直结卡：">
             <el-radio-group v-model="reserveInfoForm.straightknotflag">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
                 {{ item.dictLabel }}
@@ -601,12 +607,7 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

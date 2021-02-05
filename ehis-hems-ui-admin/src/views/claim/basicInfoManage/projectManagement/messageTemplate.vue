@@ -33,14 +33,28 @@
     name: "messageTemplate",
     data(){
       return{
+        // 流程配置页面数据
+        paramsData: {},
         messageList: [],
       }
+    },
+    created() {
+      this.paramsData = this.$route.query;
+      console.log("参数：",this.paramsData);
     },
     methods: {
       // 关闭按钮
       close(){
         this.$store.dispatch("tagsView/delView", this.$route);
-        this.$router.go(-1);
+        // this.$router.go(-1);
+        this.$router.push({
+          path: '/basic-info/projectManagement/workflow',
+          query: {
+            // 从消息模板跳转到流程配置页面
+            flag: false,
+            paramsData: this.paramsData
+          }
+        });
       }
     }
   }

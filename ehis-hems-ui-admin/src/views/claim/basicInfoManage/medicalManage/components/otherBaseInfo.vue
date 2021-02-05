@@ -91,7 +91,6 @@
           <el-form-item label="州：" prop="continent">
             <el-select v-model="otherBaseForm.continent" class="item-width" placeholder="请选择" clearable>
               <el-option label="亚洲" value="01"/>
-              <el-option label="欧洲" value="02"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -99,7 +98,6 @@
           <el-form-item label="国家：" prop="country">
             <el-select v-model="otherBaseForm.country" class="item-width" placeholder="请选择" clearable>
               <el-option label="中国" value="01"/>
-              <el-option label="日本" value="02"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -413,16 +411,21 @@ export default {
     },
 
     // 校验数据
-    validateForm () {
-      let flag = null
-      this.$refs['otherBaseForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
+    async  validateForm () {
+      let flag
+      await new Promise((resolve, reject)=> {
+        this.$refs['otherBaseForm'].validate(valid => {
+          if (valid) {
+            flag = true
+            resolve(flag)
+          } else {
+            flag = false
+            resolve(flag)
+          }
+        })
       })
       return flag
+
     }
 
   }
@@ -439,12 +442,7 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

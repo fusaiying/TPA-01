@@ -2,7 +2,6 @@ package com.paic.ehis.base.controller;
 
 import com.paic.ehis.common.core.utils.PathUtil;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.file.FileUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
@@ -11,6 +10,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +48,10 @@ public class HmpServOperaController extends BaseController {
     @Autowired
     private IHmpAddressService hmpAddressService;
 
-
     /**
      * 查询供应商管理1列表
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpServOpera hmpServOpera) {
         startPage();
@@ -62,6 +62,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 导出供应商管理1列表
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:export')")
     @Log(title = "供应商管理1", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpServOpera hmpServOpera) throws IOException {
@@ -73,6 +74,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 获取供应商管理1详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:query')")
     @GetMapping(value = "/{servcomno}")
     public AjaxResult getInfo(@PathVariable("servcomno") String servcomno) {
         return AjaxResult.success(hmpServOperaService.selectHmpServOperaById(servcomno));
@@ -81,6 +83,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 新增操作
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:add')")
     @Log(title = "供应商网络-供应商管理-基础信息维护-新增操作", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProviderInfo providerInfo) {
@@ -147,6 +150,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 修改供应商管理1
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:edit')")
     @Log(title = "供应商管理1", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProviderInfo providerInfo) {
@@ -183,6 +187,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 删除供应商管理1
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:remove')")
     @Log(title = "供应商管理1", businessType = BusinessType.DELETE)
     @DeleteMapping("/{servcomnos}")
     public AjaxResult remove(@PathVariable String[] servcomnos) {
@@ -220,6 +225,7 @@ public class HmpServOperaController extends BaseController {
      * @throws Exception
      */
     @Log(title = "供应商附件", businessType = BusinessType.IMPORT)
+    //@PreAuthorize("@ss.hasPermi('system:definition:uploadFile')")
     @PostMapping("/uploadFile")
     public AjaxResult importData(MultipartFile file, @RequestParam("servcomno") String servcomno, @RequestParam("filedesc") String filedesc) throws Exception {
         // 获取登录用户名称
@@ -336,6 +342,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 查询供应商网络列表
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:list')")
     @GetMapping("/network/list")
     public TableDataInfo networkList(HmpServOpera hmpServOpera) {
         startPage();
@@ -346,6 +353,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 根据供应商编码查询服务网点配置对象
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:list')")
     @GetMapping("/network/list/no")
     public TableDataInfo networkListByNo(HmpComWebSite hmpComWebSite) {
         startPage();
@@ -356,6 +364,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 根据服务网点编码批量删除服务网点配置对象
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:remove')")
     @Log(title = "服务网点删除", businessType = BusinessType.DELETE)
     @DeleteMapping("/website/{websitecode}")
     public AjaxResult removeWebSite(@PathVariable String[] websitecode) {
@@ -365,6 +374,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 根据服务网点编码修改服务网点配置对象
      */
+    //@PreAuthorize("@ss.hasPermi('provider:website:edit')")
     @Log(title = "修改服务网点配置对象", businessType = BusinessType.UPDATE)
     @PutMapping("/website")
     public AjaxResult editWebSite(@RequestBody HmpComWebSite hmpComWebSite) {
@@ -393,6 +403,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 新增服务网点配置对象
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:add')")
     @Log(title = "服务网点-新增操作", businessType = BusinessType.INSERT)
     @PostMapping("/website")
     public AjaxResult add(@RequestBody HmpComWebSite hmpComWebSite) {
@@ -427,6 +438,7 @@ public class HmpServOperaController extends BaseController {
     /**
      * 根据供应商编码查询服务网点配置对象
      */
+    //@PreAuthorize("@ss.hasPermi('provider:provider:list')")
     @GetMapping("/network/list/no/trans")
     public TableDataInfo networkListByNoTrans(HmpComWebSite hmpComWebSite) {
         startPage();

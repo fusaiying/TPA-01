@@ -4,9 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseIssuingcompanyRule;
 import com.paic.ehis.base.domain.ClaimProduct;
 import com.paic.ehis.base.domain.dto.IssuingcompanyRuleDTO;
@@ -61,10 +61,10 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
         for (BaseIssuingcompanyRule issuingcompanyRule : baseIssuingcompanyRules) {
             IssuingcompanyRuleVO issuingcompanyRuleVO = new IssuingcompanyRuleVO();
             BeanUtils.copyProperties(issuingcompanyRule,issuingcompanyRuleVO);
-            if (issuingcompanyRule.getSettlementtype().equals("01")){
+            if ("01".equals(issuingcompanyRule.getSettlementtype())){
                 issuingcompanyRuleVO.setAccounttype("02");
                 issuingcompanyRuleVO.setServicefee(issuingcompanyRule.getSettlementvalue());
-            }else if (issuingcompanyRule.getSettlementtype().equals("02")){
+            }else if ("02".equals(issuingcompanyRule.getSettlementtype())){
                 issuingcompanyRuleVO.setAccounttype("01");
                 issuingcompanyRuleVO.setPremrate(issuingcompanyRule.getSettlementvalue().intValue());
             }

@@ -32,10 +32,11 @@ public class BaseSupplierContractBakController extends BaseController
     /**
      * 查询base_supplier_contract_bak（供应商合约）列表
      */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseSupplierContractBak baseSupplierContractBak)
+    //@PreAuthorize("@ss.hasPermi('system:bak:list')")
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseSupplierContractBak baseSupplierContractBak)
     {
-        startPage();
+        startPage(baseSupplierContractBak);
         List<BaseSupplierContractBak> list = baseSupplierContractBakService.selectBaseSupplierContractBakList(baseSupplierContractBak);
         return getDataTable(list);
     }
@@ -43,6 +44,7 @@ public class BaseSupplierContractBakController extends BaseController
     /**
      * 导出base_supplier_contract_bak（供应商合约）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:bak:export')")
     @Log(title = "base_supplier_contract_bak（供应商合约）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierContractBak baseSupplierContractBak) throws IOException
@@ -55,6 +57,7 @@ public class BaseSupplierContractBakController extends BaseController
     /**
      * 获取base_supplier_contract_bak（供应商合约）详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:bak:query')")
     @GetMapping(value = "/{serialNo}")
     public AjaxResult getInfo(@PathVariable("serialNo") String serialNo)
     {
@@ -66,6 +69,7 @@ public class BaseSupplierContractBakController extends BaseController
      *且当服务商下存在多条合约信息时仅显示该服务商下合约终止日期最晚的一条合约信息（即服务商下创建时间最晚的一条合约信息）
      **/
 
+    //@PreAuthorize("@ss.hasPermi('system:contract:last')")
     @GetMapping(value = "/last/{providercode}")
     public  AjaxResult lastInfo(@PathVariable("providercode") String providercode)
     {
@@ -73,15 +77,17 @@ public class BaseSupplierContractBakController extends BaseController
     }
 
     //服务商合约管理主查询页面需默认显示截止当前时间合约签约时间在三个月内且合约状态为“有效”的数据
-    @GetMapping("/month")
-    public TableDataInfo lista(BaseSupplierContractBak baseSupplierContractBak) throws Exception
+    //@PreAuthorize("@ss.hasPermi('system:contract:month')")
+    @PostMapping("/month")
+    public TableDataInfo lista(@RequestBody BaseSupplierContractBak baseSupplierContractBak) throws Exception
     {
-        startPage();
+        startPage(baseSupplierContractBak);
         List<BaseSupplierContractBak> month = baseSupplierContractBakService.selectBaseSupplierBakMonth(baseSupplierContractBak);
         return getDataTable(month);
     }
 
     //根据服务机构id获取合约信息
+    //@PreAuthorize("@ss.hasPermi('system:contract:code')")
     @GetMapping(value = "/code/{providercode}")
     public AjaxResult providerCodeinfo(@PathVariable("providercode") String providercode)
     {
@@ -92,6 +98,7 @@ public class BaseSupplierContractBakController extends BaseController
     /**
      * 新增base_supplier_contract_bak（供应商合约）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bak:add')")
     @Log(title = "base_supplier_contract_bak（供应商合约）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierContractBak baseSupplierContractBak)
@@ -102,16 +109,30 @@ public class BaseSupplierContractBakController extends BaseController
     /**
      * 修改base_supplier_contract_bak（供应商合约）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bak:edit')")
     @Log(title = "base_supplier_contract_bak（供应商合约）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierContractBak baseSupplierContractBak)
     {
-        return toAjax(baseSupplierContractBakService.updateBaseSupplierContractBak(baseSupplierContractBak));
+        return AjaxResult.success(baseSupplierContractBakService.updateBaseSupplierContractBak(baseSupplierContractBak));
     }
+
+    /**
+     *修改服务机构历史合约信息接口
+     **/
+    //@PreAuthorize("@ss.hasPermi('system:bak:history')")
+    @Log(title = "base_supplier_contract_bak（供应商合约）", businessType = BusinessType.UPDATE)
+    @PutMapping("/history")
+    public AjaxResult updateHistory(@RequestBody BaseSupplierContractBak baseSupplierContractBak)
+    {
+        return toAjax(baseSupplierContractBakService.updateHistory(baseSupplierContractBak));
+    }
+
 
     /**
      * 删除base_supplier_contract_bak（供应商合约）
      */
+    //@PreAuthorize("@ss.hasPermi('system:bak:remove')")
     @Log(title = "base_supplier_contract_bak（供应商合约）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{serialNos}")
     public AjaxResult remove(@PathVariable String[] serialNos)

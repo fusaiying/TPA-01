@@ -21,6 +21,15 @@ public class BaseSupplierContractBak extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /** 机构类别 */
+    private String providerType;
+
+    /** 联系人 */
+    private String liaison;
+
+    /** 自动续约 */
+    private String renewFlag;
+
     /** 流水号 */
     private String serialNo;
 
@@ -565,6 +574,30 @@ public class BaseSupplierContractBak extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public String getProviderType() {
+        return providerType;
+    }
+
+    public void setProviderType(String providerType) {
+        this.providerType = providerType;
+    }
+
+    public String getLiaison() {
+        return liaison;
+    }
+
+    public void setLiaison(String liaison) {
+        this.liaison = liaison;
+    }
+
+    public String getRenewFlag() {
+        return renewFlag;
+    }
+
+    public void setRenewFlag(String renewFlag) {
+        this.renewFlag = renewFlag;
     }
 
     @Override

@@ -151,7 +151,6 @@ export default {
   data() {
     return {
       dialogVisable: false,
-
       remarkForm: {},
       leadFlagOptions: [{dictValue: '01', dictLabel: '很好'}, {dictValue: '02', dictLabel: '一般'}, {
         dictValue: '03',

@@ -31,17 +31,19 @@ public class BaseIssuingcompanyRuleController extends BaseController
 
     /**
      * 查询出单公司规则 列表
-     */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseIssuingcompanyRule baseIssuingcompanyRule)
+     *///    @GetMapping("/list")
+    //@PreAuthorize("@ss.hasPermi('system:rule:list')")
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
-        startPage();
+        startPage(baseIssuingcompanyRule);
         return baseIssuingcompanyRuleService.selectBaseIssuingcompanyRuleList(baseIssuingcompanyRule);
     }
 
     /**
      * 查询出单公司下属产品 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:rule:list')")
     @GetMapping("/riskList")
     public TableDataInfo riskList(BaseIssuingcompanyRule baseIssuingcompanyRule)
     {
@@ -52,7 +54,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 导出出单公司规则 列表
      */
-    /*@PreAuthorize("@ss.hasPermi('system:rule:export')")
+    /*//@PreAuthorize("@ss.hasPermi('system:rule:export')")
     @Log(title = "出单公司规则 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIssuingcompanyRule baseIssuingcompanyRule) throws IOException
@@ -65,6 +67,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 获取出单公司规则 详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:rule:query')")
     @GetMapping(value = "/{ruleNo}")
     public AjaxResult getInfo(@PathVariable("ruleNo") String ruleNo)
     {
@@ -75,6 +78,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
      * 新增或修改出单公司规则
      */
     @Transactional
+    //@PreAuthorize("@ss.hasPermi('system:rule:query')")
     @PostMapping ("/query")
     public AjaxResult getInfo(IssuingcompanyRuleDTO issuingcompanyRuleDTO) {
         return toAjax( baseIssuingcompanyRuleService.addAndModifyBaseIssuingcompanyRule(issuingcompanyRuleDTO));
@@ -83,6 +87,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 新增出单公司规则 
      */
+    //@PreAuthorize("@ss.hasPermi('system:rule:add')")
     @Log(title = "出单公司规则 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseIssuingcompanyRule baseIssuingcompanyRule)
@@ -93,6 +98,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 修改出单公司规则 
      */
+    //@PreAuthorize("@ss.hasPermi('system:rule:edit')")
     @Log(title = "出单公司规则 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIssuingcompanyRule baseIssuingcompanyRule)
@@ -103,6 +109,7 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 删除出单公司规则 
      */
+    //@PreAuthorize("@ss.hasPermi('system:rule:remove')")
     @Log(title = "出单公司规则 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ruleNos}")
     public AjaxResult remove(@PathVariable String[] ruleNos)

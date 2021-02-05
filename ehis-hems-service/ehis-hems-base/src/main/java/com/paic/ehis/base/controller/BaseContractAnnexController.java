@@ -32,8 +32,9 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 查询base_contract_annex（合约附件）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:list')")
     @GetMapping("/list")
-    public TableDataInfo list(BaseContractAnnex baseContractAnnex)
+    public TableDataInfo list( BaseContractAnnex baseContractAnnex)
     {
         startPage();
         List<BaseContractAnnex> list = baseContractAnnexService.selectBaseContractAnnexList(baseContractAnnex);
@@ -43,6 +44,7 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 导出base_contract_annex（合约附件）列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:export')")
     @Log(title = "base_contract_annex（合约附件）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseContractAnnex baseContractAnnex) throws IOException
@@ -55,6 +57,7 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 获取base_contract_annex（合约附件）详细信息
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:query')")
     @GetMapping(value = "/{contractNo}")
     public AjaxResult getInfo(@PathVariable("contractNo") String contractNo)
     {
@@ -64,6 +67,7 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 新增base_contract_annex（合约附件）
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:add')")
     @Log(title = "base_contract_annex（合约附件）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseContractAnnex baseContractAnnex)
@@ -74,6 +78,7 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 修改base_contract_annex（合约附件）
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:edit')")
     @Log(title = "base_contract_annex（合约附件）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseContractAnnex baseContractAnnex)
@@ -84,6 +89,7 @@ public class BaseContractAnnexController extends BaseController
     /**
      * 删除base_contract_annex（合约附件）
      */
+    //@PreAuthorize("@ss.hasPermi('system:annex:remove')")
     @Log(title = "base_contract_annex（合约附件）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{contractNos}")
     public AjaxResult remove(@PathVariable String[] contractNos)

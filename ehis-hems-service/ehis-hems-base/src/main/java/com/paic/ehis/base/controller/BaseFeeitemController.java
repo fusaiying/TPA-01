@@ -32,11 +32,12 @@ public class BaseFeeitemController extends BaseController
 
     /**
      * 查询费用项信息 列表
-     */
-    @GetMapping("/list")
-    public TableDataInfo list(BaseFeeitem baseFeeitem)
+     */    //@GetMapping("/list")
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:list')")
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody BaseFeeitem baseFeeitem)
     {
-        startPage();
+        startPage(baseFeeitem);
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
         return getDataTable(list);
     }
@@ -44,10 +45,13 @@ public class BaseFeeitemController extends BaseController
     /**
      * 导出费用项信息 列表
      */
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:export')")
     @Log(title = "费用项信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response,BaseFeeitem baseFeeitem) throws IOException
+    public void export(HttpServletResponse response,@RequestBody BaseFeeitem baseFeeitem) throws IOException
     {
+        String feeitemname = new String(baseFeeitem.getFeeitemname().getBytes( "UTF-8"));
+        baseFeeitem.setFeeitemname(feeitemname);
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
             ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);
             util.exportExcel(response, list, "feeitem");
@@ -56,7 +60,8 @@ public class BaseFeeitemController extends BaseController
     /**
      * 获取费用项信息 详细信息
      */
-    @GetMapping(value = "/{feeitemcode}")
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:query')")
+    @PostMapping(value = "/{feeitemcode}")
     public AjaxResult getInfo(@PathVariable("feeitemcode") String feeitemcode)
     {
         return AjaxResult.success(baseFeeitemService.selectBaseFeeitemByCode(feeitemcode));
@@ -65,6 +70,7 @@ public class BaseFeeitemController extends BaseController
     /**
      * 新增费用项信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:add')")
     @Log(title = "费用项信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseFeeitem baseFeeitem)
@@ -83,6 +89,7 @@ public class BaseFeeitemController extends BaseController
     /**
      * 修改费用项信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:edit')")
     @Log(title = "费用项信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseFeeitem baseFeeitem)
@@ -100,6 +107,7 @@ public class BaseFeeitemController extends BaseController
     /**
      * 删除费用项信息 
      */
+    //@PreAuthorize("@ss.hasPermi('system:feeitem:remove')")
     @Log(title = "费用项信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{feeitemCodes}")
     public AjaxResult remove(@PathVariable String[] feeitemCodes)

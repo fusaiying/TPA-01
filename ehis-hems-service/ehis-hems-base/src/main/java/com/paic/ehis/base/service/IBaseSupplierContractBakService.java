@@ -58,7 +58,12 @@ public interface IBaseSupplierContractBakService
      * @param baseSupplierContractBak base_supplier_contract_bak（供应商合约）
      * @return 结果
      */
-    public int updateBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak);
+    public BaseSupplierContractBak updateBaseSupplierContractBak(BaseSupplierContractBak baseSupplierContractBak);
+
+    /**
+     *修改服务机构历史合约
+     */
+    public int updateHistory(BaseSupplierContractBak baseSupplierContractBak);
 
     /**
      * 批量删除base_supplier_contract_bak（供应商合约）

@@ -1,29 +1,38 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
-
 import '@/assets/styles/index.scss' // global css
+import '@/assets/styles/sino.scss' // sino css
 import '@/assets/styles/my.scss' //
 import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
 import { download } from '@/utils/request'
-
+import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
+import {getDictsList} from "@/api/system/dict/data";
+import {selectContinent} from "@/api/system/dict/data";
+import {selectCountryByContinent} from "@/api/system/dict/data";
+import {selectPlaceCodeByPlaceName} from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/custmUtil";
 import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
-
+//导入条形码插件
+import VueBarcode from '@xkeshi/vue-barcode'
 // 全局方法挂载
+Vue.component('barcode',VueBarcode)
 Vue.prototype.getDicts = getDicts
+Vue.prototype.getDictsList = getDictsList
+Vue.prototype.selectContinent = selectContinent
+Vue.prototype.selectCountryByContinent = selectCountryByContinent
+Vue.prototype.selectPlaceCodeByPlaceName = selectPlaceCodeByPlaceName
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm

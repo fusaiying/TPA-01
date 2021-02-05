@@ -2,13 +2,13 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseBank;
 import com.paic.ehis.base.domain.BaseProviderSettle;
 import com.paic.ehis.base.domain.vo.BaseBankVo;
 import com.paic.ehis.base.mapper.BaseBankMapper;
 import com.paic.ehis.base.mapper.BaseProviderSettleMapper;
 import com.paic.ehis.base.service.IBaseBankService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +31,6 @@ public class BaseBankServiceImpl implements IBaseBankService
 
     @Autowired
     private BaseProviderSettleMapper baseProviderSettleMapper;
-
-
 
     /**
      * 查询base_bank（银行信息）

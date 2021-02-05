@@ -189,6 +189,8 @@ public class BaseProviderService extends BaseEntity
 
     private String orgFlag;
 
+    private String weekendsWorking;
+
 
 
 

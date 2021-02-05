@@ -2,11 +2,11 @@ package com.paic.ehis.base.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.base.domain.BaseProviderDep;
 import com.paic.ehis.base.domain.vo.BaseProviderDepVo;
 import com.paic.ehis.base.mapper.BaseProviderDepMapper;
 import com.paic.ehis.base.service.IBaseProviderDepService;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,6 @@ public class BaseProviderDepServiceImpl implements IBaseProviderDepService
 {
     @Autowired
     private BaseProviderDepMapper baseProviderDepMapper;
-
 
     /**
      * 查询base_provider_dept(服务商科室)

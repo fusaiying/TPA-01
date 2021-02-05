@@ -54,10 +54,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="renewFlag"    column="renew_flag"    />
         <result property="liaison"    column="liaison"    />
+        <result property="providerType"    column="provider_Type"    />
     </resultMap>
 
     <sql id="selectBaseSupplierContractVo">
-        select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison from base_supplier_contract
+        select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison,provider_Type from base_supplier_contract
     </sql>
 
     <select id="selectBaseSupplierContractList" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
@@ -103,6 +104,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
             <if test="boxRidgeCode != null  and boxRidgeCode != ''"> and box_ridge_code = #{boxRidgeCode}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="providerType != null  and providerType != ''"> and provider_Type = #{providerType}</if>
+
 
             <if test="cvaliDate != null">
                 <![CDATA[AND cvali_date >= #{cvaliDate} ]]>
@@ -198,6 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="renewFlag != null  and renewFlag != ''">renew_flag,</if>
             <if test="liaison != null  and liaison != ''">liaison,</if>
+            <if test="providerType != null  and providerType != ''">provider_Type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -249,6 +253,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="renewFlag != null and renewFlag != ''">#{renewFlag},</if>
             <if test="liaison != null  and liaison != ''">#{liaison},</if>
+            <if test="providerType != null  and providerType != ''">#{providerType},</if>
         </trim>
     </insert>
 
@@ -311,6 +316,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="renewFlag != null and renewFlag != ''">renew_flag = #{renewFlag},</if>
             <if test="renewFlag == null or renewFlag == ''">renew_flag = #{renewFlag},</if>
             <if test="liaison != null  and liaison != ''">liaison = #{liaison},</if>
+            <if test="providerType != null  and providerType != ''">provider_Type = #{providerType},</if>
         </trim>
         where contract_no = #{contractNo}
     </update>
@@ -325,5 +331,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{contractNo}
         </foreach>
     </delete>
+
+    <select id="generatorContractName" parameterType="map" resultType="String">
+select concat( #{id}, '-',(select dict_label from sys_dict_data where dict_type = #{dictType} and dict_value = #{dictValue}) ,'-', date_format(now(), '%Y%m%d'))
+from dual
+    </select>
     
 </mapper>

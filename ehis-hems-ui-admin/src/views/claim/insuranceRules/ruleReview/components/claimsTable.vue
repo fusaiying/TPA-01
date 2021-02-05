@@ -39,65 +39,65 @@
 </template>
 
 <script>
-import moment from 'moment'
-let dictss = [{dictType: 'product_status'}]
-export default {
-  filters: {
-    changeDate: function(value) {
-      if (value !== null) {
-        return moment(value).format('YYYY-MM-DD')
-      }
-    }
-  },
-  props: {
-    tableData: {
-      type: Array,
-      default: function() {
-        return []
+  import moment from 'moment'
+  let dictss = [{dictType: 'product_status'}]
+  export default {
+    filters: {
+      changeDate: function(value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
       }
     },
-    status: {
-      type: String,
-      default: function() {
-        return ''
+    props: {
+      tableData: {
+        type: Array,
+        default: function() {
+          return []
+        }
+      },
+      status: {
+        type: String,
+        default: function() {
+          return ''
+        }
       }
-    }
-  },
-  data() {
-    return {
-      dictList:[],
-      product_statusOptions:[],
-    }
-  },
-  async mounted() {
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    this.product_statusOptions = this.dictList.find(item => {
-      return item.dictType === 'product_status'
-    }).dictDate
-  },
-  methods: {
-    revieweHandle(row, node) {
-      this.$router.push({
-        path: 'rule-info',
-        query: {
-          node: node,
-          riskCode: row.riskCode
-        }
-      })
     },
-    showHandle(row, node) {
-      this.$router.push({
-        path: 'rule-info',
-        query: {
-          node: node,
-          riskCode: row.riskCode
-        }
+    data() {
+      return {
+        dictList:[],
+        product_statusOptions:[],
+      }
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
       })
+      this.product_statusOptions = this.dictList.find(item => {
+        return item.dictType === 'product_status'
+      }).dictDate
+    },
+    methods: {
+      revieweHandle(row, node) {
+        this.$router.push({
+          path: 'rule-info',
+          query: {
+            node: node,
+            riskCode: row.riskCode
+          }
+        })
+      },
+      showHandle(row, node) {
+        this.$router.push({
+          path: 'rule-info',
+          query: {
+            node: node,
+            riskCode: row.riskCode
+          }
+        })
+      }
     }
   }
-}
 </script>
 <style scoped>
   .status-color{

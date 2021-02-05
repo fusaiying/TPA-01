@@ -2,13 +2,15 @@ package com.paic.ehis.system.service;
 
 import com.paic.ehis.system.domain.SysDictData;
 import com.paic.ehis.system.domain.SysDictType;
+import com.paic.ehis.system.domain.dto.SysDictsDataDTO;
+import com.paic.ehis.system.domain.vo.DictTypeVo;
 
 import java.util.List;
 
 /**
  * 字典 业务层
  * 
- *
+ * @author admin
  */
 public interface ISysDictTypeService
 {
@@ -34,6 +36,14 @@ public interface ISysDictTypeService
      * @return 字典数据集合信息
      */
     public List<SysDictData> selectDictDataByType(String dictType);
+
+    /**
+     * 根据字典类型集合查询字典数据
+     *
+     * @param dictTypeVoList 字典类型
+     * @return 字典数据集合信息
+     */
+    public List<SysDictsDataDTO> selectDictDataByTypeList(List<DictTypeVo> dictTypeVoList);
 
     /**
      * 根据字典类型ID查询信息

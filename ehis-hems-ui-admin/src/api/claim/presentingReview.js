@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function getBackToList(query) {
   return request({
     url: 'system/batch/backToList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -13,8 +13,8 @@ export function getBackToList(query) {
 export function getDealWithList(query) {
   return request({
     url: 'system/batch/dealWithList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -66,9 +66,9 @@ export function getBatch(batchno) {
 }
 
 // 通过点击事件查询报案台账信息  列表
-export function getMinData(batchno) {
+export function getMinData(batchNo) {
   return request({
-    url: '/system/standing/'+batchno,
+    url: '/system/standing/'+batchNo,
     method: 'get',
   })
 }
@@ -77,8 +77,8 @@ export function getMinData(batchno) {
 export function getPublicList(batchno) {
   return request({
     url: '/system/batch/publicList',
-    method: 'get',
-    params: batchno
+    method: 'post',
+    data: batchno
   })
 }
 
@@ -170,6 +170,29 @@ export function exportPersonalUntreated() {
   })
 }
 
+//模糊查询部门
+export function getDept(data) {
+  return request({
+    url:'system/dept/list',
+    method:'post',
+    data:data
+  })
+}
 
+//获取所有部门
+export function getDeptList(data) {
+  return request({
+    url:'system/dept/deptList',
+    method:'get'
+  })
+}
+//获取当前部门
+export function getThisDept(parentId) {
+  return request({
+    url: '/system/dept/getdepts',
+    method: 'get',
+    params:parentId
+  })
+}
 
 

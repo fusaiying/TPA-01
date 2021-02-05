@@ -63,7 +63,7 @@ public interface IBaseSupplierContractService
      * @param baseSupplierContract base_supplier_contract（供应商合约）
      * @return 结果
      */
-    public int updateBaseSupplierContract(BaseSupplierContract baseSupplierContract);
+    public BaseSupplierContract updateBaseSupplierContract(BaseSupplierContract baseSupplierContract);
 
     /**
      * 批量删除base_supplier_contract（供应商合约）

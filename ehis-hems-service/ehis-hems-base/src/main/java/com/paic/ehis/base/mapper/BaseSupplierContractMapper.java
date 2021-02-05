@@ -4,6 +4,7 @@ import com.paic.ehis.base.domain.BaseSupplierContract;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * base_supplier_contract（供应商合约）Mapper接口
@@ -85,4 +86,14 @@ public interface BaseSupplierContractMapper
      * @return 结果
      */
     public int deleteBaseSupplierContractByIds(String[] contractNos);
+
+
+
+
+    /**
+    *@Description: 生成合约名称
+    *@Author: houjiawei
+    *@date: 2021/1/30 15:22
+    */
+    public String generatorContractName(Map<String,String> map);
 }

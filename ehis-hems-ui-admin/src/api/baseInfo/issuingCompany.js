@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function listIssuingcompany(query) {
   return request({
     url: '/provider/issuingcompany/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -69,8 +69,8 @@ export function updateInvoice(data) {
 export function listRule(query) {
     return request({
       url: '/provider/rule/list',
-      method: 'get',
-      params: query
+      method: 'post',
+      data: query
     })
   }
 

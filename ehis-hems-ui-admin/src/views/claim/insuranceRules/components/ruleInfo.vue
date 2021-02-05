@@ -172,11 +172,11 @@
     data() {
       const checkExplanation = (rule, value, callback) => {
         if (this.reviewForm.conclusion==='02' && (this.reviewForm.explanation==null || this.reviewForm.explanation==='')){
-            if (!value){
-              callback(new Error("复核结论退回，结论说明必录！"));
-            }else {
-              callback()
-            }
+          if (!value){
+            callback(new Error("复核结论退回，结论说明必录！"));
+          }else {
+            callback()
+          }
         }else {
           callback()
         }
@@ -312,23 +312,23 @@
               data.riskStatus='02'
             }
 
-              submitReview(data).then(res => {
-                if (res!=null && res.code===200){
-                  this.$message({
-                    message: '审核完毕！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.$router.go(-1)
-                }
-              }).catch(() => {
+            submitReview(data).then(res => {
+              if (res!=null && res.code===200){
                 this.$message({
-                  type: 'info',
-                  message: '审核失败！'
+                  message: '审核完毕！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
                 })
+                this.$router.go(-1)
+              }
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '审核失败！'
               })
-            }
+            })
+          }
         })
 
         if (this.reviewForm.conclusion==null || this.reviewForm.conclusion===''){

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseStandingMapper">
+    
+    <resultMap type="com.sino.system.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
+        <result property="rptno"    column="rpt_no"    />
+        <result property="idno"    column="id_no"    />
+        <result property="name"    column="name"    />
+        <result property="claimmaterials"    column="claim_materials"    />
+        <result property="remark"    column="remark"    />
+        <result property="otherinfo"    column="other_info"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="organcode"    column="organ_code"    />
+        <result property="expressnumber"    column="express_number"    />
+        <result property="receivedate"    column="receive_date"    />
+        <result property="sendby"    column="send_by"    />
+        <result property="policyNo"    column="policy_no"    />
+    </resultMap>
+
+    <resultMap type="com.sino.system.domain.vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
+        <result property="rptno"    column="rpt_no"    />
+        <result property="idno"    column="id_no"    />
+        <result property="name"    column="name"    />
+        <result property="claimmaterials"    column="claim_materials"    />
+        <result property="remark"    column="remark"    />
+        <result property="otherinfo"    column="other_info"    />
+        <result property="expressnumber"    column="express_number"    />
+        <result property="receivedate"    column="receive_date"    />
+        <result property="sendby"    column="send_by"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="organcode"    column="organ_code"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseStandingVo">
+        select rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
+    </sql>
+
+    <select id="selectClaimCaseStandingList" parameterType="com.sino.system.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        <where>  
+            <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="claimmaterials != null  and claimmaterials != ''"> and claim_materials = #{claimmaterials}</if>
+            <if test="otherinfo != null  and otherinfo != ''"> and other_info = #{otherinfo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseStandingListNew" parameterType="com.sino.system.domain.dto.ClaimCaseStandingDTO" resultMap="ClaimCaseStandingVo1Result">
+        SELECT
+        a.rpt_no,
+        a.id_no,
+        a.NAME,
+        a.claim_materials,
+        a.remark,
+        a.other_info,
+        a.create_by,
+        b.express_number,
+        b.send_by,
+        b.receive_date,
+        b.organ_code,
+        d.company_name
+        FROM
+        claim_case_standing a,
+        claim_batch b,
+        claim_case c,
+        claim_case_policy d
+        WHERE
+        a.rpt_no = c.rpt_no
+        AND b.batch_no = c.batch_no
+        AND a.rpt_no = d.rpt_no
+        AND a.STATUS = 'Y'
+        AND b.STATUS = 'Y'
+        AND c.STATUS = 'Y'
+        AND d.STATUS = 'Y'
+        <if test="rptno != null  and rptno != ''"> and a.rpt_no = #{rptno}</if>
+	    <if test="idno != null  and idno != ''"> and a.id_no = #{idno}</if>
+        <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+        <if test="expressnumber != null  and expressnumber != ''"> and b.express_number = #{expressnumber}</if>
+        <if test="receivedate != null "> and b.receive_date = #{receivedate}</if>
+        <if test="sendby != null  and sendby != ''"> and b.send_by = #{sendby}</if>
+        <if test="organcode != null  and organcode != ''"> and b.organ_code = #{organcode}</if>
+        <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+        <if test="dBefore != null   and dNow != null ">
+            and(receive_date between  #{dBefore} and  #{dNow})</if>
+        <if test="receiveStartDate != null   and receiveEndDate != null ">
+            and(receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
+    </select>
+    
+    <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        where rpt_no = #{rptno} and status="Y"
+    </select>
+        
+    <insert id="insertClaimCaseStanding" parameterType="com.sino.system.domain.ClaimCaseStanding">
+        insert into claim_case_standing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptno != null">rpt_no,</if>
+            <if test="idno != null and idno != ''">id_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="claimmaterials != null and claimmaterials != ''">claim_materials,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="otherinfo != null and otherinfo != ''">other_info,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptno != null">#{rptno},</if>
+            <if test="idno != null and idno != ''">#{idno},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="claimmaterials != null and claimmaterials != ''">#{claimmaterials},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="otherinfo != null and otherinfo != ''">#{otherinfo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseStanding" parameterType="com.sino.system.domain.ClaimCaseStanding">
+        update claim_case_standing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="idno != null and idno != ''">id_no = #{idno},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="claimmaterials != null and claimmaterials != ''">claim_materials = #{claimmaterials},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
+        </trim>
+        where rpt_no=#{idno} and status='Y'
+    </update>
+
+    <update id="updateClaimCaseStandingVo1" parameterType="com.sino.system.domain.vo.ClaimCaseStandingVo1">
+        update claim_case_standing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="idno != null and idno != ''">id_no = #{idno},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="claimmaterials != null and claimmaterials != ''">claim_materials = #{claimmaterials},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
+        </trim>
+    </update>
+
+
+
+    <delete id="deleteClaimCaseStandingById" parameterType="String">
+        delete from claim_case_standing where rpt_no = #{rptno}
+    </delete>
+
+    <delete id="deleteClaimCaseStandingByIds" parameterType="String">
+        delete from claim_case_standing where rpt_no in 
+        <foreach item="rptno" collection="array" open="(" separator="," close=")">
+            #{rptno}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimCaseStandingByIdOne" parameterType="String" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        where rpt_no = #{rptno} and status='Y'
+    </select>
+</mapper>

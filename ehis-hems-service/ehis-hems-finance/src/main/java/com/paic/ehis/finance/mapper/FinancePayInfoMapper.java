@@ -1,8 +1,8 @@
 package com.paic.ehis.finance.mapper;
 
 import com.paic.ehis.finance.domain.FinancePayInfo;
-import com.paic.ehis.finance.domain.TransferfailedVo;
 import com.paic.ehis.finance.domain.dto.TransferfailedDTO;
+import com.paic.ehis.finance.domain.vo.TransferfailedVo;
 
 import java.util.List;
 

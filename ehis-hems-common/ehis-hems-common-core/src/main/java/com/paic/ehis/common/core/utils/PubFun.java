@@ -1,6 +1,7 @@
 package com.paic.ehis.common.core.utils;
 
 import com.paic.ehis.common.core.maxno.MySQLSysMaxNoIncrementer;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer;
@@ -41,6 +42,15 @@ public class PubFun {
         boolean ResultLeap = false;
         ResultLeap = nYear % 400 == 0 | nYear % 100 != 0 & nYear % 4 == 0;
         return ResultLeap;
+    }
+
+    //接收的数据与随机的小数相比较
+    public static boolean random(double number){
+        double orderAmount = RandomUtils.nextDouble(1.0, 1000.0);
+        if(orderAmount <= number){
+            return true;
+        }
+        return false;
     }
 
     public static Date calDate(Date baseDate, int interval, String unit, Date compareDate) {

@@ -287,7 +287,8 @@
           </el-col>
         </el-row>
       </el-form>
-      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :claimtype="searchForm.claimtype" @getPropData="getPropData"/>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :claimtype="searchForm.claimtype"
+                @getPropData="getPropData"/>
     </el-card>
   </div>
 </template>
@@ -408,7 +409,7 @@
         activeName: '01',
         completedTableData: [],
         pendingTableData: [],
-        deptName:'',
+        deptName: '',
         searchForm: {
           source: '03',//交单来源 01线下 02线上 03线下
           batchno: undefined,//批次号
@@ -549,8 +550,8 @@
             }).catch(res => {
             })
           }
-          if (this.searchForm.batchstatus==='05'){//失效状态  条码打印不可用
-            this.isPrint=true
+          if (this.searchForm.batchstatus === '05') {//失效状态  条码打印不可用
+            this.isPrint = true
           }
         } else if (this.querys.status === 'edit') {
           this.eShowFooter = true
@@ -623,10 +624,10 @@
         getThisDept().then(res => {
           if (res != null) {
             this.searchForm.organcode = res.deptId
-            if (res.deptId!=null && res.deptId!==''){
-              getDeptById(res.deptId).then(res=>{
-                if (res!=null && res.code===200){
-                  this.deptName= res.data.deptName
+            if (res.deptId != null && res.deptId !== '') {
+              getDeptById(res.deptId).then(res => {
+                if (res != null && res.code === 200) {
+                  this.deptName = res.data.deptName
                 }
               })
             }
@@ -647,11 +648,11 @@
         this.$refs.searchForm.resetFields()
       },
       openHospitalDialog() {
-        if (this.searchForm.claimtype===null || this.searchForm.claimtype==='' || this.searchForm.claimtype===undefined){
+        if (this.searchForm.claimtype === null || this.searchForm.claimtype === '' || this.searchForm.claimtype === undefined) {
           return this.$message.warning(
             "请先选择理赔类型！"
           );
-        }else {
+        } else {
           this.hospitalDialog = true
         }
 
@@ -662,7 +663,7 @@
       //理赔类型改变
       typeChange() {
         if (this.searchForm.claimtype === '01') {//直结 特殊案件码表待定  E生宝贝
-          if (this.$route.query.status || this.querys.status!=='editReview'){
+          if (this.$route.query.status || this.querys.status !== 'editReview') {
             this.isSaveSub = true
             this.isSaveOrSub = false
           }
@@ -673,7 +674,7 @@
           this.searchForm.receivedate = undefined
           this.searchForm.sendby = undefined
         } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
-          if (this.$route.query.status || this.querys.status!=='editReview'){
+          if (this.$route.query.status || this.querys.status !== 'editReview') {
             this.isSaveSub = false
             this.isSaveOrSub = true
           }
@@ -811,11 +812,7 @@
                 }
                 this.eSaveSub = true
                 this.isSaveSub = true
-                if (this.$route.query.status && this.querys.status!=='add'){
-                  this.isPrint = true
-                }else {
-                  this.isPrint = false
-                }
+                this.isPrint = true
                 this.isSaveOrSub = false
                 this.isShow = true
                 this.eShowFooter = true
@@ -1007,11 +1004,11 @@
         return actions.join('');
       },
       getDeptName(deptId) {
-        let deptName=''
-        if (deptId!=null && deptId!==''){
-          getDeptById(deptId).then(res=>{
-            if (res!=null && res.code===200){
-              deptName= res.data.deptName
+        let deptName = ''
+        if (deptId != null && deptId !== '') {
+          getDeptById(deptId).then(res => {
+            if (res != null && res.code === 200) {
+              deptName = res.data.deptName
               return deptName
             }
           })

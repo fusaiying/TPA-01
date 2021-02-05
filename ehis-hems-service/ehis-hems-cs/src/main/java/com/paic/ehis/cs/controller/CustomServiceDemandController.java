@@ -6,10 +6,12 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
+import com.paic.ehis.cs.service.ICollaborativeFromService;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class CustomServiceDemandController extends BaseController {
     private IDemandAcceptVoService iDemandAcceptVoService;
     @Autowired
     private IWorkHandleInfoService iWorkHandleInfoService;
+    @Autowired
+    private ICollaborativeFromService iCollaborativeFromService;
 
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
@@ -89,4 +93,20 @@ public class CustomServiceDemandController extends BaseController {
     {
         return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
     }
+
+    /**
+     * 增加协办信息
+     * @param collaborativeFrom
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/insertTeamwork")
+    public AjaxResult insertTeamwork (@Validated @RequestBody CollaborativeFrom collaborativeFrom)
+    {
+        return toAjax(iCollaborativeFromService.insertTeamwork(collaborativeFrom));
+    }
+
+
+
 }

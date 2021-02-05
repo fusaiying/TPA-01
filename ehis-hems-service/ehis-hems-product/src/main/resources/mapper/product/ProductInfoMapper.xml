@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.ProductInfoMapper">
+    
+    <resultMap type="ProductInfo" id="ProductInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="productChname"    column="product_chname"    />
+        <result property="productEnname"    column="product_enname"    />
+        <result property="outProductChname"    column="out_product_chname"    />
+        <result property="outProductEnname"    column="out_product_enname"    />
+        <result property="productType"    column="product_type"    />
+        <result property="productTimeInfo"    column="product_time_info"    />
+        <result property="productTimeTime"    column="product_time_time"    />
+        <result property="steward"    column="steward"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="beforeDate"    column="beforeDate"    />
+        <result property="nowDate"    column="nowDate"    />
+    </resultMap>
+
+    <resultMap type="BaseServiceInfo" id="BaseServiceInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="servertypeCode"    column="servertype_code"    />
+        <result property="servertypeName"    column="servertype_name"    />
+        <result property="serviceCodeName"    column="serviceCodeName"    />
+        <result property="typeCodeName"    column="typeCodeName"    />
+        <result property="categoryCodeName"    column="categoryCodeName"    />
+        <result property="orgin"    column="orgin"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="ProductSupplierInfo" id="ProductSupplierResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="priority"    column="priority"    />
+        <result property="chname"    column="chname"    />
+        <result property="addressdetail"    column="addressdetail"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="maxPrice"    column="max_price"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProductInfoVo">
+        select serial_no, product_code, product_chname, product_enname, out_product_chname, out_product_enname, product_type, product_time_info, product_time_time, steward, bussiness_status, status, create_by, create_time, update_by, update_time from product_info
+    </sql>
+
+    <select id="selectProductInfoList" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>  
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="productChname != null  and productChname != ''"> and product_chname like concat('%', #{productChname}, '%')</if>
+            <if test="productEnname != null  and productEnname != ''"> and product_enname like concat('%', #{productEnname}, '%')</if>
+            <if test="outProductChname != null  and outProductChname != ''"> and out_product_chname like concat('%', #{outProductChname}, '%')</if>
+            <if test="outProductEnname != null  and outProductEnname != ''"> and out_product_enname like concat('%', #{outProductEnname}, '%')</if>
+            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
+            <if test="productTimeInfo != null  and productTimeInfo != ''"> and product_time_info = #{productTimeInfo}</if>
+            <if test="productTimeTime != null "> and product_time_time = #{productTimeTime}</if>
+            <if test="steward != null  and steward != ''"> and steward = #{steward}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            and status = 'Y' and bussiness_status in ('01','03','04','05') order by create_time desc
+        </where>
+    </select>
+
+    <select id="selectDefaultListist" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+            <if test="beforeDate != null   and nowDate != null ">
+                and(create_time between  #{beforeDate} and  #{nowDate})
+            </if>
+            and status = 'Y' order by create_time desc
+        </where>
+    </select>
+    
+    <select id="selectProductInfoById" parameterType="String" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        where product_code = #{productCode} and status = 'Y'
+    </select>
+        
+    <insert id="insertProductInfo" parameterType="ProductInfo">
+        insert into product_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="productCode != null and productCode != ''">product_code,</if>
+            <if test="productChname != null and productChname != ''">product_chname,</if>
+            <if test="productEnname != null and productEnname != ''">product_enname,</if>
+            <if test="outProductChname != null and outProductChname != ''">out_product_chname,</if>
+            <if test="outProductEnname != null and outProductEnname != ''">out_product_enname,</if>
+            <if test="productType != null and productType != ''">product_type,</if>
+            <if test="productTimeInfo != null and productTimeInfo != ''">product_time_info,</if>
+            <if test="productTimeTime != null">product_time_time,</if>
+            <if test="steward != null and steward != ''">steward,</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="productCode != null and productCode != ''">#{productCode},</if>
+            <if test="productChname != null and productChname != ''">#{productChname},</if>
+            <if test="productEnname != null and productEnname != ''">#{productEnname},</if>
+            <if test="outProductChname != null and outProductChname != ''">#{outProductChname},</if>
+            <if test="outProductEnname != null and outProductEnname != ''">#{outProductEnname},</if>
+            <if test="productType != null and productType != ''">#{productType},</if>
+            <if test="productTimeInfo != null and productTimeInfo != ''">#{productTimeInfo},</if>
+            <if test="productTimeTime != null">#{productTimeTime},</if>
+            <if test="steward != null and steward != ''">#{steward},</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">#{bussinessStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProductInfo" parameterType="ProductInfo">
+        update product_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
+            <if test="productChname != null and productChname != ''">product_chname = #{productChname},</if>
+            <if test="productEnname != null and productEnname != ''">product_enname = #{productEnname},</if>
+            <if test="outProductChname != null and outProductChname != ''">out_product_chname = #{outProductChname},</if>
+            <if test="outProductEnname != null and outProductEnname != ''">out_product_enname = #{outProductEnname},</if>
+            <if test="productType != null and productType != ''">product_type = #{productType},</if>
+            <if test="productTimeInfo != null and productTimeInfo != ''">product_time_info = #{productTimeInfo},</if>
+            <if test="productTimeTime != null">product_time_time = #{productTimeTime},</if>
+            <if test="steward != null and steward != ''">steward = #{steward},</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status = #{bussinessStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <update id="deleteProductInfoById" parameterType="String">
+        update product_info set status = 'N' where product_code = #{productCode} and status = 'Y'
+    </update>
+
+    <delete id="deleteProductInfoByIds" parameterType="String">
+        delete from product_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <select id="getServiceInfo" resultMap="BaseServiceInfoResult">
+        SELECT
+        serial_no,
+        service_code,
+        service_name,
+        category_code,
+        category_name,
+        servertype_code,
+        servertype_name,
+        concat_ws('-',service_code,service_name) serviceCodeName,
+        concat_ws('-',category_code,category_name) categoryCodeName,
+        concat_ws('-',servertype_code,servertype_name) typeCodeName
+        FROM base_service_info
+    </select>
+
+    <update id="updateStatus" parameterType="String">
+        update product_info set status = 'N'
+        where product_code = #{productCode} and status = 'Y'
+    </update>
+
+    <update id="updateProStatus1" parameterType="String">
+        update product_info set bussiness_status = '03'
+        where product_code = #{productCode} and status = 'Y' and bussiness_status ='02'
+    </update>
+
+    <update id="updateProStatus2" parameterType="String">
+        update product_info set bussiness_status = '05'
+        where product_code = #{productCode} and status = 'Y' and bussiness_status ='02'
+    </update>
+
+    <update id="updateProStatus3" parameterType="ProductManagerLog">
+        update product_info set bussiness_status = #{bussinessStatus}
+        where product_code = #{productCode} and status = 'Y'
+    </update>
+
+    <select id="selectCheckList" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="productChname != null  and productChname != ''"> and product_chname like concat('%', #{productChname}, '%')</if>
+            <if test="productEnname != null  and productEnname != ''"> and product_enname like concat('%', #{productEnname}, '%')</if>
+            <if test="outProductChname != null  and outProductChname != ''"> and out_product_chname like concat('%', #{outProductChname}, '%')</if>
+            <if test="outProductEnname != null  and outProductEnname != ''"> and out_product_enname like concat('%', #{outProductEnname}, '%')</if>
+            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
+            <if test="productTimeInfo != null  and productTimeInfo != ''"> and product_time_info = #{productTimeInfo}</if>
+            <if test="productTimeTime != null "> and product_time_time = #{productTimeTime}</if>
+            <if test="steward != null  and steward != ''"> and steward = #{steward}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            and status = 'Y' and bussiness_status = '02' order by create_time desc
+        </where>
+    </select>
+
+    <select id="mangerList" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="productChname != null  and productChname != ''"> and product_chname like concat('%', #{productChname}, '%')</if>
+            <if test="productEnname != null  and productEnname != ''"> and product_enname like concat('%', #{productEnname}, '%')</if>
+            <if test="outProductChname != null  and outProductChname != ''"> and out_product_chname like concat('%', #{outProductChname}, '%')</if>
+            <if test="outProductEnname != null  and outProductEnname != ''"> and out_product_enname like concat('%', #{outProductEnname}, '%')</if>
+            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
+            <if test="productTimeInfo != null  and productTimeInfo != ''"> and product_time_info = #{productTimeInfo}</if>
+            <if test="productTimeTime != null "> and product_time_time = #{productTimeTime}</if>
+            <if test="steward != null  and steward != ''"> and steward = #{steward}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            and status = 'Y' and bussiness_status in ('03','04') order by create_time desc
+        </where>
+    </select>
+
+    <select id="checkField" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+            <if test="productChname != null  and productChname != ''"> and product_chname = #{productChname}</if>
+            <if test="productEnname != null  and productEnname != ''"> and product_enname = #{productEnname}</if>
+            <if test="outProductChname != null  and outProductChname != ''"> and out_product_chname = #{outProductChname}</if>
+            <if test="outProductEnname != null  and outProductEnname != ''"> and out_product_enname = #{outProductEnname}</if>
+            and status = 'Y'
+        </where>
+    </select>
+
+    <select id="selectSupplier" parameterType="ProductInfo" resultMap="ProductSupplierResult">
+        SELECT
+            bcs.supplier_code,
+            bcs.contract_no,
+            bcs.service_code,
+            bsi.chname,
+            concat_ws(
+                '-',
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.province
+                ),
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.city
+                ),
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.district
+                )
+            ) addressdetail,
+            bcs.min_price,
+            bcs.max_price,
+            bsc.end_date,
+            psi.priority
+        FROM
+            base_contract_service bcs
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = bcs.supplier_code
+        LEFT JOIN base_supplier_contract bsc ON bsc.contract_no = bcs.contract_no
+        LEFT JOIN product_supplier_info psi ON psi.service_code = bcs.service_code and psi.supplier_code = bcs.supplier_code AND psi.product_code = #{productCode} and psi.status ='Y'
+        WHERE
+            bcs.serial_no IN (
+                SELECT DISTINCT
+                    max(serial_no)
+                FROM
+                    base_contract_service
+                WHERE
+                    service_code = #{serviceCode}
+                AND STATUS = 'Y'
+                GROUP BY
+                    supplier_code,
+                    service_code
+            ) order by if(isnull(psi.priority),1,0) asc
+    </select>
+
+
+
+    <select id="selectProductSupplier" parameterType="ProductInfo" resultMap="ProductSupplierResult">
+        SELECT
+            psi.serial_no,
+            psi.supplier_code,
+            psi.service_code,
+            bsi.chname,
+            concat_ws(
+                '-',
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.province
+                ),
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.city
+                ),
+                (
+                    SELECT DISTINCT
+                        placename
+                    FROM
+                        sn_base_address
+                    WHERE
+                        placecode = bsi.district
+                )
+            ) addressdetail,
+            bcs.min_price,
+            bcs.max_price,
+            bsc.end_date,
+            psi.priority
+        FROM
+            product_supplier_info psi
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = psi.supplier_code
+        LEFT JOIN base_contract_service bcs ON psi.service_code = bcs.service_code
+        AND psi.supplier_code = bcs.supplier_code
+        AND bcs. STATUS = 'Y'
+        AND bcs.serial_no IN (
+            SELECT DISTINCT
+                max(serial_no)
+            FROM
+                base_contract_service
+            WHERE
+                service_code = psi.service_code
+            AND STATUS = 'Y'
+            GROUP BY
+                supplier_code,
+                service_code
+        )
+        LEFT JOIN base_supplier_contract bsc ON bsc.contract_no = bcs.contract_no
+        WHERE
+            psi.product_code =  #{productCode}
+        AND psi. STATUS = 'Y'
+        ORDER BY
+        IF (isnull(psi.priority), 1,0)
+    </select>
+
+    <update id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
+        update product_supplier_info set status = 'N'
+        where product_code = #{productCode} and status = 'Y' and service_code =#{serviceCode}
+    </update>
+
+
+    <insert id="insertSupplier" parameterType="ProductSupplierInfo">
+        insert into product_supplier_info (serial_no,product_code,service_code,supplier_code,priority,status,
+        create_by,create_time,update_by,update_time)
+        values
+        <foreach collection="list" item="listDO" index="index" separator=",">
+            (#{listDO.serialNo},#{listDO.productCode},#{listDO.serviceCode}, #{listDO.supplierCode},#{listDO.priority}
+            , #{listDO.status}, #{listDO.createBy}, #{listDO.createTime}, #{listDO.updateBy}, #{listDO.updateTime})
+        </foreach>
+
+    </insert>
+</mapper>

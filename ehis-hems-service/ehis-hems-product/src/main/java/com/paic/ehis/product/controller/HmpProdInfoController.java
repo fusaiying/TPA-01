@@ -44,8 +44,8 @@ public class HmpProdInfoController extends BaseController {
     @Autowired
     private IHmpProdServComService hmpProdServComService;
 
-    @Autowired
-    private IHmpFileInfoService hmpFileInfoService;
+    /*@Autowired
+    private IHmpFileInfoService hmpFileInfoService;*/
 
     @Autowired
     private IHmpAuditTrackService hmpAuditTrackService;
@@ -56,8 +56,8 @@ public class HmpProdInfoController extends BaseController {
 
 
     /**
-     * 查询产品定义列表
-     */
+    /* * 查询产品定义列表
+     *//*
     @GetMapping("/list")
     public TableDataInfo list(HmpProdInfo hmpProdInfo)
     {
@@ -68,45 +68,45 @@ public class HmpProdInfoController extends BaseController {
         return getDataTable(list);
     }
 
-    /**
+    *//**
      * 查询服务类型
-     */
+     *//*
     @GetMapping("/getServiceType")
     public AjaxResult getServiceType(HmpProdInfo hmpProdInfo)
     {
         return AjaxResult.success(hmpProdInfoService.selectServiceType(hmpProdInfo));
     }
 
-    /**
+    *//**
      * 查询产品类别
-     */
+     *//*
     @GetMapping("/getProductClass")
     public AjaxResult getProductClass(HmpProdInfo hmpProdInfo)
     {
         return AjaxResult.success(hmpProdInfoService.selectProductClass(hmpProdInfo));
     }
 
-    /**
+    *//**
      * 查询产品细类
-     */
+     *//*
     @GetMapping("/getProductSubClass")
     public AjaxResult getProductSubClass(HmpProdInfo hmpProdInfo)
     {
         return AjaxResult.success(hmpProdInfoService.selectProductSubClass(hmpProdInfo));
     }
 
-    /**
+    *//**
      * 查询服务机构名称
-     */
+     *//*
     @GetMapping("/getServiceComNo")
     public AjaxResult getServiceComNo(HmpProdServCom hmpProdServCom)
     {
         return AjaxResult.success(hmpProdServComService.selectSerivceComNo(hmpProdServCom));
     }
 
-    /**
+    *//**
      * 查询服务机构网点
-     */
+     *//*
     @GetMapping("/getServiceNetWorkList")
     public TableDataInfo getServiceNetWorkList(HmpServOpera hmpServOpera)
     {
@@ -117,36 +117,36 @@ public class HmpProdInfoController extends BaseController {
         return getDataTable(list);
     }
 
-    /**
+    *//**
      * 查询所有省份
-     */
+     *//*
     @GetMapping("/getProvinceAll")
     public AjaxResult getProvinceAll(HmpProdSalCom hmpProdSalCom)
     {
         return AjaxResult.success(hmpProdInfoService.selectProvinceAll(hmpProdSalCom));
     }
 
-    /**
+    *//**
      * 查询城市
-     */
+     *//*
     @GetMapping("/getCityByProvince")
     public AjaxResult getCityByProvince(HmpProdSalCom hmpProdSalCom)
     {
         return AjaxResult.success(hmpProdInfoService.selectCityByProvince(hmpProdSalCom));
     }
 
-    /**
+    *//**
      * 查询地区
-     */
+     *//*
     @GetMapping("/getDistrictByCity")
     public AjaxResult getDistrictByCity(HmpProdSalCom hmpProdSalCom)
     {
         return AjaxResult.success(hmpProdInfoService.selectDistrictByCity(hmpProdSalCom));
     }
 
-    /**
+    *//**
      * 导出产品定义列表
-     */
+     *//*
     @Log(title = "产品定义", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody HmpProdInfo hmpProdInfo) throws IOException
@@ -156,18 +156,18 @@ public class HmpProdInfoController extends BaseController {
         util.exportExcel(response, list, "产品信息");
     }
 
-    /**
+    *//**
      * 获取产品定义详细信息
-     */
+     *//*
     @PostMapping(value = "/getProductInfoById")
     public AjaxResult getInfo(@RequestBody String productno)
     {
         return AjaxResult.success(hmpProdInfoService.selectHmpProdInfoById(productno));
     }
 
-    /**
+    *//**
      * 新增产品定义
-     */
+     *//*
     @Log(title = "产品定义", businessType = BusinessType.INSERT)
     @PostMapping("/addProduct")
     public AjaxResult addProduct(@RequestBody ProductInfo product)
@@ -297,9 +297,9 @@ public class HmpProdInfoController extends BaseController {
         return AjaxResult.success(productInfo);
     }
 
-    /**
+    *//**
      * 查询服务机构和网点
-     */
+     *//*
     @PostMapping("/queryServiceOrgAndNetWork")
     public AjaxResult queryServiceOrgAndNetWork(@RequestBody String productNo)
     {
@@ -326,9 +326,9 @@ public class HmpProdInfoController extends BaseController {
         return ajax;
     }
 
-    /**
+    *//**
      * 删除产品定义
-     */
+     *//*
     @Log(title = "产品定义", businessType = BusinessType.DELETE)
     @DeleteMapping("/{productnos}")
     public AjaxResult remove(@PathVariable String[] productnos)
@@ -345,9 +345,9 @@ public class HmpProdInfoController extends BaseController {
         return toAjax(result);
     }
 
-    /**
+    *//**
      * 添加保存服务地区
-     */
+     *//*
     @Log(title = "产品定义添加服务地区", businessType = BusinessType.INSERT)
     @PostMapping("/saveServiceCity")
     public AjaxResult saveServiceCity(@RequestBody ProductInfo product)
@@ -396,9 +396,9 @@ public class HmpProdInfoController extends BaseController {
         }
     }
 
-    /**
+    *//**
      * 查询服务地区
-     */
+     *//*
     @PostMapping("/queryServiceCity")
     public AjaxResult queryServiceCity(@RequestBody String productNo)
     {
@@ -411,9 +411,9 @@ public class HmpProdInfoController extends BaseController {
         return ajax;
     }
 
-    /**
+    *//**
      * 产品提交审核
-     */
+     *//*
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit")
     public AjaxResult productAudit(@RequestBody HmpProdInfo productInfo)
@@ -487,9 +487,9 @@ public class HmpProdInfoController extends BaseController {
         return AjaxResult.error("产品信息不能为空！");
     }
 
-    /**
+    *//**
      * 查询产品的审核轨迹
-     */
+     *//*
     @GetMapping("/queryAuditTrack")
     public TableDataInfo queryAuditTrack(HmpAuditTrack hmpAuditTrack)
     {
@@ -498,9 +498,9 @@ public class HmpProdInfoController extends BaseController {
         return getDataTable(list);
     }
 
-    /**
+    *//**
      * 产品审核完毕
-     */
+     *//*
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit2")
     public AjaxResult productAudit2(@RequestBody ProductInfo productInfo)
@@ -549,9 +549,9 @@ public class HmpProdInfoController extends BaseController {
         }
     }
 
-    /**
+    *//**
      * 财务复核审核完毕
-     */
+     *//*
     @Log(title = "产品定义提交审核", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/productAudit3")
     public AjaxResult productAudit3(@RequestBody ProductInfo productInfo)
@@ -614,9 +614,9 @@ public class HmpProdInfoController extends BaseController {
         }
     }
 
-    /**
+    *//**
      * 查询产品审核结果
-     */
+     *//*
     @PostMapping("/getProductExamineResult")
     public AjaxResult getProductExamineResult(@RequestBody String productNo){
         AjaxResult ajax = AjaxResult.success();
@@ -628,9 +628,9 @@ public class HmpProdInfoController extends BaseController {
         return ajax;
     }
 
-    /**
+    *//**
      * 产品上线
-     */
+     *//*
     @PostMapping("/productPublish")
     public AjaxResult productPublish(@RequestBody HmpProdInfo productInfo){
         String productNo = productInfo.getProductno();
@@ -659,9 +659,9 @@ public class HmpProdInfoController extends BaseController {
         return toAjax(hmpProdInfoService.updateHmpProdInfo(productInfoDB));
     }
 
-    /**
+    *//**
      * 重新审核
-     */
+     *//*
     @PostMapping("/productReAuditTrack")
     public AjaxResult productReAuditTrack(@RequestBody HmpProdInfo productInfo){
         String productNo = productInfo.getProductno();
@@ -690,9 +690,9 @@ public class HmpProdInfoController extends BaseController {
         return toAjax(hmpProdInfoService.updateHmpProdInfo(productInfoDB));
     }
 
-    /**
+    *//**
      * 产品上下线转换
-     */
+     *//*
     @PutMapping("/changeOnLineStatus")
     public AjaxResult changeOnLineStatus(@RequestBody HmpProdInfo productInfo){
         if(productInfo.getProductstate().equals("下线")){
@@ -704,9 +704,9 @@ public class HmpProdInfoController extends BaseController {
         return toAjax(hmpProdInfoService.updateHmpProdInfo(productInfo));
     }
 
-    /**
+    *//**
      * 更新产品信息、服务机构、服务网点
-     */
+     *//*
     @PostMapping("/productUpdate")
     public AjaxResult productUpdate(@RequestBody ProductInfo product){
         // 获取登录用户名称
@@ -756,9 +756,9 @@ public class HmpProdInfoController extends BaseController {
         return AjaxResult.success(productInfo);
     }
 
-    /**
+    *//**
      * 更新产品的服务项目、服务机构、服务网点
-     */
+     *//*
     @PostMapping("/updateProject")
     public AjaxResult updateProject(@RequestBody ProductInfo product){
         //获取登录用户名
@@ -807,15 +807,15 @@ public class HmpProdInfoController extends BaseController {
     }
 
 
-    /**
+    *//**
      * 客户权益管理-分配规则配置-分配产品字典下拉
      * @return
-     */
+     *//*
     @GetMapping("/selectproductdict")
     public AjaxResult selectProductDict()
     {
         return AjaxResult.success(hmpProdInfoService.selectProductDict());
     }
 
-
+*/
 }

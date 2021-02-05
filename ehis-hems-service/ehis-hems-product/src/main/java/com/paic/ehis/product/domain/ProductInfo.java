@@ -1,78 +1,86 @@
 package com.paic.ehis.product.domain;
 
-import java.util.List;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ProductInfo {
+import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.paic.ehis.common.core.annotation.Excel;
 
-    private HmpProdInfo prodInfo;
+/**
+ * base_product_info(服务产品)对象 product_info
+ * 
+ * @author sino
+ * @date 2021-01-15
+ */
+@Data
+public class ProductInfo extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
 
-    private List<HmpProdServCom> prodServComs;
+    /** 流水号 */
+    private String serialNo;
 
-    private List<HmpComWebSite> comWebSites;
+    /** 产品编码 */
+    @Excel(name = "产品编码")
+    private String productCode;
 
-    private List<HmpProdSalCom> prodSalComs;
+    /** 服务编码 */
+    @Excel(name = "服务编码")
+    private String serviceCode;
 
-    private HmpAuditTrack audit;
+    /** 产品中文名称 */
+    @Excel(name = "产品中文名称")
+    private String productChname;
 
-    private List<HmpServProject> servProjects;
+    /** 产品英文名称 */
+    @Excel(name = "产品英文名称")
+    private String productEnname;
 
-    //供应商
-    private List<HmpServOpera> servOperas;
+    /** 对外产品中文名称 */
+    @Excel(name = "对外产品中文名称")
+    private String outProductChname;
 
-    public List<HmpServOpera> getServOperas() {
-        return servOperas;
-    }
+    /** 对外产品英文名称 */
+    @Excel(name = "对外产品英文名称")
+    private String outProductEnname;
 
-    public void setServOperas(List<HmpServOpera> servOperas) {
-        this.servOperas = servOperas;
-    }
+    /** 产品类型 */
+    @Excel(name = "产品类型")
+    private String productType;
+
+    /** 产品期限信息 */
+    @Excel(name = "产品期限信息")
+    private String productTimeInfo;
+
+    /** 产品期限日期 */
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "产品期限日期")
+    private String productTimeTime;
+
+    /** 产品期限日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "当前时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date nowDate;
 
 
-    public List<HmpServProject> getServProjects() {
-        return servProjects;
-    }
+    /** 产品期限日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "一个月前日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date beforeDate;
 
-    public void setServProjects(List<HmpServProject> servProjects) {
-        this.servProjects = servProjects;
-    }
+    /** 医护管家 */
+    @Excel(name = "医护管家")
+    private String steward;
 
-    public HmpProdInfo getProdInfo() {
-        return prodInfo;
-    }
+    /** 业务状态 */
+    @Excel(name = "业务状态")
+    private String bussinessStatus;
 
-    public void setProdInfo(HmpProdInfo prodInfo) {
-        this.prodInfo = prodInfo;
-    }
+    /** 数据状态 */
+    @Excel(name = "数据状态")
+    private String status;
 
-    public List<HmpProdServCom> getProdServComs() {
-        return prodServComs;
-    }
-
-    public void setProdServComs(List<HmpProdServCom> prodServComs) {
-        this.prodServComs = prodServComs;
-    }
-
-    public List<HmpComWebSite> getComWebSites() {
-        return comWebSites;
-    }
-
-    public void setComWebSites(List<HmpComWebSite> comWebSites) {
-        this.comWebSites = comWebSites;
-    }
-
-    public List<HmpProdSalCom> getProdSalComs() {
-        return prodSalComs;
-    }
-
-    public void setProdSalComs(List<HmpProdSalCom> prodSalComs) {
-        this.prodSalComs = prodSalComs;
-    }
-
-    public HmpAuditTrack getAudit() {
-        return audit;
-    }
-
-    public void setAudit(HmpAuditTrack audit) {
-        this.audit = audit;
-    }
 }

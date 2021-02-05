@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.BaseManualInfoMapper">
+    
+    <resultMap type="BaseManualInfo" id="BaseManualInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="manualCode"    column="manual_code"    />
+        <result property="manualName"    column="manual_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseManualInfoVo">
+        select serial_no, manual_code, manual_name, status, create_by, create_time, update_by, update_time from base_manual_info
+    </sql>
+
+    <select id="selectBaseManualInfoList" parameterType="BaseManualInfo" resultMap="BaseManualInfoResult">
+        <include refid="selectBaseManualInfoVo"/>
+        <where>  
+            <if test="manualCode != null  and manualCode != ''"> and manual_code = #{manualCode}</if>
+            <if test="manualName != null  and manualName != ''"> and manual_name like concat('%', #{manualName}, '%')</if>
+             and status = 'Y'
+        </where>
+    </select>
+    
+    <select id="selectBaseManualInfoById" parameterType="String" resultMap="BaseManualInfoResult">
+        <include refid="selectBaseManualInfoVo"/>
+        where manual_code = #{ManualCode}
+    </select>
+        
+    <insert id="insertBaseManualInfo" parameterType="BaseManualInfo">
+        insert into base_manual_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="manualCode != null">manual_code,</if>
+            <if test="manualName != null">manual_name,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="manualCode != null">#{manualCode},</if>
+            <if test="manualName != null">#{manualName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseManualInfo" parameterType="BaseManualInfo">
+        update base_manual_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manualCode != null">manual_code = #{manualCode},</if>
+            <if test="manualName != null">manual_name = #{manualName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+<!--    <delete id="deleteBaseManualInfoById" parameterType="String">-->
+<!--        delete from base_manual_info where serial_no = #{serialNo}-->
+<!--    </delete>-->
+    <update id="deleteBaseManualInfoById" parameterType="String">
+        update base_manual_info set status = 'N' where manual_code = #{ManualCode}
+    </update>
+
+    <delete id="deleteBaseManualInfoByIds" parameterType="String">
+        delete from base_manual_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+    
+</mapper>

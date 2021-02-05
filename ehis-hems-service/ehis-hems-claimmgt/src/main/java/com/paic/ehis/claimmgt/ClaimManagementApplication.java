@@ -1,6 +1,5 @@
-package com.paic.ehis.claimmanagement;
+package com.paic.ehis.claimmgt;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import com.paic.ehis.common.security.annotation.EnableCustomConfig;
@@ -9,7 +8,7 @@ import com.paic.ehis.common.swagger.annotation.EnableCustomSwagger2;
 
 /**
  * 系统模块
- * 
+ *
  * @author admin
  */
 @EnableCustomConfig

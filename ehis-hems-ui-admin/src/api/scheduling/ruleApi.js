@@ -2,28 +2,28 @@ import request from '@/utils/request'
 
 
 /*抽检规则  */
-export function listInfo(query) {
+export function listInfo(data) {
   return request({
-    url: '/system/on/list',
-    method: 'get',
-    params: query
+    url: '/system/checkrule/selectClaimCaseCheckRule',
+    method: 'post',
+    data: data
   })
 }
 
-// 新增/修改
-export function editInfo(data) {
+// 新增
+export function addInfo(data) {
   return request({
-    url: '/system/on/add',
-    method: 'put',
+    url: '/system/checkrule/addRule',
+    method: 'post',
     data
   })
 }
 
-
-// 删除
-export function delInfo(id) {
+// editRule
+export function editInfo(data) {
   return request({
-    url: '/system/on/delete/'+id,
-    method: 'delete',
+    url: '/system/checkrule/editRule',
+    method: 'post',
+    data
   })
 }

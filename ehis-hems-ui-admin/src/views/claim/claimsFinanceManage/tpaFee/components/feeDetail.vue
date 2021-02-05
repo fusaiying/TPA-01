@@ -13,6 +13,8 @@
         </el-button>
         <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="exportData">清单导出
         </el-button>
+        <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">清单导入
+        </el-button>
       </div>
       <el-table
         :data="tableData"
@@ -65,7 +67,6 @@
 
 <script>
 
-  import { getAllBaseProviderInfo } from '@/api/contractManage/contractManagement'
   import moment from 'moment'
   import {invoiceData, updateInvoice} from '@/api/invoice/api'
 
@@ -80,13 +81,8 @@
   watch: {
     fixInfo: function (newValue) {
       this.fixInfoDetail = newValue;
-      console.log("fixInfo ---------------------------")
-      console.log(newValue);
-      console.log("fixInfo ---------------------------")
-
     },
     value: function (newValue) {
-      console.log(newValue)
       this.dialogVisable = newValue;
       if(this.dialogVisable) {
         // this.initData();
@@ -167,7 +163,10 @@
     },
     //导出
     exportData(){
-
+    },
+    //导入
+    importData(){
+      this.$emit('openImportDialog');
     },
     //关闭对话框
     changeDialogVisable() {

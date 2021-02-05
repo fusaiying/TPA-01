@@ -8,7 +8,7 @@
       :before-close="handleClose"
       :close-on-click-modal="false"
       :show-close="true"
-      width="35%">
+      width="540px">
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="30%" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">

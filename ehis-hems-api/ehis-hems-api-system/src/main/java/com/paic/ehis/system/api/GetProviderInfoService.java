@@ -15,7 +15,7 @@ import java.util.List;
  * 
  * @author admin
  */
-@FeignClient(contextId = "GetProviderInfoService", value = ServiceNameConstants.PROVIDER_SERVICE, fallbackFactory = GetProviderInfoFallbackFactory.class)
+@FeignClient(contextId = "GetProviderInfoService", value = ServiceNameConstants.PROVIDER_SERVICE)
 public interface GetProviderInfoService
 {
     /**

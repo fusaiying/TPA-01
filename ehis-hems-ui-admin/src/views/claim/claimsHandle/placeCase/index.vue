@@ -8,7 +8,9 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="机构：" prop="deptCode">
-                <el-input v-model="form.deptCode" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-select v-model="form.deptCode" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="option in sysDepts" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+                </el-select>
               </el-form-item>
             </el-col>
 
@@ -56,7 +58,7 @@
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
             <span>归档信息</span>
-            <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini"@click="addRecovery(null,'add')">新增</el-button>
+            <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini"@click="addRecovery('','add')">新增</el-button>
           </div>
           <el-table
             :data="tableData"
@@ -69,7 +71,7 @@
             <el-table-column prop="caseBoxNo" label="盒号" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="rptStartNo" :formatter="getFullRptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="deptCode" label="机构" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="deptCode" label="机构" width="150%" align="center" :formatter="getDeptName" show-overflow-tooltip />
             <el-table-column prop="createTime" label="新增时间"  width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="updateTime" label="末次修改时间"  align="center" show-overflow-tooltip />
             <el-table-column prop="updateBy" label="末次修改人" align="center" show-overflow-tooltip />
@@ -98,22 +100,23 @@
           :visible.sync="dialogVisible"
           :dialog-visible="dialogVisible"
           :append-to-body="true"
-          :before-close="handleClose"
+          :before-close="closeDialog"
           :close-on-click-modal="false"
           title=""
-          width="27%">
-          <el-card class="box-card">
-          <el-form ref="pbaceCaseForm" :model="pbaceCaseForm" style="border:0;" label-width="110px" label-position="right" size="mini">
+          width="540px">
+          <el-form ref="pbaceCaseForm" :model="pbaceCaseForm" style="border:0;" label-width="180px" label-position="right" size="mini" :rules="rules" >
             <el-row>
-              <el-col :span="8">
+              <el-col :span="24">
                 <el-form-item label="机构：" prop="deptCode">
-                  上分
+                  <el-select disabled v-model="pbaceCaseForm.deptCode" class="item-width" size="mini" placeholder="请选择">
+                    <el-option v-for="option in sysDepts" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <el-col :span="24">
                 <el-form-item label="理赔类型：" prop="claimType">
                   <el-select  :disabled="read ? 'disabled' : false"  v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
@@ -123,42 +126,44 @@
             </el-row>
 
             <el-row>
-              <el-col :span="8">  <!--:readonly="read ? 'readonly' : false"-->
+              <el-col :span="24">  <!--:readonly="read ? 'readonly' : false"-->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <el-col :span="24">
                 <el-form-item label="盒号：" prop="caseBoxNo">
-                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.caseBoxNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.caseBoxNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <el-col :span="24">
                 <el-form-item label="报案号起止：" prop="rptStartNo">
-                  <el-input v-model="pbaceCaseForm.rptStartNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input v-model="pbaceCaseForm.rptStartNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <el-col :span="24">
                 <el-form-item label="" prop="rptEndNo">
-                  <el-input v-model="pbaceCaseForm.rptEndNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input v-model="pbaceCaseForm.rptEndNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
           </el-form>
-          <span style="margin-right:25px; margin-bottom: 25px;float: right;" class="dialog-footer">
+         <!-- <span style="margin-right:25px; margin-bottom: 25px;float: right;" class="dialog-footer">
             <el-button size="mini" @click="saveInfo" type="primary">确认</el-button>
-          </span>
-          </el-card>
+          </span>-->
+            <div slot="footer" class="dialog-footer" >
+              <el-button type="primary" @click="saveInfo" >确 定</el-button>
+            </div>
         </el-dialog>
 
         <!-- 案件归档 end -->
@@ -172,7 +177,9 @@
 
    import caseList from './components/caseList'
    import moment from 'moment'
-   import { caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
+   import {getDepts, caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
+
+   import {getDept} from '@/api/claim/standingBookSearch'
 
     export default {
       filters: {
@@ -185,7 +192,31 @@
       components: {
         caseList
       },
+
         data() {
+          const checkExistInfo = (rule, value, callback) => {
+            if (!value) {
+              callback(new Error("盒号必填"));
+            }  else if(!this.read) {
+                const params = {
+                  pageNum : 1,
+                  pageSize : 1,
+                  caseBoxNo:value ,
+                };
+                caseFilingList(params).then(response => {
+                  if(response.total == 1) {
+                    callback(new Error("盒号已存在"));
+                  } else {
+                    callback();
+                  }
+                }).catch(error => {
+                  console.log(error);
+                });
+            } else {
+              callback();
+            }
+
+          };
             return {
                read:false,
                 form: {
@@ -216,21 +247,27 @@
                   rpttNo:'',
                   caseBoxNo:'',
                 },
-              dialogVisable: false,
-              listDialog:false,
-              searchBtn:false,
-              rptNo : '',
-              batchNo :'',
-              claimTypes:[],
-              yssOrNo:[],
-              editPower:true,
+                rules: {
+                  deptCode: {trigger: ['change'], required: false, message: '机构必填'},
+                  claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
+                  batchNo: {trigger: ['change'], required: true, message: '批次号必填'},
+                  rptStartNo: {trigger: ['change'], required: true, message: '报案号起必填'},
+                  rptEndNo: {trigger: ['change'], required: true, message: '报案号止必填'},
+                  caseBoxNo: {trigger: ['change'],validator: checkExistInfo, required: true},
+
+                },
+                dialogVisable: false,
+                listDialog:false,
+                searchBtn:false,
+                rptNo : '',
+                batchNo :'',
+                claimTypes:[],
+                yssOrNo:[],
+                editPower:true,
+                sysDepts:[],
             }
         },
       mounted(){
-        // sys_yes_no
-        this.getDicts("sys_yes_no").then(response => {
-          this.ysOrNo = response.data;
-        });
         // claimType
         this.getDicts("claimType").then(response => {
           this.claimTypes = response.data;
@@ -241,6 +278,7 @@
       },
 
       created: function() {
+        this.getDepts();
         this.initData();
       },
       methods: {
@@ -291,13 +329,14 @@
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-
+          this.loading = true;
           caseFilingList(params).then(response => {
             this.totalNum = response.total;
             this.tableData = response.rows;
             this.loading = false;
             this.searchBtn = false;
           }).catch(error => {
+            this.loading = true;
             console.log(error);
           });
         },
@@ -305,23 +344,8 @@
           this.searchBtn = true;
           this.gettableData();
         },
-        viewStream(row) {
-          // this.$router.push({
-          //   path: '/basic-info/contractManage-edit',
-          //   query: {status:'update',rptNo: row.rptNo,flag : row.flag ,providerCode :row.providerCode}
-          //
-          // })
-        },
         addRecovery(row,type) {
-
-          // pbaceCaseForm
-          //this.pbaceCaseForm.deptCode = '';
-          this.pbaceCaseForm.claimType = '';
-          this.pbaceCaseForm.batchNo = '';
-          this.pbaceCaseForm.rptStartNo = '';
-          this.pbaceCaseForm.rptEndNo = '';
-          this.pbaceCaseForm.caseBoxNo = '';
-
+          this.dialogVisible = true;
           if(type == 'edit') {
             this.read = true;
             this.pbaceCaseForm.claimType = row.claimType;
@@ -330,40 +354,47 @@
             this.pbaceCaseForm.rptStartNo = row.rptStartNo;
             this.pbaceCaseForm.rptEndNo = row.rptEndNo;
             this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+          } else {
+            this.resetInfo();
           }
 
-          this.dialogVisible = true;
         },
         saveInfo(){
          let params = this.pbaceCaseForm;
-         if(this.read) {  // 更新
-           editCaseFiling(params).then(response => {
-             if(response.code == 200) {
-               this.dialogVisible = false;
-               this.$message.success('更新成功！');
-               this.gettableData();
-             } else {
-               this.dialogVisible = false;
-               this.$message.error('更新失败！');
-             }
-           }).catch(error => {
-             console.log(error);
-           });
-         } else {  // 新增
-           params.deptCode = '0000';
-           addInfo(params).then(response => {
-             if(response.code == 200) {
-               this.dialogVisible = false;
-               this.$message.success('新增成功！');
-               this.gettableData();
-             } else {
-               this.dialogVisible = false;
-               this.$message.error('新增失败！');
-             }
-           }).catch(error => {
-             console.log(error);
-           });
-         }
+
+
+          this.$refs.pbaceCaseForm.validate((valid) => {
+            if (valid) {
+              if(this.read) {  // 更新
+                editCaseFiling(params).then(response => {
+                  if(response.code == 200) {
+                    this.dialogVisible = false;
+                    this.$message.success('更新成功！');
+                    this.gettableData();
+                  } else {
+                    this.dialogVisible = false;
+                    this.$message.error('更新失败！');
+                  }
+                }).catch(error => {
+                  console.log(error);
+                });
+              } else {  // 新增
+                params.deptCode = this.pbaceCaseForm.deptCode;
+                addInfo(params).then(response => {
+                  if(response.code == 200) {
+                    this.dialogVisible = false;
+                    this.$message.success('新增成功！');
+                    this.gettableData();
+                  } else {
+                    this.dialogVisible = false;
+                    this.$message.error('新增失败！');
+                  }
+                }).catch(error => {
+                  console.log(error);
+                });
+              }
+            }
+          })
         },
         destroyFun(row){
           // editDestroy
@@ -409,18 +440,50 @@
           });
 
         },
-        handleClose() {
-          this.dialogVisible = false;
+        getDepts() {
+          let query = {
+            deptName: ''
+          };
+          getDepts(query).then(response => {
+
+            if(response.data) {
+              for(let i=0; i<response.data.length; i++) {
+                let obj= new Object();
+                obj.dictLabel = response.data[i].deptName;
+                obj.dictValue = response.data[i].deptId.toString();
+                this.sysDepts.push(obj);
+              }
+            }
+            //当前登陆人部门
+            getDept().then(response => {
+              if(response.deptId) {
+                this.form.deptCode = response.deptId.toString();
+                this.pbaceCaseForm.deptCode  = response.deptId.toString();
+              }
+            })
+          })
         },
         closeDialog(){
-          //this.open = false;
+          this.resetInfo();
           this.dialogVisible = false;
+        },
+        resetInfo(){
+          this.pbaceCaseForm.claimType = '';
+          this.pbaceCaseForm.batchNo = '';
+          this.pbaceCaseForm.rptStartNo = '';
+          this.pbaceCaseForm.rptEndNo = '';
+          this.pbaceCaseForm.caseBoxNo = '';
+          this.read = false;
+          this.$refs['pbaceCaseForm'].clearValidate();
         },
         getFullRptNo(row,col){
           return  row.rptStartNo + " - " +row.rptEndNo;
         },
         getYesOrNo(row,col){
           return row.status == 'N' ? '是' : '否'
+        },
+        getDeptName(row,col){
+          return this.selectDictLabel(this.sysDepts, row.deptCode)
         },
         dateFormat(fmt,date) {
           let o = {
@@ -449,25 +512,8 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
-  /*::v-deep.el-dialog{*/
-  /*  display: flex;*/
-  /*  flex-direction: column;*/
-  /*  margin:0 !important;*/
-  /*  position:absolute;*/
-  /*  top:50%;*/
-  /*  left:50%;*/
-  /*  transform:translate(-50%,-50%);*/
-  /*  !*height:600px;*!*/
-  /*  max-height:calc(100% - 30px);*/
-  /*  max-width:calc(100% - 30px);*/
-  /*}*/
-  /*::v-deep.el-dialog .el-dialog__body{*/
-  /*  flex:1;*/
-  /*  overflow: auto;*/
-  /*}*/
-
 </style>
 

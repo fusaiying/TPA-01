@@ -114,6 +114,7 @@
         },
         //查询
         gettableData () {
+          this.loading = true;
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
@@ -121,11 +122,12 @@
             isAsc:'desc'
           };
           listInfo(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+             this.totalNum = response.total;
+             this.tableData = response.rows;
+             this.loading = false;
           }).catch(error => {
             console.log(error);
+            this.loading = false;
           });
         },
         editFun(row) {
@@ -196,7 +198,7 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
   .font_grey {

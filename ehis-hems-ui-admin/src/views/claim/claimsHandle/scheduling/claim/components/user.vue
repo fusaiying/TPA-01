@@ -8,14 +8,13 @@
       :before-close="handleClose"
       :close-on-click-modal="false"
       :show-close="true"
-      width="37%">
-      <el-card class="box-card">
+      width="540px">
         <el-form ref="userForm" :model="userForm" style="border:0;" label-width="180px" label-position="right" size="mini" :rules="rules" >
           <el-row>
             <el-col :span="24">
-              <el-form-item label="角色：" prop="level">
-                <el-select v-model="userForm.level"  size="mini" class="item-width" placeholder="请选择">
-                  <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              <el-form-item label="角色：" prop="roleId">
+                <el-select disabled v-model="userForm.roleId"  size="mini" class="item-width" placeholder="请选择">
+                 <!-- <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />-->
                 </el-select>
               </el-form-item>
             </el-col>
@@ -23,8 +22,8 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="操作用户：" prop="level">
-                <el-select v-model="userForm.level"  size="mini" class="item-width" placeholder="请选择">
+              <el-form-item label="操作用户：" prop="userId">
+                <el-select v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -41,7 +40,7 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="分配状态">
+              <el-form-item  prop="status" label="分配状态">
                 <el-radio-group v-model="userForm.status">
                   <el-radio  v-for="dict in statusOptions"  :key="dict.dictValue"  :label="dict.dictValue" >{{dict.dictLabel}}  </el-radio>
                 </el-radio-group>
@@ -49,10 +48,9 @@
             </el-col>
           </el-row>
         </el-form>
-        <span style="margin-right:50px; margin-bottom: 25px;float: right;" class="dialog-footer">
-            <el-button size="mini" type="primary">确认</el-button>
-        </span>
-      </el-card>
+      <div slot="footer" class="dialog-footer" >
+        <el-button type="primary" @click="saveInfoFun" >确 定</el-button>
+      </div>
     </el-dialog>
     <!-- 角色清单弹框 end -->
   </div>
@@ -60,6 +58,9 @@
 
 
 <script>
+
+  import {editInfo } from '@/api/scheduling/claimApi'
+
   import { getDspatchUser } from '@/api/dispatch/api'
   export default {
   props: {
@@ -79,30 +80,39 @@
       this.dialogVisible = newValue;
     },
     fixInfo: function (newVal){
-      console.log('------------')
-      console.log(newVal)
-      console.log('------------')
+      this.editData = newVal;
+      if( this.editData.type == 'edit') {
+        this.userForm.rate = newVal.rowdata.rate;
+         this.userForm.userId = newVal.rowdata.userId.toString();
+         this.userForm.distId = newVal.rowdata.distId.toString();
+        if(newVal.rowdata.status == 'Y' || newVal.rowdata.status == '01') {
+          this.userForm.status = '01';
+        } else {
+          this.userForm.status = '02';
+        }
+
+      }
 
     },
 
   },
   data() {
     return {
+      editData:{},
       custLevel:[],
         dialogVisible:false,
         userForm : {
-          level: '',
-          recMessageFlag:'',
-          debtAmountUp :'',
-          debtWhitelistId:'',
-          insuredNo:'',
+          distId:'',
+          userId: '',
+          roleId:'',
+          rate :'',
           status:'01',
-          rate:'',
         },
         rules: {
-          level: {trigger: ['change'], required: true, message: '等级必填'},
-          recMessageFlag: {trigger: ['change'], required: true, message: '缴费通知必填'},
-          debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
+          roleId: {trigger: ['change'], required: false, message: '角色必填'},
+          userId: {trigger: ['change'], required: true, message: '操作用户必填'},
+          rate: {trigger: ['change'], required: true, message: '分配比例必填'},
+          status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
       dialogVisible: false,
       // 承接人 交接人 users
@@ -120,6 +130,36 @@
     });
   },
   methods: {
+    saveInfoFun(){
+
+      this.$refs.userForm.validate((valid) => {
+        if (valid) {
+          const params = this.userForm;
+          editInfo(params).then(response => {
+            if (response.code == '200') {
+              this.$message({
+                message: '更新成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              });
+              this.dialogVisible = false;
+              this.$emit('gettableData');
+              this.$emit('closeDialogVisable');
+            } else {
+              this.$message({
+                message: '更新失败！',
+                type: 'error',
+                center: true,
+                showClose: true
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+        }
+      })
+    },
     getUserData () {
       const params = {
         pageNum:1,
@@ -133,7 +173,7 @@
           for(let i=0; i<response.rows.length; i++) {
             let obj= new Object();
             obj.dictLabel = response.rows[i].userName ;
-            obj.dictValue = response.rows[i].userName;
+            obj.dictValue = response.rows[i].userId.toString();
             this.users.push(obj);
           }
         }
@@ -163,11 +203,11 @@
 </script>
 
 <style scoped>
-  ::v-deep.item-width {
+  /deep/.item-width {
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
   .font_grey {

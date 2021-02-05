@@ -8,9 +8,9 @@
       <el-form ref="form" :model="form" style="" label-width="130px" label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="等级：" prop="level">
-              <el-select v-model="form.level" class="item-width" size="mini" placeholder="请选择">
-                <el-option v-for="option in ysOrNo" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+            <el-form-item label="角色查询：" prop="roleId">
+              <el-select v-model="form.roleId" class="item-width" size="mini" placeholder="请选择">
+                <el-option v-for="option in roleSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -41,10 +41,10 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
-            <el-table-column prop="idNoType" label="角色"  align="center" show-overflow-tooltip />
-            <el-table-column prop="name" label="操作用户"  align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="分配比例"   align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="是否有效"    align="center" show-overflow-tooltip />
+            <el-table-column prop="roleName" label="角色"  align="center" show-overflow-tooltip />
+            <el-table-column prop="userName" label="操作用户"  align="center" show-overflow-tooltip />
+            <el-table-column prop="rate" label="分配比例" :formatter="rateOrEqually"  align="center" show-overflow-tooltip />
+            <el-table-column prop="status" label="是否有效" :formatter="getStatusName" align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
@@ -63,10 +63,10 @@
       </el-card>
 
     <!-- 编辑弹框 -->
-    <user-modal :value="diaVisible"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable"/>
+    <user-modal :value="diaVisible"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
-    <assign-modal :value="assignDiaVisible"  :fixInfo="fixInfo"  @closeAssignDiaVisible="closeAssignDiaVisible"/>
+    <assign-modal :value="assignDiaVisible"  :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
 
   </div>
 </template>
@@ -80,7 +80,7 @@
 
   import moment from 'moment'
 
-  import { listInfo , editData,debtWhiteInfo,checkMoney} from '@/api/recoveryRoster/api'
+  import { listInfo ,roleAll } from '@/api/scheduling/claimApi'
 
     export default {
       filters: {
@@ -96,10 +96,11 @@
         data() {
             return {
               form:{
-                level:'',
+                roleId:'',
               },
               fixInfo: {
-
+                rowdata :'',
+                type :''
               },
               tableData: [],
               totalNum: 0,
@@ -124,8 +125,8 @@
                 debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
               },
               diaVisible: false,
-              addFlag:false,
               ysOrNo:[],
+              roleSelects:[],
 
             }
         },
@@ -134,6 +135,7 @@
         this.getDicts("sys_yes_no").then(response => {
           this.ysOrNo = response.data;
         });
+        this.getAllRole();
       },
       computed: {
 
@@ -160,20 +162,22 @@
         //查询
         gettableData () {
 
+          this.loading = true;
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            orderByColumn:'create_time',
+            roleId: this.form.roleId,
+            orderByColumn:'t1.create_time',
             isAsc:'desc'
           };
 
-
           listInfo(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+            this.totalNum = response.total;
+            this.tableData = response.rows;
+            this.loading = false
           }).catch(error => {
             console.log(error);
+            this.loading = false
           });
         },
         searchByFormParms(){
@@ -185,50 +189,42 @@
           this.assignDiaVisible = true;
         },
         editFun(row) {
-          this.addFlag = false;
+          this.fixInfo = {
+            rowdata :row,
+            type :'edit'
+          };
           this.diaVisible = true;
-          // this.recoveryForm.debtWhitelistId =row.debtWhitelistId;
-          // this.recoveryForm.level = row.level;
-          // this.recoveryForm.debtAmountUp = row.debtAmountUp;
-          // this.recoveryForm.recMessageFlag = row.recMessageFlag;
-          // this.recoveryForm.insuredNo =  row.insuredNo;
         },
-        saveDataFun(){
-          // if(this.recoveryForm.insuredNo == '') {
-          //   this.$message({
-          //     message: '请先查询基本信息！',
-          //     type: 'info',
-          //     center: true,
-          //     showClose: true
-          //   });
-          //   return false;
-          // }
-
-          this.$refs.recoveryForm.validate((valid) => {
-            if (valid) {
-              const params = this. recoveryForm;
-              editData(params).then(response => {
-                this.diaVisible = false;
-                this.gettableData();
-                if (response.code == '200') {
-                  this.$message({
-                    message: '保存成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  });
-                } else {
-                  this.$message({
-                    message: '保存失败！',
-                    type: 'error',
-                    center: true,
-                    showClose: true
-                  });
-                }
-              }).catch(error => {
-                console.log(error);
-              });
+        getStatusName(row, col){
+          if(row.status == 'Y' || row.status == '01') {
+            return '有效';
+          } else {
+            return '无效';
+          }
+        },
+        rateOrEqually(row, col){
+          if(row.isEqually == '01') {
+            return '均分';
+          } else {
+            return row.rate;
+          }
+        },
+        getAllRole(){
+          const query ={
+           // status:'Y',
+            xtype:'roleAll',
+          };
+          roleAll(query).then(response => {
+            if(response.rows) {
+              for(let i=0; i<response.rows.length; i++) {
+                let obj= new Object();
+                obj.dictLabel = response.rows[i].roleName;
+                obj.dictValue = response.rows[i].roleId.toString();
+                this.roleSelects.push(obj);
+              }
             }
+          }).catch(error => {
+            console.log(error);
           })
         },
       }
@@ -240,7 +236,7 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
   .font_grey {

@@ -1,0 +1,469 @@
+package com.paic.ehis.order.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.paic.ehis.common.core.annotation.Excel;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * order_info(工单信息)对象 order_info
+ * 
+ * @author sino
+ * @date 2021-01-26
+ */
+@Data
+public class OrderInfo extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
+
+    /** 流水号 */
+    private String serialNo;
+
+    /** 工单编码 */
+    @Excel(name = "工单编码")
+    private String orderCode;
+
+    /** 保单号 */
+    @Excel(name = "保单号")
+    private String policyNo;
+
+    /** 分单号 */
+    @Excel(name = "分单号")
+    private String policyCertificateNo;
+
+    /** 产品编码 */
+    @Excel(name = "产品编码")
+    private String productCode;
+
+    /** 服务项目编码 */
+    @Excel(name = "服务项目编码")
+    private String serviceCode;
+
+    /** 供应商编码 */
+    @Excel(name = "供应商编码")
+    private String supplierCode;
+
+    /** 客户号 */
+    @Excel(name = "客户号")
+    private String customerNo;
+
+    /** 联系人 */
+    @Excel(name = "联系人")
+    private String contactName;
+
+    /** 联系电话 */
+    @Excel(name = "联系电话")
+    private String phone;
+
+    /** 住院地区 */
+    @Excel(name = "住院地区")
+    private String inpatientArea;
+
+    /** 住院地区 */
+    @Excel(name = "住院地区")
+    private List<String> inpatientAreaList;
+
+    /** 期望地区 */
+    @Excel(name = "期望地区")
+    private String expectedArea;
+
+    /** 期望地区 */
+    @Excel(name = "期望地区")
+    private List<String> expectedAreaList;
+
+    /** 就诊地区 */
+    @Excel(name = "就诊地区")
+    private String visitingArea;
+
+    /** 就诊地区 */
+    @Excel(name = "就诊地区")
+    private List<String> visitingAreaList;
+
+    /** 所在城市 */
+    @Excel(name = "所在城市")
+    private String city;
+
+    /** 所在城市 */
+    @Excel(name = "所在城市")
+    private List<String> cityList;
+
+    /** 服务类型 */
+    @Excel(name = "服务类型")
+    private String serviceType;
+
+    /** 服务预约时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "服务预约时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date applyTime;
+
+    /** 期望医院 */
+    @Excel(name = "期望医院")
+    private String expectationHospital;
+
+    /** 期望科室 */
+    @Excel(name = "期望科室")
+    private String expectedDepartment;
+
+    /** 重疾名称 */
+    @Excel(name = "重疾名称")
+    private String seriousDisease;
+
+    /** 手术名称 */
+    @Excel(name = "手术名称")
+    private String operation;
+
+    /** 出院诊断 */
+    @Excel(name = "出院诊断")
+    private String finalDiagnosis;
+
+    /** 症状描述 */
+    @Excel(name = "症状描述")
+    private String symptomDescription;
+
+    /** 原因 */
+    @Excel(name = "原因")
+    private String reason;
+
+    /** 节点状态 */
+    @Excel(name = "节点状态")
+    private String nodeStatus;
+
+    /** 业务状态 */
+    @Excel(name = "业务状态")
+    private String bussinessStatus;
+
+    /** 数据状态 */
+    @Excel(name = "数据状态")
+    private String status;
+
+    /** 姓名 */
+    @Excel(name = "姓名")
+    private String name;
+
+    /** 性别 */
+    @Excel(name = "性别")
+    private String sex;
+
+    /** 证件 */
+    @Excel(name = "证件")
+    private String idCode;
+
+    /** 证件类型 */
+    @Excel(name = "证件类型")
+    private String idType;
+
+    /** 生日 */
+    @Excel(name = "生日")
+    private String birthday;
+
+    /** 产品名称 */
+    @Excel(name = "产品名称")
+    private String productChname;
+
+    /** 服务名称 */
+    @Excel(name = "服务名称")
+    private String serviceName;
+
+    /** 供应商名称 */
+    @Excel(name = "供应商名称")
+    private String chname;
+
+    /** 变更标志 */
+    @Excel(name = "变更标志")
+    private String updateFlag;
+
+    /** 一级科室 */
+    @Excel(name = "一级科室")
+    private String firstDept;
+
+    /** 二级科室 */
+    @Excel(name = "二级科室")
+    private String secondDept;
+
+    /** 服务预约时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "服务预约开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date applyStartTime;
+
+    /** 服务预约时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "服务预约截止时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date applyEndTime;
+
+    public void setSerialNo(String serialNo) 
+    {
+        this.serialNo = serialNo;
+    }
+
+    public String getSerialNo() 
+    {
+        return serialNo;
+    }
+    public void setOrderCode(String orderCode) 
+    {
+        this.orderCode = orderCode;
+    }
+
+    public String getOrderCode() 
+    {
+        return orderCode;
+    }
+    public void setPolicyNo(String policyNo) 
+    {
+        this.policyNo = policyNo;
+    }
+
+    public String getPolicyNo() 
+    {
+        return policyNo;
+    }
+    public void setPolicyCertificateNo(String policyCertificateNo) 
+    {
+        this.policyCertificateNo = policyCertificateNo;
+    }
+
+    public String getPolicyCertificateNo() 
+    {
+        return policyCertificateNo;
+    }
+    public void setProductCode(String productCode) 
+    {
+        this.productCode = productCode;
+    }
+
+    public String getProductCode() 
+    {
+        return productCode;
+    }
+    public void setServiceCode(String serviceCode) 
+    {
+        this.serviceCode = serviceCode;
+    }
+
+    public String getServiceCode() 
+    {
+        return serviceCode;
+    }
+    public void setSupplierCode(String supplierCode) 
+    {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getSupplierCode() 
+    {
+        return supplierCode;
+    }
+    public void setCustomerNo(String customerNo) 
+    {
+        this.customerNo = customerNo;
+    }
+
+    public String getCustomerNo() 
+    {
+        return customerNo;
+    }
+    public void setContactName(String contactName) 
+    {
+        this.contactName = contactName;
+    }
+
+    public String getContactName() 
+    {
+        return contactName;
+    }
+    public void setPhone(String phone) 
+    {
+        this.phone = phone;
+    }
+
+    public String getPhone() 
+    {
+        return phone;
+    }
+    public void setInpatientArea(String inpatientArea) 
+    {
+        this.inpatientArea = inpatientArea;
+    }
+
+    public String getInpatientArea() 
+    {
+        return inpatientArea;
+    }
+    public void setExpectedArea(String expectedArea) 
+    {
+        this.expectedArea = expectedArea;
+    }
+
+    public String getExpectedArea() 
+    {
+        return expectedArea;
+    }
+    public void setVisitingArea(String visitingArea) 
+    {
+        this.visitingArea = visitingArea;
+    }
+
+    public String getVisitingArea() 
+    {
+        return visitingArea;
+    }
+    public void setCity(String city) 
+    {
+        this.city = city;
+    }
+
+    public String getCity() 
+    {
+        return city;
+    }
+    public void setServiceType(String serviceType) 
+    {
+        this.serviceType = serviceType;
+    }
+
+    public String getServiceType() 
+    {
+        return serviceType;
+    }
+    public void setApplyTime(Date applyTime) 
+    {
+        this.applyTime = applyTime;
+    }
+
+    public Date getApplyTime() 
+    {
+        return applyTime;
+    }
+    public void setExpectationHospital(String expectationHospital) 
+    {
+        this.expectationHospital = expectationHospital;
+    }
+
+    public String getExpectationHospital() 
+    {
+        return expectationHospital;
+    }
+    public void setExpectedDepartment(String expectedDepartment) 
+    {
+        this.expectedDepartment = expectedDepartment;
+    }
+
+    public String getExpectedDepartment() 
+    {
+        return expectedDepartment;
+    }
+    public void setSeriousDisease(String seriousDisease) 
+    {
+        this.seriousDisease = seriousDisease;
+    }
+
+    public String getSeriousDisease() 
+    {
+        return seriousDisease;
+    }
+    public void setOperation(String operation) 
+    {
+        this.operation = operation;
+    }
+
+    public String getOperation() 
+    {
+        return operation;
+    }
+    public void setFinalDiagnosis(String finalDiagnosis) 
+    {
+        this.finalDiagnosis = finalDiagnosis;
+    }
+
+    public String getFinalDiagnosis() 
+    {
+        return finalDiagnosis;
+    }
+    public void setSymptomDescription(String symptomDescription) 
+    {
+        this.symptomDescription = symptomDescription;
+    }
+
+    public String getSymptomDescription() 
+    {
+        return symptomDescription;
+    }
+    public void setReason(String reason) 
+    {
+        this.reason = reason;
+    }
+
+    public String getReason() 
+    {
+        return reason;
+    }
+    public void setNodeStatus(String nodeStatus) 
+    {
+        this.nodeStatus = nodeStatus;
+    }
+
+    public String getNodeStatus() 
+    {
+        return nodeStatus;
+    }
+    public void setBussinessStatus(String bussinessStatus) 
+    {
+        this.bussinessStatus = bussinessStatus;
+    }
+
+    public String getBussinessStatus() 
+    {
+        return bussinessStatus;
+    }
+    public void setStatus(String status) 
+    {
+        this.status = status;
+    }
+
+    public String getStatus() 
+    {
+        return status;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("serialNo", getSerialNo())
+            .append("orderCode", getOrderCode())
+            .append("policyNo", getPolicyNo())
+            .append("policyCertificateNo", getPolicyCertificateNo())
+            .append("productCode", getProductCode())
+            .append("serviceCode", getServiceCode())
+            .append("supplierCode", getSupplierCode())
+            .append("customerNo", getCustomerNo())
+            .append("contactName", getContactName())
+            .append("phone", getPhone())
+            .append("inpatientArea", getInpatientArea())
+            .append("expectedArea", getExpectedArea())
+            .append("visitingArea", getVisitingArea())
+            .append("city", getCity())
+            .append("serviceType", getServiceType())
+            .append("applyTime", getApplyTime())
+            .append("expectationHospital", getExpectationHospital())
+            .append("expectedDepartment", getExpectedDepartment())
+            .append("seriousDisease", getSeriousDisease())
+            .append("operation", getOperation())
+            .append("finalDiagnosis", getFinalDiagnosis())
+            .append("symptomDescription", getSymptomDescription())
+            .append("remark", getRemark())
+            .append("reason", getReason())
+            .append("nodeStatus", getNodeStatus())
+            .append("bussinessStatus", getBussinessStatus())
+            .append("status", getStatus())
+            .append("createBy", getCreateBy())
+            .append("createTime", getCreateTime())
+            .append("updateBy", getUpdateBy())
+            .append("updateTime", getUpdateTime())
+            .toString();
+    }
+}

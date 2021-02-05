@@ -55,8 +55,9 @@
                          show-overflow-tooltip/>
         <el-table-column key="2" align="center" min-width="100" prop="chaddreess" label="医院地址" show-overflow-tooltip/>
         <el-table-column key="3" align="center" prop="bankName" min-width="160" label="结算银行" show-overflow-tooltip/>
-        <el-table-column key="5" align="center" prop="accountNo" label="账户号" min-width="120" show-overflow-tooltip/>
-        <el-table-column key="6" align="center" prop="bankDetail" label="银行信息描述" min-width="120" show-overflow-tooltip/>
+        <el-table-column key="5" align="center" prop="bankCode" label="银行账户" min-width="120" show-overflow-tooltip/>
+        <el-table-column key="6" align="center" prop="accountName" label="账户名" min-width="120" show-overflow-tooltip/>
+        <el-table-column key="7" align="center" prop="bankDetail" label="银行信息描述" min-width="120" show-overflow-tooltip/>
       </el-table>        <!--分页组件-->
       <pagination
         v-show="totalCount>0"
@@ -78,10 +79,20 @@
         type: Boolean,
         default: false
       },
+      claimtype:String
     },
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
+      },
+      claimtype: function (newValue) {
+        this.searchForm.isNetworkHospital = newValue
+        getHospitalInfo(this.searchForm).then(res=>{
+          if (res!=null && res!=='' ){
+            this.tableData=res.rows
+            this.totalCount=res.total
+          }
+        })
       },
     },
     data() {
@@ -93,18 +104,22 @@
         tableData: [],
         searchForm: {
           chname1: '',
+          isNetworkHospital: '',
           pageNum:1,
           pageSize:10
         },
       }
     },
     mounted() {
-      getHospitalInfo(this.searchForm).then(res=>{
-        if (res!=null && res!=='' ){
-          this.tableData=res.rows
-          this.totalCount=res.total
-        }
-      })
+      if (this.tableData.length<=0){
+        getHospitalInfo(this.searchForm).then(res=>{
+          if (res!=null && res!=='' ){
+            this.tableData=res.rows
+            this.totalCount=res.total
+          }
+        })
+      }
+
     },
     computed: {},
     methods: {

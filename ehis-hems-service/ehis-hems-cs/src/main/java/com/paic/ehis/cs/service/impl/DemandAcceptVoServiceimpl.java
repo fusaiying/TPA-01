@@ -279,13 +279,19 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
    //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
+        List<String> keyList=new ArrayList<>();
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
+            EditDetail editDetail=new EditDetail();
             String map1key=iter1.next();
             String map1value = String.valueOf(map1.get(map1key));
             String map2value = String.valueOf(map2.get(map1key));
             if (!map1value.equals(map2value)) {
-
+                keyList.add(map1key);
+               // editDetail.setKeyDictType();
+                editDetail.setItemKey(map1key);
+                editDetail.setOldValue(map1value);
+                editDetail.setNowValue(map2value);
             }
         }
 
@@ -301,6 +307,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
             }
         }
+
+
+
 
 
 

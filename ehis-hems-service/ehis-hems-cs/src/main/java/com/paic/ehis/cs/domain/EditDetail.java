@@ -75,7 +75,31 @@ public class EditDetail extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setDetailId(String detailId) 
+    /** 修改原因 */
+    @Excel(name = "修改原因")
+    private String editReason;
+
+    /** 修改说明 */
+    @Excel(name = "修改说明")
+    private String editRemark;
+
+    public String getEditReason() {
+        return editReason;
+    }
+
+    public void setEditReason(String editReason) {
+        this.editReason = editReason;
+    }
+
+    public String getEditRemark() {
+        return editRemark;
+    }
+
+    public void setEditRemark(String editRemark) {
+        this.editRemark = editRemark;
+    }
+
+    public void setDetailId(String detailId)
     {
         this.detailId = detailId;
     }

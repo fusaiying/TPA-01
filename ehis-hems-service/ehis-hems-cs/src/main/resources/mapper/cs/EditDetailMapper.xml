@@ -19,6 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdTime"    column="created_time"    />
         <result property="updatedBy"    column="updated_by"    />
         <result property="updatedTime"    column="updated_time"    />
+        <result property="editRemark"    column="edit_remark"    />
+        <result property="editReason"    column="edit_reason"    />
     </resultMap>
 
     <sql id="selectEditDetailVo">
@@ -47,6 +49,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectEditDetailById" parameterType="String" resultMap="EditDetailResult">
         <include refid="selectEditDetailVo"/>
         where detail_id = #{detailId}
+    </select>
+
+    <select id="selectEdit" parameterType="String" resultMap="EditDetailResult">
+        SELECT
+	i.edit_remark,
+	i.edit_reason,
+	d.old_value,
+	d.now_value,
+	d.item_key
+FROM
+	edit_info i,
+	edit_detail d
+WHERE
+	i.edit_id = d.edit_id
+	AND i.work_order_id=#{workOrderNo}
     </select>
         
     <insert id="insertEditDetail" parameterType="EditDetail">

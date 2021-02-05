@@ -48,6 +48,12 @@ public class EditDetailController extends BaseController
         return getDataTable(list);
     }
 
+
+    @GetMapping(value = "/{workOrderNo}")
+    public AjaxResult getEdit(@PathVariable("workOrderNo") String workOrderNo){
+        return AjaxResult.success(editDetailService.selectEdit(workOrderNo));
+    }
+
     /**
      * 导出修改明细 列表
      */

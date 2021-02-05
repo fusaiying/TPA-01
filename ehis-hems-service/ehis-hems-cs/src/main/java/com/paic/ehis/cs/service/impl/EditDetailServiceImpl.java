@@ -32,6 +32,11 @@ public class EditDetailServiceImpl implements IEditDetailService
         return editDetailMapper.selectEditDetailById(detailId);
     }
 
+    @Override
+    public EditDetail selectEdit(String workOrderNo) {
+        return editDetailMapper.selectEdit(workOrderNo);
+    }
+
     /**
      * 查询修改明细 列表
      * 

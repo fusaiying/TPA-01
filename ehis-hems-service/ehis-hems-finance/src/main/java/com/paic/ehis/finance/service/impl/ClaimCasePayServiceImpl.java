@@ -259,7 +259,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
 //            }
             boolean currFlag = claimCasePayVO.getCaseInfoList().stream().anyMatch(m -> "N".equals(m.getFlag()));
             if (currFlag){
-                return AjaxResult.error("批次下案件币种不统一，请核实");
+                return AjaxResult.success("批次下案件币种不统一，请核实",3);
             }
         }
         ClaimCase financeCase = new ClaimCase();
@@ -320,7 +320,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     claimCaseMapper.updateClaimCase(claimCase);
                 }
             }
-            return AjaxResult.success(financePayInfoMapper.insertFinancePayInfo(financePayInfo));
+            financePayInfoMapper.insertFinancePayInfo(financePayInfo);
+            return AjaxResult.success("确认支付成功！",1);
         }
     }
 
@@ -334,13 +335,20 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     public AjaxResult borrowingCase(ClaimCaseForeignPayVO claimCasePayVO) {
         // 批次号
         String batchNo = claimCasePayVO.getBatchNo();
+        // 外币 判断该批次下所有案件审核岗赔付结论中的账单币种是否一致
+        if (!"CNY".equals(claimCasePayVO.getPayment().getCurrency())){
+            boolean currFlag = claimCasePayVO.getCaseInfoList().stream().anyMatch(m -> "N".equals(m.getFlag()));
+            if (currFlag){
+                return AjaxResult.success("批次下案件币种不统一，请核实",3);
+            }
+        }
         ClaimCase financeCase = new ClaimCase();
         financeCase.setBatchNo(batchNo);
         financeCase.setIsFinanceBack("Y");
         financeCase.setStatus("Y");
         List<ClaimCase> finanBackList = claimCaseMapper.selectClaimCaseList(financeCase);
         if (finanBackList.size() > 0){
-            return AjaxResult.error("此批次存在回退案件，请结案后进行支付");
+            return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
         } else {
             String username = SecurityUtils.getUsername();
             SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
@@ -365,7 +373,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo);
                 }
             }
-            return AjaxResult.success("借款成功！");
+            return AjaxResult.success("借款成功！",1);
         }
     }
 

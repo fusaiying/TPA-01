@@ -2,6 +2,8 @@ package com.paic.ehis.cs.service.impl;
 
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
@@ -188,21 +190,23 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo) {
+        String workOrderNo=demandAcceptVo.getWorkOrderNo();
+        AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
+        WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
         FlowLog flowLog=new FlowLog();
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+
+
         //工单表修改
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 //      demandAcceptVoMapper.insertWorkOrderAccept(workOrderAccept);
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-//        try {ReflectUtils
-//            ComUtil.copyProperties(demandAcceptVo,acceptDetailInfo);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
 
 //      acceptDetailInfo.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
 //      acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
@@ -217,6 +221,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         acceptDetailInfo.setStatus(demandAcceptVo.getStatus());
         acceptDetailInfo.setCreateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));*/
+
+
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
@@ -263,6 +269,43 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
 //        demandAcceptVoMapper.insertFlowLog(flowLog);
+
+        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
+        WorkOrderAccept workOrderAccept2=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+
+
+        Map map1 = JSONObject.parseObject(JSONObject.toJSONString(acceptDetailInfo1), Map.class);
+        Map map2 = JSONObject.parseObject(JSONObject.toJSONString(acceptDetailInfo2), Map.class);
+
+   //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
+
+        Iterator<String> iter1 = map1.keySet().iterator();
+        while(iter1.hasNext()){
+            String map1key=iter1.next();
+            String map1value = String.valueOf(map1.get(map1key));
+            String map2value = String.valueOf(map2.get(map1key));
+            if (!map1value.equals(map2value)) {
+
+            }
+        }
+
+        Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
+        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
+
+        Iterator<String> iter2 = map3.keySet().iterator();
+        while(iter1.hasNext()){
+            String map3key=iter2.next();
+            String map3value = String.valueOf(map3.get(map3key));
+            String map4value = String.valueOf(map4.get(map3key));
+            if (!map3value.equals(map4value)) {
+
+            }
+        }
+
+
+
+
+
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 

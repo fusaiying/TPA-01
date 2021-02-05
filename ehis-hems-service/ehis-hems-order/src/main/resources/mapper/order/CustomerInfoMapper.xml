@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.CustomerInfoMapper">
+    
+    <resultMap type="CustomerInfo" id="CustomerInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="phone"    column="phone"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idCode"    column="id_code"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="policyCertificateNo"    column="policy_certificate_no"    />
+    </resultMap>
+
+    <sql id="selectCustomerInfoVo">
+        select serial_no, customer_no, name, sex, birthday, phone, id_type, id_code, status, create_by, create_time, update_by, update_time from customer_info
+    </sql>
+
+    <select id="selectCustomerInfoList" parameterType="CustomerInfo" resultMap="CustomerInfoResult">
+        <include refid="selectCustomerInfoVo"/>
+        <where>  
+            <if test="customerNo != null  and customerNo != ''"> and customer_no = #{customerNo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="birthday != null  and birthday != ''"> and birthday = #{birthday}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="idType != null  and idType != ''"> and id_type = #{idType}</if>
+            <if test="idCode != null  and idCode != ''"> and id_code = #{idCode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectCustomerInfoById" parameterType="String" resultMap="CustomerInfoResult">
+        <include refid="selectCustomerInfoVo"/>
+        where serial_no = #{serialNo}
+    </select>
+
+    <select id="selectCustomerInfoByIdNew" parameterType="String" resultMap="CustomerInfoResult">
+        SELECT
+            order_info.serial_no,
+            NAME,
+            sex,
+            birthday,
+            customer_info.phone,
+            id_type,
+            id_code,
+            policy_no,
+            policy_certificate_no
+        FROM
+            customer_info
+        LEFT JOIN order_info ON order_info.customer_no = customer_info.customer_no
+        where order_info.order_code = #{orderCode}
+    </select>
+        
+    <insert id="insertCustomerInfo" parameterType="CustomerInfo">
+        insert into customer_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="customerNo != null and customerNo != ''">customer_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="birthday != null and birthday != ''">birthday,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="idType != null and idType != ''">id_type,</if>
+            <if test="idCode != null and idCode != ''">id_code,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="customerNo != null and customerNo != ''">#{customerNo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="birthday != null and birthday != ''">#{birthday},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="idType != null and idType != ''">#{idType},</if>
+            <if test="idCode != null and idCode != ''">#{idCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomerInfo" parameterType="CustomerInfo">
+        update customer_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerNo != null and customerNo != ''">customer_no = #{customerNo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="idType != null and idType != ''">id_type = #{idType},</if>
+            <if test="idCode != null and idCode != ''">id_code = #{idCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteCustomerInfoById" parameterType="String">
+        delete from customer_info where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteCustomerInfoByIds" parameterType="String">
+        delete from customer_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+    
+</mapper>

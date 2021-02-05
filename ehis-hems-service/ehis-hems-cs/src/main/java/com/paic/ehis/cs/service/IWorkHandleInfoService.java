@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.service;
 
 import java.util.List;
+
+import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 

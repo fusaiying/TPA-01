@@ -15,6 +15,8 @@ public interface DemandAcceptVoMapper {
 
     public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
 
+    public DemandAcceptVo selectDemandAcceptVoById(String workOrderNo);
+
     public int updateStatus(String workOrderNo);
 
     public int updateStatusM(String[] workOrderNos);

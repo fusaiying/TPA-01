@@ -105,8 +105,8 @@
           :before-close="handleClose"
           :close-on-click-modal="false"
           :show-close="false"
-          width="60%">
-          <el-card class="box-card" style="margin-bottom: 30px;margin-left: 30px;margin-right: 30px">
+          width="80%">
+          <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>追讨白名单维护</span>
               <span style="float: right;">
@@ -549,13 +549,13 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
   .font_grey {
     color: #BFBFBF;
   }
-  /*::v-deep.el-dialog{*/
+  /*/deep/.el-dialog{*/
   /*  display: flex;*/
   /*  flex-direction: column;*/
   /*  margin:0 !important;*/
@@ -567,7 +567,7 @@
   /*  max-height:calc(100% - 30px);*/
   /*  max-width:calc(100% - 30px);*/
   /*}*/
-  /*::v-deep.el-dialog .el-dialog__body{*/
+  /*/deep/.el-dialog .el-dialog__body{*/
   /*  flex:1;*/
   /*  overflow: auto;*/
   /*}*/

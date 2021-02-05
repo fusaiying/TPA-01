@@ -59,7 +59,7 @@
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
           <claimsTable :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource" :problemTypes="problemTypes" :table-data="pendingTableData"  :status="activeName"/>
         </el-tab-pane>
-        <el-tab-pane :label="`已处理 （${ completedTotal }）`" name="03">
+        <el-tab-pane :label="`已处理(${ completedTotal })`" name="03">
           <claimsTable :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource" :problemTypes="problemTypes" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>

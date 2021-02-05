@@ -2,28 +2,38 @@ import request from '@/utils/request'
 
 
 /*案件分配规则  */
-export function listInfo(query) {
+export function roleAll(query) {
   return request({
-    url: '/system/whitelist/list',
+    url: '/system/role/list',
     method: 'get',
     params: query
   })
 }
 
-// 新增/修改
+
+/*案件分配规则  */
+export function listInfo(query) {
+  return request({
+    url: '/system/dist/selectClaimCaseDist',
+    method: 'get',
+    params: query
+  })
+}
+
+//修改
 export function editInfo(data) {
   return request({
-    url: '/system/whitelist/add',
-    method: 'post',
+    url: '/system/dist/updateClaimCaseDistOne',
+    method: 'put',
     data
   })
 }
 
-
-// 删除
-export function delInfo(id) {
+//案件分配一键均分
+export function editInfoAverage(data) {
   return request({
-    url:  '/system/whitelist/remove/'+ id,
-    method: 'delete',
+    url: '/system/dist/updateClaimCaseAverage',
+    method: 'put',
+    data
   })
 }

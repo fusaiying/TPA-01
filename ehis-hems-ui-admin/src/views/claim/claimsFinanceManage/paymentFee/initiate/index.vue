@@ -1,0 +1,247 @@
+<template>
+  <div class="app-container">
+    <!-- 查询条件 start -->
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
+        <span>交接案件提取</span>
+      </div>
+      <el-form ref="searchForm" :model="formSearch" style="padding-bottom: 30px;" label-width="110px" label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="任务号：" prop="settleTaskNo">
+              <el-input v-model="formSearch.settleTaskNo" class="item-width" clearable size="mini" placeholder="请输入"
+                        @keyup.native.enter="searchHandle"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="结算日期：" prop="settleDateArr">
+              <el-date-picker  v-model="formSearch.settleDateArr"  style="width:220px;"  size="mini"
+                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="建立日期：" prop="createTimeArr">
+              <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
+                type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="付款状态：" prop="settleStatus">
+              <el-select v-model="formSearch.settleStatus" clearable class="item-width" placeholder="请选择">
+                <el-option v-for="option in settleStatus" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="批次总金额：" prop="batchTotal">
+              <el-select v-model="formSearch.batchTotal" clearable class="item-width" placeholder="请选择">
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="出单公司：" prop="companyCode">
+              <el-select v-model="formSearch.companyCode" clearable class="item-width" placeholder="请选择">
+                <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <div style="text-align: right; margin-right: 10px;">
+          <el-button size="mini" type="primary"  @click="resetForm">清单导入</el-button>
+          <el-button size="mini" type="primary"  @click="openDialog">发起任务</el-button>
+          <el-button :loading="searchLoad" size="mini" type="success" icon="el-icon-search" @click="searchHandle" >查询</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm">重置</el-button>
+        </div>
+      </el-form>
+    </el-card>
+    <!-- 查询条件 end -->
+
+    <el-card class="box-card" style="margin-top: 10px;">
+      <div slot="header" class="clearfix">
+        <span>交接任务列表({{total}})</span>
+      </div>
+
+      <!--交接任务列表 start -->
+      <feeTable   :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <!--交接任务列表 end-->
+
+      <!--分页组件-->
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="pendPageInfo.page"
+        :limit.sync="pendPageInfo.pageSize"
+        @pagination="initData"
+      />
+
+    </el-card>
+
+    <!--详情 -->
+    <fee-detail :value="detailDialog" :fixInfo="fixInfo" @closeDetailDialog="closeDetailDialog"/>
+
+  </div>
+</template>
+
+<script>
+
+  import {companyList} from '@/api/tpaFee/api'
+  import { listInfo } from '@/api/paymentFee/api'
+  import feeDetail from "../components/feeDetail";
+  import feeTable from '../components/feeTable'
+  export default {
+    components: {
+      feeDetail,
+      feeTable,
+    },
+    data() {
+      return {
+
+        fixInfo:{
+          rowData:{},
+          type:'',
+        },
+        btnSearch:false,
+        detailDialog:false,
+        status:'01',
+        searchLoad:false,
+        tableData: [],
+        formSearch: {
+          settleTaskNo: '',
+          settleDateArr: '',
+          createTimeArr: '',
+          settleStatus: '',
+          batchTotal: '',
+          companyCode: '',
+        },
+        initTableData: [],
+        total: 0,
+        pendPageInfo: {
+          page: 1,
+          pageSize: 10
+        },
+        //出单公司
+        companySelect:[],
+        //结算状态
+        settleStatus:[],
+
+      }
+    },
+    mounted(){
+      //结算状态
+      this.getDicts("tpa_settle_status").then(response => {
+        this.settleStatus = response.data;
+      });
+    },
+    created() {
+      this.getCompanyList();
+      this.initData();
+    },
+    watch: {
+
+    },
+    computed: {
+    },
+    methods: {
+      resetForm() {
+        this.$refs.searchForm.resetFields()
+      },
+      searchHandle() {
+        this.btnSearch = true;
+        this.pendPageInfo.page = 1;
+        this.pendPageInfo.pageSize = 10;
+        this.total = 0;
+        this.initData();
+      },
+      // 查询处理中
+      initData() {
+
+        let settleDateStart = '';
+        let settleDateEnd = '';
+        let settleDateArr = this.formSearch.settleDateArr;
+        if('' != settleDateArr) {
+          settleDateStart = settleDateArr[0];
+          settleDateEnd = settleDateArr[1];
+        }
+
+        let createTimeStrt = '';
+        let createTimeEnd = '';
+        let createTimeArr = this.formSearch.createTimeArr;
+        if('' != createTimeArr) {
+          createTimeStrt = createTimeArr[0];
+          createTimeEnd = createTimeArr[1];
+        }
+
+        const params = {};
+        params.pageNum = this.pendPageInfo.page;
+        params.pageSize = this.pendPageInfo.pageSize;
+
+        params.settleTaskNo = this.formSearch.settleTaskNo;
+        params.settleStatus = this.formSearch.settleStatus;
+        params.batchTotal = this.formSearch.batchTotal;
+        params.companyCode = this.formSearch.companyCode;
+
+        if(!this.btnSearch) {
+          params.pageType = '01';
+        }
+
+        listInfo(params).then(res => {
+          if (res.code == '200') {
+            this.total = res.total;
+            this.initTableData = res.rows;
+          }
+        });
+      },
+      closeDetailDialog() {
+        this.detailDialog = false
+      },
+      openDetail(info){
+        this.fixInfo = {
+          rowData:info.row,
+          type:info.type,
+        },
+        this.detailDialog = true
+      },
+      openDialog(){
+        this.fixInfo = {
+          rowData:{settleTaskNo:''},
+          type:'show',
+        },
+        this.detailDialog = true;
+      },
+      //出单公司
+      getCompanyList(){
+        const query ={
+          pageNum:1,
+          pageSize:10000,
+          status:'Y',
+          xtype:'companyList',
+        };
+        companyList(query).then(response => {
+          if(response.rows) {
+            for(let i=0; i<response.rows.length; i++) {
+              let obj= new Object();
+              obj.dictLabel = response.rows[i].companyname;
+              obj.dictValue = response.rows[i].companycode.toString();
+              this.companySelect.push(obj);
+            }
+          }
+        }).catch(error => {
+          console.log(error);
+        })
+      },
+    }
+  }
+</script>
+
+<style scoped>
+  .item-width {
+    width: 220px;
+  }
+</style>

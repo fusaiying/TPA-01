@@ -59,6 +59,8 @@ public class ServiceProcessingVo  extends BaseEntity {
 
     /**安抚或通融发生费用成本*/
     private String costsIncurred;
+    /**判断暂存保存标记*/
+    private String sign;
 
 
 }

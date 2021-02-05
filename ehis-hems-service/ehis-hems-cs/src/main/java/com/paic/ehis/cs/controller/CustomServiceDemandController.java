@@ -73,6 +73,15 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iDemandAcceptVoService.insertServiceInfo(demandAcceptVo));
     }
 
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "修改受理 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/serviceUpdate")
+    public AjaxResult serviceUpdate(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+    {
+        return toAjax(iDemandAcceptVoService.updateServiceInfo(demandAcceptVo));
+    }
+
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertServiceProcessing")

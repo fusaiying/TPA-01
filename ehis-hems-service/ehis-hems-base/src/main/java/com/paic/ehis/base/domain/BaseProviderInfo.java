@@ -260,6 +260,10 @@ public class BaseProviderInfo extends BaseEntity
     @Excel(name = "银行账户名称")
     private String accountName;
 
+    private String currency;
+
+    /** 是否直结 */
+    private String isNetworkHospital;
 
     public void setProviderCode(String providerCode) 
     {

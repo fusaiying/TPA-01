@@ -70,6 +70,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bankCode"    column="bank_code"    />
         <result property="bankDetail"    column="bank_detail"    />
         <result property="accountName"    column="account_name"    />
+        <result property="currency"    column="currency"    />
+        <result property="isNetworkHospital"    column="isNetworkHospital"    />
     </resultMap>
 
 
@@ -970,13 +972,21 @@ WHERE
         bpi.first_attribute,
         bpi.second_attribute,
         bpi.chname1,
+        bps.currency,
         bb.create_time
         FROM
         base_bank bb
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = bb.provider_code and bpi.status='Y' and bpi.update_flag = '0'
+        LEFT JOIN base_provider_settle bps ON bps.provider_code = bb.provider_code
+        AND bps. STATUS = 'Y'
+        AND bps.update_flag = '0'
+        LEFT JOIN base_provider_service bpr ON bpr.provider_code = bb.provider_code
+        AND bpr. STATUS = 'Y'
+        AND bpr.update_flag = '0'
         <where>
             <if test="chname1 != null  and chname1 != ''"> and (bpi.chname1 like concat('%', #{chname1}, '%') or bpi.enname1 like concat('%', #{chname1}, '%'))</if>
             <if test="providerCode != null  and providerCode != ''"> and bpi.provider_code = #{providerCode}</if>
+            <if test="isNetworkHospital == '01'"> and (bpr.networkHospital_type_str is not null and bpr.networkHospital_type_str != '')</if>
             and bb.status ='Y' and bb.bussiness_status = '01' order by create_time desc
         </where>
     </select>

@@ -3,6 +3,7 @@ package com.paic.ehis.system.api;
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
+import com.paic.ehis.system.api.factory.GetProviderInfoFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

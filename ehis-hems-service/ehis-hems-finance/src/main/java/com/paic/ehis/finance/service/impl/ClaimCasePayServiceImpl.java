@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -61,7 +62,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectInitList() {
-        Long userId = SecurityUtils.getLoginUser().getUserId();
+        Long userId = SecurityUtils.getUserId();
         SysUser sysUser = sysUserMapper.selectUserById(userId);
         // 获取用户的所属机构
         String deptId = sysUser.getDeptId().toString();
@@ -78,7 +79,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     @Override
     public List<Map<String, Object>> selectBatchList(ClaimCasePayDTO claimCasePayDTO) {
         if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            Long userId = SecurityUtils.getLoginUser().getUserId();
+            Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);
             // 获取用户的所属机构
             claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());
@@ -270,7 +271,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             return AjaxResult.error("此批次存在回退案件，请结案后进行支付");
         } else {
             String username = SecurityUtils.getUsername();
-            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
+            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
             // 支付信息
             ClaimCasePaymentVO payment = claimCasePayVO.getPayment();
             // 案件信息
@@ -342,7 +343,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             return AjaxResult.error("此批次存在回退案件，请结案后进行支付");
         } else {
             String username = SecurityUtils.getUsername();
-            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
+            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 // 案件不为结案、撤件状态
@@ -375,7 +376,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectInitForeignList() {
-        Long userId = SecurityUtils.getLoginUser().getUserId();
+        Long userId = SecurityUtils.getUserId();
         // 获取用户的所属机构
         String deptId = sysUserMapper.selectUserById(userId).getDeptId().toString();
         List<Map<String,Object>> initList = claimBatchMapper.selectPayForeignBatchInit(deptId);
@@ -391,7 +392,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     @Override
     public List<Map<String, Object>> selectForeignBatchList(ClaimCasePayDTO claimCasePayDTO) {
         if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            Long userId = SecurityUtils.getLoginUser().getUserId();
+            Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);
             // 获取用户的所属机构
             claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());

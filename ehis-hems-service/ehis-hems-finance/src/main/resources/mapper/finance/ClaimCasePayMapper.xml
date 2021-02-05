@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.ClaimCasePayMapper">
+    <resultMap type="com.paic.ehis.finance.domain.vo.ClaimCasePayInfoVO" id="PayResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="name"    column="name"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="treatmentDate"    column="treatment_date"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="discountedAmount"    column="discounted_amount"    />
+        <result property="advancePayment"    column="advance_payment"    />
+        <result property="copay"    column="copay"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="borrowAmount"    column="borrow_amount"    />
+        <result property="payStatus"    column="pay_status"    />
+    </resultMap>
+    <resultMap type="com.paic.ehis.finance.domain.vo.ClaimCaseForeignPayInfoVO" id="ForeignPayResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="name"    column="name"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="treatmentDate"    column="treatment_date"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="discountedAmount"    column="discounted_amount"    />
+        <result property="advancePayment"    column="advance_payment"    />
+        <result property="copay"    column="copay"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="borrowAmount"    column="borrow_amount"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="exchangeRate" column="exchange_rate"/>
+        <result property="payAmountForeign" column="pay_amount_foreign"/>
+        <result property="billCurrency" column="bill_currency"/>
+    </resultMap>
+
+    <select id="selectPayInfoList" parameterType="string" resultMap="PayResult">
+        SELECT
+            a.rpt_no,
+            min( b.treatment_start_date ) treatment_start_date,
+            c.`name`,
+            sum( b.bill_amount ) bill_amount,
+            (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,
+            sum( b.tp_advance_payment + b.ss_advance_payment ) advance_payment,
+            sum( b.copay ) copay,
+            d.cal_amount,
+            d.debt_amount,
+            a.case_status,
+            a.pay_status
+        FROM
+            claim_case a
+            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no
+            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no
+            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no
+        WHERE
+            a.batch_no = #{batchNo}
+            AND a.STATUS = 'Y'
+            AND b.`status` = 'Y'
+            AND c.`status` = 'Y'
+            AND d.`status` = 'Y'
+        GROUP BY
+            a.rpt_no,
+            c.`name`,
+            d.cal_amount,
+            d.debt_amount
+		ORDER BY
+			a.rpt_no
+    </select>
+
+    <select id="selectForeignPayInfoList" parameterType="string" resultMap="ForeignPayResult">
+        SELECT
+            a.rpt_no,
+            min( b.treatment_start_date ) treatment_start_date,
+            c.`name`,
+            sum( b.bill_amount ) bill_amount,
+            (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,
+            sum( b.tp_advance_payment + b.ss_advance_payment ) advance_payment,
+            sum( b.copay ) copay,
+            d.cal_amount,
+            d.debt_amount,
+			d.exchange_rate,
+			d.pay_amount_foreign,
+            a.case_status,
+            a.pay_status,
+			d.bill_currency
+        FROM
+            claim_case a
+            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no
+            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no
+            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no
+        WHERE
+            a.batch_no = #{batchNo}
+            AND a.STATUS = 'Y'
+            AND b.`status` = 'Y'
+            AND c.`status` = 'Y'
+            AND d.`status` = 'Y'
+        GROUP BY
+            a.rpt_no,
+            c.`name`,
+            d.cal_amount,
+            d.debt_amount,
+            d.exchange_rate,
+            d.pay_amount_foreign,
+			d.bill_currency
+        ORDER BY
+            a.rpt_no
+    </select>
+
+</mapper>

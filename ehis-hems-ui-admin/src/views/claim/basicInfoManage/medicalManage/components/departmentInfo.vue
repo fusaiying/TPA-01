@@ -141,22 +141,23 @@
       </el-button>
 
     </el-card>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :modal="modalValue"
-      :close-on-click-modal="false"
-      title="提示"
-      width="30%">
-      <span>{{ '删除当前行科室信息？' }}</span>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="delConfirm">确 定</el-button>
-        </span>
-    </el-dialog>
+    <!--    <el-dialog
+          :visible.sync="dialogVisible"
+          :modal="modalValue"
+          :close-on-click-modal="false"
+          title="提示"
+          width="30%">
+          <span>{{ '删除当前行科室信息？' }}</span>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="delConfirm">确 定</el-button>
+            </span>
+        </el-dialog>-->
   </el-form>
 </template>
 <script>
 import {getdepInfo, adddepInfo} from "@/api/baseInfo/medicalManage";
+
 
 export default {
   props: {
@@ -343,14 +344,26 @@ export default {
       })
     },
 
-    delConfirm() {
-      this.dialogVisible = false
-      this.departmentForm.form.splice(this.index,1)
-    },
+    /*    delConfirm() {
+          this.dialogVisible = false
+          this.departmentForm.form.splice(this.index,1)
+        },*/
 
     delHandle(index, row) {
-      this.dialogVisible = true
+      //this.dialogVisible = true
       this.index = index
+      this.$confirm('是否删除当前行科室信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.departmentForm.form.splice(this.index,1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     editHandle(index, row) {
       this.departmentForm.form[index].id = ''

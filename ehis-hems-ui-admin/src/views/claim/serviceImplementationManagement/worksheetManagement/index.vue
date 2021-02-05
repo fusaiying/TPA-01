@@ -5,8 +5,8 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="供应商名称：" prop="supplierName">
-              <el-select v-model="formSearch.supplierName" class="item-width" placeholder="请选择" clearable>
+            <el-form-item label="供应商名称：" prop="supplierCode">
+              <el-select v-model="formSearch.supplierCode" class="item-width" placeholder="请选择" clearable filterable>
                 <el-option v-for="item in supplierNameList" :label="item.supplierName" :value="item.supplierCode"
                            :key="item.supplierCode"/>
               </el-select>
@@ -14,15 +14,13 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="产品名称：" prop="productName">
-              <el-select v-model="formSearch.productName" class="item-width"  clearable >
+            <el-form-item label="产品名称：" prop="productCode">
+              <el-select v-model="formSearch.productCode" class="item-width"  clearable >
                 <el-option v-for="item in productNameList" :label="item.productName" :value="item.productCode"
                            :key="item.productCode"/>
               </el-select>
             </el-form-item>
           </el-col>
-
-
           <el-col :span="8">
             <el-form-item label="申请日期："  prop="daterangeArr">
               <el-date-picker
@@ -36,6 +34,8 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
 
           <el-col :span="8">
             <el-form-item label="客户姓名：" prop="name">
@@ -88,6 +88,8 @@
 
 
         </el-row>
+
+
         <div style="text-align: right; margin-right: 10px;">
           <el-button
             size="mini"
@@ -114,9 +116,9 @@
           tooltip-effect="dark"
           style="width: 100%;">
           <el-table-column label="工单编号" prop="orderCode" align="center" show-overflow-tooltip/>
-          <el-table-column label="产品名称" prop="productName" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
           <el-table-column label="服务项目" prop="serviceName"  align="center" show-overflow-tooltip/>
-          <el-table-column label="供应商名称" prop="supplierName"  align="center" show-overflow-tooltip/>
+          <el-table-column label="供应商名称" prop="chname"  align="center" show-overflow-tooltip/>
           <el-table-column label="客户姓名" prop="name" align="center" show-overflow-tooltip/>
           <el-table-column label="性别" prop="sex" align="center" :formatter="getCsSex" show-overflow-tooltip/>
           <el-table-column label="证件类型" prop="idType" align="center" :formatter="getIdType" show-overflow-tooltip/>
@@ -127,9 +129,9 @@
 
           <el-table-column label="操作" align="center" min-width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.bussinessStatus !=='04' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.$index,scope.row)">处理</el-button>
-              <el-button v-if="scope.row.bussinessStatus !=='04' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="distribution(scope.$index,scope.row)">分配</el-button>
-              <el-button v-if="scope.row.bussinessStatus !=='04' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="cancelOrder(scope.$index,scope.row)">取消工单</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.$index,scope.row)">处理</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="distribution(scope.$index,scope.row)">分配</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="cancelOrder(scope.$index,scope.row)">取消工单</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -143,7 +145,7 @@
         />
       </div>
     </el-card>
-<!--    分配-->
+    <!--    分配-->
     <el-dialog
       :visible.sync="allotDialogVisable"
       :append-to-body="true"
@@ -155,10 +157,10 @@
       <el-form ref="allotForm" :model="allotForm"  size="mini" label-width="150px"  :rules="allotFormRules">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="选择供应商：" prop="supplierName" >
-              <el-select v-model="allotForm.supplierName" class="item-width" placeholder="请选择" clearable style="width: 200px">
-                <el-option v-for="item in productTypeOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
+            <el-form-item label="选择供应商：" prop="supplierCode" >
+              <el-select v-model="allotForm.supplierCode" class="item-width" placeholder="请选择" clearable style="width: 200px" filterable>
+                <el-option v-for="item in supplierProductList" :label="item.supplierName" :value="item.supplierCode"
+                           :key="item.supplierCode"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -171,7 +173,7 @@
       </div>
 
     </el-dialog>
-<!--    取消工单-->
+    <!--    取消工单-->
     <el-dialog
       :visible.sync="dialogVisable"
       :append-to-body="true"
@@ -202,15 +204,22 @@
 </template>
 
 <script>
-import {getSupplierInfo,getList,getProductInfo} from '@/api/serviceProductManage/serviceImplManage'
+import {
+  getSupplierInfo,
+  getList,
+  getProductInfo,
+  getAllProSuppInfo,
+  queryinfo,allocation,cancalOrder
+} from '@/api/serviceProductManage/serviceImplManage'
 
 
 export default {
   data() {
     return {
+      serviceInfo:{},
       allotDialogVisable: false,
       allotForm: {
-        supplierName: ''
+        supplierCode: ''
       },
       remarkForm: {
         reason: ''
@@ -220,8 +229,8 @@ export default {
       modalValue: false,
       dialogVisible:false,
       formSearch: {
-        supplierName:'',
-        productName:'',
+        supplierCode:'',
+        productCode:'',
         daterangeArr: [],
         name:'',
         idCode:'',
@@ -235,8 +244,8 @@ export default {
       params: {
         pageNum: 1,
         pageSize: 10,
-        supplierName:'',
-        productName:'',
+        supplierCode:'',
+        productCode:'',
         applyStartTime: '',
         applyEndTime: '',
         name:'',
@@ -248,20 +257,17 @@ export default {
         orderCode:''
       },
       remarkFormRules:{reason: [{required:true,message:'取消原因不能为空',trigger:'blur'}]},
-      allotFormRules:{supplierName: [{required:true,message:'供应商不能为空',trigger:'change'}]},
+      allotFormRules:{supplierCode: [{required:true,message:'供应商不能为空',trigger:'change'}]},
 
       tableData: [],
       totalCount: 0,
       loading: false,
 
-
+      supplierProductList:[],
       supplierNameList:[],
-
-      productTypeOptions:[],
-
-
+      productNameList:[],
       product_bussiness_statusOptions: [],
-      productTimeTimeOptions:[],
+
 
       worksheetBussinessStatusOptions: [],
       cs_sexOptions: [],
@@ -270,8 +276,8 @@ export default {
     }
   },
   created() {
-  //获取产品定义信息
-    this.getData()
+    //获取工单信息
+    this.init()
     //供应商名称list
     this.getSupplierList()
     //服务产品list
@@ -286,24 +292,30 @@ export default {
       this.card_typeOptions = response.data;
     });
 
-
-
     this.getDicts("product_bussiness_status").then(response => {
       this.product_bussiness_statusOptions = response.data;
     });
-    this.getDicts("productType").then(response => {
-      this.productTypeOptions = response.data;
-    });
-    this.getDicts("productTimeTime").then(response => {
-      this.productTimeTimeOptions = response.data;
-    });
+
+
 
   },
   methods: {
+    init(){
+      this.loading = true
+      //调用查询接口
+      getList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+
+    },
     //供应商名称
     getSupplierList(){
       getSupplierInfo().then(res=>{
-            this.supplierNameList=res.data
+        this.supplierNameList=res.data
       })
     },
     //产品名称
@@ -314,14 +326,35 @@ export default {
     },
 
     //分配
-    distribution(index,row){
-      this.index=index
-      this.allotDialogVisable=true
+    distribution(index,row) {
+      this.index = index
+      this.allotDialogVisable = true
       //调用服务编码查询供应商的接口
-      let query={
-        serviceCode: this.tableData[index].serviceName
+      let query = {
+        serviceCode: row.serviceCode,
+        productCode: row.productCode
       }
       //供应商【】清空
+      this.supplierProductList = []
+      getAllProSuppInfo(query).then(res => {
+        if (res.code == '200') {
+          this.supplierProductList = res.data
+        }
+      })
+      //服务信息清空
+      this.serviceInfo={}
+      let queryData={
+        orderCode : row.orderCode
+      }
+      //查询服务信息
+      queryinfo(queryData).then(res => {
+        if (res.code == '200') {
+          this.serviceInfo = res.data
+          //this.baseForm.secondDept=''
+          // this.$set(this.baseForm,'secondDept','')
+
+        }
+      })
 
     },
     //取消工单
@@ -341,18 +374,6 @@ export default {
     getIdType(row){
       return this.selectDictLabel(this.card_typeOptions, row.idType)
     },
-
-
-
-
-
-
-    getProductType(row){
-      return this.selectDictLabel(this.productTypeOptions, row.productType)
-    },
-    getProductInfo(row){
-      return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
-    },
     getBussinessStatus(row){
       return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
     },
@@ -365,8 +386,8 @@ export default {
       this.getData()
     },
     getData() {
-      this.params.supplierName= this.formSearch.supplierName
-      this.params.productName= this.formSearch.productName
+      this.params.supplierCode= this.formSearch.supplierCode
+      this.params.productCode= this.formSearch.productCode
       this.params.name= this.formSearch.name
       this.params.idCode= this.formSearch.idCode
       this.params.phone= this.formSearch.phone
@@ -374,7 +395,8 @@ export default {
       this.params.policyCertificateNo= this.formSearch.policyCertificateNo
       this.params.bussinessStatus= this.formSearch.bussinessStatus
       this.params.orderCode= this.formSearch.orderCode
-
+      this.params.applyStartTime= ''
+      this.params.applyEndTime= ''
       if(this.formSearch.daterangeArr!=null && this.formSearch.daterangeArr.length==2){
         this.params.applyStartTime= this.formSearch.daterangeArr[0]
         this.params.applyEndTime= this.formSearch.daterangeArr[1]
@@ -401,27 +423,28 @@ export default {
     saveRemark(){
       this.$refs.remarkForm.validate(valid => {
         if(valid){
-          let productData=this.tableData[this.index]
-          //调用接口
-/*          insertMangerInfo(productData).then(res=>{
+          let data={
+            orderCode: this.tableData[this.index].orderCode,
+            reason: this.remarkForm.reason
+          }
+          cancalOrder(data).then(res=>{
             if (res !=null && res.code == '200') {
               this.$message({
-                message: '操作成功！',
+                message: '取消工单成功！',
                 type: 'success',
                 center: true,
                 showClose: true
               })
-              this.saveFlag=true
             } else {
               this.$message({
-                message: '操作失败!',
+                message: '取消工单失败!',
                 type: 'error',
                 center: true,
                 showClose: true
               })
-              this.tableData[this.checkIndex].bussinessStatus='03'
             }
-          })*/
+          })
+
         }
       })
     },
@@ -433,8 +456,31 @@ export default {
     saveAllot(){
       this.$refs.allotForm.validate(valid => {
         if (valid) {
-          let productData = this.tableData[this.index]
-          //调用分配的接口
+          //供应商编码重新赋值
+          this.serviceInfo.supplierCode=this.allotForm.supplierCode
+          //找到对应的供应商对象  给联系人  联系电话赋值
+          let obj= this.supplierProductList.find(item=>{
+            return item.supplierCode==this.allotForm.supplierCode
+          })
+          this.serviceInfo.phone=obj.contractInfo[0].phone
+          this.serviceInfo.contactName=obj.contractInfo[0].contactName
+          allocation(this.serviceInfo).then(res=>{
+            if (res !=null && res.code == '200') {
+              this.$message({
+                message: '分配成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            } else {
+              this.$message({
+                message: '分配失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          })
         }
       })
 
@@ -446,12 +492,16 @@ export default {
 
 
 
-    updateHandle(row) {
+    updateHandle(index,row) {
       this.$router.push({
         path: '/implementation/worksheetManagement/edit',
         query: {
           orderCode: row.orderCode,
-          status: 'edit'
+          status: 'edit',
+          nodeStatus: row.nodeStatus,
+          serviceCode: row.serviceCode,
+          productCode: row.productCode
+
         }
       })
     }

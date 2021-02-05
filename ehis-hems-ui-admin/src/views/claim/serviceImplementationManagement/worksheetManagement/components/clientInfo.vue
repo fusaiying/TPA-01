@@ -8,7 +8,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="客户姓名：">
-            <el-input v-model="baseForm.customerNo" class="item-width" clearable size="mini" disabled/>
+            <el-input v-model="baseForm.name" class="item-width" clearable size="mini" disabled/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -28,7 +28,7 @@
         <el-col :span="8">
           <el-form-item label="手机号码：" >
             <el-input v-model="baseForm.phone" class="item-width" clearable size="mini"
-                      />
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -43,19 +43,19 @@
         <el-col :span="8">
           <el-form-item label="证件号码：" >
             <el-input v-model="baseForm.idCode" class="item-width" clearable size="mini"
-                      />
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="保单号：" >
             <el-input v-model="baseForm.policyNo" class="item-width" clearable size="mini"
-                      />
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="分单号：" >
-            <el-input v-model="baseForm.policyCertificateNo" class="item-width" clearable size="mini"
-                      />
+            <el-input v-model="baseForm.policyCertificateNo" class="item-width" clearable size="mini"  policy_certificate_no
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -69,13 +69,13 @@
 
 <script>
 
-import {checkField, getProductInfo, insertProductInfo} from '@/api/baseInfo/serviceProductManagement'
+import {getCustomerInfo} from '@/api/serviceProductManage/serviceImplManage'
 
 
 export default {
   props: {
 
-    productCode: {
+    orderCode: {
       type: String,
       default: ''
     },
@@ -99,7 +99,7 @@ export default {
     }
   },
   created() {
-    //获取产品定义信息
+
     this.getDicts("cs_sex").then(response => {
       this.cs_sexOptionsOptions = response.data;
     });
@@ -112,11 +112,11 @@ export default {
   },
   methods: {
     init() {
-      if (this.productCode != null && this.productCode != '') {
-        let queryData = {
-          productCode: this.productCode,
+      if (this.orderCode != null && this.orderCode != '') {
+        let query={
+          orderCode:this.orderCode
         }
-        getProductInfo(queryData).then(res => {
+        getCustomerInfo(query).then(res => {
           if (res.code == '200') {
             this.baseForm = res.data
           }

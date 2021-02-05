@@ -24,8 +24,77 @@ export function getProductInfo() {
 export function getList(data) {
   return request({
     url: '/order/info/list',
-    method: 'get',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 工单详细信息查询
+ */
+export function queryinfo(data) {
+  return request({
+    url: '/order/info/queryinfo',
+    method: 'post',
     data
+  })
+}
+/**
+ * 医院科室查询
+ */
+export function getHosptialInfo() {
+  return request({
+    url: '/order/info/getHosptialInfo',
+    method: 'post'
+  })
+}
+/**
+ * 客户信息查询
+ */
+export function getCustomerInfo(data) {
+  return request({
+    url: '/order/info/getCustomerInfo',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 查询服务-供应商-联系人联动关系
+ */
+export function getAllProSuppInfo(data) {
+  return request({
+    url: '/order/info/getAllProSuppInfo',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 分配
+ */
+export function allocation(data) {
+  return request({
+    url: '/order/info',
+    method: 'put',
+    data: data
+  })
+}
+/**
+ * 评价列表查询
+ */
+export function getEvaluateInfo(data) {
+  return request({
+    url: '/order/info/getEvaluateInfo',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 工单取消
+ */
+export function cancalOrder(data) {
+  return request({
+    url: '/order/info/cancalOrder',
+    method: 'post',
+    data: data
   })
 }
 

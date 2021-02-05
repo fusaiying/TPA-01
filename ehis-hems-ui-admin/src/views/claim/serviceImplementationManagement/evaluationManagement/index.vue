@@ -39,17 +39,21 @@
 
           <el-col :span="8">
             <el-form-item label="服务项目名称：" prop="serviceCode">
-              <el-select v-model="formSearch.serviceCode" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel"
-                           :value="item.dictValue"
-                           :key="item.dictValue"/>
+              <el-select v-model="formSearch.serviceCode" class="item-width" clearable filterable>
+                <el-option v-for="item in serviceInfo" :label="item.serviceName" :value="item.serviceCode"
+                           :key="item.serviceCode"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="供应商名称：" prop="supplierName">
-              <el-input v-model="formSearch.supplierName" class="item-width" clearable size="mini"
-                        placeholder="请输入"/>
+            <el-form-item label="供应商名称：" prop="supplierCode">
+              <!--              <el-input v-model="formSearch.supplierName" class="item-width" clearable size="mini"
+                                      placeholder="请输入"/>
+                          </el-form-item>-->
+              <el-select v-model="formSearch.supplierCode" class="item-width" placeholder="请选择" clearable filterable>
+                <el-option v-for="item in supplierNameList" :label="item.supplierCode+'-'+item.supplierName" :value="item.supplierCode"
+                           :key="item.supplierCode"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -83,7 +87,7 @@
           <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>
           <el-table-column label="产品名称" prop="productName" align="center" show-overflow-tooltip/>
           <el-table-column label="服务项目名称" prop="serviceName" align="center" show-overflow-tooltip/>
-          <el-table-column label="供应商名称" prop="supplierName" :formatter="getProductType" align="center"
+          <el-table-column label="供应商名称" prop="supplierName"  align="center"
                            show-overflow-tooltip/>
           <el-table-column label="客户姓名" prop="name" align="center" show-overflow-tooltip/>
           <el-table-column label="手机号" prop="phone" align="center" show-overflow-tooltip/>
@@ -144,18 +148,19 @@
 </template>
 
 <script>
-import {deleteProductInfo, getList} from '@/api/baseInfo/serviceProductManagement'
+import {getEvaluateInfo, getSupplierInfo} from '@/api/serviceProductManage/serviceImplManage'
+import {getServiceInfo} from "@/api/productManage/serviceProductManagement";
 
 
 export default {
   data() {
     return {
       dialogVisable: false,
-      remarkForm: {},
-      leadFlagOptions: [{dictValue: '01', dictLabel: '很好'}, {dictValue: '02', dictLabel: '一般'}, {
-        dictValue: '03',
-        dictLabel: '较差'
-      }],
+      serviceInfo: [],
+      remarkForm: {
+        customerEvaluation:'',
+        evaluationContent:''
+      },
       index: '',
       modalValue: false,
       dialogVisible: false,
@@ -166,7 +171,7 @@ export default {
         idType: '',
         idCode: '',
         serviceCode: '',
-        supplierName: ''
+        supplierCode: ''
       },
       params: {
         pageNum: 1,
@@ -177,14 +182,14 @@ export default {
         idType: '',
         idCode: '',
         serviceCode: '',
-        supplierName: ''
+        supplierCode: ''
       },
 
 
       tableData: [],
       totalCount: 0,
       loading: false,
-
+      supplierNameList:[],
       card_typeOptions: [],
       customerEvaluationOptions: [],
 
@@ -195,8 +200,9 @@ export default {
     }
   },
   created() {
-    //获取产品定义信息
-    this.getData()
+    //获取产品评价信息
+    this.init()
+    this.getSupplierList()
     this.getDicts("card_type").then(response => {
       this.card_typeOptions = response.data;
     });
@@ -213,18 +219,41 @@ export default {
       this.productTimeTimeOptions = response.data;
     });
 
+
   },
   methods: {
+    //供应商名称
+    getSupplierList(){
+      getSupplierInfo().then(res=>{
+        this.supplierNameList=res.data
+      })
+    },
+    init(){
+      this.loading = true
+      //调用查询接口
+      getEvaluateInfo(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+      //初始化服务项目名称
+      getServiceInfo().then(res => {
+        this.serviceInfo = res
+      })
+    },
+
     openHandle(index, row) {
       this.dialogVisable = true
       this.index = index
       //调用接口
+      this.remarkForm.customerEvaluation=row.customerEvaluation
+      this.remarkForm.evaluationContent=row.evaluationContent
     },
 
 
-    getProductType(row) {
-      return this.selectDictLabel(this.productTypeOptions, row.productType)
-    },
+
 
 
     //查询
@@ -241,13 +270,10 @@ export default {
       this.params.idType= this.formSearch.idType
       this.params.idCode= this.formSearch.idCode
       this.params.serviceCode= this.formSearch.serviceCode
-      this.params.supplierName= this.formSearch.supplierName
-
-
-
+      this.params.supplierCode= this.formSearch.supplierCode
       this.loading = true
       //调用查询接口
-      getList(this.params).then(res => {
+      getEvaluateInfo(this.params).then(res => {
         this.tableData = res.rows;
         this.totalCount = res.total;
         if (this.totalCount === 0) {
@@ -280,7 +306,7 @@ export default {
   font-weight: normal;
 }
 
-::v-deep .el-table__header-wrapper .el-checkbox__input::after {
+/deep/ .el-table__header-wrapper .el-checkbox__input::after {
   content: '全选';
   position: absolute;
   font-weight: bolder;

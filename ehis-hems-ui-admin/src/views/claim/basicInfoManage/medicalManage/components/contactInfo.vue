@@ -112,18 +112,18 @@
                  @click="addContactHandle"> + 添加
       </el-button>
     </el-card>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :modal="modalValue"
-      :close-on-click-modal="false"
-      title="提示"
-      width="30%">
-      <span>{{ '删除当前行联系人信息？' }}</span>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="delConfirm">确 定</el-button>
-        </span>
-    </el-dialog>
+    <!--    <el-dialog
+          :visible.sync="dialogVisible"
+          :modal="modalValue"
+          :close-on-click-modal="false"
+          title="提示"
+          width="30%">
+          <span>{{ '删除当前行联系人信息？' }}</span>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="delConfirm">确 定</el-button>
+            </span>
+        </el-dialog>-->
   </el-form>
 
 
@@ -363,13 +363,25 @@ export default {
     },
 
     delHandle(index, row) {
-      this.dialogVisible = true
+      //this.dialogVisible = true
       this.index = index
+      this.$confirm('是否删除当前行联系人信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.contactInfoForm.contacts.splice(this.index,1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
-    delConfirm() {
-      this.dialogVisible = false
-      this.contactInfoForm.contacts.splice(this.index,1)
-    },
+    /*    delConfirm() {
+          this.dialogVisible = false
+          this.contactInfoForm.contacts.splice(this.index,1)
+        },*/
     //联系信息添加
     addContactHandle() {
       const field = {

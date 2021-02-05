@@ -29,7 +29,7 @@ export function checkField(data) {
   return request({
     url: '/product/info/checkField',
     method: 'post',
-     data
+    data
   })
 }
 /**
@@ -182,7 +182,7 @@ export function insertMangerInfo(data) {
   return request({
     url: 'product/info/insertMangerInfo',
     method: 'post',
-     data
+    data
 
   })
 }
@@ -193,7 +193,7 @@ export function selectProductSupplier(data) {
   return request({
     url: 'product/info/selectProductSupplier',
     method: 'post',
-     data
+    data
 
   })
 }

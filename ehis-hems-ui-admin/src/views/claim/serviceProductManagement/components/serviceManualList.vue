@@ -56,7 +56,7 @@
 </template>
 <script>
 
-import {checkList, getManualInfoList} from '@/api/baseInfo/serviceProductManagement'
+import {checkList, getManualInfoList} from '@/api/productManage/serviceProductManagement'
 
 export default {
   props: {
@@ -70,11 +70,11 @@ export default {
       default: ''
     },
   },
-/*  watch: {
-    productCode: function (newValue){
-      this.init()
-    }
-  },*/
+  /*  watch: {
+      productCode: function (newValue){
+        this.init()
+      }
+    },*/
   data() {
     return {
       fileList: [],
@@ -154,7 +154,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

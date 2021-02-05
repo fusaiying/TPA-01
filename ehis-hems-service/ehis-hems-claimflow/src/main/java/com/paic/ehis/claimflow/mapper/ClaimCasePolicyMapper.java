@@ -2,6 +2,8 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCasePolicy;
+import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
+import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 
 import java.util.List;
 

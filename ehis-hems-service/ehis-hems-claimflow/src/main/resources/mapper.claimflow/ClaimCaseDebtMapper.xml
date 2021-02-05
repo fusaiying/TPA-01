@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper">
+    
+    <resultMap type="ClaimCaseDebt" id="ClaimCaseDebtResult">
+        <result property="debtId"    column="debt_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <resultMap id="DebtInfoResult" type="com.paic.ehis.claimflow.domain.vo.DebtInfoVO">
+        <result property="rptNo" column="rpt_no"/>
+        <result property="debtAmount" column="debt_amount"/>
+        <result property="colAmount" column="col_amount"/>
+        <result property="residualAmount" column="residual_amount"/>
+        <result property="insuredName" column="insured_name"/>
+        <result property="idNo" column="id_no"/>
+        <result property="treatmentEndDate" column="treatment_end_date"/>
+        <result property="source" column="source"/>
+        <result property="hospitalCode" column="hospital_code"/>
+        <result property="colStatus" column="col_status"/>
+        <result property="whiteStatus" column="white_status"/>
+        <result property="endCaseTime" column="end_case_time"/>
+        <result property="appntName" column="appnt_name"/>
+        <result property="contNo" column="cont_no"/>
+    </resultMap>
+
+    <sql id="selectClaimCaseDebtVo">
+        select debt_id, rpt_no, insured_no, debt_amount, status, create_by, create_time, update_by, update_time from claim_case_debt
+    </sql>
+
+    <select id="selectClaimCaseDebtList" parameterType="ClaimCaseDebt" resultMap="ClaimCaseDebtResult">
+        <include refid="selectClaimCaseDebtVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
+            <if test="debtAmount != null "> and debt_amount = #{debtAmount}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseDebtById" parameterType="Long" resultMap="ClaimCaseDebtResult">
+        <include refid="selectClaimCaseDebtVo"/>
+        where debt_id = #{debtId}
+    </select>
+        
+    <insert id="insertClaimCaseDebt" parameterType="ClaimCaseDebt" useGeneratedKeys="true" keyProperty="debtId">
+        insert into claim_case_debt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="debtAmount != null">debt_amount,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="debtAmount != null">#{debtAmount},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseDebt" parameterType="ClaimCaseDebt">
+        update claim_case_debt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="debtAmount != null">debt_amount = #{debtAmount},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where debt_id = #{debtId}
+    </update>
+
+    <delete id="deleteClaimCaseDebtById" parameterType="Long">
+        delete from claim_case_debt where debt_id = #{debtId}
+    </delete>
+
+    <delete id="deleteClaimCaseDebtByIds" parameterType="String">
+        delete from claim_case_debt where debt_id in 
+        <foreach item="debtId" collection="array" open="(" separator="," close=")">
+            #{debtId}
+        </foreach>
+    </delete>
+
+    <select id="selectDebtInitList" resultMap="DebtInfoResult">
+        SELECT
+            a.rpt_no,
+            a.debt_amount,
+            SUM( b.col_amount ) col_amount,
+            (a.debt_amount - SUM( b.col_amount )) residual_amount,
+            c.name insured_name,
+            c.id_no,
+            MIN( d.treatment_end_date ) treatment_end_date,
+            e.source,
+            e.hospital_code,
+            f.end_case_time,
+        CASE
+                b.debt_col_id
+            WHEN NULL THEN
+                '02' ELSE '01'
+            END AS col_status,
+        CASE
+                g.debt_whitelist_id
+            WHEN NULL THEN
+                '02' ELSE '01'
+            END AS white_status
+        FROM
+            claim_case_debt a
+            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id
+            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no
+            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no
+            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no
+            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no
+        WHERE
+            g.debt_whitelist_id IS NULL AND a.STATUS = 'Y' and b.status = 'Y'
+            and c.status = 'Y' and d.status = 'Y' and f.status = 'Y' and e.status ='Y' and g.status = 'Y'
+        GROUP BY
+            b.debt_id,
+            a.rpt_no,
+            a.debt_amount,
+            b.debt_col_id,
+            g.debt_whitelist_id,
+            c.name,
+            c.id_no
+    </select>
+
+    <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="DebtInfoResult">
+        SELECT
+            a.rpt_no,
+            a.debt_amount,
+            SUM( b.col_amount ) col_amount,
+            CASE
+                a.debt_amount - SUM( b.col_amount )
+                WHEN a.debt_amount - SUM( b.col_amount ) > 0 THEN
+                a.debt_amount - SUM( b.col_amount ) ELSE 0
+                END AS residual_amount,
+            c.name insured_name,
+            c.id_no,
+            MIN( d.treatment_end_date ) treatment_end_date,
+            e.source,
+            e.hospital_code,
+            f.end_case_time,
+            CASE
+                b.debt_col_id
+                WHEN NULL THEN
+                '02' ELSE '01'
+                END AS col_status,
+            CASE
+                g.debt_whitelist_id
+                WHEN NULL THEN
+                '02' ELSE '01'
+                END AS white_status
+        FROM
+            claim_case_debt a
+            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id
+            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no
+            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no
+            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no
+            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no
+            LEFT JOIN claim_case_policy h ON h.rpt_no = a.rpt_no
+        where
+            a.status = 'Y' AND b.status = 'Y' and c.status = 'Y' and d.status = 'Y'
+            and f.status = 'Y' and e.status = 'Y' and g.status = 'Y' and h.status = 'Y'
+            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and h.policy_no = #{policyNo}</if>
+            <if test="hospitalCode != null and hospitalCode != ''"> and e.hospital_code = #{hospitalCode}</if>
+            <if test="insuredName != null  and insuredName != ''"> and c.name like concat('%', #{insuredName}, '%')</if>
+            <if test="idNo != null  and idNo != ''"> and c.id_no = #{idNo}</if>
+            <if test="startDate != null  and startDate != ''"> and f.end_case_time BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="whiteStatus == '01'"> and g.debt_whitelist_id is not null </if>
+            <if test="whiteStatus == '02'"> and g.debt_whitelist_id is null </if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and h.policy_item_no = #{policyItemNo}</if>
+        GROUP BY
+            b.debt_id,
+            a.rpt_no,
+            a.debt_amount,
+            b.debt_col_id,
+            g.debt_whitelist_id,
+            c.name,
+            c.id_no
+    </select>
+    
+</mapper>

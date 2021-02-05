@@ -5,8 +5,9 @@
     size="small"
     highlight-current-row
     tooltip-effect="dark"
+    @sort-change="onSortChange"
     style="width: 100%;">
-    <el-table-column sortable key="1" align="center" prop="batchNo" min-width="150" label="批次号" show-overflow-tooltip/>
+    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" key="1" align="center" prop="batchNo" min-width="150" label="批次号" show-overflow-tooltip/>
     <el-table-column key="2" align="center" min-width="100" prop="rptNo" label="报案号" show-overflow-tooltip/>
     <el-table-column key="3" align="center" prop="caseStatus" min-width="160" label="案件状态" show-overflow-tooltip>
       <template slot-scope="scope">
@@ -18,7 +19,11 @@
     <el-table-column key="6" align="center" prop="organCode" label="承保机构" min-width="120" show-overflow-tooltip/>
     <el-table-column key="7" v-if="activeName==='01'" align="center" prop="stayTime" label="停留时长" min-width="120" show-overflow-tooltip/>
     <el-table-column key="8" v-if="activeName==='01'" align="center" prop="monitoringTime" label="监控时效" min-width="120" show-overflow-tooltip/>
-    <el-table-column key="9" align="center" prop="surveyCode" label="是否调查" min-width="120" show-overflow-tooltip/>
+    <el-table-column key="9" align="center" prop="surveyCode" label="是否调查" min-width="120" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{selectDictLabel(sys_yes_noOptions, scope.row.surveyCode)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column key="10" align="center" prop="operator" label="提交用户" min-width="120" show-overflow-tooltip/>
     <el-table-column key="11" align="center" fixed="right" label="操作" min-width="94" show-overflow-tooltip>
       <template slot-scope="scope">
@@ -46,6 +51,8 @@
     },
     data() {
       return {
+        prop:'',
+        order:'',
         dictList: [],
         claim_statusOptions: [],
         sys_yes_noOptions: [],
@@ -83,6 +90,18 @@
           }
         })
       },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchHandle()
+      }
     }
   }
 </script>

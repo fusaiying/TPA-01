@@ -21,11 +21,11 @@
               <el-radio-group v-model="baseForm.pulloutType">
                 <!--受理岗02-撤件可申诉选择框隐藏，默认类型为撤件，不可修改-->
 
-                <el-radio v-if="pullout_typeOptions.length>0" :key="pullout_typeOptions[0].dictValue" :label="pullout_typeOptions[0].dictLabel"
-                           :value="pullout_typeOptions[0].dictValue">
+                <el-radio v-if="pullout_typeOptions.length>0" :key="pullout_typeOptions[0].dictValue" :label="pullout_typeOptions[0].dictValue "
+                >{{ pullout_typeOptions[0].dictLabel }}
                 </el-radio>
-                <el-radio v-if="node!=='accept' && pullout_typeOptions.length>0" :key="pullout_typeOptions[1].dictValue" :label="pullout_typeOptions[1].dictLabel"
-                          :value="pullout_typeOptions[1].dictValue">
+                <el-radio v-if="node!=='accept' && pullout_typeOptions.length>0" :key="pullout_typeOptions[1].dictValue" :label="pullout_typeOptions[1].dictValue"
+                >{{ pullout_typeOptions[1].dictLabel }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>

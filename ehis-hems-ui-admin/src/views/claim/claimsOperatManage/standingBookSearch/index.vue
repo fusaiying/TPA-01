@@ -48,6 +48,10 @@
           <el-col :span="8">
             <el-form-item label="机构：" prop="organcode">
               <el-select v-model="searchForm.organcode" class="item-width" placeholder="请选择"
+                         remote
+                         reserve-keyword
+                         filterable
+                         :remote-method="remoteMethod"
                          @change="getUsers">
                 <el-option v-for="option in deptOptions" :key="option.deptId"
                            :label="option.deptName"
@@ -58,7 +62,10 @@
           <el-col :span="8">
             <el-form-item label="操作人：" prop="createBy">
               <el-select v-model="searchForm.createBy" class="item-width" placeholder="请选择"
-                         @change="">
+                         remote
+                         reserve-keyword
+                         filterable
+                         :remote-method="remoteUserMethod">
                 <el-option v-for="option in userOptions" :key="option"
                            :label="option"
                            :value="option"/>
@@ -97,11 +104,12 @@
             style=" width: 100%;">
             <el-table-column align="center" prop="rptno" width="90" label="报案号" show-overflow-tooltip>
               <template slot-scope="scope">
-                <el-form-item v-if="!scope.row.isEdit" :prop="'tableData.' + scope.$index + '.rptno'"
+                <el-form-item v-if="!scope.row.isEdit && (scope.row.rptno===''||scope.row.rptno==null)"
+                              :prop="'tableData.' + scope.$index + '.rptno'"
                               :rules="standingRules.rptno" style="display: inline-flex !important;">
                   <el-input v-model="scope.row.rptno" placeholder="请输入" size="mini"/>
                 </el-form-item>
-                <span v-if="scope.row.isEdit">{{ scope.row.rptno}}</span>
+                <span v-else>{{ scope.row.rptno}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="idno" width="90" label="证件号码" show-overflow-tooltip>
@@ -130,7 +138,8 @@
                              :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
-                <span class="form-span" v-if="scope.row.isEdit">{{getClaimmaterials(scope.row.claimmaterialList)}}</span>
+                <span class="form-span"
+                      v-if="scope.row.isEdit">{{getClaimmaterials(scope.row.claimmaterialList)}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="remark" width="90" label="备注" show-overflow-tooltip>
@@ -155,7 +164,11 @@
             <el-table-column align="center" prop="receivedate" label="接单日期" show-overflow-tooltip/>
             <el-table-column align="center" prop="sendby" label="交件人" width="100" show-overflow-tooltip/>
             <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
-            <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip/>
+            <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{selectDeptName(deptOptions,scope.row.organcode)}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
             <el-table-column align="center" label="操作" fixed="right">
               <template slot-scope="scope">
@@ -179,7 +192,7 @@
 </template>
 
 <script>
-  import {listNew, editStanding, getUser, getDept} from '@/api/claim/standingBookSearch'
+  import {listNew, editStanding, getUser, getDept, listFirst} from '@/api/claim/standingBookSearch'
 
   let dictss = [{dictType: 'claim_material'}]
   export default {
@@ -192,13 +205,7 @@
         },
 
         standingForm: {
-          tableData: [
-            {
-              idNo: '001',
-              isEdit: true,
-              claimmaterials: ['1', '2', '3']
-            }
-          ]
+          tableData: []
         },
         standingRules: {
           idno: [{required: true, message: '请输入', trigger: 'blur'}],
@@ -231,41 +238,51 @@
       this.claim_materialOptions = this.dictList.find(item => {
         return item.dictType === 'claim_material'
       }).dictDate
-      listNew(this.searchForm).then(res => {
+      listFirst(this.searchForm).then(res => {
         if (res != null && res.code === 200) {
           this.standingForm.tableData = res.rows
-          this.standingForm.tableData.forEach(item=>{
-            item.isEdit=true
+          this.standingForm.tableData.forEach(item => {
+            item.isEdit = true
           })
           this.totalCount = res.total
         }
       }).catch(res => {
       })
-      getDept().then(res => {
-
-          this.deptOptions = res.deptlist
-          this.searchForm.organcode = res.deptId
-        let data={
-            organcode:res.deptId
+      let item={
+        pageNum: 1,
+        pageSize: 200,
+      }
+      getDept(item).then(res => {
+        this.deptOptions = res.deptlist
+        this.searchForm.organcode = res.deptId
+        let data = {
+          organcode: res.deptId,
+          pageNum: 1,
+          pageSize: 200,
         }
-          getUser(data).then(res => {
-            if (res != null && res.code === 200) {
-              this.userOptions = res.data
-            }
-          })
+        getUser(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.userOptions = res.data
+          }
+        })
 
       }).catch(res => {
       })
     },
     methods: {
-      handleChange(value) {
-
-      },
       resetForm() {
-        this.$refs.searchForm.resetFields()
+        this.searchForm.rptno = '',
+          this.searchForm.idno = '',
+          this.searchForm.name = '',
+          this.searchForm.expressnumber = '',
+          this.searchForm.sendby = '',
+          this.searchForm.receiveDate = [],
+          this.searchForm.receiveStartDate = '',
+          this.searchForm.receiveEndDate = '',
+          this.searchForm.createBy = ''//操作人
       },
       search(val) {
-        let data={
+        let data = {
           pageNum: 1,
           pageSize: 10,
           rptno: this.searchForm.rptno,
@@ -273,12 +290,11 @@
           name: this.searchForm.name,
           expressnumber: this.searchForm.expressnumber,
           sendby: this.searchForm.sendby,
-          receiveStartDate: this.searchForm.receiveDate?this.searchForm.receiveDate[0]:'',
-          receiveEndDate: this.searchForm.receiveDate?this.searchForm.receiveDate[1]:'',
+          receiveStartDate: this.searchForm.receiveDate ? this.searchForm.receiveDate[0] : '',
+          receiveEndDate: this.searchForm.receiveDate ? this.searchForm.receiveDate[1] : '',
           organcode: this.searchForm.organcode,//机构
           createBy: this.searchForm.createBy//操作人
         }
-        console.log(this.searchForm.receiveDate);
         if (val === 'table') {
           data.pageSize = this.queryParams.pageSize
           this.data.pageNum = this.queryParams.pageNum
@@ -289,8 +305,8 @@
         listNew(data).then(res => {
           if (res != null && res.code === 200) {
             this.standingForm.tableData = res.rows
-            this.standingForm.tableData.forEach(item=>{
-              item.isEdit=true
+            this.standingForm.tableData.forEach(item => {
+              item.isEdit = true
             })
             this.totalCount = res.total
             if (res.deptlist.length <= 0) {
@@ -307,17 +323,17 @@
         this.searchForm.pageSize = 10
         listNew(this.searchForm).then(res => {
 
-          if (res.rows.length>0){
-            this.isListExport=true
-            let subDate=''
-            if (this.searchForm.receiveDate.length>0){
-              subDate='&receiveStartDate='+this.searchForm.receiveDate[0]+'&receiveEndDate='+this.searchForm.receiveDate[1]
+          if (res.rows.length > 0) {
+            this.isListExport = true
+            let subDate = ''
+            if (this.searchForm.receiveDate.length > 0) {
+              subDate = '&receiveStartDate=' + this.searchForm.receiveDate[0] + '&receiveEndDate=' + this.searchForm.receiveDate[1]
             }
-            this.download('system/standing/exportNew'+'?expressnumber='+this.searchForm.expressnumber+'&sendby='+this.searchForm.sendby
-              +'&organcode='+this.searchForm.organcode+'&createBy='+this.searchForm.createBy+subDate, {
+            this.download('system/standing/exportNew' + '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
+              + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate, {
               ...this.searchForm
             }, `FYX_${new Date().getTime()}.xlsx`)
-          }else {
+          } else {
             return this.$message.warning(
               "没有查询到能导出的数据！"
             )
@@ -328,7 +344,7 @@
       },
       getClaimmaterials(value) {
         let material = ''
-        if (value!=null && value.length > 0) {
+        if (value != null && value.length > 0) {
           for (let i = 0; i < value.length; i++) {
             if (i === value.length - 1) {
               material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
@@ -350,7 +366,7 @@
               showClose: true
             })
           }
-        }).catch(res=>{
+        }).catch(res => {
           this.$message({
             message: '保存失败!',
             type: 'error',
@@ -361,11 +377,54 @@
         this.search('form')
       },
       getUsers(val) {
-        getUser(val).then(res => {
+        let data = {
+          organcode: val,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        getUser(data).then(res => {
           if (res != null && res.code === 200) {
-            this.userOptions = res.rows
+            this.userOptions = res.data
           }
         })
+      },
+      remoteMethod(query) {
+        let data={
+          deptName:query,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        if (query !== '' && query != null) {
+          getDept(data).then(res => {
+            this.deptOptions = res.deptlist
+          }).catch(res => {
+          })
+        }
+      },
+      remoteUserMethod(query) {
+        let data={
+          organcode: this.searchForm.organcode,
+          userName:query,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        if (query !== '' && query != null) {
+          getUser(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.userOptions = res.data
+            }
+          })
+        }
+      },
+      selectDeptName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].deptId === parseInt(value)) {
+            actions.push(datas[key].deptName);
+            return true;
+          }
+        })
+        return actions.join('');
       }
     }
   }

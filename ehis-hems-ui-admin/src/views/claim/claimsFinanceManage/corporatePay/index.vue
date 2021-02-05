@@ -5,27 +5,37 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="批次号：" prop="rptNo">
-              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="批次号：" prop="batchNo">
+              <el-input v-model="searchForm.batchNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医院名称：" prop="idNo">
-              <el-select v-model="searchForm.idNo" class="item-width" placeholder="请选择"
-                         @change="">
-                <!-- <el-option v-for="option in claimTypeOptions" :key="option.dictValue"
-                            :label="option.dictLabel"
-                            :value="option.dictValue"/>-->
+            <el-form-item label="医院名称：" prop="hospitalCode">
+              <el-select
+                v-model="searchForm.hospitalCode"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请选择医院"
+                :remote-method="remoteMethod"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in hospitalOptions"
+                  :key="ind"
+                  :label="item.chname1"
+                  :value="item.providerCode">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否申述：" prop="name">
-              <el-select v-model="searchForm.name" class="item-width" placeholder="请选择"
+            <el-form-item label="是否申述：" prop="complainStatus">
+              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择"
                          @change="">
-                <!-- <el-option v-for="option in claimTypeOptions" :key="option.dictValue"
-                            :label="option.dictLabel"
-                            :value="option.dictValue"/>-->
+                <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue"
+                           :label="option.dictLabel"
+                           :value="option.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -34,7 +44,7 @@
           <el-col :span="8">
             <el-form-item label="交单日期：" prop="endCaseDate">
               <el-date-picker
-                v-model="searchForm.endCaseDate"
+                v-model="searchForm.caseDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -44,12 +54,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="交单机构：" prop="whiteStatus">
-              <el-select v-model="searchForm.whiteStatus" class="item-width" placeholder="请选择"
-                         @change="">
-                <!-- <el-option v-for="option in claimTypeOptions" :key="option.dictValue"
-                            :label="option.dictLabel"
-                            :value="option.dictValue"/>-->
+            <el-form-item label="交单机构：" prop="organCode">
+              <el-select v-model="searchForm.organCode" class="item-width"
+                         filterable
+                         remote
+                         reserve-keyword
+                         placeholder="请选择机构"
+                         :remote-method="remoteDeptMethod">
+                <el-option v-for="option in deptOptions" :key="option.deptId"
+                           :label="option.deptName"
+                           :value="option.deptId"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -60,7 +74,7 @@
             type="success"
             icon="el-icon-search"
             @click="
-              search
+              search('but')
             "
           >查询
           </el-button>
@@ -72,33 +86,42 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>批次信息列表</span>
         </div>
-          <el-table
-            :header-cell-style="{color:'black',background:'#f8f8ff'}"
-            :data="tableData"
-            size="small"
-            highlight-current-row
-            tooltip-effect="dark"
-            style=" width: 100%;">
-            <el-table-column align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
-            <el-table-column align="center" prop="receiveDate" label="医院名称" show-overflow-tooltip/>
-            <el-table-column align="center" prop="sendBy" label="批次案件总数" width="110" show-overflow-tooltip/>
-            <el-table-column align="center" prop="companyName" label="账单总金额" show-overflow-tooltip/>
-            <el-table-column align="center" prop="dept" label="理赔总金额" width="100" show-overflow-tooltip/>
-            <el-table-column align="center" prop="dept" label="是否申述" width="100" show-overflow-tooltip/>
-            <el-table-column align="center" prop="dept" label="交单机构" width="100" show-overflow-tooltip/>
-            <el-table-column align="center" prop="updateBy" label="交单日期" show-overflow-tooltip/>
-            <el-table-column align="center" label="操作" fixed="right">
-              <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="startPay(scope.row,'public')">开始对公支付</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+        <el-table
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          :data="tableData"
+          size="small"
+          highlight-current-row
+          tooltip-effect="dark"
+          @sort-change="onSortChange"
+          style=" width: 100%;">
+          <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
+          <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
+          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip/>
+          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip/>
+          <el-table-column align="center" prop="isAppeal" label="是否申述" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="organCode" label="交单机构" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{getDeptName( deptOptions,scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="submitDate" label="交单日期" show-overflow-tooltip/>
+          <el-table-column align="center" label="操作" fixed="right">
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="startPay(scope.row,'public')">开始对公支付</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination=""
+          @pagination="search('tab')"
         />
       </div>
     </el-card>
@@ -106,8 +129,10 @@
 </template>
 
 <script>
-
-  let dictss = [{dictType: 'claim_material'}]
+  import {getListNew} from '@/api/insuranceRules/ruleDefin'
+  import {getDept,getDeptById} from '@/api/claim/standingBookSearch'
+  import {initList,list} from '@/api/claim/corporatePay'
+  let dictss = [{dictType: 'sys_yes_no'},]
   export default {
     data() {
       return {
@@ -117,60 +142,84 @@
           pageSize: 10,
         },
 
-        tableData:[
-          {
-            batchNo:'CS001'
-          }
-        ],
+        tableData: [],
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          rptNo: '',
-          idNo: '',
-          name: '',
-          expressNumber: '',
-          sendBy: '',
-          receiveDate: [],
-          receiveStartDate: '',
-          receiveEndDate: '',
-          //机构
-          //操作人
+          batchNo: '',
+          hospitalCode: '',
+          complainStatus:'',
+          caseDate:[],
+          startDate:undefined,
+          endDate:undefined,
+          organCode:undefined,
+          orderByColumn:'',
+          isAsc:'',
         },
         totalCount: 0,
         dictList: [],
-        claim_materialOptions: [],
+        deptOptions: [],
+        hospitalOptions: [],
+        sys_yes_noOptions: [],
       }
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
         this.dictList = response.data
       })
-      this.claim_materialOptions = this.dictList.find(item => {
-        return item.dictType === 'claim_material'
+      this.sys_yes_noOptions = this.dictList.find(item => {
+        return item.dictType === 'sys_yes_no'
       }).dictDate
-      /*  listNew(this.searchForm).then(res=>{
-          if (res!=null && res.code===200){
-            this.tableData=res.rows
-            this.totalCount=res.total
-          }
-        }).catch(res=>{})*/
+      let item={
+        pageNum: 1,
+        pageSize: 200,
+      }
+      getDept(item).then(res => {
+        this.deptOptions = res.deptlist
+        this.searchForm.organCode = res.deptId
+      }).catch(res => {
+      })
+      initList(this.queryParams).then(res=>{
+        if (res!=null && res.code===200){
+          this.tableData=res.rows
+        }
+      })
     },
     methods: {
-      handleChange(value) {
-
-      },
       resetForm() {
         this.$refs.searchForm.resetFields()
       },
-      search() {
-
+      search(status) {
+        if (this.searchForm.caseDate!=null && this.searchForm.caseDate.length>0){
+          this.searchForm.startDate=this.searchForm.caseDate[0]
+          this.searchForm.endDate=this.searchForm.caseDate[1]
+        }
+        if (status==='tab'){
+          this.searchForm.pageNum=this.queryParams.pageNum
+          this.searchForm.pageSize=this.queryParams.pageSize
+        }else{
+          this.searchForm.pageNum=1
+          this.searchForm.pageSize=10
+        }
+        list(this.searchForm).then(res=>{
+          if (res!=null && res.code===200){
+            this.tableData=res.rows
+            this.totalCount=res.total
+            if (res.rows.length<=0){
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        })
       },
       listExport() {
 
       },
-      startPay(row,status){
+      startPay(row, status) {
         let data = encodeURI(
           JSON.stringify({
+            batchNo:row.batchNo,
             status,
           })
         )
@@ -181,10 +230,56 @@
           }
         })
       },
+      remoteMethod(query) {
+        if (query !== '' && query != null) {//调用特殊医院查询接口
+          let data = {
+            chname1: query
+          }
+          getListNew(data).then(res => {
+            this.hospitalOptions = res.rows
+          })
+        }
+      },
+      remoteDeptMethod(query) {
+        let data={
+          deptName:query,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        if (query !== '' && query != null) {
+          getDept(data).then(res => {
+            this.deptOptions = res.deptlist
+          }).catch(res => {
+          })
+        }
+      },
+      getDeptName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].deptId === parseInt(value)) {
+            actions.push(datas[key].deptName);
+            return true;
+          }
+        })
+        return actions.join('');
+      },
+      onSortChange({ prop, order }) {
+        this.searchForm.orderByColumn=prop
+        if (order==='ascending'){
+          this.searchForm.isAsc='asc'
+        }else if (order==='descending'){
+          this.searchForm.isAsc='desc'
+        }else if (order==null){
+          this.searchForm.orderByColumn=''
+          this.searchForm.isAsc=''
+        }
+        this.search()
+      }
 
     }
   }
 </script>
+
 
 <style scoped>
   .item-width {

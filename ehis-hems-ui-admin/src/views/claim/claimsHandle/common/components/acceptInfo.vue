@@ -5,11 +5,13 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;受理信息</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;受理信息</i>
         <span style="float: right;">
-        <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview')" type="primary" :disabled="!collapsed" size="mini" @click="save">保存</el-button>
+        <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview')" type="primary"
+                   :disabled="!collapsed" size="mini" @click="save">保存</el-button>
       </span>
       </div>
     </div>
-    <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule" :model="baseForm" style="padding-bottom: 30px;" :disabled="(node === 'accept' && status === 'show') || node==='input'"
+    <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule" :model="baseForm" style="padding-bottom: 30px;"
+             :disabled="(node === 'accept' && status === 'show') || node==='input' || node==='sport'"
              label-width="140px" label-position="right" size="mini">
       <el-row>
         <el-col :span="24">
@@ -155,7 +157,7 @@
   import {addAccept} from '@/api/claim/handleCom'
 
   let dictss = [{dictType: 'application_reason'}, {dictType: 'preAuthFlag'}, {dictType: 'priority_reason'},
-    {dictType: 'accident_status'}, {dictType: 'current_state'},{dictType: 'incidenttype'},]
+    {dictType: 'accident_status'}, {dictType: 'current_state'}, {dictType: 'incidenttype'},]
   export default {
     mixins: [],
     props: {
@@ -170,23 +172,27 @@
     watch: {
       sonAcceptInfoData: function (newVal) {
         this.getAddressData()
-        if (newVal!==null && newVal!==undefined){
-          if (newVal.claimCaseAccept!=null){
-            this.baseForm=newVal.claimCaseAccept
-            this.$set(this.baseForm,'applyTypes',newVal.applyTypes)
-            this.region[0]=newVal.claimCaseAccept.accProvince
-            this.region[1]=newVal.claimCaseAccept.accCity
-            this.region[2]=newVal.claimCaseAccept.accDistrict
-            if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
-              this.hasAcceptId=true
+        if (newVal !== null && newVal !== undefined) {
+          if (newVal.claimCaseAccept != null) {
+            this.baseForm = newVal.claimCaseAccept
+            this.$set(this.baseForm, 'applyTypes', newVal.applyTypes)
+            this.region[0] = newVal.claimCaseAccept.accProvince
+            this.region[1] = newVal.claimCaseAccept.accCity
+            this.region[2] = newVal.claimCaseAccept.accDistrict
+            if (this.baseForm.rptNo !== null && this.baseForm.rptNo !== '') {
+              this.hasAcceptId = true
             }
           }
           let date = new Date()
-          let mon=''
-          if ((date.getMonth()+1)<10){
-            mon='0'+(date.getMonth()+1)
+          let mon = date.getMonth() + 1
+          let day = date.getDate()
+          if ((date.getMonth() + 1) < 10) {
+            mon = '0' + (date.getMonth() + 1)
           }
-          if (newVal.materialCompleteDate==null || newVal.materialCompleteDate===''){
+          if ((date.getDate()) < 10) {
+            day = '0' + date.getDate()
+          }
+          if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + date.getDate()
           }
         }
@@ -218,10 +224,14 @@
       const checkDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (!value) {
           callback(new Error("请录入出险日期！"));
         } else {
@@ -235,10 +245,14 @@
       const checkFirstSerIllnessDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (!value) {
           callback(new Error("请录入首次重疾确诊日期！"));
         } else {
@@ -252,52 +266,70 @@
       const checkDeathDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (value) {
           if (value > date1) {
             callback(new Error("死亡日期有误，请重新录入！"));
           } else {
             callback()
           }
+        } else {
+          callback()
         }
       }
       const checkDisabilityDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (value) {
           if (value > date1) {
             callback(new Error("残疾确诊日期有误，请重新录入！"));
           } else {
             callback()
           }
+        } else {
+          callback()
         }
       }
       const checkReceiptDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (value) {
           if (value > date1) {
             callback(new Error("公司签收日期有误，请重新录入！"));
           } else {
             callback()
           }
+        } else {
+          callback()
         }
       }
       return {
-        hasAcceptId:false,
-        isAcceptInfoSave:false,
-        baseInfoData:{},
+        hasAcceptId: false,
+        isAcceptInfoSave: false,
+        baseInfoData: {},
         firstSerIllnessDateShow: false,
         disabilityDateShow: false,
         collapsed: true,
@@ -333,6 +365,7 @@
           deathDate: [{validator: checkDeathDate, trigger: 'blur'}],
           disabilityDate: [{validator: checkDisabilityDate, trigger: 'blur'}],
           preAuthItem: [{required: true, message: '请录入预授权项目', trigger: 'blur'}],
+          accType: [{required: true, message: '请选择出险类型', trigger: 'blur'}],
           preAuthNo: [{required: true, message: '请录入预授权号', trigger: 'blur'}],
           receiptDate: [{validator: checkReceiptDate, trigger: 'blur'}],
         },
@@ -403,7 +436,7 @@
         //录入的索赔金额不为大于0的数字或小数位大于两位，则阻断提示“索赔金额录入不合法，请检查”；
         let data = {
           applyTypes: this.baseForm.applyTypes,
-          claimCaseAccept:{
+          claimCaseAccept: {
             rptNo: this.fixInfo.rptNo,
             claimAmount: this.baseForm.claimAmount,
             accDate: this.baseForm.accDate,
@@ -436,7 +469,7 @@
                     center: true,
                     showClose: true
                   })
-                  this.isAcceptInfoSave=true
+                  this.isAcceptInfoSave = true
                 }).catch(res => {
                   this.$message({
                     message: '保存失败!',
@@ -453,21 +486,29 @@
             })
 
           } else if (this.baseInfo.claimtype === '01') {
-            addAccept(data).then(res => {
-              this.$message({
-                message: '保存成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              this.isAcceptInfoSave=true
-            }).catch(res => {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
+            this.$refs.baseForm.validate((valid) => {
+              if (valid) {
+                addAccept(data).then(res => {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.isAcceptInfoSave = true
+                }).catch(res => {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                })
+              }else {
+                return this.$message.warning(
+                  "申请信息录入不完整，请检查！"
+                )
+              }
             })
           }
         } else {

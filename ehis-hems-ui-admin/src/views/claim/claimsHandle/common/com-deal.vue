@@ -31,11 +31,11 @@
             <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini"
                        @click="openAppealInfo">申述信息</el-button>
             <el-button type="primary" size="mini" @click="">影像查看</el-button>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini"
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="">保障查看</el-button>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openHistorySurvey">调查(?)</el-button>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini" @click="openHistoryDiscussion">协谈(2)</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini" @click="">保障查看</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini" @click="openHistorySurvey">调查(?)</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini" @click="openHistoryDiscussion">协谈({{historyDisCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='accept'" size="mini"
                        @click="selectHistoricalProblem">问题件</el-button>
             <el-button type="primary" v-if="querys.node==='accept' || querys.node==='calculateReview'"
@@ -74,20 +74,20 @@
       </div>
       <!-- 受理信息 -->
       <div id="#anchor-13" class="batchInfo_class" style="margin-top: 10px;">
-        <acceptInfo :sonAcceptInfoData="sonAcceptInfoData" ref="acceptInfoForm" :claimtype="querys.claimtype"
+        <acceptInfo :sonAcceptInfoData="sonAcceptInfoData" ref="acceptInfoForm" :claimtype="querys.claimType"
                     :baseInfo="batchInfo" :isSave="isSave"
                     :node="querys.node" :status="querys.status" :fixInfo="fixInfo"/>
       </div>
       <!-- 账单明细 -->
-      <div v-if="querys.node==='input' || querys.node==='calculateReview'" id="#anchor-15" class="batchInfo_class"
+      <div v-if="querys.node==='input' || querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-15" class="batchInfo_class"
            style="margin-top: 10px;">
-        <billing-details ref="billingInfoForm" :sonBillingInfoData="sonBillingInfoData" :claimtype="querys.claimtype"
+        <billing-details ref="billingInfoForm" :batchData="batchInfo" :acceptData="sonAcceptInfoData" :sonBillingInfoData="sonBillingInfoData" :claimtype="querys.claimType"
                          :fixInfo="fixInfo"
                          :node="querys.node" :status="querys.status" @refresh-item="refreshList"/>
       </div>
       <!-- 案件理算 -->
-      <div v-if="querys.node==='calculateReview'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
-        <case-calculate :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"/>
+      <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
+        <case-calculate :sonCalculateData="sonCalculateData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
       <!--赔案备注-->
       <div id="#anchor-16" class="batchInfo_class" style="margin-top: 10px;">
@@ -117,7 +117,7 @@
     <!-- 历史理赔 -->
     <history-claim :value="historyClaimDialog" :fixInfo="fixInfo" @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
     <!-- 历史协谈 -->
-    <history-discussion :value="historyDiscussionDialog" :fixInfo="fixInfo"
+    <history-discussion :preHistoryData="preHistoryData" :value="historyDiscussionDialog" :fixInfo="fixInfo"
                         @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
     <!-- 历史调查 -->
     <history-survey :value="historySurveyDialog" :fixInfo="fixInfo"
@@ -136,7 +136,7 @@
   import caseCalculate from '../common/components/caseCalculate'//案件理算
   import payConclusion from '../common/components/payConclusion'//申诉案件陪付结论
   import discussion from '../common/components/discussion'//陪付结论
-  import mixinAnchor from "../../claimsHandle/common/mixins/mixinAnchor";
+  import mixinAnchor from "../common/mixins/mixinAnchor";
   import {mapGetters} from 'vuex'
 
   import historyProblemCase from './modul/problemCase' //历史问题件
@@ -164,6 +164,10 @@
     insurancePolicyList,
     adjustRemarkList
   } from '@/api/claim/handleCom'
+
+
+  import {  historyDisInfo } from '@/api/negotiation/api' // 历史协谈数据
+
 
   let dictss = [{dictType: 'delivery_source'},]
   export default {
@@ -197,6 +201,7 @@
     },
     data() {
       return {
+        historyDisCount:0,// 历史协谈个数
         sonInsuredData: {
           claimCaseInsured: '',
           policyInfominData: []
@@ -262,8 +267,8 @@
         reportData: [],
         dictList: [],
         delivery_sourceOption: [],
-        applicantData: {}
-
+        applicantData: {},
+        preHistoryData:[],
       }
 
     },
@@ -371,13 +376,25 @@
         this.btnArr = this.acceptArr
       } else if (this.querys.node === 'input') {
         this.btnArr = this.inputArr
-      } else if (this.querys.node === 'calculateReview') {
+      } else if (this.querys.node === 'calculateReview' || this.querys.node === 'sport' ) {
         this.btnArr = this.calculateArr
       }
-
+      this.getHistoryDisInfo();
     },
 
     methods: {
+      // 历史协谈数据
+      getHistoryDisInfo(){
+        if(this.querys.rptNo == '') {
+          return ;
+        }
+        historyDisInfo(this.rptNo).then(res => {
+          if(res.code == '200') {
+            this.historyDisCount = res.total;
+            this.preHistoryData = res.rows;
+          }
+        });
+      },
       //录入完毕
       changeBillStatus() {
         let isBillInfoSave = this.$refs.billingInfoForm.isBillInfoSave
@@ -393,7 +410,8 @@
                 center: true,
                 showClose: true
               })
-              /*this.$router.replace('/login')*/
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.go(-1)
             }
           }).catch(res => {
             this.$message({
@@ -445,7 +463,7 @@
         this.applicantData = this.$refs.insuredForm.baseForm
       },
       getApplicantDatas() {
-       let applicantData = this.$refs.insuredForm.baseForm
+        let applicantData = this.$refs.insuredForm.baseForm
         return applicantData
       },
       acceptOver() {
@@ -473,6 +491,7 @@
                 center: true,
                 showClose: true
               })
+              this.$store.dispatch("tagsView/delView", this.$route);
               this.$router.go(-1)
             }
           }).catch(res => {
@@ -494,7 +513,7 @@
             )
           } else if (!(isAcceptInfoSave || hasAcceptId)) {
             return this.$message.warning(
-              "请保存申请信息！"
+              "请保存受理信息！"
             )
           }
         }

@@ -7,15 +7,18 @@
         <span style="float: right;">
         <el-button v-if="!isOpen" type="primary" :disabled="!collapsed" size="mini" @click="openAll">一键展开</el-button>
         <el-button v-else type="primary" :disabled="!collapsed" size="mini" @click="closeAll">一键收起</el-button>
-        <el-button type="primary" :disabled="!collapsed" size="mini" @click="">赔付计算</el-button>
-        <el-button type="primary" :disabled="!collapsed" size="mini" @click="save">保存</el-button>
+        <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
+                   @click="">赔付计算</el-button>
+        <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
+                   @click="save">保存</el-button>
       </span>
       </div>
     </div>
-    <el-form ref="caseForm" :rules="caseRules" :model="caseForm" size="small" v-if="collapsed">
+    <el-form ref="caseForm" :rules="caseRules" :model="caseForm" size="small" v-show="collapsed">
       <el-table
-        v-loading="caseLoading"
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        :cell-style="cellStyle"
+        v-loading="caseLoading"
         :data="caseForm.caseData"
         size="small"
         highlight-current-row
@@ -64,7 +67,7 @@
                                  :value="option.dutyDetailCode"/>
                     </el-select>
                   </el-form-item>
-                  <span class="size" v-if="scope.row.isEdit">{{scope.row.policyNo}}-{{scope.row.riskName}}|{{scope.row.dutyDetailName}}</span>
+                  <span class="size" v-if="scope.row.isEdit">{{scope.row.policyNo}}-{{scope.row.riskName}} | {{scope.row.dutyDetailName}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="billDetailAmount" label="费用项金额" width="90" show-overflow-tooltip/>
@@ -81,11 +84,15 @@
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column align="center" width="140" prop="billNo" label="账单号/发票号" show-overflow-tooltip/>
+        <el-table-column align="center" width="140" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.billNo }} | {{ scope.row.invoiceNo }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="treatmentStartDate" label="就诊日期" show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-             <span>{{ scope.row.treatmentStartDate | changeDate }}~{{ scope.row.treatmentEndDate | changeDate }}</span>
-           </template>-->
+          <template slot-scope="scope">
+            <span>{{ scope.row.treatmentStartDate | changeDate }} ~ {{ scope.row.treatmentEndDate | changeDate }}</span>
+          </template>
         </el-table-column>
         <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="hosDiscountAmount" label="折扣金额" show-overflow-tooltip/>
@@ -176,6 +183,8 @@
     calSummary
   } from '@/api/claim/handleCom'
   import adjustmentDetail from '../modul/adjustmentDetail'
+  import moment from 'moment'
+
   let dictss = [{dictType: 'application_reason'}, {dictType: 'preAuthFlag'}, {dictType: 'priority_reason'},
     {dictType: 'accident_status'}, {dictType: 'current_state'}, {dictType: 'conclusion'},]
   export default {
@@ -198,9 +207,9 @@
           this.caseForm.caseData = newValue
         }
       },
-      fixInfo:function (newVal) {
+      fixInfo: function (newVal) {
         this.getCalSummary()
-      }
+      },
     },
     filters: {
       changeDate: function (value) {
@@ -208,28 +217,12 @@
           return moment(value).format('YYYY-MM-DD')
         }
       },
-      tableData: {
-        handler: function (newName, oldName) {
-          this.$nextTick(() => {
-            // 改变合计行样式
-            const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
-            // console.log(s_table)
-            s_table.setAttribute('style', 'border: 1px solid #1A936F')
-            const child_tr = s_table.getElementsByTagName('tr')[0]
-            // console.log(child_tr)
-            child_tr.childNodes.forEach(item => {
-              item.setAttribute('style', 'border: 1px solid #1A936F')
-            })
-          })
-        },
-        immediate: true,
-        deep: true
-      }
 
     },
     data() {
       return {
-        calSummaryData:{},
+        isSum: false,
+        calSummaryData: {},
         loading: true,
         dialogVisable: false,
         index: undefined,
@@ -299,7 +292,10 @@
       save() {
         this.$refs.caseForm.validate((valid) => {
           if (valid) {
-            billDetailsSave(this.caseForm.caseData).then(res => {
+            let item = {
+              billDetailList: this.caseForm.caseData
+            }
+            billDetailsSave(item).then(res => {
               if (res != null && res.code === 200) {
                 this.$message({
                   message: '保存成功！',
@@ -325,6 +321,7 @@
                 }
               }).catch(res => {
               })
+              this.getCalSummary()
             }).catch(res => {
               this.$message({
                 message: '保存失败!',
@@ -348,8 +345,8 @@
             if (res != null && res.code === 200 && res.rows.length > 0) {
               res.rows.forEach(item => {
                 item.isEdit = true
-                item.selectFData=[]
-                item.selectSData=[]
+                item.selectFData = []
+                item.selectSData = []
               })
               this.caseForm.caseData.forEach((temp, index) => {
                 if (temp.billId === row.billId) {
@@ -362,9 +359,11 @@
         }
       },
       changeRemark(index, remark) {
-        this.index = index
-        this.dialogVisable = true
-        this.remarkForm.remark = remark
+        if (this.node === 'calculateReview') {
+          this.index = index
+          this.dialogVisable = true
+          this.remarkForm.remark = remark
+        }
       },
       changeDialogVisable() {
         this.dialogVisable = false
@@ -386,8 +385,8 @@
               if (item.minData.length > 0) {
                 item.minData.forEach(option => {
                   option.isEdit = true
-                  option.selectFData=[]
-                  option.selectSData=[]
+                  option.selectFData = []
+                  option.selectSData = []
                 })
               }
             })
@@ -411,62 +410,65 @@
         row.isEdit = false
       },
       rowMinClick(row, column, event) {
-        let data = {
-          rptNo: this.fixInfo.rptNo
-        }
-        insurancePolicyList(data).then(res => {
-          if (res != null && res.code === 200) {
-            row.selectFData = res.rows
+        if (this.node === 'calculateReview') {
+          let data = {
+            rptNo: this.fixInfo.rptNo
           }
-        })
-        let item = {
-          riskCode: row.riskCode,
-          feeItemCode: row.feeItemCode
-        }
-        responsibilityDetailsList(item).then(res => {
-          if (res != null && res.code === 200) {
-            row.selectSData = res.rows
+          insurancePolicyList(data).then(res => {
+            if (res != null && res.code === 200) {
+              row.selectFData = res.rows
+            }
+          })
+          let item = {
+            riskCode: row.riskCode,
+            feeItemCode: row.feeItemCode
           }
-        }).catch(res => {
-        })
-        row.isEdit = false
-
+          responsibilityDetailsList(item).then(res => {
+            if (res != null && res.code === 200) {
+              row.selectSData = res.rows
+            }
+          }).catch(res => {
+          })
+          row.isEdit = false
+        }
       },
       getSum(param) {
-        const {columns, data} = param;
-        const sums = [];
-
-        columns.forEach((column, index) => {
-          if (index === 1) {
-            sums[index] = '汇总信息';
-            return;
-          }
-          switch (column.property) {
-            case "billAmount":
-              sums[index] = (this.calSummaryData.sumBillAmount).toFixed(2) ;// 账单金额
-              break;
-            case "hosDiscountAmount":
-              sums[index] = (this.calSummaryData.sumHosDiscountAmount).toFixed(2) ;//折扣金额
-              break;
-            case "unableAmount":
-              sums[index] = (this.calSummaryData.sumUnableAmount).toFixed(2) ;//不合理金额
-              break;
-            case "advancePayment":
-              sums[index] = (this.calSummaryData.sumAdvancePayment).toFixed(2) ;//先期给付
-              break;
-            case "calAmount":
-              sums[index] = (this.calSummaryData.calAmount).toFixed(2) ;//理算金额
-              break;
-            case "selfAmount":
-              sums[index] = (this.calSummaryData.sumSelfAmount).toFixed(2) ;//自费金额
-              break;
-            case "partSelfAmount":
-              sums[index] = (this.calSummaryData.sumPartSelfAmount).toFixed(2) ;//部分自费金额
-              break;
-            default:
-              break;
-          }
-        });
+        const sums = []
+        if (this.calSummaryData!==null && this.calSummaryData!==undefined && this.calSummaryData.sumBillAmount){
+          this.isSum=true
+          const {columns, data} = param;
+          columns.forEach((column, index) => {
+            if (index === 1) {
+              sums[index] = '汇总信息';
+              return;
+            }
+            switch (column.property) {
+              case "billAmount":
+                sums[index] = this.calSummaryData.sumBillAmount;// 账单金额
+                break;
+              case "hosDiscountAmount":
+                sums[index] = this.calSummaryData.sumHosDiscountAmount;//折扣金额
+                break;
+              case "unableAmount":
+                sums[index] = this.calSummaryData.sumUnableAmount;//不合理金额
+                break;
+              case "deduUsed":
+                sums[index] = this.calSummaryData.sumSelfAmount;//先期给付
+                break;
+              case "calAmount":
+                sums[index] =this.calSummaryData.sumPartSelfAmount;//理算金额
+                break;
+              case "payAmount":
+                sums[index] = this.calSummaryData.sumAdvancePayment;//自费金额
+                break;
+              case "refusedAmount":
+                sums[index] = this.calSummaryData.calAmount;//部分自费金额
+                break;
+              default:
+                break;
+            }
+          });
+        }
         return sums;
       },
       getSelectSData(riskCode, row, index) {
@@ -482,7 +484,7 @@
         }
         responsibilityDetailsList(data).then(res => {
           if (res != null && res.code === 200) {
-            row.selectSData= res.rows
+            row.selectSData = res.rows
           }
         }).catch(res => {
         })
@@ -498,15 +500,27 @@
         this.caseForm.caseData[index].minData.dutyCode = sData.dutyCode
         this.caseForm.caseData[index].minData.planCode = sData.planCode
       },
-      getCalSummary(){
-        let data={
-          rptNo:this.fixInfo.rptNo
+      getCalSummary() {
+        let data = {
+          rptNo: this.fixInfo.rptNo
         }
-        calSummary(data).then(res=>{
-          if (res!=null && res.code===200){
-            this.calSummaryData=res.data
+        calSummary(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.calSummaryData = res.data
           }
         })
+      },
+      cellStyle({row, column, rowIndex, columnIndex}) {
+        if (rowIndex===0 && this.isSum){
+          // 改变合计行样式
+          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
+          const child_tr = s_table.getElementsByTagName('tr')[0]
+          child_tr.childNodes.forEach(item => {
+            if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2) {
+              item.setAttribute('style', 'background: #dbad85')
+            }
+          })
+        }
       }
     }
   }

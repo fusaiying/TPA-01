@@ -21,13 +21,22 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="机构：" prop="organcode">
-              <el-select v-model="queryParams.organcode" class="item-width" placeholder="请选择">
-                <el-option key="01" label="上海分公司"
-                           value="01"/>
-                <el-option key="02" label="北京分公司"
-                           value="02"/>
-                <el-option key="03" label="长沙分公司"
-                           value="03"/>
+              <el-select
+                v-model="queryParams.organcode"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请选择机构"
+                :remote-method="remoteMethod"
+                class="item-width"
+                @change="getUsers"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in sysDeptOptions"
+                  :key="ind"
+                  :label="item.deptName"
+                  :value="item.deptId">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -67,9 +76,13 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="操作人：" prop="updateBy">
-              <el-select v-model="queryParams.updateBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in sysUserOptions" :key="item.userName" :label="item.userName"
-                           :value="item.userName"/>
+              <el-select v-model="queryParams.updateBy" class="item-width" placeholder="请选择"
+                         remote
+                         reserve-keyword
+                         filterable
+                         :remote-method="remoteUserMethod">
+                <el-option v-for="(item,ind) in sysUserOptions" :label="item" :value="item"
+                           :key="ind"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -108,10 +121,10 @@
       <div style="position: relative">
         <el-tabs v-model="activeName" v-loading="loading" @tab-click="handleClick">
           <el-tab-pane :label="`已退回(${backTotal})`" name="01">
-            <claimsTable :table-data="backData" :status="activeName"/>
+            <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName"/>
           </el-tab-pane>
           <el-tab-pane :label="`已处理(${dealTotal})`" name="02">
-            <claimsTable @init-data="searchHandle" :table-data="dealData" :status="activeName"/>
+            <claimsTable ref="claimsTable2" @init-data="searchHandle" :table-data="dealData" :status="activeName"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -138,9 +151,10 @@
 
 <script>
   import claimsTable from './components/claimsTable'
-  import {selectSysUser} from '@/api/insuranceRules/ruleDefin'
+  import {getUser,getDept} from '@/api/claim/standingBookSearch'
+
   import {getBackToList, getDealWithList} from '@/api/claim/presentingReview'
- let dictss=[{dictType: 'claimType'},]
+  let dictss=[{dictType: 'claimType'},]
   export default {
     components: {
       claimsTable
@@ -182,7 +196,8 @@
         changeSerchData: {},
         dictList:[],
         claimTypeOptions:[],
-        sysUserOptions:[]
+        sysUserOptions:[],
+        sysDeptOptions:[]
       }
     },
     created() {
@@ -196,7 +211,11 @@
         return item.dictType === 'claimType'
       }).dictDate
       //this.searchHandle();
-      getBackToList(this.queryParams).then(res => {
+      let query={
+        pageNum: 1,
+        pageSize: 10,
+      }
+      getBackToList(query).then(res => {
         if (res != null && res.code === 200) {
           this.backData = res.rows
           this.backTotal = res.total
@@ -209,7 +228,7 @@
       }).finally(() => {
         this.loading = false
       })
-      getDealWithList(this.queryParams).then(res => {
+      getDealWithList(query).then(res => {
         if (res != null && res.code === 200) {
           this.dealData = res.rows
           this.dealTotal = res.total
@@ -222,8 +241,25 @@
       }).finally(() => {
         this.loading = false
       })
-      selectSysUser().then(res => {
-        this.sysUserOptions = res.data
+      let item={
+        pageNum: 1,
+        pageSize: 200,
+      }
+      getDept(item).then(res => {
+        this.sysDeptOptions = res.deptlist
+        this.queryParams.organcode = res.deptId
+        let data = {
+          organcode: res.deptId,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        getUser(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.sysUserOptions = res.data
+          }
+        })
+
+      }).catch(res => {
       })
     },
     methods: {
@@ -234,6 +270,8 @@
         const params = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
           pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
+          orderByColumn:this.activeName === '01' ? this.$refs.claimsTable1.prop : this.$refs.claimsTable2.prop,
+          isAsc:this.activeName === '01' ? this.$refs.claimsTable1.order : this.$refs.claimsTable2.order,
           submitstartdate: undefined,
           submitenddate: undefined,
           organcode: this.queryParams.organcode,
@@ -246,6 +284,12 @@
           caseNumber: this.queryParams.caseNumber,
           rptno: this.queryParams.rptno,
           updateBy: this.queryParams.updateBy,
+        }
+        if (this.isinit==='N'){
+          params.pageNum=1
+          params.pageSize=10
+          params.orderByColumn=''
+          params.isAsc=''
         }
         if (this.queryParams.submitdate) {
           params.submitstartdate = this.queryParams.submitdate[0]
@@ -292,6 +336,7 @@
             }
           }).finally(() => {
             this.loading = false
+            this.isinit='Y'
           })
         }
       },
@@ -305,10 +350,12 @@
       //清单导出
       listExport() {
         let query={
-          submitdate: this.queryParams.submitdate,
+          submitstartdate:this.queryParams.submitdate[0],
+          submitenddate:this.queryParams.submitdate[1],
           organcode: this.queryParams.organcode,
           hospitalname: this.queryParams.hospitalname,
-          updateTime: this.queryParams.updateTime,
+          updatestartTime: this.queryParams.updateTime[0],
+          updateendTime: this.queryParams.updateTime[1],
           batchno: this.queryParams.batchno,
           claimtype: this.queryParams.claimtype,
           updateBy: this.queryParams.updateBy,
@@ -316,33 +363,33 @@
           rptno: this.queryParams.rptno,
         }
         if (this.activeName === '01') {
-          getBackToList(this.queryParams).then(res => {
-           if (res.rows.length>0){
-             this.isListExport=true
-             let subDate=''
-             if (this.queryParams.submitdate.length>0){
-               subDate='&submitstartdate='+this.queryParams.submitdate[0]+'&submitenddate='+this.queryParams.submitdate[1]
-               +'&updatestartTime='+this.queryParams.updateTime[0]
-             }
-             let upDate=''
-             if (this.queryParams.updateTime.length>0){
-               upDate='&updatestartTime='+this.queryParams.updateTime[0] +'&updateendTime='+this.queryParams.updateTime[1]
-             }
+          getBackToList(query).then(res => {
+            if (res.rows.length>0){
+              this.isListExport=true
+              let subDate=''
+              if (this.queryParams.submitdate.length>0){
+                subDate='&submitstartdate='+this.queryParams.submitdate[0]+'&submitenddate='+this.queryParams.submitdate[1]
+                  +'&updatestartTime='+this.queryParams.updateTime[0]
+              }
+              let upDate=''
+              if (this.queryParams.updateTime.length>0){
+                upDate='&updatestartTime='+this.queryParams.updateTime[0] +'&updateendTime='+this.queryParams.updateTime[1]
+              }
 
-             this.download('system/batch/exportReturnedPool'+'?hospitalname='+this.queryParams.hospitalname+'&organcode='+this.queryParams.organcode+
-               '&batchno='+this.queryParams.batchno+'&claimtype='+this.queryParams.claimtype+'&updateBy='+this.queryParams.updateBy+subDate
-               +upDate, {
-               ...this.queryParams
-             }, `FYX_${new Date().getTime()}.xlsx`)
-           }else {
-             return this.$message.warning(
-               "没有查询到能导出的数据！"
-             )
-           }
+              this.download('system/batch/exportReturnedPool'+'?hospitalname='+this.queryParams.hospitalname+'&organcode='+this.queryParams.organcode+
+                '&batchno='+this.queryParams.batchno+'&claimtype='+this.queryParams.claimtype+'&updateBy='+this.queryParams.updateBy+subDate
+                +upDate, {
+                ...query
+              }, `FYX_${new Date().getTime()}.xlsx`)
+            }else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
           }).finally(() => {
           })
         } else {//已处理
-          getDealWithList(this.queryParams).then(res => {
+          getDealWithList(query).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
               let subDate=''
@@ -357,7 +404,7 @@
               this.download('system/batch/exportProcessedPool'+'?hospitalname='+this.queryParams.hospitalname
                 +'&organcode='+this.queryParams.organcode+'&batchno='+this.queryParams.batchno+'&claimtype='+
                 this.queryParams.claimtype+'&updateBy='+this.queryParams.updateBy+subDate+upDate, {
-                ...this.queryParams
+                ...query
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
@@ -376,6 +423,46 @@
           this.caseNumber = true
         }
       },
+      remoteMethod(query) {
+        let data={
+          deptName:query,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        if (query !== '' && query != null) {
+          getDept(data).then(res => {
+            this.sysDeptOptions = res.deptlist
+          }).catch(res => {
+          })
+        }
+      },
+      remoteUserMethod(query) {
+        let data={
+          organcode: this.queryParams.organcode,
+          userName:query,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        if (query !== '' && query != null) {
+          getUser(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.sysUserOptions = res.data
+            }
+          })
+        }
+      },
+      getUsers(val){
+        let data = {
+          organcode: val,
+          pageNum: 1,
+          pageSize: 200,
+        }
+        getUser(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.sysUserOptions = res.data
+          }
+        })
+      }
     }
   }
 </script>

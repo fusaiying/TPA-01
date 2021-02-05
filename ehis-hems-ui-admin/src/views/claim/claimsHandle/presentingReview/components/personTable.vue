@@ -6,8 +6,9 @@
       size="small"
       highlight-current-row
       tooltip-effect="dark"
+      @sort-change="onSortChange"
       style="width: 100%;">
-      <el-table-column sortable align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
+      <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
       <el-table-column  align="center" min-width="100" prop="source" label="交单来源"
                         show-overflow-tooltip>
         <template slot-scope="scope">
@@ -38,7 +39,11 @@
       <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额"
                        show-overflow-tooltip/>
       <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-      <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip/>
+      <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="status === '02'" align="center" min-width="100" prop="batchstatus" label="批次状态"
                        show-overflow-tooltip>
         <template slot-scope="scope">
@@ -59,7 +64,7 @@
 </template>
 
 <script>
-  import {invalid} from '@/api/claim/presentingReview'
+  import {invalid,getDeptList} from '@/api/claim/presentingReview'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
@@ -74,10 +79,13 @@
     },
     data() {
       return {
+        prop:'',
+        order:'',
         dictList:[],
         delivery_sourceOptions:[],
         claimtypeOptions:[],
         batchs_statusOptions:[],
+        deptOptions:[],
       }
     },
     async created() {
@@ -93,7 +101,11 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-
+      getDeptList().then(res=>{
+        if (res!=null && res.code===200){
+          this.deptOptions=res.data
+        }
+      })
 
     },
     methods: {
@@ -114,11 +126,6 @@
         })
 
       },
-      recovery(row) {
-      },
-      getCNReasonType(row, col) {
-
-      },
       invalid(row) {
         this.$confirm(`是否确认对批次进行无效处理?`, '提示', {
           confirmButtonText: '确定',
@@ -133,14 +140,35 @@
                 center: true,
                 showClose: true
               })
-              this.searchHandle()
+              this.$parent.$parent.$parent.$parent.searchTable()
             }else {
               this.$message.error('无效处理失败！')
             }
           })
         })
       },
-
+      getDeptName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].deptId === parseInt(value)) {
+            actions.push(datas[key].deptName);
+            return true;
+          }
+        })
+        return actions.join('');
+      },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchHandle()
+      }
     }
   }
 </script>

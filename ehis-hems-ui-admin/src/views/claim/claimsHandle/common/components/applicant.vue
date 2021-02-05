@@ -12,7 +12,7 @@
       </div>
     </div>
     <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule"
-             :disabled="(node === 'accept' && status === 'show') || node==='input' "
+             :disabled="(node === 'accept' && status === 'show') || node==='input'  || node==='sport' "
              :model="baseForm" style="padding-bottom: 30px;" label-width="136px" label-position="right" size="mini">
       <el-row>
         <el-col :span="8">
@@ -30,8 +30,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="出生日期：" prop="rgtBirthday">
-            <el-input v-model="baseForm.rgtBirthday" class="item-width" clearable size="mini" placeholder="请输入"
-                      @input="getGender('baseForm')"/>
+            <el-date-picker
+              v-model="baseForm.rgtBirthday"
+              class="item-width"
+              type="date"
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -44,8 +48,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="证件号码：" prop="rgtIdNo">
-            <el-input v-model="baseForm.rgtIdNo" class="item-width" clearable size="mini" placeholder="请输入"
-                      @input="getGender('baseForm')"/>
+            <el-input v-model="baseForm.rgtIdNo" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -149,7 +152,7 @@
           this.baseForm = newVal
           console.log(regionArr)
 
-         // this.$set(this,'baseForm',newVal)
+          // this.$set(this,'baseForm',newVal)
           this.$set(this,'region',regionArr)
 
           if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
@@ -370,9 +373,9 @@
           this.baseForm.rgtDistrict = this.batchInfo.district
           this.baseForm.rgtAddress = this.batchInfo.address
 
-        /*  this.region[0] = this.batchInfo.province
-          this.region[1] = this.batchInfo.city
-          this.region[2] = this.batchInfo.district*/
+          /*  this.region[0] = this.batchInfo.province
+            this.region[1] = this.batchInfo.city
+            this.region[2] = this.batchInfo.district*/
           let regionArr=[]
           regionArr[0] = this.batchInfo.province
           regionArr[1] = this.batchInfo.city
@@ -383,9 +386,9 @@
           this.$set(this,'region',regionArr)
 
 
-        /*  this.region.push(this.batchInfo.province)
-          this.region.push(this.batchInfo.city)
-          this.region.push(this.batchInfo.district)*/
+          /*  this.region.push(this.batchInfo.province)
+            this.region.push(this.batchInfo.city)
+            this.region.push(this.batchInfo.district)*/
         } else {
           this.baseForm.rgtName = undefined
           this.baseForm.rgtBirthday = undefined
@@ -464,19 +467,6 @@
       getCNIdType(row) {
         //return this.dict.label.card_type[row.cardType]
         return this.selectDictLabel(this.card_typeOptions, row.cardType)
-      }
-      ,
-
-
-      getGender() {
-        if (this.baseForm.cardType !== '0') {
-          return
-        }
-        if (parseInt(this.baseForm.idCard.substr(16, 1)) % 2 === 1) {
-          this.baseForm.gender = '0'
-        } else {
-          this.baseForm.gender = '1'
-        }
       }
       ,
 

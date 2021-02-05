@@ -5,7 +5,8 @@
         <i v-show="!collapsed" class="el-icon-arrow-right" @click="collapsed=!collapsed">&nbsp;账单明细</i>
         <i v-show="collapsed" class="el-icon-arrow-down" @click="collapsed=!collapsed">&nbsp;账单明细</i>
         <div style="float: right;">
-          <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview') " :disabled="!collapsed" type="primary"
+          <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview') " :disabled="!collapsed"
+                     type="primary"
                      size="mini" @click="saveBill">保存
           </el-button>
         </div>
@@ -39,17 +40,19 @@
             <span>{{ scope.row.treatmentStartDate }} - {{ scope.row.treatmentEndDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/><!--显示发票/账单的金额-->
+        <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="hosDiscountAmount" label="折扣金额" show-overflow-tooltip/>
-        <el-table-column align="center" prop="createBy" label="合理费用" show-overflow-tooltip/><!--1、显示发票/账单的合理金额-->
-        <el-table-column align="center" prop="selfAmount" label="自费金额" show-overflow-tooltip/><!--显示发票/账单的自费金额-->
-        <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/><!--显示发票/账单的部分自费金额-->
+        <el-table-column align="center" prop="createBy" label="合理费用" show-overflow-tooltip/>
+        <el-table-column align="center" prop="selfAmount" label="自费金额" show-overflow-tooltip/>
+        <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/>
         <el-table-column align="center" prop="tpAdvancePayment" label="先期给付" show-overflow-tooltip/>
         <el-table-column align="center" prop="unableAmount" label="不合理金额" show-overflow-tooltip/>
         <el-table-column align="center" v-if="status==='edit'" label="操作" width="140">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
-            <el-button size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
+            <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview')" size="mini"
+                       style="color: red" type="text" @click="deleteInfo(scope.row)">删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,16 +68,19 @@
         :limit.sync="pageSize"
         @pagination="getBillList"
       />
+      <div style="height: 15px">
 
-      <el-form v-if="node === 'input' || isFormShow" ref="baseForm" :rules="baseFormRule" :model="baseForm"
+      </div>
+      <el-form v-if="node === 'input' || isFormShow || node==='sport'" ref="baseForm" :rules="baseFormRule"
+               :model="baseForm"
                style="padding-top:20px;padding-bottom: 30px;"
-               :disabled="node === 'input' && status === 'show'"
+               :disabled="status === 'show' || node==='sport'"
                label-width="188px" label-position="right" size="mini">
         <el-col :span="8">
           <el-form-item label="就诊医院：" prop="hospitalName">
             <el-input disabled v-model="baseForm.hospitalName" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
-            <el-button type="success" size="mini" @click="openHospitalDialog"
+            <el-button v-if="claimtype==='02'" type="success" size="mini" @click="openHospitalDialog"
                        icon="el-icon-search"></el-button>
           </el-form-item>
         </el-col>
@@ -99,8 +105,10 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否定点医院：" prop="isDesHospital">
-            <el-input v-model="baseForm.isDesHospital" disabled class="item-width" clearable size="mini"
-                      placeholder="请输入"/>
+            <el-select v-model="baseForm.isDesHospital" disabled  filterable remote class="item-width" placeholder="请输入">
+              <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue" :label="option.dictLabel"
+                         :value="option.dictValue"/>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -113,13 +121,10 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="账户币种：" prop="billCurrency">
-            <el-select v-model="baseForm.billCurrency" class="item-width" placeholder="请选择">
-              <!--<el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/> 理赔类型为事后时可编辑，理赔类型为直结时只读-->
-              <el-option key="01" label="CNY"
-                         value="01"/>
-              <el-option key="02" label="RMB"
-                         value="02"/>
+            <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
+                       placeholder="请选择">
+              <el-option v-for="option in currencyOptions" :key="option.dictValue" :label="option.dictLabel"
+                         :value="option.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -288,8 +293,9 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-form v-if="node === 'input' || isFormShow || isCostShow" ref="costForm" :rules="accountRules"
-               :model="costForm" size="small" >
+      <el-form v-if="node === 'input' || isFormShow || isCostShow  || node==='sport'" ref="costForm"
+               :rules="accountRules"
+               :model="costForm" size="small">
         <el-table ref="costFormTable" :data="costForm.costData"
                   :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row
                   size="small" style="width: 100%;">
@@ -297,7 +303,7 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.feeItemCode'"
-                            :rules="accountRules.feeItemCode">
+                            :rules="accountRules.feeItemCode" style="display: inline-flex !important;">
                 <el-select v-model="scope.row.feeItemCode" placeholder="请选择" size="mini">
                   <el-option v-for="item in feeOptions" :key="item.feeitemcode" :label="item.feeitemname"
                              :value="item.feeitemcode"/>
@@ -311,7 +317,7 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.billDetailAmount'"
-                            :rules="accountRules.billDetailAmount">
+                            :rules="accountRules.billDetailAmount" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.billDetailAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.billDetailAmount}}</span>
@@ -322,7 +328,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow && baseForm.isShareDisAmount!=='01'"
                             :prop="'costData.' + scope.$index + '.hosDiscountAmount'"
-                            :rules="accountRules.hosDiscountAmount">
+                            :rules="accountRules.hosDiscountAmount" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.hosDiscountAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span
@@ -330,10 +336,10 @@
             </template>
           </el-table-column>
           <el-table-column prop="selfAmount" align="center" header-align="center" label="自费金额" min-width="2"
-                           show-overflow-tooltip>
+                           show-overflow-tooltip >
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.selfAmount'"
-                            :rules="accountRules.selfAmount">
+                            :rules="accountRules.selfAmount" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.selfAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.selfAmount }}</span>
@@ -343,7 +349,7 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.partSelfAmount'"
-                            :rules="accountRules.partSelfAmount">
+                            :rules="accountRules.partSelfAmount" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.partSelfAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.partSelfAmount }}</span>
@@ -353,7 +359,7 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.unableAmount'"
-                            :rules="accountRules.unableAmount">
+                            :rules="accountRules.unableAmount" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.unableAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.unableAmount }}</span>
@@ -364,29 +370,29 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow && baseForm.isShareAp!=='01'"
                             :prop="'costData.' + scope.$index + '.advancePayment'"
-                            :rules="accountRules.advancePayment">
+                            :rules="accountRules.advancePayment" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.advancePayment" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow || baseForm.isShareAp==='01'">{{ scope.row.advancePayment }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="copay" align="center" header-align="center" label="自付额" min-width="2"
+          <el-table-column prop="billDetailCopay" align="center" header-align="center" label="自付额" min-width="2"
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow && baseForm.isShareCopay!=='01'"
-                            :prop="'costData.' + scope.$index + '.copay'"
-                            :rules="accountRules.copay">
-                <el-input v-model="scope.row.copay" placeholder="请输入" size="mini"/>
+                            :prop="'costData.' + scope.$index + '.billDetailCopay'"
+                            :rules="accountRules.billDetailCopay" style="display: inline-flex !important;">
+                <el-input v-model="scope.row.billDetailCopay" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span
-                v-if="!scope.row.isShow || baseForm.isShareCopay==='01'">{{scope.row.copay}}</span>
+                v-if="!scope.row.isShow || baseForm.isShareCopay==='01'">{{scope.row.billDetailCopay}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="visNumber" align="center" header-align="center" label="次数" min-width="2"
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.visNumber'"
-                            :rules="accountRules.visNumber">
+                            :rules="accountRules.visNumber" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.visNumber" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span
@@ -397,14 +403,15 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.remark'"
-                            :rules="accountRules.remark">
+                            :rules="accountRules.remark" style="display: inline-flex !important;">
                 <el-input v-model="scope.row.remark" maxlength="500" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span
                 v-if="!scope.row.isShow">{{scope.row.remark}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="操作" width="140" v-if="!(node === 'input' && status === 'show')">
+          <el-table-column align="center" label="操作" width="140"
+                           v-if="!(node === 'input' && status === 'show') && node !== 'sport'">
             <template slot-scope="scope">
               <el-button v-if="!scope.row.isShow" size="mini" type="text" @click="scope.row.isShow=true">编辑</el-button>
               <el-button size="mini" style="color: red" type="text" @click="deleteRow(scope.$index,scope.row)">删除
@@ -412,13 +419,13 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button type="text" size="mini" :disabled="node === 'input' && status === 'show'"
+        <el-button type="text" size="mini" :disabled="status === 'show' || node === 'sport'"
                    style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
                    @click="addRow()"> + 添加
         </el-button>
       </el-form>
-      </div>
-      <hospital :value="hospitalDialog" @closeHospital="closeHospital" @getPropData="getPropData"/>
+    </div>
+    <hospital :value="hospitalDialog" @closeHospital="closeHospital" @getPropData="getPropData"/>
   </el-card>
 </template>
 
@@ -426,8 +433,9 @@
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
 
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
-    {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'},]
+    {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'currency'},]
   import {getBillList, saveBill, editBill, getFee, getHospitalInfo, deleteBill} from '@/api/claim/handleCom'
+
 
   export default {
     components: {Hospital},
@@ -435,6 +443,8 @@
       sonBillingInfoData: Array,
       claimtype: String,
       billData: Array,
+      batchData: Object,
+      acceptData: Object,
       status: String,
       node: String,
       claimno: String,
@@ -458,6 +468,38 @@
       sonBillingInfoData: function (newVal) {
         if (newVal !== null && newVal !== undefined) {
           this.tableData = newVal
+        }
+      },
+      acceptData: function (newVal) {
+        if (newVal.claimCaseAccept !== null && newVal.claimCaseAccept !== undefined) {
+          this.baseForm.accType = newVal.claimCaseAccept.accType
+        }
+      },
+      batchData: function (newVal) {
+        getHospitalInfo({}).then(res => {
+          if (res != null && res !== '') {
+            this.hospitalOptions = res.rows
+          }
+          if (newVal !== null && newVal !== undefined) {
+            let val = this.hospitalOptions.find(item => {
+              return item.providerCode === newVal.hospitalcode
+            })
+            if (val !== null && val !== undefined) {
+              if (val.enname1 != null && val.enname1 !== '') {
+                this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
+              } else {
+                this.baseForm.hospitalName = val.chname1
+              }
+              this.baseForm.hospitalCode = val.providerCode
+
+              this.baseForm.firstAttribute = val.firstAttribute
+              this.baseForm.secondAttribute = val.secondAttribute
+              this.baseForm.isDesHospital = val.flag
+            }
+          }
+        })
+        if (newVal !== null && newVal !== undefined) {
+          this.baseForm.billCurrency = newVal.currency
         }
       },
     },
@@ -496,6 +538,11 @@
           if (!regx.test(value)) {
             callback(new Error("请录入正整数"));
           } else {
+            let sum = 0
+            for (let i = 0; i < this.costForm.costData.length; i++) {
+              sum = sum + parseInt(this.getZero(this.costForm.costData[i].visNumber))
+            }
+            this.baseForm.visNumber = sum + ''
             callback();
           }
         } else {
@@ -511,41 +558,43 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            let dataSum=0
-            for (let i = 0; i <=index; i++) {
-              dataSum=dataSum+parseFloat(this.costForm.costData[i].billDetailAmount)
+            let dataSum = 0
+            for (let i = 0; i <= index; i++) {
+              dataSum = dataSum + parseFloat(this.costForm.costData[i].billDetailAmount)
             }
-            if (dataSum<=parseFloat(this.baseForm.billAmount)){
+            if (dataSum <= parseFloat(this.baseForm.billAmount)) {
               if (this.baseForm.isShareAp === '01') {
-                this.costForm.costData[index].advancePayment = parseInt(this.baseForm.ssAdvancePayment) + parseInt(this.baseForm.tpAdvancePayment)
+                for (let i = 0; i < this.costForm.costData.length; i++) {
+                  this.costForm.costData[i].advancePayment = (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)
+                }
               }
               if (this.baseForm.isShareDisAmount === '01') {
-                let hosDiscountAmountNum=0
-                for (let i = 0; i < this.costForm.costData.length-1; i++) {
-                  this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.hosDiscountAmount).toFixed(2)
-                  hosDiscountAmountNum=hosDiscountAmountNum+parseFloat(this.costForm.costData[i].hosDiscountAmount)
+                let hosDiscountAmountNum = 0
+                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                  this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
+                  hosDiscountAmountNum = hosDiscountAmountNum + parseFloat(this.costForm.costData[i].hosDiscountAmount)
                 }
 
-                this.costForm.costData[this.costForm.costData.length-1].hosDiscountAmount=(this.baseForm.hosDiscountAmount - hosDiscountAmountNum).toFixed(2)
+                this.costForm.costData[this.costForm.costData.length - 1].hosDiscountAmount = (this.getZero(this.baseForm.hosDiscountAmount) - hosDiscountAmountNum).toFixed(2)
               }
               if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '')) {
-                let copayNum=0
-                for (let i = 0; i < this.costForm.costData.length-1; i++) {
-                  this.costForm.costData[i].copay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.copay).toFixed(2)
-                  copayNum=copayNum+ parseFloat(this.costForm.costData[i].copay)
+                let copayNum = 0
+                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                  this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
+                  copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
                 }
-                this.costForm.costData[this.costForm.costData.length-1].copay=(this.baseForm.copay-copayNum).toFixed(2)
+                this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
               } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '')) {
-                let copayNum=0
-                for (let i = 0; i < this.costForm.costData.length-1; i++) {
-                  this.costForm.costData[i].copay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.baseForm.transSerialCopay).toFixed(2)
-                  copayNum=copayNum+ parseFloat(this.costForm.costData[i].copay)
+                let copayNum = 0
+                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                  this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
+                  copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
                 }
-                this.costForm.costData[this.costForm.costData.length-1].copay=(this.baseForm.transSerialCopay-copayNum).toFixed(2)
+                this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
               }
 
               callback();
-            }else {
+            } else {
               callback(new Error("录入费用金额有误，请检查！"));
             }
           }
@@ -570,10 +619,14 @@
       const checkTreatmentStartDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (!value) {
           callback(new Error("治疗起期不能为空！"));
         } else {
@@ -599,10 +652,14 @@
       const checkTreatmentEndDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
+        let day = date.getDate()
         if (month < 10) {
           month = '0' + month
         }
-        let date1 = date.getFullYear() + "-" + month + "-" + date.getDate();
+        if (day < 10) {
+          day = '0' + day
+        }
+        let date1 = date.getFullYear() + "-" + month + "-" + day;
         if (!value) {
           callback(new Error("治疗止期不能为空！"));
         } else {
@@ -624,6 +681,18 @@
       const checkTreatmentDays = (rule, value, callback) => {
         if (!value) {
           callback(new Error("治疗天数不能为空！"));
+        } else {
+          callback()
+        }
+      }
+      const checkOne = (rule, value, callback) => {
+        if (!value) {
+          if ((this.baseForm.invoiceNo==null || this.baseForm.invoiceNo==='' || this.baseForm.invoiceNo===undefined) &&
+            (this.baseForm.billNo==null || this.baseForm.billNo==='' || this.baseForm.billNo===undefined)) {
+            callback(new Error("发票号与账单号必录其一！"));
+          }else {
+            callback()
+          }
         } else {
           callback()
         }
@@ -725,6 +794,8 @@
           isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: 'blur'}],
           icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: 'blur'}],
           clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: 'blur'}],
+          invoiceNo:[{validator: checkOne, trigger: 'blur'}],
+          billNo:[{validator: checkOne,trigger: 'blur'}],
         },
         accountRules: {
           feeItemCode: [{required: true, message: '请选择费用项名称', trigger: 'blur'}],
@@ -736,7 +807,7 @@
           visNumber: [{validator: checkVisNumber, trigger: 'blur'}],
           remark: [{validator: checkRemark, trigger: 'blur'}],
           hosDiscountAmount: [{validator: checkNums, trigger: 'blur'}],
-          copay: [{validator: checkNums, trigger: 'blur'}],
+          billDetailCopay: [{validator: checkNums, trigger: 'blur'}],
         },
         dictList: [],
         departmentOptions: [],
@@ -749,6 +820,7 @@
         second_attribute_bOptions: [],
         sys_yes_noOptions: [],
         hospitalOptions: [],
+        currencyOptions: [],
       };
     },
     async mounted() {
@@ -782,16 +854,15 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      getFee().then(res => {
+      this.currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'currency'
+      }).dictDate
+      getFee({}).then(res => {
         if (res != null && res.code === 200) {
           this.feeOptions = res.rows
         }
       })
-      getHospitalInfo().then(res => {
-        if (res != null && res !== '') {
-          this.hospitalOptions = res.rows
-        }
-      })
+
 
     },
     methods: {
@@ -882,10 +953,14 @@
               }
               getHospitalInfo(data).then(res => {
                 if (res != null && res !== '') {
-                  this.baseForm.hospitalName = res.rows[0].chname1
+                  if (res.rows[0].enname1 != null && res.rows[0].enname1 !== '') {
+                    this.baseForm.hospitalName = res.rows[0].chname1 + '|' + res.rows[0].enname1
+                  } else {
+                    this.baseForm.hospitalName = res.rows[0].chname1
+                  }
                   this.baseForm.firstAttribute = res.rows[0].firstAttribute
                   this.baseForm.secondAttribute = res.rows[0].secondAttribute
-                  this.baseForm.flag = res.rows[0].flag
+                  this.baseForm.isDesHospital = res.rows[0].flag
                 }
               })
 
@@ -908,7 +983,7 @@
           partSelfAmount: '',
           unableAmount: '',
           advancePayment: '',
-          copay: '',
+          billDetailCopay: '',
           visNumber: '',
           remark: '',
           isShow: true
@@ -922,6 +997,11 @@
           type: 'warning'
         }).then(() => {
           this.costForm.costData.splice(index, 1)
+          let sum = 0
+          for (let i = 0; i < this.costForm.costData.length; i++) {
+            sum = sum + parseInt(this.getZero(this.costForm.costData[i].visNumber))
+          }
+          this.baseForm.visNumber = sum + ''
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -988,7 +1068,7 @@
           }],
           clinicalDiagnosis: undefined,
         }
-        this.costForm.costData=[]
+        this.costForm.costData = []
         this.isFormShow = true
         this.isCostShow = false
       },
@@ -1010,10 +1090,11 @@
             this.$refs.costForm.validate((valid) => {
               if (valid) {
                 let feeSum = 0
-                let number =0
+                let number = 0
                 for (let i = 0; i < this.costForm.costData.length; i++) {
-                   number = parseInt(this.costForm.costData[i].billDetailAmount) - parseInt(this.costForm.costData[i].hosDiscountAmount) - parseInt(this.costForm.costData[i].selfAmount)
-                    - parseInt(this.costForm.costData[i].partSelfAmount) - parseInt(this.costForm.costData[i].unableAmount) - parseInt(this.costForm.costData[i].advancePayment) - parseInt(this.costForm.costData[i].copay)
+                  number = parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount)) - parseFloat(this.getZero(this.costForm.costData[i].hosDiscountAmount)) - parseFloat(this.getZero(this.costForm.costData[i].selfAmount))
+                    - parseFloat(this.getZero(this.costForm.costData[i].partSelfAmount)) - parseFloat(this.getZero(this.costForm.costData[i].unableAmount)) -
+                    parseFloat(this.getZero(this.costForm.costData[i].advancePayment)) - parseFloat(this.getZero(this.costForm.costData[i].copay))
                   if (number < 0) {
                     return this.$message.warning(
                       "录入的金额有误,请检查！"
@@ -1021,13 +1102,13 @@
                   }
                   break
                 }
-                this.costForm.costData.forEach(item=>{
-                  feeSum=feeSum+parseInt(item.billDetailAmount)
+                this.costForm.costData.forEach(item => {
+                  feeSum = feeSum + parseInt(item.billDetailAmount)
                 })
-                if (number >= 0 && feeSum!==parseInt(this.baseForm.billAmount)){
+                if (number >= 0 && feeSum !== parseInt(this.baseForm.billAmount)) {
                   return this.$message.warning(
                     "录入的费用金额与账单金额不一致,请检查！")
-                }else if (number >= 0 && feeSum===parseInt(this.baseForm.billAmount)){
+                } else if (number >= 0 && feeSum === parseInt(this.baseForm.billAmount)) {
                   let data = {
                     bill: this.baseForm,
                     billDetail: this.costForm.costData
@@ -1086,8 +1167,8 @@
                         icdCode: ''
                       }],
                       clinicalDiagnosis: undefined,
-                    },
-                      this.costForm.costData = []
+                    }
+                    this.costForm.costData = []
                   }).catch(res => {
                     this.$message({
                       message: '保存失败!',
@@ -1111,7 +1192,7 @@
           }
         })
       },
-      getBillList(){
+      getBillList() {
         let data = {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -1136,10 +1217,14 @@
       },
       getPropData(val) {
         this.baseForm.hospitalCode = val.providerCode
-        this.baseForm.hospitalName = val.chname1
+        if (val.enname1 != null && val.enname1 !== '') {
+          this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
+        } else {
+          this.baseForm.hospitalName = val.chname1
+        }
         this.baseForm.firstAttribute = val.firstAttribute
         this.baseForm.secondAttribute = val.secondAttribute
-        this.baseForm.flag = val.flag
+        this.baseForm.isDesHospital = val.flag
       },
       selectHospitalName(datas, value) {
         var actions = [];
@@ -1150,9 +1235,18 @@
           }
         })
         return actions.join('');
-      }
+      },
+      getZero(str) {
+        if (str === undefined || str === null || str === '') {
+          return 0;
+        } else {
+          return str
+        }
+      },
     }
-  };
+
+  }
+
 </script>
 <style scoped>
 

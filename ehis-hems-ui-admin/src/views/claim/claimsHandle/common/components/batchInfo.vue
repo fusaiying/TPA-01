@@ -1,53 +1,56 @@
 <template>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>批次信息</span>
-      </div>
-      <el-row style="margin: 0 40px;padding-bottom: 20px">
-        <el-col :span="8">
-          <span class="info_span to_right">交单日期：</span><span class="info_span">{{ baseInfo.submitdate }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">理赔类型：</span><span class="info_span">{{ selectDictLabel(claimTypeOptions, baseInfo.claimtype) }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">团险/个险：</span><span class="info_span">{{ selectDictLabel(insurance_typeOptions, baseInfo.conttype) }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">就诊医院：</span><span class="info_span">{{ baseInfo.hospitalcode }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">案件数：</span><span class="info_span">{{ baseInfo.casenum }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">批次总金额：</span><span class="info_span">{{ baseInfo.batchtotal }}</span>
-        </el-col>
-        <el-col :span="8">
-          <span class="info_span to_right">特殊案件：</span><span class="info_span">{{ selectDictLabel(special_caseOptions, baseInfo.speccasetype) }}</span>
-        </el-col>
-      </el-row>
-    </el-card>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>批次信息</span>
+    </div>
+    <el-row style="margin: 0 40px;padding-bottom: 20px">
+      <el-col :span="8">
+        <span class="info_span to_right">交单日期：</span><span class="info_span">{{ baseInfo.submitdate }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">理赔类型：</span><span class="info_span">{{ selectDictLabel(claimTypeOptions, baseInfo.claimtype) }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">团险/个险：</span><span class="info_span">{{ selectDictLabel(insurance_typeOptions, baseInfo.conttype) }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">就诊医院：</span><span class="info_span">{{ selectHospitalName(hospitalOptions, baseInfo.hospitalcode) }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">案件数：</span><span class="info_span">{{ baseInfo.casenum }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">批次总金额：</span><span class="info_span">{{ baseInfo.batchtotal }}{{selectDictLabel(currencyOptions, baseInfo.currency) }}</span>
+      </el-col>
+      <el-col :span="8">
+        <span class="info_span to_right">特殊案件：</span><span class="info_span">{{ selectDictLabel(special_caseOptions, baseInfo.speccasetype) }}</span>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 <script>
-  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'}, {dictType: 'special_case'},]
+  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'}, {dictType: 'special_case'},{dictType: 'currency'},]
+  import {getHospitalInfo} from '@/api/claim/handleCom'
   export default {
     props: {
       baseInfo:Object
     },
     data() {
       return {
-    /*    baseInfo:{
-          submitdate:undefined,
-          claimtype:undefined,
-          conttype:undefined,
-          hospitalcode:undefined,
-          casenum:undefined,
-          batchtotal:undefined,
-        },*/
+        /*    baseInfo:{
+              submitdate:undefined,
+              claimtype:undefined,
+              conttype:undefined,
+              hospitalcode:undefined,
+              casenum:undefined,
+              batchtotal:undefined,
+            },*/
         dictList:[],
         claimTypeOptions:[],
         insurance_typeOptions:[],
         special_caseOptions:[],
+        hospitalOptions:[],
+        currencyOptions:[],
       }
     },
     async mounted() {
@@ -63,9 +66,29 @@
       this.special_caseOptions = this.dictList.find(item => {
         return item.dictType === 'special_case'
       }).dictDate
+      this.currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'currency'
+      }).dictDate
+      getHospitalInfo({}).then(res => {
+        if (res != null && res !== '') {
+          this.hospitalOptions = res.rows
+
+        }
+      })
     },
     methods:{
-
+      selectHospitalName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].providerCode === ('' + value)) {
+            actions.push(datas[key].chname1);
+            actions.push('|');
+            actions.push(datas[key].enname1);
+            return true;
+          }
+        })
+        return actions.join('');
+      },
     }
   }
 </script>

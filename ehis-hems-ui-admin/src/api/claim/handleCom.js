@@ -291,7 +291,7 @@ export function getInsured(rptNo) {
 //撤件体检按钮
 export function removeCase(data) {
   return request({
-    url: '/system/case/editCaseCheckFrom',
+    url: '/system/case/editCaseAndRecordInfoCancel',
     method: 'post',
     data: data
   })

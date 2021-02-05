@@ -14,24 +14,24 @@
       <el-row>
         <el-col :span="8">
           <span class="info_span_col to_right">账单金额：</span><span
-          class="info_span">{{ conclusionInfo.contractNo }}</span>
+          class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">折扣金额：</span><span class="info_span">{{ conclusionInfo.amount }}</span>
+          <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }}</span>
         </el-col>
         <el-col :span="8">
           <span class="info_span_col to_right">赔付金额：</span><span
-          class="info_span">{{ conclusionInfo.contractName }}</span>
+          class="info_span money_class">{{ conclusionInfo.payAmount }}</span>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="8">
           <span class="info_span_col to_right">拒赔金额：</span><span
-          class="info_span">{{ conclusionInfo.contractNo }}</span>
+          class="info_span money_class">{{ conclusionInfo.refusedAmount }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">追讨金额：</span><span class="info_span">{{ conclusionInfo.amount}}</span>
+          <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}}</span>
         </el-col>
         <!--<el-col :span="8">
           <span class="info_span_col to_right">本次支付差额：</span><span
@@ -42,14 +42,14 @@
       <el-row>
         <el-col :span="8">
           <span class="info_span_col to_right">账单币种：</span><span
-          class="info_span">{{ conclusionInfo.contractNo }}</span>
+          class="info_span">{{ conclusionInfo.billCurrency }}</span>
         </el-col>
         <el-col :span="8">
-          <span class="info_span_col to_right">汇率：</span><span class="info_span">{{ conclusionInfo.amount}}</span>
+          <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
         </el-col>
         <el-col :span="8">
           <span class="info_span_col to_right">外币给付金额：</span><span
-          class="info_span">{{ conclusionInfo.contractName }}</span>
+          class="info_span money_class">{{ conclusionInfo.payAmountForeign }}</span>
         </el-col>
       </el-row>
 
@@ -95,7 +95,16 @@
     components: {},
     data() {
       return {
-        conclusionInfo: {},
+        conclusionInfo: {
+          sumBillAmount:undefined,
+          sumHosDiscountAmount:undefined,
+          payAmount:undefined,
+          refusedAmount:undefined,
+          debtAmount:undefined,
+          billCurrency:undefined,
+          exchangeRate:undefined,
+          payAmountForeign:undefined,
+        },
 
       }
     },

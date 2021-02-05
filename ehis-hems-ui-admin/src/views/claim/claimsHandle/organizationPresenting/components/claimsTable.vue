@@ -6,6 +6,7 @@
     highlight-current-row
     tooltip-effect="dark"
     @expand-change="getMinData"
+    @sort-change="onSortChange"
     style="width: 100%;">
     <el-table-column v-if="status==='02'" type="expand">
       <template slot-scope="scope">
@@ -28,7 +29,7 @@
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column sortable align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
+    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
     <el-table-column align="center" min-width="100" prop="source" label="交单来源" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel( delivery_sourceOptions, scope.row.source)}}</span>
@@ -55,9 +56,17 @@
       </template>
     </el-table-column>
     <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
-    <el-table-column align="center" min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip/>
+    <el-table-column align="center" min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip>currency
+      <template slot-scope="scope">
+        <span>{{ scope.row.batchtotal}}{{selectDictLabel(currencyOptions, scope.row.currency)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-    <el-table-column prop="organcode" min-width="120" label="机构" show-overflow-tooltip/>
+    <el-table-column prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
+      </template>
+    </el-table-column>
     <el-table-column align="center" min-width="100" prop="batchstatus" label="批次状态" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
@@ -75,10 +84,9 @@
 </template>
 
 <script>
-  import {getMinData} from '@/api/claim/presentingReview'
-  import {encrypt} from "@/utils/rsaEncrypt"
+  import {getMinData,getDeptList} from '@/api/claim/presentingReview'
 
-  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
+  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'currency'}, {dictType: 'batchs_status'}]
   export default {
 
     props: {
@@ -92,11 +100,15 @@
     },
     data() {
       return {
+        prop:'',
+        order:'',
         loading:true,
         dictList:[],
         delivery_sourceOptions:[],
         claimtypeOptions:[],
         batchs_statusOptions:[],
+        deptOptions:[],
+        currencyOptions:[],
       }
     },
     async created() {
@@ -112,8 +124,15 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-
-  },
+      this.currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'currency'
+      }).dictDate
+      getDeptList().then(res=>{
+        if (res!=null && res.code===200){
+          this.deptOptions=res.data
+        }
+      })
+    },
     methods: {
       // 处理跳转
       editPresenting(row, status) {
@@ -148,6 +167,28 @@
             this.loading=false
           })
         }
+      },
+      getDeptName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].deptId === parseInt(value)) {
+            actions.push(datas[key].deptName);
+            return true;
+          }
+        })
+        return actions.join('');
+      },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchHandle()
       }
     }
   }

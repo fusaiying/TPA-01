@@ -5,8 +5,9 @@
     size="small"
     highlight-current-row
     tooltip-effect="dark"
+    @sort-change="onSortChange"
     style="width: 100%;">
-    <el-table-column sortable key="1" align="center" prop="batchNo" min-width="150" label="批次号" show-overflow-tooltip/>
+    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" key="1" align="center" prop="batchNo" min-width="150" label="批次号" show-overflow-tooltip/>
     <el-table-column key="2" align="center" min-width="100" prop="rptNo" label="报案号" show-overflow-tooltip/>
     <el-table-column key="3" align="center" prop="claimType" label="是否直结" min-width="120" show-overflow-tooltip>
       <template slot-scope="scope">
@@ -46,6 +47,8 @@
     },
     data() {
       return {
+        prop:'',
+        order:'',
         dictList: [],
         claim_statusOptions: [],
         sys_yes_noOptions: [],
@@ -83,6 +86,18 @@
           }
         })
       },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchHandle()
+      }
     }
   }
 </script>

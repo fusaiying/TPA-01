@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import data from "../../views/system/dict/data";
 
 // 转账失败查询
 export function transferFailedList(data) {
@@ -25,12 +26,55 @@ export function list(data) {
     data: data
   })
 }
+
+// 开始对公支付
+export function startPay() {
+  return request({
+    url: '/system/pay/'+batchNo,
+    method: 'get'
+  })
+}
+
 // 回退
 export function rollback(rptNo) {
   return request({
     url: 'system/pay/rollback',
     method: 'get',
     params: rptNo
+  })
+}
+// 案件借款
+export function borrowingCase(data) {
+  return request({
+    url: '/system/pay/borrowingCase',
+    method: 'post',
+    data: data
+  })
+}
+// 确认支付
+export function confirmPayment(data) {
+  return request({
+    url: '/system/pay/confirmPayment',
+    method: 'post',
+    data: data
+  })
+}
+
+
+// 外币主页初始化
+export function initForeignList(data) {
+  return request({
+    url: 'system/pay/initForeignList',
+    method: 'get',
+    params: data
+  })
+}
+//外币查询按钮
+export function foreignList(data) {
+  return request({
+    url: 'system/pay/foreignList',
+    method: 'post',
+    data: data
   })
 }
 

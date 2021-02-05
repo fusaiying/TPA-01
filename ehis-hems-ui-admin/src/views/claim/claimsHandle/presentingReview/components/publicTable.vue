@@ -7,11 +7,12 @@
     highlight-current-row
     tooltip-effect="dark"
     @selection-change="selectionLineChangeHandle"
+    @sort-change="onSortChange"
     style="width: 100%;">
     <el-table-column
       type="selection"
       width="40"/>
-    <el-table-column sortable align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
+    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
     <el-table-column  align="center"  min-width="100" prop="source" label="交单来源" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel( delivery_sourceOptions, scope.row.source)}}</span>
@@ -42,75 +43,54 @@
 <script>
   import {changeStatus} from '@/api/claim/presentingReview'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'},]
-export default {
+  export default {
 
-  props: {
-    tableData: {
-      type: Array,
-      default: function() {
-        return []
+    props: {
+      tableData: {
+        type: Array,
+        default: function() {
+          return []
+        },
       },
-    },
-    // 子组件接收函数
-    searchHandle: {
-      type: Function
-    },
-    status: String
-  },
-  data() {
-    return {
-      publicTotal:0,
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        status: undefined
+      // 子组件接收函数
+      searchHandle: {
+        type: Function
       },
-      dictList:[],
-      dataonLineListSelections: [],
-      delivery_sourceOptions:[],
-      claimtypeOptions:[],
-    }
-  },
-  async created() {
-    await this.getDictsList(dictss).then(response => {
-      this.dictList = response.data
-    })
-    this.delivery_sourceOptions = this.dictList.find(item => {
-      return item.dictType === 'delivery_source'
-    }).dictDate
-    this.claimtypeOptions = this.dictList.find(item => {
-      return item.dictType === 'claimtype'
-    }).dictDate
-
-  },
-  methods: {
-    // 单个获取
-    handleOne(batchno) {
-      let batchnoes =[batchno]
-      changeStatus(batchnoes).then(res=>{
-        if (res!=null && res.code===200){
-          this.$message({
-            message: '获取成功！',
-            type: 'success',
-            center: true,
-            showClose: true
-          })
-          this.searchHandle()
-        }else {
-          this.$message.error('获取失败！')
-        }
-      })
+      status: String
     },
-    selectionLineChangeHandle (val) {
-      this.dataonLineListSelections = val
-    },
-    handle(){
-      let batchnoes =[]
-      for(let i = 0; i< this.dataonLineListSelections.length; i++){
-        batchnoes.push(this.dataonLineListSelections[i].batchno)
+    data() {
+      return {
+        prop:'',
+        order:'',
+        publicTotal:0,
+        // 查询参数
+        queryParams: {
+          pageNum: 1,
+          pageSize: 10,
+          status: undefined
+        },
+        dictList:[],
+        dataonLineListSelections: [],
+        delivery_sourceOptions:[],
+        claimtypeOptions:[],
       }
-      if (batchnoes.length>0){
+    },
+    async created() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.delivery_sourceOptions = this.dictList.find(item => {
+        return item.dictType === 'delivery_source'
+      }).dictDate
+      this.claimtypeOptions = this.dictList.find(item => {
+        return item.dictType === 'claimtype'
+      }).dictDate
+
+    },
+    methods: {
+      // 单个获取
+      handleOne(batchno) {
+        let batchnoes =[batchno]
         changeStatus(batchnoes).then(res=>{
           if (res!=null && res.code===200){
             this.$message({
@@ -118,20 +98,55 @@ export default {
               type: 'success',
               center: true,
               showClose: true
-
             })
             this.searchHandle()
           }else {
             this.$message.error('获取失败！')
           }
         })
-      }else {
-        return this.$message.warning(
-          "请选择要获取的记录，进行批量获取操作。！"
-        );
-      }
+      },
+      selectionLineChangeHandle (val) {
+        this.dataonLineListSelections = val
+      },
+      handle(){
+        let batchnoes =[]
+        for(let i = 0; i< this.dataonLineListSelections.length; i++){
+          batchnoes.push(this.dataonLineListSelections[i].batchno)
+        }
+        if (batchnoes.length>0){
+          changeStatus(batchnoes).then(res=>{
+            if (res!=null && res.code===200){
+              this.$message({
+                message: '获取成功！',
+                type: 'success',
+                center: true,
+                showClose: true
 
+              })
+              this.searchHandle()
+            }else {
+              this.$message.error('获取失败！')
+            }
+          })
+        }else {
+          return this.$message.warning(
+            "请选择要获取的记录，进行批量获取操作。！"
+          );
+        }
+
+      },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchPublic()
+      }
     }
   }
-}
 </script>

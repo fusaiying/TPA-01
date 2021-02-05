@@ -1,7 +1,6 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/sino.scss' // sino css
@@ -26,6 +25,7 @@ import Pagination from "@/components/Pagination";
 import RightToolbar from "@/components/RightToolbar"
 //导入条形码插件
 import VueBarcode from '@xkeshi/vue-barcode'
+import Element from 'element-ui'
 // 全局方法挂载
 Vue.component('barcode',VueBarcode)
 Vue.prototype.getDicts = getDicts

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.ServiceBalanceExamLogMapper">
+
+    <resultMap type="ServiceBalanceExamLog" id="ServiceBalanceExamLogResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="taskNo"    column="task_no"    />
+        <result property="status"    column="status"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="examineConclusion"    column="examine_conclusion"    />
+        <result property="examineOpinion"    column="examine_opinion"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectServiceBalanceExamLogVo">
+        select serial_no, task_no, status, bussiness_status, examine_conclusion, examine_opinion, remark, create_by, create_time, update_by, update_time from service_balance_exam_log
+    </sql>
+
+    <select id="selectServiceBalanceExamLogList" parameterType="ServiceBalanceExamLog" resultMap="ServiceBalanceExamLogResult">
+        <include refid="selectServiceBalanceExamLogVo"/>
+        <where>
+            <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="examineConclusion != null  and examineConclusion != ''"> and examine_conclusion = #{examineConclusion}</if>
+            <if test="examineOpinion != null  and examineOpinion != ''"> and examine_opinion = #{examineOpinion}</if>
+        </where>
+    </select>
+
+    <select id="selectServiceBalanceExamLogById" parameterType="Long" resultMap="ServiceBalanceExamLogResult">
+        <include refid="selectServiceBalanceExamLogVo"/>
+        where serial_no = #{serialNo}
+    </select>
+
+    <insert id="insertServiceBalanceExamLog" parameterType="ServiceBalanceExamLog" useGeneratedKeys="true" keyProperty="serialNo">
+        insert into service_balance_exam_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null and taskNo != ''">task_no,</if>
+            <if test="status != null">status,</if>
+            <if test="bussinessStatus != null">bussiness_status,</if>
+            <if test="examineConclusion != null">examine_conclusion,</if>
+            <if test="examineOpinion != null">examine_opinion,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskNo != null and taskNo != ''">#{taskNo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="bussinessStatus != null">#{bussinessStatus},</if>
+            <if test="examineConclusion != null">#{examineConclusion},</if>
+            <if test="examineOpinion != null">#{examineOpinion},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateServiceBalanceExamLog" parameterType="ServiceBalanceExamLog">
+        update service_balance_exam_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskNo != null and taskNo != ''">task_no = #{taskNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="bussinessStatus != null">bussiness_status = #{bussinessStatus},</if>
+            <if test="examineConclusion != null">examine_conclusion = #{examineConclusion},</if>
+            <if test="examineOpinion != null">examine_opinion = #{examineOpinion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteServiceBalanceExamLogById" parameterType="Long">
+        delete from service_balance_exam_log where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteServiceBalanceExamLogByIds" parameterType="String">
+        delete from service_balance_exam_log where serial_no in
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <update id="updateServiceBalanceExamLogByTaskNo" parameterType="ServiceBalanceExamLog">
+        update service_balance_exam_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskNo != null and taskNo != ''">task_no = #{taskNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="bussinessStatus != null">bussiness_status = #{bussinessStatus},</if>
+            <if test="examineConclusion != null">examine_conclusion = #{examineConclusion},</if>
+            <if test="examineOpinion != null">examine_opinion = #{examineOpinion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where task_no = #{taskNo}
+    </update>
+
+</mapper>

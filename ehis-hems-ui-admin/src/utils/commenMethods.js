@@ -24,6 +24,31 @@ export function atLeastOne(value) {
   return flag
 }
 
+// 表单必选一项校验，排除校验项
+export function atLeastOne2(value, exArr) {
+  let flag = false;
+  for (const key in value) {
+    if (exArr && exArr.length > 0) {
+      if (exArr.indexOf(key) > -1) {
+        flag = false;
+        continue;
+      }
+    }
+    if (typeof value[key] == 'object') {
+      if (value[key] && value[key].length) {
+        flag = true;
+        break;
+      }
+    } else {
+      if (value[key]) {
+        flag = true
+        break;
+      }
+    }
+  }
+  return flag
+}
+
 // 前端进行分页（在computed中使用）
 export function paginData(tableData, page, size) {
   return tableData.slice((page - 1) * size, page * size)

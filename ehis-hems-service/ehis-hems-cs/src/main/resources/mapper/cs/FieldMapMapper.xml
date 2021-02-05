@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.FieldMapMapper">
+    
+    <resultMap type="FieldMap" id="FieldMapResult">
+        <result property="sourceName"    column="source_name"    />
+        <result property="typeCode"    column="type_code"    />
+        <result property="fieldOrder"    column="field_order"    />
+        <result property="sourceFiledName"    column="source_filed_name"    />
+        <result property="sourceFieldMean"    column="source_field_mean"    />
+        <result property="targetTableName"    column="target_table_name"    />
+        <result property="targetColumnName"    column="target_column_name"    />
+        <result property="targetColumnMean"    column="target_column_mean"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectFieldMapVo">
+        select source_name, type_code, field_order, source_filed_name, source_field_mean, target_table_name, target_column_name, target_column_mean, created_by, created_time, updated_by, updated_time from field_map
+    </sql>
+
+    <select id="selectFieldMapList" parameterType="FieldMap" resultMap="FieldMapResult">
+        <include refid="selectFieldMapVo"/>
+        <where>  
+            <if test="sourceFieldMean != null  and sourceFieldMean != ''"> and source_field_mean = #{sourceFieldMean}</if>
+            <if test="targetTableName != null  and targetTableName != ''"> and target_table_name like concat('%', #{targetTableName}, '%')</if>
+            <if test="targetColumnName != null  and targetColumnName != ''"> and target_column_name like concat('%', #{targetColumnName}, '%')</if>
+            <if test="targetColumnMean != null  and targetColumnMean != ''"> and target_column_mean = #{targetColumnMean}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+
+    <select id="selectKVMap" parameterType="String" resultMap="FieldMapResult">
+    SELECT
+	source_filed_name,
+	target_column_name
+FROM
+	field_map
+WHERE
+	target_table_name =  #{targetTableName}
+	AND source_name = #{sourceName}
+    </select>
+    
+    <select id="selectFieldMapById" parameterType="String" resultMap="FieldMapResult">
+        <include refid="selectFieldMapVo"/>
+        where source_name = #{sourceName}
+    </select>
+        
+    <insert id="insertFieldMap" parameterType="FieldMap">
+        insert into field_map
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sourceName != null">source_name,</if>
+            <if test="typeCode != null">type_code,</if>
+            <if test="fieldOrder != null">field_order,</if>
+            <if test="sourceFiledName != null">source_filed_name,</if>
+            <if test="sourceFieldMean != null">source_field_mean,</if>
+            <if test="targetTableName != null">target_table_name,</if>
+            <if test="targetColumnName != null">target_column_name,</if>
+            <if test="targetColumnMean != null">target_column_mean,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sourceName != null">#{sourceName},</if>
+            <if test="typeCode != null">#{typeCode},</if>
+            <if test="fieldOrder != null">#{fieldOrder},</if>
+            <if test="sourceFiledName != null">#{sourceFiledName},</if>
+            <if test="sourceFieldMean != null">#{sourceFieldMean},</if>
+            <if test="targetTableName != null">#{targetTableName},</if>
+            <if test="targetColumnName != null">#{targetColumnName},</if>
+            <if test="targetColumnMean != null">#{targetColumnMean},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFieldMap" parameterType="FieldMap">
+        update field_map
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeCode != null">type_code = #{typeCode},</if>
+            <if test="fieldOrder != null">field_order = #{fieldOrder},</if>
+            <if test="sourceFiledName != null">source_filed_name = #{sourceFiledName},</if>
+            <if test="sourceFieldMean != null">source_field_mean = #{sourceFieldMean},</if>
+            <if test="targetTableName != null">target_table_name = #{targetTableName},</if>
+            <if test="targetColumnName != null">target_column_name = #{targetColumnName},</if>
+            <if test="targetColumnMean != null">target_column_mean = #{targetColumnMean},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where source_name = #{sourceName}
+    </update>
+
+    <delete id="deleteFieldMapById" parameterType="String">
+        delete from field_map where source_name = #{sourceName}
+    </delete>
+
+    <delete id="deleteFieldMapByIds" parameterType="String">
+        delete from field_map where source_name in 
+        <foreach item="sourceName" collection="array" open="(" separator="," close=")">
+            #{sourceName}
+        </foreach>
+    </delete>
+    
+</mapper>

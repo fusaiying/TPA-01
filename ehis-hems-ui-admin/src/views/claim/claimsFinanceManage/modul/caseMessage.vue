@@ -90,7 +90,7 @@
 </template>
 
 <script>
-  import {startPay, confirmPayment, rollback, borrowingCase,startForeignPay} from '@/api/claim/corporatePay'
+  import {startPay, confirmPayment, rollback, borrowingCase, startForeignPay} from '@/api/claim/corporatePay'
 
   let dictss = [{dictType: 'case_pay_status'}, {dictType: 'claim_status'},]
   export default {
@@ -129,47 +129,70 @@
         this.querys = JSON.parse(decodeURI(this.$route.query.data))
         if (this.querys.status === 'public') {//对公支付
           startPay(this.querys.batchNo).then(res => {
-            if(res!=null && res.code===200){
-              this.tableData=res.data.caseInfoList
-              this.baseForm=res.data.payment
+            if (res != null && res.code === 200) {
+              this.tableData = res.data.caseInfoList
+              this.baseForm = res.data.payment
             }
           })
         } else if (this.querys.status === 'publicForeign') {//对公外币支付
           startForeignPay(this.querys.batchNo).then(res => {
-            if(res!=null && res.code===200){
-              this.tableData=res.data.caseInfoList
-              this.baseForm=res.data.payment
+            if (res != null && res.code === 200) {
+              this.tableData = res.data.caseInfoList
+              this.baseForm = res.data.payment
             }
           })
         }
       }
     },
     methods: {
+      search() {
+        if (this.querys.status === 'public') {//对公支付
+          startPay(this.querys.batchNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData = res.data.caseInfoList
+              this.baseForm = res.data.payment
+            }
+          })
+        } else if (this.querys.status === 'publicForeign') {//对公外币支付
+          startForeignPay(this.querys.batchNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData = res.data.caseInfoList
+              this.baseForm = res.data.payment
+            }
+          })
+        }
+      },
       confirmPay() {//确认支付
-        if (this.baseForm.claimFlag === '01') {//非全陪
-
+        if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount !== this.querys.batchTotal) {
+          return this.$message.warning(
+            "支付总金额与批次总金额不符，请核实！"
+          )
         } else {
-          if (this.baseForm.payAmount !== this.querys.batchTotal) {
-            return this.$message.warning(
-              "支付总金额与批次总金额不符，请核实！"
-            )
+          let data={
+            batchNo: this.querys.batchNo,
+            caseInfoList:this.tableData,
+            payment:this.baseForm
           }
+          confirmPayment(data).then(res => {
+            if (res != null && res.data === 1) {
+              this.$message({
+                message: '提交成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            } else if (res != null && res.data === 2) {
+              return this.$message.warning(
+                "此批次存在回退案件，请结案后进行支付！"
+              )
+            } else if (res != null && res.data === 3) {
+              return this.$message.warning(
+                "批次下案件币种不统一，请核实！"
+              )
+            }
+          })
         }
 
-        confirmPayment().then(res => {
-          if (res != null && res.data === 1) {
-            this.$message({
-              message: '提交成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-          } else if (res != null && res.data === 0){
-            return this.$message.warning(
-              "此批次存在回退案件，请结案后进行支付！"
-            )
-          }
-        })
 
       },
       backspace(row) {//回退
@@ -177,37 +200,63 @@
           return this.$message.warning(
             " 当前案件不允许进行回退，请核实！"
           )
+        } else {
+          rollback(row.rptNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '回退成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            } else {
+              this.$message({
+                message: '回退失败',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          })
+          this.search()
         }
-
-        rollback().then(res => {
-
-        })
       },
       caseBorrow() {//案件借款
         if (this.baseForm.claimFlag === '01') {//非全陪
-
+          //按钮置灰
         } else {
           if (this.baseForm.payAmount !== this.querys.batchTotal) {
             return this.$message.warning(
               "支付总金额与批次总金额不符，请核实！"
             )
+          } else {
+            let data = {
+              batchNo: this.querys.batchNo,
+              caseInfoList:this.tableData,
+              payment:this.baseForm
+            }
+            borrowingCase(data).then(res => {
+              if (res != null && res.data === 1) {
+                this.$message({
+                  message: '提交成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+              } else if (res != null && res.data === 2) {
+                return this.$message.warning(
+                  "此批次存在回退案件，请结案后进行支付！"
+                )
+              } else if (res != null && res.data === 3) {
+                return this.$message.warning(
+                  "批次下案件币种不统一，请核实！"
+                )
+              }
+            })
           }
         }
 
-        borrowingCase().then(res => {
-          if (res != null && res.data === 1) {
-            this.$message({
-              message: '提交成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-          } else if (res != null && res.data === 0){
-            return this.$message.warning(
-              "此批次存在回退案件，请结案后进行支付！"
-            )
-          }
-        })
+
       },
       listExport() {
         if (this.querys.status === 'public') {

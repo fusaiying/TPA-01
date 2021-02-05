@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.OrderInfoMapper">
+    
+    <resultMap type="OrderInfo" id="OrderInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyCertificateNo"    column="policy_certificate_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="inpatientArea"    column="Inpatient_area"    />
+        <result property="expectedArea"    column="expected_area"    />
+        <result property="visitingArea"    column="visiting_area"    />
+        <result property="city"    column="city"    />
+        <result property="serviceType"    column="service_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="expectationHospital"    column="expectation_hospital"    />
+        <result property="expectedDepartment"    column="expected_department"    />
+        <result property="seriousDisease"    column="serious_disease"    />
+        <result property="operation"    column="operation"    />
+        <result property="finalDiagnosis"    column="final_diagnosis"    />
+        <result property="symptomDescription"    column="symptom_description"    />
+        <result property="remark"    column="remark"    />
+        <result property="reason"    column="reason"    />
+        <result property="nodeStatus"    column="node_status"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="phone"    column="phone"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idCode"    column="id_code"    />
+        <result property="productChname"    column="product_chname"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="chname"    column="chname"    />
+        <result property="applyStartTime"    column="applyStartTime"    />
+        <result property="applyEndTime"    column="applyEndTime"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="firstDept"    column="first_dept"    />
+        <result property="secondDept"    column="second_dept"    />
+    </resultMap>
+
+
+    <resultMap type="SupplierInfoVo" id="SupplierInfoResult">
+        <result property="supplierCode"    column="supplierCode"    />
+        <result property="supplierName"    column="supplierName"    />
+    </resultMap>
+
+    <resultMap type="ContractInfos" id="ContractInfosResult">
+        <result property="supplierCode"    column="supplierCode"    />
+        <result property="contactName"    column="contactName"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+
+    <resultMap type="ProductInfo" id="ProductInfoResult">
+        <result property="productCode"    column="product_code"    />
+        <result property="productName"    column="productName"    />
+    </resultMap>
+
+    <resultMap type="HospitalInfoVo" id="HospitalInfoVoResult">
+        <result property="hospitalCode"    column="hospitalCode"    />
+        <result property="hospitalName"    column="hospitalName"    />
+    </resultMap>
+
+    <resultMap type="FirstDeptInfoVo" id="FirstDeptInfoVoResult">
+        <result property="hospitalCode"    column="hospitalCode"    />
+        <result property="firstDeptName"    column="firstDeptName"    />
+    </resultMap>
+
+    <resultMap type="SecondDeptInfoVo" id="SecondDeptInfoVoResult">
+        <result property="secondDeptName"    column="secondDeptName"    />
+        <result property="firstDeptName"    column="firstDeptName"    />
+    </resultMap>
+
+    <resultMap type="OrderInfo" id="OrdertakingResult">
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="num"    column="num"    />
+        <result property="priority"    column="priority"    />
+        <result property="limitnum"    column="limitnum"    />
+        <result property="availablenum"    column="availablenum"    />
+    </resultMap>
+
+    <sql id="selectOrderInfoVo">
+        select serial_no, order_code, policy_no, policy_certificate_no, product_code, service_code, supplier_code, customer_no, contact_name, phone, Inpatient_area, expected_area, visiting_area, city, service_type, apply_time, expectation_hospital, expected_department, serious_disease, operation, final_diagnosis, symptom_description, remark, reason, node_status, bussiness_status, status, create_by, create_time, update_by, update_time from order_info
+    </sql>
+
+    <select id="selectOrderInfoList" parameterType="OrderInfo" resultMap="OrderInfoResult">
+        <include refid="selectOrderInfoVo"/>
+        <where>
+            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="policyCertificateNo != null  and policyCertificateNo != ''"> and policy_certificate_no = #{policyCertificateNo}</if>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and service_code = #{serviceCode}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="customerNo != null  and customerNo != ''"> and customer_no = #{customerNo}</if>
+            <if test="contactName != null  and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="inpatientArea != null  and inpatientArea != ''"> and Inpatient_area = #{inpatientArea}</if>
+            <if test="expectedArea != null  and expectedArea != ''"> and expected_area = #{expectedArea}</if>
+            <if test="visitingArea != null  and visitingArea != ''"> and visiting_area = #{visitingArea}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="serviceType != null  and serviceType != ''"> and service_type = #{serviceType}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="expectationHospital != null  and expectationHospital != ''"> and expectation_hospital = #{expectationHospital}</if>
+            <if test="expectedDepartment != null  and expectedDepartment != ''"> and expected_department = #{expectedDepartment}</if>
+            <if test="seriousDisease != null  and seriousDisease != ''"> and serious_disease = #{seriousDisease}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="finalDiagnosis != null  and finalDiagnosis != ''"> and final_diagnosis = #{finalDiagnosis}</if>
+            <if test="symptomDescription != null  and symptomDescription != ''"> and symptom_description = #{symptomDescription}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="nodeStatus != null  and nodeStatus != ''"> and node_status = #{nodeStatus}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectOrderInfoListNew" parameterType="OrderInfo" resultMap="OrderInfoResult">
+        SELECT
+        order_code,
+        policy_no,
+        pi.product_chname,
+        bsi.chname,
+        bso.service_name,
+        oi.supplier_code,
+        policy_certificate_no,
+        oi.product_code,
+        oi.bussiness_status,
+        oi.service_code,
+        oi.apply_time,
+        ci.name,
+        ci.sex,
+        ci.phone,
+        ci.id_code,
+        ci.id_type,
+        oi.customer_no
+        FROM
+        order_info oi
+        LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+        LEFT JOIN product_supplier_info psi ON psi.service_code = oi.service_code
+        AND psi.priority = (SELECT min(priority) FROM product_supplier_info)
+        AND psi.product_code = oi.product_code
+        LEFT JOIN product_info pi ON pi.product_code = oi.product_code
+        AND pi.STATUS = 'Y'
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code and bsi.status ='Y'
+        LEFT JOIN base_service_info bso ON bso.service_code =oi.service_code
+        <where>
+            <if test="orderCode != null  and orderCode != ''"> and oi.order_code = #{orderCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and oi.policy_no = #{policyNo}</if>
+            <if test="policyCertificateNo != null  and policyCertificateNo != ''"> and oi.policy_certificate_no = #{policyCertificateNo}</if>
+            <if test="productCode != null  and productCode != ''"> and oi.product_code = #{productCode}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
+            <if test="name != null  and name != ''"> and ci.name = #{name}</if>
+            <if test="sex != null  and sex != ''"> and ci.sex = #{sex}</if>
+            <if test="idType != null  and idType != ''"> and ci.id_type = #{idType}</if>
+            <if test="idCode != null  and idCode != ''"> and ci.id_code = #{idCode}</if>
+            <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and oi.bussiness_status = #{bussinessStatus}</if>
+            <if test="applyStartTime != null  and applyEndTime != null">  and (oi.apply_time between  #{applyStartTime} and  #{applyEndTime})</if>
+             and oi.status = 'Y'
+        </where>
+    </select>
+    
+    <select id="selectOrderInfoById" parameterType="String" resultMap="OrderInfoResult">
+        <include refid="selectOrderInfoVo"/>
+        where order_code = #{orderCode} and update_flag = '0'
+    </select>
+
+    <select id="selectOrderInfoByIdNew" parameterType="String" resultMap="OrderInfoResult">
+        SELECT
+            oi.serial_no,
+            oi.order_code,
+            oi.policy_no,
+            oi.policy_certificate_no,
+            oi.product_code,
+            pi.product_chname,
+            oi.service_code,
+            oi.supplier_code,
+            oi.customer_no,
+            oi.contact_name,
+            oi.phone,
+            oi.Inpatient_area,
+            oi.expected_area,
+            oi.visiting_area,
+            oi.city,
+            oi.service_type,
+            oi.apply_time,
+            oi.expectation_hospital,
+            oi.first_dept,
+            oi.second_dept,
+            oi.serious_disease,
+            oi.operation,
+            oi.final_diagnosis,
+            oi.symptom_description,
+            oi.remark,
+            oi.reason,
+            oi.node_status,
+            oi.bussiness_status,
+            oi.create_by,
+            oi.create_time,
+            oi.update_by,
+            oi.update_time
+        FROM order_info oi
+         LEFT JOIN product_info pi ON pi.product_code = oi.product_code and pi.status = 'Y'
+        where order_code = #{orderCode}
+    </select>
+        
+    <insert id="insertOrderInfo" parameterType="OrderInfo">
+        insert into order_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="orderCode != null and orderCode != ''">order_code,</if>
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="policyCertificateNo != null and policyCertificateNo != ''">policy_certificate_no,</if>
+            <if test="productCode != null and productCode != ''">product_code,</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code,</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
+            <if test="customerNo != null and customerNo != ''">customer_no,</if>
+            <if test="contactName != null and contactName != ''">contact_name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="inpatientArea != null and inpatientArea != ''">Inpatient_area,</if>
+            <if test="expectedArea != null and expectedArea != ''">expected_area,</if>
+            <if test="visitingArea != null and visitingArea != ''">visiting_area,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="serviceType != null and serviceType != ''">service_type,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="expectationHospital != null and expectationHospital != ''">expectation_hospital,</if>
+            <if test="expectedDepartment != null and expectedDepartment != ''">expected_department,</if>
+            <if test="seriousDisease != null and seriousDisease != ''">serious_disease,</if>
+            <if test="operation != null">operation,</if>
+            <if test="finalDiagnosis != null">final_diagnosis,</if>
+            <if test="symptomDescription != null">symptom_description,</if>
+            <if test="remark != null">remark,</if>
+            <if test="reason != null">reason,</if>
+            <if test="nodeStatus != null">node_status,</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="orderCode != null and orderCode != ''">#{orderCode},</if>
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="policyCertificateNo != null and policyCertificateNo != ''">#{policyCertificateNo},</if>
+            <if test="productCode != null and productCode != ''">#{productCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">#{serviceCode},</if>
+            <if test="supplierCode != null and supplierCode != ''">#{supplierCode},</if>
+            <if test="customerNo != null and customerNo != ''">#{customerNo},</if>
+            <if test="contactName != null and contactName != ''">#{contactName},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="inpatientArea != null and inpatientArea != ''">#{inpatientArea},</if>
+            <if test="expectedArea != null and expectedArea != ''">#{expectedArea},</if>
+            <if test="visitingArea != null and visitingArea != ''">#{visitingArea},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="serviceType != null and serviceType != ''">#{serviceType},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="expectationHospital != null and expectationHospital != ''">#{expectationHospital},</if>
+            <if test="expectedDepartment != null and expectedDepartment != ''">#{expectedDepartment},</if>
+            <if test="seriousDisease != null and seriousDisease != ''">#{seriousDisease},</if>
+            <if test="operation != null">#{operation},</if>
+            <if test="finalDiagnosis != null">#{finalDiagnosis},</if>
+            <if test="symptomDescription != null">#{symptomDescription},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="nodeStatus != null">#{nodeStatus},</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">#{bussinessStatus},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrderInfo" parameterType="OrderInfo">
+        update order_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="customerNo != null and customerNo != ''">customer_no = #{customerNo},</if>
+            <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="inpatientArea != null ">Inpatient_area = #{inpatientArea},</if>
+            <if test="expectedArea != null ">expected_area = #{expectedArea},</if>
+            <if test="visitingArea != null">visiting_area = #{visitingArea},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="serviceType != null and serviceType != ''">service_type = #{serviceType},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="expectationHospital != null">expectation_hospital = #{expectationHospital},</if>
+            <if test="expectedDepartment != null">expected_department = #{expectedDepartment},</if>
+            <if test="seriousDisease != null ">serious_disease = #{seriousDisease},</if>
+            <if test="operation != null">operation = #{operation},</if>
+            <if test="finalDiagnosis != null">final_diagnosis = #{finalDiagnosis},</if>
+            <if test="symptomDescription != null">symptom_description = #{symptomDescription},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="firstDept != null ">first_dept = #{firstDept},</if>
+            <if test="secondDept != null ">second_dept = #{secondDept},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="nodeStatus != null">node_status = #{nodeStatus},</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status = #{bussinessStatus},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where order_code = #{orderCode}
+    </update>
+
+    <delete id="deleteOrderInfoById" parameterType="String">
+        delete from order_info where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteOrderInfoByIds" parameterType="String">
+        delete from order_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <select id="getSupplierInfo"  resultMap="SupplierInfoResult">
+        select serial_no as supplierCode, chname as supplierName from base_supplier_info where status ='Y' and bussiness_status = '01'
+    </select>
+
+    <select id="getContractInfo"  resultMap="ContractInfosResult">
+        select supplier_code as supplierCode, name as contactName ,phone as phone from base_contacts where status ='Y'
+    </select>
+
+    <select id="getProductInfo"  resultMap="ProductInfoResult">
+        select product_code,product_chname as productName from product_info where status ='Y' and bussiness_status ='03'
+    </select>
+
+    <select id="getHospitalInfo"  resultMap="HospitalInfoVoResult">
+        select provider_code hospitalCode,chname1 hospitalName from base_provider_info where org_flag = '01' and status ='Y'
+    </select>
+
+    <select id="getFirstDeptInfo"  resultMap="FirstDeptInfoVoResult">
+        select DISTINCT provider_code hospitalCode,first_dept firstDeptName from base_provider_dep where  status = 'Y'
+    </select>
+
+    <select id="getSecondDeptInfo"  resultMap="SecondDeptInfoVoResult">
+        select DISTINCT first_dept firstDeptName,second_dept secondDeptName from base_provider_dep where  status = 'Y'
+    </select>
+
+    <select id="getSupplierInfoByService"  parameterType="OrderInfo" resultMap="SupplierInfoResult">
+        <!--SELECT
+            bcs.supplier_code AS supplierCode,
+            bsi.chname AS supplierName
+        FROM
+            base_contract_service bcs
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = bcs.supplier_code
+        WHERE
+            bcs.serial_no IN (
+                SELECT DISTINCT
+                    max(serial_no)
+                FROM
+                    base_contract_service
+                WHERE
+                    service_code = #{serviceCode}
+                AND STATUS = 'Y'
+                GROUP BY
+                    supplier_code,
+                    service_code
+            )-->
+            SELECT
+                psi.supplier_code AS supplierCode,
+                bsi.chname AS supplierName
+            FROM
+                product_supplier_info psi
+            LEFT JOIN base_supplier_info bsi ON bsi.serial_no = psi.supplier_code
+            AND bsi.status = 'Y'
+            WHERE
+                psi.service_code = #{serviceCode}
+            AND psi.product_code = #{productCode}
+            AND psi.status = 'Y'
+    </select>
+
+    <update id="cancalOrder">
+        update order_info set bussiness_status = '04', reason = #{reason} where status = 'Y' and update_flag = '0' and order_code = #{orderCode}
+    </update>
+
+    <update id="updateOverTime" parameterType="OrderInfo">
+        update order_info set node_status = #{nodeStatus},update_flag = '1' where update_flag = '0' and order_code = #{orderCode}
+    </update>
+
+    <select id="getOrdertaking" parameterType="OrderInfo" resultMap ="OrdertakingResult">
+        SELECT
+            psi.supplier_code,
+            psi.priority,
+            (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) num,
+            bcs.limitnum limitnum,
+            limitnum - (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) availablenum
+        FROM
+            order_info oi
+        LEFT JOIN product_supplier_info psi ON psi.product_code = oi.product_code
+        AND psi.service_code = oi.service_code
+        AND psi. STATUS = 'Y'
+        LEFT JOIN base_contract_service bcs ON bcs.service_code = oi.service_code
+        AND bcs.supplier_code = psi.supplier_code
+        AND bcs.serial_no = (
+            SELECT
+                MAX(serial_no)
+            FROM
+                base_contract_service
+            WHERE
+                bcs.service_code = oi.service_code
+            AND bcs.supplier_code = psi.supplier_code
+        )
+        WHERE
+            NOT EXISTS (
+                SELECT
+                    supplier_code
+                FROM
+                    order_info
+                WHERE
+                    node_status = '08'
+                AND order_code = #{orderCode}
+                AND supplier_code = psi.supplier_code
+            )
+    </select>
+
+</mapper>

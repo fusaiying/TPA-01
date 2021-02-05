@@ -52,7 +52,7 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>产品定义列表</span>
           <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini" icon="el-icon-plus"
-                     @click="addHandle">新增
+                      @click="addHandle">新增
           </el-button>
         </div>
         <el-table
@@ -64,19 +64,19 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="产品编码" prop="productCode" align="center"/>
-          <el-table-column label="产品名称" prop="productChname" align="center"/>
-          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center"/>
-          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center"/>
-          <el-table-column label="状态" prop="bussinessStatus" align="center" :formatter="getBussinessStatus">
-<!--            <template slot-scope="scope">
-              {{ scope.row.bussinessStatus  }}
-            </template>-->
+          <el-table-column label="产品编码" prop="productCode" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center" show-overflow-tooltip/>
+          <el-table-column label="状态" prop="bussinessStatus" align="center" :formatter="getBussinessStatus" show-overflow-tooltip>
+            <!--            <template slot-scope="scope">
+                          {{ scope.row.bussinessStatus  }}
+                        </template>-->
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">编辑</el-button>
-                            <el-button v-if="scope.row.bussinessStatus =='01' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="delHandle(scope.$index,scope.row)">删除</el-button>
+              <el-button v-if="scope.row.bussinessStatus =='01' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="delHandle(scope.$index,scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -90,24 +90,24 @@
         />
       </div>
     </el-card>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :modal="modalValue"
-      :close-on-click-modal="false"
-      title="提示"
-      width="30%">
-      <span>{{ '删除当前行的产品信息？' }}</span>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="delConfirm">确 定</el-button>
-        </span>
-    </el-dialog>
+    <!--    <el-dialog
+          :visible.sync="dialogVisible"
+          :modal="modalValue"
+          :close-on-click-modal="false"
+          title="提示"
+          width="30%">
+          <span>{{ '删除当前行的产品信息？' }}</span>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="delConfirm">确 定</el-button>
+            </span>
+        </el-dialog>-->
   </div>
 
 </template>
 
 <script>
-import {deleteProductInfo,getList} from '@/api/baseInfo/serviceProductManagement'
+import {deleteProductInfo,getList} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -140,8 +140,8 @@ export default {
     }
   },
   created() {
-  //获取产品定义信息
-    this.getData()
+
+    this.init()
     this.getDicts("product_bussiness_status").then(response => {
       this.product_bussiness_statusOptions = response.data;
     });
@@ -154,32 +154,67 @@ export default {
 
   },
   methods: {
-    delHandle(index, row) {
-      this.dialogVisible = true
-      this.index = index
-    },
-    delConfirm(){
-      this.dialogVisible = false
-      let delProductCode= this.tableData[this.index].productCode
-      deleteProductInfo(delProductCode).then(res => {
-        if (res !=null && res.code == '200') {
-          this.$message({
-            message: '删除成功！',
-            type: 'success',
-            center: true,
-            showClose: true
-          })
-          this.getData()
-        } else {
-          this.$message({
-            message: '删除失败!',
-            type: 'error',
-            center: true,
-            showClose: true
-          })
-        }
+    init(){
+      this.loading = true
+      //调用查询接口
+      getList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
       })
     },
+
+    delHandle(index, row) {
+      //this.dialogVisible = true
+      this.index = index
+      this.$confirm('是否删除当前行的产品信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let delProductCode= this.tableData[this.index].productCode
+        deleteProductInfo(delProductCode).then(res => {
+          if (res != null && res.code == '200') {
+            this.$message({
+              message: '删除成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+            this.getData()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    /*   delConfirm(){
+         this.dialogVisible = false
+         let delProductCode= this.tableData[this.index].productCode
+         deleteProductInfo(delProductCode).then(res => {
+           if (res !=null && res.code == '200') {
+             this.$message({
+               message: '删除成功！',
+               type: 'success',
+               center: true,
+               showClose: true
+             })
+             this.getData()
+           } else {
+             this.$message({
+               message: '删除失败!',
+               type: 'error',
+               center: true,
+               showClose: true
+             })
+           }
+         })
+       },*/
 
     getProductType(row){
       return this.selectDictLabel(this.productTypeOptions, row.productType)
@@ -233,7 +268,7 @@ export default {
       this.$router.push({
         path: '/service-product/addEdit',
         query: {productCode: row.productCode,
-                status: 'edit'
+          status: 'edit'
 
         }
       })

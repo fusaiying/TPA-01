@@ -10,37 +10,37 @@
     <div >
       <services-available ref="servicesAvailableForm" :productCode="productCode" :disabledFlag="disabledFlag" :status="status"></services-available>
     </div>
-<!--供应商信息-->
+    <!--供应商信息-->
     <div >
       <el-form ref="supplierInfo"  :model="supplierInfo" size="small" :disabled="disabledFlag">
         <el-card class="box-card " style="margin-top: 10px;">
           <div slot="header" class="clearfix">
-          <span>供应商信息</span>
-        </div>
-        <el-table ref="medicalRecordTable"
-                  :data="supplierInfo.supplierData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
+            <span>供应商信息</span>
+          </div>
+          <el-table ref="medicalRecordTable"
+                    :data="supplierInfo.supplierData"
+                    :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                    size="small"
+                    highlight-current-row
+                    tooltip-effect="dark"
+                    style="width: 100%;">
 
-          <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>
-          <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码"/>
-          <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称"/>
-          <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域"/>
-          <el-table-column key="4" align="center" min-width="100" prop="endDate" label="合约止期"/>
-          <el-table-column key="5" align="center" min-width="150" label="服务价格">
-            <template slot-scope="scope">
-              <span>{{ scope.row.minPrice }}-{{ scope.row.maxPrice }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column key="6" align="center" prop="priority" label="优先级次序" min-width="120">
-            <template slot-scope="scope">
-              <span >{{ scope.row.priority }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>
+            <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码" show-overflow-tooltip/>
+            <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称" show-overflow-tooltip/>
+            <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域" show-overflow-tooltip/>
+            <el-table-column key="4" align="center" min-width="100" prop="endDate" label="合约止期" show-overflow-tooltip/>
+            <el-table-column key="5" align="center" min-width="150" label="服务价格" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.minPrice }}-{{ scope.row.maxPrice }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column key="6" align="center" prop="priority" label="优先级次序" min-width="120" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span >{{ scope.row.priority }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-card>
       </el-form>
     </div>
@@ -52,7 +52,7 @@
 
     <!--审核日志-->
 
-<audit :productCode="productCode"></audit>
+    <audit :productCode="productCode"></audit>
 
 
 
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import {selectProductSupplier} from '@/api/baseInfo/serviceProductManagement'
+import {selectProductSupplier} from '@/api/productManage/serviceProductManagement'
 import productInfo   from './../components/productInfo'
 import servicesAvailable   from './../components/servicesAvailable'
 import serviceManualList   from './../components/serviceManualList'
@@ -120,124 +120,124 @@ export default {
       }
     },
 
-  /*  //提交审核
-    submitHandle(){
+    /*  //提交审核
+      submitHandle(){
 
-      let produactInfoFlag=this.$refs.productInfoForm.validateForm()
-      let servicesAvailableFlag=this.$refs.servicesAvailableForm.validateForm()
-      if(produactInfoFlag){
-        if(servicesAvailableFlag=='01'){
+        let produactInfoFlag=this.$refs.productInfoForm.validateForm()
+        let servicesAvailableFlag=this.$refs.servicesAvailableForm.validateForm()
+        if(produactInfoFlag){
+          if(servicesAvailableFlag=='01'){
 
-          let productInfoData= this.$refs.productInfoForm.baseForm
-          let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
-          let allData ={
-            productInfoData: productInfoData,
-            servicesAvailableData: servicesAvailableData
-          }
-          insertCheckInfo(allData).then(res => {
-            if (res.code == '200') {
-              this.$message({
-                message: '保存成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              this.parProductChname=productInfoData.productChname
-              this.parProductEnname=productInfoData.productEnname
-              this.parOutProductChname=productInfoData.outProductChname
-              this.parOutProductEnname=productInfoData.outProductEnname
-              //给产品编码赋值
-
-            } else {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
+            let productInfoData= this.$refs.productInfoForm.baseForm
+            let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
+            let allData ={
+              productInfoData: productInfoData,
+              servicesAvailableData: servicesAvailableData
             }
-          })
+            insertCheckInfo(allData).then(res => {
+              if (res.code == '200') {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.parProductChname=productInfoData.productChname
+                this.parProductEnname=productInfoData.productEnname
+                this.parOutProductChname=productInfoData.outProductChname
+                this.parOutProductEnname=productInfoData.outProductEnname
+                //给产品编码赋值
+
+              } else {
+                this.$message({
+                  message: '保存失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              }
+            })
 
 
-        }
-        else if (servicesAvailableFlag=='02'){
-          this.$message.warning('至少添加一条服务项目信息')
-        }
-        else if (servicesAvailableFlag=='03'){
-          this.$message.warning('未选择供应商')
-        }
-        else if (servicesAvailableFlag=='04'){
-          this.$message.warning('服务项目必录项未必录')
-        }
-
-      }
-      else {
-        this.$message.warning('产品基本信息必录项未必录')
-      }
-
-
-
-
-    },
-    //保存
-    saveAll(){
-      let produactInfoFlag=this.$refs.productInfoForm.validateForm()
-      let servicesAvailableFlag=this.$refs.servicesAvailableForm.validateForm()
-      if(produactInfoFlag){
-        if(servicesAvailableFlag=='01'){
-
-          let productInfoData= this.$refs.productInfoForm.baseForm
-          let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
-          let allData ={
-            productInfoData: productInfoData,
-            servicesAvailableData: servicesAvailableData
           }
-          saveProductInfo(allData).then(res => {
-            if (res.code == '200') {
-              this.$message({
-                message: '保存成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              this.parProductChname=productInfoData.productChname
-              this.parProductEnname=productInfoData.productEnname
-              this.parOutProductChname=productInfoData.outProductChname
-              this.parOutProductEnname=productInfoData.outProductEnname
-            } else {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
+          else if (servicesAvailableFlag=='02'){
+            this.$message.warning('至少添加一条服务项目信息')
+          }
+          else if (servicesAvailableFlag=='03'){
+            this.$message.warning('未选择供应商')
+          }
+          else if (servicesAvailableFlag=='04'){
+            this.$message.warning('服务项目必录项未必录')
+          }
+
+        }
+        else {
+          this.$message.warning('产品基本信息必录项未必录')
+        }
+
+
+
+
+      },
+      //保存
+      saveAll(){
+        let produactInfoFlag=this.$refs.productInfoForm.validateForm()
+        let servicesAvailableFlag=this.$refs.servicesAvailableForm.validateForm()
+        if(produactInfoFlag){
+          if(servicesAvailableFlag=='01'){
+
+            let productInfoData= this.$refs.productInfoForm.baseForm
+            let servicesAvailableData= this.$refs.servicesAvailableForm.serviceProForm
+            let allData ={
+              productInfoData: productInfoData,
+              servicesAvailableData: servicesAvailableData
             }
-          })
+            saveProductInfo(allData).then(res => {
+              if (res.code == '200') {
+                this.$message({
+                  message: '保存成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.parProductChname=productInfoData.productChname
+                this.parProductEnname=productInfoData.productEnname
+                this.parOutProductChname=productInfoData.outProductChname
+                this.parOutProductEnname=productInfoData.outProductEnname
+              } else {
+                this.$message({
+                  message: '保存失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              }
+            })
 
+
+          }
+          else if (servicesAvailableFlag=='02'){
+            this.$message.warning('至少添加一条服务项目信息')
+          }
+          else if (servicesAvailableFlag=='03'){
+            this.$message.warning('未选择供应商')
+          }
+          else if (servicesAvailableFlag=='04'){
+            this.$message.warning('服务项目必录项未必录')
+          }
 
         }
-        else if (servicesAvailableFlag=='02'){
-          this.$message.warning('至少添加一条服务项目信息')
-        }
-        else if (servicesAvailableFlag=='03'){
-          this.$message.warning('未选择供应商')
-        }
-        else if (servicesAvailableFlag=='04'){
-          this.$message.warning('服务项目必录项未必录')
+        else {
+          this.$message.warning('产品基本信息必录项未必录')
         }
 
-      }
-      else {
-        this.$message.warning('产品基本信息必录项未必录')
-      }
 
 
-
-    },*/
+      },*/
     //关闭
-/*    goBack(){
-      this.$router.go(-1);
-    },*/
+    /*    goBack(){
+          this.$router.go(-1);
+        },*/
 
 
   }

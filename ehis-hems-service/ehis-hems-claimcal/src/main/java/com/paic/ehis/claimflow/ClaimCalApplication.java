@@ -1,6 +1,5 @@
-package com.paic.ehis.claimcal;
+package com.paic.ehis.claimflow;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import com.paic.ehis.common.security.annotation.EnableCustomConfig;

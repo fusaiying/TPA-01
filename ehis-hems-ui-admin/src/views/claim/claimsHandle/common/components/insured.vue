@@ -14,7 +14,7 @@
 
     </div>
     <el-form v-show="collapsed" ref="baseForm" :rules="tableFormRules"
-             :disabled="(node === 'accept' && status === 'show')||node==='input' || node==='calculateReview'"
+             :disabled="(node === 'accept' && status === 'show')||node==='input' || node==='calculateReview' || node==='sport' "
              :model="baseForm"
              style="padding-bottom: 30px;" label-width="150px" size="mini" class="baseInfo_class">
       <el-row>
@@ -22,7 +22,7 @@
           <el-form-item label="客户号：" prop="insuredNo">
             <el-input v-model="baseForm.insuredNo" class="item-width" clearable
                       size="mini" disabled/>
-<!--            <span class="size">{{ baseForm.insuredNo }}</span>-->
+            <!--            <span class="size">{{ baseForm.insuredNo }}</span>-->
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -195,13 +195,13 @@
                            show-overflow-tooltip/>
           <el-table-column align="center" prop="ssFlag" label="社保标记" :formatter="getSocialinsurance1"
                            show-overflow-tooltip/>
-<!--          <el-table-column label="操作" width="120" align="center">
-            <template slot-scope="scope">
-              <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="preview(scope.row)">预览</el-button>
-              <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="download(scope.row)">下载
-              </el-button>
-            </template>
-          </el-table-column>-->
+          <!--          <el-table-column label="操作" width="120" align="center">
+                      <template slot-scope="scope">
+                        <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="preview(scope.row)">预览</el-button>
+                        <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="download(scope.row)">下载
+                        </el-button>
+                      </template>
+                    </el-table-column>-->
         </el-table>
       </el-row>
     </el-form>
@@ -466,11 +466,11 @@
       }).dictDate
 
 
-/*      if (this.node === 'report') {
-        this.tableFormRules.dateRange = {required: false, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
-      } else {
-        this.tableFormRules.dateRange = {required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
-      }*/
+      /*      if (this.node === 'report') {
+              this.tableFormRules.dateRange = {required: false, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
+            } else {
+              this.tableFormRules.dateRange = {required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
+            }*/
       this.getAddressData()
     },
     created() {
@@ -481,48 +481,48 @@
         this.getAddressData()
         const subFormSearch = JSON.parse(JSON.stringify(this.sonInsuredData))
 
-          let baseFormData = subFormSearch.claimCaseInsured
+        let baseFormData = subFormSearch.claimCaseInsured
 //this.baseForm.checked=false
-          this.$set(this.baseForm, 'checked', false)
-          this.baseForm.insuredNo = baseFormData.insuredNo
-          this.baseForm.name = baseFormData.name
-          this.baseForm.idType = baseFormData.idType
-          this.baseForm.idNo = baseFormData.idNo
-          this.baseForm.sex = baseFormData.sex
-          this.baseForm.birthday = baseFormData.birthday
-          this.baseForm.occupation = baseFormData.occupation
-          this.baseForm.nationality = baseFormData.nationality
-          this.baseForm.idStartDate = baseFormData.idStartDate
-          this.baseForm.idEndDate = baseFormData.idEndDate
-          this.baseForm.mobile = baseFormData.mobile
-          this.baseForm.province = baseFormData.province
-          this.baseForm.city = baseFormData.city
-          this.baseForm.district = baseFormData.district
-          this.baseForm.phone = baseFormData.phone
-          this.baseForm.email = baseFormData.email
-          this.baseForm.address = baseFormData.address
+        this.$set(this.baseForm, 'checked', false)
+        this.baseForm.insuredNo = baseFormData.insuredNo
+        this.baseForm.name = baseFormData.name
+        this.baseForm.idType = baseFormData.idType
+        this.baseForm.idNo = baseFormData.idNo
+        this.baseForm.sex = baseFormData.sex
+        this.baseForm.birthday = baseFormData.birthday
+        this.baseForm.occupation = baseFormData.occupation
+        this.baseForm.nationality = baseFormData.nationality
+        this.baseForm.idStartDate = baseFormData.idStartDate
+        this.baseForm.idEndDate = baseFormData.idEndDate
+        this.baseForm.mobile = baseFormData.mobile
+        this.baseForm.province = baseFormData.province
+        this.baseForm.city = baseFormData.city
+        this.baseForm.district = baseFormData.district
+        this.baseForm.phone = baseFormData.phone
+        this.baseForm.email = baseFormData.email
+        this.baseForm.address = baseFormData.address
+        this.baseForm.dateRange = []
+
+
+        /* this.baseForm.dateRange[0] =  this.baseForm.idStartDate
+      this.baseForm.dateRange[1] =  this.baseForm.idStartDate*/
+
+        //this.baseForm.idEndDate = '9999-12-31'
+        if (this.baseForm.idEndDate == '9999-12-31') {
+          this.$set(this.baseForm, 'checked', true)
           this.baseForm.dateRange = []
+        } else {
+          this.$set(this.baseForm, 'checked', false)
+          this.baseForm.dateRange[0] = this.baseForm.idStartDate
+          this.baseForm.dateRange[1] = this.baseForm.idEndDate
+        }
 
 
-          /* this.baseForm.dateRange[0] =  this.baseForm.idStartDate
-        this.baseForm.dateRange[1] =  this.baseForm.idStartDate*/
-
-          //this.baseForm.idEndDate = '9999-12-31'
-          if (this.baseForm.idEndDate == '9999-12-31') {
-            this.$set(this.baseForm, 'checked', true)
-            this.baseForm.dateRange = []
-          } else {
-            this.$set(this.baseForm, 'checked', false)
-            this.baseForm.dateRange[0] = this.baseForm.idStartDate
-            this.baseForm.dateRange[1] = this.baseForm.idEndDate
-          }
-
-
-          this.region = []
-          this.region[0] = this.baseForm.province
-          this.region[1] = this.baseForm.city
-          this.region[2] = this.baseForm.district
-          this.tableData = subFormSearch.policyInfominData
+        this.region = []
+        this.region[0] = this.baseForm.province
+        this.region[1] = this.baseForm.city
+        this.region[2] = this.baseForm.district
+        this.tableData = subFormSearch.policyInfominData
 
         /*    this.$nextTick(() =>{
 
@@ -534,6 +534,9 @@
         }
       },
       getPropData(val) {
+        //调用保存的接口
+
+
         const subFormSearch = JSON.parse(JSON.stringify(val))
         let baseFormData = subFormSearch.caseInsuredData
 
@@ -566,13 +569,13 @@
           if(baseFormData.idStartDate!=null && baseFormData.idStartDate==''){
             this.baseForm.dateRange[0] = baseFormData.idStartDate
           }
-        else {
+          else {
             this.baseForm.dateRange[0] = undefined
           }
-        if(baseFormData.idEndDate!=null && baseFormData.idEndDate==''){
+          if(baseFormData.idEndDate!=null && baseFormData.idEndDate==''){
             this.baseForm.dateRange[1] = baseFormData.idEndDate
           }
-        else {
+          else {
             this.baseForm.dateRange[1] = undefined
           }
         }
@@ -589,6 +592,9 @@
           this.baseForm.region[2]=subFormSearch.caseInsuredData.district*/
 
         this.tableData = subFormSearch.policyInfoData
+        this.isInsuredSave = true
+        this.$emit('emitSaveFlag')
+
       },
 
       closeDialogVisable() {
@@ -614,8 +620,8 @@
           /*this.baseForm.idEndDate = '9999-12-31'*/
           this.$set(this.baseForm,'isEndData','9999-12-31')
           this.baseForm.idStartDate=''
-         /* this.baseForm.dateRange[0] = ''
-          this.baseForm.dateRange[1] = '9999-12-31'*/
+          /* this.baseForm.dateRange[0] = ''
+           this.baseForm.dateRange[1] = '9999-12-31'*/
         } else {
           this.baseForm.dateRange = []
           this.baseForm.idEndDate = ''
@@ -686,7 +692,7 @@
             subFormSearch.rptNo = this.copyFixInfo.rptNo
             if(this.baseForm.dateRange.length>=2){
               this.baseForm.idStartDate= this.baseForm.dateRange[0]
-                this.baseForm.idEndDate  =this.baseForm.dateRange[1]
+              this.baseForm.idEndDate  =this.baseForm.dateRange[1]
             }
             subFormSearch.idStartDate = this.baseForm.idStartDate
             subFormSearch.idEndDate = this.baseForm.idEndDate
@@ -818,7 +824,7 @@
       }
     }
   }
-</script>
+</script>>
 <style scoped>
   .item-width {
     width: 215px;

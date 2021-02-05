@@ -4,7 +4,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane :label="label.label01" name="01">
           <el-form ref="reviewForm" :model="reviewForm" style="padding-bottom: 30px;" label-width="150px" :rules="reviewFormRule"
-                    size="mini" class="baseInfo_class">
+                   size="mini" class="baseInfo_class">
             <el-row>
               <el-row :span="8">
                 <el-form-item label="审核结果：" prop="checkResult">
@@ -17,13 +17,13 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-              <el-form-item style="margin-right: 20px;" label="审核意见：" prop="checkAdvice">
-                <el-input
-                  type="textarea"
-                  placeholder="请输入内容"
-                  v-model="reviewForm.checkAdvice" maxlength="200">
-                </el-input>
-              </el-form-item>
+                <el-form-item style="margin-right: 20px;" label="审核意见：" prop="checkAdvice">
+                  <el-input
+                    type="textarea"
+                    placeholder="请输入内容"
+                    v-model="reviewForm.checkAdvice" maxlength="200">
+                  </el-input>
+                </el-form-item>
               </el-col>
             </el-row>
             <div style="text-align: right; margin-right: 10px;">
@@ -38,14 +38,14 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane :label="label.label02" name="02">
-<!--          <el-table  :data="reviewLogTableData"
-                     :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                     size="small" highlight-current-row style="width: 100%;">
-            <el-table-column key="1"  align="center" prop="updateBy" min-width="150" label="操作人" show-overflow-tooltip/>
-            <el-table-column  key="2"  align="center" min-width="100" prop="updateTime" label="时间" show-overflow-tooltip/>
-            <el-table-column key="3"  align="center" prop="checkResultName" label="审核结论" min-width="120" show-overflow-tooltip/>
-            <el-table-column key="4"  align="center" prop="checkAdvice" min-width="160" label="审核意见" show-overflow-tooltip/>
-          </el-table>-->
+          <!--          <el-table  :data="reviewLogTableData"
+                               :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                               size="small" highlight-current-row style="width: 100%;">
+                      <el-table-column key="1"  align="center" prop="updateBy" min-width="150" label="操作人" show-overflow-tooltip/>
+                      <el-table-column  key="2"  align="center" min-width="100" prop="updateTime" label="时间" show-overflow-tooltip/>
+                      <el-table-column key="3"  align="center" prop="checkResultName" label="审核结论" min-width="120" show-overflow-tooltip/>
+                      <el-table-column key="4"  align="center" prop="checkAdvice" min-width="160" label="审核意见" show-overflow-tooltip/>
+                    </el-table>-->
           <div style="text-align: right; margin-right: 10px;">
             <el-button size="mini" type="primary"  @click="goBack">关闭</el-button>
           </div>
@@ -58,25 +58,25 @@
 </template>
 
 <script>
-import {insertCheckInfo} from '@/api/baseInfo/serviceProductManagement'
+import {insertCheckInfo} from '@/api/productManage/serviceProductManagement'
 export default {
-props:{
-  productCode: String
-},
+  props:{
+    productCode: String
+  },
 
   data() {
-  const checkReviewOpinion=(rules, value, callback) => {
-    if (this.reviewForm.checkResult=='02') {
-      if(!value) {
-        callback(new Error('审核意见不能为空！'))
+    const checkReviewOpinion=(rules, value, callback) => {
+      if (this.reviewForm.checkResult=='02') {
+        if(!value) {
+          callback(new Error('审核意见不能为空！'))
+        } else {
+          callback()
+        }
+
       } else {
         callback()
       }
-
-    } else {
-      callback()
     }
-  }
     return {
       reviewForm: {},
       activeName: '01',

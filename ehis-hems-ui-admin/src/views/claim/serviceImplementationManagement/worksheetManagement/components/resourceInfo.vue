@@ -18,35 +18,35 @@
                          :label="`${tab.label}(${tab.total})`"
                          v-loading="loading1"
                          :name="tab.name" :key="tab.name">
-<!--                            <el-row v-if="imageInfo.originallist.list.length && activeName1===tab.name"-->
-<!--                                    :id="'image' + tab.name + '1'" ref="image1"-->
-<!--                                    class="imgList_div"-->
-<!--                                    @scroll.native="getScrollTop('1', page0, tab.total, tab.name)">-->
-<!--                              <el-col v-for="(url, i) in imageInfo.originallist.list" :span="3" :key="i" class="block">-->
-<!--                                <div  class="my-image-wrapper">-->
-<!--                                  <el-image-->
-<!--                                    :src="'data:image/jpeg;base64,'+ url.src"-->
-<!--                                    style="width: 96%;height:160px"-->
-<!--                                    fit="fill"-->
-<!--                                    :preview-src-list="originallistPreviewList"-->
-<!--                                    @click="getoriginallistPreviewList(i,url.pageid,imageInfo.originallist.list,'1')"/>-->
-<!--                                  &lt;!&ndash;删除&ndash;&gt;-->
-<!--                                  <el-button-->
-<!--                                    type="text"-->
-<!--                                    style="position: absolute;top: 2px;right: 0;padding: 0"-->
-<!--                                    @click="delImageHandle(url)">-->
-<!--                                    <i class="el-icon-circle-close" style="font-size:16px;color: red;opacity: .5;"></i>-->
-<!--                                  </el-button>-->
-<!--&lt;!&ndash;                                  <el-checkbox-->
-<!--                                    :disabled="status==='show'?true:acceptFlag || disableFlag"-->
-<!--                                    :label="url"-->
-<!--                                    ref="imageCkeck"-->
-<!--                                    style="position:absolute;bottom: -2px;right: -8px;"-->
-<!--                                    text-color="#fff" fill="#fff">{{ }}</el-checkbox>&ndash;&gt;-->
-<!--                                </div>-->
-<!--                              </el-col>-->
-<!--                              <el-col  :span="24" style="text-align: center">没有更多了</el-col>-->
-<!--                            </el-row>-->
+              <!--                            <el-row v-if="imageInfo.originallist.list.length && activeName1===tab.name"-->
+              <!--                                    :id="'image' + tab.name + '1'" ref="image1"-->
+              <!--                                    class="imgList_div"-->
+              <!--                                    @scroll.native="getScrollTop('1', page0, tab.total, tab.name)">-->
+              <!--                              <el-col v-for="(url, i) in imageInfo.originallist.list" :span="3" :key="i" class="block">-->
+              <!--                                <div  class="my-image-wrapper">-->
+              <!--                                  <el-image-->
+              <!--                                    :src="'data:image/jpeg;base64,'+ url.src"-->
+              <!--                                    style="width: 96%;height:160px"-->
+              <!--                                    fit="fill"-->
+              <!--                                    :preview-src-list="originallistPreviewList"-->
+              <!--                                    @click="getoriginallistPreviewList(i,url.pageid,imageInfo.originallist.list,'1')"/>-->
+              <!--                                  &lt;!&ndash;删除&ndash;&gt;-->
+              <!--                                  <el-button-->
+              <!--                                    type="text"-->
+              <!--                                    style="position: absolute;top: 2px;right: 0;padding: 0"-->
+              <!--                                    @click="delImageHandle(url)">-->
+              <!--                                    <i class="el-icon-circle-close" style="font-size:16px;color: red;opacity: .5;"></i>-->
+              <!--                                  </el-button>-->
+              <!--&lt;!&ndash;                                  <el-checkbox-->
+              <!--                                    :disabled="status==='show'?true:acceptFlag || disableFlag"-->
+              <!--                                    :label="url"-->
+              <!--                                    ref="imageCkeck"-->
+              <!--                                    style="position:absolute;bottom: -2px;right: -8px;"-->
+              <!--                                    text-color="#fff" fill="#fff">{{ }}</el-checkbox>&ndash;&gt;-->
+              <!--                                </div>-->
+              <!--                              </el-col>-->
+              <!--                              <el-col  :span="24" style="text-align: center">没有更多了</el-col>-->
+              <!--                            </el-row>-->
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -70,8 +70,8 @@ import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import Bus from '../../../claimsHandle/bus/bus'
 
 export default {
- // inject: ['getImageInfo'],
- // mixins: [images],
+  // inject: ['getImageInfo'],
+  // mixins: [images],
   components: {
     // uploadModul,
     ElImageViewer
@@ -110,20 +110,20 @@ export default {
       imageInfo: {originallist: []},
 
 //父组件传来的数据
-        originallist: [{
-          label: '全部',
-          name: '9',
-          total: 8
-        },{
-          label: '其他证明材料',
-          name: '11',
-          total: 1
-        },
-          {
-            label: '住院单',
-            name: '111',
-            total: 7
-          }],
+      originallist: [{
+        label: '全部',
+        name: '9',
+        total: 8
+      },{
+        label: '其他证明材料',
+        name: '11',
+        total: 1
+      },
+        {
+          label: '住院单',
+          name: '111',
+          total: 7
+        }],
 
       activeNames: ['1'],
       downloadFileRarLoading: false,
@@ -234,31 +234,31 @@ export default {
       // 第一次打开预览时生成
       this.$nextTick(function () {
         if (document.getElementsByClassName('has').length === 0) {
-   /*       if (this.node === 'accept' || this.node === 'report') {
-            if (this.status === 'handle' ? !this.acceptFlag && !this.disableFlag : false) {
-              this.generateLabel('el-icon-delete has')
-            }
-          }*/
+          /*       if (this.node === 'accept' || this.node === 'report') {
+                   if (this.status === 'handle' ? !this.acceptFlag && !this.disableFlag : false) {
+                     this.generateLabel('el-icon-delete has')
+                   }
+                 }*/
           this.generateLabel('el-icon-delete has')
           this.generateLabel('el-icon-arrow-left has')
           this.generateLabel('el-icon-arrow-right has')
           this.generateLabel('el-icon-download has')
         }
         // 删除
-/*        if (this.node === 'accept' || this.node === 'report') {
-          if (this.status === 'handle' ? !this.acceptFlag && !this.disableFlag : false) {
-            let del = document.getElementsByClassName('el-icon-delete has')[0] //删除
-            del.onclick = function () {
-              let image = document.getElementsByClassName('el-image-viewer__img')[0]
-              // 获取要删除的数据
-              data.forEach(item => {
-                if (item.pageid === pageid) {
-                  _that.delImageHandle(item)
-                }
-              })
-            }
-          }
-        } */
+        /*        if (this.node === 'accept' || this.node === 'report') {
+                  if (this.status === 'handle' ? !this.acceptFlag && !this.disableFlag : false) {
+                    let del = document.getElementsByClassName('el-icon-delete has')[0] //删除
+                    del.onclick = function () {
+                      let image = document.getElementsByClassName('el-image-viewer__img')[0]
+                      // 获取要删除的数据
+                      data.forEach(item => {
+                        if (item.pageid === pageid) {
+                          _that.delImageHandle(item)
+                        }
+                      })
+                    }
+                  }
+                } */
         // 删除
         let del = document.getElementsByClassName('el-icon-delete has')[0] //删除
         del.onclick = function () {
@@ -501,7 +501,7 @@ export default {
 }
 
 /*
-.el-tabs ::v-deep .el-tabs__item {
+.el-tabs /deep/ .el-tabs__item {
   width: 10.5%;
 }*/
 

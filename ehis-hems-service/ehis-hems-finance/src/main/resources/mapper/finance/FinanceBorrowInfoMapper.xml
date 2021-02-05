@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper">
+    
+    <resultMap type="FinanceBorrowInfo" id="FinanceBorrowInfoResult">
+        <result property="borrowId"    column="borrow_id"    />
+        <result property="payBatchNo"    column="pay_batch_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="borrowAmount"    column="borrow_amount"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+    <sql id="selectFinanceBorrowInfoVo">
+        select borrow_id, pay_batch_no, batch_no, rpt_no, borrow_amount, status, create_by, create_time, update_by, update_time, dept_code from finance_borrow_info
+    </sql>
+
+    <select id="selectFinanceBorrowInfoList" parameterType="FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
+        <include refid="selectFinanceBorrowInfoVo"/>
+        <where>  
+            <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="borrowAmount != null "> and borrow_amount = #{borrowAmount}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectFinanceBorrowInfoById" parameterType="Long" resultMap="FinanceBorrowInfoResult">
+        <include refid="selectFinanceBorrowInfoVo"/>
+        where borrow_id = #{borrowId}
+    </select>
+        
+    <insert id="insertFinanceBorrowInfo" parameterType="FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
+        insert into finance_borrow_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="borrowAmount != null">borrow_amount,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">#{payBatchNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="borrowAmount != null">#{borrowAmount},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceBorrowInfo" parameterType="FinanceBorrowInfo">
+        update finance_borrow_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no = #{payBatchNo},</if>
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="borrowAmount != null">borrow_amount = #{borrowAmount},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where borrow_id = #{borrowId}
+    </update>
+
+    <delete id="deleteFinanceBorrowInfoById" parameterType="Long">
+        delete from finance_borrow_info where borrow_id = #{borrowId}
+    </delete>
+
+    <delete id="deleteFinanceBorrowInfoByIds" parameterType="String">
+        delete from finance_borrow_info where borrow_id in 
+        <foreach item="borrowId" collection="array" open="(" separator="," close=")">
+            #{borrowId}
+        </foreach>
+    </delete>
+
+    <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="FinanceBorrowInfo">
+        <include refid="selectFinanceBorrowInfoVo"/>
+        where rpt_no = #{rptNo} and status = 'Y'
+    </select>
+    
+</mapper>

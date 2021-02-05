@@ -46,10 +46,10 @@
       <div style="position: relative; margin-top: 30px;">
         <el-tabs v-model="activeName" >
           <el-tab-pane :label="`处理中(${total})`" name="01">
-            <claimsTable :table-data="pendingTableData" :activeName="activeName"/>
+            <claimsTable ref="claimsTable1" :table-data="pendingTableData" :activeName="activeName"/>
           </el-tab-pane>
           <el-tab-pane :label="`已处理(${finishTotal})`" name="02">
-            <claimsTable @init-data="searchHandle" :table-data="completedTableData" :activeName="activeName"/>
+            <claimsTable ref="claimsTable2" @init-data="searchHandle" :table-data="completedTableData" :activeName="activeName"/>
           </el-tab-pane>
         </el-tabs>
         <!--分页组件-->
@@ -101,6 +101,8 @@
           batchNo: '',
           rptNo: '',
           name: '',
+          orderByColumn: '',
+          isAsc: '',
         },
       }
     },
@@ -135,6 +137,8 @@
         if (this.activeName === '01') {//处理中
           this.searchForm.pageNum=this.backNum
           this.searchForm.pageSize=this.backSize
+          this.searchForm.orderByColumn=this.$refs.claimsTable1.prop
+          this.searchForm.isAsc=this.$refs.claimsTable1.order
           processingList(this.searchForm).then(res => {
             if (res != null && res.code === 200) {
               this.pendingTableData = res.rows
@@ -151,6 +155,8 @@
         } else if (this.activeName === '02') {//已处理
           this.searchForm.pageNum=this.dealNum
           this.searchForm.pageSize=this.dealSize
+          this.searchForm.orderByColumn=this.$refs.claimsTable2.prop
+          this.searchForm.isAsc=this.$refs.claimsTable2.order
           accomplishList(this.searchForm).then(res => {
             if (res != null && res.code === 200) {
               this.completedTableData = res.rows
@@ -220,4 +226,5 @@
     left: -500px;
     top: -500px;
   }
+
 </style>

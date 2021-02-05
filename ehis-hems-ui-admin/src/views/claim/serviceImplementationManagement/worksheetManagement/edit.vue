@@ -1,55 +1,55 @@
 <template>
   <div class="app-container">
-  <!--客户信息-->
-  <div>
-    <client-info></client-info>
-  </div>
+    <!--客户信息-->
+    <div>
+      <client-info :orderCode="orderCode"></client-info>
+    </div>
     <!--服务信息-->
     <div >
-      <service-info :orderCode="orderCode" ref="serviceInfo"></service-info>
+      <service-info :orderCode="orderCode" ref="serviceInfo" :serviceCode="serviceCode" :productCode="productCode"></service-info>
     </div>
 
-  <!--资料信息-->
-  <div>
-   <resource-info></resource-info>
-  </div>
+    <!--资料信息-->
+    <div>
+      <resource-info></resource-info>
+    </div>
 
 
-  <div
-    style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  border-bottom: 1px solid #e6ebf5;color: #303133;float: right; ">
-    <el-button size="mini" type="primary" @click="submitHandle" >审核完毕</el-button>
-    <el-button size="mini" type="primary" @click="distribution" >分配</el-button>
-    <el-button size="mini" type="primary" @click="sendBack" >退回</el-button>
-    <el-button size="mini" type="primary" @click="goBack">关闭</el-button>
-  </div>
+    <div
+      style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  color: #303133;float: right; ">
+      <el-button size="mini" type="primary" @click="submitHandle" v-if="btnShow">审核完毕</el-button>
+      <el-button size="mini" type="primary" @click="saveAllot" >分配</el-button>
+      <el-button size="mini" type="primary" @click="sendBack"  v-if="btnShow">退回</el-button>
+      <el-button size="mini" type="primary" @click="goBack">关闭</el-button>
+    </div>
     <!--    分配-->
-    <el-dialog
-      :visible.sync="allotDialogVisable"
-      :append-to-body="true"
-      :close-on-click-modal="true"
-      :before-close="changeAllotDialogVisable"
-      title="分配"
-      width="500px"
-    >
-      <el-form ref="allotForm" :model="allotForm"  size="mini" label-width="150px"  :rules="allotFormRules">
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="选择供应商：" prop="supplierName" >
-              <el-select v-model="allotForm.supplierName" class="item-width" placeholder="请选择" clearable style="width: 200px">
-                <el-option v-for="item in productTypeOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
+    <!--    <el-dialog
+          :visible.sync="allotDialogVisable"
+          :append-to-body="true"
+          :close-on-click-modal="true"
+          :before-close="changeAllotDialogVisable"
+          title="分配"
+          width="500px"
+        >
+          <el-form ref="allotForm" :model="allotForm"  size="mini" label-width="150px"  :rules="allotFormRules">
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="选择供应商：" prop="supplierName" >
+                  <el-select v-model="allotForm.supplierName" class="item-width" placeholder="请选择" clearable style="width: 200px">
+                    <el-option v-for="item in productTypeOptions" :label="item.dictLabel" :value="item.dictValue"
+                               :key="item.dictValue"/>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="mini" @click="saveAllot">确认</el-button>
-        <el-button size="mini" @click="changeAllotDialogVisable">返回</el-button>
-      </div>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" size="mini" @click="saveAllot">确认</el-button>
+            <el-button size="mini" @click="changeAllotDialogVisable">返回</el-button>
+          </div>
 
-    </el-dialog>
+        </el-dialog>-->
     <!--    退回工单-->
     <el-dialog
       :visible.sync="dialogVisable"
@@ -83,7 +83,8 @@
 </template>
 
 <script>
-import {saveProductInfo,checkProductInfo} from '@/api/baseInfo/serviceProductManagement'
+
+import {queryinfo,allocation,cancalOrder} from '@/api/serviceProductManage/serviceImplManage'
 import clientInfo   from './components/clientInfo'
 import serviceInfo   from './components/serviceInfo'
 import resourceInfo   from './components/resourceInfo'
@@ -98,6 +99,11 @@ export default {
   },
   data() {
     return {
+      productCode:'',
+      serviceCode:'',
+      productTypeOptions:[],
+      btnShow: false,
+      allData: {},
       orderCode: '',
       allotDialogVisable: false,
       dialogVisable: false,
@@ -111,7 +117,7 @@ export default {
       remarkFormRules:{reason: [{required:true,message:'退回原因不能为空',trigger:'blur'}]},
     }
   },
-   created() {
+  created() {
     this.init()
 
   },
@@ -119,6 +125,20 @@ export default {
     init(){
       if(this.$route.query.status=='edit'){
         this.orderCode=this.$route.query.orderCode
+        this.serviceCode=this.$route.query.serviceCode
+        this.productCode=this.$route.query.productCode
+        /*        //调用查询接口
+                let query={
+                  orderCode:this.orderCode
+                }
+                queryinfo(query).then(res=>{
+                  if(res!=null && res.code==200){
+                    this.allData=res.data
+                  }
+                })*/
+      }
+      if(this.$route.query.nodeStatus=='04'){
+        this.btnShow=true
       }
 
     },
@@ -131,8 +151,7 @@ export default {
 
     //提交审核
     submitHandle(){
-
-        let serviceInfoFlag=this.$refs['serviceInfo'].validateForm()
+      let serviceInfoFlag=this.$refs['serviceInfo'].validateForm()
       if(serviceInfoFlag){
         //调用审核的接口
       }
@@ -143,29 +162,48 @@ export default {
 
 
     },
-    //分配
-    distribution(){
+    /*    //分配
+        distribution(){
 
-      this.allotDialogVisable=true
-      //调用服务编码查询供应商的接口
-      let query={
+          this.allotDialogVisable=true
+          //调用服务编码查询供应商的接口
+          let query={
 
-      }
-      //供应商【】清空
+          }
+          //供应商【】清空
 
-    },
+        },*/
     changeAllotDialogVisable(){
       this.$refs.allotForm.resetFields()
       this.allotDialogVisable=false
     },
 
     saveAllot(){
-      this.$refs.allotForm.validate(valid => {
-        if (valid) {
-          //let productData = this.tableData[this.index]
-          //调用分配的接口
-        }
-      })
+      let serviceInfoFlag=this.$refs['serviceInfo'].validateForm()
+      if(serviceInfoFlag){
+        let serviceInfoData=this.$refs.serviceInfo.baseForm
+        //调用分配的接口
+        allocation(serviceInfoData).then(res=>{
+          if (res !=null && res.code == '200') {
+            this.$message({
+              message: '分配成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          } else {
+            this.$message({
+              message: '分配失败!',
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          }
+        })
+      }
+      else{
+        this.$message.warning('服务信息必录项未必录')
+      }
 
     },
 
@@ -181,28 +219,30 @@ export default {
     saveRemark(){
       this.$refs.remarkForm.validate(valid => {
         if(valid){
-          let productData=this.tableData[this.index]
-          //调用接口
-          /*          insertMangerInfo(productData).then(res=>{
-                      if (res !=null && res.code == '200') {
-                        this.$message({
-                          message: '操作成功！',
-                          type: 'success',
-                          center: true,
-                          showClose: true
-                        })
-                        this.saveFlag=true
-                      } else {
-                        this.$message({
-                          message: '操作失败!',
-                          type: 'error',
-                          center: true,
-                          showClose: true
-                        })
-                        this.tableData[this.checkIndex].bussinessStatus='03'
-                      }
-                    })*/
+          let data={
+            orderCode: this.orderCode,
+            reason: this.remarkForm.reason
+          }
+          cancalOrder(data).then(res=>{
+            if (res !=null && res.code == '200') {
+              this.$message({
+                message: '退回工单成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+            } else {
+              this.$message({
+                message: '退回工单失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            }
+          })
+
         }
+
       })
     },
 

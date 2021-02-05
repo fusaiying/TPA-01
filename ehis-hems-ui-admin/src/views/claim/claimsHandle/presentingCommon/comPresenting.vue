@@ -19,7 +19,7 @@
           <el-col :span="8">
             <el-form-item label="批次号：" prop="batchno">
               <el-input disabled v-model="searchForm.batchno" class="item-width" clearable size="mini"
-                        placeholder="D2020112200001"/>
+                        placeholder=""/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -46,8 +46,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="就诊医院：" prop="hospitalname">
-              <el-input disabled v-model="searchForm.hospitalname" class="item-width" clearable size="mini"
+            <el-form-item label="就诊医院：" prop="chname1">
+              <el-input disabled v-model="searchForm.chname1" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
               <el-button :disabled="isShow" type="success" size="mini" @click="openHospitalDialog"
                          icon="el-icon-search"></el-button>
@@ -62,10 +62,9 @@
           <el-col :span="8">
             <el-form-item label="账户币种：" prop="currency">
               <el-select :disabled="isShow" v-model="searchForm.currency" class="item-width" placeholder="请选择">
-                <el-option key="01" label="人民币"
-                           value="01"/>
-                <el-option key="02" label="美元"
-                           value="02"/>
+                <el-option v-for="option in currencyOptions" :key="option.dictValue"
+                           :label="option.dictLabel"
+                           :value="option.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -89,8 +88,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="机构：" prop="organcode">
-              <el-input disabled v-model="searchForm.organcode" class="item-width" clearable size="mini"
-                        placeholder="上海分公司"/>
+              <span class="size">{{ deptName }}</span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -132,10 +130,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item v-if="isAfter" label="交件人：" prop="sendby">
-              <el-select :disabled="isShow" v-model="searchForm.sendby" class="item-width" placeholder="请选择">
-                <el-option v-for="item in sysUserOptions" :key="item.userName" :label="item.userName"
-                           :value="item.userName"/>
-              </el-select>
+              <el-input :disabled="isShow" v-model="searchForm.sendby" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -156,10 +152,6 @@
           <el-col :span="8">
             <el-form-item v-if="searchForm.speccasetype==='03'" label="投保单位：" prop="Issuingunit">
               <el-select :disabled="isShow" v-model="searchForm.Issuingunit" class="item-width" placeholder="请选择">
-                <el-option key="张三" label="张三"
-                           value="张三"/>
-                <el-option key="李四" label="李四"
-                           value="李四"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -187,7 +179,7 @@
       </div>
       <el-divider/>
       <el-table
-        v-if="isDirect"
+        v-show="isDirect"
         :data="tableData"
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
         size="small"
@@ -197,12 +189,12 @@
         <el-table-column align="center" prop="chname1" min-width="120" label="医院名称" show-overflow-tooltip/>
         <el-table-column align="center" prop="accountName" min-width="160" label="账户名" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankName" min-width="160" label="开户行" show-overflow-tooltip/>
-        <el-table-column align="center" prop="accountNo" min-width="160" label="账号" show-overflow-tooltip/>
+        <el-table-column align="center" prop="bankCode" min-width="160" label="账号" show-overflow-tooltip/>
         <el-table-column align="center" prop="chaddreess" label="医院地址" min-width="90" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankDetail" min-width="120" label="银行信息描述" show-overflow-tooltip/>
       </el-table>
       <el-table
-        v-if="isAfter"
+        v-show="isAfter"
         :data="afterTable"
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
         size="small"
@@ -230,14 +222,16 @@
             <span v-show="!show" class="form-span">{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="claimmaterials" label="理赔材料" min-width="180" show-overflow-tooltip>
+        <el-table-column v-if="isAfter" align="center" prop="claimmaterials" label="理赔材料" min-width="180"
+                         show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-select multiple size="mini" v-model="scope.row.claimmaterials" class="item-width" placeholder="请选择">
+            <el-select v-if="show" multiple size="mini" v-model="scope.row.claimmaterials" class="item-width"
+                       placeholder="请选择">
               <el-option v-for="option in claim_materialOptions" :key="option.dictValue"
                          :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
-            <span v-show="!show"
+            <span v-if="!show"
                   class="form-span">{{getClaimmaterials(scope.row.claimmaterials)}}</span>
           </template>
         </el-table-column>
@@ -259,11 +253,11 @@
       <el-divider v-if="isShowFooter"/>
       <el-form v-if="isShowFooter" ref="recordForm" :model="recordForm" style="padding-bottom: 30px;"
                label-width="100px"
-               :rule="recordRule"
+               :rules="recordRule"
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="审核结论：" prop="conclusion">
+            <el-form-item label="复核结论：" prop="conclusion">
               <el-select :disabled="eShowFooter" v-model="recordForm.conclusion" class="item-width" placeholder="请选择">
                 <el-option v-for="option in examine_resultOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -293,7 +287,8 @@
           </el-col>
         </el-row>
       </el-form>
-      <hospital :value="hospitalDialog" @closeHospital="closeHospital" @getPropData="getPropData"/>
+      <hospital :value="hospitalDialog" @closeHospital="closeHospital" :claimtype="searchForm.claimtype"
+                @getPropData="getPropData"/>
     </el-card>
   </div>
 </template>
@@ -306,14 +301,17 @@
     addBatchAndStandingPresent,
     updateClaimBatch,
     selectRecordByBatchno,
-    getStanding
+    getStanding,
+    getThisDept,
+    getDeptList
   } from '@/api/claim/presentingReview'
-  import {selectSysUser} from '@/api/insuranceRules/ruleDefin'
+  import {getDeptById} from '@/api/claim/standingBookSearch'
   import Hospital from "../../basicInfoManage/publicVue/hospital";
   import {getHospitalInfo} from '@/api/claim/handleCom'
   //医院
   let dictss = [{dictType: 'priority_reason'}, {dictType: 'insurance_type'}, {dictType: 'claimType'}
-    , {dictType: 'sys_yes_no'}, {dictType: 'special_case'}, {dictType: 'claim_material'}, {dictType: 'examine_result'},]
+    , {dictType: 'sys_yes_no'}, {dictType: 'special_case'}, {dictType: 'claim_material'},
+    {dictType: 'examine_result'}, {dictType: 'currency'},]
   export default {
     components: {Hospital},
     data() {
@@ -343,6 +341,17 @@
           }
         }
       }
+      const checkRemark = (rule, value, callback) => {
+        if (!value) {
+          if (this.recordForm.conclusion === '02') {
+            callback(new Error("请录入结论说明"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      }
       return {
         hospitalDialog: false,
         eShowFooter: false,
@@ -368,7 +377,7 @@
         rules: {
           claimtype: {trigger: ['blur', 'change'], required: true, message: '理赔类型必填'}, // 理赔类型
           submitdate: {trigger: 'blur', required: true, message: '交单日期必填'}, // 交单日期
-          hospitalname: {trigger: ['blur', 'change'], required: true, message: '就诊医院必填'}, // 就诊医院
+          chname1: {trigger: ['blur', 'change'], required: true, message: '就诊医院必填'}, // 就诊医院
           batchtotal: [{validator: checkBatchtotal, required: true, trigger: 'blur'}], // 批次总名额
           currency: {trigger: ['blur', 'change'], required: true, message: '账单币种必填'}, // 账单币种
           conttype: {trigger: ['blur', 'change'], required: true, message: '个险/团险必填'}, // 个险/团险
@@ -381,7 +390,7 @@
         },
         recordRule: {
           conclusion: {trigger: ['blur', 'change'], required: true, message: '审核结论必填'}, // 审核结论
-          nopasstype: {trigger: 'blur', required: true, message: '不通过类型必填'}, // 不通过类型
+          remark: [{validator: checkRemark, trigger: 'blur'}], // 结论说明
         },
         afterTableTotal: 0,
         afterTable: [],
@@ -400,19 +409,20 @@
         activeName: '01',
         completedTableData: [],
         pendingTableData: [],
+        deptName: '',
         searchForm: {
           source: '03',//交单来源 01线下 02线上 03线下
           batchno: undefined,//批次号
           claimtype: undefined,//理赔类型
           submitdate: undefined,//交单日期
           hospitalcode: '01',//就诊医院id
-          hospitalname: undefined,//就诊医院名称
+          chname1: undefined,//就诊医院名称
           hospitalename: undefined,//就诊医院名称
           batchtotal: undefined,//批次总金额
           currency: undefined,//账户币种
           conttype: undefined,//个险/团险
           casenum: undefined,//案件数
-          organcode: '01',//机构
+          organcode: undefined,//机构
           billrecevieflag: undefined,//是否收到发票
           prireason: undefined,//优先原因
           expressnumber: undefined,//快递号
@@ -422,11 +432,11 @@
           speccasetype: undefined,//特殊案件类型
           Issuingunit: undefined,//投保单位
           contno: undefined,//保单号
+          batchstatus: undefined,//状态
         },
         recordForm: {
-          conclusion: undefined,//结论
-          //nopasstype: undefined,//不通过类型
-          remark: undefined,//备注
+          conclusion: '',//结论
+          remark: '',//备注
         },
         changeSerchData: {},
         dictList: [],
@@ -434,11 +444,12 @@
         insurance_typeOptions: [],
         claimTypeOptions: [],
         sys_yes_noOptions: [],
-        sysUserOptions: [],
         special_caseOptions: [],
         claim_materialOptions: [],
         examine_resultOptions: [],
         hospitalOptions: [],
+        currencyOptions: [],
+        deptOptions: [],
       }
     },
 
@@ -467,6 +478,14 @@
       this.examine_resultOptions = this.dictList.find(item => {
         return item.dictType === 'examine_result'
       }).dictDate
+      this.currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'currency'
+      }).dictDate
+      getDeptList().then(res => {
+        if (res != null && res.code === 200) {
+          this.deptOptions = res.data
+        }
+      })
     },
     async mounted() {
       let date = new Date()
@@ -488,7 +507,6 @@
           }
         })
         if (this.querys.status === 'show') {
-          this.isAfter = false
           this.isSaveSub = false
           this.isPrint = false
           this.isSaveOrSub = false
@@ -518,14 +536,22 @@
                 if (res != null && res !== '') {
                   this.tableData = res.rows
                 }
-              }).catch(res=>{})
+              }).catch(res => {
+              })
             }
           } else {//查看时是事后调用查询事后案件台账
-            getStanding(this.querys.batchno).then(res=>{
-              if (res!=null && res.code===200){
-                this.afterTable=res.rows
+            let item = {
+              batchNo: this.querys.batchno
+            }
+            getStanding(item).then(res => {
+              if (res != null && res.code === 200) {
+                this.afterTable = res.rows
               }
-            }).catch(res=>{})
+            }).catch(res => {
+            })
+          }
+          if (this.searchForm.batchstatus === '05') {//失效状态  条码打印不可用
+            this.isPrint = true
           }
         } else if (this.querys.status === 'edit') {
           this.eShowFooter = true
@@ -549,48 +575,71 @@
                 if (res != null && res !== '') {
                   this.tableData = res.rows
                 }
-              }).catch(res=>{})
+              }).catch(res => {
+              })
             }
           } else {//查看时是事后调用查询事后案件台账
-            getStanding(this.querys.batchno).then(res=>{
-              if (res!=null && res.code===200){
-                this.afterTable=res.rows
+            let item = {
+              batchNo: this.querys.batchno
+            }
+            getStanding(item).then(res => {
+              if (res != null && res.code === 200) {
+                this.afterTable = res.rows
               }
-            }).catch(res=>{})
+            }).catch(res => {
+            })
           }
         } else if (this.querys.status === 'editReview') {
           this.isShowFooter = true
           this.isSaveSub = false
           this.isReview = true
-           //查看时是直结调用查询医院接口
-           if (this.searchForm.claimtype === '01') {
-             if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
-               let data = {
-                 //医院编码
-                 providerCode: this.searchForm.hospitalcode
-               }
-               //医院
-               getHospitalInfo(data).then(res => {
-                 if (res != null && res !== '') {
-                   this.tableData = res.rows
-                 }
-               }).catch(res=>{})
-             }
-           } else {//查看时是事后调用查询事后案件台账
-             getStanding(this.querys.batchno).then(res=>{
-               if (res!=null && res.code===200){
-                 this.afterTable=res.rows
-               }
-             }).catch(res=>{})
-           }
+          //查看时是直结调用查询医院接口
+          if (this.searchForm.claimtype === '01') {
+            if (this.searchForm.hospitalcode != null && this.searchForm.hospitalcode !== '') {
+              let data = {
+                //医院编码
+                providerCode: this.searchForm.hospitalcode
+              }
+              //医院
+              getHospitalInfo(data).then(res => {
+                if (res != null && res !== '') {
+                  this.tableData = res.rows
+                }
+              }).catch(res => {
+              })
+            }
+          } else {//查看时是事后调用查询事后案件台账
+            let item = {
+              batchNo: this.querys.batchno
+            }
+            getStanding(item).then(res => {
+              if (res != null && res.code === 200) {
+                this.afterTable = res.rows
+              }
+            }).catch(res => {
+            })
+          }
         }
+      } else {
+        getThisDept().then(res => {
+          if (res != null) {
+            this.searchForm.organcode = res.deptId
+            if (res.deptId != null && res.deptId !== '') {
+              getDeptById(res.deptId).then(res => {
+                if (res != null && res.code === 200) {
+                  this.deptName = res.data.deptName
+                }
+              })
+            }
+          }
+        })
+
       }
-      selectSysUser().then(res => {
-        this.sysUserOptions = res.data
-      })
-      getHospitalInfo().then(res => {
+      let data = {}
+      getHospitalInfo(data).then(res => {
         if (res != null && res !== '') {
           this.hospitalOptions = res.rows
+          this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, this.searchForm.hospitalcode))
         }
       })
     },
@@ -599,7 +648,14 @@
         this.$refs.searchForm.resetFields()
       },
       openHospitalDialog() {
-        this.hospitalDialog = true
+        if (this.searchForm.claimtype === null || this.searchForm.claimtype === '' || this.searchForm.claimtype === undefined) {
+          return this.$message.warning(
+            "请先选择理赔类型！"
+          );
+        } else {
+          this.hospitalDialog = true
+        }
+
       },
       goBack() {
         this.$router.go(-1)
@@ -607,8 +663,10 @@
       //理赔类型改变
       typeChange() {
         if (this.searchForm.claimtype === '01') {//直结 特殊案件码表待定  E生宝贝
-          this.isSaveSub = true
-          this.isSaveOrSub = false
+          if (this.$route.query.status || this.querys.status !== 'editReview') {
+            this.isSaveSub = true
+            this.isSaveOrSub = false
+          }
           this.isDirect = true
           this.isAfter = false
           this.searchForm.prireason = undefined
@@ -616,8 +674,10 @@
           this.searchForm.receivedate = undefined
           this.searchForm.sendby = undefined
         } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
-          this.isSaveSub = false
-          this.isSaveOrSub = true
+          if (this.$route.query.status || this.querys.status !== 'editReview') {
+            this.isSaveSub = false
+            this.isSaveOrSub = true
+          }
           this.isAfter = true
           this.isDirect = false
         }
@@ -701,7 +761,7 @@
                       this.afterTable = []
                     }
                     this.searchForm = res.data.claimBatch
-                    this.$set(this.searchForm,'hospitalname',this.selectHospitalName(this.hospitalOptions,res.data.claimBatch.hospitalcode ))
+                    this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, res.data.claimBatch.hospitalcode))
                     this.show = true;
                     for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
                       let data = {
@@ -725,7 +785,9 @@
               );
             }
           } else {
-            return false
+            return this.$message.warning(
+              "请录入必要信息！"
+            );
           }
         })
 
@@ -745,8 +807,8 @@
                 })
                 //更新数据
                 if (res.data != null) {
-                  this.searchForm=res.data
-                  this.$set(this.searchForm,'hospitalname',this.selectHospitalName(this.hospitalOptions,res.data.hospitalcode ))
+                  this.searchForm = res.data
+                  this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, res.data.hospitalcode))
                 }
                 this.eSaveSub = true
                 this.isSaveSub = true
@@ -761,7 +823,9 @@
               }
             })
           } else {
-            return false
+            return this.$message.warning(
+              "请录入必要信息！"
+            );
           }
         })
       },
@@ -854,7 +918,9 @@
                 })
               }
             } else {
-              return false
+              return this.$message.warning(
+                "请录入必要信息！"
+              );
             }
           })
         } else {
@@ -889,8 +955,16 @@
                     this.$message.error('复核失败！')
                   }
                 })
+              } else {
+                return this.$message.warning(
+                  "请录入必要信息！"
+                )
               }
             });
+          } else {
+            return this.$message.warning(
+              "请录入必要信息！"
+            )
           }
         });
       },
@@ -898,20 +972,22 @@
         this.hospitalDialog = false
       },
       getPropData(val) {
-        this.searchForm.hospitalname = val.chname1
+        this.searchForm.chname1 = val.chname1
         this.searchForm.hospitalename = val.enname1
         this.searchForm.hospitalcode = val.providerCode
+        this.searchForm.currency = val.currency
         this.tableData = []
         this.tableData.push(val)
       },
       getClaimmaterials(value) {
         let material = ''
-        if (value.length > 0) {
-          for (let i = 0; i < value.length; i++) {
-            if (i===value.length-1){
-              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
-            }else {
-              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])+'，'
+        if (value !== null && value !== undefined && value !== '') {
+          let list = value.split(',')
+          for (let i = 0; i < list.length; i++) {
+            if (i === list.length - 1) {
+              material = material + this.selectDictLabel(this.claim_materialOptions, list[i])
+            } else {
+              material = material + this.selectDictLabel(this.claim_materialOptions, list[i]) + '，'
             }
           }
         }
@@ -926,6 +1002,17 @@
           }
         })
         return actions.join('');
+      },
+      getDeptName(deptId) {
+        let deptName = ''
+        if (deptId != null && deptId !== '') {
+          getDeptById(deptId).then(res => {
+            if (res != null && res.code === 200) {
+              deptName = res.data.deptName
+              return deptName
+            }
+          })
+        }
       }
     }
   }

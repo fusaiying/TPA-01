@@ -91,7 +91,7 @@
                 problemType: this.caseForm.problemType,
                 problemView: this.caseForm.problemView,
               }
-              addProblem(data).then(res => {
+              editCaseInfoSuspend(data).then(res => {
                 if (res != null && res.code === 200) {
                   this.$message({
                     message: '发起问题件成功！',

@@ -184,7 +184,7 @@
               <el-table-column align="center" prop="policyItemNo" label="分单号" show-overflow-tooltip/>
               <el-table-column align="center" prop="name" label="被保人" show-overflow-tooltip/>
               <el-table-column align="center" prop="appName" label="投保人" show-overflow-tooltip/>
-              <el-table-column align="center"  label="有限日期" show-overflow-tooltip>
+              <el-table-column align="center"  label="有效日期" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span v-if="scope.row">{{ scope.row.validStartDate }}~{{ scope.row.validEndDate }}</span>
                 </template>
@@ -195,16 +195,16 @@
               <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
               <el-table-column align="center" prop="policyType" label="保单类型" show-overflow-tooltip :formatter="getPolicy_type"/>
               <el-table-column align="center" prop="ssFlag" label="社保标记" show-overflow-tooltip :formatter="getSocialinsurance1"/>
-<!--              <el-table-column label="操作" align="center" width="100" show-overflow-tooltip fixed="right">
-                <template slot-scope="scope">
-                    <span>
-                      <el-button type="text" size="mini"
-                                 @click="editHandle(scope.$index, scope.row)">预览</el-button>
-                       <el-button type="text" size="mini"
-                                  @click="delHandle(scope.$index, scope.row)">下载</el-button>
-                    </span>
-                </template>
-              </el-table-column>-->
+              <!--              <el-table-column label="操作" align="center" width="100" show-overflow-tooltip fixed="right">
+                              <template slot-scope="scope">
+                                  <span>
+                                    <el-button type="text" size="mini"
+                                               @click="editHandle(scope.$index, scope.row)">预览</el-button>
+                                     <el-button type="text" size="mini"
+                                                @click="delHandle(scope.$index, scope.row)">下载</el-button>
+                                  </span>
+                              </template>
+                            </el-table-column>-->
 
 
             </el-table>
@@ -253,9 +253,9 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="16">
+            <el-col :span="24">
               <el-form-item label="转出意见：" prop="problemView">
-                <el-input type="textarea" style="width: 635px" :rows="4" maxlength="1000" v-model="caseForm.problemView"
+                <el-input type="textarea" style="width: 80%" :rows="4" maxlength="1000" v-model="caseForm.problemView"
                           clearable/>
               </el-form-item>
             </el-col>
@@ -268,400 +268,407 @@
 </template>
 
 <script>
-import {getCoreInfo} from '@/api/claim/register'
-import Templates from "@/views/product/templates";
+  import {getCoreInfo} from '@/api/claim/register'
+  import Templates from "@/views/product/templates";
 
 
-import {selectRecognizee, selectInsuredList, addProblem} from '@/api/claim/handleCom'
+  import {
+    selectRecognizee,
+    selectInsuredList,
+    addProblem,
+    editCaseInfoSuspend,
+    addInsuredAndPolicy
+  } from '@/api/claim/handleCom'
 
-export default {
-  props: {
-    dictList: Array,
-    value: {
-      type: Boolean,
-      default: false
-    },
-    fixInfo: {
-      type: Object,
-      default: function () {
-        return {}
-      }
-    },
+  export default {
+    props: {
+      dictList: Array,
+      value: {
+        type: Boolean,
+        default: false
+      },
+      fixInfo: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      },
 
       node: String
-  },
+    },
 
 
-  data() {
-    return {
-      copyFixInfo:{},
-      innerDialogVisable:false,
-      caseForm: {
-        problemType: '',
-        problemView: ''
-      },
-      caseFormRules: {
-        problemType: {required: true, message: '问题件类型不能为空', trigger: 'change'},
-        problemView: {required: true, message: '转出意见不能为空', trigger: 'change'},
-      },
-      problem_shipment_typeOptions: [],
+    data() {
+      return {
+        copyFixInfo:{},
+        innerDialogVisable:false,
+        caseForm: {
+          problemType: '',
+          problemView: ''
+        },
+        caseFormRules: {
+          problemType: {required: true, message: '问题件类型不能为空', trigger: 'change'},
+          problemView: {required: true, message: '转出意见不能为空', trigger: 'change'},
+        },
+        problem_shipment_typeOptions: [],
 
-      expands: [],
-      copyRadio: undefined,
-      minLoading: false,
-      policyLoading: false,
-      tableDataloading: false,
+        expands: [],
+        copyRadio: undefined,
+        minLoading: false,
+        policyLoading: false,
+        tableDataloading: false,
 
-      radio: undefined,
-      dialogVisable: false,
-      searchForm: {
-        insuredNo:'',
-        name:'',
-        idType:'',
-        idNo:'',
-        sex:'',
-        birthday:'',
-        policyNo:'',
-        policyItemNo:'',
-        UHCGVIPNo:''
-      },
-      totalCount: 0,
+        radio: undefined,
+        dialogVisable: false,
+        searchForm: {
+          insuredNo:'',
+          name:'',
+          idType:'',
+          idNo:'',
+          sex:'',
+          birthday:'',
+          policyNo:'',
+          policyItemNo:'',
+          UHCGVIPNo:''
+        },
+        totalCount: 0,
 
 
-      tableData: [/*{
+        tableData: [/*{
         contNo: 'xx', id: 0,
         policyInfoList: [{riskName: 'xx',dutyName: 'xx',riskName1:'xx'},{contNo: 'xx',dutyName: 'xx'}]
       },*/
-        /* {
-           contNo: 'x1x',
-           id: 1,
-           policyInfoList: [{riskName: 'xx', minData: [{riskName1: 'xx222'}]}, {
-             riskName: 'xx',
-             minData: [{riskName1: 'xx222'}]
-           }]
-         },*/
-        /* {contNo: 'x2x', id: 2,policyInfoList: [{riskName: 'xx',minData:{riskName1: 'xx'}},{riskName: 'xx',minData:{riskName1: 'xx'}}]},*/
-      ],
-      multipleSelection: [],
-      card_typeOptions: [],
+          /* {
+             contNo: 'x1x',
+             id: 1,
+             policyInfoList: [{riskName: 'xx', minData: [{riskName1: 'xx222'}]}, {
+               riskName: 'xx',
+               minData: [{riskName1: 'xx222'}]
+             }]
+           },*/
+          /* {contNo: 'x2x', id: 2,policyInfoList: [{riskName: 'xx',minData:{riskName1: 'xx'}},{riskName: 'xx',minData:{riskName1: 'xx'}}]},*/
+        ],
+        multipleSelection: [],
+        card_typeOptions: [],
 
 
 
 
-      /*'policy_status','get_duty_kind'*/
-      policy_statusOptions: [],
-      get_duty_kindOptions: [],
-      rgtSexOptions: [],
-      policy_typeOptions: [],
-      socialinsurance1Options: [],
-      insurance_typeOptions: [],
+        /*'policy_status','get_duty_kind'*/
+        policy_statusOptions: [],
+        get_duty_kindOptions: [],
+        rgtSexOptions: [],
+        policy_typeOptions: [],
+        socialinsurance1Options: [],
+        insurance_typeOptions: [],
 
-      getRowKeys(row) {
-        return row.id
+        getRowKeys(row) {
+          return row.id
+        },
+
+
+      }
+    },
+    watch: {
+      value: function (newValue) {
+        this.dialogVisable = newValue
+        this.getDataList()
+      },
+      fixInfo: function (newVal){
+
+        this.copyFixInfo=newVal
+      },
+
+    },
+
+
+    mounted() {
+      /*  if (this.dictList != null && this.dictList.length != 0) {
+          this.policy_statusOptions = this.dictList.find(item => {
+            return item.dictType == 'policy_status'
+          }).dictDate
+          this.get_duty_kindOptions = this.dictList.find(item => {
+            return item.dictType == 'get_duty_kind'
+          }).dictDate
+        }*/
+      this.getDicts("card_type").then(response => {
+        this.card_typeOptions = response.data;
+      });
+      this.getDicts("rgtSex").then(response => {
+        this.rgtSexOptions = response.data;
+      });
+      this.getDicts("problem_shipment_type").then(response => {
+        this.problem_shipment_typeOptions = response.data;
+      });
+
+      this.getDicts("policy_status").then(response => {
+        this.policy_statusOptions = response.data;
+      });
+      this.getDicts("policy_type").then(response => {
+        this.policy_typeOptions = response.data;
+      });
+      this.getDicts("socialinsurance1").then(response => {
+        this.socialinsurance1Options = response.data;
+      });
+      this.getDicts("insurance_type").then(response => {
+        this.insurance_typeOptions = response.data;
+      });
+      //this.getDataList()
+    },
+    methods: {
+      getPolicyRiskType(row, col) {
+        return this.selectDictLabel(this.insurance_typeOptions, row.policyRiskType)
+      },
+      getPolicy_status (row, col) {
+        return this.selectDictLabel(this.policy_statusOptions, row.policyStatus)
+      },
+      getPolicy_type(row, col) {
+        return this.selectDictLabel(this.policy_typeOptions, row.policyType)
+      },
+      getSocialinsurance1(row, col) {
+        return this.selectDictLabel(this.socialinsurance1Options, row.ssFlag)
+      },
+
+      closingDialogVisable(){
+        this.$refs.caseForm.resetFields()
+        this.innerDialogVisable=false
+      },
+      //问题件转出
+      problemOut(){
+        this.innerDialogVisable=true
+      },
+      confirmSave() {
+        this.$refs.caseForm.validate((valid) => {
+          if (valid) {
+            this.$confirm(`是否发起问题件?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              let data = {
+                rptNo: this.copyFixInfo.rptNo,
+                problemType: this.caseForm.problemType,
+                problemView: this.caseForm.problemView,
+              }
+
+              editCaseInfoSuspend(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message({
+                    message: '发起问题件成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$router.push({path: '/claims-handle/pbclaim'});
+                }
+              })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消！'
+              })
+            })
+          } else {
+            return this.$message.warning(
+              "请录入必录项！"
+            )
+          }
+        })
+
+
+      },
+
+      getDataList() {
+        selectRecognizee(this.searchForm).then(res => {
+          if (res != null && res.code == '200') {
+
+            this.tableData = res.rows;
+            if (res.total > 0) {
+              this.tableData.map((item, index) => {
+                item.policyInfoList = [];
+                item.id = index
+              })
+            }
+            let totalCount = res.total;
+            if (totalCount === 0) {
+              this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+            }
+
+          } else {
+
+          }
+        })
+      },
+
+      /*    goBack() {
+            this.dialogVisable = false
+            this.$emit('closeDialogVisable')
+          },*/
+
+      //隐藏expand图标
+      getRowClass(row, index) {
+        let res = [];
+        res.push('row-expand-cover')
+        return res.join(' ')
+      },
+      //自定义展开
+      getCurrentRow(index, row) {
+        this.$refs.tableData.toggleRowExpansion(row, true) // 点击radio展开
+        //调用查询保单信息接口
+        //保单信息的table ref
+
+        /*      this.multipleSelection = []
+              if (this.copyRadio != null && this.copyRadio !== '') {
+                let dynamicRef = 'tableExpand' + this.copyRadio
+
+                  this.$refs[dynamicRef].clearSelection();
+
+
+                this.copyRadio = this.radio
+                console.log(this.copyRadio + '------------------------')
+              } else {
+                this.copyRadio = index
+
+              }
+              this.radio = index*/
+
+      },
+
+      //展开得到保单信息
+      getPolicyInfoList(row, expandedRows) {
+        let that = this
+        this.radio=row.id
+
+        //只展开一行
+        if (expandedRows.length) {//说明展开了
+          that.expands = []
+          if (row) {
+            that.expands.push(row.id)//只展开当前行id
+          }
+        } else {//说明收起了
+          that.expands = []
+        }
+        this.policyLoading = true
+        //判断只有展开是做请求
+        if (expandedRows.length > 0) {
+          this.multipleSelection=[]
+          let query={
+            insuredNo: row.insuredNo
+          }
+          selectInsuredList(query).then(res => {
+            /*this.tableData.forEach((temp,index)=>{
+              if (temp.insuredNo===row.insuredNo){
+                this.tableData[index].policyInfoList=res.rows
+                this.tableData[index].policyInfoList.map(item => {
+                  item.minData=[]
+                })
+
+              }
+            })*/
+            this.tableData[this.radio].policyInfoList=res.data
+            this.policyLoading=false
+          }).catch(res => {
+            this.policyLoading=false
+          })
+        }
+        else {
+          this.policyLoading=false
+        }
+
+
+
+      },
+      //展开责任明细信息
+      getMinDataList(row, expandedRows) {
+      },
+
+//关闭对话框
+      changeDialogVisable() {
+        //清空对话框中的数据
+
+        this.radio = undefined
+        this.copyRadio = undefined
+        this.expands = []
+        this.$refs.searchForm.resetFields()
+        this.dialogVisable=false
+        this.$emit('closeDialogVisable')
+      },
+
+      //重置
+      restForm() {
+        this.$refs.searchForm.resetFields()
       },
 
 
-    }
-  },
-  watch: {
-    value: function (newValue) {
-      this.dialogVisable = newValue
-      this.getDataList()
-    },
-    fixInfo: function (newVal){
 
-      this.copyFixInfo=newVal
-      console.log('------------')
-      console.log(this.copyFixInfo)
-    },
-
-  },
-
-
-  mounted() {
-    /*  if (this.dictList != null && this.dictList.length != 0) {
-        this.policy_statusOptions = this.dictList.find(item => {
-          return item.dictType == 'policy_status'
-        }).dictDate
-        this.get_duty_kindOptions = this.dictList.find(item => {
-          return item.dictType == 'get_duty_kind'
-        }).dictDate
-      }*/
-    this.getDicts("card_type").then(response => {
-      this.card_typeOptions = response.data;
-    });
-    this.getDicts("rgtSex").then(response => {
-      this.rgtSexOptions = response.data;
-    });
-    this.getDicts("problem_shipment_type").then(response => {
-      this.problem_shipment_typeOptions = response.data;
-    });
-
-    this.getDicts("policy_status").then(response => {
-      this.policy_statusOptions = response.data;
-    });
-    this.getDicts("policy_type").then(response => {
-      this.policy_typeOptions = response.data;
-    });
-    this.getDicts("socialinsurance1").then(response => {
-      this.socialinsurance1Options = response.data;
-    });
-    this.getDicts("insurance_type").then(response => {
-      this.insurance_typeOptions = response.data;
-    });
-    //this.getDataList()
-  },
-  methods: {
-    getPolicyRiskType(row, col) {
-      return this.selectDictLabel(this.insurance_typeOptions, row.policyRiskType)
-    },
-    getPolicy_status (row, col) {
-      return this.selectDictLabel(this.policy_statusOptions, row.policyStatus)
-    },
-    getPolicy_type(row, col) {
-     return this.selectDictLabel(this.policy_typeOptions, row.policyType)
-    },
-    getSocialinsurance1(row, col) {
-      return this.selectDictLabel(this.socialinsurance1Options, row.ssFlag)
-    },
-
-    closingDialogVisable(){
-      this.$refs.caseForm.resetFields()
-      this.innerDialogVisable=false
-    },
-    //问题件转出
-    problemOut(){
-        this.innerDialogVisable=true
-    },
-    confirmSave() {
-      this.$refs.caseForm.validate((valid) => {
-        if (valid) {
-          this.$confirm(`是否发起问题件?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let data = {
-              rptNo: this.copyFixInfo.rptNo,
-              problemType: this.caseForm.problemType,
-              problemView: this.caseForm.problemView,
-            }
-
-            addProblem(data).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message({
-                  message: '发起问题件成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.$router.push({path: '/claims-handle/pbclaim'});
-              }
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消！'
-            })
-          })
-        } else {
-          return this.$message.warning(
-            "请录入必录项！"
-          )
+      //确人按钮
+      confirmHandle() {
+        let propData = {
+          caseInsuredData: this.tableData[this.radio],
+          policyInfoData: this.multipleSelection
         }
-      })
-
-
-    },
-
-    getDataList() {
-      selectRecognizee(this.searchForm).then(res => {
-        if (res != null && res.code == '200') {
-
-          this.tableData = res.rows;
-          if (res.total > 0) {
-            this.tableData.map((item, index) => {
-              item.policyInfoList = [];
-              item.id = index
-            })
-          }
-          let totalCount = res.total;
-          if (totalCount === 0) {
-            this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
-          }
-
-        } else {
-
+        //调用被保人保存的接口
+        const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+        subFormSearch.rptNo = this.copyFixInfo.rptNo
+        let insuredInfoData = {
+          policyNos: this.multipleSelection,
+          claimCaseInsured: subFormSearch
         }
-      })
-    },
+        addInsuredAndPolicy(insuredInfoData)
+        //关闭清空
+        this.changeDialogVisable()
+        this.$emit('getPropData', propData)
+      },
 
-    /*    goBack() {
-          this.dialogVisable = false
-          this.$emit('closeDialogVisable')
-        },*/
+      //查询
+      searchHandle() {
 
-    //隐藏expand图标
-    getRowClass(row, index) {
-      let res = [];
-      res.push('row-expand-cover')
-      return res.join(' ')
-    },
-    //自定义展开
-    getCurrentRow(index, row) {
-      this.$refs.tableData.toggleRowExpansion(row, true) // 点击radio展开
-      //调用查询保单信息接口
-      //保单信息的table ref
+        //调用查询就诊人信息的接口
+        selectRecognizee(this.searchForm).then(res => {
+          if (res != null && res.code == '200' ) {
 
-      /*      this.multipleSelection = []
-            if (this.copyRadio != null && this.copyRadio !== '') {
-              let dynamicRef = 'tableExpand' + this.copyRadio
-
-                this.$refs[dynamicRef].clearSelection();
-
-
-              this.copyRadio = this.radio
-              console.log(this.copyRadio + '------------------------')
-            } else {
-              this.copyRadio = index
-
-            }
-            this.radio = index*/
-
-    },
-
-    //展开得到保单信息
-    getPolicyInfoList(row, expandedRows) {
-      let that = this
-      this.radio=row.id
-
-      //只展开一行
-      if (expandedRows.length) {//说明展开了
-        that.expands = []
-        if (row) {
-          that.expands.push(row.id)//只展开当前行id
-        }
-      } else {//说明收起了
-        that.expands = []
-      }
-      this.policyLoading = true
-      //判断只有展开是做请求
-      if (expandedRows.length > 0) {
-        this.multipleSelection=[]
-        let query={
-          insuredNo: row.insuredNo
-        }
-        selectInsuredList(query).then(res => {
-          /*this.tableData.forEach((temp,index)=>{
-            if (temp.insuredNo===row.insuredNo){
-              this.tableData[index].policyInfoList=res.rows
-              this.tableData[index].policyInfoList.map(item => {
-                item.minData=[]
+            this.tableData = res.rows;
+            if(res.total>0) {
+              this.tableData.map((item, index) => {
+                item.policyInfoList = [];
+                item.id = index
               })
-
             }
-          })*/
-          this.tableData[this.radio].policyInfoList=res.data
-          console.log(this.tableData[this.radio])
-          this.policyLoading=false
-        }).catch(res => {
-          this.policyLoading=false
+            let totalCount = res.total;
+            if(totalCount===0) {
+              this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+            }
+
+          }
+          else {
+
+          }
+        }).finally(() => {
+
         })
+
+      },
+
+      //选中复选框
+      handleSelectionChange(val){
+        this.multipleSelection=[],
+          this.multipleSelection=val
+      },
+
+
+
+      getCNStatus(row, col) {
+        /*return this.dict.label.policy_status[row.status]*/
+        return this.selectDictLabel(this.policy_statusOptions, row.status);
+      },
+      getIdType(row,col){
+        return this.selectDictLabel( this.card_typeOptions, row.idType);
+      },
+      getSex(row,col){
+        return this.selectDictLabel( this.rgtSexOptions, row.sex);
       }
-      else {
-        this.policyLoading=false
-      }
-
-
-
-    },
-    //展开责任明细信息
-    getMinDataList(row, expandedRows) {
-    },
-
-//关闭对话框
-    changeDialogVisable() {
-      //清空对话框中的数据
-
-      this.radio = undefined
-      this.copyRadio = undefined
-      this.expands = []
-      this.$refs.searchForm.resetFields()
-      this.dialogVisable=false
-      this.$emit('closeDialogVisable')
-    },
-
-    //重置
-    restForm() {
-      this.$refs.searchForm.resetFields()
-    },
-
-
-
-    //确人按钮
-    confirmHandle() {
-      let propData = {
-        caseInsuredData: this.tableData[this.radio],
-        policyInfoData: this.multipleSelection
-
-      }
-
-      console.log(propData)
-      //关闭清空
-      this.changeDialogVisable()
-      this.$emit('getPropData', propData)
-    },
-
-    //查询
-    searchHandle() {
-
-      //调用查询就诊人信息的接口
-      selectRecognizee(this.searchForm).then(res => {
-        if (res != null && res.code == '200' ) {
-
-          this.tableData = res.rows;
-          if(res.total>0) {
-            this.tableData.map((item, index) => {
-              item.policyInfoList = [];
-              item.id = index
-            })
-          }
-          let totalCount = res.total;
-          if(totalCount===0) {
-            this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
-          }
-
-        }
-        else {
-
-        }
-      }).finally(() => {
-
-      })
-
-    },
-
-    //选中复选框
-    handleSelectionChange(val){
-      this.multipleSelection=[],
-        console.log(val)
-      this.multipleSelection=val
-    },
-
-
-
-    getCNStatus(row, col) {
-      /*return this.dict.label.policy_status[row.status]*/
-      return this.selectDictLabel(this.policy_statusOptions, row.status);
-    },
-    getIdType(row,col){
-      return this.selectDictLabel( this.card_typeOptions, row.idType);
-    },
-    getSex(row,col){
-      return this.selectDictLabel( this.rgtSexOptions, row.sex);
     }
   }
-}
 </script>
 
 <style scoped>

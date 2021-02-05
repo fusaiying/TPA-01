@@ -41,3 +41,10 @@ export function getDept(parentId) {
     params:parentId
   })
 }
+//根据部门Id获取部门
+export function getDeptById(deptId) {
+  return request({
+    url: 'system/dept/'+deptId,
+    method: 'get',
+  })
+}

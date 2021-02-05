@@ -62,20 +62,20 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="产品编码" prop="productCode" align="center"/>
-          <el-table-column label="产品名称" prop="productChname" align="center"/>
-          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center"/>
-          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center"/>
+          <el-table-column label="产品编码" prop="productCode" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center" show-overflow-tooltip/>
           <el-table-column label="状态" prop="bussinessStatus"  align="center">
             <template slot-scope="scope">
-                <span v-if="scope.row.bussinessStatus=='03'" style="padding-right: 6px">产品上线</span>
+              <span v-if="scope.row.bussinessStatus=='03'" style="padding-right: 6px">产品上线</span>
               <span v-if="scope.row.bussinessStatus=='04'" style="padding-right: 6px" >产品下线</span>
 
               <el-switch
                 v-model="scope.row.bussinessStatus"
                 active-value="03"
                 inactive-value="04" @change="changeStatus(scope.$index,scope.row)"
-                >
+              >
               </el-switch>
             </template>
           </el-table-column>
@@ -97,18 +97,18 @@
       :before-close="changeDialogVisable"
       title="产品下线"
       width="600px">
-        <el-form ref="remarkForm" :model="remarkForm"  size="mini" label-width="80px" :rules="remarkFormRules">
-          <el-row>
-            <el-col :span="8">
-              <el-form-item prop="reason" style="position:relative;width: 500px" label="下线原因">
-                <el-input type="textarea" :rows="7" v-model="remarkForm.reason"
-                          class="item-widths" clearable
-                          size="mini" placeholder="请输入"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
+      <el-form ref="remarkForm" :model="remarkForm"  size="mini" label-width="80px" :rules="remarkFormRules">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item prop="reason" style="position:relative;width: 500px" label="下线原因">
+              <el-input type="textarea" :rows="7" v-model="remarkForm.reason"
+                        class="item-widths" clearable
+                        size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-        </el-form>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" size="mini" @click="saveRemark">确认</el-button>
         <el-button size="mini" @click="changeDialogVisable">返回</el-button>
@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import {mangerList,insertMangerInfo} from '@/api/baseInfo/serviceProductManagement'
+import {mangerList,insertMangerInfo} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -155,8 +155,7 @@ export default {
     }
   },
   created() {
-  //获取产品定义信息
-    this.getData()
+    this.init()
     this.getDicts("product_management_status").then(response => {
       this.product_management_statusOptions = response.data;
     });
@@ -169,15 +168,27 @@ export default {
 
   },
   methods: {
+    init(){
+      this.loading = true
+      //调用查询接口
+      mangerList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+
     getProductType(row){
       return this.selectDictLabel(this.productTypeOptions, row.productType)
     },
     getProductInfo(row){
       return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
     },
-/*    getBussinessStatus(row){
-      return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
-    },*/
+    /*    getBussinessStatus(row){
+          return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
+        },*/
 
     changeDialogVisable(){
       this.$refs.remarkForm.resetFields()
@@ -188,34 +199,34 @@ export default {
         this.tableData[this.checkIndex].bussinessStatus = '03'
       }
       this.saveFlag=false
-       this.dialogVisable=false
+      this.dialogVisable=false
     },
 
     saveRemark(){
-        this.$refs.remarkForm.validate(valid => {
-          if(valid){
-            let productData=this.tableData[this.checkIndex]
-            insertMangerInfo(productData).then(res=>{
-              if (res !=null && res.code == '200') {
-                this.$message({
-                  message: '操作成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                  this.saveFlag=true
-              } else {
-                this.$message({
-                  message: '操作失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-                this.tableData[this.checkIndex].bussinessStatus='03'
-              }
-            })
-          }
-        })
+      this.$refs.remarkForm.validate(valid => {
+        if(valid){
+          let productData=this.tableData[this.checkIndex]
+          insertMangerInfo(productData).then(res=>{
+            if (res !=null && res.code == '200') {
+              this.$message({
+                message: '操作成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              this.saveFlag=true
+            } else {
+              this.$message({
+                message: '操作失败!',
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+              this.tableData[this.checkIndex].bussinessStatus='03'
+            }
+          })
+        }
+      })
     },
 
     changeStatus(index,data){

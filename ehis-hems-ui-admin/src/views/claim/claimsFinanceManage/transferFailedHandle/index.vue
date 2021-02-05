@@ -5,14 +5,14 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="批次号：" prop="rptNo">
-              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="批次号：" prop="batchNo">
+              <el-input v-model="searchForm.batchNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="交单日期：" prop="endCaseDate">
+            <el-form-item label="转账日期：" prop="payDate">
               <el-date-picker
-                v-model="searchForm.endCaseDate"
+                v-model="payDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -38,7 +38,7 @@
       <el-divider/>
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span>批次信息列表</span>
+          <span>失败列表</span>
         </div>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -48,17 +48,17 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="receiveDate" label="账号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="sendBy" label="账户名" show-overflow-tooltip/>
-          <el-table-column align="center" prop="companyName" label="银行名称" show-overflow-tooltip/>
-          <el-table-column align="center" prop="dept" label="转账金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="dept" label="转账日期" show-overflow-tooltip/>
-          <el-table-column align="center" prop="dept" label="退票转账失败日期" width="130" show-overflow-tooltip/>
-          <el-table-column align="center" prop="updateBy" label="收据号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="updateBy" label="退票转账失败原因" width="130" show-overflow-tooltip/>
+          <el-table-column align="center" prop="accNo" label="账号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="accName" label="账户名" show-overflow-tooltip/>
+          <el-table-column align="center" prop="payeeBank" label="银行名称" show-overflow-tooltip/>
+          <el-table-column align="center" prop="sumPayAmount" label="转账金额" show-overflow-tooltip/>
+          <el-table-column align="center" prop="payDate" label="转账日期" show-overflow-tooltip/>
+          <el-table-column align="center" prop="payFailDate" label="退票转账失败日期" width="130" show-overflow-tooltip/>
+          <el-table-column align="center" prop="receiptNo" label="收据号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="payFailReason" label="退票转账失败原因" width="130" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="">更新</el-button>
+              <el-button size="mini" type="text" @click="renewal">更新</el-button>
               <el-button size="mini" type="text" @click="">支付</el-button>
             </template>
           </el-table-column>
@@ -68,7 +68,7 @@
           :total="totalCount"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination=""
+          @pagination="search"
         />
       </div>
     </el-card>
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-
+  import {transferFailedList} from '@/api/claim/corporatePay'
   let dictss = [{dictType: 'claim_material'}]
   export default {
     data() {
@@ -87,25 +87,15 @@
           pageSize: 10,
         },
 
-        tableData:[
-          {
-            batchNo:'CS001'
-          }
-        ],
+        tableData:[],
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          rptNo: '',
-          idNo: '',
-          name: '',
-          expressNumber: '',
-          sendBy: '',
-          receiveDate: [],
-          receiveStartDate: '',
-          receiveEndDate: '',
-          //机构
-          //操作人
+          batchNo: '',
+          payStartDate: '',
+          payEndDate: '',
         },
+        payDate: [],
         totalCount: 0,
         dictList: [],
         claim_materialOptions: [],
@@ -118,25 +108,46 @@
       this.claim_materialOptions = this.dictList.find(item => {
         return item.dictType === 'claim_material'
       }).dictDate
-      /*  listNew(this.searchForm).then(res=>{
+
+      transferFailedList(this.queryParams).then(res=>{
+        if (res!=null && res.code===200){
+          this.tableData=res.rows
+          this.totalCount=res.total
+        }
+      }).catch(res=>{})
+    },
+    methods: {
+      resetForm() {
+        this.$refs.searchForm.resetFields()
+        this.payDate= []
+      },
+      search() {
+        this.searchForm.pageNum=this.queryParams.pageNum
+        this.searchForm.pageSize=this.queryParams.pageSize
+        transferFailedList(this.searchForm).then(res=>{
           if (res!=null && res.code===200){
             this.tableData=res.rows
             this.totalCount=res.total
           }
-        }).catch(res=>{})*/
-    },
-    methods: {
-      handleChange(value) {
-
+          if (res.rows.length<=0){
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }).catch(res=>{})
       },
-      resetForm() {
-        this.$refs.searchForm.resetFields()
-      },
-      search() {
-
-      },
-      listExport() {
-
+      renewal() {
+        this.searchForm.pageNum=this.queryParams.pageNum
+        this.searchForm.pageSize=this.queryParams.pageSize
+        transferFailedList(this.searchForm).then(res=>{
+          if (res!=null && res.code===200){
+            this.tableData=res.rows
+            this.totalCount=res.total
+          }
+          return this.$message.warning(
+            "更新成功！"
+          )
+        }).catch(res=>{})
       },
 
     }

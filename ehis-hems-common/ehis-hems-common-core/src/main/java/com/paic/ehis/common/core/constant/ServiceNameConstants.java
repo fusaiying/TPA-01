@@ -21,4 +21,9 @@ public class ServiceNameConstants
      * 文件服务的serviceid
      */
     public static final String FILE_SERVICE = "ehis-hems-file";
+
+    /**
+     * 医疗服务的serviceid
+     */
+    public static final String PROVIDER_SERVICE = "ehis-hems-base";
 }

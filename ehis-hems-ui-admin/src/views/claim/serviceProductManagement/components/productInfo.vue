@@ -81,7 +81,7 @@
 
 <script>
 
-import {checkField,getProductInfo,insertProductInfo} from '@/api/baseInfo/serviceProductManagement'
+import {checkField,getProductInfo,insertProductInfo} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -244,18 +244,18 @@ export default {
       }
 
 
-    /*  if (this.baseForm.productTimeInfo && this.baseForm.productTimeTime) {
-        /!*if(this.baseForm.produc tTimeInfo)*!/
-        if (this.baseForm.productTimeInfo < 0) {
-          callback(new Error("只能输入数字"));
-        } else if (!reg.test(this.baseForm.productTimeInfo)) {
-          callback(new Error("只能输入数字"));
+      /*  if (this.baseForm.productTimeInfo && this.baseForm.productTimeTime) {
+          /!*if(this.baseForm.produc tTimeInfo)*!/
+          if (this.baseForm.productTimeInfo < 0) {
+            callback(new Error("只能输入数字"));
+          } else if (!reg.test(this.baseForm.productTimeInfo)) {
+            callback(new Error("只能输入数字"));
+          } else {
+            callback();
+          }
         } else {
-          callback();
-        }
-      } else {
-        callback(new Error('产品期限不能为空'))
-      }*/
+          callback(new Error('产品期限不能为空'))
+        }*/
     }
     return {
       copyOutProductEnname: '',
@@ -293,22 +293,22 @@ export default {
   },
   methods: {
     init(){
-     if(this.productCode!=null && this.productCode!='') {
-       let queryData = {
-         productCode: this.productCode,
-       }
-       getProductInfo(queryData).then(res => {
-         if (res.code == '200') {
-           this.baseForm = res.data
-         }
-         this.copyOutProductEnname=this.baseForm.outProductEnname
-         this.copyOutProductChname=this.baseForm.outProductChname
-         this.copyProductChname=this.baseForm.productChname
-         this.copyProductEnname=this.baseForm.productEnname
+      if(this.productCode!=null && this.productCode!='') {
+        let queryData = {
+          productCode: this.productCode,
+        }
+        getProductInfo(queryData).then(res => {
+          if (res.code == '200') {
+            this.baseForm = res.data
+          }
+          this.copyOutProductEnname=this.baseForm.outProductEnname
+          this.copyOutProductChname=this.baseForm.outProductChname
+          this.copyProductChname=this.baseForm.productChname
+          this.copyProductEnname=this.baseForm.productEnname
 
-       })
+        })
 
-     }
+      }
 
     },
 

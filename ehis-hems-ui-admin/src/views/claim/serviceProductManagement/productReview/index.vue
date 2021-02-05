@@ -25,14 +25,14 @@
             </el-form-item>
           </el-col>
 
-<!--          <el-col :span="8">
-            <el-form-item label="状态：" prop="bussinessStatus">
-              <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>-->
+          <!--          <el-col :span="8">
+                      <el-form-item label="状态：" prop="bussinessStatus">
+                        <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
+                          <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
+                                     :key="item.dictValue"/>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>-->
 
 
         </el-row>
@@ -62,14 +62,14 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="产品编码" prop="productCode" align="center"/>
-          <el-table-column label="产品名称" prop="productChname" align="center"/>
-          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center"/>
-          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center"/>
-          <el-table-column label="状态" prop="bussinessStatus" :formatter="getBussinessStatus" align="center">
-<!--            <template slot-scope="scope">
-              {{ scope.row.bussinessStatus  }}
-            </template>-->
+          <el-table-column label="产品编码" prop="productCode" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center" show-overflow-tooltip/>
+          <el-table-column label="状态" prop="bussinessStatus" :formatter="getBussinessStatus" align="center" show-overflow-tooltip>
+            <!--            <template slot-scope="scope">
+                          {{ scope.row.bussinessStatus  }}
+                        </template>-->
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import {checkList} from '@/api/baseInfo/serviceProductManagement'
+import {checkList} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -125,8 +125,8 @@ export default {
     }
   },
   created() {
-  //获取产品定义信息
-    this.getData()
+
+    this.init()
 
     this.getDicts("product_review_status").then(response => {
       this.product_review_statusOptions = response.data;
@@ -140,7 +140,17 @@ export default {
 
   },
   methods: {
-
+    init(){
+      this.loading = true
+      //调用查询接口
+      checkList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+    },
 
     getProductType(row){
       return this.selectDictLabel(this.productTypeOptions, row.productType)
@@ -186,7 +196,7 @@ export default {
       this.$router.push({
         path: '/service-product/productReview/edit',
         query: {productCode: row.productCode,
-                status: 'review'
+          status: 'review'
         }
       })
     }

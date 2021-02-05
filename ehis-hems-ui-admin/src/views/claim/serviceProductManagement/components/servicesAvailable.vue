@@ -15,7 +15,7 @@
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id && scope.row.showFlag" :prop="'form.'+scope.$index +'.serviceCodeName'"
                           :rules="serviceProFormRules.serviceCodeName" style="display: inline-flex !important;">
-              <el-select v-model="scope.row.serviceCodeName" placeholder="请选择" size="mini" clearable
+              <el-select v-model="scope.row.serviceCodeName" placeholder="请选择" size="mini" clearable  filterable
                          @change="setOtherValue(scope.$index,scope.row)" style="width: 220px">
                 <!--                <el-option v-for="option in contacttype"  :label="option.label"
                                            :value="option.value"/>
@@ -34,10 +34,10 @@
         </el-table-column>
         <el-table-column prop="categoryCodeName" align="center" header-align="center" label="类别" show-overflow-tooltip>
           <template slot-scope="scope">
-<!--            <el-form-item :prop="'form.'+scope.$index +'.serviceCodeName'"
-                          :rules="serviceProFormRules.categoryCodeName" style="display: inline-flex !important; ">-->
-              <span >{{ scope.row.categoryCodeName }}</span>
-<!--            </el-form-item>-->
+            <!--            <el-form-item :prop="'form.'+scope.$index +'.serviceCodeName'"
+                                      :rules="serviceProFormRules.categoryCodeName" style="display: inline-flex !important; ">-->
+            <span >{{ scope.row.categoryCodeName }}</span>
+            <!--            </el-form-item>-->
 
             <!--            <span v-if="scope.row.serviceCodeName">{{ scope.row.categoryCodeName }}</span>-->
             <!--            <span v-if="!scope.row.serviceCodeName"></span>-->
@@ -45,10 +45,10 @@
         </el-table-column>
         <el-table-column prop="typeCodeName" align="center" header-align="center" label="种类" show-overflow-tooltip>
           <template slot-scope="scope">
-<!--            <el-form-item :prop="'form.'+scope.$index +'.typeCodeName'"
-                          :rules="serviceProFormRules.typeCodeName" style="display: inline-flex !important;">-->
-              <span >{{ scope.row.typeCodeName }}</span>
-<!--            </el-form-item>-->
+            <!--            <el-form-item :prop="'form.'+scope.$index +'.typeCodeName'"
+                                      :rules="serviceProFormRules.typeCodeName" style="display: inline-flex !important;">-->
+            <span >{{ scope.row.typeCodeName }}</span>
+            <!--            </el-form-item>-->
 
             <!--            <span v-if="scope.row.serviceCodeName">{{ scope.row.typeCodeName }}</span>-->
             <!--            <span v-else>{{ scope.row.typeCodeName }}</span>-->
@@ -110,19 +110,19 @@
                  @click="addContactHandle"> + 添加
       </el-button>
     </el-card>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :modal="modalValue"
-      :close-on-click-modal="false"
-      title="提示"
-      width="30%">
-      <span>{{ '请问是否删除该条目？' }}</span>
-      <span slot="footer" class="dialog-footer">
-         <el-button type="primary" @click="delConfirm">确 定</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
+    <!--    <el-dialog
+          :visible.sync="dialogVisible"
+          :modal="modalValue"
+          :close-on-click-modal="false"
+          title="提示"
+          width="30%">
+          <span>{{ '请问是否删除该条目？' }}</span>
+          <span slot="footer" class="dialog-footer">
+             <el-button type="primary" @click="delConfirm">确 定</el-button>
+              <el-button @click="dialogVisible = false">取 消</el-button>
 
-        </span>
-    </el-dialog>
+            </span>
+        </el-dialog>-->
 
 
     <!--供应商弹出框-->
@@ -196,8 +196,8 @@ import {
   getProductServiceList,
   selectSupplier,
   insertSupplier,
-  updateSupplierStatus
-} from '@/api/baseInfo/serviceProductManagement'
+  updateSupplierStatus, deleteProductInfo
+} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -357,7 +357,6 @@ export default {
       this.multipleSelection.forEach(item => {
         this.indexList.push(item.index)
       })
-
       //清空未选中的优先级次序
       this.supplierInfo.supplierData.forEach(item => {
         let num = 0
@@ -602,13 +601,24 @@ export default {
     },
 
     delHandle(index, row) {
-      this.dialogVisible = true
-      this.index = index
+      //this.dialogVisible = true
+      this.$confirm('是否删除该条目?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.serviceProForm.form.splice(index, 1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
-    delConfirm() {
-      this.dialogVisible = false
-      this.serviceProForm.form.splice(this.index, 1)
-    },
+    /*    delConfirm() {
+          this.dialogVisible = false
+          this.serviceProForm.form.splice(this.index, 1)
+        },*/
     //服务项目添加一行
     addContactHandle() {
       const field = {
@@ -650,19 +660,19 @@ export default {
             flag = '04'
           }
 
-/*
-          if (this.serviceProForm.form.filter(item => {
-            return item.number == ''
-          }).length > 0) {
-            flag = '03'
-          }
-          else {
-            if (valid) {
-              flag = '01'
-            } else {
-              flag = '04'
-            }
-          }*/
+          /*
+                    if (this.serviceProForm.form.filter(item => {
+                      return item.number == ''
+                    }).length > 0) {
+                      flag = '03'
+                    }
+                    else {
+                      if (valid) {
+                        flag = '01'
+                      } else {
+                        flag = '04'
+                      }
+                    }*/
         })
       } else {
         flag = '02'
@@ -692,7 +702,7 @@ export default {
 
 
 /*!*修改标签页的字体*!
-::v-deep .el-tabs__item{
+/deep/ .el-tabs__item{
   font-size: 20px ;
   font-weight: 400;
   color: #000000;

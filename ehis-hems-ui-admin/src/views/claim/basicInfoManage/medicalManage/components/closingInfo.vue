@@ -474,7 +474,18 @@ export default {
 
     },
     delHandle(index, row) {
-      this.closingFrom.baseBankVo.splice(index, 1)
+      this.$confirm('是否删除当前行账户信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.closingFrom.baseBankVo.splice(index, 1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
 
     // 校验数据
@@ -512,7 +523,12 @@ export default {
 }
 
 
-
+/*!*修改标签页的字体*!
+/deep/ .el-tabs__item{
+  font-size: 20px ;
+  font-weight: 400;
+  color: #000000;
+}*/
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

@@ -97,7 +97,7 @@
 
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-            <span>工作池</span>
+            <span>工作池({{totalNum}})</span>
 
             <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini"
                        @click="exportData">清单导出
@@ -121,8 +121,8 @@
             <el-table-column prop="name" label="被保人姓名" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="claimType" label="理赔类型" :formatter="getClaimTypeName"  width="150%" align="center" show-overflow-tooltip />
-
             <el-table-column prop="companyCode" label="出单公司"  :formatter="getCompanyName" align="center" show-overflow-tooltip />
+            <el-table-column prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
             <el-table-column prop="monitoringTime" label="监控时效" align="center" show-overflow-tooltip />
             <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center" show-overflow-tooltip />
             <el-table-column prop="operator" label="操作人"  align="center" show-overflow-tooltip />
@@ -334,13 +334,13 @@
             orderByColumn:'cc.create_time',
             isAsc:'desc'
           };
-
-
+          this.loading = true;
           selectCaseDispatchList(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+            this.totalNum = response.total;
+            this.tableData = response.rows;
+            this.loading = false;
           }).catch(error => {
+            this.loading = false;
             console.log(error);
           });
         },
@@ -363,10 +363,13 @@
           this.dialogVisible = true;
         },
         exportData() {
-          // this.$router.push({
-          //   path: '/claims-handle/discussion',
-          //   query: {discussion:'01'}
-          // })
+          let startTime = "";
+          let endTime = "";
+          let submitdate = this.form.submitdate;
+          if('' != submitdate) {
+            startTime = submitdate[0];
+            endTime = submitdate[1];
+          }
 
           const params = {
             rptNo:this.form.rptNo,
@@ -426,10 +429,10 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
-  ::v-deep.el-dialog{
+  /deep/.el-dialog{
     display: flex;
     flex-direction: column;
     margin:0 !important;
@@ -441,7 +444,7 @@
     max-height:calc(100% - 30px);
     max-width:calc(100% - 30px);
   }
-  ::v-deep.el-dialog .el-dialog__body{
+  /deep/.el-dialog .el-dialog__body{
     flex:1;
     overflow: auto;
   }

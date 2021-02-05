@@ -2,11 +2,11 @@ import request from '@/utils/request'
 
 
 //查询案件归档主页面
-export function caseFilingList(query) {
+export function caseFilingList(data) {
   return request({
     url: '/system/casefiling/caseFilingList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
@@ -44,8 +44,8 @@ export function editCaseFiling(data) {
 export function getInfoCaseFilingList(query) {
   return request({
     url: '/system/casefiling/getInfoCaseFilingList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -59,42 +59,11 @@ export function updateCaseFilingInfo(data) {
 }
 
 
-
-
-/*
-
-export function listInfo(query) {
+//模糊查询部门
+export function getDepts(data) {
   return request({
-    url: '/system/whitelist/list',
-    method: 'get',
-    params: query
+    url:'system/dept/list',
+    method:'post',
+    data:data
   })
 }
-
-// 新增/修改
-export function editData(data) {
-  return request({
-    url: '/system/whitelist/add',
-    method: 'post',
-    data
-  })
-}
-
-
-// 删除
-export function debtWhiteInfo(debtWhitelistId) {
-  return request({
-    url:  '/system/whitelist/remove/'+ debtWhitelistId,
-    method: 'delete',
-  })
-}
-
-//是否有欠款
-export function checkMoney(query) {
-  return request({
-    url:  '/system/whitelist/residualList',
-    method: 'get',
-    params: query
-  })
-}
-*/

@@ -77,4 +77,11 @@ export function foreignList(data) {
     data: data
   })
 }
+//外币查询按钮
+export function startForeignPay(foreignBatchNo) {
+  return request({
+    url: '/system/pay/'+foreignBatchNo,
+    method: 'get'
+  })
+}
 

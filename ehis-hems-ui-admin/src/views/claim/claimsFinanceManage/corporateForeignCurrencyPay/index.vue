@@ -82,21 +82,21 @@
           @sort-change="onSortChange"
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="receiveDate" label="医院名称" show-overflow-tooltip/>
-          <el-table-column align="center" prop="sendBy" label="批次案件总数" width="110" show-overflow-tooltip/>
-          <el-table-column align="center" prop="companyName" label="账单总金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="dept" label="理赔总金额" width="100" show-overflow-tooltip/>
-          <el-table-column align="center" prop="dept" label="是否申述" width="100" show-overflow-tooltip>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
+          <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
+          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip/>
+          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip/>
+          <el-table-column align="center" prop="isAppeal" label="是否申述" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{selectDictLabel( sys_yes_noOptions, scope.row.organcode)}}</span>
+              <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="organcode" label="交单机构" width="100" show-overflow-tooltip>
+          <el-table-column align="center" prop="organCode" label="交单机构" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{getDeptName( deptListOptions, scope.row.organcode)}}</span>
+              <span>{{getDeptName( deptListOptions, scope.row.organCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="updateBy" label="交单日期" show-overflow-tooltip/>
+          <el-table-column align="center" prop="submitDate" label="交单日期" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="startPay(scope.row,'publicForeign')">开始对公支付</el-button>
@@ -199,6 +199,7 @@
         let data = encodeURI(
           JSON.stringify({
             batchNo:row.batchNo,
+            batchTotal:row.batchTotal,
             status,
           })
         )

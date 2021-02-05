@@ -1,4 +1,4 @@
-package com.paic.ehis.claimflow;
+package com.paic.ehis.claimcal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;

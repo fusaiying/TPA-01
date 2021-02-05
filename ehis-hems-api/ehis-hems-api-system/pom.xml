@@ -16,7 +16,6 @@
     </description>
 
     <dependencies>
-		
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-core</artifactId>

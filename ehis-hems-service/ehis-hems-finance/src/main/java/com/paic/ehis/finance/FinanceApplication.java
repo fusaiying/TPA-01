@@ -20,6 +20,6 @@ public class FinanceApplication
     public static void main(String[] args)
     {
         SpringApplication.run(FinanceApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  客服模块启动成功   ლ(´ڡ`ლ)ﾞ  \n");
+        System.out.println("(♥◠‿◠)ﾉﾞ  财务模块启动成功   ლ(´ڡ`ლ)ﾞ  \n");
     }
 }

@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.claimcal.mapper.ClaimCaseMapper">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseMapper">
 
 
-    <resultMap type="com.paic.ehis.claimcal.domain.ClaimCase" id="ClaimCaseResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCase" id="ClaimCaseResult">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="filingNo"    column="filing_no"    />
@@ -27,7 +27,7 @@
         <result property="payStatus"    column="pay_status"    />
         <result property="isFinanceBack"    column="is_finance_back"    />
     </resultMap>
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.ProcessingCaseVo" id="ProcessingClaimCaseResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ProcessingCaseVo" id="ProcessingClaimCaseResult">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="filingNo"    column="filing_no"    />
@@ -35,13 +35,13 @@
         <result property="claimType" column="claim_type"  />
         <result property="caseStatus"    column="case_status"    />
     </resultMap>
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.ClaimAndBatchVo" id="ClaimAndBatchVo">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimAndBatchVo" id="ClaimAndBatchVo">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="filingNo"    column="filing_no"    />
         <result property="source"    column="source"    />
     </resultMap>
-    <resultMap id="BillProcessingVoResult" type="com.paic.ehis.claimcal.domain.vo.BillProcessingVo">
+    <resultMap id="BillProcessingVoResult" type="com.paic.ehis.claimflow.domain.vo.BillProcessingVo">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="stayTime" column="stay_time"   />
@@ -49,7 +49,7 @@
         <result property="name" column="name"/>
         <result property="submitUser" column="submit_user"/>
     </resultMap>
-    <resultMap id="BillAccomplishVoResult" type="com.paic.ehis.claimcal.domain.vo.BillAccomplishVo">
+    <resultMap id="BillAccomplishVoResult" type="com.paic.ehis.claimflow.domain.vo.BillAccomplishVo">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="caseStatus"    column="case_status"    />
@@ -63,7 +63,7 @@
         select rpt_no, batch_no, filing_no, case_status, pullout_type, pullout_reason, pullout_describe, end_case_time, is_appeal, pay_status, is_finance_back, status, create_by, create_time, update_by, update_time from claim_case
     </sql>
 
-    <select id="selectClaimCaseList" parameterType="com.paic.ehis.claimcal.domain.ClaimCase" resultMap="ClaimCaseResult">
+    <select id="selectClaimCaseList" parameterType="com.paic.ehis.claimflow.domain.ClaimCase" resultMap="ClaimCaseResult">
         <include refid="selectClaimCaseVo"/>
         <where>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
@@ -79,7 +79,7 @@
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
-    <select id="selectCaseOne" parameterType="com.paic.ehis.claimcal.domain.ClaimCase" resultMap="ClaimCaseResult">
+    <select id="selectCaseOne" parameterType="com.paic.ehis.claimflow.domain.ClaimCase" resultMap="ClaimCaseResult">
         <include refid="selectClaimCaseVo"/>
         <where>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
@@ -91,7 +91,7 @@
         </where>
     </select>
 
-    <select id="selectProcessingClaimCaseList" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
+    <select id="selectProcessingClaimCaseList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
         SELECT DISTINCT
         f.batch_no,
         f.rpt_no,
@@ -132,7 +132,7 @@
         </where>
     </select>
 
-    <select id="selectClaimCaseProcessedList" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
+    <select id="selectClaimCaseProcessedList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
         SELECT DISTINCT
         cr.batch_no,
         cr.rpt_no,
@@ -169,7 +169,7 @@
         where rpt_no = #{rptNo} and status='Y'
     </select>
 
-    <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimcal.domain.vo.ClaimCaseFilingListVO" resultType="String">
+    <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultType="String">
         select count(1) from claim_case
         <where>
             <if test="rptStartNo != null and rptStartNo != '' and rptEndNo != null and rptEndNo != ''">
@@ -179,7 +179,7 @@
         </where>
     </select>
 
-    <insert id="insertClaimCase" parameterType="com.paic.ehis.claimcal.domain.ClaimCase">
+    <insert id="insertClaimCase" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
         insert into claim_case
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null">rpt_no,</if>
@@ -219,7 +219,7 @@
         </trim>
     </insert>
 
-    <update id="updateClaimCase" parameterType="com.paic.ehis.claimcal.domain.ClaimCase">
+    <update id="updateClaimCase" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
             <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
@@ -247,7 +247,7 @@
         where rpt_no = #{rptNo}
     </update>
 
-    <update id="updateClaimCaseCheck" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimCaseCheckDTO">
+    <update id="updateClaimCaseCheck" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
             <if test="pulloutType != null and pulloutType != ''">pullout_type = #{pulloutType},</if>
@@ -281,7 +281,7 @@
         from claim_case form1
                  inner join claim_batch batch on form1.batch_no=batch.batch_no and form1.status='Y' and form1.rpt_no = #{rptNo}
     </select>
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.CaseDispatchVO" id="CaseDispatchVO">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CaseDispatchVO" id="CaseDispatchVO">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="caseStatus"    column="case_status"    />
@@ -296,7 +296,7 @@
         <result property="policyNo"    column="policy_no"    />
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
-    <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimcal.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
+    <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
         SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.create_by as operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
@@ -322,7 +322,7 @@
         </where>
     </select>
 
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="caseStatus"    column="case_status"    />
@@ -333,7 +333,7 @@
         <result property="name"    column="name"    />
     </resultMap>
     <!--    fu-->
-    <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
@@ -375,7 +375,7 @@
     </select>
 
     <!-- lihy -->
-    <select id="SelectConditionsForTheAdjustmentUnderNew" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="SelectConditionsForTheAdjustmentUnderNew" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
@@ -417,7 +417,7 @@
     </select>
 
     <!--fu-->
-    <select id="selectConditionsForTheAdjustmentOver" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentOver" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
             act.rpt_no,
             act.batch_no,
@@ -446,7 +446,7 @@
     </select>
 
     <!-- lihy -->
-    <select id="SelectConditionsForTheAdjustmentOverNew" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="SelectConditionsForTheAdjustmentOverNew" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
             act.rpt_no,
             act.batch_no,
@@ -475,7 +475,7 @@
     </select>
 
     <!--fu-->
-    <select id="selectConditionsForTheAdjustmentUnderTwo" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentUnderTwo" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
@@ -517,7 +517,7 @@
     </select>
 
     <!-- lihy -->
-    <select id="SelectConditionsForTheAdjustmentUnderTwoNew" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="SelectConditionsForTheAdjustmentUnderTwoNew" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
@@ -559,7 +559,7 @@
     </select>
 
     <!--fu-->
-    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimcal.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
@@ -600,7 +600,7 @@
         </where>
     </select>
 
-    <select id="selectClaimCaseRecordByrptNoCase" parameterType="com.paic.ehis.claimcal.domain.ClaimCase" resultMap="ClaimCaseResult">
+    <select id="selectClaimCaseRecordByrptNoCase" parameterType="com.paic.ehis.claimflow.domain.ClaimCase" resultMap="ClaimCaseResult">
         <include refid="selectClaimCaseVo"/>
         <where>
             <if test="rptNo != null  and rptNo != ''">and rpt_no= #{rptNo}</if>
@@ -610,7 +610,7 @@
         </where>
     </select>
 
-    <select id="selectBillProcessing" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimCaseDTO" resultMap="BillProcessingVoResult">
+    <select id="selectBillProcessing" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillProcessingVoResult">
         select a.rpt_no,a.batch_no,a.case_status,c.name,b.create_by submit_user,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, b.create_time, now( ) ) / 86400 ),
@@ -627,7 +627,7 @@
         <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
     </select>
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="caseStatus"    column="case_status"    />
@@ -638,7 +638,7 @@
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="updateBy"    column="update_by"    />
     </resultMap>
-    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimInformationDTO" resultType="com.paic.ehis.claimcal.domain.vo.ClaimInformationVo">
+    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultType="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo">
         select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
         from claim_case cc
         inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no
@@ -652,7 +652,7 @@
         </where>
     </select>
 
-    <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimcal.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
+    <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         select a.create_by,a.rpt_no,b.batch_no,b.case_status,c.name
         from claim_case b LEFT JOIN claim_case_record a on a.rpt_no = b.rpt_no and a.history_flag = 'Y' and a.status = 'Y' and b.status = 'Y'
         LEFT JOIN claim_case_insured c on b.rpt_no = c.rpt_no and c.status = 'Y'
@@ -665,16 +665,16 @@
     <select id="selepostHocAccountingOfCases" parameterType="String" resultType="String">
         select rpt_no from claim_case where batch_no = #{batchNo} and status='Y'
     </select>
-    <resultMap type="com.paic.ehis.claimcal.domain.vo.ClaimCaseDistVo" id="ClaimCaseDistVo">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo" id="ClaimCaseDistVo">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="caseStatus"    column="case_status"    />
         <result property="quantity"    column="quantity"    />
     </resultMap>
-    <select id="selectCaseDistNumber" parameterType="String" resultType="com.paic.ehis.claimcal.domain.vo.ClaimCaseDistVo">
+    <select id="selectCaseDistNumber" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">
         select count(1)  quantity from claim_case where case_status='05'  and batch_no=#{batchNo}
     </select>
-    <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimcal.domain.vo.ClaimCaseDistVo">
+    <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">
         select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}
     </select>
     <update id="updateClaimCaseVo" parameterType="string">

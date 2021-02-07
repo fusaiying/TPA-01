@@ -5,6 +5,8 @@ import com.paic.ehis.common.core.text.StrFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 字符串工具类
@@ -514,6 +516,18 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
         while (!isEmpty(suffixPattern) && !isEmpty(remainingURI));
 
         return true;
+    }
+    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+
+    /** 驼峰转下划线,效率比上面高 */
+    public static String humpToLine(String str) {
+        Matcher matcher = humpPattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     @SuppressWarnings("unchecked")

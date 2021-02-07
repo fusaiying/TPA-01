@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper">
     
-    <resultMap type="ClaimCaseDebt" id="ClaimCaseDebtResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseDebt" id="ClaimCaseDebtResult">
         <result property="debtId"    column="debt_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="insuredNo"    column="insured_no"    />
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select debt_id, rpt_no, insured_no, debt_amount, status, create_by, create_time, update_by, update_time from claim_case_debt
     </sql>
 
-    <select id="selectClaimCaseDebtList" parameterType="ClaimCaseDebt" resultMap="ClaimCaseDebtResult">
+    <select id="selectClaimCaseDebtList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebt" resultMap="ClaimCaseDebtResult">
         <include refid="selectClaimCaseDebtVo"/>
         <where>  
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where debt_id = #{debtId}
     </select>
         
-    <insert id="insertClaimCaseDebt" parameterType="ClaimCaseDebt" useGeneratedKeys="true" keyProperty="debtId">
+    <insert id="insertClaimCaseDebt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebt" useGeneratedKeys="true" keyProperty="debtId">
         insert into claim_case_debt
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseDebt" parameterType="ClaimCaseDebt">
+    <update id="updateClaimCaseDebt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebt">
         update claim_case_debt
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>

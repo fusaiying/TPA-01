@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceCollectionInfoMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.FinanceCollectionInfo" id="FinanceCollectionInfoResult">
+        <result property="collectionId"    column="collection_id"    />
+        <result property="receiptNo"    column="receipt_no"    />
+        <result property="receiptAccName"    column="receipt_acc_name"    />
+        <result property="receiptCompanyName"    column="receipt_company_name"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptDate"    column="receipt_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFinanceCollectionInfoVo">
+        select collection_id, receipt_no, receipt_acc_name, receipt_company_name, receipt_amount, receipt_date, remark, status, create_by, create_time, update_by, update_time from finance_collection_info
+    </sql>
+
+    <select id="selectFinanceCollectionInfoList" parameterType="com.paic.ehis.finance.domain.FinanceCollectionInfo" resultMap="FinanceCollectionInfoResult">
+        <include refid="selectFinanceCollectionInfoVo"/>
+        <where>  
+            <if test="receiptNo != null  and receiptNo != ''"> and receipt_no = #{receiptNo}</if>
+            <if test="receiptAccName != null  and receiptAccName != ''"> and receipt_acc_name like concat('%', #{receiptAccName}, '%')</if>
+            <if test="receiptCompanyName != null  and receiptCompanyName != ''"> and receipt_company_name like concat('%', #{receiptCompanyName}, '%')</if>
+            <if test="receiptAmount != null "> and receipt_amount = #{receiptAmount}</if>
+            <if test="receiptDate != null "> and receipt_date = #{receiptDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectFinanceCollectionInfoById" parameterType="Long" resultMap="FinanceCollectionInfoResult">
+        <include refid="selectFinanceCollectionInfoVo"/>
+        where collection_id = #{collectionId}
+    </select>
+        
+    <insert id="insertFinanceCollectionInfo" parameterType="com.paic.ehis.finance.domain.FinanceCollectionInfo" useGeneratedKeys="true" keyProperty="collectionId">
+        insert into finance_collection_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">receipt_no,</if>
+            <if test="receiptAccName != null">receipt_acc_name,</if>
+            <if test="receiptCompanyName != null">receipt_company_name,</if>
+            <if test="receiptAmount != null">receipt_amount,</if>
+            <if test="receiptDate != null">receipt_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">#{receiptNo},</if>
+            <if test="receiptAccName != null">#{receiptAccName},</if>
+            <if test="receiptCompanyName != null">#{receiptCompanyName},</if>
+            <if test="receiptAmount != null">#{receiptAmount},</if>
+            <if test="receiptDate != null">#{receiptDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceCollectionInfo" parameterType="com.paic.ehis.finance.domain.FinanceCollectionInfo">
+        update finance_collection_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="receiptNo != null and receiptNo != ''">receipt_no = #{receiptNo},</if>
+            <if test="receiptAccName != null">receipt_acc_name = #{receiptAccName},</if>
+            <if test="receiptCompanyName != null">receipt_company_name = #{receiptCompanyName},</if>
+            <if test="receiptAmount != null">receipt_amount = #{receiptAmount},</if>
+            <if test="receiptDate != null">receipt_date = #{receiptDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where collection_id = #{collectionId}
+    </update>
+
+    <delete id="deleteFinanceCollectionInfoById" parameterType="Long">
+        delete from finance_collection_info where collection_id = #{collectionId}
+    </delete>
+
+    <delete id="deleteFinanceCollectionInfoByIds" parameterType="String">
+        delete from finance_collection_info where collection_id in 
+        <foreach item="collectionId" collection="array" open="(" separator="," close=")">
+            #{collectionId}
+        </foreach>
+    </delete>
+    
+</mapper>

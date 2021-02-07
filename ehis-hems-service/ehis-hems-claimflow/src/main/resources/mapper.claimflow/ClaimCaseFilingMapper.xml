@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseFilingMapper">
     
-    <resultMap type="ClaimCaseFiling" id="ClaimCaseFilingResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseFiling" id="ClaimCaseFilingResult">
         <result property="caseBoxNo"    column="case_box_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="rptStartNo"    column="rpt_start_no"    />
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deptCode"    column="dept_code"    />
     </resultMap>
 
-    <resultMap type="ClaimCaseFilingVO" id="ClaimCaseFilingVOResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingVO" id="ClaimCaseFilingVOResult">
         <result property="caseBoxNo"    column="case_box_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="rptStartNo"    column="rpt_start_no"    />
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="claimType"    column="claim_type"    />
     </resultMap>
 
-    <resultMap type="ClaimCaseFilingInformationVO" id="ClaimCaseFilingInformationVOResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" id="ClaimCaseFilingInformationVOResult">
         <result property="caseBoxNo"    column="case_box_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="rptStartNo"    column="rpt_start_no"    />

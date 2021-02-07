@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.TransferByMapper">
+    
+    <resultMap type="TransferBy" id="TransferByResult">
+        <result property="transferId"    column="transfer_id"    />
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="toUserId"    column="to_user_id"    />
+        <result property="umCode"    column="um_code"    />
+        <result property="reason"    column="reason"    />
+        <result property="attachmentFlag"    column="attachment_flag"    />
+        <result property="status"    column="status"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectTransferByVo">
+        select transfer_id, work_order_no, to_user_id, um_code, reason, attachment_flag, status, created_by, created_time, updated_by, updated_time from transfer_by
+    </sql>
+
+    <select id="selectTransferByList" parameterType="TransferBy" resultMap="TransferByResult">
+        <include refid="selectTransferByVo"/>
+        <where>  
+            <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
+            <if test="toUserId != null  and toUserId != ''"> and to_user_id = #{toUserId}</if>
+            <if test="umCode != null  and umCode != ''"> and um_code = #{umCode}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="attachmentFlag != null  and attachmentFlag != ''"> and attachment_flag = #{attachmentFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTransferByById" parameterType="Long" resultMap="TransferByResult">
+        <include refid="selectTransferByVo"/>
+        where transfer_id = #{transferId}
+    </select>
+        
+    <insert id="insertTransferBy" parameterType="TransferBy" useGeneratedKeys="true" keyProperty="transferId">
+        insert into transfer_by
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="toUserId != null">to_user_id,</if>
+            <if test="umCode != null">um_code,</if>
+            <if test="reason != null">reason,</if>
+            <if test="attachmentFlag != null">attachment_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="toUserId != null">#{toUserId},</if>
+            <if test="umCode != null">#{umCode},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="attachmentFlag != null">#{attachmentFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTransferBy" parameterType="TransferBy">
+        update transfer_by
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
+            <if test="toUserId != null">to_user_id = #{toUserId},</if>
+            <if test="umCode != null">um_code = #{umCode},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="attachmentFlag != null">attachment_flag = #{attachmentFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where transfer_id = #{transferId}
+    </update>
+
+    <delete id="deleteTransferByById" parameterType="Long">
+        delete from transfer_by where transfer_id = #{transferId}
+    </delete>
+
+    <delete id="deleteTransferByByIds" parameterType="String">
+        delete from transfer_by where transfer_id in 
+        <foreach item="transferId" collection="array" open="(" separator="," close=")">
+            #{transferId}
+        </foreach>
+    </delete>
+    
+</mapper>

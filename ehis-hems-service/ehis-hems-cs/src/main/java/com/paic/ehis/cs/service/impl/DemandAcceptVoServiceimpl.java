@@ -196,7 +196,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String workOrderNo=demandAcceptVo.getWorkOrderNo();
         AcceptDTO acceptDTO=new AcceptDTO();
         acceptDTO.setWorkOrderNo(workOrderNo);
-        List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+        List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
         DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
      //   AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
      //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
@@ -300,9 +300,25 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setItemKey(map1key);
                 editDetail.setOldValue(map1value);
                 editDetail.setNowValue(map2value);
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
+                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setWorkOrderId(workOrderNo);
+                editInfo.setCreatedBy(SecurityUtils.getUsername());
+                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+                editInfoMapper.insertEditInfo(editInfo);
+
             }
-            editDetailMapper.insertEditDetail(editDetail);
-            editInfoMapper.insertEditInfo(editInfo);
+
         }
 
         /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);

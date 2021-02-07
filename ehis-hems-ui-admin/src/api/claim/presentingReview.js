@@ -31,7 +31,7 @@ export function addBatchAndStanding(data) {
 // 查询报案台账信息
 export function getStanding(batchNo) {
   return request({
-    url: '/system/case/postHocAccountingOfCases',
+    url: '/claimflow/case/postHocAccountingOfCases',
     method: 'get',
     params: batchNo
   })

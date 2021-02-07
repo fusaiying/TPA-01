@@ -400,7 +400,7 @@ export function infoList(data) {
 //# 下拉查询页面账单费用项详情 (主参：rptNo、billId)
 export function itemList(data) {//没人
   return request({
-    url: '/system/item/itemList',
+    url: '/claimflow/item/itemList',
     method: 'get',
     params: data
   })
@@ -418,7 +418,7 @@ export function detailsList(data) {
 //# 费用项账单保单号及险种查询 下拉框	(主参：rptNo)
 export function insurancePolicyList(data) {
   return request({
-    url: '/system/item/InsurancePolicyList',
+    url: '/claimflow/item/InsurancePolicyList',
     method: 'post',
     data: data
     // params: data
@@ -428,7 +428,7 @@ export function insurancePolicyList(data) {
 //# 费用项账单责任明细查询 下拉框	(主参：riskCode、feeItemCode)
 export function responsibilityDetailsList(data) {
   return request({
-    url: '/system/item/responsibilityDetailsList',
+    url: '/claimflow/item/responsibilityDetailsList',
     method: 'get',
     params: data
   })

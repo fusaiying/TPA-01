@@ -11,6 +11,8 @@ import com.paic.ehis.claimflow.service.IClaimCaseCalItemService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

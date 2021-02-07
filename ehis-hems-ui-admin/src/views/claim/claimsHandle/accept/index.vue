@@ -232,7 +232,7 @@
           getFinishList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportProcessedList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportProcessedList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
@@ -248,7 +248,7 @@
           getHangUpList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportSuspensionList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportSuspensionList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)

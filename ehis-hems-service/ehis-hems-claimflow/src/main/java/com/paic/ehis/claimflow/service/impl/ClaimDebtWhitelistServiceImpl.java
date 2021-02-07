@@ -1,10 +1,10 @@
 package com.paic.ehis.claimflow.service.impl;
 
-import com.paic.ehis.common.core.utils.DateUtils;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
 import com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper;
 import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2021-01-20
  */
 @Service
-public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService 
+public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
 {
     @Autowired
     private ClaimDebtWhitelistMapper claimDebtWhitelistMapper;

@@ -1,6 +1,8 @@
 package com.paic.ehis.claimflow.mapper;
 
-import com.sino.system.domain.ClaimProductTaskLog;
+
+
+import com.paic.ehis.claimflow.domain.ClaimProductTaskLog;
 
 import java.util.List;
 

@@ -21,7 +21,7 @@ public class ClaimProductPlanVO
     private String label;
 
     /** 子列表 */
-    private List<com.sino.system.domain.ClaimProductDutyVO> children;
+    private List<ClaimProductDutyVO> children;
 
     public String getValue() {
         return value;
@@ -39,11 +39,11 @@ public class ClaimProductPlanVO
         this.label = label;
     }
 
-    public List<com.sino.system.domain.ClaimProductDutyVO> getChildren() {
+    public List<ClaimProductDutyVO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<com.sino.system.domain.ClaimProductDutyVO> children) {
+    public void setChildren(List<ClaimProductDutyVO> children) {
         this.children = children;
     }
 

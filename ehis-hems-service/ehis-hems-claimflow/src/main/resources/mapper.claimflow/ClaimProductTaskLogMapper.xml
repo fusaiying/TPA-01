@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.ClaimProductTaskLogMapper">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimProductTaskLogMapper">
     
-    <resultMap type="ClaimProductTaskLog" id="ClaimProductTaskLogResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimProductTaskLog" id="ClaimProductTaskLogResult">
         <result property="riskLogNo"    column="risk_log_no"    />
         <result property="riskCode"    column="risk_code"    />
         <result property="riskStatus"    column="risk_status"    />
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select risk_log_no, risk_code, risk_status, is_history, status, create_by, create_time, update_by, update_time from claim_product_task_log
     </sql>
 
-    <select id="selectClaimProductTaskLogList" parameterType="ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
+    <select id="selectClaimProductTaskLogList" parameterType="com.paic.ehis.claimflow.domain.ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
         <include refid="selectClaimProductTaskLogVo"/>
         <where>  
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where risk_log_no = #{riskLogNo}
     </select>
 
-    <select id="selectClaimProductTaskLogByCondition" parameterType="ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
+    <select id="selectClaimProductTaskLogByCondition" parameterType="com.paic.ehis.claimflow.domain.ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
         <include refid="selectClaimProductTaskLogVo"/>
         <where>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <insert id="insertClaimProductTaskLog" parameterType="ClaimProductTaskLog">
+    <insert id="insertClaimProductTaskLog" parameterType="com.paic.ehis.claimflow.domain.ClaimProductTaskLog">
         insert into claim_product_task_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="riskLogNo != null">risk_log_no,</if>
@@ -73,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimProductTaskLog" parameterType="ClaimProductTaskLog">
+    <update id="updateClaimProductTaskLog" parameterType="com.paic.ehis.claimflow.domain.ClaimProductTaskLog">
         update claim_product_task_log
         <trim prefix="SET" suffixOverrides=",">
             <if test="riskCode != null and riskCode != ''">risk_code = #{riskCode},</if>
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectClaimProductTaskLogByMany" parameterType="ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
+    <select id="selectClaimProductTaskLogByMany" parameterType="com.paic.ehis.claimflow.domain.ClaimProductTaskLog" resultMap="ClaimProductTaskLogResult">
         <include refid="selectClaimProductTaskLogVo"/>
         <where>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>

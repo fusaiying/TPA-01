@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 初始化查询：
 export function listFirst(data) {
   return request({
-    url: '/system/standing/listFirst',
+    url: '/claimmgt/standing/listFirst',
     method: 'get',
     params:data
   })
@@ -11,7 +11,7 @@ export function listFirst(data) {
 // 查询：
 export function listNew(data) {
   return request({
-    url: '/system/standing/listNew',
+    url: '/claimmgt/standing/listNew',
     method: 'get',
     params:data
   })
@@ -20,7 +20,7 @@ export function listNew(data) {
 // 修改：
 export function editStanding(data) {
   return request({
-    url: '/system/standing/update',
+    url: '/claimmgt/standing/update',
     method: 'put',
     data:data
   })

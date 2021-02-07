@@ -1326,7 +1326,9 @@ export default {
   methods: {
     getServiceInfoData(){
       return this.$refs.serviceInfo.serviceForm
-
+    },
+    getOtherReservelInfoData(){
+      return this.$refs.otherReserveInfo.otherReserveInfoForm
     },
 
     handleClick(){
@@ -1374,6 +1376,7 @@ export default {
 
 
     },
+
 
 
 
@@ -1687,7 +1690,7 @@ export default {
                         })
                         this.$store.dispatch("tagsView/delView", this.$route);
                         this.$router.push({
-                          path: '/basic-info/medicalManage/medicalManage',
+                          path: '/basic-info/medicalManage',
                         })
                       } else {
                         this.$message({
@@ -1903,7 +1906,8 @@ export default {
       let otherServiceInfoFlag=this.$refs['otherServiceInfo'].validateForm()
       let otherReserveInfoFlag=this.$refs['otherReserveInfo'].validateForm()
       let otherClosingInfoFlag=this.$refs['otherClosingInfo'].validateForm()
-      let otherContactInfoFlag= await this.$refs['otherContactInfo'].validateForm()
+      let otherContactInfoFlag= await this.$refs['otherContactInfo'].otherValidataForm()
+
 
       if(otherBaseInfoFlag){
         if(otherServiceInfoFlag){
@@ -1958,7 +1962,7 @@ export default {
                     })
                     this.$store.dispatch("tagsView/delView", this.$route);
                     this.$router.push({
-                      path: '/basic-info/medicalManage/medicalManage',
+                      path: '/basic-info/medicalManage',
                     })
                   } else {
                     this.$message({
@@ -1979,6 +1983,12 @@ export default {
             }
             else if(otherContactInfoFlag=='02'){
               this.$message.warning('至少添加一条联系人信息')
+            }
+            else if(otherContactInfoFlag=='04'){
+              this.$message.warning('网络医院为是，联系信息中联系人至少有一位平安服务人员！')
+            }
+            else if(otherContactInfoFlag=='05'){
+              this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息！')
             }
             else {
               this.$message.warning('联系信息必录项未必录')

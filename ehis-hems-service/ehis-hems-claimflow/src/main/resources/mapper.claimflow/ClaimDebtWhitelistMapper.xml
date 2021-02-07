@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimDebtWhitelist" id="ClaimDebtWhitelistResult">
+        <result property="debtWhitelistId"    column="debt_whitelist_id"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="level"    column="level"    />
+        <result property="recMessageFlag"    column="rec_message_flag"    />
+        <result property="debtAmountUp"    column="debt_amount_up"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="name"    column="name"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="sex"    column="sex"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="residualAmount" column="residual_amount"/>
+    </resultMap>
+
+    <sql id="selectClaimDebtWhitelistVo">
+        select debt_whitelist_id, insured_no, level, rec_message_flag, debt_amount_up, status, create_by, create_time, update_by, update_time from claim_debt_whitelist
+    </sql>
+<!--条件查询列表-->
+    <select id="selectClaimDebtWhitelistList" parameterType="ClaimDebtWhitelist" resultMap="ClaimDebtWhitelistResult">
+        select
+        claim_debt_whitelist.debt_whitelist_id,
+        claim_debt_whitelist.insured_no,
+        claim_debt_whitelist.level,
+        claim_debt_whitelist.rec_message_flag,
+        claim_debt_whitelist.debt_amount_up,
+        claim_debt_whitelist.status,
+        claim_debt_whitelist.create_by,
+        claim_debt_whitelist.create_time,
+        claim_case_insured.name,
+        claim_case_insured.id_type,
+        claim_case_insured.id_no,
+        claim_case_insured.sex,
+        claim_case_insured.birthday,
+        claim_case_insured.rpt_no
+            from claim_case_insured,claim_debt_whitelist,claim_case_debt
+        <where>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="idType != null  and idType != ''"> and id_type = #{idType}</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="recMessageFlag != null  and recMessageFlag != ''"> and rec_message_flag = #{recMessageFlag}</if>
+            <if test="debtAmountUp != null "> and debt_amount_up like concat('%', #{debtAmountUp}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            and claim_case_insured.rpt_no=claim_case_debt.rpt_no
+            and claim_debt_whitelist.insured_no=claim_case_debt.insured_no
+            and claim_debt_whitelist.status='Y'
+        </where>
+    </select>
+
+    <!--修改时查询的具体信息-->
+    <select id="selectClaimDebtWhitelistById" parameterType="Long" resultMap="ClaimDebtWhitelistResult">
+        select
+        claim_debt_whitelist.debt_whitelist_id,
+        claim_debt_whitelist.insured_no,
+        claim_debt_whitelist.level,
+        claim_debt_whitelist.rec_message_flag,
+        claim_debt_whitelist.debt_amount_up,
+        claim_debt_whitelist.status,
+        claim_debt_whitelist.create_by,
+        claim_debt_whitelist.create_time,
+        claim_case_insured.name,
+        claim_case_insured.id_type,
+        claim_case_insured.id_no,
+        claim_case_insured.sex,
+        claim_case_insured.birthday
+        from claim_case_insured,claim_debt_whitelist,claim_case_debt
+       where
+        claim_case_insured.rpt_no=claim_case_debt.rpt_no
+        and claim_debt_whitelist.insured_no=claim_case_debt.insured_no
+        and claim_debt_whitelist.status='Y'
+        and debt_whitelist_id = #{debtWhitelistId}
+    </select>
+
+    <!--白名单维护界面初始化或未录入任何查询条件，点击查询按钮时，默认查询状态不为失效，追缴通知为是的白名单信息-->
+    <select id="selectClaimDebtWhitelistList1" parameterType="ClaimDebtWhitelist" resultMap="ClaimDebtWhitelistResult">
+        select
+        claim_debt_whitelist.debt_whitelist_id,
+        claim_debt_whitelist.insured_no,
+        claim_debt_whitelist.level,
+        claim_debt_whitelist.rec_message_flag,
+        claim_debt_whitelist.debt_amount_up,
+        claim_debt_whitelist.status,
+        claim_debt_whitelist.create_by,
+        claim_debt_whitelist.create_time,
+        claim_case_insured.name,
+        claim_case_insured.id_type,
+        claim_case_insured.id_no,
+        claim_case_insured.sex,
+        claim_case_insured.birthday
+        from claim_case_insured,claim_debt_whitelist,claim_case_debt
+        where
+            claim_case_insured.rpt_no=claim_case_debt.rpt_no
+            and claim_debt_whitelist.insured_no=claim_case_debt.insured_no
+            and claim_debt_whitelist.status='Y'
+            and claim_debt_whitelist.rec_message_flag='01'
+    </select>
+
+    <insert id="insertClaimDebtWhitelist" parameterType="ClaimDebtWhitelist" useGeneratedKeys="true" keyProperty="debtWhitelistId">
+        insert into claim_debt_whitelist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="level != null and level != ''">level,</if>
+            <if test="recMessageFlag != null and recMessageFlag != ''">rec_message_flag,</if>
+            <if test="debtAmountUp != null">debt_amount_up,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="level != null and level != ''">#{level},</if>
+            <if test="recMessageFlag != null and recMessageFlag != ''">#{recMessageFlag},</if>
+            <if test="debtAmountUp != null">#{debtAmountUp},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimDebtWhitelist" parameterType="ClaimDebtWhitelist">
+        update claim_debt_whitelist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="level != null and level != ''">level = #{level},</if>
+            <if test="recMessageFlag != null and recMessageFlag != ''">rec_message_flag = #{recMessageFlag},</if>
+            <if test="debtAmountUp != null">debt_amount_up = #{debtAmountUp},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where debt_whitelist_id = #{debtWhitelistId}
+    </update>
+    <!--单体删除-->
+    <delete id="deleteClaimDebtWhitelistById" parameterType="Long">
+        update claim_debt_whitelist set status="N" where debt_whitelist_id = #{debtWhitelistId} and status="Y"
+    </delete>
+    <!--批量删除-->
+    <delete id="deleteClaimDebtWhitelistByIds" parameterType="String">
+        update claim_debt_whitelist set status="N" where status="Y" and debt_whitelist_id in
+        <foreach item="debtWhitelistId" collection="array" open="(" separator="," close=")">
+            #{debtWhitelistId}
+        </foreach>
+    </delete>
+
+    <!--根据报案号查询欠款-->
+    <select id="selectResidualList" resultType="com.paic.ehis.claimflow.domain.ClaimDebtWhitelist">
+        SELECT
+            claim_case_debt.rpt_no as rptNo,
+            claim_case_debt.debt_amount,
+            SUM( claim_case_debt_col.col_amount ),
+            ( claim_case_debt.debt_amount - SUM( claim_case_debt_col.col_amount ) ) as residualAmount
+        FROM
+            claim_case_debt,claim_case_debt_col
+        where claim_case_debt.rpt_no=#{rptNo}
+        GROUP BY claim_case_debt.rpt_no,claim_case_debt.debt_amount
+    </select>
+</mapper>

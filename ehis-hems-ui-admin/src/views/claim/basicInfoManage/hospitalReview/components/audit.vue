@@ -114,7 +114,7 @@ export default {
 
     goBack(){
       this.$router.push({
-        path: '/basic-info/medicalManage/medicalManage'
+        path: '/basic-info/medicalManage'
 
       })
     },

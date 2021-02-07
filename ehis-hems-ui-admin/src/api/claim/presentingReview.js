@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //查询已退回理赔批次 列表
 export function getBackToList(query) {
   return request({
-    url: 'system/batch/backToList',
+    url: 'claimapt/batch/backToList',
     method: 'post',
     data: query
   })
@@ -12,7 +12,7 @@ export function getBackToList(query) {
 //查询已处理理赔批次 列表
 export function getDealWithList(query) {
   return request({
-    url: 'system/batch/dealWithList',
+    url: 'claimapt/batch/dealWithList',
     method: 'post',
     data: query
   })
@@ -22,7 +22,7 @@ export function getDealWithList(query) {
 // 理赔批次和报案台账信息
 export function addBatchAndStanding(data) {
   return request({
-    url: '/system/record/addBatchAndStanding',
+    url: '/claimapt/record/addBatchAndStanding',
     method: 'post',
     data: data
   })
@@ -31,7 +31,7 @@ export function addBatchAndStanding(data) {
 // 查询报案台账信息
 export function getStanding(batchNo) {
   return request({
-    url: '/system/case/postHocAccountingOfCases',
+    url: '/claimflow/case/postHocAccountingOfCases',
     method: 'get',
     params: batchNo
   })
@@ -41,7 +41,7 @@ export function getStanding(batchNo) {
 // 理赔批次和报案台账信息
 export function addBatchAndStandingPresent(data) {
   return request({
-    url: '/system/record/addBatchAndStandingPresent',
+    url: '/claimapt/record/addBatchAndStandingPresent',
     method: 'post',
     data: data
   })
@@ -51,7 +51,7 @@ export function addBatchAndStandingPresent(data) {
 // 理赔批次和报案台账信息
 export function addBatch(data) {
   return request({
-    url: '/system/record/addBatch',
+    url: '/claimapt/record/addBatch',
     method: 'post',
     data: data
   })
@@ -60,7 +60,7 @@ export function addBatch(data) {
 // 查询理赔批次 详细
 export function getBatch(batchno) {
   return request({
-    url: '/system/batch/' + batchno,
+    url: '/claimapt/batch/' + batchno,
     method: 'get'
   })
 }
@@ -68,7 +68,7 @@ export function getBatch(batchno) {
 // 通过点击事件查询报案台账信息  列表
 export function getMinData(batchNo) {
   return request({
-    url: '/system/standing/'+batchNo,
+    url: '/claimmgt/standing/'+batchNo,
     method: 'get',
   })
 }
@@ -76,7 +76,7 @@ export function getMinData(batchNo) {
 //  查询直结复核理赔批次公共池
 export function getPublicList(batchno) {
   return request({
-    url: '/system/batch/publicList',
+    url: '/claimapt/batch/publicList',
     method: 'post',
     data: batchno
   })
@@ -85,7 +85,7 @@ export function getPublicList(batchno) {
 //  查询直结复核理赔批次待处理个人池
 export function getUntreatedList(batchno) {
   return request({
-    url: '/system/batch/untreatedList',
+    url: '/claimapt/batch/untreatedList',
     method: 'get',
     params: batchno
   })
@@ -94,7 +94,7 @@ export function getUntreatedList(batchno) {
 //  从直结复核公共池获取到未处理个人池
 export function getProcessedList(batchnoes) {
   return request({
-    url: '/system/batch/processedList',
+    url: '/claimapt/batch/processedList',
     method: 'get',
     params: batchnoes
   })
@@ -103,7 +103,7 @@ export function getProcessedList(batchnoes) {
 //  从直结复核公共池获取到未处理个人池
 export function changeStatus(batchnoes) {
   return request({
-    url: '/system/batch/batchnoes',
+    url: '/claimapt/batch/batchnoes',
     method: 'put',
     data: batchnoes
   })
@@ -112,7 +112,7 @@ export function changeStatus(batchnoes) {
 //  未处理个人池的案件无效化
 export function invalid(batchno) {
   return request({
-    url: '/system/batch/' + batchno,
+    url: '/claimapt/batch/' + batchno,
     method: 'put',
     data:batchno
   })
@@ -121,7 +121,7 @@ export function invalid(batchno) {
 // 个更新复核处理页面，根据复核结论，修改批次状态，并更新sysClaimBatch表数据
 export function updateClaimBatch(data) {
   return request({
-    url: '/system/batch/updateClaimBatch',
+    url: '/claimapt/batch/updateClaimBatch',
     method: 'post',
     data: data
   })
@@ -130,7 +130,7 @@ export function updateClaimBatch(data) {
 // 查询理赔批次流程记录表
 export function selectRecordByBatchno(data) {
   return request({
-    url: '/system/record/selectRecordByBatchno',
+    url: '/claimapt/record/selectRecordByBatchno',
     method: 'post',
     data: data
   })
@@ -139,7 +139,7 @@ export function selectRecordByBatchno(data) {
 // 导出交单工作池已退回理赔批次 列表
 export function exportReturnedPool(query) {
   return request({
-    url: '/system/batch/exportReturnedPool',
+    url: '/claimapt/batch/exportReturnedPool',
     method: 'post',
     params: query	//(swagger上多字段下显示（query）)
   })
@@ -148,7 +148,7 @@ export function exportReturnedPool(query) {
 // 导出交单工作池已处理理赔批次 列表
 export function exportProcessedPool(query) {
   return request({
-    url: '/system/batch/exportProcessedPool',
+    url: '/claimapt/batch/exportProcessedPool',
     method: 'post',
     params: query	//(swagger上多字段下显示（query）)
   })
@@ -157,7 +157,7 @@ export function exportProcessedPool(query) {
 // 导出交单复核已处理理赔批次 列表
 export function exportPersonalProcessed() {
   return request({
-    url: '/system/batch/exportPersonalProcessed',
+    url: '/claimapt/batch/exportPersonalProcessed',
     method: 'post',
   })
 }
@@ -165,17 +165,8 @@ export function exportPersonalProcessed() {
 // 导出交单复核待处理理赔批次 列表
 export function exportPersonalUntreated() {
   return request({
-    url: '/system/batch/exportPersonalUntreated',
+    url: '/claimapt/batch/exportPersonalUntreated',
     method: 'post',
-  })
-}
-
-//模糊查询部门
-export function getDept(data) {
-  return request({
-    url:'system/dept/list',
-    method:'post',
-    data:data
   })
 }
 

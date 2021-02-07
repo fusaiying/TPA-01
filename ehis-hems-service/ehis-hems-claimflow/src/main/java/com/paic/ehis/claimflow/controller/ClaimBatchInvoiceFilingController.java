@@ -33,7 +33,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 查询发票归档列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:list')")
     @GetMapping("/list")
     public TableDataInfo list(ClaimBatchInvoiceFiling claimBatchInvoiceFiling)
     {
@@ -45,7 +45,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 导出发票归档列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:export')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:export')")
     @Log(title = "发票归档", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ClaimBatchInvoiceFiling claimBatchInvoiceFiling) throws IOException
@@ -58,7 +58,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 获取发票归档详细信息
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:query')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:query')")
     @GetMapping(value = "/{batchNo}")
     public AjaxResult getInfo(@PathVariable("batchNo") String batchNo)
     {
@@ -68,7 +68,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 新增发票归档
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:add')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:add')")
     @Log(title = "发票归档", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ClaimBatchInvoiceFiling claimBatchInvoiceFiling)
@@ -79,7 +79,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 修改发票归档
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:edit')")
     @Log(title = "发票归档", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ClaimBatchInvoiceFiling claimBatchInvoiceFiling)
@@ -90,7 +90,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 删除发票归档
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:remove')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:remove')")
     @Log(title = "发票归档", businessType = BusinessType.DELETE)
     @DeleteMapping("/{batchNos}")
     public AjaxResult remove(@PathVariable String[] batchNos)
@@ -101,7 +101,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 查询发票归档工作池
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:list')")
     @GetMapping("/selectInvoiceFile")
     public TableDataInfo selectInvoiceFile(InvoiceFileVo invoiceFileVo)
     {
@@ -114,7 +114,7 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     /**
      * 发票归档编辑超链接
      */
-//    @PreAuthorize("@ss.hasPermi('system:filing:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:edit')")
     @Log(title = "发票归档", businessType = BusinessType.UPDATE)
     @PutMapping("updateInvoiceFile")
     public AjaxResult updateInvoiceFile(@RequestBody InvoiceFileVo invoiceFileVo)

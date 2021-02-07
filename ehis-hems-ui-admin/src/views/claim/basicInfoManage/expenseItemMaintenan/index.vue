@@ -181,7 +181,7 @@
         listFeeitem(data).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('system/feeitem/export', {
+            this.download('provider/feeitem/export', {
               ...query
             }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({

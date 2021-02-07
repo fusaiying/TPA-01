@@ -336,7 +336,7 @@
           getUntreatedList().then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              this.download('system/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
+              this.download('claimapt/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -348,7 +348,7 @@
           getProcessedList().then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              this.download('system/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
+              this.download('claimapt/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

@@ -142,13 +142,11 @@ public class FinanceAdvanceSettleDetailController extends BaseController
         return toAjax(financeAdvanceSettleDetailService.updateSettleStatus2(settleTaskNos));
     }
 
-  /*  *//**发起垫付款任务*//*
-    @PreAuthorize("@ss.hasPermi('system:task:list')")
+    /**发起垫付款任务*/
     @GetMapping("/InitiateAdvancePaymentTask")
     public TableDataInfo InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO)
     {
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailService.InitiateAdvancePaymentTask(financeAdvanceSettleDTO);
         return getDataTable(financeAdvanceSettleVOS);
     }
-*/
 }

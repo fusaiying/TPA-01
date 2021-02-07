@@ -12,7 +12,7 @@
     </div>
     <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule" :model="baseForm" style="padding-bottom: 30px;"
              :disabled="(node === 'accept' && status === 'show') || node==='input' || node==='sport'"
-             label-width="140px" label-position="right" size="mini">
+             label-width="150px" label-position="right" size="mini">
       <el-row>
         <el-col :span="24">
           <el-form-item label="申请原因：" prop="applyTypes" style="position:relative">
@@ -35,23 +35,25 @@
               v-model="baseForm.accDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item v-if="firstSerIllnessDateShow" label="首次重疾确诊日期：" prop="firstSerIllnessDate ">
+          <el-form-item v-if="firstSerIllnessDateShow" label="首次重疾确诊日期：" prop="firstSerIllnessDate">
             <el-date-picker
               v-model="baseForm.firstSerIllnessDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="出险类型：" prop="accType">
-            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -59,7 +61,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="事故者现状：" prop="currSituation">
-            <el-select v-model="baseForm.currSituation" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.currSituation" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -71,13 +73,14 @@
               v-model="baseForm.deathDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否预售权：" prop="preAuthFlag">
-            <el-select v-model="baseForm.preAuthFlag" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.preAuthFlag" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in preAuthFlagOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -94,6 +97,7 @@
               v-model="baseForm.disabilityDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
@@ -120,13 +124,14 @@
               v-model="baseForm.receiptDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="优先原因：" prop="priReason">
-            <el-select v-model="baseForm.priReason" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.priReason" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in priority_reasonOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -170,12 +175,17 @@
       sonAcceptInfoData: Object,
     },
     watch: {
+
       sonAcceptInfoData: function (newVal) {
         this.getAddressData()
         if (newVal !== null && newVal !== undefined) {
           if (newVal.claimCaseAccept != null) {
             this.baseForm = newVal.claimCaseAccept
-            this.$set(this.baseForm, 'applyTypes', newVal.applyTypes)
+            if (newVal.applyTypes!=null && newVal.applyTypes.length>0){
+              this.$set(this.baseForm, 'applyTypes', newVal.applyTypes)
+            }else {
+              this.$set(this.baseForm, 'applyTypes', [])
+            }
             this.region[0] = newVal.claimCaseAccept.accProvince
             this.region[1] = newVal.claimCaseAccept.accCity
             this.region[2] = newVal.claimCaseAccept.accDistrict
@@ -195,6 +205,8 @@
           if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + date.getDate()
           }
+        }else {
+          this.baseForm.priReason=this.baseInfo.prireason
         }
       }
     },
@@ -302,7 +314,7 @@
             callback()
           }
         } else {
-          callback()
+          callback(new Error("请录入残疾确诊日期！"))
         }
       }
       const checkReceiptDate = (rule, value, callback) => {
@@ -359,6 +371,7 @@
         region: [],
         baseFormRule: {
           claimAmount: [{validator: checkClaimAmount, trigger: 'blur'}],
+          applyTypes:[{required: true, message: '请选择申请原因', trigger: 'blur'}],
           accDate: [{validator: checkDate, required: true, trigger: 'blur'}],
           firstSerIllnessDate: [{validator: checkFirstSerIllnessDate, required: true, trigger: 'blur'}],
           currSituation: [{required: true, message: '请选择事故者现状', trigger: 'blur'}],

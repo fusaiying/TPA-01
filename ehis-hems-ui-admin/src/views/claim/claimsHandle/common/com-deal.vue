@@ -37,7 +37,7 @@
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini" @click="openHistorySurvey">调查(?)</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini" @click="openHistoryDiscussion">协谈({{historyDisCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='accept'" size="mini"
-                       @click="selectHistoricalProblem">问题件</el-button>
+                       @click="selectHistoricalProblem">问题件({{historicalProblemDataTotal}})</el-button>
             <el-button type="primary" v-if="querys.node==='accept' || querys.node==='calculateReview'"
                        :disabled="querys.status==='show'" size="mini" @click="openRemoveDialog">撤件</el-button>
             <el-button type="primary" v-if="querys.node==='accept'" :disabled="querys.status==='show'" size="mini"
@@ -213,6 +213,7 @@
         sonProblemData: [],
         sonCalculateData: [],
         historicalProblemData: [],
+        historicalProblemDataTotal: 0,
         historicalProblemDialog: false,
         removeDialog: false,
         appealDialog: false,
@@ -295,9 +296,13 @@
           }
         }).catch(res => {
         })
-        selectHistoricalProblem(this.querys.rptNo).then(res => {
+        let item ={
+          rptNo:this.querys.rptNo
+        }
+        selectHistoricalProblem(item).then(res => {
           if (res != null && res.code === 200) {
             this.historicalProblemData = res.rows
+            this.historicalProblemDataTotal = res.total
           }
         })
         getInsured(this.querys.rptNo).then(res => {

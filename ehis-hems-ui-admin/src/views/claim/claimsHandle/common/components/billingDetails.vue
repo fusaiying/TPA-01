@@ -97,7 +97,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="科室：" prop="department">
-            <el-select v-model="baseForm.department" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.department" clearable class="item-width" placeholder="请选择">
               <el-option v-for="option in departmentOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -105,7 +105,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否定点医院：" prop="isDesHospital">
-            <el-select v-model="baseForm.isDesHospital" disabled  filterable remote class="item-width" placeholder="请输入">
+            <el-select v-model="baseForm.isDesHospital" disabled clearable  filterable remote class="item-width" placeholder="请输入">
               <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -113,7 +113,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="出险类型：" prop="accType">
-            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -122,7 +122,7 @@
         <el-col :span="8">
           <el-form-item label="账户币种：" prop="billCurrency">
             <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
-                       placeholder="请选择">
+                       placeholder="请选择" clearable>
               <el-option v-for="option in claim_currencyOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -140,7 +140,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="治疗类型：" prop="treatmentType">
-            <el-select v-model="baseForm.treatmentType" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.treatmentType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in treat_typeOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -152,6 +152,7 @@
               v-model="baseForm.treatmentStartDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
@@ -163,6 +164,7 @@
               v-model="baseForm.treatmentEndDate"
               class="item-width"
               type="date"
+              clearable
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
@@ -184,7 +186,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="账单类型：" prop="billType">
-            <el-select v-model="baseForm.billType" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.billType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in bill_typeOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -202,7 +204,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否分摊先期给付：" prop="isShareAp">
-            <el-select v-model="baseForm.isShareAp" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.isShareAp" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -226,7 +228,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否分摊自付额(CNY)：" prop="isShareCopay">
-            <el-select v-model="baseForm.isShareCopay" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.isShareCopay" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -239,7 +241,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否分摊折扣：" prop="isShareDisAmount">
-            <el-select v-model="baseForm.isShareDisAmount" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.isShareDisAmount" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -247,7 +249,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="主要诊断(ICD)：" prop="icdCode">
-            <el-select v-model="baseForm.icdCode" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.icdCode" class="item-width" placeholder="请选择" clearable>
               <!--<el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>-->
               <el-option key="01" label="垂直斜视"
@@ -264,7 +266,7 @@
           <el-form-item label="次要诊断(ICD)：" prop="icdCodes"
                         :label="index===0?'次要诊断(ICD)':'次要诊断(ICD)' + index"
                         :prop="'icdCodes.' + index + '.icdCode'">
-            <el-select v-model="icd.icdCode" class="item-width" placeholder="请选择">
+            <el-select v-model="icd.icdCode" class="item-width" placeholder="请选择" clearable>
               <!--<el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>-->
               <el-option key="01" label="垂直斜视"

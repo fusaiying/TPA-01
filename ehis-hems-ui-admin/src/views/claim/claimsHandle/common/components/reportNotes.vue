@@ -47,7 +47,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="备注类型：" prop="remarkType">
-                <el-select v-model="baseForm.remarkType" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.remarkType" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in claim_noteOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>

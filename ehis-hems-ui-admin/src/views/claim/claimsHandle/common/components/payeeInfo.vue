@@ -61,6 +61,7 @@
         </div>
         <el-divider/>
         <el-table
+          v-if="false"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="tkTableData"
           size="small"
@@ -88,7 +89,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="领款方式：" prop="payMode">
-                <el-select v-model="baseForm.payMode" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.payMode" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in collectedmodeOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
@@ -96,7 +97,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="与被保人关系：" prop="relationIns">
-                <el-select v-model="baseForm.relationIns" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.relationIns" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in relation_ship_applyOptions" :key="option.dictValue"
                              :label="option.dictLabel"
                              :value="option.dictValue"/>
@@ -113,7 +114,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="性别：" prop="payeeSex">
-                <el-select v-model="baseForm.payeeSex" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.payeeSex" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in rgtSexOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
@@ -128,7 +129,7 @@
               <el-form-item label="国籍：" prop="payeeNationality"
                             :rules="tableFormRules.payeeNationality">
                 <el-select v-model="baseForm.payeeNationality" class="item-width"
-                           placeholder="请选择">
+                           placeholder="请选择" clearable>
                   <el-option key="01" label="中国"
                              value="01"/>
                   <!--<el-option v-for="option in nativeplaceOptions" :key="option.dictValue" :label="option.dictLabel"
@@ -140,7 +141,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="证件类型：" prop="payeeIdType">
-                <el-select v-model="baseForm.payeeIdType" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.payeeIdType" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="option in card_typeOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
@@ -159,6 +160,7 @@
                   :disabled="baseForm.checked"
                   style="width: 168px;"
                   type="date"
+                  clearable
                   placeholder="选择日期"/>
                 <el-checkbox v-model="baseForm.checked" @change="longDate">长期</el-checkbox>
               </el-form-item>
@@ -167,7 +169,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="开户行：" prop="payeeBank">
-                <el-select v-model="baseForm.payeeBank" class="item-width" placeholder="请选择">
+                <el-select v-model="baseForm.payeeBank" class="item-width" placeholder="请选择" clearable>
                   <!-- <el-option v-for="option in card_typeOptions" :key="option.dictValue" :label="option.dictLabel"
                              :value="option.dictValue"/>-->
                   <el-option key="01" label="上海交通银行"
@@ -189,7 +191,7 @@
             <el-col :span="8">
               <el-form-item label="职业：" prop="payeeOccupation">
                 <el-select v-model="baseForm.payeeOccupation" filterable class="item-width"
-                           placeholder="请选择">
+                           placeholder="请选择" clearable>
                   <!-- <el-option v-for="option in payee_occupationOptions" :key="option.dictValue" :label="option.dictLabel"
                               :value="option.dictValue"/>-->
                   <el-option key="01" label="老师"
@@ -210,7 +212,7 @@
             <el-col :span="8">
               <el-form-item label="账户属性：" prop="accAttribute">
                 <el-select v-model="baseForm.accAttribute" filterable class="item-width"
-                           placeholder="请选择">
+                           placeholder="请选择" clearable>
                   <el-option v-for="option in account_attributeOptions" :key="option.dictValue"
                              :label="option.dictLabel"
                              :value="option.dictValue"/>

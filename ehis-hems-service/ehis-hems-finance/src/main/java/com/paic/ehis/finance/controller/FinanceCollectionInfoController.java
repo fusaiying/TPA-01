@@ -68,7 +68,7 @@ public class FinanceCollectionInfoController extends BaseController
      */
   //  @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "实收信息明细", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("addInfo")
     public AjaxResult add(@RequestBody FinanceCollectionInfo financeCollectionInfo)
     {
         return toAjax(financeCollectionInfoService.insertFinanceCollectionInfo(financeCollectionInfo));

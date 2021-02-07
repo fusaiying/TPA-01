@@ -1,4 +1,4 @@
-e/**
+/**
 * 通用css样式布局处理
 * Copyright (c) 2019 sino
 */
@@ -249,7 +249,7 @@ e/**
   color: #303133;
 }
 /*element原有样式修改*/
-.el-form-item ::v-deep label {
+.el-form-item  label {
   font-weight: normal;
 }
 

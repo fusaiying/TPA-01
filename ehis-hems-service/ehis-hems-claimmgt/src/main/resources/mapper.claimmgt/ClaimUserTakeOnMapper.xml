@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimUserTakeOnMapper">
     
-    <resultMap type="ClaimUserTakeOn" id="ClaimUserTakeOnResult">
+    <resultMap type="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" id="ClaimUserTakeOnResult">
         <result property="takeOnId"    column="take_on_id"    />
         <result property="userId"    column="user_id"    />
         <result property="takeOnUserId"    column="take_on_user_id"    />
@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectClaimUserTakeOnVo">
         select take_on_id, user_id, take_on_user_id, status, create_by, create_time, update_by, update_time from claim_user_take_on
     </sql>
-    <resultMap type="com.sino.system.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
+    <resultMap type="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="roleName"    column="role_name"    />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="takeOnId"    column="take_on_id"    />
 
     </resultMap>
-    <select id="selectClaimUserTakeOnList" parameterType="ClaimUserTakeOn" resultMap="ClaimUserTakeOnResult">
+    <select id="selectClaimUserTakeOnList" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" resultMap="ClaimUserTakeOnResult">
         <include refid="selectClaimUserTakeOnVo"/>
         <where>
             <if test="userId != null "> and user_id  like concat('%', #{userId}, '%')</if>
@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectClaimUserTakeOnListOne" parameterType="com.sino.system.domain.dto.UserTakeOnDTO" resultMap="ClaimUserTakeOnDTO">
+    <select id="selectClaimUserTakeOnListOne" parameterType="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" resultMap="ClaimUserTakeOnDTO">
         select t1.take_on_id,
                t1.take_on_user_id,
                t1.create_time,
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where take_on_id = #{takeOnId}
     </select>
         
-    <insert id="insertClaimUserTakeOn" parameterType="ClaimUserTakeOn" useGeneratedKeys="true" keyProperty="takeOnId">
+    <insert id="insertClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" useGeneratedKeys="true" keyProperty="takeOnId">
         insert into claim_user_take_on
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimUserTakeOn" parameterType="ClaimUserTakeOn">
+    <update id="updateClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn">
         update claim_user_take_on
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>

@@ -6,11 +6,9 @@ import java.util.Map;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
-import com.paic.ehis.cs.domain.AcceptDetailInfo;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.FieldMap;
 import com.paic.ehis.cs.domain.FlowLog;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;

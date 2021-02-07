@@ -81,11 +81,24 @@
           tooltip-effect="dark"
           @sort-change="onSortChange"
           style=" width: 100%;">
-          <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
+          <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
+                           prop="batchNo" label="批次号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel( hospitals, scope.row.hospitalCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
-          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip/>
+          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.batchTotal}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.calAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="isAppeal" label="是否申述" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
@@ -118,7 +131,8 @@
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
   import {getDeptList} from '@/api/claim/presentingReview'
-  import {initForeignList,foreignList} from '@/api/claim/corporatePay'
+  import {initForeignList, foreignList} from '@/api/claim/corporatePay'
+  import {getHospitalInfo} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'sys_yes_no'}]
   export default {
     data() {
@@ -129,22 +143,23 @@
           pageSize: 10,
         },
 
-        tableData:[],
+        tableData: [],
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          orderByColumn:'',
-          isAsc:'',
+          orderByColumn: '',
+          isAsc: '',
           batchNo: '',
           hospitalCode: '',
-          caseDate:[],
-          startDate:undefined,
-          endDate:undefined,
-          organCode:undefined,
+          caseDate: [],
+          startDate: undefined,
+          endDate: undefined,
+          organCode: undefined,
         },
         totalCount: 0,
         dictList: [],
         hospitalOptions: [],
+        hospitals: [],
         deptListOptions: [],
         sys_yes_noOptions: [],
       }
@@ -156,14 +171,19 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      getDeptList().then(res=>{
-        if (res!=null && res.code===200){
-          this.deptListOptions=res.data
+      getDeptList().then(res => {
+        if (res != null && res.code === 200) {
+          this.deptListOptions = res.data
         }
       })
-      initForeignList(this.queryParams).then(res=>{
-        if (res!=null && res.code===200){
-          this.tableData=res.rows
+      initForeignList(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.tableData = res.rows
+        }
+      })
+      getHospitalInfo({}).then(res => {
+        if (res != null && res !== '') {
+          this.hospitals = res.rows
         }
       })
     },
@@ -172,22 +192,22 @@
         this.$refs.searchForm.resetFields()
       },
       search(status) {
-        if (this.searchForm.caseDate!=null && this.searchForm.caseDate.length>0){
-          this.searchForm.startDate=this.searchForm.caseDate[0]
-          this.searchForm.endDate=this.searchForm.caseDate[1]
+        if (this.searchForm.caseDate != null && this.searchForm.caseDate.length > 0) {
+          this.searchForm.startDate = this.searchForm.caseDate[0]
+          this.searchForm.endDate = this.searchForm.caseDate[1]
         }
-        if (status==='tab'){
-          this.searchForm.pageNum=this.queryParams.pageNum
-          this.searchForm.pageSize=this.queryParams.pageSize
-        }else{
-          this.searchForm.pageNum=1
-          this.searchForm.pageSize=10
+        if (status === 'tab') {
+          this.searchForm.pageNum = this.queryParams.pageNum
+          this.searchForm.pageSize = this.queryParams.pageSize
+        } else {
+          this.searchForm.pageNum = 1
+          this.searchForm.pageSize = 10
         }
-        foreignList(this.searchForm).then(res=>{
-          if (res!=null && res.code===200){
-            this.tableData=res.rows
-            this.totalCount=res.total
-            if (res.rows.length<=0){
+        foreignList(this.searchForm).then(res => {
+          if (res != null && res.code === 200) {
+            this.tableData = res.rows
+            this.totalCount = res.total
+            if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
               )
@@ -195,11 +215,11 @@
           }
         })
       },
-      startPay(row,status){
+      startPay(row, status) {
         let data = encodeURI(
           JSON.stringify({
-            batchNo:row.batchNo,
-            batchTotal:row.batchTotal,
+            batchNo: row.batchNo,
+            batchTotal: row.batchTotal,
             status,
           })
         )
@@ -230,15 +250,15 @@
         })
         return actions.join('');
       },
-      onSortChange({ prop, order }) {
-        this.searchForm.orderByColumn=prop
-        if (order==='ascending'){
-          this.searchForm.isAsc='asc'
-        }else if (order==='descending'){
-          this.searchForm.isAsc='desc'
-        }else if (order==null){
-          this.searchForm.orderByColumn=''
-          this.searchForm.isAsc=''
+      onSortChange({prop, order}) {
+        this.searchForm.orderByColumn = prop
+        if (order === 'ascending') {
+          this.searchForm.isAsc = 'asc'
+        } else if (order === 'descending') {
+          this.searchForm.isAsc = 'desc'
+        } else if (order == null) {
+          this.searchForm.orderByColumn = ''
+          this.searchForm.isAsc = ''
         }
         this.search()
       }

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.service.IPersonInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +39,7 @@ public class PersonInfoController extends BaseController
     /**
      * 查询人员信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(PersonInfo personInfo)
     {
@@ -52,7 +51,7 @@ public class PersonInfoController extends BaseController
     /**
      * 导出人员信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
+//    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "人员信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PersonInfo personInfo) throws IOException
@@ -65,7 +64,7 @@ public class PersonInfoController extends BaseController
     /**
      * 获取人员信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
+//    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{personId}")
     public AjaxResult getInfo(@PathVariable("personId") String personId)
     {
@@ -75,7 +74,7 @@ public class PersonInfoController extends BaseController
     /**
      * 新增人员信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
+//    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "人员信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PersonInfo personInfo)
@@ -86,7 +85,7 @@ public class PersonInfoController extends BaseController
     /**
      * 修改人员信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "人员信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PersonInfo personInfo)
@@ -97,7 +96,7 @@ public class PersonInfoController extends BaseController
     /**
      * 删除人员信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "人员信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{personIds}")
     public AjaxResult remove(@PathVariable String[] personIds)

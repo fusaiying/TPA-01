@@ -20,7 +20,7 @@
         <span class="info_span to_right">案件数：</span><span class="info_span">{{ baseInfo.casenum }}</span>
       </el-col>
       <el-col :span="8">
-        <span class="info_span to_right">批次总金额：</span><span class="info_span">{{ baseInfo.batchtotal }}{{selectDictLabel(currencyOptions, baseInfo.currency) }}</span>
+        <span class="info_span to_right">批次总金额：</span><span class="info_span">{{ baseInfo.batchtotal }} {{baseInfo.currency}}</span>
       </el-col>
       <el-col :span="8">
         <span class="info_span to_right">特殊案件：</span><span class="info_span">{{ selectDictLabel(special_caseOptions, baseInfo.speccasetype) }}</span>
@@ -50,7 +50,6 @@
         insurance_typeOptions:[],
         special_caseOptions:[],
         hospitalOptions:[],
-        currencyOptions:[],
       }
     },
     async mounted() {
@@ -65,9 +64,6 @@
       }).dictDate
       this.special_caseOptions = this.dictList.find(item => {
         return item.dictType === 'special_case'
-      }).dictDate
-      this.currencyOptions = this.dictList.find(item => {
-        return item.dictType === 'currency'
       }).dictDate
       getHospitalInfo({}).then(res => {
         if (res != null && res !== '') {

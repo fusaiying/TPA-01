@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.cs.domain.UserInfo;
 import com.paic.ehis.cs.service.IUserInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +37,7 @@ public class UserInfoController extends BaseController
     /**
      * 查询用户信息 针对系统操作用户列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(UserInfo userInfo)
     {
@@ -50,7 +49,7 @@ public class UserInfoController extends BaseController
     /**
      * 导出用户信息 针对系统操作用户列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
+//    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "用户信息 针对系统操作用户", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, UserInfo userInfo) throws IOException
@@ -63,7 +62,7 @@ public class UserInfoController extends BaseController
     /**
      * 获取用户信息 针对系统操作用户详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
+//    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{userId}")
     public AjaxResult getInfo(@PathVariable("userId") String userId)
     {
@@ -73,7 +72,7 @@ public class UserInfoController extends BaseController
     /**
      * 新增用户信息 针对系统操作用户
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
+//    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "用户信息 针对系统操作用户", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody UserInfo userInfo)
@@ -84,7 +83,7 @@ public class UserInfoController extends BaseController
     /**
      * 修改用户信息 针对系统操作用户
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "用户信息 针对系统操作用户", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody UserInfo userInfo)
@@ -95,7 +94,7 @@ public class UserInfoController extends BaseController
     /**
      * 删除用户信息 针对系统操作用户
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "用户信息 针对系统操作用户", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable String[] userIds)

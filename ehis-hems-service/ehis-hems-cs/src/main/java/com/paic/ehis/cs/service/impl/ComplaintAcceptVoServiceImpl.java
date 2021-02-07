@@ -2,7 +2,7 @@ package com.paic.ehis.cs.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
@@ -21,16 +21,16 @@ import java.util.Map;
 public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     @Autowired
     private ComplaintAcceptVoMapper complaintAcceptVoMapper;
-    @Autowired
-    private PersonInfoMapper personInfoMapper;
-    @Autowired
-    private UserInfoMapper userInfoMapper;
+//    @Autowired
+//    private PersonInfoMapper personInfoMapper;
+//    @Autowired
+//    private UserInfoMapper userInfoMapper;
     @Autowired
     private FieldMapMapper fieldMapMapper;
-    @Autowired
-    private AcceptDetailInfoMapper acceptDetailInfoMapper;
-    @Autowired
-    private WorkOrderAcceptMapper workOrderAcceptMapper;
+//    @Autowired
+//    private AcceptDetailInfoMapper acceptDetailInfoMapper;
+//    @Autowired
+//    private WorkOrderAcceptMapper workOrderAcceptMapper;
     @Override
     public List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         return complaintAcceptVoMapper.selectComplaintAcceptVoList(acceptDTO);

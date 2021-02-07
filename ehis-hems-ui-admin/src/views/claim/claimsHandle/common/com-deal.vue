@@ -24,7 +24,7 @@
         </span>-->
         <span style="margin-right: 10px">
           <span
-            style="color:#409EFF;font-size:12px">申请来源：{{ selectDictLabel(delivery_sourceOption, fixInfo.source)  }}　</span>
+            style="color:#409eff;font-size:12px">申请来源：{{ selectDictLabel(delivery_sourceOption, fixInfo.source)  }}　</span>
         </span>
         <el-form style="float: right; padding: 3px 0">
           <span>

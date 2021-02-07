@@ -5,8 +5,8 @@ import request from '@/utils/request'
 export function getSupplierContractList(query) {
   return request({
     url:  '/provider/supplier/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -103,8 +103,8 @@ export function getAllBaseServiceInfo(query) {
 export function getSupplierContractBakDetail(query) {
   return request({
     url:  '/provider/bak/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 //上传附件
@@ -132,4 +132,14 @@ export function deleteFile(data) {
   //   method: 'post',
   //   data,
   // })
+}
+
+
+// 查询 供应商合约信息 列表
+export function getSupplierContractBakList(query) {
+  return request({
+    url:  '/provider/bak/list',
+    method: 'post',
+    data: query
+  })
 }

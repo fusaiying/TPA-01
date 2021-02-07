@@ -19,15 +19,47 @@
           <el-table-column align="center" prop="treatmentDate" label="就诊日期" show-overflow-tooltip/>
           <el-table-column align="center" prop="name" label="姓名" show-overflow-tooltip/>
           <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
-          <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="discountedAmount" label="折后金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip/>
-          <el-table-column align="center" prop="copay" label="自付额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip/>
+          <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.billAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="discountedAmount" label="折后金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.discountedAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.advancePayment}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="copay" label="自付额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.copay}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="payAmount" label="理赔金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.payAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="debtAmount" label="追讨金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip/>
-          <el-table-column align="center" prop="borrowAmount" label="借款金额" show-overflow-tooltip/>
+          <el-table-column align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="borrowAmount" label="借款金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.borrowAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="caseStatus" label="案件状态" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(claim_statusOptions, scope.row.caseStatus)}}</span>
@@ -51,10 +83,10 @@
               <span class="info_span_col to_right">支付币种：</span><span class="info_span">{{ baseForm.currency }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">支付总金额：</span><span class="info_span">{{ baseForm.payAmount }}</span>
+              <span class="info_span_col to_right">支付总金额：</span><span class="info_span">{{ baseForm.payAmount }} {{baseForm.currency}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">理赔总金额：</span><span class="info_span">{{ baseForm.calAmount }}</span>
+              <span class="info_span_col to_right">理赔总金额：</span><span class="info_span">{{ baseForm.calAmount }} {{baseForm.currency}}</span>
             </el-col>
           </el-row>
           <el-row>
@@ -62,7 +94,7 @@
               <span class="info_span_col to_right">开户行：</span><span class="info_span">{{ baseForm.bank }}</span>
             </el-col>
             <el-col v-if="querys.status==='publicForeign'" :span="8">
-              <span class="info_span_col to_right">外币支付总金额：</span><span class="info_span">{{ baseForm.foreignPayAmount }}</span>
+              <span class="info_span_col to_right">外币支付总金额：</span><span class="info_span">{{ baseForm.foreignPayAmount }} {{baseForm.currency}}</span>
             </el-col>
             <el-col :span="8">
               <span class="info_span_col to_right">账户名：</span><span class="info_span">{{ baseForm.bankName }}</span>

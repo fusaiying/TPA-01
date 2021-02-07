@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.CallAgain;
 import com.paic.ehis.cs.service.ICallAgainService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +40,7 @@ public class CallAgainController extends BaseController
     /**
      * 查询再次来电信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:again:list')")
+//    @PreAuthorize("@ss.hasPermi('system:again:list')")
     @GetMapping("/list")
     public TableDataInfo list(CallAgain callAgain)
     {
@@ -53,7 +52,7 @@ public class CallAgainController extends BaseController
     /**
      * 导出再次来电信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:again:export')")
+//    @PreAuthorize("@ss.hasPermi('system:again:export')")
     @Log(title = "再次来电信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CallAgain callAgain) throws IOException
@@ -66,7 +65,7 @@ public class CallAgainController extends BaseController
     /**
      * 获取再次来电信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:again:query')")
+//    @PreAuthorize("@ss.hasPermi('system:again:query')")
     @GetMapping(value = "/{callSerialNum}")
     public AjaxResult getInfo(@PathVariable("callSerialNum") String callSerialNum)
     {
@@ -76,7 +75,7 @@ public class CallAgainController extends BaseController
     /**
      * 新增再次来电信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:again:add')")
+//    @PreAuthorize("@ss.hasPermi('system:again:add')")
     @Log(title = "再次来电信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CallAgain callAgain)
@@ -87,7 +86,7 @@ public class CallAgainController extends BaseController
     /**
      * 修改再次来电信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:again:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:again:edit')")
     @Log(title = "再次来电信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CallAgain callAgain)
@@ -98,7 +97,7 @@ public class CallAgainController extends BaseController
     /**
      * 删除再次来电信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:again:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:again:remove')")
     @Log(title = "再次来电信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{callSerialNums}")
     public AjaxResult remove(@PathVariable String[] callSerialNums)
@@ -108,7 +107,7 @@ public class CallAgainController extends BaseController
     /**
      * 查询再次来电工单提醒
      */
-    @PreAuthorize("@ss.hasPermi('system:again:list')")
+//    @PreAuthorize("@ss.hasPermi('system:again:list')")
     @GetMapping("/selectCallAgain")
     public TableDataInfo selectCallAgain(CallAgain callAgain)
     {

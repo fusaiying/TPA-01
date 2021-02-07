@@ -62,7 +62,7 @@
           <el-col :span="8">
             <el-form-item label="账户币种：" prop="currency">
               <el-select :disabled="isShow" v-model="searchForm.currency" class="item-width" placeholder="请选择">
-                <el-option v-for="option in currencyOptions" :key="option.dictValue"
+                <el-option v-for="option in claim_currencyOptions" :key="option.dictValue"
                            :label="option.dictLabel"
                            :value="option.dictValue"/>
               </el-select>
@@ -311,7 +311,7 @@
   //医院
   let dictss = [{dictType: 'priority_reason'}, {dictType: 'insurance_type'}, {dictType: 'claimType'}
     , {dictType: 'sys_yes_no'}, {dictType: 'special_case'}, {dictType: 'claim_material'},
-    {dictType: 'examine_result'}, {dictType: 'currency'},]
+    {dictType: 'examine_result'}, {dictType: 'claim_currency'},]
   export default {
     components: {Hospital},
     data() {
@@ -448,7 +448,7 @@
         claim_materialOptions: [],
         examine_resultOptions: [],
         hospitalOptions: [],
-        currencyOptions: [],
+        claim_currencyOptions: [],
         deptOptions: [],
       }
     },
@@ -478,8 +478,8 @@
       this.examine_resultOptions = this.dictList.find(item => {
         return item.dictType === 'examine_result'
       }).dictDate
-      this.currencyOptions = this.dictList.find(item => {
-        return item.dictType === 'currency'
+      this.claim_currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'claim_currency'
       }).dictDate
       getDeptList().then(res => {
         if (res != null && res.code === 200) {

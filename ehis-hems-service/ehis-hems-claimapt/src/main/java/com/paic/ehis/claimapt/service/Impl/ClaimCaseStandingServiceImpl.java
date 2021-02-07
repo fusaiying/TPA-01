@@ -33,14 +33,14 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
     @Autowired
     private ClaimCaseMapper claimCaseMapper;
 
-    @Autowired
-    private PolicyInfoMapper policyInfoMapper;
+//    @Autowired
+//    private PolicyInfoMapper policyInfoMapper;
 
     @Autowired
     private SysUserMapper userMapper;
 
-    @Autowired
-    private SysDeptMapper deptMapper;
+//    @Autowired
+//    private SysDeptMapper deptMapper;
 
     /**
      * 查询报案台账信息 

@@ -202,6 +202,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
      //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+        PersonInfo callPerson= personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
+        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
         FlowLog flowLog=new FlowLog();
@@ -320,6 +322,88 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             }
 
         }
+
+        Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
+        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(personInfo1), Map.class);
+
+        //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
+
+
+        Iterator<String> iter2 = map3.keySet().iterator();
+        while(iter2.hasNext()){
+            EditDetail editDetail=new EditDetail();
+            EditInfo editInfo=new EditInfo();
+            String map3key=iter2.next();
+            String map3value = String.valueOf(map1.get(map3key));
+            String map4value = String.valueOf(map2.get(map3key));
+            if (!map3value.equals(map4value)) {
+                keyList.add(map3key);
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setItemKey(map3key);
+                editDetail.setOldValue(map3value);
+                editDetail.setNowValue(map4value);
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
+                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setWorkOrderId(workOrderNo);
+                editInfo.setCreatedBy(SecurityUtils.getUsername());
+                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+                editInfoMapper.insertEditInfo(editInfo);
+
+            }
+
+        }
+
+        Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
+        Map map6 = JSONObject.parseObject(JSONObject.toJSONString(personInfo2), Map.class);
+
+        //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
+
+
+        Iterator<String> iter3 = map5.keySet().iterator();
+        while(iter3.hasNext()){
+            EditDetail editDetail=new EditDetail();
+            EditInfo editInfo=new EditInfo();
+            String map5key=iter3.next();
+            String map5value = String.valueOf(map1.get(map5key));
+            String map6value = String.valueOf(map2.get(map5key));
+            if (!map5value.equals(map6value)) {
+                keyList.add(map5key);
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setItemKey(map5key);
+                editDetail.setOldValue(map5value);
+                editDetail.setNowValue(map6value);
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
+                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setWorkOrderId(workOrderNo);
+                editInfo.setCreatedBy(SecurityUtils.getUsername());
+                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+                editInfoMapper.insertEditInfo(editInfo);
+
+            }
+
+        }
+
+
 
         /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);

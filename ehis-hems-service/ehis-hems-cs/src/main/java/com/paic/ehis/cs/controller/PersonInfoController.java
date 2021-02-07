@@ -3,7 +3,6 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.service.IPersonInfoService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;

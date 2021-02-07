@@ -15,6 +15,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,7 +79,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         if (StringUtils.isNull(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
-        return claimBatchMapper.selectBackToBatchList(batchDTO);
+        return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
     /**
@@ -89,7 +90,13 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO) {
-        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+        if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
+                || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
+                || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())){
+            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
+//            batchDTO.setOrgancode( sysUser.getDeptId().toString());
+        }else {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         batchDTO.setStatus("Y");
@@ -100,7 +107,6 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
             batchDTO.setUpdatestartTime(calendar.getTime());
             batchDTO.setUpdateendTime(DateUtils.parseDate(DateUtils.getTime()));
         }
-        ;
         return claimBatchMapper.selectDealWithBatchList(batchDTO);
 
     }
@@ -114,9 +120,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     @Override
     public List<BatchVo> selectReviewPublicList(BatchRecordDTO batchRecordDTO) {
         batchRecordDTO.setStatus("Y");
-        batchRecordDTO.setBatchstatus("02");
-        batchRecordDTO.setOperation("04");
-        batchRecordDTO.setUpdateBy("");
+        batchRecordDTO.setBatchstatus("01");
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
     }
 
@@ -127,11 +131,9 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      * @return 交单复核理赔批次 集合
      */
     @Override
-    public List<BatchVo> selectUntreatedPersonalList() {
-        BatchRecordDTO batchRecordDTO = new BatchRecordDTO();
+    public List<BatchVo> selectUntreatedPersonalList(BatchRecordDTO batchRecordDTO) {
         batchRecordDTO.setStatus("Y");
         batchRecordDTO.setBatchstatus("02");
-        batchRecordDTO.setOperation("04");
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
     }
@@ -143,8 +145,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      * @return 交单复核理赔批次 集合
      */
     @Override
-    public List<BatchVo> selectProcessedPersonalList() {
-        BatchRecordDTO batchRecordDTO = new BatchRecordDTO();
+    public List<BatchVo> selectProcessedPersonalList(BatchRecordDTO batchRecordDTO) {
         batchRecordDTO.setStatus("Y");
         batchRecordDTO.setBatchstatus("'03','04','05'");
         batchRecordDTO.setClaimtype("01");

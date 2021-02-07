@@ -60,14 +60,14 @@ public interface IClaimBatchService
      * @param
      * @return 交单复核理赔批次 集合
      */
-    public List<BatchVo> selectUntreatedPersonalList();
+    public List<BatchVo> selectUntreatedPersonalList(BatchRecordDTO batchRecordDTO);
     /**
      * 查询直结复核理赔批次已处理个人池 列表
      *
      * @param
      * @return 交单复核理赔批次 集合
      */
-    public List<BatchVo> selectProcessedPersonalList();
+    public List<BatchVo> selectProcessedPersonalList(BatchRecordDTO batchRecordDTO);
 
     /**
      * 新增理赔批次 

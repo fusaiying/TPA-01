@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <resultMap type="com.sino.system.domain.vo.InvoiceFileVo" id="InvoiceFileVo">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo" id="InvoiceFileVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="invoiceBoxNo"    column="invoice_box_no"    />
         <result property="isFiling"    column="is_filing"    />
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
 
-    <select id="selectInvoiceFile" parameterType="com.sino.system.domain.vo.InvoiceFileVo" resultMap="InvoiceFileVo">
+    <select id="selectInvoiceFile" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo" resultMap="InvoiceFileVo">
         SELECT cbii.batch_no,cbii.invoice_box_no,cbii.is_filing,cbii.is_invoice_back,cbii.is_single,cbii.remark,
                cbii.create_time,cbii.create_by ,cb.organ_code,cb.hospital_code,cb.claim_type,cc.rpt_no,cbii.update_by,cbii.update_time
         from claim_batch_invoice_filing  cbii
@@ -131,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <update id="updateClaimBatchBill" parameterType="com.sino.system.domain.vo.InvoiceFileVo">
+    <update id="updateClaimBatchBill" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo">
         update claim_batch_invoice_filing
         <trim prefix="SET" suffixOverrides=",">
             <if test="isFiling != null and isFiling != ''">is_filing = #{bill_recevie_flag},</if>
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where batch_no = #{batchNo}
     </update>
 
-    <update id="updateInvoiceFile" parameterType="com.sino.system.domain.vo.InvoiceFileVo">
+    <update id="updateInvoiceFile" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo">
         update claim_batch_invoice_filing
         <trim prefix="SET" suffixOverrides=",">
             <if test="invoiceBoxNo != null and invoiceBoxNo != ''">invoice_box_no = #{invoiceBoxNo},</if>
@@ -152,7 +152,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 
-    <update id="updateClaimCaseFilingInfo" parameterType="com.sino.system.domain.vo.ClaimCaseFilingInformationVO">
+    <update id="updateClaimCaseFilingInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO">
         update claim_batch_invoice_filing
         <trim prefix="SET" suffixOverrides=",">
             <if test="isFiling != null and isFiling != ''">is_filing = #{isFiling},</if>

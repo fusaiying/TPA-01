@@ -93,23 +93,12 @@
 
     <select id="selectProcessingClaimCaseList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
         SELECT DISTINCT
-        f.batch_no,
-        f.rpt_no,
-        f.filing_no,
-        f.case_status,
-        f.claim_type,
-        f.stay_time
-        FROM
-        (
-        SELECT
         cc.batch_no,
         cc.filing_no,
         cc.rpt_no,
         cc.case_status,
-        cc.update_by,
+        cc.update_by,claim_type,cci.NAME,
         cc.status,
-        ( SELECT cb.claim_type FROM claim_batch cb WHERE cb.batch_no = cc.batch_no and cb.status='Y') claim_type,
-        ( SELECT cci.NAME FROM claim_case_insured cci WHERE cci.rpt_no = cc.rpt_no and cci.status='Y') NAME,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.create_time, now( ) ) / 86400 ),
         '天',
@@ -120,8 +109,9 @@
         ) stay_time
         FROM
         claim_case cc
-        LEFT JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no
-        ) f
+        LEFT JOIN (select record_id,rpt_no,create_time from claim_case_record where operation='05' and status='Y')ccr ON ccr.rpt_no = cc.rpt_no
+        LEFT JOIN   claim_batch cb on cb.batch_no = cc.batch_no and cb.status='Y'
+        left join   claim_case_insured cci on cci.rpt_no = cc.rpt_no and cci.status='Y'
         <where>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
             <if test="rptNo != null and rptNo != ''"> and rpt_no = #{rptNo}</if>
@@ -132,32 +122,39 @@
         </where>
     </select>
 
-    <select id="selectClaimCaseProcessedList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
+    <select id="selectClaimCaseProcessedList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="ClaimCaseResult">
         SELECT DISTINCT
-        cr.batch_no,
-        cr.rpt_no,
-        cr.filing_no,
-        cr.case_status
-        FROM
-        (SELECT
         cc.batch_no,
         cc.rpt_no,
         cc.filing_no,
         cc.case_status,
         cc.STATUS,
-        ccr.update_by,
+        ccr.operator,
         ccr.operation,
         ccr.history_flag
-        from
+        FROM
         claim_case cc
-        LEFT JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no and ccr.status='Y') cr
-        LEFT JOIN claim_case_insured cci ON cci.rpt_no = cr.rpt_no and cci.status='Y'
+        LEFT JOIN (
+        SELECT
+        rpt_no,
+        operator,
+        operation,
+        history_flag
+        FROM
+        claim_case_record a
+        WHERE
+        record_id = ( SELECT record_id FROM claim_case_record b WHERE a.record_id = b.record_id AND b.history_flag = 'Y' ORDER BY create_time LIMIT 1 )
+        AND STATUS = 'Y'
+        ) ccr ON ccr.rpt_no = cc.rpt_no
+        LEFT JOIN claim_case_insured cci ON cci.rpt_no = cc.rpt_no
+        AND cci.STATUS = 'Y'
         <where>
             <if test="batchNo != null  and batchNo != ''"> and cr.batch_no = #{batchNo}</if>
             <if test="rptNo != null and rptNo != ''"> and cr.rpt_no = #{rptNo}</if>
-            <if test="caseStatus != null  and caseStatus != ''"> and cr.case_status not in (${caseStatus})</if>
+            <if test="caseStatus != null  and caseStatus != '' and caseStatus = '30'"> and cr.case_status =${caseStatus} </if>
+            <if test="caseStatus != null  and caseStatus != '' and caseStatus != '30'"> and cr.case_status not in (${caseStatus})</if>
             <if test="status != null  and status != ''"> and cr.status = #{status}</if>
-            <if test="updateBy != null  and updateBy != ''"> and cr.update_by = #{updateBy}</if>
+            <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="operation  != null  and operation  != ''"> and cr.operation  = #{operation}</if>
             <if test="isHistory != null  and isHistory != ''"> and cr.history_flag = #{isHistory}</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>

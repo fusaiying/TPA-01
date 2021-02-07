@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.ClaimCaseAcceptMapper">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseAcceptMapper">
     
     <resultMap type="ClaimCaseAccept" id="ClaimCaseAcceptResult">
         <result property="rptNo"    column="rpt_no"    />

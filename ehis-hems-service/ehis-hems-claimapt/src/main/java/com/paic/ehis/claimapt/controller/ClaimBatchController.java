@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 理赔批次 Controller
@@ -41,7 +42,7 @@ public class ClaimBatchController extends BaseController
 
     /**
      * 查询理赔批次 列表
-     */ //    @GetMapping("/list")
+     */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/list")
     public TableDataInfo list(@RequestBody ClaimBatch claimBatch)
@@ -57,6 +58,9 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     claimBatch.setOrderByColumn(StringUtils.humpToLine(claimBatch.getOrderByColumn()));
             }
+        }else {
+            claimBatch.setIsAsc("desc");
+            claimBatch.setOrderByColumn("submit_date");
         }
         startPage(claimBatch);
         List<ClaimBatch> list = claimBatchService.selectClaimBatchList(claimBatch);
@@ -65,7 +69,7 @@ public class ClaimBatchController extends BaseController
 
     /**
      * 查询已退回理赔批次 列表
-     */ //    @GetMapping("/backToList")
+     */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/backToList")
     public TableDataInfo backToList(@RequestBody BatchDTO batchDTO)
@@ -81,6 +85,9 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
             }
+        }else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
         }
         startPage(batchDTO);
         List<BatchVo> list = claimBatchService.selectBackToBatchList(batchDTO);
@@ -88,7 +95,7 @@ public class ClaimBatchController extends BaseController
     }
     /**
      * 查询已处理理赔批次 列表
-     */ //    @GetMapping("/dealWithList")
+     */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/dealWithList")
     public TableDataInfo dealWithList(@RequestBody BatchDTO batchDTO)
@@ -104,6 +111,9 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
             }
+        }else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
         }
         startPage(batchDTO);
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
@@ -131,7 +141,7 @@ public class ClaimBatchController extends BaseController
     @PostMapping("/exportReturnedPool")
     public void exportReturnedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = ServletUtils.getRequest().getParameter("hospitalname");
+        String hospitalname = Objects.requireNonNull(ServletUtils.getRequest()).getParameter("hospitalname");
         batchDTO.setHospitalname(hospitalname);
         List<BatchVo> list = claimBatchService.selectBackToBatchList(batchDTO);
         for (BatchVo batchVo : list) {
@@ -149,7 +159,7 @@ public class ClaimBatchController extends BaseController
     @PostMapping("/exportProcessedPool")
     public void exportProcessedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = ServletUtils.getRequest().getParameter("hospitalname");
+        String hospitalname = Objects.requireNonNull(ServletUtils.getRequest()).getParameter("hospitalname");
         batchDTO.setHospitalname(hospitalname);
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
             for (BatchVo batchVo : list) {
@@ -165,9 +175,9 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportPersonalProcessed")
-    public void exportPersonalProcessed(HttpServletResponse response) throws IOException
+    public void exportPersonalProcessed(HttpServletResponse response,@RequestBody BatchRecordDTO batchRecordDTO) throws IOException
     {
-        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList();
+        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchRecordDTO);
             for (BatchVo batchVo : batchVoList) {
                 batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
                 batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
@@ -181,9 +191,9 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportPersonalUntreated")
-    public void exportPersonalUntreated(HttpServletResponse response) throws IOException
+    public void exportPersonalUntreated(HttpServletResponse response,@RequestBody BatchRecordDTO batchRecordDTO) throws IOException
     {
-        List<BatchVo> batchVoList = claimBatchService.selectProcessedPersonalList();
+        List<BatchVo> batchVoList = claimBatchService.selectProcessedPersonalList(batchRecordDTO);
             for (BatchVo batchVo : batchVoList) {
                 batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
                 batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
@@ -209,6 +219,9 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     batchRecordDTO.setOrderByColumn(StringUtils.humpToLine(batchRecordDTO.getOrderByColumn()));
             }
+        }else {
+            batchRecordDTO.setIsAsc("desc");
+            batchRecordDTO.setOrderByColumn("submit_date");
         }
         startPage(batchRecordDTO);
         List<BatchVo> batchVoList = claimBatchService.selectReviewPublicList(batchRecordDTO);
@@ -232,9 +245,12 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     batchRecordDTO.setOrderByColumn(StringUtils.humpToLine(batchRecordDTO.getOrderByColumn()));
             }
+        }else {
+            batchRecordDTO.setIsAsc("desc");
+            batchRecordDTO.setOrderByColumn("submit_date");
         }
         startPage(batchRecordDTO);
-        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList();
+        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchRecordDTO);
         return getDataTable(batchVoList);
     }
     /**
@@ -255,9 +271,12 @@ public class ClaimBatchController extends BaseController
                 case "updateTime":
                     batchRecordDTO.setOrderByColumn(StringUtils.humpToLine(batchRecordDTO.getOrderByColumn()));
             }
+        }else {
+            batchRecordDTO.setIsAsc("desc");
+            batchRecordDTO.setOrderByColumn("submit_date");
         }
         startPage(batchRecordDTO);
-        List<BatchVo> batchVoList = claimBatchService.selectProcessedPersonalList();
+        List<BatchVo> batchVoList = claimBatchService.selectProcessedPersonalList(batchRecordDTO);
         return getDataTable(batchVoList);
     }
     /**

@@ -152,8 +152,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseDTO.setOperation("05");
         claimCaseDTO.setIsHistory("Y");
         claimCaseDTO.setCaseStatus("'05','30'");
+        claimCaseDTO.setOperator(SecurityUtils.getUsername());
         claimCaseDTO.setStatus("Y");
-        claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
         return claimCaseMapper.selectClaimCaseProcessedList(claimCaseDTO);
     }
 
@@ -164,11 +164,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 案件信息 集合
      */
     @Override
-    public List<ProcessingCaseVo> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO) {
+    public List<ClaimCase> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO) {
         claimCaseDTO.setCaseStatus("30");
         claimCaseDTO.setStatus("Y");
-        claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
-        return claimCaseMapper.selectProcessingClaimCaseList(claimCaseDTO);
+        claimCaseDTO.setOperator(SecurityUtils.getUsername());
+        claimCaseDTO.setIsHistory("Y");
+        claimCaseDTO.setOperation("05");
+        return claimCaseMapper.selectClaimCaseProcessedList(claimCaseDTO);
     }
 
     /**

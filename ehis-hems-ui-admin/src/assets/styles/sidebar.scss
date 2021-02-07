@@ -68,7 +68,7 @@
 
     .el-menu-item, .el-submenu__title {
       overflow: hidden !important;
-      text-overflow: ellipsis !important;
+      text-overflow: clip !important;
       white-space: nowrap !important;
     }
 

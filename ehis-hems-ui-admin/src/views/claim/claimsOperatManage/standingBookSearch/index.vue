@@ -329,7 +329,7 @@
             if (this.searchForm.receiveDate.length > 0) {
               subDate = '&receiveStartDate=' + this.searchForm.receiveDate[0] + '&receiveEndDate=' + this.searchForm.receiveDate[1]
             }
-            this.download('system/standing/exportNew' + '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
+            this.download('claimmgt/standing/exportNew' + '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
               + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate, {
               ...this.searchForm
             }, `FYX_${new Date().getTime()}.xlsx`)

@@ -216,7 +216,7 @@
           getBackList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportProcessingList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportProcessingList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)

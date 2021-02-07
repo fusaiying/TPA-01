@@ -173,14 +173,14 @@ export function exportPersonalUntreated() {
 //获取所有部门
 export function getDeptList(data) {
   return request({
-    url:'system/dept/deptList',
+    url:'claimmgt/dept/deptList',
     method:'get'
   })
 }
 //获取当前部门
 export function getThisDept(parentId) {
   return request({
-    url: '/system/dept/getdepts',
+    url: '/claimmgt/dept/getdepts',
     method: 'get',
     params:parentId
   })

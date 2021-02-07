@@ -221,7 +221,7 @@
           listConditionsForTheAdjustmentUnder(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportConditionsForTheAdjustmentUnder'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportConditionsForTheAdjustmentUnder'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
@@ -237,7 +237,7 @@
           listConditionsForTheAdjustmentOver(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportConditionsForTheAdjustmentOver'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportConditionsForTheAdjustmentOver'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
@@ -253,7 +253,7 @@
           listConditionsForTheAdjustmentHang(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportConditionsForTheAdjustmentHang'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
+              this.download('claimflow/case/exportConditionsForTheAdjustmentHang'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
                 +'&name='+this.searchForm.name, {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)

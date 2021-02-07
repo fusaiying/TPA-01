@@ -263,7 +263,7 @@
       listExport() {
         if (this.querys.status === 'public') {
           this.isListExport = true
-          this.download('system/pay/export', {
+          this.download('finance/pay/export', {
             ...query
           }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
@@ -275,7 +275,7 @@
           })
         } else if (this.querys.status === 'publicForeign') {
           this.isListExport = true
-          this.download('system/pay/exportForeign', {
+          this.download('finance/pay/exportForeign', {
             ...query
           }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({

@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseStandingMapper">
     
-    <resultMap type="com.sino.system.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
+    <resultMap type="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
         <result property="name"    column="name"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="policyNo"    column="policy_no"    />
     </resultMap>
 
-    <resultMap type="com.sino.system.domain.vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
+    <resultMap type="com.paic.ehis.claimmgt.domain.vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
         <result property="name"    column="name"    />
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
 
-    <select id="selectClaimCaseStandingList" parameterType="com.sino.system.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
+    <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         <where>  
             <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectClaimCaseStandingListNew" parameterType="com.sino.system.domain.dto.ClaimCaseStandingDTO" resultMap="ClaimCaseStandingVo1Result">
+    <select id="selectClaimCaseStandingListNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseStandingDTO" resultMap="ClaimCaseStandingVo1Result">
         SELECT
         a.rpt_no,
         a.id_no,
@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where rpt_no = #{rptno} and status="Y"
     </select>
         
-    <insert id="insertClaimCaseStanding" parameterType="com.sino.system.domain.ClaimCaseStanding">
+    <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
         insert into claim_case_standing
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptno != null">rpt_no,</if>
@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseStanding" parameterType="com.sino.system.domain.ClaimCaseStanding">
+    <update id="updateClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
         update claim_case_standing
         <trim prefix="SET" suffixOverrides=",">
             <if test="idno != null and idno != ''">id_no = #{idno},</if>
@@ -141,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where rpt_no=#{idno} and status='Y'
     </update>
 
-    <update id="updateClaimCaseStandingVo1" parameterType="com.sino.system.domain.vo.ClaimCaseStandingVo1">
+    <update id="updateClaimCaseStandingVo1" parameterType="com.paic.ehis.claimmgt.domain.vo.ClaimCaseStandingVo1">
         update claim_case_standing
         <trim prefix="SET" suffixOverrides=",">
             <if test="idno != null and idno != ''">id_no = #{idno},</if>

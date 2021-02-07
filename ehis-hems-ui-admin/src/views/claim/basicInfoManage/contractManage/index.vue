@@ -2,31 +2,11 @@
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="form" :model="form" style="padding-bottom: 30px;padding-top: 30px" label-width="130px" label-position="right" size="mini">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="合约编码：" prop="contractNo">
-              <el-input v-model="form.contractNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="合约名称：" prop="contractName" >
-              <el-input v-model="form.contractName" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
-            </el-form-item>
-          </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="合约限期类型：" prop="contracttermType">
-              <el-select v-model="form.contracttermType" class="item-width" size="mini" placeholder="请选择">
-                <el-option v-for="option in contractLimitTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
         <el-row>
-
           <el-col :span="8">
-            <el-form-item label="类别：" prop="flag">
+            <el-form-item label="合约类别：" prop="flag">
               <el-select v-model="form.flag" class="item-width" size="mini" placeholder="请选择" @change="flagChange">
                 <el-option label="供应商" value="01" />
                 <el-option label="服务机构" value="02" />
@@ -62,27 +42,46 @@
               />
             </el-form-item>
           </el-col>
-
         </el-row>
+
 
         <el-row>
 
           <el-col :span="8">
-            <el-form-item label="服务机构名称：" prop="providerCode">
-              <el-select v-model="form.providerCode" class="item-width" size="mini" placeholder="请选择">
+            <el-form-item label="机构类别：" prop="proType">
+              <el-select v-model="form.proType" class="item-width" size="mini" placeholder="请选择" @change="proTypeChange" >
+                <el-option label="医院" value="01" />
+                <el-option label="其他" value="02" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8" v-if="proType1">
+            <el-form-item label="服务机构名称：" prop="providerCode1">
+              <el-select filterable v-model="form.providerCode1" class="item-width" size="mini" placeholder="请选择">
                 <el-option v-for="option in providerInfoSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8" v-if="proType2">
+            <el-form-item label="服务机构名称：" prop="providerCode2">
+              <el-select filterable v-model="form.providerCode2" class="item-width" size="mini" placeholder="请选择">
+                <el-option v-for="option in providerInfoSelects1" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="供应商名称：" prop="supplierName">
-              <el-select v-model="form.supplierName" class="item-width" size="mini" placeholder="请选择">
+              <el-select filterable v-model="form.supplierName" class="item-width" size="mini" placeholder="请选择">
                 <el-option v-for="option in supplierInfoSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
 
+        <el-row>
           <el-col :span="8">
             <el-form-item label="状态：" prop="bussinessStatus">
               <el-select v-model="form.bussinessStatus" class="item-width" size="mini" placeholder="请选择">
@@ -91,6 +90,13 @@
             </el-form-item>
           </el-col>
 
+          <el-col :span="8">
+            <el-form-item label="合约限期类型：" prop="contracttermType">
+              <el-select v-model="form.contracttermType" class="item-width" size="mini" placeholder="请选择">
+                <el-option v-for="option in contractLimitTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <div style="text-align: right; margin-right: 10px;">
@@ -162,8 +168,6 @@
     data() {
       return {
         form: {
-          contractNo: '',
-          contractName: '',
           contractType: '',
           contracttermType: '',
           servcomNo:'',
@@ -174,6 +178,10 @@
           supContractType:'',
           bussinessStatus:'',
           providerCode:'',
+          proType:'',
+          providerCode1:'',
+          providerCode2:'',
+
         },
         datearray:[],
         supplierTypes:[],
@@ -192,11 +200,14 @@
         providerTypes:[],
         supplierInfoSelects : [],
         providerInfoSelects:[],
+        providerInfoSelects1:[],
         loading: false,
         defaultData : true,
         supplierContractTypes:[],
         supplierTypeSect:false,
         proTypeSect:false,
+        proType1:false,
+        proType2:false,
       }
     },
     mounted(){
@@ -233,7 +244,15 @@
           this.supplierTypeSect = false;
         }
       },
-
+      proTypeChange(value){
+        if(value == '01') {
+          this.proType1 = true;
+          this.proType2 = false;
+        }  else {
+          this.proType1 = false;
+          this.proType2 = true;
+        }
+      },
       initData(){
         this.getPendingTableData(this.pendingPageInfo.currentPage);
       },
@@ -260,15 +279,24 @@
           pageNum:1,
           pageSize:10000,
           xadef:'select',
+          flag:'',
+          bussinessStatus:'03',
+          status:'Y',
         };
         getAllBaseProviderInfo(query).then(response => {
           // this.providerInfoSelects = response.data;
           if(response.data != null) {
             for(let i=0; i<response.data.length; i++) {
+              let bean = response.data[i];
               let obj= new Object();
-              obj.dictLabel = response.data[i].chname1 + " - " + response.data[i].enname1;
-              obj.dictValue = response.data[i].providerCode;
-              this.providerInfoSelects.push(obj);
+              obj.dictLabel = bean.providerCode + " - " +bean.chname1;
+              obj.dictValue = bean.providerCode;
+              if(bean.orgFlag == '01') { // 医院
+                this.providerInfoSelects.push(obj);
+              }
+              if(bean.orgFlag == '02') { //其他
+                this.providerInfoSelects1.push(obj);
+              }
             }
           }
         }).catch(error => {
@@ -302,9 +330,11 @@
       },
       //重置
       reset(form) {
+        this.$refs[form].resetFields();
         this.supplierTypeSect = false;
         this.proTypeSect = false;
-        this.$refs[form].resetFields();
+        this.proType1 = false;
+        this.proType2 = false;
 
       },
       //查询
@@ -335,6 +365,8 @@
 
         let  flag = '';
         let sectType = '';
+        let paraProvider = '';
+        let paraProType = '';
         if(this.form.flag == '01') {
           flag='01';
           sectType = this.form.supContractType;
@@ -343,26 +375,33 @@
           flag='02';
           sectType =  this.form.contractType;
         }
+
+        if(this.proType1) {
+          paraProType ='01';
+          paraProvider = this.form.providerCode1;
+        }
+        if(this.proType2) {
+          paraProType ='02';
+          paraProvider = this.form.providerCode2;
+        }
         //参数集合
         const param = {
           pageNum: this.pendingPageInfo.currentPage,
           pageSize: this.pendingPageInfo.pageSize,
-          contractNo:this.form.contractNo,
-          contractName: this.form.contractName,
           contractType: sectType,
           contracttermType: this.form.contracttermType,
           cvaliDate: startTime,
           endDate :endTime,
-          providerCode:this.form.providerCode,
+          providerCode:paraProvider,
           servcomNo:this.form.supplierName,
           bussinessStatus:this.form.bussinessStatus,
           flag:flag,
+          providerType: paraProType,
           createStartStr:createStartStr,
           createEndStr:createEndStr,
           orderByColumn:'create_time',
           isAsc:'desc'
         };
-
         getSupplierContractList(param).then(response => {
            this.pendingTotalNum = response.total;
            this.pendingTableData = response.rows;
@@ -440,7 +479,7 @@
     width: 220px;
   }
 
-  ::v-deep.el-table .warning-row {
+  /deep/.el-table .warning-row {
     background: oldlace;
   }
 

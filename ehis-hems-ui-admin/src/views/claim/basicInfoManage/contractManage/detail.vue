@@ -266,7 +266,6 @@
           <el-table-column label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="downloadFile(scope.row)">下载</el-button>
-              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -286,6 +285,7 @@
     getAllBaseServiceInfo,
     getSupplierContractBakDetail,
     getFileList ,
+    getSupplierContractBakList,
 
   } from '@/api/contractManage/contractManagement'
 
@@ -428,15 +428,6 @@
       methods: {
         initData(){
           let type = this.formTab ? 1 :2;
-          // if(type == 1){
-          //   if(this.searchForm.servcomNo == '') {
-          //     return false;
-          //   }
-          // } else {
-          //   if(this.providerForm.providerCode == '') {
-          //     return false;
-          //   }
-          // }
           this.getSupplierContractListByChangeType(type);
         },
       getInfo(type){
@@ -444,7 +435,6 @@
         this.allBaseSupplierInfo();
         this.allAllBaseServiceInfo();
         this.initData();
-        //this.getSupplierContractListByChangeType(type);
         if(this.formTab) {
           this.getServerContractData();
         }
@@ -583,20 +573,15 @@
         getSupplierContractBakDetail(query).then(response => {
           if(response.rows != null) {
             let data = response.rows[0];
-            // this.contractNo = data.contractNo;
-            // this.flag =  data.flag;
-            // this.servcomNo = data.servcomNo;
-            // this.providerCode = data.providerCode;
             this.providerContractInfo = data;
             this.allBaseSupplierInfo();
             this.allAllBaseServiceInfo();
-            this.getSupplierContractListByChangeType(2);
-            //this.getInfo(2);
           }
         }).catch(error => {
           console.log(error)
-        })
-        },
+        });
+        this.getSupplierBakList();
+      },
       //历史合约信息 信息
       getSupplierContractListByChangeType(type) {
         let query = {};
@@ -617,6 +602,24 @@
         }
         //查询数据
         getSupplierContractList(query).then(response => {
+          this.pendingTableData = response.rows;
+          this.hisContractTotalNum = response.total;
+        }).catch(error => {
+
+        })
+      },
+
+      //历史合约信息 信息
+      getSupplierBakList() {
+        let  query ={
+            pageNum:this.hisContractPageInfo.currentPage,
+            pageSize:this.hisContractPageInfo.pageSize,
+            providerCode:this.providerCode,
+            orderByColumn:'create_time',
+            isAsc:'desc'
+          };
+        //查询数据
+        getSupplierContractBakList(query).then(response => {
           this.pendingTableData = response.rows;
           this.hisContractTotalNum = response.total;
         }).catch(error => {
@@ -653,7 +656,7 @@
     width: 120px;
     text-align: right;
   }
-  .el-table ::v-deep .el-table__expanded-cell {
+  .el-table /deep/ .el-table__expanded-cell {
     padding: 10px;
   }
 </style>

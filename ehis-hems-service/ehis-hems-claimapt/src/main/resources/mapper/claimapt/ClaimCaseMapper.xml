@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sino.system.mapper.ClaimCaseMapper">
+
+    <resultMap type="com.sino.system.domain.ClaimCase" id="ClaimCaseResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="filingNo"    column="filing_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="pulloutType"    column="pullout_type"    />
+        <result property="pulloutReason"    column="pullout_reason"    />
+        <result property="pulloutDescribe"    column="pullout_describe"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="name"    column="name"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="isAppeal"    column="is_appeal"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="isFinanceBack"    column="is_finance_back"    />
+    </resultMap>
+    <resultMap type="com.sino.system.domain.vo.ProcessingCaseVo" id="ProcessingClaimCaseResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="filingNo"    column="filing_no"    />
+        <result property="stayTime" column="stay_time"   />
+        <result property="claimType" column="claim_type"  />
+        <result property="caseStatus"    column="case_status"    />
+    </resultMap>
+    <resultMap type="com.sino.system.domain.vo.ClaimAndBatchVo" id="ClaimAndBatchVo">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="filingNo"    column="filing_no"    />
+        <result property="source"    column="source"    />
+    </resultMap>
+    <resultMap id="BillProcessingVoResult" type="com.sino.system.domain.vo.BillProcessingVo">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="stayTime" column="stay_time"   />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="name" column="name"/>
+        <result property="submitUser" column="submit_user"/>
+    </resultMap>
+    <resultMap id="BillAccomplishVoResult" type="com.sino.system.domain.vo.BillAccomplishVo">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="name" column="name"/>
+        <result property="submitUser" column="submit_user"/>
+    </resultMap>
+
+
+
+    <sql id="selectClaimCaseVo">
+        select rpt_no, batch_no, filing_no, case_status, pullout_type, pullout_reason, pullout_describe, end_case_time, is_appeal, pay_status, is_finance_back, status, create_by, create_time, update_by, update_time from claim_case
+    </sql>
+
+    <select id="selectClaimCaseList" parameterType="com.sino.system.domain.ClaimCase" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="filingNo != null  and filingNo != ''"> and filing_no = #{filingNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and case_status = #{caseStatus}</if>
+            <if test="pulloutType != null  and pulloutType != ''"> and pullout_type = #{pulloutType}</if>
+            <if test="pulloutReason != null  and pulloutReason != ''"> and pullout_reason = #{pulloutReason}</if>
+            <if test="pulloutDescribe != null  and pulloutDescribe != ''"> and pullout_describe = #{pulloutDescribe}</if>
+            <if test="endCaseTime != null "> and end_case_time = #{endCaseTime}</if>
+            <if test="isAppeal != null  and isAppeal != ''"> and is_appeal = #{isAppeal}</if>
+            <if test="payStatus != null  and payStatus != ''"> and pay_status = #{payStatus}</if>
+            <if test="isFinanceBack != null  and isFinanceBack != ''"> and is_finance_back = #{isFinanceBack}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    <select id="selectCaseOne" parameterType="com.sino.system.domain.ClaimCase" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="filingNo != null  and filingNo != ''"> and filing_no = #{filingNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and case_status = #{caseStatus}</if>
+            <if test="pulloutReason != null  and pulloutReason != ''"> and pullout_reason = #{pulloutReason}</if>
+            <if test="pulloutDescribe != null  and pulloutDescribe != ''"> and pullout_describe = #{pulloutDescribe}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectProcessingClaimCaseList" parameterType="com.sino.system.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
+        SELECT DISTINCT
+        cc.batch_no,
+        cc.filing_no,
+        cc.rpt_no,
+        cc.case_status,
+        cc.update_by,claim_type,cci.NAME,
+        cc.status,
+        CONCAT(
+        FLOOR( TIMESTAMPDIFF( SECOND, ccr.create_time, now( ) ) / 86400 ),
+        '天',
+        TIMESTAMPDIFF( HOUR, ccr.create_time, now( ) ) % 24,
+        '时',
+        TIMESTAMPDIFF( MINUTE, ccr.create_time, now( ) ) % 60,
+        '分'
+        ) stay_time
+        FROM
+        claim_case cc
+        LEFT JOIN (select record_id,rpt_no,create_time from claim_case_record where operation='05' and status='Y')ccr ON ccr.rpt_no = cc.rpt_no
+        LEFT JOIN   claim_batch cb on cb.batch_no = cc.batch_no and cb.status='Y'
+        left join   claim_case_insured cci on cci.rpt_no = cc.rpt_no and cci.status='Y'
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="rptNo != null and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and case_status = #{caseStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseProcessedList" parameterType="com.sino.system.domain.dto.ClaimCaseDTO" resultMap="ProcessingClaimCaseResult">
+        SELECT DISTINCT
+        cr.batch_no,
+        cr.rpt_no,
+        cr.filing_no,
+        cr.case_status
+        FROM
+        (SELECT
+        cc.batch_no,
+        cc.rpt_no,
+        cc.filing_no,
+        cc.case_status,
+        cc.STATUS,
+        ccr.update_by,
+        ccr.operation,
+        ccr.history_flag
+        from
+        claim_case cc
+        LEFT JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no and ccr.status='Y') cr
+        LEFT JOIN claim_case_insured cci ON cci.rpt_no = cr.rpt_no and cci.status='Y'
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and cr.batch_no = #{batchNo}</if>
+            <if test="rptNo != null and rptNo != ''"> and cr.rpt_no = #{rptNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cr.case_status not in (${caseStatus})</if>
+            <if test="status != null  and status != ''"> and cr.status = #{status}</if>
+            <if test="updateBy != null  and updateBy != ''"> and cr.update_by = #{updateBy}</if>
+            <if test="operation  != null  and operation  != ''"> and cr.operation  = #{operation}</if>
+            <if test="isHistory != null  and isHistory != ''"> and cr.history_flag = #{isHistory}</if>
+            <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseById" parameterType="String" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        where rpt_no = #{rptNo} and status='Y'
+    </select>
+
+    <select id="selectCaseClaimCaseFilingList" parameterType="com.sino.system.domain.vo.ClaimCaseFilingListVO" resultType="String">
+        select count(1) from claim_case
+        <where>
+            <if test="rptStartNo != null and rptStartNo != '' and rptEndNo != null and rptEndNo != ''">
+                <![CDATA[and rpt_no >=  #{rptStartNo} and rpt_no <= #{rptEndNo} ]]>
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="insertClaimCase" parameterType="com.sino.system.domain.ClaimCase">
+        insert into claim_case
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null">rpt_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="filingNo != null and filingNo != ''">filing_no,</if>
+            <if test="caseStatus != null and caseStatus != ''">case_status,</if>
+            <if test="pulloutType != null">pullout_type,</if>
+            <if test="pulloutReason != null">pullout_reason,</if>
+            <if test="pulloutDescribe != null">pullout_describe,</if>
+            <if test="endCaseTime != null">end_case_time,</if>
+            <if test="isAppeal != null">is_appeal,</if>
+            <if test="payStatus != null">pay_status,</if>
+            <if test="isFinanceBack != null">is_finance_back,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null">#{rptNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="filingNo != null and filingNo != ''">#{filingNo},</if>
+            <if test="caseStatus != null and caseStatus != ''">#{caseStatus},</if>
+            <if test="pulloutType != null">#{pulloutType},</if>
+            <if test="pulloutReason != null">#{pulloutReason},</if>
+            <if test="pulloutDescribe != null">#{pulloutDescribe},</if>
+            <if test="endCaseTime != null">#{endCaseTime},</if>
+            <if test="isAppeal != null">#{isAppeal},</if>
+            <if test="payStatus != null">#{payStatus},</if>
+            <if test="isFinanceBack != null">#{isFinanceBack},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateClaimCase" parameterType="com.sino.system.domain.ClaimCase">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
+            <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
+            <if test="pulloutType != null">pullout_type = #{pulloutType},</if>
+            <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
+            <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
+            <if test="endCaseTime != null">end_case_time = #{endCaseTime},</if>
+            <if test="isAppeal != null">is_appeal = #{isAppeal},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="isFinanceBack != null">is_finance_back = #{isFinanceBack},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
+    <update id="updatecaseStatus" parameterType="String">
+        update claim_case
+        set case_status ='31'
+        where rpt_no = #{rptNo}
+    </update>
+
+    <update id="updateClaimCaseCheck" parameterType="com.sino.system.domain.dto.ClaimCaseCheckDTO">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pulloutType != null and pulloutType != ''">pullout_type = #{pulloutType},</if>
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
+            <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
+            <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
+            <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null and createBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
+    <delete id="deleteClaimCaseById" parameterType="String">
+        delete from claim_case where rpt_no = #{rptNo}
+    </delete>
+
+    <delete id="deleteClaimCaseByIds" parameterType="String">
+        delete from claim_case where rpt_no in
+        <foreach item="rptNo" collection="array" open="(" separator="," close=")">
+            #{rptNo}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimClaimAndBatchById" parameterType="String" resultMap="ClaimAndBatchVo">
+        select form1.rpt_no,form1.batch_no,form1.filing_no,batch.source
+        from claim_case form1
+                 inner join claim_batch batch on form1.batch_no=batch.batch_no and form1.status='Y' and form1.rpt_no = #{rptNo}
+    </select>
+    <resultMap type="com.sino.system.domain.vo.CaseDispatchVO" id="CaseDispatchVO">
+        <result property="batchNo"    column="batch_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="name"    column="name"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="operator"    column="operator"    />
+        <result property="source"    column="source"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="monitoringTime"    column="monitoring_time"    />
+    </resultMap>
+    <select id="selectCaseDispatchList" parameterType="com.sino.system.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
+        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.create_by as operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+        CONCAT(
+        FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
+        '天',
+        TIMESTAMPDIFF( HOUR, ccr.update_time, now( ) ) % 24,
+        '时',
+        TIMESTAMPDIFF( MINUTE, ccr.update_time, now( ) ) % 60,
+        '分'
+        )  monitoring_time
+        from claim_case  cc left join  claim_batch cb on cc.batch_no=cb.batch_no
+        left join claim_case_policy ccp on cc.rpt_no=ccp.rpt_no  and ccp.status='Y'
+        left  join claim_case_insured cci   on cc.rpt_no = cci.rpt_no  and cci.status='Y'
+        left  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'
+        <where>
+            <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
+            <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>
+            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and DATE_ADD(#{submitenddate},INTERVAL 1 DAY)</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
+            <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
+            <if test="companyCode != null  and companyCode != ''"> and ccp.company_code = #{companyCode}</if>
+            <if test="name != null  and name != ''"> and cci.name like concat('%', #{name}, '%')</if>
+            <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
+        </where>
+    </select>
+
+    <resultMap type="com.sino.system.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="surveyCode"    column="survey_code"    />
+        <result property="operator"    column="operator"    />
+        <result property="name"    column="name"    />
+    </resultMap>
+    <!--    fu-->
+    <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+        acto.rpt_no,
+        acto.batch_no,
+        acto.case_status,
+        acto.operator,
+        acto.NAME
+        FROM
+        (
+        SELECT
+        act.rpt_no,
+        act.batch_no,
+        act.case_status,
+        act.operator,
+        insured.NAME
+        FROM
+        (
+        SELECT
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
+        FROM
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation = '07'
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'N'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        ) acto
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and acto.batch_no = #{batchNo}</if>
+            <if test="name != null  and name != ''"> and acto.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="SelectConditionsForTheAdjustmentUnderNew" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+        acto.rpt_no,
+        acto.batch_no,
+        acto.case_status,
+        acto.operator,
+        acto.NAME
+        FROM
+        (
+        SELECT
+        act.rpt_no,
+        act.batch_no,
+        act.case_status,
+        act.operator,
+        insured.NAME
+        FROM
+        (
+        SELECT
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
+        FROM
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation = '08'
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'N'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        ) acto
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and acto.batch_no = #{batchNo}</if>
+            <if test="name != null  and name != ''"> and acto.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <!--fu-->
+    <select id="selectConditionsForTheAdjustmentOver" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+            act.rpt_no,
+            act.batch_no,
+            act.case_status,
+            act.operator,
+            insured.NAME
+        FROM
+            (
+                SELECT
+                    cases.rpt_no,
+                    cases.batch_no,
+                    cases.case_status,
+                    record.operator
+                FROM
+                    claim_case cases
+                        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+                        AND record.operation in ('08','99')
+                        AND record.STATUS = 'Y'
+                        AND record.history_flag = 'N'
+                        AND record.operator = #{operator}
+                        AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
+                ORDER BY
+                    record.update_time DESC
+            ) act
+                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+    </select>
+
+    <!-- lihy -->
+    <select id="SelectConditionsForTheAdjustmentOverNew" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+            act.rpt_no,
+            act.batch_no,
+            act.case_status,
+            act.operator,
+            insured.NAME
+        FROM
+            (
+                SELECT
+                    cases.rpt_no,
+                    cases.batch_no,
+                    cases.case_status,
+                    record.operator
+                FROM
+                    claim_case cases
+                        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+                        AND record.operation = '08'
+                        AND record.STATUS = 'Y'
+                        AND record.history_flag = 'Y'
+                        AND record.operator = #{operator}
+                        AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
+                ORDER BY
+                    record.update_time DESC
+            ) act
+                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+    </select>
+
+    <!--fu-->
+    <select id="selectConditionsForTheAdjustmentUnderTwo" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+        acto.rpt_no,
+        acto.batch_no,
+        acto.case_status,
+        acto.operator,
+        acto.NAME
+        FROM
+        (
+        SELECT
+        act.rpt_no,
+        act.batch_no,
+        act.case_status,
+        act.operator,
+        insured.NAME
+        FROM
+        (
+        SELECT
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
+        FROM
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation in ('08','99')
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'N'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        ) acto
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
+            <if test="name != null  and name != ''"> and act.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="SelectConditionsForTheAdjustmentUnderTwoNew" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+        acto.rpt_no,
+        acto.batch_no,
+        acto.case_status,
+        acto.operator,
+        acto.NAME
+        FROM
+        (
+        SELECT
+        act.rpt_no,
+        act.batch_no,
+        act.case_status,
+        act.operator,
+        insured.NAME
+        FROM
+        (
+        SELECT
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
+        FROM
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation ='08'
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'Y'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        ) acto
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
+            <if test="name != null  and name != ''"> and act.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <!--fu-->
+    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+        SELECT
+        acto.rpt_no,
+        acto.batch_no,
+        acto.case_status,
+        acto.operator,
+        acto.NAME
+        FROM
+        (
+        SELECT
+        act.rpt_no,
+        act.batch_no,
+        act.case_status,
+        act.operator,
+        insured.NAME
+        FROM
+        (
+        SELECT
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
+        FROM
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation in ('31','32','00')
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'N'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        ) acto
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and acto.batch_no = #{batchNo}</if>
+            <if test="name != null  and name != ''"> and acto.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseRecordByrptNoCase" parameterType="com.sino.system.domain.ClaimCase" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''">and rpt_no= #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''">and batch_no= #{batchNo}</if>
+            <if test="caseStatus = null  and caseStatus = ''">and case_status='08'</if>
+            <if test="status = null  and status = ''">and status='Y'</if>
+        </where>
+    </select>
+
+    <select id="selectBillProcessing" parameterType="com.sino.system.domain.dto.ClaimCaseDTO" resultMap="BillProcessingVoResult">
+        select a.rpt_no,a.batch_no,a.case_status,c.name,b.create_by submit_user,
+        CONCAT(
+        FLOOR( TIMESTAMPDIFF( SECOND, b.create_time, now( ) ) / 86400 ),
+        '天',
+        TIMESTAMPDIFF( HOUR, b.create_time, now( ) ) % 24,
+        '时',
+        TIMESTAMPDIFF( MINUTE, b.create_time, now( ) ) % 60,
+        '分'
+        ) stay_time
+        from claim_case a LEFT JOIN claim_case_insured c on a.rpt_no = c.rpt_no and c.status = 'Y'
+        LEFT JOIN claim_case_record b on b.rpt_no = a.rpt_no and b.history_flag = 'N' and b.status = 'Y'
+        where a.case_status = #{caseStatus} and a.status = #{status} and a.update_by = #{updateBy}
+        <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
+        <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
+        <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
+    </select>
+    <resultMap type="com.sino.system.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
+        <result property="batchNo"    column="batch_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="name"    column="name"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="accDate"    column="acc_date"    />
+        <result property="investigation"    column="investigation"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+    <select id="selectClaimInformation" parameterType="com.sino.system.domain.dto.ClaimInformationDTO" resultType="com.sino.system.domain.vo.ClaimInformationVo">
+        select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
+        from claim_case cc
+        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no
+        inner join  claim_case_policy ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
+        <where>
+            <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
+            <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and ccp.policy_item_no = #{policyItemNo}</if>
+            <if test="name != null  and name != ''"> and ccp.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBillAccomplish" parameterType="com.sino.system.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
+        select a.create_by,a.rpt_no,b.batch_no,b.case_status,c.name
+        from claim_case b LEFT JOIN claim_case_record a on a.rpt_no = b.rpt_no and a.history_flag = 'Y' and a.status = 'Y' and b.status = 'Y'
+        LEFT JOIN claim_case_insured c on b.rpt_no = c.rpt_no and c.status = 'Y'
+        where a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
+        <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
+        <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
+    </select>
+
+    <select id="selepostHocAccountingOfCases" parameterType="String" resultType="String">
+        select rpt_no from claim_case where batch_no = #{batchNo} and status='Y'
+    </select>
+    <resultMap type="com.sino.system.domain.vo.ClaimCaseDistVo" id="ClaimCaseDistVo">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="quantity"    column="quantity"    />
+    </resultMap>
+    <select id="selectCaseDistNumber" parameterType="String" resultType="com.sino.system.domain.vo.ClaimCaseDistVo">
+        select count(1)  quantity from claim_case where case_status='05'  and batch_no=#{batchNo}
+    </select>
+    <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.sino.system.domain.vo.ClaimCaseDistVo">
+        select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}
+    </select>
+    <update id="updateClaimCaseVo" parameterType="string">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null and createBy != ''">update_by = #{updateBy},</if>
+        </trim>
+        where batch_no = #{batchNo}
+    </update>
+    <!-- <update id="updateCaseUpdateBy" parameterType="String">
+         update claim_case
+         set case_status ='31'
+         where rpt_no = #{rptNo}
+     </update>-->
+</mapper>

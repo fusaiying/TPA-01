@@ -27,7 +27,7 @@ public class ClaimProductDutyDetailVO
     private String dutyCode;
 
     /** 子列表 */
-    private List<com.sino.system.domain.ClaimProductFeeitemVO> children;
+    private List<ClaimProductFeeitemVO> children;
 
     public String getValue() {
         return value;
@@ -61,11 +61,11 @@ public class ClaimProductDutyDetailVO
         this.dutyCode = dutyCode;
     }
 
-    public List<com.sino.system.domain.ClaimProductFeeitemVO> getChildren() {
+    public List<ClaimProductFeeitemVO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<com.sino.system.domain.ClaimProductFeeitemVO> children) {
+    public void setChildren(List<ClaimProductFeeitemVO> children) {
         this.children = children;
     }
 

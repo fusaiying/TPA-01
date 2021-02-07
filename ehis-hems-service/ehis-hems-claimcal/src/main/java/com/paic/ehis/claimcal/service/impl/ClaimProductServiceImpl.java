@@ -1,10 +1,7 @@
 package com.paic.ehis.claimcal.service.impl;
 
 
-import com.paic.ehis.claimcal.domain.ClaimProduct;
-import com.paic.ehis.claimcal.domain.ClaimProductInfo;
-import com.paic.ehis.claimcal.domain.ClaimProductPlanVO;
-import com.paic.ehis.claimcal.domain.ClaimProductTaskLog;
+import com.paic.ehis.claimcal.domain.*;
 import com.paic.ehis.claimcal.domain.dto.ClaimProductDTO;
 import com.paic.ehis.claimcal.domain.dto.ProcessedProductDTO;
 import com.paic.ehis.claimcal.domain.dto.UpdateClaimProductDTO;

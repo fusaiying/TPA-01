@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sino.system.mapper.ClaimBatchMapper">
+    
+    <resultMap type="com.paic.ehis.claimapt.domain.ClaimBatch" id="ClaimBatchResult">
+        <result property="batchno"    column="batch_no"    />
+        <result property="source"    column="source"    />
+        <result property="hospitalcode"    column="hospital_code"    />
+        <result property="claimtype"    column="claim_type"    />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="casenum"    column="caseload"    />
+        <result property="batchtotal"    column="batch_total"    />
+        <result property="organcode"    column="organ_code"    />
+        <result property="currency"    column="currency"    />
+        <result property="conttype"    column="cont_type"    />
+        <result property="billrecevieflag"    column="bill_recevie_flag"    />
+        <result property="prireason"    column="pri_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="batchstatus"    column="batch_status"    />
+        <result property="expressnumber"    column="express_number"    />
+        <result property="receivedate"    column="receive_date"    />
+        <result property="sendby"    column="send_by"    />
+        <result property="speccasetype"    column="speccase_type"    />
+        <result property="issuingunit"    column="issuing_unit"    />
+        <result property="contno"    column="cont_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <resultMap type="com.sino.system.domain.vo.BatchVo" id="ClaimBatchVO">
+        <result property="batchno"    column="batch_no"    />
+        <result property="source"    column="source"    />
+        <result property="claimtype"    column="claim_type"    />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="casenum"    column="caseload"    />
+        <result property="batchtotal"    column="batch_total"    />
+        <result property="organcode"    column="organ_code"    />
+        <result property="currency"    column="currency"    />
+        <result property="batchstatus"    column="batch_status"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="chname1"    column="chname1"    />
+        <result property="enname1"    column="enname1"    />
+    </resultMap>
+
+    <sql id="selectClaimBatchVo">
+        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
+    </sql>
+
+    <select id="selectClaimBatchList" parameterType="com.sino.system.domain.ClaimBatch" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        <where>  
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="hospitalcode != null  and hospitalcode != ''"> and hospital_code = #{hospitalcode}</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="submitdate != null "> and submit_date = #{submitdate}</if>
+            <if test="casenum != null "> and casenum = #{casenum}</if>
+            <if test="batchtotal != null "> and batch_total = #{batchtotal}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="currency != null  and currency != ''"> and currency = #{currency}</if>
+            <if test="conttype != null  and conttype != ''"> and cont_type = #{conttype}</if>
+            <if test="billrecevieflag != null  and billrecevieflag != ''"> and bill_recevie_flag = #{billrecevieflag}</if>
+            <if test="prireason != null  and prireason != ''"> and pri_reason = #{prireason}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status = #{batchstatus}</if>
+            <if test="expressnumber != null  and expressnumber != ''"> and express_number = #{expressnumber}</if>
+            <if test="receivedate != null "> and receive_date = #{receivedate}</if>
+            <if test="sendby != null  and sendby != ''"> and send_by = #{sendby}</if>
+            <if test="speccasetype != null  and speccasetype != ''"> and speccase_type = #{speccasetype}</if>
+            <if test="issuingunit != null  and issuingunit != ''"> and issuing_unit = #{issuingunit}</if>
+            <if test="contno != null  and contno != ''"> and cont_no = #{contno}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBackToBatchList" parameterType="com.sino.system.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
+        SELECT DISTINCT
+        cb.batch_no,
+        cb.source,
+        cb.hospital_code,
+        cb.claim_type,
+        cb.submit_date,
+        cb.caseload,
+        cb.batch_total,
+        cb.organ_code,
+        cb.currency,
+        cb.cont_type,
+        cb.batch_status,
+        cb.update_by,
+        cb.update_time,
+        bpi.chname1,
+        bpi.enname1
+        FROM
+        claim_batch cb
+        left join base_provider_info bpi on bpi.provider_code=cb.hospital_code
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
+                SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
+                UNION
+                SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))
+            </if>
+            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status =#{batchstatus}</if>
+            <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
+            <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+        </where>
+        group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,bpi.chname1,bpi.enname1
+    </select>
+
+    <select id="selectDealWithBatchList" parameterType="com.sino.system.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
+        select DISTINCT cb.batch_no, cb.source, cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
+       from claim_batch cb
+        left join
+        (select ccs.rpt_no,cc.batch_no,id_no,name,claim_materials,remark,other_info from claim_case_standing ccs
+        left join claim_case cc on cc.rpt_no=ccs.rpt_no) sc on cb.batch_no=sc.batch_no
+        left join base_provider_info bpi on bpi.provider_code=cb.hospital_code
+        <where>
+            <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
+                SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
+                UNION
+                SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status in (${batchstatus})</if>
+            <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
+            <if test="rptno != null  and rptno != ''"> and sc.rpt_no = #{rptno}</if>
+            <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+        </where>
+        group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
+    </select>
+
+    <select id="selectStraightAndReview" parameterType="com.sino.system.domain.dto.BatchRecordDTO" resultMap="ClaimBatchVO">
+        SELECT DISTINCT
+        cb.batch_no,
+        cb.source,
+        cb.hospital_code,
+        cb.claim_type,
+        cb.submit_date,
+        cb.caseload,
+        cb.batch_total,
+        cb.organ_code,
+        cb.currency,
+        cb.cont_type,
+        cb.batch_status,
+        cbr.update_by,
+        cbr.operation,
+        cb.update_time
+        FROM
+        claim_batch cb
+        LEFT JOIN (
+        SELECT
+        *
+        FROM
+        claim_batch_record a
+        WHERE
+        record_id = (
+        SELECT
+        record_id
+        FROM
+        claim_batch_record b
+        WHERE
+        a.batch_no = b.batch_no
+        AND b.operation = '04'
+        AND b.STATUS = 'Y'
+        ORDER BY
+        create_time
+        LIMIT 1
+        )
+        ) cbr ON cbr.batch_no = cb.batch_no
+        AND cbr.STATUS = 'Y'
+        LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
+        AND bpi.STATUS = 'Y'
+        <where>
+            <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
+                SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
+                UNION
+                SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')) </if>
+            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status in (${batchstatus})</if>
+            and cbr.update_by = #{updateBy}
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
+            <if test="operation != null  and operation != ''"> and cbr.operation = #{operation}</if>
+            <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+        </where>
+        group by cb.batch_no,cb.source, cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cbr.update_by,cb.update_time ,bpi.chname1,bpi.enname1
+    </select>
+    
+    <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        where batch_no = #{batchno} and status='Y'
+    </select>
+    <select id="selectClaimBatchByIdOne" parameterType="String" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        where batch_no = #{batchNo} and status='Y'
+    </select>
+        
+    <insert id="insertClaimBatch" parameterType="com.sino.system.domain.ClaimBatch">
+        insert into claim_batch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">batch_no,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="hospitalcode != null and hospitalcode != ''">hospital_code,</if>
+            <if test="claimtype != null and claimtype != ''">claim_type,</if>
+            <if test="submitdate != null">submit_date,</if>
+            <if test="casenum != null">caseload,</if>
+            <if test="batchtotal != null">batch_total,</if>
+            <if test="organcode != null and organcode != ''">organ_code,</if>
+            <if test="currency != null and currency != ''">currency,</if>
+            <if test="conttype != null and conttype != ''">cont_type,</if>
+            <if test="billrecevieflag != null">bill_recevie_flag,</if>
+            <if test="prireason != null">pri_reason,</if>
+            <if test="remark != null">remark,</if>
+            <if test="batchstatus != null and batchstatus != ''">batch_status,</if>
+            <if test="expressnumber != null">express_number,</if>
+            <if test="receivedate != null">receive_date,</if>
+            <if test="sendby != null">send_by,</if>
+            <if test="speccasetype != null">speccase_type,</if>
+            <if test="issuingunit != null">issuing_unit,</if>
+            <if test="contno != null">cont_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">#{batchno},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="hospitalcode != null and hospitalcode != ''">#{hospitalcode},</if>
+            <if test="claimtype != null and claimtype != ''">#{claimtype},</if>
+            <if test="submitdate != null">#{submitdate},</if>
+            <if test="casenum != null">#{casenum},</if>
+            <if test="batchtotal != null">#{batchtotal},</if>
+            <if test="organcode != null and organcode != ''">#{organcode},</if>
+            <if test="currency != null and currency != ''">#{currency},</if>
+            <if test="conttype != null and conttype != ''">#{conttype},</if>
+            <if test="billrecevieflag != null">#{billrecevieflag},</if>
+            <if test="prireason != null">#{prireason},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="batchstatus != null and batchstatus != ''">#{batchstatus},</if>
+            <if test="expressnumber != null">#{expressnumber},</if>
+            <if test="receivedate != null">#{receivedate},</if>
+            <if test="sendby != null">#{sendby},</if>
+            <if test="speccasetype != null">#{speccasetype},</if>
+            <if test="issuingunit != null">#{issuingunit},</if>
+            <if test="contno != null">#{contno},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimBatch" parameterType="com.sino.system.domain.ClaimBatch">
+        update claim_batch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="hospitalcode != null and hospitalcode != ''">hospital_code = #{hospitalcode},</if>
+            <if test="claimtype != null and claimtype != ''">claim_type = #{claimtype},</if>
+            <if test="submitdate != null">submit_date = #{submitdate},</if>
+            <if test="casenum != null">caseload = #{casenum},</if>
+            <if test="batchtotal != null">batch_total = #{batchtotal},</if>
+            <if test="organcode != null and organcode != ''">organ_code = #{organcode},</if>
+            <if test="currency != null and currency != ''">currency = #{currency},</if>
+            <if test="conttype != null and conttype != ''">cont_type = #{conttype},</if>
+            <if test="billrecevieflag != null">bill_recevie_flag = #{billrecevieflag},</if>
+            <if test="prireason != null">pri_reason = #{prireason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="batchstatus != null and batchstatus != ''">batch_status = #{batchstatus},</if>
+            <if test="expressnumber != null">express_number = #{expressnumber},</if>
+            <if test="receivedate != null">receive_date = #{receivedate},</if>
+            <if test="sendby != null">send_by = #{sendby},</if>
+            <if test="speccasetype != null">speccase_type = #{speccasetype},</if>
+            <if test="issuingunit != null">issuing_unit = #{issuingunit},</if>
+            <if test="contno != null">cont_no = #{contno},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where batch_no = #{batchno} and status='Y'
+    </update>
+
+    <delete id="deleteClaimBatchById" parameterType="String">
+        delete from claim_batch where batch_no = #{batchno}
+    </delete>
+
+    <delete id="deleteClaimBatchByIds" parameterType="String">
+        delete from claim_batch where batch_no in 
+        <foreach item="batchno" collection="array" open="(" separator="," close=")">
+            #{batchno}
+        </foreach>
+    </delete>
+
+    <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            b.is_appeal "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND c.rpt_no = b.rpt_no
+            AND a.organ_code = #{deptId}
+            AND b.pay_status != '03'
+            AND a.currency = 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+        GROUP BY
+            a.batch_no,
+            b.is_appeal
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            b.is_appeal "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND b.rpt_no = c.rpt_no
+            AND a.currency = 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
+            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
+            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
+            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        GROUP BY
+            a.batch_no,
+            b.is_appeal
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            b.is_appeal "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND c.rpt_no = b.rpt_no
+            AND a.organ_code = #{deptId}
+            AND b.pay_status != '03'
+            AND a.currency != 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+        GROUP BY
+            a.batch_no,
+            b.is_appeal
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayForeignBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            b.is_appeal "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND b.rpt_no = c.rpt_no
+            AND a.currency != 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
+            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
+            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
+            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+        GROUP BY
+            a.batch_no,
+            b.is_appeal
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+</mapper>

@@ -29,7 +29,8 @@
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
+    <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno"
+                     min-width="160" label="批次号" show-overflow-tooltip/>
     <el-table-column align="center" min-width="100" prop="source" label="交单来源" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel( delivery_sourceOptions, scope.row.source)}}</span>
@@ -84,9 +85,9 @@
 </template>
 
 <script>
-  import {getMinData,getDeptList} from '@/api/claim/presentingReview'
+  import {getMinData, getThisDept} from '@/api/claim/presentingReview'
 
-  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'},{dictType: 'batchs_status'}]
+  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
     props: {
@@ -100,14 +101,14 @@
     },
     data() {
       return {
-        prop:'',
-        order:'',
-        loading:true,
-        dictList:[],
-        delivery_sourceOptions:[],
-        claimtypeOptions:[],
-        batchs_statusOptions:[],
-        deptOptions:[],
+        prop: '',
+        order: '',
+        loading: true,
+        dictList: [],
+        delivery_sourceOptions: [],
+        claimtypeOptions: [],
+        batchs_statusOptions: [],
+        deptOptions: [],
       }
     },
     async created() {
@@ -123,10 +124,12 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-      getDeptList().then(res=>{
-        if (res!=null && res.code===200){
-          this.deptOptions=res.data
-        }
+      let item = {
+        pageNum: 1,
+        pageSize: 200,
+      }
+      getThisDept(item).then(res => {
+        this.deptOptions = res.deptlist
       })
     },
     methods: {
@@ -151,16 +154,16 @@
 
       },
       getMinData(row, expandedRows) {
-        this.loading=true
+        this.loading = true
         //判断只有展开是做请求
         if (expandedRows.length > 0) {
           getMinData(row.batchno).then(res => {
-            this.tableData.forEach((temp,index)=>{
-              if (temp.batchno===row.batchno){
-                this.tableData[index].minData=res.rows
+            this.tableData.forEach((temp, index) => {
+              if (temp.batchno === row.batchno) {
+                this.tableData[index].minData = res.rows
               }
             })
-            this.loading=false
+            this.loading = false
           })
         }
       },
@@ -174,15 +177,15 @@
         })
         return actions.join('');
       },
-      onSortChange({ prop, order }) {
-        this.prop=prop
-        if (order==='ascending'){
-          this.order='asc'
-        }else if (order==='descending'){
-          this.order='desc'
-        }else if (order==null){
-          this.prop=''
-          this.order=''
+      onSortChange({prop, order}) {
+        this.prop = prop
+        if (order === 'ascending') {
+          this.order = 'asc'
+        } else if (order === 'descending') {
+          this.order = 'desc'
+        } else if (order == null) {
+          this.prop = ''
+          this.order = ''
         }
         this.$parent.$parent.$parent.$parent.searchHandle()
       }

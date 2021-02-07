@@ -170,13 +170,6 @@ export function exportPersonalUntreated() {
   })
 }
 
-//获取所有部门
-export function getDeptList(data) {
-  return request({
-    url:'claimmgt/dept/deptList',
-    method:'get'
-  })
-}
 //获取当前部门
 export function getThisDept(parentId) {
   return request({

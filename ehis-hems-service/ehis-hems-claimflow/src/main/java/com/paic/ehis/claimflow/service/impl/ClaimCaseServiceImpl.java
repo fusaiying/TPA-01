@@ -971,86 +971,98 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
 
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.SelectConditionsForTheAdjustmentUnderNew(auditWorkPoolDTO);//查询出处理中的所有的数据
+        if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
+            for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
+                //已经拥有：批次号、报案号、批次状态、提交用户、被保人姓名
+                //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                //查询案件保单关联表：claim_case_policy，rpt_no
+                List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
+                    List<String> organCodeList = new ArrayList<>();//承保机构
+                    List<String> companyNameList = new ArrayList<>();//出单公司
+                    for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
+                        //去重出单公司名称拼接
+                        companyNameList.add(claimCasePoliciesOne.getCompanyName());
+                        //去重承保机构名称拼接
+                        organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
+                    }
 
-        for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-            //已经拥有：批次号、报案号、批次状态、提交用户
-            //还差：被保人姓名、出单公司、承保机构、停留时长、监控时效、是否调查
+                    StringBuilder stringBuilder = new StringBuilder();
+                    Set set = new HashSet<>(organCodeList);
+                    List newOrganCodeList = new ArrayList<>(set);
+                    if (!newOrganCodeList.isEmpty()) {
+                        stringBuilder.append(newOrganCodeList.get(0));
+                        for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
+                            stringBuilder.append("|").append(newOrganCodeList.get(i));
+                        }
+                    }
+                    conditionsForTheAdjustmentVOSLost.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
 
-            //被保人姓名
-            ClaimCaseInsured claimCaseInsured = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-            conditionsForTheAdjustmentVOSLost.setName(claimCaseInsured.getName());
-            String policyNo = null;
-            //查询案件保单关联表：claim_case_policy，rpt_no
-            List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-            //循环遍历表单号
-            for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                policyNo = claimCasePoliciesOne.getPolicyNo();
+                    StringBuilder stringBuilder2 = new StringBuilder();
+                    Set set1 = new HashSet<>(companyNameList);
+                    List newCompanyNameList = new ArrayList<>(set1);
+                    if (!newCompanyNameList.isEmpty()) {
+                        stringBuilder2.append(newCompanyNameList.get(0));
+                        for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                            stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                        }
+                    }
+                    conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
+                }
+
+                //是否调查
+                ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
+                claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                claimCaseInvestigation.setIsHistory("N");
+                claimCaseInvestigation.setStatus("Y");
+                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
+                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                    conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
+                } else {
+                    conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
+                }
+
+                //停留时长
+                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoCase(conditionsForTheAdjustmentVOSLost.getRptNo());
+                Date begin;
+                Date end = new Date();
+                if (null != claimCaseRecord && claimCaseRecord.getStatus() != "") {
+                    begin = claimCaseRecord.getCreateTime();
+                } else {
+                    ClaimCaseRecord claimCaseRecord1 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    begin = claimCaseRecord1.getUpdateTime();
+                }
+                long between = (end.getTime() - begin.getTime()) / 1000;//除以1000是为了转换成秒
+
+                long day1 = between / (24 * 3600);
+
+                long hour1 = between % (24 * 3600) / 3600;
+
+                long minute1 = between % 3600 / 60;
+
+                String time = "" + day1 + "天" + hour1 + "小时" + minute1 + "分";
+
+                conditionsForTheAdjustmentVOSLost.setStayTime(time);
+                //监控时效
+                ClaimCaseRecord claimCaseRecord1 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                if (null != claimCaseRecord1) {
+                    Date begin1 = claimCaseRecord1.getCreateTime();
+                    Date end1 = new Date();
+
+                    long between1 = (end1.getTime() - begin1.getTime()) / 1000;//除以1000是为了转换成秒
+
+                    long day2 = between1 / (24 * 3600);
+
+                    long hour2 = between1 % (24 * 3600) / 3600;
+
+                    long minute2 = between1 % 3600 / 60;
+
+                    String time2 = "" + day2 + "天" + hour2 + "小时" + minute2 + "分";
+
+                    conditionsForTheAdjustmentVOSLost.setMonitoringTime(time2);
+                }
+                ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
-            //一个报案号对应多个保单-出单公司为同一家companyName
-            //根据保单号去查policyNo1
-
-            //查询保单信息表主键为：保单号policy_no
-            PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(policyNo);
-            //承保机构
-            //company_name
-            if (null != policyInfo) {
-                conditionsForTheAdjustmentVOSLost.setOrganCode(policyInfo.getPolicyManageCom());//承保机构-by批次号=organ_code
-                conditionsForTheAdjustmentVOSLost.setCompanyName(policyInfo.getCompanyName());  //出单公司companyName
-            }
-            //
-
-            //是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
-            claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-            claimCaseInvestigation.setIsHistory("N");
-            claimCaseInvestigation.setStatus("Y");
-            List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-            if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
-                conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
-            } else {
-                conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
-            }
-
-            //停留时长
-            ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoCase(conditionsForTheAdjustmentVOSLost.getRptNo());
-            Date begin;
-            Date end = new Date();
-            if (null != claimCaseRecord && claimCaseRecord.getStatus() != "") {
-                begin = claimCaseRecord.getCreateTime();
-            } else {
-                ClaimCaseRecord claimCaseRecord1 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
-                begin = claimCaseRecord1.getUpdateTime();
-            }
-            long between = (end.getTime() - begin.getTime()) / 1000;//除以1000是为了转换成秒
-
-            long day1 = between / (24 * 3600);
-
-            long hour1 = between % (24 * 3600) / 3600;
-
-            long minute1 = between % 3600 / 60;
-
-            String time = "" + day1 + "天" + hour1 + "小时" + minute1 + "分";
-
-            conditionsForTheAdjustmentVOSLost.setStayTime(time);
-            //监控时效
-            ClaimCaseRecord claimCaseRecord1 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-            if (null != claimCaseRecord1) {
-                Date begin1 = claimCaseRecord1.getUpdateTime();
-                Date end1 = new Date();
-
-                long between1 = (end1.getTime() - begin1.getTime()) / 1000;//除以1000是为了转换成秒
-
-                long day2 = between1 / (24 * 3600);
-
-                long hour2 = between1 % (24 * 3600) / 3600;
-
-                long minute2 = between1 % 3600 / 60;
-
-                String time2 = "" + day2 + "天" + hour2 + "小时" + minute2 + "分";
-
-                conditionsForTheAdjustmentVOSLost.setMonitoringTime(time2);
-            }
-            ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
         }
         return ConditionsForTheAdjustmentVOLList;
     }
@@ -1154,29 +1166,41 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                             //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
                             //还差：出单公司、承保机构、停留时长、监控时效、是否调查
-                            //被保人姓名
-                            //ClaimCaseInsured claimCaseInsured = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                            //conditionsForTheAdjustmentVOSLost.setName(claimCaseInsured.getName());
-                            String policyNo = null;
                             //查询案件保单关联表：claim_case_policy，rpt_no
                             List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                             if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
-                                //循环遍历表单号
+                                List<String> organCodeList = new ArrayList<>();//承保机构
+                                List<String> companyNameList = new ArrayList<>();//出单公司
                                 for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                                    policyNo = claimCasePoliciesOne.getPolicyNo();
+                                    //去重出单公司名称拼接
+                                    companyNameList.add(claimCasePoliciesOne.getCompanyName());
+                                    //去重承保机构名称拼接
+                                    organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
                                 }
-                                //一个报案号对应多个保单-出单公司为同一家companyName
-                                //根据保单号去查policyNo1
 
-                                //查询保单信息表主键为：保单号policy_no
-                                PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(policyNo);
-                                //承保机构
-                                //company_name
-                                if (null != policyInfo) {
-                                    conditionsForTheAdjustmentVOSLost.setOrganCode(policyInfo.getPolicyManageCom());//承保机构-by批次号=organ_code
-                                    conditionsForTheAdjustmentVOSLost.setCompanyName(policyInfo.getCompanyName());  //出单公司companyName
+                                StringBuilder stringBuilder = new StringBuilder();
+                                Set set = new HashSet<>(organCodeList);
+                                List newOrganCodeList = new ArrayList<>(set);
+                                if (!newOrganCodeList.isEmpty()) {
+                                    stringBuilder.append(newOrganCodeList.get(0));
+                                    for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
+                                        stringBuilder.append("|").append(newOrganCodeList.get(i));
+                                    }
                                 }
+                                conditionsForTheAdjustmentVOSLost.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
+
+                                StringBuilder stringBuilder2 = new StringBuilder();
+                                Set set1 = new HashSet<>(companyNameList);
+                                List newCompanyNameList = new ArrayList<>(set1);
+                                if (!newCompanyNameList.isEmpty()) {
+                                    stringBuilder2.append(newCompanyNameList.get(0));
+                                    for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                                        stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                                    }
+                                }
+                                conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                             }
+
                             //是否调查
                             ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                             claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
@@ -1201,29 +1225,41 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                     //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
                     //还差：出单公司、承保机构、停留时长、监控时效、是否调查
-                    //被保人姓名
-                    //ClaimCaseInsured claimCaseInsured = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                    //conditionsForTheAdjustmentVOSLost.setName(claimCaseInsured.getName());
-                    String policyNo = null;
                     //查询案件保单关联表：claim_case_policy，rpt_no
                     List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
-                        //循环遍历表单号
+                        List<String> organCodeList = new ArrayList<>();//承保机构
+                        List<String> companyNameList = new ArrayList<>();//出单公司
                         for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                            policyNo = claimCasePoliciesOne.getPolicyNo();
+                            //去重出单公司名称拼接
+                            companyNameList.add(claimCasePoliciesOne.getCompanyName());
+                            //去重承保机构名称拼接
+                            organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
                         }
-                        //一个报案号对应多个保单-出单公司为同一家companyName
-                        //根据保单号去查policyNo1
 
-                        //查询保单信息表主键为：保单号policy_no
-                        PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(policyNo);
-                        //承保机构
-                        //company_name
-                        if (null != policyInfo) {
-                            conditionsForTheAdjustmentVOSLost.setOrganCode(policyInfo.getPolicyManageCom());//承保机构-by批次号=organ_code
-                            conditionsForTheAdjustmentVOSLost.setCompanyName(policyInfo.getCompanyName());  //出单公司companyName
+                        StringBuilder stringBuilder = new StringBuilder();
+                        Set set = new HashSet<>(organCodeList);
+                        List newOrganCodeList = new ArrayList<>(set);
+                        if (!newOrganCodeList.isEmpty()) {
+                            stringBuilder.append(newOrganCodeList.get(0));
+                            for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
+                                stringBuilder.append("|").append(newOrganCodeList.get(i));
+                            }
                         }
+                        conditionsForTheAdjustmentVOSLost.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
+
+                        StringBuilder stringBuilder2 = new StringBuilder();
+                        Set set1 = new HashSet<>(companyNameList);
+                        List newCompanyNameList = new ArrayList<>(set1);
+                        if (!newCompanyNameList.isEmpty()) {
+                            stringBuilder2.append(newCompanyNameList.get(0));
+                            for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                                stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                            }
+                        }
+                        conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                     }
+
                     //是否调查
                     ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                     claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());

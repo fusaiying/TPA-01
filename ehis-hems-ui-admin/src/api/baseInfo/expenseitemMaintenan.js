@@ -29,7 +29,7 @@ export function addFeeitem(data) {
 // 修改费用项信息
 export function updateFeeitem(data) {
   return request({
-    url: '/system/feeitem',
+    url: '/provider/feeitem',
     method: 'put',
     data: data
   })

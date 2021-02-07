@@ -1,9 +1,18 @@
 import request from '@/utils/request'
 
+//查询医院
+export function getHospitalInfo(data) {
+  return request({
+    url: '/provider/org/selectHospitalInfoNew',
+    method: 'post',
+    data: data
+  })
+}
+
 //# 查询处理中受理案件信息 列表
 export function getBackList(query) {
   return request({
-    url: '/system/case/processingList',
+    url: '/claimflow/case/processingList',
     method: 'get',
     params: query
   })
@@ -12,7 +21,7 @@ export function getBackList(query) {
 //# 查询已处理受理案件信息 列表
 export function getFinishList(query) {
   return request({
-    url: '/system/case/processedList',
+    url: '/claimflow/case/processedList',
     method: 'get',
     params: query
   })
@@ -21,7 +30,7 @@ export function getFinishList(query) {
 //# 查询悬挂中受理案件信息 列表
 export function getHangUpList(query) {
   return request({
-    url: '/system/case/suspensionList',
+    url: '/claimflow/case/suspensionList',
     method: 'get',
     params: query
   })
@@ -31,7 +40,7 @@ export function getHangUpList(query) {
 // 传报案号和批次号
 export function getCase(data) {
   return request({
-    url: '/system/case/getInfoClaimAndBatch',
+    url: '/claimflow/case/getInfoClaimAndBatch',
     method: 'get',
     params: data
   })
@@ -332,14 +341,6 @@ export function getFee(data) {
   })
 }
 
-//查询医院
-export function getHospitalInfo(data) {
-  return request({
-    url: '/provider/org/selectHospitalInfoNew',
-    method: 'post',
-    data: data
-  })
-}
 
 //理算
 //个人池处理中

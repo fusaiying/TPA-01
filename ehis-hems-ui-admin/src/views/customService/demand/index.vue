@@ -211,8 +211,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="sendForm.pageNum"
-          :limit.sync="sendForm.pageSize"
+          :page.sync="pageNum"
+          :limit.sync="pageSize"
           @pagination="searchHandle"
         />
       </div>
@@ -274,8 +274,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
-          :page.sync="sendForm.pageNum"
-          :limit.sync="sendForm.pageSize"
+          :page.sync="pageNumPerson"
+          :limit.sync="pageSizePerson"
           @pagination="searchHandle1"
         />
       </div>
@@ -313,6 +313,7 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
+
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -344,8 +345,12 @@
         },
         caseNumber: false,//查询条件（报案号）是否显示
         loading: true,
-        workPoolData: [],
+        workPoolData: [],//公共池
+        pageNum: 1,
+        pageSize: 10,
         workPersonPoolData:[],
+        pageNumPerson: 1,
+        pageSizePerson: 10,
         isinit: 'Y',
         totalCount: 0,
         totalPersonCount: 0,
@@ -483,6 +488,8 @@
         } else {
           queryParams = this.sendForm;
         }
+        queryParams.pageNum = this.pageNum;
+        queryParams.pageSize = this.pageSize;
         demandListAndPublicPool(queryParams).then(res => {
           console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
@@ -509,6 +516,8 @@
         } else {
           queryParams = this.sendForm;
         }
+        queryParams.pageNum = this.pageNumPerson;
+        queryParams.pageSize = this.pageSizePerson;
         demandListAndPersonalPool(this.sendForm).then(res => {
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {

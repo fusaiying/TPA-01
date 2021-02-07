@@ -288,6 +288,14 @@
               <el-input v-model="ruleForm.ContactsMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
+          <el-col :span="5">
+            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
+              国家区号:+<el-input v-model="ruleForm.contactsCountry" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="ruleForm.contactsQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="ruleForm.contactsNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="ruleForm.contactsSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
 
         </el-row>
         <el-row>
@@ -342,7 +350,7 @@
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
-          v-model="ruleForm.Content">
+          v-model="ruleForm.ontent">
         </el-input>
         </el-form-item>
       </el-form>
@@ -426,7 +434,7 @@
           callName:"",//来电人
           callRelationBy:"",//来电人与被保人关系
           contactsName:"",//联系人
-          contactsSex: 0,//联系人性别
+          contactsSex: "",//联系人性别
           contactsRelationBy: "",//联系人与别抱人关系
           contactsLanguage: "",//联系人语言
           contactsMobilePhone: "",//联系人电话
@@ -437,7 +445,11 @@
           bankLocation:"",//开户地
           accountNumber:"",//账号
           bankHolder:"",//户名
-          Content:"",
+          content:"",
+          contactsCountry:"",//
+          contactsQuhao:"",
+           contactsNumber:"",
+          contactsSecondNumber:""
 
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可

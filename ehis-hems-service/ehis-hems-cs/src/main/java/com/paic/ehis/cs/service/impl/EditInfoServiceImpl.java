@@ -115,10 +115,13 @@ public class EditInfoServiceImpl implements IEditInfoService
             EditInfo editInfo=new EditInfo();
         //随机生成流水号
         editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setWorkOrderId(demandAcceptVo.getWorkOrderNo());
         editInfo.setCreatedBy(SecurityUtils.getUsername());
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         editInfo.setUpdatedBy(SecurityUtils.getUsername());
         editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setEditReason(demandAcceptVo.getEditReason());
+        editInfo.setEditRemark(demandAcceptVo.getEditRemark());
         editInfoMapper.insertEditInfo(editInfo);
 
 

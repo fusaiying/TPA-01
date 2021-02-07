@@ -1,16 +1,19 @@
 package com.paic.ehis.cs.controller;
 
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.web.controller.BaseController;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class CustomServiceReservationController extends BaseController {
 
     @Autowired
     private IReservationAcceptVoService iReservationAcceptVoService;
+
 
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
@@ -39,6 +43,16 @@ public class CustomServiceReservationController extends BaseController {
         List<ReservationAcceptVo> list = iReservationAcceptVoService.selectReservationAcceptVoList2(acceptDTO);
         return getDataTable(list);
     }
+
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "增加 ", businessType = BusinessType.INSERT)
+    @PutMapping("/serviceAdd")
+    public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo ReservationAcceptVo)
+    {
+        return toAjax(iReservationAcceptVoService.insertServiceInfo(ReservationAcceptVo));
+    }
+
 
 
 }

@@ -50,8 +50,9 @@ public class EditDetailController extends BaseController
 
 
     @GetMapping(value = "/{workOrderNo}")
-    public AjaxResult getEdit(@PathVariable("workOrderNo") String workOrderNo){
-        return AjaxResult.success(editDetailService.selectEdit(workOrderNo));
+    public TableDataInfo getEdit(@PathVariable("workOrderNo") String workOrderNo){
+         List<EditDetail> list =editDetailService.selectEdit(workOrderNo);
+        return getDataTable(list);
     }
 
     /**
@@ -67,15 +68,6 @@ public class EditDetailController extends BaseController
         util.exportExcel(response, list, "detail");
     }
 
-    /**
-     * 获取修改明细 详细信息
-     */
-    @PreAuthorize("@ss.hasPermi('system:detail:query')")
-    @GetMapping(value = "/{detailId}")
-    public AjaxResult getInfo(@PathVariable("detailId") String detailId)
-    {
-        return AjaxResult.success(editDetailService.selectEditDetailById(detailId));
-    }
 
     /**
      * 新增修改明细 
@@ -97,16 +89,5 @@ public class EditDetailController extends BaseController
     public AjaxResult edit(@RequestBody EditDetail editDetail)
     {
         return toAjax(editDetailService.updateEditDetail(editDetail));
-    }
-
-    /**
-     * 删除修改明细 
-     */
-    @PreAuthorize("@ss.hasPermi('system:detail:remove')")
-    @Log(title = "修改明细 ", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{detailIds}")
-    public AjaxResult remove(@PathVariable String[] detailIds)
-    {
-        return toAjax(editDetailService.deleteEditDetailByIds(detailIds));
     }
 }

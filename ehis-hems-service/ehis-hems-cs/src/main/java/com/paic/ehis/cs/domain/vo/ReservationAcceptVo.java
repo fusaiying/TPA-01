@@ -164,6 +164,9 @@ public class ReservationAcceptVo extends BaseEntity {
 
     /*医院赔付比例*/
     private String compensationRatio;
+    /** 业务内容 */
+    @Excel(name = "业务内容")
+    private String content;
 
 
 

@@ -21,7 +21,7 @@ public interface EditDetailMapper
      */
     public EditDetail selectEditDetailById(String detailId);
 
-    public EditDetail selectEdit(String workOrderNo);
+    public List<EditDetail> selectEdit(String workOrderNo);
 
     /**
      * 查询修改明细 列表

@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="130px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -191,7 +191,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="165px"
                label-position="right" size="mini">
 
         <span style="color: blue">信息需求-理赔类-质疑理赔结果</span>
@@ -321,23 +321,23 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开户行：" v-show="ruleForm.bank=='1'" prop="bankaa">
+            <el-form-item label="开户行：" v-show="workPoolData.bank=='1'" prop="bankaa">
               <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户地：" v-show="ruleForm.bank=='1'" prop="bankbb">
+            <el-form-item label="开户地：" v-show="workPoolData.bank=='1'" prop="bankbb">
               <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账号：" v-show="ruleForm.bank=='1'" prop="bankcc">
+            <el-form-item label="账号：" v-show="workPoolData.bank=='1'" prop="bankcc">
               <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="户名：" v-show="ruleForm.bank=='1'" prop="bankdd">
+            <el-form-item label="户名：" v-show="workPoolData.bank=='1'" prop="bankdd">
               <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
             </el-form-item>
           </el-col>
@@ -399,7 +399,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="业务处理情况" prop="bank" >
-             <el-input v-model="ruleForm.phone" class="width-full"  size="mini" readonly></el-input>
+             <el-input v-model="workPoolData.phone" class="width-full"  size="mini" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -408,7 +408,7 @@
             <el-input
               type="textarea"
               :rows="2"
-              v-model="ruleForm.textarea" readonly>
+              v-model="workPoolData.textarea" readonly>
             </el-input>
           </el-form-item>
         </el-row>
@@ -424,10 +424,10 @@
         <el-divider style="color: blue" ></el-divider>
         <el-row>
           <el-form-item label="取消原因" prop="bank" >
-            <el-radio-group v-model="ruleForm.bank">
-              <el-radio   :label="1">客户申请变动</el-radio>
-              <el-radio   :label="2">操作失误</el-radio>
-              <el-radio   :label="3">其他原因</el-radio>
+            <el-radio-group v-model="ruleForm.editReason">
+              <el-radio   label="1">客户申请变动</el-radio>
+              <el-radio   label="2">操作失误</el-radio>
+              <el-radio   label="3">其他原因</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -437,7 +437,7 @@
             <el-input
               type="textarea"
               :rows="2"
-              v-model="ruleForm.textarea"
+              v-model="ruleForm.editRemark"
             >
             </el-input>
           </el-form-item>
@@ -445,7 +445,7 @@
       </el-form>
       <el-row :gutter="20" align="right">
         <div style="text-align: right; margin-right: 1px;">
-        <el-button type="primary"  size="mini" @click="upload()">提交</el-button>
+        <el-button type="primary"  size="mini" @click="submit()">提交</el-button>
         <el-button type="primary"  size="mini" @click="hiddenShow()">关闭</el-button>
          </div>
       </el-row>
@@ -462,7 +462,7 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch} from '@/api/customService/demand'
+  import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
 
   let dictss = [{dictType: 'product_status'}]
   export default {
@@ -483,62 +483,18 @@
         workOrderNo:"",
         //需要填入数据的部分
         ruleForm:{
-          radio:"",
-          service:"",
-          phone:"",
-          priority:"",
-          lxperson:"",
-          bankaa: "",
-          bankbb: "",
-          bankcc: "",
-          bankdd: "",
-          bank:"2",
-          textarea:"",
-        },
-        // 表单校验
-        rules: {
-          Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankaa: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankbb: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          bankcc: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankdd: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          textarea: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
-          ],
-        },
+          cancelReason:"",
+          editRemark:"",
+          workOrderNo:"",
 
+        },
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
         sendForm: {
           channle:"",
           textarea:"",
-          service: "1",
+          service: "",
           channel: "",
           acceptor: "",
           acceptorTime:"",
@@ -610,7 +566,23 @@
       //下载
       download(){},
       //提交页面数据
-      submit(){},
+      submit(){
+        let insert=this.ruleForm
+        insert.workOrderNo=this.$route.query.workOrderNo
+        cancelSubmit(insert).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("insert",insert)
+            alert("修改成功")
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
       resetForm() {
         this.$refs.sendForm.resetFields()
       },

@@ -110,7 +110,10 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
-    public int insertReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
+    public int insertServiceInfo(ReservationAcceptVo reservationAcceptVo) {
+        reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+        reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+        reservationAcceptVo.setBusinessType("预约");
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
@@ -124,10 +127,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         workOrderAccept.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setBusinessType(reservationAcceptVo.getBusinessType());
-    //  demandAcceptVoMapper.insertWorkOrderAccept(workOrderAccept);
         workOrderAcceptMapper.insertWorkOrderAccept(workOrderAccept);
 
-
+        //详细表插入
         acceptDetailInfo.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         acceptDetailInfo.setChannelCode(reservationAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(reservationAcceptVo.getItemCode());
@@ -137,12 +139,13 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setContactsPersonId(reservationAcceptVo.getContactsPersonId());
         acceptDetailInfo.setContactsRelationBy(reservationAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
-   //   acceptDetailInfo.setContent(reservationAcceptVo.getContent());
+        acceptDetailInfo.setContent(reservationAcceptVo.getContent());
         acceptDetailInfo.setStatus(reservationAcceptVo.getStatus());
         acceptDetailInfo.setCreateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setCallCenterId(reservationAcceptVo.getCallCenterId());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -171,7 +174,6 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-    //  personInfo2.setLinePhone(reservationAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -181,12 +183,12 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         //轨迹表插入
         flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
-        flowLog.setOperateCode("01");
+        flowLog.setOperateCode("06");
+        flowLog.setLinkCode("01");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//        demandAcceptVoMapper.insertFlowLog(flowLog);
         return  flowLogMapper.insertFlowLog(flowLog);
     }
 

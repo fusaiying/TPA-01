@@ -3,7 +3,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="120px"
                label-position="right" size="mini">
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
@@ -224,7 +224,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电人姓名：" prop="phone">
-              <el-input v-model="workPoolData.callPerson" class="item-width" readonly size="mini"/>
+              <el-input v-model="workPoolData.callName" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -373,7 +373,11 @@
               <span>{{ scope.row.makeTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
+          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
+            <template slot-scope="scope" class="link-type">
+              <span  @click="modifyDetails" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.umNum}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -510,14 +514,15 @@
         </el-table>
       </div>
       <div style="text-align: right; margin-right: 1px;">
+        <modify-details ref="modifyDetails"></modify-details>
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
         <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
-        <el-button  type="primary" size="mini" @click="upload">暂存</el-button>
-        <el-button type="primary" size="mini" @click="upload">提交</el-button>
+        <el-button  type="primary" size="mini" @click="submit">暂存</el-button>
+        <el-button type="primary" size="mini" @click="temporary">提交</el-button>
       </div>
     </el-card>
 
@@ -528,16 +533,18 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch} from '@/api/customService/demand'
+  import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
   import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
   import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
     components: { transfer ,
                   upLoad,
                   coOrganizer,
+      modifyDetails,
     },
     filters: {
       changeDate: function (value) {
@@ -566,7 +573,8 @@
           remark:"",
           customerFeedback:"",
           closeType:"",
-          costsIncurred:""
+          costsIncurred:"",
+          sign:""
         },
         // 表单校验
         rules: {
@@ -697,14 +705,60 @@
       upload(){ this.$refs.upload.open();},
       //下载
       download(){},
-      //提交页面数据
-      submit(){},
       //转办
       transfer(){ this.$refs.transfer.open();},
       //协办
       coOrganizer(){ this.$refs.coOrganizer.open();},
+      //超链接用
+      modifyDetails(){
+        this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.open()
+      ;},
+
       resetForm() {
         this.$refs.sendForm.resetFields()
+      },
+      //打开修改对话框
+
+      //提交
+      submit(){
+        let insert=this.ruleForm
+        insert.sign="02"
+        insert.workOrderNo=this.$route.query.workOrderNo
+        dealADD(insert).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("insert",insert)
+            alert("保存成功")
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      //暂存
+      temporary(){
+        let insert=this.ruleForm
+        insert.sign="01"
+        insert.workOrderNo=this.$route.query.workOrderNo
+        dealADD(insert).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("insert",insert)
+            alert("修改成功")
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+
       },
 
       //查询轨迹表

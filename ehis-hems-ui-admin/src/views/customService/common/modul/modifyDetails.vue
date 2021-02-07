@@ -1,15 +1,16 @@
 <template>
   <div>
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form  label-width="80px">
-       <el-row>
-         <el-form-item label="投保人姓名：" prop="insuredName" style="align-items: center">
-           <el-input v-model="workPoolData.channel" class="item-width" clearable size="mini" readonly/>
+    <el-dialog title="修改说明" :visible.sync="dialogVisable" width="600px" append-to-body>
+      <el-form  label-width="100px" >
+<!--        label-width设置了lanbl的宽度-->
+       <el-row justify="center" align="center" >
+         <el-form-item label="修改原因：" prop="insuredName">
+           <el-input v-model="ss.editReason" class="item-width"  size="mini" readonly/>
          </el-form-item>
        </el-row>
         <el-row>
-          <el-form-item label="投保人姓名：" prop="insuredName" style="align-items: center">
-            <el-input v-model="workPoolData.channel" class="item-width" clearable size="mini" readonly/>
+          <el-form-item label="修改说明：" prop="insuredName"  >
+            <el-input v-model="ss.editRemark" class="item-width"  size="mini" readonly/>
           </el-form-item>
         </el-row>
         <el-card class="box-card" style="margin-top: 10px;">
@@ -26,8 +27,8 @@
               style=" width: 100%;"
             >
               <el-table-column align="center" width="140" prop="state" label="修改项" show-overflow-tooltip/>
-              <el-table-column align="center" prop="channel" label="新值" show-overflow-tooltip/>
-              <el-table-column align="center" prop="Service" label="旧值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="oldValue" label="新值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="nowValue" label="旧值" show-overflow-tooltip/>
 
               <!--fixed="right"控制固定某一列-->
             </el-table>
@@ -46,51 +47,40 @@
   </div>
 </template>
 <script>
-  import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
+   import {modifyDetailsSearch} from '@/api/customService/demand'
 
   export default {
     name:'modify',
-    //接受父传值
-    props: {
-      workPoolData: [],
-    },
-
-
     data() {
       return {
-        cs_service_item:[],
-        open:"true",
+        totalCount:0,
+        workPoolData:[],
+        ss:{},
+        workOrderNo:"",
         queryParams: {
           pageNum: 1,
           pageSize: 10
-
-
         },
-        workPoolData:[],
-        dialogVisable: false,
-        coOrganizerForm: {
-          attachmentType: "",
-          attachmentTypes: "",
-          attachmentFile: "",
-          textarea: ""
-
-        }
+        dialogVisable:false,
       }
     },
-    mounted() {
-      this.searchHandle()
+    created() {
+
     },
+
+
     methods: {
-      searchHandle() {
-        debugger;
-        let query = {}
-        console.log('query: ',query)
-        demandListAndPublicPool(query).then(res => {
-          console.log('------------: ',res)
+      //查询
+      searchHandle(){
+        let workOrderNo = this.workOrderNo
+        debugger
+        modifyDetailsSearch(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
+            this.ss=res.rows[0]
+            console.log(this.ss)
             this.workPoolData = res.rows
             this.totalCount = res.total
-            console.log('response',res.total)
+            console.log('response',res.rows)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -100,12 +90,14 @@
         }).catch(res => {
 
         })
+
       },
-      //关闭对话框
-      changeDialogVisable() {
-        //清空对话框中的数据
-        this.$emit('closeHistoricalProblem')
-      }
+      //打开窗口
+      open(){
+        console.log("调用到了子组件")
+        this.dialogVisable=true;
+        this.searchHandle();
+      },
     }
   }
 </script>

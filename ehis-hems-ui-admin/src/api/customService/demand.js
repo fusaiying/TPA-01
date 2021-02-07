@@ -77,6 +77,43 @@ export function addInsert(data) {
   })
 }
 
+//# modify页面保存
+export function modifySubmit(data) {
+  return request({
+    url: '/cs/demand/serviceUpdate',
+    method: 'put',
+    data: data
+  })
+}
+
+//# deal页面暂存提交
+export function dealADD(data) {
+  return request({
+    url: '/cs/demand/insertServiceProcessing',
+    method: 'put',
+    data: data
+  })
+}
+
+//# 修改说明弹出框
+export function modifyDetailsSearch(workOrderNo) {
+  return request({
+    url: '/cs/detail/'+workOrderNo,
+    method: 'get'
+  })
+}
+
+
+//# cancel页面保存
+export function cancelSubmit(data) {
+  return request({
+    url: '/cs/demand/cancelSubmit',
+    method: 'put',
+    data: data
+  })
+}
+
+
 
 
 

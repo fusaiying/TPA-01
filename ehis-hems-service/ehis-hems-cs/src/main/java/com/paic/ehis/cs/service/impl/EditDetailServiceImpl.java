@@ -33,7 +33,7 @@ public class EditDetailServiceImpl implements IEditDetailService
     }
 
     @Override
-    public EditDetail selectEdit(String workOrderNo) {
+    public List<EditDetail> selectEdit(String workOrderNo) {
         return editDetailMapper.selectEdit(workOrderNo);
     }
 

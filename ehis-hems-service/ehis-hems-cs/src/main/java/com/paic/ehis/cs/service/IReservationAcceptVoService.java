@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,8 @@ public interface IReservationAcceptVoService {
     /*获取*/
     public int updateStatusM(String[] workOrderNos);
 
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
-    int insertReservationAcceptVo(ReservationAcceptVo reservationAcceptVo);
+    /*新增*/
+    public int insertServiceInfo(ReservationAcceptVo ReservationAcceptVo);
+
+//
 }

@@ -8,6 +8,7 @@ import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.IClaimCaseProblemService;
 import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -405,6 +406,7 @@ public class ClaimCaseController extends BaseController
     @PostMapping("/caseCheck")
     public TableDataInfo caseCheck(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO)
     {
+        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVOS);
@@ -424,11 +426,12 @@ public class ClaimCaseController extends BaseController
         util.exportExcel(response, conditionsForTheAdjustmentVOS, "处理中审核案件");
     }
 
-    //审核工作池接口-个人池已处理
+    //抽检工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
     @PostMapping("/listConditionsForTheAdjustmentOverNew")
     public TableDataInfo listConditionsForTheAdjustmentOverNew(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO)
     {
+        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVOS);

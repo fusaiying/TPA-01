@@ -329,6 +329,10 @@ public class ClaimCaseController extends BaseController
     @GetMapping("/listConditionsForTheAdjustmentUnder")
     public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO)
     {
+//        if (auditWorkPoolDTO.getOrderByColumn()!=null && auditWorkPoolDTO.getOrderByColumn()!=""){//要按要求排序
+//
+//        }
+//        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage();
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVoS);

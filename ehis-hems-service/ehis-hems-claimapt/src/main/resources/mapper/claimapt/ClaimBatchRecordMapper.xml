@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select conclusion,nopass_type,remark from claim_batch_record
         <where>
             <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
-            and operation = "03" and status='Y'
+            and operation = '03' and status='Y'
         </where>
     </select>
 

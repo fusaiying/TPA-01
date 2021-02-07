@@ -1,11 +1,13 @@
 package com.paic.ehis.claimapt.service.Impl;
 
-
+import com.paic.ehis.claimapt.domain.ClaimCase;
 import com.paic.ehis.claimapt.domain.ClaimCaseRecord;
 import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
+import com.paic.ehis.claimapt.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper;
 import com.paic.ehis.claimapt.service.IClaimCaseRecordService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
 {
     @Autowired
     private ClaimCaseRecordMapper claimCaseRecordMapper;
+
+    @Autowired
+    private ClaimCaseMapper claimCaseMapper;
 
     /**
      * 查询案件操作记录 
@@ -134,6 +139,21 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         claimCaseRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+
+        ClaimCase claimCase = new ClaimCase();
+        //归档号
+        String claimCaseNumber1="JGHDQQW"+DateUtils.dateTimeNow("yyyy")+"X"+PubFun.createMySqlMaxNoUseCache("FILINGCODE",10,10);
+        claimCase.setBatchNo(claimCaseStandingVo.getBatchno());//批次号
+        claimCase.setRptNo(claimCaseStandingVo.getRptno());//报案号
+        claimCase.setFilingNo(claimCaseNumber1);//归档号
+        claimCase.setCaseStatus("05");//案件状态
+        claimCase.setCreateBy(SecurityUtils.getUsername());
+        claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimCase.setUpdateBy(SecurityUtils.getUsername());
+        claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimCase.setStatus("Y");
+        claimCaseMapper.insertClaimCase(claimCase);
+
         return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
     }
 

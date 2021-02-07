@@ -219,19 +219,6 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
 
         ClaimCase claimCase = new ClaimCase();
 
-        //归档号
-        String claimCaseNumber1="JGHDQQW"+DateUtils.dateTimeNow("yyyy")+"X"+PubFun.createMySqlMaxNoUseCache("FILINGCODE",10,10);
-        claimCase.setBatchNo(claimCaseStandingVo.getBatchno());//批次号
-        claimCase.setRptNo(bahtime);//报案号
-        claimCase.setFilingNo(claimCaseNumber1);//归档号
-        claimCase.setCaseStatus("05");//案件状态
-        claimCase.setCreateBy(SecurityUtils.getUsername());
-        claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimCase.setUpdateBy(SecurityUtils.getUsername());
-        claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimCase.setStatus("Y");
-        claimCaseMapper.insertClaimCase(claimCase);
-
         claimCaseStandingMapper.insertClaimCaseStanding(claimCaseStanding);
         return claimCaseStandingVo;
     }

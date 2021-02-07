@@ -30,7 +30,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-02-05
  */
 @RestController
-@RequestMapping("/info3")
+@RequestMapping("/info4")
 public class EditInfoController extends BaseController
 {
     @Autowired

@@ -1,11 +1,10 @@
 package com.paic.ehis.cs.service.impl;
 
 
-
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
 @Service
@@ -33,6 +33,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     private AcceptDetailInfoMapper acceptDetailInfoMapper;
     @Autowired
     private WorkOrderAcceptMapper workOrderAcceptMapper;
+    @Autowired
+    private EditInfoMapper editInfoMapper;
+    @Autowired
+    private EditDetailMapper editDetailMapper;
 
 
     @Override
@@ -93,7 +97,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
     @Override
     public int updateStatus(String workOrderNo) {
-        String modifyBy=String.valueOf(SecurityUtils.getLoginUser().getUserId());
         return demandAcceptVoMapper.updateStatus(workOrderNo);
     }
 
@@ -191,8 +194,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Override
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo) {
         String workOrderNo=demandAcceptVo.getWorkOrderNo();
-        AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
-        WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        AcceptDTO acceptDTO=new AcceptDTO();
+        acceptDTO.setWorkOrderNo(workOrderNo);
+        List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+        DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
+     //   AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
+     //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
         PersonInfo personInfo1=new PersonInfo();
@@ -270,12 +277,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
 //        demandAcceptVoMapper.insertFlowLog(flowLog);
 
-        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
-        WorkOrderAccept workOrderAccept2=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+//        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
+//        WorkOrderAccept workOrderAccept2=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
 
-        Map map1 = JSONObject.parseObject(JSONObject.toJSONString(acceptDetailInfo1), Map.class);
-        Map map2 = JSONObject.parseObject(JSONObject.toJSONString(acceptDetailInfo2), Map.class);
+        Map map1 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo1), Map.class);
+        Map map2 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo), Map.class);
 
    //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
@@ -283,19 +290,22 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
             EditDetail editDetail=new EditDetail();
+            EditInfo editInfo=new EditInfo();
             String map1key=iter1.next();
             String map1value = String.valueOf(map1.get(map1key));
             String map2value = String.valueOf(map2.get(map1key));
             if (!map1value.equals(map2value)) {
                 keyList.add(map1key);
-               // editDetail.setKeyDictType();
+                editDetail.setKeyDictType("demandAcceptVo");
                 editDetail.setItemKey(map1key);
                 editDetail.setOldValue(map1value);
                 editDetail.setNowValue(map2value);
             }
+            editDetailMapper.insertEditDetail(editDetail);
+            editInfoMapper.insertEditInfo(editInfo);
         }
 
-        Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
+        /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
 
         Iterator<String> iter2 = map3.keySet().iterator();
@@ -306,14 +316,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             if (!map3value.equals(map4value)) {
 
             }
-        }
-
-
-
-
-
-
-
+        }*/
 
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }

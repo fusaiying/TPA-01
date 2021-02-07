@@ -4,7 +4,7 @@ import data from "../../views/system/dict/data";
 // 转账失败查询
 export function transferFailedList(data) {
   return request({
-    url: 'system/payInfo/TransferFailedList',
+    url: 'finance/payInfo/TransferFailedList',
     method: 'get',
     params:data
   })
@@ -13,7 +13,7 @@ export function transferFailedList(data) {
 // 对公支付初始化查询
 export function initList(data) {
   return request({
-    url: 'system/pay/initList',
+    url: 'finance/pay/initList',
     method: 'get',
     params:data
   })
@@ -21,7 +21,7 @@ export function initList(data) {
 // 对公支付查询按钮
 export function list(data) {
   return request({
-    url: 'system/pay/list',
+    url: 'finance/pay/list',
     method: 'post',
     data: data
   })
@@ -30,7 +30,7 @@ export function list(data) {
 // 开始对公支付
 export function startPay() {
   return request({
-    url: '/system/pay/'+batchNo,
+    url: '/finance/pay/'+batchNo,
     method: 'get'
   })
 }
@@ -38,7 +38,7 @@ export function startPay() {
 // 回退
 export function rollback(rptNo) {
   return request({
-    url: 'system/pay/rollback',
+    url: 'finance/pay/rollback',
     method: 'get',
     params: rptNo
   })
@@ -46,7 +46,7 @@ export function rollback(rptNo) {
 // 案件借款
 export function borrowingCase(data) {
   return request({
-    url: '/system/pay/borrowingCase',
+    url: '/finance/pay/borrowingCase',
     method: 'post',
     data: data
   })
@@ -54,7 +54,7 @@ export function borrowingCase(data) {
 // 确认支付
 export function confirmPayment(data) {
   return request({
-    url: '/system/pay/confirmPayment',
+    url: '/finance/pay/confirmPayment',
     method: 'post',
     data: data
   })
@@ -64,7 +64,7 @@ export function confirmPayment(data) {
 // 外币主页初始化
 export function initForeignList(data) {
   return request({
-    url: 'system/pay/initForeignList',
+    url: 'finance/pay/initForeignList',
     method: 'get',
     params: data
   })
@@ -72,7 +72,7 @@ export function initForeignList(data) {
 //外币查询按钮
 export function foreignList(data) {
   return request({
-    url: 'system/pay/foreignList',
+    url: 'finance/pay/foreignList',
     method: 'post',
     data: data
   })
@@ -80,7 +80,7 @@ export function foreignList(data) {
 //外币查询按钮
 export function startForeignPay(foreignBatchNo) {
   return request({
-    url: '/system/pay/'+foreignBatchNo,
+    url: '/finance/pay/'+foreignBatchNo,
     method: 'get'
   })
 }

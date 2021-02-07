@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select detail_id, settle_task_no, company_code, rpt_no, batch_no, advance_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_advance_settle_detail
     </sql>
 
-    <select id="selectFinanceAdvanceSettleDetailList" parameterType="FinanceAdvanceSettleDetail" resultMap="FinanceAdvanceSettleDetailResult">
+    <select id="selectFinanceAdvanceSettleDetailList" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleDetail" resultMap="FinanceAdvanceSettleDetailResult">
         <include refid="selectFinanceAdvanceSettleDetailVo"/>
         <where>  
             <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where detail_id = #{detailId}
     </select>
         
-    <insert id="insertFinanceAdvanceSettleDetail" parameterType="FinanceAdvanceSettleDetail" useGeneratedKeys="true" keyProperty="detailId">
+    <insert id="insertFinanceAdvanceSettleDetail" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleDetail" useGeneratedKeys="true" keyProperty="detailId">
         insert into finance_advance_settle_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no,</if>
@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinanceAdvanceSettleDetail" parameterType="FinanceAdvanceSettleDetail">
+    <update id="updateFinanceAdvanceSettleDetail" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleDetail">
         update finance_advance_settle_detail
         <trim prefix="SET" suffixOverrides=",">
             <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <resultMap type="com.paic.ehis.system.domain.vo.FinanceAdvanceSettleVO" id="FinanceAdvanceSettleVOResult">
+    <resultMap type="com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO" id="FinanceAdvanceSettleVOResult">
         <result property="settleTaskNo"    column="settle_task_no"    />
         <result property="companyCode"    column="company_code"    />
         <result property="companyName"    column="company_name"    />
@@ -141,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <!--查询列表信息-->
-    <select id="selectFinanceAdvanceSettleVOList" parameterType="com.paic.ehis.system.domain.dto.FinanceAdvanceSettleDTO" resultMap="FinanceAdvanceSettleVOResult">
+    <select id="selectFinanceAdvanceSettleVOList" parameterType="com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO" resultMap="FinanceAdvanceSettleVOResult">
         SELECT
         a.settle_task_no,
         a.company_code,

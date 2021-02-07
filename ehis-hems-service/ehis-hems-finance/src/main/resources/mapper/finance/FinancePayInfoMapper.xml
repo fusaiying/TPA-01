@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select pay_id, pay_batch_no, batch_no, pay_currency, sum_pay_amount, sum_pay_amount_foreign, sum_claim_amount, payee_bank, acc_no, acc_name, pay_status, pay_date, pay_fail_date, pay_fail_reason, status, create_by, create_time, update_by, update_time, dept_code from finance_pay_info
     </sql>
 
-    <select id="selectFinancePayInfoList" parameterType="FinancePayInfo" resultMap="FinancePayInfoResult">
+    <select id="selectFinancePayInfoList" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" resultMap="FinancePayInfoResult">
         <include refid="selectFinancePayInfoVo"/>
         <where>  
             <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where pay_id = #{payId}
     </select>
         
-    <insert id="insertFinancePayInfo" parameterType="FinancePayInfo" useGeneratedKeys="true" keyProperty="payId">
+    <insert id="insertFinancePayInfo" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" useGeneratedKeys="true" keyProperty="payId">
         insert into finance_pay_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no,</if>
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinancePayInfo" parameterType="FinancePayInfo">
+    <update id="updateFinancePayInfo" parameterType="com.paic.ehis.finance.domain.FinancePayInfo">
         update finance_pay_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no = #{payBatchNo},</if>

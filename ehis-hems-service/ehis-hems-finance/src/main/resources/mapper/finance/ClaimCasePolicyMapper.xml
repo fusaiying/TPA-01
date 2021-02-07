@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.ClaimCasePolicyMapper">
     
-    <resultMap type="ClaimCasePolicy" id="ClaimCasePolicyResult">
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCasePolicy" id="ClaimCasePolicyResult">
         <result property="policyNo"    column="policy_no"    />
         <result property="relationId"    column="relation_id"    />
         <result property="rptNo"    column="rpt_no"    />

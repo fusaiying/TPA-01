@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.ClaimBatchMapper">
 
-    <resultMap type="ClaimBatch" id="ClaimBatchResult">
+    <resultMap type="com.paic.ehis.finance.domain.ClaimBatch" id="ClaimBatchResult">
         <result property="batchno"    column="batch_no"    />
         <result property="source"    column="source"    />
         <result property="hospitalcode"    column="hospital_code"    />
@@ -31,6 +31,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
+
+    <sql id="selectClaimBatchVo">
+        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
+    </sql>
 
     <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">
         <include refid="selectClaimBatchVo"/>

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.PolicyInfoMapper">
+<mapper namespace="com.paic.ehis.claimapt.mapper.PolicyInfoMapper">
 
-    <resultMap type="PolicyInfo" id="PolicyInfoResult">
+    <resultMap type="com.paic.ehis.claimapt.domain.PolicyInfo" id="PolicyInfoResult">
         <result property="policyId"    column="policy_id"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="policyItemNo"    column="policy_item_no"    />
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select policy_no, policy_item_no, insured_no, name, valid_start_date, valid_end_date, policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
     </sql>
 
-    <select id="selectPolicyInfoList" parameterType="com.sino.system.domain.PolicyInfo" resultMap="PolicyInfoResult">
+    <select id="selectPolicyInfoList" parameterType="com.paic.ehis.claimapt.domain.PolicyInfo" resultMap="PolicyInfoResult">
         <include refid="selectPolicyInfoVo"/>
         <where>
             <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPolicyInfoVo"/>
         where insured_no = #{insuredNo}
     </select>
-    <insert id="insertPolicyInfo" parameterType="com.sino.system.domain.PolicyInfo">
+    <insert id="insertPolicyInfo" parameterType="com.paic.ehis.claimapt.domain.PolicyInfo">
         insert into policy_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="policyNo != null">policy_no,</if>
@@ -122,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updatePolicyInfo" parameterType="com.sino.system.domain.PolicyInfo">
+    <update id="updatePolicyInfo" parameterType="com.paic.ehis.claimapt.domain.PolicyInfo">
         update policy_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
@@ -160,7 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{policyNo}
         </foreach>
     </delete>
-    <resultMap type="com.sino.system.domain.vo.PolicyVo" id="PolicyVo">
+    <resultMap type="com.paic.ehis.claimapt.domain.Vo.PolicyVo" id="PolicyVo">
         <result property="policyId"    column="policy_id"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="policyItemNo"    column="policy_item_no"    />
@@ -183,7 +183,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="riskCode"    column="risk_code"    />
         <result property="policyManageCom"    column="policy_manage_com"    />
     </resultMap>
-    <resultMap type="com.sino.system.domain.vo.DutyVo" id="DutyVo">
+    <resultMap type="com.paic.ehis.claimapt.domain.Vo.DutyVo" id="DutyVo">
         <result property="riskName"    column="risk_name"    />
         <result property="riskCode"    column="risk_code"    />
         <result property="dutyDetailCode"    column="duty_detail_code"    />
@@ -193,7 +193,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dutyName"    column="duty_name"    />
         <result property="planCode"    column="plan_code"    />
     </resultMap>
-    <select id="selectInsuredList" parameterType="com.sino.system.domain.dto.PolicyDTO" resultMap="PolicyVo">
+    <select id="selectInsuredList" parameterType="com.paic.ehis.claimapt.domain.DTO.PolicyDTO" resultMap="PolicyVo">
         select  insured_no,policy_no,policy_item_no,name,app_name,valid_start_date,valid_end_date,policy_risk_type,policy_status,special_agreement,company_name,
                 company_code,policy_type,plan_code,org_policy_no,policy_type,ss_flag,policy_manage_com
         from policy_info

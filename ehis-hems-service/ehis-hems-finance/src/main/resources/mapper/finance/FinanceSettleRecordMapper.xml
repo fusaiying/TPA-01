@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select record_id, task_type, settle_task_no, operation, operator, history_flag, org_record_id, status, create_by, create_time, update_by, update_time, dept_code from finance_settle_record
     </sql>
 
-    <select id="selectFinanceSettleRecordList" parameterType="FinanceSettleRecord" resultMap="FinanceSettleRecordResult">
+    <select id="selectFinanceSettleRecordList" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord" resultMap="FinanceSettleRecordResult">
         <include refid="selectFinanceSettleRecordVo"/>
         <where>  
             <if test="taskType != null  and taskType != ''"> and task_type = #{taskType}</if>
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where record_id = #{recordId}
     </select>
         
-    <insert id="insertFinanceSettleRecord" parameterType="FinanceSettleRecord" useGeneratedKeys="true" keyProperty="recordId">
+    <insert id="insertFinanceSettleRecord" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord" useGeneratedKeys="true" keyProperty="recordId">
         insert into finance_settle_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="taskType != null and taskType != ''">task_type,</if>
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinanceSettleRecord" parameterType="FinanceSettleRecord">
+    <update id="updateFinanceSettleRecord" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord">
         update finance_settle_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="taskType != null and taskType != ''">task_type = #{taskType},</if>

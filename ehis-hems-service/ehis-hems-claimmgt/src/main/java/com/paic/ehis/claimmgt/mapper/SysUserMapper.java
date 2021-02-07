@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -129,5 +131,5 @@ public interface SysUserMapper
     List<JSONObject> queryUpperComcodeUsers(String username);
 
     /** 任务改派查询改派操作人 */
-    /*List<UserVo> selectSysUser(SysUserDTO sysUserDTO);*/
+    List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
 }

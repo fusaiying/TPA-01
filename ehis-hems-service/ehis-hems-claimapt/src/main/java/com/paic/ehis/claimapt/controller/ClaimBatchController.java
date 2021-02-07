@@ -175,9 +175,9 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportPersonalProcessed")
-    public void exportPersonalProcessed(HttpServletResponse response,@RequestBody BatchRecordDTO batchRecordDTO) throws IOException
+    public void exportPersonalProcessed(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
-        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchRecordDTO);
+        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchDTO);
             for (BatchVo batchVo : batchVoList) {
                 batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
                 batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
@@ -206,25 +206,25 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
-    public TableDataInfo reviewPublicList(@RequestBody BatchRecordDTO batchRecordDTO)
+    public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO)
     {
-        if (StringUtils.isNotEmpty(batchRecordDTO.getOrderByColumn())) {
-            switch (batchRecordDTO.getOrderByColumn()) {
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
                 case "batchno":
-                    batchRecordDTO.setOrderByColumn("batch_no");
+                    batchDTO.setOrderByColumn("batch_no");
                     break;
                 case "submitdate":
-                    batchRecordDTO.setOrderByColumn("submit_date");
+                    batchDTO.setOrderByColumn("submit_date");
                     break;
                 case "updateTime":
-                    batchRecordDTO.setOrderByColumn(StringUtils.humpToLine(batchRecordDTO.getOrderByColumn()));
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
             }
         }else {
-            batchRecordDTO.setIsAsc("desc");
-            batchRecordDTO.setOrderByColumn("submit_date");
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
         }
-        startPage(batchRecordDTO);
-        List<BatchVo> batchVoList = claimBatchService.selectReviewPublicList(batchRecordDTO);
+        startPage(batchDTO);
+        List<BatchVo> batchVoList = claimBatchService.selectReviewPublicList(batchDTO);
         return getDataTable(batchVoList);
     }
     /**
@@ -232,25 +232,25 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @GetMapping("/untreatedList")
-    public TableDataInfo untreatedPersonalList(@RequestBody BatchRecordDTO batchRecordDTO)
+    public TableDataInfo untreatedPersonalList(@RequestBody BatchDTO batchDTO)
     {
-        if (StringUtils.isNotEmpty(batchRecordDTO.getOrderByColumn())) {
-            switch (batchRecordDTO.getOrderByColumn()) {
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
                 case "batchno":
-                    batchRecordDTO.setOrderByColumn("batch_no");
+                    batchDTO.setOrderByColumn("batch_no");
                     break;
                 case "submitdate":
-                    batchRecordDTO.setOrderByColumn("submit_date");
+                    batchDTO.setOrderByColumn("submit_date");
                     break;
                 case "updateTime":
-                    batchRecordDTO.setOrderByColumn(StringUtils.humpToLine(batchRecordDTO.getOrderByColumn()));
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
             }
         }else {
-            batchRecordDTO.setIsAsc("desc");
-            batchRecordDTO.setOrderByColumn("submit_date");
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
         }
-        startPage(batchRecordDTO);
-        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchRecordDTO);
+        startPage(batchDTO);
+        List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchDTO);
         return getDataTable(batchVoList);
     }
     /**

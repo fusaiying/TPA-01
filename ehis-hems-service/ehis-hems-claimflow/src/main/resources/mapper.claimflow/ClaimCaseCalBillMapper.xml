@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCalBillMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCalBill" id="ClaimCaseCalBillResult">
+        <result property="calBillId"    column="cal_bill_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="billId"    column="bill_id"    />
+        <result property="calAmount"    column="cal_amount"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="refusedAmount"    column="refused_amount"    />
+        <result property="deduUsed"    column="dedu_used"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CaseCalBillVo" id="CaseCalBillResult">
+        <result property="calBillId"    column="cal_bill_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="billId"    column="bill_id"    />
+        <result property="calAmount"    column="cal_amount"/>
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="refusedAmount"    column="refused_amount"    />
+        <result property="deduUsed"    column="dedu_used"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="remark"    column="remark"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="treatmentStartDate"    column="treatment_start_date"    />
+        <result property="treatmentEndDate"    column="treatment_end_date"    />
+        <result property="invoiceNo"    column="invoice_no"    />
+        <result property="billNo"    column="bill_no"    />
+        <result property="copay"    column="copay"    />
+        <result property="hosDiscountAmount"    column="hos_discount_amount"    />
+        <result property="unableAmount"    column="unable_amount"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCalBillVo">
+        select cal_bill_id, rpt_no, bill_id, cal_amount, pay_amount, refused_amount, dedu_used, pay_conclusion, remark, status, create_by, create_time, update_by, update_time from claim_case_cal_bill
+    </sql>
+
+    <select id="selectClaimCaseCalBillList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalBill" resultMap="ClaimCaseCalBillResult">
+        <include refid="selectClaimCaseCalBillVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="billId != null "> and bill_id = #{billId}</if>
+            <if test="calAmount != null "> and cal_amount = #{calAmount}</if>
+            <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+            <if test="refusedAmount != null "> and refused_amount = #{refusedAmount}</if>
+            <if test="deduUsed != null "> and dedu_used = #{deduUsed}</if>
+            <if test="payConclusion != null  and payConclusion != ''"> and pay_conclusion = #{payConclusion}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectCaseCalInformationList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalBill" resultMap="CaseCalBillResult">
+        SELECT DISTINCT
+        ccb.bill_id,
+        cccb.rpt_no,
+        cccb.cal_bill_id,
+        ccb.invoice_no,
+        ccb.bill_no,
+        ccb.copay,
+        ccb.treatment_start_date,
+        ccb.treatment_end_date,
+        ccb.bill_amount,
+        ccb.hos_discount_amount,
+        ccb.unable_amount,
+        cccb.dedu_used,
+        cccb.pay_amount,
+        cccb.cal_amount,
+        cccb.refused_amount,
+        cccb.remark,
+        cccb.pay_conclusion
+        FROM
+        claim_case_cal_bill cccb
+        LEFT JOIN claim_case_bill ccb ON ccb.bill_id = cccb.bill_id and cccb.status='Y'
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and ccb.rpt_no = #{rptNo}</if>
+            <if test="billId != null "> and ccb.bill_id = #{billId}</if>
+            <if test="status != null  and status != ''"> and ccb.status = #{status}</if>
+        </where>
+    </select>
+
+
+    
+    <select id="selectClaimCaseCalBillById" parameterType="Long" resultMap="ClaimCaseCalBillResult">
+        <include refid="selectClaimCaseCalBillVo"/>
+        where cal_bill_id = #{calBillId}
+    </select>
+        
+    <insert id="insertClaimCaseCalBill" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalBill" useGeneratedKeys="true" keyProperty="calBillId">
+        insert into claim_case_cal_bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="billId != null">bill_id,</if>
+            <if test="calAmount != null">cal_amount,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="refusedAmount != null">refused_amount,</if>
+            <if test="deduUsed != null">dedu_used,</if>
+            <if test="payConclusion != null">pay_conclusion,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="billId != null">#{billId},</if>
+            <if test="calAmount != null">#{calAmount},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="refusedAmount != null">#{refusedAmount},</if>
+            <if test="deduUsed != null">#{deduUsed},</if>
+            <if test="payConclusion != null">#{payConclusion},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseCalBill" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalBill">
+        update claim_case_cal_bill
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="billId != null">bill_id = #{billId},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="deduUsed != null">dedu_used = #{deduUsed},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where cal_bill_id = #{calBillId}
+    </update>
+
+    <update id="bulkUpdateClaimCaseCalBill" parameterType="java.util.ArrayList">
+        <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+        update claim_case_cal_bill
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="item.calAmount != null">cal_amount = #{item.calAmount},</if>
+                <if test="item.payConclusion != null">pay_conclusion = #{item.payConclusion},</if>
+                <if test="item.remark != null">remark = #{item.remark},</if>
+                update_time = now(),
+                <if test="item.updateBy != null">update_by = #{item.updateBy},</if>
+            </trim>
+            where cal_bill_id = #{item.calBillId}
+        </foreach>
+    </update>
+
+    <delete id="deleteClaimCaseCalBillById" parameterType="Long">
+        delete from claim_case_cal_bill where cal_bill_id = #{calBillId}
+    </delete>
+
+    <delete id="deleteClaimCaseCalBillByIds" parameterType="String">
+        delete from claim_case_cal_bill where cal_bill_id in 
+        <foreach item="calBillId" collection="array" open="(" separator="," close=")">
+            #{calBillId}
+        </foreach>
+    </delete>
+    
+</mapper>

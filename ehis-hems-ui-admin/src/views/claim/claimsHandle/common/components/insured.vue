@@ -288,7 +288,7 @@
         }
       }
       let checkPhone = (rule, value, callback) => {
-        if (value !== '' && value !== null) {
+        if (value) {
           let str = value.replace(/\s/g, "")
           if (!validPhone(str)) {
             callback(new Error('输入格式不正确'))
@@ -369,7 +369,7 @@
 
           email: {validator: validateEmail, trigger: 'blur'},
           phone: {validator: checkValid, trigger: 'blur'},
-          checkMobie: {validator: checkPhone, trigger: 'blur'},
+          mobile: {validator: checkPhone, trigger: 'blur'},
 
           /* isReceipt: {required: true, message: '不能为空!', trigger: 'change'},
            nationality: {required: true, message: '不能为空!', trigger: 'change'},

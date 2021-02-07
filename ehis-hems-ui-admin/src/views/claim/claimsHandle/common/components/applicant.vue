@@ -102,6 +102,7 @@
   export default {
     mixins: [],
     props: {
+      baseInfo:Object,
       status: String,
       sonRegisterData: Object,
       node: String,
@@ -134,6 +135,11 @@
         this.batchInfo = newValue
 
         this.setInfo()
+      },
+      baseInfo: function (newValue) {
+        if (newValue.claimtype === '01'){
+          this.collapsed=false
+        }
       },
       fixInfo: function (newVal) {
         this.copyFixInfo = newVal

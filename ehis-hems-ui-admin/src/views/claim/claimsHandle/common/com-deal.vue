@@ -63,7 +63,7 @@
       <div id="#anchor-12" class="batchInfo_class" style="margin-top: 10px;">
         <applicant-com :sonRegisterData="sonRegisterData" :node="querys.node" :status="querys.status"
                        ref="applicantInfoForm" :applicantData="applicantData" :fixInfo="fixInfo"
-                       @getApplicantData="getApplicantData"/>
+                       @getApplicantData="getApplicantData" :baseInfo="batchInfo"/>
       </div>
       <!-- 领款人信息 -->
       <div id="#anchor-11" class="batchInfo_class" style="margin-top: 10px;">

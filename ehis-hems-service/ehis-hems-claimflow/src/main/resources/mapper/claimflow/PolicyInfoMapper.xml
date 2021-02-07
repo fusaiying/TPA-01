@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.PolicyInfoMapper">
 
-    <resultMap type="PolicyInfo" id="PolicyInfoResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.PolicyInfo" id="PolicyInfoResult">
         <result property="policyId"    column="policy_id"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="policyItemNo"    column="policy_item_no"    />

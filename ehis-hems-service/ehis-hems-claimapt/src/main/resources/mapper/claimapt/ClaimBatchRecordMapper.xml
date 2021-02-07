@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sino.system.mapper.ClaimBatchRecordMapper">
+    
+    <resultMap type="com.sino.system.domain.ClaimBatchRecord" id="ClaimBatchRecordResult">
+        <result property="recordid"    column="record_id"    />
+        <result property="batchno"    column="batch_no"    />
+        <result property="operation"    column="operation"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="nopasstype"    column="nopass_type"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimBatchRecordVo">
+        select record_id, batch_no, operation, conclusion, nopass_type, remark, status, create_by, create_time, update_by, update_time from claim_batch_record
+    </sql>
+
+    <select id="selectClaimBatchRecordList" parameterType="com.sino.system.domain.ClaimBatchRecord" resultMap="ClaimBatchRecordResult">
+        <include refid="selectClaimBatchRecordVo"/>
+        <where>  
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
+            <if test="nopasstype != null  and nopasstype != ''"> and nopass_type = #{nopasstype}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimBatchRecordById" parameterType="Long" resultMap="ClaimBatchRecordResult">
+        <include refid="selectClaimBatchRecordVo"/>
+        where record_id = #{recordid} and status="Y"
+    </select>
+        
+    <insert id="insertClaimBatchRecord" parameterType="com.sino.system.domain.ClaimBatchRecord" useGeneratedKeys="true" keyProperty="recordid">
+        insert into claim_batch_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchno != null and batchno != ''">batch_no,</if>
+            <if test="operation != null and operation != ''">operation,</if>
+            <if test="conclusion != null">conclusion,</if>
+            <if test="nopasstype != null">nopass_type,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchno != null and batchno != ''">#{batchno},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="conclusion != null">#{conclusion},</if>
+            <if test="nopasstype != null">#{nopasstype},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimBatchRecord" parameterType="com.sino.system.domain.ClaimBatchRecord">
+        update claim_batch_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchno != null and batchno != ''">batch_no = #{batchno},</if>
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
+            <if test="conclusion != null">conclusion = #{conclusion},</if>
+            <if test="nopasstype != null">nopass_type = #{nopasstype},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where record_id = #{recordid}
+    </update>
+
+    <update id="updateClaimBatchRecordByReview" parameterType="com.sino.system.domain.ClaimBatchRecord">
+        update claim_batch_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+        </where>
+    </update>
+
+    <delete id="deleteClaimBatchRecordById" parameterType="Long">
+        delete from claim_batch_record where record_id = #{recordid}
+    </delete>
+
+    <delete id="deleteClaimBatchRecordByIds" parameterType="String">
+        delete from claim_batch_record where record_id in 
+        <foreach item="recordid" collection="array" open="(" separator="," close=")">
+            #{recordid}
+        </foreach>
+    </delete>
+
+    <select id="selectSysClaimBatchRecordListByBatchno" parameterType="String" resultType="com.sino.system.domain.ClaimBatchRecord">
+        select conclusion,nopass_type,remark from claim_batch_record
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            and operation = "03" and status='Y'
+        </where>
+    </select>
+
+    <select id="selectSysClaimBatchRecordListByBatchnoOne" parameterType="String" resultType="com.sino.system.domain.ClaimBatchRecord">
+        <include refid="selectClaimBatchRecordVo"/>
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            and operation = "01" and status='Y'
+        </where>
+    </select>
+    
+</mapper>

@@ -58,7 +58,7 @@
     <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
     <el-table-column align="center" min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip>currency
       <template slot-scope="scope">
-        <span>{{ scope.row.batchtotal}}{{selectDictLabel(currencyOptions, scope.row.currency)}}</span>
+        <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
@@ -86,7 +86,7 @@
 <script>
   import {getMinData,getDeptList} from '@/api/claim/presentingReview'
 
-  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'currency'}, {dictType: 'batchs_status'}]
+  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'},{dictType: 'batchs_status'}]
   export default {
 
     props: {
@@ -108,7 +108,6 @@
         claimtypeOptions:[],
         batchs_statusOptions:[],
         deptOptions:[],
-        currencyOptions:[],
       }
     },
     async created() {
@@ -123,9 +122,6 @@
       }).dictDate
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
-      }).dictDate
-      this.currencyOptions = this.dictList.find(item => {
-        return item.dictType === 'currency'
       }).dictDate
       getDeptList().then(res=>{
         if (res!=null && res.code===200){

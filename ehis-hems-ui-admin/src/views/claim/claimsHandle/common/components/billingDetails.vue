@@ -123,7 +123,7 @@
           <el-form-item label="账户币种：" prop="billCurrency">
             <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
                        placeholder="请选择">
-              <el-option v-for="option in currencyOptions" :key="option.dictValue" :label="option.dictLabel"
+              <el-option v-for="option in claim_currencyOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
           </el-form-item>
@@ -433,7 +433,7 @@
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
 
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
-    {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'currency'},]
+    {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'claim_currency'},]
   import {getBillList, saveBill, editBill, getFee, getHospitalInfo, deleteBill} from '@/api/claim/handleCom'
 
 
@@ -820,7 +820,7 @@
         second_attribute_bOptions: [],
         sys_yes_noOptions: [],
         hospitalOptions: [],
-        currencyOptions: [],
+        claim_currencyOptions: [],
       };
     },
     async mounted() {
@@ -854,8 +854,8 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      this.currencyOptions = this.dictList.find(item => {
-        return item.dictType === 'currency'
+      this.claim_currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'claim_currency'
       }).dictDate
       getFee({}).then(res => {
         if (res != null && res.code === 200) {

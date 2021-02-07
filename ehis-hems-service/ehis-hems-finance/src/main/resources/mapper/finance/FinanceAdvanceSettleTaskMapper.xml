@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.FinanceAdvanceSettleTaskMapper">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceAdvanceSettleTaskMapper">
     
-    <resultMap type="FinanceAdvanceSettleTask" id="FinanceAdvanceSettleTaskResult">
+    <resultMap type="com.paic.ehis.finance.domain.FinanceAdvanceSettleTask" id="FinanceAdvanceSettleTaskResult">
         <result property="taskId"    column="task_id"    />
         <result property="settleTaskNo"    column="settle_task_no"    />
         <result property="companyCode"    column="company_code"    />

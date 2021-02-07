@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.ClaimCaseRecordMapper">
 
-    <resultMap type="ClaimCaseRecord" id="ClaimCaseRecordResult">
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCaseRecord" id="ClaimCaseRecordResult">
         <result property="recordId"    column="record_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="operation"    column="operation"    />

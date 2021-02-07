@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.FinancePayDetailInfoMapper">
     
-    <resultMap type="FinancePayDetailInfo" id="FinancePayDetailInfoResult">
+    <resultMap type="com.paic.ehis.finance.domain.FinancePayDetailInfo" id="FinancePayDetailInfoResult">
         <result property="payDetailId"    column="pay_detail_id"    />
         <result property="payBatchNo"    column="pay_batch_no"    />
         <result property="batchNo"    column="batch_no"    />

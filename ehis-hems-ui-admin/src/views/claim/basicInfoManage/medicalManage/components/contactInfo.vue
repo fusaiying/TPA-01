@@ -233,44 +233,133 @@ export default {
       let query={
         providerCode: this.supplierCode
       }
-      await new Promise((resolve, reject) => {
-        getNewtworktypeList(query).then(res => {
-          this.medicalTypeData = res.rows
-          if (this.medicalTypeData.filter(item => {
-            return item.networktypeName == '网络医院'
-          })[0].oldChoose == '02') {
-            this.isNetHospFlag = true
-          }
-          else {
-            this.isNetHospFlag = false
-          }
-          resolve(this.isNetHospFlag)
+
+      if(this.status=='01') {
+        await new Promise((resolve, reject) => {
+          getNewtworktypeList(query).then(res => {
+            this.medicalTypeData = res.rows
+            if (this.medicalTypeData.filter(item => {
+              return item.networktypeName == '网络医院'
+            })[0].oldChoose == '02') {
+              this.isNetHospFlag = true
+            } else {
+              this.isNetHospFlag = false
+            }
+            resolve(this.isNetHospFlag)
+          })
+        }).then(res => {
+          let obj = this.$parent.$parent.$parent.getServiceInfoData()
+          this.$refs.contactInfoForm.validate((valid) => {
+            if (this.contactInfoForm.contacts != null && this.contactInfoForm.contacts.length > 0) {
+              //找到是否有平安服务人员联系人
+              let flag = true
+              let placeTypeFlag
+              if (this.isNetHospFlag) {
+                let obj = this.contactInfoForm.contacts.find(item => {
+                  return item.placeType == '03'
+                })
+                if (obj != null && obj != '') {
+
+                  flag = true
+                } else {
+                  flag = false
+                }
+
+              } else {
+                flag = true
+              }
+              if (flag) {
+                if (obj.leadFlag == '03') {
+                  //联系信息是否有驻点人员信息
+                  let placeType = this.contactInfoForm.contacts.find(item => {
+                    return item.placeType == '01'
+                  })
+                  if (placeType != null && placeType != '') {
+                    placeTypeFlag = true
+                  } else {
+                    placeTypeFlag = false
+                  }
+                } else {
+                  placeTypeFlag = true
+                }
+                if (placeTypeFlag) {
+                  if (valid) {
+                    if (this.supplierCode) {
+                      this.contactInfoForm.contacts.supplierCode = this.supplierCode
+                      /*  if(this.isAdd){*/
+                      let formData = {
+                        providerCode: this.supplierCode,
+                        contacts: this.contactInfoForm.contacts,
+                        orgFlag: this.status
+                      }
+                      addcontactsInfo(formData).then(res => {
+                        if (res.code == '200') {
+                          this.$message({
+                            message: '保存成功！',
+                            type: 'success',
+                            center: true,
+                            showClose: true
+                          })
+                        } else {
+                          this.$message({
+                            message: '保存失败!',
+                            type: 'error',
+                            center: true,
+                            showClose: true
+                          })
+                        }
+                      })
+                    }
+                    /*else{
+                  updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
+                    if (res.code == '200') {
+                      this.$message({
+                        message: '修改成功！',
+                        type: 'success',
+                        center: true,
+                        showClose: true
+                      })
+                    } else  {
+                      this.$message({
+                        message: '修改失败!' ,
+                        type: 'error',
+                        center: true,
+                        showClose: true
+                      })
+                    }
+                  })
+                }
+
+              }*/
+                  } else {
+                    this.$message.warning('联系信息必录项未必录')
+                  }
+                } else {
+                  this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息')
+                }
+
+
+              } else {
+                this.$message.warning('网络医院为是，至少有一位平安服务人员联系人信息')
+              }
+            } else {
+              this.$message({
+                message: '至少添加一条联系人信息',
+                center: true,
+                type: "warning"
+              });
+            }
+
+          })
         })
-      }).then(res=>{
-        let obj=this.$parent.$parent.$parent.getServiceInfoData()
+      }
+      else {
+        let obj = this.$parent.$parent.$parent.getOtherReservelInfoData()
+
         this.$refs.contactInfoForm.validate((valid) => {
-          if(this.contactInfoForm.contacts!=null && this.contactInfoForm.contacts.length>0) {
-            //找到是否有平安服务人员联系人
-            let flag=true
+          if (this.contactInfoForm.contacts != null && this.contactInfoForm.contacts.length > 0) {
             let placeTypeFlag
-            if(this.isNetHospFlag){
-              let obj=this.contactInfoForm.contacts.find(item=>{
-                return item.placeType=='03'
-              })
-              if(obj!=null && obj!=''){
-
-                flag=true
-              }
-              else {
-                flag=false
-              }
-
-            }
-            else {
-              flag=true
-            }
-            if(flag) {
-              if(obj.leadFlag=='03') {
+              if (obj.leadFlag == '03') {
                 //联系信息是否有驻点人员信息
                 let placeType = this.contactInfoForm.contacts.find(item => {
                   return item.placeType == '01'
@@ -280,11 +369,10 @@ export default {
                 } else {
                   placeTypeFlag = false
                 }
-              }
-              else {
+              } else {
                 placeTypeFlag = true
               }
-              if(placeTypeFlag){
+              if (placeTypeFlag) {
                 if (valid) {
                   if (this.supplierCode) {
                     this.contactInfoForm.contacts.supplierCode = this.supplierCode
@@ -313,43 +401,36 @@ export default {
                     })
                   }
                   /*else{
-                  updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
-                    if (res.code == '200') {
-                      this.$message({
-                        message: '修改成功！',
-                        type: 'success',
-                        center: true,
-                        showClose: true
-                      })
-                    } else  {
-                      this.$message({
-                        message: '修改失败!' ,
-                        type: 'error',
-                        center: true,
-                        showClose: true
-                      })
-                    }
-                  })
-                }
+                updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
+                  if (res.code == '200') {
+                    this.$message({
+                      message: '修改成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                  } else  {
+                    this.$message({
+                      message: '修改失败!' ,
+                      type: 'error',
+                      center: true,
+                      showClose: true
+                    })
+                  }
+                })
+              }
 
-              }*/
+            }*/
                 } else {
                   this.$message.warning('联系信息必录项未必录')
                 }
-              }
-              else{
+              } else {
                 this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息')
               }
 
 
 
-
-            }
-            else {
-              this.$message.warning('网络医院为是，至少有一位平安服务人员联系人信息')
-            }
-          }
-          else {
+          } else {
             this.$message({
               message: '至少添加一条联系人信息',
               center: true,
@@ -358,7 +439,7 @@ export default {
           }
 
         })
-      })
+      }
 
     },
 
@@ -415,6 +496,7 @@ export default {
     },
     // 校验数据
     async validateForm () {
+
       let flag
       let hospFlag
       let placeTypeFlag
@@ -422,8 +504,6 @@ export default {
         providerCode: this.supplierCode
       }
       let obj=this.$parent.$parent.$parent.getServiceInfoData()
-      console.log('校验')
-      console.log(obj)
       await new Promise((resolve, reject) => {
         getNewtworktypeList(query).then(res => {
           this.medicalTypeData = res.rows
@@ -491,6 +571,48 @@ export default {
           flag='02'
         }
       })
+      return flag
+    },
+
+    //其他机构校验数据
+    otherValidataForm(){
+      let flag
+      let placeTypeFlag
+      if(this.contactInfoForm.contacts!=null && this.contactInfoForm.contacts.length>0) {
+        let obj = this.$parent.$parent.$parent.getOtherReservelInfoData()
+
+          if(obj.leadFlag=='03') {
+            //联系信息是否有驻点人员信息
+            let placeType = this.contactInfoForm.contacts.find(item => {
+              return item.placeType == '01'
+            })
+            if (placeType != null && placeType != '') {
+              placeTypeFlag = true
+            } else {
+              placeTypeFlag = false
+            }
+          }
+          else {
+            placeTypeFlag=true
+          }
+          if(placeTypeFlag){
+            this.$refs['contactInfoForm'].validate(valid => {
+              if (valid) {
+                flag = '01'
+              } else {
+                flag = '03'
+              }
+            })
+          }
+          else {
+            flag='05'
+          }
+
+
+      }
+      else {
+        flag='02'
+      }
       return flag
     }
 

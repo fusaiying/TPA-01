@@ -49,7 +49,7 @@ export default {
     editHandle(index,row){
       //跳到合约编辑的页面
       this.$router.push({
-        path: '/basic-info/medicalManage/medicalManage',
+        path: '/basic-info/medicalManage',
         contractNo: row.contractNo
       })
     }

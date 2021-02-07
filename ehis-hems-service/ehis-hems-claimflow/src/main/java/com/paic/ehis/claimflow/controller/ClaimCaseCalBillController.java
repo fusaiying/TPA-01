@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
 import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
+import com.paic.ehis.claimflow.domain.dto.BillDetailDTO;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
@@ -126,7 +127,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 理算审核  账单明细保存  按钮
      */
-    @PreAuthorize("@ss.hasPermi('system:bill:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:bill:edit')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult billDetailsSave (@RequestBody BillDetailDTO billDetailDTO)
@@ -137,7 +138,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 删除案件赔付账单明细
      */
-    @PreAuthorize("@ss.hasPermi('system:bill:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:bill:remove')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{calBillIds}")
     public AjaxResult remove(@PathVariable Long[] calBillIds)

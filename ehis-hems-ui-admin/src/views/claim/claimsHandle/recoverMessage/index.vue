@@ -310,7 +310,7 @@
         initDebt(query).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('system/debt/export'+'?idNo='+this.searchForm.idNo+'&rptNo='+this.searchForm.rptNo
+            this.download('claimflow/debt/export'+'?idNo='+this.searchForm.idNo+'&rptNo='+this.searchForm.rptNo
               +'&policyNo='+this.searchForm.policyNo +'&hospitalCode='+this.searchForm.hospitalCode
               +'&insuredName='+this.searchForm.insuredName+'&startDate='+this.searchForm.startDate
               +'&endDate='+this.searchForm.endDate+'&policyItemNo='+this.searchForm.policyItemNo

@@ -3,8 +3,8 @@ package com.paic.ehis.claimflow.domain;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 产品状态轨迹 对象 claim_product_task_log
@@ -83,7 +83,7 @@ public class ClaimProductTaskLog extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("riskLogNo", getRiskLogNo())
             .append("riskCode", getRiskCode())
             .append("riskStatus", getRiskStatus())

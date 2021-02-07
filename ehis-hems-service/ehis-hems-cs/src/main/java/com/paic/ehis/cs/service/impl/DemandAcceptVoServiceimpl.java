@@ -253,7 +253,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        demandAcceptVoMapper.insertPersonInfo(personInfo1);
+        personInfoMapper.updatePersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(demandAcceptVo.getContactsPersonId());
         personInfo2.setSex(demandAcceptVo.getContactsSex());
@@ -265,7 +265,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        demandAcceptVoMapper.insertPersonInfo(personInfo2);
+        personInfoMapper.updatePersonInfo(personInfo2);
 
         //轨迹表插入
         flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));

@@ -1,14 +1,10 @@
 package com.paic.ehis.claimmgt.service.impl;
 
-//import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
-//import com.paic.ehis.claimmgt.domain.dto.ClaimBatchDTO;
-import com.paic.ehis.claimmgt.domain.vo.ClaimCaseDistVo;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseDistService;
-import com.paic.ehis.system.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

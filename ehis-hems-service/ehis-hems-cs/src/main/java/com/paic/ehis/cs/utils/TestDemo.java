@@ -5,28 +5,28 @@ import java.util.Map;
 
 public class TestDemo {
     public static void main(String[] args) {
-//        Map<String,String> map=new HashMap<>();
-//        map.put("name1","name2");
-//        map.put("age1","age2");
-//        map.put("sex1","sex2");
-//        V2 v2=new V2();
-//        v2.setName2("zhangsan");
-//        v2.setAge2("12");
-//        v2.setSex2("nan");
-//        V1 v1=new V1();
-//
-//        VoUtils voUtils=new VoUtils<V1>();
-//        v1= (V1) voUtils.fromVoToVo(v1,map,v2);
-//        System.out.println(v1.toString());
-//
-//        V3 v3=new V3();
-//        Map<String,String> map2=new HashMap<>();
-//        map2.put("bb1","name2");
-//        map2.put("aa1","age2");
-//        map2.put("cc1","sex2");
-//        VoUtils voUtils1=new VoUtils<V3>();
-//        v3= (V3) voUtils1.fromVoToVo(v3,map2,v2);
-//        System.out.println(v3.toString());
+        Map<String,String> map=new HashMap<>();
+        map.put("name1","name2");
+        map.put("age1","age2");
+        map.put("sex1","sex2");
+        V2 v2=new V2();
+        v2.setName2("zhangsan");
+        v2.setAge2("12");
+        v2.setSex2("nan");
+        V1 v1=new V1();
+
+        VoUtils voUtils=new VoUtils<V1>();
+        v1= (V1) voUtils.fromVoToVo(v1,map,v2);
+        System.out.println(v1.toString());
+
+        V3 v3=new V3();
+        Map<String,String> map2=new HashMap<>();
+        map2.put("bb1","name2");
+        map2.put("aa1","age2");
+        map2.put("cc1","sex2");
+        VoUtils voUtils1=new VoUtils<V3>();
+        v3= (V3) voUtils1.fromVoToVo(v3,map2,v2);
+        System.out.println(v3.toString());
 
         // 数据库对象
         V2 v22=new V2();

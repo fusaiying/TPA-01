@@ -3,11 +3,9 @@ package com.paic.ehis.cs.controller;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +22,7 @@ public class CustomServiceReservationController extends BaseController {
     @Autowired
     private IReservationAcceptVoService iReservationAcceptVoService;
 
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
         startPage();
@@ -32,7 +30,7 @@ public class CustomServiceReservationController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPersonalPool")
     public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {
         startPage();

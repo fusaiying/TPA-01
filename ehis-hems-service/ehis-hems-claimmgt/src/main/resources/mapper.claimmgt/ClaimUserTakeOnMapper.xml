@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectClaimUserTakeOnVo">
         select take_on_id, user_id, take_on_user_id, status, create_by, create_time, update_by, update_time from claim_user_take_on
     </sql>
-    <resultMap type="com.sino.system.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
+    <resultMap type="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="roleName"    column="role_name"    />

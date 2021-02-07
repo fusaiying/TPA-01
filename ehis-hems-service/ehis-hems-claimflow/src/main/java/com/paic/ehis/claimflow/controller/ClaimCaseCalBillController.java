@@ -1,8 +1,18 @@
 package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
+import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
+import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
+import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
+import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
+import com.paic.ehis.claimflow.service.IClaimCaseCalItemService;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +62,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 理算审核 一键展开查询案件赔付账单明细列表
      */
-    @PreAuthorize("@ss.hasPermi('system:calBill:list')")
+//    @PreAuthorize("@ss.hasPermi('system:calBill:list')")
     @GetMapping("/detailsList")
     public TableDataInfo detailsList(ClaimCaseCalBill claimCaseCalBill)
     {
@@ -72,7 +82,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 导出案件赔付账单明细列表
      */
-    @PreAuthorize("@ss.hasPermi('system:bill:export')")
+//    @PreAuthorize("@ss.hasPermi('system:bill:export')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ClaimCaseCalBill claimCaseCalBill) throws IOException
@@ -85,7 +95,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 获取案件赔付账单明细详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:bill:query')")
+//    @PreAuthorize("@ss.hasPermi('system:bill:query')")
     @GetMapping(value = "/{calBillId}")
     public AjaxResult getInfo(@PathVariable("calBillId") Long calBillId)
     {
@@ -95,7 +105,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 新增案件赔付账单明细
      */
-    @PreAuthorize("@ss.hasPermi('system:bill:add')")
+//    @PreAuthorize("@ss.hasPermi('system:bill:add')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ClaimCaseCalBill claimCaseCalBill)

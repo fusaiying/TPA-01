@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper">
     
-    <resultMap type="ClaimCaseCal" id="ClaimCaseCalResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCal" id="ClaimCaseCalResult">
         <result property="calId"    column="cal_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="billCurrency"    column="bill_currency"    />
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <resultMap type="com.sino.system.domain.vo.CalConclusionVo" id="CalConclusionResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CalConclusionVo" id="CalConclusionResult">
         <result property="calId"    column="cal_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="billCurrency"    column="bill_currency"    />
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sumHosDiscountAmount"    column="sumHosDiscountAmount"    />
     </resultMap>
 
-    <resultMap type="com.sino.system.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
         <result property="sumBillAmount"    column="billAmount"    />
         <result property="sumHosDiscountAmount"    column="hosDiscountAmount"    />
         <result property="sumDeduUsed"    column="deduUsed"    />
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select cal_id, rpt_no, bill_currency, cal_amount, pay_amount, refused_amount, debt_amount, exchange_rate, pay_amount_foreign, pay_conclusion, refused_reason, remark, claim_check, status, create_by, create_time, update_by, update_time from claim_case_cal
     </sql>
 
-    <select id="selectClaimCaseCalList" parameterType="ClaimCaseCal" resultMap="ClaimCaseCalResult">
+    <select id="selectClaimCaseCalList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal" resultMap="ClaimCaseCalResult">
         <include refid="selectClaimCaseCalVo"/>
         <where>  
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>

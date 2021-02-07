@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 处理中工作池：
 export function processingList(data) {
   return request({
-    url: '/system/bill/processingList',
+    url: '/claimflow/bill/processingList',
     method: 'post',
     data:data
   })
@@ -11,7 +11,7 @@ export function processingList(data) {
 //已处理工作池
 export function accomplishList(data) {
   return request({
-    url: '/system/bill/accomplishList',
+    url: '/claimflow/bill/accomplishList',
     method: 'post',
     data:data
   })

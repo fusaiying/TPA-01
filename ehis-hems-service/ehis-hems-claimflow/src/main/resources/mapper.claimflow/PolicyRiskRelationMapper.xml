@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.PolicyRiskRelation" id="PolicyRiskRelationResult">
+        <result property="relationId"    column="relation_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+    </resultMap>
+
+    <select id="selectRiskNameInsuredList" parameterType="com.paic.ehis.claimflow.domain.PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
+        select  risk_name,risk_code
+        from policy_risk_relation
+        where policy_no = #{policyNo} and status='Y'
+    </select>
+
+</mapper>

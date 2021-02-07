@@ -49,17 +49,7 @@ public class BaseIcd10Controller extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseIcd10 baseIcd10) throws IOException
     {
-        BaseIcd10 baseIcd101 = new BaseIcd10();
-        String icdmName = baseIcd10.getIcdmname();
-        String icdCode = baseIcd10.getIcdcode();
-
-        String utf8IcdmName = new String(icdmName.getBytes( "UTF-8"));
-        String utf8IcdCode = new String(icdCode.getBytes( "UTF-8"));
-
-        baseIcd101.setIcdmname(utf8IcdmName);
-        baseIcd101.setIcdcode(utf8IcdCode);
-
-        List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd101);
+        List<BaseIcd10> list = baseIcd10Service.selectBaseIcd10List(baseIcd10);
         ExcelUtil<BaseIcd10> util = new ExcelUtil<BaseIcd10>(BaseIcd10.class);
         util.exportExcel(response, list, "icd10数据");
     }

@@ -143,10 +143,13 @@
           if (res!=null && res.code===200){
             this.tableData=res.rows
             this.totalCount=res.total
+            this.$message({
+              message: '保存成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
           }
-          return this.$message.warning(
-            "更新成功！"
-          )
         }).catch(res=>{})
       },
 

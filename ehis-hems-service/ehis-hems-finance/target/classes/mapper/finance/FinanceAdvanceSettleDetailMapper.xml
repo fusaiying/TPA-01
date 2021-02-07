@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sino.system.mapper.FinanceAdvanceSettleDetailMapper">
+    
+    <resultMap type="com.paic.ehis.system.domain.FinanceAdvanceSettleDetail" id="FinanceAdvanceSettleDetailResult">
+        <result property="detailId"    column="detail_id"    />
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="advanceAmount"    column="advance_amount"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+    <sql id="selectFinanceAdvanceSettleDetailVo">
+        select detail_id, settle_task_no, company_code, rpt_no, batch_no, advance_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_advance_settle_detail
+    </sql>
+
+    <select id="selectFinanceAdvanceSettleDetailList" parameterType="FinanceAdvanceSettleDetail" resultMap="FinanceAdvanceSettleDetailResult">
+        <include refid="selectFinanceAdvanceSettleDetailVo"/>
+        <where>  
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="advanceAmount != null "> and advance_amount = #{advanceAmount}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectFinanceAdvanceSettleDetailById" parameterType="Long" resultMap="FinanceAdvanceSettleDetailResult">
+        <include refid="selectFinanceAdvanceSettleDetailVo"/>
+        where detail_id = #{detailId}
+    </select>
+        
+    <insert id="insertFinanceAdvanceSettleDetail" parameterType="FinanceAdvanceSettleDetail" useGeneratedKeys="true" keyProperty="detailId">
+        insert into finance_advance_settle_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no,</if>
+            <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="advanceAmount != null">advance_amount,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">#{settleTaskNo},</if>
+            <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="advanceAmount != null">#{advanceAmount},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceAdvanceSettleDetail" parameterType="FinanceAdvanceSettleDetail">
+        update finance_advance_settle_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
+            <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="advanceAmount != null">advance_amount = #{advanceAmount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where detail_id = #{detailId}
+    </update>
+
+    <delete id="deleteFinanceAdvanceSettleDetailById" parameterType="Long">
+        update finance_advance_settle_detail set status="N" where detail_id = #{detailId} and status="Y"
+    </delete>
+
+    <delete id="deleteFinanceAdvanceSettleDetailByIds" parameterType="String">
+        update finance_advance_settle_detail set status="N" where status="Y" and detail_id in
+        <foreach item="detailId" collection="array" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+    <resultMap type="com.paic.ehis.system.domain.vo.FinanceAdvanceSettleVO" id="FinanceAdvanceSettleVOResult">
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="sumPayAmount"    column="sum_pay_amount"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="settleStatus"    column="settle_status"    />
+        <result property="settleEndDate"    column="settle_end_date"    />
+        <result property="colDate"    column="col_date"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="name"    column="name"    />
+        <result property="hospitalCode"    column="hospital_code"    />
+        <result property="treatmentStartDate"    column="treatment_start_date"    />
+        <result property="billNo"    column="bill_no"    />
+        <result property="invoiceNo"    column="invoice_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="discountedAmount"    column="discounted_amount"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="submitDate"    column="submit_date"    />
+        <result property="endCaseTime"    column="end_case_time"    />
+        <result property="source"    column="source"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="advanceAmount"    column="advance_amount"    />
+        <result property="remark"    column="remark"    />
+        <result property="receiptCompanyName"    column="receipt_company_name"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptDate"    column="receipt_date"    />
+        <result property="creditRemark"    column="credit_remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="pageType"    column="page_type"    />
+    </resultMap>
+
+    <!--查询列表信息-->
+    <select id="selectFinanceAdvanceSettleVOList" parameterType="com.paic.ehis.system.domain.dto.FinanceAdvanceSettleDTO" resultMap="FinanceAdvanceSettleVOResult">
+        SELECT
+        a.settle_task_no,
+        a.company_code,
+        d.company_name,
+        c.batch_total,
+        b.sum_pay_amount,
+        a.create_time,
+        a.settle_status,
+        a.settle_end_date,
+        a.col_date
+        FROM
+        finance_advance_settle_task a,
+        finance_pay_info b,
+        claim_batch c,
+        claim_case_policy d
+        <where>
+        <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+        <if test="settleEndDate != null "> and settle_end_date = #{settleEndDate}</if>
+        <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+        <if test="settleStatus != null  and settleStatus != ''"> and settle_status = #{settleStatus}</if>
+        <if test="batchTotal != null  and batchTotal != ''"> and batchtotal = #{batchTotal}</if>
+        <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+        <if test="companyName != null  and companyName != ''"> and company_name = #{companyName}</if>
+        <if test="pageType != null  and pageType == '01'"> and a.settle_Status in ('01','02')</if>
+        <if test="pageType != null  and pageType == '03'"> and a.settle_Status in ('02','03')</if>
+
+        AND d.company_code = a.company_code
+        AND b.batch_no = c.batch_no
+        AND a.dept_code = b.dept_code
+        AND a.STATUS = 'Y'
+        AND b.STATUS = 'Y'
+        AND c.STATUS = 'Y'
+        AND d.STATUS = 'Y'
+        </where>
+    </select>
+
+    <!--查询列表详情信息-->
+    <select id="selectFinanceAdvanceSettleVOInfo" parameterType="String" resultMap="FinanceAdvanceSettleVOResult">
+        SELECT
+            b.batch_no,
+            c.rpt_no,
+            d.insured_no,
+            d.NAME,
+            e.hospital_code,
+            e.treatment_start_date,
+            e.bill_no,
+            e.invoice_no,
+            c.case_status,
+            f.pay_conclusion,
+            g.submit_date,
+            c.end_case_time,
+            g.source,
+            f.pay_amount,
+            b.pay_date,
+            a.remark
+        FROM
+            finance_advance_settle_task a,
+            finance_pay_info b,
+            claim_case c,
+            claim_case_insured d,
+            claim_case_bill e,
+            claim_case_cal f,
+            claim_batch g
+        WHERE
+              a.settle_task_no = #{settleTaskNo}
+          AND c.rpt_no = d.rpt_no
+          AND c.rpt_no = e.rpt_no
+          AND c.rpt_no = f.rpt_no
+          AND g.batch_no = b.batch_no
+          AND g.batch_no = c.batch_no
+          AND b.dept_code = a.dept_code
+          AND a.STATUS = 'Y'
+          AND b.STATUS = 'Y'
+          AND c.STATUS = 'Y'
+          AND d.STATUS = 'Y'
+          AND e.STATUS = 'Y'
+          AND f.STATUS = 'Y'
+          AND g.STATUS = 'Y'
+    </select>
+
+
+
+    <!--计算折后金额结算金额默认为折后金额-->
+    <select id="selectDiscountAmount" resultType="String">
+        SELECT
+            sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount
+        FROM
+            claim_case_bill
+        where
+            rpt_no=#{rptNo}
+        AND
+            claim_case_bill.status="Y"
+    </select>
+
+    <!--计算账单总金额-->
+    <select id="selectBillAmount" resultType="String">
+      select sum(claim_case_bill.bill_amount)   FROM
+          claim_case_bill
+      where
+          rpt_no=#{rptNo}
+        AND
+          claim_case_bill.status="Y"
+    </select>
+
+    <!--删除按钮修改状态为无效-->
+    <delete id="deletefinanceinfo" parameterType="String">
+        update finance_advance_settle_task set status="N" where settle_task_no = #{settleTaskNo} and status="Y"
+    </delete>
+
+    <!--任务确认环节确认按钮，将结算状态由待确认改为待核销(待结算)-->
+    <delete id="updateSettleStatus1" parameterType="String">
+        update finance_advance_settle_task set settle_status="02" where settle_task_no = #{settleTaskNo} and status="Y"
+    </delete>
+
+    <!--核销按钮将结算状态由待核销改为已结算-->
+    <delete id="updateSettleStatus2" parameterType="String">
+        update finance_advance_settle_task set settle_status="03" where status="Y" and settle_task_no in
+        <foreach item="settleTaskNo" collection="array" open="(" separator="," close=")">
+            #{settleTaskNo}
+        </foreach>
+    </delete>
+
+</mapper>

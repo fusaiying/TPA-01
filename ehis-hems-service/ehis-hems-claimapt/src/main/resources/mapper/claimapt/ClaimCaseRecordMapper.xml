@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.ClaimCaseRecordMapper">
+<mapper namespace="com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper">
 
-    <resultMap type="ClaimCaseRecord" id="ClaimCaseRecordResult">
+    <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseRecord" id="ClaimCaseRecordResult">
         <result property="recordId"    column="record_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="operation"    column="operation"    />
@@ -21,7 +21,7 @@
         select record_id, rpt_no, operation, operator, history_flag, status, create_by, create_time, update_by, update_time from claim_case_record
     </sql>
 
-    <select id="selectClaimCaseRecordList" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+    <select id="selectClaimCaseRecordList" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         <where>
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
@@ -37,7 +37,7 @@
         where record_id = #{recordId}
     </select>
 
-    <insert id="insertClaimCaseRecord" parameterType="ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
+    <insert id="insertClaimCaseRecord" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
         insert into claim_case_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -63,7 +63,7 @@
         </trim>
     </insert>
 
-    <update id="updateClaimCaseRecord" parameterType="ClaimCaseRecord">
+    <update id="updateClaimCaseRecord" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -90,7 +90,7 @@
         </foreach>
     </delete>
 
-    <insert id="insertClaimCaseRecordSecond" parameterType="ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
+    <insert id="insertClaimCaseRecordSecond" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
         insert into claim_case_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -118,7 +118,7 @@
         </trim>
     </insert>
 
-    <resultMap type="ClaimCaseRecord" id="ClaimCaseRecordResultNumber">
+    <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseRecord" id="ClaimCaseRecordResultNumber">
         <result property="recordId"    column="record_id"    />
     </resultMap>
 
@@ -179,7 +179,7 @@
         where operation = '05' and history_flag = 'Y' and rpt_no = #{rptNo}
     </select>
 
-    <update id="updateClaimCaseRecordByRptNoAndOperator" parameterType="ClaimCaseRecord">
+    <update id="updateClaimCaseRecordByRptNoAndOperator" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="operator != null and operator != ''">operator = #{operator},</if>

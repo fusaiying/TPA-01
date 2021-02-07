@@ -127,6 +127,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 理算审核  账单明细保存  按钮
      */
+   // @PreAuthorize("@ss.hasPermi('system:bill:edit')")
 //    @PreAuthorize("@ss.hasPermi('system:bill:edit')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -139,6 +140,7 @@ public class ClaimCaseCalBillController extends BaseController
      * 删除案件赔付账单明细
      */
 //    @PreAuthorize("@ss.hasPermi('system:bill:remove')")
+   // @PreAuthorize("@ss.hasPermi('system:bill:remove')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{calBillIds}")
     public AjaxResult remove(@PathVariable Long[] calBillIds)

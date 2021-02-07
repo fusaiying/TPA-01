@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.ClaimBatchMapper">
+<mapper namespace="com.paic.ehis.claimapt.mapper.ClaimBatchMapper">
     
     <resultMap type="com.paic.ehis.claimapt.domain.ClaimBatch" id="ClaimBatchResult">
         <result property="batchno"    column="batch_no"    />
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
-    <resultMap type="com.sino.system.domain.vo.BatchVo" id="ClaimBatchVO">
+    <resultMap type="com.paic.ehis.claimapt.domain.Vo.BatchVo" id="ClaimBatchVO">
         <result property="batchno"    column="batch_no"    />
         <result property="source"    column="source"    />
         <result property="claimtype"    column="claim_type"    />
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
     </sql>
 
-    <select id="selectClaimBatchList" parameterType="com.sino.system.domain.ClaimBatch" resultMap="ClaimBatchResult">
+    <select id="selectClaimBatchList" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch" resultMap="ClaimBatchResult">
         <include refid="selectClaimBatchVo"/>
         <where>  
             <if test="source != null  and source != ''"> and source = #{source}</if>
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectBackToBatchList" parameterType="com.sino.system.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
+    <select id="selectBackToBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,bpi.chname1,bpi.enname1
     </select>
 
-    <select id="selectDealWithBatchList" parameterType="com.sino.system.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
+    <select id="selectDealWithBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
         select DISTINCT cb.batch_no, cb.source, cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
        from claim_batch cb
         left join
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
     </select>
 
-    <select id="selectStraightAndReview" parameterType="com.sino.system.domain.dto.BatchRecordDTO" resultMap="ClaimBatchVO">
+    <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -207,7 +207,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where batch_no = #{batchNo} and status='Y'
     </select>
         
-    <insert id="insertClaimBatch" parameterType="com.sino.system.domain.ClaimBatch">
+    <insert id="insertClaimBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch">
         insert into claim_batch
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="batchno != null">batch_no,</if>
@@ -265,7 +265,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimBatch" parameterType="com.sino.system.domain.ClaimBatch">
+    <update id="updateClaimBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch">
         update claim_batch
         <trim prefix="SET" suffixOverrides=",">
             <if test="source != null and source != ''">source = #{source},</if>
@@ -337,7 +337,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.submit_date desc
     </select>
 
-    <select id="selectPayBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+    <select id="selectPayBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.ClaimCasePayDTO" resultType="java.util.HashMap">
         SELECT
             a.batch_no "batchNo",
             a.hospital_code "hospitalCode",
@@ -400,7 +400,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.submit_date desc
     </select>
 
-    <select id="selectPayForeignBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+    <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.ClaimCasePayDTO" resultType="java.util.HashMap">
         SELECT
             a.batch_no "batchNo",
             a.hospital_code "hospitalCode",

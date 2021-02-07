@@ -114,7 +114,7 @@ export default {
 
     goBack(){
       this.$router.push({
-        path: '/basic-info/service-product/productReview/index'
+        path: '/service-product/productReview/index'
 
       })
     },

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //追讨工作池
 export function initDebt(data) {
   return request({
-    url: '/system/debt/initDebt',
+    url: '/claimflow/debt/initDebt',
     method: 'get',
     params: data
   })
@@ -12,7 +12,7 @@ export function initDebt(data) {
 //收款明细
 export function initReceipt(data) {
   return request({
-    url: '/system/receipt/initReceipt',
+    url: '/claimflow/receipt/initReceipt',
     method: 'get',
     params: data
   })

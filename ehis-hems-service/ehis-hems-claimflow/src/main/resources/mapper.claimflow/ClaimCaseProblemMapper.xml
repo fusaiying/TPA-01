@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.ClaimCaseProblemMapper">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseProblemMapper">
 
-    <resultMap type="ClaimCaseProblem" id="ClaimCaseProblemResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseProblem" id="ClaimCaseProblemResult">
         <result property="problemId"    column="problem_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="problemType"    column="problem_type"    />
@@ -28,7 +28,7 @@
     </sql>
 
 
-    <select id="selectClaimCaseProblemList" parameterType="ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+    <select id="selectClaimCaseProblemList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         <include refid="selectClaimCaseProblemVo"/>
         <where>
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
@@ -42,7 +42,7 @@
 
 
     <!--查询已处理的问题件-->
-    <select id="selectClaimCaseProblemList1" parameterType="ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+    <select id="selectClaimCaseProblemList1" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         SELECT
         claim_case_problem.rpt_no,
         claim_case_problem.problem_type,
@@ -72,7 +72,7 @@
     </select>
 
     <!--查询处理中的问题件-->
-    <select id="selectClaimCaseProblemList2" parameterType="ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+    <select id="selectClaimCaseProblemList2" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         SELECT
         claim_case_problem.rpt_no,
         claim_case_problem.problem_type,
@@ -114,7 +114,7 @@
         where problem_id = #{problemId}
     </select>
 
-    <insert id="insertClaimCaseProblem" parameterType="ClaimCaseProblem" useGeneratedKeys="true" keyProperty="problemId">
+    <insert id="insertClaimCaseProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" useGeneratedKeys="true" keyProperty="problemId">
         insert into claim_case_problem
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -144,7 +144,7 @@
         </trim>
     </insert>
 
-    <update id="updateClaimCaseProblem" parameterType="ClaimCaseProblem">
+    <update id="updateClaimCaseProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem">
         update claim_case_problem
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -174,7 +174,7 @@
     </delete>
 
     <!--查询历史问题件信息-->
-    <select id="selectHistoricalProblem" parameterType="ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+    <select id="selectHistoricalProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         <include refid="selectClaimCaseProblemVo"/>
         <where>
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>

@@ -72,5 +72,10 @@ public interface ClaimCaseProblemMapper
      */
     List<ClaimCaseProblem> selectHistoricalProblem(ClaimCaseProblem claimCaseProblem);
 
+    /**
+     *
+     * @param rptNo
+     * @return
+     */
     public List<ClaimCaseProblem> selectClaimCaseProblemByRptNo(String rptNo);
 }

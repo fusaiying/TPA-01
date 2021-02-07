@@ -2,11 +2,19 @@ package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
+import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
 import com.paic.ehis.cs.mapper.EditInfoMapper;
 import com.paic.ehis.cs.service.IEditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.xml.soap.Detail;
 
 /**
  * 修改信息 Service业务层处理
@@ -19,6 +27,10 @@ public class EditInfoServiceImpl implements IEditInfoService
 {
     @Autowired
     private EditInfoMapper editInfoMapper;
+    @Autowired
+    private FlowLogServiceImpl flowLogMapper;
+    @Autowired
+    private DemandAcceptVoMapper demandAcceptVoMapper;
 
     /**
      * 查询修改信息 
@@ -90,5 +102,39 @@ public class EditInfoServiceImpl implements IEditInfoService
     public int deleteEditInfoById(Long editId)
     {
         return editInfoMapper.deleteEditInfoById(editId);
+    }
+    /**
+     * 取消页面提交按钮
+     * @param demandAcceptVo
+     * @return
+     */
+    @Override
+    public int cancelSubmit(DemandAcceptVo demandAcceptVo) {
+
+
+            EditInfo editInfo=new EditInfo();
+        //随机生成流水号
+        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setCreatedBy(SecurityUtils.getUsername());
+        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfoMapper.insertEditInfo(editInfo);
+
+
+        //轨迹表生成数据
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setStatus("04");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.updateFlowLog(flowLog);
+
+        demandAcceptVo.setStatus("05");
+        return demandAcceptVoMapper.updateCancelStatus(demandAcceptVo.getWorkOrderNo());
     }
 }

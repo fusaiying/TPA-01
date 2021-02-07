@@ -7,12 +7,14 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
+import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.service.ICollaborativeFromService;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
+import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +35,8 @@ public class CustomServiceDemandController extends BaseController {
     @Autowired
     private ICollaborativeFromService iCollaborativeFromService;
 
+    @Autowired
+    private IEditInfoService iEditInfoService;
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
         startPage();
@@ -107,6 +111,15 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iCollaborativeFromService.insertTeamwork(collaborativeFrom));
     }
 
-
+/**
+ * 取消页面提交按钮
+ */
+@PreAuthorize("@ss.hasPermi('system:customService::edit')")
+@Log(title = "提交 ", businessType = BusinessType.INSERT)
+@PutMapping("/cancelSubmit")
+public AjaxResult cancelSubmit (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+{
+    return toAjax(iEditInfoService.cancelSubmit(demandAcceptVo));
+}
 
 }

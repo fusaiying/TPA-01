@@ -226,6 +226,12 @@ and a.insured_no=c.person_id
         where status='01'and work_order_no = #{workOrderNo}
     </update>
 
+
+    <update id="updateCancelStatus" parameterType="String" >
+         update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
+
     <update id="updateStatusM" parameterType="String" >
          update work_order_accept set status = '02'
         where status='01'and business_type='信息需求' and work_order_no in

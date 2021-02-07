@@ -167,5 +167,13 @@ public class DemandAcceptVo extends BaseEntity {
     private String officeNumber;
     /** 联系人分机号*/
     private String officeSecondNumber;
+    /**
+     * 修改原因
+     */
+    private String  editReason;
+    /**
+     * 修改说明
+     */
+    private String editRemark;
 
 }

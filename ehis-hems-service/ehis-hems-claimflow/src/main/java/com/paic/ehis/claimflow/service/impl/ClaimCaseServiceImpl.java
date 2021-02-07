@@ -5,7 +5,6 @@ import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
-import com.paic.ehis.claimflow.service.IClaimBatchService;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -68,8 +67,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Autowired
     PolicyAndRiskService policyAndRiskService;
 
-    @Autowired
-    private IClaimBatchService iClaimBatchService;
+//    @Autowired
+//    private IClaimBatchService iClaimBatchService;
 
     @Autowired
     private IClaimCaseCheckRuleService claimCaseCheckRuleService;

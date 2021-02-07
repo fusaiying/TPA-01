@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseAcceptMapper">
     
-    <resultMap type="ClaimCaseAccept" id="ClaimCaseAcceptResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseAccept" id="ClaimCaseAcceptResult">
         <result property="rptNo"    column="rpt_no"    />
         <result property="claimAmount"    column="claim_amount"    />
         <result property="accDate"    column="acc_date"    />
@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select accept_id,rpt_no, claim_amount, acc_date, acc_type, curr_situation, first_ser_illness_date, death_date, disability_date, pre_auth_flag, pre_auth_item, pre_auth_no, material_complete_date, receipt_date, pri_reason, acc_province, acc_city, acc_district, acc_address, acc_describe, status, create_by, create_time, update_by, update_time from claim_case_accept
     </sql>
 
-    <select id="selectClaimCaseAcceptList" parameterType="ClaimCaseAccept" resultMap="ClaimCaseAcceptResult">
+    <select id="selectClaimCaseAcceptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseAccept" resultMap="ClaimCaseAcceptResult">
         <include refid="selectClaimCaseAcceptVo"/>
         <where>  
             <if test="claimAmount != null "> and claim_amount = #{claimAmount}</if>
@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where rpt_no = #{rptNo} and status='Y'
     </select>
         
-    <insert id="insertClaimCaseAccept" parameterType="ClaimCaseAccept">
+    <insert id="insertClaimCaseAccept" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseAccept">
         insert into claim_case_accept
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null">rpt_no,</if>
@@ -127,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseAccept" parameterType="ClaimCaseAccept">
+    <update id="updateClaimCaseAccept" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseAccept">
         update claim_case_accept
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null">rpt_no = #{rptNo},</if>

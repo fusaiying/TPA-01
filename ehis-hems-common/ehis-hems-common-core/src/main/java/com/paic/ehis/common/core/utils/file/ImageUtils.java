@@ -1,6 +1,7 @@
 package com.paic.ehis.common.core.utils.file;
 
-import org.apache.poi.util.IOUtils;
+import org.apache.commons.io.IOUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,7 @@ public class ImageUtils
     /**
      * 读取文件为字节数据
      * 
-     * @param key 地址
+     * @param  url 地址
      * @return 字节数据
      */
     public static byte[] readFile(String url)

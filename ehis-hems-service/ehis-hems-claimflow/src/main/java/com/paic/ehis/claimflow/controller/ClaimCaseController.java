@@ -102,8 +102,8 @@ public class ClaimCaseController extends BaseController
         TableSupport.setSort("desc");
         TableSupport.setOrderByColumn("rpt_no");
         startSortPage();
-        List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        return getDataTable(list);
+        List<ClaimCase> claimCases = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        return getDataTable(claimCases);
     }
 
 
@@ -155,8 +155,9 @@ public class ClaimCaseController extends BaseController
     @PostMapping("/exportSuspensionList")
     public void exportSuspensionList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException
     {
-        List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        ExcelUtil<ProcessingCaseVo> util = new ExcelUtil<ProcessingCaseVo>(ProcessingCaseVo.class);
+        //List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        List<ClaimCase> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
         util.exportExcel(response, list, "悬挂中受理案件");
     }
 

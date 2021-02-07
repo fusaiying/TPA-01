@@ -279,7 +279,7 @@
       let validateEmail = (rule, value, callback) => {
         if (value) {
           if (!validEmail(value)) {
-            callback(new Error('输入格式不正确'))
+            callback(new Error('邮箱格式不合法，请检查'))
           } else {
             callback()
           }
@@ -291,7 +291,7 @@
         if (value) {
           let str = value.replace(/\s/g, "")
           if (!validPhone(str)) {
-            callback(new Error('输入格式不正确'))
+            callback(new Error('手机号码格式不合法，请检查'))
           } else {
             callback()
           }
@@ -304,7 +304,7 @@
           let str = value.replace(/\s/g, "")
           if (!validPhone(str)) {
             if (!/\d{3}-\d{8}|\d{4}-\d{7,8}/.test(str)) {
-              callback(new Error('输入格式不正确'))
+              callback(new Error('电话号码格式不合法，请检查'))
             } else {
               callback()
             }

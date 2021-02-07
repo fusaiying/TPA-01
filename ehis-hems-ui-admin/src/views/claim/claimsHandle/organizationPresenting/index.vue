@@ -376,7 +376,7 @@
                 upDate='&updatestartTime='+this.queryParams.updateTime[0] +'&updateendTime='+this.queryParams.updateTime[1]
               }
 
-              this.download('system/batch/exportReturnedPool'+'?hospitalname='+this.queryParams.hospitalname+'&organcode='+this.queryParams.organcode+
+              this.download('claimapt/batch/exportReturnedPool'+'?hospitalname='+this.queryParams.hospitalname+'&organcode='+this.queryParams.organcode+
                 '&batchno='+this.queryParams.batchno+'&claimtype='+this.queryParams.claimtype+'&updateBy='+this.queryParams.updateBy+subDate
                 +upDate, {
                 ...query
@@ -401,7 +401,7 @@
               if (this.queryParams.updateTime.length>0){
                 upDate='&updatestartTime='+this.queryParams.updateTime[0] +'&updateendTime='+this.queryParams.updateTime[1]
               }
-              this.download('system/batch/exportProcessedPool'+'?hospitalname='+this.queryParams.hospitalname
+              this.download('claimapt/batch/exportProcessedPool'+'?hospitalname='+this.queryParams.hospitalname
                 +'&organcode='+this.queryParams.organcode+'&batchno='+this.queryParams.batchno+'&claimtype='+
                 this.queryParams.claimtype+'&updateBy='+this.queryParams.updateBy+subDate+upDate, {
                 ...query

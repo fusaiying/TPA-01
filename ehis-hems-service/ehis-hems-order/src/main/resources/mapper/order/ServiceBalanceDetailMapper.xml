@@ -405,10 +405,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.risk_code,
             a.policy_no,
             a.policy_item_no,
-            b.supplier_service_name service_code,
+            a.service_code,
             a.appnt_name,
             a.cust_name,
-            d.dict_label sex,
+            a.sex,
             a.id_no,
             a.service_date,
             a.remark,
@@ -417,8 +417,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.reason
         FROM
             service_balance_detail a
-        LEFT JOIN base_contract_service b ON a.service_code = b.serial_no
-        LEFT JOIN sys_dict_data d on d.dict_type = 'sex' and d.dict_value = a.sex
         <where>
             <if test="taskNo != null  and taskNo != ''"> and a.task_no = #{taskNo}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>

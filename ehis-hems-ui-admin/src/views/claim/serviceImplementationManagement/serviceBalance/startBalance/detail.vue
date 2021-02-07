@@ -23,10 +23,15 @@
 
     <!-- 结算审核日志 START -->
     <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>日志</span>
-      </div>
-      <balance-exam-log-detail ref="balanceExamLogDetail" :params="balanceExamlogParams" :dictList="dictList"/>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item name="1" style="position: relative;">
+          <template slot="title">
+            <span style="font-size:16px;color:black">日志</span>
+            <span v-show="!activeNames.length" style="font-size: 12px;color: #409EFF;position: absolute;right: 40px;">展开</span>
+          </template>
+          <balance-exam-log-detail ref="balanceExamLogDetail" :params="balanceExamlogParams" :dictList="dictList"/>
+        </el-collapse-item>
+      </el-collapse>
     </el-card>
     <!-- 结算审核日志 END -->
   </div>
@@ -52,6 +57,8 @@ export default {
   },
   data() {
     return {
+      // 显示
+      activeNames: ["1"],
       //结算方式变量
       settleTypeData: {
         //按case
@@ -162,14 +169,14 @@ export default {
 </script>
 
 <style scoped>
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
-  .clearfix:after {
-    clear: both
-  }
+.clearfix:after {
+  clear: both
+}
 
 </style>

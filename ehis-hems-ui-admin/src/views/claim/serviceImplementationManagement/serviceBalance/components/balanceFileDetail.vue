@@ -10,10 +10,15 @@
           ref="balanceFile"
           :disabled="!params.isAdd"
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :headers="headers"
+          :action="url"
+          :data="{'taskNo': this.params.taskNo}"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
           :before-upload="beforeUpload"
+          :on-success="uploadSuccess"
+          :on-progress="uploadProgress"
+          :on-preview="handlePreview"
           multiple
           accept=".xls,.xlsx,.jpg,.png,.pdf"
           :file-list="fileList">
@@ -27,7 +32,9 @@
 
 <script>
 
-// import {listBank} from '@/api/supplierManager/supplier'
+import {listBalanceFile, updateBalanceFile} from "@/api/claim/serviceBalance";
+import {getToken} from "@/utils/auth";
+
 export default {
   name: "contractFileTable",
   props: {
@@ -66,12 +73,14 @@ export default {
   },
   data() {
     return {
-      // 遮罩层
-      loading: false,
       // 显示
       activeNames: [],
+      // 设置上传的请求头部
+      headers: {Authorization: "Bearer " + getToken()},
+      // 上传的地址
+      url: process.env.VUE_APP_BASE_API + "/order/balanceFile/upload",
       //列表
-      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      fileList: []
     };
   },
   created() {
@@ -85,6 +94,7 @@ export default {
     initData() {
       if (this.params.isShow) {
         this.activeNames = ['1'];
+        this.getList();
       }
     },
     /** 初始化字典 */
@@ -93,9 +103,41 @@ export default {
 
       }
     },
+    /** 查询列表 */
+    getList() {
+      //清除列表
+      this.fileList = [];
+      const query = {
+        fileSource: this.params.taskNo,
+        status: "Y"
+      };
+      listBalanceFile(query).then(res => {
+        if (res != null && res.code === 200) {
+          res.rows.forEach(item => {
+            let obj= new Object();
+            obj.serialNo = item.serialNo;
+            obj.name = item.fileName;
+            this.fileList.push(obj);
+          });
+        }
+      }).catch(res => {
+
+      });
+    },
     /** 删除文件 */
     handleRemove(file, fileList) {
-
+      const data = {
+        serialNo: file.serialNo,
+        status: "N"
+      };
+      updateBalanceFile(data).then(res => {
+        if (res != null && res.code === 200) {
+          this.msgSuccess('删除成功！');
+        } else {
+          this.msgError('删除失败！');
+        }
+        this.getList();
+      });
     },
     /** 删除文件前 */
     beforeRemove(file, fileList) {
@@ -117,6 +159,24 @@ export default {
         this.$message.warning('只能上传excel/jpg/png/pdf文件！');
         return false;
       }
+    },
+    /** 导入成功后事件 */
+    uploadSuccess(response, file, fileList){
+      this.params.isAdd = true;
+      if (response != null && response.code === 200) {
+        this.msgSuccess('导入成功！');
+      } else {
+        this.msgError('导入失败：' + response.msg);
+      }
+      this.getList();
+    },
+    /** 上传中 */
+    uploadProgress() {
+      this.params.isAdd = false;
+    },
+    /** 预览 */
+    handlePreview(file) {
+      this.download('order/balanceFile/download?serialNo=' + file.serialNo, {}, file.name);
     }
   }
 };

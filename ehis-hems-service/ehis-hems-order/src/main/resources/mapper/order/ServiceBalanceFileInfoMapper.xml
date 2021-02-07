@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.ServiceBalanceFileInfoMapper">
+    
+    <resultMap type="ServiceBalanceFileInfo" id="ServiceBalanceFileInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="fileSource"    column="file_source"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectServiceBalanceFileInfoVo">
+        select serial_no, file_name, file_path, file_source, remark, status, create_by, create_time, update_by, update_time from service_balance_file_info
+    </sql>
+
+    <select id="selectServiceBalanceFileInfoList" parameterType="ServiceBalanceFileInfo" resultMap="ServiceBalanceFileInfoResult">
+        <include refid="selectServiceBalanceFileInfoVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="filePath != null  and filePath != ''"> and file_path = #{filePath}</if>
+            <if test="fileSource != null  and fileSource != ''"> and file_source = #{fileSource}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectServiceBalanceFileInfoById" parameterType="Long" resultMap="ServiceBalanceFileInfoResult">
+        <include refid="selectServiceBalanceFileInfoVo"/>
+        where serial_no = #{serialNo}
+    </select>
+        
+    <insert id="insertServiceBalanceFileInfo" parameterType="ServiceBalanceFileInfo" useGeneratedKeys="true" keyProperty="serialNo">
+        insert into service_balance_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">file_name,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="fileSource != null">file_source,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">#{fileName},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="fileSource != null">#{fileSource},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateServiceBalanceFileInfo" parameterType="ServiceBalanceFileInfo">
+        update service_balance_file_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="fileSource != null">file_source = #{fileSource},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteServiceBalanceFileInfoById" parameterType="Long">
+        delete from service_balance_file_info where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteServiceBalanceFileInfoByIds" parameterType="String">
+        delete from service_balance_file_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+    
+</mapper>

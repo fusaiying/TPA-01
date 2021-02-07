@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select check_rule_no, case_type, amount_type, check_amount, rate, status, create_by, create_time, update_by, update_time from claim_case_check_rule
     </sql>
 
-    <select id="selectClaimCaseCheckRuleList" parameterType="ClaimCaseCheckRule" resultMap="ClaimCaseCheckRuleResult">
+    <select id="selectClaimCaseCheckRuleList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRule" resultMap="ClaimCaseCheckRuleResult">
         <include refid="selectClaimCaseCheckRuleVo"/>
         <where>  
             <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- lihy -->
-    <select id="selectClaimCaseCheckRule" parameterType="com.sino.system.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleResult">
+    <select id="selectClaimCaseCheckRule" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleResult">
         <include refid="selectClaimCaseCheckRuleVo"/>
         <where>
             <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- lihy -->
-    <select id="selectClaimCaseCheckRuleNew" parameterType="com.sino.system.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleDTOResult">
+    <select id="selectClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleDTOResult">
         SELECT
         check_rule_no,
         case_type,
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- lihy -->
-    <select id="selectClaimCaseCheckRuleMatch" parameterType="com.sino.system.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckDTOResult">
+    <select id="selectClaimCaseCheckRuleMatch" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckDTOResult">
         SELECT
         check_rule_no,
         case_type,
@@ -130,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where check_rule_no = #{checkRuleNo}
     </select>
         
-    <insert id="insertClaimCaseCheckRule" parameterType="ClaimCaseCheckRule">
+    <insert id="insertClaimCaseCheckRule" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRule">
         insert into claim_case_check_rule
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="checkRuleNo != null">check_rule_no,</if>
@@ -161,7 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <!--lihy-->
-    <insert id="insertClaimCaseCheckRuleNew" parameterType="com.sino.system.domain.dto.ClaimCaseCheckRuleDTO">
+    <insert id="insertClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseCheckRuleDTO">
         insert into claim_case_check_rule
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="checkRuleNo != null">check_rule_no,</if>
@@ -190,7 +190,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateClaimCaseCheckRule" parameterType="ClaimCaseCheckRule">
+    <update id="updateClaimCaseCheckRule" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRule">
         update claim_case_check_rule
         <trim prefix="SET" suffixOverrides=",">
             <if test="caseType != null">case_type = #{caseType},</if>
@@ -207,7 +207,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <!--lihy-->
-    <update id="updateClaimCaseCheckRuleNew" parameterType="com.sino.system.domain.dto.ClaimCaseCheckRuleDTO">
+    <update id="updateClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseCheckRuleDTO">
         update claim_case_check_rule
         <trim prefix="SET" suffixOverrides=",">
             <if test="caseType != null">case_type = #{caseType},</if>

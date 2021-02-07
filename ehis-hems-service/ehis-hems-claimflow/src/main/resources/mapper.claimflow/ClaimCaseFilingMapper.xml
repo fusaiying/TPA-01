@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select case_box_no, batch_no, rpt_start_no, rpt_end_no, claim_type, status, create_by, create_time, update_by, update_time from claim_case_filing
     </sql>
 
-    <select id="selectClaimCaseFilingList" parameterType="ClaimCaseFiling" resultMap="ClaimCaseFilingResult">
+    <select id="selectClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseFiling" resultMap="ClaimCaseFilingResult">
         <include refid="selectClaimCaseFilingVo"/>
         <where>  
             <if test="caseBoxNo != null  and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where case_box_no = #{caseBoxNo}
     </select>
 
-    <select id="selectCaseClaimCaseFilingList" parameterType="com.sino.system.domain.dto.ClaimCaseFilingDTO" resultMap="ClaimCaseFilingVOResult">
+    <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO" resultMap="ClaimCaseFilingVOResult">
         select
             case_box_no,rpt_start_no,rpt_end_no,batch_no,
             dept_code,create_time,update_time,claim_type,
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectCaseClaimCaseFilingInfo" parameterType="com.sino.system.domain.vo.ClaimCaseFilingInformationVO" resultMap="ClaimCaseFilingInformationVOResult">
+    <select id="selectCaseClaimCaseFilingInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" resultMap="ClaimCaseFilingInformationVOResult">
         select
         ccf.case_box_no,ccf.dept_code,ccf.status,ccf.claim_type,
         cbif.is_filing,cbif.is_invoice_back,cbif.is_single,cbif.remark,
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
         
-    <insert id="insertClaimCaseFiling" parameterType="ClaimCaseFiling">
+    <insert id="insertClaimCaseFiling" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseFiling">
         insert into claim_case_filing
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="deptCode != null and deptCode != ''">dept_code,</if>
@@ -141,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateClaimCaseFiling" parameterType="ClaimCaseFiling">
+    <update id="updateClaimCaseFiling" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseFiling">
         update claim_case_filing
         <trim prefix="SET" suffixOverrides=",">
             <if test="deptCode != null  and deptCode != ''">dept_code = #{deptCode}</if>
@@ -158,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where case_box_no = #{caseBoxNo}
     </update>
 
-    <update id="updateClaimCaseFilingEdit" parameterType="com.sino.system.domain.vo.ClaimCaseFilingInformationVO">
+    <update id="updateClaimCaseFilingEdit" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO">
         update claim_case_filing
         <trim prefix="SET" suffixOverrides=",">
             <if test="caseBoxNo != null and caseBoxNo != ''">case_box_no = #{caseBoxNo},</if>

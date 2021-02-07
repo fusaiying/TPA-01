@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select attr_id, check_rule_no, pay_conclusion, status, create_by, create_time, update_by, update_time from claim_case_check_rule_attr
     </sql>
 
-    <select id="selectClaimCaseCheckRuleAttrList" parameterType="ClaimCaseCheckRuleAttr" resultMap="ClaimCaseCheckRuleAttrResult">
+    <select id="selectClaimCaseCheckRuleAttrList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRuleAttr" resultMap="ClaimCaseCheckRuleAttrResult">
         <include refid="selectClaimCaseCheckRuleAttrVo"/>
         <where>  
             <if test="checkRuleNo != null  and checkRuleNo != ''"> and check_rule_no = #{checkRuleNo}</if>
@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select attr_id from claim_case_check_rule_attr
         where check_rule_no = #{checkRuleNo}
     </select>
-    <insert id="insertClaimCaseCheckRuleAttr" parameterType="ClaimCaseCheckRuleAttr" useGeneratedKeys="true" keyProperty="attrId">
+    <insert id="insertClaimCaseCheckRuleAttr" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRuleAttr" useGeneratedKeys="true" keyProperty="attrId">
         insert into claim_case_check_rule_attr
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no,</if>
@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseCheckRuleAttr" parameterType="ClaimCaseCheckRuleAttr">
+    <update id="updateClaimCaseCheckRuleAttr" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRuleAttr">
         update claim_case_check_rule_attr
         <trim prefix="SET" suffixOverrides=",">
             <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no = #{checkRuleNo},</if>
@@ -81,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <!-- lihy -->
-    <update id="updateClaimCaseCheckRuleAttrNew" parameterType="ClaimCaseCheckRuleAttr">
+    <update id="updateClaimCaseCheckRuleAttrNew" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseCheckRuleAttr">
         update claim_case_check_rule_attr
         <trim prefix="SET" suffixOverrides=",">
             <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no = #{checkRuleNo},</if>

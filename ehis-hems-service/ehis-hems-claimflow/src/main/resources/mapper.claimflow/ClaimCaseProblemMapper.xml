@@ -176,15 +176,7 @@
     <!--查询历史问题件信息-->
     <select id="selectHistoricalProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         <include refid="selectClaimCaseProblemVo"/>
-        <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-            <if test="problemType != null  and problemType != ''"> and problem_type = #{problemType}</if>
-            <if test="problemView != null  and problemView != ''"> and problem_view = #{problemView}</if>
-            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
-            <if test="conclusionView != null  and conclusionView != ''"> and conclusion_view = #{conclusionView}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            and is_history='N'
-        </where>
+        where rpt_no=#{rptNo}  and is_history='N'
     </select>
 
     <select id="selectClaimCaseProblemByRptNo" parameterType="String" resultMap="ClaimCaseProblemResult">

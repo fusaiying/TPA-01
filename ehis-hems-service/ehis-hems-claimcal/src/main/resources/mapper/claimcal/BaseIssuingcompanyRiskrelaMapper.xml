@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimcal.mapper.BaseIssuingcompanyRiskrelaMapper">
     
-    <resultMap type="com.sino.system.domain.BaseIssuingcompanyRiskrela" id="BaseIssuingcompanyRiskrelaResult">
+    <resultMap type="com.paic.ehis.claimcal.domain.BaseIssuingcompanyRiskrela" id="BaseIssuingcompanyRiskrelaResult">
         <result property="companyCode"    column="company_code"    />
         <result property="riskCode"    column="risk_code"    />
         <result property="status"    column="status"    />
@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <resultMap type="com.sino.system.domain.BaseIssuingcompanyRule" id="BaseIssuingcompanyRuleResult">
+    <resultMap type="com.paic.ehis.claimcal.domain.BaseIssuingcompanyRule" id="BaseIssuingcompanyRuleResult">
         <result property="companycode"    column="company_code"    />
         <result property="riskcode"    column="risk_code"    />
         <result property="settlementtype"    column="settlement_type"    />
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select company_code, risk_code, status, create_by, create_time, update_by, update_time from base_issuingcompany_riskrela
     </sql>
 
-    <select id="selectBaseIssuingcompanyRiskrelaList" parameterType="com.sino.system.domain.BaseIssuingcompanyRiskrela" resultMap="BaseIssuingcompanyRiskrelaResult">
+    <select id="selectBaseIssuingcompanyRiskrelaList" parameterType="com.paic.ehis.claimcal.domain.BaseIssuingcompanyRiskrela" resultMap="BaseIssuingcompanyRiskrelaResult">
         <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
         <where>  
             <if test="status != null  and status != ''"> and status = #{status}</if>
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where company_code = #{companyCode} and status='Y'
     </select>
         
-    <insert id="insertBaseIssuingcompanyRiskrela" parameterType="com.sino.system.domain.BaseIssuingcompanyRiskrela">
+    <insert id="insertBaseIssuingcompanyRiskrela" parameterType="com.paic.ehis.claimcal.domain.BaseIssuingcompanyRiskrela">
         insert into base_issuingcompany_riskrela
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="companyCode != null">company_code,</if>
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBaseIssuingcompanyRiskrela" parameterType="com.sino.system.domain.BaseIssuingcompanyRiskrela">
+    <update id="updateBaseIssuingcompanyRiskrela" parameterType="com.paic.ehis.claimcal.domain.BaseIssuingcompanyRiskrela">
         update base_issuingcompany_riskrela
         <trim prefix="SET" suffixOverrides=",">
             <if test="riskCode != null">risk_code = #{riskCode},</if>
@@ -96,22 +96,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where company_code = #{companyCode} and status='Y'
     </select>
 
-    <select id="selectCompanyRiskrelaRiskByTpa" parameterType="com.sino.system.domain.dto.TpaSettleDTO" resultMap="BaseIssuingcompanyRuleResult">
-        SELECT DISTINCT
-            product.risk_name,
-            bir.risk_code,
-            rule.settlement_type,
-            rule.settlement_value
-         FROM
-            base_issuingcompany_riskrela bir
-         LEFT JOIN base_issuingcompany_rule rule ON rule.company_code = bir.company_code
-            AND rule.STATUS = 'Y'
-         LEFT JOIN claim_product product ON product.risk_code = bir.risk_code
-            AND product.STATUS = 'Y'
-        <where>
-            <if test="companyCode != null">and company_code = #{companyCode}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="settlementType  != null  and status != ''"> and settlement_type  = #{settlementType}</if>
-        </where>
-    </select>
 </mapper>

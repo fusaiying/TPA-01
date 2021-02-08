@@ -372,7 +372,7 @@
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
-        this.getDataList()
+       // this.getDataList()
       },
       fixInfo: function (newVal){
 
@@ -589,7 +589,9 @@
         this.radio = undefined
         this.copyRadio = undefined
         this.expands = []
+        this.tableData=[]
         this.$refs.searchForm.resetFields()
+
         this.dialogVisable=false
         this.$emit('closeDialogVisable')
       },
@@ -660,7 +662,9 @@
       //查询
       searchHandle() {
          const values = Object.values(this.searchForm)
-      let flag= values.some(item => {return item != ''})
+        console.log(this.searchForm)
+      let flag= values.some(item => {return  item!=null && item !='' })
+
       if(flag){
         if(this.searchForm.idType){
           if(this.searchForm.idNo){
@@ -679,9 +683,8 @@
               }
         }
         else {
-          if((this.searchForm.name!=null && this.searchForm.name!='' && this.searchForm.sex!=null && this.searchForm.sex!=''
-            && this.searchForm.birthday!=null && this.searchForm.birthday!='' )
-          (this.searchForm.name=='' && this.searchForm.sex=='' &&  this.searchForm.birthday=='' )){
+          if((this.searchForm.name!=null && this.searchForm.name!='' && this.searchForm.sex!=null && this.searchForm.sex!='' && this.searchForm.birthday!=null && this.searchForm.birthday!='' )
+          || (this.searchForm.name=='' && this.searchForm.sex=='' &&  this.searchForm.birthday=='' )){
             this.getSelectRecogn()
           }
           else {

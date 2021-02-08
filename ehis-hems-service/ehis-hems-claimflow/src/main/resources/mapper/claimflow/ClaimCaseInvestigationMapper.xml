@@ -124,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="targetCode"    column="target_code"    />
     </resultMap>
 
-    <select id="selectBaseCodeMappingNew" parameterType="Long" resultMap="selectBaseCodeMappingNewVO">
+    <select id="selectBaseCodeMappingNew" parameterType="com.paic.ehis.claimflow.domain.BaseCodeMappingNew" resultMap="selectBaseCodeMappingNewVO">
         select code_type,original_code,target_code from base_code_mapping
         where code_type = #{codeType} and original_code = #{originalCode} and status='Y'
     </select>

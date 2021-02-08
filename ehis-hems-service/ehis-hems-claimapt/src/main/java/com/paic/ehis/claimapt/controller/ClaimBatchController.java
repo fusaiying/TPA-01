@@ -206,7 +206,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
-    public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO)
+    public TableDataInfo reviewPublicList(BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {
@@ -232,7 +232,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @GetMapping("/untreatedList")
-    public TableDataInfo untreatedPersonalList(@RequestBody BatchDTO batchDTO)
+    public TableDataInfo untreatedPersonalList( BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {
@@ -258,7 +258,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @GetMapping("/processedList")
-    public TableDataInfo processedPersonalList(@RequestBody BatchRecordDTO batchRecordDTO)
+    public TableDataInfo processedPersonalList( BatchRecordDTO batchRecordDTO)
     {
         if (StringUtils.isNotEmpty(batchRecordDTO.getOrderByColumn())) {
             switch (batchRecordDTO.getOrderByColumn()) {

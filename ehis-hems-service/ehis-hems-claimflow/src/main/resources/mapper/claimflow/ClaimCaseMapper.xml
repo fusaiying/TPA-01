@@ -120,8 +120,7 @@
         <where>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="caseStatus != null  and caseStatus != '' and caseStatus = '30'"> and cc.case_status =${caseStatus} </if>
-            <if test="caseStatus != null  and caseStatus != '' and caseStatus != '30'"> and cc.case_status not in (${caseStatus})</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status =${caseStatus} </if>
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>

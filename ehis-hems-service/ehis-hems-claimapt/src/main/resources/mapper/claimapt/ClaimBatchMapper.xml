@@ -89,8 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.currency,
         cb.cont_type,
         cb.batch_status,
-        record.update_by,
-        record.update_time,
+        cb.update_by,
+        cb.update_time,
         bpi.chname1,
         bpi.enname1
         FROM

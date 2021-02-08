@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where collaborative_id = #{collaborativeId}
     </select>
         
-    <insert id="insertCollaborativeFrom" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
+        <insert id="insertCollaborativeFrom" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
         insert into collaborative_from
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>

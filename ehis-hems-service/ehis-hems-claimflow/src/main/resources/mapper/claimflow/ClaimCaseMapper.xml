@@ -642,7 +642,7 @@
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="updateBy"    column="update_by"    />
     </resultMap>
-    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultType="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo">
+    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
         from claim_case cc
         inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no

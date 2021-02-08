@@ -194,14 +194,14 @@
         this.loading = false
       })
       //获取直结复核理赔批次待处理个人池
-      getUntreatedList().then(res => {
+      getUntreatedList(this.searchForm).then(res => {
         this.backData = res.rows
         this.backTotal = res.total
       }).finally(() => {
         this.loading = false
       })
       //获取直结复核公共池获取到未处理个人池
-      getProcessedList().then(res => {
+      getProcessedList(this.searchForm).then(res => {
         this.dealData = res.rows
         this.dealTotal = res.total
       }).finally(() => {

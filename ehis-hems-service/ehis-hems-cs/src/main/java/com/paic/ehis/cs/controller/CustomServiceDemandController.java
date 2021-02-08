@@ -100,26 +100,38 @@ public class CustomServiceDemandController extends BaseController {
 
     /**
      * 增加协办信息
-     * @param collaborativeFrom
+     * @param demandAcceptVo
      * @return
      */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertTeamwork")
-    public AjaxResult insertTeamwork (@Validated @RequestBody CollaborativeFrom collaborativeFrom)
+    public AjaxResult insertTeamwork (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
     {
-        return toAjax(iCollaborativeFromService.insertTeamwork(collaborativeFrom));
+        return toAjax(iCollaborativeFromService.insertTeamwork(demandAcceptVo));
     }
 
 /**
  * 取消页面提交按钮
  */
-@PreAuthorize("@ss.hasPermi('system:customService::edit')")
-@Log(title = "提交 ", businessType = BusinessType.INSERT)
-@PutMapping("/cancelSubmit")
-public AjaxResult cancelSubmit (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
-{
-    return toAjax(iEditInfoService.cancelSubmit(demandAcceptVo));
-}
+        @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+        @Log(title = "提交 ", businessType = BusinessType.INSERT)
+        @PutMapping("/cancelSubmit")
+        public AjaxResult cancelSubmit (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+        {
+            return toAjax(iEditInfoService.cancelSubmit(demandAcceptVo));
+        }
+        /**
+         * 查询协办工作池
+         */
+        @PreAuthorize("@ss.hasPermi('system:customService:list')")
+        @GetMapping("/selectAssist")
+        public TableDataInfo selectAssist(AcceptDTO acceptDTO) {
+            startPage();
+            List<DemandAcceptVo> list = iDemandAcceptVoService.selectAssist(acceptDTO);
+            return getDataTable(list);
+        }
+
+
 
 }

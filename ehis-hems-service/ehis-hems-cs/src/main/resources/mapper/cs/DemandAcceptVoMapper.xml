@@ -105,52 +105,52 @@ and a.status='01'
 
 
     <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.STATUS,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
-FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-and a.insured_no=c.person_id
-  and a.business_type='信息需求'
-and a.status='02'
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2
+        FROM
+        work_order_accept a,
+        accept_detail_info b,
+        person_info c
+        WHERE
+        a.work_order_no = b.work_order_no
+        and a.insured_no=c.person_id
+          and a.business_type='信息需求'
+        and a.status='02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -229,6 +229,10 @@ and a.insured_no=c.person_id
 
     <update id="updateCancelStatus" parameterType="String" >
          update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
+    <update id="updateTeamwork" parameterType="String" >
+         update work_order_accept set status = '06'
         where  work_order_no = #{workOrderNo}
     </update>
 
@@ -476,7 +480,33 @@ and a.insured_no=c.person_id
     </insert>
 
 
-
+    <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
+        select t1.work_order_no,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_no,t1.holder_name,t1.accept_time,t1.modify_time,t2.create_by,t1.vip_flag,t1.organ_code,t1.status
+        from work_order_accept t1
+        left join  accept_detail_info  t2   on t1.work_order_no=t2.work_order_no
+        left join person_info c on t1.insured_no=c.person_id
+    <where>
+            <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+            <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+            <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+            <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+            <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+            <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+            <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+            <if test="status != null  and status != ''"> and t1.status = #{status}</if>
+            <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+            <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+            <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+    </where>
+    </select>
 
 
 </mapper>

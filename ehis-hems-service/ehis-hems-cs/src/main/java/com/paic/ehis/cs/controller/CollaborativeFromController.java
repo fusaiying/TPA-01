@@ -49,7 +49,7 @@ public class CollaborativeFromController extends BaseController
         return getDataTable(list);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listNew")
     public TableDataInfo list(ConsultationDTO consultationDTO)
     {
         startPage();

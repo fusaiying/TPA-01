@@ -46,6 +46,7 @@ public interface ClaimUserTakeOnMapper
      * @return 结果
      */
     public int updateClaimUserTakeOn(ClaimUserTakeOn claimUserTakeOn);
+    public int updateSysUser(ClaimUserTakeOn claimUserTakeOn);
 
     /**
      * 删除理赔用户工作承接

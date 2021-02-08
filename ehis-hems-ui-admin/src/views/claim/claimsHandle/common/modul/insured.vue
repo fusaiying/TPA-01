@@ -622,7 +622,7 @@
 
       //查询
       searchHandle() {
-
+//测试
         //调用查询就诊人信息的接口
         selectRecognizee(this.searchForm).then(res => {
           if (res != null && res.code == '200' ) {

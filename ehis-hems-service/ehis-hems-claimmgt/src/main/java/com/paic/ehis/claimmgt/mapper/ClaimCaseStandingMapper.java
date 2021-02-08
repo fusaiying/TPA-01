@@ -34,6 +34,8 @@ public interface ClaimCaseStandingMapper
 
     public List<ClaimCaseStandingVo1> selectClaimCaseStandingListNew(ClaimCaseStandingDTO claimCaseStandingDTO);
 
+    public String selectCompanyName(String rptNo);
+
     /**
      * 新增报案台账信息 
      * 

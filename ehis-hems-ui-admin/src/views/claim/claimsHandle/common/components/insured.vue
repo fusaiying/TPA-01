@@ -427,8 +427,8 @@
         policy_statusOptions: [],
         policy_typeOptions: [],
         socialinsurance1Options: [],
-        occupationOptions: [{dictLable: '01', dictValue: '老师'}, {dictLable: '02', dictValue: '销售'}],
-        nativeplaceOptions: [{dictLable: '01', dictValue: '中国'}, {dictLable: '02', dictValue: '韩国'}],
+        occupationOptions: [{dictLabel: '老师', dictValue: '01'}, {dictLabel: '销售', dictValue: '02'}],
+        nativeplaceOptions: [{dictLabel: '中国', dictValue: '01'}, {dictLabel: '韩国', dictValue: '02'}],
       }
     },
     computed: {

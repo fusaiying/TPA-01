@@ -372,7 +372,7 @@
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
-        this.getDataList()
+       // this.getDataList()
       },
       fixInfo: function (newVal){
 
@@ -589,7 +589,9 @@
         this.radio = undefined
         this.copyRadio = undefined
         this.expands = []
+        this.tableData=[]
         this.$refs.searchForm.resetFields()
+
         this.dialogVisable=false
         this.$emit('closeDialogVisable')
       },
@@ -603,27 +605,109 @@
 
       //确人按钮
       confirmHandle() {
-        let propData = {
-          caseInsuredData: this.tableData[this.radio],
-          policyInfoData: this.multipleSelection
+        if(this.radio!=undefined && this.radio!=null ){
+          if(this.multipleSelection.length>0){
+            let propData = {
+              caseInsuredData: this.tableData[this.radio],
+              policyInfoData: this.multipleSelection
+            }
+            //调用被保人保存的接口
+            const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+            subFormSearch.rptNo = this.copyFixInfo.rptNo
+            let insuredInfoData = {
+              policyNos: this.multipleSelection,
+              claimCaseInsured: subFormSearch
+            }
+            addInsuredAndPolicy(insuredInfoData)
+            //关闭清空
+            this.changeDialogVisable()
+            this.$emit('getPropData', propData)
+          }
+          else {
+            this.$confirm('未选择保单，是否确认?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              let propData = {
+                caseInsuredData: this.tableData[this.radio],
+                policyInfoData: this.multipleSelection
+              }
+              //调用被保人保存的接口
+              const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+              subFormSearch.rptNo = this.copyFixInfo.rptNo
+              let insuredInfoData = {
+                policyNos: this.multipleSelection,
+                claimCaseInsured: subFormSearch
+              }
+              addInsuredAndPolicy(insuredInfoData)
+              //关闭清空
+              this.changeDialogVisable()
+              this.$emit('getPropData', propData)
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+
+          }
         }
-        //调用被保人保存的接口
-        const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
-        subFormSearch.rptNo = this.copyFixInfo.rptNo
-        let insuredInfoData = {
-          policyNos: this.multipleSelection,
-          claimCaseInsured: subFormSearch
+        else {
+          this.$message({message:'请选择一条被保人信息', type:'warning',showClose:true,center:true})
         }
-        addInsuredAndPolicy(insuredInfoData)
-        //关闭清空
-        this.changeDialogVisable()
-        this.$emit('getPropData', propData)
+
       },
 
       //查询
       searchHandle() {
-//测试
-        //调用查询就诊人信息的接口
+         const values = Object.values(this.searchForm)
+        console.log(this.searchForm)
+      let flag= values.some(item => {return  item!=null && item !='' })
+
+      if(flag){
+        if(this.searchForm.idType){
+          if(this.searchForm.idNo){
+            this.getSelectRecogn()
+          }
+          else {
+            this.$message({message:'请同时录入证件类型和证件号码', type:'warning',showClose:true,center:true})
+          }
+        }
+        else if(this.searchForm.idNo) {
+              if(this.searchForm.name){
+                this.getSelectRecogn()
+              }
+              else {
+                this.$message({message:'请同时录入证件类型或被保人姓名', type:'warning',showClose:true,center:true})
+              }
+        }
+        else {
+          if((this.searchForm.name!=null && this.searchForm.name!='' && this.searchForm.sex!=null && this.searchForm.sex!='' && this.searchForm.birthday!=null && this.searchForm.birthday!='' )
+          || (this.searchForm.name=='' && this.searchForm.sex=='' &&  this.searchForm.birthday=='' )){
+            this.getSelectRecogn()
+          }
+          else {
+            this.$message({message:'请同时录入性别、姓名、出生日期', type:'warning',showClose:true,center:true})
+          }
+
+        }
+      }
+      else {
+        this.$message({message: '请至少录入一项查询条件', type: 'warning', showClose: true, center: true})
+      }
+
+
+
+
+
+
+
+
+
+      },
+      //调用查询就诊人信息的接口
+      getSelectRecogn(){
         selectRecognizee(this.searchForm).then(res => {
           if (res != null && res.code == '200' ) {
 
@@ -646,7 +730,6 @@
         }).finally(() => {
 
         })
-
       },
 
       //选中复选框

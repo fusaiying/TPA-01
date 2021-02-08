@@ -63,7 +63,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="takeOnUserId != null "> and t1.take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
             <if test="status != null  and status != ''"> and t1.status = #{status}</if>
             <if test="status == null  or status == ''"> and t1.status != 'N'</if>
-
         </where>
     </select>
     

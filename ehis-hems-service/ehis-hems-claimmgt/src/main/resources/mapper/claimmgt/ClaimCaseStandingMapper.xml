@@ -101,7 +101,7 @@ FROM
 	claim_case_policy,
 	claim_case_standing
 WHERE
-	claim_case_policy.rpt_no = claim_case_standing.rpt_no
+	claim_case_policy.rpt_no = claim_case_standing.rpt_no and claim_case_policy.rpt_no = #{rptno}
     </select>
     
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">

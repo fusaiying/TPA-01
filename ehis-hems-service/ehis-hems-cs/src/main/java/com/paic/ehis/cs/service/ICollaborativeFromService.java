@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service;
 
 import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
+import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 /**
  * 协办信息 Service接口
@@ -26,6 +27,8 @@ public interface ICollaborativeFromService
      * @return 协办信息 集合
      */
     public List<CollaborativeFrom> selectCollaborativeFromList(CollaborativeFrom collaborativeFrom);
+
+    public List<CollaborativeFrom> selectCollaborativeFromListNew(ConsultationDTO consultationDTO);
 
     /**
      * 新增协办信息 

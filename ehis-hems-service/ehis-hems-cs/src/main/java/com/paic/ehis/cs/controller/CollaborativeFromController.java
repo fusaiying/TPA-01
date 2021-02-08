@@ -3,6 +3,8 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +46,14 @@ public class CollaborativeFromController extends BaseController
     {
         startPage();
         List<CollaborativeFrom> list = collaborativeFromService.selectCollaborativeFromList(collaborativeFrom);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/listNew")
+    public TableDataInfo list(ConsultationDTO consultationDTO)
+    {
+        startPage();
+        List<CollaborativeFrom> list = collaborativeFromService.selectCollaborativeFromListNew(consultationDTO);
         return getDataTable(list);
     }
 

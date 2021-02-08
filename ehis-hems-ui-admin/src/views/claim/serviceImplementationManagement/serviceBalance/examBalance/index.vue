@@ -298,7 +298,7 @@ export default {
         settleType: row.settleType,
         status: "Y"
       };
-      this.download('order/balanceDetail/export', params, row.taskNo + '_' + new Date().getTime() + '.xlsx');
+      this.download('order/balanceDetail/export', params,"balance_" + row.taskNo + '_' + new Date().getTime() + '.xlsx');
     }
   }
 };

@@ -289,7 +289,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             '肖战2' appnt_name,
             '2222' cust_no,
             '王一博2' cust_name,
-            '2' sex,
+            '0' sex,
             '6101111999909080056' id_no,
             '2021-01-22' service_date,
             '供应商2等' remark,

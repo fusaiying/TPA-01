@@ -102,6 +102,7 @@
   export default {
     mixins: [],
     props: {
+      isSave:Boolean,
       baseInfo:Object,
       status: String,
       sonRegisterData: Object,
@@ -304,41 +305,47 @@
 
     methods: {
       saveHandle() {
-        this.$refs.baseForm.validate((valid) => {
-          if (valid) {
-            const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
-            if (this.region) {
-              subFormSearch.rgtProvince = this.region[0]
-              subFormSearch.rgtDistrict = this.region[2]
-              subFormSearch.rgtCity = this.region[1]
-            }
-            subFormSearch.rptNo = this.copyFixInfo.rptNo
-            addRegister(subFormSearch).then(res => {
-              if (res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.isApplicantSave = true
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+        if (this.isSave){
+          this.$refs.baseForm.validate((valid) => {
+            if (valid) {
+              const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
+              if (this.region) {
+                subFormSearch.rgtProvince = this.region[0]
+                subFormSearch.rgtDistrict = this.region[2]
+                subFormSearch.rgtCity = this.region[1]
               }
-            })
+              subFormSearch.rptNo = this.copyFixInfo.rptNo
+              addRegister(subFormSearch).then(res => {
+                if (res.code === 200) {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.isApplicantSave = true
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+              })
 
 
-          } else {
-            this.$message.warning('必录项未必录!')
-          }
+            } else {
+              this.$message.warning('必录项未必录!')
+            }
 
 
-        })
+          })
+        }else {
+          return this.$message.warning(
+            "被保险人信息未保存，请保存后重新操作！"
+          )
+        }
       },
 
 

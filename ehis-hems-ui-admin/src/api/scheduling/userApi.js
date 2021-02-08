@@ -4,7 +4,7 @@ import request from '@/utils/request'
 /*用户调度  */
 export function listInfo(query) {
   return request({
-    url: '/system/on/list',
+    url: '/claimmgt/on/list',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listInfo(query) {
 // 新增
 export function addInfo(data) {
   return request({
-    url: '/system/on/add',
+    url: '/claimmgt/on/add',
     method: 'post',
     data
   })
@@ -22,7 +22,7 @@ export function addInfo(data) {
 // 修改
 export function editInfo(data) {
   return request({
-    url: '/system/on/update',
+    url: '/claimmgt/on/update',
     method: 'put',
     data
   })

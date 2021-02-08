@@ -202,6 +202,8 @@
                   pageNum : 1,
                   pageSize : 1,
                   caseBoxNo:value ,
+                  orderByColumn:'create_time',
+                  isAsc:'desc'
                 };
                 caseFilingList(params).then(response => {
                   if(response.total == 1) {

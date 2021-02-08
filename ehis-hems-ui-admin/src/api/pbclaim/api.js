@@ -5,7 +5,7 @@ import request from '@/utils/request'
 // 本次问题件处理
 export function updateProblem(data) {
   return request({
-    url:  '/system/case/updatecaseStatus',
+    url:  '/claimflow/case/updatecaseStatus',
     method: 'put',
     data
   })
@@ -13,7 +13,7 @@ export function updateProblem(data) {
 
 export function baseInfo(query) {
   return request({
-    url: '/system/insured/list',
+    url: '/claimflow/insured/list',
     method: 'get',
     params: query
   })
@@ -22,7 +22,7 @@ export function baseInfo(query) {
 //查询 历史问题附件信息
 export function historicalProblem(query) {
   return request({
-    url: '/system/problem/selectHistoricalProblem',
+    url: '/claimflow/problem/selectHistoricalProblem',
     method: 'get',
     params: query
   })
@@ -31,7 +31,7 @@ export function historicalProblem(query) {
 //查询 问题件工作池  (待处理)
 export function PendingData(query) {
   return request({
-    url: '/system/problem/list2',
+    url: '/claimflow/problem/list2',
     method: 'get',
     params: query
   })
@@ -40,7 +40,7 @@ export function PendingData(query) {
 //查询 问题件工作池  (已处理)
 export function processedData(query) {
   return request({
-    url: '/system/problem/list1',
+    url: '/claimflow/problem/list1',
     method: 'get',
     params: query
   })
@@ -50,7 +50,7 @@ export function processedData(query) {
 //案件调度修改操作人
 export function dispatchUpdate(data) {
   return request({
-    url: '/system/case/Dispatch',
+    url: '/claimflow/case/Dispatch',
     method: 'post',
     data: data
   })
@@ -68,7 +68,7 @@ export function getDspatchUser(query) {
 //查询出单信息
 export function getIssuingcompanyList(query) {
   return request({
-    url: '/system/issuingcompany/list',
+    url: '/provider/issuingcompany/list',
     method: 'get',
     params: query
   })

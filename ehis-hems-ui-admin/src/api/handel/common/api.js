@@ -41,7 +41,7 @@ export function adNoData(query) {
 
 export function claimInformation(query) {
   return request({
-    url: '/system/case/selectClaimInformation',
+    url: '/claimflow/case/selectClaimInformation',
     method: 'get',
     params: query
   })
@@ -50,7 +50,7 @@ export function claimInformation(query) {
 // 新增案件协谈信息  保存按钮
 export function addDiscussion(data) {
   return request({
-    url: '/system/discussion',
+    url: '/claimflow/discussion',
     method: 'post',
     data: data
   })
@@ -59,7 +59,7 @@ export function addDiscussion(data) {
 // 新增案件赔付信息 （保存）
 export function updateCal(data) {
   return request({
-    url: '/system/cal',
+    url: '/claimflow/cal',
     method: 'put',
     data: data
   })
@@ -68,7 +68,7 @@ export function updateCal(data) {
 // 理算审核案件退回 按钮 (主要需要rptNo)
 export function backToClaimCase(query){
   return request({
-    url: '/system/case/backToCase',
+    url: '/claimflow/case/backToCase',
     method: 'get',
     params: query
   })
@@ -78,7 +78,7 @@ export function backToClaimCase(query){
 // 理算审核  审核完毕 按钮
 export function finishClaimCase(query){
   return request({
-    url: '/system/case/ReviewCompleted',
+    url: '/claimflow/case/ReviewCompleted',
     method: 'get',
     params: query
   })
@@ -87,7 +87,7 @@ export function finishClaimCase(query){
 // 理算审核提调 按钮 (主参：rptNo)
 export function inQuireConfirm(query){
   return request({
-    url: '/system/case/raiseCase',
+    url: '/claimflow/case/raiseCase',
     method: 'get',
     params: query
   })
@@ -96,7 +96,7 @@ export function inQuireConfirm(query){
 // 新增案件调查任务
 export function inQuireSave(data) {
   return request({
-    url: '/system/investigation',
+    url: '/claimflow/investigation',
     method: 'post',
     data: data
   })

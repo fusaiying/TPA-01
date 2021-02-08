@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.BaseIssuingcompanyRiskrelaMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela" id="BaseIssuingcompanyRiskrelaResult">
+        <result property="companyCode"    column="company_code"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.finance.domain.BaseIssuingcompanyRule" id="BaseIssuingcompanyRuleResult">
+        <result property="companycode"    column="company_code"    />
+        <result property="riskcode"    column="risk_code"    />
+        <result property="settlementtype"    column="settlement_type"    />
+        <result property="settlementvalue"    column="settlement_value"    />
+        <result property="companyname"    column="company_name"    />
+        <result property="riskName"    column="risk_name"    />
+    </resultMap>
+
+    <sql id="selectBaseIssuingcompanyRiskrelaVo">
+        select company_code, risk_code, status, create_by, create_time, update_by, update_time from base_issuingcompany_riskrela
+    </sql>
+
+    <select id="selectBaseIssuingcompanyRiskrelaList" parameterType="com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        <where>  
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="riskCode != null">and risk_code = #{riskCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseIssuingcompanyRiskrelaById" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+        
+    <insert id="insertBaseIssuingcompanyRiskrela" parameterType="com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela">
+        insert into base_issuingcompany_riskrela
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null">company_code,</if>
+            <if test="riskCode != null">risk_code,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="riskCode != null">#{riskCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseIssuingcompanyRiskrela" parameterType="com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela">
+        update base_issuingcompany_riskrela
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="riskCode != null">risk_code = #{riskCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where company_code = #{companyCode}
+    </update>
+
+    <delete id="deleteBaseIssuingcompanyRiskrelaById" parameterType="String">
+        delete from base_issuingcompany_riskrela where company_code = #{companyCode}
+    </delete>
+
+    <delete id="deleteBaseIssuingcompanyRiskrelaByIds" parameterType="String">
+        delete from base_issuingcompany_riskrela where company_code in 
+        <foreach item="companyCode" collection="array" open="(" separator="," close=")">
+            #{companyCode}
+        </foreach>
+    </delete>
+
+    <select id="selectBaseIssuingcompanyRiskrelaByIdOne" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+
+    <select id="selectBaseIssuingcompanyRiskrelaByIdTwo" parameterType="String" resultMap="BaseIssuingcompanyRiskrelaResult">
+        <include refid="selectBaseIssuingcompanyRiskrelaVo"/>
+        where company_code = #{companyCode} and status='Y'
+    </select>
+</mapper>

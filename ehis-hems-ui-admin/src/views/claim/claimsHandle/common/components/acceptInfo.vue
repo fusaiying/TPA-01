@@ -376,7 +376,7 @@
           firstSerIllnessDate: [{validator: checkFirstSerIllnessDate, required: true, trigger: 'blur'}],
           currSituation: [{required: true, message: '请选择事故者现状', trigger: 'blur'}],
           deathDate: [{validator: checkDeathDate, trigger: 'blur'}],
-          disabilityDate: [{validator: checkDisabilityDate, trigger: 'blur'}],
+          disabilityDate: [{validator: checkDisabilityDate, required: true,trigger: 'blur'}],
           preAuthItem: [{required: true, message: '请录入预授权项目', trigger: 'blur'}],
           accType: [{required: true, message: '请选择出险类型', trigger: 'blur'}],
           preAuthNo: [{required: true, message: '请录入预授权号', trigger: 'blur'}],

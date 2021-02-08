@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询出单公司信息列表————下拉框
 export function companyList(query) {
   return request({
-    url: '/system/issuingcompany/list',
+    url: '/provider/issuingcompany/list',
     method: 'post',
     data: query
   })
@@ -12,7 +12,7 @@ export function companyList(query) {
 //险种
 export function riskList(query) {
   return request({
-    url: '/system/rule/riskList',
+    url: '/provider/rule/riskList',
     method: 'get',
     params: query
   })
@@ -21,7 +21,7 @@ export function riskList(query) {
 //服务费结算列表
 export function listInfo(query) {
   return request({
-    url: '/system/tpaTask/tpaList',
+    url: '/finance/tpaTask/tpaList',
     method: 'get',
     params: query
   })
@@ -32,7 +32,7 @@ export function listInfo(query) {
 // 任务发起
 export function tpaTaskInitiated(query) {
   return request({
-    url: '/system/tpaTask/tpaTaskInitiated',
+    url: '/finance/tpaTask/tpaTaskInitiated',
     method: 'get',
     params: query
   })
@@ -41,7 +41,7 @@ export function tpaTaskInitiated(query) {
 // 查询子页面载入
 export function selectFinanceTpaSettleTaskViewDetail(query) {
   return request({
-    url: '/system/tpaTask/taskViewDetail',
+    url: '/finance/tpaTask/taskViewDetail',
     method: 'get',
     params: query
 })
@@ -50,7 +50,7 @@ export function selectFinanceTpaSettleTaskViewDetail(query) {
 // 确认阶段删除结算任务
 export function updateTask(data) {
   return request({
-    url: '/system/task',
+    url: '/finance/task',
     method: 'put',
     data: data
   })
@@ -59,7 +59,7 @@ export function updateTask(data) {
 // 确认TPA服务费结算
 export function confirm(query) {
   return request({
-    url: '/system/tpaTask/confirm',
+    url: '/finance/tpaTask/confirm',
     method: 'get',
     params: query
   })
@@ -68,7 +68,7 @@ export function confirm(query) {
 // 导出TPA服务费结算
 export function exportInitiate(query) {
   return request({
-    url: '/system/tpaTask/exportInitiate',
+    url: '/finance/tpaTask/exportInitiate',
     method: 'post',
  // #  params: query  此处？传参&拼接
 })

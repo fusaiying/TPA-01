@@ -94,8 +94,10 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
                 || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
                 || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())){
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//            机构层级  查询 暂未是实现
 //            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
 //            batchDTO.setOrgancode( sysUser.getDeptId().toString());
+            batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }else {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
@@ -114,14 +116,14 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     /**
      * 查询直结复核理赔批次公共池 列表
      *
-     * @param batchRecordDTO 理赔批次
+     * @param batchDTO 理赔批次
      * @return 交单复核理赔批次 集合
      */
     @Override
-    public List<BatchVo> selectReviewPublicList(BatchRecordDTO batchRecordDTO) {
-        batchRecordDTO.setStatus("Y");
-        batchRecordDTO.setBatchstatus("01");
-        return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
+    public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
+        batchDTO.setStatus("Y");
+        batchDTO.setBatchstatus("01");
+        return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
     /**
@@ -131,11 +133,11 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      * @return 交单复核理赔批次 集合
      */
     @Override
-    public List<BatchVo> selectUntreatedPersonalList(BatchRecordDTO batchRecordDTO) {
-        batchRecordDTO.setStatus("Y");
-        batchRecordDTO.setBatchstatus("02");
-        batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
-        return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
+    public List<BatchVo> selectUntreatedPersonalList(BatchDTO batchDTO) {
+        batchDTO.setStatus("Y");
+        batchDTO.setBatchstatus("02");
+        batchDTO.setUpdateBy(SecurityUtils.getUsername());
+        return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
     /**

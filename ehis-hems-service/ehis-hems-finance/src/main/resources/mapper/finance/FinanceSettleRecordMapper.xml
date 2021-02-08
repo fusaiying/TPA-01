@@ -42,6 +42,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFinanceSettleRecordVo"/>
         where record_id = #{recordId}
     </select>
+
+    <select id="selectNRecordBySettleTaskNo" parameterType="string" resultMap="FinanceSettleRecordResult">
+        <include refid="selectFinanceSettleRecordVo"/>
+        where settle_task_no = #{settleTaskNo} and history_flag='N' and status='Y'
+    </select>
         
     <insert id="insertFinanceSettleRecord" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord" useGeneratedKeys="true" keyProperty="recordId">
         insert into finance_settle_record
@@ -92,6 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
         </trim>
         where record_id = #{recordId}
+    </update>
+
+    <update id="removeFinanceSettleRecords" parameterType="string">
+        update finance_settle_record set status = 'N'
+        where settle_task_no = #{settleTaskNo}
     </update>
 
     <delete id="deleteFinanceSettleRecordById" parameterType="Long">

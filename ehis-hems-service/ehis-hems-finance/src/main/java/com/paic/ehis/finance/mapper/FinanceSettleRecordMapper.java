@@ -2,6 +2,7 @@ package com.paic.ehis.finance.mapper;
 
 
 import com.paic.ehis.finance.domain.FinanceSettleRecord;
+
 import java.util.List;
 
 /**
@@ -19,6 +20,14 @@ public interface FinanceSettleRecordMapper
      * @return 结算操作记录
      */
     public FinanceSettleRecord selectFinanceSettleRecordById(Long recordId);
+
+    /**
+     * 查询任务号当前记录结算操作记录
+     *
+     * @param settleTaskNo 结算操作记录ID
+     * @return 结算操作记录
+     */
+    public FinanceSettleRecord selectNRecordBySettleTaskNo(String settleTaskNo);
 
     /**
      * 查询结算操作记录列表
@@ -43,6 +52,14 @@ public interface FinanceSettleRecordMapper
      * @return 结果
      */
     public int updateFinanceSettleRecord(FinanceSettleRecord financeSettleRecord);
+
+    /**
+     * 删除任务号关联 记录
+     *
+     * @param settleTaskNo 结算操作记录
+     * @return 结果
+     */
+    public int removeFinanceSettleRecords(String settleTaskNo);
 
     /**
      * 删除结算操作记录

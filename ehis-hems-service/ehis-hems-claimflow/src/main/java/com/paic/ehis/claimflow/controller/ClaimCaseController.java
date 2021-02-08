@@ -524,7 +524,7 @@ public class ClaimCaseController extends BaseController {
      * @return
      */
     @GetMapping("/getInfoBaseCodeMappingNew")
-    public AjaxResult getInfoBaseCodeMappingNew(@RequestBody BaseCodeMappingNew baseCodeMappingNew) {
+    public AjaxResult getInfoBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
         return AjaxResult.success(claimCaseService.selectBaseCodeMappingNew(baseCodeMappingNew));
     }
 

@@ -3,6 +3,8 @@ package com.paic.ehis.claimflow.domain;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA
  * User: fusaiying-傅赛赢
@@ -12,7 +14,7 @@ import lombok.Data;
  * subject:
  */
 @Data
-public class BaseCodeMappingNew extends BaseEntity {
+public class BaseCodeMappingNew extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     //编码类型(YYBZ-医院币种)
     private String codeType;

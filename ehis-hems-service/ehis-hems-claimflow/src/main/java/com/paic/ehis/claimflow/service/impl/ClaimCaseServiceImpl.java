@@ -1311,9 +1311,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Override
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
-
         BaseCodeMappingNew baseCodeMappingNew1 = claimCaseInvestigationMapper.selectBaseCodeMappingNew(baseCodeMappingNew);
-
         return baseCodeMappingNew1;
     }
 }

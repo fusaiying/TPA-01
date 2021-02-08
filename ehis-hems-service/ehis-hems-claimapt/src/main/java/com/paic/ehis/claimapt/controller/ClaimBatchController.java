@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Objects;
 
@@ -141,7 +142,7 @@ public class ClaimBatchController extends BaseController
     @PostMapping("/exportReturnedPool")
     public void exportReturnedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = Objects.requireNonNull(ServletUtils.getRequest()).getParameter("hospitalname");
+        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
         List<BatchVo> list = claimBatchService.selectBackToBatchList(batchDTO);
         for (BatchVo batchVo : list) {
@@ -159,7 +160,7 @@ public class ClaimBatchController extends BaseController
     @PostMapping("/exportProcessedPool")
     public void exportProcessedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = Objects.requireNonNull(ServletUtils.getRequest()).getParameter("hospitalname");
+        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
             for (BatchVo batchVo : list) {
@@ -206,7 +207,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
-    public TableDataInfo reviewPublicList(BatchDTO batchDTO)
+    public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {

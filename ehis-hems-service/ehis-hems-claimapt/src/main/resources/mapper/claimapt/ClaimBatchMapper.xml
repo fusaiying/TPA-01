@@ -154,7 +154,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO" resultMap="ClaimBatchVO">
-
         SELECT DISTINCT
         cb.batch_no,
         cb.source,

@@ -3,7 +3,6 @@ package com.paic.ehis.claimcal.mapper;
 
 
 import com.paic.ehis.claimcal.domain.ClaimRule;
-
 import java.util.List;
 
 /**

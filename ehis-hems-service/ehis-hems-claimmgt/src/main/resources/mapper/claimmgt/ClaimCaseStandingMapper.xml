@@ -65,21 +65,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.express_number,
         b.send_by,
         b.receive_date,
-        b.organ_code,
-        d.company_name
+        b.organ_code
+       /* d.company_name*/
         FROM
         claim_case_standing a,
         claim_batch b,
-        claim_case c,
-        claim_case_policy d
+        claim_case c
+       /* claim_case_policy d*/
         WHERE
         a.rpt_no = c.rpt_no
         AND b.batch_no = c.batch_no
-        AND a.rpt_no = d.rpt_no
+       /* AND a.rpt_no = d.rpt_no*/
         AND a.STATUS = 'Y'
         AND b.STATUS = 'Y'
         AND c.STATUS = 'Y'
-        AND d.STATUS = 'Y'
+       /* AND d.STATUS = 'Y'*/
         <if test="rptno != null  and rptno != ''"> and a.rpt_no = #{rptno}</if>
 	    <if test="idno != null  and idno != ''"> and a.id_no = #{idno}</if>
         <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
@@ -89,9 +89,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="organcode != null  and organcode != ''"> and b.organ_code = #{organcode}</if>
         <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
         <if test="dBefore != null   and dNow != null ">
-            and(receive_date between  #{dBefore} and  #{dNow})</if>
+            and(b.receive_date between  #{dBefore} and  #{dNow})</if>
         <if test="receiveStartDate != null   and receiveEndDate != null ">
-            and(receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
+            and(b.receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
+    </select>
+
+    <select id="selectCompanyName" parameterType="String" resultMap="ClaimCaseStandingVo1Result">
+SELECT
+	claim_case_policy.company_name
+FROM
+	claim_case_policy,
+	claim_case_standing
+WHERE
+	claim_case_policy.rpt_no = claim_case_standing.rpt_no
     </select>
     
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">

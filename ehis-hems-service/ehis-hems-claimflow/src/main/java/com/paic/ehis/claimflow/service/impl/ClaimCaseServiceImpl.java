@@ -351,6 +351,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
 
         Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+
+        ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+        claimCaseRecord2.setHistoryFlag("Y");
+        claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+
         claimCaseRecord1.setOrgRecordId(s);
         return claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
     }

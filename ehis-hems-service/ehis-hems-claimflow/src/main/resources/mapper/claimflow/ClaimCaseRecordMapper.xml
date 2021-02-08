@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseRecordMapper">
 
-    <resultMap type="ClaimCaseRecord" id="ClaimCaseRecordResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseRecord" id="ClaimCaseRecordResult">
         <result property="recordId"    column="record_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="operation"    column="operation"    />
@@ -122,7 +122,7 @@
         <result property="recordId"    column="record_id"    />
     </resultMap>
 
-    <select id="selectClaimCaseRecordSecondTwo" parameterType="String" resultMap="ClaimCaseRecordResultNumber">
+    <select id="selectClaimCaseRecordSecondTwo" parameterType="String" resultType="long">
         select record_id from claim_case_record where rpt_no=#{rptNo} and operation='05' and status='Y' and history_flag='N'
     </select>
     <select id="selectClaimCaseRecordSecondThree" parameterType="String" resultMap="ClaimCaseRecordResultNumber">

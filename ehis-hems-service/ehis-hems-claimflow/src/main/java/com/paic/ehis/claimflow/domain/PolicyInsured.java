@@ -65,6 +65,7 @@ public class PolicyInsured extends BaseEntity
     private Date idStartDate;
 
     /** 证件有效期止期（长期=9999-12-31） */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "证件有效期止期", readConverterExp = "长=期=9999-12-31")
     private Date idEndDate;
 

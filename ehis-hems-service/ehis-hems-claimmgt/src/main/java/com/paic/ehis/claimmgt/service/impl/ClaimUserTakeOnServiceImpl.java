@@ -91,10 +91,11 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
     {
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-
+        claimUserTakeOn.setUserId(claimUserTakeOn.getTakeOnUserId());
         claimUserTakeOn.setUpdateBy(username);
         claimUserTakeOn.setUpdateTime(nowDate);
         claimUserTakeOn.setStatus(claimUserTakeOn.getStatus());
+        claimUserTakeOnMapper.updateSysUser(claimUserTakeOn);
         return claimUserTakeOnMapper.updateClaimUserTakeOn(claimUserTakeOn);
     }
 

@@ -107,7 +107,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where take_on_id = #{takeOnId}
     </update>
-
+    <update id="updateSysUser" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null">user_name = #{userName},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
     <delete id="deleteClaimUserTakeOnById" parameterType="String">
         delete from claim_user_take_on where take_on_id = #{takeOnId}
     </delete>

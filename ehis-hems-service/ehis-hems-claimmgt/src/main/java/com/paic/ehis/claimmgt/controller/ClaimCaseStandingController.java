@@ -43,6 +43,18 @@ public class ClaimCaseStandingController extends BaseController
         List<ClaimCaseStanding> list = claimCaseStandingService.selectClaimCaseStandingList(claimCaseStanding);
         return getDataTable(list);
     }
+
+    /**
+     * 根据批次号 查询报案台账信息 列表
+     */
+    //  @PreAuthorize("@ss.hasPermi('system:standing:list')")
+    @GetMapping("/listByBatchNo")
+    public TableDataInfo listByBatchNo(String batchno)
+    {
+        startPage();
+        List<ClaimCaseStanding> list = claimCaseStandingService.selectCaseStandingListByBatchNo(batchno);
+        return getDataTable(list);
+    }
     /**
      * 查询台账
      * */

@@ -8,6 +8,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.finance.domain.FinanceCollectionInfo;
 import com.paic.ehis.finance.domain.FinanceTpaSettleTask;
 import com.paic.ehis.finance.domain.TpaSettleDetailInfo;
 import com.paic.ehis.finance.domain.TpaSettleInfo;
@@ -165,6 +166,9 @@ public class FinanceTpaSettleTaskController extends BaseController
     }
 
 
+    /**
+     * 导入TPA服务费结算任务列表
+     */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:import')")
     @Log(title = "TPA服务费结算任务", businessType = BusinessType.IMPORT)
     @PostMapping("/importInitiate")
@@ -172,6 +176,19 @@ public class FinanceTpaSettleTaskController extends BaseController
 
         return toAjax(financeTpaSettleTaskService.importTpaSettleTask(file));
    }
+
+    /**
+     * 根据companyCode查询收款核销列表
+     *
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:task:list')")
+    @GetMapping("/tpaReceiptColList")
+    public TableDataInfo selectTpaTaskReceiptColList(TpaSettleDTO tpaSettleDTO) {
+        List<FinanceCollectionInfo> financeCollectionInfos = financeTpaSettleTaskService.selectTpaTaskReceiptColList(tpaSettleDTO);
+        return getDataTable(financeCollectionInfos);
+    }
+
+
 
     /**
      * 获取TPA服务费结算任务详细信息

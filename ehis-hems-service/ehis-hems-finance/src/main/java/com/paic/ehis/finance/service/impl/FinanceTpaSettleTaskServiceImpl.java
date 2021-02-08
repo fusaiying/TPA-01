@@ -344,6 +344,17 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         return financeTpaSettleTaskMapper.updateFinanceTpaSettleTask(tpaSettleTask);
     }
 
+    /**
+     * 根据companyCode查询收款核销列表
+     *
+     * @param tpaSettleDTO 收款核销
+     * @return 收款核销集合
+     */
+    @Override
+    public List<FinanceCollectionInfo> selectTpaTaskReceiptColList(TpaSettleDTO tpaSettleDTO) {
+        return financeTpaSettleTaskMapper.selectTpaTaskReceiptColList(tpaSettleDTO);
+    }
+
 
     /**
      * 新增TPA服务费结算任务

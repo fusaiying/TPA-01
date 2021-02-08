@@ -31,14 +31,6 @@ public interface FinanceReceiptColMapper
     public List<FinanceReceiptCol> selectFinanceReceiptColList(FinanceReceiptCol financeReceiptCol);
 
     /**
-     * 查询收款核销列表
-     *
-     * @param financeReceiptCol 收款核销
-     * @return 收款核销集合
-     */
-    public List<FinanceCollectionInfo> selectTpaTaskReceiptColList(FinanceReceiptCol financeReceiptCol);
-
-    /**
      * 新增收款核销
      * 
      * @param financeReceiptCol 收款核销

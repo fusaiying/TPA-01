@@ -1,6 +1,8 @@
 package com.paic.ehis.finance.mapper;
 
 
+import com.paic.ehis.finance.domain.FinanceCollectionInfo;
+import com.paic.ehis.finance.domain.FinanceReceiptCol;
 import com.paic.ehis.finance.domain.FinanceTpaSettleTask;
 import com.paic.ehis.finance.domain.TpaSettleInfo;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
@@ -62,6 +64,14 @@ public interface FinanceTpaSettleTaskMapper
      * @return 结果
      */
     public int updateFinanceTpaSettleTask(FinanceTpaSettleTask financeTpaSettleTask);
+
+    /**
+     * 根据companyCode查询收款核销列表  //tpa
+     *
+     * @param tpaSettleDTO 收款核销
+     * @return 收款核销集合
+     */
+    public List<FinanceCollectionInfo> selectTpaTaskReceiptColList(TpaSettleDTO tpaSettleDTO);
 
     /**
      * 修改TPA服务费结算任务

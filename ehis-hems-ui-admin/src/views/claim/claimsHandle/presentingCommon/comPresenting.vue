@@ -303,7 +303,7 @@
     selectRecordByBatchno,
     getStanding,
     getThisDept,
-    getDeptList
+    getInfoBaseCodeMappingNew,
   } from '@/api/claim/presentingReview'
   import {getDeptById} from '@/api/claim/standingBookSearch'
   import Hospital from "../../basicInfoManage/publicVue/hospital";
@@ -481,10 +481,8 @@
       this.claim_currencyOptions = this.dictList.find(item => {
         return item.dictType === 'claim_currency'
       }).dictDate
-      getDeptList().then(res => {
-        if (res != null && res.code === 200) {
-          this.deptOptions = res.data
-        }
+      getThisDept().then(res => {
+        this.deptOptions = res.deptlist
       })
     },
     async mounted() {
@@ -619,8 +617,8 @@
             })
           }
         }
-        if (this.querys.batchstatus==='03'){
-          this.isPrint=false
+        if (this.querys.batchstatus === '03') {
+          this.isPrint = false
         }
       } else {
         getThisDept().then(res => {
@@ -950,9 +948,9 @@
                       showClose: true
                     })
                     this.show = true
-                    if(this.recordForm.conclusion==='01'){
+                    if (this.recordForm.conclusion === '01') {
                       this.isPrint = false
-                    }else {
+                    } else {
                       this.isPrint = true
                     }
                     this.eReview = true
@@ -981,7 +979,16 @@
         this.searchForm.chname1 = val.chname1
         this.searchForm.hospitalename = val.enname1
         this.searchForm.hospitalcode = val.providerCode
-        this.searchForm.currency = val.currency
+        let data = {
+          codeType: 'YYBZ',
+          originalCode: val.currency,
+        }
+        getInfoBaseCodeMappingNew(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.searchForm.currency = res.data.targetCode
+          }
+        })
+
         this.tableData = []
         this.tableData.push(val)
       },

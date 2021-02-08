@@ -179,4 +179,13 @@ export function getThisDept(parentId) {
   })
 }
 
+//通过医院币种获取理赔币种
+export function getInfoBaseCodeMappingNew(data) {
+  return request({
+    url: 'claimflow/case/getInfoBaseCodeMappingNew',
+    method: 'get',
+    params:data
+  })
+}
+
 

@@ -433,6 +433,7 @@
 
 <script>
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
+  import {getInfoBaseCodeMappingNew,} from '@/api/claim/presentingReview'
 
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
     {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'claim_currency'},]
@@ -501,7 +502,15 @@
           }
         })
         if (newVal !== null && newVal !== undefined) {
-          this.baseForm.billCurrency = newVal.currency
+          let data = {
+            codeType: 'YYBZ',
+            originalCode: newVal.currency,
+          }
+          getInfoBaseCodeMappingNew(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.baseForm.billCurrency = res.data.targetCode
+            }
+          })
         }
       },
     },

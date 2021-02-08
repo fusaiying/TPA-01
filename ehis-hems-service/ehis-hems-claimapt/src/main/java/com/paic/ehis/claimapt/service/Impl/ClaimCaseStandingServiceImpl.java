@@ -217,7 +217,7 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
         claimCaseStanding.setEndTime(claimCaseStandingVo.getEndTime());
         claimCaseStanding.setStatus("Y");
 
-        ClaimCase claimCase = new ClaimCase();
+//        ClaimCase claimCase = new ClaimCase();
 
         claimCaseStandingMapper.insertClaimCaseStanding(claimCaseStanding);
         return claimCaseStandingVo;

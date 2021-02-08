@@ -274,6 +274,10 @@
         this.importDialog = false
       },
       //导入弹框 end
+      /** 提交上传文件 */
+      submitFileForm() {
+        this.$refs.upload.submit();
+      },
       getCompanyList(){
         const query ={
           pageNum:1,

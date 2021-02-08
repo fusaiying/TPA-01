@@ -14,16 +14,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="结算日期：" prop="settleDateArr">
-              <el-date-picker  v-model="formSearch.settleDateArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            <el-form-item label="结算止期：" prop="settleDate">
+              <el-date-picker  v-model="formSearch.settleDate"  style="width:220px;"  size="mini"
+                   type="date" value-format="yyyy-MM-dd" placeholder="结算止期" />
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="建立日期：" prop="createTimeArr">
               <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
-                type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+                type="daterange" value-format="yyyy-MM-dd" placeholder="建立日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -54,7 +54,7 @@
 
         </el-row>
         <div style="text-align: right; margin-right: 10px;">
-          <el-button size="mini" type="primary"  @click="resetForm">清单导入</el-button>
+          <el-button size="mini" type="primary"  @click="openImportDialog">清单导入</el-button>
           <el-button size="mini" type="primary"  @click="openDialog">发起任务</el-button>
           <el-button :loading="searchLoad" size="mini" type="success" icon="el-icon-search" @click="searchHandle" >查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm">重置</el-button>
@@ -69,7 +69,7 @@
       </div>
 
       <!--交接任务列表 start -->
-      <feeTable   :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <feeTable   :table-data="initTableData" :status="status"  @initData="initData" @openDetail="openDetail"/>
       <!--交接任务列表 end-->
 
       <!--分页组件-->
@@ -84,7 +84,38 @@
     </el-card>
 
     <!--详情 -->
-    <fee-detail :value="detailDialog" :fixInfo="fixInfo" @closeDetailDialog="closeDetailDialog"/>
+    <fee-detail :value="detailDialog" :fixInfo="fixInfo" @closeDetailDialog="closeDetailDialog" @openImportDialog="openImportDialog"/>
+
+    <!--导入对话框 start -->
+    <el-dialog :title="upload.title" :visible.sync="importDialog"
+               :close-on-click-modal="true"
+               :before-close="closeImportDialog"
+               width="400px" append-to-body>
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
+        <div class="el-upload__tip" style="color:red" slot="tip">提示：仅允许导入“xls”或“xlsx”格式文件！</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="closeImportDialog">取 消</el-button>
+      </div>
+    </el-dialog>
+    <!--导入对话框 end -->
 
   </div>
 </template>
@@ -95,6 +126,7 @@
   import { listInfo } from '@/api/paymentFee/api'
   import feeDetail from "../components/feeDetail";
   import feeTable from '../components/feeTable'
+  import {getToken} from "@/utils/auth";
   export default {
     components: {
       feeDetail,
@@ -102,11 +134,26 @@
     },
     data() {
       return {
-
+        // 清单导入参数
+        upload: {
+          // 是否显示弹出层
+          open: false,
+          // 弹出层标题
+          title: "",
+          // 是否禁用上传
+          isUploading: false,
+          // 是否更新已经存在的用户数据
+          updateSupport: 0,
+          // 设置上传的请求头部
+          headers: {Authorization: "Bearer " + getToken()},
+          // 上传的地址
+          url:''// process.env.VUE_APP_BASE_API + "/system/user/importData"
+        },
         fixInfo:{
           rowData:{},
           type:'',
         },
+        importDialog:false,
         btnSearch:false,
         detailDialog:false,
         status:'01',
@@ -114,7 +161,7 @@
         tableData: [],
         formSearch: {
           settleTaskNo: '',
-          settleDateArr: '',
+          settleDate: '',
           createTimeArr: '',
           settleStatus: '',
           batchTotal: '',
@@ -162,13 +209,13 @@
       // 查询处理中
       initData() {
 
-        let settleDateStart = '';
-        let settleDateEnd = '';
-        let settleDateArr = this.formSearch.settleDateArr;
-        if('' != settleDateArr) {
-          settleDateStart = settleDateArr[0];
-          settleDateEnd = settleDateArr[1];
-        }
+        // let settleDateStart = '';
+        // let settleDateEnd = '';
+        // let settleDateArr = this.formSearch.settleDateArr;
+        // if('' != settleDateArr) {
+        //   settleDateStart = settleDateArr[0];
+        //   settleDateEnd = settleDateArr[1];
+        // }
 
         let createTimeStrt = '';
         let createTimeEnd = '';
@@ -181,6 +228,7 @@
         const params = {};
         params.pageNum = this.pendPageInfo.page;
         params.pageSize = this.pendPageInfo.pageSize;
+        params.settleDate = this.formSearch.settleDate;
 
         params.settleTaskNo = this.formSearch.settleTaskNo;
         params.settleStatus = this.formSearch.settleStatus;
@@ -209,9 +257,23 @@
         this.detailDialog = true
       },
       openDialog(){
+
+        if(this.formSearch.settleDate == '' ) {
+          this.$message.info('请录入结算止期！');
+          return false;
+        }
+        if(this.formSearch.companyCode == ''){
+          this.$message.info('请选择出单公司！');
+          return false;
+        }
+
         this.fixInfo = {
-          rowData:{settleTaskNo:''},
-          type:'show',
+          rowData:{
+            settleTaskNo:'',
+            settleDate:this.formSearch.settleDate,
+            companyCode:this.formSearch.companyCode,
+          },
+          type:'launch',
         },
         this.detailDialog = true;
       },
@@ -235,6 +297,36 @@
         }).catch(error => {
           console.log(error);
         })
+      },
+      //导入弹框 start
+      openImportDialog(){
+        this.importDialog = true;
+      },
+      closeImportDialog() {
+        this.importDialog = false
+      },
+      //导入弹框 end
+      /** 提交上传文件 */
+      submitFileForm() {
+        this.$refs.upload.submit();
+      },
+      /** 下载模板操作 */
+      importTemplate() {
+        // this.download('provider/provider/importTemplate', {
+        //   ...this.queryParams
+        // }, `数据模板_${new Date().getTime()}.xlsx`)
+      },
+      /** 文件上传中处理 */
+      handleFileUploadProgress(event, file, fileList) {
+        this.upload.isUploading = true;
+      },
+      /** 文件上传成功处理 */
+      handleFileSuccess(response, file, fileList) {
+        // this.upload.open = false;
+        // this.upload.isUploading = false;
+        // this.$refs.upload.clearFiles();
+        // this.$alert(response.msg, "导入结果", {dangerouslyUseHTMLString: true});
+        // this.getList();
       },
     }
   }

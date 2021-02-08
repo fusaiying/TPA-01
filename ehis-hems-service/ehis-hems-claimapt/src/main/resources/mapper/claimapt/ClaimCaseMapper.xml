@@ -506,7 +506,7 @@
 <!--    </select>-->
 
 <!--    &lt;!&ndash; lihy &ndash;&gt;-->
-<!--    <select id="SelectConditionsForTheAdjustmentUnderTwoNew" parameterType="com.sino.system.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">-->
+<!--    <select id="SelectConditionsForTheAdjustmentUnderTwoNew" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">-->
 <!--        SELECT-->
 <!--        acto.rpt_no,-->
 <!--        acto.batch_no,-->
@@ -627,7 +627,7 @@
 <!--        <result property="policyItemNo"    column="policy_item_no"    />-->
 <!--        <result property="updateBy"    column="update_by"    />-->
 <!--    </resultMap>-->
-<!--    <select id="selectClaimInformation" parameterType="ccom.paic.ehis.claimapt.domain.DTOClaimInformationDTO" resultType="com.sino.system.domain.vo.ClaimInformationVo">-->
+<!--    <select id="selectClaimInformation" parameterType="ccom.paic.ehis.claimapt.domain.DTOClaimInformationDTO" resultType="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo">-->
 <!--        select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by-->
 <!--        from claim_case cc-->
 <!--        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no-->
@@ -641,7 +641,7 @@
 <!--        </where>-->
 <!--    </select>-->
 
-<!--    <select id="selectBillAccomplish" parameterType="com.sino.system.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">-->
+<!--    <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">-->
 <!--        select a.create_by,a.rpt_no,b.batch_no,b.case_status,c.name-->
 <!--        from claim_case b LEFT JOIN claim_case_record a on a.rpt_no = b.rpt_no and a.history_flag = 'Y' and a.status = 'Y' and b.status = 'Y'-->
 <!--        LEFT JOIN claim_case_insured c on b.rpt_no = c.rpt_no and c.status = 'Y'-->
@@ -654,16 +654,16 @@
     <select id="selepostHocAccountingOfCases" parameterType="String" resultType="String">
         select rpt_no from claim_case where batch_no = #{batchNo} and status='Y'
     </select>
-<!--    <resultMap type="com.sino.system.domain.vo.ClaimCaseDistVo" id="ClaimCaseDistVo">-->
+<!--    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo" id="ClaimCaseDistVo">-->
 <!--        <result property="rptNo"    column="rpt_no"    />-->
 <!--        <result property="batchNo"    column="batch_no"    />-->
 <!--        <result property="caseStatus"    column="case_status"    />-->
 <!--        <result property="quantity"    column="quantity"    />-->
 <!--    </resultMap>-->
-<!--    <select id="selectCaseDistNumber" parameterType="String" resultType="com.sino.system.domain.vo.ClaimCaseDistVo">-->
+<!--    <select id="selectCaseDistNumber" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">-->
 <!--        select count(1)  quantity from claim_case where case_status='05'  and batch_no=#{batchNo}-->
 <!--    </select>-->
-<!--    <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.sino.system.domain.vo.ClaimCaseDistVo">-->
+<!--    <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">-->
 <!--        select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}-->
 <!--    </select>-->
     <update id="updateClaimCaseVo" parameterType="string">

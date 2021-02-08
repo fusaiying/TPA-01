@@ -399,13 +399,13 @@
           payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: 'blur'}],
           payeeSex: [{required: true, message: '性别不能为空!', trigger: 'blur'}],
           payeeMobile: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeNationality: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeIdType: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeIdNo: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          idEndDate: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
+          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: 'blur'}],
+          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: 'blur'}],
+          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: 'blur'}],
+          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: 'blur'}],
           payeeBank: [{required: true, message: '开户行不能为空!', trigger: 'blur'}],
           payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: 'blur'}],
-          payeeOccupation: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
+          payeeOccupation:[{required: true, message: '职业不能为空!', trigger: 'blur'}],
           accAttribute: [{required: true, message: '账户属性不能为空!', trigger: 'blur'}],
           accNo: {validator: checkAccNo, required: true, trigger: 'blur'},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: 'blur'},//与账户录入信息不一致时阻断谈框提示  1、不允许复制

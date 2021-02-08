@@ -4,7 +4,7 @@ import request from '@/utils/request'
 /*案件分配规则  */
 export function roleAll(query) {
   return request({
-    url: '/system/role/list',
+    url: '/claimmgt/role/list',
     method: 'get',
     params: query
   })
@@ -14,7 +14,7 @@ export function roleAll(query) {
 /*案件分配规则  */
 export function listInfo(query) {
   return request({
-    url: '/system/dist/selectClaimCaseDist',
+    url: '/claimmgt/dist/selectClaimCaseDist',
     method: 'get',
     params: query
   })
@@ -23,7 +23,7 @@ export function listInfo(query) {
 //修改
 export function editInfo(data) {
   return request({
-    url: '/system/dist/updateClaimCaseDistOne',
+    url: '/claimmgt/dist/updateClaimCaseDistOne',
     method: 'put',
     data
   })
@@ -32,7 +32,7 @@ export function editInfo(data) {
 //案件分配一键均分
 export function editInfoAverage(data) {
   return request({
-    url: '/system/dist/updateClaimCaseAverage',
+    url: '/claimmgt/dist/updateClaimCaseAverage',
     method: 'put',
     data
   })

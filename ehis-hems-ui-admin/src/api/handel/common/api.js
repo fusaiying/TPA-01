@@ -41,7 +41,7 @@ export function adNoData(query) {
 
 export function claimInformation(query) {
   return request({
-    url: '/system/case/selectClaimInformation',
+    url: '/claimflow/case/selectClaimInformation',
     method: 'get',
     params: query
   })

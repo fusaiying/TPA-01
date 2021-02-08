@@ -4,7 +4,7 @@ import request from '@/utils/request'
 /*抽检规则  */
 export function listInfo(data) {
   return request({
-    url: '/system/checkrule/selectClaimCaseCheckRule',
+    url: '/claimmgt/checkrule/selectClaimCaseCheckRule',
     method: 'post',
     data: data
   })
@@ -13,7 +13,7 @@ export function listInfo(data) {
 // 新增
 export function addInfo(data) {
   return request({
-    url: '/system/checkrule/addRule',
+    url: '/claimmgt/checkrule/addRule',
     method: 'post',
     data
   })
@@ -22,7 +22,7 @@ export function addInfo(data) {
 // editRule
 export function editInfo(data) {
   return request({
-    url: '/system/checkrule/editRule',
+    url: '/claimmgt/checkrule/editRule',
     method: 'post',
     data
   })

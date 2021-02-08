@@ -4,7 +4,7 @@ import request from '@/utils/request'
 //查询案件归档主页面
 export function caseFilingList(data) {
   return request({
-    url: '/system/casefiling/caseFilingList',
+    url: '/claimflow/casefiling/caseFilingList',
     method: 'post',
     data: data
   })
@@ -14,7 +14,7 @@ export function caseFilingList(data) {
 //改变是否销毁状态
 export function editDestroy(data) {
   return request({
-    url: '/system/casefiling/editDestroy',
+    url: '/claimflow/casefiling/editDestroy',
     method: 'post',
     data
   })
@@ -24,7 +24,7 @@ export function editDestroy(data) {
 //新增案件归档
 export function addInfo(data) {
   return request({
-    url: '/system/casefiling/add',
+    url: '/claimflow/casefiling/add',
     method: 'post',
     data: data
   })
@@ -34,7 +34,7 @@ export function addInfo(data) {
 //编辑按钮
 export function editCaseFiling(data) {
   return request({
-    url: '/system/casefiling/editCaseFiling',
+    url: '/claimflow/casefiling/editCaseFiling',
     method: 'post',
     data: data
   })
@@ -43,7 +43,7 @@ export function editCaseFiling(data) {
 //查询案件归档详细信息
 export function getInfoCaseFilingList(query) {
   return request({
-    url: '/system/casefiling/getInfoCaseFilingList',
+    url: '/claimflow/casefiling/getInfoCaseFilingList',
     method: 'post',
     data: query
   })
@@ -52,7 +52,7 @@ export function getInfoCaseFilingList(query) {
 //保存案件归档详细信息
 export function updateCaseFilingInfo(data) {
   return request({
-    url: '/system/casefiling/updateCaseFilingInfo',
+    url: '/claimflow/casefiling/updateCaseFilingInfo',
     method: 'post',
     data
   })
@@ -63,7 +63,7 @@ export function updateCaseFilingInfo(data) {
 export function getDepts(data) {
   return request({
     url:'system/dept/list',
-    method:'post',
+    method:'get',
     data:data
   })
 }

@@ -493,7 +493,7 @@
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-          this.download('system/whitelist/export', params, `FYX_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/whitelist/export', params, `FYX_${new Date().getTime()}.xlsx`);
         },
 
         handleClose() {

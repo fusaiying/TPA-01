@@ -75,7 +75,7 @@
             <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论" align="center" show-overflow-tooltip />
             <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
             <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
-            <el-table-column prop="investigation" label="有无调查"  align="center" show-overflow-tooltip />
+            <el-table-column prop="investigation" label="有无调查" :formatter="getInvestigation" align="center" show-overflow-tooltip />
           </el-table>
           <!--分页组件-->
           <pagination
@@ -183,6 +183,9 @@
         getConclusionName(row,col){
           return this.selectDictLabel(this.conclusionSelect, row.payConclusion)
         },
+        getInvestigation(row,col){
+          return row.investigation == '01' ? '是':'否';
+        },
         exportData() {
           const params = {};
           params.batchNo = this.form.batchNo ;
@@ -190,7 +193,7 @@
           params.name = this.form.name ;
           params.idNo = this.form.idNo ;
           params.policyItemNo = this.form.policyItemNo ;
-          this.download('system/case/exportClaimInformation', params, `FYX_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/case/exportClaimInformation', params, `FYX_${new Date().getTime()}.xlsx`);
         },
       }
     }

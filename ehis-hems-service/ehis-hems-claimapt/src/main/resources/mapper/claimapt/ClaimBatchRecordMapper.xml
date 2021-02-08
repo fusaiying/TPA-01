@@ -121,5 +121,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and operation = "01" and status='Y'
         </where>
     </select>
-    
+
+    <select id="selectClaimBatchRecordByBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatchRecord" resultMap="ClaimBatchRecordResult">
+        <include refid="selectClaimBatchRecordVo"/>
+        <where>
+            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
 </mapper>

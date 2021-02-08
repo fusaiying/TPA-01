@@ -6,6 +6,7 @@ import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
 import com.paic.ehis.claimapt.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper;
 import com.paic.ehis.claimapt.service.IClaimCaseRecordService;
+import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -130,11 +131,10 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
     public int insertClaimCaseRecordAndBatchRecord(ClaimCaseStandingVo claimCaseStandingVo){
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseStandingVo.getRptno());
-        claimCaseRecord.setOperation("05");//受理
+        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//受理05
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
-        //claimCaseRecord.setOrgRecordId();
-        claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setStatus("Y");
+        claimCaseRecord.setHistoryFlag(ClaimStatus.DATANO.getCode());//N
+        claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
@@ -146,12 +146,12 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         claimCase.setBatchNo(claimCaseStandingVo.getBatchno());//批次号
         claimCase.setRptNo(claimCaseStandingVo.getRptno());//报案号
         claimCase.setFilingNo(claimCaseNumber1);//归档号
-        claimCase.setCaseStatus("05");//案件状态
+        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());//案件状态05
         claimCase.setCreateBy(SecurityUtils.getUsername());
         claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimCase.setStatus("Y");
+        claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimCaseMapper.insertClaimCase(claimCase);
 
         return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);

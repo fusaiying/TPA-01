@@ -218,7 +218,7 @@ export default {
         this.sexOptions = this.dictList.find(item => {
           return item.dictType == 'sex'
         }).dictDate;
-        if (this.queryParams.isSearche) {
+        if (this.queryParams.isSearche || this.queryParams.isWrite) {
           this.balanceStatusOptions = this.dictList.find(item => {
             return item.dictType == 'balance_status'
           }).dictDate;

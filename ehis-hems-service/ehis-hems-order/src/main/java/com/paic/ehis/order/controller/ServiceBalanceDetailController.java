@@ -18,6 +18,8 @@ import com.paic.ehis.order.service.IServiceBalanceInfoService;
 import com.paic.ehis.order.service.enumeration.BalanceStatusEnum;
 import com.paic.ehis.order.service.enumeration.SettleTypeEnum;
 import com.paic.ehis.order.service.enumeration.StatusEnum;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseContractService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,9 @@ public class ServiceBalanceDetailController extends BaseController
     @Autowired
     private IServiceBalanceInfoService serviceBalanceInfoService;
 
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
+
     /**
      * 查询service_balance_detail(服务结算明细信息)列表
      */
@@ -60,28 +65,37 @@ public class ServiceBalanceDetailController extends BaseController
      */
     @Log(title = "service_balance_detail(服务结算明细信息)", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public AjaxResult export(HttpServletResponse response, @RequestBody ServiceBalanceInfo serviceBalanceInfo) throws IOException
+    public void export(HttpServletResponse response, ServiceBalanceInfo serviceBalanceInfo) throws IOException
     {
         //按case
         if (SettleTypeEnum.SETTLE_TYPE_CASE.getCode().equals(serviceBalanceInfo.getSettleType())) {
             List<ServiceBalanceDetailCaseVO> list = serviceBalanceDetailService.selectServiceBalanceDetailList_case(serviceBalanceInfo);
+            BaseContractService baseContractService = new BaseContractService();
+            baseContractService.setStatus(StatusEnum.VALID.getCode());
+            List<BaseContractService> contractServiceList = getProviderInfoService.selectBaseContractServiceInfo(baseContractService);
+            for (ServiceBalanceDetailCaseVO serviceBalanceDetailCaseVO : list) {
+                if (StringUtils.isNotEmpty(serviceBalanceDetailCaseVO.getServiceCode())) {
+                    for (BaseContractService contractService : contractServiceList) {
+                        if (contractService.getSerialNo().equals(serviceBalanceDetailCaseVO.getServiceCode())) {
+                            serviceBalanceDetailCaseVO.setServiceCode(contractService.getSupplierServiceName());
+                            break;
+                        }
+                    }
+                }
+            }
             ExcelUtil<ServiceBalanceDetailCaseVO> util = new ExcelUtil<ServiceBalanceDetailCaseVO>(ServiceBalanceDetailCaseVO.class);
             util.exportExcel(response, list, "按case（工单）");
-            return AjaxResult.success();
         } else if (SettleTypeEnum.SETTLE_TYPE_CONT.getCode().equals(serviceBalanceInfo.getSettleType())) {
             //按人头（保单）
             List<ServiceBalanceDetailContVO> list = serviceBalanceDetailService.selectServiceBalanceDetailList_cont(serviceBalanceInfo);
             ExcelUtil<ServiceBalanceDetailContVO> util = new ExcelUtil<ServiceBalanceDetailContVO>(ServiceBalanceDetailContVO.class);
             util.exportExcel(response, list, "按人头（保单）");
-            return AjaxResult.success();
         } else if (SettleTypeEnum.SETTLE_TYPE_PRICE.getCode().equals(serviceBalanceInfo.getSettleType())) {
             //按一口价
             List<ServiceBalanceDetailPriceVO> list = serviceBalanceDetailService.selectServiceBalanceDetailList_price(serviceBalanceInfo);
             ExcelUtil<ServiceBalanceDetailPriceVO> util = new ExcelUtil<ServiceBalanceDetailPriceVO>(ServiceBalanceDetailPriceVO.class);
             util.exportExcel(response, list, "按一口价");
-            return AjaxResult.success();
         }
-        return AjaxResult.error();
     }
 
     /**

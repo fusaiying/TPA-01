@@ -46,7 +46,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/list")
-    public TableDataInfo list(@RequestBody ClaimBatch claimBatch)
+    public TableDataInfo list(ClaimBatch claimBatch)
     {
         if (StringUtils.isNotEmpty(claimBatch.getOrderByColumn())) {
             switch (claimBatch.getOrderByColumn()) {
@@ -140,7 +140,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportReturnedPool")
-    public void exportReturnedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
+    public void exportReturnedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
     {
         String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
@@ -158,7 +158,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedPool")
-    public void exportProcessedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
+    public void exportProcessedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
     {
         String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
@@ -176,7 +176,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportPersonalProcessed")
-    public void exportPersonalProcessed(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
+    public void exportPersonalProcessed(HttpServletResponse response, BatchDTO batchDTO) throws IOException
     {
         List<BatchVo> batchVoList = claimBatchService.selectUntreatedPersonalList(batchDTO);
             for (BatchVo batchVo : batchVoList) {
@@ -192,7 +192,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportPersonalUntreated")
-    public void exportPersonalUntreated(HttpServletResponse response,@RequestBody BatchRecordDTO batchRecordDTO) throws IOException
+    public void exportPersonalUntreated(HttpServletResponse response, BatchRecordDTO batchRecordDTO) throws IOException
     {
         List<BatchVo> batchVoList = claimBatchService.selectProcessedPersonalList(batchRecordDTO);
             for (BatchVo batchVo : batchVoList) {
@@ -207,7 +207,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
-    public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO)
+    public TableDataInfo reviewPublicList(BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {

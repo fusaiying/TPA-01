@@ -109,7 +109,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public List<ProcessingCaseVo> selectProcessingClaimCaseList(ClaimCaseDTO claimCaseDTO) {
         if (StringUtils.isEmpty(claimCaseDTO.getBatchNo()) && StringUtils.isEmpty(claimCaseDTO.getName()) && StringUtils.isEmpty(claimCaseDTO.getRptNo())) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.MONTH, calendar.get(Calendar.DAY_OF_MONTH) - 30);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
             claimCaseDTO.setUpdateTime(DateUtils.parseDate(calendar.getTime()));
         }
         claimCaseDTO.setCaseStatus("05");

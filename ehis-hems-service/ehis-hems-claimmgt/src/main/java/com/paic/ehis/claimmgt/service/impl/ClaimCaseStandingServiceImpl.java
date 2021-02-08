@@ -56,6 +56,19 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
     }
 
     /**
+     * @param batchno
+     * @return java.util.List<com.paic.ehis.claimmgt.domain.ClaimCaseStanding>
+     * @author 硠君
+     * @Description 通过批次号查询报案台账信息
+     * @Date 15:36 2021/2/8
+     * @Parm [claimCaseStanding]
+     */
+    @Override
+    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchno) {
+        return claimCaseStandingMapper.selectCaseStandingListByBatchNo(batchno);
+    }
+
+    /**
      * 查询报案台账信息 列表
      * 
      * @param claimCaseStanding 报案台账信息 

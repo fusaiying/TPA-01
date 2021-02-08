@@ -16,7 +16,6 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,7 +105,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
             batchDTO.setUpdatestartTime(calendar.getTime());
             batchDTO.setUpdateendTime(DateUtils.parseDate(DateUtils.getTime()));
         }
@@ -155,7 +154,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         batchRecordDTO.setOperation("04");
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 1);
         batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
         batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);

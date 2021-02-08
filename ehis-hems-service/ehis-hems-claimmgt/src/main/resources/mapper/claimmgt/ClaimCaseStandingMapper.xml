@@ -108,6 +108,14 @@ WHERE
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status="Y"
     </select>
+
+    <select id="selectCaseStandingListByBatchNo" parameterType="string" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        <where>
+            <if test="Batchno != null  and Batchno != ''"> and batch_no = #{Batchno}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
         
     <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
         insert into claim_case_standing

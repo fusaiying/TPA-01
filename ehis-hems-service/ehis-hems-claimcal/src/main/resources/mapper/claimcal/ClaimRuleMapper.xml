@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.claimcal.ClaimRuleMapper">
+<mapper namespace="com.paic.ehis.claimcal.mapper.ClaimRuleMapper">
     
     <resultMap type="com.paic.ehis.claimcal.domain.ClaimRule" id="ClaimRuleResult">
         <result property="ruleNo"    column="rule_no"    />

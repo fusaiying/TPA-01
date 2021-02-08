@@ -97,8 +97,9 @@
         cc.filing_no,
         cc.rpt_no,
         cc.case_status,
-        cc.update_by,claim_type,cci.NAME,
-        cc.status,
+        cc.update_by,
+        cb.claim_type,
+        cci.NAME,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.create_time, now( ) ) / 86400 ),
         '天',
@@ -113,18 +114,11 @@
         LEFT JOIN   claim_batch cb on cb.batch_no = cc.batch_no and cb.status='Y'
         left join   claim_case_insured cci on cci.rpt_no = cc.rpt_no and cci.status='Y'
         <where>
-            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
-            <if test="rptNo != null and rptNo != ''"> and rpt_no = #{rptNo}</if>
-            <if test="caseStatus != null  and caseStatus != ''"> and case_status = #{caseStatus}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status =${caseStatus} </if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
-            <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
-            <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>
-            <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
+            <if test="updateBy != null  and updateBy != ''"> and cc.update_by = #{updateBy}</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
         </where>
     </select>
@@ -642,7 +636,7 @@
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="updateBy"    column="update_by"    />
     </resultMap>
-    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
+    <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultType="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo">
         select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
         from claim_case cc
         inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no

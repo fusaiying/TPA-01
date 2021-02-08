@@ -161,9 +161,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
         <if test="settleEndDate != null "> and settle_end_date = #{settleEndDate}</if>
         <if test="settleStartDate != null "> and settle_start_date = #{settleStartDate}</if>
-        <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+        <if test="startDate != null and endDate != null"> and a.create_time between #{startDate} and DATE_ADD(#{endDate},INTERVAL 1 DAY)</if>
         <if test="settleStatus != null  and settleStatus != ''"> and settle_status = #{settleStatus}</if>
-        <if test="batchTotal != null  and batchTotal != ''"> and batchtotal = #{batchTotal}</if>
+        <if test="batchTotal != null  and batchTotal != ''"> and batch_total = #{batchTotal}</if>
         <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
         <if test="companyName != null  and companyName != ''"> and company_name = #{companyName}</if>
         <if test="pageType != null  and pageType == '01'"> and a.settle_Status in ('01','02')</if>

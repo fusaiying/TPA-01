@@ -117,4 +117,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseInvestigationVo"/>
         where rpt_no = #{rptNo} and status = 'Y'
     </select>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.BaseCodeMappingNew" id="selectBaseCodeMappingNewVO">
+        <result property="codeType"    column="code_type"    />
+        <result property="originalCode"    column="original_code"    />
+        <result property="targetCode"    column="target_code"    />
+    </resultMap>
+
+    <select id="selectBaseCodeMappingNew" parameterType="Long" resultMap="selectBaseCodeMappingNewVO">
+        select code_type,original_code,target_code from base_code_mapping
+        where code_type = #{codeType} and original_code = #{originalCode} and status='Y'
+    </select>
+
 </mapper>

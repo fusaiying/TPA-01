@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service;
 
 
+import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
 import com.paic.ehis.claimflow.domain.dto.*;
@@ -232,5 +233,7 @@ public interface IClaimCaseService
      *用户调度更改操作人
      */
     //public int updateClaimCaseVo(ClaimCaseDistVo claimCaseDistVo);
+
+    public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew);
 
 }

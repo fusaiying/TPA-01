@@ -212,7 +212,7 @@
 
     <select id="selectClaimCaseRecordProblemShipment" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
-        where rpt_no = #{rptNo} and operation = '30' and status = 'Y'
+        where rpt_no = #{rptNo} and status = 'Y'
     </select>
 
     <select id="selectClaimCaseRecordAcceptance" parameterType="String" resultMap="ClaimCaseRecordResult">

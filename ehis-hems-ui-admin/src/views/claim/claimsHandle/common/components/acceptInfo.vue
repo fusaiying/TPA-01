@@ -296,7 +296,11 @@
             callback()
           }
         } else {
-          callback()
+          if (this.baseForm.currSituation==='01'){
+            callback(new Error("请录入死亡时间！"));
+          }else {
+            callback()
+          }
         }
       }
       const checkDisabilityDate = (rule, value, callback) => {

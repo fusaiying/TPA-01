@@ -443,6 +443,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setUpdateBy(caseDispatchDTO.getOperator());
             claimCaseMapper.updateCaseDispatchList(caseDispatchDTO);
         }*/
+
         return  claimCaseRecordMapper.updateCaseDispatchList(rptNo);
     }
 

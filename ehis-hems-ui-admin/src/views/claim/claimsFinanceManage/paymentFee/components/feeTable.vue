@@ -25,7 +25,7 @@
       <template slot-scope="scope">
         <el-button v-if="scope.row.settleStatus != '02'" size="small" type="text" @click="viewDetail(scope.row,'show')">查看</el-button>
         <el-button v-if="scope.row.settleStatus == '02'" size="small" type="text" @click="viewDetail(scope.row,'confirm')">确认</el-button>
-        <el-button v-if="scope.row.settleStatus != '03'" size="small" type="text" @click="delHandle(scope.row)">删除</el-button>
+        <el-button v-if="scope.row.settleStatus == '01'" size="small" type="text" @click="delFun(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -34,6 +34,7 @@
 <script>
 
   import moment from 'moment'
+  import { deleteFinanceInfo} from '@/api/paymentFee/api'
 
 export default {
   filters: {
@@ -83,7 +84,36 @@ export default {
   },
   methods: {
     //删除
-    delHandle(row) {
+    delFun(row) {
+      let settleTaskNo = row.settleTaskNo;
+      this.$confirm('确定删除', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        deleteFinanceInfo(settleTaskNo).then(response => {
+          if(response.code == '200') {
+            this.$emit('initData');
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            });
+          }
+
+        }).catch(error => {
+          console.log(error);
+        })
+      }).catch(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消！'
+        // })
+      })
     },
     //查看
     viewDetail(row,type){

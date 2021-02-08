@@ -185,7 +185,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="selectRecognizee" parameterType="com.paic.ehis.claimflow.domain.vo.InsuredVo" resultMap="PolicyInsuredResult">
-        select pis.insured_no, pis.name, pis.sex, pis.id_type, pis.id_no, pis.birthday from policy_insured pis left join policy_info  pi  on pis.insured_no=pi.insured_no
+        select pis.insured_no, pis.name, pis.sex, pis.id_type, pis.id_no, pis.birthday,pis.mobile,pis.email,pis.id_start_date,pis.id_end_date,
+               pis.occupation,pis.nationality,pis.phone,pis.province,pis.city,pis.district,pis.address
+        from policy_insured pis
+            left join policy_info  pi  on pis.insured_no=pi.insured_no
         <where>
             <if test="insuredNo != null  and insuredNo != ''"> and pis.insured_no = #{insuredNo}</if>
             <if test="name != null  and name != ''"> and pis.name like concat('%', #{name}, '%')</if>

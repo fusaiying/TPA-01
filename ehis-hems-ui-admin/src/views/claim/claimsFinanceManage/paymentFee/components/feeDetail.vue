@@ -11,7 +11,11 @@
         <span>理赔案件列表（{{totalNum}}）</span>
         <el-button style="float: right; margin-top: 10px;" size="mini" @click="changeDialogVisable">返回
         </el-button>
-        <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="exportData">清单导出
+        <el-button  style="float: right; margin-top: 10px;margin-right: 5px" type="primary" size="mini" @click="exportData">清单导出
+        </el-button>
+        <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 5px" type="primary" size="mini" @click="importData">清单导入
+        </el-button>
+        <el-button v-if="confimInfo"  style="float: right; margin-top: 10px;margin-right: 5px" type="primary" size="mini" @click="confirmDataInfo">确认
         </el-button>
       </div>
       <el-table
@@ -63,7 +67,7 @@
 
   import moment from 'moment'
 
-  import { getInfo } from '@/api/paymentFee/api'
+  import {deleteFinanceInfo, getInfo, initiateTask, updateConfirm} from '@/api/paymentFee/api'
 
   export default {
   props: {
@@ -85,7 +89,21 @@
       console.log(newValue)
       this.dialogVisable = newValue;
       if(this.dialogVisable) {
-         this.initData();
+        this.totalNum = 0;
+        this.tableData= [];
+        let type = this.fixInfoDetail.type ;
+        // 发起任务
+        if(type == "launch") {
+          this.initiateTaskData();
+        }
+        if(type == "show") {
+          this.initData();
+        }
+        if(type == 'confirm') {
+          this.confimInfo = true;
+          this.initData();
+        }
+       //
       }
     },
   },
@@ -100,6 +118,7 @@
   },
   data() {
     return {
+      confimInfo:false,
       loading : false,
       dialogVisable : false,
       tableData: [],
@@ -153,12 +172,64 @@
             this.loading = false;
       })
     },
+    // 发起任务
+    initiateTaskData(){
+      this.loading = true;
+      const params = {};
+      params.pageNum =  this.pageInfo.currentPage;
+      params.pageSize =  this.pageInfo.pageSize;
+
+      params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
+      params.companyCode = this.fixInfoDetail.rowData.companyCode;
+      params.settleDate = this.fixInfoDetail.rowData.settleDate;
+      initiateTask(params).then(res => {
+        if (res.code == '200') {
+          this.totalNum = res.total;
+          this.tableData= res.rows;
+        }
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
     //导出
     exportData(){
 
     },
+    //导入
+    importData(){
+      this.$emit('openImportDialog');
+    },
+    //确认
+    confirmDataInfo(){
+      let settleTaskNo  = this.fixInfoDetail.rowData.settleTaskNo;
+      this.$confirm('确定处理', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        updateConfirm(settleTaskNo).then(response => {
+          if(response.code == '200') {
+            this.confimInfo = false;
+            this.$emit('initData');
+            this.$message({
+              type: 'success',
+              message: '处理成功!'
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '处理失败'
+            });
+          }
+        }).catch(error => {
+          console.log(error);
+        })
+      }).catch(() => {
+      })
+    },
     //关闭对话框
     changeDialogVisable() {
+      this.confimInfo = false;
       this.$emit('closeDetailDialog')
     },
   },

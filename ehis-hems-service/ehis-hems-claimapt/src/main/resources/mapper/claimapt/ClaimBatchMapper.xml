@@ -127,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         record.update_by,
-        cb.update_time,
+        record.update_time,
         bpi.chname1,
         bpi.enname1
         FROM
@@ -151,10 +151,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and #{updateendTime}</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
-        group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
     </select>
 
     <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO" resultMap="ClaimBatchVO">
+
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -168,7 +168,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         cbr.update_by,
-        cbr.operation,
         cb.update_time
         FROM
         claim_batch cb
@@ -176,7 +175,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         batch_no,
         update_by,
-        update_time
+        update_time,
+        status
         FROM
         claim_batch_record a
         WHERE
@@ -211,7 +211,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatestartTime != null and updateendTime != null"> and cbr.update_time between #{updatestartTime} and #{updateendTime}</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
-        group by cb.batch_no,cb.source, cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cbr.update_by,cb.update_time ,bpi.chname1,bpi.enname1
     </select>
     
     <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">

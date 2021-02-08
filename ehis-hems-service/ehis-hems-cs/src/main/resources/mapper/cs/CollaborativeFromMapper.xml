@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="umCode"    column="um_code"    />
         <result property="solicitOpinion"    column="solicit_opinion"    />
         <result property="attachmentFlag"    column="attachment_flag"    />
+        <result property="handleState"    column="handle_state"    />
         <result property="status"    column="status"    />
         <result property="treatmentPlan"    column="treatment_plan"    />
         <result property="treatmentBasis"    column="treatment_basis"    />
@@ -18,10 +19,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdTime"    column="created_time"    />
         <result property="updatedBy"    column="updated_by"    />
         <result property="updatedTime"    column="updated_time"    />
+        <result property="itemCode"    column="item_code"    />
+        <result property="organCode"    column="organ_code"    />
     </resultMap>
 
     <sql id="selectCollaborativeFromVo">
-        select collaborative_id, work_order_no, from_user_id, um_code, solicit_opinion, attachment_flag, status, treatment_plan, treatment_basis, created_by, created_time, updated_by, updated_time from collaborative_from
+        select collaborative_id, work_order_no, from_user_id, um_code, solicit_opinion, attachment_flag, handle_state, status, treatment_plan, treatment_basis, created_by, created_time, updated_by, updated_time from collaborative_from
     </sql>
 
     <select id="selectCollaborativeFromList" parameterType="CollaborativeFrom" resultMap="CollaborativeFromResult">
@@ -32,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="umCode != null  and umCode != ''"> and um_code = #{umCode}</if>
             <if test="solicitOpinion != null  and solicitOpinion != ''"> and solicit_opinion = #{solicitOpinion}</if>
             <if test="attachmentFlag != null  and attachmentFlag != ''"> and attachment_flag = #{attachmentFlag}</if>
+            <if test="handleState != null  and handleState != ''"> and handle_state = #{handleState}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="treatmentPlan != null  and treatmentPlan != ''"> and treatment_plan = #{treatmentPlan}</if>
             <if test="treatmentBasis != null  and treatmentBasis != ''"> and treatment_basis = #{treatmentBasis}</if>
@@ -40,6 +44,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
         </where>
+    </select>
+
+    <select id="selectCollaborativeFromListNew" parameterType="ConsultationDTO" resultMap="CollaborativeFromResult">
+    SELECT
+    a.work_order_no,
+    a.collaborative_id,
+    a.created_by,
+    a.created_time,
+    a.updated_time,
+    a.handle_state,
+    b.item_code,
+    b.organ_code
+    FROM
+    collaborative_from a,
+    accept_detail_info b,
+    work_order_accept c
+    WHERE
+    a.work_order_no = b.work_order_no
+    AND a.work_order_no = c.work_order_no
+        <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
+        <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
+        <if test="createdTimeStart != null   and createdTimeEnd != null ">
+            and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
+        <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
     </select>
     
     <select id="selectCollaborativeFromById" parameterType="Long" resultMap="CollaborativeFromResult">
@@ -55,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="umCode != null">um_code,</if>
             <if test="solicitOpinion != null">solicit_opinion,</if>
             <if test="attachmentFlag != null">attachment_flag,</if>
+            <if test="handleState != null">handle_state,</if>
             <if test="status != null">status,</if>
             <if test="treatmentPlan != null">treatment_plan,</if>
             <if test="treatmentBasis != null">treatment_basis,</if>
@@ -69,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="umCode != null">#{umCode},</if>
             <if test="solicitOpinion != null">#{solicitOpinion},</if>
             <if test="attachmentFlag != null">#{attachmentFlag},</if>
+            <if test="handleState != null">#{handleState},</if>
             <if test="status != null">#{status},</if>
             <if test="treatmentPlan != null">#{treatmentPlan},</if>
             <if test="treatmentBasis != null">#{treatmentBasis},</if>
@@ -87,6 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="umCode != null">um_code = #{umCode},</if>
             <if test="solicitOpinion != null">solicit_opinion = #{solicitOpinion},</if>
             <if test="attachmentFlag != null">attachment_flag = #{attachmentFlag},</if>
+            <if test="handleState != null">handle_state = #{handleState},</if>
             <if test="status != null">status = #{status},</if>
             <if test="treatmentPlan != null">treatment_plan = #{treatmentPlan},</if>
             <if test="treatmentBasis != null">treatment_basis = #{treatmentBasis},</if>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.base.mapper.BaseIssuingcompanyRiskrelaMapper">
+<mapper namespace="com.paic.ehis.finance.mapper.BaseIssuingcompanyRiskrelaMapper">
     
     <resultMap type="com.paic.ehis.finance.domain.BaseIssuingcompanyRiskrela" id="BaseIssuingcompanyRiskrelaResult">
         <result property="companyCode"    column="company_code"    />

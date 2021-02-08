@@ -115,7 +115,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //随机生成流水号
         collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号
-        collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
+        //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
 
         collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

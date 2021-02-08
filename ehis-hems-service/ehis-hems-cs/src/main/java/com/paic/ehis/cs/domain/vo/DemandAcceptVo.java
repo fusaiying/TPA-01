@@ -178,6 +178,9 @@ public class DemandAcceptVo extends BaseEntity {
     private String editRemark;
     private EditInfo editInfo;
 
-
+    //征求处理意见
+    private String solicitOpinion;
+    //协办方UM帐号
+    private String umCode;
 
 }

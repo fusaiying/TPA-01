@@ -154,6 +154,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO" resultMap="ClaimBatchVO">
+
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -167,7 +168,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         cbr.update_by,
-        cbr.operation,
         cb.update_time
         FROM
         claim_batch cb
@@ -175,7 +175,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         batch_no,
         update_by,
-        update_time
+        update_time,
+        status
         FROM
         claim_batch_record a
         WHERE

@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import {invalid,getDeptList} from '@/api/claim/presentingReview'
+  import {invalid,getThisDept} from '@/api/claim/presentingReview'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
@@ -101,10 +101,8 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-      getDeptList().then(res=>{
-        if (res!=null && res.code===200){
-          this.deptOptions=res.data
-        }
+      getThisDept().then(res=>{
+          this.deptOptions=res.deptlist
       })
 
     },

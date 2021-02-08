@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceSettleRecordMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.FinanceSettleRecord" id="FinanceSettleRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="taskType"    column="task_type"    />
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="operation"    column="operation"    />
+        <result property="operator"    column="operator"    />
+        <result property="historyFlag"    column="history_flag"    />
+        <result property="orgRecordId"    column="org_record_id"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+    <sql id="selectFinanceSettleRecordVo">
+        select record_id, task_type, settle_task_no, operation, operator, history_flag, org_record_id, status, create_by, create_time, update_by, update_time, dept_code from finance_settle_record
+    </sql>
+
+    <select id="selectFinanceSettleRecordList" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord" resultMap="FinanceSettleRecordResult">
+        <include refid="selectFinanceSettleRecordVo"/>
+        <where>  
+            <if test="taskType != null  and taskType != ''"> and task_type = #{taskType}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="historyFlag != null  and historyFlag != ''"> and history_flag = #{historyFlag}</if>
+            <if test="orgRecordId != null "> and org_record_id = #{orgRecordId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectFinanceSettleRecordById" parameterType="Long" resultMap="FinanceSettleRecordResult">
+        <include refid="selectFinanceSettleRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <select id="selectNRecordBySettleTaskNo" parameterType="string" resultMap="FinanceSettleRecordResult">
+        <include refid="selectFinanceSettleRecordVo"/>
+        where settle_task_no = #{settleTaskNo} and history_flag='N' and status='Y'
+    </select>
+        
+    <insert id="insertFinanceSettleRecord" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into finance_settle_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskType != null and taskType != ''">task_type,</if>
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no,</if>
+            <if test="operation != null and operation != ''">operation,</if>
+            <if test="operator != null and operator != ''">operator,</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag,</if>
+            <if test="orgRecordId != null">org_record_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskType != null and taskType != ''">#{taskType},</if>
+            <if test="settleTaskNo != null and settleTaskNo != ''">#{settleTaskNo},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">#{historyFlag},</if>
+            <if test="orgRecordId != null">#{orgRecordId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinanceSettleRecord" parameterType="com.paic.ehis.finance.domain.FinanceSettleRecord">
+        update finance_settle_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskType != null and taskType != ''">task_type = #{taskType},</if>
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="orgRecordId != null">org_record_id = #{orgRecordId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <update id="removeFinanceSettleRecords" parameterType="string">
+        update finance_settle_record set status = 'N'
+        where settle_task_no = #{settleTaskNo}
+    </update>
+
+    <delete id="deleteFinanceSettleRecordById" parameterType="Long">
+        delete from finance_settle_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteFinanceSettleRecordByIds" parameterType="String">
+        delete from finance_settle_record where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+    
+</mapper>

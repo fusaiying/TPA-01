@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.domain.FinanceTpaSettleDetailMapper">
+
+    <resultMap type="FinanceTpaSettleDetail" id="FinanceTpaSettleDetailResult">
+        <result property="detailId"    column="detail_id"    />
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="serviceAmount"    column="service_amount"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+    <resultMap id="planMap" type="com.paic.ehis.finance.domain.TpaSettleDetailInfo">
+        <id property="settleTaskNo" column="settle_task_no"/>
+        <result property="settleTaskNo"    column="settle_task_no"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="serviceAmount"    column="service_amount"    />
+        <result property="remark"       column="remark"     />
+    </resultMap>
+
+    <sql id="selectFinanceTpaSettleDetailVo">
+        select detail_id, settle_task_no, company_code, policy_no, policy_item_no, service_amount, remark, status, create_by, create_time, update_by, update_time, dept_code from finance_tpa_settle_detail
+    </sql>
+
+    <select id="selectFinanceTpaSettleDetailList" parameterType="FinanceTpaSettleDetail" resultMap="FinanceTpaSettleDetailResult">
+        <include refid="selectFinanceTpaSettleDetailVo"/>
+        <where>
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
+            <if test="serviceAmount != null "> and service_amount = #{serviceAmount}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+
+    <select id="selectFinanceTpaSettleDetailById" parameterType="Long" resultMap="FinanceTpaSettleDetailResult">
+        <include refid="selectFinanceTpaSettleDetailVo"/>
+        where detail_id = #{detailId}
+    </select>
+
+    <select id="selectFinanceTpaSettleDetailBysettleTaskNo" parameterType="string" resultMap="FinanceTpaSettleDetailResult">
+        <include refid="selectFinanceTpaSettleDetailVo"/>
+        where settle_task_no = #{settleTaskNo}
+    </select>
+
+
+    <insert id="insertFinanceTpaSettleDetail" parameterType="FinanceTpaSettleDetail" useGeneratedKeys="true" keyProperty="detailId">
+        insert into finance_tpa_settle_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no,</if>
+            <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no,</if>
+            <if test="serviceAmount != null">service_amount,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">#{settleTaskNo},</if>
+            <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">#{policyItemNo},</if>
+            <if test="serviceAmount != null">#{serviceAmount},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFinanceTpaSettleDetail" parameterType="FinanceTpaSettleDetail">
+        update finance_tpa_settle_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
+            <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+            <if test="serviceAmount != null">service_amount = #{serviceAmount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where detail_id = #{detailId}
+    </update>
+
+    <update id="editFinanceTpaSettleDetail" parameterType="FinanceTpaSettleDetail">
+        update finance_tpa_settle_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
+            <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+            <if test="serviceAmount != null">service_amount = #{serviceAmount},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where settle_task_no = #{settleTaskNo}
+    </update>
+
+    <update id="neutralizeFinanceTpaSettleDetail" parameterType="string">
+        update finance_tpa_settle_detail set status='N'
+        where settle_task_no = #{settleTaskNo}
+    </update>
+
+    <update id="removeFinanceTpaSettleDetail" parameterType="java.util.ArrayList">
+        <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+            update finance_tpa_settle_detail
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>
+                <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+                <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+                <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+                <if test="serviceAmount != null">service_amount = #{serviceAmount},</if>
+                <if test="remark != null">remark = #{remark},</if>
+                <if test="status != null">status = #{status},</if>
+                <if test="updateBy != null">update_by = #{updateBy},</if>
+                <if test="updateTime != null">update_time = #{updateTime},</if>
+            </trim>
+            where detail_id = #{detailId}
+        </foreach>
+    </update>
+
+    <delete id="deleteFinanceTpaSettleDetailById" parameterType="Long">
+        delete from finance_tpa_settle_detail where detail_id = #{detailId}
+    </delete>
+
+    <delete id="deleteFinanceTpaSettleDetailByIds" parameterType="String">
+        delete from finance_tpa_settle_detail where detail_id in
+        <foreach item="detailId" collection="array" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+</mapper>

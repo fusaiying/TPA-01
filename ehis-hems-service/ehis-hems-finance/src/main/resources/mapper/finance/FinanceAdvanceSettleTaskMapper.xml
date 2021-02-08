@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.FinanceAdvanceSettleTaskMapper">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceAdvanceSettleTaskMapper">
     
-    <resultMap type="FinanceAdvanceSettleTask" id="FinanceAdvanceSettleTaskResult">
+    <resultMap type="com.paic.ehis.finance.domain.FinanceAdvanceSettleTask" id="FinanceAdvanceSettleTaskResult">
         <result property="taskId"    column="task_id"    />
         <result property="settleTaskNo"    column="settle_task_no"    />
         <result property="companyCode"    column="company_code"    />
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select task_id, settle_task_no, company_code, advance_amount, settle_end_date, settle_status, col_date, status, remark, create_by, create_time, update_by, update_time, dept_code from finance_advance_settle_task
     </sql>
 
-    <select id="selectFinanceAdvanceSettleTaskList" parameterType="FinanceAdvanceSettleTask" resultMap="FinanceAdvanceSettleTaskResult">
+    <select id="selectFinanceAdvanceSettleTaskList" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleTask" resultMap="FinanceAdvanceSettleTaskResult">
         <include refid="selectFinanceAdvanceSettleTaskVo"/>
         <where>  
             <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where task_id = #{taskId}
     </select>
         
-    <insert id="insertFinanceAdvanceSettleTask" parameterType="FinanceAdvanceSettleTask" useGeneratedKeys="true" keyProperty="taskId">
+    <insert id="insertFinanceAdvanceSettleTask" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleTask" useGeneratedKeys="true" keyProperty="taskId">
         insert into finance_advance_settle_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no,</if>
@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinanceAdvanceSettleTask" parameterType="FinanceAdvanceSettleTask">
+    <update id="updateFinanceAdvanceSettleTask" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleTask">
         update finance_advance_settle_task
         <trim prefix="SET" suffixOverrides=",">
             <if test="settleTaskNo != null and settleTaskNo != ''">settle_task_no = #{settleTaskNo},</if>

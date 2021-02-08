@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sino.system.mapper.SysDeptMapper">
+<mapper namespace="com.paic.ehis.claimapt.mapper.SysDeptMapper">
 
-	<resultMap type="SysDept" id="SysDeptResult">
+	<resultMap type="com.paic.ehis.claimapt.domain.SysDepts" id="SysDeptResult">
 		<id     property="deptId"     column="dept_id"     />
 		<result property="parentId"   column="parent_id"   />
 		<result property="ancestors"  column="ancestors"   />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateTime" column="update_time" />
 	</resultMap>
 
-	<resultMap type="SysDepts" id="SysDeptsResult">
+	<resultMap type="com.paic.ehis.claimapt.domain.SysDepts" id="SysDeptsResult">
 		<id     property="deptId"     column="dept_id"     />
 		<result property="parentId"   column="parent_id"   />
 		<result property="ancestors"  column="ancestors"   />
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from sys_dept d
     </sql>
     
-	<select id="selectDeptList" parameterType="SysDept" resultMap="SysDeptResult">
+	<select id="selectDeptList" parameterType="com.paic.ehis.claimapt.domain.SysDepts" resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
         where d.del_flag = '0'
         <if test="parentId != null and parentId != 0">
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by d.parent_id, d.order_num
     </select>
 
-	<select id="selectDepts" parameterType="SysDept" resultMap="SysDeptResult">
+	<select id="selectDepts" parameterType="com.paic.ehis.claimapt.domain.SysDepts" resultMap="SysDeptResult">
     SELECT
 	dept_id,dept_name
 FROM
@@ -109,7 +109,7 @@ WHERE
 		where dept_name=#{deptName} and parent_id = #{parentId} limit 1
 	</select>
     
-    <insert id="insertDept" parameterType="SysDept">
+    <insert id="insertDept" parameterType="com.paic.ehis.claimapt.domain.SysDepts">
  		insert into sys_dept(
  			<if test="deptId != null and deptId != 0">dept_id,</if>
  			<if test="parentId != null and parentId != 0">parent_id,</if>
@@ -137,7 +137,7 @@ WHERE
  		)
 	</insert>
 	
-	<update id="updateDept" parameterType="SysDept">
+	<update id="updateDept" parameterType="com.paic.ehis.claimapt.domain.SysDepts">
  		update sys_dept
  		<set>
  			<if test="parentId != null and parentId != 0">parent_id = #{parentId},</if>
@@ -167,7 +167,7 @@ WHERE
 	    </foreach>
 	</update>
 	 
-	 <update id="updateDeptStatus" parameterType="SysDept">
+	 <update id="updateDeptStatus" parameterType="com.paic.ehis.claimapt.domain.SysDepts">
  	    update sys_dept
  	    <set>
  	        <if test="status != null and status != ''">status = #{status},</if>

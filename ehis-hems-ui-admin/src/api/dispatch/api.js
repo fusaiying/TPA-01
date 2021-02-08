@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //查询案件调度工作池
 export function selectCaseDispatchList(query) {
   return request({
-    url: '/system/case/selectCaseDispatchList',
+    url: '/claimflow/case/selectCaseDispatchList',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function selectCaseDispatchList(query) {
 //案件调度修改操作人
 export function dispatchUpdate(data) {
   return request({
-    url: '/system/case/Dispatch',
+    url: '/claimflow/case/Dispatch',
     method: 'post',
     data: data
   })
@@ -30,7 +30,7 @@ export function getDspatchUser(query) {
 //查询出单信息
 export function getIssuingcompanyList(query) {
   return request({
-    url: '/system/issuingcompany/list',
+    url: '/provider/issuingcompany/list',
     method: 'get',
     params: query
   })

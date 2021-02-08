@@ -1,16 +1,10 @@
 package com.paic.ehis.claimmgt.service.impl;
 
-import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
-//import com.paic.ehis.claimmgt.domain.dto.ClaimBatchDTO;
-import com.paic.ehis.claimmgt.domain.vo.ClaimCaseDistVo;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseDistService;
-import com.paic.ehis.system.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +24,8 @@ public class ClaimCaseDistServiceImpl implements IClaimCaseDistService
     @Autowired
     private ClaimCaseDistMapper claimCaseDistMapper;
 
-    @Autowired
-    private ClaimCaseMapper claimCaseMapper;
+   /* @Autowired
+    private ClaimCaseMapper claimCaseMapper;*/
     @Autowired
     private SysUserServiceImpl sysUserMapper;
 

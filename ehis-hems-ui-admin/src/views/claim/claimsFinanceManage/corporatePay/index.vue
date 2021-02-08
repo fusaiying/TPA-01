@@ -95,10 +95,22 @@
           @sort-change="onSortChange"
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel( hospitals, scope.row.hospitalCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
-          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip/>
-          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip/>
+          <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.batchTotal}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="calAmount" label="理赔总金额" width="100" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.calAmount}} {{scope.row.currency}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="isAppeal" label="是否申述" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
@@ -132,6 +144,7 @@
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
   import {getDept,getDeptById} from '@/api/claim/standingBookSearch'
   import {initList,list} from '@/api/claim/corporatePay'
+  import {getHospitalInfo} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'sys_yes_no'},]
   export default {
     data() {
@@ -161,6 +174,7 @@
         deptOptions: [],
         hospitalOptions: [],
         sys_yes_noOptions: [],
+        hospitals:[],
       }
     },
     async mounted() {
@@ -182,6 +196,11 @@
       initList(this.queryParams).then(res=>{
         if (res!=null && res.code===200){
           this.tableData=res.rows
+        }
+      })
+      getHospitalInfo({}).then(res => {
+        if (res != null && res !== '') {
+          this.hospitals = res.rows
         }
       })
     },

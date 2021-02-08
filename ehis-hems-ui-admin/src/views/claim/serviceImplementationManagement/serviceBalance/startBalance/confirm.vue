@@ -140,9 +140,10 @@ export default {
     },
     /** 清单确认 */
     handelConfim() {
-      //合约附件不能为空
-      if (this.$refs.contractFileTable.fileList == 0) {
-        this.$message.warning('此任务为先票后付，需先添加发票信息！');
+      //清单附件不能为空
+      if (this.$refs.balanceFileTable.fileList == 0) {
+        this.$message.warning('清单附件不能为空！');
+        this.$refs.balanceFileTable.activeNames = ['1'];
         window.scrollTo({
           'top': document.getElementById("balanceFileDiv").offsetTop,
           'behavior': 'smooth'
@@ -189,19 +190,19 @@ export default {
 </script>
 
 <style scoped>
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
-  .clearfix:after {
-    clear: both
-  }
+.clearfix:after {
+  clear: both
+}
 
-  .box-card {
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+.box-card {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
 </style>

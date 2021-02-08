@@ -6,6 +6,7 @@ import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;
 import com.paic.ehis.claimflow.service.IClaimCaseFilingService;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -49,6 +50,7 @@ public class ClaimCaseFilingController extends BaseController {
     //@PreAuthorize("@ss.hasPermi('system:casefiling:list')")
     @PostMapping("/caseFilingList")
     public TableDataInfo caseFilingList(@RequestBody ClaimCaseFilingDTO claimCaseFilingDTO) {
+        claimCaseFilingDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseFilingDTO.getOrderByColumn()));
         startPage(claimCaseFilingDTO);
         List<ClaimCaseFilingListVO> list = claimCaseFilingService.selectCaseClaimCaseFilingList(claimCaseFilingDTO);
         return getDataTable(list);

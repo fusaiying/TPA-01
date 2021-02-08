@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.EditDetail;
 import com.paic.ehis.cs.service.IEditDetailService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +38,7 @@ public class EditDetailController extends BaseController
     /**
      * 查询修改明细 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:list')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:list')")
     @GetMapping("/list")
     public TableDataInfo list(EditDetail editDetail)
     {
@@ -57,7 +56,7 @@ public class EditDetailController extends BaseController
     /**
      * 导出修改明细 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:export')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:export')")
     @Log(title = "修改明细 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, EditDetail editDetail) throws IOException
@@ -70,7 +69,7 @@ public class EditDetailController extends BaseController
     /**
      * 获取修改明细 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:query')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:query')")
     @GetMapping(value = "/{detailId}")
     public AjaxResult getInfo(@PathVariable("detailId") String detailId)
     {
@@ -80,7 +79,7 @@ public class EditDetailController extends BaseController
     /**
      * 新增修改明细 
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:add')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:add')")
     @Log(title = "修改明细 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EditDetail editDetail)
@@ -91,7 +90,7 @@ public class EditDetailController extends BaseController
     /**
      * 修改修改明细 
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:edit')")
     @Log(title = "修改明细 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody EditDetail editDetail)
@@ -102,7 +101,7 @@ public class EditDetailController extends BaseController
     /**
      * 删除修改明细 
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:remove')")
     @Log(title = "修改明细 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{detailIds}")
     public AjaxResult remove(@PathVariable String[] detailIds)

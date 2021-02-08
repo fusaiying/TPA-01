@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimUserTakeOnMapper">
+    
+    <resultMap type="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" id="ClaimUserTakeOnResult">
+        <result property="takeOnId"    column="take_on_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="takeOnUserId"    column="take_on_user_id"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimUserTakeOnVo">
+        select take_on_id, user_id, take_on_user_id, status, create_by, create_time, update_by, update_time from claim_user_take_on
+    </sql>
+    <resultMap type="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" id="ClaimUserTakeOnDTO">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="status"    column="status"    />
+        <result property="takeOnUserId"    column="take_on_user_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="takeOnId"    column="take_on_id"    />
+
+    </resultMap>
+    <select id="selectClaimUserTakeOnList" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" resultMap="ClaimUserTakeOnResult">
+        <include refid="selectClaimUserTakeOnVo"/>
+        <where>
+            <if test="userId != null "> and user_id  like concat('%', #{userId}, '%')</if>
+            <if test="takeOnUserId != null "> and take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectClaimUserTakeOnListOne" parameterType="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" resultMap="ClaimUserTakeOnDTO">
+        select t1.take_on_id,
+               t1.take_on_user_id,
+               t1.create_time,
+                t1.user_id ,
+                t2.user_name,
+                t3.role_id,
+                t4.role_name,
+                t5.user_name,
+                t1.update_by,
+                t1.status,
+                t1.take_on_id
+        from claim_user_take_on t1
+        LEFT JOIN sys_user t2  on t1.user_id = t2.user_id
+        LEFT JOIN sys_user_role t3 on t3.user_id = t2.user_id
+        LEFT JOIN sys_role t4 on t3.role_id = t4.role_id
+        LEFT JOIN sys_user t5 on t5.user_id = t1.take_on_user_id
+        <where>
+            <if test="userId != null "> and t1.user_id  like concat('%', #{userId}, '%')</if>
+            <if test="takeOnUserId != null "> and t1.take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
+            <if test="status != null  and status != ''"> and t1.status = #{status}</if>
+            <if test="status == null  or status == ''"> and t1.status != 'N'</if>
+
+        </where>
+    </select>
+    
+    <select id="selectClaimUserTakeOnById" parameterType="String" resultMap="ClaimUserTakeOnResult">
+        <include refid="selectClaimUserTakeOnVo"/>
+        where take_on_id = #{takeOnId}
+    </select>
+        
+    <insert id="insertClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" useGeneratedKeys="true" keyProperty="takeOnId">
+        insert into claim_user_take_on
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="takeOnUserId != null">take_on_user_id,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="takeOnUserId != null">#{takeOnUserId},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn">
+        update claim_user_take_on
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="takeOnUserId != null">take_on_user_id = #{takeOnUserId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where take_on_id = #{takeOnId}
+    </update>
+
+    <delete id="deleteClaimUserTakeOnById" parameterType="String">
+        delete from claim_user_take_on where take_on_id = #{takeOnId}
+    </delete>
+
+    <delete id="deleteClaimUserTakeOnByIds" parameterType="String">
+        delete from claim_user_take_on where take_on_id in 
+        <foreach item="takeOnId" collection="array" open="(" separator="," close=")">
+            #{takeOnId}
+        </foreach>
+    </delete>
+</mapper>

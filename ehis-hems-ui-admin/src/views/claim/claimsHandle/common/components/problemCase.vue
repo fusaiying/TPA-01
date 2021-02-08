@@ -13,7 +13,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="问题件类型：" prop="problemType">
-            <el-select v-model="caseForm.problemType" class="item-width" placeholder="请选择">
+            <el-select v-model="caseForm.problemType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in problem_shipment_typeOptions" :key="option.dictValue"
                          :label="option.dictLabel"
                          :value="option.dictValue"/>

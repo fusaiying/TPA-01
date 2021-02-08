@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.PolicyInfoMapper">
+
+    <resultMap type="com.paic.ehis.claimflow.domain.PolicyInfo" id="PolicyInfoResult">
+        <result property="policyId"    column="policy_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="name"    column="name"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+        <result property="validEndDate"    column="valid_end_date"    />
+        <result property="policyRiskType"    column="policy_risk_type"    />
+        <result property="policyStatus"    column="policy_status"    />
+        <result property="specialAgreement"    column="special_agreement"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="policyType"    column="policy_type"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="orgPolicyNo"    column="org_policy_no"    />
+        <result property="orgPolicyItemNo"    column="org_policy_item_no"    />
+        <result property="ssFlag"    column="ss_flag"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+
+    <sql id="selectPolicyInfoVo">
+        select policy_no, policy_item_no, insured_no, name, valid_start_date, valid_end_date, policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
+    </sql>
+
+    <select id="selectPolicyInfoList" parameterType="com.paic.ehis.claimflow.domain.PolicyInfo" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        <where>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="validStartDate != null "> and valid_start_date = #{validStartDate}</if>
+            <if test="validEndDate != null "> and valid_end_date = #{validEndDate}</if>
+            <if test="policyRiskType != null  and policyRiskType != ''"> and policy_risk_type = #{policyRiskType}</if>
+            <if test="policyStatus != null  and policyStatus != ''"> and policy_status = #{policyStatus}</if>
+            <if test="specialAgreement != null  and specialAgreement != ''"> and special_agreement = #{specialAgreement}</if>
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="policyManageCom != null  and policyManageCom != ''"> and policy_manage_com = #{policyManageCom}</if>
+            <if test="policyType != null  and policyType != ''"> and policy_type = #{policyType}</if>
+            <if test="planCode != null  and planCode != ''"> and plan_code = #{planCode}</if>
+            <if test="orgPolicyNo != null  and orgPolicyNo != ''"> and org_policy_no = #{orgPolicyNo}</if>
+            <if test="orgPolicyItemNo != null  and orgPolicyItemNo != ''"> and org_policy_item_no = #{orgPolicyItemNo}</if>
+            <if test="ssFlag != null  and ssFlag != ''"> and ss_flag = #{ssFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectPolicyInfoById" parameterType="String" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        where policy_no = #{policyNo} and status='Y'
+    </select>
+
+    <select id="selectPolicyInfoByIdThree" parameterType="String" resultMap="PolicyInfoResult">
+        SELECT company_code  from  policy_info  where insured_no = #{insuredNo}
+    </select>
+    <select id="selectPolicyInfoByIdOne" parameterType="String" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        where insured_no = #{insuredNo}
+    </select>
+    <insert id="insertPolicyInfo" parameterType="com.paic.ehis.claimflow.domain.PolicyInfo">
+        insert into policy_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="policyNo != null">policy_no,</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no,</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="validStartDate != null">valid_start_date,</if>
+            <if test="validEndDate != null">valid_end_date,</if>
+            <if test="policyRiskType != null and policyRiskType != ''">policy_risk_type,</if>
+            <if test="policyStatus != null and policyStatus != ''">policy_status,</if>
+            <if test="specialAgreement != null">special_agreement,</if>
+            <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="companyName != null and companyName != ''">company_name,</if>
+            <if test="policyManageCom != null and policyManageCom != ''">policy_manage_com,</if>
+            <if test="policyType != null and policyType != ''">policy_type,</if>
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="orgPolicyNo != null and orgPolicyNo != ''">org_policy_no,</if>
+            <if test="orgPolicyItemNo != null and orgPolicyItemNo != ''">org_policy_item_no,</if>
+            <if test="ssFlag != null and ssFlag != ''">ss_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="policyNo != null">#{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">#{policyItemNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="validStartDate != null">#{validStartDate},</if>
+            <if test="validEndDate != null">#{validEndDate},</if>
+            <if test="policyRiskType != null and policyRiskType != ''">#{policyRiskType},</if>
+            <if test="policyStatus != null and policyStatus != ''">#{policyStatus},</if>
+            <if test="specialAgreement != null">#{specialAgreement},</if>
+            <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="companyName != null and companyName != ''">#{companyName},</if>
+            <if test="policyManageCom != null and policyManageCom != ''">#{policyManageCom},</if>
+            <if test="policyType != null and policyType != ''">#{policyType},</if>
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="orgPolicyNo != null and orgPolicyNo != ''">#{orgPolicyNo},</if>
+            <if test="orgPolicyItemNo != null and orgPolicyItemNo != ''">#{orgPolicyItemNo},</if>
+            <if test="ssFlag != null and ssFlag != ''">#{ssFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePolicyInfo" parameterType="com.paic.ehis.claimflow.domain.PolicyInfo">
+        update policy_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="validStartDate != null">valid_start_date = #{validStartDate},</if>
+            <if test="validEndDate != null">valid_end_date = #{validEndDate},</if>
+            <if test="policyRiskType != null and policyRiskType != ''">policy_risk_type = #{policyRiskType},</if>
+            <if test="policyStatus != null and policyStatus != ''">policy_status = #{policyStatus},</if>
+            <if test="specialAgreement != null">special_agreement = #{specialAgreement},</if>
+            <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="companyName != null and companyName != ''">company_name = #{companyName},</if>
+            <if test="policyManageCom != null and policyManageCom != ''">policy_manage_com = #{policyManageCom},</if>
+            <if test="policyType != null and policyType != ''">policy_type = #{policyType},</if>
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="orgPolicyNo != null and orgPolicyNo != ''">org_policy_no = #{orgPolicyNo},</if>
+            <if test="orgPolicyItemNo != null and orgPolicyItemNo != ''">org_policy_item_no = #{orgPolicyItemNo},</if>
+            <if test="ssFlag != null and ssFlag != ''">ss_flag = #{ssFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where policy_no = #{policyNo}
+    </update>
+
+    <delete id="deletePolicyInfoById" parameterType="String">
+        delete from policy_info where policy_no = #{policyNo}
+    </delete>
+
+    <delete id="deletePolicyInfoByIds" parameterType="String">
+        delete from policy_info where policy_no in
+        <foreach item="policyNo" collection="array" open="(" separator="," close=")">
+            #{policyNo}
+        </foreach>
+    </delete>
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.PolicyVo" id="PolicyVo">
+        <result property="policyId"    column="policy_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="appName"    column="app_name"    />
+        <result property="name"    column="name"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+        <result property="validEndDate"    column="valid_end_date"    />
+        <result property="policyRiskType"    column="policy_risk_type"    />
+        <result property="policyStatus"    column="policy_status"    />
+        <result property="specialAgreement"    column="special_agreement"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="policyType"    column="policy_type"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="orgPolicyNo"    column="org_policy_no"    />
+        <result property="ssFlag"    column="ss_flag"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+    </resultMap>
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.DutyVo" id="DutyVo">
+        <result property="riskName"    column="risk_name"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="dutyDetailCode"    column="duty_detail_code"    />
+        <result property="dutyCode"    column="duty_code"    />
+        <result property="dutyDetailName"    column="duty_detail_name"    />
+        <result property="applyReason"    column="apply_reason"    />
+        <result property="dutyName"    column="duty_name"    />
+        <result property="planCode"    column="plan_code"    />
+    </resultMap>
+    <select id="selectInsuredList" parameterType="com.paic.ehis.claimflow.domain.dto.PolicyDTO" resultMap="PolicyVo">
+        select  insured_no,policy_no,policy_item_no,name,app_name,valid_start_date,valid_end_date,policy_risk_type,policy_status,special_agreement,company_name,
+                company_code,policy_type,plan_code,org_policy_no,policy_type,ss_flag,policy_manage_com
+        from policy_info
+        where insured_no = #{insuredNo}  and status='Y'
+    </select>
+
+    <select id="selectDutyList" parameterType="String" resultMap="DutyVo">
+        select DISTINCT
+            cpdd.plan_code,cpdd.duty_detail_name,cpdd.duty_detail_code,cpdd.apply_reason,c.duty_code,c.risk_code,c.risk_name,
+            c.duty_name
+        from claim_product_duty_detail cpdd
+                 inner join (select prr.risk_name,cp.risk_code,cpd.duty_name,cpd.duty_code
+                             from claim_product cp
+                                      inner join policy_risk_relation prr on prr.risk_name=cp.risk_name
+                                      inner join claim_product_duty  cpd on cpd.risk_code=prr.risk_code) c
+                            on c.duty_code=cpdd.duty_code
+
+        where EXISTS(SELECT pi.plan_code FROM  policy_info pi WHERE pi.plan_code=cpdd.plan_code) AND risk_name = #{riskName}
+    </select>
+    
+</mapper>

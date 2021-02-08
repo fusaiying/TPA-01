@@ -39,6 +39,9 @@ public class ClaimCaseDTO extends BaseEntity {
     /** 是否历史 */
     private String isHistory;
 
+    /** 流程节点操作人 */
+    private String operator;
+
     /** operation */
     private String operation;
 

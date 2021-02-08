@@ -10,7 +10,6 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.datascope.annotation.DataScope;
 import com.paic.ehis.system.api.domain.SysDept;
-import com.paic.ehis.system.domain.vo.TreeSelect;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,11 +101,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param depts 部门列表
      * @return 下拉树结构列表
      */
-    @Override
-    public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts) {
-        List<SysDept> deptTrees = buildDeptTree(depts);
-        return deptTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts) {
+//        List<SysDept> deptTrees = buildDeptTree(depts);
+//        return deptTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+//    }
 
     /**
      * 根据角色ID查询部门树信息

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCheckRuleMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCheckRule" id="ClaimCaseCheckRuleResult">
+        <result property="checkRuleNo"    column="check_rule_no"    />
+        <result property="caseType"    column="case_type"    />
+        <result property="amountType"    column="amount_type"    />
+        <result property="checkAmount"    column="check_amount"    />
+        <result property="rate"    column="rate"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckRuleDTO" id="ClaimCaseCheckRuleDTOResult">
+        <result property="checkRuleNo"    column="check_rule_no"    />
+        <result property="caseType"    column="case_type"    />
+        <result property="amountType"    column="amount_type"    />
+        <result property="checkAmount"    column="check_amount"    />
+        <result property="rate"    column="rate"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO" id="ClaimCaseCheckDTOResult">
+        <result property="checkRuleNo"    column="check_rule_no"    />
+        <result property="caseType"    column="case_type"    />
+        <result property="amountType"    column="amount_type"    />
+        <result property="checkAmount"    column="check_amount"    />
+        <result property="rate"    column="rate"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCheckRuleVo">
+        select check_rule_no, case_type, amount_type, check_amount, rate, status, create_by, create_time, update_by, update_time from claim_case_check_rule
+    </sql>
+
+    <select id="selectClaimCaseCheckRuleList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRule" resultMap="ClaimCaseCheckRuleResult">
+        <include refid="selectClaimCaseCheckRuleVo"/>
+        <where>  
+            <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
+            <if test="payConclusion != null  and payConclusion != ''"> and pay_conclusion = #{payConclusion}</if>
+            <if test="amountType != null  and amountType != ''"> and amount_type = #{amountType}</if>
+            <if test="checkAmount != null "> and check_amount = #{checkAmount}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseCheckRule" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleResult">
+        <include refid="selectClaimCaseCheckRuleVo"/>
+        <where>
+            <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
+            <if test="amountType != null  and amountType != ''"> and amount_type = #{amountType}</if>
+            <if test="checkAmount != null "> and check_amount = #{checkAmount}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckRuleDTOResult">
+        SELECT
+        check_rule_no,
+        case_type,
+        amount_type,
+        check_amount,
+        rate,
+        STATUS,
+        create_by,
+        create_time,
+        update_by,
+        update_time,
+        (select GROUP_CONCAT(pay_conclusion) from claim_case_check_rule_attr
+        where check_rule_no  = t1.check_rule_no AND status = 'Y') pay_conclusion
+        FROM
+        claim_case_check_rule t1
+        <where>
+            <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
+            <if test="amountType != null  and amountType != ''"> and amount_type = #{amountType}</if>
+            <if test="checkAmount != null "> and check_amount = #{checkAmount}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseCheckRuleMatch" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO" resultMap="ClaimCaseCheckDTOResult">
+        SELECT
+        check_rule_no,
+        case_type,
+        amount_type,
+        check_amount,
+        rate,
+        STATUS,
+        create_by,
+        create_time,
+        update_by,
+        case when update_time is not null then update_time else null end as update_time,
+        (select GROUP_CONCAT(pay_conclusion) from claim_case_check_rule_attr
+        where check_rule_no  = t1.check_rule_no and pay_conclusion = #{payConclusion})
+        FROM
+        claim_case_check_rule t1
+        <where>
+            <if test="caseType != null  and caseType != ''"> and case_type = #{caseType}</if>
+            <if test="amountType != null  and amountType != ''"> and amount_type = #{amountType}</if>
+            <if test="checkAmount != null "> and check_amount = #{checkAmount}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseCheckRuleById" parameterType="String" resultMap="ClaimCaseCheckRuleResult">
+        <include refid="selectClaimCaseCheckRuleVo"/>
+        where check_rule_no = #{checkRuleNo}
+    </select>
+        
+    <insert id="insertClaimCaseCheckRule" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRule">
+        insert into claim_case_check_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null">check_rule_no,</if>
+            <if test="caseType != null">case_type,</if>
+            <if test="payConclusion != null">pay_conclusion,</if>
+            <if test="amountType != null">amount_type,</if>
+            <if test="checkAmount != null">check_amount,</if>
+            <if test="rate != null">rate,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null">#{checkRuleNo},</if>
+            <if test="caseType != null">#{caseType},</if>
+            <if test="payConclusion != null">#{payConclusion},</if>
+            <if test="amountType != null">#{amountType},</if>
+            <if test="checkAmount != null">#{checkAmount},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <!--lihy-->
+    <insert id="insertClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckRuleDTO">
+        insert into claim_case_check_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null">check_rule_no,</if>
+            <if test="caseType != null">case_type,</if>
+            <if test="amountType != null">amount_type,</if>
+            <if test="checkAmount != null">check_amount,</if>
+            <if test="rate != null">rate,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null">#{checkRuleNo},</if>
+            <if test="caseType != null">#{caseType},</if>
+            <if test="amountType != null">#{amountType},</if>
+            <if test="checkAmount != null">#{checkAmount},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateClaimCaseCheckRule" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRule">
+        update claim_case_check_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseType != null">case_type = #{caseType},</if>
+            <if test="amountType != null">amount_type = #{amountType},</if>
+            <if test="checkAmount != null">check_amount = #{checkAmount},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where check_rule_no = #{checkRuleNo}
+    </update>
+
+    <!--lihy-->
+    <update id="updateClaimCaseCheckRuleNew" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckRuleDTO">
+        update claim_case_check_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseType != null">case_type = #{caseType},</if>
+            <if test="amountType != null">amount_type = #{amountType},</if>
+            <if test="checkAmount != null">check_amount = #{checkAmount},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where check_rule_no = #{checkRuleNo}
+    </update>
+
+
+    <delete id="deleteClaimCaseCheckRuleById" parameterType="String">
+        delete from claim_case_check_rule where check_rule_no = #{checkRuleNo}
+    </delete>
+
+    <delete id="deleteClaimCaseCheckRuleByIds" parameterType="String">
+        delete from claim_case_check_rule where check_rule_no in 
+        <foreach item="checkRuleNo" collection="array" open="(" separator="," close=")">
+            #{checkRuleNo}
+        </foreach>
+    </delete>
+    
+</mapper>

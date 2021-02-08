@@ -102,6 +102,8 @@
   export default {
     mixins: [],
     props: {
+      isSave:Boolean,
+      baseInfo:Object,
       status: String,
       sonRegisterData: Object,
       node: String,
@@ -135,6 +137,11 @@
 
         this.setInfo()
       },
+      baseInfo: function (newValue) {
+        if (newValue.claimtype === '01'){
+          this.collapsed=false
+        }
+      },
       fixInfo: function (newVal) {
         this.copyFixInfo = newVal
       },
@@ -167,7 +174,7 @@
         if (value) {
           let str = value.replace(/\s/g, "")
           if (!validEmail(str)) {
-            callback(new Error('输入格式不正确'))
+            callback(new Error('邮箱格式不合法，请检查'))
           } else {
             callback()
           }
@@ -182,7 +189,7 @@
           if (value !== '' && value !== null) {
             const str = value.replace(/\s/g, '')
             if (!validPhone(str)) {
-              callback(new Error('输入格式不正确'))
+              callback(new Error('手机录入不合法，请检查'))
             } else {
               callback()
             }
@@ -196,7 +203,7 @@
           let str = value.replace(/\s/g, "")
           if (!validPhone(str)) {
             if (!/\d{3}-\d{8}|\d{4}-\d{7,8}/.test(str)) {
-              callback(new Error('输入格式不正确'))
+              callback(new Error('电话录入不合法，请检查'))
             } else {
               callback()
             }
@@ -298,41 +305,47 @@
 
     methods: {
       saveHandle() {
-        this.$refs.baseForm.validate((valid) => {
-          if (valid) {
-            const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
-            if (this.region) {
-              subFormSearch.rgtProvince = this.region[0]
-              subFormSearch.rgtDistrict = this.region[2]
-              subFormSearch.rgtCity = this.region[1]
-            }
-            subFormSearch.rptNo = this.copyFixInfo.rptNo
-            addRegister(subFormSearch).then(res => {
-              if (res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.isApplicantSave = true
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+        if (this.isSave){
+          this.$refs.baseForm.validate((valid) => {
+            if (valid) {
+              const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
+              if (this.region) {
+                subFormSearch.rgtProvince = this.region[0]
+                subFormSearch.rgtDistrict = this.region[2]
+                subFormSearch.rgtCity = this.region[1]
               }
-            })
+              subFormSearch.rptNo = this.copyFixInfo.rptNo
+              addRegister(subFormSearch).then(res => {
+                if (res.code === 200) {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.isApplicantSave = true
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+              })
 
 
-          } else {
-            this.$message.warning('必录项未必录!')
-          }
+            } else {
+              this.$message.warning('必录项未必录!')
+            }
 
 
-        })
+          })
+        }else {
+          return this.$message.warning(
+            "被保险人信息未保存，请保存后重新操作！"
+          )
+        }
       },
 
 

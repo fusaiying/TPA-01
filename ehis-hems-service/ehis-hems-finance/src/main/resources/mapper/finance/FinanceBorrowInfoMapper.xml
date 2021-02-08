@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.FinanceBorrowInfoMapper">
     
-    <resultMap type="FinanceBorrowInfo" id="FinanceBorrowInfoResult">
+    <resultMap type="com.paic.ehis.finance.domain.FinanceBorrowInfo" id="FinanceBorrowInfoResult">
         <result property="borrowId"    column="borrow_id"    />
         <result property="payBatchNo"    column="pay_batch_no"    />
         <result property="batchNo"    column="batch_no"    />
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select borrow_id, pay_batch_no, batch_no, rpt_no, borrow_amount, status, create_by, create_time, update_by, update_time, dept_code from finance_borrow_info
     </sql>
 
-    <select id="selectFinanceBorrowInfoList" parameterType="FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
+    <select id="selectFinanceBorrowInfoList" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
         <include refid="selectFinanceBorrowInfoVo"/>
         <where>  
             <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where borrow_id = #{borrowId}
     </select>
         
-    <insert id="insertFinanceBorrowInfo" parameterType="FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
+    <insert id="insertFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
         insert into finance_borrow_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no,</if>
@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateFinanceBorrowInfo" parameterType="FinanceBorrowInfo">
+    <update id="updateFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
         update finance_borrow_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no = #{payBatchNo},</if>
@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="FinanceBorrowInfo">
+    <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
         <include refid="selectFinanceBorrowInfoVo"/>
         where rpt_no = #{rptNo} and status = 'Y'
     </select>

@@ -52,7 +52,7 @@ public interface IClaimCaseService
      * @param claimCaseDTO 案件信息
      * @return 案件信息 集合
      */
-    public List<ProcessingCaseVo> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO);
+    public List<ClaimCase> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO);
 
     /**
      * 新增案件信息 

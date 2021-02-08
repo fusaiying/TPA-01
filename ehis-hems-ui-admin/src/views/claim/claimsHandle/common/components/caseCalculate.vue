@@ -453,16 +453,16 @@
                 sums[index] = this.calSummaryData.sumUnableAmount;//不合理金额
                 break;
               case "deduUsed":
-                sums[index] = this.calSummaryData.sumSelfAmount;//先期给付
+                sums[index] = this.calSummaryData.sumDeduUsed;//免赔额
                 break;
               case "calAmount":
-                sums[index] =this.calSummaryData.sumPartSelfAmount;//理算金额
+                sums[index] =this.calSummaryData.calAmount;//理算金额
                 break;
               case "payAmount":
-                sums[index] = this.calSummaryData.sumAdvancePayment;//自费金额
+                sums[index] = this.calSummaryData.sumPayAmount;//赔付金额
                 break;
               case "refusedAmount":
-                sums[index] = this.calSummaryData.calAmount;//部分自费金额
+                sums[index] = this.calSummaryData.sumRefusedAmount;//拒赔金额
                 break;
               default:
                 break;

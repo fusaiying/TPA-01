@@ -45,4 +45,13 @@ public class ClaimCaseFilingInformationVO extends BaseEntity {
 
     /** 批次号 */
     private String batchNo;
+
+    /** 报案号起 */
+    @Excel(name = "报案号起")
+    private String rptStartNo;
+
+    /** 报案号止 */
+    @Excel(name = "报案号止")
+    private String rptEndNo;
+
 }

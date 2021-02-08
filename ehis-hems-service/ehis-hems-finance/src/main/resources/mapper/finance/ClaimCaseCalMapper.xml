@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.ClaimCaseCalMapper">
     
-    <resultMap type="ClaimCaseCal" id="ClaimCaseCalResult">
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCaseCal" id="ClaimCaseCalResult">
         <result property="calId"    column="cal_id"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="billCurrency"    column="bill_currency"    />
@@ -24,6 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
+
+    <sql id="selectClaimCaseCalVo">
+        select cal_id, rpt_no, bill_currency, cal_amount, pay_amount, refused_amount, debt_amount, exchange_rate, pay_amount_foreign, pay_conclusion, refused_reason, remark, claim_check, status, create_by, create_time, update_by, update_time from claim_case_cal
+    </sql>
+
 
     <select id="selectClaimCaseCalByRptNo" parameterType="String" resultMap="ClaimCaseCalResult">
         <include refid="selectClaimCaseCalVo"/>

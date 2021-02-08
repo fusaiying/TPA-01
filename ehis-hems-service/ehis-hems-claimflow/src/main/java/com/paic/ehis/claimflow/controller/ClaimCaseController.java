@@ -8,6 +8,7 @@ import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.IClaimCaseProblemService;
 import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -101,8 +102,8 @@ public class ClaimCaseController extends BaseController
         TableSupport.setSort("desc");
         TableSupport.setOrderByColumn("rpt_no");
         startSortPage();
-        List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        return getDataTable(list);
+        List<ClaimCase> claimCases = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        return getDataTable(claimCases);
     }
 
 
@@ -154,8 +155,9 @@ public class ClaimCaseController extends BaseController
     @PostMapping("/exportSuspensionList")
     public void exportSuspensionList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException
     {
-        List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        ExcelUtil<ProcessingCaseVo> util = new ExcelUtil<ProcessingCaseVo>(ProcessingCaseVo.class);
+        //List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        List<ClaimCase> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
         util.exportExcel(response, list, "悬挂中受理案件");
     }
 
@@ -328,6 +330,10 @@ public class ClaimCaseController extends BaseController
     @GetMapping("/listConditionsForTheAdjustmentUnder")
     public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO)
     {
+//        if (auditWorkPoolDTO.getOrderByColumn()!=null && auditWorkPoolDTO.getOrderByColumn()!=""){//要按要求排序
+//
+//        }
+//        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage();
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVoS);
@@ -405,6 +411,7 @@ public class ClaimCaseController extends BaseController
     @PostMapping("/caseCheck")
     public TableDataInfo caseCheck(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO)
     {
+        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVOS);
@@ -424,11 +431,12 @@ public class ClaimCaseController extends BaseController
         util.exportExcel(response, conditionsForTheAdjustmentVOS, "处理中审核案件");
     }
 
-    //审核工作池接口-个人池已处理
+    //抽检工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
     @PostMapping("/listConditionsForTheAdjustmentOverNew")
     public TableDataInfo listConditionsForTheAdjustmentOverNew(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO)
     {
+        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVOS);

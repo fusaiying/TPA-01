@@ -11,7 +11,6 @@ import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param acceptDTO
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/complaint/selectComplaintAcceptVoList")
     public TableDataInfo selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         startPage();
@@ -44,7 +43,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param acceptDTO
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/complaint/selectComplaintAcceptVoListOne")
     public TableDataInfo selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         startPage();
@@ -57,7 +56,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param complaintAcceptVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
     public AjaxResult serviceAdd(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)

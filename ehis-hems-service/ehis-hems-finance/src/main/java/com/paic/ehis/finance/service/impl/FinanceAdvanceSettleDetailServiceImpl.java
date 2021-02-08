@@ -1,12 +1,18 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.finance.mapper.FinanceAdvanceSettleTaskMapper;
+import com.paic.ehis.finance.mapper.FinanceSettleRecordMapper;
+import com.paic.ehis.finance.mapper.SysUserMapper;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
 import com.paic.ehis.finance.mapper.FinanceAdvanceSettleDetailMapper;
-import com.paic.ehis.finance.mapper.SysUserMapper;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +33,14 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     @Autowired
     private FinanceAdvanceSettleDetailMapper financeAdvanceSettleDetailMapper;
 
-   /* @Autowired
+    @Autowired
     SysUserMapper sysUserMapper;
-*/
+
+    @Autowired
+    FinanceAdvanceSettleTaskMapper financeAdvanceSettleTaskMapper;
+
+    @Autowired
+    FinanceSettleRecordMapper financeSettleRecordMapper;
     /**
      * 查询代垫费结算明细
      * 
@@ -153,16 +164,18 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         return financeAdvanceSettleDetailMapper.updateSettleStatus2(settleTaskNos);
     }
 
-/*    *//**发起垫付款任务*//*
+
+    /**发起垫付款任务*/
     @Override
     public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
+        ArrayList<FinanceAdvanceSettleVO> financeAdvanceSettleVOS=new ArrayList<>();
         FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
         //垫付款服务费及明细的新增
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
-        //List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(financeTpaSettleDetail);
+        FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
         //获取用户的所属机构,设置当前登录机构
-        Long userId = SecurityUtils.getLoginUser().getUserId();
+        Long userId = SecurityUtils.getUserId();
         SysUser sysUser = sysUserMapper.selectUserById(userId);
         financeAdvanceSettleTask.setSettleStatus("01");
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());
@@ -180,7 +193,47 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
         financeAdvanceSettleDetail.setUpdateBy(sysUser.getUserName());
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
-        return ;
-    }*/
+
+        financeSettleRecord.setTaskType("02");
+        financeSettleRecord.setOperator("");
+        financeSettleRecord.setHistoryFlag("N");
+        financeSettleRecord.setOperation("01");
+        financeSettleRecord.setStatus("Y");
+        financeSettleRecord.setDeptCode( sysUser.getDeptId().toString());
+        financeSettleRecord.setCreateBy(sysUser.getUserName());
+        financeSettleRecord.setCreateTime(DateUtils.getNowDate());
+        financeSettleRecord.setUpdateBy(sysUser.getUserName());
+        financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
+
+        String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
+        if (StringUtils.isNotNull(financeAdvanceSettleDTO.getSettleTaskNo())) {
+            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
+            //设值 结算表的结算起期
+            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)){
+                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
+                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
+                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
+                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
+            }
+            financeAdvanceSettleTask.setSettleTaskNo(taskNo);
+            financeAdvanceSettleTaskMapper.insertFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+            financeSettleRecord.setSettleTaskNo(taskNo);
+            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
+        }else{
+            List<FinanceAdvanceSettleDetail> financeAdvanceSettleDetails = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
+            //设值 结算表的结算起期
+            if (StringUtils.isNotEmpty(financeAdvanceSettleDetails)){
+                FinanceAdvanceSettleTask advanceSettleTask = new FinanceAdvanceSettleTask();
+                advanceSettleTask.setSettleTaskNo(financeAdvanceSettleDetails.get(0).getSettleTaskNo());
+                List<FinanceAdvanceSettleTask> financeAdvanceSettleTasks = financeAdvanceSettleTaskMapper.selectFinanceAdvanceSettleTaskList(financeAdvanceSettleTask);
+                financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
+            }
+            financeAdvanceSettleTask.setSettleTaskNo(taskNo);
+            financeAdvanceSettleTaskMapper.insertFinanceAdvanceSettleTask(financeAdvanceSettleTask);
+            financeSettleRecord.setSettleTaskNo(taskNo);
+            financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);
+            financeAdvanceSettleVOS.add(financeAdvanceSettleVO);
+        } return financeAdvanceSettleVOS;
+    }
 
 }

@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function listAndPublicPool(data) {
   return request({
     url: '/claimcal/product/listAndPublicPool',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -13,8 +13,8 @@ export function listAndPublicPool(data) {
 export function pendingAndPersonPool(data) {
   return request({
     url: '/claimcal/product/listAndPersonalPoolUnfinished',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -22,8 +22,8 @@ export function pendingAndPersonPool(data) {
 export function completedAndPersonPool(data) {
   return request({
     url: '/claimcal/product/listAndPersonalPoolFinish',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -40,8 +40,8 @@ export function acquire(data) {
 export function searchPublicPool(query) {
   return request({
     url: '/claimcal/product/publicList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -50,8 +50,8 @@ export function searchPublicPool(query) {
 export function searchProcessedList(query) {
   return request({
     url: '/claimcal/product/processedList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -60,8 +60,8 @@ export function searchProcessedList(query) {
 export function searchUntreatedList(query) {
   return request({
     url: '/claimcal/product/untreatedList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -95,8 +95,8 @@ export function listPlan(query) {
 export function selectProductQuery(data) {
   return request({
     url: '/claimcal/product/selectProductQuery',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 // 查询责任明细信息 列表 (责任明细)
@@ -112,8 +112,8 @@ export function listDetail(query) {
 export function selectClaimProductList(data) {
   return request({
     url: '/claimcal/product/selectClaimProductList',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -187,8 +187,8 @@ export function checkSave(riskCode) {
 export function getListNew(data) {
   return request({
     url:'provider/org/getListNew',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 
@@ -196,9 +196,12 @@ export function getListNew(data) {
 export function selectSysUser(data) {
   return request({
     url: '/claimcal/product/selectSysUser',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
+
+
+
 
 

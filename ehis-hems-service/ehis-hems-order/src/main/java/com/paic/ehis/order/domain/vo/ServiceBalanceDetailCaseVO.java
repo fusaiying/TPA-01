@@ -49,7 +49,7 @@ public class ServiceBalanceDetailCaseVO implements Serializable
     private String custName;
 
     /** 性别 */
-    @Excel(name = "性别")
+    @Excel(name = "性别", readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
     /** 证件号码 */

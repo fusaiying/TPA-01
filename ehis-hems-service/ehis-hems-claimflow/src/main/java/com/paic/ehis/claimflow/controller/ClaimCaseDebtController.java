@@ -3,7 +3,7 @@ package com.paic.ehis.claimflow.controller;
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
 import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
-import com.paic.ehis.claimflow.service.IClaimCaseDebtReceiptService;
+//import com.paic.ehis.claimflow.service.IClaimCaseDebtReceiptService;
 import com.paic.ehis.claimflow.service.IClaimCaseDebtService;
 import com.paic.ehis.claimflow.utils.ObjectNullUtil;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
@@ -12,7 +12,6 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +32,8 @@ public class ClaimCaseDebtController extends BaseController
 {
     @Autowired
     private IClaimCaseDebtService claimCaseDebtService;
-    @Autowired
-    private IClaimCaseDebtReceiptService claimCaseDebtReceiptService;
+//    @Autowired
+//    private IClaimCaseDebtReceiptService claimCaseDebtReceiptService;
 
     /**
      * 查询案件追讨信息列表

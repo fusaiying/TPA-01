@@ -3,7 +3,7 @@ package com.paic.ehis.claimmgt.service;
 
 import com.paic.ehis.claimmgt.domain.vo.DeptVo1;
 import com.paic.ehis.system.api.domain.SysDept;
-import com.paic.ehis.system.domain.vo.TreeSelect;
+
 
 import java.util.List;
 
@@ -30,13 +30,13 @@ public interface ISysDeptService
      */
     public List<SysDept> buildDeptTree(List<SysDept> depts);
 
-    /**
-     * 构建前端所需要下拉树结构
-     * 
-     * @param depts 部门列表
-     * @return 下拉树结构列表
-     */
-    public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts);
+//    /**
+//     * 构建前端所需要下拉树结构
+//     *
+//     * @param depts 部门列表
+//     * @return 下拉树结构列表
+//     */
+//    public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts);
 
     /**
      * 根据角色ID查询部门树信息

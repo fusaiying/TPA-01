@@ -78,7 +78,7 @@ public interface IFinanceAdvanceSettleDetailService
     /**核销按钮将结算状态由待核销改为已结算*/
     public int updateSettleStatus2(String[] settleTaskNos);
 
-   /* *//**发起垫付款任务*//*
+   /**发起垫付款任务*/
     public List<FinanceAdvanceSettleVO> InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO);
-*/
+
 }

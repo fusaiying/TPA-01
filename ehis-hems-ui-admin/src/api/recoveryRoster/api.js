@@ -4,7 +4,7 @@ import request from '@/utils/request'
 
 export function listInfo(query) {
   return request({
-    url: '/system/whitelist/list',
+    url: '/claimflow/whitelist/list',
     method: 'get',
     params: query
   })
@@ -13,7 +13,7 @@ export function listInfo(query) {
 // 新增/修改
 export function editData(data) {
   return request({
-    url: '/system/whitelist/add',
+    url: '/claimflow/whitelist/add',
     method: 'post',
     data
   })

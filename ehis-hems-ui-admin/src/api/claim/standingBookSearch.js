@@ -28,7 +28,7 @@ export function editStanding(data) {
 //根据部门得到操作人
 export function getUser(data) {
   return request({
-    url: '/system/user/getusername',
+    url: '/claimmgt/user/getusername',
     method: 'get',
     params:data
   })
@@ -36,7 +36,7 @@ export function getUser(data) {
 //获取部门
 export function getDept(parentId) {
   return request({
-    url: '/system/dept/getdepts',
+    url: '/claimmgt/dept/getdepts',
     method: 'get',
     params:parentId
   })
@@ -44,7 +44,7 @@ export function getDept(parentId) {
 //根据部门Id获取部门
 export function getDeptById(deptId) {
   return request({
-    url: 'system/dept/'+deptId,
+    url: 'claimmgt/dept/'+deptId,
     method: 'get',
   })
 }

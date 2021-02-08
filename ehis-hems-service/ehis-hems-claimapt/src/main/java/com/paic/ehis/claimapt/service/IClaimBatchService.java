@@ -50,24 +50,24 @@ public interface IClaimBatchService
     /**
      * 查询直结复核理赔批次公共池 列表
      *
-     * @param batchRecordDTO 理赔批次
+     * @param batchDTO 理赔批次
      * @return 交单复核理赔批次 集合
      */
-    public List<BatchVo> selectReviewPublicList(BatchRecordDTO batchRecordDTO);
+    public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO);
     /**
      * 查询直结复核理赔批次待处理个人池 列表
      *
      * @param
      * @return 交单复核理赔批次 集合
      */
-    public List<BatchVo> selectUntreatedPersonalList();
+    public List<BatchVo> selectUntreatedPersonalList(BatchDTO batchDTO);
     /**
      * 查询直结复核理赔批次已处理个人池 列表
      *
      * @param
      * @return 交单复核理赔批次 集合
      */
-    public List<BatchVo> selectProcessedPersonalList();
+    public List<BatchVo> selectProcessedPersonalList(BatchRecordDTO batchRecordDTO);
 
     /**
      * 新增理赔批次 

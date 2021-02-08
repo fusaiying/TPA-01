@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询base_balance_info(服务结算基本信息)列表
+// 查询service_balance_info(服务结算基本信息)列表
 export function listBalance2(query) {
   return request({
     url: '/order/balance/list2',
@@ -9,7 +9,7 @@ export function listBalance2(query) {
   })
 }
 
-// 删除base_balance_info(服务结算基本信息)
+// 删除service_balance_info(服务结算基本信息)
 export function updateBalance(data) {
   return request({
     url: '/order/balance/update',
@@ -18,7 +18,7 @@ export function updateBalance(data) {
   })
 }
 
-// 新增base_balance_info(服务结算基本信息)-编辑
+// 新增service_balance_info(服务结算基本信息)-编辑
 export function addBalance(data) {
   return request({
     url: '/order/balance',
@@ -63,7 +63,7 @@ export function listBalanceExamLog(query) {
   })
 }
 
-// 查询base_balance_invoice(服务结算发票信息)列表
+// 查询service_balance_invoice(服务结算发票信息)列表
 export function listBalanceInvoice(query) {
   return request({
     url: '/order/balanceInvoice/list',
@@ -72,7 +72,7 @@ export function listBalanceInvoice(query) {
   })
 }
 
-// 新增base_balance_invoice(服务结算发票信息)-编辑
+// 新增service_balance_invoice(服务结算发票信息)-编辑
 export function addBalanceInvoice(data) {
   return request({
     url: '/order/balanceInvoice',
@@ -81,10 +81,28 @@ export function addBalanceInvoice(data) {
   })
 }
 
-// 修改/删除base_balance_invoice(服务结算发票信息)
+// 修改/删除service_balance_invoice(服务结算发票信息)
 export function updateBalanceInvoice(data) {
   return request({
     url: '/order/balanceInvoice',
+    method: 'put',
+    data: data
+  })
+}
+
+// 查询service_balance_file_info(服务结算文件信息)列表
+export function listBalanceFile(query) {
+  return request({
+    url: '/order/balanceFile/list',
+    method: 'post',
+    data: query
+  })
+}
+
+// 修改/删除service_balance_file_info(服务结算文件信息)列表
+export function updateBalanceFile(data) {
+  return request({
+    url: '/order/balanceFile',
     method: 'put',
     data: data
   })

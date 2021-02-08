@@ -508,7 +508,6 @@
         })
         if (this.querys.status === 'show') {
           this.isSaveSub = false
-          this.isPrint = false
           this.isSaveOrSub = false
           this.isShow = true
           this.eShowFooter = true
@@ -619,6 +618,9 @@
             }).catch(res => {
             })
           }
+        }
+        if (this.querys.batchstatus==='03'){
+          this.isPrint=false
         }
       } else {
         getThisDept().then(res => {
@@ -948,7 +950,11 @@
                       showClose: true
                     })
                     this.show = true
-                    this.isPrint = false
+                    if(this.recordForm.conclusion==='01'){
+                      this.isPrint = false
+                    }else {
+                      this.isPrint = true
+                    }
                     this.eReview = true
                     this.isShow = true
                   } else {

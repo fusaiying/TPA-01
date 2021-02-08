@@ -130,7 +130,7 @@
 
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
-  import {getDeptList} from '@/api/claim/presentingReview'
+  import {getThisDept} from '@/api/claim/presentingReview'
   import {initForeignList, foreignList} from '@/api/claim/corporatePay'
   import {getHospitalInfo} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'sys_yes_no'}]
@@ -171,7 +171,11 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      getDeptList().then(res => {
+      let item={
+        pageNum: 1,
+        pageSize: 200,
+      }
+      getThisDept(item).then(res => {
         if (res != null && res.code === 200) {
           this.deptListOptions = res.data
         }

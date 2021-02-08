@@ -531,6 +531,7 @@
         //别删  通过是否有id来判断是否保存过
         if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
           this.hasInsuredId=true
+          this.$emit('emitSaveFlag')
         }
       },
       getPropData(val) {

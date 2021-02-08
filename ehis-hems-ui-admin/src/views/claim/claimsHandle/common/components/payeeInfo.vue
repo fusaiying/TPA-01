@@ -443,6 +443,9 @@
     },
     methods: {
       save() {//新增  编辑
+        this.baseForm.province = this.region[0]
+        this.baseForm.city = this.region[1]
+        this.baseForm.district = this.region[2]
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             if (this.isAddOrEdit === 'add') {
@@ -537,6 +540,7 @@
           district: undefined,
           address: undefined,
         }
+        this.region=[]
         if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
           this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
           if (this.insuredData.idEndDate==='9999-12-31'){
@@ -551,6 +555,9 @@
         if (status === 'edit') {
           this.isAddOrEdit = 'edit'
           this.baseForm = row
+          this.region[0]=row.province
+          this.region[1]=row.city
+          this.region[2]=row.district
           if (row.idEndDate === '9999-12-31') {
             this.baseForm.checked = true
           }

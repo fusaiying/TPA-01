@@ -1413,7 +1413,7 @@
       this.getDicts("contract_limit_type").then(response => {
         this.contractLimitTypes = response.data;
       });
-      this.getDicts("currency").then(response => {
+      this.getDicts("claim_currency").then(response => {
          this.currencys = response.data;
       });
       this.getDicts("clearing_form").then(response => {

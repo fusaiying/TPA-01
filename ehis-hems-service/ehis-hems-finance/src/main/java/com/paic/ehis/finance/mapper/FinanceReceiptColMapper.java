@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.mapper;
 
 
+import com.paic.ehis.finance.domain.FinanceCollectionInfo;
 import com.paic.ehis.finance.domain.FinanceReceiptCol;
 
 import java.util.List;
@@ -28,6 +29,14 @@ public interface FinanceReceiptColMapper
      * @return 收款核销集合
      */
     public List<FinanceReceiptCol> selectFinanceReceiptColList(FinanceReceiptCol financeReceiptCol);
+
+    /**
+     * 查询收款核销列表
+     *
+     * @param financeReceiptCol 收款核销
+     * @return 收款核销集合
+     */
+    public List<FinanceCollectionInfo> selectTpaTaskReceiptColList(FinanceReceiptCol financeReceiptCol);
 
     /**
      * 新增收款核销

@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
+
+import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
@@ -41,6 +43,11 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public List<CollaborativeFrom> selectCollaborativeFromList(CollaborativeFrom collaborativeFrom)
     {
         return collaborativeFromMapper.selectCollaborativeFromList(collaborativeFrom);
+    }
+
+    @Override
+    public List<CollaborativeFrom> selectCollaborativeFromListNew(ConsultationDTO consultationDTO) {
+        return collaborativeFromMapper.selectCollaborativeFromListNew(consultationDTO);
     }
 
     /**

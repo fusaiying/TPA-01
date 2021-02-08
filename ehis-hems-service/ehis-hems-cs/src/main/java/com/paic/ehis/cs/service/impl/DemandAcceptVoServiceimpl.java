@@ -421,5 +421,17 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 
+    /**
+     * 协办工作池查询
+     * @param acceptDTO
+     * @return
+     */
+    @Override
+    public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO) {
+
+
+        return demandAcceptVoMapper.selectAssist(acceptDTO);
+    }
+
 
 }

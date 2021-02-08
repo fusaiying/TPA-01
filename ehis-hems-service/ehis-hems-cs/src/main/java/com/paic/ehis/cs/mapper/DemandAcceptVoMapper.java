@@ -15,11 +15,25 @@ public interface DemandAcceptVoMapper {
 
     public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
 
+    /**
+     * 查询协办工作池
+     * @param acceptDTO
+     * @return
+     */
+    public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO);
+
     public DemandAcceptVo selectDemandAcceptVoById(String workOrderNo);
 
     public int updateStatus(String workOrderNo);
 
     public int updateCancelStatus(String workOrderNo);
+
+    /**
+     * 修改为协办状态
+     * @param workOrderNo
+     * @return
+     */
+    public int updateTeamwork(String workOrderNo);
 
     public int updateStatusM(String[] workOrderNos);
 

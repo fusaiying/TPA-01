@@ -3,6 +3,7 @@ package com.paic.ehis.cs.service;
 import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
 /**
  * 协办信息 Service接口
@@ -64,8 +65,8 @@ public interface ICollaborativeFromService
 
     /**
      * 增加协办信息
-     * @param collaborativeFrom
+     * @param demandAcceptVo
      * @return
      */
-    int insertTeamwork(CollaborativeFrom collaborativeFrom);
+    int insertTeamwork(DemandAcceptVo demandAcceptVo);
 }

@@ -3,6 +3,7 @@ package com.paic.ehis.claimmgt.domain;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-01-22
  */
+@Data
 public class ClaimUserTakeOn extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -26,6 +28,8 @@ public class ClaimUserTakeOn extends BaseEntity
     /** 承接用户 */
     @Excel(name = "承接用户")
     private String takeOnUserId;
+
+    private String userName;
 
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")

@@ -302,7 +302,7 @@
 
 <style scoped>
   .item-width {
-    width: 200px;
+    width: 220px;
   }
 
   /*element原有样式修改*/

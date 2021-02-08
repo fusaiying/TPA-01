@@ -279,6 +279,7 @@
           this.searchForm.receiveDate = [],
           this.searchForm.receiveStartDate = '',
           this.searchForm.receiveEndDate = '',
+          this.searchForm.organcode = undefined,
           this.searchForm.createBy = ''//操作人
       },
       search(val) {
@@ -432,7 +433,7 @@
 
 <style scoped>
   .item-width {
-    width: 200px;
+    width: 220px;
   }
 
   /*element原有样式修改*/

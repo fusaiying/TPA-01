@@ -63,6 +63,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             PolicyDTO policyDTO = new PolicyDTO();
             policyDTO.setBirthday(claimCaseInsured1.getBirthday());
             policyDTO.setIdNo(claimCaseInsured1.getIdNo());
+            policyDTO.setRptNo(rptNo);
             policyDTO.setIdType(claimCaseInsured1.getIdType());
             policyDTO.setInsuredNo(claimCaseInsured1.getInsuredNo());
             policyDTO.setName(claimCaseInsured1.getName());
@@ -105,8 +106,8 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                     }
                     l.add(policyVo1);
                 }
+                claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
             }
-            claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
         }
         return claimCaseInsureAndPoliyVo;
     }

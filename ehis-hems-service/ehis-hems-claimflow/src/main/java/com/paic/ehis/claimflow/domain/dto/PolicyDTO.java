@@ -11,6 +11,7 @@ import java.util.Date;
 public class PolicyDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private  String rptNo;
     /** 被保人客户号 */
     @Excel(name = "被保人客户号")
     private String insuredNo;

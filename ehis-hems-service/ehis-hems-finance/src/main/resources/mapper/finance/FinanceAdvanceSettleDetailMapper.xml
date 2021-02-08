@@ -160,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
         <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
         <if test="settleEndDate != null "> and settle_end_date = #{settleEndDate}</if>
+        <if test="settleStartDate != null "> and settle_start_date = #{settleStartDate}</if>
         <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
         <if test="settleStatus != null  and settleStatus != ''"> and settle_status = #{settleStatus}</if>
         <if test="batchTotal != null  and batchTotal != ''"> and batchtotal = #{batchTotal}</if>

@@ -14,7 +14,7 @@ import com.paic.ehis.finance.utils.ObjectNullUtil;
 import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
-import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.finance.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

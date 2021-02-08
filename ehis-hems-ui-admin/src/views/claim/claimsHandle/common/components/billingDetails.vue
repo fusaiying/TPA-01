@@ -944,7 +944,7 @@
             this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
 
             this.costForm.costData = res.data.billDetail
-            if (this.baseForm.icdCodes.length === 0) {
+            if (this.baseForm.icdCodes===null || this.baseForm.icdCodes.length === 0) {
               this.baseForm.icdCodes = [{
                 icdCode: ''
               }]

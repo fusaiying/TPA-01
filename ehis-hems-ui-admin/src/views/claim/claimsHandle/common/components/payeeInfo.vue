@@ -4,7 +4,7 @@
       <div style="width: 100%;cursor: pointer;">
         <span style="font-size:16px;color:black">领款人信息</span>
         <div style="float: right;">
-          <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview')" type="primary" size="mini"
+          <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview') && baseInfo.claimtype==='02'" type="primary" size="mini"
                      @click="addOrEdit('add')">新增
           </el-button>
         </div>

@@ -17,8 +17,8 @@
     <el-table-column key="4" align="center" prop="name" label="被保人姓名" min-width="120" show-overflow-tooltip/>
     <el-table-column key="5" align="center" prop="companyName" label="出单公司" min-width="120" show-overflow-tooltip/>
     <el-table-column key="6" align="center" prop="policyManageCom" label="承保机构" min-width="120" show-overflow-tooltip/>
-    <el-table-column key="7" v-if="activeName==='01'" align="center" prop="monitorAging" label="停留时长" min-width="120" show-overflow-tooltip/>
-    <el-table-column key="8" v-if="activeName==='01'" align="center" prop="stayTime" label="监控时效" min-width="120" show-overflow-tooltip/>
+    <el-table-column key="7" v-if="activeName==='01'" align="center" prop="stayTime" label="停留时长" min-width="120" show-overflow-tooltip/>
+    <el-table-column key="8" v-if="activeName==='01'" align="center" prop="monitorAging" label="监控时效" min-width="120" show-overflow-tooltip/>
     <el-table-column key="9" align="center" prop="investigation" label="是否调查" min-width="120" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel(sys_yes_noOptions, scope.row.investigation)}}</span>

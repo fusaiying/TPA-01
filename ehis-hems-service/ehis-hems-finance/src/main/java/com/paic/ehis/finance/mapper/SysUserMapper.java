@@ -1,6 +1,6 @@
 package com.paic.ehis.finance.mapper;
 
-import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.finance.domain.SysUser;
 
 import java.util.List;
 

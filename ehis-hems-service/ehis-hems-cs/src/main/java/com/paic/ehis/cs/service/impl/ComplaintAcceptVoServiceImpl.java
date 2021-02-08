@@ -40,6 +40,27 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     public List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         return complaintAcceptVoMapper.selectComplaintAcceptVoListOne(acceptDTO);
     }
+
+    @Override
+    public ComplaintAcceptVo selectComplaintAcceptVo(String workOrderNo) {
+        ComplaintAcceptVo complaintAcceptVo=complaintAcceptVoMapper.selectComplaintAcceptVo(workOrderNo);
+        String sourceName="ComplaintAcceptVo";
+        String targetTableName="accept_detail_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        complaintAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId()));
+        complaintAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId()));
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+            complaintAcceptVo= (ComplaintAcceptVo) voUtils.fromVoToVo(complaintAcceptVo,map,acceptDetailInfo);
+        }
+        return complaintAcceptVo;
+    }
+
     /**
      * 投诉新增页面
      * @param complaintAcceptVo

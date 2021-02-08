@@ -221,6 +221,24 @@ and a.insured_no=c.person_id
   and a.work_order_no=#{workOrderNo}
     </select>
 
+    <select id="selectDemandAcceptVo" parameterType="String" resultMap="DemandAcceptVoResult">
+SELECT
+	a.work_order_no,
+	a.call_center_id,
+	a.call_person_id,
+	a.call_relation_by,
+	a.contacts_person_id,
+	a.contacts_relation_by,
+	a.email,
+	a.organ_code,
+	a.content,
+	a.channel_code,
+	a.priority_level
+FROM
+	accept_detail_info a
+	where a.work_order_no=#{workOrderNo}
+    </select>
+
     <update id="updateStatus" parameterType="String" >
          update work_order_accept set status = '02'
         where status='01'and work_order_no = #{workOrderNo}

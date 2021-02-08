@@ -15,6 +15,8 @@ public interface DemandAcceptVoMapper {
 
     public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
 
+    public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);
+
     /**
      * 查询协办工作池
      * @param acceptDTO

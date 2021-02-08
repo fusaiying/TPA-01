@@ -39,6 +39,13 @@ public class CustomServiceComplaintController extends BaseController {
         List<DemandAcceptVo> list = iComplaintAcceptVoService.selectComplaintAcceptVoList(acceptDTO);
         return getDataTable(list);
     }
+
+    @GetMapping("/accept")
+    public AjaxResult selectComplaintAcceptVo(@RequestBody String workOrderNo){
+        ComplaintAcceptVo complaintAcceptVo=iComplaintAcceptVoService.selectComplaintAcceptVo(workOrderNo);
+        return AjaxResult.success(complaintAcceptVo);
+    }
+
     /**
      * 投诉页面已处理
      * @param acceptDTO

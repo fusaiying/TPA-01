@@ -78,6 +78,26 @@
         </where>
     </select>
 
+    <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
+SELECT
+	a.work_order_no,
+	a.channel_code,
+	a.call_center_id,
+	a.contacts_person_id,
+	a.call_person_id,
+	a.priority_level,
+	a.email,
+	a.organ_code,
+	a.complaint_person_id,
+	b.insured_no
+FROM
+	accept_detail_info a,
+	work_order_accept b
+WHERE
+	a.work_order_no = b.work_order_no and a.work_order_no= #{workOrderNo}
+    </select>
+
+
     <insert id="insertWorkOrderAccept" parameterType="WorkOrderAccept">
         insert into work_order_accept
         <trim prefix="(" suffix=")" suffixOverrides=",">

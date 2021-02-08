@@ -10,6 +10,8 @@ public interface IComplaintAcceptVoService {
     List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
 
     List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
+
+    public ComplaintAcceptVo selectComplaintAcceptVo(String workOrderNo);
     /**
      * 投诉新增页面
      * @param complaintAcceptVo

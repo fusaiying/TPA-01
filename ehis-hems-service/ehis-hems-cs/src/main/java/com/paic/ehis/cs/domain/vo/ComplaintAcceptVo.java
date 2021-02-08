@@ -125,8 +125,8 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     /** 有无附件*/
     private String attachmentFlag;
-    /** 一级投诉分类  */
-    private  String level1;
-    /** 二级投诉分类  */
-    private  String level2;
+
+    /*是否已劝解*/
+    private  String persuasionFlag;
+
 }

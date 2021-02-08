@@ -34,9 +34,10 @@ public class CustomServiceDemandController extends BaseController {
     private IWorkHandleInfoService iWorkHandleInfoService;
     @Autowired
     private ICollaborativeFromService iCollaborativeFromService;
-
     @Autowired
     private IEditInfoService iEditInfoService;
+
+
     @GetMapping("/internal/listAndPublicPool")
     public TableDataInfo listAndPublicPool(AcceptDTO acceptDTO) {
         startPage();
@@ -50,6 +51,12 @@ public class CustomServiceDemandController extends BaseController {
         startPage();
         List<DemandAcceptVo> list = iDemandAcceptVoService.selectDemandAcceptList2(acceptDTO);
         return getDataTable(list);
+    }
+
+    @GetMapping("/accept")
+    public AjaxResult selectDemandAcceptVo(@RequestBody String workOrderNo){
+        DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);
+        return AjaxResult.success(demandAcceptVo);
     }
 
     @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")

@@ -96,6 +96,26 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     }
 
     @Override
+    public DemandAcceptVo selectDemandAcceptVo(String workOrderNo) {
+        DemandAcceptVo demandAcceptVo=demandAcceptVoMapper.selectDemandAcceptVo(workOrderNo);
+        String sourceName="DemandAcceptVo";
+        String targetTableName="accept_detail_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        demandAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId()));
+        demandAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId()));
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo.getWorkOrderNo());
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+            demandAcceptVo= (DemandAcceptVo) voUtils.fromVoToVo(demandAcceptVo,map,acceptDetailInfo);
+        }
+        return demandAcceptVo;
+    }
+
+    @Override
     public int updateStatus(String workOrderNo) {
         return demandAcceptVoMapper.updateStatus(workOrderNo);
     }

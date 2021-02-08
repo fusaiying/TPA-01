@@ -11,6 +11,8 @@ public interface IDemandAcceptVoService {
 
     public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO);
 
+    public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);
+
     public int updateStatus(String workOrderNo);
 
     public int updateStatusM(String[] workOrderNos);

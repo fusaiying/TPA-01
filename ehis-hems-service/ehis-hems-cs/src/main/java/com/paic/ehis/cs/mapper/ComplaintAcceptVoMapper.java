@@ -5,6 +5,7 @@ import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ComplaintAcceptVoMapper {
     /** 投诉主页面查询 */
     public List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO);
     public List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO);
+
+    public ComplaintAcceptVo selectComplaintAcceptVo(String workOrderNo);
 
     //插入工单表
     public int insertWorkOrderAccept(WorkOrderAccept WorkOrderAccept);

@@ -603,22 +603,58 @@
 
       //确人按钮
       confirmHandle() {
-        //if(){}
-        let propData = {
-          caseInsuredData: this.tableData[this.radio],
-          policyInfoData: this.multipleSelection
+        if(this.radio!=undefined && this.radio!=null ){
+          if(this.multipleSelection.length>0){
+            let propData = {
+              caseInsuredData: this.tableData[this.radio],
+              policyInfoData: this.multipleSelection
+            }
+            //调用被保人保存的接口
+            const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+            subFormSearch.rptNo = this.copyFixInfo.rptNo
+            let insuredInfoData = {
+              policyNos: this.multipleSelection,
+              claimCaseInsured: subFormSearch
+            }
+            addInsuredAndPolicy(insuredInfoData)
+            //关闭清空
+            this.changeDialogVisable()
+            this.$emit('getPropData', propData)
+          }
+          else {
+            this.$confirm('未选择保单，是否确认?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              let propData = {
+                caseInsuredData: this.tableData[this.radio],
+                policyInfoData: this.multipleSelection
+              }
+              //调用被保人保存的接口
+              const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+              subFormSearch.rptNo = this.copyFixInfo.rptNo
+              let insuredInfoData = {
+                policyNos: this.multipleSelection,
+                claimCaseInsured: subFormSearch
+              }
+              addInsuredAndPolicy(insuredInfoData)
+              //关闭清空
+              this.changeDialogVisable()
+              this.$emit('getPropData', propData)
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+
+          }
         }
-        //调用被保人保存的接口
-        const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
-        subFormSearch.rptNo = this.copyFixInfo.rptNo
-        let insuredInfoData = {
-          policyNos: this.multipleSelection,
-          claimCaseInsured: subFormSearch
+        else {
+          this.$message({message:'请选择一条被保人信息', type:'warning',showClose:true,center:true})
         }
-        addInsuredAndPolicy(insuredInfoData)
-        //关闭清空
-        this.changeDialogVisable()
-        this.$emit('getPropData', propData)
+
       },
 
       //查询

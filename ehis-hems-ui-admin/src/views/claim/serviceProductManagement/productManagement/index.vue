@@ -215,6 +215,7 @@ export default {
                 showClose: true
               })
               this.saveFlag=true
+              this.dialogVisable=false
             } else {
               this.$message({
                 message: '操作失败!',

@@ -12,7 +12,7 @@ import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
 import com.paic.ehis.finance.mapper.FinanceAdvanceSettleDetailMapper;
-import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.finance.domain.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

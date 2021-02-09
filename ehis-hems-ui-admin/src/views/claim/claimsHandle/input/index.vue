@@ -8,13 +8,13 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="报案号：" prop="batchNo">
-              <el-input v-model="searchForm.batchNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="报案号：" prop="rptNo">
+              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批次号：" prop="rptNo">
-              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="批次号：" prop="batchNo">
+              <el-input v-model="searchForm.batchNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">

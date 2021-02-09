@@ -65,7 +65,7 @@
               <span>{{selectDictLabel(claim_statusOptions, scope.row.caseStatus)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="companyName" label="payStatus" show-overflow-tooltip>
+          <el-table-column align="center" prop="payStatus" label="支付状态" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(case_pay_statusOptions, scope.row.payStatus)}}</span>
             </template>
@@ -294,9 +294,10 @@
       },
       listExport() {
         if (this.querys.status === 'public') {
+          alert(1)
           this.isListExport = true
           this.download('finance/pay/export', {
-            ...query
+
           }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
@@ -306,9 +307,10 @@
             })
           })
         } else if (this.querys.status === 'publicForeign') {
+          alert(2)
           this.isListExport = true
           this.download('finance/pay/exportForeign', {
-            ...query
+
           }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,

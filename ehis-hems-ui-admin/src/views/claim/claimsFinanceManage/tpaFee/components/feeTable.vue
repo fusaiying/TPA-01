@@ -12,7 +12,11 @@
     <el-table-column align="center" prop="companyCode" label="出单公司" show-overflow-tooltip/>
     <el-table-column align="center" prop="settlementType" label="结算类型" :formatter="getSettlementName" show-overflow-tooltip/>
     <el-table-column align="center" prop="serviceSettleAmount" label="结算总金额CNY" show-overflow-tooltip/>
-    <el-table-column align="center" prop="createTime" label="建立日期" show-overflow-tooltip/>
+    <el-table-column align="center" prop="createTime" label="建立日期" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span >{{ scope.row.createTime | changeDate}}</span>
+      </template>
+    </el-table-column>
     <el-table-column align="center" prop="settleEndDate" label="结算日期" show-overflow-tooltip/>
     <el-table-column align="center" prop="settleStatus" label="结算状态" :formatter="getStatusName" show-overflow-tooltip/>
     <el-table-column align="center" label="操作">
@@ -28,7 +32,16 @@
 <script>
 
 
+import moment from "moment";
+
 export default {
+  filters: {
+    changeDate: function(value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    }
+  },
   props: {
     tableData: {
       type: Array,

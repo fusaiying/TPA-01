@@ -80,12 +80,29 @@
   },
   watch: {
     fixInfo: function (newValue) {
+      console.log("detail newValue")
+      console.log(newValue)
+      console.log("detail newValue")
+
       this.fixInfoDetail = newValue;
     },
     value: function (newValue) {
       this.dialogVisable = newValue;
       if(this.dialogVisable) {
-        // this.initData();
+        this.totalNum = 0;
+        this.tableData= [];
+        let type = this.fixInfoDetail.type ;
+        // 发起结算
+        if(type == "launch") {
+          //this.initiateTaskData();
+        }
+        if(type == "show") {
+          this.initData();
+        }
+        if(type == 'confirm') {
+          this.confimInfo = true;
+          this.initData();
+        }
       }
     },
   },
@@ -100,6 +117,7 @@
   },
   data() {
     return {
+      confimInfo:false,
       loading : false,
       dialogVisable : false,
       tableData: [],
@@ -127,7 +145,7 @@
     });
   },
   created() {
-    this.initData();
+    //this.initData();
   },
   computed: {
 

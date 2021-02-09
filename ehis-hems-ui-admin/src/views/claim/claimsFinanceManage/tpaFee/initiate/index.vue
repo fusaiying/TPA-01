@@ -273,14 +273,23 @@
         this.detailDialog = true
       },
       openDialog(){
-        if(this.formSearch.companyCode == '') {
-          this.$message.info('请选择出单公司！');
+        if(this.formSearch.companyCode == ''
+          || this.formSearch.settleEndDate ==  ''
+          || this.formSearch.settlementType ==  ''
+          || this.formSearch.riskCode ==  '') {
+          this.$message.info('请录入出单公司、结算方式、险种、结算止期后发起结算！');
           return false;
         }
-        if(this.formSearch.settleDateArr ==  '') {
-          this.$message.info('请录入结算日期！');
-          return false;
-        }
+        this.fixInfo = {
+          rowData:{
+            settleTaskNo:'',
+            settlementType:this.formSearch.settlementType,
+            riskCode:this.formSearch.riskCode,
+            settleEndDate:this.formSearch.settleEndDate,
+            companyCode:this.formSearch.companyCode,
+          },
+          type:'launch',
+        },
         this.detailDialog = true;
       },
       closeDetailDialog() {

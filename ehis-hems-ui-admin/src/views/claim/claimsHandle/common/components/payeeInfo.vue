@@ -39,7 +39,7 @@
 
       </el-table-column>
       <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
-      <el-table-column prop="accNo" align="center" label="账户" show-overflow-tooltip/>
+      <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
                        label="操作" width="140" key="9">
         <template slot-scope="scope">

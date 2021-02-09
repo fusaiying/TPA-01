@@ -2,7 +2,6 @@ package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimBatch;
 import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseBill;
 import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 import com.paic.ehis.claimflow.domain.dto.HospitalInquiryCodeDTO;
 import com.paic.ehis.claimflow.service.IClaimBatchService;

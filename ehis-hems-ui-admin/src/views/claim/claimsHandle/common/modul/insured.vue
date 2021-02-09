@@ -739,6 +739,11 @@
       },
       //调用查询就诊人信息的接口
       getSelectRecogn(){
+        //
+        this.radio = undefined
+        this.expands = []
+        this.tableData=[]
+
         selectRecognizee(this.searchForm).then(res => {
           if (res != null && res.code == '200' ) {
 

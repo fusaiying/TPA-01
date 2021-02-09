@@ -1,10 +1,13 @@
 package com.paic.ehis.claimflow.controller;
 
+import com.paic.ehis.claimflow.domain.ClaimBatch;
+import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseBill;
 import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 import com.paic.ehis.claimflow.domain.dto.HospitalInquiryCodeDTO;
-import com.paic.ehis.claimflow.service.IClaimCaseBillService;
+import com.paic.ehis.claimflow.service.IClaimBatchService;
 import com.paic.ehis.claimflow.service.IClaimCasePayeeService;
+import com.paic.ehis.claimflow.service.IClaimCaseService;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -37,7 +40,10 @@ public class ClaimCasePayeeController extends BaseController {
     private GetProviderInfoService getProviderInfoService;
 
     @Autowired
-    private IClaimCaseBillService iClaimCaseBillService;
+    private IClaimBatchService claimBatchService;
+
+    @Autowired
+    private IClaimCaseService claimCaseService;
 
     /**
      * 查询案件领款人信息列表
@@ -131,6 +137,7 @@ public class ClaimCasePayeeController extends BaseController {
 
 
     //“医院”列表账户数据
+
     /**
      * 获取案件领款人信息详细信息
      */
@@ -139,9 +146,12 @@ public class ClaimCasePayeeController extends BaseController {
     public AjaxResult getInfohospitalCode(HospitalInquiryCodeDTO hospitalInquiryCodeDTO) {
         List<BaseProviderInfo> tableDataInfo =null;
         BaseProviderInfo baseProviderInfo = new BaseProviderInfo();//调用医院接口需要的实体类
-        ClaimCaseBill claimCaseBill = iClaimCaseBillService.selectClaimCaseBillListByRptNo(hospitalInquiryCodeDTO.getRptNo());//查询就诊医院编码
-        if (claimCaseBill!=null){
-            String hospitalCode = claimCaseBill.getHospitalCode();//得到就诊医院编码
+        //先查批次号
+        ClaimCase claimCase = claimCaseService.selectClaimCaseById(hospitalInquiryCodeDTO.getRptNo());
+        //批次号查医院编码
+        ClaimBatch claimBatch = claimBatchService.selectClaimBatchById(claimCase.getBatchNo());
+        if (claimBatch!=null){
+            String hospitalCode = claimBatch.getHospitalcode();//得到就诊医院编码
             baseProviderInfo.setProviderCode(hospitalCode);
             tableDataInfo = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
         }

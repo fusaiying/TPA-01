@@ -249,8 +249,8 @@
 
         params.settleTaskNo = this.formSearch.settleTaskNo;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.createTime = createTimeStrt;
-        params.endTime = createTimeEnd;
+        params.startDate = createTimeStrt;
+        params.endDate = createTimeEnd;
         params.settleStatus = this.formSearch.settleStatus;
         params.batchTotal = this.formSearch.batchTotal;
         params.companyCode = this.formSearch.companyCode;

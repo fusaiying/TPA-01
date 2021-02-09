@@ -330,37 +330,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where batch_no = #{batchno} and status='Y'
     </update>
 
-    <!--<update id="editClaimBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch">
-        update claim_batch
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="source != null and source != ''">source = #{source},</if>
-            <if test="hospitalcode != null and hospitalcode != ''">hospital_code = #{hospitalcode},</if>
-            <if test="claimtype != null and claimtype != ''">claim_type = #{claimtype},</if>
-            <if test="submitdate != null">submit_date = #{submitdate},</if>
-            <if test="casenum != null">caseload = #{casenum},</if>
-            <if test="batchtotal != null">batch_total = #{batchtotal},</if>
-            <if test="organcode != null and organcode != ''">organ_code = #{organcode},</if>
-            <if test="currency != null and currency != ''">currency = #{currency},</if>
-            <if test="conttype != null and conttype != ''">cont_type = #{conttype},</if>
-            <if test="billrecevieflag != null">bill_recevie_flag = #{billrecevieflag},</if>
-            <if test="prireason != null">pri_reason = #{prireason},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="batchstatus != null and batchstatus != ''">batch_status = #{batchstatus},</if>
-            <if test="expressnumber != null">express_number = #{expressnumber},</if>
-            <if test="receivedate != null">receive_date = #{receivedate},</if>
-            <if test="sendby != null">send_by = #{sendby},</if>
-            <if test="speccasetype != null">speccase_type = #{speccasetype},</if>
-            <if test="issuingunit != null">issuing_unit = #{issuingunit},</if>
-            <if test="contno != null">cont_no = #{contno},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-        </trim>
-        where batch_no = #{batchno} and status='Y'
-    </update>
--->
     <delete id="deleteClaimBatchById" parameterType="String">
         delete from claim_batch where batch_no = #{batchno}
     </delete>

@@ -49,6 +49,8 @@ public class TpaSettleDTO extends BaseEntity implements Serializable {
 
     private String status;
 
+    private String deptCode;
+
     public String getSettleTaskNo() {
         return settleTaskNo;
     }
@@ -127,6 +129,14 @@ public class TpaSettleDTO extends BaseEntity implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
     }
 
     @Override

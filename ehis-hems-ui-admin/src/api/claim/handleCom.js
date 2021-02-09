@@ -451,3 +451,12 @@ export function calSummary(data) {
     params: data
   })
 }
+
+//理算审核 赔付计算
+export function calculate(rptNo) {
+  return request({
+    url: 'claimcal/claim/calculate',
+    method: 'post',
+    data: rptNo
+  })
+}

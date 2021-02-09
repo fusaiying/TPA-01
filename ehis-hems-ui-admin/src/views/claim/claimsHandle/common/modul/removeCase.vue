@@ -128,24 +128,36 @@
         this.baseForm.rptNo=this.fixInfo.rptNo
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
-            removeCase(this.baseForm).then(res=>{
-              if(res!=null && res.code===200){
+            this.$confirm(`是否确定撤件?`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              removeCase(this.baseForm).then(res=>{
+                if(res!=null && res.code===200){
+                  this.$message({
+                    message: '撤件成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.changeDialogVisable()
+                }
+              }).catch(res=>{
                 this.$message({
-                  message: '撤件成功！',
-                  type: 'success',
+                  message: '撤件失败!',
+                  type: 'error',
                   center: true,
                   showClose: true
                 })
-                this.changeDialogVisable()
-              }
-            }).catch(res=>{
+              })
+            }).catch(() => {
               this.$message({
-                message: '撤件失败!',
-                type: 'error',
-                center: true,
-                showClose: true
+                type: 'info',
+                message: '已取消！'
               })
             })
+
           }else {
             if (this.baseForm.pulloutType==null || this.baseForm.pulloutType===''){
               return this.$message.warning(

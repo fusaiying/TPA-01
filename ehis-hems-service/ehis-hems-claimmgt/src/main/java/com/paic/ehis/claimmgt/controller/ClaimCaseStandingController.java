@@ -61,7 +61,7 @@ public class ClaimCaseStandingController extends BaseController
     public TableDataInfo listFirst(ClaimCaseStandingDTO claimCaseStandingDTO)
     {
         startPage();
-        List<ClaimCaseStandingVo1> list = claimCaseStandingService.selectClaimCaseStandingListNew(claimCaseStandingDTO);
+        List<ClaimCaseStandingVo1> list = claimCaseStandingService.selectClaimCaseStandingListFirst(claimCaseStandingDTO);
         return getDataTable(list);
     }
 

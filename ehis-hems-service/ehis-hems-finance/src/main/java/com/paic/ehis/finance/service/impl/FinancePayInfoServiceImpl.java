@@ -1,5 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
@@ -124,13 +126,24 @@ public class FinancePayInfoServiceImpl implements IFinancePayInfoService
                 BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
                 baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
                 //调用医院接口
-                BaseProviderInfo hospital = getProviderInfoService.selectOrgInfo(baseProviderInfo).get(0);
-                TransferfailedVo transferfailedVo=new TransferfailedVo();
-                BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
-                transferfailedVo.setPayeeBank(hospital.getAccountName());//开户行
-                transferfailedVo.setAccName(hospital.getBankName());//账户名
-                transferfailedVo.setAccNo(hospital.getBankCode());//账户号
-                transferfailedVos1.add(transferfailedVo);
+                R<List<BaseProviderInfo>>  result =  getProviderInfoService.selectOrgInfo(baseProviderInfo);
+
+                if (R.FAIL == result.getCode())
+                {
+                    throw new BaseException(result.getMsg());
+                }
+                List<BaseProviderInfo> baseProviderList = result.getData();
+
+                if(null != baseProviderList && !baseProviderList.isEmpty()) {
+                    BaseProviderInfo hospital = baseProviderList.get(0);
+                    TransferfailedVo transferfailedVo=new TransferfailedVo();
+                    BeanUtils.copyProperties(transferfailedVo1,transferfailedVo);
+                    transferfailedVo.setPayeeBank(hospital.getAccountName());//开户行
+                    transferfailedVo.setAccName(hospital.getBankName());//账户名
+                    transferfailedVo.setAccNo(hospital.getBankCode());//账户号
+                    transferfailedVos1.add(transferfailedVo);
+                }
+
             }
         return transferfailedVos1;
     }

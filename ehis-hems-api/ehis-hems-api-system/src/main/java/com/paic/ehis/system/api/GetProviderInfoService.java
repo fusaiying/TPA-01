@@ -1,5 +1,5 @@
 package com.paic.ehis.system.api;
-
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
@@ -38,7 +38,7 @@ public interface GetProviderInfoService
      * @return 结果
      */
     @PostMapping(value = "/org/selectHospitalInfo")
-    public List<BaseProviderInfo> selectOrgInfo(@RequestBody BaseProviderInfo baseProviderInfo);
+    public R<List<BaseProviderInfo>> selectOrgInfo(@RequestBody BaseProviderInfo baseProviderInfo);
 
     /**
      * 获取医院的结算信息

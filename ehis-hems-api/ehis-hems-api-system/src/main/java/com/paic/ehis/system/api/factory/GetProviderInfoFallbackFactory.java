@@ -1,5 +1,5 @@
 package com.paic.ehis.system.api.factory;
-
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.domain.BaseContractService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
@@ -33,7 +33,7 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
             }
 
             @Override
-            public List<BaseProviderInfo> selectOrgInfo(BaseProviderInfo baseProviderInfo)
+            public R<List<BaseProviderInfo>> selectOrgInfo(BaseProviderInfo baseProviderInfo)
             {
                 return null;
             }

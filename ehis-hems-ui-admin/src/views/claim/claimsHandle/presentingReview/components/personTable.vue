@@ -37,7 +37,11 @@
       </el-table-column>
       <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
       <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额"
-                       show-overflow-tooltip/>
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
       <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
         <template slot-scope="scope">

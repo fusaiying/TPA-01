@@ -47,6 +47,6 @@ export function initiateTask(query) {
   return request({
     url: '/finance/settleDetail/InitiateAdvancePaymentTask',
     method: 'get',
-    query: query
+    params: query
   })
 }

@@ -14,16 +14,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="结算日期：" prop="settleDateArr">
-              <el-date-picker  v-model="formSearch.settleDateArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            <el-form-item label="结算止期：" prop="settleEndDate">
+              <el-date-picker  v-model="formSearch.settleEndDate"  style="width:220px;"  size="mini"
+                               type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="建立日期：" prop="createTimeArr">
               <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+                       start-placeholder="开始日期" end-placeholder="结束日期"
+                       type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -39,8 +40,8 @@
 
           <el-col :span="8">
             <el-form-item label="批次总金额：" prop="batchTotal">
-              <el-select v-model="formSearch.batchTotal" clearable class="item-width" placeholder="请选择">
-              </el-select>
+              <el-input v-model="formSearch.batchTotal" class="item-width" clearable size="mini" placeholder="请输入"
+                        @keyup.native.enter="searchHandle"/>
             </el-form-item>
           </el-col>
 
@@ -114,6 +115,7 @@
   import feeDetail from "../components/feeDetail"
   import feeTable from '../components/feeTable'
   import gatheringTable from '../components/gatheringTable'
+  import moment from "moment";
 
   export default {
     components: {
@@ -131,7 +133,7 @@
         tableData: [],
         formSearch: {
           settleTaskNo: '',
-          settleDateArr: '',
+          settleEndDate: '',
           createTimeArr: '',
           settleStatus: '',
           batchTotal: '',
@@ -186,26 +188,52 @@
       },
       // 查询处理中
       initData() {
-
-        let settleDateStart = '';
-        let settleDateEnd = '';
-        let settleDateArr = this.formSearch.settleDateArr;
-        if('' != settleDateArr) {
-          settleDateStart = settleDateArr[0];
-          settleDateEnd = settleDateArr[1];
-        }
-
         let createTimeStrt = '';
         let createTimeEnd = '';
         let createTimeArr = this.formSearch.createTimeArr;
         if('' != createTimeArr) {
           createTimeStrt = createTimeArr[0];
           createTimeEnd = createTimeArr[1];
+          let entime = moment(createTimeStrt)
+          let letime = moment(createTimeEnd)
+          let dif = letime.diff(entime, 'months')
+          if(dif > 3) {
+            // 时间跨度太长，是否确认
+            this.$confirm('时间跨度太长，是否确认', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'info'
+            }).then(() => {
+              this.getData();
+            }).catch(() => {
+            })
+          } else {
+            this.getData();
+          }
+        } else {
+          this.getData();
         }
-
+      },
+      getData(){
+        let createTimeStrt = '';
+        let createTimeEnd = '';
+        let createTimeArr = this.formSearch.createTimeArr;
+        if('' != createTimeArr) {
+          createTimeStrt = createTimeArr[0] + " 00:00:00";
+          createTimeEnd = createTimeArr[1];
+        }
         const params = {};
         params.pageNum = this.pendPageInfo.page;
         params.pageSize = this.pendPageInfo.pageSize;
+
+        params.settleTaskNo = this.formSearch.settleTaskNo;
+        params.settleEndDate = this.formSearch.settleEndDate;
+        params.startDate = createTimeStrt;
+        params.endDate = createTimeEnd;
+        params.settleStatus = this.formSearch.settleStatus;
+        params.batchTotal = this.formSearch.batchTotal;
+        params.companyCode = this.formSearch.companyCode;
+
         if(this.btnSearch) {
           params.pageType = '03';
         } else {

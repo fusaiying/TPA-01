@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseStandingMapper">
-
+    
     <resultMap type="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
-        <where>
+        <where>  
             <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="claimmaterials != null  and claimmaterials != ''"> and claim_materials = #{claimmaterials}</if>
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and(b.receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
     </select>
 
-    <select id="selectCompanyName" parameterType="String" resultType="string">
+    <select id="selectCompanyName" parameterType="String" resultMap="ClaimCaseStandingVo1Result">
 SELECT
 	claim_case_policy.company_name
 FROM
@@ -103,12 +103,20 @@ FROM
 WHERE
 	claim_case_policy.rpt_no = claim_case_standing.rpt_no and claim_case_policy.rpt_no = #{rptno} and claim_case_policy.status='Y' and claim_case_standing.status='Y'
     </select>
-
+    
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status="Y"
     </select>
 
+    <select id="selectCaseStandingListByBatchNo" parameterType="string" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        <where>
+            <if test="Batchno != null  and Batchno != ''"> and batch_no = #{Batchno}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+        
     <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
         insert into claim_case_standing
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -169,7 +177,7 @@ WHERE
     </delete>
 
     <delete id="deleteClaimCaseStandingByIds" parameterType="String">
-        delete from claim_case_standing where rpt_no in
+        delete from claim_case_standing where rpt_no in 
         <foreach item="rptno" collection="array" open="(" separator="," close=")">
             #{rptno}
         </foreach>

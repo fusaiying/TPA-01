@@ -63,6 +63,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             PolicyDTO policyDTO = new PolicyDTO();
             policyDTO.setBirthday(claimCaseInsured1.getBirthday());
             policyDTO.setIdNo(claimCaseInsured1.getIdNo());
+            policyDTO.setRptNo(rptNo);
             policyDTO.setIdType(claimCaseInsured1.getIdType());
             policyDTO.setInsuredNo(claimCaseInsured1.getInsuredNo());
             policyDTO.setName(claimCaseInsured1.getName());
@@ -105,8 +106,8 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                     }
                     l.add(policyVo1);
                 }
+                claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
             }
-            claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
         }
         return claimCaseInsureAndPoliyVo;
     }
@@ -193,15 +194,16 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
         int i;
         Long relationId = null;
         List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNo(claimCaseInsured.getRptNo());//案件被保人信息表
-        if (null == claimCaseInsureds || claimCaseInsureds.size() == 0) {//为空
-            i = claimCaseInsuredMapper.insertClaimCaseInsured(claimCaseInsured);
-        } else {
+
+        if (claimCaseInsureds.size() != 0) {//为空
             for (ClaimCaseInsured claimCaseInsuredsOne : claimCaseInsureds) {//全部变为无效
                 ClaimCaseInsured claimCaseInsured1 = new ClaimCaseInsured();
                 claimCaseInsured1.setCiId(claimCaseInsuredsOne.getCiId());
                 claimCaseInsured1.setStatus("N");
                 claimCaseInsuredMapper.updateClaimCaseInsured(claimCaseInsured1);
             }
+            i = claimCaseInsuredMapper.insertClaimCaseInsured(claimCaseInsured);
+        } else {
             i = claimCaseInsuredMapper.insertClaimCaseInsured(claimCaseInsured);
         }
         for (PolicyVo policyNo : policyNos) {

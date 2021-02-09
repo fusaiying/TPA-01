@@ -92,7 +92,7 @@
         </span>
       </div>
       <div v-show="divShow">
-        <publicTable ref="publicTable" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
+        <publicTable ref="publicTables" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
         <!--分页组件-->
         <pagination
           v-show="publicTotal>0"
@@ -194,14 +194,14 @@
         this.loading = false
       })
       //获取直结复核理赔批次待处理个人池
-      getUntreatedList().then(res => {
+      getUntreatedList(this.searchForm).then(res => {
         this.backData = res.rows
         this.backTotal = res.total
       }).finally(() => {
         this.loading = false
       })
       //获取直结复核公共池获取到未处理个人池
-      getProcessedList().then(res => {
+      getProcessedList(this.searchForm).then(res => {
         this.dealData = res.rows
         this.dealTotal = res.total
       }).finally(() => {
@@ -224,8 +224,8 @@
       searchPublic() {
         //获取公共池
         let query = this.searchForm
-        query.orderByColumn = this.$refs.publicTable.prop
-        query.isAsc = this.$refs.publicTable.order
+        query.orderByColumn = this.$refs.publicTables.prop
+        query.isAsc = this.$refs.publicTables.order
         getPublicList(query).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total

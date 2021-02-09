@@ -1,12 +1,15 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+//import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
+//import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -14,6 +17,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +79,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
+   // @Autowired
+    //private ClaimCaseDistMapper claimCaseDistMapper;
+    //@Autowired
+    //private SysUserMapper sysUserMapper;
 
 
     /**
@@ -109,7 +117,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public List<ProcessingCaseVo> selectProcessingClaimCaseList(ClaimCaseDTO claimCaseDTO) {
         if (StringUtils.isEmpty(claimCaseDTO.getBatchNo()) && StringUtils.isEmpty(claimCaseDTO.getName()) && StringUtils.isEmpty(claimCaseDTO.getRptNo())) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.MONTH, calendar.get(Calendar.DAY_OF_MONTH) - 30);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
             claimCaseDTO.setUpdateTime(DateUtils.parseDate(calendar.getTime()));
         }
         claimCaseDTO.setCaseStatus("05");
@@ -163,13 +171,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 案件信息 集合
      */
     @Override
-    public List<ClaimCase> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO) {
+    public List<ProcessingCaseVo> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO) {
         claimCaseDTO.setCaseStatus("30");
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setOperator(SecurityUtils.getUsername());
         claimCaseDTO.setIsHistory("Y");
         claimCaseDTO.setOperation("05");
-        return claimCaseMapper.selectClaimCaseProcessedList(claimCaseDTO);
+        return claimCaseMapper.selectProcessingClaimCaseList(claimCaseDTO);
     }
 
     /**
@@ -252,9 +260,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         //将之前的案件流程表变为历史节点
         List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCaseProblemDTO.getRptNo());
-        if (claimCaseRecordsList.size()!=0){
-            for (ClaimCaseRecord claimCaseRecords:claimCaseRecordsList){
-            ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+        if (claimCaseRecordsList.size() != 0) {
+            for (ClaimCaseRecord claimCaseRecords : claimCaseRecordsList) {
+                ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 claimCaseRecord1.setHistoryFlag("Y");
                 claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
@@ -273,6 +281,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
+
+        List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
+        if (claimCaseProblems.size() != 0) {
+            for (ClaimCaseProblem claimCaseProblemsOne : claimCaseProblems) {
+                ClaimCaseProblem claimCaseProblem1 = new ClaimCaseProblem();
+                claimCaseProblem1.setIsHistory("Y");
+                claimCaseProblem1.setProblemId(claimCaseProblemsOne.getProblemId());
+                claimCaseProblemMapper.updateClaimCaseProblem(claimCaseProblem1);
+            }
+        }
         //生成一条案件问题件表信息
         ClaimCaseProblem claimCaseProblem = new ClaimCaseProblem();
         claimCaseProblem.setRptNo(claimCaseProblemDTO.getRptNo());//报案号
@@ -334,8 +352,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         //将之前的案件流程表变为历史节点
         List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
-        if (claimCaseRecordsList.size()!=0){
-            for (ClaimCaseRecord claimCaseRecords2:claimCaseRecordsList){
+        if (claimCaseRecordsList.size() != 0) {
+            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
@@ -351,6 +369,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
 
         Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+
+        ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+        claimCaseRecord2.setHistoryFlag("Y");
+        claimCaseRecord2.setRecordId(s);
+        claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+
         claimCaseRecord1.setOrgRecordId(s);
         return claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
     }
@@ -380,14 +405,26 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         //将之前的案件流程表变为历史节点
         List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordRevocation(claimCase.getRptNo());
-        if (claimCaseRecordsList.size()!=0){
-            for (ClaimCaseRecord claimCaseRecords2:claimCaseRecordsList){
+        if (claimCaseRecordsList.size() != 0) {
+            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
         }
+
+        //将之前的案件流程表变为历史节点
+        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
+        if (claimCaseRecords.size() != 0) {
+            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecords) {
+                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
+                claimCaseRecord3.setHistoryFlag("Y");
+                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
+                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
+            }
+        }
+
         //生成案件操作记录表
         claimCaseRecord.setRptNo(claimCase.getRptNo());
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
@@ -443,7 +480,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setUpdateBy(caseDispatchDTO.getOperator());
             claimCaseMapper.updateCaseDispatchList(caseDispatchDTO);
         }*/
-        return  claimCaseRecordMapper.updateCaseDispatchList(rptNo);
+
+        return claimCaseRecordMapper.updateCaseDispatchList(rptNo);
     }
 
     //条件理算审核
@@ -1121,7 +1159,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         //根据批次号去查报案号
         List<String> strings = claimCaseMapper.selepostHocAccountingOfCases(batchNo);
         if (strings.size() != 0) {
-            for (String rptno:strings) {
+            for (String rptno : strings) {
                 //根据报案号去查台账信息
                 ClaimCaseStanding claimCaseStanding = claimCaseStandingMapper.selectClaimCaseStandingByIdOne(rptno);
                 if (claimCaseStanding != null) {
@@ -1279,5 +1317,43 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         return ConditionsForTheAdjustmentVOLList;
     }
 
+    @Override
+    public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
+        BaseCodeMappingNew baseCodeMappingNew1 = claimCaseInvestigationMapper.selectBaseCodeMappingNew(baseCodeMappingNew);
+        return baseCodeMappingNew1;
+    }
 
+    /**
+     * 案件交单完成进入受理阶段分配操作人
+     */
+    /*@Override
+    public int updateCaseDist(ClaimBatchDTO claimBatchDTO) {
+        ClaimCase claimCase=new ClaimCase();
+        //List<ClaimCase> claimCases=claimCaseMapper.selectClaimCaseList(claimCase);
+        ClaimCaseDistVo claimCaseDistVo=claimCaseMapper.selectCaseDistNumber(claimBatchDTO.getClaimBatch().getBatchno());
+        int i=claimCaseDistVo.getQuantity();//当前批次案子数量
+        ClaimCaseDist claimCaseDist=new ClaimCaseDist();
+        ClaimCaseDist caseDists=claimCaseDistMapper.selectClaimCaseDistListOne(claimCaseDist);
+        double j=caseDists.getRate().doubleValue()/100;//获取当前操作人分配比例
+        SysUser sysUser = sysUserMapper.selectUserById(claimCaseDist.getUserId());//根据用户id得到用户名
+        for (int x=0;x<=i*j;x++) {
+            //c.setUpdateBy(claimCaseDist.getUserId().toString());
+            claimCase.setUpdateBy(sysUser.getUserName());
+        }
+        return claimCaseMapper.updateClaimCase(claimCase);
+    }
+    @Override
+    public int updateOtherCaseDist(String rptNo) {
+        ClaimCase claimCase=new ClaimCase();
+        ClaimCaseDist claimCaseDist=new ClaimCaseDist();
+        ClaimCaseDist caseDists=claimCaseDistMapper.selectClaimCaseDistListOne(claimCaseDist);
+        double j=caseDists.getRate().doubleValue()/100;//获取当前操作人分配比例
+        ClaimCaseDistVo claimCaseDistVo=claimCaseMapper.selectCaseDistNumberOne(rptNo,claimCase.getCaseStatus());
+        int i=claimCaseDistVo.getQuantity();//当前批次案子数量
+        SysUser sysUser = sysUserMapper.selectUserById(claimCaseDist.getUserId());//根据用户id得到用户名
+        if(j<j*(i+1)){
+            claimCase.setUpdateBy(sysUser.getUserName());
+        }
+        return  claimCaseMapper.updateClaimCase(claimCase);
+    }*/
 }

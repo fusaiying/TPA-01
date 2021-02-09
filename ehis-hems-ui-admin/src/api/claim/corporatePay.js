@@ -5,8 +5,8 @@ import data from "../../views/system/dict/data";
 export function transferFailedList(data) {
   return request({
     url: 'finance/payInfo/TransferFailedList',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 

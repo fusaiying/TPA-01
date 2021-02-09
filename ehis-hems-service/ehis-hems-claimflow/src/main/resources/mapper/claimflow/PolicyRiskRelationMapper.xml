@@ -188,7 +188,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{relationId}
         </foreach>
     </delete>
-    <select id="selectRiskNameInsuredList" parameterType="PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
+    <select id="selectRiskNameInsuredList" parameterType="com.paic.ehis.claimflow.domain.PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
         select  risk_name,risk_code
         from policy_risk_relation
         where policy_no = #{policyNo} and status='Y'

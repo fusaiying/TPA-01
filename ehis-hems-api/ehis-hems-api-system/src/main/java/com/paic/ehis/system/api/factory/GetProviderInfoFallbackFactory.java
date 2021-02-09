@@ -1,6 +1,7 @@
 package com.paic.ehis.system.api.factory;
-
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseContractService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import feign.hystrix.FallbackFactory;
@@ -27,7 +28,12 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
         return new GetProviderInfoService()
         {
             @Override
-            public List<BaseProviderInfo> selectOrgInfo(BaseProviderInfo baseProviderInfo)
+            public List<BaseContractService> selectBaseContractServiceInfo(BaseContractService baseContractService) {
+                return null;
+            }
+
+            @Override
+            public R<List<BaseProviderInfo>> selectOrgInfo(BaseProviderInfo baseProviderInfo)
             {
                 return null;
             }

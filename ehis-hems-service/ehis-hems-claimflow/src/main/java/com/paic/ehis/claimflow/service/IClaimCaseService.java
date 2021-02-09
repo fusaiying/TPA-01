@@ -1,6 +1,8 @@
 package com.paic.ehis.claimflow.service;
 
 
+//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
+import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
 import com.paic.ehis.claimflow.domain.dto.*;
@@ -52,7 +54,7 @@ public interface IClaimCaseService
      * @param claimCaseDTO 案件信息
      * @return 案件信息 集合
      */
-    public List<ClaimCase> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO);
+    public List<ProcessingCaseVo> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO);
 
     /**
      * 新增案件信息 
@@ -233,4 +235,14 @@ public interface IClaimCaseService
      */
     //public int updateClaimCaseVo(ClaimCaseDistVo claimCaseDistVo);
 
+    public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew);
+
+    /**
+     * 案件交单完成进入受理阶段分配操作人
+     */
+    //public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);
+    /**
+     除受理阶段其余阶段分配操作人
+     */
+   // public int updateOtherCaseDist(String rptNo);
 }

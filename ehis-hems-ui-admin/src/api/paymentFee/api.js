@@ -20,18 +20,17 @@ export function getInfo(query) {
 /*删除按钮修改状态为无效*/
 export function deleteFinanceInfo(settleTaskNo) {
   return request({
-    url: '/finance/settleDetail/deleteFinanceInfo'+settleTaskNo,
+    url: '/finance/settleDetail/deleteFinanceInfo/'+settleTaskNo,
     method: 'delete',
   })
 }
 
 /**任务确认环节确认按钮，将结算状态由待确认改为待核销(待结算)*/
-// @DeleteMapping("/updateSettleStatus1/{settleTaskNo}")
-
-export function updateSettleStatus1(settleTaskNo) {
+export function updateConfirm(settleTaskNo) {
   return request({
-    url: '/finance/settleDetail/updateSettleStatus1'+settleTaskNo,
-    method: 'put',
+    url: '/finance/settleDetail/updateSettleStatus1/'+settleTaskNo,
+    method: 'PUT',
+    data:settleTaskNo
   })
 }
 
@@ -41,4 +40,13 @@ export function updateSettleStatus2(settleTaskNos) {
     url: '/finance/settleDetail/updateSettleStatus2'+settleTaskNos,
     method: 'put',
 })
+}
+
+/**发起垫付款任务*/
+export function initiateTask(query) {
+  return request({
+    url: '/finance/settleDetail/InitiateAdvancePaymentTask',
+    method: 'get',
+    params: query
+  })
 }

@@ -295,15 +295,17 @@ export default {
         //确认前（01-待确认，03-待确认（退回））可修改，其他时候只能查看
         if (row.bussinessStatus == "01" || row.bussinessStatus == "03") {
           this.invoice.isAdd = true;
-        } else {
-          if (row.invoiceStatus == "N") {
-            this.invoice.isWrite = true;
-          }
         }
       } else {
         //未核销可添加
         if (row.invoiceStatus == "N") {
           this.invoice.isAdd = true;
+        }
+      }
+      //确认前（04-已审核（待核销），05-核销 可发票核销
+      if (row.bussinessStatus == "04" || row.bussinessStatus == "05") {
+        //未核销可添加
+        if (row.invoiceStatus == "N") {
           this.invoice.isWrite = true;
         }
       }

@@ -113,7 +113,10 @@ export default {
                 this.parProductEnname=productInfoData.productEnname
                 this.parOutProductChname=productInfoData.outProductChname
                 this.parOutProductEnname=productInfoData.outProductEnname
-                //给产品编码赋值
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.push({
+                  path: '/service-product/product-definition',
+                })
 
               } else {
                 this.$message({

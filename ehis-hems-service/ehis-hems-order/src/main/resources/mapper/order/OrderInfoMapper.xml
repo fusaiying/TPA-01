@@ -150,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
         LEFT JOIN product_supplier_info psi ON psi.service_code = oi.service_code
         AND psi.priority = (SELECT min(priority) FROM product_supplier_info)
-        AND psi.product_code = oi.product_code
+        AND psi.product_code = oi.product_code AND psi.status ='Y'
         LEFT JOIN product_info pi ON pi.product_code = oi.product_code
         AND pi.STATUS = 'Y'
         LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code and bsi.status ='Y'

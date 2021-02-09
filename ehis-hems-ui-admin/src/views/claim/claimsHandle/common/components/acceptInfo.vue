@@ -175,7 +175,9 @@
       sonAcceptInfoData: Object,
     },
     watch: {
+      baseInfo:function(newVal){
 
+      },
       sonAcceptInfoData: function (newVal) {
         this.getAddressData()
         if (newVal !== null && newVal !== undefined) {
@@ -192,6 +194,9 @@
             if (this.baseForm.rptNo !== null && this.baseForm.rptNo !== '') {
               this.hasAcceptId = true
             }
+          }else {
+            console.log(this.baseInfo.prireason);
+            this.baseForm.priReason=this.baseInfo.prireason
           }
           let date = new Date()
           let mon = date.getMonth() + 1
@@ -203,10 +208,8 @@
             day = '0' + date.getDate()
           }
           if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
-            this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + date.getDate()
+            this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + day
           }
-        }else {
-          this.baseForm.priReason=this.baseInfo.prireason
         }
       }
     },
@@ -293,7 +296,11 @@
             callback()
           }
         } else {
-          callback()
+          if (this.baseForm.currSituation==='01'){
+            callback(new Error("请录入死亡时间！"));
+          }else {
+            callback()
+          }
         }
       }
       const checkDisabilityDate = (rule, value, callback) => {
@@ -413,6 +420,7 @@
       this.incidenttypeOptions = this.dictList.find(item => {
         return item.dictType === 'incidenttype'
       }).dictDate
+
     },
 
     methods: {

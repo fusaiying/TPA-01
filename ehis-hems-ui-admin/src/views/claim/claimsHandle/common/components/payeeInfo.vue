@@ -4,7 +4,7 @@
       <div style="width: 100%;cursor: pointer;">
         <span style="font-size:16px;color:black">领款人信息</span>
         <div style="float: right;">
-          <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview')" type="primary" size="mini"
+          <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview') && baseInfo.claimtype==='02'" type="primary" size="mini"
                      @click="addOrEdit('add')">新增
           </el-button>
         </div>
@@ -39,7 +39,7 @@
 
       </el-table-column>
       <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
-      <el-table-column prop="accNo" align="center" label="账户" show-overflow-tooltip/>
+      <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
                        label="操作" width="140" key="9">
         <template slot-scope="scope">
@@ -399,13 +399,13 @@
           payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: 'blur'}],
           payeeSex: [{required: true, message: '性别不能为空!', trigger: 'blur'}],
           payeeMobile: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeNationality: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeIdType: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeIdNo: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          idEndDate: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
+          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: 'blur'}],
+          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: 'blur'}],
+          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: 'blur'}],
+          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: 'blur'}],
           payeeBank: [{required: true, message: '开户行不能为空!', trigger: 'blur'}],
           payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: 'blur'}],
-          payeeOccupation: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
+          payeeOccupation:[{required: true, message: '职业不能为空!', trigger: 'blur'}],
           accAttribute: [{required: true, message: '账户属性不能为空!', trigger: 'blur'}],
           accNo: {validator: checkAccNo, required: true, trigger: 'blur'},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: 'blur'},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
@@ -443,6 +443,9 @@
     },
     methods: {
       save() {//新增  编辑
+        this.baseForm.province = this.region[0]
+        this.baseForm.city = this.region[1]
+        this.baseForm.district = this.region[2]
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             if (this.isAddOrEdit === 'add') {
@@ -537,6 +540,7 @@
           district: undefined,
           address: undefined,
         }
+        this.region=[]
         if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
           this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
           if (this.insuredData.idEndDate==='9999-12-31'){
@@ -551,6 +555,9 @@
         if (status === 'edit') {
           this.isAddOrEdit = 'edit'
           this.baseForm = row
+          this.region[0]=row.province
+          this.region[1]=row.city
+          this.region[2]=row.district
           if (row.idEndDate === '9999-12-31') {
             this.baseForm.checked = true
           }

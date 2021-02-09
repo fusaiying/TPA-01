@@ -9,6 +9,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.domain.vo.*;
 import com.paic.ehis.base.service.*;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -499,7 +500,7 @@ public class BaseProviderInfoController extends BaseController {
     }
 
 
-    //@PreAuthorize("@ss.hasPermi('system:risklog:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:risklog:list')")
     @PostMapping("/selectHospitalInfo")
     public AjaxResult selectHospitalInfo(@RequestBody BaseProviderInfo baseProviderInfo)
     {

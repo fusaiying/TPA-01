@@ -427,8 +427,8 @@
         policy_statusOptions: [],
         policy_typeOptions: [],
         socialinsurance1Options: [],
-        occupationOptions: [{dictLable: '01', dictValue: '老师'}, {dictLable: '02', dictValue: '销售'}],
-        nativeplaceOptions: [{dictLable: '01', dictValue: '中国'}, {dictLable: '02', dictValue: '韩国'}],
+        occupationOptions: [{dictLabel: '老师', dictValue: '01'}, {dictLabel: '销售', dictValue: '02'}],
+        nativeplaceOptions: [{dictLabel: '中国', dictValue: '01'}, {dictLabel: '韩国', dictValue: '02'}],
       }
     },
     computed: {
@@ -560,6 +560,7 @@
         this.baseForm.email=baseFormData.email
         this.baseForm.address=baseFormData.address
         this.baseForm.dateRange = []
+
         if (this.baseForm.idEndDate =='9999-12-31') {
           this.$set(this.baseForm, 'checked', true)
           this.baseForm.dateRange = []
@@ -567,14 +568,17 @@
         else {
           this.$set(this.baseForm, 'checked', false)
 
-          if(baseFormData.idStartDate!=null && baseFormData.idStartDate==''){
-            this.baseForm.dateRange[0] = baseFormData.idStartDate
+          if(baseFormData.idStartDate!=null && baseFormData.idStartDate!=''){
+
+            this.baseForm.dateRange[0] =  baseFormData.idStartDate
+
           }
           else {
+
             this.baseForm.dateRange[0] = undefined
           }
-          if(baseFormData.idEndDate!=null && baseFormData.idEndDate==''){
-            this.baseForm.dateRange[1] = baseFormData.idEndDate
+          if(baseFormData.idEndDate!=null && baseFormData.idEndDate!=''){
+            this.baseForm.dateRange[1] =  this.baseForm.idEndDate
           }
           else {
             this.baseForm.dateRange[1] = undefined
@@ -619,7 +623,7 @@
         if (this.baseForm.checked) {
           this.baseForm.dateRange = []
           /*this.baseForm.idEndDate = '9999-12-31'*/
-          this.$set(this.baseForm,'isEndData','9999-12-31')
+          this.$set(this.baseForm,'idEndDate','9999-12-31')
           this.baseForm.idStartDate=''
           /* this.baseForm.dateRange[0] = ''
            this.baseForm.dateRange[1] = '9999-12-31'*/

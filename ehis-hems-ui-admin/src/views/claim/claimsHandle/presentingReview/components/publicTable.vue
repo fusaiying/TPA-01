@@ -31,7 +31,11 @@
     <el-table-column sortable align="center" prop="submitdate" min-width="120" label="交单日期" show-overflow-tooltip/>
     <el-table-column sortable align="center" prop="updateTime" min-width="120" label="操作日期" show-overflow-tooltip/>
     <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
-    <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip/>
+    <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip>
+    <template slot-scope="scope">
+      <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
+    </template>
+    </el-table-column>
     <el-table-column align="center" label="操作" min-width="94" fixed="right">
       <template slot-scope="scope">
         <el-button size="small" type="text" @click="handleOne(scope.row.batchno)">获取</el-button>
@@ -145,7 +149,7 @@
           this.prop=''
           this.order=''
         }
-        this.$parent.$parent.$parent.$parent.searchPublic()
+        this.$parent.$parent.searchPublic()
       }
     }
   }

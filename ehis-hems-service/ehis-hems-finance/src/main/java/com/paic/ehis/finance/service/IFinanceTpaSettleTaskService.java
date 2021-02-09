@@ -1,6 +1,7 @@
 package com.paic.ehis.finance.service;
 
 
+import com.paic.ehis.finance.domain.FinanceCollectionInfo;
 import com.paic.ehis.finance.domain.FinanceTpaSettleTask;
 import com.paic.ehis.finance.domain.TpaSettleInfo;
 import com.paic.ehis.finance.domain.dto.TpaSettleDTO;
@@ -63,6 +64,14 @@ public interface IFinanceTpaSettleTaskService
      * @return TPA服务费结算任务Map
      */
     public int importTpaSettleTask(MultipartFile file);
+
+    /**
+     * 根据companyCode查询收款核销列表
+     *
+     * @param tpaSettleDTO 收款核销
+     * @return 收款核销集合
+     */
+    public List<FinanceCollectionInfo> selectTpaTaskReceiptColList(TpaSettleDTO tpaSettleDTO);
 
     /**
      * 新增TPA服务费结算任务

@@ -26,6 +26,15 @@ public interface IClaimCaseStandingService
     public ClaimCaseStanding selectClaimCaseStandingById(String rptNo);
 
     /**
+     * @author 硠君
+     * @Description  通过批次号查询报案台账信息
+     * @Date 15:36 2021/2/8
+     * @Parm [claimCaseStanding]
+     * @return java.util.List<com.paic.ehis.claimmgt.domain.ClaimCaseStanding>
+     **/
+    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchno);
+
+    /**
      * 查询报案台账信息 列表
      * 
      * @param claimCaseStanding 报案台账信息 

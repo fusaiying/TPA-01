@@ -1,5 +1,6 @@
 package com.paic.ehis.base.controller;
 
+import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -116,5 +117,16 @@ public class BaseContractServiceController extends BaseController
     public AjaxResult removeById(@PathVariable String serialNo)
     {
         return toAjax(baseContractServiceService.deleteBaseContractServiceById(serialNo));
+    }
+
+    /**
+     * 查询base_contract_service（合约服务项目）列表
+     * @param baseContractService
+     * @return
+     */
+    @PostMapping("/selectBaseContractServiceInfo")
+    public List<BaseContractService> selectBaseContractServiceInfo(@RequestBody BaseContractService baseContractService)
+    {
+        return baseContractServiceService.selectBaseContractServiceList(baseContractService);
     }
 }

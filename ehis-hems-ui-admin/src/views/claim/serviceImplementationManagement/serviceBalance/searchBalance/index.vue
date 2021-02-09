@@ -60,7 +60,7 @@
     </el-card>
 
     <!-- 结算明细列表 START-->
-    <balance-detail ref="balanceDetailTable" :queryParams="queryParams" :dictList="dictList"/>
+    <balance-detail ref="balanceDetailTable" :queryParams="queryDetailParams" :dictList="dictList"/>
     <!-- 结算明细列表 END-->
 
   </div>
@@ -103,6 +103,13 @@ export default {
         policyNo: null,
         //分单号
         policyItemNo: null
+      },
+      //明细查询参数
+      queryDetailParams: {
+        //是否展示
+        isShow: false,
+        //是否结算
+        isSearche: true
       },
       //是否显示
       isShow: false,
@@ -177,6 +184,7 @@ export default {
     handleQuery() {
       this.isShow = true;
       this.queryParams.pageNum = 1;
+      this.queryDetailParams = JSON.parse(JSON.stringify(this.queryParams));
     },
     /** 重置按钮操作 */
     resetQuery() {

@@ -38,6 +38,20 @@
                     javaType="ArrayList" column="settle_task_no" select="getDuty"/>
     </resultMap>
 
+    <resultMap type="com.paic.ehis.finance.domain.FinanceCollectionInfo" id="FinanceCollectionInfoResult">
+        <result property="collectionId"    column="collection_id"    />
+        <result property="receiptNo"    column="receipt_no"    />
+        <result property="receiptAccName"    column="receipt_acc_name"    />
+        <result property="receiptCompanyName"    column="receipt_company_name"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptDate"    column="receipt_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
 
     <sql id="selectFinanceTpaSettleTaskVo">
         select task_id, settle_task_no, company_code, settlement_type, service_settle_amount, settle_end_date, settle_status, status, remark, create_by, create_time, update_by, update_time, dept_code from finance_tpa_settle_task
@@ -95,7 +109,7 @@
         GROUP BY settle_task_no LIMIT 1 ) ft
         ON ft.settle_task_no = task.settle_task_no
         <where>
-            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and task.settle_task_no = #{settleTaskNo}</if>
         </where>
     </select>
 
@@ -118,7 +132,6 @@
             <if test="companyCode != null  and companyCode != ''"> and ftsk.company_code = #{companyCode}</if>
             <if test="riskCode != null  and riskCode != ''"> and bir.risk_code = #{riskCode}</if>
             <if test="settlementType != null  and settlementType != ''"> and ftsk.settlement_type = #{settlementType}</if>
-            <if test="serviceSettleAmount != null "> and ftsk.service_settle_amount = #{serviceSettleAmount}</if>
             <if test="settleEndDate != null "> and ftsk.settle_end_date = #{settleEndDate}</if>
             <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status in (${settleStatus})</if>
             <if test="status != null  and status != ''"> and ftsk.status = #{status}</if>
@@ -130,6 +143,28 @@
     <select id="selectFinanceTpaSettleTaskById" parameterType="Long" resultMap="FinanceTpaSettleTaskResult">
         <include refid="selectFinanceTpaSettleTaskVo"/>
         where task_id = #{taskId}
+    </select>
+
+    <select id="selectTpaTaskReceiptColList" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="FinanceCollectionInfoResult">
+        SELECT
+        info.receipt_acc_name,
+        info.receipt_amount,
+        info.receipt_date,
+        info.remark,
+        info.update_by
+        FROM
+        finance_receipt_col col
+        LEFT JOIN finance_collection_info info ON info.receipt_no = col.receipt_no
+        AND info.STATUS = 'Y'
+        LEFT JOIN finance_tpa_settle_task task ON task.settle_task_no = task_no
+        AND task.STATUS = 'Y'
+        <where>
+            <if test="companyCode != null  and companyCode != ''"> and task.company_code = #{companyCode}</if>
+            <if test="receiptNo != null  and receiptNo != ''"> and col.receipt_no = #{receiptNo}</if>
+--             <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
+            <if test="status != null  and status != ''"> and task.status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and task.dept_code = #{deptCode}</if>
+        </where>
     </select>
 
     <insert id="insertFinanceTpaSettleTask" parameterType="FinanceTpaSettleTask" useGeneratedKeys="true" keyProperty="taskId">

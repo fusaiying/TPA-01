@@ -134,6 +134,10 @@ export default {
                 center: true,
                 showClose: true
               })
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.push({
+                path: '/service-product/productReview/index',
+              })
             } else {
               this.$message({
                 message: '审核失败!',

@@ -65,7 +65,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="发票类型:" prop="invoiceType">
-                  <el-select v-model="form.invoiceType" placeholder="请选择发票类型">
+                  <el-select v-model="form.invoiceType" placeholder="请选择发票类型" class="item-width">
                     <el-option v-for="item in invoiceTypeOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue"/>
                   </el-select>
                 </el-form-item>
@@ -73,13 +73,13 @@
 
               <el-col :span="8">
                 <el-form-item label="发票代码:" prop="invoiceCode">
-                  <el-input v-model="form.invoiceCode" placeholder="请输入发票代码"/>
+                  <el-input v-model="form.invoiceCode" placeholder="请输入发票代码" class="item-width" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="发票号码:" prop="invoiceNo">
-                  <el-input v-model="form.invoiceNo" placeholder="请输入发票号码"/>
+                  <el-input v-model="form.invoiceNo" placeholder="请输入发票号码" class="item-width" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -87,19 +87,19 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="发票金额:" prop="amount">
-                  <el-input v-model="form.amount" placeholder="请输入发票金额"/>
+                  <el-input v-model="form.amount" placeholder="请输入发票金额" class="item-width" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="发票金额（税）:" prop="amountTax">
-                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）"/>
+                  <el-input v-model="form.amountTax" placeholder="请输入发票金额（不含税）" class="item-width" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="发票税额:" prop="tax">
-                  <el-input v-model="form.tax" placeholder="请输入发票税额"/>
+                  <el-input v-model="form.tax" placeholder="请输入发票税额" class="item-width" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -368,6 +368,10 @@ export default {
 
 .el-table .hidden-row {
   display: none;
+}
+
+.item-width {
+  width: 220px;
 }
 
 </style>

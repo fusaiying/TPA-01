@@ -85,4 +85,6 @@ public interface ClaimBatchRecordMapper
      * @return
      */
     public List<ClaimBatchRecord> selectSysClaimBatchRecordListByBatchnoOne(String batchno);
+
+    public ClaimBatchRecord selectClaimBatchRecordByBatch(ClaimBatchRecord claimBatchRecord);
 }

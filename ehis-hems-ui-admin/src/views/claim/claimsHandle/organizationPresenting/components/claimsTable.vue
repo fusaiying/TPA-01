@@ -57,7 +57,7 @@
       </template>
     </el-table-column>
     <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
-    <el-table-column align="center" min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip>currency
+    <el-table-column align="center" min-width="110" prop="batchtotal" label="批次总金额" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
       </template>
@@ -138,6 +138,7 @@
         let data = encodeURI(
           JSON.stringify({
             batchno: row.batchno, //批次号
+            batchstatus: row.batchstatus, //批次状态
             status,//新增or查看
             claimtype: row.claimtype//理赔类型
           })

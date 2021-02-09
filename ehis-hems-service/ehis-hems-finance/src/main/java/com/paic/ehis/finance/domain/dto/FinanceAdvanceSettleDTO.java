@@ -47,5 +47,11 @@ public class FinanceAdvanceSettleDTO extends BaseEntity {
     @Excel(name = "接口数据类型")
     private String pageType;
 
+    /** 开始日期 */
+    private String startDate;
+
+    /** 结束日期 */
+    private String endDate;
+
 
 }

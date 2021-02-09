@@ -22,7 +22,12 @@
         tooltip-effect="dark"
         style="width: 100%;">
         <el-table-column type="expand" v-if="node==='calculateReview'"/>
-        <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip/>
+        <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ getNo(scope.row) }} </span>
+          </template>
+
+        </el-table-column>
         <!--显示录入的账单号/发票号-->
         <el-table-column align="center" prop="treatmentType" label="治疗类型" show-overflow-tooltip>
           <template slot-scope="scope">
@@ -433,6 +438,7 @@
 
 <script>
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
+  import {getInfoBaseCodeMappingNew,} from '@/api/claim/presentingReview'
 
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
     {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'claim_currency'},]
@@ -501,7 +507,7 @@
           }
         })
         if (newVal !== null && newVal !== undefined) {
-          this.baseForm.billCurrency = newVal.currency
+          this.baseForm.billCurrency=newVal.currency
         }
       },
     },
@@ -944,7 +950,7 @@
             this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
 
             this.costForm.costData = res.data.billDetail
-            if (this.baseForm.icdCodes.length === 0) {
+            if (this.baseForm.icdCodes===null || this.baseForm.icdCodes.length === 0) {
               this.baseForm.icdCodes = [{
                 icdCode: ''
               }]
@@ -1124,6 +1130,10 @@
                         showClose: true
                       })
                       this.isBillInfoSave = true
+                      if (this.node==='calculateReview'){
+                        this.$emit("refresh-item", 'calculate')
+                      }
+
                     }
                     let data = {
                       rptNo: this.fixInfo.rptNo
@@ -1245,6 +1255,17 @@
           return str
         }
       },
+      getNo(row){
+        let strNo=''
+        if (row.billNo!==null && row.billNo!=='' && row.invoiceNo!==null && row.invoiceNo!==''){
+          strNo=row.billNo+'|'+row.invoiceNo
+        }else if (row.billNo!==null && row.billNo!=='' && (row.invoiceNo==null || row.invoiceNo==='')){
+          strNo=row.billNo
+        }else if ((row.billNo==null || row.billNo==='') && row.invoiceNo!==null && row.invoiceNo!==''){
+          strNo=row.invoiceNo
+        }
+        return strNo
+      }
     }
 
   }

@@ -37,7 +37,11 @@
       </el-table-column>
       <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
       <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额"
-                       show-overflow-tooltip/>
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
       <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -64,7 +68,7 @@
 </template>
 
 <script>
-  import {invalid,getDeptList} from '@/api/claim/presentingReview'
+  import {invalid,getThisDept} from '@/api/claim/presentingReview'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
@@ -101,10 +105,8 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-      getDeptList().then(res=>{
-        if (res!=null && res.code===200){
-          this.deptOptions=res.data
-        }
+      getThisDept().then(res=>{
+          this.deptOptions=res.deptlist
       })
 
     },
@@ -114,6 +116,7 @@
         let data = encodeURI(
           JSON.stringify({
             batchno: row.batchno, //批次号
+            batchstatus: row.batchstatus, //批次状态
             status,//新增or查看
             claimtype: row.claimtype//理赔类型
           })

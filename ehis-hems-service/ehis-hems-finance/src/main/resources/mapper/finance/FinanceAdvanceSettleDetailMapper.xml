@@ -156,18 +156,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         finance_advance_settle_task a,
         finance_pay_info b,
         claim_batch c,
-        claim_case_policy d
+        base_issuingcompany d,
+        finance_advance_settle_detail h
         <where>
         <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
         <if test="settleEndDate != null "> and settle_end_date = #{settleEndDate}</if>
-        <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+        <if test="settleStartDate != null "> and settle_start_date = #{settleStartDate}</if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and a.create_time between #{startDate} and DATE_ADD(#{endDate},INTERVAL 1 DAY)</if>
         <if test="settleStatus != null  and settleStatus != ''"> and settle_status = #{settleStatus}</if>
-        <if test="batchTotal != null  and batchTotal != ''"> and batchtotal = #{batchTotal}</if>
-        <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
-        <if test="companyName != null  and companyName != ''"> and company_name = #{companyName}</if>
+        <if test="batchTotal != null  and batchTotal != ''"> and batch_total = #{batchTotal}</if>
+        <if test="companyCode != null  and companyCode != ''"> and d.company_code = #{companyCode}</if>
+        <if test="companyName != null  and companyName != ''"> and d.company_name = #{companyName}</if>
         <if test="pageType != null  and pageType == '01'"> and a.settle_Status in ('01','02')</if>
         <if test="pageType != null  and pageType == '03'"> and a.settle_Status in ('02','03')</if>
-
+        AND h.settle_task_no = a.settle_task_no
+        AND c.batch_no = h.batch_no
         AND d.company_code = a.company_code
         AND b.batch_no = c.batch_no
         AND a.dept_code = b.dept_code
@@ -204,15 +207,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             claim_case_insured d,
             claim_case_bill e,
             claim_case_cal f,
-            claim_batch g
+            claim_batch g,
+            finance_advance_settle_detail h
         WHERE
               a.settle_task_no = #{settleTaskNo}
           AND c.rpt_no = d.rpt_no
           AND c.rpt_no = e.rpt_no
           AND c.rpt_no = f.rpt_no
+          AND c.rpt_no = h.rpt_no
           AND g.batch_no = b.batch_no
           AND g.batch_no = c.batch_no
+          AND g.batch_no = h.batch_no
           AND b.dept_code = a.dept_code
+          AND h.settle_task_no = a.settle_task_no
           AND a.STATUS = 'Y'
           AND b.STATUS = 'Y'
           AND c.STATUS = 'Y'
@@ -220,6 +227,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           AND e.STATUS = 'Y'
           AND f.STATUS = 'Y'
           AND g.STATUS = 'Y'
+          AND h.STATUS = 'Y'
     </select>
 
 

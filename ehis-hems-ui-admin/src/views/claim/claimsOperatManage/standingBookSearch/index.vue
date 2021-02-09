@@ -279,6 +279,7 @@
           this.searchForm.receiveDate = [],
           this.searchForm.receiveStartDate = '',
           this.searchForm.receiveEndDate = '',
+          this.searchForm.organcode = undefined,
           this.searchForm.createBy = ''//操作人
       },
       search(val) {
@@ -296,8 +297,8 @@
           createBy: this.searchForm.createBy//操作人
         }
         if (val === 'table') {
+          data.pageNum = this.queryParams.pageNum
           data.pageSize = this.queryParams.pageSize
-          this.data.pageNum = this.queryParams.pageNum
         } else {
           data.pageNum = 1
           data.pageSize = 10
@@ -432,7 +433,7 @@
 
 <style scoped>
   .item-width {
-    width: 200px;
+    width: 220px;
   }
 
   /*element原有样式修改*/

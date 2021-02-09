@@ -319,9 +319,6 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
-        } else {
-            auditWorkPoolDTO.setIsAsc("desc");
-            auditWorkPoolDTO.setOrderByColumn("submit_date");
         }
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
@@ -344,9 +341,6 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo listConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
-        } else {
-            auditWorkPoolDTO.setIsAsc("desc");
-            auditWorkPoolDTO.setOrderByColumn("submit_date");
         }
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
@@ -369,9 +363,6 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo listConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
-        } else {
-            auditWorkPoolDTO.setIsAsc("desc");
-            auditWorkPoolDTO.setOrderByColumn("submit_date");
         }
         startPage(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimUserTakeOnMapper">
-    
+
     <resultMap type="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" id="ClaimUserTakeOnResult">
         <result property="takeOnId"    column="take_on_id"    />
         <result property="userId"    column="user_id"    />
@@ -43,16 +43,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimUserTakeOnListOne" parameterType="com.paic.ehis.claimmgt.domain.dto.UserTakeOnDTO" resultMap="ClaimUserTakeOnDTO">
         select t1.take_on_id,
-               t1.take_on_user_id,
-               t1.create_time,
-                t1.user_id ,
-                t2.user_name,
-                t3.role_id,
-                t4.role_name,
-                t5.user_name,
-                t1.update_by,
-                t1.status,
-                t1.take_on_id
+        t1.take_on_user_id,
+        t1.create_time,
+        t1.user_id ,
+        t2.user_name,
+        t3.role_id,
+        t4.role_name,
+        t5.user_name,
+        t1.update_by,
+        t1.status,
+        t1.take_on_id
         from claim_user_take_on t1
         LEFT JOIN sys_user t2  on t1.user_id = t2.user_id
         LEFT JOIN sys_user_role t3 on t3.user_id = t2.user_id
@@ -63,14 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="takeOnUserId != null "> and t1.take_on_user_id  like concat('%',  #{takeOnUserId}, '%')</if>
             <if test="status != null  and status != ''"> and t1.status = #{status}</if>
             <if test="status == null  or status == ''"> and t1.status != 'N'</if>
+
         </where>
     </select>
-    
+
     <select id="selectClaimUserTakeOnById" parameterType="String" resultMap="ClaimUserTakeOnResult">
         <include refid="selectClaimUserTakeOnVo"/>
         where take_on_id = #{takeOnId}
     </select>
-        
+
     <insert id="insertClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn" useGeneratedKeys="true" keyProperty="takeOnId">
         insert into claim_user_take_on
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -81,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="takeOnUserId != null">#{takeOnUserId},</if>
@@ -90,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateClaimUserTakeOn" parameterType="com.paic.ehis.claimmgt.domain.ClaimUserTakeOn">
@@ -110,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_user
         <trim prefix="SET" suffixOverrides=",">
             <if test="userName != null">user_name = #{userName},</if>
+            <!--<if test="status != null and status != ''">status = #{status},</if>-->
         </trim>
         where user_id = #{userId}
     </update>
@@ -118,7 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteClaimUserTakeOnByIds" parameterType="String">
-        delete from claim_user_take_on where take_on_id in 
+        delete from claim_user_take_on where take_on_id in
         <foreach item="takeOnId" collection="array" open="(" separator="," close=")">
             #{takeOnId}
         </foreach>

@@ -562,7 +562,6 @@
         this.baseForm.dateRange = []
 
         if (this.baseForm.idEndDate =='9999-12-31') {
-
           this.$set(this.baseForm, 'checked', true)
           this.baseForm.dateRange = []
         }

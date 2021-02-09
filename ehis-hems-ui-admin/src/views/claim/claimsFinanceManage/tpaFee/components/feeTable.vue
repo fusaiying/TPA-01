@@ -105,6 +105,10 @@ export default {
     },
     //查看
     viewDetail(row,type){
+      // this.detailInfo.row = row;
+      // this.detailInfo.type = type;
+      // this.$emit('openDetail',this.detailInfo);
+      // this.detailDialog = true;
       this.detailInfo.row = row;
       this.detailInfo.type = type;
       this.$emit('openDetail',this.detailInfo);

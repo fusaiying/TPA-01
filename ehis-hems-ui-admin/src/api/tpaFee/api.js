@@ -30,7 +30,7 @@ export function listInfo(query) {
 
 
 // 任务发起
-export function tpaTaskInitiated(query) {
+export function initiateTask(query) {
   return request({
     url: '/finance/tpaTask/tpaTaskInitiated',
     method: 'get',
@@ -39,7 +39,7 @@ export function tpaTaskInitiated(query) {
 }
 
 // 查询子页面载入
-export function selectFinanceTpaSettleTaskViewDetail(query) {
+export function taskViewDetail(query) {
   return request({
     url: '/finance/tpaTask/taskViewDetail',
     method: 'get',

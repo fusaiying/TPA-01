@@ -278,7 +278,7 @@
         this.fixInfo = {
           rowData:info.row,
           type:info.type,
-        },
+        };
         this.detailDialog = true
       },
       openDialog(){

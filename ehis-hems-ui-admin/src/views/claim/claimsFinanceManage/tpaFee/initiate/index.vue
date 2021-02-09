@@ -269,7 +269,10 @@
       },
       //详情弹框 start
       openDetail(info){
-        this.fixInfo = info;
+        this.fixInfo = {
+          rowData:info.row,
+          type:info.type,
+        };
         this.detailDialog = true
       },
       openDialog(){

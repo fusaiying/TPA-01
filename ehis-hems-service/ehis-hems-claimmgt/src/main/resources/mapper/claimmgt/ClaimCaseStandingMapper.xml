@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and(b.receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
     </select>
 
-    <select id="selectCompanyName" parameterType="String" resultMap="ClaimCaseStandingVo1Result">
+    <select id="selectCompanyName" parameterType="String" resultType="string">
 SELECT
 	claim_case_policy.company_name
 FROM

@@ -1130,6 +1130,7 @@
                         showClose: true
                       })
                       this.isBillInfoSave = true
+                      this.$emit("refresh-item", 'calculate')
                     }
                     let data = {
                       rptNo: this.fixInfo.rptNo

@@ -87,7 +87,7 @@
       </div>
       <!-- 案件理算 -->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-18" class="batchInfo_class" style="margin-top: 10px;">
-        <case-calculate :sonCalculateData="sonCalculateData" :fixInfo="fixInfo" :node="querys.node"/>
+        <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
       <!--赔案备注-->
       <div id="#anchor-16" class="batchInfo_class" style="margin-top: 10px;">
@@ -460,6 +460,8 @@
               this.sonBillingInfoData = res.rows
             }
           })
+        }else if (item === 'calculate') {
+          this.$refs.caseCalculate.getDataCase()
         }
       },
       changeSaveFlag() {

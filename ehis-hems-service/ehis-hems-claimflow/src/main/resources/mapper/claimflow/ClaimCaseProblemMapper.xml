@@ -43,7 +43,7 @@
 
     <!--查询已处理的问题件-->
     <select id="selectClaimCaseProblemList1" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
-        SELECT
+        SELECT distinct
         claim_case_problem.rpt_no,
         claim_case_problem.problem_type,
         claim_case_problem.create_by,
@@ -73,7 +73,7 @@
 
     <!--查询处理中的问题件-->
     <select id="selectClaimCaseProblemList2" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
-        SELECT
+        SELECT distinct
         claim_case_problem.rpt_no,
         claim_case_problem.problem_type,
         claim_case_problem.create_by,

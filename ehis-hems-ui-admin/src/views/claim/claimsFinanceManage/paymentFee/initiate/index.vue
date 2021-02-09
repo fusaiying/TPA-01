@@ -23,6 +23,7 @@
           <el-col :span="8">
             <el-form-item label="建立日期：" prop="createTimeArr">
               <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
+                start-placeholder="开始日期" end-placeholder="结束日期"
                 type="daterange" value-format="yyyy-MM-dd" placeholder="建立日期" />
             </el-form-item>
           </el-col>
@@ -257,6 +258,10 @@
 
         if(!this.btnSearch) {
           params.pageType = '01';
+          let startDate  = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+          let endDate =  moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+          params.startDate = startDate;
+          params.endDate = endDate;
         }
 
         listInfo(params).then(res => {
@@ -273,7 +278,7 @@
         this.fixInfo = {
           rowData:info.row,
           type:info.type,
-        },
+        };
         this.detailDialog = true
       },
       openDialog(){

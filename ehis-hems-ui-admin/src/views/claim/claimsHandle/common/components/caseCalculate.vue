@@ -8,7 +8,7 @@
         <el-button v-if="!isOpen" type="primary" :disabled="!collapsed" size="mini" @click="openAll">一键展开</el-button>
         <el-button v-else type="primary" :disabled="!collapsed" size="mini" @click="closeAll">一键收起</el-button>
         <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
-                   @click="">赔付计算</el-button>
+                   @click="calculate">赔付计算</el-button>
         <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
                    @click="save">保存</el-button>
       </span>
@@ -180,6 +180,7 @@
     responsibilityDetailsList,
     billDetailsSave,
     insurancePolicyList,
+    calculate,
     calSummary
   } from '@/api/claim/handleCom'
   import adjustmentDetail from '../modul/adjustmentDetail'
@@ -288,6 +289,44 @@
       },
       checkedAllFun() {
 
+      },
+      calculate(){
+        calculate().then(res=>{
+          if (res!=null && res.code===200){
+            this.$message({
+              message: '理算成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          }
+        }).catch(res=>{
+          this.$message({
+            message: '保存失败!',
+            type: 'error',
+            center: true,
+            showClose: true
+          })
+        })
+        let data = {
+          rptNo: this.fixInfo.rptNo,
+        }
+        detailsList(data).then(res => {
+          if (res != null && res.code === 200 && res.rows.length > 0) {
+            this.caseForm.caseData = res.rows
+            this.caseForm.caseData.forEach(item => {
+              item.isEdit = true
+              if (item.minData.length > 0) {
+                item.minData.forEach(option => {
+                  option.isEdit = true
+                  option.selectFData = []
+                  option.selectSData = []
+                })
+              }
+            })
+          }
+        })
+        this.getCalSummary()
       },
       save() {
         this.$refs.caseForm.validate((valid) => {

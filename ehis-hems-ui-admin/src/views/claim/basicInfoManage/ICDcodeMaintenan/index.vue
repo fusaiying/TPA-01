@@ -138,7 +138,7 @@ export default {
       },
       tableData: [],
       totalCount: 0,
-      loading: true,
+      loading: false,
       rules: {
 
         icdmname: [{ validator: checkChineseName, trigger: 'blur' }]
@@ -153,13 +153,13 @@ export default {
     }
   },
   mounted() {
-    getICDList(this.formSearch).then(response => {
+/*    getICDList(this.formSearch).then(response => {
       this.tableData = response.rows;
       this.totalCount = response.total;
       this.loading = false;
     }).catch(res => {
       this.loading = false
-    })
+    })*/
     this.getDicts("base_library_mark").then(response => {
       this.base_library_markOptions = response.data;
     });

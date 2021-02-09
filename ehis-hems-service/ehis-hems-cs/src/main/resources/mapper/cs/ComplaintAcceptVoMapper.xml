@@ -22,6 +22,9 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">

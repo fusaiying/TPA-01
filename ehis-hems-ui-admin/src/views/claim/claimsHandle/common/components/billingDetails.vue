@@ -1130,7 +1130,10 @@
                         showClose: true
                       })
                       this.isBillInfoSave = true
-                      this.$emit("refresh-item", 'calculate')
+                      if (this.node==='calculateReview'){
+                        this.$emit("refresh-item", 'calculate')
+                      }
+
                     }
                     let data = {
                       rptNo: this.fixInfo.rptNo

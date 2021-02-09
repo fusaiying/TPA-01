@@ -8,8 +8,8 @@ import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
-import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
-import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
+//import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
+//import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -79,10 +79,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
-    @Autowired
-    private ClaimCaseDistMapper claimCaseDistMapper;
-    @Autowired
-    private SysUserMapper sysUserMapper;
+   // @Autowired
+    //private ClaimCaseDistMapper claimCaseDistMapper;
+    //@Autowired
+    //private SysUserMapper sysUserMapper;
 
 
     /**
@@ -1326,7 +1326,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 案件交单完成进入受理阶段分配操作人
      */
-    @Override
+    /*@Override
     public int updateCaseDist(ClaimBatchDTO claimBatchDTO) {
         ClaimCase claimCase=new ClaimCase();
         //List<ClaimCase> claimCases=claimCaseMapper.selectClaimCaseList(claimCase);
@@ -1355,5 +1355,5 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setUpdateBy(sysUser.getUserName());
         }
         return  claimCaseMapper.updateClaimCase(claimCase);
-    }
+    }*/
 }

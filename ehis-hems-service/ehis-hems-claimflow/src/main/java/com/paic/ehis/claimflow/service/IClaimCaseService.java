@@ -240,9 +240,9 @@ public interface IClaimCaseService
     /**
      * 案件交单完成进入受理阶段分配操作人
      */
-    public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);
+    //public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);
     /**
      除受理阶段其余阶段分配操作人
      */
-    public int updateOtherCaseDist(String rptNo);
+   // public int updateOtherCaseDist(String rptNo);
 }

@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -9,6 +10,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
+import com.paic.ehis.cs.mapper.FlowLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
@@ -27,7 +29,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Autowired
     private CollaborativeFromMapper collaborativeFromMapper;
     @Autowired
-    private DemandAcceptVoMapper demandAcceptVoMapper;
+    private FlowLogMapper flowLogMapper;
 
     /**
      * 查询协办信息 
@@ -114,7 +116,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int insertTeamwork(DemandAcceptVo demandAcceptVo) {
         //修改个人池状态为已协办
-        demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
+        //demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
 
 
         //往协办池加数据
@@ -124,6 +126,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号
         //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
         collaborativeFrom.setUmCode(demandAcceptVo.getUmCode());
+        collaborativeFrom.setStatus(01l);
         collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
         collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -138,17 +141,28 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
      */
     @Override
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setStatus("06");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.updateFlowLog(flowLog);
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
         collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
         collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        return collaborativeFromMapper.insertConsultationDemand(collaborativeFrom);
+        return collaborativeFromMapper.updateConsultationDemand(collaborativeFrom);
     }
     /**
      * 征求意见 投诉  服务处理 意见
@@ -158,10 +172,22 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
     @Override
     public int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo) {
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setStatus("06");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLogMapper.updateFlowLog(flowLog);
+
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());
         collaborativeFrom.setNonReason(demandAcceptVo.getNonReason());
         collaborativeFrom.setTreatmentBasis(demandAcceptVo.getTreatmentBasis());
@@ -170,6 +196,6 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        return collaborativeFromMapper.insertConsultationDemandOne(collaborativeFrom);
+        return collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);
     }
 }

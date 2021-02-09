@@ -80,13 +80,8 @@
   watch: {
     fixInfo: function (newValue) {
       this.fixInfoDetail = newValue;
-      console.log("fixInfo ---------------------------")
-      console.log(newValue);
-      console.log("fixInfo ---------------------------")
-
     },
     value: function (newValue) {
-      console.log(newValue)
       this.dialogVisable = newValue;
       if(this.dialogVisable) {
         this.totalNum = 0;
@@ -103,7 +98,6 @@
           this.confimInfo = true;
           this.initData();
         }
-       //
       }
     },
   },

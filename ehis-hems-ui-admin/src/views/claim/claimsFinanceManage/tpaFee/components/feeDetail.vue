@@ -68,7 +68,7 @@
 <script>
 
   import moment from 'moment'
-  import {invoiceData, updateInvoice} from '@/api/invoice/api'
+  import {taskViewDetail, initiateTask} from '@/api/tpaFee/api'
 
   export default {
   props: {
@@ -80,12 +80,33 @@
   },
   watch: {
     fixInfo: function (newValue) {
+      console.log("detail newValue")
+      console.log(newValue)
+      console.log("detail newValue")
+
       this.fixInfoDetail = newValue;
+      console.log("fixInfoDetail")
+      console.log(this.fixInfoDetail)
+      console.log("fixInfoDetail")
+
     },
     value: function (newValue) {
       this.dialogVisable = newValue;
       if(this.dialogVisable) {
-        // this.initData();
+        this.totalNum = 0;
+        this.tableData= [];
+        let type = this.fixInfoDetail.type ;
+        // 发起结算
+        if(type == "launch") {
+          this.initiateTaskData();
+        }
+        if(type == "show") {
+          this.initData();
+        }
+        if(type == 'confirm') {
+          this.confimInfo = true;
+          this.initData();
+        }
       }
     },
   },
@@ -100,6 +121,7 @@
   },
   data() {
     return {
+      confimInfo:false,
       loading : false,
       dialogVisable : false,
       tableData: [],
@@ -127,7 +149,7 @@
     });
   },
   created() {
-    this.initData();
+    //this.initData();
   },
   computed: {
 
@@ -141,10 +163,8 @@
       const params = {};
       params.pageNum =  this.pageInfo.currentPage;
       params.pageSize =  this.pageInfo.pageSize;
-     // params.rptNo = this.formSearch.rptNo;
-
-
-      invoiceData(params).then(res => {
+      params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
+      taskViewDetail(params).then(res => {
           if (res.code == '200') {
             this.totalNum = res.total;
 
@@ -159,6 +179,32 @@
           }
         }).finally(() => {
             this.loading = false;
+      })
+    },
+    // 发起结算
+    initiateTaskData(){
+      this.loading = true;
+      const params = {};
+      params.pageNum =  this.pageInfo.currentPage;
+      params.pageSize =  this.pageInfo.pageSize;
+
+      params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
+      params.companyCode = this.fixInfoDetail.rowData.companyCode;
+      params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
+      initiateTask(params).then(res => {
+        if (res.code == '200') {
+          this.totalNum = res.total;
+          let _data = res.rows;
+          if (_data.length !== 0) {
+            _data.forEach(item => {
+              item.editing = false;
+              item.minData = [item]
+            })
+          }
+          this.tableData= _data;
+        }
+      }).finally(() => {
+        this.loading = false;
       })
     },
     //导出

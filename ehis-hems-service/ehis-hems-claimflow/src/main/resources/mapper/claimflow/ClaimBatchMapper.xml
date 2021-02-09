@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.claimapt.mapper.ClaimBatchMapper">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimBatchMapper">
     
-    <resultMap type="com.paic.ehis.claimapt.domain.ClaimBatch" id="ClaimBatchResult">
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimBatch" id="ClaimBatchResult">
         <result property="batchno"    column="batch_no"    />
         <result property="source"    column="source"    />
         <result property="hospitalcode"    column="hospital_code"    />
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
-    <resultMap type="com.paic.ehis.claimapt.domain.Vo.BatchVo" id="ClaimBatchVO">
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.BatchVo" id="ClaimBatchVO">
         <result property="batchno"    column="batch_no"    />
         <result property="source"    column="source"    />
         <result property="claimtype"    column="claim_type"    />
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
     </sql>
 
-    <select id="selectClaimBatchList" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch" resultMap="ClaimBatchResult">
+    <select id="selectClaimBatchList" parameterType="com.paic.ehis.claimflow.domain.ClaimBatch" resultMap="ClaimBatchResult">
         <include refid="selectClaimBatchVo"/>
         <where>  
             <if test="source != null  and source != ''"> and source = #{source}</if>
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectDirectQueryList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
+    <select id="selectBackToBatchList" parameterType="com.paic.ehis.claimflow.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bpi.enname1
         FROM
         claim_batch cb
-        left join base_provider_info bpi on bpi.provider_code=cb.hospital_code and bpi.status='Y'
+        left join base_provider_info bpi on bpi.provider_code=cb.hospital_code
         <where>
             <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
             <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
@@ -108,12 +108,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
             <if test="batchstatus != null  and batchstatus != ''"> and batch_status =#{batchstatus}</if>
             <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
-            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
+        group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,bpi.chname1,bpi.enname1
     </select>
 
-    <select id="selectDealWithBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
+    <select id="selectDealWithBatchList" parameterType="com.paic.ehis.claimflow.domain.dto.BatchDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -127,17 +128,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         record.update_by,
-        record.update_time,
+        cb.update_time,
         bpi.chname1,
         bpi.enname1
         FROM
         claim_batch cb
         LEFT JOIN (
-        SELECT
+        SELECT DISTINCT
         batch_no,
-        update_by,
-        update_time,
-        status
+        update_by
         FROM
         claim_batch_record a
         WHERE
@@ -147,33 +146,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
         claim_batch_record b
         WHERE
-        a.batch_no = b.batch_no
-        AND b.operation = '01'
-        AND b.STATUS = 'Y'
+        a.record_id = b.record_id
+        AND operation = '02'
+        AND STATUS = 'Y'
         ORDER BY
         create_time
         LIMIT 1
         )
-        )record on record.batch_no=cb.batch_no and record.status='Y'
+        AND STATUS = 'Y'
+        ) record ON cb.batch_no = record.batch_no
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
         AND bpi.STATUS = 'Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
-            <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
+            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
                 SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
                 UNION
                 SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))</if>
-            <if test="claimtype != null  and claimtype != ''"> and cb.claim_type = #{claimtype}</if>
-            <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
-            <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
-            <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status in (${batchstatus})</if>
-            <if test="updateBy != null  and updateBy != ''"> and record.update_by = #{updateBy}</if>
-            <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status in (${batchstatus})</if>
+            <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
+        group by cb.batch_no,cb.source,cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cb.update_by,cb.update_time,sc.rpt_no,sc.id_no,sc.name,sc.claim_materials,sc.remark,sc.other_info,bpi.chname1,bpi.enname1
     </select>
 
-    <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO" resultMap="ClaimBatchVO">
+    <select id="selectStraightAndReview" parameterType="com.paic.ehis.claimflow.domain.dto.BatchRecordDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,
         cb.source,
@@ -187,15 +188,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         cbr.update_by,
+        cbr.operation,
         cb.update_time
         FROM
         claim_batch cb
         LEFT JOIN (
         SELECT
-        batch_no,
-        update_by,
-        update_time,
-        status
+        *
         FROM
         claim_batch_record a
         WHERE
@@ -206,7 +205,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '04'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
@@ -218,18 +217,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND bpi.STATUS = 'Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
-            <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
+            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
                 SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
                 UNION
                 SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')) </if>
-            <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
-            <if test="claimtype != null  and claimtype != ''"> and cb.claim_type = #{claimtype}</if>
-            <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
-            <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status in (${batchstatus})</if>
+            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
+            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and batch_status in (${batchstatus})</if>
             and cbr.update_by = #{updateBy}
-            <if test="updatestartTime != null and updateendTime != null"> and cbr.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and #{updateendTime}</if>
+            <if test="operation != null  and operation != ''"> and cbr.operation = #{operation}</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
+        group by cb.batch_no,cb.source, cb.hospital_code, cb.claim_type, cb.submit_date, cb.caseload, cb.batch_total, cb.organ_code, cb.currency, cb.cont_type,cb.batch_status,cbr.update_by,cb.update_time ,bpi.chname1,bpi.enname1
     </select>
     
     <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">
@@ -241,7 +242,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where batch_no = #{batchNo} and status='Y'
     </select>
         
-    <insert id="insertClaimBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch">
+    <insert id="insertClaimBatch" parameterType="com.paic.ehis.claimflow.domain.ClaimBatch">
         insert into claim_batch
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="batchno != null">batch_no,</if>
@@ -299,7 +300,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimBatch" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch">
+    <update id="updateClaimBatch" parameterType="com.paic.ehis.claimflow.domain.ClaimBatch">
         update claim_batch
         <trim prefix="SET" suffixOverrides=",">
             <if test="source != null and source != ''">source = #{source},</if>
@@ -341,130 +342,130 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND c.rpt_no = b.rpt_no
-            AND a.organ_code = #{deptId}
-            AND b.pay_status != '03'
-            AND a.currency = 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-        GROUP BY
-            a.batch_no,
-            b.is_appeal
-        ORDER BY
-            a.submit_date desc
-    </select>
+<!--    <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            a.batch_no "batchNo",-->
+<!--            a.hospital_code "hospitalCode",-->
+<!--            a.caseload "caseload",-->
+<!--            a.batch_total "batchTotal",-->
+<!--            b.is_appeal "isAppeal",-->
+<!--            a.organ_code "organCode",-->
+<!--            a.submit_date "submitDate",-->
+<!--            SUM( c.cal_amount ) "calAmount"-->
+<!--        FROM-->
+<!--            claim_batch a,-->
+<!--            claim_case b,-->
+<!--            claim_case_cal c-->
+<!--        WHERE-->
+<!--            b.batch_no = a.batch_no-->
+<!--            AND c.rpt_no = b.rpt_no-->
+<!--            AND a.organ_code = #{deptId}-->
+<!--            AND b.pay_status != '03'-->
+<!--            AND a.currency = 'CNY'-->
+<!--            AND a.STATUS = 'Y'-->
+<!--            AND b.STATUS = 'Y'-->
+<!--            AND c.STATUS = 'Y'-->
+<!--        GROUP BY-->
+<!--            a.batch_no,-->
+<!--            b.is_appeal-->
+<!--        ORDER BY-->
+<!--            a.submit_date desc-->
+<!--    </select>-->
 
-    <select id="selectPayBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.ClaimCasePayDTO" resultType="java.util.HashMap">
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND b.rpt_no = c.rpt_no
-            AND a.currency = 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
-            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
-            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-        GROUP BY
-            a.batch_no,
-            b.is_appeal
-        ORDER BY
-            a.submit_date desc
-    </select>
+<!--    <select id="selectPayBatchList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            a.batch_no "batchNo",-->
+<!--            a.hospital_code "hospitalCode",-->
+<!--            a.caseload "caseload",-->
+<!--            a.batch_total "batchTotal",-->
+<!--            b.is_appeal "isAppeal",-->
+<!--            a.organ_code "organCode",-->
+<!--            a.submit_date "submitDate",-->
+<!--            SUM( c.cal_amount ) "calAmount"-->
+<!--        FROM-->
+<!--            claim_batch a,-->
+<!--            claim_case b,-->
+<!--            claim_case_cal c-->
+<!--        WHERE-->
+<!--            b.batch_no = a.batch_no-->
+<!--            AND b.rpt_no = c.rpt_no-->
+<!--            AND a.currency = 'CNY'-->
+<!--            AND a.STATUS = 'Y'-->
+<!--            AND b.STATUS = 'Y'-->
+<!--            AND c.STATUS = 'Y'-->
+<!--            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>-->
+<!--            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>-->
+<!--            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>-->
+<!--            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>-->
+<!--            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>-->
+<!--        GROUP BY-->
+<!--            a.batch_no,-->
+<!--            b.is_appeal-->
+<!--        ORDER BY-->
+<!--            a.submit_date desc-->
+<!--    </select>-->
 
-    <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND c.rpt_no = b.rpt_no
-            AND a.organ_code = #{deptId}
-            AND b.pay_status != '03'
-            AND a.currency != 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-        GROUP BY
-            a.batch_no,
-            b.is_appeal
-        ORDER BY
-            a.submit_date desc
-    </select>
+<!--    <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            a.batch_no "batchNo",-->
+<!--            a.hospital_code "hospitalCode",-->
+<!--            a.caseload "caseload",-->
+<!--            a.batch_total "batchTotal",-->
+<!--            b.is_appeal "isAppeal",-->
+<!--            a.organ_code "organCode",-->
+<!--            a.submit_date "submitDate",-->
+<!--            SUM( c.cal_amount ) "calAmount"-->
+<!--        FROM-->
+<!--            claim_batch a,-->
+<!--            claim_case b,-->
+<!--            claim_case_cal c-->
+<!--        WHERE-->
+<!--            b.batch_no = a.batch_no-->
+<!--            AND c.rpt_no = b.rpt_no-->
+<!--            AND a.organ_code = #{deptId}-->
+<!--            AND b.pay_status != '03'-->
+<!--            AND a.currency != 'CNY'-->
+<!--            AND a.STATUS = 'Y'-->
+<!--            AND b.STATUS = 'Y'-->
+<!--            AND c.STATUS = 'Y'-->
+<!--        GROUP BY-->
+<!--            a.batch_no,-->
+<!--            b.is_appeal-->
+<!--        ORDER BY-->
+<!--            a.submit_date desc-->
+<!--    </select>-->
 
-    <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.ClaimCasePayDTO" resultType="java.util.HashMap">
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND b.rpt_no = c.rpt_no
-            AND a.currency != 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
-            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
-            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-        GROUP BY
-            a.batch_no,
-            b.is_appeal
-        ORDER BY
-            a.submit_date desc
-    </select>
+<!--    <select id="selectPayForeignBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">-->
+<!--        SELECT-->
+<!--            a.batch_no "batchNo",-->
+<!--            a.hospital_code "hospitalCode",-->
+<!--            a.caseload "caseload",-->
+<!--            a.batch_total "batchTotal",-->
+<!--            b.is_appeal "isAppeal",-->
+<!--            a.organ_code "organCode",-->
+<!--            a.submit_date "submitDate",-->
+<!--            SUM( c.cal_amount ) "calAmount"-->
+<!--        FROM-->
+<!--            claim_batch a,-->
+<!--            claim_case b,-->
+<!--            claim_case_cal c-->
+<!--        WHERE-->
+<!--            b.batch_no = a.batch_no-->
+<!--            AND b.rpt_no = c.rpt_no-->
+<!--            AND a.currency != 'CNY'-->
+<!--            AND a.STATUS = 'Y'-->
+<!--            AND b.STATUS = 'Y'-->
+<!--            AND c.STATUS = 'Y'-->
+<!--            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>-->
+<!--            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>-->
+<!--            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>-->
+<!--            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>-->
+<!--            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>-->
+<!--        GROUP BY-->
+<!--            a.batch_no,-->
+<!--            b.is_appeal-->
+<!--        ORDER BY-->
+<!--            a.submit_date desc-->
+<!--    </select>-->
 
 </mapper>

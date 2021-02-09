@@ -129,7 +129,6 @@
         WHERE
         a.record_id = b.record_id
         AND b.operation = '05'
-        AND b.history_flag = 'Y'
         ORDER BY
         create_time desc
         LIMIT 1
@@ -148,6 +147,7 @@
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
             <if test="updateBy != null  and updateBy != ''"> and cc.update_by = #{updateBy}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
+            <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
         </where>
     </select>
@@ -159,6 +159,7 @@
         cc.filing_no,
         cc.case_status,
         cc.STATUS,
+        cb.claim_type,
         ccr.operator,
         ccr.operation,
         ccr.history_flag
@@ -188,6 +189,8 @@
         )
         AND STATUS = 'Y'
         ) ccr ON ccr.rpt_no = cc.rpt_no
+        LEFT JOIN claim_batch cb ON cb.batch_no = cc.batch_no
+        AND cb.STATUS = 'Y'
         LEFT JOIN claim_case_insured cci ON cci.rpt_no = cc.rpt_no
         AND cci.STATUS = 'Y'
         <where>
@@ -376,7 +379,7 @@
         acto.rpt_no,
         acto.batch_no,
         acto.case_status,
-        acto.operator,
+        acto.update_by,
         acto.NAME
         FROM
         (
@@ -384,26 +387,19 @@
         act.rpt_no,
         act.batch_no,
         act.case_status,
-        act.operator,
+        act.update_by,
         insured.NAME
-        FROM
+        from
         (
         SELECT
-        cases.rpt_no,
-        cases.batch_no,
-        cases.case_status,
-        record.operator
+        rpt_no,
+        batch_no,
+        case_status,
+        update_by
         FROM
-        claim_case cases
-        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation = '07'
-        AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
-        AND record.operator = #{operator}
-        ORDER BY
-        record.update_time DESC
-        ) act
-        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        claim_case
+        where case_status='07' and update_by=#{operator} and status='Y')act
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
         <where>
             <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>

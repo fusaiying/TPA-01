@@ -176,5 +176,13 @@ public class ReservationAcceptVo extends BaseEntity {
 
 
 
+    /**
+     * 修改原因
+     */
+    private String  editReason;
+    /**
+     * 修改说明
+     */
+    private String editRemark;
 
 }

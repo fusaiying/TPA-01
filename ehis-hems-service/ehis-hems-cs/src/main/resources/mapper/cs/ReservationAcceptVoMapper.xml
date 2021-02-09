@@ -208,5 +208,8 @@
         </foreach>
     </update>
 
-
+    <update id="updateOrderCancelStatus" parameterType="String" >
+        update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
 </mapper>

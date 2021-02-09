@@ -22,6 +22,13 @@ public interface WorkOrderAcceptMapper
     public WorkOrderAccept selectWorkOrderAcceptById(String workOrderNo);
 
     /**
+     * 计算处理时长
+     * @param workOrderNo
+     * @return
+     */
+    public WorkOrderAccept selectProcessingTime(String workOrderNo);
+
+    /**
      * 查询工单申请信息 列表
      * 
      * @param workOrderAccept 工单申请信息 

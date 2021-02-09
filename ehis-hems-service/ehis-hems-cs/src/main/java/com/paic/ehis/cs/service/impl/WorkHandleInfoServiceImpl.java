@@ -12,9 +12,11 @@ import com.paic.ehis.cs.domain.FieldMap;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
+import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 {
     @Autowired
     private WorkHandleInfoMapper workHandleInfoMapper;
+    @Autowired
+    private WorkOrderAcceptMapper workOrderAcceptMapper;
     @Autowired
     private FieldMapMapper fieldMapMapper;
     @Autowired
@@ -229,5 +233,67 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
         }
         return workHandleInfoMapper.assistInComplaint(complaintDealVo);
+    }
+
+    @Override
+    public int insertResevationDeal(ReservationDealVo reservationDealVo) {
+        if(reservationDealVo.getSign()=="01"){
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+        workHandleInfo.setHandleType("处理");
+        workHandleInfo.setStatus("Y");
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+        workHandleInfo.setRemark(reservationDealVo.getRemark());
+       //获取处理时长
+        workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+            VoUtils voUtils=new VoUtils<ReservationDealVo>();
+            workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
+        return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
+        else {
+            FlowLog flowLog=new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            flowLogMapper.updateFlowLog(flowLog);
+
+
+            WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("Y");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfo.setRemark(reservationDealVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ReservationDealVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
+
+            return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
+
+        }
     }
 }

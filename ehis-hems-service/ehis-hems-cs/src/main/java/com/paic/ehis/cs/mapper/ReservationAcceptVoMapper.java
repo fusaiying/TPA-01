@@ -15,4 +15,5 @@ public interface ReservationAcceptVoMapper {
 
     /*获取*/
     public int updateStatusM(String[] workOrderNos);
+    public int updateOrderCancelStatus(String workOrderNo);
 }

@@ -8,8 +8,11 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
 import com.paic.ehis.cs.mapper.EditInfoMapper;
+import com.paic.ehis.cs.mapper.ReservationAcceptVoMapper;
 import com.paic.ehis.cs.service.IEditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,8 @@ public class EditInfoServiceImpl implements IEditInfoService
     private FlowLogServiceImpl flowLogMapper;
     @Autowired
     private DemandAcceptVoMapper demandAcceptVoMapper;
+    @Autowired
+    private ReservationAcceptVoMapper reservationAcceptVoMapper;
 
     /**
      * 查询修改信息 
@@ -104,7 +109,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         return editInfoMapper.deleteEditInfoById(editId);
     }
     /**
-     * 取消页面提交按钮
+     * 信息需求  取消页面提交按钮
      * @param demandAcceptVo
      * @return
      */
@@ -129,7 +134,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
-        flowLog.setStatus("04");
+        flowLog.setStatus("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -139,5 +144,38 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         demandAcceptVo.setStatus("05");
         return demandAcceptVoMapper.updateCancelStatus(demandAcceptVo.getWorkOrderNo());
+    }
+    /**
+     * 预约取消页面提交按钮
+     */
+    @Override
+    public int orderCancelSubmit(ReservationAcceptVo reservationAcceptVo) {
+
+        EditInfo editInfo=new EditInfo();
+        //随机生成流水号
+        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
+        editInfo.setCreatedBy(SecurityUtils.getUsername());
+        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setEditReason(reservationAcceptVo.getEditReason());
+        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
+        editInfoMapper.insertEditInfo(editInfo);
+
+        //轨迹表生成数据
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setStatus("05");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
+        flowLogMapper.updateFlowLog(flowLog);
+
+        reservationAcceptVo.setStatus("05");
+        return reservationAcceptVoMapper.updateOrderCancelStatus(reservationAcceptVo.getWorkOrderNo());
     }
 }

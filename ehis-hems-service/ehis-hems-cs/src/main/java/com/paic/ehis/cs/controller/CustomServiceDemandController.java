@@ -119,7 +119,7 @@ public class CustomServiceDemandController extends BaseController {
     }
 
 /**
- * 取消页面提交按钮
+ * 信息需求取消页面提交按钮
  */
         @PreAuthorize("@ss.hasPermi('system:customService::edit')")
         @Log(title = "提交 ", businessType = BusinessType.INSERT)

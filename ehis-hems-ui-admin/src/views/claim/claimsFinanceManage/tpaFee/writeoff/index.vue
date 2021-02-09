@@ -24,7 +24,8 @@
           <el-col :span="8">
             <el-form-item label="建立日期：" prop="createTimeArr">
               <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
-                type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+                               start-placeholder="开始日期" end-placeholder="结束日期"
+                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,6 +113,7 @@
 
   import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
+  import moment from "moment";
   export default {
     components: {
       feeDetail,
@@ -182,17 +184,35 @@
       },
       // 查询处理中
       initData() {
-
+        let createTimeStrt = '';
+        let createTimeEnd = '';
+        let createTimeArr = this.formSearch.createTimeArr;
+        if('' != createTimeArr) {
+          createTimeStrt = createTimeArr[0];
+          createTimeEnd = createTimeArr[1];
+          let entime = moment(createTimeStrt)
+          let letime = moment(createTimeEnd)
+          let dif = letime.diff(entime, 'months')
+          if(dif > 3) {
+            // 时间跨度太长，是否确认
+            this.$confirm('时间跨度太长，是否确认', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'info'
+            }).then(() => {
+              this.getData();
+            }).catch(() => {
+            })
+          } else {
+            this.getData();
+          }
+        } else {
+          this.getData();
+        }
+      },
+      getData(){
         let creationStartDate = '';
         let creationEndDate = '';
-        /*
-        settleTaskNo: '',
-          companyCode: '',
-          createTimeArr: '',
-          settlementType: '',
-          riskCode:'',
-          settleDateArr: '',
-        * */
         let createTimeArr = this.formSearch.createTimeArr;
         if('' != createTimeArr) {
           creationStartDate = createTimeArr[0];
@@ -218,7 +238,6 @@
           }
           this.searchLoad = false
         });
-        this.searchLoad = false
       },
       closeDetailDialog() {
         this.detailDialog = false

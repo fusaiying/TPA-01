@@ -131,7 +131,6 @@ public class ClaimCasePayeeController extends BaseController {
 
 
     //“医院”列表账户数据
-
     /**
      * 获取案件领款人信息详细信息
      */

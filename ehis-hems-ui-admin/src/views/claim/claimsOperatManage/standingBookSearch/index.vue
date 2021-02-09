@@ -300,7 +300,7 @@
           data.pageNum = this.queryParams.pageNum
           data.pageSize = this.queryParams.pageSize
         } else {
-          data.pageNum = 2
+          data.pageNum = 1
           data.pageSize = 10
         }
         listNew(data).then(res => {

@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service;
 
 
+import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
@@ -236,4 +237,12 @@ public interface IClaimCaseService
 
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew);
 
+    /**
+     * 案件交单完成进入受理阶段分配操作人
+     */
+    public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);
+    /**
+     除受理阶段其余阶段分配操作人
+     */
+    public int updateOtherCaseDist(String rptNo);
 }

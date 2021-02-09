@@ -1,12 +1,15 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
+import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -14,6 +17,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +79,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
+    @Autowired
+    private ClaimCaseDistMapper claimCaseDistMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
 
     /**
@@ -1313,5 +1321,39 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
         BaseCodeMappingNew baseCodeMappingNew1 = claimCaseInvestigationMapper.selectBaseCodeMappingNew(baseCodeMappingNew);
         return baseCodeMappingNew1;
+    }
+
+    /**
+     * 案件交单完成进入受理阶段分配操作人
+     */
+    @Override
+    public int updateCaseDist(ClaimBatchDTO claimBatchDTO) {
+        ClaimCase claimCase=new ClaimCase();
+        //List<ClaimCase> claimCases=claimCaseMapper.selectClaimCaseList(claimCase);
+        ClaimCaseDistVo claimCaseDistVo=claimCaseMapper.selectCaseDistNumber(claimBatchDTO.getClaimBatch().getBatchno());
+        int i=claimCaseDistVo.getQuantity();//当前批次案子数量
+        ClaimCaseDist claimCaseDist=new ClaimCaseDist();
+        ClaimCaseDist caseDists=claimCaseDistMapper.selectClaimCaseDistListOne(claimCaseDist);
+        double j=caseDists.getRate().doubleValue()/100;//获取当前操作人分配比例
+        SysUser sysUser = sysUserMapper.selectUserById(claimCaseDist.getUserId());//根据用户id得到用户名
+        for (int x=0;x<=i*j;x++) {
+            //c.setUpdateBy(claimCaseDist.getUserId().toString());
+            claimCase.setUpdateBy(sysUser.getUserName());
+        }
+        return claimCaseMapper.updateClaimCase(claimCase);
+    }
+    @Override
+    public int updateOtherCaseDist(String rptNo) {
+        ClaimCase claimCase=new ClaimCase();
+        ClaimCaseDist claimCaseDist=new ClaimCaseDist();
+        ClaimCaseDist caseDists=claimCaseDistMapper.selectClaimCaseDistListOne(claimCaseDist);
+        double j=caseDists.getRate().doubleValue()/100;//获取当前操作人分配比例
+        ClaimCaseDistVo claimCaseDistVo=claimCaseMapper.selectCaseDistNumberOne(rptNo,claimCase.getCaseStatus());
+        int i=claimCaseDistVo.getQuantity();//当前批次案子数量
+        SysUser sysUser = sysUserMapper.selectUserById(claimCaseDist.getUserId());//根据用户id得到用户名
+        if(j<j*(i+1)){
+            claimCase.setUpdateBy(sysUser.getUserName());
+        }
+        return  claimCaseMapper.updateClaimCase(claimCase);
     }
 }

@@ -103,13 +103,14 @@ export default {
 
     //删除
     delFun(row) {
-      let settleTaskNo = row.settleTaskNo;
+      const params = {};
+      params.settleTaskNo =  row.settleTaskNo;
       this.$confirm('确定删除', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'info'
       }).then(() => {
-        updateTask(settleTaskNo).then(response => {
+        updateTask(params).then(response => {
           if(response.code == '200') {
             this.$emit('initData');
             this.$message({

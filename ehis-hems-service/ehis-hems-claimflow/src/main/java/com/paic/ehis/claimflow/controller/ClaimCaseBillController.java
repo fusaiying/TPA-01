@@ -166,6 +166,7 @@ public class ClaimCaseBillController extends BaseController
         claimCaseRecord2.setRptNo(rptNo);
         claimCaseRecord2.setOperation("07");
         claimCaseRecord2.setHistoryFlag("N");
+        claimCaseRecord2.setStatus("Y");
         claimCaseRecord2.setCreateBy(username);
         // 07轨迹开始
         claimCaseRecordService.insertClaimCaseRecord(claimCaseRecord2);

@@ -89,7 +89,7 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
     public int updateClaimBatchByReview(String[] batchnoes) {
         int i = 0;
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
-        claimBatchRecord.setOperation("04");
+        claimBatchRecord.setOperation("02");
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
         claimBatchRecord.setUpdateTime(DateUtils.getNowDate());
         ClaimBatch claimBatch = new ClaimBatch();

@@ -140,7 +140,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportReturnedPool")
-    public void exportReturnedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
+    public void exportReturnedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
         String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
@@ -158,7 +158,7 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedPool")
-    public void exportProcessedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
+    public void exportProcessedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
     {
         String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
         batchDTO.setHospitalname(hospitalname);
@@ -207,7 +207,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
-    public TableDataInfo reviewPublicList(BatchDTO batchDTO)
+    public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {
@@ -233,7 +233,7 @@ public class ClaimBatchController extends BaseController
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @GetMapping("/untreatedList")
-    public TableDataInfo untreatedPersonalList( BatchDTO batchDTO)
+    public TableDataInfo untreatedPersonalList(BatchDTO batchDTO)
     {
         if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {

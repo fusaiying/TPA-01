@@ -1,5 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -171,7 +173,13 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
         //调用医院接口
-        BaseProviderInfo hospital = getProviderInfoService.selectOrgInfo(baseProviderInfo).get(0);
+
+        R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
+        if (R.FAIL == result.getCode())
+        {
+            throw new BaseException(result.getMsg());
+        }
+        BaseProviderInfo hospital = result.getData().get(0);
         //BaseProviderInfo hospital = (BaseProviderInfo) tableDataInfo.getRows().get(1);
         // 封装返回对象
         claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
@@ -508,7 +516,12 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
         //调用医院接口
-        BaseProviderInfo hospital = getProviderInfoService.selectOrgInfo(baseProviderInfo).get(0);  // 封装返回对象
+        R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
+        if (R.FAIL == result.getCode())
+        {
+            throw new BaseException(result.getMsg());
+        }
+        BaseProviderInfo hospital = result.getData().get(0);  // 封装返回对象
         claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
         claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
         claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号

@@ -7,6 +7,8 @@ import com.paic.ehis.claimflow.domain.dto.HospitalInquiryCodeDTO;
 import com.paic.ehis.claimflow.service.IClaimBatchService;
 import com.paic.ehis.claimflow.service.IClaimCasePayeeService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -152,7 +154,12 @@ public class ClaimCasePayeeController extends BaseController {
         if (claimBatch!=null){
             String hospitalCode = claimBatch.getHospitalcode();//得到就诊医院编码
             baseProviderInfo.setProviderCode(hospitalCode);
-            tableDataInfo = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            tableDataInfo = result.getData();
         }
         return AjaxResult.success(tableDataInfo);
     }

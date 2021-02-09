@@ -107,7 +107,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
 
     /**
-     * 增加协办信息
+     * 增加协办信息  协办按钮接口可调
      * @param demandAcceptVo
      * @return
      */
@@ -130,5 +130,45 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
+    }
+    /**
+     * 征求意见信息信息需求服务处理   加处理意见
+     * @param demandAcceptVo
+     * @return
+     */
+    @Override
+    public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
+
+        CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
+        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
+        collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
+        collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
+        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
+        collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        return collaborativeFromMapper.insertConsultationDemand(collaborativeFrom);
+    }
+    /**
+     * 征求意见 投诉  服务处理 意见
+     * @param demandAcceptVo
+     * @return
+     */
+
+    @Override
+    public int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo) {
+
+        CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
+        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
+        collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());
+        collaborativeFrom.setNonReason(demandAcceptVo.getNonReason());
+        collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
+        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
+        collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        return collaborativeFromMapper.insertConsultationDemandOne(collaborativeFrom);
     }
 }

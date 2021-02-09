@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.CollaborativeFromMapper">
     
-    <resultMap type="CollaborativeFrom" id="CollaborativeFromResult">
+    <resultMap type="com.paic.ehis.cs.domain.CollaborativeFrom" id="CollaborativeFromResult">
         <result property="collaborativeId"    column="collaborative_id"    />
         <result property="workOrderNo"    column="work_order_no"    />
         <result property="fromUserId"    column="from_user_id"    />
@@ -13,6 +13,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="attachmentFlag"    column="attachment_flag"    />
         <result property="handleState"    column="handle_state"    />
         <result property="status"    column="status"    />
+        <result property="opinion"    column="opinion"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="nonReason"    column="non_reason"    />
         <result property="treatmentPlan"    column="treatment_plan"    />
         <result property="treatmentBasis"    column="treatment_basis"    />
         <result property="createdBy"    column="created_by"    />
@@ -24,10 +27,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCollaborativeFromVo">
-        select collaborative_id, work_order_no, from_user_id, um_code, solicit_opinion, attachment_flag, handle_state, status, treatment_plan, treatment_basis, created_by, created_time, updated_by, updated_time from collaborative_from
+        select collaborative_id, work_order_no, from_user_id, um_code, solicit_opinion, attachment_flag, handle_state, status, opinion, valid_flag, non_reason, treatment_plan, treatment_basis, created_by, created_time, updated_by, updated_time from collaborative_from
     </sql>
-
-    <select id="selectCollaborativeFromList" parameterType="CollaborativeFrom" resultMap="CollaborativeFromResult">
+    <select id="selectCollaborativeFromList" parameterType="com.paic.ehis.cs.domain.CollaborativeFrom" resultMap="CollaborativeFromResult">
         <include refid="selectCollaborativeFromVo"/>
         <where>  
             <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
@@ -37,6 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attachmentFlag != null  and attachmentFlag != ''"> and attachment_flag = #{attachmentFlag}</if>
             <if test="handleState != null  and handleState != ''"> and handle_state = #{handleState}</if>
             <if test="status != null "> and status = #{status}</if>
+            <if test="opinion != null  and opinion != ''"> and opinion = #{opinion}</if>
+            <if test="validFlag != null  and validFlag != ''"> and valid_flag = #{validFlag}</if>
+            <if test="nonReason != null  and nonReason != ''"> and non_reason = #{nonReason}</if>
             <if test="treatmentPlan != null  and treatmentPlan != ''"> and treatment_plan = #{treatmentPlan}</if>
             <if test="treatmentBasis != null  and treatmentBasis != ''"> and treatment_basis = #{treatmentBasis}</if>
             <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
@@ -46,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectCollaborativeFromListNew" parameterType="ConsultationDTO" resultMap="CollaborativeFromResult">
+    <select id="selectCollaborativeFromListNew" parameterType="com.paic.ehis.cs.domain.dto.ConsultationDTO" resultMap="CollaborativeFromResult">
     SELECT
     a.work_order_no,
     a.collaborative_id,
@@ -80,36 +85,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         
         <insert id="insertCollaborativeFrom" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
         insert into collaborative_from
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
-            <if test="fromUserId != null">from_user_id,</if>
-            <if test="umCode != null">um_code,</if>
-            <if test="solicitOpinion != null">solicit_opinion,</if>
-            <if test="attachmentFlag != null">attachment_flag,</if>
-            <if test="handleState != null">handle_state,</if>
-            <if test="status != null">status,</if>
-            <if test="treatmentPlan != null">treatment_plan,</if>
-            <if test="treatmentBasis != null">treatment_basis,</if>
-            <if test="createdBy != null and createdBy != ''">created_by,</if>
-            <if test="createdTime != null">created_time,</if>
-            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
-            <if test="updatedTime != null">updated_time,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
-            <if test="fromUserId != null">#{fromUserId},</if>
-            <if test="umCode != null">#{umCode},</if>
-            <if test="solicitOpinion != null">#{solicitOpinion},</if>
-            <if test="attachmentFlag != null">#{attachmentFlag},</if>
-            <if test="handleState != null">#{handleState},</if>
-            <if test="status != null">#{status},</if>
-            <if test="treatmentPlan != null">#{treatmentPlan},</if>
-            <if test="treatmentBasis != null">#{treatmentBasis},</if>
-            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
-            <if test="createdTime != null">#{createdTime},</if>
-            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
-            <if test="updatedTime != null">#{updatedTime},</if>
-         </trim>
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+                <if test="fromUserId != null">from_user_id,</if>
+                <if test="umCode != null">um_code,</if>
+                <if test="solicitOpinion != null">solicit_opinion,</if>
+                <if test="attachmentFlag != null">attachment_flag,</if>
+                <if test="handleState != null">handle_state,</if>
+                <if test="status != null">status,</if>
+                <if test="opinion != null">opinion,</if>
+                <if test="validFlag != null">valid_flag,</if>
+                <if test="nonReason != null">non_reason,</if>
+                <if test="treatmentPlan != null">treatment_plan,</if>
+                <if test="treatmentBasis != null">treatment_basis,</if>
+                <if test="createdBy != null and createdBy != ''">created_by,</if>
+                <if test="createdTime != null">created_time,</if>
+                <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+                <if test="updatedTime != null">updated_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+                <if test="fromUserId != null">#{fromUserId},</if>
+                <if test="umCode != null">#{umCode},</if>
+                <if test="solicitOpinion != null">#{solicitOpinion},</if>
+                <if test="attachmentFlag != null">#{attachmentFlag},</if>
+                <if test="handleState != null">#{handleState},</if>
+                <if test="status != null">#{status},</if>
+                <if test="opinion != null">#{opinion},</if>
+                <if test="validFlag != null">#{validFlag},</if>
+                <if test="nonReason != null">#{nonReason},</if>
+                <if test="treatmentPlan != null">#{treatmentPlan},</if>
+                <if test="treatmentBasis != null">#{treatmentBasis},</if>
+                <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+                <if test="createdTime != null">#{createdTime},</if>
+                <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+                <if test="updatedTime != null">#{updatedTime},</if>
+            </trim>
     </insert>
 
     <update id="updateCollaborativeFrom" parameterType="CollaborativeFrom">
@@ -122,6 +133,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attachmentFlag != null">attachment_flag = #{attachmentFlag},</if>
             <if test="handleState != null">handle_state = #{handleState},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="opinion != null">opinion = #{opinion},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="nonReason != null">non_reason = #{nonReason},</if>
             <if test="treatmentPlan != null">treatment_plan = #{treatmentPlan},</if>
             <if test="treatmentBasis != null">treatment_basis = #{treatmentBasis},</if>
             <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
@@ -131,6 +145,84 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where collaborative_id = #{collaborativeId}
     </update>
+    <insert id="insertConsultationDemand" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
+        insert into collaborative_from
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="fromUserId != null">from_user_id,</if>
+            <if test="umCode != null">um_code,</if>
+            <if test="solicitOpinion != null">solicit_opinion,</if>
+            <if test="attachmentFlag != null">attachment_flag,</if>
+            <if test="handleState != null">handle_state,</if>
+            <if test="status != null">status,</if>
+            <if test="opinion != null">opinion,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="nonReason != null">non_reason,</if>
+            <if test="treatmentPlan != null">treatment_plan,</if>
+            <if test="treatmentBasis != null">treatment_basis,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="fromUserId != null">#{fromUserId},</if>
+            <if test="umCode != null">#{umCode},</if>
+            <if test="solicitOpinion != null">#{solicitOpinion},</if>
+            <if test="attachmentFlag != null">#{attachmentFlag},</if>
+            <if test="handleState != null">#{handleState},</if>
+            <if test="status != null">#{status},</if>
+            <if test="opinion != null">#{opinion},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="nonReason != null">#{nonReason},</if>
+            <if test="treatmentPlan != null">#{treatmentPlan},</if>
+            <if test="treatmentBasis != null">#{treatmentBasis},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
+    <insert id="insertConsultationDemandOne" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
+        insert into collaborative_from
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="fromUserId != null">from_user_id,</if>
+            <if test="umCode != null">um_code,</if>
+            <if test="solicitOpinion != null">solicit_opinion,</if>
+            <if test="attachmentFlag != null">attachment_flag,</if>
+            <if test="handleState != null">handle_state,</if>
+            <if test="status != null">status,</if>
+            <if test="opinion != null">opinion,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="nonReason != null">non_reason,</if>
+            <if test="treatmentPlan != null">treatment_plan,</if>
+            <if test="treatmentBasis != null">treatment_basis,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="fromUserId != null">#{fromUserId},</if>
+            <if test="umCode != null">#{umCode},</if>
+            <if test="solicitOpinion != null">#{solicitOpinion},</if>
+            <if test="attachmentFlag != null">#{attachmentFlag},</if>
+            <if test="handleState != null">#{handleState},</if>
+            <if test="status != null">#{status},</if>
+            <if test="opinion != null">#{opinion},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="nonReason != null">#{nonReason},</if>
+            <if test="treatmentPlan != null">#{treatmentPlan},</if>
+            <if test="treatmentBasis != null">#{treatmentBasis},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
 
     <delete id="deleteCollaborativeFromById" parameterType="Long">
         delete from collaborative_from where collaborative_id = #{collaborativeId}

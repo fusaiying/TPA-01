@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,8 @@ public class CollaborativeFromController extends BaseController
 {
     @Autowired
     private ICollaborativeFromService collaborativeFromService;
+    @Autowired
+    private IWorkHandleInfoService iWorkHandleInfoService;
 
     /**
      * 查询协办信息 列表
@@ -111,5 +115,18 @@ public class CollaborativeFromController extends BaseController
     public AjaxResult remove(@PathVariable Long[] collaborativeIds)
     {
         return toAjax(collaborativeFromService.deleteCollaborativeFromByIds(collaborativeIds));
+    }
+
+    /**
+     * 协办投诉处理
+     * @param complaintDealVo
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:from:edit')")
+    @Log(title = "协办信息 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/assistInComplaint")
+    public AjaxResult assistInComplaint(@RequestBody ComplaintDealVo complaintDealVo)
+    {
+        return toAjax(iWorkHandleInfoService.assistInComplaint(complaintDealVo));
     }
 }

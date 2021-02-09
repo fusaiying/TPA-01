@@ -2,6 +2,7 @@ package com.paic.ehis.cs.mapper;
 
 import java.util.List;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
@@ -43,6 +44,13 @@ public interface WorkHandleInfoMapper
      * @return 结果
      */
     public int updateWorkHandleInfo(WorkHandleInfo workHandleInfo);
+
+    /**
+     * 协办投诉处理
+     * @param complaintDealVo
+     * @return
+     */
+    public int assistInComplaint(ComplaintDealVo complaintDealVo);
 
     /**
      * 删除工单处理信息 

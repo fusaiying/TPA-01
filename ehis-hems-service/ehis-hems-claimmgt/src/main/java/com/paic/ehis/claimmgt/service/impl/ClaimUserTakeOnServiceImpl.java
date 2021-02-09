@@ -13,19 +13,19 @@ import java.util.List;
 
 /**
  * 理赔用户工作承接Service业务层处理
- * 
+ *
  * @author sino
  * @date 2021-01-22
  */
 @Service
-public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService 
+public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 {
     @Autowired
     private ClaimUserTakeOnMapper claimUserTakeOnMapper;
 
     /**
      * 查询理赔用户工作承接
-     * 
+     *
      * @param takeOnId 理赔用户工作承接ID
      * @return 理赔用户工作承接
      */
@@ -50,7 +50,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 
     /**
      * 查询理赔用户工作承接列表
-     * 
+     *
      * @param userTakeOnDTO 理赔用户工作承接
      * @return 理赔用户工作承接
      */
@@ -62,7 +62,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 
     /**
      * 新增理赔用户工作承接
-     * 
+     *
      * @param claimUserTakeOn 理赔用户工作承接
      * @return 结果
      */
@@ -82,7 +82,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 
     /**
      * 修改理赔用户工作承接
-     * 
+     *
      * @param claimUserTakeOn 理赔用户工作承接
      * @return 结果
      */
@@ -91,17 +91,16 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
     {
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-        claimUserTakeOn.setUserId(claimUserTakeOn.getTakeOnUserId());
+
         claimUserTakeOn.setUpdateBy(username);
         claimUserTakeOn.setUpdateTime(nowDate);
         claimUserTakeOn.setStatus(claimUserTakeOn.getStatus());
-        claimUserTakeOnMapper.updateSysUser(claimUserTakeOn);
         return claimUserTakeOnMapper.updateClaimUserTakeOn(claimUserTakeOn);
     }
 
     /**
      * 批量删除理赔用户工作承接
-     * 
+     *
      * @param takeOnIds 需要删除的理赔用户工作承接ID
      * @return 结果
      */
@@ -113,7 +112,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
 
     /**
      * 删除理赔用户工作承接信息
-     * 
+     *
      * @param takeOnId 理赔用户工作承接ID
      * @return 结果
      */

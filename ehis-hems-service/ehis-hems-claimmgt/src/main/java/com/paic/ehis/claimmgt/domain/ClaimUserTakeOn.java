@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 理赔用户工作承接对象 claim_user_take_on
- * 
+ *
  * @author sino
  * @date 2021-01-22
  */
@@ -62,12 +62,12 @@ public class ClaimUserTakeOn extends BaseEntity
     {
         return takeOnUserId;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
@@ -75,14 +75,14 @@ public class ClaimUserTakeOn extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("takeOnId", getTakeOnId())
-            .append("userId", getUserId())
-            .append("takeOnUserId", getTakeOnUserId())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
+                .append("takeOnId", getTakeOnId())
+                .append("userId", getUserId())
+                .append("takeOnUserId", getTakeOnUserId())
+                .append("status", getStatus())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .toString();
     }
 }

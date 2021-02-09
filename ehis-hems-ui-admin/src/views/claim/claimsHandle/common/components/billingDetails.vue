@@ -502,15 +502,7 @@
           }
         })
         if (newVal !== null && newVal !== undefined) {
-          let data = {
-            codeType: 'YYBZ',
-            originalCode: newVal.currency,
-          }
-          getInfoBaseCodeMappingNew(data).then(res => {
-            if (res != null && res.code === 200) {
-              this.baseForm.billCurrency = res.data.targetCode
-            }
-          })
+          this.baseForm.billCurrency=newVal.currency
         }
       },
     },

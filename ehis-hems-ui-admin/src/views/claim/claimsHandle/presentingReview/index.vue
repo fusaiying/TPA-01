@@ -92,7 +92,7 @@
         </span>
       </div>
       <div v-show="divShow">
-        <publicTable ref="publicTable" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
+        <publicTable ref="publicTables" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
         <!--分页组件-->
         <pagination
           v-show="publicTotal>0"
@@ -224,8 +224,8 @@
       searchPublic() {
         //获取公共池
         let query = this.searchForm
-        query.orderByColumn = this.$refs.publicTable.prop
-        query.isAsc = this.$refs.publicTable.order
+        query.orderByColumn = this.$refs.publicTables.prop
+        query.isAsc = this.$refs.publicTables.order
         getPublicList(query).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total

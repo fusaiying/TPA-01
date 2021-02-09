@@ -85,6 +85,11 @@ public class ComplaintAcceptVo extends BaseEntity {
     @Excel(name = "优先级")
     private String priorityLevel;
 
+    /** 被保人客户号 */
+    @Excel(name = "被保人客户号")
+    private String insuredNo;
+
+
     /** 来电人与被保人关系 */
     @Excel(name = "来电人与被保人关系")
     private String callRelationBy;
@@ -112,6 +117,8 @@ public class ComplaintAcceptVo extends BaseEntity {
     private PersonInfo contactsPerson;
     /**投诉人*/
     private PersonInfo complainantPerson;
+    /*被保人*/
+    private PersonInfo insurer;
     /** 原操作人*/
     private UserInfo OperatorLast;
 

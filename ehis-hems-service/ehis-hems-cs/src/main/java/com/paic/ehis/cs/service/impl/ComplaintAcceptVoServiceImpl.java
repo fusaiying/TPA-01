@@ -57,6 +57,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         complaintAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId()));
         complaintAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId()));
+        complaintAcceptVo.setComplainantPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId()));
+        complaintAcceptVo.setInsurer(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo()));
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();

@@ -1,7 +1,7 @@
 package com.paic.ehis.claimflow.service;
 
 
-import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
+//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseStanding;

@@ -682,14 +682,45 @@
                 this.$message({message:'请同时录入证件类型或被保人姓名', type:'warning',showClose:true,center:true})
               }
         }
-        else {
-          if((this.searchForm.name!=null && this.searchForm.name!='' && this.searchForm.sex!=null && this.searchForm.sex!='' && this.searchForm.birthday!=null && this.searchForm.birthday!='' )
-          || (this.searchForm.name=='' && this.searchForm.sex=='' &&  this.searchForm.birthday=='' )){
+        else if(this.searchForm.name){
+
+            if((this.searchForm.birthday!=null && this.searchForm.birthday!='') ){
+              this.getSelectRecogn()
+            }
+            else {
+              this.$message({message:'请同时录入性别、出生日期或证件号码', type:'warning',showClose:true,center:true})
+            }
+
+        }
+        else if(this.searchForm.birthday){
+          if(this.searchForm.name!=null && this.searchForm.name!='' ){
             this.getSelectRecogn()
           }
           else {
             this.$message({message:'请同时录入性别、姓名、出生日期', type:'warning',showClose:true,center:true})
           }
+
+        }
+
+        else {
+          if(this.searchForm.sex){
+            if(this.searchForm.birthday!=null && this.searchForm.birthday!='' && this.searchForm.name!=null && this.searchForm.name!=''){
+              this.getSelectRecogn()
+            }
+            else {
+              this.$message({message:'请同时录入性别、姓名、出生日期', type:'warning',showClose:true,center:true})
+            }
+          }
+          else {
+            this.getSelectRecogn()
+          }
+       /*   if((this.searchForm.name!=null && this.searchForm.name!='' && this.searchForm.sex!=null && this.searchForm.sex!='' && this.searchForm.birthday!=null && this.searchForm.birthday!='' )
+          || (this.searchForm.name=='' && this.searchForm.sex=='' &&  this.searchForm.birthday=='' )){
+            this.getSelectRecogn()
+          }
+          else {
+            this.$message({message:'请同时录入性别、姓名、出生日期', type:'warning',showClose:true,center:true})
+          }*/
 
         }
       }

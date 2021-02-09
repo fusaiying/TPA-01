@@ -129,7 +129,6 @@
         WHERE
         a.record_id = b.record_id
         AND b.operation = '05'
-        AND b.history_flag = 'Y'
         ORDER BY
         create_time desc
         LIMIT 1
@@ -148,6 +147,7 @@
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
             <if test="updateBy != null  and updateBy != ''"> and cc.update_by = #{updateBy}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
+            <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
         </where>
     </select>
@@ -159,6 +159,7 @@
         cc.filing_no,
         cc.case_status,
         cc.STATUS,
+        cb.claim_type,
         ccr.operator,
         ccr.operation,
         ccr.history_flag
@@ -188,6 +189,8 @@
         )
         AND STATUS = 'Y'
         ) ccr ON ccr.rpt_no = cc.rpt_no
+        LEFT JOIN claim_batch cb ON cb.batch_no = cc.batch_no
+        AND cb.STATUS = 'Y'
         LEFT JOIN claim_case_insured cci ON cci.rpt_no = cc.rpt_no
         AND cci.STATUS = 'Y'
         <where>

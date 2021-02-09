@@ -7,15 +7,15 @@ import java.util.List;
 
 /**
  * 理赔用户工作承接Mapper接口
- * 
+ *
  * @author sino
  * @date 2021-01-22
  */
-public interface ClaimUserTakeOnMapper 
+public interface ClaimUserTakeOnMapper
 {
     /**
      * 查询理赔用户工作承接
-     * 
+     *
      * @param takeOnId 理赔用户工作承接ID
      * @return 理赔用户工作承接
      */
@@ -23,7 +23,7 @@ public interface ClaimUserTakeOnMapper
 
     /**
      * 查询理赔用户工作承接列表
-     * 
+     *
      * @param claimUserTakeOn 理赔用户工作承接
      * @return 理赔用户工作承接集合
      */
@@ -33,7 +33,7 @@ public interface ClaimUserTakeOnMapper
 
     /**
      * 新增理赔用户工作承接
-     * 
+     *
      * @param claimUserTakeOn 理赔用户工作承接
      * @return 结果
      */
@@ -41,7 +41,7 @@ public interface ClaimUserTakeOnMapper
 
     /**
      * 修改理赔用户工作承接
-     * 
+     *
      * @param claimUserTakeOn 理赔用户工作承接
      * @return 结果
      */
@@ -50,7 +50,7 @@ public interface ClaimUserTakeOnMapper
 
     /**
      * 删除理赔用户工作承接
-     * 
+     *
      * @param takeOnId 理赔用户工作承接ID
      * @return 结果
      */
@@ -58,7 +58,7 @@ public interface ClaimUserTakeOnMapper
 
     /**
      * 批量删除理赔用户工作承接
-     * 
+     *
      * @param takeOnIds 需要删除的数据ID
      * @return 结果
      */

@@ -195,6 +195,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         claimBatchRecord.setCreateTime(DateUtils.getNowDate());
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
         claimBatchRecord.setUpdateTime(DateUtils.getNowDate());
+        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
         return claimBatchMapper.updateClaimBatch(claimBatch);
     }
 

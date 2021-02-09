@@ -149,7 +149,7 @@
           this.prop=''
           this.order=''
         }
-        this.$parent.$parent.$parent.$parent.searchPublic()
+        this.$parent.$parent.searchPublic()
       }
     }
   }

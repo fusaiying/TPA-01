@@ -249,8 +249,8 @@
 
         params.settleTaskNo = this.formSearch.settleTaskNo;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.createTime = createTimeStrt;
-        params.endTime = createTimeEnd;
+        params.startDate = createTimeStrt;
+        params.endDate = createTimeEnd;
         params.settleStatus = this.formSearch.settleStatus;
         params.batchTotal = this.formSearch.batchTotal;
         params.companyCode = this.formSearch.companyCode;
@@ -278,7 +278,7 @@
       },
       openDialog(){
 
-        if(this.formSearch.settleDate == '' ) {
+        if(this.formSearch.settleEndDate == '' ) {
           this.$message.info('请录入结算止期！');
           return false;
         }
@@ -290,7 +290,7 @@
         this.fixInfo = {
           rowData:{
             settleTaskNo:'',
-            settleDate:this.formSearch.settleDate,
+            settleEndDate:this.formSearch.settleEndDate,
             companyCode:this.formSearch.companyCode,
           },
           type:'launch',

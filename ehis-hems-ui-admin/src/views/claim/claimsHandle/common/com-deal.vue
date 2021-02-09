@@ -166,7 +166,8 @@
   } from '@/api/claim/handleCom'
 
 
-  import {  historyDisInfo } from '@/api/negotiation/api' // 历史协谈数据
+  import {  historyDisInfo } from '@/api/negotiation/api'
+  import elementIcons from "../../../components/icons/element-icons"; // 历史协谈数据
 
 
   let dictss = [{dictType: 'delivery_source'},]
@@ -480,8 +481,12 @@
         //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
         let isInsuredSave = this.$refs.insuredForm.isInsuredSave
         let hasInsuredId = this.$refs.insuredForm.hasInsuredId
-        let isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
-        let hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
+        let isApplicantSave=true
+        let hasApplicantId=true
+        if (this.batchInfo==='02'){
+          isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
+          hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
+        }
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
         if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {

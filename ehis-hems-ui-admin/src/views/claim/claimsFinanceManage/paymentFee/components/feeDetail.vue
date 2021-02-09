@@ -181,7 +181,7 @@
 
       params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
       params.companyCode = this.fixInfoDetail.rowData.companyCode;
-      params.settleDate = this.fixInfoDetail.rowData.settleDate;
+      params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
       initiateTask(params).then(res => {
         if (res.code == '200') {
           this.totalNum = res.total;

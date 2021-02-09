@@ -23,7 +23,7 @@
       <template slot-scope="scope">
         <el-button v-if="status != '02'" size="small" type="text" @click="viewDetail(scope.row,'show')">查看</el-button>
         <el-button v-if="status == '02'" size="small" type="text" @click="viewDetail(scope.row,'confirm')">确认</el-button>
-        <el-button v-if="status != '03'" size="small" type="text" @click="delHandle(scope.row)">删除</el-button>
+        <el-button v-if="status != '03'" size="small" type="text" @click="delFun(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -33,6 +33,8 @@
 
 
 import moment from "moment";
+
+import {updateTask} from '@/api/tpaFee/api'
 
 export default {
   filters: {
@@ -100,8 +102,32 @@ export default {
   methods: {
 
     //删除
-    delHandle(row) {
+    delFun(row) {
+      let settleTaskNo = row.settleTaskNo;
+      this.$confirm('确定删除', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        updateTask(settleTaskNo).then(response => {
+          if(response.code == '200') {
+            this.$emit('initData');
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            });
+          }
 
+        }).catch(error => {
+          console.log(error);
+        })
+      }).catch(() => {
+      })
     },
     //查看
     viewDetail(row,type){

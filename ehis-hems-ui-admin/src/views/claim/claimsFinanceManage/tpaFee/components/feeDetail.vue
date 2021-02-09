@@ -13,7 +13,9 @@
         </el-button>
         <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="exportData">清单导出
         </el-button>
-        <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">清单导入
+        <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">清单导入
+        </el-button>
+        <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">确认
         </el-button>
       </div>
       <el-table
@@ -69,6 +71,7 @@
 
   import moment from 'moment'
   import {taskViewDetail, initiateTask} from '@/api/tpaFee/api'
+  import {updateConfirm} from "@/api/paymentFee/api";
 
   export default {
   props: {
@@ -214,8 +217,37 @@
     importData(){
       this.$emit('openImportDialog');
     },
+    //确认
+    confirmDataInfo(){
+      let settleTaskNo  = this.fixInfoDetail.rowData.settleTaskNo;
+      this.$confirm('确定处理', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        updateConfirm(settleTaskNo).then(response => {
+          if(response.code == '200') {
+            this.confimInfo = false;
+            this.$emit('initData');
+            this.$message({
+              type: 'success',
+              message: '处理成功!'
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '处理失败'
+            });
+          }
+        }).catch(error => {
+          console.log(error);
+        })
+      }).catch(() => {
+      })
+    },
     //关闭对话框
     changeDialogVisable() {
+      this.confimInfo = false;
       this.$emit('closeDetailDialog')
     },
   },

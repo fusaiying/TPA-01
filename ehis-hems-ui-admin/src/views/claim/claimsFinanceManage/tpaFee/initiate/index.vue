@@ -71,7 +71,7 @@
       </div>
 
       <!--服务费结算列表 start -->
-      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail" @initData="initData"/>
       <!--服务费结算列表 end-->
 
       <!--分页组件-->
@@ -278,9 +278,8 @@
       openDialog(){
         if(this.formSearch.companyCode == ''
           || this.formSearch.settleEndDate ==  ''
-          || this.formSearch.settlementType ==  ''
-          || this.formSearch.riskCode ==  '') {
-          this.$message.info('请录入出单公司、结算方式、险种、结算止期后发起结算！');
+          || this.formSearch.settlementType ==  '') {
+          this.$message.info('请录入出单公司、结算方式、结算止期后发起结算！');
           return false;
         }
         this.fixInfo = {

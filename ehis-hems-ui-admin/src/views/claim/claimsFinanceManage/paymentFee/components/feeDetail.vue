@@ -67,7 +67,7 @@
 
   import moment from 'moment'
 
-  import {deleteFinanceInfo, getInfo, initiateTask, updateConfirm} from '@/api/paymentFee/api'
+  import {getInfo, initiateTask, updateConfirm} from '@/api/paymentFee/api'
 
   export default {
   props: {

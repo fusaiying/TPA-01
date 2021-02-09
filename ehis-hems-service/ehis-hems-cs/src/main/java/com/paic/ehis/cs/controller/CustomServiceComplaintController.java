@@ -40,8 +40,8 @@ public class CustomServiceComplaintController extends BaseController {
         return getDataTable(list);
     }
 
-    @GetMapping("/accept")
-    public AjaxResult selectComplaintAcceptVo(@RequestBody String workOrderNo){
+    @GetMapping(value = "/{workOrderNo}")
+    public AjaxResult selectComplaintAcceptVo(@PathVariable("workOrderNo")String workOrderNo){
         ComplaintAcceptVo complaintAcceptVo=iComplaintAcceptVoService.selectComplaintAcceptVo(workOrderNo);
         return AjaxResult.success(complaintAcceptVo);
     }

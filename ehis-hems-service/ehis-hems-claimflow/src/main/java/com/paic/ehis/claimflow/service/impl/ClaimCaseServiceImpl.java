@@ -1,7 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
+//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;

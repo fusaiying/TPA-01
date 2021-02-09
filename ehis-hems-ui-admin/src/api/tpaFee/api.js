@@ -50,7 +50,7 @@ export function taskViewDetail(query) {
 // 确认阶段删除结算任务
 export function updateTask(data) {
   return request({
-    url: '/finance/task',
+    url: '/finance/tpaTask',
     method: 'put',
     data: data
   })

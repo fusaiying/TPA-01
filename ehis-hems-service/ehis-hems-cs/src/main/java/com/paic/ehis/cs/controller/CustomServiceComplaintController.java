@@ -75,4 +75,12 @@ public class CustomServiceComplaintController extends BaseController {
         complaintAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
         return toAjax(iComplaintAcceptVoService.insertComplaintInfo(complaintAcceptVo));
     }
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "修改 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateComplaintAcceptVo")
+    public AjaxResult updateComplaintAcceptVo(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
+    {
+        return toAjax(iComplaintAcceptVoService.updateComplaintAcceptVo(complaintAcceptVo));
+    }
 }

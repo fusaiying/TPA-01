@@ -3,6 +3,8 @@ package com.paic.ehis.cs.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.UserInfo;
 import lombok.Data;
@@ -167,6 +169,10 @@ public class ReservationAcceptVo extends BaseEntity {
     /** 业务内容 */
     @Excel(name = "业务内容")
     private String content;
+
+    private EditInfo editInfo;
+
+    private EditDetail editDetail;
 
 
 

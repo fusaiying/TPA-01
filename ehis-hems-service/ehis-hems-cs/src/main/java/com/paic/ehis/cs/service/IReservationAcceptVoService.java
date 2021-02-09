@@ -22,5 +22,8 @@ public interface IReservationAcceptVoService {
     /*新增*/
     public int insertServiceInfo(ReservationAcceptVo ReservationAcceptVo);
 
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo);
+
 //
 }

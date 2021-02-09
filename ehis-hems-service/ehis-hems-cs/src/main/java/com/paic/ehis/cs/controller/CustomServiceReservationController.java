@@ -48,9 +48,17 @@ public class CustomServiceReservationController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
-    public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo ReservationAcceptVo)
+    public AjaxResult reservationAdd(@Validated @RequestBody ReservationAcceptVo reservationAcceptVo)
     {
-        return toAjax(iReservationAcceptVoService.insertServiceInfo(ReservationAcceptVo));
+        return toAjax(iReservationAcceptVoService.insertServiceInfo(reservationAcceptVo));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "修改 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateReservationAcceptVo")
+    public AjaxResult updateReservationAcceptVo(@Validated @RequestBody ReservationAcceptVo reservationAcceptVo)
+    {
+        return toAjax(iReservationAcceptVoService.updateReservationAcceptVo(reservationAcceptVo));
     }
 
 

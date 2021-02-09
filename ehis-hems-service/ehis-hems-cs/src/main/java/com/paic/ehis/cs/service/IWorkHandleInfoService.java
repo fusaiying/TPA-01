@@ -5,6 +5,7 @@ import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
@@ -86,4 +87,8 @@ public interface IWorkHandleInfoService
      * @return
      */
     int assistInComplaint(ComplaintDealVo complaintDealVo);
+    /**
+     *预约处理页面  服务处理
+     */
+    int insertResevationDeal(ReservationDealVo reservationDealVo);
 }

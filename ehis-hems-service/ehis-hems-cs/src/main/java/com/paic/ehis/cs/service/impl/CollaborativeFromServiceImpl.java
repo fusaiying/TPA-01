@@ -164,7 +164,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());
         collaborativeFrom.setNonReason(demandAcceptVo.getNonReason());
-        collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
+        collaborativeFrom.setTreatmentBasis(demandAcceptVo.getTreatmentBasis());
+        collaborativeFrom.setTreatmentPlan(demandAcceptVo.getTreatmentPlan());
         collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());

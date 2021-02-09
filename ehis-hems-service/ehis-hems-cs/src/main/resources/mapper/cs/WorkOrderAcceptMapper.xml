@@ -141,5 +141,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{workOrderNo}
         </foreach>
     </delete>
-    
+    <select id="selectProcessingTime" parameterType="Long" resultMap="WorkOrderAcceptResult">
+        SELECT concat(DATEDIFF(click_time,accept_time),"天") as processing_time from work_order_accept
+        where work_order_no = #{workOrderNo}
+    </select>
 </mapper>

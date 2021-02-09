@@ -2,6 +2,8 @@ package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 import java.util.List;
 
@@ -70,4 +72,9 @@ public interface IEditInfoService
      * @return
      */
    public int cancelSubmit(DemandAcceptVo demandAcceptVo);
+
+    /**
+     * 取消页面提交按钮
+     */
+    int orderCancelSubmit(ReservationAcceptVo reservationAcceptVo);
 }

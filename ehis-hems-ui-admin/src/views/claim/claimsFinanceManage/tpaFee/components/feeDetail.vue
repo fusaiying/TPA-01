@@ -159,7 +159,6 @@
       return this.selectDictLabel(this.ysOrNo, value)
     },
     initData(){
-      alert('ssssssssssssss');
       this.loading = true;
       const params = {};
       params.pageNum =  this.pageInfo.currentPage;

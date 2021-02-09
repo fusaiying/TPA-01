@@ -10,6 +10,7 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.FieldMap;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
@@ -172,5 +173,61 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         }
 
 
+    }
+    /**
+     *  协办处理页面 信息需求  服务处理
+     * @param serviceProcessingVo
+     * @return
+     */
+    @Override
+    public int teamworkProcessing(ServiceProcessingVo serviceProcessingVo) {
+        WorkHandleInfo workHandleInfo = new WorkHandleInfo();
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
+        workHandleInfo.setHandleType("处理");
+        workHandleInfo.setStatus("Y");
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        workHandleInfo.setRemark(serviceProcessingVo.getRemark());
+        List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ServiceProcessingVo");
+        for (FieldMap fieldMap : KVMap) {
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map = new HashMap<String, String>();
+            map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
+            VoUtils voUtils = new VoUtils<ServiceProcessingVo>();
+            workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, serviceProcessingVo);
+        }
+        return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
+    }
+    /**
+     * 协办投诉处理
+     * @param complaintDealVo
+     * @return
+     */
+    @Override
+    public int assistInComplaint(ComplaintDealVo complaintDealVo) {
+        WorkHandleInfo workHandleInfo = new WorkHandleInfo();
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
+        workHandleInfo.setHandleType("处理");
+        workHandleInfo.setStatus("Y");
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        workHandleInfo.setRemark(complaintDealVo.getRemark());
+        List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
+        for (FieldMap fieldMap : KVMap) {
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map = new HashMap<String, String>();
+            map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
+            VoUtils voUtils = new VoUtils<ComplaintDealVo>();
+            workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
+        }
+        return workHandleInfoMapper.assistInComplaint(complaintDealVo);
     }
 }

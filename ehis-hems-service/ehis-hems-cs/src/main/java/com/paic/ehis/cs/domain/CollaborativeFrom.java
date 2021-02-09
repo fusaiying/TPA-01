@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 /**
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-02-05
  */
+@Data
 public class CollaborativeFrom extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -40,9 +42,22 @@ public class CollaborativeFrom extends BaseEntity
     @Excel(name = "有无附件")
     private String attachmentFlag;
 
+    @Excel(name = "处理状态")
+    private String handleState;
+
     /** 状态 协办中；已经协办； */
     @Excel(name = "状态 协办中；已经协办；")
     private Long status;
+
+    @Excel(name="处理意见")
+    private String opinion;
+
+    @Excel(name="投诉是否成立")
+    private String validFlag;
+
+    @Excel(name="投诉不成立理由")
+    private String nonReason;
+
 
     /** 处理方案 */
     @Excel(name = "处理方案")
@@ -64,6 +79,9 @@ public class CollaborativeFrom extends BaseEntity
     /** 更新人 */
     @Excel(name = "更新人")
     private String updatedBy;
+
+    private String itemCode;
+    private String organCode;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")

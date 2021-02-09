@@ -183,4 +183,13 @@ public class DemandAcceptVo extends BaseEntity {
     //协办方UM帐号
     private String umCode;
 
+    private Long CollaborativeId;
+    @Excel(name="处理意见")
+    private String opinion;
+
+    @Excel(name="投诉是否成立")
+    private String validFlag;
+
+    @Excel(name="投诉不成立理由")
+    private String nonReason;
 }

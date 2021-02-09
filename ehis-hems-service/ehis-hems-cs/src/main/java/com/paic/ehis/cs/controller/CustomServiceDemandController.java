@@ -138,7 +138,42 @@ public class CustomServiceDemandController extends BaseController {
             List<DemandAcceptVo> list = iDemandAcceptVoService.selectAssist(acceptDTO);
             return getDataTable(list);
         }
+    /**
+     *  协办处理页面 信息需求  服务处理
+     * @param serviceProcessingVo
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/teamworkProcessing")
+    public AjaxResult teamworkProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
+    {
+        return toAjax(iWorkHandleInfoService.teamworkProcessing(serviceProcessingVo));
+    }
 
+    /**
+     * 征求意见信息信息需求处理意见
+     * @param demandAcceptVo
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/insertConsultationDemand")
+    public AjaxResult insertConsultationDemand(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+    {
+        return toAjax(iCollaborativeFromService.insertConsultationDemand(demandAcceptVo));
+    }
+    /**
+     * 征求意见投诉需求处理意见
+     * @param demandAcceptVo
+     * @return
+     */
 
-
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/insertConsultationDemandOne")
+    public AjaxResult insertConsultationDemandOne(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+    {
+        return toAjax(iCollaborativeFromService.insertConsultationDemandOne(demandAcceptVo));
+    }
 }

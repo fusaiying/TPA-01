@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
@@ -72,4 +73,17 @@ public interface IWorkHandleInfoService
      */
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo);
 
+    /**
+     * 信息需求  协办处理页面  服务处理
+     * @param serviceProcessingVo
+     * @return
+     */
+    int teamworkProcessing(ServiceProcessingVo serviceProcessingVo);
+
+    /**
+     * 协办投诉处理
+     * @param complaintDealVo
+     * @return
+     */
+    int assistInComplaint(ComplaintDealVo complaintDealVo);
 }

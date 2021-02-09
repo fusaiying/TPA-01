@@ -47,9 +47,9 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="结算止期：" prop="settleDateArr">
-              <el-date-picker  v-model="formSearch.settleDateArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            <el-form-item label="结算止期：" prop="settleEndDate">
+              <el-date-picker  v-model="formSearch.settleEndDate"  style="width:220px;"  size="mini"
+                               type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
 
@@ -130,6 +130,7 @@
   import feeTable from '../components/feeTable'
   import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
+  import moment from "moment";
   /*import importTable from "../components/importTable";*/
 
   export default {
@@ -169,7 +170,7 @@
           createTimeArr: '',
           settlementType: '',
           riskCode:'',
-          settleDateArr: '',
+          settleEndDate: '',
         },
         initTableData: [],
         total: 0,
@@ -210,17 +211,36 @@
       },
       // 查询处理中
       initData() {
+
+        let createTimeStrt = '';
+        let createTimeEnd = '';
+        let createTimeArr = this.formSearch.createTimeArr;
+        if('' != createTimeArr) {
+          createTimeStrt = createTimeArr[0];
+          createTimeEnd = createTimeArr[1];
+          let entime = moment(createTimeStrt)
+          let letime = moment(createTimeEnd)
+          let dif = letime.diff(entime, 'months')
+          if(dif > 3) {
+            // 时间跨度太长，是否确认
+            this.$confirm('时间跨度太长，是否确认', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'info'
+            }).then(() => {
+              this.getData();
+            }).catch(() => {
+            })
+          } else {
+            this.getData();
+          }
+        } else {
+          this.getData();
+        }
+      },
+      getData(){
         let creationStartDate = '';
         let creationEndDate = '';
-        /*
-        settleTaskNo: '',
-          companyCode: '',
-          createTimeArr: '',
-          settlementType: '',
-          riskCode:'',
-          settleDateArr: '',
-        * */
-
         let createTimeArr = this.formSearch.createTimeArr;
         if('' != createTimeArr) {
           creationStartDate = createTimeArr[0];
@@ -229,12 +249,14 @@
         const params = {};
         params.pageNum = this.pendPageInfo.page;
         params.pageSize = this.pendPageInfo.pageSize;
+
         params.settleTaskNo = this.formSearch.settleTaskNo;
         params.companyCode = this.formSearch.companyCode;
         params.creationStartDate = creationStartDate;
         params.creationEndDate = creationEndDate;
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
+        params.settleEndDate = this.formSearch.settleEndDate;
         params.pageStatus = '01';
         this.searchLoad = true;
         listInfo(params).then(res => {
@@ -242,9 +264,8 @@
             this.total = res.total;
             this.initTableData = res.rows;
           }
-         // this.searchLoad = false
+          this.searchLoad = false
         });
-      //  this.searchLoad = false
       },
       //详情弹框 start
       openDetail(info){

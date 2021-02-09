@@ -47,9 +47,9 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="结算止期：" prop="settleDateArr">
-              <el-date-picker  v-model="formSearch.settleDateArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+            <el-form-item label="结算止期：" prop="settleEndDate">
+              <el-date-picker  v-model="formSearch.settleEndDate"  style="width:220px;"  size="mini"
+                               type="date" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
 
@@ -132,7 +132,7 @@
           createTimeArr: '',
           settlementType: '',
           riskCode:'',
-          settleDateArr: '',
+          settleEndDate: '',
         },
         initTableData: [],
         total: 0,
@@ -207,6 +207,7 @@
         params.creationEndDate = creationEndDate;
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
+        params.settleEndDate = this.formSearch.settleEndDate;
         params.pageStatus = '03';
 
         this.searchLoad = true;

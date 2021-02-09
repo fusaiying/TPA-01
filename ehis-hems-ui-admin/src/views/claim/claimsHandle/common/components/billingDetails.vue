@@ -22,7 +22,12 @@
         tooltip-effect="dark"
         style="width: 100%;">
         <el-table-column type="expand" v-if="node==='calculateReview'"/>
-        <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip/>
+        <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ getNo(scope.row) }} </span>
+          </template>
+
+        </el-table-column>
         <!--显示录入的账单号/发票号-->
         <el-table-column align="center" prop="treatmentType" label="治疗类型" show-overflow-tooltip>
           <template slot-scope="scope">
@@ -1246,6 +1251,17 @@
           return str
         }
       },
+      getNo(row){
+        let strNo=''
+        if (row.billNo!==null && row.billNo!=='' && row.invoiceNo!==null && row.invoiceNo!==''){
+          strNo=row.billNo+'|'+row.invoiceNo
+        }else if (row.billNo!==null && row.billNo!=='' && (row.invoiceNo==null || row.invoiceNo==='')){
+          strNo=row.billNo
+        }else if ((row.billNo==null || row.billNo==='') && row.invoiceNo!==null && row.invoiceNo!==''){
+          strNo=row.invoiceNo
+        }
+        return strNo
+      }
     }
 
   }

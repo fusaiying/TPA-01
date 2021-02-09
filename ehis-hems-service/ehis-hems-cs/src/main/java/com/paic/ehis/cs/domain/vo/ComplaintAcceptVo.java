@@ -3,9 +3,7 @@ package com.paic.ehis.cs.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
-import com.paic.ehis.cs.domain.PersonInfo;
-import com.paic.ehis.cs.domain.UserInfo;
-import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -128,5 +126,9 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     /*是否已劝解*/
     private  String persuasionFlag;
+
+    private EditInfo editInfo;
+
+    private EditDetail editDetail;
 
 }

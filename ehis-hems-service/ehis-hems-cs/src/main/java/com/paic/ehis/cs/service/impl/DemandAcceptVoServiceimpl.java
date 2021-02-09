@@ -354,8 +354,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             EditDetail editDetail=new EditDetail();
             EditInfo editInfo=new EditInfo();
             String map3key=iter2.next();
-            String map3value = String.valueOf(map1.get(map3key));
-            String map4value = String.valueOf(map2.get(map3key));
+            String map3value = String.valueOf(map3.get(map3key));
+            String map4value = String.valueOf(map4.get(map3key));
             if (!map3value.equals(map4value)) {
                 keyList.add(map3key);
                 editDetail.setKeyDictType("demandAcceptVo");
@@ -394,8 +394,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             EditDetail editDetail=new EditDetail();
             EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
-            String map5value = String.valueOf(map1.get(map5key));
-            String map6value = String.valueOf(map2.get(map5key));
+            String map5value = String.valueOf(map5.get(map5key));
+            String map6value = String.valueOf(map6.get(map5key));
             if (!map5value.equals(map6value)) {
                 keyList.add(map5key);
                 editDetail.setKeyDictType("demandAcceptVo");

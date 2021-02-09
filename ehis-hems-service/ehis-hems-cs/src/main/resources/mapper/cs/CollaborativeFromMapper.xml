@@ -145,84 +145,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where collaborative_id = #{collaborativeId}
     </update>
-    <insert id="insertConsultationDemand" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
-        insert into collaborative_from
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
-            <if test="fromUserId != null">from_user_id,</if>
-            <if test="umCode != null">um_code,</if>
-            <if test="solicitOpinion != null">solicit_opinion,</if>
-            <if test="attachmentFlag != null">attachment_flag,</if>
-            <if test="handleState != null">handle_state,</if>
-            <if test="status != null">status,</if>
-            <if test="opinion != null">opinion,</if>
-            <if test="validFlag != null">valid_flag,</if>
-            <if test="nonReason != null">non_reason,</if>
-            <if test="treatmentPlan != null">treatment_plan,</if>
-            <if test="treatmentBasis != null">treatment_basis,</if>
-            <if test="createdBy != null and createdBy != ''">created_by,</if>
-            <if test="createdTime != null">created_time,</if>
-            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
-            <if test="updatedTime != null">updated_time,</if>
+    <update id="updateConsultationDemand" parameterType="CollaborativeFrom" >
+        update collaborative_from
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
+            <if test="fromUserId != null">from_user_id = #{fromUserId},</if>
+            <if test="umCode != null">um_code = #{umCode},</if>
+            <if test="solicitOpinion != null">solicit_opinion = #{solicitOpinion},</if>
+            <if test="attachmentFlag != null">attachment_flag = #{attachmentFlag},</if>
+            <if test="handleState != null">handle_state = #{handleState},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="opinion != null">opinion = #{opinion},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="nonReason != null">non_reason = #{nonReason},</if>
+            <if test="treatmentPlan != null">treatment_plan = #{treatmentPlan},</if>
+            <if test="treatmentBasis != null">treatment_basis = #{treatmentBasis},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
-            <if test="fromUserId != null">#{fromUserId},</if>
-            <if test="umCode != null">#{umCode},</if>
-            <if test="solicitOpinion != null">#{solicitOpinion},</if>
-            <if test="attachmentFlag != null">#{attachmentFlag},</if>
-            <if test="handleState != null">#{handleState},</if>
-            <if test="status != null">#{status},</if>
-            <if test="opinion != null">#{opinion},</if>
-            <if test="validFlag != null">#{validFlag},</if>
-            <if test="nonReason != null">#{nonReason},</if>
-            <if test="treatmentPlan != null">#{treatmentPlan},</if>
-            <if test="treatmentBasis != null">#{treatmentBasis},</if>
-            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
-            <if test="createdTime != null">#{createdTime},</if>
-            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
-            <if test="updatedTime != null">#{updatedTime},</if>
+        where collaborative_id = #{collaborativeId}  and work_order_no = #{workOrderNo}
+    </update>
+    <update id="updateConsultationDemandOne" parameterType="CollaborativeFrom">
+        update collaborative_from
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
+            <if test="fromUserId != null">from_user_id = #{fromUserId},</if>
+            <if test="umCode != null">um_code = #{umCode},</if>
+            <if test="solicitOpinion != null">solicit_opinion = #{solicitOpinion},</if>
+            <if test="attachmentFlag != null">attachment_flag = #{attachmentFlag},</if>
+            <if test="handleState != null">handle_state = #{handleState},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="opinion != null">opinion = #{opinion},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="nonReason != null">non_reason = #{nonReason},</if>
+            <if test="treatmentPlan != null">treatment_plan = #{treatmentPlan},</if>
+            <if test="treatmentBasis != null">treatment_basis = #{treatmentBasis},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
         </trim>
-    </insert>
-    <insert id="insertConsultationDemandOne" parameterType="CollaborativeFrom" useGeneratedKeys="true" keyProperty="collaborativeId">
-        insert into collaborative_from
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
-            <if test="fromUserId != null">from_user_id,</if>
-            <if test="umCode != null">um_code,</if>
-            <if test="solicitOpinion != null">solicit_opinion,</if>
-            <if test="attachmentFlag != null">attachment_flag,</if>
-            <if test="handleState != null">handle_state,</if>
-            <if test="status != null">status,</if>
-            <if test="opinion != null">opinion,</if>
-            <if test="validFlag != null">valid_flag,</if>
-            <if test="nonReason != null">non_reason,</if>
-            <if test="treatmentPlan != null">treatment_plan,</if>
-            <if test="treatmentBasis != null">treatment_basis,</if>
-            <if test="createdBy != null and createdBy != ''">created_by,</if>
-            <if test="createdTime != null">created_time,</if>
-            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
-            <if test="updatedTime != null">updated_time,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
-            <if test="fromUserId != null">#{fromUserId},</if>
-            <if test="umCode != null">#{umCode},</if>
-            <if test="solicitOpinion != null">#{solicitOpinion},</if>
-            <if test="attachmentFlag != null">#{attachmentFlag},</if>
-            <if test="handleState != null">#{handleState},</if>
-            <if test="status != null">#{status},</if>
-            <if test="opinion != null">#{opinion},</if>
-            <if test="validFlag != null">#{validFlag},</if>
-            <if test="nonReason != null">#{nonReason},</if>
-            <if test="treatmentPlan != null">#{treatmentPlan},</if>
-            <if test="treatmentBasis != null">#{treatmentBasis},</if>
-            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
-            <if test="createdTime != null">#{createdTime},</if>
-            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
-            <if test="updatedTime != null">#{updatedTime},</if>
-        </trim>
-    </insert>
+        where collaborative_id = #{collaborativeId}  and work_order_no = #{workOrderNo}
+    </update>
 
     <delete id="deleteCollaborativeFromById" parameterType="Long">
         delete from collaborative_from where collaborative_id = #{collaborativeId}

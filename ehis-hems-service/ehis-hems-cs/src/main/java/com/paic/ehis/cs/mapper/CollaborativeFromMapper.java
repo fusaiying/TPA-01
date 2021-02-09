@@ -47,9 +47,9 @@ public interface CollaborativeFromMapper
      */
     public int updateCollaborativeFrom(CollaborativeFrom collaborativeFrom);
 
-    public int insertConsultationDemand(CollaborativeFrom collaborativeFrom);
+    public int updateConsultationDemand(CollaborativeFrom collaborativeFrom);
 
-    public int insertConsultationDemandOne(CollaborativeFrom collaborativeFrom);
+    public int updateConsultationDemandOne(CollaborativeFrom collaborativeFrom);
 
     /**
      * 删除协办信息 

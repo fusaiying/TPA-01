@@ -286,10 +286,7 @@
         <el-row >
           <el-col :span="5">
             <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsCountry" class="item-width" readonly style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsQuhao" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsSecondNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsCountry" class="item-width" readonly style="width: 75px"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -393,57 +390,11 @@
       </div>
     </el-card>
 
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span style="color: blue">HCS服务预约预修改记录</span>
-        <el-divider/>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="HCSPoolData"
-          size="small"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column prop="alterTime" label="修改时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.alterTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="alterId" align="center" label="修改序列号" show-overflow-tooltip/>
-          <el-table-column prop="alterChannel" align="center" label="预约渠道" show-overflow-tooltip/>
-          <el-table-column prop="alterContent" align="center"  style="width: available" label="修改内容描述" show-overflow-tooltip/>
-        </el-table>
-        <pagination
-          v-show="HCSTotal>0"
-          :total="HCSTotal"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchHCS"
-        />
-      </div>
-    </el-card>
-
     <el-card>
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
-          <div style="text-align: right; margin-right: 8px;">
-            <el-button type="primary" size="mini" @click="modify">修改</el-button>
-            <el-button type="primary" size="mini" @click="cancle">取消</el-button>
-          </div>
           <el-divider/>
-       <el-row>
-        <el-col :span="8">
-        <el-form-item label="业务处理情况" prop="businessProcess" >
-          <el-radio-group v-model="ruleForm.businessProcess">
-            <el-radio   :label="1">成功</el-radio>
-            <el-radio   :label="2">响应</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        </el-col>
-        </el-row>
           <el-row>
         <el-form-item label="处理说明：" prop="remark">
           <el-input
@@ -454,40 +405,7 @@
           </el-input>
         </el-form-item>
           </el-row>
-          <el-row>
-            <el-form-item label="客户反馈" prop="customerFeedback" >
-              <el-radio-group v-model="ruleForm.customerFeedback">
-                <el-radio   :label="1">满意</el-radio>
-                <el-radio   :label="2">接受</el-radio>
-                <el-radio   :label="3">不接受</el-radio>
-              </el-radio-group>
-            </el-form-item>
-
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="结案类型：" prop="closeType">
-                <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-                  <el-option v-for="item in serves" :key="item.value" :label="item.label"
-                             :value="item.value"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item label="安抚或通融发生费用成本：" prop="costsIncurred">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="不超过500字符："
-                v-model="ruleForm.costsIncurred">
-              </el-input>
-            </el-form-item>
-          </el-row>
-
         </el-form>
-
-
     </el-card>
 
     <el-card class="box-card" style="margin-top: 10px;">
@@ -518,11 +436,10 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
+        <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
         <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
-        <el-button  type="primary" size="mini" @click="submit">暂存</el-button>
-        <el-button type="primary" size="mini" @click="temporary">提交</el-button>
+        <el-button  type="primary" size="mini" @click="urge">催办</el-button>
+        <el-button  type="primary"  size="mini" @click="cancle">撤销</el-button>
       </div>
     </el-card>
 
@@ -711,10 +628,7 @@
         this.$refs.transfer.open()
         },
       //协办
-      coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
-        this.$refs.coOrganizer.open()
-      },
+      coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
       modifyDetails(){
         this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
@@ -723,28 +637,6 @@
 
       resetForm() {
         this.$refs.sendForm.resetFields()
-      },
-      //打开修改对话框
-
-      //提交
-      submit(){
-        let insert=this.ruleForm
-        insert.sign="02"
-        insert.workOrderNo=this.$route.query.workOrderNo
-        dealADD(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("保存成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
       },
       //暂存
       temporary(){
@@ -789,45 +681,7 @@
 
         })
       },
-      //查询HCS
-      searchHCS() {
-        let workOrderNo=this.queryParams
-        workOrderNo.status=""
-        HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS',res.rows)
-          if (res != null && res.code === 200) {
-            this.HCSPoolData = res.rows
-            this.HCSTotal = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
 
-        })
-      },
-      //修改按钮
-      modify() {
-        if (this.ids.length==0){
-          alert("先选中一行")
-        }else {if(this.ids.length>2){
-          alert("选中一行")
-        }else {
-          this.$router.push({
-            path: '/customService/modify',
-            query: {
-              workOrderNo: this.queryParams.workOrderNo,
-              policyNo: this.queryParams.policyNo,
-              policyItemNo: this.queryParams.policyItemNo,
-              status: this.queryParams.status
-            }
-          })
-        }
-        }
-      },
       //取消按钮
       cancle() {
         this.$router.push({
@@ -840,6 +694,8 @@
           }
         })
       },
+     // 催办
+      urge(){},
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.ids = selection.map(item => item.workOrderNo);

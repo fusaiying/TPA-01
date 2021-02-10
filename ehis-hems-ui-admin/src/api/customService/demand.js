@@ -114,6 +114,27 @@ export function cancelSubmit(data) {
 }
 
 
+//# transfer页面提交
+export function transferSubmit(data) {
+  return request({
+    url: '/cs/by/transferSubmit',
+    method: 'post',
+    data: data
+  })
+}
+
+//# coOrganizer页面提交
+export function coOrganizerSubmit(data) {
+  return request({
+    url: '/cs/demand/insertTeamwork',
+    method: 'put',
+    data: data
+  })
+}
+
+
+
+
 
 
 

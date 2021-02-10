@@ -76,7 +76,7 @@ public class TransferByController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:by:add')")
     @Log(title = "转办信息 ", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/transferSubmit")
     public AjaxResult add(@RequestBody TransferBy transferBy)
     {
         return toAjax(transferByService.insertTransferBy(transferBy));

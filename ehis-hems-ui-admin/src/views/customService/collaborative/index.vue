@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <second-phone :work-pool-data="workPoolData"></second-phone>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
@@ -149,81 +148,14 @@
 
         </el-row>
         <div style="text-align: right; margin-right: 1px;">
-          <el-button size="mini" type="primary" @click="searchHandles">查询</el-button>
+          <el-button size="mini" type="primary" @click="searchHandle">查询</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>
-      <!--<el-divider/>-->
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">待处理（{{ totalCount }}）</span>
-        <div style="text-align: right; margin-right: 8px;">
-            <el-button type="primary" size="mini" @click="add">新增</el-button>
-           <el-button type="primary" size="mini" @click="obtainButton">获取</el-button>
-        </div>
-        <el-divider style=""/>
-        <el-table
-          ref="multipleTable"
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="workPoolData"
-          size="small"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
-          <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.acceptTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" fixed="right" label="操作" width="140">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
-              <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
-              <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <pagination
-          v-show="totalCount>0"
-          :total="totalCount"
-          :page.sync="pageNum"
-          :limit.sync="pageSize"
-          @pagination="searchHandle"
-        />
-      </div>
-    </el-card>
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span style="color: blue">处理中（{{ totalPersonCount }}）</span>
+        <span style="color: blue">协办中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
@@ -233,11 +165,10 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-<!--          <el-table-column type="selection" align="center" name/> sd-->
+          >
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope" class="link-type">
-              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
@@ -258,8 +189,6 @@
           </el-table-column>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -272,9 +201,6 @@
           <el-table-column align="center" label="操作" fixed="right" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
-              <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
-              <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
             </template>
           </el-table-column>
         </el-table>
@@ -284,7 +210,7 @@
           :total="totalPersonCount"
           :page.sync="pageNumPerson"
           :limit.sync="pageSizePerson"
-          @pagination="searchHandle1"
+          @pagination="searchHandle"
         />
       </div>
     </el-card>
@@ -294,11 +220,8 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
-  import secondPhone from "../common/modul/secondPhone";
-
+  import {selectAssist} from '@/api/customService/collaborative'
   export default {
-    components:{secondPhone},
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -321,7 +244,6 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
-
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -380,7 +302,7 @@
       }
     },
     created() {
-      this.searchHandles()
+      this.searchHandle()
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
       });
@@ -405,63 +327,10 @@
     },
 
     methods: {
-      //修改按钮
-      modifyButton(s){
-        this.$router.push({
-          path: '/customService/modify',
-          query:{
-            workOrderNo:s.workOrderNo,
-            policyNo:s.policyNo,
-            policyItemNo:s.policyItemNo,
-            status:s.status
-          }
-        })
-      },
-      //取消按钮
-      cancleBytton(s){
-        this.$router.push({
-          path: '/customService/cancle',
-          query:{
-            workOrderNo:s.workOrderNo,
-            policyNo:s.policyNo,
-            policyItemNo:s.policyItemNo,
-            status:s.status
-          }
-        })
-      },
-      //获取按钮
-      obtainButton(s){
-        if(s.workOrderNo==null&&this.ids.length===0){
-          alert("请先选中一行！")
-        }else {
-        if (s.workOrderNo!=null) {
-          let workOrderNo=s.workOrderNo
-          demandObtain(workOrderNo).then(res => {
-            if (res != null && res.code === 200) {
-            }
-          }).catch(res => {
-
-          })
-
-
-        }else {
-           const workOrderNos=this.ids
-           console.log("ids:",workOrderNos)
-           demandObtainMany(workOrderNos).then(res => {
-            if (res != null && res.code === 200) {
-              alert("success")
-            }
-          }).catch(res => {
-
-          })
-        }
-          this.searchHandles()
-      }
-        },
       //工单页面超链接
       workOrderButton(s){
         this.$router.push({
-          path: '/customService/orderDetails',
+          path: '/customService/collaborative/complaint',
           query:{
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
@@ -473,7 +342,7 @@
       //处理按钮
       dealButton(s){
           this.$router.push({
-            path: '/customService/deal',
+            path: '/customService/collaborative/deal',
             query:{
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
@@ -482,52 +351,11 @@
             }
           })
       },
-      // 多选框选中数据
-      handleSelectionChange(selection) {
-        this.ids = selection.map(item => item.workOrderNo);
-
-      },
-
-      //增加按钮
-      add(row) {
-        this.$router.push({
-          path: '/customService/demand-edit',
-          isEmpty: false
-        })
-      },
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
-      //待处理查询
+      //查询
       searchHandle() {
-        let queryParams;
-        if (this.sendForm.acceptorTime.length > 0) {
-          queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
-        } else {
-          queryParams = this.sendForm;
-        }
-        queryParams.pageNum = this.pageNum;
-        queryParams.pageSize = this.pageSize;
-        demandListAndPublicPool(queryParams).then(res => {
-          console.log('共公池',res.rows)
-          if (res != null && res.code === 200) {
-            this.workPoolData = res.rows
-            this.totalCount = res.total
-            console.log('response',res.total)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      },
-      //处理中查询
-      searchHandle1() {
         let queryParams;
         if (this.sendForm.acceptorTime.length > 0) {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
@@ -538,7 +366,7 @@
         }
         queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;
-        demandListAndPersonalPool(this.sendForm).then(res => {
+        selectAssist(this.sendForm).then(res => {
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
@@ -553,12 +381,6 @@
         }).catch(res => {
 
         })
-      },
-
-      //查询按钮
-      searchHandles() {
-        this.searchHandle()
-        this.searchHandle1()
       },
     }
   }

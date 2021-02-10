@@ -350,7 +350,7 @@
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
-          v-model="ruleForm.ontent">
+          v-model="ruleForm.content">
         </el-input>
         </el-form-item>
       </el-form>

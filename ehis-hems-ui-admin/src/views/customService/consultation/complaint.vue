@@ -194,86 +194,51 @@
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
 
-        <span style="color: blue">信息需求-理赔类</span>
+        <span style="color: blue">投诉-服务受理信息</span>
         <el-divider/>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
-              <el-input v-model="workPoolData.length" class="item-width"  size="mini" readonly/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="workPoolData.callMobilePhone" class="item-width"  size="mini" readonly/>
-            </el-form-item>
-          </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
               <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="8">
-            <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="电话中心业务流水号：" prop="callCenterId">
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="phone">
-              <el-input v-model="workPoolData.callName" class="item-width" readonly size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="来电人与被保人关系：" prop="priority" >
-              <el-select v-model="workPoolData.callRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="联系人：" prop="lxperson">
-              <el-input v-model="workPoolData.contactsRelationBy" class="item-width"  size="mini" readonly/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="priority" >
-              <el-select v-model="workPoolData.contactsSex" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系人与被保人关系：" prop="priority" >
-              <el-select v-model="workPoolData.contactsRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="联系人姓名：" prop="callCenterId">
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+          <el-form-item label="联系人性别：" prop="sex" >
+            <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" readonly/>
+          </el-form-item>
+          </el-col>
+          <el-col :span="8">
+          <el-form-item label="联系人地址：" prop="address">
+            <el-input v-model="workPoolData.contactsPerson.address" class="item-width"  size="mini" readonly/>
+          </el-form-item>
+          </el-col>
+          <el-col :span="8">
+          <el-form-item label="客户号：" prop="phone">
+            <el-input v-model="workPoolData.callMobilePhone" class="item-width"  size="mini" readonly/>
+          </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="优先级：" prop="priorityLevel">
+              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-
           <el-col :span="8">
-            <el-form-item label="联系人移动电话：" prop="phone">
-              <el-input v-model="workPoolData.ContactsMobilePhone" class="item-width"  size="mini" readonly/>
+            <el-form-item label="来电号码：" prop="phone">
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -281,75 +246,75 @@
               <el-input v-model="workPoolData.email" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-
         </el-row>
-        <el-row >
-          <el-col :span="5">
-            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsCountry" class="item-width" readonly style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsQuhao" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsSecondNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人移动电话：" prop="mobilePhone">
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="所在地："  prop="phone">
-            <el-input v-model="workPoolData.phone" class="width-full"  size="mini" readonly/>
-          </el-form-item>
-
-        </el-row>
-        <el-row>
-
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="priority">
-              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
+            <el-form-item label="联系人语言：" prop="priority"  >
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否涉及银行转账" prop="bank" >
-              <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
-
-              </el-radio-group>
+            <el-form-item label="投诉人姓名：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开户行：" v-show="ruleForm.bank=='1'" prop="bankaa">
-              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
+            <el-form-item label="投诉人性别：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户地：" v-show="ruleForm.bank=='1'" prop="bankbb">
-              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
+            <el-form-item label="投诉人身份：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账号：" v-show="ruleForm.bank=='1'" prop="bankcc">
-              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="户名：" v-show="ruleForm.bank=='1'" prop="bankdd">
-              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
+            <el-form-item label="客户电话：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.linePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="业务内容：" prop="textarea">
-          <el-input
-            type="textarea"
-            :rows="2"
-            readonly
-            v-model="workPoolData.textarea">
-          </el-input>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="办公电话：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.homePhone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
+          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini" readonly/>
         </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="投诉内容：" prop="phone">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="workPoolData.content">
+            </el-input>
+          </el-form-item>
+        </el-row>
+
+
+
       </el-form>
     </el-card>
 
@@ -393,101 +358,48 @@
       </div>
     </el-card>
 
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span style="color: blue">HCS服务预约预修改记录</span>
-        <el-divider/>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="HCSPoolData"
-          size="small"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column prop="alterTime" label="修改时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.alterTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="alterId" align="center" label="修改序列号" show-overflow-tooltip/>
-          <el-table-column prop="alterChannel" align="center" label="预约渠道" show-overflow-tooltip/>
-          <el-table-column prop="alterContent" align="center"  style="width: available" label="修改内容描述" show-overflow-tooltip/>
-        </el-table>
-        <pagination
-          v-show="HCSTotal>0"
-          :total="HCSTotal"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchHCS"
-        />
-      </div>
-    </el-card>
+
 
     <el-card>
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+        <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
-          <div style="text-align: right; margin-right: 8px;">
-            <el-button type="primary" size="mini" @click="modify">修改</el-button>
-            <el-button type="primary" size="mini" @click="cancle">取消</el-button>
-          </div>
           <el-divider/>
-       <el-row>
-        <el-col :span="8">
-        <el-form-item label="业务处理情况" prop="businessProcess" >
-          <el-radio-group v-model="ruleForm.businessProcess">
-            <el-radio   :label="1">成功</el-radio>
-            <el-radio   :label="2">响应</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        </el-col>
-        </el-row>
           <el-row>
-        <el-form-item label="处理说明：" prop="remark">
+            <el-form-item label="投诉是否成立：" prop="priority">
+            <el-select v-model="sendForm.validFlag" class="item-width" placeholder="请选择" >
+              <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                         :value="item.dictValue"/>
+            </el-select>
+          </el-form-item>
+          </el-row>
+          <el-row>
+
+            <el-form-item label="投诉不成立理由："  prop="nonReason">
+              <el-input size="mini" v-model="sendForm.nonReason" ></el-input>
+            </el-form-item>
+          </el-row>
+          <el-row>
+        <el-form-item label="处理方案：" prop="remark">
           <el-input
             type="textarea"
-            :rows="2"
+            :rows="1"
             placeholder="请输入内容"
-            v-model="ruleForm.remark">
+            v-model="sendForm.treatmentPlan">
           </el-input>
         </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="客户反馈" prop="customerFeedback" >
-              <el-radio-group v-model="ruleForm.customerFeedback">
-                <el-radio   :label="1">满意</el-radio>
-                <el-radio   :label="2">接受</el-radio>
-                <el-radio   :label="3">不接受</el-radio>
-              </el-radio-group>
-            </el-form-item>
-
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="结案类型：" prop="closeType">
-                <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-                  <el-option v-for="item in serves" :key="item.value" :label="item.label"
-                             :value="item.value"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item label="安抚或通融发生费用成本：" prop="costsIncurred">
+            <el-form-item label="处理依据：" prop="treatmentBasis">
               <el-input
                 type="textarea"
-                :rows="2"
-                placeholder="不超过500字符："
-                v-model="ruleForm.costsIncurred">
+                :rows="1"
+                v-model="sendForm.treatmentBasis">
               </el-input>
             </el-form-item>
           </el-row>
 
         </el-form>
-
-
     </el-card>
 
     <el-card class="box-card" style="margin-top: 10px;">
@@ -514,15 +426,11 @@
         </el-table>
       </div>
       <div style="text-align: right; margin-right: 1px;">
-        <modify-details ref="modifyDetails"></modify-details>
-        <transfer ref="transfer"></transfer>
-        <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
-        <el-button  type="primary" size="mini" @click="submit">暂存</el-button>
-        <el-button type="primary" size="mini" @click="temporary">提交</el-button>
+        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button  type="primary" size="mini" @click="close">关闭</el-button>
+
       </div>
     </el-card>
 
@@ -534,17 +442,13 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
-  import transfer from "../common/modul/transfer";
-  import upLoad from "../common/modul/upload";
-  import coOrganizer from "../common/modul/coOrganizer";
-  import modifyDetails from "../common/modul/modifyDetails";
+  import {complainSearch,comSearch}  from  '@/api/customService/consultation'
 
+  import coOrganizer from "../common/modul/coOrganizer";
   let dictss = [{dictType: 'product_status'}]
   export default {
-    components: { transfer ,
-                  upLoad,
-                  coOrganizer,
-      modifyDetails,
+    components: {
+      coOrganizer,
     },
     filters: {
       changeDate: function (value) {
@@ -560,11 +464,6 @@
         //流转用
         flowLogData:[],
         flowLogCount: 0,
-        // //传过来的工单号
-        // workOrderNo:"",
-        // policyNo:"",
-        // policyItemNo:"",
-        // status:"",
         //信息需求反显数组
         //需要填入数据的部分
         ruleForm:{
@@ -574,7 +473,8 @@
           customerFeedback:"",
           closeType:"",
           costsIncurred:"",
-          sign:""
+          sign:"",
+          collaborativeId:""
         },
         // 表单校验
         rules: {
@@ -600,9 +500,11 @@
         updateBy: undefined,
         //新增的数据传输
         sendForm: {
-          sign:"",//控制暂存还是提交用
           workOrderNo:'',
-          businessProcess:'',
+          validFlag:"",
+          nonReason:"",
+          treatmentPlan:"",
+          treatmentBasis:""
         },
         caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
@@ -622,7 +524,7 @@
         HCSTotal:0,
         //业务处理信息
         dealInfo:[],
-
+        cs_whether_flag:[],
         isinit: 'Y',
         totalCount: 0,
         changeSerchData: {},
@@ -648,18 +550,21 @@
         this.queryParams.policyNo=this.$route.query.policyNo;
         this.queryParams.policyItemNo=this.$route.query.policyItemNo;
         this.queryParams.status=this.$route.query.status;
-      //window.aaa = this;
-      this.searchHandle()
-      this.searchFlowLog()
-      this.searchHCS()
-      // this.getDicts("sys_oper_type").then(response => {
-      //   this.states = response.data;
-      //   console.log("response:",response)
-      // });
+        this.searchHandle()
+        this.searchFlowLog()
+        this.getDicts("cs_whether_flag").then(response => {
+        this.cs_whether_flag = response.data;
+
+      });
 
     },
 
     methods: {
+      download(){},
+      //关闭
+      close(){
+
+      },
       //新增按钮
       add(){
         let addQueryParams=this.ruleForm
@@ -679,18 +584,14 @@
         })
 
       },
-      //取消
-      deal(){},
+      upload(){},
       //反显信息需求
       searchHandle() {
-        let query=this.queryParams
-        console.log("query",query)
-        demandListAndPersonalPool(query).then(res => {
-          console.log('共公池',res.rows)
+        let workOrderNo=this.queryParams.workOrderNo
+        complainSearch(workOrderNo).then(res => {
+          console.log('共公池',res.data)
           if (res != null && res.code === 200) {
-            this.workPoolData = res.rows[0]
-            this.totalCount = res.total
-            console.log('response',res.total)
+            this.workPoolData = res.data
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -701,20 +602,13 @@
 
         })
       },
-      //上传附件
-      upload(){ this.$refs.upload.open();},
-      //下载
-      download(){},
       //转办
       transfer(){
         this.$refs.transfer.transferForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.transfer.open()
         },
       //协办
-      coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
-        this.$refs.coOrganizer.open()
-      },
+      coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
       modifyDetails(){
         this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
@@ -728,10 +622,10 @@
 
       //提交
       submit(){
-        let insert=this.ruleForm
-        insert.sign="02"
+        let insert=this.sendForm
         insert.workOrderNo=this.$route.query.workOrderNo
-        dealADD(insert).then(res => {
+        insert.collaborativeId=this.$route.query.collaborativeId
+        comSearch(insert).then(res => {
           if (res != null && res.code === 200) {
             console.log("insert",insert)
             alert("保存成功")
@@ -746,27 +640,6 @@
         })
 
       },
-      //暂存
-      temporary(){
-        let insert=this.ruleForm
-        insert.sign="01"
-        insert.workOrderNo=this.$route.query.workOrderNo
-        dealADD(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
-      },
-
       //查询轨迹表
       searchFlowLog() {
         let workOrderNo=this.queryParams
@@ -779,26 +652,6 @@
             this.flowLogCount=res.total
             console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      },
-      //查询HCS
-      searchHCS() {
-        let workOrderNo=this.queryParams
-        workOrderNo.status=""
-        HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS',res.rows)
-          if (res != null && res.code === 200) {
-            this.HCSPoolData = res.rows
-            this.HCSTotal = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

@@ -181,25 +181,25 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
         financeAdvanceSettleTask.setStatus("Y");
-        financeAdvanceSettleTask.setDeptCode( sysUser.getDeptId().toString());
+        financeAdvanceSettleTask.setDeptCode(sysUser.getDeptId().toString());
         financeAdvanceSettleTask.setCreateBy(sysUser.getUserName());
         financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
         financeAdvanceSettleTask.setUpdateBy(sysUser.getUserName());
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
-        financeAdvanceSettleDetail.setDeptCode( sysUser.getDeptId().toString());
+        financeAdvanceSettleDetail.setDeptCode(sysUser.getDeptId().toString());
         financeAdvanceSettleDetail.setCreateBy(sysUser.getUserName());
         financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
         financeAdvanceSettleDetail.setUpdateBy(sysUser.getUserName());
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
         financeSettleRecord.setTaskType("02");
-        financeSettleRecord.setOperator("");
+        financeSettleRecord.setOperator(sysUser.getUserName());
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
-        financeSettleRecord.setDeptCode( sysUser.getDeptId().toString());
+        financeSettleRecord.setDeptCode(sysUser.getDeptId().toString());
         financeSettleRecord.setCreateBy(sysUser.getUserName());
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
         financeSettleRecord.setUpdateBy(sysUser.getUserName());

@@ -301,12 +301,72 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     }
 
     /**
-     * 查询工单业处理信息 预约  信息需求
-     * @param acceptDTO
+     * 查询工单业处理信息   信息需求
+     * @param serviceProcessingVo
      * @return
      */
     @Override
-    public List<ReservationAcceptVo> selectWorkOrder(AcceptDTO acceptDTO) {
-        return null;
+    public List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
+
+        //获取处理时长
+       // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
+
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        String sourceName="ServiceProcessingVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+                VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+                serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
+            }
+        return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
+    }
+
+    /**
+     * 查询工单业处理信息 预约
+     */
+    @Override
+    public List<WorkHandleInfo> selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
+
+        //获取处理时长
+         workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        String sourceName="ReservationDealVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<ReservationDealVo>();
+            reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
+        }
+        return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
+    }
+
+    /**
+     * 查询工单业处理信息 投诉
+     */
+    @Override
+    public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        String sourceName="ComplaintDealVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<ComplaintDealVo>();
+            complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
+        }
+        return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
     }
 }

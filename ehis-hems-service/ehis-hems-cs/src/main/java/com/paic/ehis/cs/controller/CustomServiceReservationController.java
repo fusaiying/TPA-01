@@ -6,6 +6,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
@@ -92,13 +93,5 @@ public class CustomServiceReservationController extends BaseController {
         return toAjax(iWorkHandleInfoService.insertResevationDeal(reservationDealVo));
     }
 
-    /**
-     * 查询工单业处理信息 预约  信息需求
-     */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectWorkOrder ")
-    public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO) {
-        List<ReservationAcceptVo> list = iWorkHandleInfoService.selectWorkOrder(acceptDTO);
-        return getDataTable(list);
-    }
+
 }

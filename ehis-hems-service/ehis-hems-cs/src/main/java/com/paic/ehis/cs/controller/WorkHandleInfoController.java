@@ -3,6 +3,11 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paic.ehis.cs.domain.EditInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.domain.vo.ReservationDealVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,5 +106,33 @@ public class WorkHandleInfoController extends BaseController
     public AjaxResult remove(@PathVariable Long[] handleIds)
     {
         return toAjax(workHandleInfoService.deleteWorkHandleInfoByIds(handleIds));
+    }
+
+    /**
+     * 查询工单业处理信息 信息需求
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @GetMapping("/selectWorkOrder ")
+    public TableDataInfo selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
+        List<WorkHandleInfo> list = workHandleInfoService.selectWorkOrder(serviceProcessingVo);
+        return getDataTable(list);
+    }
+    /**
+     * 查询工单业处理信息 预约
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @GetMapping("/selectOrderWorkOrder ")
+    public TableDataInfo selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
+        List<WorkHandleInfo> list = workHandleInfoService.selectOrderWorkOrder(reservationDealVo);
+        return getDataTable(list);
+    }
+    /**
+     * 查询工单业处理信息 投诉
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @GetMapping("/selectComplaintWorkOrder ")
+    public TableDataInfo selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
+        List<WorkHandleInfo> list = workHandleInfoService.selectComplaintWorkOrder(complaintDealVo);
+        return getDataTable(list);
     }
 }

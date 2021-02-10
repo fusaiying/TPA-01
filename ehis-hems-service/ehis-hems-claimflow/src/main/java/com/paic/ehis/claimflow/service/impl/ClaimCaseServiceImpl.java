@@ -80,9 +80,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
-
-    @Autowired
-    private IClaimCaseCheckRuleService claimCaseCheckRuleService;
    // @Autowired
     //private ClaimCaseDistMapper claimCaseDistMapper;
     //@Autowired
@@ -910,22 +907,18 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
         //暂未实现判断被保人当前匹配到的赔付责任所属的保单是否存在在途保全（个别保全项：）对理赔进行挂起操作，待保全处理完成后理赔继续并进行重新理算
         //——寿险还未对接接口，暂缓处理
-//        judgeClaimCaseCheckRule
+
         ClaimCaseCheckDTO claimCaseCheckDTO = new ClaimCaseCheckDTO();
         claimCaseCheckDTO.setRptNo(claimCaseCal.getRptNo());
-//        claimCaseCheckDTO.setPayAmount(claimCaseCal.getRptNo());
-//        claimCaseCheckDTO.setPayConclusion();
-//        claimCaseCheckDTO.setCaseType();
+        claimCaseCheckDTO.setPayAmount(claimCaseCal.getPayAmount());
+        claimCaseCheckDTO.setPayConclusion(claimCaseCal.getPayConclusion());
+        claimCaseCheckDTO.setCaseType(claimCaseCal.getIsAppeal());
         claimCaseCheckDTO.setAmount(claimCaseCal.getRefusedAmount());
-//        claimCaseCheckDTO.setPayAmount(claimCaseCal.get);
-        //判断案件是否符合流程抽检岗规则—————————如何实现？？？
-//        claimCaseCheckRuleService.judgeClaimCaseCheckRule()
+        //判断案件是否符合流程抽检岗规则
         //判断后  结案
-//        claimCase.setCaseStatus("99");
-//        claimCase.setUpdateBy(SecurityUtils.getUsername());
-//        claimCase.setUpdateTime(DateUtils.getNowDate());
-//        return claimCaseMapper.updateClaimCase(claimCase);
-        return 0;
+        ClaimCaseServiceImpl claimCaseService = new ClaimCaseServiceImpl();
+        return claimCaseService.judgeClaimCaseCheckRule(claimCaseCheckDTO);
+
     }
 
 

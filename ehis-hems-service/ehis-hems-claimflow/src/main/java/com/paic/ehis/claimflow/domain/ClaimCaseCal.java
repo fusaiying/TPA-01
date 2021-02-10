@@ -69,6 +69,9 @@ public class ClaimCaseCal extends BaseEntity
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;
 
+    /** 是否申诉 */
+    private String isAppeal;
+
     public void setCalId(Long calId) 
     {
         this.calId = calId;
@@ -185,6 +188,14 @@ public class ClaimCaseCal extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public String getIsAppeal() {
+        return isAppeal;
+    }
+
+    public void setIsAppeal(String isAppeal) {
+        this.isAppeal = isAppeal;
     }
 
     @Override

@@ -361,7 +361,6 @@
             }
           })
         } else {
-          alert(2)
           listRemarkRptNo(this.querys.rptNo).then(res => {
             if (res != null && res.code === 200) {
               this.sonPayeeInfoData = res.data

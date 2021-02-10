@@ -307,7 +307,6 @@
             })
           })
         } else if (this.querys.status === 'publicForeign') {
-          alert(2)
           this.isListExport = true
           this.download('finance/pay/exportForeign', {
 

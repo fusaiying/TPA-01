@@ -95,9 +95,7 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
 
     @Override
     public List<ClaimCaseStandingVo1> selectClaimCaseStandingListFirst(ClaimCaseStandingDTO claimCaseStandingDTO) {
-        String name = SecurityUtils.getUsername();
-        int deptId = userMapper.selectDept(name);
-        claimCaseStandingDTO.setOrgancode(String.valueOf(deptId));
+
         List<ClaimCaseStandingVo1> claimCaseStandingVos = claimCaseStandingMapper.selectClaimCaseStandingListNew(claimCaseStandingDTO);
         if(!claimCaseStandingVos.isEmpty()){
             for(ClaimCaseStandingVo1 claimCaseStandingVo1 :claimCaseStandingVos){

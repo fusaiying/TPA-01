@@ -4,7 +4,9 @@ package com.paic.ehis.claimmgt.controller;
 import com.paic.ehis.claimmgt.domain.ClaimCaseStanding;
 import com.paic.ehis.claimmgt.domain.dto.ClaimCaseStandingDTO;
 import com.paic.ehis.claimmgt.domain.vo.ClaimCaseStandingVo1;
+import com.paic.ehis.claimmgt.mapper.SysUserMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseStandingService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -31,6 +33,8 @@ public class ClaimCaseStandingController extends BaseController
 {
     @Autowired
     private IClaimCaseStandingService claimCaseStandingService;
+    @Autowired
+    private SysUserMapper userMapper;
 
     /**
      * 查询报案台账信息 列表
@@ -72,6 +76,9 @@ public class ClaimCaseStandingController extends BaseController
     @GetMapping("/listFirst")
     public TableDataInfo listFirst(ClaimCaseStandingDTO claimCaseStandingDTO)
     {
+        String name = SecurityUtils.getUsername();
+        int deptId = userMapper.selectDept(name);
+        claimCaseStandingDTO.setOrgancode(String.valueOf(deptId));
         startPage();
         List<ClaimCaseStandingVo1> list = claimCaseStandingService.selectClaimCaseStandingListFirst(claimCaseStandingDTO);
         return getDataTable(list);

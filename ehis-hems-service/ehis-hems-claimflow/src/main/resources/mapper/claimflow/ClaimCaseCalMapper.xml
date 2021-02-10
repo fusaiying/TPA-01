@@ -28,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.paic.ehis.claimflow.domain.vo.CalConclusionVo" id="CalConclusionResult">
         <result property="calId"    column="cal_id"    />
         <result property="rptNo"    column="rpt_no"    />
+        <result property="insuredNo"    column="insured_no"    />
         <result property="billCurrency"    column="bill_currency"    />
         <result property="calAmount"    column="cal_amount"    />
         <result property="isAppeal"    column="is_appeal"    />

@@ -25,6 +25,9 @@ public class CalConclusionVo implements Serializable {
     /** 报案号 */
     private String rptNo;
 
+    /** 被保人客户号 */
+    private String insuredNo;
+
     /** 账单币种 */
     private String billCurrency;
 

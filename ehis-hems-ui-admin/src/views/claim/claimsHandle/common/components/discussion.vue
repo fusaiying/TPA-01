@@ -26,10 +26,10 @@
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">300 CNY</span>
+              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">6000 CNY</span>
+              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }}</span>
             </el-col>
             <el-col :span="8">
               <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmount }}</span>
@@ -43,7 +43,7 @@
               <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.contractName }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }}</span>
             </el-col>
           </el-row>
 
@@ -53,7 +53,7 @@
             <!--  <span class="info_span_col to_right">账单币种：</span>-->
               <el-form-item label="账单币种：" prop="billCurrency">
                 <el-select  size="mini" v-model="conclusionForm.billCurrency" class= "el-select item-width el-select--mini" placeholder="请选择">
-                  <el-option  v-for="dict in currencys" :key="dict.dictValue"  :label="dict.dictLabel"  :value="dict.dictValue" />
+                  <el-option  v-for="dict in currencys" :key="dict.dictValue"  :label="dict.dictValue+' - '+dict.dictLabel"  :value="dict.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -61,7 +61,7 @@
               <span class="info_span_col to_right">汇率：</span><span class="info_span money_class">{{ conclusionInfo.exchangeRate}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span money_class">{{ conclusionInfo.contractName }}</span>
+              <span class="info_span_col to_right">外币给付金额：</span><span class="info_span money_class"></span>
             </el-col>
           </el-row>
 
@@ -295,14 +295,17 @@
         isButtonShow:true,
         //赔付结论信息 start
         conclusionInfo:{
-                        // 账单金额
-                         // 折扣金额
+          sumBillAmount:'', // 账单金额
+          sumHosDiscountAmount:'',// 折扣金额
           payAmount:'', // 赔付金额
           refusedAmount:'', //拒赔金额
           debtAmount:'', // 追讨金额
-                         // 本次支付差额
+          paymentDifference:'',// 本次支付差额
           exchangeRate:'', // 汇率
                           //外币给付金额
+          isAppeal:'', //是否是申诉案件
+          insuredNo:'', // 被保人客户号
+          payConclusion:'', //赔付结论
 
         },
         conclusionForm:{
@@ -394,7 +397,7 @@
       this.getDicts("conclusion").then(response => {
         this.conclusionSelect = response.data;
       });
-      this.getDicts("currency").then(response => {
+      this.getDicts("claim_currency").then(response => {
         this.currencys = response.data;
       });
       //协谈类型
@@ -486,6 +489,7 @@
               updateCal(params).then(res => {
                 console.log(res);
                 if (res.code == '200') {
+                  this.getCalInfo();
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
@@ -511,6 +515,10 @@
           return false;
         }
 
+        if(this.conclusionForm.payConclusion == ''){
+          this.$message.info('请先保存再进行审核！')
+          return false;
+        }
         //币种一致
         const param = {
           rptNo : this.rptNo,
@@ -563,21 +571,20 @@
         });
       },
       addRecoveryInfo(){
-
         if(this.conclusionInfo.debtAmount > 0) {
           const params = {
             rptNo : this.rptNo,
-            insuredNo: 'wXID999999999996',
+            insuredNo: this.conclusionInfo.insuredNo,
             debtAmount:this.conclusionInfo.debtAmount,
           };
-
           addRecoveryInfo(params).then(res => {
             console.log(res);
           });
         }
-
         const params = {
           rptNo : this.rptNo,
+          payConclusion: this.conclusionInfo.payConclusion,
+          isAppeal: this.conclusionInfo.isAppeal,
         };
         // 审核完毕
         finishClaimCase(params).then(res => {
@@ -688,9 +695,17 @@
       },
       getCalInfo() {
         calInfo(this.rptNo).then(res => {
-          console.log(res);
           if(res.code == '200') {
             this.conclusionInfo = res.data;
+            this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
+            this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
+            this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因
+            this.conclusionForm.remark = this.conclusionInfo.remark; // 客户备注
+            this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
+            // alert(this.conclusionInfo.isAppeal);
+            // console.log("res.data")
+            // console.log(res.data)
+            // console.log("res.data")
           }
         });
       },

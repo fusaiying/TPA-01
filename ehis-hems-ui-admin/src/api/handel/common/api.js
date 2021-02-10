@@ -106,7 +106,7 @@ export function inQuireSave(data) {
 // 查询案件赔付信息详细	（tab页）
 export function calInfo(rptNo) {
   return request({
-    url: '/system/cal/' + rptNo,
+    url: '/claimflow/cal/' + rptNo,
     method: 'get'
   })
 }
@@ -115,7 +115,7 @@ export function calInfo(rptNo) {
 // 理算审核  审核完毕险种产品重设验证  (主要需要rptNo)
 export function verifyProReset(query){
   return request({
-    url: '/system/case/verifyReset',
+    url: '/claimflow/case/verifyReset',
     method: 'get',
     params: query
   })
@@ -125,7 +125,7 @@ export function verifyProReset(query){
 
 export function verifyCurrency(query) {
   return request({
-    url: '/system/case/verifyBillCurrency',
+    url: '/claimflow/case/verifyBillCurrency',
     method: 'get',
     params: query
   })
@@ -135,7 +135,7 @@ export function verifyCurrency(query) {
 //（审核完毕按钮前，验证 追讨金额大于0生成追讨记录并显示在追讨工作池）
   export function addRecoveryInfo (data) {
     return request({
-      url: '/system/debt',
+      url: '/claimflow/debt',
       method: 'post',
       data: data
     })

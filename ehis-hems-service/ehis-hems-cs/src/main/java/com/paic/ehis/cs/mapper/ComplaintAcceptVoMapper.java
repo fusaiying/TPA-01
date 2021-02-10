@@ -27,4 +27,11 @@ public interface ComplaintAcceptVoMapper {
     //插入轨迹表
     public int insertFlowLog(FlowLog flowLog);
 
+    /**
+     * 投诉取消提交将状态改为已取消
+     * @param workOrderNo
+     * @return
+     */
+    public int updateReservedCancelStatus(String workOrderNo);
+
 }

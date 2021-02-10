@@ -10,10 +10,8 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.FieldMap;
 import com.paic.ehis.cs.domain.FlowLog;
-import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.ReservationDealVo;
-import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
+import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
@@ -235,13 +233,18 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         return workHandleInfoMapper.assistInComplaint(complaintDealVo);
     }
 
+    /**
+     * 预约处理
+     * @param reservationDealVo
+     * @return
+     */
     @Override
     public int insertResevationDeal(ReservationDealVo reservationDealVo) {
         if(reservationDealVo.getSign()=="01"){
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
         workHandleInfo.setHandleType("处理");
-        workHandleInfo.setStatus("Y");
+        workHandleInfo.setStatus("02");
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -276,7 +279,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
-            workHandleInfo.setStatus("Y");
+            workHandleInfo.setStatus("03");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -295,5 +298,15 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
 
         }
+    }
+
+    /**
+     * 查询工单业处理信息 预约  信息需求
+     * @param acceptDTO
+     * @return
+     */
+    @Override
+    public List<ReservationAcceptVo> selectWorkOrder(AcceptDTO acceptDTO) {
+        return null;
     }
 }

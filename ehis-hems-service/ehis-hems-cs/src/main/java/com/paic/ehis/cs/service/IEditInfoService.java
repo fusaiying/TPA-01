@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.EditInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
@@ -77,4 +78,11 @@ public interface IEditInfoService
      * 取消页面提交按钮
      */
     int orderCancelSubmit(ReservationAcceptVo reservationAcceptVo);
+
+    /**
+     * 取消提交
+     * @param complaintAcceptVo
+     * @return
+     */
+    int reservedCancelSubmit(ComplaintAcceptVo complaintAcceptVo);
 }

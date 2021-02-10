@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.WorkOrderAcceptMapper">
     
-    <resultMap type="WorkOrderAccept" id="WorkOrderAcceptResult">
+    <resultMap type="com.paic.ehis.cs.domain.WorkOrderAccept" id="WorkOrderAcceptResult">
         <result property="workOrderNo"    column="work_order_no"    />
         <result property="businessType"    column="business_type"    />
         <result property="policyNo"    column="policy_no"    />
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select work_order_no, business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, create_by, create_time, update_by, update_time from work_order_accept
     </sql>
 
-    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
         <where>  
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where work_order_no = #{workOrderNo}
     </select>
         
-    <insert id="insertWorkOrderAccept" parameterType="WorkOrderAccept">
+    <insert id="insertWorkOrderAccept" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         insert into work_order_accept
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no,</if>
@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateWorkOrderAccept" parameterType="WorkOrderAccept">
+    <update id="updateWorkOrderAccept" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
         update work_order_accept
         <trim prefix="SET" suffixOverrides=",">
             <if test="businessType != null and businessType != ''">business_type = #{businessType},</if>
@@ -141,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{workOrderNo}
         </foreach>
     </delete>
+
     <select id="selectProcessingTime" parameterType="Long" resultMap="WorkOrderAcceptResult">
         SELECT concat(DATEDIFF(click_time,accept_time),"天") as processing_time from work_order_accept
         where work_order_no = #{workOrderNo}

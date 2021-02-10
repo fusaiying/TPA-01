@@ -121,4 +121,6 @@ public class ComplaintDealVo extends BaseEntity {
     /*业务处理情况*/
     private String businessProcess;
 
+    private String sign;
+
 }

@@ -8,8 +8,10 @@ import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.service.IComplaintAcceptVoService;
+import com.paic.ehis.cs.service.IEditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +28,8 @@ public class CustomServiceComplaintController extends BaseController {
 
     @Autowired
     private IComplaintAcceptVoService iComplaintAcceptVoService;
+    @Autowired
+    private IEditInfoService iEditInfoService;
 
     /**
      * 投诉页面待处理
@@ -47,7 +51,7 @@ public class CustomServiceComplaintController extends BaseController {
     }
 
     /**
-     * 投诉页面已处理
+     * 投诉页面已处理查询页面
      * @param acceptDTO
      * @return
      */
@@ -76,6 +80,11 @@ public class CustomServiceComplaintController extends BaseController {
         return toAjax(iComplaintAcceptVoService.insertComplaintInfo(complaintAcceptVo));
     }
 
+    /**
+     * 投诉修改
+     * @param complaintAcceptVo
+     * @return
+     */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "修改 ", businessType = BusinessType.UPDATE)
     @PutMapping("/updateComplaintAcceptVo")
@@ -83,4 +92,30 @@ public class CustomServiceComplaintController extends BaseController {
     {
         return toAjax(iComplaintAcceptVoService.updateComplaintAcceptVo(complaintAcceptVo));
     }
+
+    /**
+     * 取消投诉
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "修改 ", businessType = BusinessType.INSERT)
+    @PutMapping("/reservedCancelSubmit")
+    public AjaxResult reservedCancelSubmit (@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
+    {
+        return toAjax(iEditInfoService.reservedCancelSubmit(complaintAcceptVo));
+    }
+
+    /**
+     * 投诉需求处理意见
+     * @param complaintDealVo
+     * @return
+     */
+
+    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+    @Log(title = "获取 ", businessType = BusinessType.INSERT)
+    @PutMapping("/complaintHandling ")
+    public AjaxResult complaintHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
+    {
+        return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+    }
+
 }

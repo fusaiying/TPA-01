@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,4 +24,11 @@ public interface IComplaintAcceptVoService {
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     int updateComplaintAcceptVo(ComplaintAcceptVo complaintAcceptVo);
+
+    /**
+     * 投诉处理
+     * @param complaintDealVo
+     * @return
+     */
+    int complaintHandling(ComplaintDealVo complaintDealVo);
 }

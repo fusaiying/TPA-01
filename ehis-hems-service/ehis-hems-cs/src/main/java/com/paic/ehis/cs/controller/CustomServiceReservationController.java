@@ -91,4 +91,14 @@ public class CustomServiceReservationController extends BaseController {
     {
         return toAjax(iWorkHandleInfoService.insertResevationDeal(reservationDealVo));
     }
+
+    /**
+     * 查询工单业处理信息 预约  信息需求
+     */
+    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @GetMapping("/selectWorkOrder ")
+    public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO) {
+        List<ReservationAcceptVo> list = iWorkHandleInfoService.selectWorkOrder(acceptDTO);
+        return getDataTable(list);
+    }
 }

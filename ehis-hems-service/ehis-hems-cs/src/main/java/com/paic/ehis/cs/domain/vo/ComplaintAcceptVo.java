@@ -115,6 +115,22 @@ public class ComplaintAcceptVo extends BaseEntity {
     private String content;
     /** 联系人*/
     private PersonInfo contactsPerson;
+    /** 联系人国家*/
+    private String contactsCountry;
+    /** 联系人区号*/
+    private String contactsQuhao;
+    /** 联系人号码*/
+    private String contactsNumber;
+    /** 联系人分机号*/
+    private String contactsSecondNumber;
+    /** 联系人性别*/
+    private long contactsSex;
+    /** 联系人姓名*/
+    private String contactsName;
+    /** 联系人语言*/
+    private String contactsLanguage;
+    /** 联系人电话*/
+    private String contactsMobilePhone;
     /**投诉人*/
     private PersonInfo complainantPerson;
     /*被保人*/
@@ -138,4 +154,12 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     private EditDetail editDetail;
 
+    /**
+     * 修改原因
+     */
+    private String  editReason;
+    /**
+     * 修改说明
+     */
+    private String editRemark;
 }

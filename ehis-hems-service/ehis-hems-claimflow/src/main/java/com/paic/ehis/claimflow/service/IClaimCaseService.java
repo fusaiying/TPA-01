@@ -2,9 +2,7 @@ package com.paic.ehis.claimflow.service;
 
 
 //import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
-import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
-import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -193,18 +191,18 @@ public interface IClaimCaseService
     /**
      * 审核完毕
      *
-     * @param claimCase 案件信息
+     * @param claimCaseCal 案件信息
      * @return 结果
      */
-    public int reviewCompletedClaimCase(ClaimCase claimCase );
+    public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal );
 
     /**
      * 提调
      *
-     * @param claimCase 案件信息
+     * @param caseInvestigation 案件信息
      * @return 结果
      */
-    public int raiseClaimCase(ClaimCase claimCase);
+    public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation);
 
     /**
      * 理赔信息查询

@@ -33,6 +33,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isAppeal"    column="is_appeal"    />
         <result property="refusedAmount"    column="refused_amount"    />
         <result property="debtAmount"    column="debt_amount"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="refusedReason"    column="refused_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="claimCheck"    column="claim_check"    />
         <result property="exchangeRate"    column="exchange_rate"    />
         <result property="payAmountForeign"    column="pay_amount_foreign"    />
         <result property="sumBillAmount"    column="sumBillAmount"    />
@@ -88,7 +92,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.debt_amount,
         ccc.exchange_rate,
         ccc.pay_amount_foreign,
+        ccc.pay_conclusion,
+        ccc.refused_reason,
+        ccc.remark,
+        ccc.claim_check,
         cc.is_appeal,
+        insured.insured_no,
         bill.sumBillAmount,
         bill.sumHosDiscountAmount
         FROM
@@ -102,10 +111,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM claim_case_bill ccb
         GROUP BY rpt_no ) bill
         ON ccc.rpt_no = bill.rpt_no
+        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
         </where>
-        and status = 'Y'
+        and ccc.status = 'Y'
     </select>
 
     <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
@@ -145,7 +155,7 @@ GROUP BY
 	rpt_no
 	) sumCalBill ON sumCalBill.rpt_no = ccc.rpt_no
 WHERE
-	ccc.rpt_no = #{rptNo} and status='Y'
+	ccc.rpt_no = #{rptNo} and ccc.status='Y'
     </select>
 
     <insert id="insertClaimCaseCal" parameterType="ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">

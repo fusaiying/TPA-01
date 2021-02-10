@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.finance.domain.FinanceTpaSettleDetailMapper">
+<mapper namespace="com.paic.ehis.finance.mapper.FinanceTpaSettleDetailMapper">
 
     <resultMap type="FinanceTpaSettleDetail" id="FinanceTpaSettleDetailResult">
         <result property="detailId"    column="detail_id"    />

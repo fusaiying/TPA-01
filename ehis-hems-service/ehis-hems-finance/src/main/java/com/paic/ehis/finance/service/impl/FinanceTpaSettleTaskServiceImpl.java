@@ -109,6 +109,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeTpaSettleTask.setCompanyCode(tpaSettleDTO.getCompanyCode());
         financeTpaSettleTask.setStatus("Y");
 //        financeTpaSettleTask.setDeptCode( sysUser.getDeptId().toString());
+        financeTpaSettleTask.setDeptCode("unknown");
         financeTpaSettleTask.setCreateBy(SecurityUtils.getUsername());
         financeTpaSettleTask.setCreateTime(DateUtils.getNowDate());
         financeTpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
@@ -116,6 +117,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
 
         financeTpaSettleDetail.setStatus("Y");
 //        financeTpaSettleDetail.setDeptCode( sysUser.getDeptId().toString());
+        financeTpaSettleDetail.setDeptCode("unknown");
         financeTpaSettleDetail.setCreateBy(SecurityUtils.getUsername());
         financeTpaSettleDetail.setCreateTime(DateUtils.getNowDate());
         financeTpaSettleDetail.setUpdateBy(SecurityUtils.getUsername());
@@ -127,6 +129,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
 //        financeSettleRecord.setDeptCode( sysUser.getDeptId().toString());
+        financeSettleRecord.setDeptCode("unknown");
         financeSettleRecord.setCreateBy(SecurityUtils.getUsername());
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
         financeSettleRecord.setUpdateBy(SecurityUtils.getUsername());
@@ -416,6 +419,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
 //        Long userId = SecurityUtils.getLoginUser().getUserId();
 //        SysUser sysUser = sysUserMapper.selectUserById(userId);
 //        settleRecord.setDeptCode( sysUser.getDeptId().toString());
+        settleRecord.setDeptCode("unknown");
         financeSettleRecordMapper.insertFinanceSettleRecord(settleRecord);
         return financeTpaSettleTaskMapper.updateFinanceTpaSettleTask(financeTpaSettleTask);
     }

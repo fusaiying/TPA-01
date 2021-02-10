@@ -37,6 +37,19 @@ public class CalConclusionVo implements Serializable {
     /** 拒赔金额 */
     private BigDecimal refusedAmount;
 
+    /** 赔付结论 */
+    private String payConclusion;
+
+    /** 拒赔原因 */
+    private String refusedReason;
+
+    /* 客户备注 */
+    private String remark;
+
+   /*  核赔依据 */
+    private String claimCheck;
+
+    /** 是否申诉案件 */
     private String isAppeal;
 
     /** 追讨金额 */

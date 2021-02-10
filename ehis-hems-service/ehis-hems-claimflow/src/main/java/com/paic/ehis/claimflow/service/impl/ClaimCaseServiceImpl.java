@@ -11,6 +11,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseService;
 //import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
 //import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -79,6 +80,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
+
+    @Autowired
+    private IClaimCaseCheckRuleService claimCaseCheckRuleService;
    // @Autowired
     //private ClaimCaseDistMapper claimCaseDistMapper;
     //@Autowired
@@ -898,43 +902,50 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 审核完毕
      *
-     * @param claimCase 案件信息
+     * @param claimCaseCal 案件信息
      * @return 结果
      */
     @Transactional
     @Override
-    public int reviewCompletedClaimCase(ClaimCase claimCase) {//ReviewCompletedDTO
+    public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
         //暂未实现判断被保人当前匹配到的赔付责任所属的保单是否存在在途保全（个别保全项：）对理赔进行挂起操作，待保全处理完成后理赔继续并进行重新理算
         //——寿险还未对接接口，暂缓处理
-
+//        judgeClaimCaseCheckRule
+        ClaimCaseCheckDTO claimCaseCheckDTO = new ClaimCaseCheckDTO();
+        claimCaseCheckDTO.setRptNo(claimCaseCal.getRptNo());
+//        claimCaseCheckDTO.setPayAmount(claimCaseCal.getRptNo());
+//        claimCaseCheckDTO.setPayConclusion();
+//        claimCaseCheckDTO.setCaseType();
+        claimCaseCheckDTO.setAmount(claimCaseCal.getRefusedAmount());
+//        claimCaseCheckDTO.setPayAmount(claimCaseCal.get);
         //判断案件是否符合流程抽检岗规则—————————如何实现？？？
-
+//        claimCaseCheckRuleService.judgeClaimCaseCheckRule()
         //判断后  结案
-        claimCase.setCaseStatus("99");
-        claimCase.setUpdateBy(SecurityUtils.getUsername());
-        claimCase.setUpdateTime(DateUtils.getNowDate());
-        return claimCaseMapper.updateClaimCase(claimCase);
+//        claimCase.setCaseStatus("99");
+//        claimCase.setUpdateBy(SecurityUtils.getUsername());
+//        claimCase.setUpdateTime(DateUtils.getNowDate());
+//        return claimCaseMapper.updateClaimCase(claimCase);
+        return 0;
     }
 
 
     /**
      * 提调
      *
-     * @param claimCase 案件信息
+     * @param caseInvestigation 案件信息
      * @return 结果
      */
     @Transactional
     @Override
-    public int raiseClaimCase(ClaimCase claimCase) {
-        System.out.println(claimCase.getRptNo());
-        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(claimCase.getRptNo());
+    public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
+        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(caseInvestigation.getRptNo());
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();
-        caseRecord.setRptNo(claimCase.getRptNo());
+        caseRecord.setRptNo(caseInvestigation.getRptNo());
         caseRecord.setOperation("32");
         caseRecord.setStatus("Y");
         caseRecord.setHistoryFlag("N");
@@ -943,6 +954,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
+        ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
+        claimCaseInvestigation.setIsHistory("N");
+        claimCaseInvestigation.setInvNo("ZWQR"+ PubFun.createMySqlMaxNoUseCache("Investigation",10,7));
+        claimCaseInvestigation.setCreateBy(SecurityUtils.getUsername());
+        claimCaseInvestigation.setCreateTime(DateUtils.getNowDate());
+        claimCaseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseInvestigation.setUpdateTime(DateUtils.getNowDate());
+        claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
+
+        ClaimCase claimCase = new ClaimCase();
         claimCase.setCaseStatus("32");
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());

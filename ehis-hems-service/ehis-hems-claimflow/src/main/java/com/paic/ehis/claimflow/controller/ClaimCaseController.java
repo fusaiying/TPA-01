@@ -1,9 +1,6 @@
 package com.paic.ehis.claimflow.controller;
 
-import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
-import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
-import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.IClaimCaseProblemService;
@@ -50,8 +47,8 @@ public class ClaimCaseController extends BaseController {
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @GetMapping("/raiseCase")
-    public AjaxResult raiseClaimCase(ClaimCase claimCase) {
-        return toAjax(claimCaseService.raiseClaimCase(claimCase));
+    public AjaxResult raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
+        return toAjax(claimCaseService.raiseClaimCase(caseInvestigation));
     }
 
     /**
@@ -473,8 +470,8 @@ public class ClaimCaseController extends BaseController {
      */
 //    @PreAuthorize("@ss.hasPermi('system:case:edit')")
     @GetMapping("/ReviewCompleted")
-    public AjaxResult reviewCompletedClaimCase(ClaimCase claimCase) {
-        return toAjax(claimCaseService.reviewCompletedClaimCase(claimCase));
+    public AjaxResult reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
+        return toAjax(claimCaseService.reviewCompletedClaimCase(claimCaseCal));
     }
 
     /**

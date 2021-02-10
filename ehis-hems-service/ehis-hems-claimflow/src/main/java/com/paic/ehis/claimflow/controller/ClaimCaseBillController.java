@@ -10,6 +10,7 @@ import com.paic.ehis.claimflow.domain.vo.ClaimCaseBillInfoVO;
 import com.paic.ehis.claimflow.service.IClaimCaseBillService;
 import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -168,6 +169,7 @@ public class ClaimCaseBillController extends BaseController
         claimCaseRecord2.setHistoryFlag("N");
         claimCaseRecord2.setStatus("Y");
         claimCaseRecord2.setCreateBy(username);
+        claimCaseRecord2.setCreateTime(DateUtils.getNowDate());
         // 07轨迹开始
         claimCaseRecordService.insertClaimCaseRecord(claimCaseRecord2);
         // 案件信息表更新

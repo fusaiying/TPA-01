@@ -18,6 +18,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 理算审核提调 按钮
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @GetMapping("/raiseCase")
     public AjaxResult raiseClaimCase(ClaimCase claimCase) {
         return toAjax(claimCaseService.raiseClaimCase(claimCase));
@@ -56,7 +57,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 查询案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/list")
     public TableDataInfo list(ClaimCase claimCase) {
         startPage();
@@ -67,7 +68,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 查询处理中受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processingList")
     public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
         claimCaseDTO.setIsAsc("desc");
@@ -80,7 +81,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 查询已处理受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processedList")
     public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
         TableSupport.setSort("desc");
@@ -93,21 +94,21 @@ public class ClaimCaseController extends BaseController {
     /**
      * 查询悬挂中受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/suspensionList")
     public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
         TableSupport.setSort("desc");
         TableSupport.setOrderByColumn("rpt_no");
         startSortPage();
-        List<ClaimCase> claimCases = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        return getDataTable(claimCases);
+        List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        return getDataTable(processingCaseVos);
     }
 
 
     /**
      * 导出案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:export')")export
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:export')")
     @Log(title = "案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ClaimCase claimCase) throws IOException {
@@ -119,7 +120,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 导出处理中受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:export')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:export')")
     @Log(title = "处理中受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessingList")
     public void exportProcessingList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
@@ -131,7 +132,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 导出已处理受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:export')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:export')")
     @Log(title = "已处理受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedList")
     public void exportProcessedList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
@@ -147,20 +148,20 @@ public class ClaimCaseController extends BaseController {
     /**
      * 导出悬挂中受理案件信息 列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:export')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:export')")
     @Log(title = "悬挂中受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportSuspensionList")
     public void exportSuspensionList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
         //List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        List<ClaimCase> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
+        List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
+        ExcelUtil<ProcessingCaseVo> util = new ExcelUtil<ProcessingCaseVo>(ProcessingCaseVo.class);
         util.exportExcel(response, list, "悬挂中受理案件");
     }
 
     /**
      * 获取案件信息 详细信息
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:query')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:query')")
     @GetMapping(value = "/{rptNo}")
     public AjaxResult getInfo(@PathVariable("rptNo") String rptNo) {
         return AjaxResult.success(claimCaseService.selectClaimCaseById(rptNo));
@@ -169,7 +170,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 新增案件信息
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:add')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:add')")
     @Log(title = "案件信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ClaimCase claimCase) {
@@ -179,7 +180,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 修改案件信息
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ClaimCase claimCase) {
@@ -198,7 +199,7 @@ public class ClaimCaseController extends BaseController {
     /**
      * 删除案件信息
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:remove')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:remove')")
     @Log(title = "案件信息 ", businessType = BusinessType.DELETE)
     @DeleteMapping("/{rptNos}")
     public AjaxResult remove(@PathVariable String[] rptNos) {
@@ -209,7 +210,7 @@ public class ClaimCaseController extends BaseController {
      * 受理处理页面查询报案号对应的批次信息和交单机构
      * 获取案件信息 详细信息（多表关联查询batch和Claim表）
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:query')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:query')")
     @GetMapping("/getInfoClaimAndBatch")
     public AjaxResult getInfoClaimAndBatch(String rptNo) {
         ClaimAndBatchVo claimAndBatchVo = claimCaseService.selectClaimClaimAndBatchById(rptNo);
@@ -223,7 +224,7 @@ public class ClaimCaseController extends BaseController {
      * @param claimCaseProblemDTO
      * @return
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseInfoSuspend")
     public AjaxResult editCaseInfoSuspend(@RequestBody ClaimCaseProblemDTO claimCaseProblemDTO) {
@@ -237,7 +238,7 @@ public class ClaimCaseController extends BaseController {
      * @param claimCase
      * @return
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseAndRecordInfoSuspend")
     public AjaxResult editCaseAndRecordInfoSuspend(@RequestBody ClaimCase claimCase) {
@@ -251,7 +252,7 @@ public class ClaimCaseController extends BaseController {
      * @param claimCase
      * @return
      */
-//    @PreAuthorize("@ss.hasPermi('system:case:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseAndRecordInfoCancel")
     public AjaxResult editCaseAndRecordInfoCancel(@RequestBody ClaimCase claimCase) {
@@ -271,7 +272,7 @@ public class ClaimCaseController extends BaseController {
         return getDataTable(list);
     }*/
 
-//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/selectCaseDispatchList")
     public TableDataInfo selectCaseDispatchList(DispatchDTO dispatchDTO) {
         startPage();

@@ -370,17 +370,17 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 
         //新增理赔批次流程记录
         //一条
-        ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
-        //批次号一样setBatchno
-        claimBatchRecord.setBatchno(str1);
-        //流程记录ID不一样
-        claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
-        claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
-        claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
-        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
-        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+//        ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
+//        //批次号一样setBatchno
+//        claimBatchRecord.setBatchno(str1);
+//        //流程记录ID不一样
+//        claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
+//        claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
+//        claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
+//        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
+//        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
         //二条
         ClaimBatchRecord claimBatchRecord1 = new ClaimBatchRecord();

@@ -56,11 +56,6 @@ export default {
   },
   watch: {
     tableData:function(newValue) {
-      console.log("*****333333333333*******************")
-      console.log("********333333****************")
-      console.log(newValue)
-      console.log("**********33333333**************")
-      console.log("**********3333333**************")
       this.dataSearchLoad = false;
     },
   },
@@ -109,10 +104,6 @@ export default {
           console.log(error);
         })
       }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消！'
-        // })
       })
     },
     //查看

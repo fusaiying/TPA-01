@@ -44,7 +44,7 @@ public interface IClaimCaseStandingService
 
     public List<ClaimCaseStandingVo1> selectClaimCaseStandingListNew(ClaimCaseStandingDTO claimCaseStandingDTO);
 
-    List<ClaimCaseStandingVo1> selectClaimCaseStandingListFirst(ClaimCaseStandingDTO claimCaseStandingDTO);
+    public List<ClaimCaseStandingVo1> selectClaimCaseStandingListFirst(ClaimCaseStandingDTO claimCaseStandingDTO);
 
     /**
      * 新增报案台账信息 

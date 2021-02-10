@@ -23,7 +23,8 @@
           <el-col :span="8">
             <el-form-item label="建立日期：" prop="createTimeArr">
               <el-date-picker  v-model="formSearch.createTimeArr"  style="width:220px;"  size="mini"
-                               type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
+                   start-placeholder="开始日期" end-placeholder="结束日期"
+                   type="daterange" value-format="yyyy-MM-dd" placeholder="选择日期" />
             </el-form-item>
           </el-col>
         </el-row>

@@ -109,7 +109,7 @@
         GROUP BY settle_task_no LIMIT 1 ) ft
         ON ft.settle_task_no = task.settle_task_no
         <where>
-            <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
+            <if test="settleTaskNo != null  and settleTaskNo != ''"> and task.settle_task_no = #{settleTaskNo}</if>
         </where>
     </select>
 
@@ -159,11 +159,11 @@
         LEFT JOIN finance_tpa_settle_task task ON task.settle_task_no = task_no
         AND task.STATUS = 'Y'
         <where>
-            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
-            <if test="receiptNo != null  and receiptNo != ''"> and receipt_no = #{receiptNo}</if>
+            <if test="companyCode != null  and companyCode != ''"> and task.company_code = #{companyCode}</if>
+            <if test="receiptNo != null  and receiptNo != ''"> and col.receipt_no = #{receiptNo}</if>
 --             <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+            <if test="status != null  and status != ''"> and task.status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and task.dept_code = #{deptCode}</if>
         </where>
     </select>
 

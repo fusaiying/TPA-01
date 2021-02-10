@@ -216,6 +216,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                 financeAdvanceSettleTask.setSettleStartDate(financeAdvanceSettleTasks.get(0).getSettleEndDate());
             }
             financeAdvanceSettleTask.setSettleTaskNo(taskNo);
+
             financeAdvanceSettleTaskMapper.insertFinanceAdvanceSettleTask(financeAdvanceSettleTask);
             financeSettleRecord.setSettleTaskNo(taskNo);
             financeSettleRecordMapper.insertFinanceSettleRecord(financeSettleRecord);

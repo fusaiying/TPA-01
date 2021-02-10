@@ -100,11 +100,10 @@ public class FinancePayInfoController extends BaseController
     /**
      * 查询支付信息列表
      */
-   // @PreAuthorize("@ss.hasPermi('system:info:TransferFailedList')")
     @PostMapping("/TransferFailedList")
     public TableDataInfo TransferFailedList(@RequestBody TransferfailedDTO transferfailedDTO)
     {
-        startPage();
+        startPage(transferfailedDTO);
         List<TransferfailedVo> list = financePayInfoService.selectTransferfailedList(transferfailedDTO);
         return getDataTable(list);
     }

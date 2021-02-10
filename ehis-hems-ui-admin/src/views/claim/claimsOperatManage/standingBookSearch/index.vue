@@ -248,7 +248,7 @@
         }
       }).catch(res => {
       })
-      let item={
+      let item = {
         pageNum: 1,
         pageSize: 200,
       }
@@ -296,13 +296,10 @@
           organcode: this.searchForm.organcode,//机构
           createBy: this.searchForm.createBy//操作人
         }
-        if (val === 'table') {
-          data.pageSize = this.queryParams.pageSize
-          this.data.pageNum = this.queryParams.pageNum
-        } else {
-          data.pageNum = 1
-          data.pageSize = 10
-        }
+
+        data.pageNum = this.queryParams.pageNum
+        data.pageSize = this.queryParams.pageSize
+
         listNew(data).then(res => {
           if (res != null && res.code === 200) {
             this.standingForm.tableData = res.rows
@@ -390,8 +387,8 @@
         })
       },
       remoteMethod(query) {
-        let data={
-          deptName:query,
+        let data = {
+          deptName: query,
           pageNum: 1,
           pageSize: 200,
         }
@@ -403,9 +400,9 @@
         }
       },
       remoteUserMethod(query) {
-        let data={
+        let data = {
           organcode: this.searchForm.organcode,
-          userName:query,
+          userName: query,
           pageNum: 1,
           pageSize: 200,
         }

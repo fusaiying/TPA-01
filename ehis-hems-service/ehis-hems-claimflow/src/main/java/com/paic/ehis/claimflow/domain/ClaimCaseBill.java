@@ -157,6 +157,9 @@ public class ClaimCaseBill extends BaseEntity
     /** 次要诊断 */
     private List<IcdCode> icdCodes;
 
+    /** 合理费用 */
+    private BigDecimal reasonAmount;
+
     public List<IcdCode> getIcdCodes() {
         return icdCodes;
     }

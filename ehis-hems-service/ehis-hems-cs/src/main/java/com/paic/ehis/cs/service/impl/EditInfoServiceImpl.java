@@ -7,9 +7,11 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
+import com.paic.ehis.cs.mapper.ComplaintAcceptVoMapper;
 import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
 import com.paic.ehis.cs.mapper.EditInfoMapper;
 import com.paic.ehis.cs.mapper.ReservationAcceptVoMapper;
@@ -36,6 +38,8 @@ public class EditInfoServiceImpl implements IEditInfoService
     private DemandAcceptVoMapper demandAcceptVoMapper;
     @Autowired
     private ReservationAcceptVoMapper reservationAcceptVoMapper;
+    @Autowired
+    private ComplaintAcceptVoMapper complaintAcceptVoMapper;
 
     /**
      * 查询修改信息 
@@ -177,5 +181,42 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         reservationAcceptVo.setStatus("05");
         return reservationAcceptVoMapper.updateOrderCancelStatus(reservationAcceptVo.getWorkOrderNo());
+    }
+
+
+    /**
+     * 投诉取消提交
+     * @param complaintAcceptVo
+     * @return
+     */
+    @Override
+    public int reservedCancelSubmit(ComplaintAcceptVo complaintAcceptVo) {
+        //取消原因  取消说明
+        EditInfo editInfo=new EditInfo();
+        //随机生成流水号
+        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
+        editInfo.setCreatedBy(SecurityUtils.getUsername());
+        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setEditReason(complaintAcceptVo.getEditReason());
+        editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
+        editInfoMapper.insertEditInfo(editInfo);
+
+        //轨迹表生成数据
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setStatus("05");//05 取消状态
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+        flowLogMapper.updateFlowLog(flowLog);
+
+        complaintAcceptVo.setStatus("05");
+        return complaintAcceptVoMapper.updateReservedCancelStatus(complaintAcceptVo.getWorkOrderNo());
     }
 }

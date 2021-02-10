@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
@@ -91,4 +93,11 @@ public interface IWorkHandleInfoService
      *预约处理页面  服务处理
      */
     int insertResevationDeal(ReservationDealVo reservationDealVo);
+
+    /**
+     * 查询工单业处理信息 预约  信息需求
+     * @param acceptDTO
+     * @return
+     */
+    List<ReservationAcceptVo> selectWorkOrder(AcceptDTO acceptDTO);
 }

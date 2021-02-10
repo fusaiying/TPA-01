@@ -298,7 +298,7 @@
           }
         }).catch(res => {
         })
-        getBatch(this.querys.batchNo).then(res => {
+        await getBatch(this.querys.batchNo).then(res => {
           if (res != null && res.code === 200) {
             this.batchInfo = res.data
             this.querys.claimType = res.data.claimtype
@@ -361,6 +361,7 @@
             }
           })
         } else {
+          alert(2)
           listRemarkRptNo(this.querys.rptNo).then(res => {
             if (res != null && res.code === 200) {
               this.sonPayeeInfoData = res.data

@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column align="center" prop="billAmount" label="账单金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="hosDiscountAmount" label="折扣金额" show-overflow-tooltip/>
-        <el-table-column align="center" prop="createBy" label="合理费用" show-overflow-tooltip/>
+        <el-table-column align="center" prop="" label="合理费用" show-overflow-tooltip/>
         <el-table-column align="center" prop="selfAmount" label="自费金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/>
         <el-table-column align="center" prop="tpAdvancePayment" label="先期给付" show-overflow-tooltip/>

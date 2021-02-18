@@ -5,6 +5,7 @@ import com.paic.ehis.claimapt.domain.ClaimBatchRecord;
 import com.paic.ehis.claimapt.mapper.ClaimBatchMapper;
 import com.paic.ehis.claimapt.mapper.ClaimBatchRecordMapper;
 import com.paic.ehis.claimapt.service.IClaimBatchRecordService;
+import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
     public int updateClaimBatchByReview(String[] batchnoes) {
         int i = 0;
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
-        claimBatchRecord.setOperation("02");
+        claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());
         claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
@@ -102,7 +103,7 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
             claimBatchRecord.setBatchno(batchno);
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
             claimBatch.setBatchno(batchno);
-            claimBatch.setBatchstatus("02");
+            claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
             i = claimBatchMapper.updateClaimBatch(claimBatch);
         }
         return i;

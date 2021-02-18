@@ -50,10 +50,11 @@ public class BaseFeeitemController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:feeitem:export')")
     @Log(title = "费用项信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response,@RequestBody BaseFeeitem baseFeeitem) throws IOException
+    public void export(HttpServletResponse response,BaseFeeitem baseFeeitem) throws IOException
     {
-        String feeitemname = URLDecoder.decode(baseFeeitem.getFeeitemname(),"utf-8");
-        baseFeeitem.setFeeitemname(feeitemname);
+//        String feeitemname = URLDecoder.decode(baseFeeitem.getFeeitemname(),"utf-8");
+//        baseFeeitem.setFeeitemname(feeitemname);
+        System.out.println("我叒导出Excel了！！！");
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
             ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);
             util.exportExcel(response, list, "feeitem");

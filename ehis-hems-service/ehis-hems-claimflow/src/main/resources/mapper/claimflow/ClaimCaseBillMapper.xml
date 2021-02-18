@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="partSelfAmount"    column="part_self_amount"    />
         <result property="unableAmount"    column="unable_amount"    />
         <result property="clinicalDiagnosis"    column="clinical_diagnosis"    />
+        <result property="reasonAmount" column="reason_amount"/>
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -59,7 +60,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseBillVo">
-        select bill_id, rpt_no, hospital_code, department, is_des_hospital, acc_type, bill_currency, bill_amount, vis_number, treatment_type, treatment_start_date, treatment_end_date, treatment_Days, invoice_no, bill_no, bill_type, ss_advance_payment, tp_advance_payment, is_share_ap, trans_serial_no, trans_Serial_copay, copay, is_share_copay, hos_discount_amount, is_share_dis_amount, self_amount, part_self_amount, unable_amount, clinical_diagnosis, status, create_by, create_time, update_by, update_time from claim_case_bill
+        SELECT
+            bill_id,
+            rpt_no,
+            hospital_code,
+            department,
+            is_des_hospital,
+            acc_type,
+            bill_currency,
+            bill_amount,
+            vis_number,
+            treatment_type,
+            treatment_start_date,
+            treatment_end_date,
+            treatment_Days,
+            invoice_no,
+            bill_no,
+            bill_type,
+            ss_advance_payment,
+            tp_advance_payment,
+            is_share_ap,
+            trans_serial_no,
+            trans_Serial_copay,
+            copay,
+            is_share_copay,
+            hos_discount_amount,
+            is_share_dis_amount,
+            self_amount,
+            part_self_amount,
+            unable_amount,
+            bill_amount-IFNULL(hos_discount_amount,0)-IFNULL(self_amount,0)-IFNULL(part_self_amount,0)-IFNULL(ss_advance_payment,0)-IFNULL(tp_advance_payment,0)-IFNULL(unable_amount,0) reason_amount,
+            clinical_diagnosis,
+            STATUS,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        FROM
+            claim_case_bill
     </sql>
 
     <select id="selectClaimCaseBillList" parameterType="ClaimCaseBill" resultMap="ClaimCaseBillResult">

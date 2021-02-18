@@ -807,23 +807,24 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setRptNo(claimCase.getRptNo());
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setStatus("Y");
-        claimCaseRecord.setOperation("06");
-        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
+        claimCaseRecord.setOperation("05");
+        ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
+        /*List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
         if (claimCaseRecords.size() > 0) {
             claimCase.setUpdateBy(claimCaseRecords.get(0).getCreateBy());
-        }
+        }*/
+        claimCase.setUpdateBy(caseRecord.getOperator());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("05");
 
-        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(claimCase.getRptNo());
-        record.setOperator(SecurityUtils.getUsername());
+        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCase.getRptNo());
         record.setHistoryFlag("Y");
+        record.setOperator(SecurityUtils.getUsername());
         record.setUpdateBy(SecurityUtils.getUsername());
         record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(record);
 
         claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setOperation("05");
         claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());

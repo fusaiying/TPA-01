@@ -5,6 +5,7 @@ import com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO;
 import com.paic.ehis.claimflow.domain.vo.BillAccomplishVo;
 import com.paic.ehis.claimflow.domain.vo.BillProcessingVo;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseBillInfoVO;
+import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 
 import java.util.List;
 
@@ -87,4 +88,12 @@ public interface IClaimCaseBillService
      * @return
      */
     public ClaimCaseBill selectClaimCaseBillListByRptNo(String rptNo);
+
+    /**
+     * 根据报案号查询费用项信息
+     *
+     * @param rptNo
+     * @return
+     */
+    public List<ClaimProductFeeitem> selectFeeitemList(String rptNo);
 }

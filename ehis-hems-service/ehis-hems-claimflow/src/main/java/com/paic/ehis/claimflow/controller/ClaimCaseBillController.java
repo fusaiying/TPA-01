@@ -19,6 +19,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -177,5 +178,13 @@ public class ClaimCaseBillController extends BaseController
         claimCase.setRptNo(rptNo);
         claimCase.setCaseStatus("07");
         return toAjax(claimCaseService.updateClaimCase(claimCase));
+    }
+
+    /**
+     * 根据报案号查询费用项编码、费用项名称
+     */
+    @GetMapping("/feeitem")
+    public List<ClaimProductFeeitem> selectFeeitemList(String rptNo){
+        return claimCaseBillService.selectFeeitemList(rptNo);
     }
 }

@@ -95,4 +95,16 @@ public class ClaimProductFeeitemServiceImpl implements IClaimProductFeeitemServi
     {
         return claimProductFeeitemMapper.deleteClaimProductFeeitemById(feeitemCode);
     }
+
+    /**
+     * 根据保单号查询费用项编码、费用项名称
+     *
+     * @param policys
+     * @return
+     */
+    @Override
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys) {
+
+        return claimProductFeeitemMapper.selectFeeitemByPolicyNos(policys);
+    }
 }

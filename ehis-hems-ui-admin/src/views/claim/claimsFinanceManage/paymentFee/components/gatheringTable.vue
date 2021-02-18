@@ -1,73 +1,52 @@
 <template>
   <el-table
-    :data="gatherTable"
+    :data="tableData"
     :header-cell-style="{color:'black',background:'#f8f8ff'}"
     size="small"
     highlight-current-row
     tooltip-effect="dark"
+    v-loading="loading"
     style="width: 100%;">
-
-    <el-table-column align="center" prop="companyName" label="公司名称" show-overflow-tooltip/>
-    <el-table-column align="center" prop="companyName" label="收款金额CNY" show-overflow-tooltip/>
-    <el-table-column align="center" prop="organCode" label="收款日期" show-overflow-tooltip/>
-    <el-table-column align="center" prop="name" label="收款备注" show-overflow-tooltip/>
+    <el-table-column label="" width="40">
+      <template slot-scope="scope">
+        <el-radio :label="scope.$index" v-model="radio" @change.native="getCurrentRow(scope.row)" style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" prop="receiptCompanyName" label="公司名称" show-overflow-tooltip/>
+    <el-table-column align="center" prop="receiptAmount" label="收款金额CNY" show-overflow-tooltip/>
+    <el-table-column align="center" prop="receiptDate" label="收款日期" show-overflow-tooltip/>
+    <el-table-column align="center" prop="remark" label="收款备注" show-overflow-tooltip/>
     <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
   </el-table>
 </template>
 
 <script>
-import { changeDate } from '@/utils/commenMethods.js'
-import {encrypt} from "@/utils/rsaEncrypt"
+
 export default {
   props: {
-    gatherTable: {
+    tableData: {
       type: Array,
       default: function() {
         return []
       }
     },
     status: String,
-
+  },
+  watch: {
+    tableData:function(newValue) {
+      this.loading = false;
+    },
   },
   data() {
     return {
-      gatherTableData: [],
-      gatherTotal: 0,
-      gatherPageInfo: {
-        page: 1,
-        pageSize: 10
-      },
-      // detailInfo:{
-      //   row:'',
-      //   type:'',
-      // },
+      loading:true,
+      radio:false,
     }
   },
   methods: {
-    //删除
-    delHandle(row) {
-
-    },
-    //查看
-    viewDetail(row){
-      // this.detailInfo.row = row;
-      // this.detailInfo.type = 'edit';
-     // this.$emit('openDetail',this.detailInfo);
+    getCurrentRow(row){//获取当前行的数据
+      this.$emit('radioVue',row.collectionId);
     }
-    // detailHandle(row, status) {
-    //   let data = encodeURI(
-    //     JSON.stringify({
-    //       claimno: 'xxx',
-    //       node: 'review'
-    //     })
-    //   )
-    //   const newpage = this.$router.resolve({
-    //     name: 'casedetail',
-    //     params:{},
-    //     query:{ data }
-    //   })
-    //   window.open(newpage.href, '_blank');
-    // }
   }
 }
 </script>

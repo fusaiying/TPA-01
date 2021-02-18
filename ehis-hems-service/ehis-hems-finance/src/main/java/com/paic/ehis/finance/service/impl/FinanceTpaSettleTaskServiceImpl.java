@@ -2,6 +2,7 @@ package com.paic.ehis.finance.service.impl;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -25,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,6 +98,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         ArrayList<TpaSettleDetailInfo> detailInfos=new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         CompanyRiskPolicy companyRiskPolicy = null;
+        Date EarliestDay=new Date();
         //TPA服务费及明细的新增
         FinanceTpaSettleTask financeTpaSettleTask = new FinanceTpaSettleTask();
         FinanceTpaSettleDetail financeTpaSettleDetail = new FinanceTpaSettleDetail();
@@ -138,10 +141,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         //根据传回条件，查询对应险种下的关联保单信息
         policyAndRiskRelation.setCompanyCode(tpaSettleDTO.getCompanyCode());
         String taskNo = "SF" + PubFun.createMySqlMaxNoUseCache("tpa_service_settlement", 10, 10);
-        BigDecimal multiply = null;
 
-        if (StringUtils.isNotNull(tpaSettleDTO.getRiskCode())){
-            financeTpaSettleDetail.setRiskCode(tpaSettleDTO.getRiskCode());
+        if (StringUtils.isEmpty(tpaSettleDTO.getRiskCode())){
+//            financeTpaSettleDetail.setRiskCode(tpaSettleDTO.getRiskCode());
             List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailList(financeTpaSettleDetail);
             //设值 结算表的结算起期
             if (StringUtils.isNotEmpty(financeTpaSettleDetails)){
@@ -153,7 +155,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             List<BaseIssuingcompanyRule> baseIssuingRules = baseIssuingcompanyRiskrelaMapper.selectCompanyRiskrelaRiskByTpa(tpaSettleDTO);
             for (BaseIssuingcompanyRule baseIssuingRule : baseIssuingRules) {
                 //通过险种、保单关联得到对应的保单数据
-
                 policyAndRiskRelation.setRiskCode(baseIssuingRule.getRiskcode());
                 policyAndRiskRelation.setStartTime(financeTpaSettleTask.getSettleStartDate());
                 policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
@@ -194,6 +195,10 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 }
                 financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());
                 tpaSettleInfos.add(tpaSettleInfo);
+                EarliestDay=companyRiskPolicy.getValidStartDate().before(EarliestDay)?companyRiskPolicy.getValidStartDate():EarliestDay;
+            }
+            if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+                financeTpaSettleTask.setSettleStartDate(EarliestDay);
             }
             financeTpaSettleTask.setSettleTaskNo(taskNo);
             financeTpaSettleTaskMapper.insertFinanceTpaSettleTask(financeTpaSettleTask);
@@ -213,6 +218,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             BaseIssuingcompanyRule baseIssuingcompanyRule = new BaseIssuingcompanyRule();
             baseIssuingcompanyRule.setCompanycode(tpaSettleDTO.getCompanyCode());
             baseIssuingcompanyRule.setRiskcode(tpaSettleDTO.getRiskCode());
+            baseIssuingcompanyRule.setStatus(ClaimStatus.DATAYES.getCode());
             BaseIssuingcompanyRule companyRule = baseIssuingcompanyRuleMapper.selectBaseIssuingcompanyRule(baseIssuingcompanyRule);
 
             //通过险种、保单关联得到对应的保单数据
@@ -221,21 +227,23 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             policyAndRiskRelation.setEndTime(financeTpaSettleTask.getSettleEndDate());
             policyAndRiskRelation.setCompanyCode(financeTpaSettleTask.getCompanyCode());
             TableDataInfo relationCompanyList = policyAndRiskService.getRelationCompanyList(policyAndRiskRelation);
-            for (Object row : relationCompanyList.getRows()) {
-                companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
-                //子页面下拉数据
-                BeanUtils.copyProperties(companyRiskPolicy,tpaSettleDetailInfo);
-                tpaSettleDetailInfo.setRiskName(companyRule.getRiskName());
-                if ("02".equals(tpaSettleDTO.getSettlementType())){//保费比例
-                    tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue());
-                    tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+            if (StringUtils.isNotEmpty(relationCompanyList.getRows())) {
+                for (Object row : relationCompanyList.getRows()) {
+                    companyRiskPolicy = objectMapper.convertValue(row, CompanyRiskPolicy.class);
+                    //子页面下拉数据
+                    BeanUtils.copyProperties(companyRiskPolicy, tpaSettleDetailInfo);
+                    tpaSettleDetailInfo.setRiskName(companyRule.getRiskName());
+                    if ("02".equals(tpaSettleDTO.getSettlementType())) {//保费比例
+                        tpaSettleDetailInfo.setPremiumRatio(companyRule.getSettlementvalue());
+                        tpaSettleDetailInfo.setServiceAmount(companyRiskPolicy.getPrem().multiply(tpaSettleDetailInfo.getPremiumRatio()));
+                    }
+                    financeTpaSettleDetail.setSettleTaskNo(taskNo);
+                    financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
+                    financeTpaSettleDetailMapper.insertFinanceTpaSettleDetail(financeTpaSettleDetail);
+                    policyAndRiskRelation.setSettleFlag("Y");
+                    policyAndRiskService.settledPolicy(policyAndRiskRelation);
+                    detailInfos.add(tpaSettleDetailInfo);
                 }
-                financeTpaSettleDetail.setSettleTaskNo(taskNo);
-                financeTpaSettleDetail.setServiceAmount(tpaSettleDetailInfo.getServiceAmount());
-                financeTpaSettleDetailMapper.insertFinanceTpaSettleDetail(financeTpaSettleDetail);
-                policyAndRiskRelation.setSettleFlag("Y");
-                policyAndRiskService.settledPolicy(policyAndRiskRelation);
-                detailInfos.add(tpaSettleDetailInfo);
             }
             tpaSettleInfo.setDetailInfos(detailInfos);
             assert companyRiskPolicy != null;
@@ -250,6 +258,9 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
 
+            if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+                financeTpaSettleTask.setSettleStartDate(companyRiskPolicy.getValidStartDate());
+            }
             financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());
             financeTpaSettleTask.setSettleTaskNo(taskNo);
             financeTpaSettleTaskMapper.insertFinanceTpaSettleTask(financeTpaSettleTask);

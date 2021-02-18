@@ -195,7 +195,7 @@
         </trim>
         where rpt_no = #{rptNo} and operation = #{operation} and history_flag = 'N' and status = 'Y'
     </update>
-    <update id="updateCaseDispatchList" parameterType="String">
+    <update id="updateCaseDispatchList" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -210,6 +210,7 @@
         </trim>
         where rpt_no = #{rptNo} and history_flag='N'
     </update>
+
 
 
     <select id="selectClaimCaseRecordByrptNoFour" parameterType="String" resultMap="ClaimCaseRecordResult">
@@ -229,5 +230,17 @@
     <select id="selectClaimCaseRecordRevocation" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation in ('97','98') and status = 'Y'
+    </select>
+
+<!--  根据报案号查询 对应案件状态的的最近的一条轨迹  -->
+    <select id="selectRecentClaimCaseRecord" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="historyFlag != null  and historyFlag != ''"> and history_flag = #{historyFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time LIMIT 1
     </select>
 </mapper>

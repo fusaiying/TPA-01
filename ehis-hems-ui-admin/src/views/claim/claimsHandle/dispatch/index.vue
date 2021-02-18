@@ -392,10 +392,7 @@
           this.multiple = !selection.length;
         },
         handleClose() {
-          this.dialogVisible = false;
-        },
-        closeDialog(){
-          //this.open = false;
+          this.operatorForm.operator = '';
           this.dialogVisible = false;
         },
         updateOperator(){
@@ -405,10 +402,11 @@
           }
           const params = {
             rptNo: this.rptNos,
-            updateBy: this.operatorForm.operator
+            operator: this.operatorForm.operator
           };
           dispatchUpdate(params).then(response => {
             if(response.code == 200) {
+              this.operatorForm.operator = '';
               this.dialogVisible = false;
               this.$message.success('调度成功！');
               this.gettableData();

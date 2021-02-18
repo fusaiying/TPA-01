@@ -97,4 +97,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="selectFeeitemByPolicyNos" parameterType="string" resultMap="ClaimProductFeeitemResult">
+        SELECT DISTINCT
+            a.feeitem_code,
+            a.feeitem_name
+        FROM
+            claim_product_feeitem a,
+            policy_risk_relation b
+        WHERE
+            a.risk_code = b.risk_code
+            AND b.policy_no IN
+            <foreach collection="list" item="policyNo" open="(" separator="," close=")">
+                #{policyNo}
+            </foreach>
+    </select>
+    
 </mapper>

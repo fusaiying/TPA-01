@@ -122,7 +122,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //往协办池加数据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         //随机生成流水号
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
+        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号
         //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
         collaborativeFrom.setUmCode(demandAcceptVo.getUmCode());
@@ -142,7 +142,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
         flowLog.setStatus("06");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -153,7 +153,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLogMapper.updateFlowLog(flowLog);
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
+        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
@@ -173,7 +173,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
         flowLog.setStatus("06");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -185,7 +185,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6)));
+        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());

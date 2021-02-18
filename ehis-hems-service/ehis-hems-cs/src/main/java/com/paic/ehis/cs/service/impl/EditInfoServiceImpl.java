@@ -136,7 +136,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
         flowLog.setStatus("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -157,7 +157,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("edit_id",10,6)));
         editInfo.setWorkOrderId(reservationAcceptVo.getWorkOrderNo());
         editInfo.setCreatedBy(SecurityUtils.getUsername());
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -169,7 +169,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
         flowLog.setStatus("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -194,7 +194,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         //取消原因  取消说明
         EditInfo editInfo=new EditInfo();
         //随机生成流水号
-        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6)));
+        editInfo.setEditId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("edit_id",10,6)));
         editInfo.setWorkOrderId(complaintAcceptVo.getWorkOrderNo());
         editInfo.setCreatedBy(SecurityUtils.getUsername());
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -206,7 +206,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
         flowLog.setStatus("05");//05 取消状态
         flowLog.setCreatedBy(SecurityUtils.getUsername());

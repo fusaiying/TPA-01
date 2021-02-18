@@ -140,7 +140,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
         }else {
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setStatus("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -265,7 +265,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
         else {
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setStatus("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());

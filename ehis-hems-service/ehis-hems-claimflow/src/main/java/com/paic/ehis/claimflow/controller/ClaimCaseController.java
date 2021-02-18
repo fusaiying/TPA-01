@@ -283,8 +283,8 @@ public class ClaimCaseController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/Dispatch")
-    public AjaxResult Dispatch(@RequestBody String rptNo) {
-        claimCaseService.updateClaimCase(rptNo);
+    public AjaxResult Dispatch(@RequestBody CaseDispatchDTO caseDispatchDTO) {
+        claimCaseService.updateClaimCase(caseDispatchDTO);
         return AjaxResult.success();
     }
 

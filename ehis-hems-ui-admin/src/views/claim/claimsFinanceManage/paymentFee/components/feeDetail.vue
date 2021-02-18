@@ -24,6 +24,7 @@
         size="small"
         highlight-current-row
         tooltip-effect="dark"
+        v-loading="loading"
         style="width: 100%;">
         <el-table-column align="center" prop="batchNo" width="140" label="批次号" show-overflow-tooltip/>
         <el-table-column align="center" prop="rptNo" width="140" label="报案号" show-overflow-tooltip/>
@@ -33,18 +34,18 @@
 
         <el-table-column align="center" prop="treatmentStartDate" width="120" label="就诊日期" show-overflow-tooltip/>
         <el-table-column align="center" prop="billNo" width="120" label="账单号/发票号" show-overflow-tooltip/>
-        <el-table-column align="center" prop="caseStatus"  width="120" label="案件状态" show-overflow-tooltip/>
+        <el-table-column align="center" prop="caseStatus" :formatter="getClaimStatusName"  width="120" label="案件状态" show-overflow-tooltip/>
         <el-table-column align="center" prop="billAmount" width="120" label="账单总金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="discountedAmount" width="120" label="折后金额" show-overflow-tooltip/>
 
-        <el-table-column align="center" prop="payConclusion" width="120" label="赔付结论" show-overflow-tooltip/>
+        <el-table-column align="center" prop="payConclusion" width="120"  :formatter="getConclusionName" label="赔付结论" show-overflow-tooltip/>
         <el-table-column align="center" prop="submitDate" width="120" label="交单日期" show-overflow-tooltip/>
         <el-table-column align="center" prop="endCaseTime" width="120" label="结案日期" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.endCaseTime|changeDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="source" width="120" label="交单来源" show-overflow-tooltip/>
+        <el-table-column align="center" prop="source" width="120" :formatter="getDeliverySourceName" label="交单来源" show-overflow-tooltip/>
         <el-table-column align="center" prop="payAmount" width="120" label="给付金额" show-overflow-tooltip/>
 
         <el-table-column align="center" prop="payDate" width="120" label="付款日期" show-overflow-tooltip/>
@@ -64,6 +65,8 @@
 </template>
 
 <script>
+
+let dictss = [{dictType: 'sys_yes_no'}, {dictType: 'claimType'}, {dictType: 'claim_status'}, {dictType: 'conclusion'}, {dictType: 'delivery_source'}]
 
   import moment from 'moment'
 
@@ -112,8 +115,11 @@
   },
   data() {
     return {
+      deliverySource:[],
+      conclusionSelect:[],
+      claimStatusSelect:[],
       confimInfo:false,
-      loading : false,
+      loading : true,
       dialogVisable : false,
       tableData: [],
       pageInfo: {
@@ -126,18 +132,34 @@
       claimTypes:[],
       providerInfoSelects:[],
       fixInfoDetail:{},
+      dictList:[],
 
     }
   },
-  mounted(){
+  async  mounted(){
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
     // sys_yes_no
-    this.getDicts("sys_yes_no").then(response => {
-      this.ysOrNo = response.data;
-    });
-    // claimType
-    this.getDicts("claimType").then(response => {
-      this.claimTypes = response.data;
-    });
+    this.ysOrNo = this.dictList.find(item => {
+      return item.dictType === 'sys_yes_no'
+    }).dictDate
+    // // claimType
+    this.claimTypes = this.dictList.find(item => {
+      return item.dictType === 'claimType'
+    }).dictDate
+    // //案件状态 claim_status
+    this.claimStatusSelect = this.dictList.find(item => {
+      return item.dictType === 'claim_status'
+    }).dictDate
+    // //赔付结论 conclusion
+    this.conclusionSelect = this.dictList.find(item => {
+      return item.dictType === 'conclusion'
+    }).dictDate
+    // //交单来源
+    this.deliverySource = this.dictList.find(item => {
+      return item.dictType === 'delivery_source'
+    }).dictDate
   },
   created() {
    //  this.initData();
@@ -148,6 +170,15 @@
   methods: {
     getYesOrNoName(value){
       return this.selectDictLabel(this.ysOrNo, value)
+    },
+    getClaimStatusName(row,col){
+      return this.selectDictLabel(this.claimStatusSelect, row.caseStatus)
+    },
+    getConclusionName(row,col){
+      return this.selectDictLabel(this.conclusionSelect, row.payConclusion)
+    },
+    getDeliverySourceName(row,col) {
+      return this.selectDictLabel(this.deliverySource, row.source)
     },
     initData(){
       this.loading = true;

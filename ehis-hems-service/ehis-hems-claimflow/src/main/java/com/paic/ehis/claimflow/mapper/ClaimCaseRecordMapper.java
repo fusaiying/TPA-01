@@ -2,6 +2,8 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
+import com.paic.ehis.claimflow.domain.dto.CaseDispatchDTO;
+import com.paic.ehis.claimflow.domain.dto.DispatchDTO;
 
 import java.util.List;
 
@@ -125,10 +127,10 @@ public interface ClaimCaseRecordMapper
 
     /**
      * 修改案件调度流程节点操作人
-     * @param rptNo
+     * @param claimCaseRecord
      * @return
      */
-    int  updateCaseDispatchList(String rptNo);
+    int  updateCaseDispatchList(ClaimCaseRecord claimCaseRecord);
 
     /**
      *

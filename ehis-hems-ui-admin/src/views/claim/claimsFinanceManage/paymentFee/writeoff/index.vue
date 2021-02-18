@@ -68,7 +68,7 @@
       </div>
 
       <!--交接任务列表 start -->
-      <feeTable  :table-data="initTableData" :status="status"  @openDetail="openDetail"/>
+      <feeTable  :table-data="initTableData" :status="status" @checkBoxVue="checkBoxVue"  @openDetail="openDetail"/>
       <!--交接任务列表 end-->
 
       <!--分页组件-->
@@ -88,10 +88,12 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>收款明细</span>
+        <el-button  style="float: right;" type="primary" size="mini" @click="dealFun">核销
+        </el-button>
       </div>
 
       <!--收款明细 start-->
-      <gatheringTable :table-data="gatherTableData" />
+      <gatheringTable :table-data="gatherTableData" @radioVue="radioVue"/>
       <!--收款明细 end -->
 
       <pagination
@@ -110,7 +112,7 @@
 
 
   import {companyList} from '@/api/tpaFee/api'
-  import { listInfo } from '@/api/paymentFee/api'
+  import {listInfo, collectionInfoList, updateSettleEndStatus, updateConfirm} from '@/api/paymentFee/api'
 
   import feeDetail from "../components/feeDetail"
   import feeTable from '../components/feeTable'
@@ -155,6 +157,10 @@
         companySelect:[],
         //结算状态
         settleStatus:[],
+        // 复选框任务号
+        taskNoList:[],
+        //收款明显单选框 实收ID
+        collectionId:''
       }
     },
     mounted(){
@@ -166,6 +172,7 @@
     created() {
       this.getCompanyList();
       this.initData();
+      this.initGatherData();
     },
     watch: {
 
@@ -173,8 +180,58 @@
     computed: {
     },
     methods: {
+      radioVue(value){
+        this.collectionId = value;
+      },
+      checkBoxVue(checkVue){
+        this.taskNoList = checkVue;
+      },
+      dealFun(){
+        if(this.taskNoList.length === 0) {
+          this.$message({ type: 'info',  message: '请选择需要进行核销的任务!'});
+          return false;
+        }
+        if(this.collectionId === '') {
+          this.$message({ type: 'info',  message: '请选择收款明细!'});
+          return false;
+        }
+        //updateSettleEndStatus
+        let settleTaskNo  = this.taskNoList;
+        this.$confirm('确定核销', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          updateSettleEndStatus(settleTaskNo).then(response => {
+            if(response.code == '200') {
+              this.initData();
+              this.initGatherData();
+              this.$message({
+                type: 'success',
+                message: '核销成功!'
+              });
+            } else {
+              this.$message({
+                type: 'info',
+                message: '核销失败'
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          })
+        }).catch(() => {
+        })
+      },
       initGatherData(){
-
+        const params = {};
+        params.pageNum = this.gatherPageInfo.page;
+        params.pageSize = this.gatherPageInfo.pageSize;
+        collectionInfoList(params).then(res => {
+          if (res.code == '200') {
+            this.gatherTotal = res.total;
+            this.gatherTableData = res.rows;
+          }
+        });
       },
       resetForm() {
         this.$refs.searchForm.resetFields()

@@ -45,18 +45,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.create_by,
         b.create_time,
         b.update_by,
-        b.update_time
+        b.update_time,
+        d.col_id
         FROM
         finance_advance_settle_detail a,
         finance_collection_info b,
-        finance_receipt_info c
+        finance_receipt_info c,
+        finance_receipt_col d
         WHERE
         a.dept_code = c.dept_code
         AND b.receipt_acc_name = c.receipt_acc_name
         AND c.settle_task_no = a.settle_task_no
+        AND a.dept_code = d.dept_code
+        AND b.receipt_no=d.receipt_no
+        AND c.task_type='02'
         AND a.STATUS = 'Y'
         AND b.STATUS = 'Y'
         AND c.STATUS = 'Y'
+        AND d.STATUS = 'Y'
     </select>
     
     <select id="selectFinanceCollectionInfoById" parameterType="Long" resultMap="FinanceCollectionInfoResult">

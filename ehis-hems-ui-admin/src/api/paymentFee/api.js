@@ -8,6 +8,15 @@ export function listInfo(query) {
     data: query
   })
 }
+
+//收款明细列表
+export function collectionInfoList(query) {
+  return request({
+    url: '/finance//CollectionInfo/list',
+    method: 'get',
+    params: query
+  })
+}
 // * 根据结算任务号查询代垫费案件结算明细*/
 export function getInfo(query) {
   return request({
@@ -35,10 +44,11 @@ export function updateConfirm(settleTaskNo) {
 }
 
 /**核销按钮将结算状态由待核销改为已结算*/
-export function updateSettleStatus2(settleTaskNos) {
+export function updateSettleEndStatus(settleTaskNos) {
   return request({
-    url: '/finance/settleDetail/updateSettleStatus2'+settleTaskNos,
-    method: 'put',
+    url: '/finance/settleDetail/updateSettleStatus2/'+settleTaskNos,
+    method: 'PUT',
+    data:settleTaskNos
 })
 }
 

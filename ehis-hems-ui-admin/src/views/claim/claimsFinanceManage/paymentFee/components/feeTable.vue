@@ -118,7 +118,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.settleTaskNos = (selection.map(item => item.settleTaskNo)); //rptNo
+      this.settleTaskNos = (selection.map(item => item.settleTaskNo));
+      this.$emit('checkBoxVue',this.settleTaskNos);
+
       // this.single = selection.length != 1;
       // this.multiple = !selection.length;
     },

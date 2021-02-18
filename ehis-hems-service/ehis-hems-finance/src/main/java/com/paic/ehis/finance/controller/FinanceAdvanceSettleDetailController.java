@@ -48,10 +48,10 @@ public class FinanceAdvanceSettleDetailController extends BaseController
   //  @PreAuthorize("@ss.hasPermi('system:detail:export')")
     @Log(title = "代垫费结算明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, FinanceAdvanceSettleDetail financeAdvanceSettleDetail) throws IOException
+    public void export(HttpServletResponse response, FinanceAdvanceSettleDTO dto) throws IOException
     {
-        List<FinanceAdvanceSettleDetail> list = financeAdvanceSettleDetailService.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
-        ExcelUtil<FinanceAdvanceSettleDetail> util = new ExcelUtil<FinanceAdvanceSettleDetail>(FinanceAdvanceSettleDetail.class);
+        List<FinanceAdvanceSettleVO> list =  financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOInfo(dto.getSettleTaskNo());
+        ExcelUtil<FinanceAdvanceSettleVO> util = new ExcelUtil<FinanceAdvanceSettleVO>(FinanceAdvanceSettleVO.class);
         util.exportExcel(response, list, "detail");
     }
 

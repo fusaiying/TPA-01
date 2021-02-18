@@ -61,7 +61,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<ClaimBatch> selectClaimBatchList(ClaimBatch claimBatch) {
-        claimBatch.setStatus("Y");
+        claimBatch.setStatus(ClaimStatus.DATAYES.getCode());
         return claimBatchMapper.selectClaimBatchList(claimBatch);
     }
 
@@ -74,8 +74,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
-        batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("04");
+        batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());
         if (StringUtils.isNull(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
@@ -121,8 +121,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
-        batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("01");
+        batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
@@ -134,8 +134,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectUntreatedPersonalList(BatchDTO batchDTO) {
-        batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("02");
+        batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
         batchDTO.setUpdateBy(SecurityUtils.getUsername());
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
@@ -148,10 +148,10 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectProcessedPersonalList(BatchRecordDTO batchRecordDTO) {
-        batchRecordDTO.setStatus("Y");
+        batchRecordDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchRecordDTO.setBatchstatus("'03','04','05'");
         batchRecordDTO.setClaimtype("01");
-        batchRecordDTO.setOperation("04");
+        batchRecordDTO.setOperation(ClaimStatus.BATCHRETURN.getCode());
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 1);
@@ -182,15 +182,15 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     public int updateClaimBatchstatus(String batchno) {
         ClaimBatch claimBatch = new ClaimBatch();
         claimBatch.setBatchno(batchno);
-        claimBatch.setBatchstatus("05");
+        claimBatch.setBatchstatus(ClaimStatus.BATCHINVALID.getCode());
         claimBatch.setUpdateBy(SecurityUtils.getUsername());
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
 
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
         claimBatchRecord.setBatchno(batchno);
-        claimBatchRecord.setOperation("05");
-        claimBatchRecord.setStatus("Y");
+        claimBatchRecord.setOperation(ClaimStatus.BATCHINVALID.getCode());
+        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());
         claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord.setCreateTime(DateUtils.getNowDate());
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());

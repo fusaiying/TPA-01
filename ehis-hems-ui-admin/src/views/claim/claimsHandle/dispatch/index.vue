@@ -116,13 +116,13 @@
             :header-cell-style="{color:'black',background:'#f8f8ff'}"
           >
             <el-table-column type="selection" width="50" align="center"/>
-            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column sortable prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="source" :formatter="getDeliverySourceName" label="交单来源" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="name" label="被保人姓名" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="claimType" label="理赔类型" :formatter="getClaimTypeName"  width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="companyName" label="出单公司" align="center" show-overflow-tooltip />
-            <el-table-column prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
+            <el-table-column sortable prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
             <el-table-column prop="monitoringTime" label="监控时效" align="center" show-overflow-tooltip />
             <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center" show-overflow-tooltip />
             <el-table-column prop="operator" label="操作人"  align="center" show-overflow-tooltip />
@@ -233,7 +233,7 @@
         this.getDicts("claimType").then(response => {
           this.claimTypeSelect = response.data;
         });
-        this.getDicts("queue_claim_status").then(response => {
+        this.getDicts("claim_status").then(response => {
           this.caseStatusSelect = response.data;
         });
         this.getDspatchUserData();

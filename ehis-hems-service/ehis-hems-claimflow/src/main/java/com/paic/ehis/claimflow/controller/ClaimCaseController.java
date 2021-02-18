@@ -471,7 +471,16 @@ public class ClaimCaseController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:case:edit')")
     @GetMapping("/ReviewCompleted")
     public AjaxResult reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
-        return toAjax(claimCaseService.reviewCompletedClaimCase(claimCaseCal));
+
+        ClaimCaseCheckDTO claimCaseCheckDTO = new ClaimCaseCheckDTO();
+        claimCaseCheckDTO.setRptNo(claimCaseCal.getRptNo());
+        claimCaseCheckDTO.setPayAmount(claimCaseCal.getPayAmount());
+        claimCaseCheckDTO.setPayConclusion(claimCaseCal.getPayConclusion());
+        claimCaseCheckDTO.setCaseType(claimCaseCal.getIsAppeal());
+        claimCaseCheckDTO.setAmount(claimCaseCal.getRefusedAmount());
+        //判断案件是否符合流程抽检岗规则
+        //判断后  结案
+        return toAjax(claimCaseService.judgeClaimCaseCheckRule(claimCaseCheckDTO));
     }
 
     /**

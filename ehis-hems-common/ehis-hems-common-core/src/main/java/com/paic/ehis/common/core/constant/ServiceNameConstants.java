@@ -26,4 +26,14 @@ public class ServiceNameConstants
      * 医疗服务的serviceid
      */
     public static final String PROVIDER_SERVICE = "ehis-hems-base";
+
+    /**
+     * 系统模块的serviceid
+     */
+    public static final String POLICY_SERVICE = "ehis-hems-policy";
+
+    /**
+     * 系统模块的serviceid
+     */
+    public static final String FLOW_SERVICE = "ehis-hems-claimflow";
 }

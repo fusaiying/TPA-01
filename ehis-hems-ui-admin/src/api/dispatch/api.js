@@ -31,8 +31,8 @@ export function getDspatchUser(query) {
 export function getIssuingcompanyList(query) {
   return request({
     url: '/provider/issuingcompany/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

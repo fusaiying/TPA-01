@@ -21,7 +21,7 @@
         <result property="deptCode"    column="dept_code"    />
     </resultMap>
 
-    <resultMap id="planMap" type="com.paic.ehis.finance.domain.TpaSettleDetailInfo">
+    <resultMap id="tpaSettleDetailMap" type="com.paic.ehis.finance.domain.TpaSettleDetailInfo">
         <id property="settleTaskNo" column="settle_task_no"/>
         <result property="settleTaskNo"    column="settle_task_no"    />
         <result property="policyNo"    column="policy_no"    />
@@ -55,7 +55,7 @@
         where detail_id = #{detailId}
     </select>
 
-    <select id="selectFinanceTpaSettleDetailBysettleTaskNo" parameterType="string" resultMap="FinanceTpaSettleDetailResult">
+    <select id="selectFinanceTpaSettleDetailBySettleTaskNo" parameterType="string" resultMap="tpaSettleDetailMap">
         <include refid="selectFinanceTpaSettleDetailVo"/>
         where settle_task_no = #{settleTaskNo}
     </select>

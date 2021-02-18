@@ -311,7 +311,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                     boolean flag=false;
                     ExcelUtils<FinanceTpaSettleDetail> utils = new ExcelUtils<FinanceTpaSettleDetail>(FinanceTpaSettleDetail.class);
                     List<FinanceTpaSettleDetail> detailList = utils.importExcel(sheet);
-                    List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailBysettleTaskNo(detailList.get(0).getSettleTaskNo());
+                    List<FinanceTpaSettleDetail> financeTpaSettleDetails = financeTpaSettleDetailMapper.selectFinanceTpaSettleDetailBySettleTaskNo(detailList.get(0).getSettleTaskNo());
                     if (detailList.size()==financeTpaSettleDetails.size()){
                         financeTpaSettleDetailMapper.removeFinanceTpaSettleDetail(detailList);
                     }else {

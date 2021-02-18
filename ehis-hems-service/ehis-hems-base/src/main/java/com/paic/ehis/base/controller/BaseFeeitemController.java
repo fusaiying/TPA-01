@@ -9,12 +9,14 @@ import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseFeeitem;
 import com.paic.ehis.base.service.IBaseFeeitemService;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -45,12 +47,12 @@ public class BaseFeeitemController extends BaseController
     /**
      * 导出费用项信息 列表
      */
-    //@PreAuthorize("@ss.hasPermi('system:feeitem:export')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:feeitem:export')")
     @Log(title = "费用项信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody BaseFeeitem baseFeeitem) throws IOException
     {
-        String feeitemname = new String(baseFeeitem.getFeeitemname().getBytes( "UTF-8"));
+        String feeitemname = URLDecoder.decode(baseFeeitem.getFeeitemname(),"utf-8");
         baseFeeitem.setFeeitemname(feeitemname);
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
             ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);

@@ -11,19 +11,19 @@ import java.util.Date;
 @Data
 public class FinanceAdvanceSettleVO implements Serializable {
     /** 结算任务号 */
-    @Excel(name = "结算任务号")
+   // @Excel(name = "结算任务号")
     private String settleTaskNo;
 
     /** 出单公司编码 */
-    @Excel(name = "出单公司编码")
+  //  @Excel(name = "出单公司编码")
     private String companyCode;
 
     /** 出单公司名称 */
-    @Excel(name = "出单公司名称")
+ //   @Excel(name = "出单公司名称")
     private String companyName;
 
     /** 任务总金额 */
-    @Excel(name = "任务总金额")
+  //  @Excel(name = "任务总金额")
     private BigDecimal sumPayAmount;
 
     /** 创建时间 */
@@ -31,17 +31,17 @@ public class FinanceAdvanceSettleVO implements Serializable {
     private Date createTime;
 
     /** 结算状态 (01-待确认、02-待结算、03-已结算) */
-    @Excel(name = "结算状态 (01-待确认、02-待结算、03-已结算)")
+   // @Excel(name = "结算状态 (01-待确认、02-待结算、03-已结算)")
     private String settleStatus;
 
     /** 结算止期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
+   // @Excel(name = "结算止期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date settleEndDate;
 
     /** 核销日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "核销日期", width = 30, dateFormat = "yyyy-MM-dd")
+  //  @Excel(name = "核销日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date colDate;
 
     /** 批次号 */
@@ -123,28 +123,6 @@ public class FinanceAdvanceSettleVO implements Serializable {
     @Excel(name = "备注")
     private String remark;
 
-    /** 收款公司名称 */
-    @Excel(name = "收款公司名称")
-    private String receiptCompanyName;
-
-    /** 收款金额 */
-    @Excel(name = "收款金额")
-    private BigDecimal receiptAmount;
-
-    /** 收款日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "收款日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date receiptDate;
-
-    /** 收款备注 */
-    @Excel(name = "收款备注")
-    private String creditRemark;
-
-    /** 操作人 */
-    @Excel(name = "操作人")
-    private String createBy;
-
-
-    @Excel(name = "接口数据类型")
+   // @Excel(name = "接口数据类型")
     private String pageType;
 }

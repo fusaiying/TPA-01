@@ -168,6 +168,7 @@ WHERE
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
         </trim>
+        where rpt_no = #{rptno} and status="Y"
     </update>
 
 

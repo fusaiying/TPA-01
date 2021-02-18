@@ -1,18 +1,10 @@
 import request from '@/utils/request'
-//# 查询未处理的信息需求数据
-export function demandListAndPublicPool(query) {
+//# 查询协办工作池
+export function selectAssist(query) {
   return request({
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/demand/selectAssist',
     method: 'get',
     params: query
   })
 }
 
-//# 查询未处理的信息需求数据
-export function demandListAndPersonalPool(query) {
-  return request({
-    url: '/cs/demand/internal/listAndPublicPool',
-    method: 'get',
-    params: query
-  })
-}

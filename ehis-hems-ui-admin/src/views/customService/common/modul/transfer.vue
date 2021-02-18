@@ -11,8 +11,8 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span style="font-size: 20px">请选择转交接收方UM账号：</span>
           <el-row>
-            <el-form-item  prop="attachmentType">
-              <el-select v-model="transferForm.attachmentType" class="item-width" placeholder="请选择">
+            <el-form-item  prop="umCode">
+              <el-select v-model="transferForm.umCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -25,12 +25,12 @@
             </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="转交处原因：" prop="textarea">
+            <el-form-item label="转交处原因：" prop="reason">
               <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="不超过500字符："
-                v-model="transferForm.textarea">
+                v-model="transferForm.reason">
               </el-input>
             </el-form-item>
           </el-row>
@@ -44,7 +44,7 @@
           </el-row>
 
           <span style="float: right;">
-          <el-button size="mini" @click="defineButton">确定</el-button>
+          <el-button size="mini" @click="transferButton">确定</el-button>
           <el-button size="mini" @click="changeDialogVisable">返回</el-button>
         </span>
         </div>
@@ -56,6 +56,8 @@
 </template>
 
 <script>
+  import {transferSubmit} from "../../../../api/customService/demand";
+
   export default {
     name:'upLoad',
     //接受父传值
@@ -70,7 +72,7 @@
 
       data() {
         return {
-
+          cs_service_item:[],
           rules: {
             attachmentTypes: [{
               required: true, message: "UM账号必填", trigger: "blur"
@@ -84,13 +86,13 @@
             ]
           },
 
-
+          //workOrderNo:"",
           dialogVisable: false,
           transferForm: {
-            attachmentType: "",
-            attachmentTypes: "",
-            attachmentFile: "",
-            textarea: ""
+            umCode: "",
+            reason: "",
+            textarea: "",
+            workOrderNo:""
 
           }
         }
@@ -113,25 +115,37 @@
         });
       },
       methods: {
+        //提交页面数据
+        transferButton(){
+          let insert=this.transferForm
+         // insert.workOrderNo=this.workOrderNo
+          transferSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              console.log("insert",insert)
+              alert("修改成功")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+
+        },
+
         //打开窗口
         open(){
           console.log("调用到了子组件")
           this.dialogVisable=true
         },
-        //确定保存数据
-        defineButton() {
 
-        },
         //关闭对话框
         changeDialogVisable() {
           //清空对话框中的数据
           this.dialogVisable=false
-          /* console.log('-------')
-         this.radio = undefined
-         this.copyRadio = undefined
-         this.expands = []
-         this.$refs.searchForm.resetFields()
-         this.$emit('closeProblemShipment')*/
+
         }
       }
     }

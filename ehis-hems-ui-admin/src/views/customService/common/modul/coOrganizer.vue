@@ -12,13 +12,13 @@
           <span style="font-size: 20px">协办方UM账号：</span>
           <el-row>
             <el-form-item  prop="attachmentType">
-              <el-select v-model="coOrganizerForm.attachmentType" class="item-width" placeholder="请选择">
+              <el-select v-model="coOrganizerForm.umCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
             <el-form-item prop="attachmentTypes">
-              <el-input size="mini" v-model="coOrganizerForm.attachmentTypes"></el-input>
+              <el-input size="mini" v-model="coOrganizerForm.umCode"></el-input>
             </el-form-item>
             <el-form-item>
               <span style="color: gray">下拉框只能选择一个主账号，文本框可以填写多个以“，”分隔</span>
@@ -30,7 +30,7 @@
                 type="textarea"
                 :rows="2"
                 placeholder="不超过500字符："
-                v-model="coOrganizerForm.textarea">
+                v-model="coOrganizerForm.solicitOpinion">
               </el-input>
             </el-form-item>
           </el-row>
@@ -60,7 +60,7 @@
           </span>
 
           <span style="float: right;">
-          <el-button size="mini" @click="defineButton">提交</el-button>
+          <el-button size="mini" @click="submitButton">提交</el-button>
           <el-button size="mini" @click="changeDialogVisable">取消</el-button>
         </span>
         </div>
@@ -72,21 +72,13 @@
 </template>
 
 <script>
+  import {coOrganizerSubmit} from "../../../../api/customService/demand";
+
   export default {
     name:'upLoad',
-    //接受父传值
-    props: {
-      historicalProblemData: Array,
-      value: {
-        type: Boolean,
-        default: false
-      },
-    },
-
-
     data() {
       return {
-
+        serves:[],
         rules: {
           attachmentTypes: [{
             required: true, message: "UM账号必填", trigger: "blur"
@@ -100,28 +92,16 @@
           ]
         },
 
-
+        cs_service_item:[],
         dialogVisable: false,
-        coOrganizerForm: {
-          attachmentType: "",
-          attachmentTypes: "",
-          attachmentFile: "",
-          textarea: ""
+        coOrganizerForm:{
+          umCode:"",
+          solicitOpinion:"",
+          workOrderNo:""
 
         }
       }
     },
-
-    watch: {
-      value: function (newValue) {
-        this.dialogVisable = newValue
-      },
-      historicalProblemData: function (newValue) {
-        this.baseForm = newValue
-      }
-    },
-
-
     mounted() {
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
@@ -135,19 +115,26 @@
         this.dialogVisable=true
       },
       //确定保存数据
-      defineButton() {
+      submitButton() {
+        let insert=this.coOrganizerForm
+        coOrganizerSubmit(insert).then(res => {
+          if (res != null && res.code === 200) {
+            alert("修改成功")
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
 
       },
       //关闭对话框
       changeDialogVisable() {
         //清空对话框中的数据
         this.dialogVisable=false
-        /* console.log('-------')
-       this.radio = undefined
-       this.copyRadio = undefined
-       this.expands = []
-       this.$refs.searchForm.resetFields()
-       this.$emit('closeProblemShipment')*/
       }
     }
   }

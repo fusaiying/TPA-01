@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.CallAgainMapper">
+    
+    <resultMap type="CallAgain" id="CallAgainResult">
+        <result property="callSerialNum"    column="call_serial_num"    />
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="insuredName"    column="insured_name"    />
+        <result property="acceptTime"    column="accept_time"    />
+    </resultMap>
+
+    <sql id="selectCallAgainVo">
+        select call_serial_num, work_order_no, remark, status, created_by, created_time, updated_by, updated_time from call_again
+    </sql>
+
+    <select id="selectCallAgainList" parameterType="CallAgain" resultMap="CallAgainResult">
+        <include refid="selectCallAgainVo"/>
+        <where>  
+            <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+
+    <select id="selectCallAgain" parameterType="CallAgain" resultMap="CallAgainResult">
+        select t1.call_serial_num,t1.work_order_no,t1.remark,t2.accept_time,t2.insured_name
+        from call_again t1
+        left join  work_order_accept  t2  on  t1.work_order_no=t2.work_order_no
+        <where>
+            <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+        and t1.status='Y'
+    </select>
+
+    <select id="selectCallAgainById" parameterType="String" resultMap="CallAgainResult">
+        <include refid="selectCallAgainVo"/>
+        where call_serial_num = #{callSerialNum}
+    </select>
+        
+    <insert id="insertCallAgain" parameterType="CallAgain">
+        insert into call_again
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="callSerialNum != null">call_serial_num,</if>
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="callSerialNum != null">#{callSerialNum},</if>
+            <if test="workOrderNo != null and workOrderNo != ''">#{workOrderNo},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCallAgain" parameterType="CallAgain">
+        update call_again
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where call_serial_num = #{callSerialNum}
+    </update>
+
+    <delete id="deleteCallAgainById" parameterType="String">
+        delete from call_again where call_serial_num = #{callSerialNum}
+    </delete>
+
+    <delete id="deleteCallAgainByIds" parameterType="String">
+        delete from call_again where call_serial_num in 
+        <foreach item="callSerialNum" collection="array" open="(" separator="," close=")">
+            #{callSerialNum}
+        </foreach>
+    </delete>
+    
+</mapper>

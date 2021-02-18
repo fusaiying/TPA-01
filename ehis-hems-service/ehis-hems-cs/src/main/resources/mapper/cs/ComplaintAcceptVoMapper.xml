@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.paic.ehis.cs.mapper.ComplaintAcceptVoMapper">
+    <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintAcceptVo" id="ComplaintAcceptVoResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="businessType" column="business_type"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="insuredName" column="insured_name"/>
+        <result property="holderName" column="holder_name"/>
+        <result property="acceptBy" column="accept_by"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="insuredNo" column="insured_no"/>
+    </resultMap>
+
+    <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
+        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
+        from accept_detail_info t1
+        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
+        <where>
+            <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+            <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+            <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
+            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+            <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+            <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+            <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+            <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+            <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+            <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        </where>
+    </select>
+
+    <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
+        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
+        from accept_detail_info t1
+        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
+        <where>
+            <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+            <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
+            <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
+            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
+            <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
+            <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
+            <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+            <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+            <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+            <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        </where>
+    </select>
+
+    <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
+SELECT
+	a.work_order_no,
+	a.channel_code,
+	a.call_center_id,
+	a.contacts_person_id,
+	a.call_person_id,
+	a.priority_level,
+	a.email,
+	a.organ_code,
+	a.complaint_person_id,
+	b.insured_no
+FROM
+	accept_detail_info a,
+	work_order_accept b
+WHERE
+	a.work_order_no = b.work_order_no and a.work_order_no= #{workOrderNo}
+    </select>
+
+
+    <insert id="insertWorkOrderAccept" parameterType="WorkOrderAccept">
+        insert into work_order_accept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="businessType != null and businessType != ''">business_type,</if>
+            <if test="policyNo != null">policy_no,</if>
+            <if test="policyItemNo != null">policy_item_no,</if>
+            <if test="riskCode != null">risk_code,</if>
+            <if test="insuredNo != null">insured_no,</if>
+            <if test="insuredName != null">insured_name,</if>
+            <if test="holderNo != null">holder_no,</if>
+            <if test="holderName != null">holder_name,</if>
+            <if test="acceptBy != null">accept_by,</if>
+            <if test="acceptTime != null">accept_time,</if>
+            <if test="modifyBy != null">modify_by,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="vipFlag != null">vip_flag,</if>
+            <if test="organCode != null">organ_code,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="businessType != null and businessType != ''">#{businessType},</if>
+            <if test="policyNo != null">#{policyNo},</if>
+            <if test="policyItemNo != null">#{policyItemNo},</if>
+            <if test="riskCode != null">#{riskCode},</if>
+            <if test="insuredNo != null">#{insuredNo},</if>
+            <if test="insuredName != null">#{insuredName},</if>
+            <if test="holderNo != null">#{holderNo},</if>
+            <if test="holderName != null">#{holderName},</if>
+            <if test="acceptBy != null">#{acceptBy},</if>
+            <if test="acceptTime != null">#{acceptTime},</if>
+            <if test="modifyBy != null">#{modifyBy},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="vipFlag != null">#{vipFlag},</if>
+            <if test="organCode != null">#{organCode},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertAcceptDetailInfo" parameterType="AcceptDetailInfo">
+        insert into accept_detail_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="channelCode != null">channel_code,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="callPersonId != null">call_person_id,</if>
+            <if test="callRelationBy != null">call_relation_by,</if>
+            <if test="priorityLevel != null">priority_level,</if>
+            <if test="contactsPersonId != null">contacts_person_id,</if>
+            <if test="contactsRelationBy != null">contacts_relation_by,</if>
+            <if test="callCenterId != null">call_center_id,</if>
+            <if test="email != null">email,</if>
+            <if test="organCode != null">organ_code,</if>
+            <if test="content != null">content,</if>
+            <if test="complaintPersonId != null">complaint_person_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="prop0 != null">prop0,</if>
+            <if test="prop1 != null">prop1,</if>
+            <if test="prop2 != null">prop2,</if>
+            <if test="prop3 != null">prop3,</if>
+            <if test="prop4 != null">prop4,</if>
+            <if test="prop5 != null">prop5,</if>
+            <if test="prop6 != null">prop6,</if>
+            <if test="prop7 != null">prop7,</if>
+            <if test="prop8 != null">prop8,</if>
+            <if test="prop9 != null">prop9,</if>
+            <if test="prop10 != null">prop10,</if>
+            <if test="prop11 != null">prop11,</if>
+            <if test="prop12 != null">prop12,</if>
+            <if test="prop13 != null">prop13,</if>
+            <if test="prop14 != null">prop14,</if>
+            <if test="prop15 != null">prop15,</if>
+            <if test="prop16 != null">prop16,</if>
+            <if test="prop17 != null">prop17,</if>
+            <if test="prop18 != null">prop18,</if>
+            <if test="prop19 != null">prop19,</if>
+            <if test="prop20 != null">prop20,</if>
+            <if test="prop21 != null">prop21,</if>
+            <if test="prop22 != null">prop22,</if>
+            <if test="prop23 != null">prop23,</if>
+            <if test="prop24 != null">prop24,</if>
+            <if test="prop25 != null">prop25,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="channelCode != null">#{channelCode},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="callPersonId != null">#{callPersonId},</if>
+            <if test="callRelationBy != null">#{callRelationBy},</if>
+            <if test="priorityLevel != null">#{priorityLevel},</if>
+            <if test="contactsPersonId != null">#{contactsPersonId},</if>
+            <if test="contactsRelationBy != null">#{contactsRelationBy},</if>
+            <if test="callCenterId != null">#{callCenterId},</if>
+            <if test="email != null">#{email},</if>
+            <if test="organCode != null">#{organCode},</if>
+            <if test="content != null">#{content},</if>
+            <if test="complaintPersonId != null">#{complaintPersonId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="prop0 != null">#{prop0},</if>
+            <if test="prop1 != null">#{prop1},</if>
+            <if test="prop2 != null">#{prop2},</if>
+            <if test="prop3 != null">#{prop3},</if>
+            <if test="prop4 != null">#{prop4},</if>
+            <if test="prop5 != null">#{prop5},</if>
+            <if test="prop6 != null">#{prop6},</if>
+            <if test="prop7 != null">#{prop7},</if>
+            <if test="prop8 != null">#{prop8},</if>
+            <if test="prop9 != null">#{prop9},</if>
+            <if test="prop10 != null">#{prop10},</if>
+            <if test="prop11 != null">#{prop11},</if>
+            <if test="prop12 != null">#{prop12},</if>
+            <if test="prop13 != null">#{prop13},</if>
+            <if test="prop14 != null">#{prop14},</if>
+            <if test="prop15 != null">#{prop15},</if>
+            <if test="prop16 != null">#{prop16},</if>
+            <if test="prop17 != null">#{prop17},</if>
+            <if test="prop18 != null">#{prop18},</if>
+            <if test="prop19 != null">#{prop19},</if>
+            <if test="prop20 != null">#{prop20},</if>
+            <if test="prop21 != null">#{prop21},</if>
+            <if test="prop22 != null">#{prop22},</if>
+            <if test="prop23 != null">#{prop23},</if>
+            <if test="prop24 != null">#{prop24},</if>
+            <if test="prop25 != null">#{prop25},</if>
+        </trim>
+    </insert>
+    <insert id="insertPersonInfo" parameterType="PersonInfo">
+        insert into person_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personId != null">person_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null">sex,</if>
+            <if test="identity != null">identity,</if>
+            <if test="mobilePhone != null">mobile_phone,</if>
+            <if test="linePhone != null">line_phone,</if>
+            <if test="homePhone != null">home_phone,</if>
+            <if test="workPhone != null">work_phone,</if>
+            <if test="language != null">language,</if>
+            <if test="email != null">email,</if>
+            <if test="idNumber != null">id_number,</if>
+            <if test="idType != null">id_type,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="address != null">address,</if>
+            <if test="otherCustomerNo != null">other_customer_no,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">#{personId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="identity != null">#{identity},</if>
+            <if test="mobilePhone != null">#{mobilePhone},</if>
+            <if test="linePhone != null">#{linePhone},</if>
+            <if test="homePhone != null">#{homePhone},</if>
+            <if test="workPhone != null">#{workPhone},</if>
+            <if test="language != null">#{language},</if>
+            <if test="email != null">#{email},</if>
+            <if test="idNumber != null">#{idNumber},</if>
+            <if test="idType != null">#{idType},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="address != null">#{address},</if>
+            <if test="otherCustomerNo != null">#{otherCustomerNo},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
+    <insert id="insertFlowLog" parameterType="FlowLog">
+        insert into flow_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="flowId != null">flow_id,</if>
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="subId != null">sub_id,</if>
+            <if test="subType != null">sub_type,</if>
+            <if test="linkCode != null">link_code,</if>
+            <if test="operateCode != null">operate_code,</if>
+            <if test="makeBy != null">make_by,</if>
+            <if test="umNum != null">um_num,</if>
+            <if test="makeTime != null">make_time,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="opinion != null">opinion,</if>
+            <if test="toDepartment != null">to_department,</if>
+            <if test="toReason != null">to_reason,</if>
+            <if test="attachmentFlag != null">attachment_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="flowId != null">#{flowId},</if>
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="subId != null">#{subId},</if>
+            <if test="subType != null">#{subType},</if>
+            <if test="linkCode != null">#{linkCode},</if>
+            <if test="operateCode != null">#{operateCode},</if>
+            <if test="makeBy != null">#{makeBy},</if>
+            <if test="umNum != null">#{umNum},</if>
+            <if test="makeTime != null">#{makeTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="opinion != null">#{opinion},</if>
+            <if test="toDepartment != null">#{toDepartment},</if>
+            <if test="toReason != null">#{toReason},</if>
+            <if test="attachmentFlag != null">#{attachmentFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
+    <update id="updateReservedCancelStatus" parameterType="String" >
+        update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
+</mapper>

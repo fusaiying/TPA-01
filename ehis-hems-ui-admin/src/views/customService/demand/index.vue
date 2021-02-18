@@ -7,27 +7,27 @@
         <el-row>
 <!--v-model双向绑定 v-model的值为当前被选中的el-option的 value 属性值-->
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="service">
-              <el-select v-model="sendForm.service" class="item-width" placeholder="请选择">
+            <el-form-item label="服务项目：" prop="itemCode">
+              <el-select v-model="sendForm.itemCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="channel">
-              <el-select v-model="sendForm.channel" class="item-width" placeholder="请选择">
+            <el-form-item label="受理渠道：" prop="channelCode">
+              <el-select v-model="sendForm.channelCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理人：" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="受理人：" prop="acceptBy">
+              <el-input v-model="sendForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-        </el-row>
+          </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理日期：" prop="acceptorTime">
@@ -42,8 +42,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理人：" prop="Handler">
-              <el-input v-model="sendForm.handler" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="处理人：" prop="modifyBy">
+              <el-input v-model="sendForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -58,50 +58,50 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
-        </el-row>
+          </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="工单号：" prop="workNumber">
-              <el-input v-model="sendForm.workNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="工单号：" prop="workOrderNo">
+              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保单号：" prop="policyNumber">
-              <el-input v-model="sendForm.policyNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="保单号：" prop="policyNo">
+              <el-input v-model="sendForm.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号：" prop="secondNumber">
-              <el-input v-model="sendForm.secondNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="分单号：" prop="policyItemNo">
+              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-        </el-row>
+          </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投保人姓名：" prop="insuredName">
+            <el-form-item label="投保人姓名：" prop="holderName">
+              <el-input v-model="sendForm.holderName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人姓名：" prop="insuredName">
               <el-input v-model="sendForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人姓名：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
+              <el-input v-model="sendForm.idNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
+          </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人电话：" prop="phone">
-              <el-input v-model="sendForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人电话：" prop="mobilePhone">
+              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="sendForm.organization" class="item-width" placeholder="请选择">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -119,48 +119,37 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
-        </el-row>
+          </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="sendForm.priority" class="item-width" placeholder="请选择">
+            <el-form-item label="优先级：" prop="priorityLevel">
+              <el-select v-model="sendForm.priorityLevel" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="vip标识：" prop="vip">
-              <el-select v-model="sendForm.vip" class="item-width" placeholder="请选择">
+            <el-form-item label="vip标识：" prop="vipFlag">
+              <el-select v-model="sendForm.vipFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="状态：" prop="state">
-              <el-select v-model="sendForm.state" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <el-form-item label="状态：" prop="status">
+            <el-select v-model="sendForm.status" class="item-width" placeholder="请选择">
+              <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
+                         :value="item.dictValue"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
 
         </el-row>
         <div style="text-align: right; margin-right: 1px;">
-          <el-button
-            size="mini"
-            type="success"
-            icon="el-icon-search"
-            @click="
-              isinit='N',
-              page=1,
-              finishPage=1,
-              searchHandle()
-            "
-          >查询
-          </el-button>
+          <el-button size="mini" type="primary" @click="searchHandles">查询</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>
@@ -171,10 +160,11 @@
         <span style="color: blue">待处理（{{ totalCount }}）</span>
         <div style="text-align: right; margin-right: 8px;">
             <el-button type="primary" size="mini" @click="add">新增</el-button>
-           <el-button type="primary" size="mini" @click="add">获取</el-button>
+           <el-button type="primary" size="mini" @click="obtainButton">获取</el-button>
         </div>
         <el-divider style=""/>
         <el-table
+          ref="multipleTable"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPoolData"
           size="small"
@@ -183,31 +173,35 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workNumber" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="channel" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="Service" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="secondNumber" label="分单号" show-overflow-tooltip/>
-          <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="beInsuredName" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="insuredName" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="acceptorTime" label="受理时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate}}</span>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
+            <template slot-scope="scope" class="link-type">
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="HandlerTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
+          <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
+          <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
+          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate}}</span>
+              <span>{{ scope.row.acceptTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="Acceptor" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="Handler" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="vip" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip/>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
@@ -221,51 +215,59 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :page.sync="pageNum"
+          :limit.sync="pageSize"
           @pagination="searchHandle"
         />
       </div>
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>处理中（{{ totalCount }}）</span>
+        <span style="color: blue">处理中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="workPoolData"
+          :data="workPersonPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
 <!--          <el-table-column type="selection" align="center" name/> sd-->
-          <el-table-column align="center" width="140" prop="workNumber" label="工单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="channel" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="Service" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNumber" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="secondNumber" label="分单号" show-overflow-tooltip/>
-          <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
-          <el-table-column prop="beInsuredName" align="center" label="被保人" show-overflow-tooltip/>
-          <el-table-column prop="insuredName" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="acceptorTime" label="受理时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+            <template slot-scope="scope" class="link-type">
+              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="HandlerTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
+          <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
+          <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
+          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-
-          <el-table-column prop="Acceptor" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="Handler" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="vip" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priority" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="organization" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="state" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.modifyTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.modifyTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <!--fixed="right"控制固定某一列-->
           <el-table-column align="center" label="操作" fixed="right" width="140">
             <template slot-scope="scope">
@@ -279,265 +281,291 @@
 
         <pagination
           v-show="totalCount>0"
-          :total="totalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchHandle"
+          :total="totalPersonCount"
+          :page.sync="pageNumPerson"
+          :limit.sync="pageSizePerson"
+          @pagination="searchHandle1"
         />
       </div>
     </el-card>
-
-    <!--再次来电弹出框-->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-card class="box-card" style="margin-top: 10px;">
-          <div slot="header" class="clearfix">
-            <el-divider/>
-            <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
-            <el-table
-              :header-cell-style="{color:'black',background:'#f8f8ff'}"
-              :data="workPoolData"
-              size="small"
-              highlight-current-row
-              tooltip-effect="dark"
-              style=" width: 100%;"
-            >
-              <el-table-column align="center" width="140" prop="state" label="序号" show-overflow-tooltip/>
-              <el-table-column align="center" prop="channel" label="工单号" show-overflow-tooltip/>
-              <el-table-column align="center" prop="Service" label="受理时间" show-overflow-tooltip/>
-              <el-table-column align="center" prop="policyNumber" label="被保人姓名" show-overflow-tooltip/>
-              <el-table-column align="center" prop="secondNumber" label="说明" show-overflow-tooltip/>
-              <!--              <el-button size="mini" type="text" @click="sendOne(scope.row)">关闭</el-button>-->
-              <!--fixed="right"控制固定某一列-->
-            </el-table>
-            <pagination
-              v-show="totalCount>0"
-              :total="totalCount"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="searchHandle"
-            />
-          </div>
-        </el-card>
-
-      </el-form>
-    </el-dialog>
 
   </div>
 </template>
 
 <script>
-import moment from 'moment'
-import {demandListAndPublicPool, demandListAndPersonalPool} from '@/api/customService/demand'
+  import moment from 'moment'
+  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
+  import secondPhone from "../common/modul/secondPhone";
 
-export default {
-  filters: {
-    changeDate: function (value) {
-      if (value !== null) {
-        return moment(value).format('YYYY-MM-DD')
-      }
-    }
-  },
-  data() {
-    return {
-      open: "",//是否弹出
-      title: "",//弹出框名称
-      cs_service_item: [],//服务项目
-      cs_channel: [],//
-      cs_organization: [],//
-      cs_priority: [],//
-      cs_vip_flag: [],//
-      cs_handle_state: [],//
-      secondPhone: [],
-      riskCodes: [],
-      dialogFormVisible: false,
-      updateBy: undefined,
-      sendForm: {
-        service: "",//服务信息
-        channel: "",
-        acceptor: "",
-        acceptorTime: "",
-        handler: "",
-        handlerTime: "",
-        workNumber: "",
-        policyNumber: "",
-        secondNumber: "",
-        insuredName: "",
-        beInsuredName: "",
-        beInsuredNo: "",
-        organization: "",
-        appointmentTime: "",
-        priority: "",
-        vip: "",
-        phone: "",
-        state: ""
-      },
-      caseNumber: false,//查询条件（报案号）是否显示
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10
-
-
-      },
-      loading: true,
-      workPoolData: [],
-      isinit: 'Y',
-      totalCount: 0,
-      changeSerchData: {},
-      states: [],
-      serves: [{
-        value: '1',
-        label: '服务1'
-      }, {
-        value: '2',
-        label: '服务2'
-      }, {
-        value: '3',
-        label: '服务3'
-      }, {
-        value: '4',
-        label: '服务4'
-      }],
-      sysUserOptions: [],
-    }
-  },
-  created() {
-    this.searchHandle()
-    this.getDicts("cs_service_item").then(response => {
-      this.cs_service_item = response.data;
-      console.log("服务项目:", response)
-    });
-    this.getDicts("cs_channel").then(response => {
-      this.cs_channel = response.data;
-    });
-    this.getDicts("cs_organization").then(response => {
-      this.cs_organization = response.data;
-    });
-    this.getDicts("cs_priority").then(response => {
-      this.cs_priority = response.data;
-    });
-    this.getDicts("cs_vip_flag").then(response => {
-      this.cs_vip_flag = response.data;
-    });
-    this.getDicts("cs_handle_state").then(response => {
-      this.cs_handle_state = response.data;
-    });
-    this.handlePhone()
-
-  },
-
-  methods: {
-    //修改按钮
-    modifyButton() {
-      this.$router.push({
-        path: '/customService/modify',
-        isEmpty: false
-      })
-    },
-    //取消按钮
-    cancleBytton() {
-      this.$router.push({
-        path: '/customService/cancle',
-        isEmpty: false
-      })
-    },
-    //获取按钮
-    obtainButton() {
-    },
-    //处理按钮
-    dealButton() {
-      this.$router.push({
-        path: '/customService/deal',
-        isEmpty: false
-      })
-    },
-    /** 第二次来电弹出框 */
-    handlePhone() {
-      this.reset();
-      this.searchHandle().then(response => {
-        this.workPoolData = response.rows;
-        this.totalCount = res.total;
-        this.title = "第二次来电弹出框";
-        this.open = "true";
-        //   for (var i = 0; i < res.total; i++) {
-        //
-        //   if (response.rows[i].state == 1) {
-        //     this.open = true;
-        //     this.title = "再次来电提醒";
-        //     this.secondPhone.add(response.rows[i].state) ;
-        //   }
-        //
-        // };
-
-      });
-    },
-
-    //增加按钮
-    add(row) {
-      this.$router.push({
-        path: '/customService/demand-edit',
-        isEmpty: false
-      })
-    },
-    resetForm() {
-      this.$refs.sendForm.resetFields()
-    },
-    //查询
-    searchHandle() {
-      debugger;
-      let query = {
-        pageNum: this.queryParams.pageNum,
-        pageSize: this.queryParams.pageSize,
-        service: this.sendForm.service,
-        channel: this.sendForm.channel,
-        Acceptor: this.sendForm.Acceptor,
-        acceptorTime: this.sendForm.acceptorTime,
-        Handler: this.sendForm.Handler,
-        HandlerTime: this.sendForm.HandlerTime,
-        workNumber: this.sendForm.workNumber,
-        policyNumber: this.sendForm.policyNumber,
-        secondNumber: this.sendForm.secondNumber,
-        insuredName: this.sendForm.insuredName,
-        beInsuredName: this.sendForm.beInsuredName,
-        beInsuredNo: this.sendForm.beInsuredName,
-        organization: this.sendForm.organization,
-        appointmentTime: this.sendForm.appointmentTime,
-        priority: this.sendForm.priority,
-        vip: this.sendForm.vip,
-        phone: this.sendForm.phone,
-        state: this.sendForm.state
-      }
-      debugger;
-      console.log('query: ', query)
-      demandListAndPublicPool(query).then(res => {
-        console.log('------------: ', res)
-        if (res != null && res.code === 200) {
-          this.workPoolData = res.rows
-          this.totalCount = res.total
-          console.log('response', res.total)
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
+  export default {
+    components:{secondPhone},
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
         }
-      }).catch(res => {
+      }
+    },
+    data() {
+      return {
+        ids:[],//多选框
+        open:"",//是否弹出
+        title:"",//弹出框名称
+        cs_service_item:[],//服务项目
+        cs_channel:[],//渠道
+        cs_organization:[],//出单机构
+        cs_priority:[],//优先级
+        cs_vip_flag:[],// vip标识
+        cs_handle_state:[],// 状态：
+        secondPhone:[],
+        riskCodes:[],
+        dialogFormVisible: false,
+        updateBy: undefined,
 
-      })
+        sendForm: {//传值给后台
+          pageNum: 1,
+          pageSize: 10,
+          itemCode: "",//服务信息
+          channelCode: "",//受理渠道
+          acceptBy: "",//受理人
+          modifyBy: "",//处理人
+          acceptorTime:[],//受理时间数组
+          appointmentTime:[],//预约时间数组
+          handlerTime:[],//处理时间数组
+          workOrderNo: "",//工单编号
+          policyNo: "",//保单号
+          policyItemNo: "",//分单号
+          holderName: "",//投保人
+          insuredName: "",//被保人
+          idNumber: "",//证件号
+          organCode: "",//出单机构
+          priorityLevel:"",//优先级
+          vipFlag:"",//VIP标识
+          mobilePhone:"",//移动电话
+          status:"",//状态
+          // acceptTimeStart:"",//开始受理时间
+          // acceptTimeEnd:"",//结束受理时间
+          // modifyTimeStart:"",//开始修改时间
+          // modifyTimeEnd:"",//结束修改时间
+          // complaintTimeStart:"",//开始预约时间
+          // complaintTimeEnd:""//结束预约时间
+
+        },
+        caseNumber: false,//查询条件（报案号）是否显示
+        loading: true,
+        workPoolData: [],//公共池
+        pageNum: 1,
+        pageSize: 10,
+        workPersonPoolData:[],
+        pageNumPerson: 1,
+        pageSizePerson: 10,
+        isinit: 'Y',
+        totalCount: 0,
+        totalPersonCount: 0,
+        changeSerchData: {},
+        serves: [{
+          value: '1',
+          label: '服务1'
+        }, {
+          value: '2',
+          label: '服务2'
+        }, {
+          value: '3',
+          label: '服务3'
+        }, {
+          value: '4',
+          label: '服务4'
+        }],
+        sysUserOptions: [],
+      }
     },
-    handleSelectionChange(val) {
-      this.dataonLineListSelections = val
+    created() {
+      this.searchHandles()
+      this.getDicts("cs_service_item").then(response => {
+        this.cs_service_item = response.data;
+      });
+      this.getDicts("cs_organization").then(response => {
+        this.cs_organization = response.data;
+      });
+      this.getDicts("cs_priority").then(response => {
+        this.cs_priority = response.data;
+      });
+      this.getDicts("cs_vip_flag").then(response => {
+        this.cs_vip_flag = response.data;
+      });
+      this.getDicts("cs_handle_state").then(response => {
+        this.cs_handle_state = response.data;
+      });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
+      });
+
+
+
     },
-    getRiskStatus(row) {
-      return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+
+    methods: {
+      //修改按钮
+      modifyButton(s){
+        this.$router.push({
+          path: '/customService/modify',
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
+        })
+      },
+      //取消按钮
+      cancleBytton(s){
+        this.$router.push({
+          path: '/customService/cancle',
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
+        })
+      },
+      //获取按钮
+      obtainButton(s){
+        if(s.workOrderNo==null&&this.ids.length===0){
+          alert("请先选中一行！")
+        }else {
+        if (s.workOrderNo!=null) {
+          let workOrderNo=s.workOrderNo
+          demandObtain(workOrderNo).then(res => {
+            if (res != null && res.code === 200) {
+            }
+          }).catch(res => {
+
+          })
+
+
+        }else {
+           const workOrderNos=this.ids
+           console.log("ids:",workOrderNos)
+           demandObtainMany(workOrderNos).then(res => {
+            if (res != null && res.code === 200) {
+              alert("success")
+            }
+          }).catch(res => {
+
+          })
+        }
+          this.searchHandles()
+      }
+        },
+      //工单页面超链接
+      workOrderButton(s){
+        this.$router.push({
+          path: '/customService/orderDetails',
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
+        })
+      },
+      //处理按钮
+      dealButton(s){
+          this.$router.push({
+            path: '/customService/deal',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+      },
+      // 多选框选中数据
+      handleSelectionChange(selection) {
+        this.ids = selection.map(item => item.workOrderNo);
+
+      },
+
+      //增加按钮
+      add(row) {
+        this.$router.push({
+          path: '/customService/demand-edit',
+          isEmpty: false
+        })
+      },
+      resetForm() {
+        this.$refs.sendForm.resetFields()
+      },
+      //待处理查询
+      searchHandle() {
+        let queryParams;
+        if (this.sendForm.acceptorTime.length > 0) {
+          queryParams = JSON.parse(JSON.stringify(this.sendForm));
+          queryParams.acceptTimeStart=acceptorTime[0]
+          queryParams.acceptTimeEnd=acceptorTime[1]
+        } else {
+          queryParams = this.sendForm;
+        }
+        queryParams.pageNum = this.pageNum;
+        queryParams.pageSize = this.pageSize;
+        demandListAndPublicPool(queryParams).then(res => {
+          console.log('共公池',res.rows)
+          if (res != null && res.code === 200) {
+            this.workPoolData = res.rows
+            this.totalCount = res.total
+            console.log('response',res.total)
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+      //处理中查询
+      searchHandle1() {
+        let queryParams;
+        if (this.sendForm.acceptorTime.length > 0) {
+          queryParams = JSON.parse(JSON.stringify(this.sendForm));
+          queryParams.acceptTimeStart=acceptorTime[0]
+          queryParams.acceptTimeEnd=acceptorTime[1]
+        } else {
+          queryParams = this.sendForm;
+        }
+        queryParams.pageNum = this.pageNumPerson;
+        queryParams.pageSize = this.pageSizePerson;
+        demandListAndPersonalPool(this.sendForm).then(res => {
+          console.log('个人池：',res.rows)
+          if (res != null && res.code === 200) {
+            this.workPersonPoolData = res.rows
+            this.totalPersonCount = res.total
+            console.log('response',res.total)
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+
+      //查询按钮
+      searchHandles() {
+        this.searchHandle()
+        this.searchHandle1()
+      },
     }
   }
-}
 </script>
 
 <style scoped>
-.item-width {
-  width: 220px;
-}
+  .item-width {
+    width: 220px;
+  }
 </style>

@@ -61,11 +61,13 @@
 
     data() {
       return {
+        cs_service_item:[],
         dialogVisable:false,
         baseForm: {
           fjKind:"",
           fjFile:"",
-          textarea:""
+          textarea:"",
+
 
         }
     }

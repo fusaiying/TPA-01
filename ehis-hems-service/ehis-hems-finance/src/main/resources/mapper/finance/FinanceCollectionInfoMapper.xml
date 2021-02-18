@@ -54,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.dept_code = c.dept_code
         AND b.receipt_acc_name = c.receipt_acc_name
         AND c.settle_task_no = a.settle_task_no
+        AND c.task_type='02'
         AND a.STATUS = 'Y'
         AND b.STATUS = 'Y'
         AND c.STATUS = 'Y'

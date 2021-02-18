@@ -1194,6 +1194,27 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
         claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
 
+        //更新历史记录,并添加新的历史记录
+        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCaseCheckDTO.getRptNo());
+        claimCaseRecord.setHistoryFlag("Y");
+        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
+        ClaimCaseRecord caseRecord = new ClaimCaseRecord();
+        caseRecord.setRptNo(claimCaseCheckDTO.getRptNo());
+        if (claimCaseCheckDTO1.getCaseStatus().equals("08")){
+            caseRecord.setOperation("08");
+        }else if (claimCaseCheckDTO1.getCaseStatus().equals("99")){
+            caseRecord.setOperation("99");
+        }
+        caseRecord.setStatus("Y");
+        caseRecord.setHistoryFlag("N");
+        caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
+        caseRecord.setCreateBy(SecurityUtils.getUsername());
+        caseRecord.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
+
         return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
     }
 

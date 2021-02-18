@@ -153,4 +153,7 @@ public interface ClaimCaseRecordMapper
     public List<ClaimCaseRecord> selectClaimCaseRecordAcceptance(String rptNo);
     //查询所有案件状态为：97和98的案件，全部置为无效
     public List<ClaimCaseRecord> selectClaimCaseRecordRevocation(String rptNo);
+
+    //查询案件状态为审核的历史记录
+    public ClaimCaseRecord selectClaimCaseRecordByRptNoOperation(String rptNo);
 }

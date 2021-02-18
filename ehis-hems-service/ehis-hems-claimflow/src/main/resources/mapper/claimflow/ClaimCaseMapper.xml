@@ -291,15 +291,7 @@
     <update id="updateClaimCaseCheck" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
-            <if test="pulloutType != null and pulloutType != ''">pullout_type = #{pulloutType},</if>
-            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
-            <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
             <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
-            <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
-            <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
-            <if test="status != null and status != ''">status = #{status},</if>
-            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and createBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

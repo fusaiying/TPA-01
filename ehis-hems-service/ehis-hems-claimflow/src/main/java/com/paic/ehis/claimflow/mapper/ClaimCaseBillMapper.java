@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseBill;
+import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDTO;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public interface ClaimCaseBillMapper
      * @return 案件账单明细集合
      */
     public List<ClaimCaseBill> selectClaimCaseBillList(ClaimCaseBill claimCaseBill);
+
+    /**
+     * 根据报案号查询账单信息
+     * @param rptNo
+     * @return
+     */
+    public List<ClaimCaseBillDTO> selectClaimCaseBillDTOByRptNo(String rptNo);
 
     /**
      * 新增案件账单明细
@@ -69,8 +77,6 @@ public interface ClaimCaseBillMapper
      * @return
      */
     public ClaimCaseBill selectClaimCaseBillListByRptNo(String rptNo);
-
-
 
     /**
      * 根据账单ID更新账单明细表，数据失效

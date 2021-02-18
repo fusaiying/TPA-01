@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseBillDetail;
+import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDetailDTO;
 
 import java.util.List;
 
@@ -27,6 +28,13 @@ public interface ClaimCaseBillDetailMapper
      * @return 案件账单费用项明细集合
      */
     public List<ClaimCaseBillDetail> selectClaimCaseBillDetailList(ClaimCaseBillDetail claimCaseBillDetail);
+
+    /**
+     * 根据报案号查询账单明细数据
+     * @param rptNo
+     * @return
+     */
+    public List<ClaimCaseBillDetailDTO> selectClaimCaseBillDetailDTOByRptNo(String rptNo);
 
     /**
      * 新增案件账单费用项明细

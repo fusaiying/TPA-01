@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 
+import com.paic.ehis.claimflow.domain.ClaimCaseCal;
 import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 
@@ -54,6 +55,14 @@ public interface ClaimCaseCalBillMapper
      * @return 结果
      */
     public int updateClaimCaseCalBill(ClaimCaseCalBill claimCaseCalBill);
+
+    /**
+     * 通过报案号修改案件赔付账单明细
+     *
+     * @param claimCaseCalBill
+     * @return
+     */
+    public int updateClaimCaseCalBillByRptNo(ClaimCaseCalBill claimCaseCalBill);
 
     /**
      * 修改案件赔付账单明细

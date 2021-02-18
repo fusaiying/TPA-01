@@ -225,6 +225,29 @@ WHERE
         where cal_id = #{calId}
     </update>
 
+    <update id="updateClaimCaseCalByRptNo" parameterType="ClaimCaseCal">
+        update claim_case_cal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="billCurrency != null and billCurrency != ''">bill_currency = #{billCurrency},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="debtAmount != null">debt_amount = #{debtAmount},</if>
+            <if test="exchangeRate != null">exchange_rate = #{exchangeRate},</if>
+            <if test="payAmountForeign != null">pay_amount_foreign = #{payAmountForeign},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="refusedReason != null">refused_reason = #{refusedReason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="claimCheck != null">claim_check = #{claimCheck},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
     <delete id="deleteClaimCaseCalById" parameterType="Long">
         delete from claim_case_cal where cal_id = #{calId}
     </delete>

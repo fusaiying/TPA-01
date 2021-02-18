@@ -198,6 +198,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where cal_item_id = #{calItemId}
     </update>
 
+    <update id="updateClaimCaseCalItemByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalItem">
+        update claim_case_cal_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="billDetailId != null">bill_detail_id = #{billDetailId},</if>
+            <if test="billId != null">bill_id = #{billId},</if>
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+            <if test="riskCode != null and riskCode != ''">risk_code = #{riskCode},</if>
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="dutyDetailCode != null and dutyDetailCode != ''">duty_detail_code = #{dutyDetailCode},</if>
+            <if test="dutyCode != null and dutyCode != ''">duty_code = #{dutyCode},</if>
+            <if test="feeItemCode != null and feeItemCode != ''">fee_item_code = #{feeItemCode},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="deduUsed != null">dedu_used = #{deduUsed},</if>
+            <if test="payRate != null">pay_rate = #{payRate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
     <update id="bulkUpdateClaimCaseCalItem" parameterType="java.util.ArrayList">
         <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
             update claim_case_cal_item

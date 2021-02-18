@@ -28,12 +28,7 @@ public class ServiceNameConstants
     public static final String PROVIDER_SERVICE = "ehis-hems-base";
 
     /**
-     * 保单模块的serviceid
+     * 理赔作业服务的serviceid
      */
-    public static final String POLICY_SERVICE = "ehis-hems-policy";
-
-    /**
-     * 理赔作业处理模块的serviceid
-     */
-    public static final String FLOW_SERVICE = "ehis-hems-claimflow";
+    public static final String CLAIM_FLOW_SERVICE = "ehis-hems-claimflow";
 }

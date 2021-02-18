@@ -330,7 +330,7 @@
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
-        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.create_by as operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
         '天',
@@ -346,7 +346,7 @@
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>
-            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and DATE_ADD(#{submitenddate},INTERVAL 1 DAY)</if>
+            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and (#{submitenddate})</if>
             <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="companyCode != null  and companyCode != ''"> and ccp.company_code = #{companyCode}</if>
@@ -667,7 +667,7 @@
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
         from claim_case cc
-        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no
+        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no  and cci.status='Y'
         inner join  claim_case_policy ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>

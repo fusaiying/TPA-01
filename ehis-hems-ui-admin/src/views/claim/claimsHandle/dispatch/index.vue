@@ -121,7 +121,7 @@
             <el-table-column prop="name" label="被保人姓名" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="claimType" label="理赔类型" :formatter="getClaimTypeName"  width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="companyCode" label="出单公司"  :formatter="getCompanyName" align="center" show-overflow-tooltip />
+            <el-table-column prop="companyName" label="出单公司" align="center" show-overflow-tooltip />
             <el-table-column prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
             <el-table-column prop="monitoringTime" label="监控时效" align="center" show-overflow-tooltip />
             <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center" show-overflow-tooltip />
@@ -297,9 +297,9 @@
         getClaimTypeName(row,col){
           return this.selectDictLabel(this.claimTypeSelect, row.claimType)
         },
-        getCompanyName(row,col){
-          return this.selectDictLabel(this.companySelect, row.companycode)
-        },
+        // getCompanyName(row,col){
+        //   return this.selectDictLabel(this.companySelect, row.companycode)
+        // },
         initData(){
           this.gettableData();
         },
@@ -382,7 +382,7 @@
             caseStatus:this.form.caseStatus,
             updateBy:this.form.operator,
           };
-          this.download('system/case/exportDispatchList', params, `FYX_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/case/exportDispatchList', params, `案件调度_${new Date().getTime()}.xlsx`);
         },
         // 多选框选中数据
         handleSelectionChange(selection) {

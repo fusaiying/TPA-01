@@ -82,7 +82,7 @@
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column prop="businessService" label="服务项目" min-width="160" align="center"show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
-              <span>{{selectDictLabel(business_typeOptions, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
+              <span>{{scope.row.businessService.split('-')[0]+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="organization" label="出单机构" min-width="160" align="center"  show-overflow-tooltip>
@@ -129,7 +129,7 @@
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column prop="businessService" label="服务项目" min-width="160" align="center"show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
-              <span>{{selectDictLabel(business_typeOptions, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
+              <span>{{scope.row.businessService.split('-')[0]+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="organization" label="出单机构" min-width="160" align="center"  show-overflow-tooltip>
@@ -143,12 +143,7 @@
               <span>{{ scope.row.updateTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.status">
-              <span>{{selectDictLabel(inspection_stateOptions, scope.row.status)}}</span>
-            </template>
-          </el-table-column>
-
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="handleOne(scope.row)">处理</el-button>
@@ -178,11 +173,8 @@ import {
   inspectionGetByIds
 } from '@/api/customService/spotCheck'
 
-let dictss = [
-  {dictType: 'cs_business_type'}
-  ,{dictType: 'cs_service_item'}
+let dictss = [{dictType: 'cs_service_item'}
   ,{dictType: 'cs_organization'}
-  ,{dictType: 'cs_inspection_state'}
 ]
 export default {
   filters: {
@@ -219,10 +211,8 @@ export default {
       dataonLineListSelections: [],
 
       dictList: [],
-      business_typeOptions:[],
       service_itemOptions:[],
       organizationOptions:[],
-      inspection_stateOptions:[],
       //是否提示
       isRemind:true,
     }
@@ -234,17 +224,11 @@ export default {
       console.log('response: ', dictss, response)
       this.dictList = response.data
     })
-    this.business_typeOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_business_type'
-    }).dictDate
     this.service_itemOptions = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
     this.organizationOptions = this.dictList.find(item => {
       return item.dictType === 'cs_organization'
-    }).dictDate
-    this.inspection_stateOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_inspection_state'
     }).dictDate
     this.isRemind=false
     this.searchHandle()
@@ -373,13 +357,11 @@ export default {
         JSON.stringify({
           workOrderNo: row.workOrderNo, //批次号
           policyNo: row.policyNo, //保单号
-          policyItemNo: row.policyItemNo, //分单号
-          businessType: row.businessType
+          policyItemNo: row.policyItemNo //分单号
         })
       )
-      console.info("handleOne:"+data)
       this.$router.push({
-        path: '/workOrder/inspectionHandle',
+        path: '/claims-handle/presenting-edit',
         query: {
           data
         }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.WorkOrderAcceptMapper">
+    
+    <resultMap type="com.paic.ehis.cs.domain.vo.AcceptVo" id="AcceptResult">
+        <result property="workOrderNo"    column="work_order_no"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="channel"    column="channel_code"    />
+        <result property="serviceItem"    column="item_code"    />
+        <result property="businessService"    column="business_service"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="acceptTime"    column="create_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+        <result property="vipFlag"    column="vip_flag"    />
+        <result property="priorityLevel"    column="priority_level"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectVo">
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+               woa.policy_no,woa.policy_item_no,woa.risk_code,woa.create_time,woa.modify_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        from work_order_accept woa
+        left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
+    </sql>
+    <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        <include refid="selectVo"/>
+        where 1=1
+        <if test="workOrderNo != null  and workOrderNo != ''"> and woa.work_order_no = #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and woa.policy_no = #{policyNo}</if>
+        <if test="acceptStatus != null  and acceptStatus != ''"> and woa.status = #{acceptStatus}</if>
+        <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
+        <if test="endCaseStartTime != null ">
+            and woa.end_date <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and woa.end_date <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        <if test="workOrderNoList != null  and workOrderNoList != ''">
+        and woa.work_order_no IN (
+        <foreach collection="workOrderNoList" item="workOrderNo"
+                 separator=",">
+            #{workOrderNo}
+        </foreach>
+        )
+        </if>
+        <if test="acceptStatusList != null  and acceptStatusList != ''">
+        and woa.status IN (
+        <foreach collection="acceptStatusList" item="acceptStatus_"
+                 separator=",">
+            #{acceptStatus_}
+        </foreach>
+        )
+        </if>
+    </select>
+
+</mapper>

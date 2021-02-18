@@ -28,7 +28,7 @@ export function inspectionListAndPersonalPool(query) {
   })
 }
 
-//任务改派查询改派操作人接口
+//# 任务改派查询改派操作人接口
 export function selectSysUser() {
   return request({
     url: '/system/product/selectSysUser',
@@ -49,7 +49,7 @@ export function selectConfirmationQuery(query) {
 //# 发起质检操作
   export function inspectionSendByIds(sendIds) {
     return request({
-      url: '/cs/spotCheck/sendIds',
+      url: '/cs/spotCheck/internal/sendIds',
       method: 'put',
       data: sendIds
     })
@@ -58,8 +58,27 @@ export function selectConfirmationQuery(query) {
 //# 获取待质检操作
 export function inspectionGetByIds(getIds) {
   return request({
-    url: '/cs/spotCheck/getIds',
+    url: '/cs/spotCheck/internal/getIds',
     method: 'put',
     data: getIds
+  })
+}
+
+
+//# 查询客户基本信息
+export function getPersonInfoData(params) {
+  // return request({
+  //   url: '/cs/spotCheck/getIds',
+  //   method: 'put',
+  //   data: params
+  // })
+}
+
+//# 通过工单号查询工单详情
+export function getAcceptInfoByTypeOrId(params){
+  return request({
+    url: '/cs/spotCheck/internal/getAcceptInfo',
+    method: 'get',
+    params: params
   })
 }

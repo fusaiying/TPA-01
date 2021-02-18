@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.FlowLogMapper">
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO flow_log
+        (flow_id, work_order_no, sub_id, sub_type,
+         link_code, operate_code, make_by,
+         um_num, make_time, remarks, opinion,
+         to_department, to_reason, attachment_flag,
+         status, created_by, created_time, updated_by,
+         updated_time)
+        VALUES
+        <foreach collection="list" index="index" item="flowLog" separator=","  >
+        (
+         #{flowLog.flowId, jdbcType=VARCHAR},
+         #{flowLog.workOrderNo,jdbcType=VARCHAR},
+         #{flowLog.subId,jdbcType=VARCHAR},
+         #{flowLog.subType,jdbcType=VARCHAR},
+         #{flowLog.linkCode,jdbcType=VARCHAR},
+         #{flowLog.operateCode,jdbcType=VARCHAR},
+         #{flowLog.makeBy,jdbcType=VARCHAR},
+         #{flowLog.umNum,jdbcType=VARCHAR},
+         #{flowLog.makeTime,jdbcType=TIMESTAMP},
+         #{flowLog.remarks,jdbcType=VARCHAR},
+         #{flowLog.opinion,jdbcType=VARCHAR},
+         #{flowLog.toDepartment,jdbcType=VARCHAR},
+         #{flowLog.toReason,jdbcType=VARCHAR},
+         #{flowLog.attachmentFlag,jdbcType=VARCHAR},
+         #{flowLog.status,jdbcType=VARCHAR},
+         #{flowLog.createdBy,jdbcType=VARCHAR},
+         #{flowLog.createdTime,jdbcType=TIMESTAMP},
+         #{flowLog.updatedBy,jdbcType=VARCHAR},
+         #{flowLog.updatedTime,jdbcType=TIMESTAMP}
+        )
+    </foreach>
+    </insert>
+
+</mapper>

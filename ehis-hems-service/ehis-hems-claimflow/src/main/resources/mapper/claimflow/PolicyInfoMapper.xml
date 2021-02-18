@@ -210,7 +210,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                       inner join policy_risk_relation prr on prr.risk_name=cp.risk_name
                                       inner join claim_product_duty  cpd on cpd.risk_code=prr.risk_code) c
                             on c.duty_code=cpdd.duty_code
-
         where EXISTS(SELECT pi.plan_code FROM  policy_info pi WHERE pi.plan_code=cpdd.plan_code) AND risk_name = #{riskName}
     </select>
     

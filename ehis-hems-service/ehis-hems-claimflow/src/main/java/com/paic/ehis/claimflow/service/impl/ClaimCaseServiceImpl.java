@@ -79,10 +79,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
-   // @Autowired
-    //private ClaimCaseDistMapper claimCaseDistMapper;
-    //@Autowired
-    //private SysUserMapper sysUserMapper;
 
 
     /**
@@ -442,7 +438,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * 查询案件调度工作池
      *
      * @param
-     * @return
+     * @returnDispatchDTO dispatchDTO
      */
 
     @Override
@@ -468,20 +464,22 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 案件调度
      *
-     * @param rptNo
+     * @param caseDispatchDTO
      * @return
      */
     @Override
-    public int updateClaimCase(String rptNo) {
-        /*List<String> l = caseDispatchDTO.getRptNo();
-        ClaimCase claimCase = new ClaimCase();
-        for (String rptno : l) {
-            claimCase.setRptNo(rptno);
-            claimCase.setUpdateBy(caseDispatchDTO.getOperator());
-            claimCaseMapper.updateCaseDispatchList(caseDispatchDTO);
-        }*/
-
-        return claimCaseRecordMapper.updateCaseDispatchList(rptNo);
+    public void updateClaimCase(CaseDispatchDTO caseDispatchDTO) {
+       //获取前端传入报案号
+        List<String> rptNo1=caseDispatchDTO.getRptNo();
+        ClaimCaseRecord claimCaseRecord=new ClaimCaseRecord();
+        //循环遍历  进行案件调度修改操作人
+        for (String rpt:rptNo1){
+            claimCaseRecord.setRptNo(rpt);
+            claimCaseRecord.setOperator(caseDispatchDTO.getOperator());
+            claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            claimCaseRecordMapper.updateCaseDispatchList(claimCaseRecord);
+        }
+       // return claimCaseRecordMapper.updateCaseDispatchList();
     }
 
     //条件理算审核

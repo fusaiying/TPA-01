@@ -195,7 +195,7 @@
         </trim>
         where rpt_no = #{rptNo} and operation = #{operation} and history_flag = 'N' and status = 'Y'
     </update>
-    <update id="updateCaseDispatchList" parameterType="String">
+    <update id="updateCaseDispatchList" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>

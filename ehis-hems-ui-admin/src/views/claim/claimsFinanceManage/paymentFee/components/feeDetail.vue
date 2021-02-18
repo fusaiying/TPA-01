@@ -187,7 +187,15 @@
     },
     //导出
     exportData(){
+      const params = {};
+      params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
 
+      let type = this.fixInfoDetail.type ;
+      if(type == "launch") {
+        params.companyCode = this.fixInfoDetail.rowData.companyCode;
+        params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
+      }
+      this.download('finance/settleDetail/export', params, `理赔案件_${new Date().getTime()}.xlsx`);
     },
     //导入
     importData(){

@@ -1085,7 +1085,62 @@
       },
       getCostData(row, expandedRows) {
         if (expandedRows.length > 0) {
-          this.addOrEdit('edit',row)
+          editBill(row.billId).then(res => {
+            if (res != null && res.code === 200) {
+              this.baseForm.billId = res.data.bill.billId
+              this.baseForm.rptNo = res.data.bill.rptNo
+              this.baseForm.hospitalCode = res.data.bill.hospitalCode
+              this.baseForm.department = res.data.bill.department
+              this.baseForm.isDesHospital = res.data.bill.isDesHospital
+              this.baseForm.accType = res.data.bill.accType
+              this.baseForm.billCurrency = res.data.bill.billCurrency
+              this.baseForm.billAmount = res.data.bill.billAmount
+              this.baseForm.visNumber = res.data.bill.visNumber
+              this.baseForm.treatmentType = res.data.bill.treatmentType
+              this.baseForm.treatmentStartDate = res.data.bill.treatmentStartDate
+              this.baseForm.treatmentEndDate = res.data.bill.treatmentEndDate
+              this.baseForm.treatmentDays = res.data.bill.treatmentDays
+              this.baseForm.invoiceNo = res.data.bill.invoiceNo
+              this.baseForm.billNo = res.data.bill.billNo
+              this.baseForm.billType = res.data.bill.billType
+              this.baseForm.ssAdvancePayment = res.data.bill.ssAdvancePayment
+              this.baseForm.tpAdvancePayment = res.data.bill.tpAdvancePayment
+              this.baseForm.isShareAp = res.data.bill.isShareAp
+              this.baseForm.transSerialNo = res.data.bill.transSerialNo
+              this.baseForm.transSerialCopay = res.data.bill.transSerialCopay
+              this.baseForm.copay = res.data.bill.copay
+              this.baseForm.isShareCopay = res.data.bill.isShareCopay
+              this.baseForm.hosDiscountAmount = res.data.bill.hosDiscountAmount
+              this.baseForm.isShareDisAmount = res.data.bill.isShareDisAmount
+              this.baseForm.icdCode = res.data.bill.icdCode
+              this.baseForm.icdCodes = res.data.bill.icdCodes
+              this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
+              this.costForm.costData = res.data.billDetail
+              if (this.baseForm.icdCodes===null || this.baseForm.icdCodes.length === 0) {
+                this.baseForm.icdCodes = [{
+                  icdCode: ''
+                }]
+              }
+              if (res.data.bill.hospitalCode != null && res.data.bill.hospitalCode !== '') {
+                let data = {
+                  providerCode: res.data.bill.hospitalCode
+                }
+                getHospitalInfo(data).then(res => {
+                  if (res != null && res !== '') {
+                    if (res.rows[0].enname1 != null && res.rows[0].enname1 !== '') {
+                      this.baseForm.hospitalName = res.rows[0].chname1 + '|' + res.rows[0].enname1
+                    } else {
+                      this.baseForm.hospitalName = res.rows[0].chname1
+                    }
+                    this.baseForm.firstAttribute = res.rows[0].firstAttribute
+                    this.baseForm.secondAttribute = res.rows[0].secondAttribute
+                    this.baseForm.isDesHospital = res.rows[0].flag
+                  }
+                })
+              }
+            }
+          }).catch(res => {
+          })
           this.isFormShow = false
           this.isCostShow = true
         } else {

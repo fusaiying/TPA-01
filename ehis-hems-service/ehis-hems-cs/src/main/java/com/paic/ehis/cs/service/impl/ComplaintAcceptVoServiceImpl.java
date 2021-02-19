@@ -179,7 +179,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo3.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo3);
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+ PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
+        flowLog.setFlowId("00000000000000000"+ PubFun.createMySqlMaxNoUseCache("flow_id",10,3));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setOperateCode("01");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -449,7 +449,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         return workHandleInfoMapper.assistInComplaint(complaintDealVo);}
         else {
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("handle_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setStatus("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());

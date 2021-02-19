@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 理算及福利规则接口
  */
-@FeignClient(contextId = "ClaimCalService", value = ServiceNameConstants.CAL_SERVICE)
+@FeignClient(contextId = "ClaimCalService", value = ServiceNameConstants.CAL_SERVICE, fallbackFactory = ClaimCalServiceFallbackFactory.class)
 public interface ClaimCalService {
 
     /**

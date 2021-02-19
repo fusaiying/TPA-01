@@ -202,7 +202,9 @@
           }
         },
         rateOrEqually(row, col){
-          if(row.isEqually == '01') {
+          if(row.isEqually == 'Y' && row.status == '02') {
+            return '0';
+          } else if(row.isEqually == 'Y') {
             return '均分';
           } else {
             return row.rate;

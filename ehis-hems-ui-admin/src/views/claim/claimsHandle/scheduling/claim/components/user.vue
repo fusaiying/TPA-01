@@ -140,7 +140,6 @@
     getRole(value){
       roleInfo(value).then(response => {
         if (response.code == '200') {
-          console.log(response.roleIds)
           this.userForm.roleId = response.roleIds.toString();
         }
       }).catch(error => {

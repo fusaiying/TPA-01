@@ -202,11 +202,10 @@ export function editPayee(data) {
 }
 
 //# 删除案件领款人信息
-export function delPayee(data) {
+export function delPayee(payeeId) {
   return request({
-    url: '/claimflow/payee/rptNo',
+    url: '/claimflow/payee/'+payeeId,
     method: 'put',
-    data: data
   })
 }
 

@@ -477,6 +477,11 @@
       sonBillingInfoData: function (newVal) {
         if (newVal !== null && newVal !== undefined) {
           this.tableData = newVal
+          if (newVal.length>0){
+            this.isBillInfoSave=true
+          }else {
+            this.isBillInfoSave=false
+          }
         }
       },
       acceptData: function (newVal) {
@@ -1245,6 +1250,26 @@
                       }],
                       clinicalDiagnosis: undefined,
                     }
+                    if (this.batchData !== null && this.batchData !== undefined) {
+                      let val = this.hospitalOptions.find(item => {
+                        return item.providerCode === this.batchData.hospitalcode
+                      })
+                      if (val !== null && val !== undefined) {
+                        if (val.enname1 != null && val.enname1 !== '') {
+                          this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
+                        } else {
+                          this.baseForm.hospitalName = val.chname1
+                        }
+                        this.baseForm.hospitalCode = val.providerCode
+
+                        this.baseForm.firstAttribute = val.firstAttribute
+                        this.baseForm.secondAttribute = val.secondAttribute
+                        this.baseForm.isDesHospital = val.flag
+                      }
+                    }
+                  if (this.batchData !== null && this.batchData !== undefined) {
+                    this.baseForm.billCurrency = this.batchData.currency
+                  }
                     this.costForm.costData = []
                   }).catch(res => {
                     this.$message({

@@ -128,12 +128,11 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("05");
 
-
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoFive(claimCaseProblem.getRptNo());
-        record.setOperator(SecurityUtils.getUsername());
-        record.setHistoryFlag("Y");
-        record.setUpdateBy(SecurityUtils.getUsername());
-        record.setUpdateTime(DateUtils.getNowDate());
+           record.setOperator(SecurityUtils.getUsername());
+           record.setHistoryFlag("Y");
+           record.setUpdateBy(SecurityUtils.getUsername());
+           record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(record);
 
         claimCaseRecord.setHistoryFlag("N");
@@ -142,10 +141,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
-
         claimCaseMapper.updateClaimCase(claimCase);
-
-
         return claimCaseProblemMapper.updateClaimCaseProblem(claimCaseProblem);
     }
 

@@ -261,7 +261,7 @@ WHERE
 
     <select id="selectClaimCaseCalByIdOne" parameterType="String" resultMap="ClaimCaseCalResult">
         <include refid="selectClaimCaseCalVo"/>
-        where rpt_no = #{rptNo}
+        where rpt_no = #{rptNo}  and status='Y'
     </select>
 
     <select id="selectClaimCaseCalByBatchNo" parameterType="String" resultMap="ClaimCaseCalResult">

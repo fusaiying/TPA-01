@@ -66,8 +66,6 @@
     <update id="updateClaimCaseRecord" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
-            <if test="operation != null and operation != ''">operation = #{operation},</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>

@@ -139,6 +139,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
             return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
         }else {
+            //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
@@ -150,7 +151,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             flowLogMapper.updateFlowLog(flowLog);
 
-
+            //主表生成数据
             WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");

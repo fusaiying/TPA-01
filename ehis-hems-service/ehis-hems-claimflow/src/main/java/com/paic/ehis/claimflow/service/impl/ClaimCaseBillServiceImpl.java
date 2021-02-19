@@ -327,6 +327,9 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(rptNo);
         List<String> policyList = claimCasePolicies.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
         // 调用claimcal接口
-        return claimCalService.selectFeeitemByPolicys(policyList);
+        if (policyList.size()>0){
+            return claimCalService.selectFeeitemByPolicys(policyList);
+        }
+        return null;
     }
 }

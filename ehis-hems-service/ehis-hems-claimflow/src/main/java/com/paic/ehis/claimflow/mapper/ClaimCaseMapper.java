@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCase;
+import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 
@@ -105,6 +106,12 @@ public interface ClaimCaseMapper
      */
     List<CaseDispatchVO> selectCaseDispatchList(DispatchDTO dispatchDTO);
 
+    /**
+     * 修改案件调度流程节点操作人
+     * @param claimCase
+     * @return
+     */
+    int  updateCaseDispatchList(ClaimCase claimCase);
 
     // List<DispatchPolicyVo>  selectPolicyDispatchList(String policyNo);
 

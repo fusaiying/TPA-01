@@ -576,7 +576,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          delPayee(row).then(res => {
+          delPayee(row.payeeId).then(res => {
             if (res != null && res.code === 200) {
               this.$message({
                 message: '删除成功',

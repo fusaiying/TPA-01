@@ -130,10 +130,10 @@ public class ClaimCaseDistServiceImpl implements IClaimCaseDistService
     public int updateClaimCaseAverage(ClaimCaseDist claimCaseDist) {
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-
         claimCaseDist.setUpdateBy(username);
         claimCaseDist.setUpdateTime(nowDate);
         claimCaseDist.setStatus("Y");
+        claimCaseDist.setIsEqually(claimCaseDist.getIsEqually());
         return claimCaseDistMapper.updateClaimCaseAverage(claimCaseDist);
     }
     /**
@@ -149,7 +149,11 @@ public class ClaimCaseDistServiceImpl implements IClaimCaseDistService
         claimCaseDist.setCreateBy(username);
         claimCaseDist.setUpdateBy(username);
         claimCaseDist.setUpdateTime(nowDate);
-        claimCaseDist.setStatus("Y");
+      /*  claimCaseDist.setStatus("Y");
+        claimCaseDist.setStatus();*/
+        if(!claimCaseDist.getStatus().equals("02")) {
+            claimCaseDist.setIsEqually("N");
+        }
         claimCaseDist.setRoleId(claimCaseDist.getRoleId());
         return   claimCaseDistMapper.updateClaimCaseDistOne(claimCaseDist);
     }

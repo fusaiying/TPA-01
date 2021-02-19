@@ -274,7 +274,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 claimCaseRecord1.setHistoryFlag("Y");
                 claimCaseRecord1.setOperation("05");//
-                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
             }
@@ -291,7 +291,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
-
 
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
         if (claimCaseProblems.size() != 0) {
@@ -368,7 +367,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setOperation("05");//
-                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
@@ -423,7 +422,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setOperation("05");//
-                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
@@ -479,13 +478,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public void updateClaimCase(CaseDispatchDTO caseDispatchDTO) {
        //获取前端传入报案号
         List<String> rptNo1=caseDispatchDTO.getRptNo();
-        ClaimCaseRecord claimCaseRecord=new ClaimCaseRecord();
+        ClaimCase claimCase=new ClaimCase();
         //循环遍历  进行案件调度修改操作人
         for (String rpt:rptNo1){
-            claimCaseRecord.setRptNo(rpt);
-            claimCaseRecord.setOperator(caseDispatchDTO.getOperator());
-            claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-            claimCaseRecordMapper.updateCaseDispatchList(claimCaseRecord);
+            claimCase.setRptNo(rpt);
+            claimCase.setUpdateBy(caseDispatchDTO.getUpdateBy());
+            claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            claimCaseMapper.updateCaseDispatchList(claimCase);
         }
        // return claimCaseRecordMapper.updateCaseDispatchList();
     }

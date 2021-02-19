@@ -12,6 +12,7 @@ import com.paic.ehis.claimflow.domain.dto.ClaimCaseDiscussionDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO;
 import com.paic.ehis.claimflow.service.IClaimCaseDiscussionService;
 import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -85,7 +86,7 @@ public class ClaimCaseDiscussionController extends BaseController
     /**
      * 新增案件协谈信息
      */
-   // @PreAuthorize("@ss.hasPermi('system:discussion:add')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:discussion:add')")
     @Log(title = "案件协谈信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)

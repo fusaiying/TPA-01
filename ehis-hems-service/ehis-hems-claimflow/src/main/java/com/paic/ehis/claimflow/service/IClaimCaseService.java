@@ -26,6 +26,14 @@ public interface IClaimCaseService
     public ClaimCase selectClaimCaseById(String rptNo);
 
     /**
+     * 根据批次号  查询案件信息
+     *
+     * @param claimCase 案件信息 ID
+     * @return 案件信息
+     */
+    public List<ClaimCase> selectClaimCaseByBatchNo(ClaimCase claimCase);
+
+    /**
      * 查询案件信息 列表
      *
      * @param claimCase 案件信息

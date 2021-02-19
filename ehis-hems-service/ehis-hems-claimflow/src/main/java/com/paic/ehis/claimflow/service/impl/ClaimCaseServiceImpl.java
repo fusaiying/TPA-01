@@ -94,6 +94,18 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     }
 
     /**
+     * 根据批次号  查询案件信息
+     *
+     * @param claimCase 案件信息 ID
+     * @return 案件信息
+     */
+    @Override
+    public List<ClaimCase> selectClaimCaseByBatchNo(ClaimCase claimCase) {
+        claimCase.setStatus(ClaimStatus.DATAYES.getCode());
+        return claimCaseMapper.selectCaseOne(claimCase);
+    }
+
+    /**
      * 查询案件信息 列表
      *
      * @param claimCase 案件信息

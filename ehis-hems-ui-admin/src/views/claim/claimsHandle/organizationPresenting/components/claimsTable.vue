@@ -158,7 +158,10 @@
         this.loading = true
         //判断只有展开是做请求
         if (expandedRows.length > 0) {
-          getMinData(row.batchno).then(res => {
+          let data ={
+            batchNo:row.batchno
+          }
+          getMinData(data).then(res => {
             this.tableData.forEach((temp, index) => {
               if (temp.batchno === row.batchno) {
                 this.tableData[index].minData = res.rows

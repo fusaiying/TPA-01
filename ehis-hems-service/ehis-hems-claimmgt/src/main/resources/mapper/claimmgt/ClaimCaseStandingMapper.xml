@@ -126,7 +126,7 @@ WHERE
         LEFT JOIN claim_case cases ON stand.rpt_no = cases.rpt_no
         AND cases.STATUS = 'Y'
         <where>
-            <if test="Batchno != null  and Batchno != ''"> and cases.batch_no = #{Batchno}</if>
+            <if test="batchNo != null  and batchNo != ''"> and cases.batch_no = #{batchNo}</if>
             and stand.status = 'Y'
         </where>
     </select>

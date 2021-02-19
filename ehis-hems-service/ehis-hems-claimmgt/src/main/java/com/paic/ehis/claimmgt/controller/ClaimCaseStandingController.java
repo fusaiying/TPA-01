@@ -13,6 +13,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -51,12 +52,12 @@ public class ClaimCaseStandingController extends BaseController
     /**
      * 根据批次号 查询报案台账信息 列表
      */
-    //  @PreAuthorize("@ss.hasPermi('system:standing:list')")
-    @GetMapping("/listByBatchNo")
-    public TableDataInfo listByBatchNo(String batchno)
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:standing:list')")
+    @GetMapping("value = /{batchNo}")
+    public TableDataInfo listByBatchNo(@PathVariable("batchNo") String batchNo)
     {
         startPage();
-        List<ClaimCaseStanding> list = claimCaseStandingService.selectCaseStandingListByBatchNo(batchno);
+        List<ClaimCaseStanding> list = claimCaseStandingService.selectCaseStandingListByBatchNo(batchNo);
         return getDataTable(list);
     }
     /**

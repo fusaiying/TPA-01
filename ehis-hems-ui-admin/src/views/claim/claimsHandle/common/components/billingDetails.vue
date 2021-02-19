@@ -312,7 +312,7 @@
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.feeItemCode'"
                             :rules="accountRules.feeItemCode" style="display: inline-flex !important;">
                 <el-select v-model="scope.row.feeItemCode" placeholder="请选择" size="mini">
-                  <el-option v-for="item in feeOptions" :key="item.feeitemcode" :label="item.feeitemname"
+                  <el-option v-for="item in feeOptions" :key="item.feeitemCode" :label="item.feeitemName"
                              :value="item.feeitemcode"/>
                 </el-select>
               </el-form-item>

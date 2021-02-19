@@ -218,7 +218,7 @@
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalPersonCount = res.total
+            this.totalCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

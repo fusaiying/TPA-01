@@ -592,6 +592,7 @@
           console.log('共公池',res.data)
           if (res != null && res.code === 200) {
             this.workPoolData = res.data
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

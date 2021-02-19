@@ -395,7 +395,6 @@
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
           <el-divider/>
-          <el-row>
         <el-form-item label="处理说明：" prop="remark">
           <el-input
             type="textarea"
@@ -404,7 +403,6 @@
             v-model="ruleForm.remark">
           </el-input>
         </el-form-item>
-          </el-row>
         </el-form>
     </el-card>
 
@@ -496,19 +494,7 @@
         // 表单校验
         rules: {
           Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+            {required: true, message: "处理说明不能为空", trigger: "blur"}
           ],
 
         },
@@ -568,7 +554,6 @@
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()
-      this.searchHCS()
       // this.getDicts("sys_oper_type").then(response => {
       //   this.states = response.data;
       //   console.log("response:",response)

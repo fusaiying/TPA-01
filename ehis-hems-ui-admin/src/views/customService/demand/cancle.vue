@@ -424,7 +424,7 @@
         <el-divider style="color: blue" ></el-divider>
         <el-row>
           <el-form-item label="取消原因" prop="bank" >
-            <el-radio-group v-model="ruleForm.editReason">
+            <el-radio-group v-model="ruleForm.cancelReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
               <el-radio   label="3">其他原因</el-radio>

@@ -54,6 +54,7 @@ public class CollaborativeFromController extends BaseController
     }
 
     @GetMapping("/listNew")
+    //征求意见处理
     public TableDataInfo list(ConsultationDTO consultationDTO)
     {
         startPage();

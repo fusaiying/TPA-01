@@ -132,6 +132,16 @@ export function coOrganizerSubmit(data) {
   })
 }
 
+//# 工单详情页面数据查询
+export function orderDetailSearch(query) {
+  return request({
+    url: '/cs/info3/selectWorkOrder',
+    method: 'get',
+    params: query
+  })
+}
+
+
 
 
 

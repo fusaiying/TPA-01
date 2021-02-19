@@ -53,7 +53,7 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
-    @GetMapping("/accept")
+    @GetMapping("/accept")//信息需求受理
     public AjaxResult selectDemandAcceptVo(@RequestBody String workOrderNo){
         DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);
         return AjaxResult.success(demandAcceptVo);
@@ -168,7 +168,6 @@ public class CustomServiceDemandController extends BaseController {
      * @param demandAcceptVo
      * @return
      */
-
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemandOne")

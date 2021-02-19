@@ -61,9 +61,27 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         String sourceName="ComplaintAcceptVo";
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-        complaintAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId()));
-        complaintAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId()));
-        complaintAcceptVo.setComplainantPerson(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId()));
+
+        PersonInfo personInfo = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
+        if (personInfo != null) {
+            complaintAcceptVo.setCallPerson(personInfo);
+        } else {
+            complaintAcceptVo.setCallPerson(new PersonInfo());
+        }
+
+        PersonInfo personInfo2 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
+        if (personInfo2 != null) {
+            complaintAcceptVo.setContactsPerson(personInfo2);
+        } else {
+            complaintAcceptVo.setContactsPerson(new PersonInfo());
+        }
+
+        PersonInfo personInfo3 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
+        if (personInfo3 != null) {
+            complaintAcceptVo.setComplainantPerson(personInfo3);
+        } else {
+            complaintAcceptVo.setComplainantPerson(new PersonInfo());
+        }
         complaintAcceptVo.setInsurer(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo()));
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
         for (FieldMap fieldMap:KVMap){

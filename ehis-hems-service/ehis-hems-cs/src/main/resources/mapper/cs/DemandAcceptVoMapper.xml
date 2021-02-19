@@ -33,6 +33,7 @@
         <result property="email" column="email"/>
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
     </resultMap>
 
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
@@ -57,6 +58,7 @@ a.create_by create_by1,
 a.create_time create_time1,
 a.update_by update_by1,
 a.update_time update_time1,
+b.call_center_id,
 b.channel_code,
 b.item_code,
 b.call_person_id,

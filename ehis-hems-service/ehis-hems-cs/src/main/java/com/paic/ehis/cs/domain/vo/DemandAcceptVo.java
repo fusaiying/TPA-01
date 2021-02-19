@@ -15,7 +15,8 @@ import java.util.Date;
 public class DemandAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-
+    //电话中心业务流水号
+    private String callCenterId;
     /** 工单编号 */
     private String workOrderNo;
 

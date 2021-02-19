@@ -159,7 +159,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         acceptDetailInfo.setContactsRelationBy(demandAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(demandAcceptVo.getEmail());
         acceptDetailInfo.setContent(demandAcceptVo.getContent());
-        acceptDetailInfo.setStatus(demandAcceptVo.getStatus());
+        acceptDetailInfo.setStatus("01");
         acceptDetailInfo.setCreateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());

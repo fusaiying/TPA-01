@@ -76,7 +76,7 @@
         </trim>
         <where>
             <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
-            <if test="recordId != null  and recordId != ''"> and record_id = #{recordId}</if>
+            and record_id = #{recordId}
         </where>
     </update>
 

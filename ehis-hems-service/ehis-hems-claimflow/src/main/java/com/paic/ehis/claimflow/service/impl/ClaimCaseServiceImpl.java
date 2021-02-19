@@ -290,8 +290,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+        if (s != null) {
+            claimCaseRecord.setOrgRecordId(s);//
+        }
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
+        //将之前的问题件表信息置为无效
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
         if (claimCaseProblems.size() != 0) {
             for (ClaimCaseProblem claimCaseProblemsOne : claimCaseProblems) {
@@ -312,6 +317,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseProblem.setCreateTime(DateUtils.getNowDate());
         claimCaseProblem.setUpdateBy(SecurityUtils.getUsername());
         claimCaseProblem.setUpdateTime(DateUtils.getNowDate());
+
         claimCaseProblemMapper.insertClaimCaseProblem(claimCaseProblem);
 
         return claimCaseMapper.updateClaimCase(claimCase);
@@ -325,7 +331,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public int updateCaseAndRecordInfoSuspend(ClaimCase claimCase) {
+    public int  updateCaseAndRecordInfoSuspend(ClaimCase claimCase) {
 
         //判断是否为审核岗退回受理
         // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
@@ -439,6 +445,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setStatus("Y");
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+        if (s != null) {
+            claimCaseRecord.setOrgRecordId(s);//
+        }
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
         return claimCaseMapper.updateClaimCase(claimCase);

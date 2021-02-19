@@ -284,7 +284,7 @@
 
     <update id="updatecaseStatus" parameterType="String">
         update claim_case
-        set case_status ='31'
+        set case_status ='05'
         where rpt_no = #{rptNo}
     </update>
 
@@ -463,7 +463,7 @@
                         AND record.operation in ('08','99')
                         AND record.STATUS = 'Y'
                         AND record.history_flag = 'N'
-                        AND record.operator = #{operator}
+                        AND record.update_by = #{updateBy}
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
                 ORDER BY
                     record.update_time DESC

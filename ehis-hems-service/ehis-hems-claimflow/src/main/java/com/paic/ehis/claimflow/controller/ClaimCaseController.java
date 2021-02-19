@@ -186,11 +186,12 @@ public class ClaimCaseController extends BaseController {
 
     @PutMapping("/updatecaseStatus")
     public AjaxResult edit(@RequestBody ClaimCaseProblem claimCaseProblem) {
-        String repNo = claimCaseProblem.getRptNo();
+        /*String repNo = claimCaseProblem.getRptNo();
         claimCaseProblemService.updateClaimCaseProblem(claimCaseProblem);// // //处理意见
         claimCaseService.updatecaseStatus(repNo);  // update to    case_status  31
         int result = claimCaseRecordService.updatehistoryFlag(repNo);// history_flag = 'Y'
-        return toAjax(result);
+        return toAjax(result);*/
+        return toAjax(claimCaseProblemService.updateClaimCaseProblem(claimCaseProblem));
     }
 
     /**

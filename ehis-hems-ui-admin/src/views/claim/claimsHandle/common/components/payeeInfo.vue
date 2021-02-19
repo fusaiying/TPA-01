@@ -274,6 +274,7 @@
           this.baseForm.payeeNationality = this.insuredData.nationality,
           this.baseForm.payeeIdType = this.insuredData.idType,
           this.baseForm.payeeIdNo = this.insuredData.idNo
+          this.baseForm.payeeOccupation = this.insuredData.occupation
         if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
           this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
           if (this.insuredData.idEndDate==='9999-12-31'){

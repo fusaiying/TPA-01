@@ -92,6 +92,9 @@ public interface ClaimCaseRecordMapper
      */
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOne(String rptNo);
 
+
+    public ClaimCaseRecord selectClaimCaseRecordByrptNoFive(String rptNo);
+
     /**
      *
      * @param rptNo

@@ -19,6 +19,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,8 @@ public class ClaimCaseBillController extends BaseController
     private IClaimCaseRecordService claimCaseRecordService;
     @Autowired
     private IClaimCaseService claimCaseService;
+    @Autowired
+    private ClaimCalService claimCalService;
 
     /**
      * 查询案件账单明细列表
@@ -155,6 +158,9 @@ public class ClaimCaseBillController extends BaseController
      */
     @GetMapping("changeStatus")
     public AjaxResult changeStatus(String rptNo){
+        //进行理算计算
+        claimCalService.Calculate(rptNo);
+
         String username = SecurityUtils.getUsername();
         ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
         claimCaseRecord1.setRptNo(rptNo);

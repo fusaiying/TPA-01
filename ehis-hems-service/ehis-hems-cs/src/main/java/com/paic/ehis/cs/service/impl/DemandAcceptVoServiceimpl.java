@@ -323,8 +323,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getLinePhone1()[1]+demandAcceptVo.getContactsPerson().getLinePhone1()[2]+demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
-        personInfo2.setWorkPhone(demandAcceptVo.getCallPerson().getWorkPhone1()[0]);
+        personInfo2.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        personInfo2.setWorkPhone(demandAcceptVo.getCallPerson().getWorkPhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());

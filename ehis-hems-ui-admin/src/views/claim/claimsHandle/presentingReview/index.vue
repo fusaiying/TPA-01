@@ -258,6 +258,12 @@
             this.loading = false
           })
         }
+        getPublicList(this.searchForm).then(res => {
+          this.publicData = res.rows
+          this.publicTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
       },
       searchTable() {
         const params1 = {

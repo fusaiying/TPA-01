@@ -104,7 +104,7 @@ export default {
             checkProductInfo(allData).then(res => {
               if (res.code == '200') {
                 this.$message({
-                  message: '提交审核成功！',
+                  message: '提交成功！',
                   type: 'success',
                   center: true,
                   showClose: true
@@ -120,7 +120,7 @@ export default {
 
               } else {
                 this.$message({
-                  message: '提交审核失败!',
+                  message: '提交失败!',
                   type: 'error',
                   center: true,
                   showClose: true

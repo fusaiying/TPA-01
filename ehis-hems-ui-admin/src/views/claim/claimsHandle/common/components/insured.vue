@@ -119,7 +119,7 @@
               placeholder="请选择"
               @change="handleChange"
               clearable/>
-            <el-input v-model="baseForm.address" :readonly="disableFlag" show-word-limit maxlength="100"
+            <el-input v-model="baseForm.address" :readonly="disableFlag" show-word-limit maxlength="400"
                       style="width:61%;" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>

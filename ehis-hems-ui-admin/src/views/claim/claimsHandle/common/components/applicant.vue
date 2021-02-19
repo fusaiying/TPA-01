@@ -83,7 +83,7 @@
               clearable
               filterable
               @change="handleChange"/>
-            <el-input v-model="baseForm.rgtAddress" show-word-limit maxlength="100" style="width:60%;" clearable
+            <el-input v-model="baseForm.rgtAddress" show-word-limit maxlength="400" style="width:60%;" clearable
                       size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>

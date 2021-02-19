@@ -482,7 +482,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         //循环遍历  进行案件调度修改操作人
         for (String rpt:rptNo1){
             claimCase.setRptNo(rpt);
-            claimCase.setUpdateBy(caseDispatchDTO.getUpdateBy());
+            claimCase.setUpdateBy(caseDispatchDTO.getOperator());
             claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimCaseMapper.updateCaseDispatchList(claimCase);
         }

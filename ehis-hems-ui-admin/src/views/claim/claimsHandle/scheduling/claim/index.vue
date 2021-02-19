@@ -63,7 +63,7 @@
       </el-card>
 
     <!-- 编辑弹框 -->
-    <user-modal :value="diaVisible"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
+    <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
     <assign-modal :value="assignDiaVisible"  :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>

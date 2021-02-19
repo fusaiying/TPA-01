@@ -314,7 +314,7 @@
                             :rules="accountRules.feeItemCode" style="display: inline-flex !important;">
                 <el-select v-model="scope.row.feeItemCode" placeholder="请选择" size="mini">
                   <el-option v-for="item in feeOptions" :key="item.feeitemCode" :label="item.feeitemName"
-                             :value="item.feeitemcode"/>
+                             :value="item.feeitemCode"/>
                 </el-select>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ selectFee(feeOptions,scope.row.feeItemCode) }}</span>
@@ -488,7 +488,7 @@
         if (newVal !== null && newVal !== undefined) {
           getFee(newVal.rptNo).then(res => {
             if (res != null && res.code === 200) {
-              this.feeOptions = res.rows
+              this.feeOptions = res.data
             }
           })
         }
@@ -1003,7 +1003,9 @@
           remark: '',
           isShow: true
         }
+
         this.costForm.costData.push(field)
+        console.log(this.costForm.costData);
       },
       deleteRow(index, row) {
         this.$confirm(`是否确定删除?`, '提示', {
@@ -1282,12 +1284,14 @@
       },
       selectFee(datas, value) {
         var actions = [];
-        Object.keys(datas).some((key) => {
-          if (datas[key].feeitemcode === ('' + value)) {
-            actions.push(datas[key].feeitemname);
-            return true;
-          }
-        })
+        if (datas!==null && datas!==undefined){
+          Object.keys(datas).some((key) => {
+            if (datas[key].feeitemCode === ('' + value)) {
+              actions.push(datas[key].feeitemName);
+              return true;
+            }
+          })
+        }
         return actions.join('');
       },
       getPropData(val) {

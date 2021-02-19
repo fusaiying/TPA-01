@@ -330,7 +330,7 @@
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
-        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
         '天',

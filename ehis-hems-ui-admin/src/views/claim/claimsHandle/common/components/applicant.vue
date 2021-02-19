@@ -167,6 +167,14 @@
             this.hasApplicantId=true
           }
         }
+        if(this.sonRegisterData!=null && this.sonRegisterData!=''){
+          if(this.sonRegisterData.relationIns==1){
+            this.relationsFlag=true
+          }
+          else {
+            this.relationsFlag=false
+          }
+        }
       }
 
     },

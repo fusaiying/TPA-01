@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.service.IEditDetailService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,9 @@ public class EditDetailController extends BaseController
     }
 
 
-    @GetMapping(value = "/{workOrderNo}")
-    public TableDataInfo getEdit(@PathVariable("workOrderNo") String workOrderNo){
-         List<EditDetail> list =editDetailService.selectEdit(workOrderNo);
+    @GetMapping("/edit")
+    public TableDataInfo getEdit(FlowLog flowLog){
+         List<EditDetail> list =editDetailService.selectEdit(flowLog);
         return getDataTable(list);
     }
 

@@ -83,6 +83,16 @@ public class EditDetail extends BaseEntity
     @Excel(name = "修改说明")
     private String editRemark;
 
+    private String subId;
+
+    public String getSubId() {
+        return subId;
+    }
+
+    public void setSubId(String subId) {
+        this.subId = subId;
+    }
+
     public String getEditReason() {
         return editReason;
     }

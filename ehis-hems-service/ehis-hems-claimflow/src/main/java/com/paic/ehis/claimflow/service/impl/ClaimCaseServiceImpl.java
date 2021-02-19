@@ -261,6 +261,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             for (ClaimCaseRecord claimCaseRecords : claimCaseRecordsList) {
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 claimCaseRecord1.setHistoryFlag("Y");
+                claimCaseRecord1.setOperation("05");//
+                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
             }
@@ -353,6 +355,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
+                claimCaseRecord3.setOperation("05");//
+                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
@@ -406,21 +410,23 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
+                claimCaseRecord3.setOperation("05");//
+                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
         }
 
-        //将之前的案件流程表变为历史节点
-        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
-        if (claimCaseRecords.size() != 0) {
-            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecords) {
-                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
-                claimCaseRecord3.setHistoryFlag("Y");
-                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
-                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
-            }
-        }
+//        //将之前的案件流程表变为历史节点
+//        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
+//        if (claimCaseRecords.size() != 0) {
+//            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecords) {
+//                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
+//                claimCaseRecord3.setHistoryFlag("Y");
+//                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
+//                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
+//            }
+//        }
 
         //生成案件操作记录表
         claimCaseRecord.setRptNo(claimCase.getRptNo());

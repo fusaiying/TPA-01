@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where company_code = #{companyCode} and status='Y'
     </select>
 
-    <select id="selectCompanyRiskrelaRiskByTpa" parameterType="com.sino.system.domain.dto.TpaSettleDTO" resultMap="BaseIssuingcompanyRuleResult">
+    <select id="selectCompanyRiskrelaRiskByTpa" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="BaseIssuingcompanyRuleResult">
         SELECT DISTINCT
         product.risk_name,
         bir.risk_code,

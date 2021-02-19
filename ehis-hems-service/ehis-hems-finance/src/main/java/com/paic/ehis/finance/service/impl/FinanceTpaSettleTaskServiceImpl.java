@@ -258,7 +258,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 tpaSettleInfo.setServiceSettleAmount(companyRule.getSettlementvalue().multiply(companyRiskPolicy.getSumPerm()));
             }
 
-            if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
+            if (!StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
                 financeTpaSettleTask.setSettleStartDate(companyRiskPolicy.getValidStartDate());
             }
             financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());

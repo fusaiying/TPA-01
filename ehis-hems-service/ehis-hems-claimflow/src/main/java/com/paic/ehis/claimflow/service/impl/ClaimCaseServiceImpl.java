@@ -478,13 +478,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public void updateClaimCase(CaseDispatchDTO caseDispatchDTO) {
        //获取前端传入报案号
         List<String> rptNo1=caseDispatchDTO.getRptNo();
-        ClaimCaseRecord claimCaseRecord=new ClaimCaseRecord();
+        ClaimCase claimCase=new ClaimCase();
         //循环遍历  进行案件调度修改操作人
         for (String rpt:rptNo1){
-            claimCaseRecord.setRptNo(rpt);
-            claimCaseRecord.setUpdateBy(caseDispatchDTO.getUpdateBy());
-            claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-            claimCaseRecordMapper.updateCaseDispatchList(claimCaseRecord);
+            claimCase.setRptNo(rpt);
+            claimCase.setUpdateBy(caseDispatchDTO.getUpdateBy());
+            claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            claimCaseMapper.updateCaseDispatchList(claimCase);
         }
        // return claimCaseRecordMapper.updateCaseDispatchList();
     }

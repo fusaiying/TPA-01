@@ -354,7 +354,18 @@
             <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
         </where>
     </select>
-
+    <update id="updateCaseDispatchList" parameterType="ClaimCase">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />

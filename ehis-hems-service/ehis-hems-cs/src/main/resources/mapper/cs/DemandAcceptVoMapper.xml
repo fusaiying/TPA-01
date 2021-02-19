@@ -140,7 +140,7 @@ and a.status='01'
         b.organ_code,
         b.content,
         b.complaint_person_id,
-        b.create_by create_by2,
+        b.create_by ,
         b.create_time create_time2,
         b.update_by update_by2,
         b.update_time update_time2,

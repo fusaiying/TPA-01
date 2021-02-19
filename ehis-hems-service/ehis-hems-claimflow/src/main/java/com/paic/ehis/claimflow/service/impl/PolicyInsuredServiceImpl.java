@@ -1,9 +1,6 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.PolicyInsured;
-import com.paic.ehis.claimflow.domain.vo.PolicyFlagVo;
-import com.paic.ehis.claimflow.domain.vo.PolicyVo;
-import com.paic.ehis.claimflow.mapper.PolicyInfoMapper;
 import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IPolicyInsuredService;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -14,21 +11,19 @@ import java.util.List;
 
 /**
  * 被保人信息Service业务层处理
- * 
+ *
  * @author sino
  * @date 2021-01-09
  */
 @Service
-public class PolicyInsuredServiceImpl implements IPolicyInsuredService 
+public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 {
     @Autowired
     private PolicyInsuredMapper policyInsuredMapper;
-    @Autowired
-    private PolicyInfoMapper policyInfoMapper;
 
     /**
      * 查询被保人信息
-     * 
+     *
      * @param insuredNo 被保人信息ID
      * @return 被保人信息
      */
@@ -40,7 +35,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
     /**
      * 查询被保人信息列表
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 被保人信息
      */
@@ -52,7 +47,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
     /**
      * 新增被保人信息
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 结果
      */
@@ -65,7 +60,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
     /**
      * 修改被保人信息
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 结果
      */
@@ -78,7 +73,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
     /**
      * 批量删除被保人信息
-     * 
+     *
      * @param insuredNos 需要删除的被保人信息ID
      * @return 结果
      */
@@ -90,7 +85,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
     /**
      * 删除被保人信息信息
-     * 
+     *
      * @param insuredNo 被保人信息ID
      * @return 结果
      */
@@ -105,23 +100,8 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return
      */
     @Override
-    public PolicyFlagVo selectRecognizee(PolicyInsured policyInsured) {
-        PolicyFlagVo policyFlagVo=new PolicyFlagVo();
-        if(policyInsured.getPolicyNo().isEmpty()){
-            //return policyInsuredMapper.selectRecognizee(policyInsured);
-            policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
-        }else
-        {
-           PolicyVo policyVos= policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
-            if(policyVos.getPolicyRiskType().equals("G")){
-               policyFlagVo.setFlag(policyFlagVo.getFlag());
-            }else{
-                policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
+    public List<PolicyInsured> selectRecognizee(PolicyInsured policyInsured) {
 
-            }
-
-        }
-
-        return policyFlagVo;
+        return policyInsuredMapper.selectRecognizee(policyInsured);
     }
 }

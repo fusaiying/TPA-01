@@ -695,18 +695,18 @@
 
     <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         SELECT
-            a.create_by submit_user,
-            a.rpt_no,
-            b.batch_no,
-            b.case_status,
-            c.NAME
+        a.create_by submit_user,
+        a.rpt_no,
+        b.batch_no,
+        b.case_status,
+        c.NAME
         FROM
-            claim_case b
-            LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
-            LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
+        claim_case b
+        LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
+        LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
         WHERE
-            a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
-            and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
+        and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
         <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>

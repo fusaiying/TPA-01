@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper">
-    
+
     <resultMap type="com.paic.ehis.claimflow.domain.ClaimCasePolicy" id="ClaimCasePolicyResult">
         <result property="policyNo"    column="policy_no"    />
         <result property="relationId"    column="relation_id"    />
@@ -62,17 +62,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCasePolicyList" parameterType="ClaimCasePolicy" resultMap="ClaimCasePolicyResult">
         <include refid="selectClaimCasePolicyVo"/>
-        <where>  
+        <where>
             <if test="rptNo != null and rptNo != ''"> and rpt_no = #{rptNo}</if>
             <if test="status != null and status != ''"> and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectClaimCasePolicyById" parameterType="Long" resultMap="ClaimCasePolicyResult">
         <include refid="selectClaimCasePolicyVo"/>
         where relation_id = #{relationId}
     </select>
-        
+
     <insert id="insertClaimCasePolicy" parameterType="ClaimCasePolicy" useGeneratedKeys="true" keyProperty="relationId">
         insert into claim_case_policy
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
             <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
@@ -126,7 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateClaimCasePolicy" parameterType="ClaimCasePolicy">
@@ -148,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteClaimCasePolicyByIds" parameterType="String">
-        delete from claim_case_policy where relation_id in 
+        delete from claim_case_policy where relation_id in
         <foreach item="relationId" collection="array" open="(" separator="," close=")">
             #{relationId}
         </foreach>

@@ -61,4 +61,12 @@ public interface ClaimProductFeeitemMapper
      * @return 结果
      */
     public int deleteClaimProductFeeitemByIds(String[] feeitemCodes);
+
+    /**
+     * 根据保单号查询费用项编码、费用项名称
+     *
+     * @param policyNos
+     * @return
+     */
+    public List<ClaimProductFeeitem> selectFeeitemByPolicyNos(List<String> policyNos);
 }

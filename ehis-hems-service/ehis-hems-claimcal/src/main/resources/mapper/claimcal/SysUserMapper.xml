@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="status"       column="role_status"    />
 	</resultMap>
 
-	<resultMap type="com.paic.ehis.claimcal.domain.VO.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
+	<resultMap type="com.paic.ehis.claimcal.domain.vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
 		<result property="rptno"    column="rpt_no"    />
 		<result property="idno"    column="id_no"    />
 		<result property="name"    column="name"    />
@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="organcode"    column="organ_code"    />
 	</resultMap>
 
-	<resultMap type="com.paic.ehis.claimcal.domain.VO.UserVo" id="UserVoResult">
+	<resultMap type="com.paic.ehis.claimcal.domain.vo.UserVo" id="UserVoResult">
 		<id     property="id"       column="user_id"      />
 		<result property="userName"     column="user_name"    />
 	</resultMap>
@@ -214,11 +214,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.dept_id,a.dept_name from sys_dept a
 	</select>
 	
-	<select id="queryComcodeUsers" resultType="com.paic.ehis.claimcal.domain.VO.ComcodeUsersVo" parameterType="String">
+	<select id="queryComcodeUsers" resultType="com.paic.ehis.claimcal.domain.vo.ComcodeUsersVo" parameterType="String">
 		select a.user_id id,a.user_name username,a.status enabled,GROUP_CONCAT(distinct c.role_name) name,c.role_sort level,d.dept_id comcode from sys_user a,sys_user_role b,sys_role c,sys_dept d where a.user_id = b.user_id and b.role_id = c.role_id and a.dept_id = d.dept_id and d.status = '0' and a.dept_id = #{dept_id} GROUP BY a.user_id
 	</select>
 
-	<select id="queryUpperComcodeUsers" parameterType="String" resultType="com.paic.ehis.claimcal.domain.VO.UserVo">
+	<select id="queryUpperComcodeUsers" parameterType="String" resultType="com.paic.ehis.claimcal.domain.vo.UserVo">
 		select a.user_id id,a.user_name username from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and role_sort = (select (case (c.role_sort-1) when 0 then 1 else (c.role_sort-1) end) from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and a.user_name = #{username})
 	</select>
 

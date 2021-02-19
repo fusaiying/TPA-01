@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.claimcal.domain.SysPost;
 import com.paic.ehis.claimcal.domain.SysUserPost;
 import com.paic.ehis.claimcal.domain.SysUserRole;
-import com.paic.ehis.claimcal.domain.VO.UserVo;
+import com.paic.ehis.claimcal.domain.vo.UserVo;
 import com.paic.ehis.claimcal.domain.dto.SysUserDTO;
 import com.paic.ehis.claimcal.mapper.*;
 import com.paic.ehis.claimcal.service.ISysConfigService;

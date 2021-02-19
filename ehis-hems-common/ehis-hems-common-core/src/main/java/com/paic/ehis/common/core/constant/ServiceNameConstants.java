@@ -35,5 +35,10 @@ public class ServiceNameConstants
     /**
      * 理赔作业处理模块的serviceid
      */
-    public static final String FLOW_SERVICE = "ehis-hems-claimflow";
+    public static final String CLAIM_FLOW_SERVICE = "ehis-hems-claimflow";
+
+    /**
+     * 理算及规则设置模块的serviceid
+     */
+    public static final String CAL_SERVICE = "ehis-hems-claimcal";
 }

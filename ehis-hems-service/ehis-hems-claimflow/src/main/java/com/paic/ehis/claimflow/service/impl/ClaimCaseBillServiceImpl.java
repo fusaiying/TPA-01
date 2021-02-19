@@ -11,12 +11,15 @@ import com.paic.ehis.claimflow.service.IClaimCaseBillService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.system.api.ClaimCalService;
+import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 案件账单明细Service业务层处理
@@ -43,6 +46,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     private ClaimCaseBillDiagnosisMapper claimCaseBillDiagnosisMapper;
     @Autowired
     private ClaimCaseBillDetailMapper claimCaseBillDetailMapper;
+    @Autowired
+    private ClaimCalService claimCalService;
 
     /**
      * 查询案件账单明细
@@ -309,5 +314,19 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     @Override
     public ClaimCaseBill selectClaimCaseBillListByRptNo(String rptNo) {
         return claimCaseBillMapper.selectClaimCaseBillListByRptNo(rptNo);
+    }
+
+    /**
+     * 根据报案号查询费用项编码、费用项名称
+     *
+     * @param rptNo
+     * @return
+     */
+    @Override
+    public List<ClaimProductFeeitem> selectFeeitemList(String rptNo) {
+        List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(rptNo);
+        List<String> policyList = claimCasePolicies.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
+        // 调用claimcal接口
+        return claimCalService.selectFeeitemByPolicys(policyList);
     }
 }

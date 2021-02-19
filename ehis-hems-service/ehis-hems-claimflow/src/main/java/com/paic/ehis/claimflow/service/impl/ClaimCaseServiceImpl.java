@@ -609,7 +609,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
                     auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
                     auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
-                    auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
+                    auditWorkPoolDTO.setUpdateBy(SecurityUtils.getUsername());
                     List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
                     if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {

@@ -130,10 +130,10 @@ public class ClaimCaseDistServiceImpl implements IClaimCaseDistService
     public int updateClaimCaseAverage(ClaimCaseDist claimCaseDist) {
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-
         claimCaseDist.setUpdateBy(username);
         claimCaseDist.setUpdateTime(nowDate);
         claimCaseDist.setStatus("Y");
+        claimCaseDist.setIsEqually(claimCaseDist.getIsEqually());
         return claimCaseDistMapper.updateClaimCaseAverage(claimCaseDist);
     }
     /**

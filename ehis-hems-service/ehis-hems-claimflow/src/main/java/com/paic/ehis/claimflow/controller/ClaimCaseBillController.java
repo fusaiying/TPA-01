@@ -12,6 +12,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -129,8 +130,12 @@ public class ClaimCaseBillController extends BaseController
      */
     @PostMapping("/processingList")
     public TableDataInfo processingList(@RequestBody ClaimCaseDTO claimCaseDTO){
-        TableSupport.setSort("desc");
-        TableSupport.setOrderByColumn("rpt_no");
+        if (StringUtils.isNotEmpty(claimCaseDTO.getOrderByColumn())){
+            claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        } else {
+            claimCaseDTO.setOrderByColumn("rpt_no");
+            claimCaseDTO.setIsAsc("desc");
+        }
         startPage(claimCaseDTO);
         List<BillProcessingVo> processingList = claimCaseBillService.selectProcessingList(claimCaseDTO);
         return getDataTable(processingList);
@@ -144,8 +149,12 @@ public class ClaimCaseBillController extends BaseController
      */
     @PostMapping("/accomplishList")
     public TableDataInfo accomplishList(@RequestBody ClaimCaseDTO claimCaseDTO){
-        TableSupport.setOrderByColumn("rpt_no");
-        TableSupport.setSort("desc");
+        if (StringUtils.isNotEmpty(claimCaseDTO.getOrderByColumn())){
+            claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        } else {
+            claimCaseDTO.setOrderByColumn("rpt_no");
+            claimCaseDTO.setIsAsc("desc");
+        }
         startPage(claimCaseDTO);
         List<BillAccomplishVo> accomplishList = claimCaseBillService.selectAccomplishList(claimCaseDTO);
         return getDataTable(accomplishList);

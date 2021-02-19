@@ -31,7 +31,7 @@ public interface IClaimCaseService
      * @param claimCase 案件信息 ID
      * @return 案件信息
      */
-    public List<ClaimCase> selectClaimCaseByBatchNo(ClaimCase claimCase);
+    public List<ProcessingCaseVo> selectClaimCaseByBatchNo(ClaimCase claimCase);
 
     /**
      * 查询案件信息 列表

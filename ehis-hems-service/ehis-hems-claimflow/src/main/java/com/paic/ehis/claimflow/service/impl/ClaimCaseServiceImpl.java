@@ -100,7 +100,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 案件信息
      */
     @Override
-    public List<ClaimCase> selectClaimCaseByBatchNo(ClaimCase claimCase) {
+    public List<ProcessingCaseVo> selectClaimCaseByBatchNo(ClaimCase claimCase) {
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());
         return claimCaseMapper.selectCaseOne(claimCase);
     }
@@ -940,17 +940,18 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Transactional
     @Override
     public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
-        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(caseInvestigation.getRptNo());
+        ClaimCaseRecord caseRecord = new ClaimCaseRecord();
+        caseRecord.setRptNo(caseInvestigation.getRptNo());
+        caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
+        caseRecord.setHistoryFlag("N");
+        caseRecord.setOperation(ClaimStatus.CASESURVEY.getCode());
+        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(caseRecord);
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
-        ClaimCaseRecord caseRecord = new ClaimCaseRecord();
-        caseRecord.setRptNo(caseInvestigation.getRptNo());
-        caseRecord.setOperation("32");
-        caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
-        caseRecord.setHistoryFlag("N");
+
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
@@ -966,7 +967,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
 
         ClaimCase claimCase = new ClaimCase();
-        claimCase.setCaseStatus("32");
+        claimCase.setCaseStatus(ClaimStatus.CASESURVEY.getCode());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         return claimCaseMapper.updateClaimCase(claimCase);

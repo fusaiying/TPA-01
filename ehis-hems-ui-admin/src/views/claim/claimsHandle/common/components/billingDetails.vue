@@ -50,7 +50,7 @@
         <el-table-column align="center" prop="reasonAmount" label="合理费用" show-overflow-tooltip/>
         <el-table-column align="center" prop="selfAmount" label="自费金额" show-overflow-tooltip/>
         <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/>
-        <el-table-column align="center" prop="tpAdvancePayment" label="先期给付" show-overflow-tooltip/>
+        <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip/>
         <el-table-column align="center" prop="unableAmount" label="不合理金额" show-overflow-tooltip/>
         <el-table-column align="center" v-if="status==='edit'" label="操作" width="140">
           <template slot-scope="scope">
@@ -483,6 +483,15 @@
           this.baseForm.accType = newVal.claimCaseAccept.accType
         }
       },
+      fixInfo: function (newVal) {
+        if (newVal !== null && newVal !== undefined) {
+          getFee(newVal.rptNo).then(res => {
+            if (res != null && res.code === 200) {
+              this.feeOptions = res.rows
+            }
+          })
+        }
+      },
       batchData: function (newVal) {
         getHospitalInfo({}).then(res => {
           if (res != null && res !== '') {
@@ -865,12 +874,6 @@
       this.claim_currencyOptions = this.dictList.find(item => {
         return item.dictType === 'claim_currency'
       }).dictDate
-      getFee({}).then(res => {
-        if (res != null && res.code === 200) {
-          this.feeOptions = res.rows
-        }
-      })
-
 
     },
     methods: {
@@ -1082,6 +1085,7 @@
       },
       getCostData(row, expandedRows) {
         if (expandedRows.length > 0) {
+          this.addOrEdit('edit',row)
           this.isFormShow = false
           this.isCostShow = true
         } else {

@@ -56,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBaseProviderApplyVo">
-        select serial_no, lead_time, hotline2, policies_open, inter_locking,provider_code, appointment_call, outpatient_info, hotline, outpatient_day, hospitalize_day, outpatientearly_str, confirm_deliverytime, holiday_time, send_type_str, mail, phone, fax, send_way_str, invite_remark, fastmail_remark, reception_flag, selfpayment_flag, continent_flag, continent, payment, nondirectcustomer, straightknotflag, makeappointment, vipappointment, lead_flag, arrestpoint_tel, arrestpoint_name, arrestpoint_phone, outpatient_address, appointreminders, preauthsendway, clinicmedicalrecord, medicalrecords, hospitaldeposit, emergencyinfo, remarks, status, create_by, create_time, update_by, update_time from base_provider_apply_bak
+        select serial_no, update_flag,lead_time, hotline2, policies_open, inter_locking,provider_code, appointment_call, outpatient_info, hotline, outpatient_day, hospitalize_day, outpatientearly_str, confirm_deliverytime, holiday_time, send_type_str, mail, phone, fax, send_way_str, invite_remark, fastmail_remark, reception_flag, selfpayment_flag, continent_flag, continent, payment, nondirectcustomer, straightknotflag, makeappointment, vipappointment, lead_flag, arrestpoint_tel, arrestpoint_name, arrestpoint_phone, outpatient_address, appointreminders, preauthsendway, clinicmedicalrecord, medicalrecords, hospitaldeposit, emergencyinfo, remarks, status, create_by, create_time, update_by, update_time from base_provider_apply_bak
     </sql>
 
     <sql id="selectBaseProviderApplyVoNew">

@@ -41,13 +41,19 @@ public class PersonInfo extends BaseEntity
     @Excel(name = "固定电话")
     private String linePhone;
 
+    private String[] linePhone1;
+
     /** 家庭电话 国家区号-区号-号码-分机号;"-"不能丢 */
     @Excel(name = "家庭电话")
     private String homePhone;
 
+    private String[] homePhone1;
+
     /** 办公电话 国家区号-区号-号码-分机号;"-"不能丢 */
     @Excel(name = "办公电话")
     private String workPhone;
+
+    private String[] workPhone1;
 
     /** 语言 */
     @Excel(name = "语言")
@@ -96,7 +102,31 @@ public class PersonInfo extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setPersonId(String personId) 
+    public String[] getLinePhone1() {
+        return linePhone1;
+    }
+
+    public void setLinePhone1(String[] linePhone1) {
+        this.linePhone1 = linePhone1;
+    }
+
+    public String[] getHomePhone1() {
+        return homePhone1;
+    }
+
+    public void setHomePhone1(String[] homePhone1) {
+        this.homePhone1 = homePhone1;
+    }
+
+    public String[] getWorkPhone1() {
+        return workPhone1;
+    }
+
+    public void setWorkPhone1(String[] workPhone1) {
+        this.workPhone1 = workPhone1;
+    }
+
+    public void setPersonId(String personId)
     {
         this.personId = personId;
     }

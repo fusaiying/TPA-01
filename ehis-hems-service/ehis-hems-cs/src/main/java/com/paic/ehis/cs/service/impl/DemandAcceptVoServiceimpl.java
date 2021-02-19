@@ -54,10 +54,22 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             }
             PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId());
             if (contactsPerson != null) {
+              //  demandAcceptVo1.setContactsPerson(contactsPerson);
+                String linePhone=contactsPerson.getLinePhone();
+                String[] linePhone1=linePhone.split("\\-");
+                contactsPerson.setLinePhone1(linePhone1);
+                String homePhone=contactsPerson.getHomePhone();
+                String[] homePhone1=homePhone.split("\\-");
+                contactsPerson.setHomePhone1(homePhone1);
+                String workPhone=contactsPerson.getWorkPhone();
+                String[] workPhone1=workPhone.split("\\-");
+                contactsPerson.setWorkPhone1(workPhone1);
                 demandAcceptVo1.setContactsPerson(contactsPerson);
+
             } else {
                 demandAcceptVo1.setContactsPerson(new PersonInfo());
             }
+
             //   demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
            // demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo1.getWorkOrderNo());
@@ -96,6 +108,15 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             }
             PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId());
             if (contactsPerson != null) {
+                String linePhone=contactsPerson.getLinePhone();
+                String[] linePhone1=linePhone.split("\\-");
+                contactsPerson.setLinePhone1(linePhone1);
+                String homePhone=contactsPerson.getHomePhone();
+                String[] homePhone1=homePhone.split("\\-");
+                contactsPerson.setHomePhone1(homePhone1);
+                String workPhone=contactsPerson.getWorkPhone();
+                String[] workPhone1=workPhone.split("\\-");
+                contactsPerson.setWorkPhone1(workPhone1);
                 demandAcceptVo1.setContactsPerson(contactsPerson);
             } else {
                 demandAcceptVo1.setContactsPerson(new PersonInfo());

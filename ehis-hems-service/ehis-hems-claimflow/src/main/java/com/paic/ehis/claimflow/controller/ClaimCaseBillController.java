@@ -44,8 +44,6 @@ public class ClaimCaseBillController extends BaseController
     private IClaimCaseRecordService claimCaseRecordService;
     @Autowired
     private IClaimCaseService claimCaseService;
-    @Autowired
-    private ClaimCalService claimCalService;
 
     /**
      * 查询案件账单明细列表
@@ -159,7 +157,7 @@ public class ClaimCaseBillController extends BaseController
     @GetMapping("changeStatus")
     public AjaxResult changeStatus(String rptNo){
         //进行理算计算
-        claimCalService.Calculate(rptNo);
+        claimCaseBillService.ClaimCal(rptNo);
 
         String username = SecurityUtils.getUsername();
         ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();

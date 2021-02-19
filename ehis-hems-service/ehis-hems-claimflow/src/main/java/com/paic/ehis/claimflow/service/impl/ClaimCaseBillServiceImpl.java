@@ -332,4 +332,10 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         }
         return null;
     }
+
+    @Override
+    public boolean ClaimCal(String rptNo) {
+        claimCalService.Calculate(rptNo);
+        return true;
+    }
 }

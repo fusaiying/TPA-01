@@ -96,4 +96,11 @@ public interface IClaimCaseBillService
      * @return
      */
     public List<ClaimProductFeeitem> selectFeeitemList(String rptNo);
+
+    /**
+     * 理算计算
+     * @param rptNo
+     * @return
+     */
+    public boolean ClaimCal(String rptNo);
 }

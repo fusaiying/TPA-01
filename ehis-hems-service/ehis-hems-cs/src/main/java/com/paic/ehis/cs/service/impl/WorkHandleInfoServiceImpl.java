@@ -118,7 +118,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
      */
     @Override
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo) {
-        if(serviceProcessingVo.getSign()=="01"){
+        if(serviceProcessingVo.getSign().equals("01")){
             WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");

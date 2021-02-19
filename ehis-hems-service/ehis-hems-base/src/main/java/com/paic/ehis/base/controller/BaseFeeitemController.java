@@ -54,7 +54,6 @@ public class BaseFeeitemController extends BaseController
     {
 //        String feeitemname = URLDecoder.decode(baseFeeitem.getFeeitemname(),"utf-8");
 //        baseFeeitem.setFeeitemname(feeitemname);
-        System.out.println("我叒导出Excel了！！！");
         List<BaseFeeitem> list = baseFeeitemService.selectBaseFeeitemList(baseFeeitem);
             ExcelUtil<BaseFeeitem> util = new ExcelUtil<BaseFeeitem>(BaseFeeitem.class);
             util.exportExcel(response, list, "feeitem");

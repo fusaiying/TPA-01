@@ -103,9 +103,9 @@ public class ClaimCasePayeeController extends BaseController {
      */
 //    @PreAuthorize("@ss.hasPermi('system:payee:remove')")
     @Log(title = "无效化案件领款人信息", businessType = BusinessType.UPDATE)
-    @PutMapping(value = "/rptNo")
-    public AjaxResult Invalidation(@RequestBody String rptNo) {
-        return toAjax(claimCasePayeeService.deleteClaimCasePayeeByRptNo(rptNo));
+    @PutMapping(value = "/{payeeId}")
+    public AjaxResult Invalidation(@PathVariable Long payeeId) {
+        return toAjax(claimCasePayeeService.deleteClaimCasePayeeByRptNo(payeeId));
     }
 
     /**

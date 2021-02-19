@@ -140,10 +140,11 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportReturnedPool")
-    public void exportReturnedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
+    public void exportReturnedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
-        batchDTO.setHospitalname(hospitalname);
+//        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
+//        batchDTO.setHospitalname(hospitalname);
+        System.out.println("我叒导出已退回Excel了！！！");
         List<BatchVo> list = claimBatchService.selectBackToBatchList(batchDTO);
         for (BatchVo batchVo : list) {
             batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(),"")+"|"+StringUtils.nvl(batchVo.getEnname1(),""));
@@ -158,10 +159,11 @@ public class ClaimBatchController extends BaseController
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedPool")
-    public void exportProcessedPool(HttpServletResponse response,@RequestBody BatchDTO batchDTO) throws IOException
+    public void exportProcessedPool(HttpServletResponse response, BatchDTO batchDTO) throws IOException
     {
-        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
-        batchDTO.setHospitalname(hospitalname);
+//        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
+//        batchDTO.setHospitalname(hospitalname);
+        System.out.println("我叒导出已处理Excel了！！！");
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
             for (BatchVo batchVo : list) {
                 batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));

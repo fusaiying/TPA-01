@@ -1242,9 +1242,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();
         caseRecord.setRptNo(claimCaseCheckDTO.getRptNo());
-        if (claimCaseCheckDTO1.getCaseStatus().equals("08")) {
+        if ("08".equals(claimCaseCheckDTO1.getCaseStatus())) {
             caseRecord.setOperation("08");
-        } else if (claimCaseCheckDTO1.getCaseStatus().equals("99")) {
+        } else if ("99".equals(claimCaseCheckDTO1.getCaseStatus())) {
             caseRecord.setOperation("99");
         }
         caseRecord.setStatus("Y");

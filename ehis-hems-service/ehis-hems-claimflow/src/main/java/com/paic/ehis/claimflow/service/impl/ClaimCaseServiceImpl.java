@@ -284,7 +284,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setRptNo(claimCaseProblemDTO.getRptNo());//报案号
         claimCaseRecord.setHistoryFlag("N");//是否历史节点
         claimCaseRecord.setOperation("30");//流程节点-问题件
-        claimCaseRecord.setOperator(SecurityUtils.getUsername());//流程节点操作人
+//        claimCaseRecord.setOperator(SecurityUtils.getUsername());//流程节点操作人
         claimCaseRecord.setStatus("Y");//数据状态
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
@@ -375,7 +375,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         //完成案件操作记录表的记录
         claimCaseRecord1.setRptNo(claimCase.getRptNo());
-        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+//        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
         claimCaseRecord1.setHistoryFlag("N");
         claimCaseRecord1.setStatus("Y");
         claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
@@ -429,20 +429,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             }
         }
 
-//        //将之前的案件流程表变为历史节点
-//        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
-//        if (claimCaseRecords.size() != 0) {
-//            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecords) {
-//                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
-//                claimCaseRecord3.setHistoryFlag("Y");
-//                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
-//                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
-//            }
-//        }
-
         //生成案件操作记录表
         claimCaseRecord.setRptNo(claimCase.getRptNo());
-        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+//        claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setStatus("Y");
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());

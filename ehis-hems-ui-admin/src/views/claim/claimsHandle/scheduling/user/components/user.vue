@@ -13,7 +13,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="交接人：" prop="userId">
-                <el-select v-model="userForm.userId"  size="mini" placeholder="请选择">
+                <el-select filterable v-model="userForm.userId"  size="mini" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="承接人：" prop="takeOnUserId">
-                <el-select v-model="userForm.takeOnUserId"  size="mini" placeholder="请选择">
+                <el-select filterable v-model="userForm.takeOnUserId"  size="mini" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>

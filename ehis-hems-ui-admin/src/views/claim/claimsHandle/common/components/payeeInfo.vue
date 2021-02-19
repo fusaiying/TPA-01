@@ -409,7 +409,7 @@
           payeeOccupation:[{required: true, message: '职业不能为空!', trigger: ['blur','change']}],
           accAttribute: [{required: true, message: '账户属性不能为空!', trigger: ['blur','change']}],
           accNo: {validator: checkAccNo, required: true, trigger: ['blur','change']},//允许录入数字和字母
-          accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur','change']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
+          accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
           address: {validator: checkAddress, required: true, trigger: ['blur','change']},
         }
       };

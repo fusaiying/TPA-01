@@ -64,8 +64,8 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
      * @Parm [claimCaseStanding]
      */
     @Override
-    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchno) {
-        return claimCaseStandingMapper.selectCaseStandingListByBatchNo(batchno);
+    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchNo) {
+        return claimCaseStandingMapper.selectCaseStandingListByBatchNo(batchNo);
     }
 
     /**

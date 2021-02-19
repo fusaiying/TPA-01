@@ -66,10 +66,11 @@ export function getBatch(batchno) {
 }
 
 // 通过点击事件查询报案台账信息  列表
-export function getMinData(batchNo) {
+export function getMinData(data) {
   return request({
-    url: '/claimmgt/standing/'+batchNo,
+    url:"claimflow/case/caseListByBatchNo",
     method: 'get',
+    params:data
   })
 }
 

@@ -185,9 +185,10 @@ public interface ClaimCaseMapper
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
 
     /**
-     * 计算案子数量
+     * 计算案子数量+
      */
     ClaimCaseDistVo selectCaseDistNumber(String batchNo);
     ClaimCaseDistVo selectCaseDistNumberOne(String rptNo,String caseStatus);
-    ClaimCase selectCaseOne(ClaimCase claimCase);
+    /** 见未被使用-flint-List<ClaimCase> */
+    List<ClaimCase> selectCaseOne(ClaimCase claimCase);
 }

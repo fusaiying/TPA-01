@@ -56,10 +56,10 @@ public interface IClaimCasePayeeService
     /**
      * 删除案件领款人信息信息
      * 
-     * @param rptNo 案件领款人信息ID
+     * @param payeeId 案件领款人信息ID
      * @return 结果
      */
-    public int deleteClaimCasePayeeByRptNo(String rptNo);
+    public int deleteClaimCasePayeeByRptNo(Long payeeId);
 
     /**
      * 获取案件领款人信息-最近的一条

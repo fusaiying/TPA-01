@@ -66,6 +66,7 @@
     <update id="updateClaimCaseRecord" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
@@ -75,7 +76,7 @@
         </trim>
         <where>
             <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
-            <if test="recordId != null  and recordId != ''"> and record_id = #{recordId}</if>
+            and record_id = #{recordId}
         </where>
     </update>
 
@@ -254,4 +255,19 @@
         </where>
         order by create_time LIMIT 1
     </select>
+
+    <update id="updateRecordHistoricalState" parameterType="ClaimCaseRecord">
+        update claim_case_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and operation = #{operation}</if>
+            and history_flag='N'
+            and status='Y'
+        </where>
+    </update>
 </mapper>

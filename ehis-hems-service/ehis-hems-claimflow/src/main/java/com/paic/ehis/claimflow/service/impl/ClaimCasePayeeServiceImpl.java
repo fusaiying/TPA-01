@@ -95,15 +95,17 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     /**
      * 删除案件领款人信息信息
      * 
-     * @param rptNo 案件领款人信息ID
+     * @param payeeId 案件领款人信息ID
      * @return 结果
      */
     @Override
-    public int deleteClaimCasePayeeByRptNo(String rptNo)
+    public int deleteClaimCasePayeeByRptNo(Long payeeId)
     {
         ClaimCasePayee claimCasePayee = new ClaimCasePayee();
-        claimCasePayee.setRptNo(rptNo);
+        claimCasePayee.setPayeeId(payeeId);
         claimCasePayee.setStatus("N");
+        claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
+        claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         return claimCasePayeeMapper.updateClaimCasePayee(claimCasePayee);
     }
 

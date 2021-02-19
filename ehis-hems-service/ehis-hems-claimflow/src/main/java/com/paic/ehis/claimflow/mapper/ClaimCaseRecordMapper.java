@@ -171,5 +171,15 @@ public interface ClaimCaseRecordMapper
   **/
     public ClaimCaseRecord selectRecentClaimCaseRecord(ClaimCaseRecord claimCaseRecord);
 
+    /**
+    * @author 硠君
+    * @Description 根据报案号 将当前历史状态为N的轨迹，置为历史状态
+    * @Date 17:52 2021/2/19
+    * @Parm [claimCaseRecord]
+    * @return int
+    **/
+    
+    public int updateRecordHistoricalState(ClaimCaseRecord claimCaseRecord);
+
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);
 }

@@ -66,7 +66,6 @@
     <update id="updateClaimCaseRecord" parameterType="com.paic.ehis.claimcal.domain.ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
             <if test="operation != null and operation != ''">operation = #{operation},</if>
             <if test="operator != null and operator != ''">operator = #{operator},</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
@@ -192,7 +191,6 @@
     <update id="updateCaseDispatchList" parameterType="String">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
             <if test="operation != null and operation != ''">operation = #{operation},</if>
             <if test="operator != null and operator != ''">operator = #{operator},</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>

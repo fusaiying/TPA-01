@@ -418,6 +418,10 @@
           }
         });
       },
+      //获取领款人信息数据
+      getPayeeInfoData(){
+        return this.$refs.payeeInfoForm.tableData
+      },
       //录入完毕
       changeBillStatus() {
         let isBillInfoSave = this.$refs.billingInfoForm.isBillInfoSave
@@ -508,44 +512,52 @@
         }
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
-        if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
-          let data = {
-            rptNo: this.querys.rptNo
-          }
-          editCaseAndRecordInfoSuspend(data).then(res => {
-            if (res != null && res.code === 200) {
+        let flag=this.$refs.insuredForm.validataForm()
+        if (flag){
+          if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
+            let data = {
+              rptNo: this.querys.rptNo
+            }
+            editCaseAndRecordInfoSuspend(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message({
+                  message: '提交成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              }
+            }).catch(res => {
               this.$message({
-                message: '提交成功！',
-                type: 'success',
+                message: '提交失败!',
+                type: 'error',
                 center: true,
                 showClose: true
               })
-              this.$store.dispatch("tagsView/delView", this.$route);
-              this.$router.go(-1)
-            }
-          }).catch(res => {
-            this.$message({
-              message: '提交失败!',
-              type: 'error',
-              center: true,
-              showClose: true
             })
-          })
-        } else {
-          if (!(isInsuredSave || hasInsuredId)) {
-            return this.$message.warning(
-              "请保存被保人信息！"
-            )
-          } else if (!(isApplicantSave || hasApplicantId)) {
-            return this.$message.warning(
-              "请保存申请人信息！"
-            )
-          } else if (!(isAcceptInfoSave || hasAcceptId)) {
-            return this.$message.warning(
-              "请保存受理信息！"
-            )
+          } else {
+            if (!(isInsuredSave || hasInsuredId)) {
+              return this.$message.warning(
+                "请保存被保人信息！"
+              )
+            } else if (!(isApplicantSave || hasApplicantId)) {
+              return this.$message.warning(
+                "请保存申请人信息！"
+              )
+            } else if (!(isAcceptInfoSave || hasAcceptId)) {
+              return this.$message.warning(
+                "请保存受理信息！"
+              )
+            }
           }
+        }else {
+          return this.$message.warning(
+            "领款人信息中与被保人关系存在本人时，被保人信息的职业和国籍必录！"
+          )
         }
+
 
       },
       goBack() {

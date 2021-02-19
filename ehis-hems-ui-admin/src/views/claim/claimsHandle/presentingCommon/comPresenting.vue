@@ -510,10 +510,8 @@
           this.isShow = true
           this.eShowFooter = true
           selectRecordByBatchno(this.searchForm.batchno).then(res => {
-            if (res != null && res.code === 200) {
-              if (res.data.length < 1) {
-                this.isShowFooter = false
-              } else {
+            if (res != null && res.code === 200 && res.data.length > 0) {
+              if (res.data[0]!=null){
                 this.recordForm = res.data[0]
                 this.isShowFooter = true
               }
@@ -554,8 +552,10 @@
           this.eShowFooter = true
           selectRecordByBatchno(this.searchForm.batchno).then(res => {
             if (res != null && res.code === 200 && res.data.length > 0) {
-              this.recordForm = res.data[0]
-              this.isShowFooter = true
+              if (res.data[0]!=null){
+                this.recordForm = res.data[0]
+                this.isShowFooter = true
+              }
             } else {
               this.isShowFooter = false
             }

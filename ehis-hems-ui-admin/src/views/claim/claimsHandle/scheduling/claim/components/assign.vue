@@ -49,7 +49,7 @@
       default: false
     },
     roleSelects: {
-      roleSelects: Object,
+      type: Array,
       default: function () {
         return {}
       }
@@ -61,7 +61,6 @@
     },
     roleSelects: function (newVal){
       this.roles = newVal;
-
     },
 
   },

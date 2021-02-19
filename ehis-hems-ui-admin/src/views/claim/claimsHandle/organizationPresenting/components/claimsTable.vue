@@ -17,8 +17,12 @@
                   v-loading="loading"
                   tooltip-effect="dark"
                   style="width: 100%;">
-          <el-table-column prop="rptno" label="报案号" align="center"/>
-          <el-table-column prop="status" label="案件状态" align="center"/><!--status待确认-->
+          <el-table-column prop="rptNo" label="报案号" align="center"/>
+          <el-table-column prop="caseStatus" label="案件状态" align="center">
+            <template slot-scope="props">
+              <span>{{selectDictLabel( claim_statusOptions, scope.row.caseStatus)}}</span>
+            </template>
+          </el-table-column><!--status待确认-->
           <el-table-column prop="updateTime" label="操作日期" align="center"/>
           <el-table-column prop="updateBy" label="操作人" align="center"/>
           <el-table-column label="操作" align="center">
@@ -87,7 +91,7 @@
 <script>
   import {getMinData, getThisDept} from '@/api/claim/presentingReview'
 
-  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
+  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}, {dictType: 'claim_status'}]
   export default {
 
     props: {
@@ -106,6 +110,7 @@
         loading: true,
         dictList: [],
         delivery_sourceOptions: [],
+        claim_statusOptions: [],
         claimtypeOptions: [],
         batchs_statusOptions: [],
         deptOptions: [],
@@ -123,6 +128,9 @@
       }).dictDate
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
+      }).dictDate
+      this.claim_statusOptions = this.dictList.find(item => {
+        return item.dictType === 'claim_status'
       }).dictDate
       let item = {
         pageNum: 1,

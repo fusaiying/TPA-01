@@ -19,6 +19,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -155,6 +156,9 @@ public class ClaimCaseBillController extends BaseController
      */
     @GetMapping("changeStatus")
     public AjaxResult changeStatus(String rptNo){
+        //进行理算计算
+        claimCaseBillService.ClaimCal(rptNo);
+
         String username = SecurityUtils.getUsername();
         ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
         claimCaseRecord1.setRptNo(rptNo);
@@ -184,7 +188,7 @@ public class ClaimCaseBillController extends BaseController
      * 根据报案号查询费用项编码、费用项名称
      */
     @GetMapping("/feeitem")
-    public List<ClaimProductFeeitem> selectFeeitemList(String rptNo){
-        return claimCaseBillService.selectFeeitemList(rptNo);
+    public AjaxResult selectFeeitemList(String rptNo){
+        return AjaxResult.success(claimCaseBillService.selectFeeitemList(rptNo));
     }
 }

@@ -684,7 +684,7 @@
         }
         else if(this.searchForm.name){
 
-            if((this.searchForm.birthday!=null && this.searchForm.birthday!='') ){
+            if((this.searchForm.birthday!=null && this.searchForm.birthday!='')||(this.searchForm.policyNo!=null && this.searchForm.policyNo!='') ){
               this.getSelectRecogn()
             }
             else {
@@ -699,6 +699,15 @@
           else {
             this.$message({message:'请同时录入性别、姓名、出生日期', type:'warning',showClose:true,center:true})
           }
+
+        }
+        else if(this.searchForm.policyNo){
+            if(this.searchForm.name!=null && this.searchForm.name!=''){
+              this.getSelectRecogn()
+            }
+            else {
+              this.$message({message:'请同时录入保单号、姓名', type:'warning',showClose:true,center:true})
+            }
 
         }
 

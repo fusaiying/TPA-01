@@ -330,11 +330,10 @@ export function editBill(billId) {
 }
 
 //获取费用项
-export function getFee(data) {
+export function getFee(rptNo) {
   return request({
-    url: '/provider/feeitem/list',
-    method: 'post',
-    data:data
+    url: '/claimflow/bill/feeitem?rptNo='+rptNo,
+    method: 'get',
   })
 }
 
@@ -455,8 +454,7 @@ export function calSummary(data) {
 //理算审核 赔付计算
 export function calculate(rptNo) {
   return request({
-    url: 'claimcal/claim/calculate',
-    method: 'post',
-    data: rptNo
+    url: 'claimcal/claim/calculate?rptNo='+rptNo,
+    method: 'get',
   })
 }

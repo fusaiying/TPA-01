@@ -274,6 +274,7 @@
           this.baseForm.payeeNationality = this.insuredData.nationality,
           this.baseForm.payeeIdType = this.insuredData.idType,
           this.baseForm.payeeIdNo = this.insuredData.idNo
+          this.baseForm.payeeOccupation = this.insuredData.occupation
         if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
           this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
           if (this.insuredData.idEndDate==='9999-12-31'){
@@ -394,22 +395,22 @@
         card_typeOptions: [],
         rgtSexOptions: [],
         tableFormRules: {
-          payMode: [{required: true, message: '领款方式不能为空!', trigger: 'blur'}],
-          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: 'blur'}],
-          payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: 'blur'}],
-          payeeSex: [{required: true, message: '性别不能为空!', trigger: 'blur'}],
-          payeeMobile: {validator: checkRequired, trigger: 'blur'},//与被保人关系非本人时必录，否则非必录
-          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: 'blur'}],
-          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: 'blur'}],
-          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: 'blur'}],
-          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: 'blur'}],
-          payeeBank: [{required: true, message: '开户行不能为空!', trigger: 'blur'}],
-          payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: 'blur'}],
-          payeeOccupation:[{required: true, message: '职业不能为空!', trigger: 'blur'}],
-          accAttribute: [{required: true, message: '账户属性不能为空!', trigger: 'blur'}],
-          accNo: {validator: checkAccNo, required: true, trigger: 'blur'},//允许录入数字和字母
-          accNoCheck: {validator: checkAccNoCheck, required: true, trigger: 'blur'},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
-          address: {validator: checkAddress, required: true, trigger: 'blur'},
+          payMode: [{required: true, message: '领款方式不能为空!', trigger: ['blur','change']}],
+          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: ['blur','change']}],
+          payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: ['blur','change']}],
+          payeeSex: [{required: true, message: '性别不能为空!', trigger:['blur','change']}],
+          payeeMobile: {validator: checkRequired, trigger: ['blur','change']},//与被保人关系非本人时必录，否则非必录
+          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: ['blur','change']}],
+          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: ['blur','change']}],
+          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: ['blur','change']}],
+          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur','change']}],
+          payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur','change']}],
+          payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur','change']}],
+          payeeOccupation:[{required: true, message: '职业不能为空!', trigger: ['blur','change']}],
+          accAttribute: [{required: true, message: '账户属性不能为空!', trigger: ['blur','change']}],
+          accNo: {validator: checkAccNo, required: true, trigger: ['blur','change']},//允许录入数字和字母
+          accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur','change']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
+          address: {validator: checkAddress, required: true, trigger: ['blur','change']},
         }
       };
     },

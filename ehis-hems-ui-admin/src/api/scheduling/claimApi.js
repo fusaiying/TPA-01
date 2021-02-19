@@ -4,7 +4,7 @@ import request from '@/utils/request'
 /*案件分配规则  */
 export function roleAll(query) {
   return request({
-    url: '/claimmgt/role/list',
+    url: '/system/role/list',
     method: 'get',
     params: query
   })

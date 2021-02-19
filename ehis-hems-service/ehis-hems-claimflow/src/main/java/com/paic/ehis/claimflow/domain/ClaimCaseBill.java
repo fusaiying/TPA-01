@@ -97,6 +97,9 @@ public class ClaimCaseBill extends BaseEntity
     @Excel(name = "第三方先期给付")
     private BigDecimal tpAdvancePayment;
 
+    /** 先期给付 */
+    private BigDecimal advancePayment;
+
     /** 是否分摊先期给付 */
     @Excel(name = "是否分摊先期给付")
     private String isShareAp;

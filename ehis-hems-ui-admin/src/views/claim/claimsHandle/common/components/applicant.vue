@@ -25,12 +25,13 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="申请人姓名：" prop="rgtName">
-            <el-input v-model="baseForm.rgtName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="baseForm.rgtName" class="item-width" clearable size="mini" placeholder="请输入" :disabled="relationsFlag"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="出生日期：" prop="rgtBirthday">
             <el-date-picker
+              :disabled="relationsFlag"
               v-model="baseForm.rgtBirthday"
               class="item-width"
               type="date"
@@ -40,7 +41,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="证件类型：" prop="rgtIdType">
-            <el-select v-model="baseForm.rgtIdType" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.rgtIdType" class="item-width" placeholder="请选择" :disabled="relationsFlag">
               <el-option v-for="option in card_typeOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -48,12 +49,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="证件号码：" prop="rgtIdNo">
-            <el-input v-model="baseForm.rgtIdNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="baseForm.rgtIdNo" class="item-width" clearable size="mini" placeholder="请输入" :disabled="relationsFlag"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="性别：" prop="rgtSex">
-            <el-select v-model="baseForm.rgtSex" class="item-width" placeholder="请选择">
+            <el-select v-model="baseForm.rgtSex" class="item-width" placeholder="请选择" :disabled="relationsFlag">
               <el-option v-for="option in rgtSexOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -83,7 +84,7 @@
               clearable
               filterable
               @change="handleChange"/>
-            <el-input v-model="baseForm.rgtAddress" show-word-limit maxlength="100" style="width:60%;" clearable
+            <el-input v-model="baseForm.rgtAddress" show-word-limit maxlength="400" style="width:60%;" clearable
                       size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
@@ -215,6 +216,7 @@
         }
       }
       return {
+        relationsFlag: false,
         isApplicantSave: false,
         hasApplicantId: false,
         copyFixInfo: {},
@@ -243,12 +245,12 @@
           rgtAddress: undefined,
         },
         baseFormRule: {
-          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: 'change'}],
-          rgtName: [{required: true, message: '申请人姓名不能为空!', trigger: 'blur'}],
-          rgtBirthday: [{required: true, message: '出生日期不能为空!', trigger: 'blur'}],
-          rgtIdType: [{required: true, message: '证件类型不能为空!', trigger: 'change'}],
-          rgtIdNo: [{required: true, message: '证件号码不能为空!', trigger: 'blur'}],
-          rgtSex: [{required: true, message: '证件号码不能为空!', trigger: 'change'}],
+          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: ['change','blur']}],
+          rgtName: [{required: true, message: '申请人姓名不能为空!', trigger: ['change','blur']}],
+          rgtBirthday: [{required: true, message: '出生日期不能为空!', trigger: ['change','blur']}],
+          rgtIdType: [{required: true, message: '证件类型不能为空!', trigger: ['change','blur']}],
+          rgtIdNo: [{required: true, message: '证件号码不能为空!', trigger: ['change','blur']}],
+          rgtSex: [{required: true, message: '性别不能为空!', trigger: ['change','blur']}],
           rgtPhone: {validator: checkValid, trigger: 'blur'},
           rgtMobile: {validator: checkPhone, trigger: 'blur'},
           rgtEmail: {validator: validateEmail, trigger: 'blur'},
@@ -397,6 +399,7 @@
 
           // this.$set(this,'baseForm',newVal)
           this.$set(this,'region',regionArr)
+          this.relationsFlag=true
 
 
           /*  this.region.push(this.batchInfo.province)
@@ -416,6 +419,7 @@
           this.baseForm.rgtDistrict = undefined
           this.baseForm.rgtAddress = undefined
           this.region = []
+          this.relationsFlag=false
         }
       }
       ,

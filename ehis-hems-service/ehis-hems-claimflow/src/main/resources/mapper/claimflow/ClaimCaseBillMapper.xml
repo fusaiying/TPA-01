@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="billType"    column="bill_type"    />
         <result property="ssAdvancePayment"    column="ss_advance_payment"    />
         <result property="tpAdvancePayment"    column="tp_advance_payment"    />
+        <result property="advancePayment" column="advance_payment"/>
         <result property="isShareAp"    column="is_share_ap"    />
         <result property="transSerialNo"    column="trans_serial_no"    />
         <result property="transSerialCopay"    column="trans_Serial_copay"    />
@@ -79,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             bill_type,
             ss_advance_payment,
             tp_advance_payment,
+            ifnull(ss_advance_payment,0)+ifnull(tp_advance_payment,0) advance_payment,
             is_share_ap,
             trans_serial_no,
             trans_Serial_copay,

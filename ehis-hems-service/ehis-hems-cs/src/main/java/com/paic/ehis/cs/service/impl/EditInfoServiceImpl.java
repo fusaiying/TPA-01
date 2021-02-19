@@ -10,11 +10,7 @@ import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
-import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
-import com.paic.ehis.cs.mapper.ComplaintAcceptVoMapper;
-import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
-import com.paic.ehis.cs.mapper.EditInfoMapper;
-import com.paic.ehis.cs.mapper.ReservationAcceptVoMapper;
+import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IEditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +29,7 @@ public class EditInfoServiceImpl implements IEditInfoService
     @Autowired
     private EditInfoMapper editInfoMapper;
     @Autowired
-    private FlowLogServiceImpl flowLogMapper;
+    private FlowLogMapper flowLogMapper;
     @Autowired
     private DemandAcceptVoMapper demandAcceptVoMapper;
     @Autowired
@@ -177,7 +173,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
-        flowLogMapper.updateFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
 
         reservationAcceptVo.setStatus("05");
         return reservationAcceptVoMapper.updateOrderCancelStatus(reservationAcceptVo.getWorkOrderNo());

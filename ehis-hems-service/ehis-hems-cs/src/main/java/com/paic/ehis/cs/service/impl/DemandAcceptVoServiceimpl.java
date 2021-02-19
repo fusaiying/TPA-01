@@ -324,7 +324,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
         personInfo2.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        personInfo2.setWorkPhone(demandAcceptVo.getCallPerson().getWorkPhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        personInfo2.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -380,9 +380,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
                 editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
                 editInfoMapper.insertEditInfo(editInfo);
-
             }
-
         }
 
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
@@ -420,9 +418,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
                 editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
                 editInfoMapper.insertEditInfo(editInfo);
-
             }
-
         }
 
         Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
@@ -460,26 +456,18 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
                 editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
                 editInfoMapper.insertEditInfo(editInfo);
-
             }
-
         }
-
-
-
         /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
-
         Iterator<String> iter2 = map3.keySet().iterator();
         while(iter1.hasNext()){
             String map3key=iter2.next();
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
             if (!map3value.equals(map4value)) {
-
-            }
+          }
         }*/
-
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 
@@ -490,8 +478,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
      */
     @Override
     public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO) {
-
-
         return demandAcceptVoMapper.selectAssist(acceptDTO);
     }
 

@@ -190,7 +190,7 @@ public class ClaimCaseBillController extends BaseController
      * 根据报案号查询费用项编码、费用项名称
      */
     @GetMapping("/feeitem")
-    public List<ClaimProductFeeitem> selectFeeitemList(String rptNo){
-        return claimCaseBillService.selectFeeitemList(rptNo);
+    public AjaxResult selectFeeitemList(String rptNo){
+        return AjaxResult.success(claimCaseBillService.selectFeeitemList(rptNo));
     }
 }

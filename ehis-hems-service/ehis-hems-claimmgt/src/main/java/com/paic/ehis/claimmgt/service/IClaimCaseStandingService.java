@@ -32,7 +32,7 @@ public interface IClaimCaseStandingService
      * @Parm [claimCaseStanding]
      * @return java.util.List<com.paic.ehis.claimmgt.domain.ClaimCaseStanding>
      **/
-    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchno);
+    public List<ClaimCaseStanding> selectCaseStandingListByBatchNo(String batchNo);
 
     /**
      * 查询报案台账信息 列表

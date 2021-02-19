@@ -98,7 +98,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
         ArrayList<TpaSettleDetailInfo> detailInfos=new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         CompanyRiskPolicy companyRiskPolicy = null;
-        Date EarliestDay=new Date();
+        Date earliestDay=new Date();
         //TPA服务费及明细的新增
         FinanceTpaSettleTask financeTpaSettleTask = new FinanceTpaSettleTask();
         FinanceTpaSettleDetail financeTpaSettleDetail = new FinanceTpaSettleDetail();
@@ -195,10 +195,10 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
                 }
                 financeTpaSettleTask.setServiceSettleAmount(tpaSettleInfo.getServiceSettleAmount());
                 tpaSettleInfos.add(tpaSettleInfo);
-                EarliestDay=companyRiskPolicy.getValidStartDate().before(EarliestDay)?companyRiskPolicy.getValidStartDate():EarliestDay;
+                earliestDay=companyRiskPolicy.getValidStartDate().before(earliestDay)?companyRiskPolicy.getValidStartDate():earliestDay;
             }
             if (StringUtils.isNotNull(financeTpaSettleTask.getSettleStartDate())) {
-                financeTpaSettleTask.setSettleStartDate(EarliestDay);
+                financeTpaSettleTask.setSettleStartDate(earliestDay);
             }
             financeTpaSettleTask.setSettleTaskNo(taskNo);
             financeTpaSettleTaskMapper.insertFinanceTpaSettleTask(financeTpaSettleTask);

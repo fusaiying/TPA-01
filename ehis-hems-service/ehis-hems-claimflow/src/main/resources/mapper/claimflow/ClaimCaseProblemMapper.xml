@@ -89,7 +89,9 @@
         TIMESTAMPDIFF( MINUTE, claim_case_problem.create_time, now( ) ) % 60,
         '分'
         ) stop_time,
-        claim_case.case_status
+        claim_case.case_status,
+        claim_case_problem.problem_view,
+        claim_case_problem.conclusion_view
         FROM
         claim_case_problem,
         claim_case_insured,

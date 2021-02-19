@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO;
 import com.paic.ehis.claimflow.domain.vo.BillAccomplishVo;
@@ -12,8 +13,12 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
+import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
+import com.paic.ehis.system.api.domain.SysOrganInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +56,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     private ClaimCaseBillDetailMapper claimCaseBillDetailMapper;
     @Autowired
     private ClaimCalService claimCalService;
+    @Autowired
+    private RemoteUserService remoteUserService;
 
     /**
      * 查询案件账单明细
@@ -243,26 +250,15 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
-            String ms = StringUtils.join(manageComs, "|");
-//            for (ClaimCasePolicy policy : claimCasePolicyList) {
-//                // 根据保单号查出保单所有信息
-//                PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(policy.getPolicyNo());
-//                if (policyInfo != null) {
-//                    String companyName = policyInfo.getCompanyName();
-//                    String manageCom = policyInfo.getPolicyManageCom();
-//                    //字符拼接
-//                    if (cs.length() > 0) {
-//                        cs.append("|");
-//                    }
-//                    cs.append(companyName);
-//                    if (ms.length() > 0) {
-//                        ms.append("|");
-//                    }
-//                    ms.append(manageCom);
-//                }
-//            }
+            Object data = remoteUserService.getOrganInfo(manageComs).get(AjaxResult.DATA_TAG);
+            List<SysOrganInfo> sysOrganInfoList = new ArrayList<>();
+            if(data != null){
+                String jsonOrganInfoStr = JSON.toJSONString(data);
+                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfo.class);
+                String ms = StringUtils.join(sysOrganInfoList, "|");
+                caseInfo.setPolicyManageCom(ms);
+            }
             caseInfo.setCompanyName(cs);
-            caseInfo.setPolicyManageCom(ms);
         }
         return caseList;
     }
@@ -293,25 +289,24 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             }
             // 出单公司、承保机构
             List<ClaimCasePolicy> claimCasePolicyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(accomplishVo.getRptNo());
-            StringBuilder cs = new StringBuilder();
-            StringBuilder ms = new StringBuilder();
-            for (ClaimCasePolicy policy : claimCasePolicyList) {
-                // 根据保单号查出保单所有信息
-                PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(policy.getPolicyNo());
-                String companyName = policyInfo.getCompanyName();
-                String manageCom = policyInfo.getPolicyManageCom();
-                //字符拼接
-                if (cs.length() > 0) {
-                    cs.append("|");
-                }
-                cs.append(companyName);
-                if (ms.length() > 0){
-                    ms.append("|");
-                }
-                ms.append(manageCom);
+            // 出单公司拼接
+            List<String> companyNameList = claimCasePolicyList.stream().map(ClaimCasePolicy::getCompanyName).collect(Collectors.toList());
+            LinkedHashSet<String> companyNameSet = new LinkedHashSet<>(companyNameList);
+            ArrayList<String> companyName = new ArrayList<>(companyNameSet);
+            String cs = StringUtils.join(companyName, "|");
+            accomplishVo.setCompanyName(cs);
+            // 承保机构 取sys_dept
+            List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
+            LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
+            ArrayList<String> manageComs = new ArrayList<>(manageComSet);
+            Object data = remoteUserService.getOrganInfo(manageComs).get(AjaxResult.DATA_TAG);
+            List<SysOrganInfo> sysOrganInfoList = new ArrayList<>();
+            if(data != null){
+                String jsonOrganInfoStr = JSON.toJSONString(data);
+                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfo.class);
+                String ms = StringUtils.join(sysOrganInfoList, "|");
+                accomplishVo.setPolicyManageCom(ms);
             }
-            accomplishVo.setCompanyName(cs.toString());
-            accomplishVo.setPolicyManageCom(ms.toString());
         }
         return accomplishList;
     }

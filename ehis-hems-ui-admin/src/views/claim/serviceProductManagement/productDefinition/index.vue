@@ -231,6 +231,8 @@ export default {
       const values = Object.values(this.formSearch)
       let flag= values.some(item => {return  item!=null && item !='' })
       if(flag){
+        this.params.pageSize=10
+        this.params.pageNum=1
         this.getData()
       }
       else {

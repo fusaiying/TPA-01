@@ -190,4 +190,87 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from claim_case_policy
         where insured_no = #{insuredNo} and status='Y' and rpt_no = #{rptNo}
     </select>
+
+    <!-- 核心案件同步接口-->
+    <select id="selectClaimCasePolicyCore" parameterType="String" resultType="java.lang.Integer">
+        <include refid="selectClaimCasePolicyVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+        </where>
+    </select>
+    <!-- 核心案件同步接口-->
+    <select id="selectClaimCasePolicyNewCore" parameterType="String" resultMap="ClaimCasePolicyResult">
+        <include refid="selectClaimCasePolicyVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+        </where>
+    </select>
+    <!-- 核心案件同步接口-->
+    <insert id="insertClaimCasePolicyCore" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePolicy" useGeneratedKeys="true" keyProperty="relationId">
+        insert into claim_case_policy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no,</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="appName != null and appName != ''">app_name,</if>
+            <if test="validStartDate != null">valid_start_date,</if>
+            <if test="validEndDate != null">valid_end_date,</if>
+            <if test="policyRiskType != null and policyRiskType != ''">policy_risk_type,</if>
+            <if test="policyStatus != null and policyStatus != ''">policy_status,</if>
+            <if test="specialAgreement != null and specialAgreement != ''">special_agreement,</if>
+            <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="companyName != null and companyName != ''">company_name,</if>
+            <if test="policyManageCom != null and policyManageCom != ''">policy_manage_com,</if>
+            <if test="policyType != null and policyType != ''">policy_type,</if>
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="orgPolicyNo != null and orgPolicyNo != ''">org_policy_no,</if>
+            <if test="orgPolicyItemNo != null and orgPolicyItemNo != ''">org_policy_item_no,</if>
+            <if test="ssFlag != null and ssFlag != ''">ss_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">#{policyItemNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="appName != null and appName != ''">#{appName},</if>
+            <if test="validStartDate != null">#{validStartDate},</if>
+            <if test="validEndDate != null">#{validEndDate},</if>
+            <if test="policyRiskType != null and policyRiskType != ''">#{policyRiskType},</if>
+            <if test="policyStatus != null and policyStatus != ''">#{policyStatus},</if>
+            <if test="specialAgreement != null and specialAgreement != ''">#{specialAgreement},</if>
+            <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="companyName != null and companyName != ''">#{companyName},</if>
+            <if test="policyManageCom != null and policyManageCom != ''">#{policyManageCom},</if>
+            <if test="policyType != null and policyType != ''">#{policyType},</if>
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="orgPolicyNo != null and orgPolicyNo != ''">#{orgPolicyNo},</if>
+            <if test="orgPolicyItemNo != null and orgPolicyItemNo != ''">#{orgPolicyItemNo},</if>
+            <if test="ssFlag != null and ssFlag != ''">#{ssFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+    <!-- 核心案件同步接口-->
+    <update id="updateClaimCasePolicyCore" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePolicy">
+        update claim_case_policy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="policyItemNo != null and policyItemNo != ''">policy_item_no = #{policyItemNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="policyManageCom != null and policyManageCom != ''">policy_manage_com = #{policyManageCom},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
 </mapper>

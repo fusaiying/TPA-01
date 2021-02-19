@@ -1,5 +1,6 @@
 package com.paic.ehis.system.api.factory;
 
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import feign.hystrix.FallbackFactory;
@@ -23,6 +24,11 @@ public class ClaimCalServiceFallbackFactory implements FallbackFactory<ClaimCalS
             @Override
             public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys) {
                 return null;
+            }
+
+            @Override
+            public AjaxResult Calculate(String rptNo) {
+                return AjaxResult.error("案件：" + rptNo + "，理算计算失败，原因：" + throwable.getMessage());
             }
         };
     }

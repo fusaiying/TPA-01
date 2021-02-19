@@ -258,13 +258,6 @@
             this.loading = false
           })
         }
-        //获取公共池
-        getPublicList(this.searchForm).then(res => {
-          this.publicData = res.rows
-          this.publicTotal = res.total
-        }).finally(() => {
-          this.loading = false
-        })
       },
       searchTable() {
         const params1 = {
@@ -300,8 +293,8 @@
       },
       search() {
         const query = {
-          pageNum: this.searchForm.pageNum,
-          pageSize: this.searchForm.pageSize,
+          pageNum:1,
+          pageSize: 10,
           submitstartdate: undefined,
           submitenddate: undefined,
           updatestartTime: undefined,

@@ -110,7 +110,8 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="是否定点医院：" prop="isDesHospital">
-            <el-select v-model="baseForm.isDesHospital" disabled clearable  filterable remote class="item-width" placeholder="请输入">
+            <el-select v-model="baseForm.isDesHospital" disabled clearable filterable remote class="item-width"
+                       placeholder="请输入">
               <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
             </el-select>
@@ -343,7 +344,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="selfAmount" align="center" header-align="center" label="自费金额" min-width="2"
-                           show-overflow-tooltip >
+                           show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.selfAmount'"
                             :rules="accountRules.selfAmount" style="display: inline-flex !important;">
@@ -516,7 +517,7 @@
           }
         })
         if (newVal !== null && newVal !== undefined) {
-          this.baseForm.billCurrency=newVal.currency
+          this.baseForm.billCurrency = newVal.currency
         }
       },
     },
@@ -581,9 +582,12 @@
             }
             if (dataSum <= parseFloat(this.baseForm.billAmount)) {
               if (this.baseForm.isShareAp === '01') {
-                for (let i = 0; i < this.costForm.costData.length; i++) {
-                  this.costForm.costData[i].advancePayment = (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)
+                let paymentSum = 0
+                for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                  this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+                  paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
                 }
+                this.costForm.costData[this.costForm.costData.length - 1].advancePayment=((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)- paymentSum).toFixed(2)
               }
               if (this.baseForm.isShareDisAmount === '01') {
                 let hosDiscountAmountNum = 0
@@ -704,10 +708,10 @@
       }
       const checkOne = (rule, value, callback) => {
         if (!value) {
-          if ((this.baseForm.invoiceNo==null || this.baseForm.invoiceNo==='' || this.baseForm.invoiceNo===undefined) &&
-            (this.baseForm.billNo==null || this.baseForm.billNo==='' || this.baseForm.billNo===undefined)) {
+          if ((this.baseForm.invoiceNo == null || this.baseForm.invoiceNo === '' || this.baseForm.invoiceNo === undefined) &&
+            (this.baseForm.billNo == null || this.baseForm.billNo === '' || this.baseForm.billNo === undefined)) {
             callback(new Error("发票号与账单号必录其一！"));
-          }else {
+          } else {
             callback()
           }
         } else {
@@ -794,37 +798,37 @@
           clinicalDiagnosis: undefined,
         },
         baseFormRule: {
-          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: 'blur'}],
-          billCurrency: [{required: true, message: '账户币种不能为空', trigger: 'blur'}],
-          billAmount: [{validator: checkBillAmount, required: true, trigger: 'blur'}],
-          treatmentType: [{required: true, message: '治疗类型不能为空', trigger: 'blur'}],
-          treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: 'blur'}],
-          treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: 'blur'}],
-          treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: 'blur'}],
-          ssAdvancePayment: [{validator: checkNum, trigger: 'blur'}],
-          tpAdvancePayment: [{validator: checkNum, trigger: 'blur'}],
-          isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: 'blur'}],
-          transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: 'blur'}],
-          copay: [{validator: checkNum, trigger: 'blur'}],
-          isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: 'blur'}],
+          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur', 'change']}],
+          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur', 'change']}],
+          billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur', 'change']}],
+          treatmentType: [{required: true, message: '治疗类型不能为空', trigger: ['blur', 'change']}],
+          treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur', 'change']}],
+          treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: ['blur', 'change']}],
+          treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: ['blur', 'change']}],
+          ssAdvancePayment: [{validator: checkNum, trigger: ['blur', 'change']}],
+          tpAdvancePayment: [{validator: checkNum, trigger: ['blur', 'change']}],
+          isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: ['blur', 'change']}],
+          transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: ['blur', 'change']}],
+          copay: [{validator: checkNum, trigger: ['blur', 'change']}],
+          isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
           hosDiscountAmount: [{validator: checkNum, trigger: 'blur'}],
-          isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: 'blur'}],
-          icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: 'blur'}],
-          clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: 'blur'}],
-          invoiceNo:[{validator: checkOne, trigger: 'blur'}],
-          billNo:[{validator: checkOne,trigger: 'blur'}],
+          isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: ['blur', 'change']}],
+          icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
+          clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: ['blur', 'change']}],
+          invoiceNo: [{validator: checkOne, trigger: ['blur', 'change']}],
+          billNo: [{validator: checkOne, trigger: ['blur', 'change']}],
         },
         accountRules: {
-          feeItemCode: [{required: true, message: '请选择费用项名称', trigger: 'blur'}],
-          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: 'blur'}],
-          selfAmount: [{validator: checkNums, trigger: 'blur'}],
-          partSelfAmount: [{validator: checkNums, trigger: 'blur'}],
-          unableAmount: [{validator: checkNums, trigger: 'blur'}],
-          advancePayment: [{validator: checkNums, trigger: 'blur'}],
-          visNumber: [{validator: checkVisNumber, trigger: 'blur'}],
-          remark: [{validator: checkRemark, trigger: 'blur'}],
-          hosDiscountAmount: [{validator: checkNums, trigger: 'blur'}],
-          billDetailCopay: [{validator: checkNums, trigger: 'blur'}],
+          feeItemCode: [{required: true, message: '请选择费用项名称', trigger: ['blur', 'change']}],
+          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur', 'change']}],
+          selfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
+          partSelfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
+          unableAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
+          advancePayment: [{validator: checkNums, trigger: ['blur', 'change']}],
+          visNumber: [{validator: checkVisNumber, trigger: ['blur', 'change']}],
+          remark: [{validator: checkRemark, trigger: ['blur', 'change']}],
+          hosDiscountAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
+          billDetailCopay: [{validator: checkNums, trigger: ['blur', 'change']}],
         },
         dictList: [],
         departmentOptions: [],
@@ -953,7 +957,7 @@
             this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
 
             this.costForm.costData = res.data.billDetail
-            if (this.baseForm.icdCodes===null || this.baseForm.icdCodes.length === 0) {
+            if (this.baseForm.icdCodes === null || this.baseForm.icdCodes.length === 0) {
               this.baseForm.icdCodes = [{
                 icdCode: ''
               }]
@@ -1085,7 +1089,62 @@
       },
       getCostData(row, expandedRows) {
         if (expandedRows.length > 0) {
-          this.addOrEdit('edit',row)
+          editBill(row.billId).then(res => {
+            if (res != null && res.code === 200) {
+              this.baseForm.billId = res.data.bill.billId
+              this.baseForm.rptNo = res.data.bill.rptNo
+              this.baseForm.hospitalCode = res.data.bill.hospitalCode
+              this.baseForm.department = res.data.bill.department
+              this.baseForm.isDesHospital = res.data.bill.isDesHospital
+              this.baseForm.accType = res.data.bill.accType
+              this.baseForm.billCurrency = res.data.bill.billCurrency
+              this.baseForm.billAmount = res.data.bill.billAmount
+              this.baseForm.visNumber = res.data.bill.visNumber
+              this.baseForm.treatmentType = res.data.bill.treatmentType
+              this.baseForm.treatmentStartDate = res.data.bill.treatmentStartDate
+              this.baseForm.treatmentEndDate = res.data.bill.treatmentEndDate
+              this.baseForm.treatmentDays = res.data.bill.treatmentDays
+              this.baseForm.invoiceNo = res.data.bill.invoiceNo
+              this.baseForm.billNo = res.data.bill.billNo
+              this.baseForm.billType = res.data.bill.billType
+              this.baseForm.ssAdvancePayment = res.data.bill.ssAdvancePayment
+              this.baseForm.tpAdvancePayment = res.data.bill.tpAdvancePayment
+              this.baseForm.isShareAp = res.data.bill.isShareAp
+              this.baseForm.transSerialNo = res.data.bill.transSerialNo
+              this.baseForm.transSerialCopay = res.data.bill.transSerialCopay
+              this.baseForm.copay = res.data.bill.copay
+              this.baseForm.isShareCopay = res.data.bill.isShareCopay
+              this.baseForm.hosDiscountAmount = res.data.bill.hosDiscountAmount
+              this.baseForm.isShareDisAmount = res.data.bill.isShareDisAmount
+              this.baseForm.icdCode = res.data.bill.icdCode
+              this.baseForm.icdCodes = res.data.bill.icdCodes
+              this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
+              this.costForm.costData = res.data.billDetail
+              if (this.baseForm.icdCodes === null || this.baseForm.icdCodes.length === 0) {
+                this.baseForm.icdCodes = [{
+                  icdCode: ''
+                }]
+              }
+              if (res.data.bill.hospitalCode != null && res.data.bill.hospitalCode !== '') {
+                let data = {
+                  providerCode: res.data.bill.hospitalCode
+                }
+                getHospitalInfo(data).then(res => {
+                  if (res != null && res !== '') {
+                    if (res.rows[0].enname1 != null && res.rows[0].enname1 !== '') {
+                      this.baseForm.hospitalName = res.rows[0].chname1 + '|' + res.rows[0].enname1
+                    } else {
+                      this.baseForm.hospitalName = res.rows[0].chname1
+                    }
+                    this.baseForm.firstAttribute = res.rows[0].firstAttribute
+                    this.baseForm.secondAttribute = res.rows[0].secondAttribute
+                    this.baseForm.isDesHospital = res.rows[0].flag
+                  }
+                })
+              }
+            }
+          }).catch(res => {
+          })
           this.isFormShow = false
           this.isCostShow = true
         } else {
@@ -1134,7 +1193,7 @@
                         showClose: true
                       })
                       this.isBillInfoSave = true
-                      if (this.node==='calculateReview'){
+                      if (this.node === 'calculateReview') {
                         this.$emit("refresh-item", 'calculate')
                       }
 
@@ -1238,6 +1297,15 @@
         } else {
           this.baseForm.hospitalName = val.chname1
         }
+        let data = {
+          codeType: 'YYBZ',
+          originalCode: val.currency,
+        }
+        getInfoBaseCodeMappingNew(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.baseForm.billCurrency = res.data.targetCode
+          }
+        })
         this.baseForm.firstAttribute = val.firstAttribute
         this.baseForm.secondAttribute = val.secondAttribute
         this.baseForm.isDesHospital = val.flag
@@ -1259,14 +1327,14 @@
           return str
         }
       },
-      getNo(row){
-        let strNo=''
-        if (row.billNo!==null && row.billNo!=='' && row.invoiceNo!==null && row.invoiceNo!==''){
-          strNo=row.billNo+'|'+row.invoiceNo
-        }else if (row.billNo!==null && row.billNo!=='' && (row.invoiceNo==null || row.invoiceNo==='')){
-          strNo=row.billNo
-        }else if ((row.billNo==null || row.billNo==='') && row.invoiceNo!==null && row.invoiceNo!==''){
-          strNo=row.invoiceNo
+      getNo(row) {
+        let strNo = ''
+        if (row.billNo !== null && row.billNo !== '' && row.invoiceNo !== null && row.invoiceNo !== '') {
+          strNo = row.billNo + '|' + row.invoiceNo
+        } else if (row.billNo !== null && row.billNo !== '' && (row.invoiceNo == null || row.invoiceNo === '')) {
+          strNo = row.billNo
+        } else if ((row.billNo == null || row.billNo === '') && row.invoiceNo !== null && row.invoiceNo !== '') {
+          strNo = row.invoiceNo
         }
         return strNo
       }

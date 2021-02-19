@@ -64,16 +64,27 @@
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
-      <el-pagination
+<!--      <pagination
         v-show="activeName==='01'?pendingTotal >0: completedTotal>0"
         :total="activeName==='01'?pendingTotal: completedTotal"
-        :current-page="activeName==='01'?pendPageInfo.page:completePageInfo.page"
-        :page-size="activeName==='01'?pendPageInfo.pageSize:completePageInfo.pageSize"
-        :page-sizes="[5,10, 20, 30, 50,100]"
-        style="margin-top: 8px; text-align: right;"
-        layout="prev, pager, next, sizes"
-        @size-change="sizeChange"
-        @current-change="pageChange"/>
+        :page.sync="activeName==='01'?pendPageInfo.pageNum:completePageInfo.pageNum"
+        :limit.sync="activeName==='01'?pendPageInfo.pageSize:completePageInfo.pageSize"/>-->
+      <pagination
+        v-if="activeName==='01'"
+        v-show="pendingTotal>0"
+        :total="pendingTotal"
+        :page.sync="pendPageInfo.pageNum"
+        :limit.sync="pendPageInfo.pageSize"
+        @pagination="handleClick"
+      />
+      <pagination
+        v-if="activeName==='03'"
+        v-show="completedTotal>0"
+        :total="completedTotal"
+        :page.sync="pendPageInfo.pageNum"
+        :limit.sync="pendPageInfo.pageSize"
+        @pagination="handleClick"
+      />
     </el-card>
   </div>
 </template>
@@ -110,12 +121,12 @@ export default {
       completedTotal: 0,
 
       pendPageInfo: {
-        page: 1,
+        pageNum:1,
         pageSize: 10
       },
 
       completePageInfo: {
-        page: 1,
+        pageNum:1,
         pageSize: 10
       },
 
@@ -139,7 +150,6 @@ export default {
     });
   },
   created() {
-   // this.searchHandle()
     this.getAllData();
   },
   watch: {
@@ -184,7 +194,7 @@ export default {
 
       this.searchLoad = true;
       const pendParams = {};
-      pendParams.pageNum = this.pendPageInfo.page;
+      pendParams.pageNum = this.pendPageInfo.pageNum;
       pendParams.pageSize = this.pendPageInfo.pageSize;
       pendParams.rptNo = rptNo;
       pendParams.source = source;
@@ -193,7 +203,6 @@ export default {
       pendParams.createBy = createBy;
 
       PendingData(pendParams).then(res => {
-        console.log(res);
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
@@ -220,7 +229,7 @@ export default {
 
 
       const processeParams = {};
-      processeParams.pageNum = this.completePageInfo.page;
+      processeParams.pageNum = this.completePageInfo.pageNum;
       processeParams.pageSize = this.completePageInfo.pageSize;
       processeParams.rptNo = rptNo;
       processeParams.source = source;
@@ -249,24 +258,27 @@ export default {
         this.getProcessedData()
       }
     },
-    sizeChange(val) {
-      if (this.activeName === '01') {
-        this.pendPageInfo.pageSize = val
-        this.getPendingData()
-      } else {
-        this.completePageInfo.pageSize = val
-        this.getProcessedData()
-      }
-    },
-    pageChange(val) {
-      if (this.activeName === '01') {
-        this.pendPageInfo.page = val;
-        this.getPendingData()
-      } else {
-        this.completePageInfo.page = val;
-        this.getProcessedData()
-      }
-    },
+    // sizeChange(val) {
+    //   if (this.activeName === '01') {
+    //     this.pendPageInfo.pageSize = val
+    //     this.getPendingData()
+    //   } else {
+    //     this.completePageInfo.pageSize = val
+    //     this.getProcessedData()
+    //   }
+    // },
+    // pageChange(val) {
+    //   if(val == undefined || val == null) {
+    //     val = 1;
+    //   }
+    //   if (this.activeName === '01') {
+    //     this.pendPageInfo.pageNum = val;
+    //     this.getPendingData()
+    //   } else {
+    //     this.completePageInfo.pageNum = val;
+    //     this.getProcessedData()
+    //   }
+    // },
 
     refreshTable() {
       this.searchHandle()

@@ -18,7 +18,7 @@
     <el-table-column align="center" prop="source"  :formatter="getDeliverySourceName" label="交单来源" show-overflow-tooltip/>
     <el-table-column align="center" prop="createBy" label="提交用户" show-overflow-tooltip/>
     <el-table-column align="center" label="操作">
-      <template slot-scope="scope"> <!-- && scope.row.negotiationmode == '02' -->
+      <template slot-scope="scope">
         <el-button v-if="status === '01' " size="small" type="text" @click="editHandle(scope.row,'handle')">处理</el-button>
         <el-button v-else size="small" type="text" @click="editHandle(scope.row,'show')">查看</el-button>
       </template>
@@ -27,8 +27,7 @@
 </template>
 
 <script>
-/*import { changeDate } from '@/utils/commenMethods.js'*/
-import {encrypt} from "@/utils/rsaEncrypt"
+
 export default {
   dicts: ['negotiation_type'],
   props: {
@@ -41,21 +40,21 @@ export default {
       }
     },
     problemTypes: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }
     },
 
     claimStatusSelect: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }
     },
 
     deliverySource: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }
@@ -78,26 +77,13 @@ export default {
 
     // 处理跳转
     editHandle(row, type) {
+      console.log(row)
       this.$router.push({
         path: '/claims-handle/pbClaimDetail',
-        query: {type:type,rptNo: row.rptNo}
+        query: {type:type,rptNo: row.rptNo,problemId:row.problemId}
 
       })
     },
-    detailHandle(row, status) {
-      // let data = encodeURI(
-      //   JSON.stringify({
-      //     claimno: encrypt(row.claimno),
-      //     status,
-      //     node: 'review'
-      //   })
-      // )
-      // const newpage = this.$router.resolve({
-      //   name: 'casedetail',
-      //   params:{},
-      //   query:{ data }
-      // })
-    }
   }
 }
 </script>

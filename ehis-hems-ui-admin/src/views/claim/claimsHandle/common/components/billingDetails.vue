@@ -1003,7 +1003,9 @@
           remark: '',
           isShow: true
         }
+
         this.costForm.costData.push(field)
+        console.log(this.costForm.costData);
       },
       deleteRow(index, row) {
         this.$confirm(`是否确定删除?`, '提示', {
@@ -1282,12 +1284,14 @@
       },
       selectFee(datas, value) {
         var actions = [];
-        Object.keys(datas).some((key) => {
-          if (datas[key].feeitemcode === ('' + value)) {
-            actions.push(datas[key].feeitemname);
-            return true;
-          }
-        })
+        if (datas!==null && datas!==undefined){
+          Object.keys(datas).some((key) => {
+            if (datas[key].feeitemCode === ('' + value)) {
+              actions.push(datas[key].feeitemName);
+              return true;
+            }
+          })
+        }
         return actions.join('');
       },
       getPropData(val) {

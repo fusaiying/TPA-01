@@ -292,7 +292,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
-
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
         if (claimCaseProblems.size() != 0) {
             for (ClaimCaseProblem claimCaseProblemsOne : claimCaseProblems) {

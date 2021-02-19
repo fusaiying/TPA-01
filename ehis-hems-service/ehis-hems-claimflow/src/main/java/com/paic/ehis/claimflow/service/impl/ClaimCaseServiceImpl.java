@@ -359,7 +359,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseAccept.setRptNo(claimCase.getRptNo());
         claimCaseAccept.setMaterialCompleteDate(DateUtils.getNowDate());
         claimCaseAcceptMapper.updateClaimCaseAccept(claimCaseAccept);
-
+/*
         //将之前的案件流程表变为历史节点
         List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCase.getRptNo());
         if (claimCaseRecordsList.size() != 0) {
@@ -372,6 +372,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
         }
+ */
         //完成案件操作记录表的记录
         claimCaseRecord1.setRptNo(claimCase.getRptNo());
 //        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
@@ -379,11 +380,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord1.setStatus("Y");
         claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
 
         Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
 
         ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
-        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+//        claimCaseRecord2.setRptNo(claimCase.getRptNo());
         claimCaseRecord2.setHistoryFlag("Y");
         claimCaseRecord2.setRecordId(s);
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);

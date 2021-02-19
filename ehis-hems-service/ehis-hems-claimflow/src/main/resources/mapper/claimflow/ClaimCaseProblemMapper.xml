@@ -69,6 +69,7 @@
         AND claim_case_problem.rpt_no = claim_case_record.rpt_no
         AND claim_batch.batch_no = claim_case.batch_no
         AND claim_case_record.history_flag = 'Y'
+        AND claim_case_problem.is_history='Y'
         and claim_case_problem.status = 'Y'
         AND claim_batch.STATUS = 'Y'
         AND claim_case_insured.STATUS = 'Y'
@@ -117,6 +118,7 @@
         AND claim_case_problem.rpt_no = claim_case_record.rpt_no
         AND claim_batch.batch_no = claim_case.batch_no
         AND claim_case_record.history_flag = 'N'
+        AND claim_case_problem.is_history='N'
         AND claim_case.case_status = '30'
         and claim_case_problem.status = 'Y'
         AND claim_batch.STATUS = 'Y'

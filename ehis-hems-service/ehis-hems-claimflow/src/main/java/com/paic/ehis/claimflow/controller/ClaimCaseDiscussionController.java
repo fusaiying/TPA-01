@@ -145,11 +145,7 @@ public class ClaimCaseDiscussionController extends BaseController
    @PutMapping("/updatecasediscussionStatus")
     public AjaxResult updatecasediscussionStatus(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
     {
-        String repNo = claimCaseDiscussion.getRptNo();
-        claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion) ; //处理意见
-        claimCaseDiscussionService.updatecasediscussionStatus(repNo);  // update to    case_status  32调查
-        int result = claimCaseRecordService.updatehistoryFlag(repNo);// history_flag = 'Y'
-        return toAjax(result);
+        return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
     }
 
     /*查询基本信息表*/

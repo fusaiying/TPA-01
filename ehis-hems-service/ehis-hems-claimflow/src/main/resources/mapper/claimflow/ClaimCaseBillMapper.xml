@@ -148,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectClaimCaseBillByIdOne" parameterType="String" resultMap="ClaimCaseBillResult">
         select  rpt_no, concat(bill_currency , bill_amount) as paymentAmount from claim_case_bill
-        where rpt_no = #{rptNo}
+        where rpt_no = #{rptNo} and status='Y'
     </select>
         
     <insert id="insertClaimCaseBill" parameterType="ClaimCaseBill" useGeneratedKeys="true" keyProperty="billId">

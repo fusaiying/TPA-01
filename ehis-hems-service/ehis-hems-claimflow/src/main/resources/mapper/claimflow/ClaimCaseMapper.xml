@@ -646,13 +646,15 @@
         TIMESTAMPDIFF( MINUTE, b.create_time, now( ) ) % 60,
         '分'
         ) stay_time
-        from claim_case a LEFT JOIN claim_case_insured c on a.rpt_no = c.rpt_no and c.status = 'Y'
-        LEFT JOIN claim_case_record b on b.rpt_no = a.rpt_no and b.history_flag = 'N' and b.status = 'Y'
+        from claim_case a LEFT JOIN claim_case_insured c on a.rpt_no = c.rpt_no
+        LEFT JOIN claim_case_record b on b.rpt_no = a.rpt_no
         where a.case_status = #{caseStatus} and a.status = #{status} and a.update_by = #{updateBy}
+        and c.status = 'Y' and b.history_flag = 'N' and b.status = 'Y'
         <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
     </select>
+
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
@@ -680,7 +682,7 @@
 
     <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         SELECT
-            a.create_by,
+            a.create_by submit_user,
             a.rpt_no,
             b.batch_no,
             b.case_status,

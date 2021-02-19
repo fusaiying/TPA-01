@@ -19,7 +19,7 @@
                   style="width: 100%;">
           <el-table-column prop="rptNo" label="报案号" align="center"/>
           <el-table-column prop="caseStatus" label="案件状态" align="center">
-            <template slot-scope="props">
+            <template slot-scope="scope">
               <span>{{selectDictLabel( claim_statusOptions, scope.row.caseStatus)}}</span>
             </template>
           </el-table-column><!--status待确认-->

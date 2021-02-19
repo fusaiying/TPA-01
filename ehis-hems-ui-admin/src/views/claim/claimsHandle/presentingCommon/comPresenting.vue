@@ -514,7 +514,7 @@
               if (res.data.length < 1) {
                 this.isShowFooter = false
               } else {
-                this.recordForm = res.rows
+                this.recordForm = res.data[0]
                 this.isShowFooter = true
               }
             } else {

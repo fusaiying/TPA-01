@@ -418,6 +418,10 @@
           }
         });
       },
+      //获取领款人信息数据
+      getPayeeInfoData(){
+        return this.$refs.payeeInfoForm.tableData
+      },
       //录入完毕
       changeBillStatus() {
         let isBillInfoSave = this.$refs.billingInfoForm.isBillInfoSave

@@ -689,8 +689,6 @@
               })
             }
             const subFormSearch = JSON.parse(JSON.stringify(this.baseForm))
-
-
             subFormSearch.province = this.region[0]
             subFormSearch.city = this.region[1]
             subFormSearch.district = this.region[2]
@@ -730,7 +728,6 @@
 
 
         })
-
 
       },
       insuredInfoSave() {
@@ -826,6 +823,39 @@
       },
       getLabel_type(value) {
         return this.selectDictLabel(this.label_typeOptions, value)
+      },
+      //校验
+      validataForm(){
+        let flag
+        let savefalg
+          let list = this.$parent.getPayeeInfoData()
+         let obj =list.find(item =>{
+          return item.relationIns==1
+        })
+        //领款人中与被保人关系有本人
+        if(obj!=null && obj!=''){
+          flag=true
+        }
+        else {
+          flag=false
+        }
+        if(flag){
+          if(this.baseForm.nationality && this.baseForm.occupation){
+            savefalg=true
+          }
+          else {
+            this.$set(this.tableFormRules,'nationality',{required: true, message: '国籍不能为空!', trigger: ['change','blur']})
+            this.$set(this.tableFormRules,'occupation',{required: true, message: '职业不能为空!', trigger: ['change','blur']})
+
+            savefalg=false
+          }
+
+        }
+        else {
+          savefalg=true
+        }
+        console.log(savefalg)
+        return savefalg
       }
     }
   }

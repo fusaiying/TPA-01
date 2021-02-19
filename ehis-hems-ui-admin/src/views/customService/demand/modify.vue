@@ -286,7 +286,8 @@
         //回显服务项目
         //需要填入数据的部分
         workPoolData:{
-
+          callPerson:{},
+          contactsPerson:{},//联系人
           workOrderNo:"",//工单号
           channelCode:"",//受理渠道
           callCenterId:"",//电话中心业务流水号
@@ -431,6 +432,8 @@
       close(){
 
       },
+      //反显结论信息
+
       //反显信息需求
       searchHandle() {
         if (this.queryParams.status=="01") {
@@ -466,10 +469,6 @@
                 editRemark: ""
               };
               workPoolData.editInfo=editInfo
-              //修改原因
-            //  workPoolData.editInfo.editReason = "";
-              //修改说明
-            //  workPoolData.editInfo.editRemark = "";
               workPoolData.callCenterId=""
               workPoolData.officeCountry=""
               workPoolData.officeNumber=""
@@ -515,24 +514,24 @@
       handleSelectionChange(val) {
         this.dataonLineListSelections = val
       },
-        //提交页面数据
-        submit(){
-          let insert=this.workPoolData
-          modifySubmit(insert).then(res => {
-            if (res != null && res.code === 200) {
-              console.log("insert",insert)
-              alert("修改成功")
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "失败！"
-                )
-              }
-            }
-          }).catch(res => {
-
-          })
-
-        },
+        // //提交页面数据
+        // submit(){
+        //   let insert=this.workPoolData
+        //   modifySubmit(insert).then(res => {
+        //     if (res != null && res.code === 200) {
+        //       console.log("insert",insert)
+        //       alert("修改成功")
+        //       if (res.rows.length <= 0) {
+        //         return this.$message.warning(
+        //           "失败！"
+        //         )
+        //       }
+        //     }
+        //   }).catch(res => {
+        //
+        //   })
+        //
+        // },
       //关闭按钮
       hiddenShow:function () {
         // 返回上级路由并关闭当前路由

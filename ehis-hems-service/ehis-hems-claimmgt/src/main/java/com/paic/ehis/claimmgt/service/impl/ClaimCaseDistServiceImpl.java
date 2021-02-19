@@ -150,7 +150,7 @@ public class ClaimCaseDistServiceImpl implements IClaimCaseDistService
         claimCaseDist.setUpdateBy(username);
         claimCaseDist.setUpdateTime(nowDate);
         claimCaseDist.setStatus("Y");
-        claimCaseDist.setRoleId(claimCaseDist.getDistId());
+        claimCaseDist.setRoleId(claimCaseDist.getRoleId());
         return   claimCaseDistMapper.updateClaimCaseDistOne(claimCaseDist);
     }
     /**

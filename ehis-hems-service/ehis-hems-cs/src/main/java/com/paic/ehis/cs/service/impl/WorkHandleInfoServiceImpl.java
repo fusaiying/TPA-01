@@ -149,7 +149,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-            flowLogMapper.updateFlowLog(flowLog);
+            flowLogMapper.insertFlowLog(flowLog);
 
             //主表生成数据
             WorkHandleInfo workHandleInfo=new WorkHandleInfo();

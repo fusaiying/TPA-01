@@ -173,7 +173,7 @@
         and claim_case_discussion.rpt_no = claim_case.rpt_no
         and claim_case_discussion.rpt_no = claim_case_record.rpt_no
         and claim_case.batch_no = claim_batch.batch_no
-        AND claim_case_record.history_flag = 'N'
+        AND claim_case_discussion.is_history = 'N'
         AND claim_case.case_status = '31'
         and claim_case_discussion.status = 'Y'
         AND claim_batch.STATUS = 'Y'
@@ -208,7 +208,7 @@
             and claim_case_discussion.rpt_no = claim_case.rpt_no
             and claim_case_discussion.rpt_no = claim_case_record.rpt_no
             and claim_case.batch_no = claim_batch.batch_no
-            AND claim_case_record.history_flag = 'Y'
+            AND claim_case_discussion.is_history = 'Y'
             and claim_case_discussion.status = 'Y'
             AND claim_batch.STATUS = 'Y'
             AND claim_case_insured.STATUS = 'Y'

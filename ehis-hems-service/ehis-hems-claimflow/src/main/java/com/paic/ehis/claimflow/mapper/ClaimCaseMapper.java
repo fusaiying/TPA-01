@@ -197,5 +197,5 @@ public interface ClaimCaseMapper
     ClaimCaseDistVo selectCaseDistNumber(String batchNo);
     ClaimCaseDistVo selectCaseDistNumberOne(String rptNo,String caseStatus);
     /** 见未被使用-flint-List<ClaimCase> */
-    List<ClaimCase> selectCaseOne(ClaimCase claimCase);
+    public List<ProcessingCaseVo> selectCaseOne(ClaimCase claimCase);
 }

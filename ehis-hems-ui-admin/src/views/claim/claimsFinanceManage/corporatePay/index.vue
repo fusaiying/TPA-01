@@ -93,8 +93,10 @@
           highlight-current-row
           tooltip-effect="dark"
           @sort-change="onSortChange"
+          :cell-style="changeCellStyle"
           style=" width: 100%;">
-          <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchNo" label="批次号" show-overflow-tooltip/>
+          <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
+                           prop="batchNo" label="批次号" show-overflow-tooltip/>
           <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel( hospitals, scope.row.hospitalCode)}}</span>
@@ -142,9 +144,10 @@
 
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
-  import {getDept,getDeptById} from '@/api/claim/standingBookSearch'
-  import {initList,list} from '@/api/claim/corporatePay'
+  import {getDept, getDeptById} from '@/api/claim/standingBookSearch'
+  import {initList, list} from '@/api/claim/corporatePay'
   import {getHospitalInfo} from '@/api/claim/handleCom'
+
   let dictss = [{dictType: 'sys_yes_no'},]
   export default {
     data() {
@@ -161,20 +164,20 @@
           pageSize: 10,
           batchNo: '',
           hospitalCode: '',
-          complainStatus:'',
-          caseDate:[],
-          startDate:undefined,
-          endDate:undefined,
-          organCode:undefined,
-          orderByColumn:'',
-          isAsc:'',
+          complainStatus: '',
+          caseDate: [],
+          startDate: undefined,
+          endDate: undefined,
+          organCode: undefined,
+          orderByColumn: '',
+          isAsc: '',
         },
         totalCount: 0,
         dictList: [],
         deptOptions: [],
         hospitalOptions: [],
         sys_yes_noOptions: [],
-        hospitals:[],
+        hospitals: [],
       }
     },
     async mounted() {
@@ -184,7 +187,7 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      let item={
+      let item = {
         pageNum: 1,
         pageSize: 200,
       }
@@ -193,9 +196,9 @@
         this.searchForm.organCode = res.deptId
       }).catch(res => {
       })
-      initList(this.queryParams).then(res=>{
-        if (res!=null && res.code===200){
-          this.tableData=res.rows
+      initList(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.tableData = res.rows
         }
       })
       getHospitalInfo({}).then(res => {
@@ -209,22 +212,22 @@
         this.$refs.searchForm.resetFields()
       },
       search(status) {
-        if (this.searchForm.caseDate!=null && this.searchForm.caseDate.length>0){
-          this.searchForm.startDate=this.searchForm.caseDate[0]
-          this.searchForm.endDate=this.searchForm.caseDate[1]
+        if (this.searchForm.caseDate != null && this.searchForm.caseDate.length > 0) {
+          this.searchForm.startDate = this.searchForm.caseDate[0]
+          this.searchForm.endDate = this.searchForm.caseDate[1]
         }
-        if (status==='tab'){
-          this.searchForm.pageNum=this.queryParams.pageNum
-          this.searchForm.pageSize=this.queryParams.pageSize
-        }else{
-          this.searchForm.pageNum=1
-          this.searchForm.pageSize=10
+        if (status === 'tab') {
+          this.searchForm.pageNum = this.queryParams.pageNum
+          this.searchForm.pageSize = this.queryParams.pageSize
+        } else {
+          this.searchForm.pageNum = 1
+          this.searchForm.pageSize = 10
         }
-        list(this.searchForm).then(res=>{
-          if (res!=null && res.code===200){
-            this.tableData=res.rows
-            this.totalCount=res.total
-            if (res.rows.length<=0){
+        list(this.searchForm).then(res => {
+          if (res != null && res.code === 200) {
+            this.tableData = res.rows
+            this.totalCount = res.total
+            if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
               )
@@ -238,7 +241,7 @@
       startPay(row, status) {
         let data = encodeURI(
           JSON.stringify({
-            batchNo:row.batchNo,
+            batchNo: row.batchNo,
             status,
           })
         )
@@ -260,8 +263,8 @@
         }
       },
       remoteDeptMethod(query) {
-        let data={
-          deptName:query,
+        let data = {
+          deptName: query,
           pageNum: 1,
           pageSize: 200,
         }
@@ -282,19 +285,25 @@
         })
         return actions.join('');
       },
-      onSortChange({ prop, order }) {
-        this.searchForm.orderByColumn=prop
-        if (order==='ascending'){
-          this.searchForm.isAsc='asc'
-        }else if (order==='descending'){
-          this.searchForm.isAsc='desc'
-        }else if (order==null){
-          this.searchForm.orderByColumn=''
-          this.searchForm.isAsc=''
+      onSortChange({prop, order}) {
+        this.searchForm.orderByColumn = prop
+        if (order === 'ascending') {
+          this.searchForm.isAsc = 'asc'
+        } else if (order === 'descending') {
+          this.searchForm.isAsc = 'desc'
+        } else if (order == null) {
+          this.searchForm.orderByColumn = ''
+          this.searchForm.isAsc = ''
         }
         this.search()
-      }
-
+      },
+      changeCellStyle(rows, column, rowIndex, columnIndex) {
+        /* if(rows.row.bussinessStatus != "01"){
+           return 'color: red'  // 修改的样式
+         }else{
+           return ''
+         }*/
+      },
     }
   }
 </script>

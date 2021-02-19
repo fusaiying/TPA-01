@@ -222,7 +222,7 @@
               dialogVisable: false,
               rptNos : '',
               deliverySource:[],
-
+              searchBtn:false,
             }
         },
       mounted(){
@@ -318,6 +318,12 @@
             endTime = submitdate[1];
           }
 
+          if(!this.searchBtn) {
+            let currentDate = new  Date();
+            endTime   = (this.dateFormat('yyyy-MM-dd',currentDate))  +" 23:59:59";
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            startTime = this.dateFormat('yyyy-MM-dd',currentDate);
+          }
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
@@ -345,6 +351,9 @@
           });
         },
         searchByFormParms(){
+          this.searchBtn  = true;
+          this.pageInfo.currentPage = 1;
+          this.pageInfo.pageSize = 10;
           this.gettableData();
         },
         viewStream(row) {

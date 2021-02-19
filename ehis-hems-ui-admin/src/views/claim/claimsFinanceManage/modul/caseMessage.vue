@@ -14,6 +14,7 @@
           size="small"
           highlight-current-row
           tooltip-effect="dark"
+          :cell-style="changeCellStyle"
           style=" width: 100%;">
           <el-table-column align="center" prop="rptNo" label="报案号" show-overflow-tooltip/>
           <el-table-column align="center" prop="treatmentDate" label="就诊日期" show-overflow-tooltip/>
@@ -320,6 +321,13 @@
           })
         }
       },
+      changeCellStyle (rows, column, rowIndex, columnIndex) {
+        /* if(rows.row.bussinessStatus != "01"){
+           return 'color: red'  // 修改的样式
+         }else{
+           return ''
+         }*/
+      }
     }
   }
 </script>

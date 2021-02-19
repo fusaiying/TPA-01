@@ -150,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where rpt_no = #{rptNo}
+        where payee_id = #{payeeId}
     </update>
 
     <delete id="deleteClaimCasePayeeById" parameterType="Long">

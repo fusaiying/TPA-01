@@ -100,7 +100,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 案件信息
      */
     @Override
-    public List<ClaimCase> selectClaimCaseByBatchNo(ClaimCase claimCase) {
+    public List<ProcessingCaseVo> selectClaimCaseByBatchNo(ClaimCase claimCase) {
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());
         return claimCaseMapper.selectCaseOne(claimCase);
     }
@@ -274,7 +274,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 claimCaseRecord1.setHistoryFlag("Y");
                 claimCaseRecord1.setOperation("05");//
-//                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
             }
@@ -290,8 +290,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+        if (s != null) {
+            claimCaseRecord.setOrgRecordId(s);//
+        }
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
+        //将之前的问题件表信息置为无效
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
         if (claimCaseProblems.size() != 0) {
             for (ClaimCaseProblem claimCaseProblemsOne : claimCaseProblems) {
@@ -312,6 +317,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseProblem.setCreateTime(DateUtils.getNowDate());
         claimCaseProblem.setUpdateBy(SecurityUtils.getUsername());
         claimCaseProblem.setUpdateTime(DateUtils.getNowDate());
+
         claimCaseProblemMapper.insertClaimCaseProblem(claimCaseProblem);
 
         return claimCaseMapper.updateClaimCase(claimCase);
@@ -325,7 +331,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public int updateCaseAndRecordInfoSuspend(ClaimCase claimCase) {
+    public int  updateCaseAndRecordInfoSuspend(ClaimCase claimCase) {
 
         //判断是否为审核岗退回受理
         // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
@@ -384,14 +390,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
 
         Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
-
-        ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+        if (s != null) {
+            ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
 //        claimCaseRecord2.setRptNo(claimCase.getRptNo());
-        claimCaseRecord2.setHistoryFlag("Y");
-        claimCaseRecord2.setRecordId(s);
-        claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+            claimCaseRecord2.setHistoryFlag("Y");
+            claimCaseRecord2.setRecordId(s);
+            claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
 
-        claimCaseRecord1.setOrgRecordId(s);
+            claimCaseRecord1.setOrgRecordId(s);
+        }
         return claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
     }
 
@@ -438,6 +445,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setStatus("Y");
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+        if (s != null) {
+            claimCaseRecord.setOrgRecordId(s);//
+        }
         claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
 
         return claimCaseMapper.updateClaimCase(claimCase);
@@ -479,17 +490,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public void updateClaimCase(CaseDispatchDTO caseDispatchDTO) {
-       //获取前端传入报案号
-        List<String> rptNo1=caseDispatchDTO.getRptNo();
-        ClaimCase claimCase=new ClaimCase();
+        //获取前端传入报案号
+        List<String> rptNo1 = caseDispatchDTO.getRptNo();
+        ClaimCase claimCase = new ClaimCase();
         //循环遍历  进行案件调度修改操作人
-        for (String rpt:rptNo1){
+        for (String rpt : rptNo1) {
             claimCase.setRptNo(rpt);
-            claimCase.setUpdateBy(caseDispatchDTO.getUpdateBy());
+            claimCase.setUpdateBy(caseDispatchDTO.getOperator());
             claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimCaseMapper.updateCaseDispatchList(claimCase);
         }
-       // return claimCaseRecordMapper.updateCaseDispatchList();
+        // return claimCaseRecordMapper.updateCaseDispatchList();
     }
 
     //条件理算审核
@@ -939,17 +950,18 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Transactional
     @Override
     public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
-        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(caseInvestigation.getRptNo());
+        ClaimCaseRecord caseRecord = new ClaimCaseRecord();
+        caseRecord.setRptNo(caseInvestigation.getRptNo());
+        caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
+        caseRecord.setHistoryFlag("N");
+        caseRecord.setOperation(ClaimStatus.CASESURVEY.getCode());
+        ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(caseRecord);
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
-        ClaimCaseRecord caseRecord = new ClaimCaseRecord();
-        caseRecord.setRptNo(caseInvestigation.getRptNo());
-        caseRecord.setOperation("32");
-        caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
-        caseRecord.setHistoryFlag("N");
+
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
@@ -957,7 +969,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
         claimCaseInvestigation.setIsHistory("N");
-        claimCaseInvestigation.setInvNo("ZWQR"+ PubFun.createMySqlMaxNoUseCache("Investigation",10,7));
+        claimCaseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
         claimCaseInvestigation.setCreateBy(SecurityUtils.getUsername());
         claimCaseInvestigation.setCreateTime(DateUtils.getNowDate());
         claimCaseInvestigation.setUpdateBy(SecurityUtils.getUsername());
@@ -965,7 +977,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
 
         ClaimCase claimCase = new ClaimCase();
-        claimCase.setCaseStatus("32");
+        claimCase.setCaseStatus(ClaimStatus.CASESURVEY.getCode());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         return claimCaseMapper.updateClaimCase(claimCase);
@@ -1230,9 +1242,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();
         caseRecord.setRptNo(claimCaseCheckDTO.getRptNo());
-        if (claimCaseCheckDTO1.getCaseStatus().equals("08")){
+        if (claimCaseCheckDTO1.getCaseStatus().equals("08")) {
             caseRecord.setOperation("08");
-        }else if (claimCaseCheckDTO1.getCaseStatus().equals("99")){
+        } else if (claimCaseCheckDTO1.getCaseStatus().equals("99")) {
             caseRecord.setOperation("99");
         }
         caseRecord.setStatus("Y");

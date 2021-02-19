@@ -514,7 +514,7 @@
               if (res.data.length < 1) {
                 this.isShowFooter = false
               } else {
-                this.recordForm = res.data[0]
+        /*        this.recordForm = res.data[0]*/
                 this.isShowFooter = true
               }
             } else {
@@ -554,7 +554,7 @@
           this.eShowFooter = true
           selectRecordByBatchno(this.searchForm.batchno).then(res => {
             if (res != null && res.code === 200 && res.data.length > 0) {
-              this.recordForm = res.data[0]
+             /* this.recordForm = res.data[0]*/
               this.isShowFooter = true
             } else {
               this.isShowFooter = false

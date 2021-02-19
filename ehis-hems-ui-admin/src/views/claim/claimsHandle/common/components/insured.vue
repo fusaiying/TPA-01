@@ -846,15 +846,12 @@
           else {
             this.$set(this.tableFormRules,'nationality',{required: true, message: '国籍不能为空!', trigger: ['change','blur']})
             this.$set(this.tableFormRules,'occupation',{required: true, message: '职业不能为空!', trigger: ['change','blur']})
-
             savefalg=false
           }
-
         }
         else {
           savefalg=true
         }
-        console.log(savefalg)
         return savefalg
       }
     }

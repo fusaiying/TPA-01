@@ -59,11 +59,6 @@
         <result property="submitUser" column="submit_user"/>
     </resultMap>
 
-    <resultMap type="com.paic.ehis.claimflow.domain.vo.RptNoVo" id="RptNoVoResult">
-        <result property="rptNo"    column="rpt_no"    />
-        <result property="batchNo"    column="batch_no"    />
-    </resultMap>
-
 
 
     <sql id="selectClaimCaseVo">
@@ -224,15 +219,6 @@
                 <![CDATA[and rpt_no >=  #{rptStartNo} and rpt_no <= #{rptEndNo} ]]>
             </if>
 
-        </where>
-    </select>
-
-    <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
-        select rpt_no,batch_no from claim_case
-        <where>
-            <if test="rptStartNo != null and rptStartNo != '' and rptEndNo != null and rptEndNo != ''">
-                <![CDATA[and rpt_no >=  #{rptStartNo} and rpt_no <= #{rptEndNo} ]]>
-            </if>
         </where>
     </select>
 
@@ -709,18 +695,18 @@
 
     <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         SELECT
-            a.create_by submit_user,
-            a.rpt_no,
-            b.batch_no,
-            b.case_status,
-            c.NAME
+        a.create_by submit_user,
+        a.rpt_no,
+        b.batch_no,
+        b.case_status,
+        c.NAME
         FROM
-            claim_case b
-            LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
-            LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
+        claim_case b
+        LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
+        LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
         WHERE
-            a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
-            and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
+        and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
         <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
@@ -753,67 +739,4 @@
          set case_status ='31'
          where rpt_no = #{rptNo}
      </update>-->
-
-    <!-- 核心案件同步接口-->
-    <select id="selectClaimCaseCore" parameterType="String" resultType="java.lang.Integer">
-        <include refid="selectClaimCaseVo"/>
-        <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-        </where>
-    </select>
-    <!-- 核心案件同步接口-->
-    <select id="selectClaimCaseNewCore" parameterType="String" resultMap="ClaimCaseResult">
-        <include refid="selectClaimCaseVo"/>
-        <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-        </where>
-    </select>
-    <!-- 核心案件同步接口-->
-    <insert id="insertClaimCaseCore" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
-        insert into claim_case
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="rptNo != null">rpt_no,</if>
-            <if test="batchNo != null and batchNo != ''">batch_no,</if>
-            <if test="filingNo != null and filingNo != ''">filing_no,</if>
-            <if test="caseStatus != null and caseStatus != ''">case_status,</if>
-            <if test="pulloutType != null">pullout_type,</if>
-            <if test="pulloutReason != null">pullout_reason,</if>
-            <if test="pulloutDescribe != null">pullout_describe,</if>
-            <if test="endCaseTime != null">end_case_time,</if>
-            <if test="isAppeal != null">is_appeal,</if>
-            <if test="payStatus != null">pay_status,</if>
-            <if test="isFinanceBack != null">is_finance_back,</if>
-            <if test="status != null and status != ''">status,</if>
-            <if test="createBy != null and createBy != ''">create_by,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="updateBy != null">update_by,</if>
-            <if test="updateTime != null">update_time,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="rptNo != null">#{rptNo},</if>
-            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
-            <if test="filingNo != null and filingNo != ''">#{filingNo},</if>
-            <if test="caseStatus != null and caseStatus != ''">#{caseStatus},</if>
-            <if test="pulloutType != null">#{pulloutType},</if>
-            <if test="pulloutReason != null">#{pulloutReason},</if>
-            <if test="pulloutDescribe != null">#{pulloutDescribe},</if>
-            <if test="endCaseTime != null">#{endCaseTime},</if>
-            <if test="isAppeal != null">#{isAppeal},</if>
-            <if test="payStatus != null">#{payStatus},</if>
-            <if test="isFinanceBack != null">#{isFinanceBack},</if>
-            <if test="status != null and status != ''">#{status},</if>
-            <if test="createBy != null and createBy != ''">#{createBy},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateBy != null">#{updateBy},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-        </trim>
-    </insert>
-    <!-- 核心案件同步接口-->
-    <update id="updateClaimCaseCore" parameterType="com.paic.ehis.claimflow.domain.CoreCase">
-        update claim_case
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="status != null and status != ''">status = #{status},</if>
-        </trim>
-        where rpt_no = #{rptNo}
-    </update>
 </mapper>

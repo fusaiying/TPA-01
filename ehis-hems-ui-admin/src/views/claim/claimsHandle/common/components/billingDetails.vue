@@ -794,37 +794,37 @@
           clinicalDiagnosis: undefined,
         },
         baseFormRule: {
-          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: 'blur'}],
-          billCurrency: [{required: true, message: '账户币种不能为空', trigger: 'blur'}],
-          billAmount: [{validator: checkBillAmount, required: true, trigger: 'blur'}],
-          treatmentType: [{required: true, message: '治疗类型不能为空', trigger: 'blur'}],
-          treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: 'blur'}],
-          treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: 'blur'}],
-          treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: 'blur'}],
-          ssAdvancePayment: [{validator: checkNum, trigger: 'blur'}],
-          tpAdvancePayment: [{validator: checkNum, trigger: 'blur'}],
-          isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: 'blur'}],
-          transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: 'blur'}],
-          copay: [{validator: checkNum, trigger: 'blur'}],
-          isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: 'blur'}],
+          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur','change']}],
+          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur','change']}],
+          billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur','change']}],
+          treatmentType: [{required: true, message: '治疗类型不能为空', trigger: ['blur','change']}],
+          treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur','change']}],
+          treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger:['blur','change']}],
+          treatmentDays: [{validator: checkTreatmentDays, required: true, trigger:['blur','change']}],
+          ssAdvancePayment: [{validator: checkNum, trigger:['blur','change']}],
+          tpAdvancePayment: [{validator: checkNum, trigger: ['blur','change']}],
+          isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: ['blur','change']}],
+          transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: ['blur','change']}],
+          copay: [{validator: checkNum, trigger: ['blur','change']}],
+          isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur','change']}],
           hosDiscountAmount: [{validator: checkNum, trigger: 'blur'}],
-          isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: 'blur'}],
-          icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: 'blur'}],
-          clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: 'blur'}],
-          invoiceNo:[{validator: checkOne, trigger: 'blur'}],
-          billNo:[{validator: checkOne,trigger: 'blur'}],
+          isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger:['blur','change']}],
+          icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur','change']}],
+          clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: ['blur','change']}],
+          invoiceNo:[{validator: checkOne, trigger: ['blur','change']}],
+          billNo:[{validator: checkOne,trigger: ['blur','change']}],
         },
         accountRules: {
-          feeItemCode: [{required: true, message: '请选择费用项名称', trigger: 'blur'}],
-          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: 'blur'}],
-          selfAmount: [{validator: checkNums, trigger: 'blur'}],
-          partSelfAmount: [{validator: checkNums, trigger: 'blur'}],
-          unableAmount: [{validator: checkNums, trigger: 'blur'}],
-          advancePayment: [{validator: checkNums, trigger: 'blur'}],
-          visNumber: [{validator: checkVisNumber, trigger: 'blur'}],
-          remark: [{validator: checkRemark, trigger: 'blur'}],
-          hosDiscountAmount: [{validator: checkNums, trigger: 'blur'}],
-          billDetailCopay: [{validator: checkNums, trigger: 'blur'}],
+          feeItemCode: [{required: true, message: '请选择费用项名称', trigger: ['blur','change']}],
+          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur','change']}],
+          selfAmount: [{validator: checkNums, trigger: ['blur','change']}],
+          partSelfAmount: [{validator: checkNums, trigger: ['blur','change']}],
+          unableAmount: [{validator: checkNums, trigger:['blur','change']}],
+          advancePayment: [{validator: checkNums, trigger:['blur','change']}],
+          visNumber: [{validator: checkVisNumber, trigger: ['blur','change']}],
+          remark: [{validator: checkRemark, trigger: ['blur','change']}],
+          hosDiscountAmount: [{validator: checkNums, trigger: ['blur','change']}],
+          billDetailCopay: [{validator: checkNums, trigger: ['blur','change']}],
         },
         dictList: [],
         departmentOptions: [],
@@ -1293,6 +1293,15 @@
         } else {
           this.baseForm.hospitalName = val.chname1
         }
+        let data = {
+          codeType: 'YYBZ',
+          originalCode: val.currency,
+        }
+        getInfoBaseCodeMappingNew(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.baseForm.billCurrency = res.data.targetCode
+          }
+        })
         this.baseForm.firstAttribute = val.firstAttribute
         this.baseForm.secondAttribute = val.secondAttribute
         this.baseForm.isDesHospital = val.flag

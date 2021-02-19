@@ -135,7 +135,32 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     @Override
     public int updateClaimCaseDiscussion(ClaimCaseDiscussion claimCaseDiscussion)
     {
-        claimCaseDiscussion.setUpdateTime(DateUtils.getNowDate());
+        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
+        claimCaseRecord.setRptNo(claimCaseDiscussion.getRptNo());
+        claimCaseRecord.setHistoryFlag("Y");
+        claimCaseRecord.setStatus("Y");
+        claimCaseRecord.setOperation("07");
+        ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
+        ClaimCase claimCase=claimCaseMapper.selectClaimCaseById(claimCaseDiscussion.getRptNo());
+        claimCase.setUpdateBy(caseRecord.getOperator());
+        claimCase.setUpdateTime(DateUtils.getNowDate());
+        claimCase.setCaseStatus("07");
+
+        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoFive(claimCaseDiscussion.getRptNo());
+        record.setOperator(SecurityUtils.getUsername());
+        record.setHistoryFlag("Y");
+        record.setUpdateBy(SecurityUtils.getUsername());
+        record.setUpdateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.updateClaimCaseRecord(record);
+
+        claimCaseRecord.setHistoryFlag("N");
+        claimCaseRecord.setOperation("07");
+        claimCaseRecord.setOrgRecordId(record.getRecordId());
+        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        claimCaseMapper.updateClaimCase(claimCase);
+
         return claimCaseDiscussionMapper.updateClaimCaseDiscussion(claimCaseDiscussion);
     }
 

@@ -82,7 +82,8 @@
        } else {
          this.userForm.status = '02';
        }
-
+     } else {
+       this.$refs["userForm"].clearValidate();
      }
     },
 
@@ -91,7 +92,6 @@
     return {
       editData:{},
       custLevel:[],
-        dialogVisible:false,
         userForm : {
           takeOnId:'',
           userId: '',
@@ -202,22 +202,29 @@
       });
     },
     handleClose() {
+
+      this.userForm.takeOnId = '';
+      this.userForm.userId = '';
+      this.userForm.takeOnUserId = '';
+      this.userForm.status = '01';
+      //this.$refs.userForm.resetFields()
+      this.$refs["userForm"].clearValidate();
       this.dialogVisible = false;
       this.$emit('closeDialogVisable')
     },
-    closeDialog(){
-      this.dialogVisible = false;
-      this.$emit('closeDialogVisable')
-    },
-    changeDialogVisable() {
-      //清空对话框中的数据
-      // this.radio = undefined
-      // this.copyRadio = undefined
-      // this.expands = []
-      // this.$refs.searchForm.resetFields()
-      this.dialogVisible=false;
-      this.$emit('closeDialogVisable')
-    },
+    // closeDialog(){
+    //   this.dialogVisible = false;
+    //   this.$emit('closeDialogVisable')
+    // },
+    // changeDialogVisable() {
+    //   //清空对话框中的数据
+    //   // this.radio = undefined
+    //   // this.copyRadio = undefined
+    //   // this.expands = []
+    //   // this.$refs.searchForm.resetFields()
+    //   this.dialogVisible=false;
+    //   this.$emit('closeDialogVisable')
+    // },
   }
 }
 </script>

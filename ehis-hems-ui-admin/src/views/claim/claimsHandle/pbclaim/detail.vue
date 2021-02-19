@@ -122,6 +122,7 @@
         },
         handleView :false,
         rptNo:'',
+        problemId:'',
         HistoryData :[],
 
         dealInfo: {
@@ -139,7 +140,7 @@
      mounted() {
 
       //性别
-       this.getDicts("sex").then(response => {
+       this.getDicts("rgtSex").then(response => {
          this.gender = response.data;
        });
        //问题件类型
@@ -156,7 +157,7 @@
        });
 
        this.rptNo = this.$route.query.rptNo ;
-
+       this.problemId = this.$route.query.problemId ;
        if (this.$route.query.type != 'show') {
           this.handleView  = true;
           this.getPendingData();
@@ -212,6 +213,7 @@
         }).then(function () {
           const param = {};
           param.rptNo = rptNo;
+          param.problemId = vm.problemId;
           param.conclusionView = conclusionView;
           param.isHistory = 'Y';
           updateProblem(param).then(res => {

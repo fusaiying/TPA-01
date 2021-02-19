@@ -20,6 +20,11 @@ public class ClaimCaseProblem extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /** 批次号 */
+    private String batchNo;
+    /** 案件类型 */
+    private String claimType;
+
     private String name;
 
     /** 问题件ID */
@@ -195,7 +200,21 @@ public class ClaimCaseProblem extends BaseEntity
         return status;
     }
 
+    public String getBatchNo() {
+        return batchNo;
+    }
 
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
+
+    public String getClaimType() {
+        return claimType;
+    }
+
+    public void setClaimType(String claimType) {
+        this.claimType = claimType;
+    }
 
     @Override
     public String toString() {

@@ -10,7 +10,7 @@
     <el-table-column align="center" prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" show-overflow-tooltip/>
     <el-table-column align="center" prop="rptNo" label="报案号" show-overflow-tooltip>
       <template slot-scope="scope">
-        <el-button width="160" size="small" type="text" @click="editHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+        <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
       </template>
     </el-table-column>
     <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
@@ -82,6 +82,25 @@ export default {
         path: '/claims-handle/pbClaimDetail',
         query: {type:type,rptNo: row.rptNo,problemId:row.problemId}
 
+      })
+    },
+    // 处理跳转
+    viewHandle(row, status) {
+      let data = encodeURI(
+        JSON.stringify({
+          batchNo: row.batchNo,
+          claimType: row.claimType,
+          rptNo: row.rptNo,
+          status,
+          node: 'accept',
+          styleFlag: 'list',
+        })
+      )
+      this.$router.push({
+        path: '/claims-handle/accept-process',
+        query: {
+          data
+        }
       })
     },
   }

@@ -21,6 +21,8 @@
         <result property="name"    column="name"    />
         <result property="stopTime"    column="stop_time"    />
         <result property="isHistory"    column="is_history"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="claimType"    column="claim_type"    />
     </resultMap>
 
     <sql id="selectClaimCaseProblemVo">
@@ -52,7 +54,9 @@
         claim_case_problem.problem_view,
         claim_case_problem.conclusion_view,
         claim_batch.source,
-        claim_case.case_status
+        claim_case.case_status,
+        claim_batch.claim_type,
+        claim_batch.batch_no
         FROM
         claim_case_problem,
         claim_case_insured,
@@ -98,7 +102,9 @@
         TIMESTAMPDIFF( MINUTE, claim_case_problem.create_time, now( ) ) % 60,
         '分'
         ) stop_time,
-        claim_case.case_status
+        claim_case.case_status,
+        claim_batch.claim_type,
+        claim_batch.batch_no
         FROM
         claim_case_problem,
         claim_case_insured,

@@ -163,4 +163,5 @@ public class ClaimCasePayeeController extends BaseController {
         }
         return AjaxResult.success(tableDataInfo);
     }
+
 }

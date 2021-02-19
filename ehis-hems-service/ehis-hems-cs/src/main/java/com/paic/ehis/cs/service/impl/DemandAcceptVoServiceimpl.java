@@ -46,10 +46,20 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (DemandAcceptVo demandAcceptVo1:demandAcceptVos){
-            demandAcceptVo1.setCallPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo1.getCallPersonId()));
-            demandAcceptVo1.setContactsPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId()));
-            demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
-            demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
+            PersonInfo callPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getCallPersonId());
+            if (callPerson != null) {
+                demandAcceptVo1.setCallPerson(callPerson);
+            } else {
+                demandAcceptVo1.setCallPerson(new PersonInfo());
+            }
+            PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId());
+            if (contactsPerson != null) {
+                demandAcceptVo1.setContactsPerson(contactsPerson);
+            } else {
+                demandAcceptVo1.setContactsPerson(new PersonInfo());
+            }
+            //   demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
+           // demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo1.getWorkOrderNo());
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();
@@ -78,10 +88,20 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (DemandAcceptVo demandAcceptVo1:demandAcceptVos){
-            demandAcceptVo1.setCallPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo1.getCallPersonId()));
-            demandAcceptVo1.setContactsPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId()));
-            demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
-            demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
+            PersonInfo callPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getCallPersonId());
+            if (callPerson != null) {
+                demandAcceptVo1.setCallPerson(callPerson);
+            } else {
+                demandAcceptVo1.setCallPerson(new PersonInfo());
+            }
+            PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId());
+            if (contactsPerson != null) {
+                demandAcceptVo1.setContactsPerson(contactsPerson);
+            } else {
+                demandAcceptVo1.setContactsPerson(new PersonInfo());
+            }
+        //    demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
+         //   demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo1.getWorkOrderNo());
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();

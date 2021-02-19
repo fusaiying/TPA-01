@@ -6,15 +6,15 @@ import java.util.List;
 
 /**
  * 被保人信息Service接口
- * 
+ *
  * @author sino
  * @date 2021-01-09
  */
-public interface IPolicyInsuredService 
+public interface IPolicyInsuredService
 {
     /**
      * 查询被保人信息
-     * 
+     *
      * @param insuredNo 被保人信息ID
      * @return 被保人信息
      */
@@ -22,7 +22,7 @@ public interface IPolicyInsuredService
 
     /**
      * 查询被保人信息列表
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 被保人信息集合
      */
@@ -30,7 +30,7 @@ public interface IPolicyInsuredService
 
     /**
      * 新增被保人信息
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 结果
      */
@@ -38,7 +38,7 @@ public interface IPolicyInsuredService
 
     /**
      * 修改被保人信息
-     * 
+     *
      * @param policyInsured 被保人信息
      * @return 结果
      */
@@ -46,7 +46,7 @@ public interface IPolicyInsuredService
 
     /**
      * 批量删除被保人信息
-     * 
+     *
      * @param insuredNos 需要删除的被保人信息ID
      * @return 结果
      */
@@ -54,7 +54,7 @@ public interface IPolicyInsuredService
 
     /**
      * 删除被保人信息信息
-     * 
+     *
      * @param insuredNo 被保人信息ID
      * @return 结果
      */

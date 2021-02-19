@@ -65,6 +65,14 @@ public interface ClaimCaseCalMapper
     public int updateClaimCaseCal(ClaimCaseCal claimCaseCal);
 
     /**
+     * 通过报案号修改案件赔付信息
+     *
+     * @param claimCaseCal
+     * @return
+     */
+    public int updateClaimCaseCalByRptNo(ClaimCaseCal claimCaseCal);
+
+    /**
      * 删除案件赔付信息
      * 
      * @param calId 案件赔付信息ID

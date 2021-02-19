@@ -55,6 +55,8 @@ public interface ClaimCaseCalItemMapper
      */
     public int updateClaimCaseCalItem(ClaimCaseCalItem claimCaseCalItem);
 
+    public int updateClaimCaseCalItemByRptNo(ClaimCaseCalItem claimCaseCalItem);
+
     /**
      * 批量修改案件赔付费用项明细
      *

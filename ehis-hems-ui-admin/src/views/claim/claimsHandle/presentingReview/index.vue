@@ -92,7 +92,7 @@
         </span>
       </div>
       <div v-show="divShow">
-        <publicTable ref="publicTables" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
+        <publicTable ref="publicTables" :searchHandle="searchHandleData" :table-data="publicData" :status="activeName"/>
         <!--分页组件-->
         <pagination
           v-show="publicTotal>0"
@@ -234,6 +234,30 @@
         })
 
       },
+      searchHandleData() {
+        const params = {
+          pageNum:1,
+          pageSize:10
+        }
+        getUntreatedList(params).then(res => {
+          this.backData = res.rows
+          this.backTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+        getProcessedList(params).then(res => {
+          this.dealData = res.rows
+          this.dealTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+        getPublicList(this.searchForm).then(res => {
+          this.publicData = res.rows
+          this.publicTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+      },
       searchHandle() {
         const params = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
@@ -258,7 +282,6 @@
             this.loading = false
           })
         }
-        //获取公共池
         getPublicList(this.searchForm).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total
@@ -300,8 +323,8 @@
       },
       search() {
         const query = {
-          pageNum: this.searchForm.pageNum,
-          pageSize: this.searchForm.pageSize,
+          pageNum:1,
+          pageSize: 10,
           submitstartdate: undefined,
           submitenddate: undefined,
           updatestartTime: undefined,

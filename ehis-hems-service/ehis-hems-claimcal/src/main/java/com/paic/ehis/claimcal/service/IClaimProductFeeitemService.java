@@ -60,4 +60,12 @@ public interface IClaimProductFeeitemService
      * @return 结果
      */
     public int deleteClaimProductFeeitemById(String feeitemCode);
+
+    /**
+     * 根据保单号查询费用项编码、费用项名称
+     *
+     * @param policys
+     * @return
+     */
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys);
 }

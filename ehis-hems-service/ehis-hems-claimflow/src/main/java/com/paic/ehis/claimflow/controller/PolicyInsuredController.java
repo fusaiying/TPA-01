@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 /**
  * 被保人信息Controller
- * 
+ *
  * @author sino
  * @date 2021-01-09
  */
@@ -90,7 +90,7 @@ public class PolicyInsuredController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:insured:remove')")
     @Log(title = "被保人信息", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{insuredNos}")
+    @DeleteMapping("/{insuredNos}")
     public AjaxResult remove(@PathVariable String[] insuredNos)
     {
         return toAjax(policyInsuredService.deletePolicyInsuredByIds(insuredNos));
@@ -99,7 +99,7 @@ public class PolicyInsuredController extends BaseController
     /**
      * 被保人查询页面
      */
-   // @PreAuthorize("@ss.hasPermi('system:insured:list')")
+    // @PreAuthorize("@ss.hasPermi('system:insured:list')")
     @GetMapping("/selectRecognizee")
     public TableDataInfo selectRecognizee(PolicyInsured policyInsured)
     {

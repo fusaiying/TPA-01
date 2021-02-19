@@ -1,9 +1,11 @@
 package com.paic.ehis.claimflow.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,4 +43,11 @@ public class ProcessingCaseVo implements Serializable {
     /** 停留时长 */
     @Excel(name = "停留时长")
     private String stayTime;
+
+    /** 操作时间 */
+    private String updateBy;
+
+    /** 操作人 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date updateTime;
 }

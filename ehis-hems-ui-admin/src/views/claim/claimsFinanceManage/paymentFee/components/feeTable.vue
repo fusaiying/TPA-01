@@ -23,8 +23,8 @@
     <el-table-column sortable align="center" prop="colDate" label="核销日期" show-overflow-tooltip/>
     <el-table-column align="center" label="操作">
       <template slot-scope="scope">
-        <el-button v-if="scope.row.settleStatus != '02'" size="small" type="text" @click="viewDetail(scope.row,'show')">查看</el-button>
-        <el-button v-if="scope.row.settleStatus == '02'" size="small" type="text" @click="viewDetail(scope.row,'confirm')">确认</el-button>
+        <el-button size="small" type="text" @click="viewDetail(scope.row,'show')">查看</el-button>
+        <el-button v-if="scope.row.settleStatus == '01'" size="small" type="text" @click="viewDetail(scope.row,'confirm')">确认</el-button>
         <el-button v-if="scope.row.settleStatus == '01'" size="small" type="text" @click="delFun(scope.row)">删除</el-button>
       </template>
     </el-table-column>
@@ -118,7 +118,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.settleTaskNos = (selection.map(item => item.settleTaskNo)); //rptNo
+      this.settleTaskNos = (selection.map(item => item.settleTaskNo));
+      this.$emit('checkBoxVue',this.settleTaskNos);
+
       // this.single = selection.length != 1;
       // this.multiple = !selection.length;
     },

@@ -14,7 +14,7 @@
             <el-col :span="24">
               <el-form-item label="角色：" prop="roleId">
                 <el-select disabled v-model="userForm.roleId"  size="mini" class="item-width" placeholder="请选择">
-                 <!-- <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />-->
+                  <el-option v-for="option in roles" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="操作用户：" prop="userId">
-                <el-select v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择">
+                <el-select v-model="userForm.userId"  size="mini" class="item-width" placeholder="请选择" @change="getRole">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -59,7 +59,7 @@
 
 <script>
 
-  import {editInfo } from '@/api/scheduling/claimApi'
+  import {editInfo ,roleInfo } from '@/api/scheduling/claimApi'
 
   import { getDspatchUser } from '@/api/dispatch/api'
   export default {
@@ -70,6 +70,12 @@
     },
     fixInfo: {
       type: Object,
+      default: function () {
+        return {}
+      }
+    },
+    roleSelects: {
+      type: Array,
       default: function () {
         return {}
       }
@@ -90,11 +96,12 @@
         } else {
           this.userForm.status = '02';
         }
-
+        this.getRole(this.userForm.userId)
       }
-
     },
-
+    roleSelects: function (newVal){
+      this.roles = newVal;
+    },
   },
   data() {
     return {
@@ -114,7 +121,7 @@
           rate: {trigger: ['change'], required: true, message: '分配比例必填'},
           status: {trigger: ['change'], required: true, message: '分配状态必填'},
         },
-      dialogVisible: false,
+      roles:[],
       // 承接人 交接人 users
        users:[],
       // 状态数据字典
@@ -130,8 +137,16 @@
     });
   },
   methods: {
+    getRole(value){
+      roleInfo(value).then(response => {
+        if (response.code == '200') {
+          this.userForm.roleId = response.roleIds.toString();
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    },
     saveInfoFun(){
-
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           const params = this.userForm;

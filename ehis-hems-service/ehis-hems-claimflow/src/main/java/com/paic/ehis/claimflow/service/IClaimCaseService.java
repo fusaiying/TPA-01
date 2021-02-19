@@ -18,7 +18,7 @@ import java.util.List;
 public interface IClaimCaseService
 {
     /**
-     * 查询案件信息 
+     * 查询案件信息
      *
      * @param rptNo 案件信息 ID
      * @return 案件信息
@@ -26,9 +26,17 @@ public interface IClaimCaseService
     public ClaimCase selectClaimCaseById(String rptNo);
 
     /**
+     * 根据批次号  查询案件信息
+     *
+     * @param claimCase 案件信息 ID
+     * @return 案件信息
+     */
+    public List<ProcessingCaseVo> selectClaimCaseByBatchNo(ClaimCase claimCase);
+
+    /**
      * 查询案件信息 列表
      *
-     * @param claimCase 案件信息 
+     * @param claimCase 案件信息
      * @return 案件信息 集合
      */
     public List<ClaimCase> selectClaimCaseList(ClaimCase claimCase);
@@ -55,17 +63,17 @@ public interface IClaimCaseService
     public List<ProcessingCaseVo> selectSuspensionClaimCaseList(ClaimCaseDTO claimCaseDTO);
 
     /**
-     * 新增案件信息 
+     * 新增案件信息
      *
-     * @param claimCase 案件信息 
+     * @param claimCase 案件信息
      * @return 结果
      */
     public int insertClaimCase(ClaimCase claimCase);
 
     /**
-     * 修改案件信息 
+     * 修改案件信息
      *
-     * @param claimCase 案件信息 
+     * @param claimCase 案件信息
      * @return 结果
      */
     public int updateClaimCase(ClaimCase claimCase);
@@ -73,7 +81,7 @@ public interface IClaimCaseService
     public int updatecaseStatus(String repNo);
 
     /**
-     * 批量删除案件信息 
+     * 批量删除案件信息
      *
      * @param rptNos 需要删除的案件信息 ID
      * @return 结果
@@ -129,10 +137,10 @@ public interface IClaimCaseService
 
     /**
      *
-     * @param rptNo
+     * @param caseDispatchDTO
      * @return
      */
-    public int updateClaimCase(String rptNo);
+    public void updateClaimCase(CaseDispatchDTO caseDispatchDTO);
 
 
     /**条件理算审核

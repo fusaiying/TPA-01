@@ -13,7 +13,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="交接人：" prop="userId">
-                <el-select v-model="userForm.userId"  size="mini" placeholder="请选择">
+                <el-select filterable v-model="userForm.userId"  size="mini" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="承接人：" prop="takeOnUserId">
-                <el-select v-model="userForm.takeOnUserId"  size="mini" placeholder="请选择">
+                <el-select filterable v-model="userForm.takeOnUserId"  size="mini" placeholder="请选择">
                   <el-option v-for="option in users" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -82,7 +82,8 @@
        } else {
          this.userForm.status = '02';
        }
-
+     } else {
+       this.$refs["userForm"].clearValidate();
      }
     },
 
@@ -91,7 +92,6 @@
     return {
       editData:{},
       custLevel:[],
-        dialogVisible:false,
         userForm : {
           takeOnId:'',
           userId: '',
@@ -202,22 +202,29 @@
       });
     },
     handleClose() {
+
+      this.userForm.takeOnId = '';
+      this.userForm.userId = '';
+      this.userForm.takeOnUserId = '';
+      this.userForm.status = '01';
+      //this.$refs.userForm.resetFields()
+      this.$refs["userForm"].clearValidate();
       this.dialogVisible = false;
       this.$emit('closeDialogVisable')
     },
-    closeDialog(){
-      this.dialogVisible = false;
-      this.$emit('closeDialogVisable')
-    },
-    changeDialogVisable() {
-      //清空对话框中的数据
-      // this.radio = undefined
-      // this.copyRadio = undefined
-      // this.expands = []
-      // this.$refs.searchForm.resetFields()
-      this.dialogVisible=false;
-      this.$emit('closeDialogVisable')
-    },
+    // closeDialog(){
+    //   this.dialogVisible = false;
+    //   this.$emit('closeDialogVisable')
+    // },
+    // changeDialogVisable() {
+    //   //清空对话框中的数据
+    //   // this.radio = undefined
+    //   // this.copyRadio = undefined
+    //   // this.expands = []
+    //   // this.$refs.searchForm.resetFields()
+    //   this.dialogVisible=false;
+    //   this.$emit('closeDialogVisable')
+    // },
   }
 }
 </script>

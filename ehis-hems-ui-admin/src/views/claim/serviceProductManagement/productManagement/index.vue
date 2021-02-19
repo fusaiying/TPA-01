@@ -268,6 +268,8 @@ export default {
 
     //查询
     searchHandle() {
+      this.params.pageNum=1
+      this.params.pageSize=10
       this.getData()
     },
     getData() {

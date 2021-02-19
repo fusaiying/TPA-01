@@ -68,8 +68,7 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processingList")
     public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
-        claimCaseDTO.setIsAsc("desc");
-        claimCaseDTO.setOrderByColumn("rpt_no");
+        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         startPage(claimCaseDTO);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectProcessingClaimCaseList(claimCaseDTO);
         return getDataTable(processingCaseVos);
@@ -81,9 +80,8 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processedList")
     public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
-        TableSupport.setSort("desc");
-        TableSupport.setOrderByColumn("rpt_no");
-        startSortPage();
+        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        startPage(claimCaseDTO);
         List<ClaimCase> list = claimCaseService.selectProcessedClaimCaseList(claimCaseDTO);
         return getDataTable(list);
     }
@@ -94,9 +92,8 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/suspensionList")
     public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
-        TableSupport.setSort("desc");
-        TableSupport.setOrderByColumn("rpt_no");
-        startSortPage();
+        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        startPage(claimCaseDTO);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
         return getDataTable(processingCaseVos);
     }
@@ -149,7 +146,6 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "悬挂中受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportSuspensionList")
     public void exportSuspensionList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
-        //List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
         List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
         ExcelUtil<ProcessingCaseVo> util = new ExcelUtil<ProcessingCaseVo>(ProcessingCaseVo.class);
         util.exportExcel(response, list, "悬挂中受理案件");
@@ -162,6 +158,15 @@ public class ClaimCaseController extends BaseController {
     @GetMapping(value = "/{rptNo}")
     public AjaxResult getInfo(@PathVariable("rptNo") String rptNo) {
         return AjaxResult.success(claimCaseService.selectClaimCaseById(rptNo));
+    }
+
+    /**
+     * 根据批次号获取案件信息 详细信息
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:query')")
+    @GetMapping("/caseListByBatchNo")
+    public TableDataInfo getCaseListByBatchNo(ClaimCase claimCase) {
+        return getDataTable(claimCaseService.selectClaimCaseByBatchNo(claimCase));
     }
 
     /**
@@ -186,11 +191,12 @@ public class ClaimCaseController extends BaseController {
 
     @PutMapping("/updatecaseStatus")
     public AjaxResult edit(@RequestBody ClaimCaseProblem claimCaseProblem) {
-        String repNo = claimCaseProblem.getRptNo();
+  /*      String repNo = claimCaseProblem.getRptNo();
         claimCaseProblemService.updateClaimCaseProblem(claimCaseProblem);// // //处理意见
         claimCaseService.updatecaseStatus(repNo);  // update to    case_status  31
         int result = claimCaseRecordService.updatehistoryFlag(repNo);// history_flag = 'Y'
-        return toAjax(result);
+        return toAjax(result);*/
+        return toAjax(claimCaseProblemService.updateClaimCaseProblem(claimCaseProblem));
     }
 
     /**
@@ -283,8 +289,8 @@ public class ClaimCaseController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/Dispatch")
-    public AjaxResult Dispatch(@RequestBody String rptNo) {
-        claimCaseService.updateClaimCase(rptNo);
+    public AjaxResult Dispatch(@RequestBody CaseDispatchDTO caseDispatchDTO) {
+        claimCaseService.updateClaimCase(caseDispatchDTO);
         return AjaxResult.success();
     }
 
@@ -471,7 +477,16 @@ public class ClaimCaseController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:case:edit')")
     @GetMapping("/ReviewCompleted")
     public AjaxResult reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
-        return toAjax(claimCaseService.reviewCompletedClaimCase(claimCaseCal));
+
+        ClaimCaseCheckDTO claimCaseCheckDTO = new ClaimCaseCheckDTO();
+        claimCaseCheckDTO.setRptNo(claimCaseCal.getRptNo());
+        claimCaseCheckDTO.setPayAmount(claimCaseCal.getPayAmount());
+        claimCaseCheckDTO.setPayConclusion(claimCaseCal.getPayConclusion());
+        claimCaseCheckDTO.setCaseType(claimCaseCal.getIsAppeal());
+        claimCaseCheckDTO.setAmount(claimCaseCal.getRefusedAmount());
+        //判断案件是否符合流程抽检岗规则
+        //判断后  结案
+        return toAjax(claimCaseService.judgeClaimCaseCheckRule(claimCaseCheckDTO));
     }
 
     /**

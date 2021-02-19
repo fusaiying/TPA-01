@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Date create in 14:13 2021/1/22
  * @Version 1.0
  **/
-@FeignClient(contextId = "PolicyAndRiskService", value = ServiceNameConstants.SYSTEM_SERVICE)
+@FeignClient(contextId = "PolicyAndRiskService", value = ServiceNameConstants.CLAIM_FLOW_SERVICE)
 public interface PolicyAndRiskService {
         /**
          * 通过保单号查询关联险种

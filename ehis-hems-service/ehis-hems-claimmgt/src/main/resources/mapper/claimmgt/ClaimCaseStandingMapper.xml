@@ -110,10 +110,24 @@ WHERE
     </select>
 
     <select id="selectCaseStandingListByBatchNo" parameterType="string" resultMap="ClaimCaseStandingResult">
-        <include refid="selectClaimCaseStandingVo"/>
+        SELECT
+        stand.rpt_no,
+        stand.id_no,
+        stand.NAME,
+        stand.claim_materials,
+        stand.remark,
+        stand.other_info,
+        stand.create_by,
+        stand.create_time,
+        stand.update_by,
+        stand.update_time
+        FROM
+        claim_case_standing stand
+        LEFT JOIN claim_case cases ON stand.rpt_no = cases.rpt_no
+        AND cases.STATUS = 'Y'
         <where>
-            <if test="Batchno != null  and Batchno != ''"> and batch_no = #{Batchno}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="batchNo != null  and batchNo != ''"> and cases.batch_no = #{batchNo}</if>
+            and stand.status = 'Y'
         </where>
     </select>
         
@@ -168,6 +182,7 @@ WHERE
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
         </trim>
+        where rpt_no = #{rptno} and status="Y"
     </update>
 
 

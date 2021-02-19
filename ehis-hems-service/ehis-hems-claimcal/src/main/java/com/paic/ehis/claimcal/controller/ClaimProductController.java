@@ -3,7 +3,7 @@ package com.paic.ehis.claimcal.controller;
 
 import com.paic.ehis.claimcal.domain.ClaimProduct;
 import com.paic.ehis.claimcal.domain.ClaimProductPlanVO;
-import com.paic.ehis.claimcal.domain.VO.UserVo;
+import com.paic.ehis.claimcal.domain.vo.UserVo;
 import com.paic.ehis.claimcal.domain.dto.ClaimProductDTO;
 import com.paic.ehis.claimcal.domain.dto.ProcessedProductDTO;
 import com.paic.ehis.claimcal.domain.dto.SysUserDTO;

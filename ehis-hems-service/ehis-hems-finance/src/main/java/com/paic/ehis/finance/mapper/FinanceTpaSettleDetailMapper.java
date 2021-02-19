@@ -28,7 +28,7 @@ public interface FinanceTpaSettleDetailMapper
      * @param settleTaskNo TPA服务费结算明细ID
      * @return TPA服务费结算明细
      */
-    public List<FinanceTpaSettleDetail> selectFinanceTpaSettleDetailBysettleTaskNo(String settleTaskNo);
+    public List<FinanceTpaSettleDetail> selectFinanceTpaSettleDetailBySettleTaskNo(String settleTaskNo);
 
     /**
      * 查询TPA服务费结算明细列表

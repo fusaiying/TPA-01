@@ -1,4 +1,4 @@
-package com.paic.ehis.claimcal.domain.VO;
+package com.paic.ehis.claimcal.domain.vo;
 
 import lombok.Data;
 

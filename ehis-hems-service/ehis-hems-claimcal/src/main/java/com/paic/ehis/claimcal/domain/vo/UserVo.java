@@ -1,4 +1,4 @@
-package com.paic.ehis.claimcal.domain.VO;
+package com.paic.ehis.claimcal.domain.vo;
 
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;

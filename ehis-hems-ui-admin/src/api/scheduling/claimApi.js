@@ -4,12 +4,18 @@ import request from '@/utils/request'
 /*案件分配规则  */
 export function roleAll(query) {
   return request({
-    url: '/claimmgt/role/list',
+    url: '/system/role/list',
     method: 'get',
     params: query
   })
 }
-
+/*获取用户角色  */
+export function roleInfo(userId) {
+  return request({
+    url: '/system/user/' + userId,
+    method: 'get',
+  })
+}
 
 /*案件分配规则  */
 export function listInfo(query) {

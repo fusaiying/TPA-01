@@ -116,13 +116,13 @@
             :header-cell-style="{color:'black',background:'#f8f8ff'}"
           >
             <el-table-column type="selection" width="50" align="center"/>
-            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column sortable prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="source" :formatter="getDeliverySourceName" label="交单来源" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="name" label="被保人姓名" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="claimType" label="理赔类型" :formatter="getClaimTypeName"  width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="companyCode" label="出单公司"  :formatter="getCompanyName" align="center" show-overflow-tooltip />
-            <el-table-column prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
+            <el-table-column prop="companyName" label="出单公司" align="center" show-overflow-tooltip />
+            <el-table-column sortable prop="submitdate" label="交单日期"  align="center" show-overflow-tooltip />
             <el-table-column prop="monitoringTime" label="监控时效" align="center" show-overflow-tooltip />
             <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center" show-overflow-tooltip />
             <el-table-column prop="operator" label="操作人"  align="center" show-overflow-tooltip />
@@ -222,7 +222,7 @@
               dialogVisable: false,
               rptNos : '',
               deliverySource:[],
-
+              searchBtn:false,
             }
         },
       mounted(){
@@ -233,7 +233,7 @@
         this.getDicts("claimType").then(response => {
           this.claimTypeSelect = response.data;
         });
-        this.getDicts("queue_claim_status").then(response => {
+        this.getDicts("claim_status").then(response => {
           this.caseStatusSelect = response.data;
         });
         this.getDspatchUserData();
@@ -297,9 +297,9 @@
         getClaimTypeName(row,col){
           return this.selectDictLabel(this.claimTypeSelect, row.claimType)
         },
-        getCompanyName(row,col){
-          return this.selectDictLabel(this.companySelect, row.companycode)
-        },
+        // getCompanyName(row,col){
+        //   return this.selectDictLabel(this.companySelect, row.companycode)
+        // },
         initData(){
           this.gettableData();
         },
@@ -318,6 +318,12 @@
             endTime = submitdate[1];
           }
 
+          if(!this.searchBtn) {
+            let currentDate = new  Date();
+            endTime   = (this.dateFormat('yyyy-MM-dd',currentDate))  +" 23:59:59";
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            startTime = this.dateFormat('yyyy-MM-dd',currentDate);
+          }
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
@@ -345,6 +351,9 @@
           });
         },
         searchByFormParms(){
+          this.searchBtn  = true;
+          this.pageInfo.currentPage = 1;
+          this.pageInfo.pageSize = 10;
           this.gettableData();
         },
         viewStream(row) {
@@ -382,7 +391,7 @@
             caseStatus:this.form.caseStatus,
             updateBy:this.form.operator,
           };
-          this.download('system/case/exportDispatchList', params, `FYX_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/case/exportDispatchList', params, `案件调度_${new Date().getTime()}.xlsx`);
         },
         // 多选框选中数据
         handleSelectionChange(selection) {
@@ -392,10 +401,7 @@
           this.multiple = !selection.length;
         },
         handleClose() {
-          this.dialogVisible = false;
-        },
-        closeDialog(){
-          //this.open = false;
+          this.operatorForm.operator = '';
           this.dialogVisible = false;
         },
         updateOperator(){
@@ -405,10 +411,11 @@
           }
           const params = {
             rptNo: this.rptNos,
-            updateBy: this.operatorForm.operator
+            operator: this.operatorForm.operator
           };
           dispatchUpdate(params).then(response => {
             if(response.code == 200) {
+              this.operatorForm.operator = '';
               this.dialogVisible = false;
               this.$message.success('调度成功！');
               this.gettableData();

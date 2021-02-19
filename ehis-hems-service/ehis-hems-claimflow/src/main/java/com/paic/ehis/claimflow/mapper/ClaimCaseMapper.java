@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCase;
+import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 
@@ -105,6 +106,12 @@ public interface ClaimCaseMapper
      */
     List<CaseDispatchVO> selectCaseDispatchList(DispatchDTO dispatchDTO);
 
+    /**
+     * 修改案件调度流程节点操作人
+     * @param claimCase
+     * @return
+     */
+    int  updateCaseDispatchList(ClaimCase claimCase);
 
     // List<DispatchPolicyVo>  selectPolicyDispatchList(String policyNo);
 
@@ -185,9 +192,10 @@ public interface ClaimCaseMapper
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
 
     /**
-     * 计算案子数量
+     * 计算案子数量+
      */
     ClaimCaseDistVo selectCaseDistNumber(String batchNo);
     ClaimCaseDistVo selectCaseDistNumberOne(String rptNo,String caseStatus);
-    ClaimCase selectCaseOne(ClaimCase claimCase);
+    /** 见未被使用-flint-List<ClaimCase> */
+    public List<ProcessingCaseVo> selectCaseOne(ClaimCase claimCase);
 }

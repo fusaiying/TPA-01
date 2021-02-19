@@ -66,9 +66,7 @@
     <update id="updateClaimCaseRecord" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
             <if test="operation != null and operation != ''">operation = #{operation},</if>
-            <if test="operator != null and operator != ''">operator = #{operator},</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
@@ -76,7 +74,10 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where record_id = #{recordId}
+        <where>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            and record_id = #{recordId}
+        </where>
     </update>
 
     <delete id="deleteClaimCaseRecordById" parameterType="Long">
@@ -136,13 +137,30 @@
 
     <select id="selectClaimCaseRecordByrptNoOne" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
-        where rpt_no = #{rptNo} and operation = '07' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+        where rpt_no = #{rptNo} and operation = '07' and status = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+    <select id="selectClaimCaseRecordByrptNoFive" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '30' and status = 'Y' and  history_flag = 'N' ORDER BY update_time DESC limit 1
     </select>
 
     <!-- lihy -->
     <select id="selectClaimCaseRecordByrptNoOneNew" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseRecordByrptNoOneOld" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'N'
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseRecordByRptNoOperation" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '07' and status = 'Y' and  history_flag = 'N'
     </select>
 
     <select id="selectClaimCaseRecordByrptNoThree" parameterType="String" resultMap="ClaimCaseRecordResult">
@@ -152,7 +170,7 @@
 
     <select id="selectClaimCaseRecordByrptNoTwo" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
-        where rpt_no = #{rptNo} and operation = '06' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+        where rpt_no = #{rptNo} and operation = '06' and status = 'Y' ORDER BY update_time DESC limit 1
     </select>
 
     <select id="selectClaimCaseRecordByrptNoCase" parameterType="String" resultMap="ClaimCaseRecordResult">
@@ -189,7 +207,7 @@
         </trim>
         where rpt_no = #{rptNo} and operation = #{operation} and history_flag = 'N' and status = 'Y'
     </update>
-    <update id="updateCaseDispatchList" parameterType="String">
+    <update id="updateCaseDispatchList" parameterType="ClaimCaseRecord">
         update claim_case_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -204,6 +222,7 @@
         </trim>
         where rpt_no = #{rptNo} and history_flag='N'
     </update>
+
 
 
     <select id="selectClaimCaseRecordByrptNoFour" parameterType="String" resultMap="ClaimCaseRecordResult">
@@ -224,4 +243,31 @@
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation in ('97','98') and status = 'Y'
     </select>
+
+<!--  根据报案号查询 对应案件状态的的最近的一条轨迹  -->
+    <select id="selectRecentClaimCaseRecord" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="historyFlag != null  and historyFlag != ''"> and history_flag = #{historyFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time LIMIT 1
+    </select>
+
+    <update id="updateRecordHistoricalState" parameterType="ClaimCaseRecord">
+        update claim_case_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and operation = #{operation}</if>
+            and history_flag='N'
+            and status='Y'
+        </where>
+    </update>
 </mapper>

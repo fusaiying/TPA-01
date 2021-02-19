@@ -34,6 +34,8 @@
         <result property="stayTime" column="stay_time"   />
         <result property="claimType" column="claim_type"  />
         <result property="caseStatus"    column="case_status"    />
+        <result property="updateTime" column="update_time"   />
+        <result property="updateBy" column="update_by"  />
     </resultMap>
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimAndBatchVo" id="ClaimAndBatchVo">
         <result property="rptNo"    column="rpt_no"    />
@@ -79,7 +81,7 @@
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
-    <select id="selectCaseOne" parameterType="com.paic.ehis.claimflow.domain.ClaimCase" resultMap="ClaimCaseResult">
+    <select id="selectCaseOne" parameterType="com.paic.ehis.claimflow.domain.ClaimCase" resultMap="ProcessingClaimCaseResult">
         <include refid="selectClaimCaseVo"/>
         <where>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
@@ -196,7 +198,7 @@
         <where>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="caseStatus != null  and caseStatus != '' and caseStatus != '30'"> and cc.case_status not in (${caseStatus})</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status not in (${caseStatus})</if>
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>
@@ -284,22 +286,14 @@
 
     <update id="updatecaseStatus" parameterType="String">
         update claim_case
-        set case_status ='31'
+        set case_status ='05'
         where rpt_no = #{rptNo}
     </update>
 
     <update id="updateClaimCaseCheck" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckDTO">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
-            <if test="pulloutType != null and pulloutType != ''">pullout_type = #{pulloutType},</if>
-            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
-            <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
             <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
-            <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
-            <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
-            <if test="status != null and status != ''">status = #{status},</if>
-            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and createBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
@@ -338,7 +332,7 @@
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
-        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,ccr.create_by as operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
         '天',
@@ -354,7 +348,7 @@
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>
-            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and DATE_ADD(#{submitenddate},INTERVAL 1 DAY)</if>
+            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and (#{submitenddate})</if>
             <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="companyCode != null  and companyCode != ''"> and ccp.company_code = #{companyCode}</if>
@@ -362,7 +356,18 @@
             <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
         </where>
     </select>
-
+    <update id="updateCaseDispatchList" parameterType="ClaimCase">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
@@ -471,7 +476,7 @@
                         AND record.operation in ('08','99')
                         AND record.STATUS = 'Y'
                         AND record.history_flag = 'N'
-                        AND record.operator = #{operator}
+                        AND record.update_by = #{updateBy}
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
                 ORDER BY
                     record.update_time DESC
@@ -654,13 +659,15 @@
         TIMESTAMPDIFF( MINUTE, b.create_time, now( ) ) % 60,
         '分'
         ) stay_time
-        from claim_case a LEFT JOIN claim_case_insured c on a.rpt_no = c.rpt_no and c.status = 'Y'
-        LEFT JOIN claim_case_record b on b.rpt_no = a.rpt_no and b.history_flag = 'N' and b.status = 'Y'
+        from claim_case a LEFT JOIN claim_case_insured c on a.rpt_no = c.rpt_no
+        LEFT JOIN claim_case_record b on b.rpt_no = a.rpt_no
         where a.case_status = #{caseStatus} and a.status = #{status} and a.update_by = #{updateBy}
+        and c.status = 'Y' and b.history_flag = 'N' and b.status = 'Y'
         <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
     </select>
+
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
@@ -675,7 +682,7 @@
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by
         from claim_case cc
-        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no
+        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no  and cci.status='Y'
         inner join  claim_case_policy ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
@@ -688,18 +695,18 @@
 
     <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         SELECT
-            a.create_by,
-            a.rpt_no,
-            b.batch_no,
-            b.case_status,
-            c.NAME
+        a.create_by submit_user,
+        a.rpt_no,
+        b.batch_no,
+        b.case_status,
+        c.NAME
         FROM
-            claim_case b
-            LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
-            LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
+        claim_case b
+        LEFT JOIN claim_case_record a ON a.rpt_no = b.rpt_no
+        LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
         WHERE
-            a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
-            and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
+        and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
         <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>

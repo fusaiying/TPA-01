@@ -63,7 +63,7 @@
       </el-card>
 
     <!-- 编辑弹框 -->
-    <user-modal :value="diaVisible"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
+    <user-modal :value="diaVisible" :roleSelects="roleSelects"  :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable" @gettableData="gettableData"/>
 
     <!-- 一键分配弹框 -->
     <assign-modal :value="assignDiaVisible"  :roleSelects="roleSelects"  @closeAssignDiaVisible="closeAssignDiaVisible" @gettableData="gettableData"/>
@@ -124,7 +124,6 @@
                 recMessageFlag: {trigger: ['change'], required: true, message: '缴费通知必填'},
                 debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
               },
-              diaVisible: false,
               ysOrNo:[],
               roleSelects:[],
 
@@ -203,7 +202,9 @@
           }
         },
         rateOrEqually(row, col){
-          if(row.isEqually == '01') {
+          if(row.isEqually == 'Y' && row.status == '02') {
+            return '0';
+          } else if(row.isEqually == 'Y') {
             return '均分';
           } else {
             return row.rate;

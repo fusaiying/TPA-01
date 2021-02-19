@@ -380,10 +380,16 @@ export default {
 
     //查询
     searchHandle() {
-      this.params.pageNum=1
-      this.params.pageSize=10
-
-      this.getData()
+      const values = Object.values(this.formSearch)
+      let flag= values.some(item => {return  item!=null && item !='' })
+      if(flag){
+        this.params.pageSize=10
+        this.params.pageNum=1
+        this.getData()
+      }
+      else {
+        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
+      }
     },
     getData() {
       this.params.supplierCode= this.formSearch.supplierCode

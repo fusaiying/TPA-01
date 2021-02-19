@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.claimcal.domain.ClaimRuleConstraintMapper">
+<mapper namespace="com.paic.ehis.claimcal.mapper.ClaimRuleConstraintMapper">
     
     <resultMap type="com.paic.ehis.claimcal.domain.ClaimRuleConstraint" id="ClaimRuleConstraintResult">
         <result property="constraintNo"    column="constraint_no"    />

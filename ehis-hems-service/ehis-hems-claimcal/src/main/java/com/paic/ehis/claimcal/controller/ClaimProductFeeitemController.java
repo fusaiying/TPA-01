@@ -96,4 +96,15 @@ public class ClaimProductFeeitemController extends BaseController
     {
         return toAjax(claimProductFeeitemService.deleteClaimProductFeeitemByIds(feeitemCodes));
     }
+
+    /**
+     * 根据保单号获得费用项编码、费用项名称
+     *
+     * @param policys
+     * @return
+     */
+    @PostMapping("/policys")
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(@RequestBody List<String> policys){
+        return claimProductFeeitemService.selectFeeitemByPolicys(policys);
+    }
 }

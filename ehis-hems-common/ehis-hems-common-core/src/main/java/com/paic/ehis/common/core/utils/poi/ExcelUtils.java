@@ -138,7 +138,7 @@ public class ExcelUtils<T> {
 //            // 如果指定sheet名,则取指定sheet中的内容.
 //            sheet = wb.getSheet(sheetName);
 //        } else {
-//            // 如果传入的sheet名不存在则默认指向第1个sheet.
+//            // 如果传入的sheet名不存在则默认指向第1个sheet
 //            sheet = wb.getSheetAt(0);
 //        }
 

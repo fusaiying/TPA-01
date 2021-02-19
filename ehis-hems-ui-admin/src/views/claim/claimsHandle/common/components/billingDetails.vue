@@ -314,7 +314,7 @@
                             :rules="accountRules.feeItemCode" style="display: inline-flex !important;">
                 <el-select v-model="scope.row.feeItemCode" placeholder="请选择" size="mini">
                   <el-option v-for="item in feeOptions" :key="item.feeitemCode" :label="item.feeitemName"
-                             :value="item.feeitemcode"/>
+                             :value="item.feeitemCode"/>
                 </el-select>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ selectFee(feeOptions,scope.row.feeItemCode) }}</span>

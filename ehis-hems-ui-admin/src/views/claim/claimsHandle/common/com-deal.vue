@@ -373,7 +373,7 @@
         if (this.querys.node === 'calculateReview') {
           adjustRemarkList(data).then(res => {
             if (res != null && res.code === 200) {
-              this.reportData = res.data
+              this.reportData = res.rows
             }
           })
         } else {

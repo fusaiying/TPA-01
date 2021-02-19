@@ -213,4 +213,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where EXISTS(SELECT pi.plan_code FROM  policy_info pi WHERE pi.plan_code=cpdd.plan_code) AND risk_name = #{riskName}
     </select>
     
+    <select id="selectPolicyRiskType"   parameterType="String" resultMap="PolicyVo">
+        select  policy_risk_type
+        from policy_info
+        where policy_no = #{policyNo}  and status='Y'
+    </select>
+    
 </mapper>

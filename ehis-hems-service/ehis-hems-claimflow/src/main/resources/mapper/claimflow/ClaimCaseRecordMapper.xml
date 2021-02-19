@@ -139,6 +139,11 @@
         where rpt_no = #{rptNo} and operation = '07' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
     </select>
 
+    <select id="selectClaimCaseRecordByrptNoFive" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '30' and status = 'Y' and  history_flag = 'N' ORDER BY update_time DESC limit 1
+    </select>
+
     <!-- lihy -->
     <select id="selectClaimCaseRecordByrptNoOneNew" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>

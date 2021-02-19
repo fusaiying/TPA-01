@@ -170,4 +170,6 @@ public interface ClaimCaseRecordMapper
   * @return com.paic.ehis.claimflow.domain.ClaimCaseRecord
   **/
     public ClaimCaseRecord selectRecentClaimCaseRecord(ClaimCaseRecord claimCaseRecord);
+
+    public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);
 }

@@ -151,6 +151,12 @@
     </select>
 
     <!-- lihy -->
+    <select id="selectClaimCaseRecordByrptNoOneOld" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'N'
+    </select>
+
+    <!-- lihy -->
     <select id="selectClaimCaseRecordByRptNoOperation" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation = '07' and status = 'Y' and  history_flag = 'N'

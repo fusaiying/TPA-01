@@ -488,7 +488,7 @@
         if (newVal !== null && newVal !== undefined) {
           getFee(newVal.rptNo).then(res => {
             if (res != null && res.code === 200) {
-              this.feeOptions = res.rows
+              this.feeOptions = res.data
             }
           })
         }

@@ -319,12 +319,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfoMapper.updatePersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(demandAcceptVo.getContactsPersonId());
-        personInfo2.setSex(demandAcceptVo.getContactsSex());
-        personInfo2.setName(demandAcceptVo.getContactsName());
-        personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
+        personInfo2.setSex(demandAcceptVo.getContactsPerson().getSex());
+        personInfo2.setName(demandAcceptVo.getContactsPerson().getName());
+        personInfo2.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
         personInfo2.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        personInfo2.setWorkPhone(demandAcceptVo.getCallPerson().getWorkPhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        personInfo2.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());

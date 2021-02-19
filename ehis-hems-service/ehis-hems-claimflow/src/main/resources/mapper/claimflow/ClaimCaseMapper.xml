@@ -653,6 +653,7 @@
         <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
     </select>
+
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
@@ -680,7 +681,7 @@
 
     <select id="selectBillAccomplish" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO" resultMap="BillAccomplishVoResult">
         SELECT
-            a.create_by,
+            a.create_by submit_user,
             a.rpt_no,
             b.batch_no,
             b.case_status,

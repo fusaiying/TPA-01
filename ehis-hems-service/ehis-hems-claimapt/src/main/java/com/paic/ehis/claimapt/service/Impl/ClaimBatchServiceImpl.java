@@ -358,7 +358,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch) {
-        claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
+        claimBatch.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());//01
         //批次号
         String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);

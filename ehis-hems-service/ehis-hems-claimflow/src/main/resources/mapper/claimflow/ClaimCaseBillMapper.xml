@@ -42,6 +42,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap id="ClaimCaseBillDTOResult" type="com.paic.ehis.system.api.domain.dto.ClaimCaseBillDTO">
+        <result property="billId"    column="bill_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="hospitalCode"    column="hospital_code"    />
+        <result property="department"    column="department"    />
+        <result property="isDesHospital"    column="is_des_hospital"    />
+        <result property="accType"    column="acc_type"    />
+        <result property="billCurrency"    column="bill_currency"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="visNumber"    column="vis_number"    />
+        <result property="treatmentType"    column="treatment_type"    />
+        <result property="treatmentStartDate"    column="treatment_start_date"    />
+        <result property="treatmentEndDate"    column="treatment_end_date"    />
+        <result property="treatmentDays"    column="treatment_Days"    />
+        <result property="billType"    column="bill_type"    />
+    </resultMap>
+
     <sql id="selectClaimCaseBillVo">
         SELECT
             bill_id,
@@ -116,6 +133,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="clinicalDiagnosis != null  and clinicalDiagnosis != ''"> and clinical_diagnosis = #{clinicalDiagnosis}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
+    </select>
+
+    <select id="selectClaimCaseBillDTOByRptNo" parameterType="String" resultMap="ClaimCaseBillDTOResult">
+        select bill_id,rpt_no,hospital_code,department,is_des_hospital,acc_type,bill_currency,bill_amount,vis_number,treatment_type,treatment_start_date,treatment_end_date,treatment_Days,bill_type
+        from claim_case_bill where rpt_no = #{rptNo} and status = 'Y'
     </select>
     
     <select id="selectClaimCaseBillById" parameterType="Long" resultMap="ClaimCaseBillResult">

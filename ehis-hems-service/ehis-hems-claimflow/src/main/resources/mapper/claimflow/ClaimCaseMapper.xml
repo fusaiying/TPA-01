@@ -284,7 +284,7 @@
 
     <update id="updatecaseStatus" parameterType="String">
         update claim_case
-        set case_status ='31'
+        set case_status ='05'
         where rpt_no = #{rptNo}
     </update>
 

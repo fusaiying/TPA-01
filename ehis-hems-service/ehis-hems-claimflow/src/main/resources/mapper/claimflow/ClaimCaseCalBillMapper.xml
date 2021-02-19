@@ -149,6 +149,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where cal_bill_id = #{calBillId}
     </update>
 
+    <update id="updateClaimCaseCalBillByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalBill">
+        update claim_case_cal_bill
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="billId != null">bill_id = #{billId},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="deduUsed != null">dedu_used = #{deduUsed},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
     <update id="bulkUpdateClaimCaseCalBill" parameterType="java.util.ArrayList">
         <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
         update claim_case_cal_bill

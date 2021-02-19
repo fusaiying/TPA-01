@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimcal.mapper.PolicyRiskRelationMapper">
+    
+    <resultMap type="com.paic.ehis.claimcal.domain.PolicyRiskRelation" id="PolicyRiskRelationResult">
+        <result property="relationId"    column="relation_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+    </resultMap>
+
+    <sql id="selectPolicyRiskRelationVo">
+        select relation_id, policy_no, risk_code, risk_name, status, create_by, create_time, update_by, update_time from policy_risk_relation
+    </sql>
+
+    <select id="selectPolicyRiskRelationList" parameterType="PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
+        <include refid="selectPolicyRiskRelationVo"/>
+        <where>  
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="riskName != null  and riskName != ''"> and risk_name like concat('%', #{riskName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+</mapper>

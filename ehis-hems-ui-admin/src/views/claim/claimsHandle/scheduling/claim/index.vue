@@ -124,7 +124,6 @@
                 recMessageFlag: {trigger: ['change'], required: true, message: '缴费通知必填'},
                 debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
               },
-              diaVisible: false,
               ysOrNo:[],
               roleSelects:[],
 

@@ -10,6 +10,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
 //import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
 //import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
+import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -806,8 +807,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCase.getRptNo());
         claimCaseRecord.setHistoryFlag("Y");
-        claimCaseRecord.setStatus("Y");
-        claimCaseRecord.setOperation("05");
+        claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());
+        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());
         ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
         /*List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
         if (claimCaseRecords.size() > 0) {
@@ -815,7 +816,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }*/
         claimCase.setUpdateBy(caseRecord.getOperator());
         claimCase.setUpdateTime(DateUtils.getNowDate());
-        claimCase.setCaseStatus("05");
+        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());
 
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCase.getRptNo());
         record.setHistoryFlag("Y");
@@ -938,7 +939,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();
         caseRecord.setRptNo(caseInvestigation.getRptNo());
         caseRecord.setOperation("32");
-        caseRecord.setStatus("Y");
+        caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
         caseRecord.setHistoryFlag("N");
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setCreateBy(SecurityUtils.getUsername());

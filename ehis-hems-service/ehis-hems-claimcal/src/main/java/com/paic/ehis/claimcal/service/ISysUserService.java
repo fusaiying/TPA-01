@@ -1,7 +1,7 @@
 package com.paic.ehis.claimcal.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.paic.ehis.claimcal.domain.VO.UserVo;
+import com.paic.ehis.claimcal.domain.vo.UserVo;
 import com.paic.ehis.claimcal.domain.dto.SysUserDTO;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;

@@ -377,7 +377,7 @@
         regions: [],
         region: [],
         baseFormRule: {
-          claimAmount: [{validator: checkClaimAmount,  trigger: ['blur','change']}],
+          claimAmount: [{validator: checkClaimAmount,  trigger: ['blur']}],
           applyTypes:[{required: true, message: '请选择申请原因', trigger: ['blur','change']}],
           accDate: [{validator: checkDate, required: true, trigger: ['blur','change']}],
           firstSerIllnessDate: [{validator: checkFirstSerIllnessDate, required: true, trigger: ['blur','change']}],

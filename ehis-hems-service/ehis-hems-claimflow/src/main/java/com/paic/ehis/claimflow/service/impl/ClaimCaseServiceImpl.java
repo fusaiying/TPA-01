@@ -274,7 +274,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
                 claimCaseRecord1.setHistoryFlag("Y");
                 claimCaseRecord1.setOperation("05");//
-                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
             }
@@ -367,7 +367,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setOperation("05");//
-                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }
@@ -422,7 +422,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
                 claimCaseRecord3.setHistoryFlag("Y");
                 claimCaseRecord3.setOperation("05");//
-                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
                 claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
                 claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
             }

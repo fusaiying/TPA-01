@@ -435,7 +435,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--            a.submit_date desc-->
 <!--    </select>-->
 
-<!--    <select id="selectPayForeignBatchList" parameterType="com.sino.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">-->
+<!--    <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.system.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">-->
 <!--        SELECT-->
 <!--            a.batch_no "batchNo",-->
 <!--            a.hospital_code "hospitalCode",-->

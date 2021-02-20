@@ -131,6 +131,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         claimCaseDTO.setCaseStatus("05");
         claimCaseDTO.setStatus("Y");
+        claimCaseDTO.setIsHistory("N");
         claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
         /*          实现多少天多少小时多少分的计算实现
         ArrayList<ProcessingCaseVo> processingCaseVos = new ArrayList<>();
@@ -822,12 +823,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setOperator(SecurityUtils.getUsername());
         record.setUpdateBy(SecurityUtils.getUsername());
         record.setUpdateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.updateClaimCaseRecord(record);
+        claimCaseRecordMapper.updateRecordHistoricalState(record);
 
         claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         return claimCaseMapper.updateClaimCase(claimCase);
     }

@@ -14,6 +14,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -127,8 +128,7 @@ public class ClaimCaseCalBillController extends BaseController
     /**
      * 理算审核  账单明细保存  按钮
      */
-   // @PreAuthorize("@ss.hasPermi('system:bill:edit')")
-//    @PreAuthorize("@ss.hasPermi('system:bill:edit')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:bill:edit')")
     @Log(title = "案件赔付账单明细", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult billDetailsSave (@RequestBody BillDetailDTO billDetailDTO)

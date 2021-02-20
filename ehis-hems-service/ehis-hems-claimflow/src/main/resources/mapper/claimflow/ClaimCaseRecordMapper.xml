@@ -265,7 +265,8 @@
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         <where>
-            <if test="rptNo != null  and rptNo != ''"> and operation = #{operation}</if>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
             and history_flag='N'
             and status='Y'
         </where>

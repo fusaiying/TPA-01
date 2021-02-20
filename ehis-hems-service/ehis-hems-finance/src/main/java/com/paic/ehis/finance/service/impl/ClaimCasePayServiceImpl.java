@@ -69,6 +69,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 获取用户的所属机构
         String deptId = sysUser.getDeptId().toString();
         List<Map<String,Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
+        // TODO: 调用微服务获取医院中文名称
         return initList;
     }
 

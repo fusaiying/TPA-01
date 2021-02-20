@@ -68,7 +68,7 @@
         </span>
       </div>
 
-      <el-form ref="clussionForm" :model="clussionForm" style="padding-bottom: 0px;margin-left: 2%" label-width="130px">
+      <el-form ref="clussionForm" :model="clussionForm" style="padding-bottom: 0px;margin-left: 2%" label-width="130px" :rules="rules">
         <el-row>
           <el-col :span="8">
             <el-form-item label="问题件类型 ：" prop="bussinessStatus">
@@ -87,7 +87,7 @@
 
         <el-row >
           <el-col :span="8">
-            <el-form-item label="处理意见：" :style="{width:'100%'}" :class="['long-input']" prop="remark" maxlength="2000" >
+            <el-form-item label="处理意见：" :style="{width:'100%'}" :class="['long-input']" prop="conclusionView" maxlength="2000" >
               <el-input maxlength="2000" type="textarea" :rows="3"  v-model="clussionForm.conclusionView"  clearable/>
             </el-form-item>
           </el-col>
@@ -129,11 +129,14 @@
           problemType:'',
           problemView: '',
         },
-
         problemTypes:[],
         deliverySource:[],
         claimStatusSelect:[],
         gender:[],
+
+        rules: {
+          conclusionView: {trigger: ['blur'], required: true, message: '处理意见必填'}
+        },
       }
     },
 
@@ -205,33 +208,37 @@
         });
       },
       dealFun(rptNo,conclusionView){
-        let vm = this;
-        this.$confirm('确认处理本次问题件?', "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function () {
-          const param = {};
-          param.rptNo = rptNo;
-          param.problemId = vm.problemId;
-          param.conclusionView = conclusionView;
-          param.isHistory = 'Y';
-          updateProblem(param).then(res => {
-            if(res.code == '200') {
-              vm.dealBtn = false;
-              vm.$message({
-                message: '处理成功！',
-                type: 'success',
-                center: true,
-                showClose: true
+        this.$refs.clussionForm.validate((valid) => {
+          if (valid) {
+            let vm = this;
+            this.$confirm('确认处理本次问题件?', "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            }).then(function () {
+              const param = {};
+              param.rptNo = rptNo;
+              param.problemId = vm.problemId;
+              param.conclusionView = conclusionView;
+              param.isHistory = 'Y';
+              updateProblem(param).then(res => {
+                if(res.code == '200') {
+                  vm.dealBtn = false;
+                  vm.$message({
+                    message: '处理成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  });
+                }
               });
-            }
-          });
-        }).then(() => {
-          //this.msgSuccess(text + "成功");
-        }).catch(function (error) {
-          console.log(error)
-        });
+            }).then(() => {
+              //this.msgSuccess(text + "成功");
+            }).catch(function (error) {
+              console.log(error)
+            });
+          }
+        })
       },
       goBack(){
         this.$router.go(-1)

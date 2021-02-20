@@ -218,9 +218,9 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
             //判断是否在此抽检比例中
             boolean random = PubFun.random(cc.getRate().doubleValue());
             //将查询到的金额类型与接收的金额类型进行比较
-            if (cc.getAmountType().equals("赔付金额")) {
+            if ("赔付金额".equals(cc.getAmountType())) {
                 caseCheck = claimCaseCheckDTO.getPayAmount().doubleValue();
-            } else if (cc.getAmountType().equals("拒付金额")) {
+            } else if ("拒付金额".equals(cc.getAmountType())) {
                 caseCheck = claimCaseCheckDTO.getAmount().doubleValue();
             }
             //若此时的抽检比例和金额符合要求

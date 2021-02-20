@@ -183,7 +183,10 @@
            ,getDspatchUser
            ,dispatchUpdate
            ,getIssuingcompanyList
+           ,roleInfo
+           ,logInfo
         } from '@/api/dispatch/api'
+  import moment from "moment";
 
     export default {
       components: {
@@ -247,10 +250,44 @@
         this.initData();
       },
       methods: {
+        getPermit(){
+          /**
+           挂起	00
+           机构交单	04
+           受理	05
+           问题件	30
+           撤件可申诉	97
+           撤件	98
+           录入	06
+           审核	07
+           协谈	31
+           调查	32
+           抽检	08
+           结案	99
+           */
+        },
+        getRole(value){
+          roleInfo(value).then(response => {
+            if (response.code == '200') {
+              console.log(response)
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+        },
+        getLogRole(){
+          logInfo().then(response => {
+            if (response.code == '200') {
+              console.log(response)
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+        },
         getDeliverySourceName(row,col) {
           return this.selectDictLabel(this.deliverySource, row.source)
         },
-        getIssuingcompanySelect (){  //getIssuingcompanyList
+        getIssuingcompanySelect (){
           const params = {
             pageNum:1,
             pageSize:1000,
@@ -319,10 +356,8 @@
           }
 
           if(!this.searchBtn) {
-            let currentDate = new  Date();
-            endTime   = (this.dateFormat('yyyy-MM-dd',currentDate))  +" 23:59:59";
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            startTime = this.dateFormat('yyyy-MM-dd',currentDate);
+            startTime  = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+            endTime =  moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
           }
           const params = {
             pageNum:this.pageInfo.currentPage,

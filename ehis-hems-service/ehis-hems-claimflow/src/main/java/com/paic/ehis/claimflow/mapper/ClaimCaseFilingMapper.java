@@ -72,6 +72,6 @@ public interface ClaimCaseFilingMapper
     /** 编辑按钮 */
     public int updateClaimCaseFilingEdit(ClaimCaseFilingListVO claimCaseFilingListVO);
 
-    /** 保存案件归档详细信息 */
-    public List<ClaimCaseFilingInformationVO> selectCaseClaimCaseFilingInfo(ClaimCaseFilingListVO claimCaseFilingListVO);
+    /** 查询案件归档详细信息 */
+    public ClaimCaseFilingInformationVO selectCaseClaimCaseFilingInfo(ClaimCaseFilingListVO claimCaseFilingListVO);
 }

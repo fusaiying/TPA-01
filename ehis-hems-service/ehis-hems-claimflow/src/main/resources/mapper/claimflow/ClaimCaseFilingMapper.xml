@@ -96,15 +96,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCaseClaimCaseFilingInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" resultMap="ClaimCaseFilingInformationVOResult">
         select
-        ccf.case_box_no,ccf.dept_code,ccf.status,ccf.claim_type,
-        cbif.is_filing,cbif.is_invoice_back,cbif.is_single,cbif.remark,
-        ccf.batch_no,
-        ( select GROUP_CONCAT(rpt_no) from claim_case where batch_no = ccf.batch_no ) rpt_no
+        ccf.case_box_no,ccf.dept_code,ccf.claim_type,
+        cbif.is_filing,cbif.is_invoice_back,cbif.is_single,cbif.remark
         from claim_case_filing ccf
         inner join claim_batch_invoice_filing cbif on ccf.batch_no=cbif.batch_no
         <where>
-            <if test="batchNo != null  and batchNo != ''"> and ccf.batch_no = #{batchNo}</if>
-            <if test="status != null  and status != ''"> and ccf.status = #{status}</if>
+            <if test="caseBoxNo != null and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
         </where>
     </select>
 

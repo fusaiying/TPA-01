@@ -59,6 +59,10 @@
         <result property="submitUser" column="submit_user"/>
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.RptNoVo" id="RptNoVoResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+    </resultMap>
 
 
     <sql id="selectClaimCaseVo">
@@ -384,7 +388,7 @@
         acto.rpt_no,
         acto.batch_no,
         acto.case_status,
-        acto.operator,
+        acto.update_by,
         acto.NAME
         FROM
         (
@@ -392,7 +396,7 @@
         act.rpt_no,
         act.batch_no,
         act.case_status,
-        act.operator,
+        act.update_by,
         insured.NAME
         FROM
         (
@@ -400,16 +404,11 @@
         cases.rpt_no,
         cases.batch_no,
         cases.case_status,
-        record.operator
+        cases.update_by
         FROM
         claim_case cases
-        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation = '07'
-        AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
-        AND record.operator = #{operator}
-        ORDER BY
-        record.update_time DESC
+        where cases.case_status = '07' AND cases.STATUS = 'Y' AND cases.update_by = #{operator}
+        ORDER BY cases.update_time DESC
         ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
@@ -734,6 +733,17 @@
     <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">
         select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}
     </select>
+
+    <!--lhy-->
+
+    <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
+        select rpt_no from claim_case
+        <where>
+            <if test="rpt_start_no != null  and rpt_start_no != ''"> <![CDATA[and  rpt_no >= rpt_start_no = #{rptStartNo}]]></if>
+            <if test="rpt_end_no != null  and rpt_end_no != ''"> <![CDATA[and rpt_no <= rpt_end_no = #{rptEndNo}]]></if>
+        </where>
+    </select>
+
     <update id="updateClaimCaseVo" parameterType="string">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">

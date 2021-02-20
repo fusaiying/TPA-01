@@ -140,7 +140,7 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-form-item label="详细地址：">
+          <el-form-item label="事故地点：">
             <el-cascader :options="regions" v-model="region" class="item-width" placeholder="请选择"
                          @change="handleChange"/>
             <el-input v-model="baseForm.accAddress" show-word-limit maxlength="100" style="width:60%;" clearable

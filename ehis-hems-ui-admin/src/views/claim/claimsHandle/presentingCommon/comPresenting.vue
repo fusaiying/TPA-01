@@ -367,6 +367,7 @@
         isAfter: false,//事后
         isDirect: false,//直结
         isShowFooter: false,//结论
+        isShowRecord: false,
         isShow: false,
         querys: null,
         // 查询参数
@@ -502,6 +503,11 @@
             this.isSaveOrSub = true
             this.isDirect = false
             this.isAfter = true
+          }
+        })
+        getDeptById(this.searchForm.organcode).then(res => {
+          if (res != null && res.code === 200) {
+            this.deptName = res.data.deptName
           }
         })
         if (this.querys.status === 'show') {
@@ -969,6 +975,7 @@
                   claimBatch: this.searchForm, //
                   claimBatchRecord: this.recordForm//
                 }
+                this.eReview = true
                 updateClaimBatch(data).then(res => {
                   if (res != null && res.code === 200) {
                     this.$message({
@@ -983,9 +990,10 @@
                     } else {
                       this.isPrint = true
                     }
-                    this.eReview = true
                     this.isShow = true
                   } else {
+                    this.eReview = false
+                    this.isShowRecord=false
                     this.$message.error('复核失败！')
                   }
                 })

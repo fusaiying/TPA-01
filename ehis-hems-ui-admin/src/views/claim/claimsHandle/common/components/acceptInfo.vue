@@ -195,7 +195,6 @@
               this.hasAcceptId = true
             }
           }else {
-            console.log(this.baseInfo.prireason);
             this.baseForm.priReason=this.baseInfo.prireason
           }
           this.checkedAllFun()
@@ -208,7 +207,8 @@
           if ((date.getDate()) < 10) {
             day = '0' + date.getDate()
           }
-          if (newVal.claimCaseAccept.materialCompleteDate == null || newVal.claimCaseAccept.materialCompleteDate === '') {
+          console.log(newVal);
+          if (newVal.claimCaseAccept!=null && (newVal.claimCaseAccept.materialCompleteDate == null || newVal.claimCaseAccept.materialCompleteDate === '')) {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + day
           }
         }
@@ -221,7 +221,7 @@
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
           if (value < 0) {
-            callback(new Error("索赔金额录入不合法，请检查"));
+            callback(new Error("索赔金额录入不合法，请检查"))
             return this.$message.warning(
               "索赔金额录入不合法，请检查！"
             )

@@ -185,8 +185,14 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService {
         return problemTextDTO;
     }
 
+    /**
+     *
+     * @param rptNo
+     * @return
+     */
     @Override
     public List<ClaimCaseProblem> selectClaimCaseProblemByRptNo(String rptNo) {
         return claimCaseProblemMapper.selectClaimCaseProblemByRptNo(rptNo);
     }
+
 }

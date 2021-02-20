@@ -331,14 +331,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(personInfo2);
 
-        //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLog.setOperateCode("01");
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
 //        demandAcceptVoMapper.insertFlowLog(flowLog);
 
 //        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -347,7 +340,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo), Map.class);
-
+        String edit=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
    //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
         List<String> keyList=new ArrayList<>();
@@ -365,7 +358,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setOldValue(map1value);
                 editDetail.setNowValue(map2value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(edit);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
@@ -403,7 +396,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setOldValue(map3value);
                 editDetail.setNowValue(map4value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(edit);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
@@ -441,7 +434,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(edit);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
@@ -458,6 +451,16 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editInfoMapper.insertEditInfo(editInfo);
             }
         }
+
+        //轨迹表插入
+        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
+        flowLog.setSubId(edit);
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLog.setOperateCode("01");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
         Iterator<String> iter2 = map3.keySet().iterator();

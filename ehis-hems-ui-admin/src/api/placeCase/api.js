@@ -41,11 +41,11 @@ export function editCaseFiling(data) {
 }
 
 //查询案件归档详细信息
-export function getInfoCaseFilingList(query) {
+export function getInfoCaseFilingList(data) {
   return request({
     url: '/claimflow/casefiling/getInfoCaseFilingList',
     method: 'post',
-    data: query
+    data: data
   })
 }
 

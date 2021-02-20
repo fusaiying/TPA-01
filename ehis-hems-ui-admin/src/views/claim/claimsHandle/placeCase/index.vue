@@ -294,11 +294,10 @@
             this.editPower = true;
           }
           this.fixInfo  = {
-            batchNo:row.batchNo,
+            caseBoxNo:row.caseBoxNo,
             rptStartNo:row.rptStartNo,
             rptEndNo:row.rptEndNo,
           };
-          console.log(this.fixInfo)
           this.listDialog = true
         },
         closeListDialog() {

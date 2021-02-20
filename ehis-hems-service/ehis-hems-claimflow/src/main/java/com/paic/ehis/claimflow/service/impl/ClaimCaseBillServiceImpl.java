@@ -16,16 +16,14 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.RemoteUserService;
-import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
-import com.paic.ehis.system.api.domain.SysOrganInfo;
+import com.paic.ehis.system.api.domain.SysOrganInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -251,10 +249,10 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
             Object data = remoteUserService.getOrganInfo(manageComs).get(AjaxResult.DATA_TAG);
-            List<SysOrganInfo> sysOrganInfoList = new ArrayList<>();
+            List<SysOrganInfoVO> sysOrganInfoList = new ArrayList<>();
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
-                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfo.class);
+                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
                 String ms = StringUtils.join(sysOrganInfoList, "|");
                 caseInfo.setPolicyManageCom(ms);
             }
@@ -300,10 +298,10 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
             Object data = remoteUserService.getOrganInfo(manageComs).get(AjaxResult.DATA_TAG);
-            List<SysOrganInfo> sysOrganInfoList = new ArrayList<>();
+            List<SysOrganInfoVO> sysOrganInfoList = new ArrayList<>();
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
-                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfo.class);
+                sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
                 String ms = StringUtils.join(sysOrganInfoList, "|");
                 accomplishVo.setPolicyManageCom(ms);
             }

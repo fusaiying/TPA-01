@@ -453,7 +453,7 @@ export function calSummary(data) {
 //理算审核 赔付计算
 export function calculate(rptNo) {
   return request({
-    url: 'claimcal/claim/calculate?rptNo='+rptNo,
+    url: 'claimcal/claim/calculate/'+rptNo,
     method: 'get',
   })
 }

@@ -477,10 +477,10 @@
       sonBillingInfoData: function (newVal) {
         if (newVal !== null && newVal !== undefined) {
           this.tableData = newVal
-          if (newVal.length>0){
-            this.isBillInfoSave=true
-          }else {
-            this.isBillInfoSave=false
+          if (newVal.length > 0) {
+            this.isBillInfoSave = true
+          } else {
+            this.isBillInfoSave = false
           }
         }
       },
@@ -592,7 +592,7 @@
                   this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
                   paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
                 }
-                this.costForm.costData[this.costForm.costData.length - 1].advancePayment=((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)- paymentSum).toFixed(2)
+                this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
               }
               if (this.baseForm.isShareDisAmount === '01') {
                 let hosDiscountAmountNum = 0
@@ -1256,20 +1256,19 @@
                       })
                       if (val !== null && val !== undefined) {
                         if (val.enname1 != null && val.enname1 !== '') {
-                          this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
+                          this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
                         } else {
-                          this.baseForm.hospitalName = val.chname1
+                          this.$set(this.baseForm, 'hospitalName', val.chname1)
                         }
-                        this.baseForm.hospitalCode = val.providerCode
-
-                        this.baseForm.firstAttribute = val.firstAttribute
-                        this.baseForm.secondAttribute = val.secondAttribute
-                        this.baseForm.isDesHospital = val.flag
+                        this.$set(this.baseForm, 'hospitalCode', val.providerCode)
+                        this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
+                        this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
+                        this.$set(this.baseForm, 'isDesHospital', val.flag)
                       }
                     }
-                  if (this.batchData !== null && this.batchData !== undefined) {
-                    this.baseForm.billCurrency = this.batchData.currency
-                  }
+                    if (this.batchData !== null && this.batchData !== undefined) {
+                      this.baseForm.billCurrency = this.batchData.currency
+                    }
                     this.costForm.costData = []
                   }).catch(res => {
                     this.$message({
@@ -1309,7 +1308,7 @@
       },
       selectFee(datas, value) {
         var actions = [];
-        if (datas!==null && datas!==undefined){
+        if (datas !== null && datas !== undefined) {
           Object.keys(datas).some((key) => {
             if (datas[key].feeitemCode === ('' + value)) {
               actions.push(datas[key].feeitemName);

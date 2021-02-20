@@ -746,27 +746,31 @@
 
 
       },
-      //调用查询就诊人信息的接口
+      //调用查询被保人信息的接口
       getSelectRecogn(){
         //
         this.radio = undefined
         this.expands = []
         this.tableData=[]
-
         selectRecognizee(this.searchForm).then(res => {
           if (res != null && res.code == '200' ) {
+            if(res.data.flag=='false'){
+              this.tableData = res.data.policyInsuredList;
+              if(res.data.policyInsuredList.length>0) {
+                this.tableData.map((item, index) => {
+                  item.policyInfoList = [];
+                  item.id = index
+                })
+              }
+              let totalCount = res.data.policyInsuredList.length;
+              if(totalCount===0) {
+                this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+              }
+            }
+            else {
+              this.$message({message: '团单不可单独用保单号查询', type: 'warning', showClose: true, center: true})
+            }
 
-            this.tableData = res.rows;
-            if(res.total>0) {
-              this.tableData.map((item, index) => {
-                item.policyInfoList = [];
-                item.id = index
-              })
-            }
-            let totalCount = res.total;
-            if(totalCount===0) {
-              this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
-            }
 
           }
           else {

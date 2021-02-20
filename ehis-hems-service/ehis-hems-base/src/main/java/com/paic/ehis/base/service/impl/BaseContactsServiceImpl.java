@@ -173,7 +173,7 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
         int count = 0;
         List<BaseContacts> baseContactsinfos = baseContactsMapper.selectBaseContactsByCode(providerCode);
         List<BaseContacts> baseContactsinfosNew = baseContactsMapper.selectBaseContactsByCodeNew(providerCode);
-        if(baseContactsinfosNew.isEmpty()){ //存在则修改已存在的数据
+        if(!baseContactsinfosNew.isEmpty()){ //存在则修改已存在的数据
             baseContactsMapper.updateBaseContactsByCodeNew(providerCode);
         }
         for(BaseContacts baseContact :baseContactsinfos){

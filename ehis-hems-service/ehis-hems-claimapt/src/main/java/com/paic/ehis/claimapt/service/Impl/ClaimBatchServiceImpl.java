@@ -482,10 +482,9 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         ClaimBatchRecord claimBatchRecord1 = claimBatchRecordMapper.selectClaimBatchRecordByBatch(claimBatchRecord);
         if (claimBatchRecord1 != null) {
             claimBatchRecord.setRecordid(claimBatchRecord1.getRecordid());
-            claimBatchRecord.setStatus(ClaimStatus.DATANO.getCode());//N
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//N
             claimBatchRecordMapper.updateClaimBatchRecord(claimBatchRecord);
 
-            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 

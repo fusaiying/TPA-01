@@ -556,7 +556,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                 }
 
-
                 //停留时长
                 ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (null != claimCaseRecord) {

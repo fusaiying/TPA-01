@@ -174,19 +174,22 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService {
     public ProblemTextDTO selectHistoricalProblem(ClaimCaseProblem claimCaseProblem) {
         ProblemTextDTO problemTextDTO = new ProblemTextDTO();
         List<ClaimCaseProblem> claimCaseProblemList = claimCaseProblemMapper.selectHistoricalProblem(claimCaseProblem);
-        List<ClaimCaseProblem> claimCaseProblems1 = new ArrayList<>();
-        for (ClaimCaseProblem claimCaseProblems : claimCaseProblemList) {
-            if (claimCaseProblems.getIsHistory().equals("N")) {
-                problemTextDTO.setProblemStatus("Y");
+        if (claimCaseProblemList.size() != 0) {
+            int size = claimCaseProblemList.size();
+            List<ClaimCaseProblem> claimCaseProblems1 = new ArrayList<>();
+            for (ClaimCaseProblem claimCaseProblems : claimCaseProblemList) {
+                if (claimCaseProblems.getIsHistory().equals("N")) {
+                    problemTextDTO.setProblemStatus("Y");
+                }
+                claimCaseProblems1.add(claimCaseProblems);
             }
-            claimCaseProblems1.add(claimCaseProblems);
+            problemTextDTO.setTotal(size);
+            problemTextDTO.setClaimCaseProblems(claimCaseProblems1);
         }
-        problemTextDTO.setClaimCaseProblems(claimCaseProblems1);
         return problemTextDTO;
     }
 
     /**
-     *
      * @param rptNo
      * @return
      */

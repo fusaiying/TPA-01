@@ -97,12 +97,11 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 //            机构层级  查询 暂未是实现
 //            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
 //            batchDTO.setOrgancode( sysUser.getDeptId().toString());
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
         } else {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'02','03','05'");
+        batchDTO.setBatchstatus("'01','02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);

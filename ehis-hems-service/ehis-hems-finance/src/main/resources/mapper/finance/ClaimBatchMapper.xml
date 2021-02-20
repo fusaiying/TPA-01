@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.`status` = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.`status` = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"

@@ -230,7 +230,7 @@
         const params = {
           pageNum:this.pageInfo.currentPage,
           pageSize:this.pageInfo.pageSize,
-          batchNo:this.paramFixInfo.batchNo,
+          caseBoxNo:this.paramFixInfo.caseBoxNo,
           rptStartNo:this.paramFixInfo.rptStartNo,
           rptEndNo:this.paramFixInfo.rptEndNo,
           orderByColumn:'ccf.create_time',

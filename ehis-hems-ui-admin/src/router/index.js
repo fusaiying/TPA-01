@@ -118,7 +118,36 @@ export const constantRoutes = [
         meta: { title: '修改生成配置' }
       }
     ]
+  },
+  // 服务项目列表-新增/编辑
+  {
+    path: '/basicInfo',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'projectManagement/add/:projectno(\\w+)',
+        component: (resolve) => require(['@/views/claim/basicInfoManage/projectManagement/info'], resolve),
+        name: 'ProjectInfo',
+        meta: { title: '服务项目信息', icon: '' }
+      }
+    ]
+  },
+  // 医生管理-新增  /basicInfo/doctor/add/0
+  {
+    path: '/basicInfo',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'doctor/add/:docno(\\w+)',
+        component: () => import('@/views/claim/basicInfoManage/doctor/info'),
+        name: 'doctorInfo',
+        meta: { title: '医生信息新增/编辑', noCache: true }
+      }
+    ]
   }
+
 ]
 
 export default new Router({

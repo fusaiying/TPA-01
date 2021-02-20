@@ -131,7 +131,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="账户币种：" prop="billCurrency">
+            <el-form-item label="账单币种：" prop="billCurrency">
               <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
                          placeholder="请选择" clearable>
                 <el-option v-for="option in claim_currencyOptions" :key="option.dictValue" :label="option.dictLabel"

@@ -129,17 +129,9 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     @Override
     public List<ClaimCaseFilingListVO> selectCaseClaimCaseFilingList(ClaimCaseFilingDTO claimCaseFilingDTO) {
 
-        //当前端不传值时默认展示当前登录机构最近一个月的归档数据
-        if(StringUtils.isNull(claimCaseFilingDTO.getClaimType())
-            && StringUtils.isNull(claimCaseFilingDTO.getDeptCode())
-            && StringUtils.isNull(claimCaseFilingDTO.getBatchNo())
-            && StringUtils.isNull(claimCaseFilingDTO.getRptNo())
-            && StringUtils.isNull(claimCaseFilingDTO.getCaseBoxNo())){
-            //设置时间为最近一个月
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) -30);
-            claimCaseFilingDTO.setUpdateStartTime(calendar.getTime());
-            claimCaseFilingDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
+        //默认展示当前登录机构最近一个月的归档数据,因为前端已经将时间设置为一个月前，进行传输，所以只需判断机构为空就查询当前登录机构，不为空则查询传输的数据
+        if(StringUtils.isNull(claimCaseFilingDTO.getDeptCode())){
+
             //获取用户的所属机构,设置当前登录机构
             Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);

@@ -40,9 +40,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectClaimCaseInvestigationById" parameterType="Long" resultMap="ClaimCaseInvestigationResult">
+    <select id="selectClaimCaseInvestigationById" parameterType="String" resultMap="ClaimCaseInvestigationResult">
         <include refid="selectClaimCaseInvestigationVo"/>
         where inv_no = #{invNo}
+    </select>
+
+    <select id="selectClaimCaseInvestigationByNew" parameterType="String" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        where rpt_no = #{rptNo} and status = 'Y' and is_history='N'
     </select>
         
     <insert id="insertClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
@@ -86,7 +91,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
         update claim_case_investigation
         <trim prefix="SET" suffixOverrides=",">
-            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
             <if test="invType != null and invType != ''">inv_type = #{invType},</if>
             <if test="invReason != null and invReason != ''">inv_reason = #{invReason},</if>
             <if test="invOrganCode != null and invOrganCode != ''">inv_organ_code = #{invOrganCode},</if>
@@ -95,8 +99,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invView != null and invView != ''">inv_view = #{invView},</if>
             <if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
             <if test="status != null">status = #{status},</if>
-            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

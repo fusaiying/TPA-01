@@ -319,7 +319,7 @@
       },
       batchGet() {
         //调用子组件的方法
-        this.$refs.publicTable.handle()
+        this.$refs.publicTables.handle()
       },
       search() {
         const query = {

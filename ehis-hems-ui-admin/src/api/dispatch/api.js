@@ -46,7 +46,7 @@ export function roleInfo(userId) {
 /*获取登录用户信息  */
 export function logInfo() {
   return request({
-    url: '/system/getInfo',
+    url: '/system/user/getInfo',
     method: 'get',
   })
 }

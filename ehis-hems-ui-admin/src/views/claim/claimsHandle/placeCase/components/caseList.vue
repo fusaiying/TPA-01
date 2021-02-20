@@ -196,7 +196,7 @@
 
     // 获取跳转地址的数据
     created: function() {
-      this.initData();
+      //this.initData();
     },
     methods: {
       saveData() {

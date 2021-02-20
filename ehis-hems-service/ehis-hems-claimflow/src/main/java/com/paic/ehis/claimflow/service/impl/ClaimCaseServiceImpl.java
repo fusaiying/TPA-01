@@ -186,7 +186,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setOperator(SecurityUtils.getUsername());
         claimCaseDTO.setIsHistory("Y");
-        claimCaseDTO.setOperation("05");
         return claimCaseMapper.selectProcessingClaimCaseList(claimCaseDTO);
     }
 
@@ -941,6 +940,24 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     }
 
+    /**
+     * 调查信息保存
+     *
+     * @param caseInvestigation 案件信息
+     * @return 结果
+     */
+    @Override
+    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
+        caseInvestigation.setIsHistory("N");
+        caseInvestigation.setInvDate(DateUtils.getNowDate());
+        caseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
+        caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
+        caseInvestigation.setCreateBy(SecurityUtils.getUsername());
+        caseInvestigation.setCreateTime(DateUtils.getNowDate());
+        caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+        caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+        return claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+    }
 
     /**
      * 提调
@@ -955,7 +972,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setRptNo(caseInvestigation.getRptNo());
         caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
         caseRecord.setHistoryFlag("N");
-        caseRecord.setOperation(ClaimStatus.CASESURVEY.getCode());
+        caseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(caseRecord);
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
@@ -968,14 +985,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
-        ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
-        claimCaseInvestigation.setIsHistory("N");
-        claimCaseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
-        claimCaseInvestigation.setCreateBy(SecurityUtils.getUsername());
-        claimCaseInvestigation.setCreateTime(DateUtils.getNowDate());
-        claimCaseInvestigation.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
+        ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByNew(caseInvestigation.getRptNo());
+        caseInvestigation.setInvNo(claimCaseInvestigation.getInvNo());
+        caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+        caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+        claimCaseInvestigationMapper.updateClaimCaseInvestigation(caseInvestigation);
 
         ClaimCase claimCase = new ClaimCase();
         claimCase.setCaseStatus(ClaimStatus.CASESURVEY.getCode());

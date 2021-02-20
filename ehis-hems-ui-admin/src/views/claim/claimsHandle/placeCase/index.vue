@@ -333,8 +333,8 @@
             batchNo: this.form.batchNo ,
             rptNo:this.form.rptNo ,
             caseBoxNo:this.form.caseBoxNo ,
-            createStartStr : createStartStr,
-            createEndStr : createEndStr,
+            beginTime : createStartStr,
+            endTime : createEndStr,
             orderByColumn:'create_time',
             isAsc:'desc'
           };

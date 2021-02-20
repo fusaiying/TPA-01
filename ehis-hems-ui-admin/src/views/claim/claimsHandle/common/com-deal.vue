@@ -170,7 +170,7 @@
     changeBillStatus,
     infoList,
     insurancePolicyList,
-    adjustRemarkList
+    adjustRemarkList, addInsuredAndPolicy
   } from '@/api/claim/handleCom'
 
 
@@ -506,14 +506,24 @@
         let hasInsuredId = this.$refs.insuredForm.hasInsuredId
         let isApplicantSave = true
         let hasApplicantId = true
-        if (this.batchInfo === '02') {
+        if (this.batchInfo.claimtype === '02') {
           isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
           hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
         }
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
         let flag=this.$refs.insuredForm.validataForm()
-        if (flag){
+        //理赔类型事后 false  直结true
+        let saveflag=true
+        if(this.batchInfo.claimtype==='02'){
+          saveflag=false
+        }
+        else {
+          saveflag=true
+        }
+
+        //
+        if(saveflag){
           if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
             let data = {
               rptNo: this.querys.rptNo
@@ -552,10 +562,66 @@
               )
             }
           }
-        }else {
-          return this.$message.warning(
-            "领款人信息中与被保人关系存在本人时，被保人信息的职业和国籍必录！"
-          )
+        }
+        else {
+          if (flag) {
+
+            //获取被保人信息数据   保存被保人信息
+           let insuredData= this.$refs.insuredForm.baseForm
+           let  tableData=this.$refs.insuredForm.tableData
+            const subFormSearch = JSON.parse(JSON.stringify(insuredData))
+            subFormSearch.rptNo = this.querys.rptNo
+
+
+            let insuredInfoData = {
+              policyNos: tableData,
+              claimCaseInsured: subFormSearch
+            }
+            addInsuredAndPolicy(insuredInfoData)
+
+            if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
+              let data = {
+                rptNo: this.querys.rptNo
+              }
+              editCaseAndRecordInfoSuspend(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message({
+                    message: '提交成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }
+              }).catch(res => {
+                this.$message({
+                  message: '提交失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              })
+            } else {
+              if (!(isInsuredSave || hasInsuredId)) {
+                return this.$message.warning(
+                  "请保存被保人信息！"
+                )
+              } else if (!(isApplicantSave || hasApplicantId)) {
+                return this.$message.warning(
+                  "请保存申请人信息！"
+                )
+              } else if (!(isAcceptInfoSave || hasAcceptId)) {
+                return this.$message.warning(
+                  "请保存受理信息！"
+                )
+              }
+            }
+          } else {
+            return this.$message.warning(
+              "领款人信息中与被保人关系存在本人时，被保人信息的职业和国籍必录！"
+            )
+          }
         }
 
 

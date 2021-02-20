@@ -59,6 +59,10 @@
         <result property="submitUser" column="submit_user"/>
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.RptNoVo" id="RptNoVoResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+    </resultMap>
 
 
     <sql id="selectClaimCaseVo">
@@ -378,7 +382,7 @@
         <result property="operator"    column="operator"    />
         <result property="name"    column="name"    />
     </resultMap>
-    <!--    fu-->
+    <!--    fu 理算审核 待处理-->
     <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
@@ -394,16 +398,18 @@
         act.case_status,
         act.update_by,
         insured.NAME
-        from
+        FROM
         (
         SELECT
-        rpt_no,
-        batch_no,
-        case_status,
-        update_by
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        cases.update_by
         FROM
-        claim_case
-        where case_status='07' and update_by=#{operator} and status='Y')act
+        claim_case cases
+        where cases.case_status = '07' AND cases.STATUS = 'Y' AND cases.update_by = #{operator}
+        ORDER BY cases.update_time DESC
+        ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
         <where>
@@ -455,7 +461,7 @@
         </where>
     </select>
 
-    <!--fu-->
+    <!--fu 理算审核 默认查询一个月的 已处理-->
     <select id="selectConditionsForTheAdjustmentOver" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
             act.rpt_no,
@@ -475,8 +481,8 @@
                         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
                         AND record.operation in ('08','99')
                         AND record.STATUS = 'Y'
-                        AND record.history_flag = 'N'
-                        AND record.update_by = #{updateBy}
+                        AND record.history_flag = 'Y'
+                        AND record.operator = #{operator}
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
                 ORDER BY
                     record.update_time DESC
@@ -513,7 +519,7 @@
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
     </select>
 
-    <!--fu-->
+    <!--fu  按条件查询 已处理-->
     <select id="selectConditionsForTheAdjustmentUnderTwo" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
@@ -541,7 +547,7 @@
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
         AND record.operation in ('08','99')
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
+        AND record.history_flag = 'Y'
         AND record.operator = #{operator}
         ORDER BY
         record.update_time DESC
@@ -597,7 +603,7 @@
         </where>
     </select>
 
-    <!--fu-->
+    <!--fu  理算审核 悬挂-->
     <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
@@ -727,6 +733,17 @@
     <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">
         select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}
     </select>
+
+    <!--lhy-->
+
+    <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
+        select rpt_no from claim_case
+        <where>
+            <if test="rpt_start_no != null  and rpt_start_no != ''"> <![CDATA[and  rpt_no >= rpt_start_no = #{rptStartNo}]]></if>
+            <if test="rpt_end_no != null  and rpt_end_no != ''"> <![CDATA[and rpt_no <= rpt_end_no = #{rptEndNo}]]></if>
+        </where>
+    </select>
+
     <update id="updateClaimCaseVo" parameterType="string">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">

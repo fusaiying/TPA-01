@@ -200,7 +200,7 @@
     <!--查询历史问题件信息-->
     <select id="selectHistoricalProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
         <include refid="selectClaimCaseProblemVo"/>
-        where rpt_no=#{rptNo}  and is_history='N'
+        where rpt_no=#{rptNo}  and is_history='Y'
     </select>
 
     <select id="selectClaimCaseProblemByRptNo" parameterType="String" resultMap="ClaimCaseProblemResult">

@@ -577,9 +577,10 @@
               policyNos: tableData,
               claimCaseInsured: subFormSearch
             }
-            addInsuredAndPolicy(insuredInfoData)
+
 
             if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
+              addInsuredAndPolicy(insuredInfoData)
               let data = {
                 rptNo: this.querys.rptNo
               }

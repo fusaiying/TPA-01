@@ -57,24 +57,38 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
-          <claimsTable :negotiationTypes="negotiationTypes" :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource"  :table-data="pendingTableData" :claimno="claimno" :node="node" :status="activeName" @editHandle="editHandle"/>
+          <claimsTable :negotiationTypes="negotiationTypes" :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource"  :table-data="pendingTableData" :claimno="claimno" :node="node" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="03">
-          <claimsTable :negotiationTypes="negotiationTypes" :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource" :table-data="completedTableData" :claimno="claimno" :node="node" :status="activeName" @editHandle="editHandle"/>
+          <claimsTable :negotiationTypes="negotiationTypes" :claimStatusSelect="claimStatusSelect" :deliverySource="deliverySource" :table-data="completedTableData" :claimno="claimno" :node="node" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
-      <el-pagination
+<!--      <el-pagination
         v-show="activeName==='01'?pendingTotal >0: completedTotal>0"
         :total="activeName==='01'?pendingTotal: completedTotal"
         :current-page="activeName==='01'?pendPageInfo.page:completePageInfo.page"
         :page-size="activeName==='01'?pendPageInfo.pageSize:completePageInfo.pageSize"
         :page-sizes="[5,10, 20, 30, 50,100]"
         style="margin-top: 8px; text-align: right;"
-        layout="prev, pager, next, sizes"/>
+        layout="prev, pager, next, sizes"/>-->
+      <pagination
+        v-if="activeName==='01'"
+        v-show="pendingTotal>0"
+        :total="pendingTotal"
+        :page.sync="pendPageInfo.pageNum"
+        :limit.sync="pendPageInfo.pageSize"
+        @pagination="handleClick"
+      />
+      <pagination
+        v-if="activeName==='03'"
+        v-show="completedTotal>0"
+        :total="completedTotal"
+        :page.sync="completePageInfo.pageNum"
+        :limit.sync="completePageInfo.pageSize"
+        @pagination="handleClick"
+      />
     </el-card>
-    <!-- @size-change="sizeChange"
-        @current-change="pageChange"-->
   </div>
 </template>
 
@@ -103,11 +117,11 @@ export default {
       pendingTotal: 0,
       completedTotal: 0,
       pendPageInfo: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10
       },
       completePageInfo: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10
       },
       dialogVisible: false,
@@ -160,9 +174,9 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.pendPageInfo.page = 1;
+      this.pendPageInfo.pageNum = 1;
       this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.page = 1;
+      this.completePageInfo.pageNum = 1;
       this.completePageInfo.pageSize = 10;
       this.pendingTotal = 0;
       this.completedTotal = 0;
@@ -185,7 +199,7 @@ export default {
       params.name = name;
       params.discType = discType;
       params.createBy = createBy;
-      params.pageno = this.pendPageInfo.page;
+      params.pageno = this.pendPageInfo.pageNum;
       params.pagesize = this.pendPageInfo.pageSize;
       PendingData(params).then(res => {
         if (res.code == '200') {
@@ -212,7 +226,7 @@ export default {
       params.name = name;
       params.discType = discType;
       params.createBy = createBy;
-      params.pageno = this.completePageInfo.page;
+      params.pageno = this.completePageInfo.pageNum;
       params.pagesize = this.completePageInfo.pageSize;
       processedData(params).then(res => {
         if (res.code == '200') {
@@ -227,27 +241,6 @@ export default {
       } else {
         this.getProcessedData()
       }
-    },
-    // sizeChange(val) {
-    //   if (this.activeName === '01') {
-    //     this.pendPageInfo.pageSize = val
-    //     this.getPendingData()
-    //   } else {
-    //     this.completePageInfo.pageSize = val
-    //     this.getProcessedData()
-    //   }
-    // },
-    // pageChange(val) {
-    //   if (this.activeName === '01') {
-    //     this.pendPageInfo.page = val
-    //     this.getPendingData()
-    //   } else {
-    //     this.completePageInfo.page = val
-    //     this.getProcessedData()
-    //   }
-    // },
-    editHandle(data) {
-
     },
     handleClose() {
       this.dialogVisible = false

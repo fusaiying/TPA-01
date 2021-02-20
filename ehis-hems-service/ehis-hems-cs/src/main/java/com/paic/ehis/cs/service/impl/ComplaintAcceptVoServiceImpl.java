@@ -47,11 +47,15 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
     @Override
     public List<DemandAcceptVo> selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
+        DemandAcceptVo demandAcceptVo=new DemandAcceptVo();
+        demandAcceptVo.setStatus("01");
         return complaintAcceptVoMapper.selectComplaintAcceptVoList(acceptDTO);
     }
 
     @Override
     public List<DemandAcceptVo> selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
+        DemandAcceptVo demandAcceptVo=new DemandAcceptVo();
+        demandAcceptVo.setStatus("02");
         return complaintAcceptVoMapper.selectComplaintAcceptVoListOne(acceptDTO);
     }
 
@@ -482,6 +486,15 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             return workHandleInfoMapper.assistInComplaint(complaintDealVo);
 
         }
+    }
+    /**
+     * 投诉页面获取处理
+     * @param workOrderNo
+     * @return
+     */
+    @Override
+    public int updateComplaintStatus(String workOrderNo) {
+        return complaintAcceptVoMapper.updateComplaintStatus(workOrderNo);
     }
 
 }

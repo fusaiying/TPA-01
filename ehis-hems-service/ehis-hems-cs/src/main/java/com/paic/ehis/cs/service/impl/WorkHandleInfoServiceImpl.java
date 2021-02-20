@@ -7,9 +7,7 @@ import java.util.Map;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
-import com.paic.ehis.cs.domain.AcceptDetailInfo;
-import com.paic.ehis.cs.domain.FieldMap;
-import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
@@ -19,7 +17,6 @@ import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
-import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 
 /**
@@ -112,14 +109,25 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         return workHandleInfoMapper.deleteWorkHandleInfoById(handleId);
     }
     /**
-     * 修改服务处理页面
+     * 修改服务处理页面   暂存
      * @param serviceProcessingVo
      * @return
      */
     @Override
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo) {
-        if(serviceProcessingVo.getSign().equals("01")){
-            WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
+        WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        if (workHandleInfo1==null) {
+        //if(serviceProcessingVo.getSign().equals("01")){
+            //将其余状态置为N
+
+            //无本人操作历史   则增加一条新数据
+
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
 
@@ -128,7 +136,100 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+            workHandleInfo.setRemark(serviceProcessingVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
+            return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
+        }else {
+            //生成轨迹表
+           /* FlowLog flowLog=new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            flowLogMapper.insertFlowLog(flowLog);*/
+
+            //主表生成数据
+            //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            //将所有状态置为N
             workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("Y");
+            workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+            workHandleInfo.setRemark(serviceProcessingVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
+
+            return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
+
+        }
+
+
+    }
+
+    @Override
+    public int insertSaveServiceInfo(ServiceProcessingVo serviceProcessingVo) {
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
+        WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        if (workHandleInfo1==null) {
+            //生成轨迹表
+            FlowLog flowLog=new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            flowLogMapper.insertFlowLog(flowLog);
+            //if(serviceProcessingVo.getSign().equals("01")){
+            //将其余状态置为N
+
+            //修改主表状态为已处理
+            WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workOrderAccept.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+            //无本人操作历史   则增加一条新数据
+           // WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setHandleType("处理");
+
+            workHandleInfo.setStatus("Y");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
             workHandleInfo.setRemark(serviceProcessingVo.getRemark());
             List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
             for (FieldMap fieldMap:KVMap){
@@ -151,17 +252,24 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             flowLogMapper.insertFlowLog(flowLog);
-
+            //修改主表状态为已处理
+            WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workOrderAccept.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //主表生成数据
-            WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+           // WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
-            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+
             workHandleInfo.setRemark(serviceProcessingVo.getRemark());
             List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ServiceProcessingVo");
             for (FieldMap fieldMap:KVMap){
@@ -172,12 +280,15 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
                 VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
 
-            return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
+            return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
 
         }
 
 
     }
+
+
+
     /**
      *  协办处理页面 信息需求  服务处理
      * @param serviceProcessingVo
@@ -312,6 +423,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         //获取处理时长
        // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setStatus("Y");
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
         String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";

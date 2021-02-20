@@ -14,6 +14,7 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,8 +25,7 @@ import java.util.List;
  * @date 2021-01-11
  */
 @Service
-public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
-{
+public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService {
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
 
@@ -42,8 +42,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 案件问题件
      */
     @Override
-    public ClaimCaseProblem selectClaimCaseProblemById(Long problemId)
-    {
+    public ClaimCaseProblem selectClaimCaseProblemById(Long problemId) {
         return claimCaseProblemMapper.selectClaimCaseProblemById(problemId);
     }
 
@@ -54,8 +53,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 案件问题件
      */
     @Override
-    public List<ClaimCaseProblem> selectClaimCaseProblemList(ClaimCaseProblem claimCaseProblem)
-    {
+    public List<ClaimCaseProblem> selectClaimCaseProblemList(ClaimCaseProblem claimCaseProblem) {
         return claimCaseProblemMapper.selectClaimCaseProblemList(claimCaseProblem);
     }
 
@@ -65,7 +63,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
     }
 
     @Override
-    public List<ClaimCaseProblem> selectClaimCaseProblemList2(ClaimCaseProblem claimCaseProblem) throws Exception{
+    public List<ClaimCaseProblem> selectClaimCaseProblemList2(ClaimCaseProblem claimCaseProblem) throws Exception {
 //        Map map = Dateutils.getCurrontTime1();
 //        claimCaseProblem.setdBefore1(sdf.parse(String.valueOf(map.get("defaultStartDate"))));
 //        claimCaseProblem.setdNow1(sdf.parse(String.valueOf(map.get("defaultEndDate"))));
@@ -89,8 +87,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 结果
      */
     @Override
-    public int  insertClaimCaseProblem(ClaimCaseProblem claimCaseProblem)
-    {
+    public int insertClaimCaseProblem(ClaimCaseProblem claimCaseProblem) {
         claimCaseProblem.setCreateBy(SecurityUtils.getUsername());
         claimCaseProblem.setCreateTime(DateUtils.getNowDate());
         claimCaseProblem.setUpdateBy(SecurityUtils.getUsername());
@@ -98,12 +95,12 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
         claimCaseProblem.setStatus("Y");//状态
         claimCaseProblem.setIsHistory("N");
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblem.getRptNo());
-        for (ClaimCaseProblem claimCaseProblemsList:claimCaseProblems){
+        for (ClaimCaseProblem claimCaseProblemsList : claimCaseProblems) {
             claimCaseProblem.setProblemId(claimCaseProblemsList.getProblemId());
         }
-        if (claimCaseProblems!=null && !claimCaseProblems.isEmpty()){//不为空
+        if (claimCaseProblems != null && !claimCaseProblems.isEmpty()) {//不为空
             return claimCaseProblemMapper.updateClaimCaseProblem(claimCaseProblem);
-        }else {//为空
+        } else {//为空
             return claimCaseProblemMapper.insertClaimCaseProblem(claimCaseProblem);
         }
     }
@@ -116,24 +113,23 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 结果
      */
     @Override
-    public int updateClaimCaseProblem(ClaimCaseProblem claimCaseProblem)
-    {
+    public int updateClaimCaseProblem(ClaimCaseProblem claimCaseProblem) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseProblem.getRptNo());
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setStatus("Y");
         claimCaseRecord.setOperation("05");
         ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
-        ClaimCase claimCase=claimCaseMapper.selectClaimCaseById(claimCaseProblem.getRptNo());
+        ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(claimCaseProblem.getRptNo());
         claimCase.setUpdateBy(caseRecord.getOperator());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("05");
 
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoFive(claimCaseProblem.getRptNo());
-           record.setOperator(SecurityUtils.getUsername());
-           record.setHistoryFlag("Y");
-           record.setUpdateBy(SecurityUtils.getUsername());
-           record.setUpdateTime(DateUtils.getNowDate());
+        record.setOperator(SecurityUtils.getUsername());
+        record.setHistoryFlag("Y");
+        record.setUpdateBy(SecurityUtils.getUsername());
+        record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(record);
 
         claimCaseRecord.setHistoryFlag("N");
@@ -153,8 +149,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 结果
      */
     @Override
-    public int deleteClaimCaseProblemByIds(Long[] problemIds)
-    {
+    public int deleteClaimCaseProblemByIds(Long[] problemIds) {
         return claimCaseProblemMapper.deleteClaimCaseProblemByIds(problemIds);
     }
 
@@ -165,13 +160,13 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return 结果
      */
     @Override
-    public int deleteClaimCaseProblemById(Long problemId)
-    {
+    public int deleteClaimCaseProblemById(Long problemId) {
         return claimCaseProblemMapper.deleteClaimCaseProblemById(problemId);
     }
 
     /**
      * 查找历史问题件页面
+     *
      * @param claimCaseProblem
      * @return
      */
@@ -179,17 +174,19 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
     public ProblemTextDTO selectHistoricalProblem(ClaimCaseProblem claimCaseProblem) {
         ProblemTextDTO problemTextDTO = new ProblemTextDTO();
         List<ClaimCaseProblem> claimCaseProblemList = claimCaseProblemMapper.selectHistoricalProblem(claimCaseProblem);
+        List<ClaimCaseProblem> claimCaseProblems1 = new ArrayList<>();
         for (ClaimCaseProblem claimCaseProblems : claimCaseProblemList) {
             if (claimCaseProblems.getIsHistory().equals("N")) {
                 problemTextDTO.setProblemStatus("Y");
             }
+            claimCaseProblems1.add(claimCaseProblems);
         }
-        problemTextDTO.setClaimCaseProblems(claimCaseProblemList);
+        problemTextDTO.setClaimCaseProblems(claimCaseProblems1);
         return problemTextDTO;
     }
 
     @Override
-    public List<ClaimCaseProblem> selectClaimCaseProblemByRptNo(String rptNo){
+    public List<ClaimCaseProblem> selectClaimCaseProblemByRptNo(String rptNo) {
         return claimCaseProblemMapper.selectClaimCaseProblemByRptNo(rptNo);
     }
 }

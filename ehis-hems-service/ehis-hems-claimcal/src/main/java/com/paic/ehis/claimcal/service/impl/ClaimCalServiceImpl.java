@@ -111,10 +111,10 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 cccID.setDutyDetailCode(dutyDetailCode);
                 cccID.setFeeItemCode(ccbD.getFeeItemCode());
                 cccID.setCalAmount(ccbD.getBillDetailAmount().subtract(ccbD.getBillDetailCopay()).
-                        subtract(ccbD.getAdvancePayment()).subtract(ccbD.getHosDiscountAmount()).subtract(ccbD.getUnableAmount()));
+                        subtract(ccbD.getAdvancePayment()).subtract(ccbD.getHosDiscountAmount()).subtract(ccbD.getUnableAmount() == null ? new BigDecimal(0) : ccbD.getUnableAmount()));
                 cccID.setRefusedAmount(new BigDecimal(0));
                 cccID.setDeduUsed(new BigDecimal(0));
-                cccID.setPayRate(new BigDecimal(1));
+                cccID.setPayRate(new BigDecimal(100));
                 sumBillCalAmount = sumBillCalAmount.add(cccID.getCalAmount());
                 sumFeeAmount = sumFeeAmount.add(ccbD.getBillDetailAmount());
 

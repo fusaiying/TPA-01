@@ -59,6 +59,10 @@
         <result property="submitUser" column="submit_user"/>
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.RptNoVo" id="RptNoVoResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+    </resultMap>
 
 
     <sql id="selectClaimCaseVo">
@@ -729,6 +733,17 @@
     <select id="selectCaseDistNumberOne" parameterType="String" resultType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDistVo">
         select count(1)  quantity from claim_case where case_status=#{caseStatus}  and rpt_no=#{rptNo}
     </select>
+
+    <!--lhy-->
+
+    <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
+        select rpt_no from claim_case
+        <where>
+            <if test="rpt_start_no != null  and rpt_start_no != ''"> <![CDATA[and  rpt_no >= rpt_start_no = #{rptStartNo}]]></if>
+            <if test="rpt_end_no != null  and rpt_end_no != ''"> <![CDATA[and rpt_no <= rpt_end_no = #{rptEndNo}]]></if>
+        </where>
+    </select>
+
     <update id="updateClaimCaseVo" parameterType="string">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">

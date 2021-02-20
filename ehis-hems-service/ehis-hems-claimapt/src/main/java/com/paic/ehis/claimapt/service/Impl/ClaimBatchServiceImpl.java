@@ -6,10 +6,7 @@ import com.paic.ehis.claimapt.domain.DTO.BatchDTO;
 import com.paic.ehis.claimapt.domain.DTO.BatchRecordDTO;
 import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimapt.domain.Vo.BatchVo;
-import com.paic.ehis.claimapt.mapper.ClaimBatchMapper;
-import com.paic.ehis.claimapt.mapper.ClaimBatchRecordMapper;
-import com.paic.ehis.claimapt.mapper.ClaimCaseMapper;
-import com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper;
+import com.paic.ehis.claimapt.mapper.*;
 import com.paic.ehis.claimapt.service.IClaimBatchService;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -41,6 +38,9 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 
     @Autowired
     private ClaimCaseRecordMapper claimCaseRecordMapper;
+
+    @Autowired
+    private ClaimBatchInvoiceFilingMapper claimBatchInvoiceFilingMapper;
 
     /**
      * 查询理赔批次
@@ -396,6 +396,16 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 
         claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchMapper.insertClaimBatch(claimBatch);
+
+        //生成发表归档信息
+        ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
+        claimBatchInvoiceFiling.setBatchNo(str1);
+        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
+        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
+        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
+
         return claimBatch;
     }
 
@@ -482,7 +492,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         ClaimBatchRecord claimBatchRecord1 = claimBatchRecordMapper.selectClaimBatchRecordByBatch(claimBatchRecord);
         if (claimBatchRecord1 != null) {
             claimBatchRecord.setRecordid(claimBatchRecord1.getRecordid());
-            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//N
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecordMapper.updateClaimBatchRecord(claimBatchRecord);
 
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
@@ -494,6 +504,16 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
             claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchMapper.updateClaimBatch(claimBatch);
         }
+
+        //生成发表归档信息
+        ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
+        claimBatchInvoiceFiling.setBatchNo(claimBatch.getBatchno());
+        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
+        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
+        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
+
         return standingAndBatck;
     }
 

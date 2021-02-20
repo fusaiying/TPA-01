@@ -37,14 +37,11 @@ public class ClaimCaseRemarkController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:remark:list')")
     @GetMapping("/list")
-    public AjaxResult list(ClaimCaseRemark claimCaseRemark)
+    public TableDataInfo list(ClaimCaseRemark claimCaseRemark)
     {
         startPage();
         List<ClaimCaseRemark> list = claimCaseRemarkService.selectClaimCaseRemarkList(claimCaseRemark);
-        RemarkVO remarkVO = new RemarkVO();
-        remarkVO.setRemarkList(list);
-        remarkVO.setUserName(SecurityUtils.getUsername());
-        return AjaxResult.success(remarkVO);
+        return getDataTable(list);
     }
 
     /**
@@ -125,6 +122,11 @@ public class ClaimCaseRemarkController extends BaseController
     @GetMapping(value = "/s/{rptNo}")
     public AjaxResult getInfo(@PathVariable("rptNo") String rptNo)
     {
-        return AjaxResult.success(claimCaseRemarkService.selectClaimCaseRemarkByRptNo(rptNo));
+        List<ClaimCaseRemark> claimCaseRemarks = claimCaseRemarkService.selectClaimCaseRemarkByRptNo(rptNo);
+        RemarkVO remarkVO = new RemarkVO();
+        remarkVO.setRemarkList(claimCaseRemarks);
+        remarkVO.setUserName(SecurityUtils.getUsername());
+        return AjaxResult.success(remarkVO);
+
     }
 }

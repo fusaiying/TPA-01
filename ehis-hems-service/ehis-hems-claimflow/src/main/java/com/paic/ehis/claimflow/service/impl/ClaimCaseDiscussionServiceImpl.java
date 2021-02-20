@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * 案件协谈信息Service业务层处理
@@ -194,27 +194,70 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         List<ClaimCaseDiscussionVO> claimCaseDiscussionVOS = claimCaseDiscussionMapper.selectCaseDisListUnder(claimCaseDiscussionDTO);
         //已有：rpt_no,/*案件受理报案号*/  source,/*交单来源*/  name,/*被保人姓名*/  disc_type,/*协谈类型*/
         // create_by,/*提交用户,流程节点操作人*/  case_status,/*案件状态*/  organ_code,/*承保机构*/  id_no,/*证件号码*/
-        //  acc_date,/*出险日期*/ 监控时效 acc_type/*事故类型*/  submit_date交单日期  source交单来源 停留时长
-        //还差：出单公司
+        // submit_date交单日期  source交单来源 停留时长
+        //还差：出单公司/*出险日期*/ 监控时效
         for (ClaimCaseDiscussionVO claimCaseDiscussionVO:claimCaseDiscussionVOS) {
-
-           //出单公司companyName
+            //出单公司companyName
             List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
-            String companyName = null;
-            StringBuilder sb = new StringBuilder();
-            for (ClaimCasePolicy laimCasePolicyList : claimCasePolicies) {
-                PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(laimCasePolicyList.getPolicyNo());//查出出单公司的所有信息
-               if(policyInfo != null) {
-                   String companyName1 = policyInfo.getCompanyName();//得到单个的出单公司名字
-                   //字符拼接
-                   if (sb.length() > 0) {//该步即不会第一位有逗号，也防止最后一位拼接逗号！
-                       sb.append("|");
-                   }
-                   sb.append(companyName1);
-               }
+            if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
+                List<String> organCodeList = new ArrayList<>();//承保机构
+                List<String> companyNameList = new ArrayList<>();//出单公司
+                for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
+                    //去重出单公司名称拼接
+                    companyNameList.add(claimCasePoliciesOne.getCompanyName());
+                    //去重承保机构名称拼接
+                    organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+                Set set = new HashSet<>(organCodeList);
+                List newOrganCodeList = new ArrayList<>(set);
+                if (!newOrganCodeList.isEmpty()) {
+                    stringBuilder.append(newOrganCodeList.get(0));
+                    for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
+                        stringBuilder.append("|").append(newOrganCodeList.get(i));
+                    }
+                }
+                claimCaseDiscussionVO.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
+
+                StringBuilder stringBuilder2 = new StringBuilder();
+                Set set1 = new HashSet<>(companyNameList);
+                List newCompanyNameList = new ArrayList<>(set1);
+                if (!newCompanyNameList.isEmpty()) {
+                    stringBuilder2.append(newCompanyNameList.get(0));
+                    for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                        stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                    }
+                }
+                claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
             }
-            companyName = sb.toString();
-            claimCaseDiscussionVO.setCompanyName(companyName);
+//提交用
+
+            //停留时长
+            ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(claimCaseDiscussionVO.getRptNo());
+            if (null != claimCaseRecord) {
+                Date begin = claimCaseRecord.getCreateTime();
+                Date end = new Date();
+                long between = (end.getTime() - begin.getTime()) / 1000;//除以1000是为了转换成秒
+                long day1 = between / (24 * 3600);
+                long hour1 = between % (24 * 3600) / 3600;
+                long minute1 = between % 3600 / 60;
+                String time = "" + day1 + "天" + hour1 + "小时" + minute1 + "分";
+                claimCaseDiscussionVO.setStopTime(time);
+            }
+            //监控时效
+            ClaimCaseRecord claimCaseRecord1 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(claimCaseDiscussionVO.getRptNo());
+            if (null != claimCaseRecord1) {
+                Date begin1 = claimCaseRecord1.getCreateTime();
+                Date end1 = new Date();
+                long between1 = (end1.getTime() - begin1.getTime()) / 1000;//除以1000是为了转换成秒
+                long day2 = between1 / (24 * 3600);
+                long hour2 = between1 % (24 * 3600) / 3600;
+                long minute2 = between1 % 3600 / 60;
+                String time2 = "" + day2 + "天" + hour2 + "小时" + minute2 + "分";
+                claimCaseDiscussionVO.setMonitoringTime(time2);
+            }
+            claimCaseDiscussionVOS.add(claimCaseDiscussionVO);
         }
         return claimCaseDiscussionVOS;
     }
@@ -226,10 +269,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         List<ClaimCaseDiscussionVO> claimCaseDiscussionVOS1 = claimCaseDiscussionMapper.selectCaseDisListOver(claimCaseDiscussionDTO);
         //已有：rpt_no,/*案件受理报案号*/  source,/*交单来源*/  name,/*被保人姓名*/  disc_type,/*协谈类型*/
         // create_by,/*提交用户,流程节点操作人*/  case_status,/*案件状态*/  organ_code,/*承保机构*/
-        //还差：出单公司、监控时效
         for (ClaimCaseDiscussionVO claimCaseDiscussionVO:claimCaseDiscussionVOS1) {
-            //年龄
-
             //出单公司companyName
             List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
             String companyName = null;

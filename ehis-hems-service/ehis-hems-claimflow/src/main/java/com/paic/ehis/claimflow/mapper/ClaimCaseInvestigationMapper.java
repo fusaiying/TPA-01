@@ -23,6 +23,7 @@ public interface ClaimCaseInvestigationMapper
      * @return 案件调查任务
      */
     public ClaimCaseInvestigation selectClaimCaseInvestigationById(Long invNo);
+    public ClaimCaseInvestigation selectClaimCaseInvestigationByNew(String rptNo);
     public ClaimCaseInvestigation selectClaimCaseInvestigationByIdOne(String rptNo);
 
 

@@ -159,7 +159,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="操作人：" prop="operator">
-                  <el-select v-model="operatorForm.operator" class="item-width" size="mini" placeholder="请选择">
+                  <el-select v-model="operatorForm.operator" class="item-width" size="mini" placeholder="请选择" @change="getRole">
                     <el-option v-for="option in operatorSelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -183,7 +183,10 @@
            ,getDspatchUser
            ,dispatchUpdate
            ,getIssuingcompanyList
+           ,roleInfo
+           ,logInfo
         } from '@/api/dispatch/api'
+  import moment from "moment";
 
     export default {
       components: {
@@ -223,6 +226,9 @@
               rptNos : '',
               deliverySource:[],
               searchBtn:false,
+              logRoleName:'',
+              checkRoleName:'',
+              userIdName: {},
             }
         },
       mounted(){
@@ -245,12 +251,90 @@
 
       created: function() {
         this.initData();
+        this.getLogRole();
       },
       methods: {
+        getPermit(caseStatus,type){
+          /**
+           挂起	00
+           机构交单	04
+           受理	05
+           问题件	30
+           撤件可申诉	97
+           撤件	98
+           录入	06
+           审核	07
+           协谈	31
+           调查	32
+           抽检	08
+           结案	99
+           */
+          switch(caseStatus) {
+            case '00':
+              return true
+              break;
+            case '04':
+              return true
+              break;
+            case '05':
+              return type === 1 ? this.logRoleName.indexOf("受理") > 0 : this.checkRoleName.indexOf("受理") > 0
+              break;
+            case '30':
+              return type === 1 ? this.logRoleName.indexOf("问题件") > 0 : this.checkRoleName.indexOf("问题件") > 0
+              break;
+            case '97':
+              return true
+            case '98':
+              return true
+            case '06':
+              return type === 1 ? this.logRoleName.indexOf("录入") > 0 : this.checkRoleName.indexOf("录入") > 0
+              break;
+            case '07':
+              return type === 1 ? this.logRoleName.indexOf("审核") > 0 : this.checkRoleName.indexOf("审核") > 0
+              break;
+            case '31':
+              return type === 1 ? this.logRoleName.indexOf("协谈") > 0 : this.checkRoleName.indexOf("协谈") > 0
+              break;
+            case '32':
+              return type === 1 ? this.logRoleName.indexOf("调查") > 0 : this.checkRoleName.indexOf("调查") > 0
+              break;
+            case '08':
+              return type === 1 ? this.logRoleName.indexOf("抽检") > 0 : this.checkRoleName.indexOf("抽检") > 0
+              break;
+            case '99':
+              return true
+            default:
+              return true
+          }
+        },
+        getRole(value){
+           value  = this.userIdName[value];
+           if(value == '') {
+             return false;
+           }
+          roleInfo(value).then(response => {
+            if (response.code == '200') {
+              //console.log(response.data.roles[0].roleName)
+              this.checkRoleName = response.data.roles[0].roleName;
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+        },
+        getLogRole(){
+          logInfo().then(response => {
+            if (response.code == '200') {
+              //console.log(response.user.roles[0].roleName)
+              this.logRoleName = response.user.roles[0].roleName;
+            }
+          }).catch(error => {
+            console.log(error);
+          });
+        },
         getDeliverySourceName(row,col) {
           return this.selectDictLabel(this.deliverySource, row.source)
         },
-        getIssuingcompanySelect (){  //getIssuingcompanyList
+        getIssuingcompanySelect (){
           const params = {
             pageNum:1,
             pageSize:1000,
@@ -285,6 +369,8 @@
                 obj.dictLabel = response.rows[i].userName ;
                 obj.dictValue = response.rows[i].userName;
                 this.operatorSelect.push(obj);
+                // 根据用户名称映射用户id
+                this.userIdName[response.rows[i].userName]=response.rows[i].userId;
               }
             }
           }).catch(error => {
@@ -319,10 +405,8 @@
           }
 
           if(!this.searchBtn) {
-            let currentDate = new  Date();
-            endTime   = (this.dateFormat('yyyy-MM-dd',currentDate))  +" 23:59:59";
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            startTime = this.dateFormat('yyyy-MM-dd',currentDate);
+            startTime  = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+            endTime =  moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
           }
           const params = {
             pageNum:this.pageInfo.currentPage,
@@ -395,7 +479,32 @@
         },
         // 多选框选中数据
         handleSelectionChange(selection) {
-          this.rptNos = (selection.map(item => item.rptNo)); //rptNo
+          console.log(selection)
+          let checkArra = new Array();
+          let uncheckArra = new Array();
+
+          for (let i=0; i<selection.length; i++) {
+            let caseStatus = selection[i].caseStatus;
+            if(this.logRoleName.indexOf("管理员") < 0) {
+              let permit = this.getPermit(caseStatus,1);
+              if(permit) {
+                checkArra.push(selection[i].rptNo)
+              } else {
+                uncheckArra.remove(selection[i].rptNo)
+              }
+            }
+            if(this.checkRoleName.indexOf("管理员") < 0) {
+              let permit = this.getPermit(caseStatus,2);
+              if(permit) {
+                checkArra.push(selection[i].rptNo)
+              }
+            }
+
+          }
+
+
+        //  this.rptNos = (selection.map(item => item.rptNo)); //rptNo
+
           // this.ids = selection.map(item => item.rptNo);
           this.single = selection.length != 1;
           this.multiple = !selection.length;

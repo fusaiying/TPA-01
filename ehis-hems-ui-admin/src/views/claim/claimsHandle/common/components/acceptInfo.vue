@@ -198,6 +198,7 @@
             console.log(this.baseInfo.prireason);
             this.baseForm.priReason=this.baseInfo.prireason
           }
+          this.checkedAllFun()
           let date = new Date()
           let mon = date.getMonth() + 1
           let day = date.getDate()

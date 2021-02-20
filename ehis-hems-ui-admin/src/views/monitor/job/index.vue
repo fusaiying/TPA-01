@@ -472,7 +472,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('schedule/job/export', {
+      this.download('system/job/export', {
         ...this.queryParams
       }, `job_${new Date().getTime()}.xlsx`)
     }

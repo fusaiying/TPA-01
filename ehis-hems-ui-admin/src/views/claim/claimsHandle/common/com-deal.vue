@@ -274,7 +274,7 @@
           {label: '赔付结论', name: '#anchor-17'},
           //{label: '问题件', name: '#anchor-14'},
         ],
-        reportData: [],
+        reportData: {},
         dictList: [],
         delivery_sourceOption: [],
         applicantData: {},
@@ -373,7 +373,7 @@
         if (this.querys.node === 'calculateReview') {
           adjustRemarkList(data).then(res => {
             if (res != null && res.code === 200) {
-              this.reportData = res.rows
+              this.reportData = res.data
             }
           })
         } else {

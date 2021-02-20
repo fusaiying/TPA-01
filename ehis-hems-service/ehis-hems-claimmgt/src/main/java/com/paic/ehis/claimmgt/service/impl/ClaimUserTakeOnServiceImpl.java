@@ -76,7 +76,7 @@ public class ClaimUserTakeOnServiceImpl implements IClaimUserTakeOnService
         claimUserTakeOn.setCreateTime(nowDate);
         claimUserTakeOn.setUpdateBy(username);
         claimUserTakeOn.setUpdateTime(nowDate);
-        claimUserTakeOn.setStatus("Y");
+        claimUserTakeOn.setStatus(claimUserTakeOn.getStatus());
         return claimUserTakeOnMapper.insertClaimUserTakeOn(claimUserTakeOn);
     }
 

@@ -42,6 +42,15 @@ public class ClaimCaseController extends BaseController {
     private IClaimCaseRecordService claimCaseRecordService;
 
 
+
+    /**
+     * 理算审核调查 保存按钮
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:add')")
+    @PostMapping("/saveInvestigation")
+    public AjaxResult saveInvestigation(ClaimCaseInvestigation caseInvestigation) {
+        return toAjax(claimCaseService.surveyInformationPreservation(caseInvestigation));
+    }
     /**
      * 理算审核提调 按钮
      */

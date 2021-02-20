@@ -187,7 +187,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.cont_type,
         cb.batch_status,
         cbr.update_by,
-        cb.update_time
+        cb.update_time,
+        bpi.chname1,
+        bpi.enname1
         FROM
         claim_batch cb
         LEFT JOIN (

@@ -96,7 +96,7 @@ export function inQuireConfirm(query){
 // 新增案件调查任务
 export function inQuireSave(data) {
   return request({
-    url: '/claimflow/investigation',
+    url: '/claimflow/case/saveInvestigation',
     method: 'post',
     data: data
   })

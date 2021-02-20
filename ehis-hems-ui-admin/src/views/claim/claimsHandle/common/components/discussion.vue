@@ -355,7 +355,7 @@
           invReason: {trigger: ['change'], required: true, message: '提调原因必填'},
           invOrganCode: {trigger: ['change'], required: true, message: '调查机构必填'},
           organCode: {trigger: ['change'], required: true, message: '提调机构必填'},
-        /*  policyNo: {trigger: ['change'], required: true, message: '保单号必填'},*/
+          policyNo: {trigger: ['change'], required: true, message: '保单号必填'},
           invView: {trigger: ['change'], required: true, message: '提调事项必填'},
         },
 
@@ -643,7 +643,6 @@
             }
             const params = this.surveyForm;
             params.rptNo = this.rptNo;
-            params.policyNo = 'teststttt';
 
             inQuireSave(params).then(res => {
               console.log(res);
@@ -695,7 +694,7 @@
       },
       getCalInfo() {
         calInfo(this.rptNo).then(res => {
-          if(res.code == '200') {
+          if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
             this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论

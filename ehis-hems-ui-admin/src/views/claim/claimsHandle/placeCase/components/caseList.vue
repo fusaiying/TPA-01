@@ -123,14 +123,6 @@
           </el-table-column>
         </el-table>
       </el-form>
-        <!--分页组件-->
- <!--       <pagination
-          v-show="totalNum>0"
-          :total="totalNum"
-          :page.sync="pageInfo.currentPage"
-          :limit.sync="pageInfo.pageSize"
-          @pagination="initData"
-        />-->
     </el-card>
   </el-dialog>
 </template>
@@ -145,29 +137,24 @@
         type: Boolean,
         default: false
       },
-      rptNo: String,
-      batchNo: String,
+      fixInfo: Object,
       editPower: {
         type: Boolean,
         default: false
       },
     },
     watch: {
+      fixInfo: function (newValue) {
+        this.paramFixInfo = newValue;
+      },
+      editPower: function (newValue) {
+        this.edit = newValue;
+      },
       value: function (newValue) {
         this.dialogListVisable = newValue;
         if(this.dialogListVisable) {
           this.initData();
         }
-      },
-      rptNo: function (newValue) {
-        this.detailRptNo = newValue;
-      },
-      batchNo: function (newValue) {
-        this.detailBatchNo = newValue;
-      },
-      editPower: function (newValue) {
-        console.log(newValue);
-        this.edit = newValue;
       },
 
     },
@@ -194,6 +181,7 @@
         detailBatchNo:'',
         selectData:'',
         edit:true,
+        paramFixInfo: {},
       }
     },
     mounted(){
@@ -208,7 +196,7 @@
 
     // 获取跳转地址的数据
     created: function() {
-      this.initData();
+      //this.initData();
     },
     methods: {
       saveData() {
@@ -221,7 +209,6 @@
           return false;
         }
         updateCaseFilingInfo(listDta).then(response => {
-          // console.log(response)
           if(response.code == '200') {
             this.$message({
               type: 'success',
@@ -238,24 +225,14 @@
         }).catch(error => {
           console.log(error);
         })
-        // this.$refs.dataForm.validate((valid) => {
-        //   if (valid) {
-        //     let listDta = this.dataForm.tableData;
-        //     console.log(listDta)
-        //     console.log(listDta)
-        //     console.log(listDta)
-        //     console.log(listDta)
-        //   } else {
-        //     return false
-        //   }
-        // })
-
       },
       initData(){
         const params = {
           pageNum:this.pageInfo.currentPage,
           pageSize:this.pageInfo.pageSize,
-          batchNo:this.batchNo,
+          caseBoxNo:this.paramFixInfo.caseBoxNo,
+          rptStartNo:this.paramFixInfo.rptStartNo,
+          rptEndNo:this.paramFixInfo.rptEndNo,
           orderByColumn:'ccf.create_time',
           isAsc:'desc'
         };
@@ -272,14 +249,6 @@
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.selectData = selection;
-        console.log(selection);
-        console.log(selection);
-        console.log(selection);
-
-        // this.rptNos = (selection.map(item => item.rptNo)); //rptNo
-        // // this.ids = selection.map(item => item.rptNo);
-        // this.single = selection.length != 1;
-        // this.multiple = !selection.length;
       },
       //关闭对话框
       changeDialogVisable() {

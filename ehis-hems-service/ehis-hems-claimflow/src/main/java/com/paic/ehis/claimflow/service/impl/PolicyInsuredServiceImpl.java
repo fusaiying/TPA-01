@@ -1,6 +1,9 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.PolicyInsured;
+import com.paic.ehis.claimflow.domain.vo.PolicyFlagVo;
+import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import com.paic.ehis.claimflow.mapper.PolicyInfoMapper;
 import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IPolicyInsuredService;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -20,6 +23,8 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 {
     @Autowired
     private PolicyInsuredMapper policyInsuredMapper;
+    @Autowired
+    private PolicyInfoMapper policyInfoMapper;
 
     /**
      * 查询被保人信息
@@ -100,8 +105,24 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return
      */
     @Override
-    public List<PolicyInsured> selectRecognizee(PolicyInsured policyInsured) {
+    public PolicyFlagVo selectRecognizee(PolicyInsured policyInsured) {
+        PolicyFlagVo policyFlagVo=new PolicyFlagVo();
+        if(policyInsured.getPolicyNo().isEmpty()){
+            //return policyInsuredMapper.selectRecognizee(policyInsured);
+            policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
+            policyFlagVo.setFlag("false");
+        }else
+        {
+            PolicyVo policyVos= policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
+            if(policyVos.getPolicyRiskType().equals("G")){
+                policyFlagVo.setFlag("true");
+            }else{
+                policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
+                policyFlagVo.setFlag("false");
+            }
 
-        return policyInsuredMapper.selectRecognizee(policyInsured);
+        }
+
+        return policyFlagVo;
     }
 }

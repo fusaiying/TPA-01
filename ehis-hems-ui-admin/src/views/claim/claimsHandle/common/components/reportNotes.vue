@@ -23,7 +23,7 @@
       <el-table-column align="center" prop="remark" label="备注内容" show-overflow-tooltip/>
       <el-table-column align="center" prop="station" label="添加岗位" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ selectDictLabel(job_typeOptions, scope.row.remarkType) }}</span>
+          <span>{{ selectDictLabel(job_typeOptions, scope.row.station) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="createBy" label="添加人" show-overflow-tooltip/>
@@ -32,10 +32,10 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" v-if="batchInfo.claimtype==='02' && status==='edit'" label="操作" width="140">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
-          <el-button size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
+      <el-table-column align="center" v-if="status==='edit'" label="操作" width="140"><!--batchInfo.claimtype==='02' && -->
+        <template slot-scope="scope" >
+          <el-button :disabled="user!==scope.row.createBy" size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
+          <el-button :disabled="user!==scope.row.createBy" size="mini" style="color: red" type="text" @click="deleteInfo(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,7 +79,7 @@
   export default {
     props: {
       batchInfo:Object,
-      reportDatas: Array,
+      reportDatas: Object,
       status: String,
       node: String,
       claimno: String,
@@ -101,11 +101,13 @@
     },
     watch: {
       reportDatas:function (newValue) {
-        this.reportData=newValue
+        this.reportData=newValue.remarkList
+        this.user=newValue.userName
       }
     },
     data() {
       return {
+        user:'',
         reportData:[],
         isAddOrEdit:'',
         dialogFormVisible: false,
@@ -156,6 +158,8 @@
           this.baseForm.station='02'
         }else if(this.node==='calculateReview'){
           this.baseForm.station='03'
+        }else if(this.node==='sport'){
+          this.baseForm.station='04'
         }
         this.$refs.baseForm.validate((valid) => {
           if (valid) {

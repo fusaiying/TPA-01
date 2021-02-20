@@ -168,7 +168,7 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :batchNo="batchNo" :rptNo="rptNo" @closeListDialog="closeListDialog"/>
+    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>
@@ -261,8 +261,11 @@
                 dialogVisable: false,
                 listDialog:false,
                 searchBtn:false,
-                rptNo : '',
-                batchNo :'',
+                fixInfo:{
+                  batchNo:'',
+                  rptStartNo:'',
+                  rptEndNo:'',
+                },
                 claimTypes:[],
                 yssOrNo:[],
                 editPower:true,
@@ -290,7 +293,11 @@
           } else {
             this.editPower = true;
           }
-          this.batchNo  = row.batchNo;
+          this.fixInfo  = {
+            caseBoxNo:row.caseBoxNo,
+            rptStartNo:row.rptStartNo,
+            rptEndNo:row.rptEndNo,
+          };
           this.listDialog = true
         },
         closeListDialog() {
@@ -326,8 +333,8 @@
             batchNo: this.form.batchNo ,
             rptNo:this.form.rptNo ,
             caseBoxNo:this.form.caseBoxNo ,
-            createStartStr : createStartStr,
-            createEndStr : createEndStr,
+            beginTime : createStartStr,
+            endTime : createEndStr,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
@@ -408,9 +415,6 @@
             batchNo : row.batchNo,
             caseBoxNo : row.caseBoxNo
           };
-          // param.batchNo = row.batchNo;
-          // param.caseBoxNo = row.caseBoxNo;
-
           let vm = this;
           this.$confirm('确定销毁该记录?', "提示", {
             confirmButtonText: "确定",

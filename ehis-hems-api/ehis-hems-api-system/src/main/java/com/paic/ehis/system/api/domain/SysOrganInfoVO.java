@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-02-19
  */
-public class SysOrganInfo extends BaseEntity
+public class SysOrganInfoVO extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

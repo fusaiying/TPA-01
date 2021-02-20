@@ -23,7 +23,7 @@
       <el-table-column align="center" prop="remark" label="备注内容" show-overflow-tooltip/>
       <el-table-column align="center" prop="station" label="添加岗位" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ selectDictLabel(job_typeOptions, scope.row.remarkType) }}</span>
+          <span>{{ selectDictLabel(job_typeOptions, scope.row.station) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="createBy" label="添加人" show-overflow-tooltip/>
@@ -156,6 +156,8 @@
           this.baseForm.station='02'
         }else if(this.node==='calculateReview'){
           this.baseForm.station='03'
+        }else if(this.node==='sport'){
+          this.baseForm.station='04'
         }
         this.$refs.baseForm.validate((valid) => {
           if (valid) {

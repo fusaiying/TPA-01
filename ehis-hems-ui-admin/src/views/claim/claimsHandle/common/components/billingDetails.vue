@@ -81,170 +81,188 @@
                style="padding-top:20px;padding-bottom: 30px;"
                :disabled="status === 'show' || node==='sport'"
                label-width="188px" label-position="right" size="mini">
-        <el-col :span="8">
-          <el-form-item label="就诊医院：" prop="hospitalName">
-            <el-input disabled v-model="baseForm.hospitalName" class="item-width" clearable size="mini"
-                      placeholder="请录入"/>
-            <el-button v-if="claimtype==='02'" type="success" size="mini" @click="openHospitalDialog"
-                       icon="el-icon-search"></el-button>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="医院性质：" prop="firstAttribute">
-            <span class="size">{{selectDictLabel( first_attributeOptions, baseForm.firstAttribute)}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="医院等级：" prop="secondAttribute">
-            <span v-if="baseForm.firstAttribute==='01'" class="size">{{selectDictLabel( second_attribute_aOptions, baseForm.secondAttribute)}}</span>
-            <span v-if="baseForm.firstAttribute==='02'" class="size">{{selectDictLabel( second_attribute_bOptions, baseForm.secondAttribute)}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="科室：" prop="department">
-            <el-select v-model="baseForm.department" clearable class="item-width" placeholder="请选择">
-              <el-option v-for="option in departmentOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="是否定点医院：" prop="isDesHospital">
-            <el-select v-model="baseForm.isDesHospital" disabled clearable filterable remote class="item-width"
-                       placeholder="请输入">
-              <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="出险类型：" prop="accType">
-            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="账户币种：" prop="billCurrency">
-            <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
-                       placeholder="请选择" clearable>
-              <el-option v-for="option in claim_currencyOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="账单金额：" prop="billAmount">
-            <el-input v-model="baseForm.billAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="就诊次数：" prop="visNumber">
-            <el-input v-model="baseForm.visNumber" disabled class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="治疗类型：" prop="treatmentType">
-            <el-select v-model="baseForm.treatmentType" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in treat_typeOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="治疗起期：" prop="treatmentStartDate">
-            <el-date-picker
-              v-model="baseForm.treatmentStartDate"
-              class="item-width"
-              type="date"
-              clearable
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="治疗止期：" prop="treatmentEndDate">
-            <el-date-picker
-              :disabled="this.$route.query.status==='add'"
-              v-model="baseForm.treatmentEndDate"
-              class="item-width"
-              type="date"
-              clearable
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="治疗天数：" prop="treatmentDays">
-            <el-input v-model="baseForm.treatmentDays" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="发票号：" prop="invoiceNo">
-            <el-input v-model="baseForm.invoiceNo" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="账单号：" prop="billNo">
-            <el-input v-model="baseForm.billNo" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="账单类型：" prop="billType">
-            <el-select v-model="baseForm.billType" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in bill_typeOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="社保先期给付：" prop="ssAdvancePayment">
-            <el-input v-model="baseForm.ssAdvancePayment" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="第三方先期给付：" prop="tpAdvancePayment">
-            <el-input v-model="baseForm.tpAdvancePayment" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="是否分摊先期给付：" prop="isShareAp">
-            <el-select v-model="baseForm.isShareAp" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="交易流水号：" prop="transSerialNo">
-            <el-input v-model="baseForm.transSerialNo" maxlength="100" class="item-width" clearable size="mini"
-                      placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="交易流水号自付额(CNY)：" prop="transSerialCopay">
-            <span class="size">{{ baseForm.transSerialCopay }}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="自付额(CNY)：" prop="copay">
-            <el-input v-model="baseForm.copay" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="是否分摊自付额(CNY)：" prop="isShareCopay">
-            <el-select v-model="baseForm.isShareCopay" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="医院折扣：" prop="hosDiscountAmount">
-            <el-input v-model="baseForm.hosDiscountAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="就诊医院：" prop="hospitalName">
+              <el-input disabled v-model="baseForm.hospitalName" class="item-width" clearable size="mini"
+                        placeholder="请录入"/>
+              <el-button v-if="claimtype==='02'" type="success" size="mini" @click="openHospitalDialog"
+                         icon="el-icon-search"></el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="医院性质：" prop="firstAttribute">
+              <span class="size">{{selectDictLabel( first_attributeOptions, baseForm.firstAttribute)}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="医院等级：" prop="secondAttribute">
+              <span v-if="baseForm.firstAttribute==='01'" class="size">{{selectDictLabel( second_attribute_aOptions, baseForm.secondAttribute)}}</span>
+              <span v-if="baseForm.firstAttribute==='02'" class="size">{{selectDictLabel( second_attribute_bOptions, baseForm.secondAttribute)}}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="科室：" prop="department">
+              <el-select v-model="baseForm.department" clearable class="item-width" placeholder="请选择">
+                <el-option v-for="option in departmentOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="是否定点医院：" prop="isDesHospital">
+              <el-select v-model="baseForm.isDesHospital" disabled clearable filterable remote class="item-width"
+                         placeholder="请输入">
+                <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="出险类型：" prop="accType">
+              <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="账户币种：" prop="billCurrency">
+              <el-select :disabled="claimtype==='01'" v-model="baseForm.billCurrency" class="item-width"
+                         placeholder="请选择" clearable>
+                <el-option v-for="option in claim_currencyOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="账单金额：" prop="billAmount">
+              <el-input v-model="baseForm.billAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="就诊次数：" prop="visNumber">
+              <el-input v-model="baseForm.visNumber" disabled class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="治疗类型：" prop="treatmentType">
+              <el-select v-model="baseForm.treatmentType" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="option in treat_typeOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="治疗起期：" prop="treatmentStartDate">
+              <el-date-picker
+                v-model="baseForm.treatmentStartDate"
+                class="item-width"
+                type="date"
+                clearable
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="治疗止期：" prop="treatmentEndDate">
+              <el-date-picker
+                :disabled="this.$route.query.status==='add'"
+                v-model="baseForm.treatmentEndDate"
+                class="item-width"
+                type="date"
+                clearable
+                placeholder="选择日期"
+                value-format="yyyy-MM-dd"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="治疗天数：" prop="treatmentDays">
+              <el-input v-model="baseForm.treatmentDays" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="发票号：" prop="invoiceNo">
+              <el-input v-model="baseForm.invoiceNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="账单号：" prop="billNo">
+              <el-input v-model="baseForm.billNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="账单类型：" prop="billType">
+              <el-select v-model="baseForm.billType" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="option in bill_typeOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="社保先期给付：" prop="ssAdvancePayment">
+              <el-input v-model="baseForm.ssAdvancePayment" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="第三方先期给付：" prop="tpAdvancePayment">
+              <el-input v-model="baseForm.tpAdvancePayment" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="是否分摊先期给付：" prop="isShareAp">
+              <el-select v-model="baseForm.isShareAp" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="交易流水号：" prop="transSerialNo">
+              <el-input v-model="baseForm.transSerialNo" maxlength="100" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="交易流水号自付额(CNY)：" prop="transSerialCopay">
+              <span class="size">{{ baseForm.transSerialCopay }}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="自付额(CNY)：" prop="copay">
+              <el-input v-model="baseForm.copay" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="是否分摊自付额(CNY)：" prop="isShareCopay">
+              <el-select v-model="baseForm.isShareCopay" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="option in input_statusOptions" :key="option.dictValue" :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="医院折扣：" prop="hosDiscountAmount">
+              <el-input v-model="baseForm.hosDiscountAmount" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-col :span="8">
           <el-form-item label="是否分摊折扣：" prop="isShareDisAmount">
             <el-select v-model="baseForm.isShareDisAmount" class="item-width" placeholder="请选择" clearable>
@@ -527,7 +545,7 @@
       },
     },
     data() {
-      const checkNum = (rule, value, callback) => {
+      const checkSsAdvancePayment = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
           if (value < 0) {
@@ -535,6 +553,87 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
+            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+              let paymentSum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+                paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+            }
+            callback();
+          }
+        } else {
+          callback();
+        }
+      }
+      const checkTpAdvancePayment = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else if (!regx.test(value)) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else {
+            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+              let paymentSum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+                paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+            }
+            callback();
+          }
+        } else {
+          callback();
+        }
+      }
+      const checkCopay = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else if (!regx.test(value)) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else {
+            if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length>0 ) {
+              let copayNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
+                copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
+            } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length>0 ) {
+              let copayNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
+                copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
+            }
+            callback();
+          }
+        } else {
+          callback();
+        }
+      }
+      const checkHosDiscountAmount = (rule, value, callback) => {
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else if (!regx.test(value)) {
+            callback(new Error("允许录入正数，保留两位小数"));
+          } else {
+            if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length>0 ) {
+              let hosDiscountAmountNum = 0
+              for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+                this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
+                hosDiscountAmountNum = hosDiscountAmountNum + parseFloat(this.costForm.costData[i].hosDiscountAmount)
+              }
+              this.costForm.costData[this.costForm.costData.length - 1].hosDiscountAmount = (this.getZero(this.baseForm.hosDiscountAmount) - hosDiscountAmountNum).toFixed(2)
+            }
             callback();
           }
         } else {
@@ -810,13 +909,13 @@
           treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur', 'change']}],
           treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: ['blur', 'change']}],
           treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: ['blur', 'change']}],
-          ssAdvancePayment: [{validator: checkNum, trigger: ['blur', 'change']}],
-          tpAdvancePayment: [{validator: checkNum, trigger: ['blur', 'change']}],
+          ssAdvancePayment: [{validator: checkSsAdvancePayment, trigger: ['blur','change']}],
+          tpAdvancePayment: [{validator: checkTpAdvancePayment, trigger: ['blur','change']}],
           isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: ['blur', 'change']}],
           transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: ['blur', 'change']}],
-          copay: [{validator: checkNum, trigger: ['blur', 'change']}],
+          copay: [{validator: checkCopay, trigger: ['blur','change']}],
           isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
-          hosDiscountAmount: [{validator: checkNum, trigger: 'blur'}],
+          hosDiscountAmount: [{validator: checkHosDiscountAmount, trigger:  ['blur','change']}],
           isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: ['blur', 'change']}],
           icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
           clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: ['blur', 'change']}],
@@ -1089,6 +1188,25 @@
             icdCode: ''
           }],
           clinicalDiagnosis: undefined,
+        }
+        if (this.batchData !== null && this.batchData !== undefined) {
+          let val = this.hospitalOptions.find(item => {
+            return item.providerCode === this.batchData.hospitalcode
+          })
+          if (val !== null && val !== undefined) {
+            if (val.enname1 != null && val.enname1 !== '') {
+              this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
+            } else {
+              this.$set(this.baseForm, 'hospitalName', val.chname1)
+            }
+            this.$set(this.baseForm, 'hospitalCode', val.providerCode)
+            this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
+            this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
+            this.$set(this.baseForm, 'isDesHospital', val.flag)
+          }
+        }
+        if (this.batchData !== null && this.batchData !== undefined) {
+          this.baseForm.billCurrency = this.batchData.currency
         }
         this.costForm.costData = []
         this.isFormShow = true

@@ -286,6 +286,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 //        claimCaseRecord2.setRptNo(claimCase.getRptNo());
             claimCaseRecord2.setHistoryFlag("Y");
             claimCaseRecord2.setRecordId(s);
+            claimCaseRecord2.setOperator(SecurityUtils.getUsername());
             claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
 
             claimCaseRecord1.setOrgRecordId(s);
@@ -378,6 +379,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 //        claimCaseRecord2.setRptNo(claimCase.getRptNo());
             claimCaseRecord2.setHistoryFlag("Y");
             claimCaseRecord2.setRecordId(s);
+            claimCaseRecord2.setOperator(SecurityUtils.getUsername());
             claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
 
             claimCaseRecord1.setOrgRecordId(s);
@@ -423,6 +425,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         if (s != null) {
             ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
 //        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+            claimCaseRecord2.setOperator(SecurityUtils.getUsername());
             claimCaseRecord2.setHistoryFlag("Y");
             claimCaseRecord2.setRecordId(s);
             claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
@@ -499,8 +502,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);//查询出处理中的所有的数据
         if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
             for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                //已经拥有：批次号、报案号、批次状态、提交用户、被保人姓名
-                //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                //已经拥有：批次号、报案号、批次状态、、被保人姓名
+                //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                 //查询案件保单关联表：claim_case_policy，rpt_no
                 List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -547,6 +550,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
                 }
+
+                //提交用户
+                ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
 
                 //停留时长
                 ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
@@ -614,8 +621,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
                     if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                            //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
-                            //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                            //已经拥有：批次号、报案号、批次状态、被保人姓名
+                            //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                             //查询案件保单关联表：claim_case_policy，rpt_no
                             List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                             if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -651,6 +658,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                                 conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                             }
 
+                            //提交用户
+                            ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                            conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+
                             //是否调查
                             ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                             claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
@@ -673,8 +684,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
             if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                    //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
-                    //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                    //已经拥有：批次号、报案号、批次状态、被保人姓名
+                    //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                     //查询案件保单关联表：claim_case_policy，rpt_no
                     List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -710,6 +721,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                     }
 
+                    //提交用户
+                    ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+
                     //是否调查
                     ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                     claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
@@ -741,8 +756,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
         if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
             for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
-                //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                //已经拥有：批次号、报案号、批次状态、被保人姓名
+                //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                 //查询案件保单关联表：claim_case_policy，rpt_no
                 List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -777,6 +792,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     }
                     conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                 }
+
+                //提交用户
+                ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
 
                 //是否调查
                 ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();

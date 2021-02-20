@@ -377,7 +377,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="三级投诉分类：" prop="priority"  >
+              <el-form-item label="是否计件：" prop="priority"  >
                 <el-select v-model="workPoolData.contactsLanguage" class="item-width" >
                   <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                              :value="item.dictValue"/>
@@ -492,12 +492,10 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
-
           </el-row>
           <el-row>
               <el-form-item label="投诉业务类别：" prop="policyNo" >
-                <el-input v-model="sendForm.policyNo"  clearable size="mini" class="width-full"/>
+                <el-input v-model="sendForm.policyNo"  clearable size="mini"/>
               </el-form-item>
           </el-row>
           <el-row>

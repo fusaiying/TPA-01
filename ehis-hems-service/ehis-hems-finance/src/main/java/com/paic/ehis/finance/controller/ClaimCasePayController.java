@@ -62,8 +62,8 @@ public class ClaimCasePayController extends BaseController {
      * @return
      */
     @GetMapping(value = "/{batchNo}")
-    public ClaimCasePayVO getCaseInfo(@PathVariable("batchNo") String batchNo){
-        return claimCasePayService.getCaseInfo(batchNo);
+    public AjaxResult getCaseInfo(@PathVariable("batchNo") String batchNo){
+        return AjaxResult.success(claimCasePayService.getCaseInfo(batchNo));
     }
 
     /**
@@ -147,9 +147,9 @@ public class ClaimCasePayController extends BaseController {
      * @param batchNo
      * @return
      */
-    @GetMapping("/{foreignBatchNo}")
-    public ClaimCaseForeignPayVO getForeignCase(@PathVariable("foreignBatchNo") String batchNo){
-        return claimCasePayService.getForeignCase(batchNo);
+    @GetMapping("/foreignBatchNo")
+    public AjaxResult getForeignCase(String batchNo){
+        return AjaxResult.success(claimCasePayService.getForeignCase(batchNo));
     }
 
     /**

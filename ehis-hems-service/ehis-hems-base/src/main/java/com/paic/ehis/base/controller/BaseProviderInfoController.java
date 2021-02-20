@@ -517,4 +517,18 @@ public class BaseProviderInfoController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 外部调用结算时使用的方法
+     *
+     * @param baseProviderSettle
+     * @return
+     */
+//    @PreAuthorize("@ss.hasPermi('system:risklog:list')")
+    @PostMapping("/selectsettleInfoNew")
+    public List<BaseProviderSettle> selectsettleInfoNew(@RequestBody BaseProviderSettle baseProviderSettle)
+    {
+        List<BaseProviderSettle> list = baseProviderSettleService.selectBaseProviderSettleList(baseProviderSettle);
+        return list;
+    }
+
 }

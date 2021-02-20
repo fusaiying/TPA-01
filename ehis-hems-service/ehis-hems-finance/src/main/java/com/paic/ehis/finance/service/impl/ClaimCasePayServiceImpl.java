@@ -69,7 +69,20 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 获取用户的所属机构
         String deptId = sysUser.getDeptId().toString();
         List<Map<String,Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
-        // TODO: 调用微服务获取医院中文名称
+        for (Map<String,Object> map : initList){
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
+            // 调用微服务获取医院名称
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                map.put("hospitalCode", hospital.getChname1());
+            }
+        }
         return initList;
     }
 
@@ -87,7 +100,23 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             // 获取用户的所属机构
             claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());
         }
-        return claimBatchMapper.selectPayBatchList(claimCasePayDTO);
+        List<Map<String, Object>> batchList = claimBatchMapper.selectPayBatchList(claimCasePayDTO);
+        // 调用微服务获取医院中文名称
+        for (Map<String,Object> map : batchList){
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
+            // 调用微服务获取医院名称
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                map.put("hospitalCode", hospital.getChname1());
+            }
+        }
+        return batchList;
     }
 
     /**
@@ -140,7 +169,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 claimCaseRecord.setHistoryFlag("N");
                 claimCaseRecord.setStatus("Y");
                 List<ClaimCaseRecord> recordList = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
-                if (recordList.size() < 0){
+                if (recordList.size() <= 0){
                     // 2、结案轨迹置成历史轨迹
                     claimCaseRecord.setOperator(username);
                     claimCaseRecord.setHistoryFlag("Y");
@@ -174,24 +203,26 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
         //调用医院接口
-
-        R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
+        R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
         if (R.FAIL == result.getCode())
         {
             throw new BaseException(result.getMsg());
         }
-        BaseProviderInfo hospital = result.getData().get(0);
-        //BaseProviderInfo hospital = (BaseProviderInfo) tableDataInfo.getRows().get(1);
-        // 封装返回对象
-        claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
-        claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
-        claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+        if (result.getData().size() > 0) {
+            BaseProviderInfo hospital = result.getData().get(0);
+            //BaseProviderInfo hospital = (BaseProviderInfo) tableDataInfo.getRows().get(1);
+            // 封装返回对象
+            claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
+            claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
+            claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+        }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
-        BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
-        claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
-
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+            BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
+            claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
+        }
         claimCasePayVO.setPayment(claimCasePaymentVO);
         return claimCasePayVO;
     }
@@ -363,25 +394,22 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
-                // 案件不为结案、撤件状态
-                if (!"98".equals(caseInfo.getCaseStatus()) && !"99".equals(caseInfo.getCaseStatus())) {
-                    // 支付状态置为可支付
-                    ClaimCase claimCase = new ClaimCase();
-                    claimCase.setRptNo(caseInfo.getRptNo());
-                    claimCase.setPayStatus("01");
-                    claimCaseMapper.updateClaimCase(claimCase);
-                    // 借款表生成数据
-                    FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
-                    financeBorrowInfo.setBatchNo(claimCasePayVO.getBatchNo());
-                    financeBorrowInfo.setRptNo(caseInfo.getRptNo());
-                    financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
-                    financeBorrowInfo.setStatus("Y");
-                    financeBorrowInfo.setCreateBy(username);
-                    financeBorrowInfo.setCreateTime(DateUtils.getNowDate());
-                    financeBorrowInfo.setDeptCode(sysUser.getDeptId().toString());
-                    financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo);
-                }
-            }
+                // 支付状态置为可支付
+                ClaimCase claimCase = new ClaimCase();
+                claimCase.setRptNo(caseInfo.getRptNo());
+                claimCase.setPayStatus("01");
+                claimCaseMapper.updateClaimCase(claimCase);
+                // 借款表生成数据
+                FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
+                financeBorrowInfo.setBatchNo(claimCasePayVO.getBatchNo());
+                financeBorrowInfo.setRptNo(caseInfo.getRptNo());
+                financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
+                financeBorrowInfo.setStatus("Y");
+                financeBorrowInfo.setCreateBy(username);
+                financeBorrowInfo.setCreateTime(DateUtils.getNowDate());
+                financeBorrowInfo.setDeptCode(sysUser.getDeptId().toString());
+                financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo);
+        }
             return AjaxResult.success("借款成功！",1);
         }
     }
@@ -397,6 +425,20 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 获取用户的所属机构
         String deptId = sysUserMapper.selectUserById(userId).getDeptId().toString();
         List<Map<String,Object>> initList = claimBatchMapper.selectPayForeignBatchInit(deptId);
+        for (Map<String,Object> map : initList){
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
+            // 调用微服务获取医院名称
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                map.put("hospitalCode", hospital.getChname1());
+            }
+        }
         return initList;
     }
 
@@ -414,11 +456,27 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             // 获取用户的所属机构
             claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());
         }
-        return claimBatchMapper.selectPayForeignBatchList(claimCasePayDTO);
+        List<Map<String, Object>> batchList = claimBatchMapper.selectPayForeignBatchList(claimCasePayDTO);
+        for (Map<String,Object> map : batchList){
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
+            // 调用微服务获取医院名称
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                map.put("hospitalCode", hospital.getChname1());
+            }
+        }
+        return batchList;
     }
 
     /**
-     * 根据批次号查询
+     * 根据批次号查询对公支付外币案件信息
+     *
      * @param batchNo
      * @return
      */
@@ -522,16 +580,19 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         {
             throw new BaseException(result.getMsg());
         }
-        BaseProviderInfo hospital = result.getData().get(0);  // 封装返回对象
-        claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
-        claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
-        claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+        if (result.getData().size() > 0) {
+            BaseProviderInfo hospital = result.getData().get(0);  // 封装返回对象
+            claimCasePaymentVO.setBank(hospital.getAccountName());//开户行
+            claimCasePaymentVO.setBankName(hospital.getBankName());//账户名
+            claimCasePaymentVO.setBankNumber(hospital.getBankCode());//账户号
+        }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
-        BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
-        claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
-
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+            BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
+            claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
+        }
         claimCaseForeignPayVO.setPayment(claimCasePaymentVO);
         return claimCaseForeignPayVO;
     }

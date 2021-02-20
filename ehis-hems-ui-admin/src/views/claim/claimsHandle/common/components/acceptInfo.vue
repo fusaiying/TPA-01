@@ -111,7 +111,7 @@
           <el-form-item label="材料齐全日期：" prop="materialCompleteDate">
             <el-date-picker
               v-model="baseForm.materialCompleteDate"
-              disabled
+              :disabled="node==='accept' || node==='input' "
               class="item-width"
               type="date"
               placeholder="选择日期"
@@ -208,7 +208,7 @@
           if ((date.getDate()) < 10) {
             day = '0' + date.getDate()
           }
-          if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
+          if (newVal.claimCaseAccept.materialCompleteDate == null || newVal.claimCaseAccept.materialCompleteDate === '') {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + day
           }
         }

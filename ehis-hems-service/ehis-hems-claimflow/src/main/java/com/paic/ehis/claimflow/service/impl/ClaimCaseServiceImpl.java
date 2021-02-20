@@ -399,11 +399,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         String pulloutType = claimCase.getPulloutType();
         if (pulloutType.equals("01")) {//撤件97
-            claimCase.setCaseStatus("97");
-            claimCaseRecord1.setOperation("97");
-        } else if (pulloutType.equals("02")) {//撤件可申诉98
             claimCase.setCaseStatus("98");
             claimCaseRecord1.setOperation("98");
+        } else if (pulloutType.equals("02")) {//撤件可申诉98
+            claimCase.setCaseStatus("97");
+            claimCaseRecord1.setOperation("97");
         }
         claimCase.setStatus("Y");
         claimCase.setUpdateBy(SecurityUtils.getUsername());

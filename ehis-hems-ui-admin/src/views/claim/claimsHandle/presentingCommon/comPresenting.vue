@@ -189,7 +189,7 @@
         <el-table-column align="center" prop="chname1" min-width="120" label="医院名称" show-overflow-tooltip/>
         <el-table-column align="center" prop="accountName" min-width="160" label="账户名" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankName" min-width="160" label="开户行" show-overflow-tooltip/>
-        <el-table-column align="center" prop="bankCode" min-width="160" label="账号" show-overflow-tooltip/>
+        <el-table-column align="center" prop="accountNo" min-width="160" label="账号" show-overflow-tooltip/>
         <el-table-column align="center" prop="chaddreess" label="医院地址" min-width="90" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankDetail" min-width="120" label="银行信息描述" show-overflow-tooltip/>
       </el-table>

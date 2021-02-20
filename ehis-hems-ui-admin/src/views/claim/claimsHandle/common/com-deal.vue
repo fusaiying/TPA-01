@@ -354,7 +354,7 @@
                   payeeName:item.accountName,
                   accAttribute:item.accAttribute,
                   payeeBank:item.bankName,
-                  accNo:item.bankCode,
+                  accNo:item.accountNo,
                 }
                 this.sonPayeeInfoData.push(option)
               })

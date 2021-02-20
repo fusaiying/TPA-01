@@ -28,7 +28,7 @@ export function list(data) {
 }
 
 // 开始对公支付
-export function startPay() {
+export function startPay(batchNo) {
   return request({
     url: '/finance/pay/'+batchNo,
     method: 'get'

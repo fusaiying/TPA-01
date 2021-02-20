@@ -55,7 +55,7 @@
                          show-overflow-tooltip/>
         <el-table-column key="2" align="center" min-width="100" prop="chaddreess" label="医院地址" show-overflow-tooltip/>
         <el-table-column key="3" align="center" prop="bankName" min-width="160" label="结算银行" show-overflow-tooltip/>
-        <el-table-column key="5" align="center" prop="bankCode" label="银行账户" min-width="120" show-overflow-tooltip/>
+        <el-table-column key="5" align="center" prop="accountNo" label="银行账号" min-width="120" show-overflow-tooltip/>
         <el-table-column key="6" align="center" prop="accountName" label="账户名" min-width="120" show-overflow-tooltip/>
         <el-table-column key="7" align="center" prop="bankDetail" label="银行信息描述" min-width="120" show-overflow-tooltip/>
       </el-table>        <!--分页组件-->

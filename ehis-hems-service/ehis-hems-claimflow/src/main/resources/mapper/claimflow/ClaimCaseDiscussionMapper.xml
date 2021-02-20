@@ -139,46 +139,26 @@
     claim_batch.source,/*交单来源*/
     claim_case_insured.name,/*被保人姓名*/
     claim_case_discussion.disc_type,/*协谈类型*/
-    claim_case_record.create_by,/*提交用户,流程节点操作人*/
+    claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
     claim_case.case_status,/*案件状态*/
-    claim_batch.organ_code,/*承保机构*/
-        CONCAT(
-        FLOOR( TIMESTAMPDIFF( SECOND, claim_case_discussion.create_time, now( ) ) / 86400 ),
-        '天',
-        TIMESTAMPDIFF( HOUR, claim_case_discussion.create_time, now( ) ) % 24,
-        '时',
-        TIMESTAMPDIFF( MINUTE, claim_case_discussion.create_time, now( ) ) % 60,
-        '分'
-        ) stop_time,  /*停留时长*/
-
-        CONCAT(
-        FLOOR( TIMESTAMPDIFF( SECOND, claim_case_record.update_time, now( ) ) / 86400 ),
-        '天',
-        TIMESTAMPDIFF( HOUR, claim_case_record.update_time, now( ) ) % 24,
-        '时',
-        TIMESTAMPDIFF( MINUTE, claim_case_record.update_time, now( ) ) % 60,
-        '分'
-        ) monitoring_time   /*监控时效*/
+    claim_batch.organ_code/*承保机构*/
     from
     claim_case_discussion,
     claim_batch,
     claim_case_insured,
-    claim_case_record,
     claim_case
 
     <where>
         <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
-        <if test="createBy != null and createBy != null">and claim_case_record.create_by like concat('%', #{createBy}, '%')</if>
+        <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
         and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
         and claim_case_discussion.rpt_no = claim_case.rpt_no
-        and claim_case_discussion.rpt_no = claim_case_record.rpt_no
         and claim_case.batch_no = claim_batch.batch_no
         AND claim_case_discussion.is_history = 'N'
         AND claim_case.case_status = '31'
         and claim_case_discussion.status = 'Y'
         AND claim_batch.STATUS = 'Y'
         AND claim_case_insured.STATUS = 'Y'
-        AND claim_case_record.STATUS = 'Y'
         AND claim_case.STATUS = 'Y'
     </where>
     </select>
@@ -190,7 +170,7 @@
         claim_batch.source,/*交单来源*/
         claim_case_insured.name,/*被保人姓名*/
         claim_case_discussion.disc_type,/*协谈类型*/
-        claim_case_record.create_by,/*提交用户,流程节点操作人*/
+        claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
         claim_case.case_status,/*案件状态*/
         claim_batch.organ_code/*承保机构*/
 
@@ -198,21 +178,18 @@
         claim_case_discussion,
         claim_batch,
         claim_case_insured,
-        claim_case_record,
         claim_case
 
         <where>
             <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
-            <if test="createBy != null and createBy != null">and claim_case_record.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
             and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case_discussion.rpt_no = claim_case.rpt_no
-            and claim_case_discussion.rpt_no = claim_case_record.rpt_no
             and claim_case.batch_no = claim_batch.batch_no
             AND claim_case_discussion.is_history = 'Y'
             and claim_case_discussion.status = 'Y'
             AND claim_batch.STATUS = 'Y'
             AND claim_case_insured.STATUS = 'Y'
-            AND claim_case_record.STATUS = 'Y'
             AND claim_case.STATUS = 'Y'
         </where>
     </select>

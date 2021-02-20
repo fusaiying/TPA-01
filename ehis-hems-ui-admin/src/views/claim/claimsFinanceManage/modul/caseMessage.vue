@@ -50,8 +50,8 @@
               <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
+          <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
+          <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
             </template>

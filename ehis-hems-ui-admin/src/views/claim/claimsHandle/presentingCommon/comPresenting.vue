@@ -189,7 +189,7 @@
         <el-table-column align="center" prop="chname1" min-width="120" label="医院名称" show-overflow-tooltip/>
         <el-table-column align="center" prop="accountName" min-width="160" label="账户名" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankName" min-width="160" label="开户行" show-overflow-tooltip/>
-        <el-table-column align="center" prop="bankCode" min-width="160" label="账号" show-overflow-tooltip/>
+        <el-table-column align="center" prop="accountNo" min-width="160" label="账号" show-overflow-tooltip/>
         <el-table-column align="center" prop="chaddreess" label="医院地址" min-width="90" show-overflow-tooltip/>
         <el-table-column align="center" prop="bankDetail" min-width="120" label="银行信息描述" show-overflow-tooltip/>
       </el-table>
@@ -367,6 +367,7 @@
         isAfter: false,//事后
         isDirect: false,//直结
         isShowFooter: false,//结论
+        isShowRecord: false,
         isShow: false,
         querys: null,
         // 查询参数
@@ -502,6 +503,11 @@
             this.isSaveOrSub = true
             this.isDirect = false
             this.isAfter = true
+          }
+        })
+        getDeptById(this.searchForm.organcode).then(res => {
+          if (res != null && res.code === 200) {
+            this.deptName = res.data.deptName
           }
         })
         if (this.querys.status === 'show') {
@@ -969,6 +975,7 @@
                   claimBatch: this.searchForm, //
                   claimBatchRecord: this.recordForm//
                 }
+                this.eReview = true
                 updateClaimBatch(data).then(res => {
                   if (res != null && res.code === 200) {
                     this.$message({
@@ -983,9 +990,10 @@
                     } else {
                       this.isPrint = true
                     }
-                    this.eReview = true
                     this.isShow = true
                   } else {
+                    this.eReview = false
+                    this.isShowRecord=false
                     this.$message.error('复核失败！')
                   }
                 })

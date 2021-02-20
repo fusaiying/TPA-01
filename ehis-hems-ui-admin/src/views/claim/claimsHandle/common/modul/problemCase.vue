@@ -17,7 +17,7 @@
       <el-form label-width="120px" size="mini" disabled><!-- v-for="option in baseForm"-->
         <el-col :span="8">
           <el-form-item label="问题件类型：" prop="problemType">
-            <el-input v-model="item.problemType" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input :value='getProblemType(item.problemType)' class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  let dictss = [{dictType: 'problem_shipment_type'},]
   export default {
     props: {
       historicalProblemData: Array,
@@ -76,14 +77,9 @@
     data() {
       return {
         dialogVisable: false,
-        baseForm: [
-          {
-            problemType:'01'
-          },
-          {
-            problemType:'01'
-          }
-        ]
+        dictList: [],
+        problem_shipment_typeOption: [],
+        baseForm: []
       }
     },
     watch: {
@@ -96,7 +92,13 @@
     },
 
 
-    mounted() {
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.problem_shipment_typeOption = this.dictList.find(item => {
+        return item.dictType === 'problem_shipment_type'
+      }).dictDate
     },
     methods: {
       //关闭对话框
@@ -110,6 +112,9 @@
          this.$refs.searchForm.resetFields()
          this.$emit('closeProblemShipment')*/
       },
+      getProblemType(value){
+        return  this.selectDictLabel(this.problem_shipment_typeOption,value)
+      }
     }
   }
 </script>

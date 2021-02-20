@@ -168,7 +168,7 @@
 
           </el-form>
           <span slot="footer" class="dialog-footer">
-            <el-button size="mini" @click="updateOperator" type="primary">确认</el-button>
+            <el-button size="mini" @click="checkPermit" type="primary">确认</el-button>
             <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
           </span>
         </el-dialog>
@@ -229,6 +229,10 @@
               logRoleName:'',
               checkRoleName:'',
               userIdName: {},
+              checkArra : new Array(),
+              uncheckArra : new Array(),
+              checkSelection:[],
+              userNameValue:'',
             }
         },
       mounted(){
@@ -277,29 +281,29 @@
               return true
               break;
             case '05':
-              return type === 1 ? this.logRoleName.indexOf("受理") > 0 : this.checkRoleName.indexOf("受理") > 0
+              return type === 1 ? this.logRoleName.indexOf("受理") > -1 : this.checkRoleName.indexOf("受理") > -1
               break;
             case '30':
-              return type === 1 ? this.logRoleName.indexOf("问题件") > 0 : this.checkRoleName.indexOf("问题件") > 0
+              return type === 1 ? this.logRoleName.indexOf("问题件") > -1 : this.checkRoleName.indexOf("问题件") > -1
               break;
             case '97':
               return true
             case '98':
               return true
             case '06':
-              return type === 1 ? this.logRoleName.indexOf("录入") > 0 : this.checkRoleName.indexOf("录入") > 0
+              return type === 1 ? this.logRoleName.indexOf("录入") > -1 : this.checkRoleName.indexOf("录入") > -1
               break;
             case '07':
-              return type === 1 ? this.logRoleName.indexOf("审核") > 0 : this.checkRoleName.indexOf("审核") > 0
+              return type === 1 ? this.logRoleName.indexOf("审核") > 0 : this.checkRoleName.indexOf("审核") > -1
               break;
             case '31':
-              return type === 1 ? this.logRoleName.indexOf("协谈") > 0 : this.checkRoleName.indexOf("协谈") > 0
+              return type === 1 ? this.logRoleName.indexOf("协谈") > -1 : this.checkRoleName.indexOf("协谈") > -1
               break;
             case '32':
-              return type === 1 ? this.logRoleName.indexOf("调查") > 0 : this.checkRoleName.indexOf("调查") > 0
+              return type === 1 ? this.logRoleName.indexOf("调查") > -1 : this.checkRoleName.indexOf("调查") > -1
               break;
             case '08':
-              return type === 1 ? this.logRoleName.indexOf("抽检") > 0 : this.checkRoleName.indexOf("抽检") > 0
+              return type === 1 ? this.logRoleName.indexOf("抽检") > -1 : this.checkRoleName.indexOf("抽检") > -1
               break;
             case '99':
               return true
@@ -308,18 +312,19 @@
           }
         },
         getRole(value){
-           value  = this.userIdName[value];
+          this.userNameValue = this.userIdName[value];
+          // value  = this.userIdName[value];
            if(value == '') {
              return false;
            }
-          roleInfo(value).then(response => {
-            if (response.code == '200') {
-              //console.log(response.data.roles[0].roleName)
-              this.checkRoleName = response.data.roles[0].roleName;
-            }
-          }).catch(error => {
-            console.log(error);
-          });
+          // roleInfo(value).then(response => {
+          //   if (response.code == '200') {
+          //     //console.log(response.data.roles[0].roleName)
+          //     this.checkRoleName = response.data.roles[0].roleName;
+          //   }
+          // }).catch(error => {
+          //   console.log(error);
+          // });
         },
         getLogRole(){
           logInfo().then(response => {
@@ -448,8 +453,7 @@
           // })
         },
         claimDispatch() {
-
-          if(this.rptNos == '') {
+          if(this.checkSelection.length === 0) {
             this.$message.warning('请先选择需要处理的数据！');
             return false;
           }
@@ -477,35 +481,24 @@
           };
           this.download('claimflow/case/exportDispatchList', params, `案件调度_${new Date().getTime()}.xlsx`);
         },
+        arrayContain(array, obj){
+          for (let i = 0; i < array.length; i++){
+            if (array[i] == obj)
+              return true;
+          }
+          return false;
+        },
+        remove (array,val) {
+          let index = array.indexOf(val);
+          if (index > -1) {
+            array = array.splice(index, 1);
+          }
+          return array;
+        },
         // 多选框选中数据
         handleSelectionChange(selection) {
-          console.log(selection)
-          let checkArra = new Array();
-          let uncheckArra = new Array();
-
-          for (let i=0; i<selection.length; i++) {
-            let caseStatus = selection[i].caseStatus;
-            if(this.logRoleName.indexOf("管理员") < 0) {
-              let permit = this.getPermit(caseStatus,1);
-              if(permit) {
-                checkArra.push(selection[i].rptNo)
-              } else {
-                uncheckArra.remove(selection[i].rptNo)
-              }
-            }
-            if(this.checkRoleName.indexOf("管理员") < 0) {
-              let permit = this.getPermit(caseStatus,2);
-              if(permit) {
-                checkArra.push(selection[i].rptNo)
-              }
-            }
-
-          }
-
-
-        //  this.rptNos = (selection.map(item => item.rptNo)); //rptNo
-
-          // this.ids = selection.map(item => item.rptNo);
+          //console.log(selection)
+          this.checkSelection = selection;
           this.single = selection.length != 1;
           this.multiple = !selection.length;
         },
@@ -513,28 +506,126 @@
           this.operatorForm.operator = '';
           this.dialogVisible = false;
         },
-        updateOperator(){
+        checkPermit(){
 
           if(this.operatorForm.operator == '') {
             return false;
           }
-          const params = {
-            rptNo: this.rptNos,
-            operator: this.operatorForm.operator
-          };
-          dispatchUpdate(params).then(response => {
-            if(response.code == 200) {
-              this.operatorForm.operator = '';
-              this.dialogVisible = false;
-              this.$message.success('调度成功！');
-              this.gettableData();
+          this.uncheckArra = [];
+          this.checkArra = [];
+
+          if(this.userNameValue == '') {
+            return false;
+          }
+          roleInfo(this.userNameValue).then(response => {
+            if (response.code == '200') {
+              this.checkRoleName = response.data.roles[0].roleName;
+
+              // 判断是否有权限
+              for (let i=0; i<this.checkSelection.length; i++) {
+                let caseStatus = this.checkSelection[i].caseStatus;
+                if(this.logRoleName.indexOf("管理员") < 0) {
+                  let permit = this.getPermit(caseStatus,1);
+                  if(permit) {
+                    this.checkArra.push(this.checkSelection[i].rptNo)
+                  } else {
+                    this.uncheckArra.push(this.checkSelection[i].rptNo)
+                  }
+                } else {
+                  this.checkArra.push(this.checkSelection[i].rptNo)
+                }
+                if(this.checkRoleName.indexOf("管理员") < 0) {
+                  let permit = this.getPermit(caseStatus,2);
+                  if(permit) {
+                    if(!this.arrayContain(this.checkArra,this.checkSelection[i].rptNo)) {
+                      this.checkArra.push(this.checkSelection[i].rptNo)
+                      this.remove(this.uncheckArra,this.checkSelection[i].rptNo)
+                    }
+                  } else {
+                    if(this.arrayContain(this.checkArra,this.checkSelection[i].rptNo)) {
+                      this.remove(this.checkArra,this.checkSelection[i].rptNo)
+                      this.uncheckArra.push(this.checkSelection[i].rptNo)
+                    }
+                  }
+                }
+              }
+              // console.log("******************************")
+              // console.log(this.uncheckArra);
+              // console.log("******************************")
+              // console.log("+++++++++++++++++++++++++++++++++++++")
+              // console.log(this.checkArra);
+              // console.log("+++++++++++++++++++++++++++++++++++++")
+              // console.log(this.uncheckArra);
+              // console.log(this.checkArra);
+              if(this.uncheckArra.length > 0) {
+
+                let confirmText = this.uncheckArra.toString().split(",")
+                let h = this.$createElement
+                let newDatas = []
+                newDatas.push(h('p', null, "以下案件操作人无处理权限，请重新分配"))
+                newDatas.push(h('p', null, ""))
+                for (const i in confirmText) {
+                  newDatas.push(h('p', null, confirmText[i]))
+                }
+
+                this.$confirm('提示',{
+                  title:'提示',
+                  message: h('div', null, newDatas),
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'info'
+                }).then(() => {
+                  this.updateOperator()
+                }).catch(() => {
+
+                })
+              } else {
+                this.updateOperator()
+              }
+
             } else {
-              this.dialogVisible = false;
-              this.$message.error('调度失败！');
+              console.log(response);
             }
           }).catch(error => {
             console.log(error);
           });
+
+          // const params = {
+          //   rptNo: this.rptNos,
+          //   operator: this.operatorForm.operator
+          // };
+          // dispatchUpdate(params).then(response => {
+          //   if(response.code == 200) {
+          //     this.operatorForm.operator = '';
+          //     this.dialogVisible = false;
+          //     this.$message.success('调度成功！');
+          //     this.gettableData();
+          //   } else {
+          //     this.dialogVisible = false;
+          //     this.$message.error('调度失败！');
+          //   }
+          // }).catch(error => {
+          //   console.log(error);
+          // });
+        },
+        updateOperator(){
+            const params = {
+              rptNo: this.checkArra,
+              operator: this.operatorForm.operator
+            };
+            dispatchUpdate(params).then(response => {
+              if(response.code == 200) {
+                this.operatorForm.operator = '';
+                this.dialogVisible = false;
+                this.$message.success('调度成功！');
+                this.gettableData();
+              } else {
+                this.dialogVisible = false;
+                this.$message.error('调度失败！');
+              }
+            }).catch(error => {
+              console.log(error);
+            });
         },
       }
     }

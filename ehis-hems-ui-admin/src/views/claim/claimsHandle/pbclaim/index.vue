@@ -81,8 +81,8 @@
         v-if="activeName==='03'"
         v-show="completedTotal>0"
         :total="completedTotal"
-        :page.sync="pendPageInfo.pageNum"
-        :limit.sync="pendPageInfo.pageSize"
+        :page.sync="completePageInfo.pageNum"
+        :limit.sync="completePageInfo.pageSize"
         @pagination="handleClick"
       />
     </el-card>

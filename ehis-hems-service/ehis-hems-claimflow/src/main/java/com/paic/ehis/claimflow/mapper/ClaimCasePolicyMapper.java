@@ -63,6 +63,11 @@ public interface ClaimCasePolicyMapper
      */
     public int deleteClaimCasePolicyByIds(Long[] relationIds);
 
+    /**
+     *
+     * @param rptNo
+     * @return
+     */
     public List<ClaimCasePolicy> selectClaimCasePolicyByRptNo(String rptNo);
 
     List<ClaimCasePolicy> selectClaimCasePolicyByRptNoOne(String rptNo);

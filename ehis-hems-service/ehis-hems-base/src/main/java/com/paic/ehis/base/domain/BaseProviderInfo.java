@@ -260,6 +260,10 @@ public class BaseProviderInfo extends BaseEntity
     @Excel(name = "银行账户名称")
     private String accountName;
 
+    /** 银行账户名称 */
+    @Excel(name = "银行账户账号")
+    private String accountNo;
+
     private String currency;
 
     /** 是否直结 */

@@ -42,21 +42,21 @@ export default {
     problemTypes: {
       type: Array,
       default: function() {
-        return []
+        return {}
       }
     },
 
     claimStatusSelect: {
       type: Array,
-      default: function() {
-        return []
+      default: function () {
+        return {}
       }
     },
 
     deliverySource: {
       type: Array,
       default: function() {
-        return []
+        return {}
       }
     },
   },

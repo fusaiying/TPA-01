@@ -797,6 +797,8 @@
         this.$refs.searchForm.validate((valid) => {
           if (valid) {
             let claimBatch = this.searchForm
+            this.eSaveSub = true
+            this.isSaveSub = true
             addBatch(claimBatch).then(res => {
               if (res != null && res.code === 200) {
                 this.$message({
@@ -817,6 +819,8 @@
                 this.isShow = true
                 this.eShowFooter = true
               } else {
+                this.eSaveSub = false
+                this.isSaveSub = false
                 this.$message.error(
                   "保存提交失败!"
                 );
@@ -884,39 +888,47 @@
                     );
                   }
                 }
-
               })
               //前面都通过则继续进行
-              if (!this.hasBlock) {
-                //请求接口保存table获取afterTable  给afterTableTotal赋值
-                //then里面的
-                let data = {
-                  claimBatch: this.searchForm, //
-                  standingData: this.afterTable//
-                }
-                addBatchAndStandingPresent(data).then(res => {
-                  if (res != null && res.code === 200) {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                    if (res.data.standingData != null) {
-                      this.afterTable = res.data.standingData
-                      this.afterTableTotal = res.data.standingData.length
-                    }
-                    this.show = true
-                    this.isSaveSub = false
-                    this.isPrint = false
-                    this.eSaveOrSub = true
-                    this.isShow = true
-                    this.eShowFooter = true
-                  } else {
-                    this.$message.error('保存失败！')
+              if(parseInt(this.searchForm.casenum)==this.afterTable.length){
+                if (!this.hasBlock) {
+                  //请求接口保存table获取afterTable  给afterTableTotal赋值
+                  //then里面的
+                  let data = {
+                    claimBatch: this.searchForm, //
+                    standingData: this.afterTable//
                   }
-                })
+                  this.eSaveOrSub = true
+                  addBatchAndStandingPresent(data).then(res => {
+                    if (res != null && res.code === 200) {
+                      this.$message({
+                        message: '保存成功！',
+                        type: 'success',
+                        center: true,
+                        showClose: true
+                      })
+                      if (res.data.standingData != null) {
+                        this.afterTable = res.data.standingData
+                        this.afterTableTotal = res.data.standingData.length
+                      }
+                      this.show = true
+                      this.isSaveSub = false
+                      this.isPrint = false
+                      this.eSaveOrSub = true
+                      this.isShow = true
+                      this.eShowFooter = true
+                    } else {
+                      this.eSaveOrSub = false
+                      this.$message.error('保存失败！')
+                    }
+                  })
+                }
+              }else {
+                return this.$message.warning(
+                  "案件数与台账信息个数不匹配请先进行保存处理！"
+                );
               }
+
             } else {
               return this.$message.warning(
                 "请录入必要信息！"

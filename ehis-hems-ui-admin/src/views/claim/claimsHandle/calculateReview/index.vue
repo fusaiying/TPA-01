@@ -113,9 +113,9 @@
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          batchNo: undefined,
-          rptNo: undefined,
-          name: undefined,
+          batchNo: '',
+          rptNo: '',
+          name: '',
           orderByColumn:'',
           isAsc:'',
         },

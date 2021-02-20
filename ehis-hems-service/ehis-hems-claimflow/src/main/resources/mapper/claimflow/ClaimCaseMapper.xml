@@ -378,13 +378,13 @@
         <result property="operator"    column="operator"    />
         <result property="name"    column="name"    />
     </resultMap>
-    <!--    fu-->
+    <!--    fu 理算审核 待处理-->
     <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
         acto.batch_no,
         acto.case_status,
-        acto.update_by,
+        acto.operator,
         acto.NAME
         FROM
         (
@@ -392,18 +392,25 @@
         act.rpt_no,
         act.batch_no,
         act.case_status,
-        act.update_by,
+        act.operator,
         insured.NAME
-        from
+        FROM
         (
         SELECT
-        rpt_no,
-        batch_no,
-        case_status,
-        update_by
+        cases.rpt_no,
+        cases.batch_no,
+        cases.case_status,
+        record.operator
         FROM
-        claim_case
-        where case_status='07' and update_by=#{operator} and status='Y')act
+        claim_case cases
+        INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
+        AND record.operation = '07'
+        AND record.STATUS = 'Y'
+        AND record.history_flag = 'N'
+        AND record.operator = #{operator}
+        ORDER BY
+        record.update_time DESC
+        ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
         <where>
@@ -455,7 +462,7 @@
         </where>
     </select>
 
-    <!--fu-->
+    <!--fu 理算审核 默认查询一个月的 已处理-->
     <select id="selectConditionsForTheAdjustmentOver" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
             act.rpt_no,
@@ -475,8 +482,8 @@
                         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
                         AND record.operation in ('08','99')
                         AND record.STATUS = 'Y'
-                        AND record.history_flag = 'N'
-                        AND record.update_by = #{updateBy}
+                        AND record.history_flag = 'Y'
+                        AND record.operator = #{operator}
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
                 ORDER BY
                     record.update_time DESC
@@ -513,7 +520,7 @@
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
     </select>
 
-    <!--fu-->
+    <!--fu  按条件查询 已处理-->
     <select id="selectConditionsForTheAdjustmentUnderTwo" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,
@@ -541,7 +548,7 @@
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
         AND record.operation in ('08','99')
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
+        AND record.history_flag = 'Y'
         AND record.operator = #{operator}
         ORDER BY
         record.update_time DESC
@@ -597,7 +604,7 @@
         </where>
     </select>
 
-    <!--fu-->
+    <!--fu  理算审核 悬挂-->
     <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
         acto.rpt_no,

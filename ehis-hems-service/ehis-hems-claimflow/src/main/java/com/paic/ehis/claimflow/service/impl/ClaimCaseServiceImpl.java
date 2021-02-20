@@ -267,34 +267,57 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
 
-        //将之前的案件流程表变为历史节点
-        List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCaseProblemDTO.getRptNo());
-        if (claimCaseRecordsList.size() != 0) {
-            for (ClaimCaseRecord claimCaseRecords : claimCaseRecordsList) {
-                ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
-                claimCaseRecord1.setHistoryFlag("Y");
-                claimCaseRecord1.setOperation("05");//
-                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
-                claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
-                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
-            }
-        }
-        //生成一条案件流程信息
-        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
-        claimCaseRecord.setRptNo(claimCaseProblemDTO.getRptNo());//报案号
-        claimCaseRecord.setHistoryFlag("N");//是否历史节点
-        claimCaseRecord.setOperation("30");//流程节点-问题件
-//        claimCaseRecord.setOperator(SecurityUtils.getUsername());//流程节点操作人
-        claimCaseRecord.setStatus("Y");//数据状态
-        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
-        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
-        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+//        //将之前的案件流程表变为历史节点
+//        List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordProblemShipment(claimCaseProblemDTO.getRptNo());
+//        if (claimCaseRecordsList.size() != 0) {
+//            for (ClaimCaseRecord claimCaseRecords : claimCaseRecordsList) {
+//                ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+//                claimCaseRecord1.setHistoryFlag("Y");
+//                claimCaseRecord1.setOperation("05");//
+//                claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord1.setRecordId(claimCaseRecords.getRecordId());
+//                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord1);
+//            }
+//        }
+//        //生成一条案件流程信息
+//        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
+//        claimCaseRecord.setRptNo(claimCaseProblemDTO.getRptNo());//报案号
+//        claimCaseRecord.setHistoryFlag("N");//是否历史节点
+//        claimCaseRecord.setOperation("30");//流程节点-问题件
+////        claimCaseRecord.setOperator(SecurityUtils.getUsername());//流程节点操作人
+//        claimCaseRecord.setStatus("Y");//数据状态
+//        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
+//        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+//        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+//        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+//        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+//        if (s != null) {
+//            claimCaseRecord.setOrgRecordId(s);//
+//        }
+//        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
+        ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+        //完成案件操作记录表的记录
+        claimCaseRecord1.setRptNo(claimCaseProblemDTO.getClaimCase().getRptNo());
+//        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+        claimCaseRecord1.setOperation("30");//流程节点-问题件
+        claimCaseRecord1.setHistoryFlag("N");
+        claimCaseRecord1.setStatus("Y");
+        claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
+
+        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCaseProblemDTO.getClaimCase().getRptNo());
         if (s != null) {
-            claimCaseRecord.setOrgRecordId(s);//
+            ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+//        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+            claimCaseRecord2.setHistoryFlag("Y");
+            claimCaseRecord2.setRecordId(s);
+            claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+
+            claimCaseRecord1.setOrgRecordId(s);
         }
-        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
+        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
 
         //将之前的问题件表信息置为无效
         List<ClaimCaseProblem> claimCaseProblems = claimCaseProblemMapper.selectClaimCaseProblemByRptNo(claimCaseProblemDTO.getRptNo());
@@ -411,45 +434,67 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public int updateCaseAndRecordInfoCancel(ClaimCase claimCase) {
-        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
+        ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
 
         String pulloutType = claimCase.getPulloutType();
         if (pulloutType.equals("01")) {//撤件97
             claimCase.setCaseStatus("97");
-            claimCaseRecord.setOperation("97");
+            claimCaseRecord1.setOperation("97");
         } else if (pulloutType.equals("02")) {//撤件可申诉98
             claimCase.setCaseStatus("98");
-            claimCaseRecord.setOperation("98");
+            claimCaseRecord1.setOperation("98");
         }
         claimCase.setStatus("Y");
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
 
-        //将之前的案件流程表变为历史节点
-        List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordRevocation(claimCase.getRptNo());
-        if (claimCaseRecordsList.size() != 0) {
-            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
-                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
-                claimCaseRecord3.setHistoryFlag("Y");
-                claimCaseRecord3.setOperation("05");//
-//                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
-                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
-                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
-            }
-        }
+//        //将之前的案件流程表变为历史节点
+//        List<ClaimCaseRecord> claimCaseRecordsList = claimCaseRecordMapper.selectClaimCaseRecordRevocation(claimCase.getRptNo());
+//        if (claimCaseRecordsList.size() != 0) {
+//            for (ClaimCaseRecord claimCaseRecords2 : claimCaseRecordsList) {
+//                ClaimCaseRecord claimCaseRecord3 = new ClaimCaseRecord();
+//                claimCaseRecord3.setHistoryFlag("Y");
+//                claimCaseRecord3.setOperation("05");//
+////                claimCaseRecord3.setOperator(SecurityUtils.getUsername());
+//                claimCaseRecord3.setRecordId(claimCaseRecords2.getRecordId());
+//                claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord3);
+//            }
+//        }
 
-        //生成案件操作记录表
-        claimCaseRecord.setRptNo(claimCase.getRptNo());
-//        claimCaseRecord.setOperator(SecurityUtils.getUsername());
-        claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setStatus("Y");
-        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+//        //生成案件操作记录表
+//        claimCaseRecord.setRptNo(claimCase.getRptNo());
+////        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+//        claimCaseRecord.setHistoryFlag("N");
+//        claimCaseRecord.setStatus("Y");
+//        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
+//        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+//        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+//        if (s != null) {
+//            claimCaseRecord.setOrgRecordId(s);//
+//        }
+//        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
+        //完成案件操作记录表的记录
+        claimCaseRecord1.setRptNo(claimCase.getRptNo());
+//        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+        claimCaseRecord1.setOperation("30");//流程节点-问题件
+        claimCaseRecord1.setHistoryFlag("N");
+        claimCaseRecord1.setStatus("Y");
+        claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
+
         Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
         if (s != null) {
-            claimCaseRecord.setOrgRecordId(s);//
+            ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+//        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+            claimCaseRecord2.setHistoryFlag("Y");
+            claimCaseRecord2.setRecordId(s);
+            claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+
+            claimCaseRecord1.setOrgRecordId(s);
         }
-        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord);
+        claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
 
         return claimCaseMapper.updateClaimCase(claimCase);
     }

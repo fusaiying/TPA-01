@@ -91,6 +91,7 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
         int i = 0;
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
         claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());
+        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());
         claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());

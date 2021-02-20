@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.service;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
+import com.paic.ehis.claimflow.domain.dto.ProblemTextDTO;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public interface IClaimCaseProblemService
      * @param claimCaseProblem
      * @return
      */
-    List<ClaimCaseProblem> selectHistoricalProblem(ClaimCaseProblem claimCaseProblem);
+    ProblemTextDTO selectHistoricalProblem(ClaimCaseProblem claimCaseProblem);
 
     /**
      * 查找问题件信息

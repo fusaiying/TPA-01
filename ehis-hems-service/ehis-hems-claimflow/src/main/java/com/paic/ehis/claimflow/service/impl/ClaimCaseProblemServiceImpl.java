@@ -4,6 +4,7 @@ package com.paic.ehis.claimflow.service.impl;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
 import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
+import com.paic.ehis.claimflow.domain.dto.ProblemTextDTO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseProblemMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseRecordMapper;
@@ -175,9 +176,16 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService
      * @return
      */
     @Override
-    public List<ClaimCaseProblem> selectHistoricalProblem(ClaimCaseProblem claimCaseProblem) {
-        claimCaseProblem.setStatus("Y");
-        return claimCaseProblemMapper.selectHistoricalProblem(claimCaseProblem);
+    public ProblemTextDTO selectHistoricalProblem(ClaimCaseProblem claimCaseProblem) {
+        ProblemTextDTO problemTextDTO = new ProblemTextDTO();
+        List<ClaimCaseProblem> claimCaseProblemList = claimCaseProblemMapper.selectHistoricalProblem(claimCaseProblem);
+        for (ClaimCaseProblem claimCaseProblems : claimCaseProblemList) {
+            if (claimCaseProblems.getIsHistory().equals("N")) {
+                problemTextDTO.setProblemStatus("Y");
+            }
+        }
+        problemTextDTO.setClaimCaseProblems(claimCaseProblemList);
+        return problemTextDTO;
     }
 
     @Override

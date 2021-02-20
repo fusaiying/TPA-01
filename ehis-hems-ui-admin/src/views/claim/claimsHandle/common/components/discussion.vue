@@ -695,7 +695,7 @@
       },
       getCalInfo() {
         calInfo(this.rptNo).then(res => {
-          if(res.code == '200') {
+          if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
             this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论

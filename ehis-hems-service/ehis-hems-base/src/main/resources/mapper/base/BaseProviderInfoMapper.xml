@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bankCode"    column="bank_code"    />
         <result property="bankDetail"    column="bank_detail"    />
         <result property="accountName"    column="account_name"    />
-        <result property="accountNo"    column="account_name"    />
+        <result property="accountNo"    column="account_no"    />
         <result property="currency"    column="currency"    />
         <result property="isNetworkHospital"    column="isNetworkHospital"    />
     </resultMap>

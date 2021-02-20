@@ -19,7 +19,7 @@ public class EditInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 编辑流水号 */
-    private Long editId;
+    private String editId;
 
     /** 工单号 */
     @Excel(name = "工单号")
@@ -63,16 +63,15 @@ public class EditInfo extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setEditId(Long editId) 
-    {
+    public String getEditId() {
+        return editId;
+    }
+
+    public void setEditId(String editId) {
         this.editId = editId;
     }
 
-    public Long getEditId() 
-    {
-        return editId;
-    }
-    public void setWorkOrderId(String workOrderId) 
+    public void setWorkOrderId(String workOrderId)
     {
         this.workOrderId = workOrderId;
     }

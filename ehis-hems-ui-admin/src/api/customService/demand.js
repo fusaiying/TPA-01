@@ -96,10 +96,11 @@ export function dealADD(data) {
 }
 
 //# 修改说明弹出框
-export function modifyDetailsSearch(workOrderNo) {
+export function modifyDetailsSearch(query) {
   return request({
-    url: '/cs/detail/'+workOrderNo,
-    method: 'get'
+    url: '/cs/detail/edit',
+    method: 'get',
+    params: query
   })
 }
 

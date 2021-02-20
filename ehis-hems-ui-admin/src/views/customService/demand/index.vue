@@ -449,7 +449,7 @@
            console.log("ids:",workOrderNos)
            demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              alert("success")
+
             }
           }).catch(res => {
 
@@ -513,7 +513,7 @@
         demandListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.totalCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -540,7 +540,7 @@
         demandListAndPersonalPool(this.sendForm).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
+            this.totalPersonCount = res.rows.length
             console.log("sd",res.rows)
             console.log('response',res.total)
             if (res.rows.length <= 0) {

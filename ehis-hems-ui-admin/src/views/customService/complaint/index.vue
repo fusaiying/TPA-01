@@ -293,7 +293,7 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
+  import {complaintListAndPublicPool,complaintListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/complaint'
 
   export default {
     filters: {
@@ -506,7 +506,7 @@
         }
         queryParams.pageNum = this.pageNum;
         queryParams.pageSize = this.pageSize;
-        demandListAndPublicPool(queryParams).then(res => {
+        complaintListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total
@@ -533,7 +533,7 @@
         }
         queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;
-        demandListAndPersonalPool(this.sendForm).then(res => {
+        complaintListAndPersonalPool(this.sendForm).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.total

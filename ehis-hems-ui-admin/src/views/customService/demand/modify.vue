@@ -90,10 +90,10 @@
         <el-row >
           <el-col :span="5">
             <el-form-item label="家庭固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -101,10 +101,10 @@
         <el-row >
           <el-col :span="5">
             <el-form-item label="办公室电话:"  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.officeCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.officeQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.officeNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.officeSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -146,7 +146,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            v-model="workPoolData.textarea">
+            v-model="workPoolData.content">
           </el-input>
         </el-form-item>
       </el-form>
@@ -173,6 +173,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
+
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -287,7 +288,11 @@
         //需要填入数据的部分
         workPoolData:{
           callPerson:{},
-          contactsPerson:{},//联系人
+          contactsPerson:{
+            linePhone1:[],
+            workPhone1:[],
+            homePhone1:[],
+          },//联系人
           workOrderNo:"",//工单号
           channelCode:"",//受理渠道
           callCenterId:"",//电话中心业务流水号
@@ -433,7 +438,26 @@
 
       },
       //反显结论信息
+      searchHandle2() {
+        let queryParams=this.queryParams
+        demandListAndPublicPool(queryParams).then(res => {
+          if (res!=null && res.code === 200) {
+            let workPoolData = res.rows[0];
+            this.workPoolData = workPoolData;
+            this.totalCount = res.total
+            console.log('公共', this.workPoolData)
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
 
+        })
+
+
+      },
       //反显信息需求
       searchHandle() {
         if (this.queryParams.status=="01") {
@@ -469,7 +493,6 @@
                 editRemark: ""
               };
               workPoolData.editInfo=editInfo
-              workPoolData.callCenterId=""
               workPoolData.officeCountry=""
               workPoolData.officeNumber=""
               workPoolData.officeQuhao=""

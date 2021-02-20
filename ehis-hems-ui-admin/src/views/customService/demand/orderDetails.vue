@@ -407,7 +407,7 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="业务处理情况"  >
+            <el-form-item label="业务处理情况:"  >
               <el-input v-model="orderDetailSearch.businessProcess" class="width-full"  size="mini" readonly></el-input>
             </el-form-item>
           </el-col>
@@ -444,8 +444,12 @@
     data() {
 
       return {
+        //最下面数据
         orderDetailSearch:{},
+        //客户信息查询
         sendForm:{},
+        //质疑理赔结果用
+        workPoolData:{},
         // 查询参数
         queryParams: {
           workOrderNo:"",
@@ -457,11 +461,9 @@
         },
         search:{
           workOrderNo:"",
-
         },
         dealPool:"",
         dealTotal:0,
-        workPoolData: "",
         totalCount: 0,
         flowLogData:[],
         flowLogCount: 0,
@@ -476,31 +478,31 @@
       this.queryParams.status=this.$route.query.status;
       this.searchHandle()
       this.searchFlowLog()
-      this.searchHandle2()
+      //this.searchHandle2()
 
     },
 
 
     methods: {
-
-      searchHandle2() {
-        this.search.workOrderNo=this.$route.query.workOrderNo;
-        let query=this.search
-        orderDetailSearch(query).then(res => {
-          console.log('1231',res.rows)
-          if (res != null && res.code === 200) {
-            this.orderDetailSearch = res.rows
-            console.log('response',res.total)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      },
+      //最下面结论用
+      // searchHandle2() {
+      //   this.search.workOrderNo=this.$route.query.workOrderNo;
+      //   let query=this.search
+      //   orderDetailSearch(query).then(res => {
+      //     console.log('1231',res.rows)
+      //     if (res != null && res.code === 200) {
+      //       this.orderDetailSearch = res.rows
+      //       console.log('response',res.total)
+      //       if (res.rows.length <= 0) {
+      //         return this.$message.warning(
+      //           "未查询到数据！"
+      //         )
+      //       }
+      //     }
+      //   }).catch(res => {
+      //
+      //   })
+      // },
       //超链接用
       modifyDetails(){
         this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;

@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="130px"
                label-position="right" size="mini">
 
       <span style="color: blue">服务受理信息</span>
@@ -324,27 +324,19 @@
         </el-row>
         <el-row>
           <el-col :span="16">
-            <el-col :span="10">
+
           <el-form-item label="预约时间："  style="white-space: nowrap" prop="phone">
-            <el-input class="width-full"  v-model="ruleForm.ContactsMobilePhone"  clearable size="mini" placeholder="请输入"></el-input>
-          </el-form-item>
-            </el-col>
-            <el-col :span="10">
-            <el-form-item  prop="organCode">
+            <el-input  v-model="ruleForm.ContactsMobilePhone"  clearable size="mini" style="width: 150px" class="item-width" placeholder="请输入"></el-input>
+
               <el-select v-model="ruleForm.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 150px" class="item-width"  :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>时
-            </el-form-item>
-            </el-col>
-            <el-col :span="10">
-            <el-form-item  prop="organCode">
               <el-select v-model="ruleForm.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 150px" class="item-width"  :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>分
-            </el-form-item>
-          </el-col>
+          </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
@@ -373,7 +365,7 @@
         <el-row>
         <span style="color: blue">附件信息</span>
                 <div  style="text-align: right; margin-right: 1px;">
-                 <up-load ref="upload"  > </up-load>
+                 <up-load ref="upload" > </up-load>
                   <el-button size="mini" type="primary" @click="upload()" >上传附件</el-button>
                 </div>
         </el-row>

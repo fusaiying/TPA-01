@@ -26,7 +26,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="被保人生日：" prop="beBirthday">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="格式YYYYMMDD"/>
             </el-form-item>
           </el-col>
         </el-row>

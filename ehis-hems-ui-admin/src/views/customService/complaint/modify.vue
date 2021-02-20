@@ -70,7 +70,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="contactsLanguage"  >
+            <el-form-item label="联系人地址：" prop="contactsLanguage"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
                 <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -78,71 +78,85 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" >
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="phone">
+              <el-input  v-model="workPoolData.ContactsMobilePhone"  clearable size="mini" style="width: 50px" class="item-width" placeholder="请输入"></el-input>
+
+              <el-select v-model="workPoolData.organCode" placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 30px" class="item-width"  :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>时
+              <el-select v-model="workPoolData.organCode" placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 30px" class="item-width"  :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>分
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row >
+          <el-col :span="8">
+            <el-form-item label="投诉人姓名：" prop="callMobilePhone">
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人性别：" prop="contactsSex">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人性别：" prop="contactsSex">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
-        <el-row >
-          <el-col :span="5">
-            <el-form-item label="家庭固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row >
-          <el-col :span="5">
-            <el-form-item label="办公室电话:"  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.officeCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.officeQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.officeNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.officeSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
+        <el-col :span="8">
+          <el-form-item label="家庭电话：" prop="callMobilePhone">
+            <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="办公电话：" prop="callMobilePhone">
+            <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
+          </el-form-item>
+        </el-col>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
-              <el-radio-group v-model="workPoolData.bankTransfer" >
-                <el-radio   label="1">是</el-radio>
-                <el-radio   label="2">否</el-radio>
-              </el-radio-group>
+            <el-form-item label="联系人语言：" prop="contactsSex">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
+
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" prop="bankName">
-              <el-input size="mini" v-model="workPoolData.bankName" ></el-input>
+            <el-form-item label="出单机构：" prop="contactsSex">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" prop="bankLocation">
-              <el-input size="mini" v-model="workPoolData.bankLocation" ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" prop="accountNumber">
-              <el-input size="mini" v-model="workPoolData.accountNumber" ></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" prop="bankHolder">
-              <el-input size="mini" v-model="workPoolData.bankHolder" ></el-input>
+            <el-form-item label="是否已劝解：" prop="contactsSex">
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="业务内容：" prop="content">
+        <el-form-item label="投诉内容：" prop="content">
           <el-input
             type="textarea"
             :rows="2"
@@ -152,41 +166,43 @@
       </el-form>
     </el-card>
 
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span style="color:blue;">业务流转情况</span>
-        <el-divider></el-divider>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="flowLogData"
-          size="small"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
-          <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
-          <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
-          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
-          <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
-          <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
-          <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
-        </el-table>
+<!--    <el-card class="box-card" style="margin-top: 10px;">-->
+<!--      <div slot="header" class="clearfix">-->
+<!--        <el-row>-->
+<!--          <span style="color: blue">附件信息</span>-->
+<!--          <div  style="text-align: right; margin-right: 1px;">-->
+<!--            <up-load ref="upload" > </up-load>-->
+<!--            <el-button size="mini" type="primary" @click="upload()" >上传附件</el-button>-->
+<!--          </div>-->
+<!--        </el-row>-->
+<!--        <el-divider/>-->
+<!--        &lt;!&ndash;          <el-button  type="primary" style="float: right" size="mini" @click="tan">上传附件</el-button></span>&ndash;&gt;-->
+<!--        <up-load  :dialogVisable="dialogVisable"></up-load>-->
+<!--        <el-table-->
+<!--          :header-cell-style="{color:'black',background:'#f8f8ff'}"-->
+<!--          :data="workPoolData"-->
+<!--          size="small"-->
+<!--          highlight-current-row-->
+<!--          tooltip-effect="dark"-->
+<!--          style=" width: 100%;">-->
+<!--          <el-table-column align="center" prop="policyNumber" label="附件名称" show-overflow-tooltip/>-->
+<!--          <el-table-column align="center"  prop="secondNumber" label="附件类型" show-overflow-tooltip/>-->
+<!--          <el-table-column prop="riskCode" align="center" label="上传人" show-overflow-tooltip/>-->
+<!--          <el-table-column prop="beInsuredName" align="center" label="上传时间 " show-overflow-tooltip/>-->
+<!--          <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>-->
+<!--          <el-table-column align="center" fixed="right" label="操作" width="140">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--        </el-table>-->
 
-        <pagination
-          v-show="flowLogCount>0"
-          :total="flowLogCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchFlowLog"
-        />
-      </div>
-    </el-card>
+<!--      </div>-->
+<!--      <div style="text-align: right; margin-right: 1px;">-->
+<!--        <el-button  type="primary" size="mini" @click="submit">提交</el-button>-->
+<!--        <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>-->
+<!--      </div>-->
+<!--    </el-card>-->
 
 
     <el-card v-if="this.queryParams.status>2">
@@ -260,9 +276,11 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,modifySubmit} from '@/api/customService/demand'
+  import upLoad from "../common/modul/upload";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: { upLoad },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -286,7 +304,8 @@
         //回显服务项目
         //需要填入数据的部分
         workPoolData:{
-
+          contactsPerson:{},//联系人
+          callPerson:{},//来电人
           workOrderNo:"",//工单号
           channelCode:"",//受理渠道
           callCenterId:"",//电话中心业务流水号
@@ -541,7 +560,10 @@
 
 
       },
-
+      //上传附件
+      upload(){
+        this.$refs.upload.open();
+      },
 
 
 

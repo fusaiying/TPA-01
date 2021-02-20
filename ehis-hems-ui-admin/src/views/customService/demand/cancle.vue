@@ -191,7 +191,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="165px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="165px"
                label-position="right" size="mini">
 
         <span style="color: blue">信息需求-理赔类-质疑理赔结果</span>
@@ -199,12 +199,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="workPoolData.CallMobilePhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.callPerson.mobilephone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -224,7 +224,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电人姓名：" prop="phone">
-              <el-input v-model="workPoolData.callPerson" class="item-width" readonly size="mini"/>
+              <el-input v-model="workPoolData.callPerson.name" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -240,12 +240,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人：" prop="lxperson">
-              <el-input v-model="workPoolData.contactsPerson" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority" >
-              <el-select v-model="workPoolData.ContactsSex" class="item-width" disabled>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -264,7 +264,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
-              <el-select v-model="workPoolData.ContactsLanguage" class="item-width" disabled>
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -273,7 +273,7 @@
 
           <el-col :span="8">
             <el-form-item label="联系人移动电话：" prop="phone">
-              <el-input v-model="workPoolData.ContactsMobilePhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -286,16 +286,16 @@
         <el-row >
           <el-col :span="5">
             <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.ContactsCountry" class="item-width" readonly style="width: 75px"/>
-              区号<el-input v-model="workPoolData.ContactsQuhao" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.ContactsNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.ContactsSecondNumber" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-form-item label="所在地："  prop="phone">
-            <el-input v-model="workPoolData.phone" class="width-full"  size="mini" readonly/>
+            <el-input v-model="workPoolData.contactsPerson.address" class="width-full"  size="mini" readonly/>
           </el-form-item>
 
         </el-row>
@@ -321,23 +321,23 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开户行：" v-show="workPoolData.bank=='1'" prop="bankaa">
+            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" >
               <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户地：" v-show="workPoolData.bank=='1'" prop="bankbb">
+            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" >
               <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账号：" v-show="workPoolData.bank=='1'" prop="bankcc">
+            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" >
               <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="户名：" v-show="workPoolData.bank=='1'" prop="bankdd">
+            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" >
               <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
             </el-form-item>
           </el-col>
@@ -347,7 +347,7 @@
             type="textarea"
             :rows="2"
             readonly
-            v-model="workPoolData.textarea">
+            v-model="workPoolData.content">
           </el-input>
         </el-form-item>
       </el-form>
@@ -392,7 +392,7 @@
 
 
     <el-card>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini" v-show="this.queryParams.status>2">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -418,13 +418,13 @@
     </el-card>
 
     <el-card>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form  :model="submitForm"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因" prop="bank" >
-            <el-radio-group v-model="ruleForm.cancelReason">
+          <el-form-item label="取消原因"  >
+            <el-radio-group v-model="submitForm.cancelReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
               <el-radio   label="3">其他原因</el-radio>
@@ -433,11 +433,11 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="处理说明：" prop="textarea">
+          <el-form-item label="处理说明：">
             <el-input
               type="textarea"
               :rows="2"
-              v-model="ruleForm.editRemark"
+              v-model="submitForm.editRemark"
             >
             </el-input>
           </el-form-item>
@@ -488,6 +488,11 @@
           workOrderNo:"",
 
         },
+        submitForm:{
+          cancelReason:"",
+          editRemark:"",
+          workOrderNo:"",
+        },
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
@@ -525,7 +530,7 @@
           pageSize: 10
         },
         loading: true,
-        workPoolData: [],
+        workPoolData: {},
         isinit: 'Y',
         totalCount: 0,
         changeSerchData: {},
@@ -567,7 +572,7 @@
       download(){},
       //提交页面数据
       submit(){
-        let insert=this.ruleForm
+        let insert=this.submitForm
         insert.workOrderNo=this.$route.query.workOrderNo
         cancelSubmit(insert).then(res => {
           if (res != null && res.code === 200) {

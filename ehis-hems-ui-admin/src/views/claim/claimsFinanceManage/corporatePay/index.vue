@@ -210,6 +210,7 @@
     methods: {
       resetForm() {
         this.$refs.searchForm.resetFields()
+        this.searchForm.caseDate=[]
       },
       search(status) {
         if (this.searchForm.caseDate != null && this.searchForm.caseDate.length > 0) {

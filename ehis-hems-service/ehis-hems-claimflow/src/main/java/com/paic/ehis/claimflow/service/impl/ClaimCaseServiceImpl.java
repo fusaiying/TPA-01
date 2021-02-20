@@ -410,7 +410,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         //完成案件操作记录表的记录
         claimCaseRecord1.setRptNo(claimCase.getRptNo());
 //        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
-        claimCaseRecord1.setOperation("30");//流程节点-问题件
+//        claimCaseRecord1.setOperation("");//流程节点
         claimCaseRecord1.setHistoryFlag("N");
         claimCaseRecord1.setStatus("Y");
         claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());

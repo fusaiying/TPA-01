@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.`status` = 'Y') "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
@@ -93,9 +93,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND b.STATUS = 'Y'
             AND c.STATUS = 'Y'
             <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
-            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
-            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y')  </if>
+            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
             <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
         GROUP BY
             a.batch_no,
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.`status` = 'Y') "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
@@ -140,7 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.hospital_code "hospitalCode",
             a.caseload "caseload",
             a.batch_total "batchTotal",
-            b.is_appeal "isAppeal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
             a.organ_code "organCode",
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
@@ -156,9 +156,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND b.STATUS = 'Y'
             AND c.STATUS = 'Y'
             <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and b.is_appeal = '01' </if>
-            <if test="complainStatus == '02'"> and b.is_appeal = '02' </if>
-            <if test="startDate != null  and startDate != ''"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
             <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
         GROUP BY
             a.batch_no,

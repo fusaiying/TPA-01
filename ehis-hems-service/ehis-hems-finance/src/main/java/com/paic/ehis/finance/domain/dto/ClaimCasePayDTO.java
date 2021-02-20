@@ -1,5 +1,6 @@
 package com.paic.ehis.finance.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
@@ -21,9 +22,11 @@ public class ClaimCasePayDTO extends BaseEntity {
     private String complainStatus;
 
     /** 开始日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
 
     /** 结束日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
     /** 交单机构 */

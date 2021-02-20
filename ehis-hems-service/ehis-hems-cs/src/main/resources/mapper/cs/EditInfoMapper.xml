@@ -38,14 +38,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectEditInfoById" parameterType="Long" resultMap="EditInfoResult">
+    <select id="selectEditInfoById" parameterType="String" resultMap="EditInfoResult">
         <include refid="selectEditInfoVo"/>
         where edit_id = #{editId}
     </select>
         
-    <insert id="insertEditInfo" parameterType="EditInfo" useGeneratedKeys="true" keyProperty="editId">
+    <insert id="insertEditInfo" parameterType="EditInfo">
         insert into edit_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="editId != null">edit_id,</if>
             <if test="workOrderId != null and workOrderId != ''">work_order_id,</if>
             <if test="otherId != null">other_id,</if>
             <if test="otherType != null">other_type,</if>
@@ -58,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedTime != null">updated_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="editId != null">#{editId},</if>
             <if test="workOrderId != null and workOrderId != ''">#{workOrderId},</if>
             <if test="otherId != null">#{otherId},</if>
             <if test="otherType != null">#{otherType},</if>
@@ -88,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where edit_id = #{editId}
     </update>
 
-    <delete id="deleteEditInfoById" parameterType="Long">
+    <delete id="deleteEditInfoById" parameterType="String">
         delete from edit_info where edit_id = #{editId}
     </delete>
 

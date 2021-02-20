@@ -341,14 +341,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(demandAcceptVo), Map.class);
-        String edit=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
+//        String edit=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
    //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
         List<String> keyList=new ArrayList<>();
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
+        //    EditInfo editInfo=new EditInfo();
             String map1key=iter1.next();
             String map1value = String.valueOf(map1.get(map1key));
             String map2value = String.valueOf(map2.get(map1key));
@@ -360,21 +360,21 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setNowValue(map2value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
                 editDetail.setEditId(editId);
-                editDetail.setEditId(edit);
+               // editDetail.setEditId(edit);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(editDetail.getEditId());
-                editInfo.setWorkOrderId(workOrderNo);
-                editInfo.setCreatedBy(SecurityUtils.getUsername());
-                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
-                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
-                editInfoMapper.insertEditInfo(editInfo);
+//                editInfo.setEditId(editId);
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+//                editInfoMapper.insertEditInfo(editInfo);
             }
         }
 
@@ -387,7 +387,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter2 = map3.keySet().iterator();
         while(iter2.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
+        //    EditInfo editInfo=new EditInfo();
             String map3key=iter2.next();
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
@@ -400,22 +400,22 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setNowValue(map4value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
                 editDetail.setEditId(editId);
-                editDetail.setEditId(edit);
+             //   editDetail.setEditId(edit);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
 
-                editInfo.setEditId(editDetail.getEditId());
-                editInfo.setWorkOrderId(workOrderNo);
-                editInfo.setCreatedBy(SecurityUtils.getUsername());
-                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
-                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
-                editInfoMapper.insertEditInfo(editInfo);
+//                editInfo.setEditId(editId);
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+//                editInfoMapper.insertEditInfo(editInfo);
             }
         }
 
@@ -428,7 +428,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         Iterator<String> iter3 = map5.keySet().iterator();
         while(iter3.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
             String map5value = String.valueOf(map5.get(map5key));
             String map6value = String.valueOf(map6.get(map5key));
@@ -439,14 +438,26 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(edit);
+              //  editDetail.setEditId(edit);
                 editDetail.setEditId(editId);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(editDetail.getEditId());
+//                editInfo.setEditId(editId);
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
+//                editInfoMapper.insertEditInfo(editInfo);
+            }
+        }
+                EditInfo editInfo=new EditInfo();
+                editInfo.setEditId(editId);
                 editInfo.setWorkOrderId(workOrderNo);
                 editInfo.setCreatedBy(SecurityUtils.getUsername());
                 editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -455,12 +466,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 editInfo.setEditRemark(demandAcceptVo.getEditInfo().getEditRemark());
                 editInfo.setEditReason(demandAcceptVo.getEditInfo().getEditReason());
                 editInfoMapper.insertEditInfo(editInfo);
-            }
-        }
 
         //轨迹表插入
         flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
-        flowLog.setSubId(edit);
+        flowLog.setSubId(editId);
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setOperateCode("01");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -478,16 +487,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
           }
         }*/
 
-        //轨迹表插入
-        flowLog.setSubId(editId);
-        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLog.setOperateCode("01");
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        demandAcceptVoMapper.insertFlowLog(flowLog);
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 

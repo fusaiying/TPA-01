@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 修改信息 对象 edit_info
  * 
  * @author sino
- * @date 2021-02-05
+ * @date 2021-02-20
  */
 public class EditInfo extends BaseEntity
 {
@@ -63,15 +63,16 @@ public class EditInfo extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public String getEditId() {
-        return editId;
-    }
-
-    public void setEditId(String editId) {
+    public void setEditId(String editId) 
+    {
         this.editId = editId;
     }
 
-    public void setWorkOrderId(String workOrderId)
+    public String getEditId() 
+    {
+        return editId;
+    }
+    public void setWorkOrderId(String workOrderId) 
     {
         this.workOrderId = workOrderId;
     }

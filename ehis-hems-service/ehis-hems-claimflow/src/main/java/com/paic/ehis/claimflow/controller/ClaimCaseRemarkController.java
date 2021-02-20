@@ -2,13 +2,16 @@ package com.paic.ehis.claimflow.controller;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseRemark;
+import com.paic.ehis.claimflow.domain.vo.RemarkVO;
 import com.paic.ehis.claimflow.service.IClaimCaseRemarkService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,23 +37,29 @@ public class ClaimCaseRemarkController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:remark:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ClaimCaseRemark claimCaseRemark)
+    public AjaxResult list(ClaimCaseRemark claimCaseRemark)
     {
         startPage();
         List<ClaimCaseRemark> list = claimCaseRemarkService.selectClaimCaseRemarkList(claimCaseRemark);
-        return getDataTable(list);
+        RemarkVO remarkVO = new RemarkVO();
+        remarkVO.setRemarkList(list);
+        remarkVO.setUserName(SecurityUtils.getUsername());
+        return AjaxResult.success(remarkVO);
     }
 
     /**
      * 理算页面查询案件备注列表
      */
-//    @PreAuthorize("@ss.hasPermi('system:remark:list')")
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:remark:list')")
     @GetMapping("/adjustRemarkList")
-    public TableDataInfo adjustRemarkList(ClaimCaseRemark claimCaseRemark)
+    public AjaxResult adjustRemarkList(ClaimCaseRemark claimCaseRemark)
     {
         startPage();
         List<ClaimCaseRemark> list = claimCaseRemarkService.selectAdjustClaimCaseRemarkList(claimCaseRemark);
-        return getDataTable(list);
+        RemarkVO remarkVO = new RemarkVO();
+        remarkVO.setRemarkList(list);
+        remarkVO.setUserName(SecurityUtils.getUsername());
+        return AjaxResult.success(remarkVO);
     }
 
     /**

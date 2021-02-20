@@ -205,6 +205,14 @@ public interface IClaimCaseService
     public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal );
 
     /**
+     * 调查信息保存
+     *
+     * @param caseInvestigation 案件信息
+     * @return 结果
+     */
+    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation);
+
+    /**
      * 提调
      *
      * @param caseInvestigation 案件信息

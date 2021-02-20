@@ -35,4 +35,19 @@ export function getIssuingcompanyList(query) {
     data: query
   })
 }
+/*获取用户角色  */
+export function roleInfo(userId) {
+  return request({
+    url: '/system/user/' + userId,
+    method: 'get',
+  })
+}
+
+/*获取登录用户信息  */
+export function logInfo() {
+  return request({
+    url: '/system/getInfo',
+    method: 'get',
+  })
+}
 

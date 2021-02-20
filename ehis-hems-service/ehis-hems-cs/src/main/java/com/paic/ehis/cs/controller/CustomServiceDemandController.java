@@ -102,7 +102,12 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/insertServiceProcessing")
     public AjaxResult insertServiceProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
     {
-        return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
+     if(serviceProcessingVo.getSign().equals("01")){
+         return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
+     }else{
+         return toAjax(iWorkHandleInfoService.insertSaveServiceInfo(serviceProcessingVo));
+     }
+
     }
 
     /**

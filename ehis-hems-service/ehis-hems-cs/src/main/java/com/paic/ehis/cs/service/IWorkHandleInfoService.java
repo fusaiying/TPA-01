@@ -70,11 +70,18 @@ public interface IWorkHandleInfoService
     public int deleteWorkHandleInfoById(Long handleId);
 
     /**
-     * 修改服务处理页面
+     * 修改服务暂存处理页面
      * @param serviceProcessingVo
      * @return
      */
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo);
+
+    /**
+     * 修改服务保存处理页面
+     * @param serviceProcessingVo
+     * @return
+     */
+    public int insertSaveServiceInfo(ServiceProcessingVo serviceProcessingVo);
 
     /**
      * 信息需求  协办处理页面  服务处理

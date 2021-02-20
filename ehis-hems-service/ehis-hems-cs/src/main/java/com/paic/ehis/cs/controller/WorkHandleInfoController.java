@@ -112,7 +112,7 @@ public class WorkHandleInfoController extends BaseController
      * 查询工单业处理信息 信息需求
      */
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectWorkOrder ")
+    @GetMapping("/selectWorkOrder")
     public TableDataInfo selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
         List<WorkHandleInfo> list = workHandleInfoService.selectWorkOrder(serviceProcessingVo);
         return getDataTable(list);
@@ -121,7 +121,7 @@ public class WorkHandleInfoController extends BaseController
      * 查询工单业处理信息 预约
      */
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectOrderWorkOrder ")
+    @GetMapping("/selectOrderWorkOrder")
     public TableDataInfo selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
         List<WorkHandleInfo> list = workHandleInfoService.selectOrderWorkOrder(reservationDealVo);
         return getDataTable(list);
@@ -130,7 +130,7 @@ public class WorkHandleInfoController extends BaseController
      * 查询工单业处理信息 投诉
      */
     @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectComplaintWorkOrder ")
+    @GetMapping("/selectComplaintWorkOrder")
     public TableDataInfo selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
         List<WorkHandleInfo> list = workHandleInfoService.selectComplaintWorkOrder(complaintDealVo);
         return getDataTable(list);

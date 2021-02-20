@@ -29,10 +29,13 @@
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
-        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
-        from accept_detail_info t1
-        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
-        <where>
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t1.status
+        from work_order_accept t1
+        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
+        where
+        t1.work_order_no = t2.work_order_no
+        and t1.business_type='投诉'
+        and t1.status='01'
             <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
             <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -52,14 +55,16 @@
             <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-        </where>
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
-        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
-        from accept_detail_info t1
-        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
-        <where>
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t1.status
+        from work_order_accept t1
+        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
+        where
+        t1.work_order_no = t2.work_order_no
+        and t1.business_type='投诉'
+        and t1.status='02'
             <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
             <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -79,9 +84,11 @@
             <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-        </where>
     </select>
-
+    <update id="updateComplaintStatus" parameterType="String" >
+        update work_order_accept set status = '02'
+        where status='01'and work_order_no = #{workOrderNo}
+    </update>
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
 SELECT
 	a.work_order_no,

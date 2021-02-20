@@ -104,6 +104,13 @@ public class CustomServiceComplaintController extends BaseController {
         return toAjax(iEditInfoService.reservedCancelSubmit(complaintAcceptVo));
     }
 
+    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
+    @Log(title = "获取 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/obtain")
+    public AjaxResult updateComplaintStatus(@RequestBody String workOrderNo)
+    {
+        return toAjax(iComplaintAcceptVoService.updateComplaintStatus(workOrderNo));
+    }
     /**
      * 投诉需求处理意见
      * @param complaintDealVo

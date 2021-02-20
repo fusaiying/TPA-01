@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service;
 
 import com.paic.ehis.claimflow.domain.PolicyInsured;
+import com.paic.ehis.claimflow.domain.vo.PolicyFlagVo;
 
 import java.util.List;
 
@@ -62,6 +63,6 @@ public interface IPolicyInsuredService
     /**
      * 被保人查询页面
      * */
-    List<PolicyInsured> selectRecognizee(PolicyInsured policyInsured
+    PolicyFlagVo selectRecognizee(PolicyInsured policyInsured
     );
 }

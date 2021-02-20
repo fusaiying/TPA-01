@@ -172,7 +172,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
         update claim_case_cal_bill
             <trim prefix="SET" suffixOverrides=",">
-                <if test="item.calAmount != null">cal_amount = #{item.calAmount},</if>
+                <if test="item.payAmount != null">pay_amount = #{item.payAmount},</if>
                 <if test="item.payConclusion != null">pay_conclusion = #{item.payConclusion},</if>
                 <if test="item.remark != null">remark = #{item.remark},</if>
                 update_time = now(),

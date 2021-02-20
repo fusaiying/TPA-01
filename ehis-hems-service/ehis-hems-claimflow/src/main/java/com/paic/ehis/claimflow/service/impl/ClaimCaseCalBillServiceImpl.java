@@ -108,23 +108,25 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();
         ArrayList<ClaimCaseCalItem> claimCaseCalItems = new ArrayList<>();
-        for (CaseCalBillVo caseCalBillVo : billDetailDTO.getBillDetailList()) {
-            ClaimCaseCalBill claimCaseCalBill = new ClaimCaseCalBill();
-            claimCaseCalBill.setCalAmount(caseCalBillVo.getCalAmount());
-            claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
-            claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
-            claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
-            claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
-            claimCaseCalBills.add(claimCaseCalBill);
-            if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
-                for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
-                    ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
-                    claimCaseCalItem.setPolicyNo(minDatum.getPolicyNo());
-                    claimCaseCalItem.setRiskCode(minDatum.getRiskCode());
-                    claimCaseCalItem.setDutyDetailCode(minDatum.getDutyDetailCode());
-                    claimCaseCalItem.setCalItemId(minDatum.getCalItemId());
-                    claimCaseCalItem.setUpdateBy(SecurityUtils.getUsername());
-                    claimCaseCalItems.add(claimCaseCalItem);
+        if (StringUtils.isNotEmpty(billDetailDTO.getBillDetailList())) {
+            for (CaseCalBillVo caseCalBillVo : billDetailDTO.getBillDetailList()) {
+                ClaimCaseCalBill claimCaseCalBill = new ClaimCaseCalBill();
+                claimCaseCalBill.setCalAmount(caseCalBillVo.getCalAmount());
+                claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
+                claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
+                claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
+                claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseCalBills.add(claimCaseCalBill);
+                if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
+                    for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
+                        ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
+                        claimCaseCalItem.setPolicyNo(minDatum.getPolicyNo());
+                        claimCaseCalItem.setRiskCode(minDatum.getRiskCode());
+                        claimCaseCalItem.setDutyDetailCode(minDatum.getDutyDetailCode());
+                        claimCaseCalItem.setCalItemId(minDatum.getCalItemId());
+                        claimCaseCalItem.setUpdateBy(SecurityUtils.getUsername());
+                        claimCaseCalItems.add(claimCaseCalItem);
+                    }
                 }
             }
         }

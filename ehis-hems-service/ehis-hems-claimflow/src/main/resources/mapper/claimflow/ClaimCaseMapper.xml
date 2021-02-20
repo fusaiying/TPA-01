@@ -133,7 +133,7 @@
         FROM
         claim_case_record b
         WHERE
-        a.record_id = b.record_id
+        a.rpt_no = b.rpt_no
         AND b.operation = '05'
         ORDER BY
         create_time desc
@@ -186,7 +186,7 @@
         FROM
         claim_case_record b
         WHERE
-        a.record_id = b.record_id
+        a.rpt_no = b.rpt_no
         AND b.operation = '05'
         AND b.history_flag = 'Y'
         ORDER BY

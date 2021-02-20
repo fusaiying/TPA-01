@@ -635,11 +635,13 @@
         })
 
       }
-      let data = {}
+      let data = {
+        //医院编码
+        providerCode: this.searchForm.hospitalcode
+      }
       getHospitalInfo(data).then(res => {
         if (res != null && res !== '') {
-          this.hospitalOptions = res.rows
-          this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, this.searchForm.hospitalcode))
+          this.$set(this.searchForm, 'chname1', this.selectHospitalName( res.rows, this.searchForm.hospitalcode))
         }
       })
     },
@@ -761,7 +763,15 @@
                       this.afterTable = []
                     }
                     this.searchForm = res.data.claimBatch
-                    this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, res.data.claimBatch.hospitalcode))
+                    let data = {
+                      //医院编码
+                      providerCode: res.data.claimBatch.hospitalcode
+                    }
+                    getHospitalInfo(data).then(response => {
+                      if (response != null && response !== '') {
+                        this.$set(this.searchForm, 'chname1', this.selectHospitalName( response.rows,res.data.claimBatch.hospitalcode))
+                      }
+                    })
                     this.show = true;
                     for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
                       let data = {
@@ -810,7 +820,15 @@
                 //更新数据
                 if (res.data != null) {
                   this.searchForm = res.data
-                  this.$set(this.searchForm, 'chname1', this.selectHospitalName(this.hospitalOptions, res.data.hospitalcode))
+                  let data = {
+                    //医院编码
+                    providerCode:  res.data.hospitalcode
+                  }
+                  getHospitalInfo(data).then(response => {
+                    if (response != null && response !== '') {
+                      this.$set(this.searchForm, 'chname1', this.selectHospitalName( response.rows, res.data.hospitalcode))
+                    }
+                  })
                 }
                 this.eSaveSub = true
                 this.isSaveSub = true

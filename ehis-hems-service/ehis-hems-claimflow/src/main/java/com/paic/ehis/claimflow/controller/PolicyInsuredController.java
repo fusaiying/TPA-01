@@ -101,10 +101,10 @@ public class PolicyInsuredController extends BaseController
      */
     // @PreAuthorize("@ss.hasPermi('system:insured:list')")
     @GetMapping("/selectRecognizee")
-    public TableDataInfo selectRecognizee(PolicyInsured policyInsured)
+    public AjaxResult selectRecognizee(PolicyInsured policyInsured)
     {
-        startPage();
-        List<PolicyInsured> list = policyInsuredService.selectRecognizee(policyInsured);
-        return getDataTable(list);
+
+        // List<PolicyInsured> list = policyInsuredService.selectRecognizee(policyInsured);
+        return AjaxResult.success( policyInsuredService.selectRecognizee(policyInsured));
     }
 }

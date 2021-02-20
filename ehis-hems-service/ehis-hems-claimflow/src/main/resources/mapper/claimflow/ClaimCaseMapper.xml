@@ -739,8 +739,8 @@
     <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
         select rpt_no from claim_case
         <where>
-            <if test="rpt_start_no != null  and rpt_start_no != ''"> <![CDATA[and  rpt_no >= rpt_start_no = #{rptStartNo}]]></if>
-            <if test="rpt_end_no != null  and rpt_end_no != ''"> <![CDATA[and rpt_no <= rpt_end_no = #{rptEndNo}]]></if>
+            <if test="rptStartNo != null  and rptStartNo != ''"> <![CDATA[and  rpt_no >=  #{rptStartNo}]]></if>
+            <if test="rptEndNo != null  and rptEndNo != ''"> <![CDATA[and rpt_no <= #{rptEndNo}]]></if>
         </where>
     </select>
 

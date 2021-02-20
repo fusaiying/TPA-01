@@ -399,6 +399,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         //生成发表归档信息
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(str1);
+        claimBatchInvoiceFiling.setStatus("Y");
         claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
@@ -507,6 +508,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         //生成发表归档信息
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(claimBatch.getBatchno());
+        claimBatchInvoiceFiling.setStatus("Y");
         claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());

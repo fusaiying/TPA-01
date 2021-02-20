@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.controller;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
+import com.paic.ehis.claimflow.domain.dto.ProblemTextDTO;
 import com.paic.ehis.claimflow.service.IClaimCaseProblemService;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -120,11 +121,10 @@ public class ClaimCaseProblemController extends BaseController
      */
  //   @PreAuthorize("@ss.hasPermi('system:problem:list')")
     @GetMapping("/selectHistoricalProblem")
-    public TableDataInfo selectHistoricalProblem(ClaimCaseProblem claimCaseProblem)
+    public AjaxResult selectHistoricalProblem(ClaimCaseProblem claimCaseProblem)
     {
-        startPage();
-        List<ClaimCaseProblem> list = claimCaseProblemService.selectHistoricalProblem(claimCaseProblem);
-        return getDataTable(list);
+        ProblemTextDTO problemTextDTO = claimCaseProblemService.selectHistoricalProblem(claimCaseProblem);
+        return AjaxResult.success(problemTextDTO);
     }
 
     /**

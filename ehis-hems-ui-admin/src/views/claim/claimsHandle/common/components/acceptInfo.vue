@@ -208,7 +208,7 @@
           if ((date.getDate()) < 10) {
             day = '0' + date.getDate()
           }
-          if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
+          if (newVal.claimCaseAccept.materialCompleteDate == null || newVal.claimCaseAccept.materialCompleteDate === '') {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + day
           }
         }

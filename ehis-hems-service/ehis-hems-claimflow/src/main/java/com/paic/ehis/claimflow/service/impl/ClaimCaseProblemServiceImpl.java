@@ -183,7 +183,7 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService {
                 }
                 claimCaseProblems1.add(claimCaseProblems);
             }
-            problemTextDTO.setTotal(size);
+            problemTextDTO.setTotal( String.valueOf(size));
             problemTextDTO.setClaimCaseProblems(claimCaseProblems1);
         }
         return problemTextDTO;

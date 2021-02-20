@@ -14,7 +14,7 @@ public class ProblemTextDTO {
      */
     private String problemStatus;
 
-    private int total;
+    private String total;
 
     @Override
     public String toString() {

@@ -222,7 +222,8 @@
         sonProblemData: [],
         sonCalculateData: [],
         historicalProblemData: [],
-        historicalProblemDataTotal: 0,
+        historicalProblemDataTotal: '0',
+        problemStatus: 0,
         historicalProblemDialog: false,
         removeDialog: false,
         appealDialog: false,
@@ -310,8 +311,14 @@
         }
         selectHistoricalProblem(item).then(res => {
           if (res != null && res.code === 200) {
-            this.historicalProblemData = res.rows
-            this.historicalProblemDataTotal = res.total
+            this.historicalProblemData = res.data.claimCaseProblems
+            if (res.data.problemStatus==='Y'){
+              this.historicalProblemDataTotal='?'
+            }else {
+              if (res.data.total!=null){
+                this.historicalProblemDataTotal = res.data.total
+              }
+            }
           }
         })
         getInsured(this.querys.rptNo).then(res => {

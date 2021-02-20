@@ -598,6 +598,9 @@
 
       //重置
       restForm() {
+        this.radio = undefined
+        this.expands = []
+        this.tableData=[]
         this.$refs.searchForm.resetFields()
       },
 

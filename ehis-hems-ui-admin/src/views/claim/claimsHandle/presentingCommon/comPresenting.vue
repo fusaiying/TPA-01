@@ -797,6 +797,8 @@
         this.$refs.searchForm.validate((valid) => {
           if (valid) {
             let claimBatch = this.searchForm
+            this.eSaveSub = true
+            this.isSaveSub = true
             addBatch(claimBatch).then(res => {
               if (res != null && res.code === 200) {
                 this.$message({
@@ -817,6 +819,8 @@
                 this.isShow = true
                 this.eShowFooter = true
               } else {
+                this.eSaveSub = false
+                this.isSaveSub = false
                 this.$message.error(
                   "保存提交失败!"
                 );
@@ -894,6 +898,7 @@
                     claimBatch: this.searchForm, //
                     standingData: this.afterTable//
                   }
+                  this.eSaveOrSub = true
                   addBatchAndStandingPresent(data).then(res => {
                     if (res != null && res.code === 200) {
                       this.$message({
@@ -913,6 +918,7 @@
                       this.isShow = true
                       this.eShowFooter = true
                     } else {
+                      this.eSaveOrSub = false
                       this.$message.error('保存失败！')
                     }
                   })

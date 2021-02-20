@@ -407,7 +407,9 @@
         cases.update_by
         FROM
         claim_case cases
-        where cases.case_status = '07' AND cases.STATUS = 'Y' AND cases.update_by = #{operator}
+        where cases.case_status = '07'
+        AND cases.STATUS = 'Y'
+        AND cases.update_by = #{operator}
         ORDER BY cases.update_time DESC
         ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'

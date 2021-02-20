@@ -435,7 +435,7 @@
           this.loading = false
         })
         this.isOpen = true
-        let ids = this.caseForm.caseData.map(item => item.id)
+        let ids = this.caseForm.caseData.map(item => item.billId)
         this.expands = ids
       },
       closeAll() {
@@ -443,7 +443,7 @@
         this.expands = []
       },
       getRowKeys(row) {
-        return row.id
+        return row.billId
       },
       rowClick(row, column, event) {
         row.isEdit = false

@@ -1,10 +1,12 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.paic.ehis.claimflow.domain.ClaimBatchInvoiceFiling;
 import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingVO;
+import com.paic.ehis.claimflow.domain.vo.RptNoVo;
 import com.paic.ehis.claimflow.mapper.ClaimBatchInvoiceFilingMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseFilingMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
@@ -189,9 +191,38 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     @Override
     public List<ClaimCaseFilingInformationVO> selectCaseClaimCaseFilingInfo(ClaimCaseFilingListVO claimCaseFilingListVO) {
 
-        List<ClaimCaseFilingInformationVO> claimCaseFilingInformationVoS = claimCaseFilingMapper.selectCaseClaimCaseFilingInfo(claimCaseFilingListVO);
+        //新建一个集合，这个集合是返回给前端的
+        List<ClaimCaseFilingInformationVO> claimCaseFilingInformationVo = new ArrayList<>();
 
-        return claimCaseFilingInformationVoS;
+        //新建一个实体类保存传给前端的信息
+        ClaimCaseFilingInformationVO claimCaseFilingInformationVO = new ClaimCaseFilingInformationVO();
+
+        //通过前端传过来的盒号查询出案件归档明细所需要的信息
+        ClaimCaseFilingInformationVO claimCaseFilingInformationVoS = claimCaseFilingMapper.selectCaseClaimCaseFilingInfo(claimCaseFilingListVO);
+
+        //通过前端传过来的报案起止号查询出报案号和批次号
+        List<RptNoVo> rptNoVos = claimCaseMapper.selectCaseClaimCaseFilingRptNo(claimCaseFilingListVO);
+
+        //循环遍历
+        for (RptNoVo v:rptNoVos) {
+
+            //向实体类中添加报案号数据
+            claimCaseFilingInformationVO.setRptNo(v.getRptNo());
+
+            //将查询到的信息添加到给前端的集合的实体类中
+            claimCaseFilingInformationVO.setCaseBoxNo(claimCaseFilingInformationVoS.getCaseBoxNo());
+            claimCaseFilingInformationVO.setDeptCode(claimCaseFilingInformationVoS.getDeptCode());
+            claimCaseFilingInformationVO.setClaimType(claimCaseFilingInformationVoS.getClaimType());
+            claimCaseFilingInformationVO.setIsFiling(claimCaseFilingInformationVoS.getIsFiling());
+            claimCaseFilingInformationVO.setIsInvoiceBack(claimCaseFilingInformationVoS.getIsInvoiceBack());
+            claimCaseFilingInformationVO.setIsSingle(claimCaseFilingInformationVoS.getIsSingle());
+            claimCaseFilingInformationVO.setRemark(claimCaseFilingInformationVoS.getRemark());
+
+            //将实体类添加到给前端的集合中
+            claimCaseFilingInformationVo.add(claimCaseFilingInformationVO);
+        }
+
+        return claimCaseFilingInformationVo;
     }
 
     /** 保存案件归档详细信息 */

@@ -269,6 +269,8 @@ public class BaseProviderInfo extends BaseEntity
     /** 是否直结 */
     private String isNetworkHospital;
 
+    private String supplierCode;
+
     public void setProviderCode(String providerCode) 
     {
         this.providerCode = providerCode;

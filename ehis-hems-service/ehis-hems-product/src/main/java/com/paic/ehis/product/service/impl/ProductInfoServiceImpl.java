@@ -219,13 +219,23 @@ public class ProductInfoServiceImpl implements IProductInfoService
         int i = 0;
         ProductManagerLog productManagerLog = new ProductManagerLog();
         if("01".equals(productCheckInfo.getCheckResult())){
+            if("04".equals(productCheckInfo.getBussinessStatus())){
+                productManagerLog.setProductCode(productCheckInfo.getProductCode());
+                productManagerLog.setBussinessStatus(productCheckInfo.getBussinessStatus());
+                count =productInfoMapper.updateProStatus3(productManagerLog);
+            }
             //审核同意，变更产品状态为发布
             count =productInfoMapper.updateProStatus1(productCheckInfo.getProductCode());
             productManagerLog.setBussinessStatus("03");//发布
         }else if("02".equals(productCheckInfo.getCheckResult())){
-            //审核同意，变更产品状态为退回
-            count =productInfoMapper.updateProStatus2(productCheckInfo.getProductCode());
-            productManagerLog.setBussinessStatus("05");//退回
+            if("04".equals(productCheckInfo.getBussinessStatus())){
+                i=1;
+            }else{
+                //审核不同意，变更产品状态为退回
+                count =productInfoMapper.updateProStatus2(productCheckInfo.getProductCode());
+                productManagerLog.setBussinessStatus("05");//退回
+            }
+
         }
         if(count>0){
             //保存到审核日志表

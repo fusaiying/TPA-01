@@ -191,8 +191,8 @@
         const param = {};
         param.rptNo = this.rptNo;
         historicalProblem(param).then(res => {
-          if(res.code == '200' && res.rows.length >0) {
-            this.HistoryData = res.rows;
+          if(res.code == '200' && res.data.claimCaseProblems.length >0) {
+            this.HistoryData = res.data.claimCaseProblems;
           }
         });
       },

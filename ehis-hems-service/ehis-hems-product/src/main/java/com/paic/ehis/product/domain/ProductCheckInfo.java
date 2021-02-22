@@ -2,6 +2,7 @@ package com.paic.ehis.product.domain;
 
 
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.paic.ehis.common.core.annotation.Excel;
@@ -12,6 +13,7 @@ import com.paic.ehis.common.core.annotation.Excel;
  * @author sino
  * @date 2021-01-15
  */
+@Data
 public class ProductCheckInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -34,6 +36,10 @@ public class ProductCheckInfo extends BaseEntity
     /** 数据状态 */
     @Excel(name = "数据状态")
     private String status;
+
+    /** 业务状态 */
+    @Excel(name = "业务状态")
+    private String bussinessStatus;
 
     public void setSerialNo(String serialNo) 
     {

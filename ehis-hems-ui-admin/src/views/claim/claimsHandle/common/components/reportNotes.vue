@@ -177,7 +177,7 @@
                 this.dialogFormVisible = false
                 getRemarkRptNo(this.fixInfo.rptNo).then(res => {
                   if (res != null && res.code === 200) {
-                    this.reportData = res.data
+                    this.reportData = res.data.remarkList
                   }
                 }).catch(res => {
                 })
@@ -202,7 +202,7 @@
                 this.dialogFormVisible = false
                 getRemarkRptNo(this.fixInfo.rptNo).then(res => {
                   if (res != null && res.code === 200) {
-                    this.reportData = res.data
+                    this.reportData = res.data.remarkList
                   }
                 }).catch(res => {
                 })
@@ -240,7 +240,7 @@
               })
               getRemarkRptNo(this.fixInfo.rptNo).then(res => {
                 if (res != null && res.code === 200) {
-                  this.reportData = res.data
+                  this.reportData = res.data.remarkList
                 }
               }).catch(res => {
               })

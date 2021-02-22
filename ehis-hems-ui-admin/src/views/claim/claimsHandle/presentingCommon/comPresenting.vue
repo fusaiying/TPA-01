@@ -24,7 +24,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="理赔类型：" prop="claimtype">
-              <el-select :disabled="isShow" v-model="searchForm.claimtype" class="item-width" placeholder="请选择"
+              <el-select :disabled="isShow || (querys!=null && querys.node==='review')" v-model="searchForm.claimtype"
+                         class="item-width" placeholder="请选择"
                          @change="typeChange">
                 <el-option v-for="option in claimTypeOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -35,7 +36,7 @@
           <el-col :span="8">
             <el-form-item label="交单日期：" prop="submitdate">
               <el-date-picker
-                :disabled="this.$route.query.status==='add'|| isShow"
+                :disabled="this.$route.query.status==='add'|| isShow || (querys!=null && querys.node==='review')"
                 v-model="searchForm.submitdate"
                 class="item-width"
                 type="date"
@@ -517,7 +518,7 @@
           this.eShowFooter = true
           selectRecordByBatchno(this.searchForm.batchno).then(res => {
             if (res != null && res.code === 200 && res.data.length > 0) {
-              if (res.data[0]!=null){
+              if (res.data[0] != null) {
                 this.recordForm = res.data[0]
                 this.isShowFooter = true
               }
@@ -558,7 +559,7 @@
           this.eShowFooter = true
           selectRecordByBatchno(this.searchForm.batchno).then(res => {
             if (res != null && res.code === 200 && res.data.length > 0) {
-              if (res.data[0]!=null){
+              if (res.data[0] != null) {
                 this.recordForm = res.data[0]
                 this.isShowFooter = true
               }
@@ -647,7 +648,7 @@
       }
       getHospitalInfo(data).then(res => {
         if (res != null && res !== '') {
-          this.$set(this.searchForm, 'chname1', this.selectHospitalName( res.rows, this.searchForm.hospitalcode))
+          this.$set(this.searchForm, 'chname1', this.selectHospitalName(res.rows, this.searchForm.hospitalcode))
         }
       })
     },
@@ -703,7 +704,6 @@
               let table = this.afterTable.filter(item => {
                 return item.idno != null && item.idno !== ''
               })
-              console.log(table);
               table.forEach((v, i) => {
                 for (const val in v) {
                   if (this.hasBlock) {
@@ -713,13 +713,7 @@
                     for (const childrenVal in v) {
                       if (v[childrenVal] === "" || v[childrenVal] === null) {
                         //el-table中列绑定的字段
-                        if (`${childrenVal}` === "name") {
-                          this.hasBlock = true;
-                          // el-table中列表头内容
-                          return this.$message.warning(
-                            "被保人不能为空"
-                          );
-                        } else if (`${childrenVal}` === "claimmaterials") {
+                        if (`${childrenVal}` === "claimmaterials") {
                           this.hasBlock = true;
                           return this.$message.warning(
                             "理赔材料不能为空"
@@ -775,7 +769,7 @@
                     }
                     getHospitalInfo(data).then(response => {
                       if (response != null && response !== '') {
-                        this.$set(this.searchForm, 'chname1', this.selectHospitalName( response.rows,res.data.claimBatch.hospitalcode))
+                        this.$set(this.searchForm, 'chname1', this.selectHospitalName(response.rows, res.data.claimBatch.hospitalcode))
                       }
                     })
                     this.show = true;
@@ -828,11 +822,11 @@
                   this.searchForm = res.data
                   let data = {
                     //医院编码
-                    providerCode:  res.data.hospitalcode
+                    providerCode: res.data.hospitalcode
                   }
                   getHospitalInfo(data).then(response => {
                     if (response != null && response !== '') {
-                      this.$set(this.searchForm, 'chname1', this.selectHospitalName( response.rows, res.data.hospitalcode))
+                      this.$set(this.searchForm, 'chname1', this.selectHospitalName(response.rows, res.data.hospitalcode))
                     }
                   })
                 }
@@ -865,7 +859,12 @@
           this.hasBlock = false
           this.$refs.searchForm.validate((valid) => {
             if (valid) {
-              this.afterTable.forEach((v, i) => {
+              //筛选已填写身份证号的  后面都必须填写
+              let table = this.afterTable.filter(item => {
+                return item.idno != null && item.idno !== ''
+              })
+
+              table.forEach((v, i) => {
                 for (const val in v) {
                   if (this.hasBlock) {
                     break
@@ -879,12 +878,6 @@
                           // el-table中列表头内容
                           return this.$message.warning(
                             "证件号码不能为空"
-                          );
-                        } else if (`${childrenVal}` === "name") {
-                          this.hasBlock = true;
-                          // el-table中列表头内容
-                          return this.$message.warning(
-                            "被保人不能为空"
                           );
                         } else if (`${childrenVal}` === "claimmaterials") {
                           this.hasBlock = true;
@@ -914,13 +907,13 @@
                 }
               })
               //前面都通过则继续进行
-              if(parseInt(this.searchForm.casenum)==this.afterTable.length){
+              if (parseInt(this.searchForm.casenum) == table.length) {
                 if (!this.hasBlock) {
                   //请求接口保存table获取afterTable  给afterTableTotal赋值
                   //then里面的
                   let data = {
                     claimBatch: this.searchForm, //
-                    standingData: this.afterTable//
+                    standingData: table//
                   }
                   this.eSaveOrSub = true
                   addBatchAndStandingPresent(data).then(res => {
@@ -935,7 +928,7 @@
                         this.afterTable = res.data.standingData
                         this.afterTableTotal = res.data.standingData.length
                       }
-                      this.show = true
+                      this.show = false
                       this.isSaveSub = false
                       this.isPrint = false
                       this.eSaveOrSub = true
@@ -947,10 +940,51 @@
                     }
                   })
                 }
-              }else {
-                return this.$message.warning(
-                  "案件数与台账信息个数不匹配请先进行保存处理！"
-                );
+              } else {
+                this.$confirm(`存在未登记台账的案件，是否确认提交?`, '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  if (!this.hasBlock) {
+                    //请求接口保存table获取afterTable  给afterTableTotal赋值
+                    //then里面的
+                    let data = {
+                      claimBatch: this.searchForm, //
+                      standingData: table//
+                    }
+                    this.eSaveOrSub = true
+                    addBatchAndStandingPresent(data).then(res => {
+                      if (res != null && res.code === 200) {
+                        this.$message({
+                          message: '保存成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        })
+                        if (res.data.standingData != null) {
+                          this.afterTable = res.data.standingData
+                          this.afterTableTotal = res.data.standingData.length
+                        }
+                        this.show = true
+                        this.isSaveSub = false
+                        this.isPrint = false
+                        this.eSaveOrSub = true
+                        this.isShow = true
+                        this.eShowFooter = true
+                      } else {
+                        this.eSaveOrSub = false
+                        this.$message.error('保存失败！')
+                      }
+                    })
+                  }
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消！'
+                  })
+                })
+
               }
 
             } else {
@@ -993,7 +1027,7 @@
                     this.isShow = true
                   } else {
                     this.eReview = false
-                    this.isShowRecord=false
+                    this.isShowRecord = false
                     this.$message.error('复核失败！')
                   }
                 })

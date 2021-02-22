@@ -8,7 +8,7 @@
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
             <div style="float: right;">
-              <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
+              <el-button v-if="isButtonShow && conSave" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
               <el-button v-if="node!=='sport'" size="mini" type="primary" @click="backClaimCase">退回受理</el-button>
@@ -68,7 +68,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="赔付结论：" prop="payConclusion">
-                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择">
+                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
                   <el-option v-for="dict in conclusionSelect" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
                 </el-select>
               </el-form-item>
@@ -288,7 +288,19 @@
       },
     },
     data() {
+      const checkRefusedReason = (rule, value, callback) => {
+        if(this.conclusionForm.payConclusion != '' && '05' == this.conclusionForm.payConclusion) {
+          if (!value) {
+            callback(new Error("拒赔原因必填"));// XXXXXXXXXXXX
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
       return {
+        conSave:false,
         rptNo:'',
         batchNo:'',
         fixInfoData:'',
@@ -319,7 +331,7 @@
         conRules: {
           billCurrency: {trigger: ['change'], required: true, message: '账单币种必填'},
           payConclusion: {trigger: ['change'], required: true, message: '赔付结论必填'},
-          refusedReason: {trigger: ['change'], required: true, message: '拒赔原因必填'},
+          refusedReason: {trigger: ['change'], required: false, validator: checkRefusedReason},
           remark: {trigger: ['change'], required: true, message: '客户备注必填'},
           claimCheck: {trigger: ['change'], required: true, message: '核赔依据必填'},
 
@@ -428,7 +440,11 @@
     computed: {
     },
     methods: {
-
+      payConclusionChange(value){
+        if(value != '05'){
+          this.conclusionForm.refusedReason = '';
+        }
+      },
       discussionSave(){
 
         this.$refs.discussionForm.validate((valid) => {
@@ -468,6 +484,7 @@
 
       // 赔付结论保存
       updateCalInfo(){
+          this.conSave = false
           this.$refs.conclusionForm.validate((valid) => {
             if (valid) {
               if(this.rptNo == '') {
@@ -487,7 +504,6 @@
               };
 
               updateCal(params).then(res => {
-                console.log(res);
                 if (res.code == '200') {
                   this.getCalInfo();
                   this.$message({
@@ -497,6 +513,7 @@
                     showClose: true
                   });
                 } else {
+                  this.conSave = true
                   this.$message({
                     message: '保存失败！',
                     type: 'error',
@@ -505,6 +522,8 @@
                   });
                 }
               });
+            } else {
+              this.conSave = true
             }
           })
       },
@@ -515,7 +534,7 @@
           return false;
         }
 
-        if(this.conclusionForm.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == ''){
           this.$message.info('请先保存再进行审核！')
           return false;
         }
@@ -696,6 +715,9 @@
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
+            if(this.conclusionInfo.payConclusion == '') {
+              this.conSave = true;
+            }
             this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
             this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因

@@ -13,6 +13,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 
     @Autowired
     private ClaimBatchInvoiceFilingMapper claimBatchInvoiceFilingMapper;
+
+    @Autowired SysUserMapper sysUserMapper;
 
     /**
      * 查询理赔批次
@@ -93,10 +96,11 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
                 || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
                 || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
 //            机构层级  查询 暂未是实现
-//            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getLoginUser().getUserId());
-//            batchDTO.setOrgancode( sysUser.getDeptId().toString());
+            Long userId = SecurityUtils.getUserId();
+            SysUser sysUser = sysUserMapper.selectUserById(userId);
+            // 获取用户的所属机构
+            batchDTO.setOrgancode( sysUser.getDeptId().toString());
         } else {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
@@ -120,8 +124,10 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
-        String username = SecurityUtils.getUsername();
-
+        Long userId = SecurityUtils.getUserId();
+        SysUser sysUser = sysUserMapper.selectUserById(userId);
+        // 获取用户的所属机构
+        batchDTO.setOrgancode( sysUser.getDeptId().toString());
         batchDTO.setClaimtype("01");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());

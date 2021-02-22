@@ -120,7 +120,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         if (StringUtils.isNotEmpty(billDetailDTO.getBillDetailList())) {
             for (CaseCalBillVo caseCalBillVo : billDetailDTO.getBillDetailList()) {
                 ClaimCaseCalBill claimCaseCalBill = new ClaimCaseCalBill();
-                claimCaseCalBill.setCalAmount(caseCalBillVo.getCalAmount());
+                claimCaseCalBill.setPayAmount(caseCalBillVo.getPayAmount());
                 claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());

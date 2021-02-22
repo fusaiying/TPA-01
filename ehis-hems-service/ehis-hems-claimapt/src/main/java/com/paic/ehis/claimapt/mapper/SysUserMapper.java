@@ -36,13 +36,13 @@ public interface SysUserMapper
 //     */
 //    public SysUser selectUserByUserName(String userName);
 //
-//    /**
-//     * 通过用户ID查询用户
-//     *
-//     * @param userId 用户ID
-//     * @return 用户对象信息
-//     */
-//    public SysUser selectUserById(Long userId);
+    /**
+     * 通过用户ID查询用户
+     *
+     * @param userId 用户ID
+     * @return 用户对象信息
+     */
+    public SysUser selectUserById(Long userId);
 //
 //    /**
 //     * 新增用户信息

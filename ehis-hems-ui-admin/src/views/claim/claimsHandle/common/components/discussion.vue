@@ -550,7 +550,7 @@
           return false;
         }
 
-        if(this.conclusionInfo.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
           this.$message.info('请先保存再进行审核！')
           return false;
         }
@@ -731,7 +731,7 @@
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
-            if(this.conclusionInfo.payConclusion == '') {
+            if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null) {
               this.conSave = true;
             }
             if(this.conclusionInfo.billCurrency != '' && this.conclusionInfo.billCurrency != null) {

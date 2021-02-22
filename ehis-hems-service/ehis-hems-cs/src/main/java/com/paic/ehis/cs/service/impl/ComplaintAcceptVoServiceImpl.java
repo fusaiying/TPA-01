@@ -431,6 +431,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workHandleInfo.setCreatedBy(complaintDealVo.getCreatedBy());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
+
+
+
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
         workHandleInfo.setHandleType("处理");
         workHandleInfo.setStatus("03");

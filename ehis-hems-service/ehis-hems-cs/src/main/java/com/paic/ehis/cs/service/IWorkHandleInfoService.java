@@ -100,6 +100,7 @@ public interface IWorkHandleInfoService
      *预约处理页面  服务处理
      */
     int insertResevationDeal(ReservationDealVo reservationDealVo);
+    int insertResevationSaveDeal(ReservationDealVo reservationDealVo);
 
     /**
      * 查询工单业处理信息 预约  信息需求

@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      status:'edit',
+      status:'',
       disabledFlag: false,
       parProductChname: '',
       parProductEnname: '',

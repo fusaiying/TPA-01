@@ -142,6 +142,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
+          <el-form-item label="主任：" prop="director">
+            <el-input v-model="baseForm.director" class="item-width" clearable size="mini"  placeholder="请输入"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="重疾名称：" prop="seriousDisease">
             <el-input v-model="baseForm.seriousDisease" class="item-width" clearable size="mini"  placeholder="请输入"
             />

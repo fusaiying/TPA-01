@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimapt.mapper.ClaimCaseStandingMapper">
-    
+
     <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
-        <where>  
+        <where>
             <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="claimmaterials != null  and claimmaterials != ''"> and claim_materials = #{claimmaterials}</if>
@@ -113,15 +113,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="receiveStartDate != null   and receiveEndDate != null ">
             and(receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
     </select>
-    
+
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status="Y"
     </select>
-        
+
     <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding">
         insert into claim_case_standing
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">batch_no,</if>
+            <if test="idType != null">id_type,</if>
             <if test="rptno != null">rpt_no,</if>
             <if test="idno != null and idno != ''">id_no,</if>
             <if test="name != null and name != ''">name,</if>
@@ -135,6 +137,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">#{batchno},</if>
+            <if test="idType != null and idno != ''">#{idType},</if>
             <if test="rptno != null">#{rptno},</if>
             <if test="idno != null and idno != ''">#{idno},</if>
             <if test="name != null and name != ''">#{name},</if>
@@ -181,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteClaimCaseStandingByIds" parameterType="String">
-        delete from claim_case_standing where rpt_no in 
+        delete from claim_case_standing where rpt_no in
         <foreach item="rptno" collection="array" open="(" separator="," close=")">
             #{rptno}
         </foreach>

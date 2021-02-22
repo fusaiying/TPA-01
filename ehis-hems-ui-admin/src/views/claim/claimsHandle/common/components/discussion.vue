@@ -68,7 +68,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="赔付结论：" prop="payConclusion">
-                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择">
+                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
                   <el-option v-for="dict in conclusionSelect" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
                 </el-select>
               </el-form-item>
@@ -288,6 +288,17 @@
       },
     },
     data() {
+      const checkRefusedReason = (rule, value, callback) => {
+        if(this.conclusionForm.payConclusion != '' && '05' == this.conclusionForm.payConclusion) {
+          if (!value) {
+            callback(new Error("拒赔原因必填"));// XXXXXXXXXXXX
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
       return {
         rptNo:'',
         batchNo:'',
@@ -319,7 +330,7 @@
         conRules: {
           billCurrency: {trigger: ['change'], required: true, message: '账单币种必填'},
           payConclusion: {trigger: ['change'], required: true, message: '赔付结论必填'},
-          refusedReason: {trigger: ['change'], required: true, message: '拒赔原因必填'},
+          refusedReason: {trigger: ['change'], required: false, validator: checkRefusedReason},
           remark: {trigger: ['change'], required: true, message: '客户备注必填'},
           claimCheck: {trigger: ['change'], required: true, message: '核赔依据必填'},
 
@@ -428,7 +439,11 @@
     computed: {
     },
     methods: {
-
+      payConclusionChange(value){
+        if(value != '05'){
+          this.conclusionForm.refusedReason = '';
+        }
+      },
       discussionSave(){
 
         this.$refs.discussionForm.validate((valid) => {
@@ -487,7 +502,6 @@
               };
 
               updateCal(params).then(res => {
-                console.log(res);
                 if (res.code == '200') {
                   this.getCalInfo();
                   this.$message({
@@ -515,7 +529,7 @@
           return false;
         }
 
-        if(this.conclusionForm.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == ''){
           this.$message.info('请先保存再进行审核！')
           return false;
         }

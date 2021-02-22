@@ -103,7 +103,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     {
         claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
         claimCaseCal.setUpdateTime(DateUtils.getNowDate());
-        int i = claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
+        int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         if (1==i){
             return claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
         }else {

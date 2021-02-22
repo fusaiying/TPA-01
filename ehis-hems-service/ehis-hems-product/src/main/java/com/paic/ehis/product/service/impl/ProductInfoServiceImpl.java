@@ -220,12 +220,11 @@ public class ProductInfoServiceImpl implements IProductInfoService
         ProductManagerLog productManagerLog = new ProductManagerLog();
         if("01".equals(productCheckInfo.getCheckResult())){
             if("04".equals(productCheckInfo.getBussinessStatus())){
-                productManagerLog.setProductCode(productCheckInfo.getProductCode());
-                productManagerLog.setBussinessStatus(productCheckInfo.getBussinessStatus());
-                count =productInfoMapper.updateProStatus3(productManagerLog);
+                count =productInfoMapper.updateProStatus4(productCheckInfo.getProductCode());
+            }else{
+                count =productInfoMapper.updateProStatus1(productCheckInfo.getProductCode());
             }
             //审核同意，变更产品状态为发布
-            count =productInfoMapper.updateProStatus1(productCheckInfo.getProductCode());
             productManagerLog.setBussinessStatus("03");//发布
         }else if("02".equals(productCheckInfo.getCheckResult())){
             if("04".equals(productCheckInfo.getBussinessStatus())){

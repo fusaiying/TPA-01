@@ -196,6 +196,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where product_code = #{productCode} and status = 'Y' and bussiness_status ='02'
     </update>
 
+    <update id="updateProStatus4" parameterType="String">
+        update product_info set bussiness_status = '03'
+        where product_code = #{productCode} and status = 'Y' and bussiness_status ='04'
+    </update>
+
     <update id="updateProStatus2" parameterType="String">
         update product_info set bussiness_status = '05'
         where product_code = #{productCode} and status = 'Y' and bussiness_status ='02'

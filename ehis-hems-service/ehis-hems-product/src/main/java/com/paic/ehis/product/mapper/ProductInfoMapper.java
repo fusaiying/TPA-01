@@ -71,6 +71,9 @@ public interface ProductInfoMapper
     //修改产品定义表为发布状态
     public int updateProStatus1( String productCode);
 
+    //修改产品定义表为发布状态
+    public int updateProStatus4( String productCode);
+
     //修改产品定义表为退回状态
     public int updateProStatus2( String productCode);
 

@@ -139,7 +139,7 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
                  ) {policyVo1.setRiskName(policyRiskRelation.getRiskName());
                 policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
             }
-            List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName());//小集合
+            List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
             policyVo1.setMinData(dutyVos);
 
          l.add(policyVo1);}

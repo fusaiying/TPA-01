@@ -117,8 +117,6 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public int insertTeamwork(DemandAcceptVo demandAcceptVo) {
         //修改个人池状态为已协办
         //demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
-
-
         //往协办池加数据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         //随机生成流水号
@@ -184,7 +182,6 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLogMapper.updateFlowLog(flowLog);
-
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));

@@ -26,6 +26,9 @@
         <result property="contactsPersonId" column="contacts_person_id"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="insuredNo" column="insured_no"/>
+        <result property="callCenterId" column="call_center_id"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="priorityLevel" column="priority_level"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">

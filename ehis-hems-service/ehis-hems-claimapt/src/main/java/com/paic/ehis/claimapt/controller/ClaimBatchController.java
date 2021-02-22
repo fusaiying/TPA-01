@@ -8,7 +8,6 @@ import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
 import com.paic.ehis.claimapt.domain.Vo.BatchVo;
 import com.paic.ehis.claimapt.service.IClaimBatchRecordService;
 import com.paic.ehis.claimapt.service.IClaimBatchService;
-import com.paic.ehis.common.core.utils.ServletUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;

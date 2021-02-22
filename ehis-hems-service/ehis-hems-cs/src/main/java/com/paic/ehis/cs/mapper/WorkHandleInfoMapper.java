@@ -89,5 +89,13 @@ public interface WorkHandleInfoMapper
      * @return
      */
     public int updateStatus(WorkHandleInfo workHandleInfo);
+
+
+
+    /**
+     * 根据工单号查询当前创建人
+     * @param workHandleInfo
+     * @return
+     */
     public WorkHandleInfo selectCreatedBy(WorkHandleInfo workHandleInfo);
 }

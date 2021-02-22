@@ -97,6 +97,11 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iDemandAcceptVoService.updateServiceInfo(demandAcceptVo));
     }
 
+    /**
+     * 信息需求处理页面
+     * @param serviceProcessingVo
+     * @return
+     */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertServiceProcessing")

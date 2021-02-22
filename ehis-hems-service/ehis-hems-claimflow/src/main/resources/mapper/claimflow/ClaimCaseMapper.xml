@@ -410,7 +410,6 @@
         claim_case cases
         where cases.case_status = '07'
         AND cases.STATUS = 'Y'
-        AND record.history_flag = 'N'
         AND cases.update_by = #{operator}
         ORDER BY cases.update_time DESC
         ) act
@@ -483,7 +482,7 @@
                 FROM
                     claim_case cases
                         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-                        AND record.operation = '07'
+                        AND record.operation in ('08','99')
                         AND record.STATUS = 'Y'
                         AND record.history_flag = 'Y'
                         AND record.operator = #{operator}
@@ -549,7 +548,7 @@
         FROM
         claim_case cases
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation in = '07'
+        AND record.operation in ('08','99')
         AND record.STATUS = 'Y'
         AND record.history_flag = 'Y'
         AND record.operator = #{operator}

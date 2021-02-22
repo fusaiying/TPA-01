@@ -129,7 +129,7 @@
             <span  v-else>{{getYesOrNoName(scope.row.isSingle)}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip/>
+        <el-table-column align="center" prop="orgName" min-width="120" label="机构" show-overflow-tooltip/>
         <el-table-column align="center" prop="remark" min-width="110" label="备注" show-overflow-tooltip>
           <template slot-scope="scope" >
             <template v-if="scope.row.editing" >

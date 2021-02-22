@@ -39,7 +39,7 @@
         left join person_info c  on  t1.insured_no = c.person_id
         where
         t1.work_order_no = t2.work_order_no
-        and t1.business_type='投诉'
+        and t1.business_type='03'
         and t1.status='01'
         <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>

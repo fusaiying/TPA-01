@@ -152,7 +152,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
         //征求意见处理完毕后  将协办表中状态改为02
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
+        //collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setStatus("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
@@ -172,6 +172,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
     @Override
     public int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo) {
+        //轨迹表插入数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
@@ -183,8 +184,9 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLogMapper.updateFlowLog(flowLog);
 
+
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
+       // collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setStatus("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());

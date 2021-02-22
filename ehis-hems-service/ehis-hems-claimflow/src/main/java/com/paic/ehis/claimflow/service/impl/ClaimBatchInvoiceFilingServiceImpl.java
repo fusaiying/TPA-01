@@ -1,5 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.paic.ehis.claimflow.domain.ClaimBatch;
+import com.paic.ehis.claimflow.mapper.ClaimBatchMapper;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.claimflow.domain.ClaimBatchInvoiceFiling;
 import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
@@ -26,6 +28,8 @@ public class ClaimBatchInvoiceFilingServiceImpl implements IClaimBatchInvoiceFil
 
     @Autowired
     private ClaimCaseInsuredMapper claimCaseInsuredMapper;
+    @Autowired
+    private ClaimBatchMapper claimBatchMapper;
 
     /**
      * 查询发票归档
@@ -148,6 +152,10 @@ public class ClaimBatchInvoiceFilingServiceImpl implements IClaimBatchInvoiceFil
     @Override
     public int updateInvoiceFile(InvoiceFileVo invoiceFileVo)
     {
+        if(invoiceFileVo.getBillrecevieflag().equals("N")){
+            invoiceFileVo.setBillrecevieflag("Y");
+            claimBatchMapper.updateClaimBatchInvoice(invoiceFileVo.getBatchNo());
+        }
         invoiceFileVo.setUpdateTime(DateUtils.getNowDate());
         return claimBatchInvoiceFilingMapper.updateInvoiceFile(invoiceFileVo);
     }

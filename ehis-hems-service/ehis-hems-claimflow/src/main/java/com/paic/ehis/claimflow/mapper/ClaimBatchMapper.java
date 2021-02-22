@@ -72,6 +72,7 @@ public interface ClaimBatchMapper
      * @return 结果
      */
     public int updateClaimBatch(ClaimBatch claimBatch);
+    public int updateClaimBatchInvoice(String BatchNo);
 
     /**
      * 删除理赔批次 

@@ -17,7 +17,7 @@ public class InvoiceFileVo extends BaseEntity {
      * 是否收到发票
      */
     @Excel(name = "是否收到发票")
-    private String billRecevieFlag;
+    private String billrecevieflag;
     /** 批次号 */
     private String batchNo;
 

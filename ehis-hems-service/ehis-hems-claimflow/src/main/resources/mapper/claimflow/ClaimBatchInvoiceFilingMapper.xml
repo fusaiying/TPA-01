@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="organcode"    column="organ_code"    />
         <result property="hospitalCode"    column="hospital_code"    />
         <result property="rptNo"    column="rpt_no"    />
-        <result property="billRecevieFlag"    column="bill_recevie_flag"    />
+        <result property="billrecevieflag"    column="bill_recevie_flag"    />
         <result property="orgName"    column="organ_name"    />
 
     </resultMap>

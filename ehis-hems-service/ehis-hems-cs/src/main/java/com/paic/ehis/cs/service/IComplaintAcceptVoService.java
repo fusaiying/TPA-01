@@ -31,6 +31,7 @@ public interface IComplaintAcceptVoService {
      * @return
      */
     int complaintHandling(ComplaintDealVo complaintDealVo);
+    int complaintSaveHandling(ComplaintDealVo complaintDealVo);
 
     /**
      * 投诉页面获取处理

@@ -122,7 +122,12 @@ public class CustomServiceComplaintController extends BaseController {
     @PutMapping("/complaintHandling ")
     public AjaxResult complaintHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
     {
-        return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+        if(complaintDealVo.getSign().equals("01")){
+            return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+        }else{
+            return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+        }
+
     }
 
 }

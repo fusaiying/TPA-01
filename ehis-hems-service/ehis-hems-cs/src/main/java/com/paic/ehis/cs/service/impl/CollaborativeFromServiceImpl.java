@@ -143,8 +143,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-        //flowLog.setWorkOrderNo();从前端获得
-        flowLog.setStatus("06");
+        flowLog.setStatus("06");//状态置为已协办
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -189,6 +188,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
 
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
+        collaborativeFrom.setStatus("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());

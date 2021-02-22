@@ -26,8 +26,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Autowired
     private PersonInfoMapper personInfoMapper;
     @Autowired
-    private UserInfoMapper userInfoMapper;
-    @Autowired
     private FieldMapMapper fieldMapMapper;
     @Autowired
     private AcceptDetailInfoMapper acceptDetailInfoMapper;

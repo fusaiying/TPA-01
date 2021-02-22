@@ -102,7 +102,7 @@
           <el-col :span="8">
             <el-form-item prop="reason" style="position:relative;width: 500px" label="下线原因">
               <el-input type="textarea" :rows="7" v-model="remarkForm.reason"
-                        class="item-widths" clearable
+                        class="item-widths" clearable maxlength="200"
                         size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -142,7 +142,6 @@ export default {
         bussinessStatus: ''
       },
 
-      saveFlag:false,
       tableData: [],
       totalCount: 0,
       loading: false,
@@ -192,13 +191,9 @@ export default {
 
     changeDialogVisable(){
       this.$refs.remarkForm.resetFields()
-      if(this.saveFlag) {
-        this.tableData[this.checkIndex].bussinessStatus = '04'
-      }
-      else{
-        this.tableData[this.checkIndex].bussinessStatus = '03'
-      }
-      this.saveFlag=false
+
+     this.tableData[this.checkIndex].bussinessStatus='03'
+
       this.dialogVisable=false
     },
 
@@ -214,7 +209,7 @@ export default {
                 center: true,
                 showClose: true
               })
-              this.saveFlag=true
+              this.$refs.remarkForm.resetFields()
               this.dialogVisable=false
             } else {
               this.$message({
@@ -223,6 +218,7 @@ export default {
                 center: true,
                 showClose: true
               })
+              this.$refs.remarkForm.resetFields()
               this.tableData[this.checkIndex].bussinessStatus='03'
             }
           })
@@ -232,9 +228,19 @@ export default {
 
     changeStatus(index,data){
       this.checkIndex=index
+
+
+      //产品上线
       if(data.bussinessStatus=='03'){
-        //调用保存的接口
-        let productData=this.tableData[index]
+        //跳转至审核页面
+        this.$router.push({
+          path: '/service-product/productReview/edit',
+          query: {productCode: data.productCode,
+            status: 'management'
+          }
+        })
+
+      /*  let productData=this.tableData[index]
         insertMangerInfo(productData).then(res=>{
           if (res !=null && res.code == '200') {
             this.$message({
@@ -253,7 +259,8 @@ export default {
             })
             this.tableData[this.checkIndex].bussinessStatus='04'
           }
-        })
+        })*/
+
       }
       else {
 
@@ -268,9 +275,17 @@ export default {
 
     //查询
     searchHandle() {
-      this.params.pageNum=1
-      this.params.pageSize=10
-      this.getData()
+      const values = Object.values(this.formSearch)
+      let flag= values.some(item => {return  item!=null && item !='' })
+      if(flag){
+        this.params.pageSize=10
+        this.params.pageNum=1
+        this.getData()
+      }
+      else {
+        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
+      }
+
     },
     getData() {
       this.params.productCode= this.formSearch.productCode

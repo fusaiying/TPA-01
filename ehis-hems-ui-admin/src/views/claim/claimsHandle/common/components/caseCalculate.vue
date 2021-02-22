@@ -300,6 +300,22 @@
               showClose: true
             })
           }
+          detailsList(data).then(res => {
+            if (res != null && res.code === 200 && res.rows.length > 0) {
+              this.caseForm.caseData = res.rows
+              this.caseForm.caseData.forEach(item => {
+                item.isEdit = true
+                if (item.minData.length > 0) {
+                  item.minData.forEach(option => {
+                    option.isEdit = true
+                    option.selectFData = []
+                    option.selectSData = []
+                  })
+                }
+              })
+            }
+          })
+          this.getCalSummary()
         }).catch(res=>{
           this.$message({
             message: '理算失败!',
@@ -311,22 +327,6 @@
         let data = {
           rptNo: this.fixInfo.rptNo,
         }
-        detailsList(data).then(res => {
-          if (res != null && res.code === 200 && res.rows.length > 0) {
-            this.caseForm.caseData = res.rows
-            this.caseForm.caseData.forEach(item => {
-              item.isEdit = true
-              if (item.minData.length > 0) {
-                item.minData.forEach(option => {
-                  option.isEdit = true
-                  option.selectFData = []
-                  option.selectSData = []
-                })
-              }
-            })
-          }
-        })
-        this.getCalSummary()
       },
       save() {
         this.$refs.caseForm.validate((valid) => {

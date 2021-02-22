@@ -502,7 +502,6 @@
               };
 
               updateCal(params).then(res => {
-                console.log(res);
                 if (res.code == '200') {
                   this.getCalInfo();
                   this.$message({
@@ -530,7 +529,7 @@
           return false;
         }
 
-        if(this.conclusionForm.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == ''){
           this.$message.info('请先保存再进行审核！')
           return false;
         }

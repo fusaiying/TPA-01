@@ -86,7 +86,7 @@ public class ClaimCalDealServiceImpl implements IClaimCalDealService {
         List<ClaimCaseBillDTO> claimCaseBillList = claimCaseBillMapper.selectClaimCaseBillDTOByRptNo(rptNo);
         claimCaseBillList.forEach(ccb -> {
             ClaimCaseBillInfo ccbI = new ClaimCaseBillInfo();
-            List<ClaimCaseBillDetailDTO> ClaimCaseBillDetailList = claimCaseBillDetailMapper.selectClaimCaseBillDetailDTOByRptNo(rptNo);
+            List<ClaimCaseBillDetailDTO> ClaimCaseBillDetailList = claimCaseBillDetailMapper.selectClaimCaseBillDetailDTOByRptNo(rptNo,ccb.getBillId());
             ccbI.setClaimCaseBill(ccb);
             ccbI.setClaimCaseBillDetailList(ClaimCaseBillDetailList);
             claimCaseBillInfoList.add(ccbI);

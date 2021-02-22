@@ -195,6 +195,76 @@ public class OrderInfo extends BaseEntity
     @Excel(name = "服务预约截止时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applyEndTime;
 
+    /** 住院时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date inpatientTime;
+
+    /** 主任 */
+    @Excel(name = "主任")
+    private String director;
+
+    /** 取消时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String cancelTime;
+
+    /** 接单时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date receivingTime;
+
+    /** 预约成功/失败时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date applyResultTime;
+
+    /** 订单完成时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date orderCompleteTime;
+
+    /** 医生会诊意见 */
+    @Excel(name = "医生会诊意见")
+    private String consultation;
+
+    /** 会诊医生介绍 */
+    @Excel(name = "会诊医生介绍")
+    private String consultant;
+
+    /** 取消原因 */
+    @Excel(name = "取消原因")
+    private String cancelReason;
+
+    /** B端具体状态 */
+    @Excel(name = "B端具体状态")
+    private String detailStatus;
+
+    /** 住院医院 */
+    @Excel(name = "住院医院")
+    private String inpatientHospital;
+
+    /** 住院地址 */
+    @Excel(name = "住院地址")
+    private String inpatientAddress;
+
+    /** 预约失败原因 */
+    @Excel(name = "预约失败原因")
+    private String failureReason;
+
+    /** 未到诊原因 */
+    @Excel(name = "未到诊原因")
+    private String noVisitReason;
+
+    /** 结算价格 */
+    @Excel(name = "结算价格")
+    private String settlePrice;
+
+    /** 寄送方式 */
+    @Excel(name = "寄送方式")
+    private String dealingMethod;
+
+    /** 不通过原因 */
+    @Excel(name = "不通过原因")
+    private String refuseReason;
+
+
+
     public void setSerialNo(String serialNo) 
     {
         this.serialNo = serialNo;

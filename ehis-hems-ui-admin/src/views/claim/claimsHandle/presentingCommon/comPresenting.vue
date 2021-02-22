@@ -209,7 +209,18 @@
             <span v-show="!show" class="form-span">{{scope.row.rptno}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="idno" min-width="160" label="证件号码" show-overflow-tooltip>
+        <el-table-column align="center" prop="idType" min-width="160" label="证件类型" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-select v-if="show" size="mini" v-model="scope.row.idType" width="200px" clearable
+                       placeholder="请选择">
+              <el-option v-for="option in card_typeOptions" :key="option.dictValue"
+                         :label="option.dictLabel"
+                         :value="option.dictValue"/>
+            </el-select>
+            <span v-show="!show" class="form-span">{{scope.row.idType}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="idno" min-width="170" label="证件号码" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input size="mini" v-if="show" v-model="scope.row.idno"
                       placeholder="请输入"></el-input>
@@ -312,7 +323,7 @@
   //医院
   let dictss = [{dictType: 'priority_reason'}, {dictType: 'insurance_type'}, {dictType: 'claimType'}
     , {dictType: 'sys_yes_no'}, {dictType: 'special_case'}, {dictType: 'claim_material'},
-    {dictType: 'examine_result'}, {dictType: 'claim_currency'},]
+    {dictType: 'examine_result'}, {dictType: 'claim_currency'},{dictType: 'card_type'},]
   export default {
     components: {Hospital},
     data() {
@@ -448,6 +459,7 @@
         sys_yes_noOptions: [],
         special_caseOptions: [],
         claim_materialOptions: [],
+        card_typeOptions: [],
         examine_resultOptions: [],
         hospitalOptions: [],
         claim_currencyOptions: [],
@@ -482,6 +494,9 @@
       }).dictDate
       this.claim_currencyOptions = this.dictList.find(item => {
         return item.dictType === 'claim_currency'
+      }).dictDate
+      this.card_typeOptions = this.dictList.find(item => {
+        return item.dictType === 'card_type'
       }).dictDate
       getThisDept().then(res => {
         this.deptOptions = res.deptlist
@@ -776,6 +791,7 @@
                     for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
                       let data = {
                         rptno: '',
+                        idType: '1',
                         idno: '',
                         name: '',
                         claimmaterials: '',
@@ -928,7 +944,7 @@
                         this.afterTable = res.data.standingData
                         this.afterTableTotal = res.data.standingData.length
                       }
-                      this.show = true
+                      this.show = false
                       this.isSaveSub = false
                       this.isPrint = false
                       this.eSaveOrSub = true

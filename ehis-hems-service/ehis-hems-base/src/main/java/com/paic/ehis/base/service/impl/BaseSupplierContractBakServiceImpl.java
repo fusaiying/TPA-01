@@ -133,7 +133,7 @@ public class BaseSupplierContractBakServiceImpl implements IBaseSupplierContract
 //            String contractNo = "SPC" + PubFun.createMySqlMaxNoUseCache("BaseSupplierContract", 0, 9);
 //            baseSupplierContractBak.setContractNo(contractNo);
 //            baseSupplierContractBak.setSerialNo(PubFun.createMySqlMaxNoUseCache("BaseSupplierContractBakSerialNo", 0, 11));
-        int result = baseSupplierContractBakMapper.insertBaseSupplierContractBak(baseSupplierContractBak);
+        int result = baseSupplierContractBakMapper.updateBaseSupplierContractBak(baseSupplierContractBak);
         return baseSupplierContractBak;
     }
 

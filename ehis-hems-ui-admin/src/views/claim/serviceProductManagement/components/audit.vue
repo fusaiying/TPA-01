@@ -61,7 +61,11 @@
 import {insertCheckInfo} from '@/api/productManage/serviceProductManagement'
 export default {
   props:{
-    productCode: String
+    productCode: String,
+    status: {
+      type: String,
+      default: ''
+    }
   },
 
   data() {
@@ -78,7 +82,10 @@ export default {
       }
     }
     return {
-      reviewForm: {},
+      reviewForm: {
+        checkResult: '',
+        checkAdvice: ''
+      },
       activeName: '01',
       label: {
         label01: '审核',
@@ -113,16 +120,26 @@ export default {
     },
 
     goBack(){
-      this.$router.push({
-        path: '/service-product/productReview/index'
-
-      })
+      if(this.status=='review') {
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.push({
+          path: '/service-product/productReview/index'
+        })
+      }
+      else if(this.status=='management'){
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.push({
+          path: '/service-product/productManagement/index'
+        })
+      }
     },
     submitHandle(){
+      let bussinessStatus= this.status=='management'? '04' : '02'
       let formData={
         productCode: this.productCode,
         checkResult: this.reviewForm.checkResult,
-        checkAdvice:  this.reviewForm.checkAdvice
+        checkAdvice:  this.reviewForm.checkAdvice,
+        bussinessStatus: bussinessStatus
       }
       this.$refs.reviewForm.validate((valid) => {
         if(valid) {
@@ -134,10 +151,18 @@ export default {
                 center: true,
                 showClose: true
               })
-              this.$store.dispatch("tagsView/delView", this.$route);
-              this.$router.push({
-                path: '/service-product/productReview/index',
-              })
+              if(bussinessStatus=='02') {
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.push({
+                  path: '/service-product/productReview/index',
+                })
+              }
+            else if(bussinessStatus=='04'){
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.push({
+                  path: '/service-product/productManagement/index',
+                })
+              }
             } else {
               this.$message({
                 message: '审核失败!',

@@ -66,7 +66,11 @@
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
             <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip >
+              <template slot-scope="scope">
+                <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+              </template>
+            </el-table-column>
             <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="name" label="被保险人" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码"   width="150%" align="center" show-overflow-tooltip />
@@ -194,6 +198,28 @@
           params.idNo = this.form.idNo ;
           params.policyItemNo = this.form.policyItemNo ;
           this.download('claimflow/case/exportClaimInformation', params, `FYX_${new Date().getTime()}.xlsx`);
+        },
+        // 处理跳转
+        viewHandle(row, status) {
+          let data = encodeURI(
+            JSON.stringify({
+              batchNo: row.batchNo,
+              claimType: row.claimType,
+              rptNo: row.rptNo,
+              status,
+              node: 'accept',
+              styleFlag: 'list',
+            })
+          )
+          // console.log(row.batchNo)
+          // console.log(row.claimType)
+          // console.log(row.rptNo)
+          this.$router.push({
+            path: '/claims-handle/accept-process',
+            query: {
+              data
+            }
+          })
         },
       }
     }

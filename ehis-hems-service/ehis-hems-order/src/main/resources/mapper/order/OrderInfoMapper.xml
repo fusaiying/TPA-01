@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateFlag"    column="update_flag"    />
         <result property="firstDept"    column="first_dept"    />
         <result property="secondDept"    column="second_dept"    />
+        <result property="director"    column="director"    />
     </resultMap>
 
 
@@ -194,6 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.expected_area,
             oi.visiting_area,
             oi.city,
+            oi.director,
             oi.service_type,
             oi.apply_time,
             oi.expectation_hospital,
@@ -299,6 +301,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expectedArea != null ">expected_area = #{expectedArea},</if>
             <if test="visitingArea != null">visiting_area = #{visitingArea},</if>
             <if test="city != null">city = #{city},</if>
+            <if test="director != null and director != ''">director = #{director},</if>
             <if test="serviceType != null and serviceType != ''">service_type = #{serviceType},</if>
             <if test="applyTime != null">apply_time = #{applyTime},</if>
             <if test="expectationHospital != null">expectation_hospital = #{expectationHospital},</if>

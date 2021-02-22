@@ -18,10 +18,12 @@
         :data="tableData"
         size="small"
         highlight-current-row
+        :row-key="getRowKeys"
+        :expand-row-keys="expands"
         @expand-change="getCostData"
         tooltip-effect="dark"
         style="width: 100%;">
-        <el-table-column type="expand" v-if="node==='calculateReview' || status==='show'"/>
+        <el-table-column type="expand" v-if="node==='calculateReview' || node==='sport' || status==='show'"/>
         <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ getNo(scope.row) }} </span>
@@ -76,10 +78,10 @@
       <div style="height: 15px">
 
       </div>
-      <el-form v-if="node === 'input' || isFormShow || node==='sport'" ref="baseForm" :rules="baseFormRule"
+      <el-form v-if="node === 'input' || isFormShow" ref="baseForm" :rules="baseFormRule"
                :model="baseForm"
                style="padding-top:20px;padding-bottom: 30px;"
-               :disabled="status === 'show' || node==='sport'"
+               :disabled="status === 'show' || node==='sport' || isCostShow"
                label-width="188px" label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
@@ -319,8 +321,9 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-form v-if="node === 'input' || isFormShow || isCostShow  || node==='sport'" ref="costForm"
+      <el-form v-if="node === 'input' || isFormShow || isCostShow" ref="costForm"
                :rules="accountRules"
+               :disabled="isCostShow"
                :model="costForm" size="small">
         <el-table ref="costFormTable" :data="costForm.costData"
                   :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row
@@ -782,12 +785,13 @@
       }
       const checkTreatmentType = (rule, value, callback) => {
         if (value) {
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '2'&& (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
+          callback();
         } else {
           callback(new Error("治疗类型不能为空"));
         }
@@ -810,10 +814,10 @@
             this.baseForm.treatmentEndDate = value
           }
 
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
           if (value > date1) {
@@ -839,16 +843,16 @@
         if (!value) {
           callback(new Error("治疗止期不能为空！"));
         } else {
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null || this.baseForm.treatmentStartDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentStartDate !== null || this.baseForm.treatmentStartDate !== '')) {
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
           if (value > date1) {
             callback(new Error("不允许录入晚于当前操作日期！"));
           } else if (value < this.baseForm.treatmentStartDate) {
-            callback(new Error("不允许早于治疗止期！"));
+            callback(new Error("不允许早于治疗起期！"));
           } else {
             callback()
           }
@@ -912,6 +916,7 @@
         costForm: {
           costData: [],
         },
+        expands: [],
         tableData: [],
         total: 1,
         pageNum: 1,
@@ -930,8 +935,8 @@
           billAmount: undefined,
           visNumber: undefined,
           treatmentType: undefined,
-          treatmentStartDate: undefined,
-          treatmentEndDate: undefined,
+          treatmentStartDate: '',
+          treatmentEndDate: '',
           treatmentDays: undefined,
           invoiceNo: undefined,
           billNo: undefined,
@@ -953,9 +958,9 @@
           clinicalDiagnosis: undefined,
         },
         baseFormRule: {
-          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur', 'change']}],
-          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur', 'change']}],
-          billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur', 'change']}],
+          hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur']}],
+          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur','change']}],
+          billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur']}],
           treatmentType: [{validator: checkTreatmentType,required: true, trigger: ['blur', 'change']}],
           treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur', 'change']}],
           treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: ['blur', 'change']}],
@@ -967,8 +972,8 @@
           copay: [{validator: checkCopay, trigger: ['blur','change']}],
           isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
           hosDiscountAmount: [{validator: checkHosDiscountAmount, trigger:  ['blur','change']}],
-          isShareDisAmount: [{required: true, message: '请选择主要诊断(ICD)', trigger: ['blur', 'change']}],
-          icdCode: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
+          isShareDisAmount: [{required: true, message: '请选择是否分摊折扣', trigger: ['blur', 'change']}],
+          icdCode: [{required: true, message: '请选择主要诊断(ICD)', trigger: ['blur', 'change']}],
           clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: ['blur', 'change']}],
           invoiceNo: [{validator: checkOne, trigger: ['blur', 'change']}],
           billNo: [{validator: checkOne, trigger: ['blur', 'change']}],
@@ -1138,7 +1143,6 @@
           }
         }).catch(res => {
         })
-
       },
       closeHospital() {
         this.hospitalDialog = false
@@ -1160,7 +1164,6 @@
         }
 
         this.costForm.costData.push(field)
-        console.log(this.costForm.costData);
       },
       deleteRow(index, row) {
         this.$confirm(`是否确定删除?`, '提示', {
@@ -1205,6 +1208,7 @@
         return iDays;
       },
       addBill() {
+        this.$refs.baseForm.resetFields()
         this.baseForm = {
           rptNo: '',
           hospitalCode: undefined,
@@ -1263,8 +1267,13 @@
         this.isFormShow = true
         this.isCostShow = false
       },
+      getRowKeys(row){
+        return row.billId   //这里看这一行中需要根据哪个属性值是id
+      },
       getCostData(row, expandedRows) {
         if (expandedRows.length > 0) {
+          this.expands = []
+          this.expands.push(row.billId)
           editBill(row.billId).then(res => {
             if (res != null && res.code === 200) {
               this.baseForm.billId = res.data.bill.billId
@@ -1321,10 +1330,11 @@
             }
           }).catch(res => {
           })
-          this.isFormShow = false
+          this.isFormShow = true
           this.isCostShow = true
         } else {
           this.isCostShow = false
+          this.isFormShow = false
         }
       },
       openHospitalDialog() {
@@ -1332,6 +1342,7 @@
       },
       saveBill() {
         this.baseForm.rptNo = this.fixInfo.rptNo
+        console.log(this.baseForm);
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             this.$refs.costForm.validate((valid) => {
@@ -1383,62 +1394,66 @@
                       }
                     }).catch(res => {
                     })
-                    this.baseForm = {
-                      billId: undefined,
-                      rptNo: '',
-                      hospitalCode: undefined,
-                      hospitalName: undefined,
-                      firstAttribute: undefined,//医院性质
-                      secondAttribute: undefined,//医院等级
-                      department: undefined,
-                      isDesHospital: undefined,
-                      accType: undefined,
-                      billCurrency: undefined,
-                      billAmount: undefined,
-                      visNumber: undefined,
-                      treatmentType: undefined,
-                      treatmentStartDate: undefined,
-                      treatmentEndDate: undefined,
-                      treatmentDays: undefined,
-                      invoiceNo: undefined,
-                      billNo: undefined,
-                      billType: undefined,//
-                      ssAdvancePayment: undefined,
-                      tpAdvancePayment: undefined,
-                      isShareAp: '01',
-                      transSerialNo: undefined,
-                      transSerialCopay: undefined,
-                      copay: undefined,
-                      isShareCopay: '01',
-                      hosDiscountAmount: undefined,
-                      flag: undefined,
-                      isShareDisAmount: '01',
-                      icdCode: undefined,
-                      icdCodes: [{
-                        icdCode: ''
-                      }],
-                      clinicalDiagnosis: undefined,
-                    }
-                    if (this.batchData !== null && this.batchData !== undefined) {
-                      let val = this.hospitalOptions.find(item => {
-                        return item.providerCode === this.batchData.hospitalcode
-                      })
-                      if (val !== null && val !== undefined) {
-                        if (val.enname1 != null && val.enname1 !== '') {
-                          this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
-                        } else {
-                          this.$set(this.baseForm, 'hospitalName', val.chname1)
-                        }
-                        this.$set(this.baseForm, 'hospitalCode', val.providerCode)
-                        this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
-                        this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
-                        this.$set(this.baseForm, 'isDesHospital', val.flag)
+                    if (this.node==='input'){
+                      this.$refs.baseForm.resetFields()
+                      this.baseForm = {
+                        billId: undefined,
+                        rptNo: '',
+                        hospitalCode: undefined,
+                        hospitalName: undefined,
+                        firstAttribute: undefined,//医院性质
+                        secondAttribute: undefined,//医院等级
+                        department: undefined,
+                        isDesHospital: undefined,
+                        accType: undefined,
+                        billCurrency: undefined,
+                        billAmount: undefined,
+                        visNumber: undefined,
+                        treatmentType: undefined,
+                        treatmentStartDate: undefined,
+                        treatmentEndDate: undefined,
+                        treatmentDays: undefined,
+                        invoiceNo: undefined,
+                        billNo: undefined,
+                        billType: undefined,//
+                        ssAdvancePayment: undefined,
+                        tpAdvancePayment: undefined,
+                        isShareAp: '01',
+                        transSerialNo: undefined,
+                        transSerialCopay: undefined,
+                        copay: undefined,
+                        isShareCopay: '01',
+                        hosDiscountAmount: undefined,
+                        flag: undefined,
+                        isShareDisAmount: '01',
+                        icdCode: undefined,
+                        icdCodes: [{
+                          icdCode: ''
+                        }],
+                        clinicalDiagnosis: undefined,
                       }
+                      if (this.batchData !== null && this.batchData !== undefined) {
+                        let val = this.hospitalOptions.find(item => {
+                          return item.providerCode === this.batchData.hospitalcode
+                        })
+                        if (val !== null && val !== undefined) {
+                          if (val.enname1 != null && val.enname1 !== '') {
+                            this.$set(this.baseForm, 'hospitalName', val.chname1 + '|' + val.enname1)
+                          } else {
+                            this.$set(this.baseForm, 'hospitalName', val.chname1)
+                          }
+                          this.$set(this.baseForm, 'hospitalCode', val.providerCode)
+                          this.$set(this.baseForm, 'firstAttribute', val.firstAttribute)
+                          this.$set(this.baseForm, 'secondAttribute', val.secondAttribute)
+                          this.$set(this.baseForm, 'isDesHospital', val.flag)
+                        }
+                      }
+                      if (this.batchData !== null && this.batchData !== undefined) {
+                        this.baseForm.billCurrency = this.batchData.currency
+                      }
+                      this.costForm.costData = []
                     }
-                    if (this.batchData !== null && this.batchData !== undefined) {
-                      this.baseForm.billCurrency = this.batchData.currency
-                    }
-                    this.costForm.costData = []
+                    console.log(this.baseForm);
                   }).catch(res => {
                     this.$message({
                       message: '保存失败!',

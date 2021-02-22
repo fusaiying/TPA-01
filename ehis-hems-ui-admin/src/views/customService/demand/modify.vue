@@ -221,12 +221,12 @@
     </el-card>
 
     <el-card>
-      <el-form ref="workPoolData3" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
-            <el-form-item label="修改原因"  >
+            <el-form-item label="修改原因：" prop="editReason"  >
               <el-radio-group v-model="workPoolData.editInfo.editReason">
                 <el-radio label="1">客户申请变动</el-radio>
                 <el-radio label="2">操作失误</el-radio>
@@ -235,7 +235,7 @@
             </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="修改说明：" >
+          <el-form-item label="修改说明：" prop="editRemark">
             <el-input
               type="textarea"
               :rows="2"
@@ -332,36 +332,13 @@
         totalCount: 0,
         // 表单校验
         rules: {
-          channelCode: [
-            {required: true, message: "受理渠道不能为空", trigger: "blur"}
+          editReason: [
+            {required: true, message: "修改原因不能为空", trigger: "blur"}
           ],
-          priorityLevel: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
+          editRemark: [
+            {required: true, message: "修改说明不能为空", trigger: "blur"}
           ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          contactsMobilePhone: [
-            {required: true, message: "联系人手机不能为空", trigger: "blur"}
-          ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          content: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
-          ],
+
         },
         // 查询参数
         queryParams: {
@@ -416,21 +393,29 @@
     methods: {
       //提交页面数据
       submit(){
-        let insert=this.workPoolData
-        insert.workOrderNo=this.$route.query.workOrderNo
-        modifySubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
+        this.$refs.workPoolData.validate((valid) => {
+          if (valid) {
+            let insert=this.workPoolData
+            insert.workOrderNo=this.$route.query.workOrderNo
+            modifySubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                console.log("insert",insert)
+                alert("修改成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+
+            })
+          }else {
+            return false
           }
-        }).catch(res => {
 
         })
+
 
       },
       //关闭页面

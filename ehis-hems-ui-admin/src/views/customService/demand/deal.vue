@@ -436,7 +436,7 @@
           <el-divider/>
        <el-row>
         <el-col :span="8">
-        <el-form-item label="业务处理情况" prop="businessProcess" >
+        <el-form-item label="业务处理情况：" prop="businessProcess" >
           <el-radio-group v-model="ruleForm.businessProcess">
             <el-radio   :label="1">成功</el-radio>
             <el-radio   :label="2">响应</el-radio>
@@ -578,20 +578,20 @@
         },
         // 表单校验
         rules: {
-          Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
+          businessProcess: [
+            {required: true, message: "业务处理情况不能为空", trigger: "blur"}
           ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
+          remark: [
+            {required: true, message: "处理说明不能为空", trigger: "blur"}
           ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
+          customerFeedback: [
+            {required: true, message: "客户反馈不能为空", trigger: "blur"}
           ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+          closeType: [
+            {required: true, message: "结案类型不能为空", trigger: "blur"}
           ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          costsIncurred: [
+            {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"}
           ],
 
         },
@@ -735,42 +735,53 @@
 
       //提交
       submit(){
-        let insert=this.ruleForm
-        insert.sign="02"
-        insert.workOrderNo=this.$route.query.workOrderNo
-        dealADD(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("保存成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid){
+            let insert = this.ruleForm
+            insert.sign = "02"
+            insert.workOrderNo = this.$route.query.workOrderNo
+            dealADD(insert).then(res => {
+              if (res != null && res.code === 200) {
+                console.log("insert", insert)
+                alert("提交成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+            })
+          }else {
+            return false
           }
-        }).catch(res => {
 
         })
 
       },
       //暂存
       temporary(){
-        let insert=this.ruleForm
-        insert.sign="01"
-        insert.workOrderNo=this.$route.query.workOrderNo
-        dealADD(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
-          }
-        }).catch(res => {
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid){
+            let insert=this.ruleForm
+            insert.sign="01"
+            insert.workOrderNo=this.$route.query.workOrderNo
+            dealADD(insert).then(res => {
+              if (res != null && res.code === 200) {
+                console.log("insert",insert)
+                alert("暂存成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
 
+            })
+          }
         })
+
 
       },
 

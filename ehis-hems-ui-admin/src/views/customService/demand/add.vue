@@ -135,10 +135,9 @@
     },
     created() {
       debugger;
-      this.searchHandle()
+     // this.searchHandle()
       this.getDicts("sys_oper_type").then(response => {
         this.states = response.data;
-        console.log("response:",response)
       });
 
     },
@@ -166,45 +165,41 @@
         this.$refs.sendForm.resetFields()
       },
       searchHandle() {
-        debugger;
-        let query = {
-          pageNum: this.queryParams.pageNum,
-          pageSize: this.queryParams.pageSize,
-          Service: this.sendForm.Service,
-          channel: this.sendForm.channel,
-          Acceptor: this.sendForm.Acceptor,
-          acceptorTime: this.sendForm.acceptorTime,
-          Handler: this.sendForm.Handler,
-          HandlerTime: this.sendForm.HandlerTime,
-          workNumber: this.sendForm.workNumber,
-          policyNumber: this.sendForm.policyNumber,
-          secondNumber: this.sendForm.secondNumber,
-          insuredName: this.sendForm.insuredName,
-          beInsuredName: this.sendForm.beInsuredName,
-          beInsuredNo: this.sendForm.beInsuredName,
-          organization: this.sendForm.organization,
-          appointmentTime:this.sendForm.appointmentTime,
-          priority:this.sendForm.priority,
-          vip:this.sendForm.vip,
-          phone:this.sendForm.phone,
-          state:this.sendForm.state
-        }
-        debugger;
-        console.log('query: ',query)
-        demandListAndPublicPool(query).then(res => {
-          console.log('------------: ',res)
-          if (res != null && res.code === 200) {
-            this.workPoolData = res.rows
-            this.totalCount = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
+        // let query = {
+        //   pageNum: this.queryParams.pageNum,
+        //   pageSize: this.queryParams.pageSize,
+        //   Service: this.sendForm.Service,
+        //   channel: this.sendForm.channel,
+        //   Acceptor: this.sendForm.Acceptor,
+        //   acceptorTime: this.sendForm.acceptorTime,
+        //   Handler: this.sendForm.Handler,
+        //   HandlerTime: this.sendForm.HandlerTime,
+        //   workNumber: this.sendForm.workNumber,
+        //   policyNumber: this.sendForm.policyNumber,
+        //   secondNumber: this.sendForm.secondNumber,
+        //   insuredName: this.sendForm.insuredName,
+        //   beInsuredName: this.sendForm.beInsuredName,
+        //   beInsuredNo: this.sendForm.beInsuredName,
+        //   organization: this.sendForm.organization,
+        //   appointmentTime:this.sendForm.appointmentTime,
+        //   priority:this.sendForm.priority,
+        //   vip:this.sendForm.vip,
+        //   phone:this.sendForm.phone,
+        //   state:this.sendForm.state
+        // }
+        // demandListAndPublicPool(query).then(res => {
+        //   if (res != null && res.code === 200) {
+        //     this.workPoolData = res.rows
+        //     this.totalCount = res.total
+        //     if (res.rows.length <= 0) {
+        //       return this.$message.warning(
+        //         "未查询到数据！"
+        //       )
+        //     }
+        //   }
+        // }).catch(res => {
+        //
+        // })
       },
       handleSelectionChange(val) {
         this.dataonLineListSelections = val

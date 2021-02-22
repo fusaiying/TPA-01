@@ -341,8 +341,19 @@
       },
       //处理按钮
       dealButton(s){
+        if(s.businessType=="信息需求") {
           this.$router.push({
             path: '/customService/collaborative/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
+        }else {
+          this.$router.push({
+            path: '/customService/collaborative/complaint',
             query:{
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
@@ -350,6 +361,8 @@
               status:s.status
             }
           })
+        }
+
       },
       resetForm() {
         this.$refs.sendForm.resetFields()

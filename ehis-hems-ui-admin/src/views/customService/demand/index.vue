@@ -110,6 +110,7 @@
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentTime">
               <el-date-picker
+                disabled=""
                 v-model="sendForm.appointmentTime"
                 class="item-width"
                 type="daterange"
@@ -234,7 +235,6 @@
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
-<!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope" class="link-type">
               <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
@@ -446,7 +446,6 @@
 
         }else {
            const workOrderNos=this.ids
-           console.log("ids:",workOrderNos)
            demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
 
@@ -514,7 +513,6 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.rows.length
-            console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -541,8 +539,6 @@
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.rows.length
-            console.log("sd",res.rows)
-            console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

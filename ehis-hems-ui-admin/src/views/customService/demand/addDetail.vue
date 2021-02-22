@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
       <span style="color: blue">服务受理信息</span>
@@ -235,7 +235,7 @@
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="来电人：" prop="phone">
+            <el-form-item label="来电人：" prop="callName">
               <el-input v-model="ruleForm.callName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -315,8 +315,8 @@
           <el-col :span="8">
           <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
             <el-radio-group v-model="ruleForm.bankTransfer">
-              <el-radio   :label="1">是</el-radio>
-              <el-radio   :label="2">否</el-radio>
+              <el-radio   label="1">是</el-radio>
+              <el-radio   label="2">否</el-radio>
 
             </el-radio-group>
           </el-form-item>
@@ -345,7 +345,7 @@
               </el-form-item>
             </el-col>
         </el-row>
-        <el-form-item label="业务内容：" prop="Content">
+        <el-form-item label="业务内容：" prop="content">
         <el-input
           type="textarea"
           :rows="2"
@@ -366,7 +366,6 @@
                 </div>
         </el-row>
         <el-divider/>
-<!--          <el-button  type="primary" style="float: right" size="mini" @click="tan">上传附件</el-button></span>-->
         <up-load  :dialogVisable="dialogVisable"></up-load>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -440,7 +439,7 @@
           contactsMobilePhone: "",//联系人电话
           email:"",//邮件
           organCode:"",//出单机构
-          bankTransfer:"",//是否涉及转账
+          bankTransfer:"2",//是否涉及转账
           bankName:"",//开户行
           bankLocation:"",//开户地
           accountNumber:"",//账号
@@ -454,6 +453,9 @@
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
         rules: {
+          callName:[
+            {required: true, message: "来电人不能为空", trigger: "blur"}
+          ],
           channelCode: [
             {required: true, message: "受理渠道不能为空", trigger: "blur"}
           ],
@@ -463,9 +465,6 @@
           priorityLevel: [
             {required: true, message: "优先级不能为空", trigger: "blur"}
           ],
-          contactsRelationBy: [
-              {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-            ],
           contactsName: [
             {required: true, message: "联系人不能为空", trigger: "blur"}
           ],
@@ -487,7 +486,7 @@
           bankHolder: [
             {required: true, message: "户名不能为空", trigger: "blur"}
           ],
-          Content: [
+          content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
         },
@@ -498,7 +497,7 @@
         sendForm: {
           channelCode:"",
           textarea:"",
-          service: "1",
+          service: "",
           channel: "",
           acceptor: "",
           acceptorTime:"",
@@ -531,25 +530,11 @@
         totalCount: 0,
         changeSerchData: {},
         states: [],
-        serves: [{
-          value: '1',
-          label: '服务1'
-        }, {
-          value: '2',
-          label: '服务2'
-        }, {
-          value: '3',
-          label: '服务3'
-        }, {
-          value: '4',
-          label: '服务4'
-        }],
         sysUserOptions: [],
       }
     },
     created() {
-      debugger;
-      window.aaa = this;
+      //window.aaa = this;
       this.searchHandle()
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
@@ -577,21 +562,26 @@
       download(){},
       //提交页面数据
        submit(){
-           let insert=this.ruleForm
-           addInsert(insert).then(res => {
-             console.log("insert",insert)
-           if (res != null && res.code === 200) {
-             console.log("insert",insert)
-             alert("插入成功")
-             if (res.rows.length <= 0) {
-               return this.$message.warning(
-                 "失败！"
-               )
-             }
-           }
-         }).catch(res => {
+         this.$refs.ruleForm.validate((valid) => {
+           if (valid) {
+             let insert=this.ruleForm
+             addInsert(insert).then(res => {
+               if (res != null && res.code === 200) {
+                 alert("插入成功")
+                 if (res.rows.length <= 0) {
+                   return this.$message.warning(
+                     "失败！"
+                   )
+                 }
+               }
+             }).catch(res => {
 
-         })
+             })
+           } else {
+             return false;
+           }
+         });
+
 
        },
       resetForm() {
@@ -621,10 +611,7 @@
           phone:this.sendForm.phone,
           state:this.sendForm.state
         }
-        debugger;
-        console.log('query: ',query)
         demandListAndPublicPool(query).then(res => {
-          console.log('------------: ',res)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total

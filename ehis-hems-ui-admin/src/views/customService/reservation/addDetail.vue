@@ -195,9 +195,9 @@
       <span style="color: blue">服务受理信息</span>
         <el-divider/>
         <el-row>
-      <el-form-item label="受理渠道" prop="channelCode">
-        <el-radio-group v-model="ruleForm.channelCode">
-          <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in cs_channel">
+      <el-form-item label="受理渠道" prop="channelCode" >
+        <el-radio-group v-model="ruleForm.channelCode" >
+          <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in cs_channel" ma>
             {{ item.dictLabel }}
           </el-radio>
         </el-radio-group>

@@ -84,11 +84,11 @@
               <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="channelCode" label="流转号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="collaborativeId" label="流转号" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNo" label="案件发起人" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="处理状态" show-overflow-tooltip/>
+          <el-table-column align="center" prop="createdBy" label="案件发起人" show-overflow-tooltip/>
+          <el-table-column prop="status" align="handleState" label="处理状态" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="流转时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -181,7 +181,7 @@
 
       //处理按钮
       dealButton(s){
-      if (s.itemCode=="01"){
+      if (s.businessType=="01"){
           this.$router.push({
             path: '/customService/consultation/deal',
             query:{

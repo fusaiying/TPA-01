@@ -233,33 +233,17 @@ export default {
       //产品上线
       if(data.bussinessStatus=='03'){
         //跳转至审核页面
-        this.$router.push({
-          path: '/service-product/productReview/edit',
-          query: {productCode: data.productCode,
-            status: 'management'
-          }
+        this.$nextTick(() => {
+          this.$router.push({
+            path: '/service-product/productReview/edit',
+            query: {
+              productCode: data.productCode,
+              status: 'management'
+            }
+          })
         })
 
-      /*  let productData=this.tableData[index]
-        insertMangerInfo(productData).then(res=>{
-          if (res !=null && res.code == '200') {
-            this.$message({
-              message: '操作成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
 
-          } else {
-            this.$message({
-              message: '操作失败!',
-              type: 'error',
-              center: true,
-              showClose: true
-            })
-            this.tableData[this.checkIndex].bussinessStatus='04'
-          }
-        })*/
 
       }
       else {

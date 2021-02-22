@@ -154,6 +154,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             demandAcceptVo= (DemandAcceptVo) voUtils.fromVoToVo(demandAcceptVo,map,acceptDetailInfo);
         }
         return demandAcceptVo;
+
     }
 
     @Override
@@ -476,17 +477,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
-        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
-        Iterator<String> iter2 = map3.keySet().iterator();
-        while(iter1.hasNext()){
-            String map3key=iter2.next();
-            String map3value = String.valueOf(map3.get(map3key));
-            String map4value = String.valueOf(map4.get(map3key));
-            if (!map3value.equals(map4value)) {
-          }
-        }*/
-
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 

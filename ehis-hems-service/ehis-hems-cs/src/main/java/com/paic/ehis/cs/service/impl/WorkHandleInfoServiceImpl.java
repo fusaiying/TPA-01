@@ -422,6 +422,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
         //获取处理时长
        // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
+
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setStatus("Y");
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());

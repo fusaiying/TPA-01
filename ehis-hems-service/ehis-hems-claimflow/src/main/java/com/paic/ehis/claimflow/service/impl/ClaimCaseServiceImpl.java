@@ -344,16 +344,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             if (listA.size() != 0) {//若存在TPA保单
                 claimCaseShuntClass.getClaimCase().setCaseProp("01");
                 claimCaseShuntClass.setCaseStypeFind("01");
-            } else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-提示：此被保人只有健康险保单，确认后将提交至健康险
-                claimCaseShuntClass.getClaimCase().setCaseProp("02");
-                claimCaseShuntClass.setCaseStypeFind("02");
-            }//若都没有-提示：请撤件
-            claimCaseShuntClass.getClaimCase().setCaseProp("03");
-            claimCaseShuntClass.setCaseStypeFind("03");
 
-        } else {
-            if (caseProp == "01") {
-//走TPA流程
+                //走TPA流程
                 //判断是否为审核岗退回受理
                 // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -409,9 +401,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseRecord1.setOrgRecordId(s);
                 }
                 claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
-            } else if (caseProp == "02") {
-//转去核心健康险
+            } else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-提示：此被保人只有健康险保单，确认后将提交至健康险
+                claimCaseShuntClass.getClaimCase().setCaseProp("02");
+                claimCaseShuntClass.setCaseStypeFind("02");
+            }//若都没有-提示：请撤件
+            claimCaseShuntClass.getClaimCase().setCaseProp("03");
+            claimCaseShuntClass.setCaseStypeFind("03");
 
+        } else {
+            if (caseProp == "02") {
+//转去核心健康险
             }
         }
         return claimCaseShuntClass;

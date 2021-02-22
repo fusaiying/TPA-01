@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created with IntelliJ IDEA.
  *
  * @ClassName CaseInvestigationVO
- * @Description: TODO
+ * @Description: TODO 理算审核页面调查tab页展示信息
  * @Author 硠君
  * @Date create in 17:22 2021/2/22
  * @Version 1.0

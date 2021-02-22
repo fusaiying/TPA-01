@@ -1,17 +1,20 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimBatch;
-import com.paic.ehis.claimflow.mapper.ClaimBatchMapper;
-import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.claimflow.domain.ClaimBatchInvoiceFiling;
 import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
 import com.paic.ehis.claimflow.domain.vo.InvoiceFileVo;
 import com.paic.ehis.claimflow.mapper.ClaimBatchInvoiceFilingMapper;
+import com.paic.ehis.claimflow.mapper.ClaimBatchMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseInsuredMapper;
 import com.paic.ehis.claimflow.service.IClaimBatchInvoiceFilingService;
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -152,9 +155,14 @@ public class ClaimBatchInvoiceFilingServiceImpl implements IClaimBatchInvoiceFil
     @Override
     public int updateInvoiceFile(InvoiceFileVo invoiceFileVo)
     {
-        if(invoiceFileVo.getBillrecevieflag().equals("N")){
-            invoiceFileVo.setBillrecevieflag("Y");
-            claimBatchMapper.updateClaimBatchInvoice(invoiceFileVo.getBatchNo());
+        String isFiling = invoiceFileVo.getIsFiling();
+        if(StringUtils.isNotBlank(isFiling)) {
+            ClaimBatch dto = new ClaimBatch();
+            dto.setBatchno(invoiceFileVo.getBatchNo());
+            dto.setBillrecevieflag(isFiling);
+            dto.setUpdateTime(new Date());
+            dto.setUpdateBy(SecurityUtils.getUsername());
+            claimBatchMapper.updateClaimBatch(dto);
         }
         invoiceFileVo.setUpdateTime(DateUtils.getNowDate());
         return claimBatchInvoiceFilingMapper.updateInvoiceFile(invoiceFileVo);

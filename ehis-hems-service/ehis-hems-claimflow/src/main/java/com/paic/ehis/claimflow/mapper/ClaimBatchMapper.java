@@ -6,7 +6,6 @@ import com.paic.ehis.claimflow.domain.dto.BatchRecordDTO;
 import com.paic.ehis.claimflow.domain.vo.BatchVo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 理赔批次 Mapper接口
@@ -72,7 +71,6 @@ public interface ClaimBatchMapper
      * @return 结果
      */
     public int updateClaimBatch(ClaimBatch claimBatch);
-    public int updateClaimBatchInvoice(String BatchNo);
 
     /**
      * 删除理赔批次 

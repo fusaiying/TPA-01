@@ -330,13 +330,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where batch_no = #{batchno} and status='Y'
     </update>
-    <update id="updateClaimBatchInvoice" parameterType="string">
-        update claim_batch
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="billrecevieflag != null">bill_recevie_flag = #{billrecevieflag},</if>
-        </trim>
-        where batch_no = #{batchno} and status='Y'
-    </update>
+
     <delete id="deleteClaimBatchById" parameterType="String">
         delete from claim_batch where batch_no = #{batchno}
     </delete>

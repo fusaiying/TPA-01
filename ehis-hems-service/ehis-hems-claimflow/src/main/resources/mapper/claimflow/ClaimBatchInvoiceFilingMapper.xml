@@ -126,13 +126,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join  claim_batch  cb on  cb.batch_no=cbii.batch_no
         left join claim_case cc  on cc.batch_no=cb.batch_no
         left join sys_dept dept  on cb.organ_code = dept.dept_id
-        <where>
+        where cb.bill_recevie_flag='N'
             <if test="invoiceBoxNo != null  and invoiceBoxNo != ''"> and cbii.invoice_box_no = #{invoiceBoxNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>
             <if test="rptNo != null  and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="billRecevieFlag != null  and billRecevieFlag != ''"> and cb.bill_recevie_flag = #{billRecevieFlag}</if>
-        </where>
     </select>
 
     <update id="updateClaimBatchBill" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo">

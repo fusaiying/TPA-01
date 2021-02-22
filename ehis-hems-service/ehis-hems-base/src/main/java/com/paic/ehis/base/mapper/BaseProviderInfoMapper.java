@@ -173,4 +173,7 @@ public interface BaseProviderInfoMapper
     public  List<BaseProviderInfo> selectBaseProviderInfos(BaseProviderInfo baseProviderInfo);
 
     public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo);
+
+    public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo);
+
 }

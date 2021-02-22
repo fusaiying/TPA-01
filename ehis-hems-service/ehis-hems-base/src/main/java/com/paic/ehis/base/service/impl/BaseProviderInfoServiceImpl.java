@@ -523,6 +523,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo) {
         return baseProviderInfoMapper.selectHospitalInfo(baseProviderInfo);
     }
+    @Override
+    public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo) {
+        return baseProviderInfoMapper.selectBaseProviderBackInfos(baseProviderInfo);
+    }
 
 
     /**

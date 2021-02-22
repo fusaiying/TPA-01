@@ -156,5 +156,6 @@ public interface IBaseProviderInfoService
 
     public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo);
 
+    public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo);
 
 }

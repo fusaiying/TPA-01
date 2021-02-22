@@ -361,4 +361,6 @@ public class ClaimBatchController extends BaseController
         ClaimBatch claimBatch = claimBatchService.selectClaimBatchById(batchNo);
         return getDataTable(null);
     }
+
+    //根据证件类型和证件号去查被保人信息表policy_insured
 }

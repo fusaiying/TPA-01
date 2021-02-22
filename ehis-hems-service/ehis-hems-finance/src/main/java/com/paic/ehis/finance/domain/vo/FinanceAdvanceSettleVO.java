@@ -123,6 +123,29 @@ public class FinanceAdvanceSettleVO implements Serializable {
     @Excel(name = "备注")
     private String remark;
 
+
+    /** 收据号 */
+    private String receiptNo;
+
+    /** 收款账户名 */
+    private String receiptAccName;
+
+    /** 收款公司名称 */
+    private String receiptCompanyName;
+
+    /** 收款金额 */
+    private BigDecimal receiptAmount;
+
+    /** 收款日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date receiptDate;
+
+    /** 垫付款备注 */
+    private String creditRemark;
+
+    /** 操作人 */
+    private String creditCreateBy;
+
    // @Excel(name = "接口数据类型")
     private String pageType;
 }

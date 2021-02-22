@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.order.mapper.OrderBussinessInfoMapper">
+    
+    <resultMap type="RoleLoginInfo" id="RoleLoginInfoResult">
+        <result property="role"    column="role"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+
+    <resultMap type="OrderInfo" id="OrderInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyCertificateNo"    column="policy_certificate_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="contactName"    column="contact_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="inpatientArea"    column="Inpatient_area"    />
+        <result property="expectedArea"    column="expected_area"    />
+        <result property="visitingArea"    column="visiting_area"    />
+        <result property="city"    column="city"    />
+        <result property="serviceType"    column="service_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="expectationHospital"    column="expectation_hospital"    />
+        <result property="expectedDepartment"    column="expected_department"    />
+        <result property="seriousDisease"    column="serious_disease"    />
+        <result property="operation"    column="operation"    />
+        <result property="finalDiagnosis"    column="final_diagnosis"    />
+        <result property="symptomDescription"    column="symptom_description"    />
+        <result property="remark"    column="remark"    />
+        <result property="reason"    column="reason"    />
+        <result property="nodeStatus"    column="node_status"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="phone"    column="phone"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idCode"    column="id_code"    />
+        <result property="productChname"    column="product_chname"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="chname"    column="chname"    />
+        <result property="applyStartTime"    column="applyStartTime"    />
+        <result property="applyEndTime"    column="applyEndTime"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="firstDept"    column="first_dept"    />
+        <result property="secondDept"    column="second_dept"    />
+        <result property="inpatientTime"    column="inpatient_time"    />
+        <result property="director"    column="director"    />
+        <result property="cancelTime"    column="cancel_time"    />
+        <result property="receivingTime"    column="receiving_time"    />
+        <result property="applyResultTime"    column="apply_result_time"    />
+        <result property="orderCompleteTime"    column="order_complete_time"    />
+        <result property="consultation"    column="consultation"    />
+        <result property="consultant"    column="consultant"    />
+        <result property="cancelReason"    column="cancel_reason"    />
+        <result property="detailStatus"    column="detail_status"    />
+        <result property="inpatientHospital"    column="inpatient_hospital"    />
+        <result property="inpatientAddress"    column="inpatient_address"    />
+        <result property="failureReason"    column="failure_reason"    />
+        <result property="noVisitReason"    column="no_visit_reason"    />
+        <result property="settlePrice"    column="settle_price"    />
+        <result property="dealingMethod"    column="dealing_method"    />
+        <result property="dealingShow"    column="dealing_show"    />
+        <result property="refuseReason"    column="refuse_reason"    />
+    </resultMap>
+
+    <select id="checkpassWord"  resultMap="RoleLoginInfoResult">
+       select distinct role,password from base_contacts where role = #{role}
+    </select>
+
+    <select id="getReceivedTimes"  resultType="int">
+       select count(0) from order_info where status = 'Y' and role = #{role}
+    </select>
+
+    <select id="getCompletionTimes"  resultType="int">
+       select count(0) from order_info where status = 'Y' and role = #{role} and node_status in ('03','04')
+    </select>
+
+    <select id="getProgressTimes"  resultType="int">
+       select count(0) from order_info where status = 'Y' and role = #{role} and node_status = '02'
+    </select>
+
+    <select id="getOrderList" parameterType="OrderInfo" resultMap="OrderInfoResult">
+       SELECT
+            order_code,
+            policy_no,
+            bsi.chname,
+            oi.service_code,
+            bso.service_name,
+            oi.supplier_code,
+            policy_certificate_no,
+            oi.product_code,
+            oi.bussiness_status,
+            oi.service_code,
+            oi.apply_time,
+            oi.Inpatient_area,
+            oi.Inpatient_time,
+            oi.visiting_area,
+            oi.expected_area,
+            oi.expectation_hospital,
+            oi.first_dept,
+            oi.second_dept,
+            oi.director,
+            oi.symptom_description,
+            oi.cancel_time,
+            oi.create_time,
+            oi.receiving_time,
+            oi.apply_result_time,
+            oi.order_complete_time,
+            oi.consultation,
+            oi.consultant,
+            oi.cancel_reason,
+            ci. NAME,
+            ci.sex,
+            ci.birthday,
+            ci.phone,
+            ci.id_code,
+            ci.id_type,
+            oi.customer_no
+        FROM
+            order_info oi
+        LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code
+        AND bsi. STATUS = 'Y'
+        LEFT JOIN base_service_info bso ON bso.service_code = oi.service_code
+        where oi.role = #{role} and oi.node_status = #{nodeStatus} and oi.status = 'Y'
+    </select>
+
+    <update id="receivingOrder" parameterType="OrderInfo">
+        update order_info set node_status = #{nodeStatus},role = #{role} where order_code = #{orderCode} and status = 'Y'
+    </update>
+
+
+    <update id="implementtOrder" parameterType="OrderInfo">
+        update order_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detailStatus != null and detailStatus != ''">detail_status = #{detailStatus},</if>
+            <if test="inpatientArea != null ">Inpatient_area = #{inpatientArea},</if>
+            <if test="inpatientHospital != null and inpatientHospital != ''">inpatient_hospital = #{inpatientHospital},</if>
+            <if test="director != null and director != ''">director = #{director},</if>
+            <if test="firstDept != null ">first_dept = #{firstDept},</if>
+            <if test="secondDept != null ">second_dept = #{secondDept},</if>
+            <if test="inpatientTime != null">inpatient_time = #{inpatientTime},</if>
+            <if test="inpatientAddress != null and inpatientAddress != ''">inpatient_address = #{inpatientAddress},</if>
+            <if test="failureReason != null and failureReason != ''">failure_reason = #{failureReason},</if>
+            <if test="noVisitReason != null and noVisitReason != ''">no_visit_reason = #{noVisitReason},</if>
+            <if test="settlePrice != null and settlePrice != ''">settle_price = #{settlePrice},</if>
+            <if test="dealingMethod != null and dealingMethod != ''">dealing_method = #{dealingMethod},</if>
+            <if test="dealingShow != null and dealingShow != ''">dealing_show = #{dealingShow},</if>
+            <if test="refuseReason != null and refuseReason != ''">refuse_reason = #{refuseReason},</if>
+            <if test="consultation != null and consultation != ''">consultation = #{consultation},</if>
+            <if test="consultant != null and consultant != ''">consultant = #{consultant},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="nodeStatus != null and nodeStatus != ''">node_status = #{nodeStatus},</if>
+        </trim>
+        where order_code = #{orderCode}
+    </update>
+
+</mapper>

@@ -48,6 +48,8 @@ public class InvoiceFileVo extends BaseEntity {
     @Excel(name = "交单机构编码")
     private String organcode;
 
+    private String orgName;
+
     /** 被保人姓名 */
     @Excel(name = "被保人姓名")
     private String name;

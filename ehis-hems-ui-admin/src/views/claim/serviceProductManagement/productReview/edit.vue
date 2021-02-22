@@ -12,7 +12,7 @@
     </div>
     <!--供应商信息-->
     <div >
-      <el-form ref="supplierInfo"  :model="supplierInfo" size="small" :disabled="disabledFlag">
+      <el-form ref="supplierInfo"  :model="supplierInfo" size="small" disabled>
         <el-card class="box-card " style="margin-top: 10px;">
           <div slot="header" class="clearfix">
             <span>供应商信息</span>
@@ -25,7 +25,7 @@
                     tooltip-effect="dark"
                     style="width: 100%;">
 
-            <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>
+<!--            <el-table-column align="center" min-width="50" type="selection" width="120px"  ></el-table-column>-->
             <el-table-column key="1" align="center" prop="supplierCode" min-width="150" label="供应商编码" show-overflow-tooltip/>
             <el-table-column key="2" align="center" min-width="100" prop="chname" label="供应商名称" show-overflow-tooltip/>
             <el-table-column key="3" align="center" prop="addressdetail" min-width="150" label="适用区域" show-overflow-tooltip/>
@@ -52,7 +52,7 @@
 
     <!--审核日志-->
 
-    <audit :productCode="productCode"></audit>
+    <audit :productCode="productCode" :status="status"></audit>
 
 
 
@@ -87,29 +87,28 @@ export default {
       parOutProductEnname: '',
       productCode: '',
       supplierInfo: {
-        supplierData: [{supplierCode: 'xx', priorityOrder: '1',index:0}, {
-          supplierCode: 'xx',
-          priorityOrder: '',index:1
-        }, {supplierCode: 'xx', priorityOrder: '2',index:2}]
+        supplierData: []
       },
 
 
     }
   },
-  async created() {
-    await this.init()
-
-
-
+   created() {
+     this.init()
   },
   methods: {
     init(){
-
-      if(this.$route.query.status=='review'){
-        this.disabledFlag=true
-        this.productCode=this.$route.query.productCode
+    if(this.$route.query.status!=null && this.$route.query.status!='') {
+      if (this.$route.query.status == 'review') {
+        this.status = 'review'
+      }
+      else if(this.$route.query.status == 'management'){
+        this.status = 'management'
+      }
+        this.disabledFlag = true
+        this.productCode = this.$route.query.productCode
         //调用查询供应商的接口
-        let query={
+        let query = {
           productCode: this.$route.query.productCode
         }
         selectProductSupplier(query).then(res => {
@@ -117,7 +116,11 @@ export default {
         })
 
 
-      }
+
+    }
+
+
+
     },
 
     /*  //提交审核

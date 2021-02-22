@@ -743,6 +743,7 @@
     addContractServer,
     getAllBaseSupplierInfo,
     getAllBaseProviderInfo,
+    getAllBackBaseProviderInfo,
     getAllBaseServiceInfo,
     getSupplierContractBakDetail,
     getSupplierContractBakList
@@ -1606,6 +1607,33 @@
             if(bean.orgFlag == '02') { //其他
               this.providerCode2.push(obj);
             }
+          }
+
+          if(this.onlyAddPro) {
+            const query ={
+              pageNum:1,
+              pageSize:10000,
+              xadef:'select',
+              flag:'',
+              bussinessStatus:'01',
+              status:'Y',
+            };
+            getAllBackBaseProviderInfo(query).then(response => {
+              for(let i=0; i<response.data.length; i++) {
+                let bean = response.data[i];
+                let obj= new Object();
+                obj.dictLabel = bean.providerCode + " - " +bean.chname1;
+                obj.dictValue = bean.providerCode;
+                if(bean.orgFlag == '01') { // 医院
+                  this.providerCode1.push(obj);
+                }
+                if(bean.orgFlag == '02') { //其他
+                  this.providerCode2.push(obj);
+                }
+              }
+            }).catch(error => {
+              console.log(error);
+            })
           }
         }).catch(error => {
           console.log(error);

@@ -102,10 +102,10 @@ public class ClaimCaseBillController extends BaseController
     {
         // 判断是新增还是编辑
         if (!"".equals(claimCaseBill.getBill().getBillId()) && claimCaseBill.getBill().getBillId() != null){
-            claimCaseBillService.updateClaimCaseBill(claimCaseBill);
+            return  AjaxResult.success(claimCaseBillService.updateClaimCaseBill(claimCaseBill));
         }
         // 新增
-        return toAjax(claimCaseBillService.insertClaimCaseBill(claimCaseBill));
+        return AjaxResult.success(claimCaseBillService.insertClaimCaseBill(claimCaseBill));
     }
 
     /**

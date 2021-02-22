@@ -183,10 +183,63 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     @Override
     public int updateClaimCaseBill(ClaimCaseBillInfoVO claimCaseBill)
     {
+        String username = SecurityUtils.getUsername();
+        // 获取账单明细表信息
+        ClaimCaseBill billInfo = claimCaseBill.getBill();
         Long billId = claimCaseBill.getBill().getBillId();
+        // 将之前的诊断信息置为无效
         claimCaseBillDiagnosisMapper.updateClaimCaseBillDiagnosisByBillId(billId);
-        claimCaseBillDetailMapper.updateClaimCaseBillDetailByBillId(billId);
-        return claimCaseBillMapper.updateClaimCaseBillById(billId);
+        // 获取诊断信息 - 新增
+        ClaimCaseBillDiagnosis claimCaseBillDiagnosis = new ClaimCaseBillDiagnosis();
+        // 主要诊断
+        claimCaseBillDiagnosis.setBillId(billId);
+        claimCaseBillDiagnosis.setRptNo(billInfo.getRptNo());
+        claimCaseBillDiagnosis.setDigType("01");
+        claimCaseBillDiagnosis.setIcdCode(billInfo.getIcdCode());
+        claimCaseBillDiagnosis.setStatus("Y");
+        claimCaseBillDiagnosis.setCreateBy(username);
+        claimCaseBillDiagnosis.setCreateTime(DateUtils.getNowDate());
+        claimCaseBillDiagnosisMapper.insertClaimCaseBillDiagnosis(claimCaseBillDiagnosis);
+        // 次要诊断
+        List<IcdCode> icdCodes = billInfo.getIcdCodes();
+        for (int i=0;i<icdCodes.size();i++){
+            if (!"".equals(icdCodes.get(i).getIcdCode()) && null != icdCodes.get(i).getIcdCode()) {
+                ClaimCaseBillDiagnosis diagnosis = new ClaimCaseBillDiagnosis();
+                diagnosis.setBillId(billId);
+                diagnosis.setRptNo(billInfo.getRptNo());
+                diagnosis.setDigType("02");
+                diagnosis.setIcdCode(icdCodes.get(i).getIcdCode());
+                diagnosis.setStatus("Y");
+                diagnosis.setCreateBy(username);
+                diagnosis.setCreateTime(DateUtils.getNowDate());
+                claimCaseBillDiagnosisMapper.insertClaimCaseBillDiagnosis(diagnosis);
+            }
+        }
+
+        // 自费金额
+        BigDecimal selfAmount = new BigDecimal("0");
+        // 部分自费
+        BigDecimal partSelf = new BigDecimal("0");
+        // 不合理金额
+        BigDecimal unableAmount = new BigDecimal("0");
+
+        // 3、获取费用项明细
+        List<ClaimCaseBillDetail> billDetail = claimCaseBill.getBillDetail();
+        for (ClaimCaseBillDetail detail : billDetail){
+            selfAmount = selfAmount.add(detail.getSelfAmount() == null ? new BigDecimal("0.00") : detail.getSelfAmount());
+            partSelf = partSelf.add(detail.getPartSelfAmount() == null ? new BigDecimal("0.00") : detail.getPartSelfAmount());
+            unableAmount = unableAmount.add(detail.getUnableAmount() == null ? new BigDecimal("0.00") : detail.getUnableAmount());
+//            detail.setBillId(billId);
+//            detail.setRptNo(billInfo.getRptNo());
+//            detail.setStatus("Y");
+            detail.setUpdateBy(username);
+            detail.setUpdateTime(DateUtils.getNowDate());
+            claimCaseBillDetailMapper.updateClaimCaseBillDetail(detail);
+        }
+        billInfo.setSelfAmount(selfAmount);
+        billInfo.setPartSelfAmount(partSelf);
+        billInfo.setUnableAmount(unableAmount);
+        return claimCaseBillMapper.updateClaimCaseBill(billInfo);
     }
 
     /**

@@ -135,13 +135,12 @@
             <if test="unableAmount != null">unable_amount = #{unableAmount},</if>
             <if test="visNumber != null">vis_number = #{visNumber},</if>
             <if test="remark != null">remark = #{remark},</if>
-            <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where detail_id = #{detailId}
+        where detail_id = #{detailId} and status = 'Y'
     </update>
 
     <delete id="deleteClaimCaseBillDetailById" parameterType="Long">

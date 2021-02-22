@@ -83,7 +83,7 @@ public interface FinanceAdvanceSettleDetailMapper
     public int updateSettleStatus1(String settleTaskNo);
 
     /**核销按钮将结算状态由待核销改为已结算*/
-    public int updateSettleStatus2(String[] settleTaskNo);
+    public int updateSettleStatus2(String settleTaskNo);
 
 
 }

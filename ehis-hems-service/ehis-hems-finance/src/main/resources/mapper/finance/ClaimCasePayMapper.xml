@@ -42,7 +42,7 @@
     <select id="selectPayInfoList" parameterType="string" resultMap="PayResult">
         SELECT
             a.rpt_no,
-            min( b.treatment_start_date ) treatment_start_date,
+            min( b.treatment_start_date ) treatment_date,
             c.name,
             sum( b.bill_amount ) bill_amount,
             (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,
@@ -75,7 +75,7 @@
     <select id="selectForeignPayInfoList" parameterType="string" resultMap="ForeignPayResult">
         SELECT
             a.rpt_no,
-            min( b.treatment_start_date ) treatment_start_date,
+            min( b.treatment_start_date ) treatment_date,
             c.`name`,
             sum( b.bill_amount ) bill_amount,
             (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,

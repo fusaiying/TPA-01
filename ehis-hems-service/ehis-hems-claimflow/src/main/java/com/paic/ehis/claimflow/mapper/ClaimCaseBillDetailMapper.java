@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseBillDetail;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDetailDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface ClaimCaseBillDetailMapper
      * @param rptNo
      * @return
      */
-    public List<ClaimCaseBillDetailDTO> selectClaimCaseBillDetailDTOByRptNo(String rptNo);
+    public List<ClaimCaseBillDetailDTO> selectClaimCaseBillDetailDTOByRptNo(@Param("rptNo") String rptNo,@Param("billId") long billId);
 
     /**
      * 新增案件账单费用项明细

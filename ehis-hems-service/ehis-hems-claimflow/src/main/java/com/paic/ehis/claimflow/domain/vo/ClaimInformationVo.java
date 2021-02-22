@@ -11,7 +11,11 @@ import java.util.Date;
 
 @Data
 public class ClaimInformationVo extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
+
+    private String claimType;
+
     /** 批次号 */
     @Excel(name = "批次号")
     private String batchNo;

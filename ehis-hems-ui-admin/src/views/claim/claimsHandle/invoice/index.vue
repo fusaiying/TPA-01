@@ -59,6 +59,7 @@
         size="small"
         highlight-current-row
         tooltip-effect="dark"
+        v-loading="loading"
         style="width: 100%;"> <!--   @expand-change="getMinData" -->
         <el-table-column  type="expand">
           <template slot-scope="scope">
@@ -79,7 +80,7 @@
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column sortable align="center" prop="batchNo" min-width="120" label="批次号" show-overflow-tooltip/>
+        <el-table-column align="center" prop="batchNo" min-width="120" label="批次号" show-overflow-tooltip/>
         <el-table-column align="center" min-width="200" prop="invoiceBoxNo" label="发票盒号" show-overflow-tooltip>
           <template slot-scope="scope" >
             <template v-if="scope.row.editing" >
@@ -282,18 +283,23 @@
     },
     searchHandle() {
       this.searchBtn = true;
+      this.pageInfo.currentPage = 1;
+      this.pageInfo.pageSize = 10;
       this.initData();
     },
     initData(){
       this.loading = true;
       const params = {};
-      params.pageNum = this.searchBtn ? 1 : this.pageInfo.currentPage;
-      params.pageSize = this.searchBtn ? 10 : this.pageInfo.pageSize;
+      params.pageNum =  this.pageInfo.currentPage;
+      params.pageSize =  this.pageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.batchNo = this.formSearch.batchNo;
       params.hospitalCode = this.formSearch.hospitalCode;
       params.invoiceBoxNo = this.formSearch.invoiceBoxNo;
 
+      if(!this.searchBtn) {
+        params.billrecevieflag = "02";
+      }
 
       invoiceData(params).then(res => {
           if (res.code == '200') {
@@ -313,7 +319,6 @@
             this.tableData= _data;
           }
         }).finally(() => {
-            this.searchBtn = false;
             this.loading = false;
       })
     },

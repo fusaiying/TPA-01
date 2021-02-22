@@ -928,7 +928,7 @@
                         this.afterTable = res.data.standingData
                         this.afterTableTotal = res.data.standingData.length
                       }
-                      this.show = true
+                      this.show = false
                       this.isSaveSub = false
                       this.isPrint = false
                       this.eSaveOrSub = true

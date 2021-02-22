@@ -68,14 +68,7 @@ export default {
         this.disabledFlag=true
       }
       else if( this.$route.query.status=='edit'){
-
-        console.log('bianji')
-
         this.productCode=this.$route.query.productCode
-
-
-
-
       }
     },
     getSaveFlag(val){

@@ -399,6 +399,12 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         //生成发表归档信息
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(str1);
+        String billrecevieflag = claimBatch.getBillrecevieflag();
+        if(billrecevieflag.equals("")) {
+            claimBatchInvoiceFiling.setIsFiling("02");
+        } else {
+            claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
+        }
         claimBatchInvoiceFiling.setStatus("Y");
         claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));

@@ -3,10 +3,10 @@
     <div slot="header" class="clearfix">
       <span>产品基本信息</span>
       <span style="float: right;">
-          <el-button size="mini" type="primary" @click="baseFormSaveHandle" v-if="status!=='edit'">保存</el-button>
+          <el-button size="mini" type="primary" @click="baseFormSaveHandle" v-if="status ==''">保存</el-button>
         </span>
     </div>
-    <el-form ref="baseForm" :model="baseForm" label-width="170px" :rules="baseInfoRule" :disabled="disableFlag && status=='edit'"
+    <el-form ref="baseForm" :model="baseForm" label-width="170px" :rules="baseInfoRule" :disabled="disableFlag && (status=='review' || status=='management')"
              label-position="right" size="mini">
       <el-row>
         <el-col :span="8">

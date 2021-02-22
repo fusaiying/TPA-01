@@ -42,6 +42,7 @@
         <result property="batchNo"    column="batch_no"    />
         <result property="filingNo"    column="filing_no"    />
         <result property="source"    column="source"    />
+        <result property="isAppeal"    column="is_appeal"    />
     </resultMap>
     <resultMap id="BillProcessingVoResult" type="com.paic.ehis.claimflow.domain.vo.BillProcessingVo">
         <result property="rptNo"    column="rpt_no"    />
@@ -316,7 +317,7 @@
     </delete>
 
     <select id="selectClaimClaimAndBatchById" parameterType="String" resultMap="ClaimAndBatchVo">
-        select form1.rpt_no,form1.batch_no,form1.filing_no,batch.source
+        select form1.rpt_no,form1.batch_no,form1.filing_no,batch.source,form1.is_appeal
         from claim_case form1
                  inner join claim_batch batch on form1.batch_no=batch.batch_no and form1.status='Y' and form1.rpt_no = #{rptNo}
     </select>
@@ -409,6 +410,7 @@
         claim_case cases
         where cases.case_status = '07'
         AND cases.STATUS = 'Y'
+        AND record.history_flag = 'N'
         AND cases.update_by = #{operator}
         ORDER BY cases.update_time DESC
         ) act
@@ -481,7 +483,7 @@
                 FROM
                     claim_case cases
                         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-                        AND record.operation in ('08','99')
+                        AND record.operation = '07'
                         AND record.STATUS = 'Y'
                         AND record.history_flag = 'Y'
                         AND record.operator = #{operator}
@@ -547,7 +549,7 @@
         FROM
         claim_case cases
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation in ('08','99')
+        AND record.operation in = '07'
         AND record.STATUS = 'Y'
         AND record.history_flag = 'Y'
         AND record.operator = #{operator}

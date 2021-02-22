@@ -43,7 +43,7 @@ public class ClaimCaseFilingDTO extends BaseEntity {
     private String destroy;
 
     /** 数据状态（Y-有效，N-无效） */
-    @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
+    @Excel(name = "数据状态", readConverterExp = "Y=-有效,N-无效")
     private String status;
 
     /** 创建日期起 */

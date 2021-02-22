@@ -33,11 +33,6 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     @Autowired
     private ClaimCaseMapper claimCaseMapper;
 
-    @Autowired
-    private PolicyInfoMapper policyInfoMapper;
-
-    @Autowired
-    private ClaimCasePolicyMapper claimCasePolicyMapper;
     /**
      * 查询案件协谈信息
      *
@@ -221,7 +216,6 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
                 String time2 = "" + day2 + "天" + hour2 + "小时" + minute2 + "分";
                 claimCaseDiscussionVO.setMonitoringTime(time2);
             }
-            claimCaseDiscussionVOS.add(claimCaseDiscussionVO);
         }
         return claimCaseDiscussionVOS;
     }
@@ -229,31 +223,9 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     //已处理协谈
     @Override
     public List<ClaimCaseDiscussionVO> selectCaseDisListOver(ClaimCaseDiscussionDTO claimCaseDiscussionDTO) {
-        //查询出协谈处理中的所有的数据
-        List<ClaimCaseDiscussionVO> claimCaseDiscussionVOS1 = claimCaseDiscussionMapper.selectCaseDisListOver(claimCaseDiscussionDTO);
-        //已有：rpt_no,/*案件受理报案号*/  source,/*交单来源*/  name,/*被保人姓名*/  disc_type,/*协谈类型*/
-        // create_by,/*提交用户,流程节点操作人*/  case_status,/*案件状态*/  organ_code,/*承保机构*/
-        for (ClaimCaseDiscussionVO claimCaseDiscussionVO:claimCaseDiscussionVOS1) {
-            //出单公司companyName
-            List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
-            String companyName = null;
-            StringBuilder sb = new StringBuilder();
-            for (ClaimCasePolicy laimCasePolicyList : claimCasePolicies) {
-                PolicyInfo policyInfo = policyInfoMapper.selectPolicyInfoById(laimCasePolicyList.getPolicyNo());//查出出单公司的所有信息
-               if(null != policyInfo) {
-                   String companyName1 = policyInfo.getCompanyName();//得到单个的出单公司名字
-                   //字符拼接
-                   if (sb.length() > 0) {//该步即不会第一位有逗号，也防止最后一位拼接逗号！
-                       sb.append("|");
-                   }
-                   sb.append(companyName1);
-               }
-            }
-            companyName = sb.toString();
-            claimCaseDiscussionVO.setCompanyName(companyName);
-        }
-        return claimCaseDiscussionVOS1;
+        return claimCaseDiscussionMapper.selectCaseDisListOver(claimCaseDiscussionDTO);
     }
+
     @Override
     public int updatecasediscussionStatus(String repNo) {
         return claimCaseMapper.updatecaseStatus(repNo);

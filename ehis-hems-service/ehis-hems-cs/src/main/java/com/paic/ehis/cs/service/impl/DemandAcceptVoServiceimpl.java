@@ -269,7 +269,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         FlowLog flowLog=new FlowLog();
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
 
-
+        workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         //工单表修改
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -294,6 +294,15 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
+        acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
+        acceptDetailInfo.setPriorityLevel(demandAcceptVo.getPriorityLevel());
+        acceptDetailInfo.setEmail(demandAcceptVo.getEmail());
+        acceptDetailInfo.setBankTransfer(demandAcceptVo.getBankTransfer());
+        acceptDetailInfo.setBankHolder(demandAcceptVo.getBankHolder());
+        acceptDetailInfo.setBankLocation(demandAcceptVo.getBankLocation());
+        acceptDetailInfo.setAccountNumber(demandAcceptVo.getAccountNumber());
+        acceptDetailInfo.setBankName(demandAcceptVo.getBankName());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();

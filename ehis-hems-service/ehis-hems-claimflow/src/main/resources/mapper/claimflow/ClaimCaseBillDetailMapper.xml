@@ -65,9 +65,9 @@
         </where>
     </select>
 
-    <select id="selectClaimCaseBillDetailDTOByRptNo" parameterType="String" resultMap="ClaimCaseBillDetailDTOResult">
+    <select id="selectClaimCaseBillDetailDTOByRptNo"  resultMap="ClaimCaseBillDetailDTOResult">
         select detail_id, bill_id, rpt_no, fee_item_code, fee_item_name, bill_detail_amount, self_amount, part_self_amount, advance_payment, bill_detail_copay, hos_discount_amount, unable_amount, vis_number
-        from claim_case_bill_detail where rpt_no = #{rptNo} and status = 'Y'
+        from claim_case_bill_detail where rpt_no = #{rptNo} and bill_id = #{billId} and status = 'Y'
     </select>
 
     <select id="selectClaimCaseBillDetailById" parameterType="Long" resultMap="ClaimCaseBillDetailResult">

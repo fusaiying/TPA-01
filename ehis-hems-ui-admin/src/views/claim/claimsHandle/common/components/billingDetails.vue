@@ -782,12 +782,13 @@
       }
       const checkTreatmentType = (rule, value, callback) => {
         if (value) {
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '2'&& (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
+          callback();
         } else {
           callback(new Error("治疗类型不能为空"));
         }
@@ -810,10 +811,10 @@
             this.baseForm.treatmentEndDate = value
           }
 
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
           if (value > date1) {
@@ -839,10 +840,10 @@
         if (!value) {
           callback(new Error("治疗止期不能为空！"));
         } else {
-          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null || this.baseForm.treatmentStartDate !== '')) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentStartDate !== null || this.baseForm.treatmentStartDate !== '')) {
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
           if (value > date1) {
@@ -930,8 +931,8 @@
           billAmount: undefined,
           visNumber: undefined,
           treatmentType: undefined,
-          treatmentStartDate: undefined,
-          treatmentEndDate: undefined,
+          treatmentStartDate: '',
+          treatmentEndDate: '',
           treatmentDays: undefined,
           invoiceNo: undefined,
           billNo: undefined,

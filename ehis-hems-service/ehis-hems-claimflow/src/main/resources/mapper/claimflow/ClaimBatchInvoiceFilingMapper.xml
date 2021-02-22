@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="organcode"    column="organ_code"    />
         <result property="hospitalCode"    column="hospital_code"    />
         <result property="rptNo"    column="rpt_no"    />
-        <result property="billrecevieflag"    column="bill_recevie_flag"    />
+        <result property="billRecevieFlag"    column="bill_recevie_flag"    />
         <result property="orgName"    column="organ_name"    />
 
     </resultMap>
@@ -131,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>
             <if test="rptNo != null  and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
+            <if test="billRecevieFlag != null  and billRecevieFlag != ''"> and cb.bill_recevie_flag = #{billRecevieFlag}</if>
         </where>
     </select>
 

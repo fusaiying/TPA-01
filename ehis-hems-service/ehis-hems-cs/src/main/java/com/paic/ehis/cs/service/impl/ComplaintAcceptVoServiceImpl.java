@@ -432,7 +432,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
 
-
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
 
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
         workHandleInfo.setHandleType("处理");
@@ -454,6 +456,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         }
         return workHandleInfoMapper.assistInComplaint(complaintDealVo);}
         else {
+
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("03");
@@ -490,6 +497,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
 
         if (workHandleInfo1==null) {
+
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
             //插入轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
@@ -522,6 +534,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             }
             return workHandleInfoMapper.assistInComplaint(complaintDealVo);}
         else {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
             //插入轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));

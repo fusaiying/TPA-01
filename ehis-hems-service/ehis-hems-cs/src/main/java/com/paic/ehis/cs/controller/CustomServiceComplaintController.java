@@ -125,7 +125,7 @@ public class CustomServiceComplaintController extends BaseController {
         if(complaintDealVo.getSign().equals("01")){
             return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
         }else{
-            return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+            return toAjax(iComplaintAcceptVoService.complaintSaveHandling(complaintDealVo));
         }
     }
 }

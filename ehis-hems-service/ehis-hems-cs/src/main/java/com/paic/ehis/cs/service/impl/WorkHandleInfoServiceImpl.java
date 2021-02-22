@@ -325,6 +325,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     @Override
     public int assistInComplaint(ComplaintDealVo complaintDealVo) {
         WorkHandleInfo workHandleInfo = new WorkHandleInfo();
+
+        //将所有状态置为N
+        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        workHandleInfoMapper.updateStatus(workHandleInfo);
+
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
         workHandleInfo.setHandleType("处理");
         workHandleInfo.setStatus("Y");
@@ -358,6 +363,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
 
         //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
@@ -383,7 +391,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
         else {
 
-
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
 
             //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
@@ -421,6 +431,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
@@ -456,6 +469,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
         return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
         else {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));

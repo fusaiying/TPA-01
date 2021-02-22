@@ -382,25 +382,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </insert>
 
-    <update id="updateWorkHandleInfo" parameterType="WorkHandleInfo">
-        update work_handle_info
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="handleType != null and handleType != ''">handle_type = #{handleType},</if>
-            <if test="workOrderNo != null and workOrderNo != ''">work_order_no = #{workOrderNo},</if>
-            <if test="flag != null">flag = #{flag},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
-            <if test="createdTime != null">created_time = #{createdTime},</if>
-            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
-            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="handleProp1 != null">handle_prop1 = #{handleProp1},</if>
-            <if test="handleProp2 != null">handle_prop2 = #{handleProp2},</if>
-            <if test="handleProp3 != null">handle_prop3 = #{handleProp3},</if>
-            <if test="handleProp30 != null">handle_prop30 = #{handleProp30},</if>
-        </trim>
-        where handle_id = #{handleId}
-    </update>
     <select id="selectCreatedBy" parameterType="WorkHandleInfo" resultMap="WorkHandleInfoResult">
         select  handle_id from work_handle_info   where work_order_no=#{workOrderNo}  and created_by=#{createdBy}
     </select>

@@ -136,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="receiptAmount"    column="receipt_amount"    />
         <result property="receiptDate"    column="receipt_date"    />
         <result property="creditRemark"    column="credit_remark"    />
-        <result property="createBy"    column="create_by"    />
+        <result property="creditCreateBy"    column="credit_create_by"    />
         <result property="pageType"    column="page_type"    />
     </resultMap>
 
@@ -151,12 +151,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.create_time,
         a.settle_status,
         a.settle_end_date,
-        a.col_date
+        a.col_date,
+        e.receipt_company_name,
+        e.receipt_amount,
+        e.receipt_date,
+        e.remark as credit_remark,
+        e.create_by as credit_create_by
         FROM
         finance_advance_settle_task a,
         finance_pay_info b,
         claim_batch c,
         base_issuingcompany d,
+        finance_collection_info e,
+        finance_receipt_col f,
         finance_advance_settle_detail h
         <where>
         <if test="settleTaskNo != null  and settleTaskNo != ''"> and settle_task_no = #{settleTaskNo}</if>
@@ -173,11 +180,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND c.batch_no = h.batch_no
         AND d.company_code = a.company_code
         AND b.batch_no = c.batch_no
+        AND e.receipt_no = f.receipt_no
         AND a.dept_code = b.dept_code
+        AND a.dept_code = f.dept_code
         AND a.STATUS = 'Y'
         AND b.STATUS = 'Y'
         AND c.STATUS = 'Y'
         AND d.STATUS = 'Y'
+        AND e.STATUS = 'Y'
+        AND f.STATUS = 'Y'
+        AND h.STATUS = 'Y'
         </where>
     </select>
 
@@ -266,10 +278,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--核销按钮将结算状态由待核销改为已结算-->
     <delete id="updateSettleStatus2" parameterType="String">
-        update finance_advance_settle_task set settle_status="03" where status="Y" and settle_task_no in
-        <foreach item="settleTaskNo" collection="array" open="(" separator="," close=")">
-            #{settleTaskNo}
-        </foreach>
+        update finance_advance_settle_task set settle_status="03" where settle_task_no = #{settleTaskNo} and status="Y"
     </delete>
 
 </mapper>

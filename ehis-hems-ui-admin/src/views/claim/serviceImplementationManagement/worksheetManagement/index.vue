@@ -129,9 +129,9 @@
 
           <el-table-column label="操作" align="center" min-width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? true:true" type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.$index,scope.row)">处理</el-button>
-              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? true:true" type="text" size="mini" style="color: #1890ff;" @click="distribution(scope.$index,scope.row)">分配</el-button>
-              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? true:true" type="text" size="mini" style="color: #1890ff;" @click="cancelOrder(scope.$index,scope.row)">取消工单</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.$index,scope.row)">处理</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="distribution(scope.$index,scope.row)">分配</el-button>
+              <el-button v-show="scope.row.bussinessStatus =='04' || scope.row.bussinessStatus =='02'? false:true" type="text" size="mini" style="color: #1890ff;" @click="cancelOrder(scope.$index,scope.row)">取消工单</el-button>
             </template>
           </el-table-column>
         </el-table>

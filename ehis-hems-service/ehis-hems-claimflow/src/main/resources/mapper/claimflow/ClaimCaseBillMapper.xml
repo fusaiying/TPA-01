@@ -258,13 +258,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="partSelfAmount != null">part_self_amount = #{partSelfAmount},</if>
             <if test="unableAmount != null">unable_amount = #{unableAmount},</if>
             <if test="clinicalDiagnosis != null">clinical_diagnosis = #{clinicalDiagnosis},</if>
-            <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where bill_id = #{billId}
+        where bill_id = #{billId} and status = 'Y'
     </update>
 
     <delete id="deleteClaimCaseBillById" parameterType="Long">

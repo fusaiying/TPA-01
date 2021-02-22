@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         UPDATE base_supplier_outlets
 SET STATUS = 'N'
 WHERE
-	website_code = #{websiteCode}
+	website_code = #{websiteCode} and supplier_code = #{supplierCode}
     </update>
 
     <delete id="deleteBaseSupplierOutletsById" parameterType="String">

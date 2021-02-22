@@ -33,6 +33,6 @@
     ) addressdetail
     FROM  base_supplier_outlets so
     JOIN base_provider_info pi ON pi.provider_code = so.website_code
-    and so.supplier_code = #{supplierCode} and so.status = 'Y'
+    and so.supplier_code = #{supplierCode} and so.status = 'Y' and pi.update_flag = '0'
     </select>
 </mapper>

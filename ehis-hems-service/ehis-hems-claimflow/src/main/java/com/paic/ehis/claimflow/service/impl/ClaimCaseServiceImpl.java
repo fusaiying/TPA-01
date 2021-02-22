@@ -124,11 +124,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ProcessingCaseVo> selectProcessingClaimCaseList(ClaimCaseDTO claimCaseDTO) {
-        if (StringUtils.isEmpty(claimCaseDTO.getBatchNo()) && StringUtils.isEmpty(claimCaseDTO.getName()) && StringUtils.isEmpty(claimCaseDTO.getRptNo())) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
-            claimCaseDTO.setUpdateTime(DateUtils.parseDate(calendar.getTime()));
-        }
         claimCaseDTO.setCaseStatus("05");
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setIsHistory("N");
@@ -166,6 +161,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ClaimCase> selectProcessedClaimCaseList(ClaimCaseDTO claimCaseDTO) {
+        if (StringUtils.isNotEmpty(claimCaseDTO.getRptNo()) &&
+                StringUtils.isNotEmpty(claimCaseDTO.getBatchNo()) &&
+                StringUtils.isNotEmpty(claimCaseDTO.getName())
+        ){
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
+            claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
+            claimCaseDTO.setUpdateEndTime(DateUtils.getNowDate());
+        }
         claimCaseDTO.setOperation("05");
         claimCaseDTO.setIsHistory("Y");
         claimCaseDTO.setCaseStatus("'05','30'");

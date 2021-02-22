@@ -191,7 +191,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
         <span style="color: blue">投诉-服务受理信息</span>
@@ -226,7 +226,7 @@
           </el-col>
           <el-col :span="8">
           <el-form-item label="客户号：" prop="phone">
-            <el-input v-model="workPoolData.callMobilePhone" class="item-width"  size="mini" readonly/>
+            <el-input v-model="workPoolData.insuredNo" class="item-width"  size="mini" readonly/>
           </el-form-item>
           </el-col>
         </el-row>
@@ -280,14 +280,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户电话：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.linePhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.homePhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.insurer.workPhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -305,9 +305,9 @@
         <el-row>
           <el-form-item label="投诉内容：" prop="phone">
             <el-input
+              disabled
               type="textarea"
               :rows="2"
-              placeholder="请输入内容"
               v-model="workPoolData.content">
             </el-input>
           </el-form-item>
@@ -339,13 +339,15 @@
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="modifyDetails" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.umNum}}</span>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
+          <modify-details ref="modifyDetails"></modify-details>
+
         </el-table>
 
         <pagination
@@ -361,7 +363,7 @@
 
 
     <el-card>
-        <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+        <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="130px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
           <el-divider/>
@@ -443,12 +445,13 @@
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
-
   import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
   let dictss = [{dictType: 'product_status'}]
   export default {
     components: {
       coOrganizer,
+      modifyDetails,
     },
     filters: {
       changeDate: function (value) {
@@ -481,18 +484,8 @@
           Service: [
             {required: true, message: "服务项目不能为空", trigger: "blur"}
           ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
+
+
 
         },
         readonly: true,
@@ -518,7 +511,14 @@
         },
         loading: true,
         //数据反显用
-        workPoolData:"",
+        workPoolData:{
+          contactsPerson:{
+            homePhone1:[]
+          },
+          callPerson: {},
+          complainantPerson:{},
+          insurer:{},
+        },
         //HCS服务预约预修改记录
         HCSPoolData:[],
         HCSTotal:0,
@@ -589,7 +589,7 @@
       searchHandle() {
         let workOrderNo=this.queryParams.workOrderNo
         complainSearch(workOrderNo).then(res => {
-          console.log('共公池',res.data)
+          console.log('callcenter',res.data)
           if (res != null && res.code === 200) {
             this.workPoolData = res.data
 
@@ -611,11 +611,11 @@
       //协办
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
-      modifyDetails(){
-        this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
-      ;},
-
+        ;},
       resetForm() {
         this.$refs.sendForm.resetFields()
       },
@@ -628,7 +628,6 @@
         insert.collaborativeId=this.$route.query.collaborativeId
         comSearch(insert).then(res => {
           if (res != null && res.code === 200) {
-            console.log("insert",insert)
             alert("保存成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -646,12 +645,9 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(

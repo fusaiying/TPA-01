@@ -290,9 +290,6 @@
     watch: {
       policySelectData: function (newValue) {
         this.policyNos = newValue;
-        console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
-        console.log(newValue);
-        console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
@@ -553,7 +550,7 @@
           return false;
         }
 
-        if(this.conclusionInfo.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
           this.$message.info('请先保存再进行审核！')
           return false;
         }
@@ -734,22 +731,22 @@
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
-            if(this.conclusionInfo.payConclusion == '') {
+            if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null) {
               this.conSave = true;
             }
-            if(this.conclusionInfo.billCurrency != '') {
+            if(this.conclusionInfo.billCurrency != '' && this.conclusionInfo.billCurrency != null) {
               this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             }
-            if(this.conclusionInfo.payConclusion != '') {
+            if(this.conclusionInfo.payConclusion != '' && this.conclusionInfo.payConclusion != null) {
               this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
             }
-            if(this.conclusionInfo.refusedReason != '') {
+            if(this.conclusionInfo.refusedReason != '' && this.conclusionInfo.refusedReason != null) {
               this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因
             }
-            if(this.conclusionInfo.remark != '') {
+            if(this.conclusionInfo.remark != '' && this.conclusionInfo.remark != null) {
               this.conclusionForm.remark = this.conclusionInfo.remark; // 客户备注
             }
-            if(this.conclusionInfo.claimCheck != '') {
+            if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
             }
             // console.log("res.data")

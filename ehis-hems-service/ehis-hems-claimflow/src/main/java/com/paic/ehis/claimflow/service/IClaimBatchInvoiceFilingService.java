@@ -74,4 +74,6 @@ public interface IClaimBatchInvoiceFilingService
      * @return
      */
     int updateInvoiceFile(InvoiceFileVo invoiceFileVo);
+
+    List<InvoiceFileVo> selectRptNo(InvoiceFileVo invoiceFileVo);
 }

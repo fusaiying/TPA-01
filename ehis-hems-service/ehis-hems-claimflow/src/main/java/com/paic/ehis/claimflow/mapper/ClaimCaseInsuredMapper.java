@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
+import com.paic.ehis.claimflow.domain.vo.InvoiceFileVo;
 
 import java.util.List;
 
@@ -67,4 +68,5 @@ public interface ClaimCaseInsuredMapper
     public  List<ClaimCaseInsured>  selectCaseList(String rptNo);
 
     public ClaimCaseInsured selectClaimCaseInsuredListByRptNoTwo(String rptNo);
+    public List<InvoiceFileVo> selectRptNo(String batchNo);
 }

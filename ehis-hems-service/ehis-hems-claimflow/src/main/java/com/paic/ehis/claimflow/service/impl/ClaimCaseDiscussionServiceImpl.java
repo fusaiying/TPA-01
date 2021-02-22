@@ -231,7 +231,6 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
                 }
                 claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
             }
-//提交用
 
             //停留时长
             ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(claimCaseDiscussionVO.getRptNo());

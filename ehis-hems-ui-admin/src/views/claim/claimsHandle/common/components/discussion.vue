@@ -718,12 +718,21 @@
             if(this.conclusionInfo.payConclusion == '') {
               this.conSave = true;
             }
-            this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
-            this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
-            this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因
-            this.conclusionForm.remark = this.conclusionInfo.remark; // 客户备注
-            this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
-            // alert(this.conclusionInfo.isAppeal);
+            if(this.conclusionInfo.billCurrency != '') {
+              this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
+            }
+            if(this.conclusionInfo.payConclusion != '') {
+              this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
+            }
+            if(this.conclusionInfo.refusedReason != '') {
+              this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因
+            }
+            if(this.conclusionInfo.remark != '') {
+              this.conclusionForm.remark = this.conclusionInfo.remark; // 客户备注
+            }
+            if(this.conclusionInfo.claimCheck != '') {
+              this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
+            }
             // console.log("res.data")
             // console.log(res.data)
             // console.log("res.data")

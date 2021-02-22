@@ -704,15 +704,6 @@
           }
 
         }
-        else if(this.searchForm.policyNo){
-            if(this.searchForm.name!=null && this.searchForm.name!=''){
-              this.getSelectRecogn()
-            }
-            else {
-              this.$message({message:'请同时录入保单号、姓名', type:'warning',showClose:true,center:true})
-            }
-
-        }
 
         else {
           if(this.searchForm.sex){

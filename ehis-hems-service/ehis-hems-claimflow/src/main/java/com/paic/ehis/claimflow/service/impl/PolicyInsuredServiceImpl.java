@@ -115,10 +115,16 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
         }*/
         else
         {
-            PolicyVo policyVos= policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
-            if(policyVos.getPolicyRiskType().equals("G")){
-                policyFlagVo.setFlag("true");
-            }else{
+            if(policyInsured.getName().isEmpty()) {
+                PolicyVo policyVos = policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
+                if (policyVos.getPolicyRiskType().equals("G")) {
+                    policyFlagVo.setFlag("true");
+                } else {
+                    policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
+                    policyFlagVo.setFlag("false");
+                }
+            }
+            else {
                 policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
                 policyFlagVo.setFlag("false");
             }

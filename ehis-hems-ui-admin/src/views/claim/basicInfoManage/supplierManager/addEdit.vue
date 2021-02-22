@@ -885,6 +885,7 @@
           pageSize: this.serviceInfo.pageSize,
           chname1: this.serviceForm.websitecName,
           orgFlag: this.serviceForm.websitecType,
+          supplierCode: this.querys.serialNo,
           province: undefined,
           city: undefined,
           district: undefined,
@@ -1216,6 +1217,7 @@
         let params = {
           pageNum: 1,
           pageSize: 10,
+          supplierCode: this.querys.serialNo,
         }
         getService(params).then(res => {
           if (res != null && res.code === 200) {

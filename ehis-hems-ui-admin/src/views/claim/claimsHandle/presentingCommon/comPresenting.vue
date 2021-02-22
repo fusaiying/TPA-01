@@ -956,7 +956,11 @@
                     }
                   })
                 }
-              } else {
+              } else if(parseInt(this.searchForm.casenum) < table.length){
+                return this.$message.warning(
+                  "批次案件数少于登记台账的案件数,请检查！"
+                );
+              }else {
                 this.$confirm(`存在未登记台账的案件，是否确认提交?`, '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',

@@ -100,7 +100,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                             policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
                         }
                     }
-                    List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName());//小集合
+                    List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
                     if (dutyVos.size()!=0){
                         policyVo1.setMinData(dutyVos);
                     }

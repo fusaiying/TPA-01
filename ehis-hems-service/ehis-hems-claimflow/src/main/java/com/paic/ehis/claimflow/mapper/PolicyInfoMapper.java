@@ -72,7 +72,7 @@ public interface PolicyInfoMapper
 
     PolicyVo selectPolicyRiskType(String policyNo);
 
-    List<DutyVo> selectDutyList(String riskName);
+    List<DutyVo> selectDutyList(String riskName,String insuredNo);
 
     PolicyInfo selectPolicyInfoByIdOne(String insuredNo);
 

@@ -110,6 +110,20 @@ public class ClaimBatchInvoiceFilingController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 根据批次号查询报案号
+     * @param invoiceFileVo
+     * @return
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:filing:list')")
+    @GetMapping("/selectRptNo")
+    public TableDataInfo selectRptNo(InvoiceFileVo invoiceFileVo)
+    {
+        startPage();
+        List<InvoiceFileVo> list = claimBatchInvoiceFilingService.selectRptNo(invoiceFileVo);
+        return getDataTable(list);
+    }
+
 
     /**
      * 发票归档编辑超链接

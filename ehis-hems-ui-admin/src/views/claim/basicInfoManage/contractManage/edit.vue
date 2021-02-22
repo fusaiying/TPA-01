@@ -2176,11 +2176,10 @@
               this.preContractPartyB = detailData.contractPartyB;
               this.preContractPartyC = detailData.contractPartyC;
 
-              ///providerType    providerInfoSelects providerCode1
               if(detailData.providerType == '01') {
                 this.providerInfoSelects = this.providerCode1;
               }
-              if(detailData.providerType == '01') {
+              if(detailData.providerType == '02') {
                 this.providerInfoSelects = this.providerCode2;
               }
               this.providerForm.providerType = detailData.providerType;
@@ -2270,7 +2269,7 @@
             if(detailData.providerType == '01') {
               this.providerInfoSelects = this.providerCode1;
             }
-            if(detailData.providerType == '01') {
+            if(detailData.providerType == '02') {
               this.providerInfoSelects = this.providerCode2;
             }
             this.providerForm.serialNo = detailData.serialNo;

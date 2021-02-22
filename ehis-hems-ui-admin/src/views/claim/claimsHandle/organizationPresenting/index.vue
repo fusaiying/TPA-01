@@ -120,6 +120,9 @@
       </div>
       <div style="position: relative">
         <el-tabs v-model="activeName" v-loading="loading" @tab-click="handleClick">
+          <el-tab-pane :label="`处理中(${processedTotal})`" name="03">
+            <claimsTable ref="claimsTable3" :table-data="processedData" :status="activeName"/>
+          </el-tab-pane>
           <el-tab-pane :label="`已退回(${backTotal})`" name="01">
             <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName"/>
           </el-tab-pane>
@@ -145,6 +148,14 @@
         :limit.sync="dealSize"
         @pagination="searchHandle"
       />
+      <pagination
+        v-if="activeName==='03'"
+        v-show="processedTotal>0"
+        :total="processedTotal"
+        :page.sync="processedNum"
+        :limit.sync="processedSize"
+        @pagination="searchProcessed"
+      />
     </el-card>
   </div>
 </template>
@@ -167,6 +178,8 @@
         backSize: 10,
         dealNum: 1,
         dealSize: 10,
+        processedNum: 1,
+        processedSize: 10,
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -184,11 +197,13 @@
         loading: true,
         backData: [],//已退回数据
         dealData: [],//已处理
+        processedData: [],//处理中
         apply_sourcetypeOptions: [],
         isinit: 'Y',
         page: 1,
         backTotal: 0,
         dealTotal: 0,
+        processedTotal: 0,
         pageSize: 10,
         finishPage: 1,
         finishPageSize: 10,
@@ -266,6 +281,9 @@
       resetForm() {
         this.$refs.queryParams.resetFields()
       },
+      searchProcessed(){//处理中查询
+
+      },
       searchHandle() {
         const params = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
@@ -318,7 +336,7 @@
           }).finally(() => {
             this.loading = false
           })
-        } else {
+        } else if ((this.activeName === '02')){
           getDealWithList(params).then(res => {
             if (res != null && res.code === 200) {
               this.dealData = res.rows
@@ -338,6 +356,25 @@
             this.loading = false
             this.isinit='Y'
           })
+        }else {//处理中
+          const query = {
+            pageNum:this.processedNum ,
+            pageSize: this.processedSize,
+            orderByColumn:this.$refs.claimsTable3.prop,
+            isAsc:this.$refs.claimsTable3.order,
+            submitstartdate: undefined,
+            submitenddate: undefined,
+            organcode: this.queryParams.organcode,
+            hospitalname: this.queryParams.hospitalname,
+            updatestartTime: undefined,
+            updateendTime: undefined,
+            batchno: this.queryParams.batchno,
+            claimtype: this.queryParams.claimtype,
+            applicationsource: this.queryParams.applicationsource,
+            caseNumber: this.queryParams.caseNumber,
+            rptno: this.queryParams.rptno,
+            updateBy: this.queryParams.updateBy,
+          }
         }
       },
       //新增
@@ -416,7 +453,7 @@
         }
       },
       handleClick(tab, event) {
-        if (tab.name === '01') {
+        if (tab.name === '01' || tab.name === '03') {
           this.caseNumber = false
           this.queryParams.rptno = undefined
         } else {

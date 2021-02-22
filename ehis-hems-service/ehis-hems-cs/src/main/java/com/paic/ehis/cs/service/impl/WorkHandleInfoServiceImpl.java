@@ -408,6 +408,12 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
         }
     }
+
+    /**
+     * 预约处理   保存
+     * @param reservationDealVo
+     * @return
+     */
     @Override
     public int insertResevationSaveDeal(ReservationDealVo reservationDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();

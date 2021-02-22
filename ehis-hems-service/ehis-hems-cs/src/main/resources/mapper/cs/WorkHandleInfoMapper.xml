@@ -360,6 +360,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="handleProp1 != null">handle_prop1,</if>
             <if test="handleProp2 != null">handle_prop2,</if>
             <if test="handleProp3 != null">handle_prop3,</if>
+            <if test="handleProp13 != null">handle_prop13,</if>
             <if test="handleProp30 != null">handle_prop30,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -376,9 +377,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="handleProp1 != null">#{handleProp1},</if>
             <if test="handleProp2 != null">#{handleProp2},</if>
             <if test="handleProp3 != null">#{handleProp3},</if>
+            <if test="handleProp13 != null">#{handleProp13},</if>
             <if test="handleProp30 != null">#{handleProp30},</if>
         </trim>
     </insert>
+
     <select id="selectCreatedBy" parameterType="WorkHandleInfo" resultMap="WorkHandleInfoResult">
         select  handle_id from work_handle_info   where work_order_no=#{workOrderNo}  and created_by=#{createdBy}
     </select>

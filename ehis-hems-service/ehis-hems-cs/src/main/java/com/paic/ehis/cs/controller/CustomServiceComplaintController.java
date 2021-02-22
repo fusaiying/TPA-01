@@ -32,7 +32,7 @@ public class CustomServiceComplaintController extends BaseController {
     private IEditInfoService iEditInfoService;
 
     /**
-     * 投诉页面待处理
+     * 投诉页面待处理  查询
      * @param acceptDTO
      * @return
      */
@@ -111,12 +111,12 @@ public class CustomServiceComplaintController extends BaseController {
     {
         return toAjax(iComplaintAcceptVoService.updateComplaintStatus(workOrderNo));
     }
+
     /**
      * 投诉需求处理意见
      * @param complaintDealVo
      * @return
      */
-
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/complaintHandling ")
@@ -125,9 +125,7 @@ public class CustomServiceComplaintController extends BaseController {
         if(complaintDealVo.getSign().equals("01")){
             return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
         }else{
-            return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));
+            return toAjax(iComplaintAcceptVoService.complaintSaveHandling(complaintDealVo));
         }
-
     }
-
 }

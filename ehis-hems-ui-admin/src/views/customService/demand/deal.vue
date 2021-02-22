@@ -670,9 +670,7 @@
       add(){
         let addQueryParams=this.ruleForm
         addQueryParams.workOrderNo=this.workOrderNo
-        console.log("sdas",this.workOrderNo)
         dealAdd(addQueryParams).then(res => {
-          console.log("增加",addQueryParams)
           if (res != null && res.code === 200) {
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -690,9 +688,7 @@
       //反显信息需求
       searchHandle() {
         let query=this.queryParams
-        console.log("query",query)
         demandListAndPersonalPool(query).then(res => {
-          console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows[0]
             this.totalCount = res.total

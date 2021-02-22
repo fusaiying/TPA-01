@@ -293,7 +293,7 @@
 
 <script>
   import moment from 'moment'
-  import {complaintListAndPublicPool,complaintListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/complaint'
+  import {complaintListAndPublicPool,complaintListAndPersonalPool,complaintObtain,complaintObtainMany} from '@/api/customService/complaint'
 
   export default {
     filters: {
@@ -432,18 +432,15 @@
         }else {
         if (s.workOrderNo!=null) {
           let workOrderNo=s.workOrderNo
-          demandObtain(workOrderNo).then(res => {
+          complaintObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
             }
           }).catch(res => {
 
           })
-
-
         }else {
            const workOrderNos=this.ids
-           console.log("ids:",workOrderNos)
-           demandObtainMany(workOrderNos).then(res => {
+          complaintObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
               alert("success")
             }
@@ -509,7 +506,7 @@
         complaintListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.totalCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -536,7 +533,7 @@
         complaintListAndPersonalPool(this.sendForm).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
+            this.totalPersonCount = res.rows.length
             console.log("sd",res.rows)
             console.log('response',res.total)
             if (res.rows.length <= 0) {

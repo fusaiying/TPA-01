@@ -101,7 +101,7 @@
           </el-table-column>
           <el-table-column align="center" prop="policyNo" label="处理时效（工作日）" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="scope.row.status!='02'">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
             </template>
           </el-table-column>

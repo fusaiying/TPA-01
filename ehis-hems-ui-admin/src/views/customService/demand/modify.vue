@@ -221,12 +221,12 @@
     </el-card>
 
     <el-card>
-      <el-form ref="workPoolData" :rules="rules" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="workPoolData"  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
-            <el-form-item label="修改原因：" prop="editReason"  >
+            <el-form-item label="修改原因："  >
               <el-radio-group v-model="workPoolData.editInfo.editReason">
                 <el-radio label="1">客户申请变动</el-radio>
                 <el-radio label="2">操作失误</el-radio>
@@ -235,7 +235,7 @@
             </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="修改说明：" prop="editRemark">
+          <el-form-item label="修改说明：" >
             <el-input
               type="textarea"
               :rows="2"
@@ -321,7 +321,6 @@
           officeQuhao:"",//
           officeNumber:"",//
           officeSecondNumber:"",//
-
           editInfo:{
             editReason:"",//修改原因
             editRemark:"" //修改说明
@@ -337,6 +336,42 @@
           ],
           editRemark: [
             {required: true, message: "修改说明不能为空", trigger: "blur"}
+          ],
+          contactsMobilePhone:[
+            {required: true, message: "联系人手机不能为空", trigger: "blur"}
+          ],
+          channelCode: [
+            {required: true, message: "受理渠道不能为空", trigger: "blur"}
+          ],
+          itemCode: [
+            {required: true, message: "服务项目不能为空", trigger: "blur"}
+          ],
+          priorityLevel: [
+            {required: true, message: "优先级不能为空", trigger: "blur"}
+          ],
+          contactsName: [
+            {required: true, message: "联系人不能为空", trigger: "blur"}
+          ],
+          ContactsMobilePhone:[
+            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          ],
+          organCode: [
+            {required: true, message: "出单机构不能为空", trigger: "blur"}
+          ],
+          bankName: [
+            {required: true, message: "开户行不能为空", trigger: "blur"}
+          ],
+          bankLocation: [
+            {required: true, message: "开户地不能为空", trigger: "blur"}
+          ],
+          accountNumber: [
+            {required: true, message: "账号不能为空", trigger: "blur"}
+          ],
+          bankHolder: [
+            {required: true, message: "户名不能为空", trigger: "blur"}
+          ],
+          content: [
+            {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
 
         },
@@ -422,42 +457,27 @@
       close(){
 
       },
-      //反显结论信息
-      searchHandle2() {
-        let queryParams=this.queryParams
-        demandListAndPublicPool(queryParams).then(res => {
-          if (res!=null && res.code === 200) {
-            let workPoolData = res.rows[0];
-            this.workPoolData = workPoolData;
-            this.totalCount = res.total
-            console.log('公共', this.workPoolData)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
-
-      },
       //反显信息需求
       searchHandle() {
         if (this.queryParams.status=="01") {
-          console.log("status值",this.queryParams.status)
-          const query = this.queryParams
+          let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res!=null && res.code === 200) {
               let workPoolData = res.rows[0];
-              //修改原因
-              workPoolData.editInfo.editReason = "";
-              //修改说明
-              workPoolData.editInfo.editRemark = "";
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editReason="",
+              workPoolData.editRemark="",
+              workPoolData.editInfo=editInfo
+              workPoolData.officeCountry=""
+              workPoolData.officeNumber=""
+              workPoolData.officeQuhao=""
+              workPoolData.officeSecondNumber=""
+
               this.workPoolData = workPoolData;
               this.totalCount = res.total
-              console.log('公共', this.workPoolData)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -470,7 +490,6 @@
         }else {
           let query = this.queryParams
           demandListAndPersonalPool(query).then(res => {
-
             if (res!= null && res.code === 200) {
               let workPoolData = res.rows[0];
               let editInfo = {
@@ -484,8 +503,6 @@
               workPoolData.officeSecondNumber=""
               this.workPoolData = workPoolData;
               this.totalCount = res.total
-              console.log(this.workPoolData)
-
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -503,11 +520,8 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -522,24 +536,7 @@
       handleSelectionChange(val) {
         this.dataonLineListSelections = val
       },
-        // //提交页面数据
-        // submit(){
-        //   let insert=this.workPoolData
-        //   modifySubmit(insert).then(res => {
-        //     if (res != null && res.code === 200) {
-        //       console.log("insert",insert)
-        //       alert("修改成功")
-        //       if (res.rows.length <= 0) {
-        //         return this.$message.warning(
-        //           "失败！"
-        //         )
-        //       }
-        //     }
-        //   }).catch(res => {
-        //
-        //   })
-        //
-        // },
+
       //关闭按钮
       hiddenShow:function () {
         // 返回上级路由并关闭当前路由

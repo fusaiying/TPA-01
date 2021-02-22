@@ -21,7 +21,7 @@
         @expand-change="getCostData"
         tooltip-effect="dark"
         style="width: 100%;">
-        <el-table-column type="expand" v-if="node==='calculateReview'"/>
+        <el-table-column type="expand" v-if="node==='calculateReview' || status==='show'"/>
         <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ getNo(scope.row) }} </span>
@@ -564,6 +564,14 @@
             callback();
           }
         } else {
+          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+            let paymentSum = 0
+            for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+              this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+              paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
+            }
+            this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+          }
           callback();
         }
       }
@@ -586,6 +594,14 @@
             callback();
           }
         } else {
+          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+            let paymentSum = 0
+            for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+              this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
+              paymentSum = paymentSum + parseFloat(this.costForm.costData[i].advancePayment)
+            }
+            this.costForm.costData[this.costForm.costData.length - 1].advancePayment = ((parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2) - paymentSum).toFixed(2)
+          }
           callback();
         }
       }
@@ -615,6 +631,21 @@
             callback();
           }
         } else {
+          if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length>0 ) {
+            let copayNum = 0
+            for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+              this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
+              copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+            }
+            this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
+          } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length>0 ) {
+            let copayNum = 0
+            for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+              this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
+              copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
+            }
+            this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
+          }
           callback();
         }
       }
@@ -637,6 +668,14 @@
             callback();
           }
         } else {
+          if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length>0 ) {
+            let hosDiscountAmountNum = 0
+            for (let i = 0; i < this.costForm.costData.length - 1; i++) {
+              this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
+              hosDiscountAmountNum = hosDiscountAmountNum + parseFloat(this.costForm.costData[i].hosDiscountAmount)
+            }
+            this.costForm.costData[this.costForm.costData.length - 1].hosDiscountAmount = (this.getZero(this.baseForm.hosDiscountAmount) - hosDiscountAmountNum).toFixed(2)
+          }
           callback();
         }
       }
@@ -739,6 +778,18 @@
           }
         } else {
           callback(new Error("账单金额不能为空"));
+        }
+      }
+      const checkTreatmentType = (rule, value, callback) => {
+        if (value) {
+          if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+            this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
+          }
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentEndDate !== null || this.baseForm.treatmentEndDate !== '')) {
+            this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
+          }
+        } else {
+          callback(new Error("治疗类型不能为空"));
         }
       }
       const checkTreatmentStartDate = (rule, value, callback) => {
@@ -905,7 +956,7 @@
           hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur', 'change']}],
           billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur', 'change']}],
           billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur', 'change']}],
-          treatmentType: [{required: true, message: '治疗类型不能为空', trigger: ['blur', 'change']}],
+          treatmentType: [{validator: checkTreatmentType,required: true, trigger: ['blur', 'change']}],
           treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur', 'change']}],
           treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: ['blur', 'change']}],
           treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: ['blur', 'change']}],

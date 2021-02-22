@@ -31,4 +31,6 @@ public class DutyVo implements Serializable {
     /**计划编码*/
     @Excel(name = "计划编码")
     private String planCode;
+    @Excel(name="客户号")
+    private String insuredNo;
 }

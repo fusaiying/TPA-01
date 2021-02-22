@@ -59,7 +59,7 @@ public class ClaimCaseCalController extends BaseController
     }
 
     /**
-     * 理算审核 默认查询案件汇总信息 列表
+     * 理算审核 默认查询案件汇总信息
      *
      * @param claimCaseBill 案件赔付账单明细
      * @return 案件赔付账单明细集合
@@ -103,8 +103,9 @@ public class ClaimCaseCalController extends BaseController
         CalConclusionVo calConclusionVo = claimCaseCalService.updateClaimCaseCal(claimCaseCal);
         if (StringUtils.isNotNull(calConclusionVo)){
             return AjaxResult.success(calConclusionVo);
+        }else {
+            return AjaxResult.error();
         }
-        return AjaxResult.error();
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
 
+import com.paic.ehis.claimflow.domain.ClaimCaseCal;
 import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
 import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
 import com.paic.ehis.claimflow.domain.dto.BillDetailDTO;
@@ -8,6 +9,7 @@ import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCalBillMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCalItemMapper;
+import com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -33,6 +35,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
 
     @Autowired
     private ClaimCaseCalItemMapper claimCaseCalItemMapper;
+
+    @Autowired
+    private ClaimCaseCalMapper claimCaseCalMapper;
 
     /**
      * 查询案件赔付账单明细
@@ -108,6 +113,10 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();
         ArrayList<ClaimCaseCalItem> claimCaseCalItems = new ArrayList<>();
+        ClaimCaseCal claimCaseCal = new ClaimCaseCal();
+        claimCaseCal.setRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
+        claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseCal.setUpdateTime(DateUtils.getNowDate());
         if (StringUtils.isNotEmpty(billDetailDTO.getBillDetailList())) {
             for (CaseCalBillVo caseCalBillVo : billDetailDTO.getBillDetailList()) {
                 ClaimCaseCalBill claimCaseCalBill = new ClaimCaseCalBill();
@@ -116,6 +125,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
                 claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseCal.setCalAmount(claimCaseCalBill.getPayAmount());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
                 claimCaseCalBills.add(claimCaseCalBill);
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {

@@ -111,7 +111,7 @@
           <el-form-item label="材料齐全日期：" prop="materialCompleteDate">
             <el-date-picker
               v-model="baseForm.materialCompleteDate"
-              disabled
+              :disabled="node==='accept' || node==='input' "
               class="item-width"
               type="date"
               placeholder="选择日期"
@@ -140,7 +140,7 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-form-item label="详细地址：">
+          <el-form-item label="事故地点：">
             <el-cascader :options="regions" v-model="region" class="item-width" placeholder="请选择"
                          @change="handleChange"/>
             <el-input v-model="baseForm.accAddress" show-word-limit maxlength="100" style="width:60%;" clearable
@@ -195,7 +195,6 @@
               this.hasAcceptId = true
             }
           }else {
-            console.log(this.baseInfo.prireason);
             this.baseForm.priReason=this.baseInfo.prireason
           }
           this.checkedAllFun()
@@ -208,7 +207,7 @@
           if ((date.getDate()) < 10) {
             day = '0' + date.getDate()
           }
-          if (newVal.materialCompleteDate == null || newVal.materialCompleteDate === '') {
+          if (newVal.claimCaseAccept!=null && (newVal.claimCaseAccept.materialCompleteDate == null || newVal.claimCaseAccept.materialCompleteDate === '')) {
             this.baseForm.materialCompleteDate = date.getFullYear() + "-" + mon + "-" + day
           }
         }
@@ -221,7 +220,7 @@
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
           if (value < 0) {
-            callback(new Error("索赔金额录入不合法，请检查"));
+            callback(new Error("索赔金额录入不合法，请检查"))
             return this.$message.warning(
               "索赔金额录入不合法，请检查！"
             )

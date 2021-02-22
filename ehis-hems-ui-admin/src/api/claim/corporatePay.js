@@ -80,7 +80,7 @@ export function foreignList(data) {
 //外币查询按钮
 export function startForeignPay(foreignBatchNo) {
   return request({
-    url: '/finance/pay/'+foreignBatchNo,
+    url: '/finance/pay/foreignBatchNo?batchNo='+foreignBatchNo,
     method: 'get'
   })
 }

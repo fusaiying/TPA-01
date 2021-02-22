@@ -6,7 +6,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="com.paic.ehis.finance.domain.FinanceBorrowInfo" id="FinanceBorrowInfoResult">
         <result property="borrowId"    column="borrow_id"    />
-        <result property="payBatchNo"    column="pay_batch_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
         <result property="borrowAmount"    column="borrow_amount"    />
@@ -19,13 +18,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectFinanceBorrowInfoVo">
-        select borrow_id, pay_batch_no, batch_no, rpt_no, borrow_amount, status, create_by, create_time, update_by, update_time, dept_code from finance_borrow_info
+        select borrow_id, batch_no, rpt_no, borrow_amount, status, create_by, create_time, update_by, update_time, dept_code from finance_borrow_info
     </sql>
 
     <select id="selectFinanceBorrowInfoList" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" resultMap="FinanceBorrowInfoResult">
         <include refid="selectFinanceBorrowInfoVo"/>
         <where>  
-            <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
             <if test="borrowAmount != null "> and borrow_amount = #{borrowAmount}</if>
@@ -42,7 +40,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo" useGeneratedKeys="true" keyProperty="borrowId">
         insert into finance_borrow_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no,</if>
             <if test="batchNo != null and batchNo != ''">batch_no,</if>
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
             <if test="borrowAmount != null">borrow_amount,</if>
@@ -70,7 +67,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateFinanceBorrowInfo" parameterType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
         update finance_borrow_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no = #{payBatchNo},</if>
             <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
             <if test="borrowAmount != null">borrow_amount = #{borrowAmount},</if>

@@ -17,6 +17,9 @@ public class ClaimAndBatchVo implements Serializable {
     @Excel(name = "归档号")
     private String filingNo;
 
+    /** 是否申诉案件(01=正常，02=申诉) */
+    @Excel(name = "是否申诉案件", readConverterExp = "01=正常,02=申诉")
+    private String isAppeal;
     /**
      * 交单来源
      */
@@ -55,12 +58,21 @@ public class ClaimAndBatchVo implements Serializable {
         this.source = source;
     }
 
+    public String getIsAppeal() {
+        return isAppeal;
+    }
+
+    public void setIsAppeal(String isAppeal) {
+        this.isAppeal = isAppeal;
+    }
+
     @Override
     public String toString() {
         return "ClaimAndBatchVo{" +
                 "rptNo='" + rptNo + '\'' +
                 ", batchNo='" + batchNo + '\'' +
                 ", filingNo='" + filingNo + '\'' +
+                ", isAppeal='" + isAppeal + '\'' +
                 ", source='" + source + '\'' +
                 '}';
     }

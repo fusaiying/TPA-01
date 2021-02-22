@@ -9,6 +9,7 @@
         <result property="rptNo"    column="rpt_no"    />
         <result property="operation"    column="operation"    />
         <result property="operator"    column="operator"    />
+        <result property="orgRecordId"    column="org_record_id"    />
         <result property="historyFlag"    column="history_flag"    />
         <result property="status"    column="status"    />
         <result property="createBy"    column="create_by"    />

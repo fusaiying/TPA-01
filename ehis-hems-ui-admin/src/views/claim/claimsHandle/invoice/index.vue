@@ -25,9 +25,9 @@
               <el-select filterable   v-model="formSearch.hospitalCode"  class="item-width" placeholder="请选择">
                 <el-option
                   v-for="dict in providerInfoSelects"
-                  :key="dict.providerCode"
-                  :label="dict.providerCode+' - '+dict.chname1"
-                  :value="dict.providerCode"
+                  :key="dict.dictLabel"
+                  :label="dict.dictValue+' - '+dict.dictLabel"
+                  :value="dict.dictValue"
                 />
               </el-select>
             </el-form-item>
@@ -129,7 +129,7 @@
             <span  v-else>{{getYesOrNoName(scope.row.isSingle)}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip/>
+        <el-table-column align="center" prop="orgName" min-width="120" label="机构" show-overflow-tooltip/>
         <el-table-column align="center" prop="remark" min-width="110" label="备注" show-overflow-tooltip>
           <template slot-scope="scope" >
             <template v-if="scope.row.editing" >
@@ -325,18 +325,23 @@
         status:'Y'
       };
       getAllBaseProviderInfo(query).then(response => {
+        console.log(response)
         for(let i=0; i<response.data.length; i++) {
           let obj= new Object();
-          obj.dictLabel = response.data[i].chname1;
-          obj.dictValue = response.data[i].providerCode;
+          obj.dictLabel = response.data[i].chname1.toString();
+          obj.dictValue = response.data[i].providerCode.toString();
           this.providerInfoSelects.push(obj);
         }
       }).catch(error => {
         console.log(error);
       })
     },
-    getHospitalName(index,row) {
-      return this.selectDictLabel(this.providerInfoSelects, row.hospitalCode);
+    getHospitalName(row,col) {
+      let result = this.selectDictLabel(this.providerInfoSelects, row.hospitalCode)
+      if(result != '') {
+        return result;
+      }
+      return row.hospitalCode;
     },
   },
 

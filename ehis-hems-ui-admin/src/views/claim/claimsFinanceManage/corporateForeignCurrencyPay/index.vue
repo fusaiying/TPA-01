@@ -6,8 +6,8 @@
         <el-row>
 
           <el-col :span="8">
-            <el-form-item label="批次号：" prop="rptNo">
-              <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="批次号：" prop="batchNo">
+              <el-input v-model="searchForm.batchNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -31,8 +31,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否申述：" prop="name">
-              <el-select v-model="searchForm.name" class="item-width" placeholder="请选择"
+            <el-form-item label="是否申述：" prop="complainStatus">
+              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择"
                          @change="">
                 <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -43,9 +43,9 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="交单日期：" prop="endCaseDate">
+            <el-form-item label="交单日期：" prop="caseDate">
               <el-date-picker
-                v-model="searchForm.endCaseDate"
+                v-model="searchForm.caseDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -80,7 +80,6 @@
           highlight-current-row
           tooltip-effect="dark"
           @sort-change="onSortChange"
-          :cell-style="changeCellStyle"
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
                            prop="batchNo" label="批次号" show-overflow-tooltip/>
@@ -148,14 +147,15 @@
         searchForm: {
           pageNum: 1,
           pageSize: 10,
-          orderByColumn: '',
-          isAsc: '',
           batchNo: '',
           hospitalCode: '',
+          complainStatus: '',
           caseDate: [],
           startDate: undefined,
           endDate: undefined,
           organCode: undefined,
+          orderByColumn: '',
+          isAsc: '',
         },
         totalCount: 0,
         dictList: [],
@@ -268,14 +268,6 @@
         }
         this.search()
       },
-      changeCellStyle (rows, column, rowIndex, columnIndex) {
-        /* if(rows.row.bussinessStatus != "01"){
-           return 'color: red'  // 修改的样式
-         }else{
-           return ''
-         }*/
-      },
-
     }
   }
 </script>

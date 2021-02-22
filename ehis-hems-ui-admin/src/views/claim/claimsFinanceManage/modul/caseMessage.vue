@@ -50,8 +50,8 @@
               <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
+          <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
+          <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
             </template>
@@ -196,7 +196,7 @@
         }
       },
       confirmPay() {//确认支付
-        if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount !== this.querys.batchTotal) {
+        if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount != this.querys.batchTotal) {
           return this.$message.warning(
             "支付总金额与批次总金额不符，请核实！"
           )
@@ -258,8 +258,9 @@
       caseBorrow() {//案件借款
         if (this.baseForm.claimFlag === '01') {//非全陪
           //按钮置灰
+
         } else {
-          if (this.baseForm.payAmount !== this.querys.batchTotal) {
+          if (this.baseForm.payAmount != this.querys.batchTotal) {
             return this.$message.warning(
               "支付总金额与批次总金额不符，请核实！"
             )
@@ -322,11 +323,19 @@
         }
       },
       changeCellStyle (rows, column, rowIndex, columnIndex) {
-        /* if(rows.row.bussinessStatus != "01"){
-           return 'color: red'  // 修改的样式
-         }else{
-           return ''
-         }*/
+        if(this.querys.status==='public'){
+          /*if (){//当系统日期-该批次的交单日期>=网络医院维护的该医院的付款期限，该笔批次在对公支付查询页面飘红显示
+            return 'color: red'  // 修改的样式
+          } else{
+            return ''
+          }*/
+        }else if(this.querys.status==='publicForeign'){
+          if (rows.row.flag==='N'){
+            return 'color: red'  // 修改的样式
+          } else{
+            return ''
+          }
+        }
       }
     }
   }

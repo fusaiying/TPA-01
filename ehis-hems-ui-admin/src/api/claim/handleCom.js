@@ -70,7 +70,7 @@ export function selectHistoricalProblem(data) {
   return request({
     url: '/claimflow/problem/selectHistoricalProblem',
     method: 'get',
-    data: data
+    params: data
   })
 }
 

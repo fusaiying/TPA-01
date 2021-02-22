@@ -399,11 +399,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         String pulloutType = claimCase.getPulloutType();
         if (pulloutType.equals("01")) {//撤件97
-            claimCase.setCaseStatus("97");
-            claimCaseRecord1.setOperation("97");
-        } else if (pulloutType.equals("02")) {//撤件可申诉98
             claimCase.setCaseStatus("98");
             claimCaseRecord1.setOperation("98");
+        } else if (pulloutType.equals("02")) {//撤件可申诉98
+            claimCase.setCaseStatus("97");
+            claimCaseRecord1.setOperation("97");
         }
         claimCase.setStatus("Y");
         claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -552,7 +552,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                 //提交用户
                 ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                if (claimCaseRecord2!=null){
+                    conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                }
 
                 //停留时长
                 ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
@@ -659,7 +661,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                             //提交用户
                             ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                            conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                            if (claimCaseRecord2!=null){
+                                conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                            }
 
                             //是否调查
                             ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
@@ -722,7 +726,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                     //提交用户
                     ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                    conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                    if (claimCaseRecord2!=null){
+                        conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                    }
 
                     //是否调查
                     ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
@@ -794,7 +800,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                 //提交用户
                 ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                if (claimCaseRecord2!=null){
+                    conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                }
 
                 //是否调查
                 ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();

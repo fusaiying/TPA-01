@@ -106,7 +106,7 @@
         <problemCase :sonProblemData="sonProblemData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"/>
       </div>
       <!--赔付结论-->
-      <div v-if="querys.node==='calculateReview'" class="batchInfo_class" style="margin-top: 10px;">
+      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='02'" class="batchInfo_class" style="margin-top: 10px;">
         <pay-conclusion :fixInfo="fixInfo"/>
       </div>
       <!--赔付结论-->
@@ -222,7 +222,8 @@
         sonProblemData: [],
         sonCalculateData: [],
         historicalProblemData: [],
-        historicalProblemDataTotal: 0,
+        historicalProblemDataTotal: '0',
+        problemStatus: 0,
         historicalProblemDialog: false,
         removeDialog: false,
         appealDialog: false,
@@ -310,8 +311,14 @@
         }
         selectHistoricalProblem(item).then(res => {
           if (res != null && res.code === 200) {
-            this.historicalProblemData = res.rows
-            this.historicalProblemDataTotal = res.total
+            this.historicalProblemData = res.data.claimCaseProblems
+            if (res.data.problemStatus==='Y'){
+              this.historicalProblemDataTotal='?'
+            }else {
+              if (res.data.total!=null){
+                this.historicalProblemDataTotal = res.data.total
+              }
+            }
           }
         })
         getInsured(this.querys.rptNo).then(res => {
@@ -577,9 +584,10 @@
               policyNos: tableData,
               claimCaseInsured: subFormSearch
             }
-            addInsuredAndPolicy(insuredInfoData)
+
 
             if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
+              addInsuredAndPolicy(insuredInfoData)
               let data = {
                 rptNo: this.querys.rptNo
               }

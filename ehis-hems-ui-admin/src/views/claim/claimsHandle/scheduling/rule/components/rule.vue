@@ -52,7 +52,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="抽检金额：" prop="checkAmount">
-                <el-input  maxlength="14" v-model="ruleForm.checkAmount" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  class="item-width"  size="mini" placeholder="请输入" />
+                <el-input  maxlength="14" v-model="ruleForm.checkAmount" @input="changeRate"  class="item-width"  size="mini" placeholder="请输入" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="抽检比例：" prop="rate">
-                <el-input  maxlength="4" v-model="ruleForm.rate" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" class="item-width" size="mini" placeholder="请输入" />
+                <el-input min="0" max="100" maxlength="6" v-model="ruleForm.rate" @input="changeRate"  class="item-width" size="mini" placeholder="请输入" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -153,6 +153,17 @@
 
   },
   data() {
+    const maxRate = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("抽检比例必填"));
+      } else {
+        if(parseFloat(value) > 100){
+          callback(new Error("抽检比例最大值为100"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
         copyFormData:{},
         editData:{},
@@ -174,7 +185,7 @@
           payConclusion: {trigger: ['change'], required: true, message: '赔付结论必填'},
           amountType: {trigger: ['change'], required: true, message: '金额类型必填'},
           checkAmount: {trigger: ['change'], required: true, message: '金额上限必填'},
-          rate: {trigger: ['change'], required: true, message: '抽检金额必填'},
+          rate: { trigger: ['change'], required: true, validator:maxRate},
           status: {trigger: ['change'], required: true, message: '规则状态必填'},
         },
       dialogVisible: false,
@@ -191,6 +202,14 @@
     });
   },
   methods: {
+    changeRate(){
+      this.ruleForm.rate = this.ruleForm.rate.replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+      this.ruleForm.rate = this.ruleForm.rate.replace(/\.{2,}/g,".") //清除第二个小数点
+      this.ruleForm.rate = this.ruleForm.rate.replace(/^\./g,""); //验证第一个字符是数字而不是字符
+      this.ruleForm.rate = this.ruleForm.rate.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+      this.ruleForm.rate = this.ruleForm.rate.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+      this.ruleForm.rate = this.ruleForm.rate.indexOf(".") > 0? this.ruleForm.rate.split(".")[0].substring(0, 11) + "." + this.ruleForm.rate.split(".")[1]: this.ruleForm.rate.substring(0, 11); //限制只能输入7位正整数
+    },
     resetForm(){
       this.ruleForm.checkRuleNo = '';
       this.ruleForm.caseType = '';

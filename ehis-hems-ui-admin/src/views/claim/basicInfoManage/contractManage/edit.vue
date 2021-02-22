@@ -1475,6 +1475,7 @@
               this.getBakDetail();
             } else {
               this.getSupplierContractListByChangeType(2);
+              this.pageOpe = 'add';
             }
           }
         }
@@ -1502,7 +1503,8 @@
               this.hospPro = false;
               this.getBakDetail();
             } else {
-              this.getSupplierContractListByChangeType(2);
+              this.getSupplierContractListByChangeType(2)
+              this.pageOpe = 'add';
             }
           }
         }

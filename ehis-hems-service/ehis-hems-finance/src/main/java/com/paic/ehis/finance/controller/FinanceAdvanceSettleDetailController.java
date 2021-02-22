@@ -10,6 +10,7 @@ import com.paic.ehis.finance.domain.FinanceAdvanceSettleDetail;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
+import com.paic.ehis.finance.service.IFinanceCollectionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,8 @@ public class FinanceAdvanceSettleDetailController extends BaseController
 {
     @Autowired
     private IFinanceAdvanceSettleDetailService financeAdvanceSettleDetailService;
+    @Autowired
+    private IFinanceCollectionInfoService financeCollectionInfoService;
 
     /**
      * 查询代垫费结算明细列表
@@ -137,9 +140,10 @@ public class FinanceAdvanceSettleDetailController extends BaseController
 
     /**核销按钮将结算状态由待核销改为已结算*/
     @PutMapping("/updateSettleStatus2/{settleTaskNos}")
-    public AjaxResult updateSettleStatus2(@RequestBody String[] settleTaskNos)
+    public AjaxResult updateSettleStatus2(@RequestBody String settleTaskNo,Long collectionId)
     {
-        return toAjax(financeAdvanceSettleDetailService.updateSettleStatus2(settleTaskNos));
+        financeCollectionInfoService.deleteFinanceCollectionInfoById(collectionId);
+        return toAjax(financeAdvanceSettleDetailService.updateSettleStatus2(settleTaskNo));
     }
 
     /**发起垫付款任务*/

@@ -119,7 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteFinanceCollectionInfoById" parameterType="Long">
-        delete from finance_collection_info where collection_id = #{collectionId}
+        update from finance_collection_info set status="N" where collection_id = #{collectionId} and status="Y"
     </delete>
 
     <delete id="deleteFinanceCollectionInfoByIds" parameterType="String">

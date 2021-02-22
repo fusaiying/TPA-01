@@ -112,7 +112,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
@@ -215,6 +215,7 @@
           claimCaseInsured: '',
           policyInfominData: []
         },
+        policySelectData:[],
         sonRegisterData: {},
         sonPayeeInfoData: [],
         sonBillingInfoData: [],
@@ -329,7 +330,8 @@
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {
-              this.sonInsuredData.policyInfominData = res.data.policyInfominData
+              this.sonInsuredData.policyInfominData = res.data.policyInfominData;
+              this.policySelectData = res.data.policyInfominData;
             }
           }
         })

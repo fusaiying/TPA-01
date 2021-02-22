@@ -15,7 +15,7 @@
 
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="productCode">
-              <el-select v-model="formSearch.productCode" class="item-width"  clearable >
+              <el-select v-model="formSearch.productCode" class="item-width"  clearable filterable>
                 <el-option v-for="item in productNameList" :label="item.productName" :value="item.productCode"
                            :key="item.productCode"/>
               </el-select>

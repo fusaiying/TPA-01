@@ -226,6 +226,7 @@
         const params = {};
         params.pageNum = this.gatherPageInfo.page;
         params.pageSize = this.gatherPageInfo.pageSize;
+        params.companyCode = this.formSearch.companyCode;
         collectionInfoList(params).then(res => {
           if (res.code == '200') {
             this.gatherTotal = res.total;
@@ -242,6 +243,9 @@
         this.pendPageInfo.pageSize = 10;
         this.total = 0;
         this.initData();
+        if(this.formSearch.companyCode != '') {
+          this.initGatherData();
+        }
       },
       // 查询处理中
       initData() {

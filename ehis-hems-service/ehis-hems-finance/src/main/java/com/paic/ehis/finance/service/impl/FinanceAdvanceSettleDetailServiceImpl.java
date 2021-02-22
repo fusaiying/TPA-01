@@ -3,15 +3,12 @@ package com.paic.ehis.finance.service.impl;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.finance.mapper.FinanceAdvanceSettleTaskMapper;
-import com.paic.ehis.finance.mapper.FinanceSettleRecordMapper;
-import com.paic.ehis.finance.mapper.SysUserMapper;
+import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
-import com.paic.ehis.finance.mapper.FinanceAdvanceSettleDetailMapper;
 import com.paic.ehis.finance.domain.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
 
     @Autowired
     FinanceSettleRecordMapper financeSettleRecordMapper;
+
     /**
      * 查询代垫费结算明细
      * 
@@ -159,9 +157,9 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
 
     /** 核销按钮将结算状态由待核销改为已结算*/
     @Override
-    public int updateSettleStatus2(String[] settleTaskNos)
+    public int updateSettleStatus2(String settleTaskNo)
     {
-        return financeAdvanceSettleDetailMapper.updateSettleStatus2(settleTaskNos);
+        return financeAdvanceSettleDetailMapper.updateSettleStatus2(settleTaskNo);
     }
 
 

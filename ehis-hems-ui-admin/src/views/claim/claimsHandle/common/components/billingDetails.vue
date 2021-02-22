@@ -723,8 +723,8 @@
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
             let dataSum = 0
-            for (let i = 0; i <= index; i++) {
-              dataSum = dataSum + parseFloat(this.costForm.costData[i].billDetailAmount)
+            for (let i = 0; i < this.costForm.costData.length; i++) {
+              dataSum = dataSum + parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount))
             }
             if (dataSum == parseFloat(this.baseForm.billAmount)) {
               if (this.baseForm.isShareAp === '01') {

@@ -41,8 +41,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="撤件描述：" prop="pulloutDescribe" style="position:relative">
-              <el-input type="textarea" :rows="3" v-model="baseForm.pulloutDescribe" maxlength="1000"
-                        class="item-widths" clearable
+              <el-input type="textarea" :rows="3" v-model="baseForm.pulloutDescribe" maxlength="1000" show-word-limit
+                        class="item-widths"
                         size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>

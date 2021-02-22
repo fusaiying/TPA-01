@@ -61,7 +61,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     a.handle_state,
     a.status,
     b.item_code,
-    b.organ_code
+    b.organ_code,
+    c.business_type
     FROM
     collaborative_from a,
     accept_detail_info b,

@@ -218,6 +218,11 @@
             <el-col :span="8">
               <el-form-item label="保单号：" prop="policyNo">
                 <el-select v-model="surveyForm.policyNo" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="dict in policyNos"
+                             :key="dict.policyNo"
+                             :label="dict.policyNo"
+                             :value="dict.policyNo"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -272,11 +277,22 @@
         type: Boolean,
         default: false
       },
+      policySelectData: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      },
       fixInfo:Object,
-      node:String
+      node:String,
+
     },
     watch: {
-      value: function (newValue) {
+      policySelectData: function (newValue) {
+        this.policyNos = newValue;
+        console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+        console.log(newValue);
+        console.log("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
@@ -285,6 +301,8 @@
         if(this.rptNo != '') {
           this.getCalInfo()
         }
+      },
+      value: function (newValue) {
       },
     },
     data() {
@@ -300,6 +318,7 @@
         }
       };
       return {
+        policyNos :[],
         conSave:false,
         rptNo:'',
         batchNo:'',

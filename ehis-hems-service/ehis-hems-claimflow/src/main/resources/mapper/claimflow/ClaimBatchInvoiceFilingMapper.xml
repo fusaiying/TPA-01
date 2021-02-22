@@ -126,7 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join  claim_batch  cb on  cb.batch_no=cbii.batch_no
         left join claim_case cc  on cc.batch_no=cb.batch_no
         left join sys_dept dept  on cb.organ_code = dept.dept_id
-        where
+        where 1 = 1
             <if test="invoiceBoxNo != null  and invoiceBoxNo != ''"> and cbii.invoice_box_no = #{invoiceBoxNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>

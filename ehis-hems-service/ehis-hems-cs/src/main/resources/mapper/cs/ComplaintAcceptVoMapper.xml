@@ -29,6 +29,7 @@
         <result property="callCenterId" column="call_center_id"/>
         <result property="channelCode" column="channel_code"/>
         <result property="priorityLevel" column="priority_level"/>
+        <result property="content" column="content"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -112,6 +113,7 @@ SELECT
 	a.email,
 	a.organ_code,
 	a.complaint_person_id,
+	a.content,
 	b.insured_no
 FROM
 	accept_detail_info a,

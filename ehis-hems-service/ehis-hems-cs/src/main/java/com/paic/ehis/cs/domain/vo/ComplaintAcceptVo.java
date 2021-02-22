@@ -14,6 +14,7 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     private String callCenterId;
 
+
     /** 工单编号 */
     private String workOrderNo;
 

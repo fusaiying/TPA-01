@@ -1,6 +1,7 @@
 package com.paic.ehis.claimapt.service;
 
 
+import com.paic.ehis.claimapt.domain.ClaimBatch;
 import com.paic.ehis.claimapt.domain.ClaimCaseStanding;
 import com.paic.ehis.claimapt.domain.DTO.ClaimCaseStandingDTO;
 import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
@@ -77,7 +78,7 @@ public interface IClaimCaseStandingService
      * @param claimCaseStandingVo 报案台账信息
      * @return 结果
      */
-    public ClaimCaseStandingVo insertSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
+    public int insertSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
 
     /**
      * 机构交单-事后-保存-修改报案台账信息
@@ -85,5 +86,7 @@ public interface IClaimCaseStandingService
      * @param claimCaseStandingVo 报案台账信息
      * @return 结果
      */
-    public ClaimCaseStandingVo updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
+    public int updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
+
+    public List<ClaimCaseStandingVo> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
 }

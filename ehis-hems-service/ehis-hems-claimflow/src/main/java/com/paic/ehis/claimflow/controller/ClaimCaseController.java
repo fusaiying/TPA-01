@@ -247,14 +247,14 @@ public class ClaimCaseController extends BaseController {
      * 受理确认按钮功能
      * 修改案件信息
      *
-     * @param claimCase
+     * @param claimCaseShuntClass
      * @return
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:edit')")
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseAndRecordInfoSuspend")
-    public AjaxResult editCaseAndRecordInfoSuspend(@RequestBody ClaimCase claimCase) {
-        return toAjax(claimCaseService.updateCaseAndRecordInfoSuspend(claimCase));
+    public AjaxResult editCaseAndRecordInfoSuspend(@RequestBody ClaimCaseShuntClass claimCaseShuntClass) {
+        return AjaxResult.success(claimCaseService.updateCaseAndRecordInfoSuspend(claimCaseShuntClass));
     }
 
     /**

@@ -221,5 +221,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from policy_info
         where policy_no = #{policyNo}  and status='Y'
     </select>
-    
+
+    <select id="selectPolicyInfoByInsuredNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseShuntClass" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        where insured_no = #{insuredNo} AND name = #{name}
+    </select>
+
 </mapper>

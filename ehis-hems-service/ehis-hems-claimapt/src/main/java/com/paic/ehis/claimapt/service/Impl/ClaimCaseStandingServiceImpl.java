@@ -1,6 +1,7 @@
 package com.paic.ehis.claimapt.service.Impl;
 
 
+import com.paic.ehis.claimapt.domain.ClaimBatch;
 import com.paic.ehis.claimapt.domain.ClaimCase;
 import com.paic.ehis.claimapt.domain.ClaimCaseStanding;
 import com.paic.ehis.claimapt.domain.DTO.ClaimCaseStandingDTO;
@@ -178,12 +179,12 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
      * @return 结果
      */
     @Override
-    public ClaimCaseStandingVo insertSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo)
+    public int insertSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo)
     {
-        //获取报案号
-        String bahtime="96"+"JGH0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
-
-        claimCaseStandingVo.setRptno(bahtime);
+//        //获取报案号
+//        String bahtime="96"+"JGH0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
+//
+//        claimCaseStandingVo.setRptno(bahtime);
         claimCaseStandingVo.setCreateBy(SecurityUtils.getUsername());
         claimCaseStandingVo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCaseStandingVo.setUpdateBy(SecurityUtils.getUsername());
@@ -201,11 +202,13 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
             }
             sb.append(claimmaterials.get(i));
         }
-
         claimCaseStanding.setClaimmaterials(sb.toString());
+
         claimCaseStanding.setRptno(claimCaseStandingVo.getRptno());
         claimCaseStanding.setIdno(claimCaseStandingVo.getIdno());
+        claimCaseStanding.setBatchno(claimCaseStandingVo.getBatchno());
         claimCaseStanding.setName(claimCaseStandingVo.getName());
+        claimCaseStanding.setIdType(claimCaseStandingVo.getIdType());
         claimCaseStanding.setOtherinfo(claimCaseStandingVo.getOtherinfo());
         claimCaseStanding.setCreateBy(claimCaseStandingVo.getCreateBy());
         claimCaseStanding.setCreateTime(claimCaseStandingVo.getCreateTime());
@@ -219,8 +222,8 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
 
 //        ClaimCase claimCase = new ClaimCase();
 
-        claimCaseStandingMapper.insertClaimCaseStanding(claimCaseStanding);
-        return claimCaseStandingVo;
+        return claimCaseStandingMapper.insertClaimCaseStanding(claimCaseStanding);
+//        return claimCaseStandingVo;
     }
 
     /**
@@ -230,7 +233,7 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
      * @return 结果
      */
     @Override
-    public ClaimCaseStandingVo updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo)//
+    public int updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo)//
     {
         claimCaseStandingVo.setUpdateBy(SecurityUtils.getUsername());
         claimCaseStandingVo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -251,6 +254,9 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
         claimCaseStanding.setRptno(claimCaseStandingVo.getRptno());
         claimCaseStanding.setIdno(claimCaseStandingVo.getIdno());
         claimCaseStanding.setName(claimCaseStandingVo.getName());
+        claimCaseStanding.setIdType(claimCaseStandingVo.getIdType());
+        claimCaseStanding.setBatchno(claimCaseStandingVo.getBatchno());
+        claimCaseStanding.setStandingId(claimCaseStandingVo.getStandingId());
         claimCaseStanding.setOtherinfo(claimCaseStandingVo.getOtherinfo());
         claimCaseStanding.setCreateBy(claimCaseStandingVo.getCreateBy());
         claimCaseStanding.setCreateTime(claimCaseStandingVo.getCreateTime());
@@ -262,7 +268,13 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
         claimCaseStanding.setEndTime(claimCaseStandingVo.getEndTime());
         claimCaseStanding.setStatus("Y");
 
-        claimCaseStandingMapper.updateClaimCaseStanding(claimCaseStanding);
-        return claimCaseStandingVo;
+        return claimCaseStandingMapper.updateClaimCaseStanding(claimCaseStanding);
+//        return claimCaseStandingVo;
+    }
+
+    @Override
+    public List<ClaimCaseStandingVo> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch)
+    {
+        return claimCaseStandingMapper.selectClaimCaseStandingByBatchno(claimBatch);
     }
 }

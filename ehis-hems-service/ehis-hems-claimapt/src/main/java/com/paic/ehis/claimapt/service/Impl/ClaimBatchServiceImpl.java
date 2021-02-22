@@ -367,29 +367,15 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         claimBatch.setUpdateBy(SecurityUtils.getUsername());
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
-        //新增理赔批次流程记录
-        //一条
-//        ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
-//        //批次号一样setBatchno
-//        claimBatchRecord.setBatchno(str1);
-//        //流程记录ID不一样
-//        claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
-//        claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-//        claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
-//        claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-//        claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
-//        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
-//        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
-
         //二条
         ClaimBatchRecord claimBatchRecord1 = new ClaimBatchRecord();
         //批次号一样
         claimBatchRecord1.setBatchno(str1);
         claimBatchRecord1.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord1.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord1.setUpdateBy(SecurityUtils.getUsername());
+        claimBatchRecord1.setUpdateBy("");
         claimBatchRecord1.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord1.setOperation(ClaimStatus.BATCHTENDER.getCode());//01
+        claimBatchRecord1.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
         claimBatchRecord1.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord1);
 
@@ -423,7 +409,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public ClaimBatch updateClaimBatchTwo(ClaimBatch claimBatch) {//
-        claimBatch.setBatchstatus("02");
+        claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
 
         claimBatch.setUpdateBy(SecurityUtils.getUsername());
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -437,11 +423,11 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
         claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord.setOperation("02");//02为提交
-        claimBatchRecord.setStatus("Y");
+        claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02为提交
+        claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
-        claimBatch.setStatus("Y");
+        claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchMapper.updateClaimBatch(claimBatch);
         return claimBatch;
     }

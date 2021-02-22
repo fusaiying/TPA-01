@@ -1,8 +1,10 @@
 package com.paic.ehis.claimapt.mapper;
 
 
+import com.paic.ehis.claimapt.domain.ClaimBatch;
 import com.paic.ehis.claimapt.domain.ClaimCaseStanding;
 import com.paic.ehis.claimapt.domain.DTO.ClaimCaseStandingDTO;
+import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
 import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo1;
 
 import java.util.List;
@@ -74,4 +76,6 @@ public interface ClaimCaseStandingMapper
      * @return
      */
     public ClaimCaseStanding selectClaimCaseStandingByIdOne(String rptno);
+
+    public List<ClaimCaseStandingVo> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
 }

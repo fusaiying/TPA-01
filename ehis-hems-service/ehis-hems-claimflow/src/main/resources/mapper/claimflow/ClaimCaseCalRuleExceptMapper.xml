@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCalRuleExceptMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCalRuleExcept" id="ClaimCaseCalRuleExceptResult">
+        <result property="ruleExcId"    column="rule_exc_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCalRuleExceptVo">
+        select rule_exc_id, rpt_no, rule_no, status, create_by, create_time, update_by, update_time from claim_case_cal_rule_except
+    </sql>
+
+    <select id="selectClaimCaseCalRuleExceptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRuleExcept" resultMap="ClaimCaseCalRuleExceptResult">
+        <include refid="selectClaimCaseCalRuleExceptVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="ruleNo != null  and ruleNo != ''"> and rule_no = #{ruleNo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseCalRuleExceptById" parameterType="Long" resultMap="ClaimCaseCalRuleExceptResult">
+        <include refid="selectClaimCaseCalRuleExceptVo"/>
+        where rule_exc_id = #{ruleExcId}
+    </select>
+
+    <insert id="insertClaimCaseCalRuleExcept" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRuleExcept" useGeneratedKeys="true" keyProperty="ruleExcId">
+        insert into claim_case_cal_rule_except
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="ruleNo != null and ruleNo != ''">rule_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="ruleNo != null and ruleNo != ''">#{ruleNo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseCalRuleExcept" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRuleExcept">
+        update claim_case_cal_rule_except
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="ruleNo != null and ruleNo != ''">rule_no = #{ruleNo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rule_exc_id = #{ruleExcId}
+    </update>
+
+    <delete id="deleteClaimCaseCalRuleExceptById" parameterType="Long">
+        delete from claim_case_cal_rule_except where rule_exc_id = #{ruleExcId}
+    </delete>
+
+    <delete id="deleteClaimCaseCalRuleExceptByIds" parameterType="String">
+        delete from claim_case_cal_rule_except where rule_exc_id in 
+        <foreach item="ruleExcId" collection="array" open="(" separator="," close=")">
+            #{ruleExcId}
+        </foreach>
+    </delete>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.TheAdjustmentSubsidiaryTwoVO" id="TheAdjustmentSubsidiaryOneVOTeseTwo">
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="ruleDescription"    column="rule_description"    />
+        <result property="ruleElement"    column="rule_element"    />
+        <result property="elementValue"    column="element_value"    />
+        <result property="elementUnit"    column="element_unit"    />
+        <result property="ruleExcId"    column="rule_exc_id"    />
+    </resultMap>
+    <select id="selectClaimCaseCalRuleListByRptNoTwo" parameterType="String" resultMap="TheAdjustmentSubsidiaryOneVOTeseTwo">
+        select rule.rule_exc_id,except.rule_no,rule.rule_description,rule.rule_element,rule.element_value,rule.element_unit from claim_case_cal_rule_except except
+        join claim_rule rule on except.rule_no=rule.rule_no and except.rpt_no=#{rptNo} and except.status='Y'
+    </select>
+    
+</mapper>

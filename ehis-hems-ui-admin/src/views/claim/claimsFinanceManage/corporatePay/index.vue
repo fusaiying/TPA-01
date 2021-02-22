@@ -93,7 +93,6 @@
           highlight-current-row
           tooltip-effect="dark"
           @sort-change="onSortChange"
-          :cell-style="changeCellStyle"
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
                            prop="batchNo" label="批次号" show-overflow-tooltip/>
@@ -224,6 +223,7 @@
           this.searchForm.pageNum = 1
           this.searchForm.pageSize = 10
         }
+
         list(this.searchForm).then(res => {
           if (res != null && res.code === 200) {
             this.tableData = res.rows
@@ -297,13 +297,6 @@
           this.searchForm.isAsc = ''
         }
         this.search()
-      },
-      changeCellStyle(rows, column, rowIndex, columnIndex) {
-        /* if(rows.row.bussinessStatus != "01"){
-           return 'color: red'  // 修改的样式
-         }else{
-           return ''
-         }*/
       },
     }
   }

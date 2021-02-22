@@ -145,6 +145,7 @@
       editPresenting(row, status) {
         let data = encodeURI(
           JSON.stringify({
+            node:'presenting',
             batchno: row.batchno, //批次号
             batchstatus: row.batchstatus, //批次状态
             status,//新增or查看

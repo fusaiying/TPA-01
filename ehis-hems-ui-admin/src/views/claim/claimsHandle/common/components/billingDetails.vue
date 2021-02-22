@@ -21,7 +21,7 @@
         @expand-change="getCostData"
         tooltip-effect="dark"
         style="width: 100%;">
-        <el-table-column type="expand" v-if="node==='calculateReview'"/>
+        <el-table-column type="expand" v-if="node==='calculateReview' || status==='show'"/>
         <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ getNo(scope.row) }} </span>

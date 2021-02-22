@@ -121,7 +121,7 @@
     methods: {
       getCalInfo() {
         calInfo(this.fixInfo.rptNo).then(res => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data) {
             this.conclusionInfo = res.data;
           }
         })

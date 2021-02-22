@@ -71,8 +71,11 @@
 
       const checkPulloutDescribe = (rule, value, callback) => {
         if (!value) {
-          /* if ()*/
-          callback(new Error(" "))
+           if (this.baseForm.pulloutType==='01'){
+             callback(new Error(" "))
+           }else {
+             callback()
+           }
         } else {
           callback()
         }

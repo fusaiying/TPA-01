@@ -90,11 +90,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             insured.id_no
         FROM
             claim_case_insured insured
-            LEFT JOIN claim_case_investigation inv ON insured.rpt_no = inv.rpt_no
+            LEFT JOIN claim_case_investigation inv ON insured.rpt_no = inv.rpt_no and inv.is_history='N'
             AND inv.STATUS = 'Y'
             INNER JOIN claim_case_accept accept ON accept.rpt_no = inv.rpt_no
             AND accept.STATUS = 'Y'
-        where rpt_no = #{rptNo} and status = 'Y'
+        where insured.rpt_no = #{rptNo} and insured.status = 'Y'
     </select>
 
     <select id="selectClaimCaseInvestigationByNew" parameterType="String" resultMap="ClaimCaseInvestigationResult">

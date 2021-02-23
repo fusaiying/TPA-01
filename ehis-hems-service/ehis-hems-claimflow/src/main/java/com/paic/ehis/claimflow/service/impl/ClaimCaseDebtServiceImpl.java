@@ -66,13 +66,18 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
     @Override
     public int insertClaimCaseDebt(ClaimCaseDebt claimCaseDebt)
     {
-        /*BigDecimal bigDecimal = new BigDecimal(0);
-        if (reviewCompletedDTO.getDebtAmount().compareTo(bigDecimal) > -1){}*/
-        claimCaseDebt.setStatus("Y");
-        claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
-        claimCaseDebt.setCreateTime(DateUtils.getNowDate());
-        claimCaseDebt.setCreateTime(DateUtils.getNowDate());
-        return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+        BigDecimal bigDecimal = new BigDecimal(0);
+        if (claimCaseDebt.getDebtAmount().compareTo(bigDecimal) > 0){
+            claimCaseDebt.setStatus("Y");
+            claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
+            claimCaseDebt.setCreateTime(DateUtils.getNowDate());
+            claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+            return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+        }else {
+            return 1;
+        }
+
     }
 
     /**

@@ -8,6 +8,7 @@ import com.paic.ehis.base.domain.BaseContacts;
 import com.paic.ehis.base.domain.vo.BaseContactsVo;
 import com.paic.ehis.base.mapper.BaseContactsMapper;
 import com.paic.ehis.base.service.IBaseContactsService;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -15,6 +16,8 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,36 +75,66 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
         int count = 0;
         int i = 0;
         //List<BaseContacts> baseContactsinfos = baseContactsMapper.selectBaseContactsByCode(baseContactsVo.get(0).getSupplierCode());
-        if("01".equals(baseContactsVo.getOrgFlag())){
-            baseContactsMapper.updateBaseContactsByCode(baseContactsVo.getProviderCode());
-        }else if("02".equals(baseContactsVo.getOrgFlag())){
-            baseContactsMapper.updateBaseContactsByCodeNew(baseContactsVo.getProviderCode());
-        }
         if(!baseContactsVo.getContacts().isEmpty()){
-            for(BaseContacts baseContact :baseContactsVo.getContacts()){
-                baseContact.setCreateTime(DateUtils.getNowDate());
-                baseContact.setUpdateTime(DateUtils.getNowDate());
-                baseContact.setCreateBy(SecurityUtils.getUsername());
-                baseContact.setUpdateBy(SecurityUtils.getUsername());
-                baseContact.setSupplierCode(baseContactsVo.getProviderCode());
-                if("02".equals(baseContact.getPlaceType())){
-                    baseContact.setRole("PA"+PubFun.createMySqlMaxNoUseCache("accountNoSer",10,8));
-                    baseContact.setPassword(ToPinyin(baseContact.getName())+"123456");
-                }
-                baseContact.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
-                baseContact.setProviderCode(baseContactsVo.getProviderCode());
-                baseContact.setUpdateFlag("0");
-                baseContact.setStatus("Y");
-                if("01".equals(baseContactsVo.getOrgFlag())){
-                    i = baseContactsMapper.insertBaseContacts(baseContact);
-                }else if("02".equals(baseContactsVo.getOrgFlag())){
-                    i = baseContactsMapper.insertBaseContactsNew(baseContact);
+            for(BaseContacts baseContact :baseContactsVo.getContacts()) {
+                if (baseContact.getSerialNo() != null && baseContact.getSerialNo() != "") {
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    if ("02".equals(baseContact.getPlaceType())) {
+                        baseContact.setPassword(ToPinyin(baseContact.getName()) + "123456");
+                    }
+                    baseContact.setProviderCode(baseContactsVo.getProviderCode());
+                    if ("01".equals(baseContactsVo.getOrgFlag())) {
+                        i = baseContactsMapper.updateBaseContacts(baseContact);
+                    } else if ("02".equals(baseContactsVo.getOrgFlag())) {
+                        i = baseContactsMapper.updateBaseContactsNew(baseContact);
+                    }
+                } else {
+                    baseContact.setCreateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setCreateBy(SecurityUtils.getUsername());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    if ("02".equals(baseContact.getPlaceType())) {
+                        baseContact.setPassword(ToPinyin(baseContact.getName()) + "123456");
+                    }
+                    baseContact.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer", 12, 12));
+                    baseContact.setProviderCode(baseContactsVo.getProviderCode());
+                    baseContact.setUpdateFlag("0");
+                    baseContact.setStatus("Y");
+                    if ("01".equals(baseContactsVo.getOrgFlag())) {
+                        i = baseContactsMapper.insertBaseContacts(baseContact);
+                    } else if ("02".equals(baseContactsVo.getOrgFlag())) {
+                        i = baseContactsMapper.insertBaseContactsNew(baseContact);
+                    }
+
                 }
                 count += i;
             }
         }
         return count;
     }
+
+    @Override
+    public int deleteBaseContacts(BaseContacts baseContacts)
+    {
+        int i=0;
+        if ("01".equals(baseContacts.getOrgFlag())) {
+            i = baseContactsMapper.deleteBaseContactsById(baseContacts.getSerialNo());
+        } else if ("02".equals(baseContacts.getOrgFlag())) {
+            i = baseContactsMapper.deleteBaseContactsByIdNew(baseContacts.getSerialNo());
+        }
+        return i;
+    }
+
+
+    @Override
+    public int deleteBaseContact(BaseContacts baseContacts)
+    {
+        int  i = baseContactsMapper.deleteBaseContactsByIdNew(baseContacts.getSerialNo());
+        return i;
+    }
+
+
 
     @Override
     public int addBaseContacts(List<BaseContacts> baseContactsList) {
@@ -126,7 +159,7 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
         }
         return count;*/
         int count = 0;
-        if (!baseContactsList.isEmpty()) {
+        /*if (!baseContactsList.isEmpty()) {
             baseContactsMapper.updateBaseContactsStatus(baseContactsList.get(0).getSupplierCode());
             for (BaseContacts baseContacts : baseContactsList) {
                 if ("01".equals(baseContacts.getPlaceType())){
@@ -149,6 +182,33 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
                 baseContacts.setStatus("Y");
                 baseContacts.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
                 int i = baseContactsMapper.insertBaseContactsNew(baseContacts);
+                count += i;
+            }
+        }*/
+        int i =0;
+        if (!baseContactsList.isEmpty()) {
+            for(BaseContacts baseContact :baseContactsList) {
+                if (baseContact.getSerialNo() != null && baseContact.getSerialNo() != "") {
+                    if ("01".equals(baseContact.getPlaceType())){
+                        String name=baseContact.getName();
+                        baseContact.setPassword(PinYinUtils.toPinYin(name)+"123456");
+                    }
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    i = baseContactsMapper.updateBaseContactsNew(baseContact);
+                }else{
+                    if ("01".equals(baseContact.getPlaceType())){
+                        String name=baseContact.getName();
+                        baseContact.setPassword(PinYinUtils.toPinYin(name)+"123456");
+                    }
+                    baseContact.setCreateTime(DateUtils.getNowDate());
+                    baseContact.setCreateBy(SecurityUtils.getUsername());
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    baseContact.setStatus("Y");
+                    baseContact.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
+                    i = baseContactsMapper.insertBaseContactsNew(baseContact);
+                }
                 count += i;
             }
         }

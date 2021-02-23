@@ -365,7 +365,7 @@
           idNo: {required: true, message: '证件号码不能为空!', trigger: 'blur'},
           sex: {required: true, message: '性别不能为空!', trigger: 'blur'},
           birthday: {required: true, message: '出生日期不能为空!', trigger: 'blur'},
-          dateRange: {required: true,validator: checkDateRange,  trigger: ['blur','change']},
+         // dateRange: {required: true,validator: checkDateRange,  trigger: ['blur','change']},
 
           email: {validator: validateEmail, trigger: 'blur'},
           phone: {validator: checkValid, trigger: 'blur'},

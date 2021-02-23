@@ -184,6 +184,7 @@
       initForeignList(this.queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.tableData = res.rows
+          this.totalCount = res.total
         }
       })
       getHospitalInfo({}).then(res => {

@@ -114,10 +114,10 @@ public interface IClaimCaseService
     /**
      * 受理确认按钮功能
      * 修改案件信息
-     * @param claimCase
+     * @param claimCaseShuntClass
      * @return
      */
-    public int updateCaseAndRecordInfoSuspend(ClaimCase claimCase);
+    public ClaimCaseShuntClass updateCaseAndRecordInfoSuspend( ClaimCaseShuntClass claimCaseShuntClass);
 
     /**
      * 撤件弹框确认按钮
@@ -210,7 +210,7 @@ public interface IClaimCaseService
      * @param caseInvestigation 案件信息
      * @return 结果
      */
-    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation);
+    public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation);
 
     /**
      * 提调

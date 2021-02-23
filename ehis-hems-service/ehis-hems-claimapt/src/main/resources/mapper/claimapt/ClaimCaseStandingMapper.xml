@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimapt.mapper.ClaimCaseStandingMapper">
-    
+
     <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
@@ -21,6 +21,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="receivedate"    column="receive_date"    />
         <result property="sendby"    column="send_by"    />
         <result property="policyNo"    column="policy_no"    />
+        <result property="standingId"    column="standing_id"    />
+        <result property="batchno"    column="batch_no"    />
+        <result property="idType"    column="id_type"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
@@ -38,13 +41,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="organcode"    column="organ_code"    />
     </resultMap>
 
+<!--    <resultMap type="com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo" id="ClaimCaseStandingResultTest">-->
+<!--        <result property="rptno"    column="rpt_no"    />-->
+<!--        <result property="idno"    column="id_no"    />-->
+<!--        <result property="name"    column="name"    />-->
+<!--        <result property="claimmaterials"    column="claim_materials"    />-->
+<!--        <result property="remark"    column="remark"    />-->
+<!--        <result property="otherinfo"    column="other_info"    />-->
+<!--        <result property="status"    column="status"    />-->
+<!--        <result property="createBy"    column="create_by"    />-->
+<!--        <result property="createTime"    column="create_time"    />-->
+<!--        <result property="updateBy"    column="update_by"    />-->
+<!--        <result property="updateTime"    column="update_time"    />-->
+<!--        <result property="standingId"    column="standing_id"    />-->
+<!--        <result property="batchno"    column="batch_no"    />-->
+<!--        <result property="idType"    column="id_type"    />-->
+<!--    </resultMap>-->
+
     <sql id="selectClaimCaseStandingVo">
-        select rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
+        select standing_id,batch_no,id_type,rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
-        <where>  
+        <where>
             <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="claimmaterials != null  and claimmaterials != ''"> and claim_materials = #{claimmaterials}</if>
@@ -93,15 +113,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="receiveStartDate != null   and receiveEndDate != null ">
             and(receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
     </select>
-    
+
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status="Y"
     </select>
-        
+
     <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding">
         insert into claim_case_standing
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">batch_no,</if>
+            <if test="idType != null">id_type,</if>
             <if test="rptno != null">rpt_no,</if>
             <if test="idno != null and idno != ''">id_no,</if>
             <if test="name != null and name != ''">name,</if>
@@ -115,6 +137,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">#{batchno},</if>
+            <if test="idType != null and idno != ''">#{idType},</if>
             <if test="rptno != null">#{rptno},</if>
             <if test="idno != null and idno != ''">#{idno},</if>
             <if test="name != null and name != ''">#{name},</if>
@@ -132,13 +156,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateClaimCaseStanding" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding">
         update claim_case_standing
         <trim prefix="SET" suffixOverrides=",">
+            <if test="idType != null and idType != ''">id_type = #{idType},</if>
+            <if test="batchno != null and batchno != ''">batch_no = #{batchno},</if>
             <if test="idno != null and idno != ''">id_no = #{idno},</if>
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="claimmaterials != null and claimmaterials != ''">claim_materials = #{claimmaterials},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
         </trim>
-        where rpt_no=#{idno} and status='Y'
+        where standing_id=#{standingId} and status='Y'
     </update>
 
     <update id="updateClaimCaseStandingVo1" parameterType="com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo1">
@@ -152,14 +178,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
     </update>
 
-
-
     <delete id="deleteClaimCaseStandingById" parameterType="String">
         delete from claim_case_standing where rpt_no = #{rptno}
     </delete>
 
     <delete id="deleteClaimCaseStandingByIds" parameterType="String">
-        delete from claim_case_standing where rpt_no in 
+        delete from claim_case_standing where rpt_no in
         <foreach item="rptno" collection="array" open="(" separator="," close=")">
             #{rptno}
         </foreach>
@@ -168,5 +192,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseStandingByIdOne" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status='Y'
+    </select>
+
+    <select id="selectClaimCaseStandingByBatchno" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        where batch_no = #{batchno} and status='Y'  ORDER BY standing_id limit #{casenum}
     </select>
 </mapper>

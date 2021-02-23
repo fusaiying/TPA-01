@@ -489,6 +489,11 @@ public class BaseProviderInfoController extends BaseController {
         return  AjaxResult.success(baseProviderInfoService.selectBaseProviderInfos(baseProviderInfo));
     }
 
+    @PostMapping("/allLBackist")
+    public AjaxResult allLBackist(@RequestBody BaseProviderInfo baseProviderInfo)
+    {
+        return  AjaxResult.success(baseProviderInfoService.selectBaseProviderBackInfos(baseProviderInfo));
+    }
 
     //@PreAuthorize("@ss.hasPermi('system:risklog:list')")
     @GetMapping("/selectsettleInfo")

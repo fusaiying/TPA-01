@@ -34,7 +34,9 @@ public class ClaimCaseDTO extends BaseEntity {
 
     /** 操作时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date updateTime;
+    private Date updateStartTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date updateEndTime;
 
     /** 是否历史 */
     private String isHistory;

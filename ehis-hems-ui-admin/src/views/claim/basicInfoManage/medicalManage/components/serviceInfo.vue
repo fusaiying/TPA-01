@@ -535,6 +535,7 @@
 </template>
 <script>
 import {
+
   getserviceInfo,
   addserviceInfo,
   updateserviceInfo,
@@ -544,7 +545,7 @@ import {
   getNewtworktypeRisklog
 } from "@/api/baseInfo/medicalManage";
 import {formatDate} from "@/utils";
-import {getSupplierContractList} from "@/api/contractManage/contractManagement";
+import {getSupplierContractBakDetail} from "@/api/contractManage/contractManagement";
 
 
 export default {
@@ -1306,7 +1307,8 @@ export default {
           query: {
             status: 'add',
             flag: 'add',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })
@@ -1317,7 +1319,8 @@ export default {
           query: {
             status: 'add',
             flag: 'update',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })
@@ -1382,7 +1385,7 @@ export default {
       let flag
       await new Promise((resolve, reject) => {
         //查询数据
-        getSupplierContractList(query).then(response => {
+        getSupplierContractBakDetail(query).then(response => {
           this.pendingTableData = response.rows;
           resolve(this.pendingTableData)
         })

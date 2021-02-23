@@ -5,6 +5,7 @@ package com.paic.ehis.claimflow.mapper;
 import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
+import com.paic.ehis.claimflow.domain.vo.CaseInvestigationVO;
 
 import java.util.List;
 
@@ -22,9 +23,10 @@ public interface ClaimCaseInvestigationMapper
      * @param invNo 案件调查任务ID
      * @return 案件调查任务
      */
-    public ClaimCaseInvestigation selectClaimCaseInvestigationById(Long invNo);
+    public ClaimCaseInvestigation selectClaimCaseInvestigationById(String invNo);
     public ClaimCaseInvestigation selectClaimCaseInvestigationByNew(String rptNo);
     public ClaimCaseInvestigation selectClaimCaseInvestigationByIdOne(String rptNo);
+    public CaseInvestigationVO selectClaimCaseInvestigationByRptNo(String rptNo);
 
 
     /**

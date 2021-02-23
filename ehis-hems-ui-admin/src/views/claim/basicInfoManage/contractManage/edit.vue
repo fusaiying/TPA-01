@@ -156,7 +156,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="机构类别：" prop="providerType">
-              <el-select v-model="providerForm.providerType" class="item-width" size="mini" placeholder="请选择" @change="proTypeChange" >
+              <el-select :disabled="onlyAddPro" v-model="providerForm.providerType" class="item-width" size="mini" placeholder="请选择" @change="proTypeChange" >
                 <el-option label="医院" value="01" />
                 <el-option label="其他" value="02" />
               </el-select>
@@ -165,7 +165,7 @@
 
           <el-col :span="8">
             <el-form-item label="服务机构名称：" prop="providerCode">
-              <el-select filterable  :disabled="!hospPro" v-model="providerForm.providerCode" class="item-width" placeholder="请选择" @change="typeServerChange">
+              <el-select  filterable  :disabled="onlyAddPro" v-model="providerForm.providerCode" class="item-width" placeholder="请选择" @change="typeServerChange">
                 <el-option v-for="option in providerInfoSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
             </el-form-item>
@@ -743,6 +743,7 @@
     addContractServer,
     getAllBaseSupplierInfo,
     getAllBaseProviderInfo,
+    getAllBackBaseProviderInfo,
     getAllBaseServiceInfo,
     getSupplierContractBakDetail,
     getSupplierContractBakList
@@ -1463,6 +1464,8 @@
           this.formTab = false;
           this.providerForm.providerCode = this.$route.query.providerCode;
           // this.providerForm.contractNo = this.$route.query.contractNo;
+          // this.$route.query.status
+          this.providerForm.providerType =  this.$route.query.orgflag;
 
           //如果是更新反显数据
           if(this.$route.query.flag == 'update') {
@@ -1606,6 +1609,39 @@
             if(bean.orgFlag == '02') { //其他
               this.providerCode2.push(obj);
             }
+          }
+
+          if(this.onlyAddPro) {
+            const query ={
+              pageNum:1,
+              pageSize:10000,
+              xadef:'select',
+              flag:'',
+              bussinessStatus:'01',
+              status:'Y',
+            };
+            getAllBackBaseProviderInfo(query).then(response => {
+              for(let i=0; i<response.data.length; i++) {
+                let bean = response.data[i];
+                let obj= new Object();
+                obj.dictLabel = bean.providerCode + " - " +bean.chname1;
+                obj.dictValue = bean.providerCode;
+                if(bean.orgFlag == '01') { // 医院
+                  this.providerCode1.push(obj);
+                }
+                if(bean.orgFlag == '02') { //其他
+                  this.providerCode2.push(obj);
+                }
+              }
+            }).catch(error => {
+              console.log(error);
+            })
+            if(this.$route.query.orgflag == '01') {
+              this.providerInfoSelects  = this.providerCode1;
+            } else {
+              this.providerInfoSelects  = this.providerCode2;
+            }
+            this.providerForm.providerCode = this.$route.query.providerCode;
           }
         }).catch(error => {
           console.log(error);

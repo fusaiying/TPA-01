@@ -308,11 +308,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
         baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
         baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
-        BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+        /*BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
         if(baseProviderInfoNew != null){
             baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
-        }
-
+        }*/
         baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
         baseProviderInfo.setStatus("Y");
         baseProviderInfo.setUpdateFlag("0");
@@ -382,10 +381,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         String province = baseProviderInfoMapper.selectName1(baseProviderInfo.getProviderCode());
         if("01".equals(baseProviderInfo.getOrgFlag())){
             baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
-            BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+            /*BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
             if(baseProviderInfoNew != null){
                 baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
-            }
+            }*/
             baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
             baseProviderInfo.setStatus("Y");
                 //查询省的中文名称
@@ -522,6 +521,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     @Override
     public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo) {
         return baseProviderInfoMapper.selectHospitalInfo(baseProviderInfo);
+    }
+    @Override
+    public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo) {
+        return baseProviderInfoMapper.selectBaseProviderBackInfos(baseProviderInfo);
     }
 
 

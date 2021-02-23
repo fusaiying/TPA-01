@@ -89,6 +89,15 @@ export function getAllBaseProviderInfo(query) {
   })
 }
 
+// 所有服务机构列表
+export function getAllBackBaseProviderInfo(query) {
+  return request({
+    url:  '/provider/org/allLBackist',
+    method: 'post',
+    data:query
+  })
+}
+
 
 // 所有服务项目列表
 export function getAllBaseServiceInfo(query) {

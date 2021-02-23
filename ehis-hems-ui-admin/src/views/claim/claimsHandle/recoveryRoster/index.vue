@@ -51,7 +51,7 @@
       <el-card  style="margin-top: 10px;">
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-            <span>追讨白名单列（{{totalNum}}）</span>
+            <span>追讨白名单列表（{{totalNum}}）</span>
             <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini" @click="exportData">清单导出</el-button>
             <el-button  style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="addRecovery">新增</el-button>
           </div>
@@ -112,7 +112,7 @@
               <span style="float: right;">
                 <el-button v-if="addFlag" type="primary" size="mini" @click="searchFun">查询</el-button>
                 <el-button type="primary" size="mini" @click="saveDataFun">保存</el-button>
-                <el-button size="mini" @click="changeDialogVisable">返回</el-button>
+                <el-button size="mini" @click="handleClose">返回</el-button>
               </span>
             </div>
           <el-form ref="recoveryForm" :model="recoveryForm" style="border:0;" label-width="110px" label-position="right" size="mini" :rules="rules" >
@@ -438,12 +438,13 @@
         addRecovery() {
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = '';
+          this.recoveryForm.level  = [];
           this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = '';
+          this.recoveryForm.recMessageFlag  = [];
           this.recoveryForm.insuredNo =  '';
           this.addFlag = true;
           this.dialogVisible = true;
+          this.$refs['recoveryForm'].clearValidate();
         },
         saveDataFun(){
           if(this.recoveryForm.insuredNo == '') {
@@ -497,11 +498,18 @@
         },
 
         handleClose() {
+          this.recoveryInfo = '';
+          this.recoveryForm.debtWhitelistId  = '';
+          this.recoveryForm.level  = [];
+          this.recoveryForm.debtAmountUp  = '';
+          this.recoveryForm.recMessageFlag  = [];
+          this.recoveryForm.insuredNo =  '';
+          this.$refs['recoveryForm'].clearValidate();
           this.dialogVisible = false;
         },
-        closeDialog(){
-          this.dialogVisible = false;
-        },
+        // closeDialog(){
+        //   this.dialogVisible = false;
+        // },
         getAge (strBirthday) {
           let returnAge;
           let strBirthdayArr=strBirthday.split("-");

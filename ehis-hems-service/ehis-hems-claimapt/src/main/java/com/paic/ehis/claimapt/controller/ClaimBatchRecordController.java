@@ -3,6 +3,7 @@ package com.paic.ehis.claimapt.controller;
 
 import com.paic.ehis.claimapt.domain.ClaimBatch;
 import com.paic.ehis.claimapt.domain.ClaimBatchRecord;
+import com.paic.ehis.claimapt.domain.ClaimCaseStanding;
 import com.paic.ehis.claimapt.domain.StandingAndBatck;
 import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
 import com.paic.ehis.claimapt.service.IClaimBatchRecordService;
@@ -143,17 +144,24 @@ public class ClaimBatchRecordController extends BaseController
             //第二次点击保存，改值理赔批次信息，添加报案台账信息
             List<ClaimCaseStandingVo> standingData = standingAndBatck1.getStandingData();
 
-            ArrayList<ClaimCaseStandingVo> claimCaseStandingVos = new ArrayList<>();
+//            ArrayList<ClaimCaseStandingVo> claimCaseStandingVos = new ArrayList<>();
             if(standingData!=null || standingData.size()!=0) {//null == list || list.size() ==0
                 for (ClaimCaseStandingVo claimCaseStandingVo : standingData) {
-                    if (claimCaseStandingVo.getRptno() == null || claimCaseStandingVo.getRptno() == "") {
-                        claimCaseStandingVos.add(iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo));
+//                    claimCaseStandingVo.setBatchno(batchno);
+                    if (claimCaseStandingVo.getStandingId() == null || claimCaseStandingVo.getStandingId() == "") {
+//                        claimCaseStandingVos.add(iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo));
+                        iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo);
                     } else {
-                        claimCaseStandingVos.add(iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo));
+//                        claimCaseStandingVos.add(iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo));
+                        iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo);
                     }
-                    standingAndBatck1.setStandingData(claimCaseStandingVos);
+//                    standingAndBatck1.setStandingData(claimCaseStandingVos);
                 }
+                List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+                standingAndBatck1.setStandingData(claimCaseStandingVos1);
             }
+
+            //判断传过来得台账信息数目与案件数目是否一致，》=则无操作，《=则先查询排序，然后将最后得台账信息置为无效
             return AjaxResult.success(standingAndBatck1);
         }
     }
@@ -181,19 +189,29 @@ public class ClaimBatchRecordController extends BaseController
 
         List<ClaimCaseStandingVo> standingData = standingAndBatck1.getStandingData();
 
-        ArrayList<ClaimCaseStandingVo> claimCaseStandingVos = new ArrayList<>();
+//        ArrayList<ClaimCaseStandingVo> claimCaseStandingVos = new ArrayList<>();
 
         for (ClaimCaseStandingVo claimCaseStandingVo:standingData){
-            if (claimCaseStandingVo.getRptno()==null || claimCaseStandingVo.getRptno() == ""){
-                claimCaseStandingVos.add(iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo));
-            }else {
-                claimCaseStandingVos.add(iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo));
+            if (claimCaseStandingVo.getStandingId() == null || claimCaseStandingVo.getStandingId() == "") {
+//                        claimCaseStandingVos.add(iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo));
+                iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo);
+            } else {
+//                        claimCaseStandingVos.add(iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo));
+                iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo);
             }
-            standingAndBatck.setStandingData(claimCaseStandingVos);
+            //standingAndBatck.setStandingData(claimCaseStandingVos);
 
             //点击提交时，应该生成相对应得案件批次信息表-案件信息表和案件信息轨迹表一一对应
             iClaimCaseRecordService.insertClaimCaseRecordAndBatchRecord(claimCaseStandingVo);
         }
+
+//        standingData.size();//传过来得台账
+//        standingAndBatck.getClaimBatch().getCasenum();//案件数量
+
+        //得改参数累接受得
+//        List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+//        standingAndBatck1.setStandingData(claimCaseStandingVos1);
+
         return AjaxResult.success(standingAndBatck);
     }
 

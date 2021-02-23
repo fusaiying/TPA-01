@@ -179,15 +179,15 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="分配比例：" prop="payeeRatio">
-                <el-input v-model="baseForm.payeeRatio" class="item-width" clearable size="mini"
+                <el-input v-model="baseForm.payeeRatio"  style="width: 185px" clearable size="mini"
                           placeholder="请输入"/>
+                <span>%</span>
               </el-form-item>
+
             </el-col>
-            <el-col :span="2">
-              <span>%</span>
-            </el-col>
+
             <el-col :span="8">
               <el-form-item label="职业：" prop="payeeOccupation">
                 <el-select v-model="baseForm.payeeOccupation" filterable class="item-width"

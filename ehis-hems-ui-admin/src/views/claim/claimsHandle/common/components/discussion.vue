@@ -202,7 +202,7 @@
             <el-col :span="8">
               <el-form-item label="调查机构：" prop="invOrganCode">
                 <el-select v-model="surveyForm.invOrganCode" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="item in inquiryOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
+                  <el-option v-for="item in inquiryOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -210,7 +210,7 @@
             <el-col :span="8">
               <el-form-item label="提调机构：" prop="organCode">
                 <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
+                  <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -218,6 +218,11 @@
             <el-col :span="8">
               <el-form-item label="保单号：" prop="policyNo">
                 <el-select v-model="surveyForm.policyNo" class="item-width" size="mini" placeholder="请选择">
+                  <el-option v-for="dict in policyNos"
+                             :key="dict.policyNo"
+                             :label="dict.policyNo"
+                             :value="dict.policyNo"
+                  ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -272,11 +277,19 @@
         type: Boolean,
         default: false
       },
+      policySelectData: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      },
       fixInfo:Object,
-      node:String
+      node:String,
+
     },
     watch: {
-      value: function (newValue) {
+      policySelectData: function (newValue) {
+        this.policyNos = newValue;
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
@@ -285,6 +298,8 @@
         if(this.rptNo != '') {
           this.getCalInfo()
         }
+      },
+      value: function (newValue) {
       },
     },
     data() {
@@ -300,6 +315,7 @@
         }
       };
       return {
+        policyNos :[],
         conSave:false,
         rptNo:'',
         batchNo:'',
@@ -534,7 +550,7 @@
           return false;
         }
 
-        if(this.conclusionInfo.payConclusion == ''){
+        if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null){
           this.$message.info('请先保存再进行审核！')
           return false;
         }
@@ -715,22 +731,22 @@
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
-            if(this.conclusionInfo.payConclusion == '') {
+            if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null) {
               this.conSave = true;
             }
-            if(this.conclusionInfo.billCurrency != '') {
+            if(this.conclusionInfo.billCurrency != '' && this.conclusionInfo.billCurrency != null) {
               this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             }
-            if(this.conclusionInfo.payConclusion != '') {
+            if(this.conclusionInfo.payConclusion != '' && this.conclusionInfo.payConclusion != null) {
               this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
             }
-            if(this.conclusionInfo.refusedReason != '') {
+            if(this.conclusionInfo.refusedReason != '' && this.conclusionInfo.refusedReason != null) {
               this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因
             }
-            if(this.conclusionInfo.remark != '') {
+            if(this.conclusionInfo.remark != '' && this.conclusionInfo.remark != null) {
               this.conclusionForm.remark = this.conclusionInfo.remark; // 客户备注
             }
-            if(this.conclusionInfo.claimCheck != '') {
+            if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
             }
             // console.log("res.data")

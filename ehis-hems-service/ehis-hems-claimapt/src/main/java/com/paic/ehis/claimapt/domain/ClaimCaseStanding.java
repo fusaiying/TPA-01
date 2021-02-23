@@ -26,6 +26,19 @@ public class ClaimCaseStanding extends BaseEntity {
     private Date dNow;
 
     /**
+     * 证件类型
+     */
+    private String idType;
+
+    /**批次号*/
+    private String batchno;
+
+    /**
+     * 台账ID
+     */
+    private String standingId;
+
+    /**
      * 报案号
      */
     private String rptno;
@@ -94,6 +107,14 @@ public class ClaimCaseStanding extends BaseEntity {
     /** 出单公司名称 */
     @Excel(name = "出单公司名称")
     private String companyName;
+
+    public String getBatchno() {
+        return batchno;
+    }
+
+    public void setBatchno(String batchno) {
+        this.batchno = batchno;
+    }
 
     public Date getdBefore() {
         return dBefore;
@@ -207,6 +228,22 @@ public class ClaimCaseStanding extends BaseEntity {
         this.status = status;
     }
 
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
+    public String getStandingId() {
+        return standingId;
+    }
+
+    public void setStandingId(String standingId) {
+        this.standingId = standingId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -221,6 +258,9 @@ public class ClaimCaseStanding extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("idType", getIdType())
+                .append("standingId", getStandingId())
+                .append("batchno", getBatchno())
                 .toString();
     }
 }

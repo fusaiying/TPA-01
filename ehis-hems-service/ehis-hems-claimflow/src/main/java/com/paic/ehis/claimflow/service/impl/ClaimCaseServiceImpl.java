@@ -124,11 +124,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ProcessingCaseVo> selectProcessingClaimCaseList(ClaimCaseDTO claimCaseDTO) {
-        if (StringUtils.isEmpty(claimCaseDTO.getBatchNo()) && StringUtils.isEmpty(claimCaseDTO.getName()) && StringUtils.isEmpty(claimCaseDTO.getRptNo())) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
-            claimCaseDTO.setUpdateTime(DateUtils.parseDate(calendar.getTime()));
-        }
         claimCaseDTO.setCaseStatus("05");
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setIsHistory("N");
@@ -166,6 +161,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ClaimCase> selectProcessedClaimCaseList(ClaimCaseDTO claimCaseDTO) {
+        if (StringUtils.isNotEmpty(claimCaseDTO.getRptNo()) &&
+                StringUtils.isNotEmpty(claimCaseDTO.getBatchNo()) &&
+                StringUtils.isNotEmpty(claimCaseDTO.getName())
+        ) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
+            claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
+            claimCaseDTO.setUpdateEndTime(DateUtils.getNowDate());
+        }
         claimCaseDTO.setOperation("05");
         claimCaseDTO.setIsHistory("Y");
         claimCaseDTO.setCaseStatus("'05','30'");
@@ -323,12 +327,96 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * 受理确认按钮功能
      * 修改案件信息
      *
-     * @param claimCase
+     * @param claimCaseShuntClass
      * @return
      */
     @Override
-    public int  updateCaseAndRecordInfoSuspend(ClaimCase claimCase) {
+    public ClaimCaseShuntClass updateCaseAndRecordInfoSuspend(ClaimCaseShuntClass claimCaseShuntClass) {
 
+        ClaimCase claimCase = claimCaseShuntClass.getClaimCase();
+        String caseProp = claimCase.getCaseProp();
+        if (caseProp == null) {
+            //查询TPA保单
+            //policy_info
+            List<PolicyInfo> listA = policyInfoMapper.selectPolicyInfoByInsuredNo(claimCaseShuntClass);
+            //查询核心健康险保单
+            ArrayList<Object> listB = new ArrayList<>();
+            if (listA.size() != 0) {//若存在TPA保单
+                claimCaseShuntClass.getClaimCase().setCaseProp("01");
+                claimCaseShuntClass.setCaseStypeFind("01");
+
+                //走TPA流程
+
+                //判断是否为审核岗退回受理
+                // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
+                ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
+                claimCaseRecord.setRptNo(claimCase.getRptNo());
+                claimCaseRecord.setStatus("Y");
+                //claimCaseRecord.setHistoryFlag("N");
+                claimCaseRecord.setOperation("06");
+                List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
+                ClaimCaseRecord claimCaseRecord1 = new ClaimCaseRecord();
+                if (null == claimCaseRecords || claimCaseRecords.size() == 0) {
+                    //为空的情况
+                    //第一次处理-案件状态05->06
+                    claimCase.setCaseStatus("06");//案件信息-录入
+                    claimCaseRecord1.setOperation("06");//案件操作记录-录入
+
+                    //将原有的
+                } else {
+                    //不为空的情况
+                    //第二次处理-案件状态05->07
+                    claimCase.setCaseStatus("07");//案件信息-审核
+                    claimCaseRecord1.setOperation("07");//案件操作记录-审核
+                }
+                claimCase.setStatus("Y");
+                claimCase.setUpdateBy(SecurityUtils.getUsername());
+                claimCase.setUpdateTime(DateUtils.getNowDate());
+                claimCaseMapper.updateClaimCase(claimCase);//完成案件信息改变
+
+                //修改受理信息的材料齐全日期：
+                ClaimCaseAccept claimCaseAccept = new ClaimCaseAccept();
+                claimCaseAccept.setRptNo(claimCase.getRptNo());
+                claimCaseAccept.setMaterialCompleteDate(DateUtils.getNowDate());
+                claimCaseAcceptMapper.updateClaimCaseAccept(claimCaseAccept);
+
+                //完成案件操作记录表的记录
+                claimCaseRecord1.setRptNo(claimCase.getRptNo());
+//        claimCaseRecord1.setOperator(SecurityUtils.getUsername());
+                claimCaseRecord1.setHistoryFlag("N");
+                claimCaseRecord1.setStatus("Y");
+                claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
+                claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
+                claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
+
+                Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+                if (s != null) {
+                    ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
+//        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+                    claimCaseRecord2.setHistoryFlag("Y");
+                    claimCaseRecord2.setRecordId(s);
+                    claimCaseRecord2.setOperator(SecurityUtils.getUsername());
+                    claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
+
+                    claimCaseRecord1.setOrgRecordId(s);
+                }
+                claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
+            } else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-提示：此被保人只有健康险保单，确认后将提交至健康险
+                claimCaseShuntClass.getClaimCase().setCaseProp("02");
+                claimCaseShuntClass.setCaseStypeFind("02");
+            } else {//若都没有-提示：请撤件
+                claimCaseShuntClass.getClaimCase().setCaseProp("03");
+                claimCaseShuntClass.setCaseStypeFind("03");
+            }
+        } else if (caseProp == "02") {
+//转去核心健康险
+        }
+
+        return claimCaseShuntClass;
+
+        /*
+        ClaimCase claimCase = claimCaseShuntClass.getClaimCase();
         //判断是否为审核岗退回受理
         // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -384,6 +472,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCaseRecord1.setOrgRecordId(s);
         }
         return claimCaseRecordMapper.insertClaimCaseRecordSecond(claimCaseRecord1);
+     */
     }
 
     /**
@@ -552,7 +641,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                 //提交用户
                 ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                if (claimCaseRecord2!=null){
+                if (claimCaseRecord2 != null) {
                     conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                 }
 
@@ -661,7 +750,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                             //提交用户
                             ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                            if (claimCaseRecord2!=null){
+                            if (claimCaseRecord2 != null) {
                                 conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                             }
 
@@ -726,7 +815,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                     //提交用户
                     ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                    if (claimCaseRecord2!=null){
+                    if (claimCaseRecord2 != null) {
                         conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                     }
 
@@ -800,7 +889,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
                 //提交用户
                 ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                if (claimCaseRecord2!=null){
+                if (claimCaseRecord2 != null) {
                     conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                 }
 
@@ -955,16 +1044,22 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 结果
      */
     @Override
-    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-        caseInvestigation.setIsHistory("N");
+    public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+        stringBuilder.append("ZWQR").append(investigation);
+        caseInvestigation.setInvNo(stringBuilder.toString());
         caseInvestigation.setInvDate(DateUtils.getNowDate());
-        caseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
+        caseInvestigation.setIsHistory("N");
         caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
         caseInvestigation.setCreateBy(SecurityUtils.getUsername());
         caseInvestigation.setCreateTime(DateUtils.getNowDate());
         caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
         caseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        return claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        return i==1? caseInvestigation:null;
     }
 
     /**

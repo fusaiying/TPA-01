@@ -112,7 +112,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
@@ -215,6 +215,7 @@
           claimCaseInsured: '',
           policyInfominData: []
         },
+        policySelectData:[],
         sonRegisterData: {},
         sonPayeeInfoData: [],
         sonBillingInfoData: [],
@@ -329,7 +330,8 @@
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {
-              this.sonInsuredData.policyInfominData = res.data.policyInfominData
+              this.sonInsuredData.policyInfominData = res.data.policyInfominData;
+              this.policySelectData = res.data.policyInfominData;
             }
           }
         })
@@ -533,26 +535,60 @@
         if(saveflag){
           if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
             let data = {
-              rptNo: this.querys.rptNo
+              claimCase:{rptNo: this.querys.rptNo},
+              insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+              name: this.$refs.insuredForm.baseForm.name//被保人姓名
             }
             editCaseAndRecordInfoSuspend(data).then(res => {
               if (res != null && res.code === 200) {
-                this.$message({
-                  message: '提交成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
+                if (res.data.caseStypeFind==='01'){
+                  this.$message({
+                    message: '提交成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }else if (res.data.caseStypeFind==='02'){
+                  this.$confirm(`此被保人只有健康险保单，确认后将提交至健康险?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                    let data = {
+                      claimCase:{rptNo: this.querys.rptNo},
+                      insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+                      name: this.$refs.insuredForm.baseForm.name,//被保人姓名
+                      caseStypeFind:'02'
+                    }
+                    editCaseAndRecordInfoSuspend(data).then(response => {
+                      if (res != null && response.code === 200) {
+                        this.$message({
+                          message: '提交成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        })
+                        this.$store.dispatch("tagsView/delView", this.$route);
+                        this.$router.go(-1)
+                      }
+                    })
+                  }).catch(() => {
+                    this.$message({
+                      type: 'info',
+                      message: '已取消！'
+                    })
+                  })
+                }else if (res.data.caseStypeFind==='03'){
+                  return this.$message.warning(
+                    "该被保人不存在保单信息，请撤件！"
+                  )
+                }
+
               }
             }).catch(res => {
-              this.$message({
-                message: '提交失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
+
             })
           } else {
             if (!(isInsuredSave || hasInsuredId)) {

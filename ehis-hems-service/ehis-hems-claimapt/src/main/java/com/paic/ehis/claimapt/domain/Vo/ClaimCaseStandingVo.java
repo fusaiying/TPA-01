@@ -12,30 +12,70 @@ public class ClaimCaseStandingVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    /** 批次号 */
+    /**
+     * 批次号
+     */
     private String batchno;
 
-    /** 报案号 */
+    /**
+     * 证件类型
+     */
+    private String idType;
+
+    /**
+     * 台账ID
+     */
+    private String standingId;
+
+    /**
+     * 报案号
+     */
     private String rptno;
 
-    /** 证件号码 */
+    /**
+     * 证件号码
+     */
     @Excel(name = "证件号码")
     private String idno;
 
-    /** 被保险人姓名 */
+    /**
+     * 被保险人姓名
+     */
     @Excel(name = "被保险人姓名")
     private String name;
 
-    /** 理赔材料 */
+    /**
+     * 理赔材料
+     */
     @Excel(name = "理赔材料")
     private List<String> claimmaterials;
 
-    /** 其他（案件去向） */
+    /**
+     * 其他（案件去向）
+     */
     @Excel(name = "其他", readConverterExp = "案件去向")
     private String otherinfo;
 
+    /**备注*/
+    private String remark;
+
     private String status;
 
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
+    public String getStandingId() {
+        return standingId;
+    }
+
+    public void setStandingId(String standingId) {
+        this.standingId = standingId;
+    }
 
     public String getStatus() {
         return status;
@@ -48,35 +88,51 @@ public class ClaimCaseStandingVo extends BaseEntity {
     public String getBatchno() {
         return batchno;
     }
+
     public void setBatchno(String batchno) {
         this.batchno = batchno;
     }
 
-    public void setRptno(String rptno)
-    {
+    public void setRptno(String rptno) {
         this.rptno = rptno;
     }
-    public String getRptno()
-    {
+
+    public String getRptno() {
         return rptno;
     }
 
-    public void setIdno(String idno)
-    {
+    public void setIdno(String idno) {
         this.idno = idno;
     }
-    public String getIdno()
-    {
+
+    public String getIdno() {
         return idno;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
-    public String getName()
-    {
+
+    public String getName() {
         return name;
+    }
+
+    public void setOtherinfo(String otherinfo) {
+        this.otherinfo = otherinfo;
+    }
+
+    public String getOtherinfo() {
+        return otherinfo;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public List<String> getClaimmaterials() {
@@ -85,15 +141,6 @@ public class ClaimCaseStandingVo extends BaseEntity {
 
     public void setClaimmaterials(List<String> claimmaterials) {
         this.claimmaterials = claimmaterials;
-    }
-
-    public void setOtherinfo(String otherinfo)
-    {
-        this.otherinfo = otherinfo;
-    }
-    public String getOtherinfo()
-    {
-        return otherinfo;
     }
 
     @Override
@@ -107,6 +154,9 @@ public class ClaimCaseStandingVo extends BaseEntity {
                 .append("claimmaterials", getClaimmaterials())
                 .append("remark", getRemark())
                 .append("otherinfo", getOtherinfo())
+                .append("idType", getIdType())
+                .append("standingId", getStandingId())
+                .append("remark", getRemark())
                 .toString();
     }
 }

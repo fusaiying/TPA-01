@@ -551,7 +551,7 @@
       const checkSsAdvancePayment = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
@@ -581,7 +581,7 @@
       const checkTpAdvancePayment = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
@@ -611,7 +611,7 @@
       const checkCopay = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
@@ -655,7 +655,7 @@
       const checkHosDiscountAmount = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
@@ -685,7 +685,7 @@
       const checkNums = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("请录入正数"));
           } else if (!regx.test(value)) {
             callback(new Error("请保留两位小数"));
@@ -717,16 +717,16 @@
         const index = rule.field.replace('costData.', '').replace('.billDetailAmount', '')
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
             let dataSum = 0
-            for (let i = 0; i <= index; i++) {
-              dataSum = dataSum + parseFloat(this.costForm.costData[i].billDetailAmount)
+            for (let i = 0; i < this.costForm.costData.length; i++) {
+              dataSum = dataSum + parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount))
             }
-            if (dataSum <= parseFloat(this.baseForm.billAmount)) {
+            if (dataSum == parseFloat(this.baseForm.billAmount)) {
               if (this.baseForm.isShareAp === '01') {
                 let paymentSum = 0
                 for (let i = 0; i < this.costForm.costData.length - 1; i++) {
@@ -772,7 +772,7 @@
       const checkBillAmount = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
-          if (value < 0) {
+          if (value <= 0) {
             callback(new Error("账单金额不为正数，请检查"));
           } else if (!regx.test(value)) {
             callback(new Error("账单金额最多保留两位小数，请检查"));
@@ -1087,6 +1087,7 @@
         editBill(row.billId).then(res => {
           if (res != null && res.code === 200) {
             this.isFormShow = true
+            this.isCostShow = false
             this.baseForm.billId = res.data.bill.billId
             this.baseForm.rptNo = res.data.bill.rptNo
             this.baseForm.hospitalCode = res.data.bill.hospitalCode
@@ -1208,7 +1209,6 @@
         return iDays;
       },
       addBill() {
-        this.$refs.baseForm.resetFields()
         this.baseForm = {
           rptNo: '',
           hospitalCode: undefined,
@@ -1353,7 +1353,7 @@
                   number = parseFloat(this.getZero(this.costForm.costData[i].billDetailAmount)) - parseFloat(this.getZero(this.costForm.costData[i].hosDiscountAmount)) - parseFloat(this.getZero(this.costForm.costData[i].selfAmount))
                     - parseFloat(this.getZero(this.costForm.costData[i].partSelfAmount)) - parseFloat(this.getZero(this.costForm.costData[i].unableAmount)) -
                     parseFloat(this.getZero(this.costForm.costData[i].advancePayment)) - parseFloat(this.getZero(this.costForm.costData[i].copay))
-                  if (number < 0) {
+                  if (number <= 0) {
                     return this.$message.warning(
                       "录入的金额有误,请检查！"
                     )
@@ -1361,12 +1361,12 @@
                   break
                 }
                 this.costForm.costData.forEach(item => {
-                  feeSum = feeSum + parseInt(item.billDetailAmount)
+                  feeSum = feeSum + parseFloat(item.billDetailAmount)
                 })
-                if (number >= 0 && feeSum !== parseInt(this.baseForm.billAmount)) {
+                if (number >= 0 && feeSum != parseFloat(this.baseForm.billAmount)) {
                   return this.$message.warning(
                     "录入的费用金额与账单金额不一致,请检查！")
-                } else if (number >= 0 && feeSum === parseInt(this.baseForm.billAmount)) {
+                } else if (number >= 0 && feeSum == parseFloat(this.baseForm.billAmount)) {
                   let data = {
                     bill: this.baseForm,
                     billDetail: this.costForm.costData

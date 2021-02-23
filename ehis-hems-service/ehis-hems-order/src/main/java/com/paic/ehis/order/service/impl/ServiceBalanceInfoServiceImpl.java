@@ -49,9 +49,6 @@ public class ServiceBalanceInfoServiceImpl implements IServiceBalanceInfoService
     @Autowired
     private ServiceBalanceInvoiceMapper serviceBalanceInvoiceMapper;
 
-    // 日期格式化 获取当前日期
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
     /**
      * 查询service_balance_info(服务结算基本信息)
      * 

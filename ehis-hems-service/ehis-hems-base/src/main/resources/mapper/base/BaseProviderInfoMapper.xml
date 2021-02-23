@@ -519,7 +519,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 FROM
 	base_provider_info
 WHERE
-	NOT EXISTS ( SELECT 1 FROM base_supplier_outlets so WHERE base_provider_info.provider_code = so.website_code and so.status='Y')
+	NOT EXISTS ( SELECT 1 FROM base_supplier_outlets so WHERE base_provider_info.provider_code = so.website_code and so.supplier_code = #{supplierCode} and  so.status='Y')
         <if test="chname1 != null  and chname1 != ''"> and chname1 = #{chname1}</if>
         <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
         <if test="province != null  and province != ''"> and province = #{province}</if>
@@ -959,6 +959,16 @@ WHERE
            <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
 
        </where>
+    </select>
+
+    <select id="selectBaseProviderBackInfos" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">
+        select serial_no, provider_code,inter_hosp,virtual_org,chname1,enname1,status,org_flag from base_provider_info_bak
+        <where>
+            <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''"> and bussiness_Status = #{bussinessStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="orgFlag != null  and orgFlag != ''"> and org_flag = #{orgFlag}</if>
+        </where>
     </select>
 
     <select id="selectHospitalInfo" parameterType="BaseProviderInfo" resultMap="BaseProviderInfoResult">

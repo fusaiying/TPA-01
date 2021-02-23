@@ -77,5 +77,5 @@ public interface ClaimCaseStandingMapper
      */
     public ClaimCaseStanding selectClaimCaseStandingByIdOne(String rptno);
 
-    public List<ClaimCaseStandingVo> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
+    public List<ClaimCaseStanding> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
 }

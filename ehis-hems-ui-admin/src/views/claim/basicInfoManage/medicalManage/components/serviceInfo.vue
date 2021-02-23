@@ -1307,7 +1307,8 @@ export default {
           query: {
             status: 'add',
             flag: 'add',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })
@@ -1318,7 +1319,8 @@ export default {
           query: {
             status: 'add',
             flag: 'update',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })

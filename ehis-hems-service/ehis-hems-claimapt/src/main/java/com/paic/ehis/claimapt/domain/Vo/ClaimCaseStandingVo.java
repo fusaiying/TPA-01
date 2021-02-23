@@ -117,14 +117,6 @@ public class ClaimCaseStandingVo extends BaseEntity {
         return name;
     }
 
-    public List<String> getClaimmaterials() {
-        return claimmaterials;
-    }
-
-    public void setClaimmaterials(List<String> claimmaterials) {
-        this.claimmaterials = claimmaterials;
-    }
-
     public void setOtherinfo(String otherinfo) {
         this.otherinfo = otherinfo;
     }
@@ -141,6 +133,14 @@ public class ClaimCaseStandingVo extends BaseEntity {
     @Override
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<String> getClaimmaterials() {
+        return claimmaterials;
+    }
+
+    public void setClaimmaterials(List<String> claimmaterials) {
+        this.claimmaterials = claimmaterials;
     }
 
     @Override

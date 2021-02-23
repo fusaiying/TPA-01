@@ -41,22 +41,22 @@
         <result property="organcode"    column="organ_code"    />
     </resultMap>
 
-    <resultMap type="com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo" id="ClaimCaseStandingResultTest">
-        <result property="rptno"    column="rpt_no"    />
-        <result property="idno"    column="id_no"    />
-        <result property="name"    column="name"    />
-        <result property="claimmaterials"    column="claim_materials"    />
-        <result property="remark"    column="remark"    />
-        <result property="otherinfo"    column="other_info"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="standingId"    column="standing_id"    />
-        <result property="batchno"    column="batch_no"    />
-        <result property="idType"    column="id_type"    />
-    </resultMap>
+<!--    <resultMap type="com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo" id="ClaimCaseStandingResultTest">-->
+<!--        <result property="rptno"    column="rpt_no"    />-->
+<!--        <result property="idno"    column="id_no"    />-->
+<!--        <result property="name"    column="name"    />-->
+<!--        <result property="claimmaterials"    column="claim_materials"    />-->
+<!--        <result property="remark"    column="remark"    />-->
+<!--        <result property="otherinfo"    column="other_info"    />-->
+<!--        <result property="status"    column="status"    />-->
+<!--        <result property="createBy"    column="create_by"    />-->
+<!--        <result property="createTime"    column="create_time"    />-->
+<!--        <result property="updateBy"    column="update_by"    />-->
+<!--        <result property="updateTime"    column="update_time"    />-->
+<!--        <result property="standingId"    column="standing_id"    />-->
+<!--        <result property="batchno"    column="batch_no"    />-->
+<!--        <result property="idType"    column="id_type"    />-->
+<!--    </resultMap>-->
 
     <sql id="selectClaimCaseStandingVo">
         select standing_id,batch_no,id_type,rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
@@ -178,8 +178,6 @@
         </trim>
     </update>
 
-
-
     <delete id="deleteClaimCaseStandingById" parameterType="String">
         delete from claim_case_standing where rpt_no = #{rptno}
     </delete>
@@ -196,7 +194,7 @@
         where rpt_no = #{rptno} and status='Y'
     </select>
 
-    <select id="selectClaimCaseStandingByBatchno" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch" resultMap="ClaimCaseStandingResultTest">
+    <select id="selectClaimCaseStandingByBatchno" parameterType="com.paic.ehis.claimapt.domain.ClaimBatch" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where batch_no = #{batchno} and status='Y'  ORDER BY standing_id limit #{casenum}
     </select>

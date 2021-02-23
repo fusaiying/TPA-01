@@ -270,6 +270,10 @@
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
+  let dictss = [{dictType: 'rejected_reasons'}, {dictType: 'conclusion'}, {dictType: 'claim_currency'}, {dictType: 'negotiation_type'},
+    {dictType: 'negotiation_sub_type'}, {dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'},{dictType: 'inquiry_org'},{dictType: 'initiate_org'},
+    {dictType: 'rgtSex'},{dictType: 'card_type'}]
+
   export default {
     components: {
     },
@@ -317,6 +321,7 @@
         }
       };
       return {
+        dictList: [],
         rgtSexs:[],
         card_types: [],
         inQuireConfirmBtn:false,
@@ -437,49 +442,43 @@
 
     created() {
     },
-    mounted() {
-      this.getDicts("rejected_reasons").then(response => {
-        this.rejectedReasons = response.data;
-      });
-      //赔付结论 conclusion
-      this.getDicts("conclusion").then(response => {
-        this.conclusionSelect = response.data;
-      });
-      this.getDicts("claim_currency").then(response => {
-        this.currencys = response.data;
-      });
-      //协谈类型
-      this.getDicts("negotiation_type").then(response => {
-        this.negotiationTypes = response.data;
-      });
-      //协谈细类
-      this.getDicts("negotiation_sub_type").then(response => {
-        this.negotiationSubTypes = response.data;
-      });
-      //提调类型
-      this.getDicts("dispatch_type").then(response => {
-        this.dispatchTypes = response.data;
-      });
-      //提调原因
-      this.getDicts("initiate_reasons").then(response => {
-        this.initiateReasons = response.data;
-      });
-      //调查机构
-      this.getDicts("inquiry_org").then(response => {
-        this.inquiryOrg = response.data;
-      });
-      //提调机构
-      this.getDicts("initiate_org").then(response => {
-        this.initiateOrg = response.data;
-      });
-      // rgtSex
-      this.getDicts("rgtSex").then(response => {
-        this.rgtSexs = response.data;
-      });
-      // card_type
-      this.getDicts("card_type").then(response => {
-        this.card_types = response.data;
-      });
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.rejectedReasons = this.dictList.find(item => {
+        return item.dictType === 'rejected_reasons'
+      }).dictDate
+      this.conclusionSelect = this.dictList.find(item => {
+        return item.dictType === 'conclusion'
+      }).dictDate
+      this.currencys = this.dictList.find(item => {
+        return item.dictType === 'claim_currency'
+      }).dictDate
+      this.negotiationTypes = this.dictList.find(item => {
+        return item.dictType === 'negotiation_type'
+      }).dictDate
+      this.negotiationSubTypes = this.dictList.find(item => {
+        return item.dictType === 'negotiation_sub_type'
+      }).dictDate
+      this.dispatchTypes = this.dictList.find(item => {
+        return item.dictType === 'dispatch_type'
+      }).dictDate
+      this.initiateReasons = this.dictList.find(item => {
+        return item.dictType === 'initiate_reasons'
+      }).dictDate
+      this.inquiryOrg = this.dictList.find(item => {
+        return item.dictType === 'inquiry_org'
+      }).dictDate
+      this.initiateOrg = this.dictList.find(item => {
+        return item.dictType === 'initiate_org'
+      }).dictDate
+      this.rgtSexs = this.dictList.find(item => {
+        return item.dictType === 'rgtSex'
+      }).dictDate
+      this.card_types = this.dictList.find(item => {
+        return item.dictType === 'card_type'
+      }).dictDate
     },
     computed: {
     },
@@ -678,24 +677,30 @@
         params.claimCheck = this.conclusionForm.claimCheck;
         params.remark = this.conclusionForm.remark;
 
-        backToClaimCase(params).then(res => {
-          console.log(res);
-          if (res.code == '200') {
-            this.$message({
-              message: '退回成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            });
-          } else {
-            this.$message({
-              message: '退回失败！',
-              type: 'error',
-              center: true,
-              showClose: true
-            });
-          }
-        });
+        this.$confirm(`是否退回受理?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          backToClaimCase(params).then(res => {
+            if (res.code == '200') {
+              this.$message({
+                message: '退回成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              });
+            } else {
+              this.$message({
+                message: '退回失败！',
+                type: 'error',
+                center: true,
+                showClose: true
+              });
+            }
+          });
+        }).catch(() => {
+        })
       },
       //调查保存
       inQuireSaveFun(){

@@ -129,8 +129,9 @@
 
 </template>
 <script>
-import {addcontactsInfo, getNewtworktypeList} from "@/api/baseInfo/medicalManage";
+import {addcontactsInfo, getNewtworktypeList,deleteContactsInfo} from "@/api/baseInfo/medicalManage";
 import {validPhone} from "@/utils/validate";
+import {delPayee, listRemarkRptNo} from "@/api/claim/handleCom";
 
 
 
@@ -451,13 +452,27 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.contactInfoForm.contacts.splice(this.index,1)
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+        let query = {
+          orgflag: this.status,
+          serialNo: row.serialNo
+        }
+        deleteContactsInfo(query).then(res => {
+          if (res != null && res.code === 200) {
+            this.$message({
+              message: '删除成功',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+            this.contactInfoForm.contacts.splice(this.index, 1)
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
         });
-      });
+      })
     },
     /*    delConfirm() {
           this.dialogVisible = false

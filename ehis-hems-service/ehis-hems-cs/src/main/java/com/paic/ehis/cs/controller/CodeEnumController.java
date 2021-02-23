@@ -70,7 +70,7 @@ public class CodeEnumController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:enum:export')")
     @Log(title = "业务码 ", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
+    @PostMapping("/exportNew")
     public void export(HttpServletResponse response, CodeEnumDTO codeEnumDTO) throws IOException
     {
         List<CodeEnumVo> list = codeEnumService.selectCodeEnumVo(codeEnumDTO);
@@ -78,8 +78,10 @@ public class CodeEnumController extends BaseController
         util.exportExcel(response, list, "enum");
     }
 
-    public List<CodeEnumVo> updateCodeEnumVo(List<CodeEnumVo> list){
-        return codeEnumService.updateCodeEnumVo(list);
+
+    @GetMapping("/updateCodeEnumVo")
+    public AjaxResult updateCodeEnumVo(List<CodeEnumVo> list){
+        return AjaxResult.success(codeEnumService.updateCodeEnumVo(list));
     }
 
 

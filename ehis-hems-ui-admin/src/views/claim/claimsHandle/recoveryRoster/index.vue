@@ -67,7 +67,11 @@
             <el-table-column prop="idType" label="证件类型" :formatter="getCardTypeName" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="sex" :formatter="getsexName" label="性别" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="birthday" label="出生日期"  width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="birthday" label="出生日期"  width="150%" align="center" show-overflow-tooltip >
+              <template slot-scope="scope">
+                <span>{{ scope.row.birthday|changeDate }}</span>
+              </template>
+            </el-table-column>
 
             <el-table-column prop="level" :formatter="getLevelName" label="等级"  align="center" show-overflow-tooltip />
             <el-table-column prop="debtAmountUp" label="金额上限" align="center" show-overflow-tooltip />
@@ -389,10 +393,8 @@
           this.recoveryForm.insuredNo =  row.insuredNo;
         },
         delFun(row) {
-
-          console.log(row.rptNo)
           const params = {
-            rptNo:row.rptNo
+            insuredNo:row.insuredNo
           };
           // 存在欠款 ？
           checkMoney(params).then(response => {

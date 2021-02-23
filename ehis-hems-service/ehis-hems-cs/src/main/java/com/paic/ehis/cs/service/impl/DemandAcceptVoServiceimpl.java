@@ -140,8 +140,27 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String sourceName="DemandAcceptVo";
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-        demandAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId()));
-        demandAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId()));
+        PersonInfo callPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
+        if (callPerson != null) {
+            demandAcceptVo.setCallPerson(callPerson);
+        } else {
+            demandAcceptVo.setCallPerson(new PersonInfo());
+        }
+        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
+        if (contactsPerson != null) {
+            String linePhone=contactsPerson.getLinePhone();
+            String[] linePhone1=linePhone.split("\\-");
+            contactsPerson.setLinePhone1(linePhone1);
+            String homePhone=contactsPerson.getHomePhone();
+            String[] homePhone1=homePhone.split("\\-");
+            contactsPerson.setHomePhone1(homePhone1);
+            String workPhone=contactsPerson.getWorkPhone();
+            String[] workPhone1=workPhone.split("\\-");
+            contactsPerson.setWorkPhone1(workPhone1);
+            demandAcceptVo.setContactsPerson(contactsPerson);
+        } else {
+            demandAcceptVo.setContactsPerson(new PersonInfo());
+        }
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo.getWorkOrderNo());
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();

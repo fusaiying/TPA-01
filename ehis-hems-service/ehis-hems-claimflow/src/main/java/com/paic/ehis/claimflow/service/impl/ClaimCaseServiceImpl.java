@@ -1043,16 +1043,22 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 结果
      */
     @Override
-    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-        caseInvestigation.setIsHistory("N");
+    public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+        stringBuilder.append("ZWQR").append(investigation);
+        caseInvestigation.setInvNo(stringBuilder.toString());
         caseInvestigation.setInvDate(DateUtils.getNowDate());
-        caseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
+        caseInvestigation.setIsHistory("N");
         caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
         caseInvestigation.setCreateBy(SecurityUtils.getUsername());
         caseInvestigation.setCreateTime(DateUtils.getNowDate());
         caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
         caseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        return claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        return i==1? caseInvestigation:null;
     }
 
     /**

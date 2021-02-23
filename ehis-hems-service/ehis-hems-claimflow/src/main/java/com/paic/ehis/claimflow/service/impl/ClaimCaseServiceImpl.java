@@ -1044,8 +1044,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-
-
         StringBuilder stringBuilder = new StringBuilder();
         String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
         stringBuilder.append("ZWQR").append(investigation);

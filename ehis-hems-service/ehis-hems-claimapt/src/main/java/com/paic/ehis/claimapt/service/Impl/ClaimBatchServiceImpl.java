@@ -68,6 +68,23 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         return claimBatchMapper.selectClaimBatchList(claimBatch);
     }
 
+    /**
+     * 查询机构交单状态理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    @Override
+    public List<BatchVo> selectPendingBatchList(BatchDTO batchDTO) {
+        batchDTO.setClaimtype("02");
+        batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
+        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+        }
+        return claimBatchMapper.selectDirectQueryList(batchDTO);
+    }
+
 
     /**
      * 查询已退回理赔批次 列表
@@ -130,7 +147,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         batchDTO.setOrgancode( sysUser.getDeptId().toString());
         batchDTO.setClaimtype("01");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
-        batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
+        batchDTO.setUpdateBy("");
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 

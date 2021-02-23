@@ -13,12 +13,15 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.claimapt.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.paic.ehis.common.core.web.controller.BaseController;
 import java.util.Calendar;
 import java.util.List;
+
+
+
 
 /**
  * 理赔批次 Service业务层处理
@@ -27,7 +30,7 @@ import java.util.List;
  * @date 2021-01-05
  */
 @Service
-public class ClaimBatchServiceImpl implements IClaimBatchService {
+public class ClaimBatchServiceImpl extends BaseController implements IClaimBatchService{
     @Autowired
     private ClaimBatchMapper claimBatchMapper;
 
@@ -43,7 +46,8 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     @Autowired
     private ClaimBatchInvoiceFilingMapper claimBatchInvoiceFilingMapper;
 
-    @Autowired SysUserMapper sysUserMapper;
+    @Autowired
+    SysUserMapper sysUserMapper;
 
     /**
      * 查询理赔批次
@@ -79,7 +83,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         batchDTO.setClaimtype("02");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
-        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         return claimBatchMapper.selectDirectQueryList(batchDTO);
@@ -96,7 +100,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());
-        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         return claimBatchMapper.selectDirectQueryList(batchDTO);
@@ -141,13 +145,32 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
+                case "batchno":
+                    batchDTO.setOrderByColumn("batch_no");
+                    break;
+                case "submitdate":
+                    batchDTO.setOrderByColumn("submit_date");
+                    break;
+                case "updateTime":
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
+            }
+        } else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
+        }
+
         batchDTO.setClaimtype("01");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
         batchDTO.setUpdateBy("");
         // 获取用户的所属机构
         batchDTO.setOrgancode( sysUserMapper.selectUserById(SecurityUtils.getUserId()).getDeptId().toString());
-        return claimBatchMapper.selectDirectQueryList(batchDTO);
+        startPage(batchDTO);
+        List<BatchVo> batchVos = claimBatchMapper.selectDirectQueryList(batchDTO);
+
+        return batchVos;
     }
 
     /**

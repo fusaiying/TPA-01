@@ -2,9 +2,10 @@ package com.paic.ehis.claimapt.mapper;
 
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.claimapt.domain.DTO.SysUserDTO;
+import com.paic.ehis.claimapt.domain.SysUser;
 import com.paic.ehis.claimapt.domain.Vo.UserVo;
 import com.paic.ehis.system.api.domain.SysDept;
-import com.paic.ehis.system.api.domain.SysUser;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

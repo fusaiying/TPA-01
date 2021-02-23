@@ -237,7 +237,7 @@ public class ClaimBatchController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
     public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO) {
-        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+        /*if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {
                 case "batchno":
                     batchDTO.setOrderByColumn("batch_no");
@@ -252,7 +252,7 @@ public class ClaimBatchController extends BaseController {
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-        startPage(batchDTO);
+        startPage(batchDTO);*/
         List<BatchVo> batchVoList = claimBatchService.selectReviewPublicList(batchDTO);
         return getDataTable(batchVoList);
     }

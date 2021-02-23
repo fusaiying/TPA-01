@@ -293,13 +293,17 @@
           return {}
         }
       },
-
+      saveVFlag: {
+        type: Boolean,
+        default: true
+      },
       node: String
     },
 
 
     data() {
       return {
+        saveFlag : true,
         copyFixInfo:{},
         innerDialogVisable:false,
         caseForm: {
@@ -377,6 +381,9 @@
       fixInfo: function (newVal){
 
         this.copyFixInfo=newVal
+      },
+      saveVFlag: function (newValue) {
+        this.saveFlag = newValue
       },
 
     },
@@ -621,7 +628,9 @@
               policyNos: this.multipleSelection,
               claimCaseInsured: subFormSearch
             }
-            addInsuredAndPolicy(insuredInfoData)
+            if(this.saveFlag) {
+              addInsuredAndPolicy(insuredInfoData)
+            }
             //关闭清空
             this.changeDialogVisable()
             this.$emit('getPropData', propData)
@@ -643,7 +652,9 @@
                 policyNos: this.multipleSelection,
                 claimCaseInsured: subFormSearch
               }
-              addInsuredAndPolicy(insuredInfoData)
+              if(this.saveFlag) {
+                addInsuredAndPolicy(insuredInfoData)
+              }
               //关闭清空
               this.changeDialogVisable()
               this.$emit('getPropData', propData)

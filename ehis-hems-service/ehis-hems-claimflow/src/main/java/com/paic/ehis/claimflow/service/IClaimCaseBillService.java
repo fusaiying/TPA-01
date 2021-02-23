@@ -103,4 +103,12 @@ public interface IClaimCaseBillService
      * @return
      */
     public boolean ClaimCal(String rptNo);
+
+    /**
+     * 账单删除
+     *
+     * @param claimCaseBill
+     * @return
+     */
+    public int deleteClaimCaseBill(ClaimCaseBillInfoVO claimCaseBill);
 }

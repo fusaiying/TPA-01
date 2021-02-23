@@ -130,7 +130,11 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     public List<ClaimCaseFilingListVO> selectCaseClaimCaseFilingList(ClaimCaseFilingDTO claimCaseFilingDTO) {
 
         //默认展示当前登录机构最近一个月的归档数据,因为前端已经将时间设置为一个月前，进行传输，所以只需判断机构为空就查询当前登录机构，不为空则查询传输的数据
-        if(StringUtils.isNull(claimCaseFilingDTO.getDeptCode())){
+        if(StringUtils.isEmpty(claimCaseFilingDTO.getDeptCode())
+                && StringUtils.isEmpty(claimCaseFilingDTO.getClaimType())
+                && StringUtils.isEmpty(claimCaseFilingDTO.getBatchNo())
+                && StringUtils.isEmpty(claimCaseFilingDTO.getRptNo())
+                && StringUtils.isEmpty(claimCaseFilingDTO.getCaseBoxNo())){
 
             //获取用户的所属机构,设置当前登录机构
             Long userId = SecurityUtils.getUserId();

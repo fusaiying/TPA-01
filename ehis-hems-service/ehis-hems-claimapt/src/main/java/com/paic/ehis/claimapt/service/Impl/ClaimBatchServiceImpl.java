@@ -395,7 +395,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(str1);
         String billrecevieflag = claimBatch.getBillrecevieflag();
-        if(billrecevieflag.equals("")) {
+        if(StringUtils.isBlank(billrecevieflag)) {
             claimBatchInvoiceFiling.setIsFiling("02");
         } else {
             claimBatchInvoiceFiling.setIsFiling(billrecevieflag);

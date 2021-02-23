@@ -7,6 +7,7 @@ import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -37,20 +38,31 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist)
     {
 
-        List<ClaimDebtWhitelist> claimDebtWhitelists=claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
+
+        // 如果不为空  姓名  证件号
+        if(StringUtils.isNotBlank(claimDebtWhitelist.getName()) || StringUtils.isNotBlank(claimDebtWhitelist.getIdNo())) {
+            PolicyInsured policyInsured = new PolicyInsured();
+            policyInsured.setIdNo(claimDebtWhitelist.getIdNo());
+            policyInsured.setName(claimDebtWhitelist.getName());
+            List<PolicyInsured> policyInsuredList = policyInsuredMapper.selectRecognizee(policyInsured);
+            String[] insurdNos = policyInsuredList.toArray(new String[policyInsuredList.size()]);
+            claimDebtWhitelist.setInsuredNos(insurdNos);
+        }
+        List<ClaimDebtWhitelist> claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
         for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
             String insuredNo = claimDebtWhitelist1.getInsuredNo();
             PolicyInsured policyInsured = new PolicyInsured();
             policyInsured.setInsuredNo(insuredNo);
             List<PolicyInsured> policyInsured1 = policyInsuredMapper.selectRecognizee(policyInsured);
-                for (PolicyInsured policyInfo : policyInsured1) {
-                        claimDebtWhitelist1.setName(policyInfo.getName());
-                        claimDebtWhitelist1.setIdType(policyInfo.getIdType());
-                        claimDebtWhitelist1.setIdNo(policyInfo.getIdNo());
-                        claimDebtWhitelist1.setSex(policyInfo.getSex());
-                        claimDebtWhitelist1.setBirthday(policyInfo.getBirthday());
+            for (PolicyInsured policyInfo : policyInsured1) {
+                claimDebtWhitelist1.setName(policyInfo.getName());
+                claimDebtWhitelist1.setIdType(policyInfo.getIdType());
+                claimDebtWhitelist1.setIdNo(policyInfo.getIdNo());
+                claimDebtWhitelist1.setSex(policyInfo.getSex());
+                claimDebtWhitelist1.setBirthday(policyInfo.getBirthday());
             }
         }
+
         return claimDebtWhitelists;
     }
 

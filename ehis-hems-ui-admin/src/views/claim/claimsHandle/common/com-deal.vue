@@ -420,7 +420,7 @@
         if (this.querys.rptNo == '') {
           return;
         }
-        historyDisInfo(this.rptNo).then(res => {
+        historyDisInfo(this.querys.rptNo).then(res => {
           if (res.code == '200') {
             this.historyDisCount = res.total;
             this.preHistoryData = res.rows;

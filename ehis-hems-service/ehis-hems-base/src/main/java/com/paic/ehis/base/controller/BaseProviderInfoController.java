@@ -215,6 +215,8 @@ public class BaseProviderInfoController extends BaseController {
         return AjaxResult.success(baseContactsService.selectBaseContactsByCode(baseContacts));
     }
 
+
+
     /**
      * 获取base_provider_apply(服务商预约信息)详细信息
      */
@@ -275,6 +277,13 @@ public class BaseProviderInfoController extends BaseController {
     public AjaxResult addcontacts(@RequestBody BaseContactsVo baseContactsVo)
     {
         return toAjax(baseContactsService.insertBaseContacts(baseContactsVo));
+    }
+
+
+    @PostMapping("deleteContactsInfo")
+    public AjaxResult deleteContactsInfo(@RequestBody BaseContacts baseContacts)
+    {
+        return toAjax(baseContactsService.deleteBaseContacts(baseContacts));
     }
 
     /**

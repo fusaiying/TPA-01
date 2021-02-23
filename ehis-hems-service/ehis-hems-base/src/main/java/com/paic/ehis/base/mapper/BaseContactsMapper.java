@@ -71,7 +71,7 @@ public interface BaseContactsMapper
     public int updateBaseContacts(BaseContacts baseContacts);
 
     /*public int updateBaseContact(BaseContacts baseContacts);*/
-
+    public int updateBaseContactsNew(BaseContacts baseContacts);
 
 
     public  int updateBaseContactsStatus(String supplierCode);
@@ -83,6 +83,8 @@ public interface BaseContactsMapper
      * @return 结果
      */
     public int deleteBaseContactsById(String serialno);
+
+    public int deleteBaseContactsByIdNew(String serialno);
 
     /**
      * 批量删除base_contacts（联系人信息）

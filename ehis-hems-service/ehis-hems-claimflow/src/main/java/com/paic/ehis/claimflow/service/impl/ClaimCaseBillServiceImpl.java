@@ -290,9 +290,9 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             // 是否调查
             List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
             if (claimCaseInvestigation.size() > 0){
-                caseInfo.setInvestigation("02");
-            } else {
                 caseInfo.setInvestigation("01");
+            } else {
+                caseInfo.setInvestigation("02");
             }
             // 出单公司、承保机构
             List<ClaimCasePolicy> claimCasePolicyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(caseInfo.getRptNo());
@@ -338,9 +338,9 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             // 是否调查
             List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(accomplishVo.getRptNo());
             if (claimCaseInvestigation.size() > 0){
-                accomplishVo.setInvestigation("02");
-            } else {
                 accomplishVo.setInvestigation("01");
+            } else {
+                accomplishVo.setInvestigation("02");
             }
             // 出单公司、承保机构
             List<ClaimCasePolicy> claimCasePolicyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(accomplishVo.getRptNo());

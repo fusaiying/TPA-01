@@ -1303,9 +1303,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ) { // 是否调查
             List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
             if ( claimCaseInvestigation.size() > 0) {
-                caseInfo.setInvestigation("02");
-            } else {
                 caseInfo.setInvestigation("01");
+            } else {
+                caseInfo.setInvestigation("02");
             }
             //获取就诊日期
             List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());

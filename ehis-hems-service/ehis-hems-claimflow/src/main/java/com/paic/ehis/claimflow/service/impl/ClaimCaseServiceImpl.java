@@ -164,7 +164,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         if (StringUtils.isNotEmpty(claimCaseDTO.getRptNo()) &&
                 StringUtils.isNotEmpty(claimCaseDTO.getBatchNo()) &&
                 StringUtils.isNotEmpty(claimCaseDTO.getName())
-        ){
+        ) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
             claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
@@ -335,7 +335,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCase claimCase = claimCaseShuntClass.getClaimCase();
         String caseProp = claimCase.getCaseProp();
-        if (caseProp ==null) {
+        if (caseProp == null) {
             //查询TPA保单
             //policy_info
             List<PolicyInfo> listA = policyInfoMapper.selectPolicyInfoByInsuredNo(claimCaseShuntClass);
@@ -404,13 +404,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             } else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-提示：此被保人只有健康险保单，确认后将提交至健康险
                 claimCaseShuntClass.getClaimCase().setCaseProp("02");
                 claimCaseShuntClass.setCaseStypeFind("02");
-            }//若都没有-提示：请撤件
-            claimCaseShuntClass.getClaimCase().setCaseProp("03");
-            claimCaseShuntClass.setCaseStypeFind("03");
-
+            } else {//若都没有-提示：请撤件
+                claimCaseShuntClass.getClaimCase().setCaseProp("03");
+                claimCaseShuntClass.setCaseStypeFind("03");
+            }
         } else if (caseProp == "02") {
 //转去核心健康险
-            }
+        }
 
         return claimCaseShuntClass;
 

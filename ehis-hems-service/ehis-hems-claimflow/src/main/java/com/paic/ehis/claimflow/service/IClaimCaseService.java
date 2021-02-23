@@ -210,7 +210,7 @@ public interface IClaimCaseService
      * @param caseInvestigation 案件信息
      * @return 结果
      */
-    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation);
+    public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation);
 
     /**
      * 提调

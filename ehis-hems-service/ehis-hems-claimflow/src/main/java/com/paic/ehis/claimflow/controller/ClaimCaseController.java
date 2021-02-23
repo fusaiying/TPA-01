@@ -48,8 +48,8 @@ public class ClaimCaseController extends BaseController {
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:add')")
     @PostMapping("/saveInvestigation")
-    public AjaxResult saveInvestigation(ClaimCaseInvestigation caseInvestigation) {
-        return toAjax(claimCaseService.surveyInformationPreservation(caseInvestigation));
+    public AjaxResult saveInvestigation(@RequestBody ClaimCaseInvestigation caseInvestigation) {
+        return AjaxResult.success(claimCaseService.surveyInformationPreservation(caseInvestigation));
     }
     /**
      * 理算审核提调 按钮

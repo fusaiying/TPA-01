@@ -123,42 +123,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
         SELECT
-	ccc.rpt_no,
-	cal_id,
-	billAmount,
-	hosDiscountAmount,
-	unableAmount,
-	deduUsed,
-	calAmount,
-	payAmount,
-	refusedAmount
-FROM
-	claim_case_cal ccc
-	LEFT JOIN (
-SELECT
-	sum( ifnull( bill_amount, 0 ) ) AS billAmount,
-	sum( ifnull( hos_discount_amount, 0 ) ) AS hosDiscountAmount,
-	sum( ifnull( unable_amount, 0 ) ) AS unableAmount,
-	rpt_no
-FROM
-	claim_case_bill
-GROUP BY
-	rpt_no
-	) sumbill ON sumbill.rpt_no = ccc.rpt_no
-	LEFT JOIN (
-SELECT
-	sum( ifnull( dedu_used, 0 ) ) AS deduUsed,
-	sum( ifnull( cal_amount, 0 ) ) AS calAmount,
-	sum( ifnull( pay_amount, 0 ) ) AS payAmount,
-	sum( ifnull( refused_amount, 0 ) ) AS refusedAmount,
-	rpt_no
-FROM
-	claim_case_cal_bill
-GROUP BY
-	rpt_no
-	) sumCalBill ON sumCalBill.rpt_no = ccc.rpt_no
-WHERE
-	ccc.rpt_no = #{rptNo} and ccc.status='Y'
+        ccc.rpt_no,
+        cal_id,
+        billAmount,
+        hosDiscountAmount,
+        unableAmount,
+        deduUsed,
+        calAmount,
+        payAmount,
+        refusedAmount
+    FROM
+        claim_case_cal ccc
+        LEFT JOIN (
+    SELECT
+        sum( ifnull( bill_amount, 0 ) ) AS billAmount,
+        sum( ifnull( hos_discount_amount, 0 ) ) AS hosDiscountAmount,
+        sum( ifnull( unable_amount, 0 ) ) AS unableAmount,
+        rpt_no
+    FROM
+        claim_case_bill
+	WHERE status='Y'
+    GROUP BY
+        rpt_no
+        ) sumbill ON sumbill.rpt_no = ccc.rpt_no
+        LEFT JOIN (
+    SELECT
+        sum( ifnull( dedu_used, 0 ) ) AS deduUsed,
+        sum( ifnull( cal_amount, 0 ) ) AS calAmount,
+        sum( ifnull( pay_amount, 0 ) ) AS payAmount,
+        sum( ifnull( refused_amount, 0 ) ) AS refusedAmount,
+        rpt_no
+    FROM
+        claim_case_cal_bill
+	WHERE status='Y'
+    GROUP BY
+        rpt_no
+        ) sumCalBill ON sumCalBill.rpt_no = ccc.rpt_no
+    WHERE
+        ccc.rpt_no = #{rptNo} and ccc.status='Y'
     </select>
 
     <insert id="insertClaimCaseCal" parameterType="ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">

@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ( claim_case_debt.debt_amount - SUM( claim_case_debt_col.col_amount ) ) as residualAmount
         FROM
             claim_case_debt,claim_case_debt_col
-        GROUP BY claim_case_debt.rpt_no,claim_case_debt.debt_amount
         where claim_case_debt.insured_no=#{insuredNo}
+        GROUP BY claim_case_debt.rpt_no,claim_case_debt.debt_amount
     </select>
 </mapper>

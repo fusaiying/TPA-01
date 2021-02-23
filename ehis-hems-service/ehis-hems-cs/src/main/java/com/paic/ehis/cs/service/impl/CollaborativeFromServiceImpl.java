@@ -150,7 +150,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLogMapper.updateFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         //将所有状态置为N

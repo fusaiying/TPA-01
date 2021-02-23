@@ -18,7 +18,7 @@
                size="mini">
         <el-row>
           <el-col :span="20" :xs="24">
-            <el-form-item label="协谈类型：" prop="fileType">
+            <el-form-item label="申诉类型：" prop="fileType">
               <el-select v-model="appealForm.discussType" class="item-width" size="mini" placeholder="请选择">
               </el-select>
             </el-form-item>

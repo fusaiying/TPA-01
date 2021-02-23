@@ -23,6 +23,9 @@ public class ClaimCasePayInfoVO implements Serializable {
     /** 批次号 */
     private String batchNo;
 
+    /** 被保人客户号 */
+    private String insuredNo;
+
     /** 姓名 */
     @Excel(name = "姓名")
     private String name;

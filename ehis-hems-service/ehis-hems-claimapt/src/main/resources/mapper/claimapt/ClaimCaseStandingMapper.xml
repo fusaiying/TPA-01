@@ -198,4 +198,18 @@
         <include refid="selectClaimCaseStandingVo"/>
         where batch_no = #{batchno} and status='Y'  ORDER BY standing_id limit #{casenum}
     </select>
+
+    <update id="updateClaimCaseStandingByBatchno" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding">
+        update claim_case_standing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null and status != ''">status = #{status},</if>
+        </trim>
+        where batch_no=#{batchno} and status='Y'
+    </update>
+
+    <select id="selectClaimCaseStandingByIdidType" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
+        <include refid="selectClaimCaseStandingVo"/>
+        where id_type = #{idType} and id_no = #{idno} and status='Y'
+    </select>
+
 </mapper>

@@ -64,7 +64,7 @@
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
             <el-table-column prop="name" label="被保人名称" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNoType" label="证件类型" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="idType" label="证件类型" :formatter="getCardTypeName" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="sex" :formatter="getsexName" label="性别" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="birthday" label="出生日期"  width="150%" align="center" show-overflow-tooltip />
@@ -166,7 +166,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="金额上限：" prop="debtAmountUp">
-                  <el-input maxlength="14" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input maxlength="14" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -174,7 +174,7 @@
             <el-row v-if="false">
               <el-col :span="8">
                 <el-form-item label="debtWhitelistId：" prop="debtWhitelistId">
-                  <el-input maxlength="14"  v-model="recoveryForm.debtWhitelistId" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input maxlength="14"  v-model="recoveryForm.debtWhitelistId" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -182,7 +182,7 @@
             <el-row v-if="false">
               <el-col :span="8">
                 <el-form-item label="insuredNo：" prop="insuredNo">
-                  <el-input maxlength="14"  v-model="recoveryForm.insuredNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                  <el-input maxlength="14"  v-model="recoveryForm.insuredNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -195,9 +195,7 @@
       </el-card>
 
     <!-- 保单信息查询模态框 -->
-    <insured-modal :value="dialogPolicy"
-                   @getPropData="getPropData" :fixInfo="fixInfo"
-                   @closeDialogVisable="closeDialogVisable"/>
+    <insured-modal  :saveVFlag="saveVFlag" :value="dialogPolicy"  @getPropData="getPropData" :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable"/>
 
 
   </div>
@@ -223,6 +221,7 @@
       },
         data() {
             return {
+              saveVFlag:true,
               dialogPolicy:false,
               fixInfo: {
                 batchNo: undefined,
@@ -275,7 +274,7 @@
               ysOrNo:[],
               custLevel:[],
               rgtSexs:[],
-
+              card_types: [],
             }
         },
       mounted(){
@@ -291,6 +290,10 @@
         this.getDicts("rgtSex").then(response => {
           this.rgtSexs = response.data;
         });
+        // card_type
+        this.getDicts("card_type").then(response => {
+          this.card_types = response.data;
+        });
       },
       computed: {
 
@@ -303,6 +306,9 @@
         getsexName(row,col) {
           return this.selectDictLabel(this.rgtSexs, row.sex)
         },
+        getCardTypeName(row,col) {
+          return this.selectDictLabel(this.card_types, row.idType)
+        },
         getLevelName(row,col) {
           return this.selectDictLabel(this.custLevel, row.level)
         },
@@ -310,6 +316,7 @@
           return this.selectDictLabel(this.ysOrNo, row.recMessageFlag)
         },
         closeDialogVisable() {
+          this.saveVFlag = true;
           this.dialogPolicy = false
         },
         getPropData(backValue) {
@@ -327,6 +334,7 @@
 
 
         searchFun() {
+          this.saveVFlag = false;
           this.dialogPolicy = true;
         },
         changeDialogVisable(){
@@ -354,12 +362,13 @@
             isAsc:'desc'
           };
 
-
+          this.loading = true;
           listInfo(params).then(response => {
                this.totalNum = response.total;
                this.tableData = response.rows;
                 this.loading = false
           }).catch(error => {
+            this.loading = false
             console.log(error);
           });
         },
@@ -494,7 +503,7 @@
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-          this.download('claimflow/whitelist/export', params, `FYX_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/whitelist/export', params, `追讨白名单_${new Date().getTime()}.xlsx`);
         },
 
         handleClose() {

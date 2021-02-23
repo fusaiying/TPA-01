@@ -9,6 +9,15 @@ export function invoiceData(query) {
   })
 }
 
+//发票归档
+export function childData(query) {
+  return request({
+    url: '/claimflow/filing/selectRptNo',
+    method: 'get',
+    params: query
+  })
+}
+
 //编辑发票归档
 export function updateInvoice(data) {
   return request({

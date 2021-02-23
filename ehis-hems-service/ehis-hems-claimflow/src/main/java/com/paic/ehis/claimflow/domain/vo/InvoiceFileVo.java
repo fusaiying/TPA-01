@@ -55,4 +55,7 @@ public class InvoiceFileVo extends BaseEntity {
     private String name;
 
     private String status;
+
+    private String caseStatus;
+
 }

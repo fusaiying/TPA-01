@@ -120,7 +120,7 @@
           <template slot-scope="scope">
             <el-link style="font-size: 11px" v-if="scope.row.remark" type="primary"
                      @click="changeRemark(scope.$index,scope.row.remark)">{{ scope.row.remark }}
-            </el-link>
+              </el-link>
             <el-link style="font-size: 11px" type="primary" v-else @click="changeRemark(scope.$index)">请点击输入备注</el-link>
           </template>
         </el-table-column>
@@ -220,7 +220,40 @@
       },
 
     },
+
     data() {
+      const checkPayAmount = (rule, value, callback) => {
+        const index = rule.field.replace('caseData.', '').replace('.payAmount', '')
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("最小允许录入0"));
+          } else if (!regx.test(value)) {
+            callback(new Error("请保留两位小数"));
+          } else if (value>(parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount))){
+            callback(new Error("录入金额有误"));
+          }else {
+            this.baseForm.caseData[index].refusedAmount=parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount)-parseFloat(this.baseForm.caseData[index].payAmount)
+            callback();
+          }
+        } else {
+          callback(new Error("赔付金额不能为空"));
+        }
+      }
+      const checkRemark = (rule, value, callback) => {
+        const index = rule.field.replace('caseData.', '').replace('.remark', '')
+        if (value) {
+          callback();
+        } else {
+          if (this.baseForm.caseData[index].payAmount==0 && this.baseForm.caseData[index].calAmount==0){
+            callback();
+          }else if (this.baseForm.caseData[index].payAmount!=this.baseForm.caseData[index].calAmount){
+            callback(new Error("请录入备注"));
+          }else {
+            callback();
+          }
+        }
+      }
       return {
         isSum: false,
         calSummaryData: {},
@@ -232,7 +265,8 @@
           caseData: []
         },
         caseRules: {
-          payAmount: [{required: true, message: '赔付金额不能为空', trigger: 'blur'}],//赔付金额
+          payAmount: [{validator: checkPayAmount,required: true,trigger: ['blur','change']}],//赔付金额
+          remark: [{validator: checkRemark,required: true,trigger: ['blur']}],//赔付金额
           payConclusion: [{required: true, message: '请选择赔付结论', trigger: 'blur'}],//赔付结论
           riskCode: [{required: true, message: '请选择', trigger: 'blur,change'}],//
           dutyDetailCode: [{required: true, message: '请选择', trigger: 'blur,change'}],//

@@ -283,16 +283,16 @@
           </el-col>
 
         </el-row>
-        <el-row >
-          <el-col :span="5">
-            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
+<!--        <el-row >-->
+<!--          <el-col :span="5">-->
+<!--            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">-->
+<!--              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly style="width: 75px"/>-->
+<!--              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
+<!--              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
+<!--              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
           <el-form-item label="所在地："  prop="phone">
             <el-input v-model="workPoolData.contactsPerson.address" class="width-full"  size="mini" readonly/>
@@ -374,8 +374,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="modifyDetails" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.umNum}}</span>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
@@ -403,7 +403,7 @@
             type="textarea"
             :rows="2"
             placeholder="请输入内容"
-            v-model="submitForm.opinion">
+            v-model="submitForm.remark">
           </el-input>
         </el-form-item>
           </el-row>
@@ -449,7 +449,7 @@
 <script>
   import moment from 'moment'
   import {dealAdd,FlowLogSearch} from '@/api/customService/demand'
-  import {dealSearch,demandAccept}  from  '@/api/customService/consultation'
+  import {dealSubmit,demandAccept}  from  '@/api/customService/consultation'
 
   import coOrganizer from "../common/modul/coOrganizer";
 
@@ -492,14 +492,14 @@
         //新增的数据传输
         submitForm: {
           workOrderNo:"",
-          opinion:"",
+          remark:"",
         },
         sendForm:{
 
         },
         workPoolData:{
           contactsPerson:{
-            homePhone1:[]
+            homePhone1:[],
           },
           callPerson: {},
 
@@ -587,10 +587,11 @@
       //协办
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
-      modifyDetails(){
-        this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
-      ;},
+        },
 
       resetForm() {
         this.$refs.sendForm.resetFields()
@@ -602,7 +603,7 @@
         let insert=this.sendForm
         insert.workOrderNo=this.$route.query.workOrderNo
         insert.collaborativeId=this.$route.query.collaborativeId
-        dealSearch(insert).then(res => {
+        dealSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
             console.log("insert",insert)
             alert("保存成功")
@@ -641,14 +642,8 @@
       searchHandle() {
         demandAccept(this.queryParams.workOrderNo).then(res => {
             if (res!= null && res.code === 200) {
-              this.workPoolData = res.rows[0];
-              this.totalCount = res.total
-              console.log("?",res.rows)
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
+              console.log("77777",res.data)
+              this.workPoolData = res.data;
             }
           }).catch(res => {
 

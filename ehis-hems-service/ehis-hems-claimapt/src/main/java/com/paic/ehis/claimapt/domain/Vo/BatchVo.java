@@ -74,6 +74,12 @@ public class BatchVo implements Serializable {
     @Excel(name = "批次状态 " ,readConverterExp="01=处理中 02=交单复核 03=交单完成 04=交单退回 05=交单无效")
     private String batchstatus;
 
+    /** 结论 */
+    private String conclusion;
+
+    /** 备注 */
+    private String remark;
+
     /** 就诊医院中文名 */
     private String chname1;
 

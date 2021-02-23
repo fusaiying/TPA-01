@@ -45,6 +45,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="chname1"    column="chname1"    />
         <result property="enname1"    column="enname1"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectClaimBatchVo">
@@ -78,24 +80,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectDirectQueryList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
-        cb.batch_no,
-        cb.source,
-        cb.hospital_code,
-        cb.claim_type,
-        cb.submit_date,
-        cb.caseload,
-        cb.batch_total,
-        cb.organ_code,
-        cb.currency,
-        cb.cont_type,
-        cb.batch_status,
-        cb.update_by,
-        cb.update_time,
-        bpi.chname1,
-        bpi.enname1
+            cb.batch_no,
+            cb.source,
+            cb.hospital_code,
+            cb.claim_type,
+            cb.submit_date,
+            cb.caseload,
+            cb.batch_total,
+            cb.organ_code,
+            cb.currency,
+            cb.cont_type,
+            cb.batch_status,
+            cb.update_by,
+            cb.update_time,
+            bpi.chname1,
+            bpi.enname1,
+            record.conclusion,
+            record.remark
         FROM
-        claim_batch cb
-        left join base_provider_info bpi on bpi.provider_code=cb.hospital_code and bpi.status='Y'
+            claim_batch cb
+        left join base_provider_info bpi
+        on bpi.provider_code=cb.hospital_code and bpi.status='Y'
+        left join claim_batch_record record
+        on cb.batch_no=record.batch_no and record.operation='04' and record.status='Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
             <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>

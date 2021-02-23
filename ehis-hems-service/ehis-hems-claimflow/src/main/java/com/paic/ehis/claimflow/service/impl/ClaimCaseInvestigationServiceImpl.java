@@ -8,6 +8,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,18 +70,24 @@ public class ClaimCaseInvestigationServiceImpl implements IClaimCaseInvestigatio
     @Override
     public ClaimCaseInvestigation insertClaimCaseInvestigation(ClaimCaseInvestigation claimCaseInvestigation)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
-        stringBuilder.append("DL").append(investigation);
-        claimCaseInvestigation.setInvNo(stringBuilder.toString());
-        claimCaseInvestigation.setInvDate(DateUtils.getNowDate());
-        claimCaseInvestigation.setIsHistory("N");
-        claimCaseInvestigation.setStatus("Y");
-        claimCaseInvestigation.setCreateBy(SecurityUtils.getUsername());
-        claimCaseInvestigation.setCreateTime(DateUtils.getNowDate());
-        claimCaseInvestigation.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
+        int i;
+        ClaimCaseInvestigation caseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(claimCaseInvestigation.getRptNo());
+        if (StringUtils.isNotNull(caseInvestigation)) {
+            i = claimCaseInvestigationMapper.updateClaimCaseInvestigation(claimCaseInvestigation);
+        }else{
+            StringBuilder stringBuilder = new StringBuilder();
+            String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+            stringBuilder.append("DL").append(investigation);
+            claimCaseInvestigation.setInvNo(stringBuilder.toString());
+            claimCaseInvestigation.setInvDate(DateUtils.getNowDate());
+            claimCaseInvestigation.setIsHistory("N");
+            claimCaseInvestigation.setStatus("Y");
+            claimCaseInvestigation.setCreateBy(SecurityUtils.getUsername());
+            claimCaseInvestigation.setCreateTime(DateUtils.getNowDate());
+            claimCaseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseInvestigation.setUpdateTime(DateUtils.getNowDate());
+            i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(claimCaseInvestigation);
+        }
         return i==1? claimCaseInvestigation:null;
     }
 

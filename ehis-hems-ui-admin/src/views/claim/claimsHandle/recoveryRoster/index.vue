@@ -195,9 +195,7 @@
       </el-card>
 
     <!-- 保单信息查询模态框 -->
-    <insured-modal :value="dialogPolicy"
-                   @getPropData="getPropData" :fixInfo="fixInfo"
-                   @closeDialogVisable="closeDialogVisable"/>
+    <insured-modal  :saveVFlag="saveVFlag" :value="dialogPolicy"  @getPropData="getPropData" :fixInfo="fixInfo"  @closeDialogVisable="closeDialogVisable"/>
 
 
   </div>
@@ -223,6 +221,7 @@
       },
         data() {
             return {
+              saveVFlag:true,
               dialogPolicy:false,
               fixInfo: {
                 batchNo: undefined,
@@ -310,6 +309,7 @@
           return this.selectDictLabel(this.ysOrNo, row.recMessageFlag)
         },
         closeDialogVisable() {
+          this.saveVFlag = true;
           this.dialogPolicy = false
         },
         getPropData(backValue) {
@@ -327,6 +327,7 @@
 
 
         searchFun() {
+          this.saveVFlag = false;
           this.dialogPolicy = true;
         },
         changeDialogVisable(){

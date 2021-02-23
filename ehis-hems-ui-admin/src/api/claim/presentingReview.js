@@ -8,6 +8,14 @@ export function getBackToList(query) {
     data: query
   })
 }
+//查询处理中理赔批次 列表
+export function getPendingList(query) {
+  return request({
+    url:'claimapt/batch/pendingList',
+    method:'post',
+    data:query
+  })
+}
 
 //查询已处理理赔批次 列表
 export function getDealWithList(query) {

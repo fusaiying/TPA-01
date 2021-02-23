@@ -381,10 +381,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         String province = baseProviderInfoMapper.selectName1(baseProviderInfo.getProviderCode());
         if("01".equals(baseProviderInfo.getOrgFlag())){
             baseProviderInfoMapper.updateBaseProviderInfoByCode(baseProviderInfo);
-            BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+            /*BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
             if(baseProviderInfoNew != null){
                 baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
-            }
+            }*/
             baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
             baseProviderInfo.setStatus("Y");
                 //查询省的中文名称

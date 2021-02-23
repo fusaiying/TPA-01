@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="insuredNos != null  and insuredNos != ''">
                 insured_no in
-                <foreach collection="array" item="roleId" open="(" separator="," close=")">
+                <foreach collection="insuredNos" item="insuredNos" open="(" separator="," close=")">
                     #{insuredNos}
                 </foreach>
             </if>

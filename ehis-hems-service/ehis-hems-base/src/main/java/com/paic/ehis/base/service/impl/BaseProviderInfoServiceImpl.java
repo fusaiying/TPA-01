@@ -308,11 +308,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         baseProviderInfo.setUpdateTime(DateUtils.getNowDate());
         baseProviderInfo.setCreateBy(SecurityUtils.getUsername());
         baseProviderInfo.setUpdateBy(SecurityUtils.getUsername());
-        BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
+        /*BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(baseProviderInfo.getProviderCode());
         if(baseProviderInfoNew != null){
             baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(baseProviderInfo.getProviderCode());
-        }
-
+        }*/
         baseProviderInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("providerinfoSer",12,12));
         baseProviderInfo.setStatus("Y");
         baseProviderInfo.setUpdateFlag("0");

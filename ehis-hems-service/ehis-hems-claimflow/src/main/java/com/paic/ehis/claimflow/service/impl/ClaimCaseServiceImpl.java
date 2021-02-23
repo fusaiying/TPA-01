@@ -709,6 +709,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+        auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();

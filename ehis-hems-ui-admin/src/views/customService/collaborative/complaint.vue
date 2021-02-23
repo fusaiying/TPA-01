@@ -732,6 +732,7 @@
       }
     },
     created() {
+      debugger
         this.queryParams.workOrderNo=this.$route.query.workOrderNo;
         this.queryParams.policyNo=this.$route.query.policyNo;
         this.queryParams.policyItemNo=this.$route.query.policyItemNo;
@@ -748,25 +749,6 @@
     },
 
     methods: {
-      //新增按钮
-      add(){
-        let addQueryParams=this.ruleForm
-        addQueryParams.workOrderNo=this.workOrderNo
-        console.log("sdas",this.workOrderNo)
-        dealAdd(addQueryParams).then(res => {
-          console.log("增加",addQueryParams)
-          if (res != null && res.code === 200) {
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
-      },
       //取消
       deal(){},
       //反显信息需求
@@ -812,7 +794,7 @@
 
       //暂存
       temporary(){
-        let insert=this.ruleForm
+        let insert=this.sendForm
         insert.sign="01"
         insert.workOrderNo=this.$route.query.workOrderNo
         collaborativeTemporary(insert).then(res => {

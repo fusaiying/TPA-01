@@ -360,8 +360,8 @@ public class ClaimBatchController extends BaseController {
     }
 
     //根据证件类型和证件号去查被保人信息表policy_insured
-    @GetMapping(value = "/getInfoQueryTheHospital")
-    public AjaxResult getInfoQueryTheHospital(ClaimCaseStanding claimCaseStanding) {
+    @GetMapping(value = "/selectClaimCaseStandingByIdidType")
+    public AjaxResult selectClaimCaseStandingByIdidType(ClaimCaseStanding claimCaseStanding) {
 
         List<String> str=new ArrayList<>();
         //先查tpa--policy_insured

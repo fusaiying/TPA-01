@@ -47,10 +47,10 @@ public interface WorkHandleInfoMapper
 
     /**
      * 协办投诉处理
-     * @param complaintDealVo
+     * @param workHandleInfo
      * @return
      */
-    public int assistInComplaint(ComplaintDealVo complaintDealVo);
+    public int assistInComplaint(WorkHandleInfo workHandleInfo);
 
     /**
      * 删除工单处理信息 

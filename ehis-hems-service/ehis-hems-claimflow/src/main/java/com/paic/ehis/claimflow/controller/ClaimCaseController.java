@@ -541,4 +541,16 @@ public class ClaimCaseController extends BaseController {
         return AjaxResult.success(claimCaseService.selectBaseCodeMappingNew(baseCodeMappingNew));
     }
 
+    /**
+     * PBW在线理赔请求接口
+     * @param baseCodeMappingNew
+     * @return
+     */
+//    @GetMapping("/getBatchNoRptNo")
+//    public AjaxResult getBatchNoRptNo(BaseCodeMappingNew baseCodeMappingNew) {
+//
+//
+//        return AjaxResult.success(claimCaseService.selectBaseCodeMappingNew(baseCodeMappingNew));
+//    }
+
 }

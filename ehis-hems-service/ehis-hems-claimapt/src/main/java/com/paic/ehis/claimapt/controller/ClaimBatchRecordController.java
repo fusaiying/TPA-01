@@ -125,7 +125,10 @@ public class ClaimBatchRecordController extends BaseController
     public AjaxResult addBatchAndStanding(@RequestBody StandingAndBatck standingAndBatck)
     {
         if (standingAndBatck.getClaimBatch().getCasenum() < standingAndBatck.getStandingData().size()){
-            return AjaxResult.success(iClaimCaseStandingService.updateClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch().getBatchno()));
+            iClaimCaseStandingService.updateClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch().getBatchno());
+            List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+            standingAndBatck.setStandingData(claimCaseStandingVos1);
+            return AjaxResult.success(standingAndBatck);
         } else {
 
             String batchno = standingAndBatck.getClaimBatch().getBatchno();//获取批次号

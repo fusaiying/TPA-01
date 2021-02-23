@@ -261,13 +261,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
      //   AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
      //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
-        AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         PersonInfo callPerson= personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
         FlowLog flowLog=new FlowLog();
-        WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         //工单表修改
@@ -303,6 +303,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         acceptDetailInfo.setBankLocation(demandAcceptVo.getBankLocation());
         acceptDetailInfo.setAccountNumber(demandAcceptVo.getAccountNumber());
         acceptDetailInfo.setBankName(demandAcceptVo.getBankName());
+        acceptDetailInfo.setContent(demandAcceptVo.getContent());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();

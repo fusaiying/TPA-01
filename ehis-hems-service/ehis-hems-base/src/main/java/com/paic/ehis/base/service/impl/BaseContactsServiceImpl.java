@@ -127,6 +127,14 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
     }
 
 
+    @Override
+    public int deleteBaseContact(BaseContacts baseContacts)
+    {
+        int  i = baseContactsMapper.deleteBaseContactsByIdNew(baseContacts.getSerialNo());
+        return i;
+    }
+
+
 
     @Override
     public int addBaseContacts(List<BaseContacts> baseContactsList) {
@@ -151,7 +159,7 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
         }
         return count;*/
         int count = 0;
-        if (!baseContactsList.isEmpty()) {
+        /*if (!baseContactsList.isEmpty()) {
             baseContactsMapper.updateBaseContactsStatus(baseContactsList.get(0).getSupplierCode());
             for (BaseContacts baseContacts : baseContactsList) {
                 if ("01".equals(baseContacts.getPlaceType())){
@@ -174,6 +182,33 @@ public class BaseContactsServiceImpl implements IBaseContactsService {
                 baseContacts.setStatus("Y");
                 baseContacts.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
                 int i = baseContactsMapper.insertBaseContactsNew(baseContacts);
+                count += i;
+            }
+        }*/
+        int i =0;
+        if (!baseContactsList.isEmpty()) {
+            for(BaseContacts baseContact :baseContactsList) {
+                if (baseContact.getSerialNo() != null && baseContact.getSerialNo() != "") {
+                    if ("01".equals(baseContact.getPlaceType())){
+                        String name=baseContact.getName();
+                        baseContact.setPassword(PinYinUtils.toPinYin(name)+"123456");
+                    }
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    i = baseContactsMapper.updateBaseContactsNew(baseContact);
+                }else{
+                    if ("01".equals(baseContact.getPlaceType())){
+                        String name=baseContact.getName();
+                        baseContact.setPassword(PinYinUtils.toPinYin(name)+"123456");
+                    }
+                    baseContact.setCreateTime(DateUtils.getNowDate());
+                    baseContact.setCreateBy(SecurityUtils.getUsername());
+                    baseContact.setUpdateTime(DateUtils.getNowDate());
+                    baseContact.setUpdateBy(SecurityUtils.getUsername());
+                    baseContact.setStatus("Y");
+                    baseContact.setSerialNo(PubFun.createMySqlMaxNoUseCache("contactsSer",12,12));
+                    i = baseContactsMapper.insertBaseContactsNew(baseContact);
+                }
                 count += i;
             }
         }

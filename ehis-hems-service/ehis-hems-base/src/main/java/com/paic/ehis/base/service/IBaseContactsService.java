@@ -57,6 +57,8 @@ public interface IBaseContactsService
 
     public int deleteBaseContacts(BaseContacts baseContacts);
 
+    public int deleteBaseContact(BaseContacts baseContacts);
+
     public int addBaseContacts(List<BaseContacts> baseContactsVo);
 
 

@@ -130,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>
             <if test="rptNo != null  and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="billrecevieflag != null  and billrecevieflag != ''"> and cb.bill_recevie_flag = #{billrecevieflag}</if>
+            <if test="billrecevieflag != null  and billrecevieflag != ''"> and cbii.is_filing = #{billrecevieflag}</if>
     </select>
 
     <update id="updateClaimBatchBill" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo">

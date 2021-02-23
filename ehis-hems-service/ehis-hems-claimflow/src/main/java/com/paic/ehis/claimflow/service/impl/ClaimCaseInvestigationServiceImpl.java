@@ -71,7 +71,7 @@ public class ClaimCaseInvestigationServiceImpl implements IClaimCaseInvestigatio
     public ClaimCaseInvestigation insertClaimCaseInvestigation(ClaimCaseInvestigation claimCaseInvestigation)
     {
         int i;
-        ClaimCaseInvestigation caseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(claimCaseInvestigation.getRptNo());
+        ClaimCaseInvestigation caseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByNew(claimCaseInvestigation.getRptNo());
         if (StringUtils.isNotNull(caseInvestigation)) {
             i = claimCaseInvestigationMapper.updateClaimCaseInvestigation(claimCaseInvestigation);
         }else{

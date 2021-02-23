@@ -1,7 +1,10 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.paic.ehis.claimflow.domain.*;
+import com.paic.ehis.claimflow.domain.ClaimCaseBill;
+import com.paic.ehis.claimflow.domain.ClaimCaseBillDetail;
+import com.paic.ehis.claimflow.domain.ClaimCaseBillDiagnosis;
+import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO;
 import com.paic.ehis.claimflow.domain.vo.BillAccomplishVo;
 import com.paic.ehis.claimflow.domain.vo.BillProcessingVo;
@@ -16,6 +19,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import com.paic.ehis.system.api.domain.SysOrganInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -284,11 +288,11 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             // 监控时效
             caseInfo.setMonitorAging(claimCaseRecordMapper.selectMinAcceptTime(caseInfo.getRptNo()));
             // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if (null == claimCaseInvestigation){
-                caseInfo.setInvestigation("02");
-            } else {
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+            if (claimCaseInvestigation.size() > 0){
                 caseInfo.setInvestigation("01");
+            } else {
+                caseInfo.setInvestigation("02");
             }
             // 出单公司、承保机构
             List<ClaimCasePolicy> claimCasePolicyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(caseInfo.getRptNo());
@@ -297,7 +301,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             LinkedHashSet<String> companyNameSet = new LinkedHashSet<>(companyNameList);
             ArrayList<String> companyName = new ArrayList<>(companyNameSet);
             String cs = StringUtils.join(companyName, "|");
-            // 承保机构 取sys_dept
+            // 承保机构 取sys_organ-info
             List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
@@ -306,7 +310,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
                 sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
-                String ms = StringUtils.join(sysOrganInfoList, "|");
+                List<String> organNameList = sysOrganInfoList.stream().map(SysOrganInfoVO::getOrganName).collect(Collectors.toList());
+                String ms = StringUtils.join(organNameList, "|");
                 caseInfo.setPolicyManageCom(ms);
             }
             caseInfo.setCompanyName(cs);
@@ -332,11 +337,11 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         // 获取是否调查、出单公司、承保机构
         for (BillAccomplishVo accomplishVo : accomplishList){
             // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(accomplishVo.getRptNo());
-            if (null == claimCaseInvestigation){
-                accomplishVo.setInvestigation("02");
-            } else {
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(accomplishVo.getRptNo());
+            if (claimCaseInvestigation.size() > 0){
                 accomplishVo.setInvestigation("01");
+            } else {
+                accomplishVo.setInvestigation("02");
             }
             // 出单公司、承保机构
             List<ClaimCasePolicy> claimCasePolicyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(accomplishVo.getRptNo());
@@ -346,7 +351,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             ArrayList<String> companyName = new ArrayList<>(companyNameSet);
             String cs = StringUtils.join(companyName, "|");
             accomplishVo.setCompanyName(cs);
-            // 承保机构 取sys_dept
+            // 承保机构 取sys_organ_info
             List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
@@ -355,7 +360,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
                 sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
-                String ms = StringUtils.join(sysOrganInfoList, "|");
+                List<String> organNameList = sysOrganInfoList.stream().map(SysOrganInfoVO::getOrganName).collect(Collectors.toList());
+                String ms = StringUtils.join(organNameList, "|");
                 accomplishVo.setPolicyManageCom(ms);
             }
         }
@@ -385,7 +391,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         List<String> policyList = claimCasePolicies.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
         // 调用claimcal接口
         if (policyList.size()>0){
-            return claimCalService.selectFeeitemByPolicys(policyList);
+            return claimCalService.selectFeeitemByPolicys(claimCasePolicies);
         }
         return null;
     }

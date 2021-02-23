@@ -2,6 +2,7 @@ package com.paic.ehis.system.api.factory;
 
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class ClaimCalServiceFallbackFactory implements FallbackFactory<ClaimCalS
         log.error("理算及福利规则调用失败:{}", throwable.getMessage());
         return new ClaimCalService() {
             @Override
-            public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys) {
+            public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<ClaimCasePolicy> policys) {
                 return null;
             }
 

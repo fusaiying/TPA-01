@@ -9,6 +9,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -104,7 +105,8 @@ public class ClaimProductFeeitemController extends BaseController
      * @return
      */
     @PostMapping("/policys")
-    public List<ClaimProductFeeitem> selectFeeitemByPolicys(@RequestBody List<String> policys){
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(@RequestBody List<ClaimCasePolicy> policys){
+        List<ClaimProductFeeitem> claimProductFeeitems = claimProductFeeitemService.selectFeeitemByPolicys(policys);
         return claimProductFeeitemService.selectFeeitemByPolicys(policys);
     }
 }

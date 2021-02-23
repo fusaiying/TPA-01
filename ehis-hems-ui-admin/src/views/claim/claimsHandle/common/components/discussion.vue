@@ -8,7 +8,7 @@
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
             <div style="float: right;">
-              <el-button v-if="isButtonShow && conSave" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
+              <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
               <el-button v-if="node!=='sport'" size="mini" type="primary" @click="backClaimCase">退回受理</el-button>
@@ -149,34 +149,34 @@
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">调查任务号：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
+              <span class="info_span_col to_right">调查任务号：</span><span class="info_span_col">{{ surveyInfo.invNo }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">被保人：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">被保人：</span><span class="info_span_col">{{ surveyInfo.name}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{ surveyInfo.contractName }}</span>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="8">
-              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">证件号码：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">出险日期：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{selectDictLabel(rgtSexs,surveyInfo.sex)}}</span>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
+              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{selectDictLabel(card_types,surveyInfo.idType)}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">证件号码：</span><span class="info_span_col">{{ surveyInfo.idNo}}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">出险日期：</span><span class="info_span_col">{{ surveyInfo.accDate}}</span>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accAddress}}</span>
             </el-col>
           </el-row>
 
@@ -266,8 +266,13 @@
           verifyProReset,
           verifyCurrency,
           addRecoveryInfo,
+          investigationBaseInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
+
+  let dictss = [{dictType: 'rejected_reasons'}, {dictType: 'conclusion'}, {dictType: 'claim_currency'}, {dictType: 'negotiation_type'},
+    {dictType: 'negotiation_sub_type'}, {dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'},{dictType: 'inquiry_org'},{dictType: 'initiate_org'},
+    {dictType: 'rgtSex'},{dictType: 'card_type'}]
 
   export default {
     components: {
@@ -296,7 +301,8 @@
         this.rptNo = this.fixInfoData.rptNo;
         this.batchNo = this.fixInfoData.batchNo;
         if(this.rptNo != '') {
-          this.getCalInfo()
+          this.getCalInfo();
+          this.getInvestigationBaseInfo();
         }
       },
       value: function (newValue) {
@@ -315,6 +321,10 @@
         }
       };
       return {
+        dictList: [],
+        rgtSexs:[],
+        card_types: [],
+        inQuireConfirmBtn:false,
         policyNos :[],
         conSave:false,
         rptNo:'',
@@ -368,7 +378,22 @@
 
         //调查信息 start
         surveyInfo:{
-
+          invNo:'', // 调查任务号
+          name : '', // 被保人
+          sex:'', //性别
+          idType:'', // 证件类型
+          idNo:'', // 证件号码
+          accDate:'', // 出险日期
+          accProvince:'',
+          accCity:'',
+          accDistrict:'',
+          accAddress:'',
+          invType:'', // 提调类型
+          invReason:'', // 提调原因
+          invOrganCode:'', // 调查机构
+          organCode:'', // 提调机构
+          policyNo:'',
+          invView:'',
         },
         surveyForm:{
           invType:'',
@@ -417,41 +442,43 @@
 
     created() {
     },
-    mounted() {
-      this.getDicts("rejected_reasons").then(response => {
-        this.rejectedReasons = response.data;
-      });
-      //赔付结论 conclusion
-      this.getDicts("conclusion").then(response => {
-        this.conclusionSelect = response.data;
-      });
-      this.getDicts("claim_currency").then(response => {
-        this.currencys = response.data;
-      });
-      //协谈类型
-      this.getDicts("negotiation_type").then(response => {
-        this.negotiationTypes = response.data;
-      });
-      //协谈细类
-      this.getDicts("negotiation_sub_type").then(response => {
-        this.negotiationSubTypes = response.data;
-      });
-      //提调类型
-      this.getDicts("dispatch_type").then(response => {
-        this.dispatchTypes = response.data;
-      });
-      //提调原因
-      this.getDicts("initiate_reasons").then(response => {
-        this.initiateReasons = response.data;
-      });
-      //调查机构
-      this.getDicts("inquiry_org").then(response => {
-        this.inquiryOrg = response.data;
-      });
-      //提调机构
-      this.getDicts("initiate_org").then(response => {
-        this.initiateOrg = response.data;
-      });
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.rejectedReasons = this.dictList.find(item => {
+        return item.dictType === 'rejected_reasons'
+      }).dictDate
+      this.conclusionSelect = this.dictList.find(item => {
+        return item.dictType === 'conclusion'
+      }).dictDate
+      this.currencys = this.dictList.find(item => {
+        return item.dictType === 'claim_currency'
+      }).dictDate
+      this.negotiationTypes = this.dictList.find(item => {
+        return item.dictType === 'negotiation_type'
+      }).dictDate
+      this.negotiationSubTypes = this.dictList.find(item => {
+        return item.dictType === 'negotiation_sub_type'
+      }).dictDate
+      this.dispatchTypes = this.dictList.find(item => {
+        return item.dictType === 'dispatch_type'
+      }).dictDate
+      this.initiateReasons = this.dictList.find(item => {
+        return item.dictType === 'initiate_reasons'
+      }).dictDate
+      this.inquiryOrg = this.dictList.find(item => {
+        return item.dictType === 'inquiry_org'
+      }).dictDate
+      this.initiateOrg = this.dictList.find(item => {
+        return item.dictType === 'initiate_org'
+      }).dictDate
+      this.rgtSexs = this.dictList.find(item => {
+        return item.dictType === 'rgtSex'
+      }).dictDate
+      this.card_types = this.dictList.find(item => {
+        return item.dictType === 'card_type'
+      }).dictDate
     },
     computed: {
     },
@@ -650,24 +677,30 @@
         params.claimCheck = this.conclusionForm.claimCheck;
         params.remark = this.conclusionForm.remark;
 
-        backToClaimCase(params).then(res => {
-          console.log(res);
-          if (res.code == '200') {
-            this.$message({
-              message: '退回成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            });
-          } else {
-            this.$message({
-              message: '退回失败！',
-              type: 'error',
-              center: true,
-              showClose: true
-            });
-          }
-        });
+        this.$confirm(`是否退回受理?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          backToClaimCase(params).then(res => {
+            if (res.code == '200') {
+              this.$message({
+                message: '退回成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              });
+            } else {
+              this.$message({
+                message: '退回失败！',
+                type: 'error',
+                center: true,
+                showClose: true
+              });
+            }
+          });
+        }).catch(() => {
+        })
       },
       //调查保存
       inQuireSaveFun(){
@@ -680,8 +713,8 @@
             params.rptNo = this.rptNo;
 
             inQuireSave(params).then(res => {
-              console.log(res);
               if (res.code == '200') {
+                this.getInvestigationBaseInfo();
                 this.$message({
                   message: '保存成功！',
                   type: 'success',
@@ -752,6 +785,32 @@
             // console.log("res.data")
             // console.log(res.data)
             // console.log("res.data")
+          }
+        });
+      },
+      getInvestigationBaseInfo() {
+        investigationBaseInfo(this.rptNo).then(res => {
+          if(res.code == '200' && res.data) {
+            this.surveyInfo = res.data;
+            if(this.surveyInfo.invType != '' && this.surveyInfo.invType != null) {
+              this.surveyForm.invType = this.surveyInfo.invType;
+              this.inQuireConfirmBtn = true;
+            }
+            if(this.surveyInfo.invReason != '' && this.surveyInfo.invReason != null) {
+              this.surveyForm.invReason = this.surveyInfo.invReason;
+            }
+            if(this.surveyInfo.invOrganCode != '' && this.surveyInfo.invOrganCode != null) {
+              this.surveyForm.invOrganCode = this.surveyInfo.invOrganCode;
+            }
+            if(this.surveyInfo.organCode != '' && this.surveyInfo.organCode != null) {
+              this.surveyForm.organCode = this.surveyInfo.organCode;
+            }
+            if(this.surveyInfo.policyNo != '' && this.surveyInfo.policyNo != null) {
+             // this.surveyForm.policyNo = this.surveyInfo.policyNo;
+            }
+            if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
+              this.surveyForm.invView = this.surveyInfo.invView;
+            }
           }
         });
       },

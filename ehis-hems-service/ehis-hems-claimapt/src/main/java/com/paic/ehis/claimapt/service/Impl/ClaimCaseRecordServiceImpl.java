@@ -129,6 +129,7 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
      */
     @Override
     public int insertClaimCaseRecordAndBatchRecord(ClaimCaseStandingVo claimCaseStandingVo){
+        String bahtime="96"+"JGH0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseStandingVo.getRptno());
         claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//受理05
@@ -139,7 +140,7 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         claimCaseRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
         claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-
+        claimCaseRecord.setRptNo(bahtime);
         ClaimCase claimCase = new ClaimCase();
         //归档号
         String claimCaseNumber1="JGHDQQW"+DateUtils.dateTimeNow("yyyy")+"X"+PubFun.createMySqlMaxNoUseCache("FILINGCODE",10,10);
@@ -152,6 +153,7 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimCase.setRptNo(bahtime);
         claimCaseMapper.insertClaimCase(claimCase);
 
         return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);

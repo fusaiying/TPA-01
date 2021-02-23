@@ -54,27 +54,6 @@ public class ClaimDebtWhitelistController extends BaseController
     }
 
     /**
-     * 获取案件追讨白名单详细信息
-     */
-    //@PreAuthorize("@ss.hasPermi('system:whitelist:query')")
-    @GetMapping(value = "/{debtWhitelistId}")
-    public AjaxResult getInfo(@PathVariable("debtWhitelistId") Long debtWhitelistId)
-    {
-        return AjaxResult.success(claimDebtWhitelistService.selectClaimDebtWhitelistById(debtWhitelistId));
-    }
-
-    /**
-     * 白名单维护界面初始化或未录入任何查询条件，点击查询按钮时，默认查询状态不为失效，追缴通知为是的白名单信息
-     */
-   // @PreAuthorize("@ss.hasPermi('system:whitelist:list1')")
-    @GetMapping("/list1")
-    public TableDataInfo list1(ClaimDebtWhitelist claimDebtWhitelist)
-    {
-        startPage();
-        List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList1(claimDebtWhitelist);
-        return getDataTable(list);
-    }
-    /**
      * 新增案件追讨白名单
      */
    // @PreAuthorize("@ss.hasPermi('system:whitelist:add')")
@@ -117,11 +96,11 @@ public class ClaimDebtWhitelistController extends BaseController
         return toAjax(claimDebtWhitelistService.deleteClaimDebtWhitelistById(debtWhitelistId));
     }
 
-    /*根据报案号查询欠款信息*/
+    /*根据被保人客户号号查询欠款信息*/
     //@PreAuthorize("@ss.hasPermi('system:whitelist:ResidualList')")
     @GetMapping("/residualList")
-    public AjaxResult residualList(String rptNo)
+    public AjaxResult residualList(String insuredNo)
     {
-        return AjaxResult.success(claimDebtWhitelistService.selectResidualList(rptNo));
+        return AjaxResult.success(claimDebtWhitelistService.selectResidualList(insuredNo));
     }
 }

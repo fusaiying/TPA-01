@@ -3,6 +3,7 @@ package com.paic.ehis.system.api;
 
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import com.paic.ehis.system.api.factory.ClaimCalServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -26,7 +27,7 @@ public interface ClaimCalService {
      * @return
      */
     @PostMapping("/productFeeitem/policys")
-    public List<ClaimProductFeeitem> selectFeeitemByPolicys(@RequestBody List<String> policys);
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(@RequestBody List<ClaimCasePolicy> policys);
 
     @GetMapping("/claim/calculate/{rptNo}")
     public AjaxResult Calculate(@PathVariable("rptNo") String rptNo);

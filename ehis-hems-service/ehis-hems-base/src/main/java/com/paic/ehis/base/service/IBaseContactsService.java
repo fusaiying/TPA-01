@@ -55,6 +55,10 @@ public interface IBaseContactsService
 
     public int insertBaseContactsNew(String providerCode);
 
+    public int deleteBaseContacts(BaseContacts baseContacts);
+
+    public int deleteBaseContact(BaseContacts baseContacts);
+
     public int addBaseContacts(List<BaseContacts> baseContactsVo);
 
 

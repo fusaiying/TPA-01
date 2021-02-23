@@ -1,7 +1,10 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.paic.ehis.claimflow.domain.*;
+import com.paic.ehis.claimflow.domain.ClaimCaseBill;
+import com.paic.ehis.claimflow.domain.ClaimCaseBillDetail;
+import com.paic.ehis.claimflow.domain.ClaimCaseBillDiagnosis;
+import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO;
 import com.paic.ehis.claimflow.domain.vo.BillAccomplishVo;
 import com.paic.ehis.claimflow.domain.vo.BillProcessingVo;
@@ -16,6 +19,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import com.paic.ehis.system.api.domain.SysOrganInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -385,7 +389,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         List<String> policyList = claimCasePolicies.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
         // 调用claimcal接口
         if (policyList.size()>0){
-            return claimCalService.selectFeeitemByPolicys(policyList);
+            return claimCalService.selectFeeitemByPolicys(claimCasePolicies);
         }
         return null;
     }

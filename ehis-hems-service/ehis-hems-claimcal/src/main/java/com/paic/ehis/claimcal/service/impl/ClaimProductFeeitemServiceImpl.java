@@ -5,6 +5,7 @@ import com.paic.ehis.claimcal.domain.ClaimProductFeeitem;
 import com.paic.ehis.claimcal.mapper.ClaimProductFeeitemMapper;
 import com.paic.ehis.claimcal.service.IClaimProductFeeitemService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +104,7 @@ public class ClaimProductFeeitemServiceImpl implements IClaimProductFeeitemServi
      * @return
      */
     @Override
-    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys) {
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<ClaimCasePolicy> policys) {
 
         return claimProductFeeitemMapper.selectFeeitemByPolicyNos(policys);
     }

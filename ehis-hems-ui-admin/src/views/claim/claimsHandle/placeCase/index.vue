@@ -128,7 +128,7 @@
             <el-row>
               <el-col :span="24">  <!--:readonly="read ? 'readonly' : false"-->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input :disabled="readbatchNo ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -221,6 +221,7 @@
           };
             return {
                read:false,
+               readbatchNo:false,
                 form: {
                   deptCode: '',
                   claimType: '',
@@ -381,6 +382,12 @@
             this.pbaceCaseForm.rptStartNo = row.rptStartNo;
             this.pbaceCaseForm.rptEndNo = row.rptEndNo;
             this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+            if(row.batchNo != ''  && row.batchNo != null) {
+              this.readbatchNo = true;
+            } else {
+              this.readbatchNo = false;
+            }
+
           } else {
             this.resetInfo();
           }
@@ -498,6 +505,7 @@
           this.pbaceCaseForm.rptEndNo = '';
           this.pbaceCaseForm.caseBoxNo = '';
           this.read = false;
+          this.readbatchNo = false;
           this.$refs['pbaceCaseForm'].clearValidate();
         },
         getFullRptNo(row,col){

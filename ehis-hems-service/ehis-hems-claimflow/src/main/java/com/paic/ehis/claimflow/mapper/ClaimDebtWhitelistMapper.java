@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
+import com.paic.ehis.claimflow.domain.dto.ClaimDebtWhitelistDTO;
 
 import java.util.List;
 
@@ -15,11 +16,9 @@ public interface ClaimDebtWhitelistMapper
 
     /**
      * 查询案件追讨白名单列表
-     * 
-     * @param claimDebtWhitelist 案件追讨白名单
      * @return 案件追讨白名单集合
      */
-    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist);
+    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelistDTO claimDebtWhitelistDTO);
 
     /**
      * 新增案件追讨白名单

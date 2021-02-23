@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <!--条件查询列表-->
-    <select id="selectClaimDebtWhitelistList" parameterType="com.paic.ehis.claimflow.domain.ClaimDebtWhitelist" resultMap="ClaimDebtWhitelistResult">
+    <select id="selectClaimDebtWhitelistList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimDebtWhitelistDTO" resultMap="ClaimDebtWhitelistResult">
         SELECT
         debt_whitelist_id,
         insured_no,

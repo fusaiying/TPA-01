@@ -1792,7 +1792,7 @@
             pageNum:this.hisContractPageInfo.currentPage,
             pageSize:this.hisContractPageInfo.pageSize,
             providerCode:this.providerForm.providerCode,
-            status:'Y',
+            //status:'Y',
             orderByColumn:'create_time',
             isAsc:'desc',
             xtype:'bckList'

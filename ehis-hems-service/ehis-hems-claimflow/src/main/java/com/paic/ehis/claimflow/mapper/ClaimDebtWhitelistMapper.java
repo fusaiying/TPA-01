@@ -54,7 +54,7 @@ public interface ClaimDebtWhitelistMapper
     public int deleteClaimDebtWhitelistByIds(Long[] debtWhitelistIds);
 
     /**
-     *根据报案号查询欠款
+     *根据被保人客户号查询欠款
      */
-    public ClaimDebtWhitelist selectResidualList(String rptNo);
+    public ClaimDebtWhitelist selectResidualList(String insuredNo);
 }

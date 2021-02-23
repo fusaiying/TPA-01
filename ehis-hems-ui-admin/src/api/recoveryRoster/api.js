@@ -23,7 +23,7 @@ export function editData(data) {
 // 删除
 export function debtWhiteInfo(debtWhitelistId) {
   return request({
-    url:  '/system/whitelist/remove/'+ debtWhitelistId,
+    url:  '/claimflow/whitelist/remove/'+ debtWhitelistId,
     method: 'delete',
   })
 }
@@ -31,7 +31,7 @@ export function debtWhiteInfo(debtWhitelistId) {
 //是否有欠款
 export function checkMoney(query) {
   return request({
-    url:  '/system/whitelist/residualList',
+    url:  '/claimflow/whitelist/residualList',
     method: 'get',
     params: query
   })

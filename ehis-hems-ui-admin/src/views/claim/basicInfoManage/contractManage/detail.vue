@@ -564,7 +564,7 @@
         //  bussinessStatus:'01', todo:
           providerCode:this.providerCode,
           flag :'02',
-          status:'Y',
+          //status:'Y',
           orderByColumn:'create_time',
           isAsc:'desc'
         };

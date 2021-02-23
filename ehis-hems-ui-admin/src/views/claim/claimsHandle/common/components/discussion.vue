@@ -8,7 +8,7 @@
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
             <div style="float: right;">
-              <el-button v-if="isButtonShow && conSave" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
+              <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
               <el-button v-if="node!=='sport'" size="mini" type="primary" @click="backClaimCase">退回受理</el-button>

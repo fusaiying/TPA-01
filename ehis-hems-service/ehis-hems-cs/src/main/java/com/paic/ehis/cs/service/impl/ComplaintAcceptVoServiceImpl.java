@@ -210,12 +210,19 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
-        WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
-        AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
+        acceptDetailInfo.setChannelCode(complaintAcceptVo.getChannelCode());
+        acceptDetailInfo.setItemCode(complaintAcceptVo.getItemCode());
+        acceptDetailInfo.setCallCenterId(complaintAcceptVo.getCallCenterId());
+        acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
+        acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
+        acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");

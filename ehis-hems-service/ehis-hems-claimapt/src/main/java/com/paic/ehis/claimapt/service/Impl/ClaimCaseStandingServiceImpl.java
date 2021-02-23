@@ -267,7 +267,6 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService {
     }
 
     /**
-     *
      * @param claimBatch
      * @return
      */
@@ -280,7 +279,7 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService {
 
             String[] split = claimCaseStandingslist.getClaimmaterials().split(",");
             List<String> b = new ArrayList<>();
-            for(int i=0;i<split.length;i++){
+            for (int i = 0; i < split.length; i++) {
                 b.add(split[i]);
             }
 
@@ -297,6 +296,19 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService {
             objects.add(claimCaseStandingVo);
         }
         return objects;
+    }
+
+    @Override
+    public int updateClaimCaseStandingByBatchno(String batchno){
+        ClaimCaseStanding claimCaseStanding = new ClaimCaseStanding();
+        claimCaseStanding.setBatchno(batchno);
+        claimCaseStanding.setStatus("N");
+        return claimCaseStandingMapper.updateClaimCaseStandingByBatchno(claimCaseStanding);
+    }
+
+    @Override
+    public List<ClaimCaseStanding> selectClaimCaseStandingByIdidType(ClaimCaseStanding claimCaseStanding) {
+        return claimCaseStandingMapper.selectClaimCaseStandingByIdidType(claimCaseStanding);
     }
 
 }

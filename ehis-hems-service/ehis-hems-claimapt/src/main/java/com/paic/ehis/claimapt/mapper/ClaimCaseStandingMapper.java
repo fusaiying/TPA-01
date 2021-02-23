@@ -78,4 +78,9 @@ public interface ClaimCaseStandingMapper
     public ClaimCaseStanding selectClaimCaseStandingByIdOne(String rptno);
 
     public List<ClaimCaseStanding> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
+
+    public int updateClaimCaseStandingByBatchno(ClaimCaseStanding claimCaseStanding);
+
+
+    public List<ClaimCaseStanding> selectClaimCaseStandingByIdidType(ClaimCaseStanding claimCaseStanding);
 }

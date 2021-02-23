@@ -461,7 +461,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             VoUtils voUtils = new VoUtils<ComplaintDealVo>();
             workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
         }
-        return workHandleInfoMapper.assistInComplaint(complaintDealVo);}
+        return workHandleInfoMapper.assistInComplaint(workHandleInfo);}
         else {
 
             //将所有状态置为N
@@ -537,9 +537,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 Map map = new HashMap<String, String>();
                 map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
                 VoUtils voUtils = new VoUtils<ComplaintDealVo>();
-                workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
+                workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,complaintDealVo);
             }
-            return workHandleInfoMapper.assistInComplaint(complaintDealVo);}
+            return workHandleInfoMapper.assistInComplaint(workHandleInfo);}
         else {
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());

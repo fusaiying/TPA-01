@@ -10,8 +10,9 @@ import lombok.Data;
 
 
 import java.util.Date;
+import java.util.List;
 
-
+@Data
 public class DemandAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -182,7 +183,8 @@ public class DemandAcceptVo extends BaseEntity {
     //征求处理意见
     private String solicitOpinion;
     //协办方UM帐号
-    private String umCode;
+    private String[] umCode;
+
 
     private Long CollaborativeId;
     @Excel(name="处理意见")
@@ -627,13 +629,6 @@ public class DemandAcceptVo extends BaseEntity {
         this.solicitOpinion = solicitOpinion;
     }
 
-    public String getUmCode() {
-        return umCode;
-    }
-
-    public void setUmCode(String umCode) {
-        this.umCode = umCode;
-    }
 
     public Long getCollaborativeId() {
         return CollaborativeId;

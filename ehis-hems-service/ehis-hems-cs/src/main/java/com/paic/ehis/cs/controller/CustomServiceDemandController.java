@@ -131,7 +131,8 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/insertTeamwork")
     public AjaxResult insertTeamwork (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
     {
-        return toAjax(iCollaborativeFromService.insertTeamwork(demandAcceptVo));
+        iCollaborativeFromService.insertTeamwork(demandAcceptVo);
+        return AjaxResult.success();
     }
 
 /**

@@ -126,23 +126,28 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
      * @return
      */
     @Override
-    public int insertTeamwork(DemandAcceptVo demandAcceptVo) {
+    public void insertTeamwork(DemandAcceptVo demandAcceptVo) {
         //修改个人池状态为已协办
         //demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
+        String[] umCode1=demandAcceptVo.getUmCode();
         //往协办池加数据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        //随机生成流水号
-        collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
-        collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号
-        //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
-        collaborativeFrom.setUmCode(demandAcceptVo.getUmCode());
-        collaborativeFrom.setStatus("01");
-        collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
-        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        return collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
+        for(String um:umCode1){
+            collaborativeFrom.setUmCode(um);
+            //随机生成流水号
+            collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
+            collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号
+            //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
+            //collaborativeFrom.setUmCode(demandAcceptVo.getUmCode());
+            collaborativeFrom.setStatus("01");
+            collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
+            collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+            collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
+            collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+             collaborativeFromMapper.insertCollaborativeFrom(collaborativeFrom);
+        }
+
     }
     /**
      * 征求意见信息信息需求服务处理   加处理意见

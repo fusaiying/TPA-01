@@ -69,7 +69,7 @@ public interface ICollaborativeFromService
      * @param demandAcceptVo
      * @return
      */
-    int insertTeamwork(DemandAcceptVo demandAcceptVo);
+    void insertTeamwork(DemandAcceptVo demandAcceptVo);
 
     /**
      * 征求意见投诉需求处理意见

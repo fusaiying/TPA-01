@@ -112,7 +112,7 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
     public List<PolicyVo> selectInsuredList(PolicyDTO policyDTO) {
 
         List<PolicyVo> l = new ArrayList<>();
-        List<PolicyVo> policyVoList = policyInfoMapper.selectInsuredList(policyDTO);//属性值
+        List<PolicyVo> policyVoList = policyInfoMapper.selectInsuredList(policyDTO.getInsuredNo());//属性值
         PolicyVo policyVo1 = new PolicyVo();
         for (PolicyVo policyVo:policyVoList){
             policyVo1.setPolicyId(policyVo.getPolicyId());
@@ -140,9 +140,9 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
                 policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
             }
             List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
-            policyVo1.setMinData(dutyVos);
-
-         l.add(policyVo1);}
+            policyVo.setMinData(dutyVos);
+            l.add(policyVo);
+            }
        return  l;
     }
 }

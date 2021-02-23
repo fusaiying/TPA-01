@@ -129,7 +129,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public void insertTeamwork(DemandAcceptVo demandAcceptVo) {
         //修改个人池状态为已协办
         //demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
-        List<String> umCode1=demandAcceptVo.getUmCode();
+        String[] umCode1=demandAcceptVo.getUmCode();
         //往协办池加数据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         for(String um:umCode1){

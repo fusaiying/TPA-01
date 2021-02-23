@@ -53,6 +53,11 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 征求意见  信息需求页面查询
+     * @param workOrderNo
+     * @return
+     */
     @GetMapping("/accept")//信息需求受理
     public AjaxResult selectDemandAcceptVo(@RequestParam("workOrderNo") String workOrderNo){
         DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);

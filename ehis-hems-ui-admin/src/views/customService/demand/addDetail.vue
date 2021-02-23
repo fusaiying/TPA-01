@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
       <span style="color: blue">服务受理信息</span>
@@ -314,7 +314,7 @@
           </el-col>
           <el-col :span="8">
           <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
-            <el-radio-group v-model="ruleForm.bankTransfer">
+            <el-radio-group v-model="ruleForm.bankTransfer" @change="bankChange(ruleForm.bankTransfer)">
               <el-radio   label="1">是</el-radio>
               <el-radio   label="2">否</el-radio>
 
@@ -416,6 +416,71 @@
       }
     },
     data() {
+      // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
+      const rules_bank= {
+        callName: [
+          {required: true, message: "来电人不能为空", trigger: "blur"}
+        ],
+          channelCode: [
+          {required: true, message: "受理渠道不能为空", trigger: "blur"}
+        ],
+          itemCode: [
+          {required: true, message: "服务项目不能为空", trigger: "blur"}
+        ],
+          priorityLevel: [
+          {required: true, message: "优先级不能为空", trigger: "blur"}
+        ],
+          contactsName: [
+          {required: true, message: "联系人不能为空", trigger: "blur"}
+        ],
+          ContactsMobilePhone:[
+          {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+        ],
+          organCode: [
+          {required: true, message: "出单机构不能为空", trigger: "blur"}
+        ],
+          bankName: [
+          {required: true, message: "开户行不能为空", trigger: "blur"}
+        ],
+          bankLocation: [
+          {required: true, message: "开户地不能为空", trigger: "blur"}
+        ],
+          accountNumber: [
+          {required: true, message: "账号不能为空", trigger: "blur"}
+        ],
+          bankHolder: [
+          {required: true, message: "户名不能为空", trigger: "blur"}
+        ],
+          content: [
+          {required: true, message: "业务内容不能为空", trigger: "blur"}
+        ],
+      };
+     const rules_noBank={
+        callName:[
+          {required: true, message: "来电人不能为空", trigger: "blur"}
+        ],
+          channelCode: [
+          {required: true, message: "受理渠道不能为空", trigger: "blur"}
+        ],
+          itemCode: [
+          {required: true, message: "服务项目不能为空", trigger: "blur"}
+        ],
+          priorityLevel: [
+          {required: true, message: "优先级不能为空", trigger: "blur"}
+        ],
+          contactsName: [
+          {required: true, message: "联系人不能为空", trigger: "blur"}
+        ],
+          ContactsMobilePhone:[
+          {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+        ],
+          organCode: [
+          {required: true, message: "出单机构不能为空", trigger: "blur"}
+        ],
+          content: [
+          {required: true, message: "业务内容不能为空", trigger: "blur"}
+        ],
+      };
 
       return {
         cs_service_item:[],//服务项目
@@ -451,45 +516,11 @@
           contactsSecondNumber:""
 
         },
-        // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
-        rules: {
-          callName:[
-            {required: true, message: "来电人不能为空", trigger: "blur"}
-          ],
-          channelCode: [
-            {required: true, message: "受理渠道不能为空", trigger: "blur"}
-          ],
-          itemCode: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priorityLevel: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          ContactsMobilePhone:[
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          content: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
-          ],
-        },
+        rules1:rules_bank,
+        rules2:rules_noBank,
+        changeForm:{
+          rules:rules_noBank
+        },//用来区分有无转账的校验
         readonly: true,
         dialogVisable: "",//上传附件用
         historicalProblemData:Array,//上传附件用
@@ -555,6 +586,15 @@
     },
 
     methods: {
+      //监听是否银行转账事件
+      bankChange(s){
+        if (s=="1"){
+          this.changeForm.rules=this.rules1
+        }else {
+          this.changeForm.rules=this.rules2
+        }
+
+      },
      //上传附件
       upload(){
         this.$refs.upload.open();

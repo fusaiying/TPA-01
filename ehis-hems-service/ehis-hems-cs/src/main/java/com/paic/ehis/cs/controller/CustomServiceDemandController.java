@@ -54,7 +54,7 @@ public class CustomServiceDemandController extends BaseController {
     }
 
     @GetMapping("/accept")//信息需求受理
-    public AjaxResult selectDemandAcceptVo(@RequestBody String workOrderNo){
+    public AjaxResult selectDemandAcceptVo(@RequestParam("workOrderNo") String workOrderNo){
         DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);
         return AjaxResult.success(demandAcceptVo);
     }

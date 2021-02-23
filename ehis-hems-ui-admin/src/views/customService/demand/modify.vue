@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="workPoolData" :model="workPoolData" :rules="changeForm.rules" style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
         <span style="color: blue">服务项目-信息需求受理【修改】</span>
@@ -30,7 +30,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="contactsName">
+            <el-form-item label="联系人姓名：" prop="contactsPerson.name">
               <el-input  v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
@@ -65,7 +65,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人手机：" prop="contactsMobilePhone">
+            <el-form-item label="联系人手机：" prop="contactsPerson.mobilePhone">
               <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
@@ -112,7 +112,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
-              <el-radio-group v-model="workPoolData.bankTransfer" >
+              <el-radio-group v-model="workPoolData.bankTransfer" @change="bankChange(workPoolData.bankTransfer)">
                 <el-radio   label="1">是</el-radio>
                 <el-radio   label="2">否</el-radio>
               </el-radio-group>
@@ -221,7 +221,7 @@
     </el-card>
 
     <el-card>
-      <el-form ref="workPoolData"  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="workPoolData3"  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
@@ -272,6 +272,78 @@
       }
     },
     data() {
+      const  rules_bank= {
+          editReason: [
+            {required: true, message: "修改原因不能为空", trigger: "blur"}
+          ],
+          editRemark: [
+            {required: true, message: "修改说明不能为空", trigger: "blur"}
+          ],
+          'contactsPerson.mobilePhone':[
+            {required: true, message: "联系人手机不能为空", trigger: "blur"}
+          ],
+          channelCode: [
+            {required: true, message: "受理渠道不能为空", trigger: "blur"}
+          ],
+          itemCode: [
+            {required: true, message: "服务项目不能为空", trigger: "blur"}
+          ],
+          priorityLevel: [
+            {required: true, message: "优先级不能为空", trigger: "blur"}
+          ],
+          'contactsPerson.name': [
+            {required: true, message: "联系人不能为空", trigger: "blur"}
+          ],
+          organCode: [
+            {required: true, message: "出单机构不能为空", trigger: "blur"}
+          ],
+          bankName: [
+            {required: true, message: "开户行不能为空", trigger: "blur"}
+          ],
+          bankLocation: [
+            {required: true, message: "开户地不能为空", trigger: "blur"}
+          ],
+          accountNumber: [
+            {required: true, message: "账号不能为空", trigger: "blur"}
+          ],
+          bankHolder: [
+            {required: true, message: "户名不能为空", trigger: "blur"}
+          ],
+          content: [
+            {required: true, message: "业务内容不能为空", trigger: "blur"}
+          ],
+
+        };
+      const rules_noBank= {
+        editReason: [
+          {required: true, message: "修改原因不能为空", trigger: "blur"}
+        ],
+          editRemark: [
+          {required: true, message: "修改说明不能为空", trigger: "blur"}
+        ],
+          'contactsPerson.mobilePhone':[
+          {required: true, message: "联系人手机不能为空", trigger: "blur"}
+        ],
+          channelCode: [
+          {required: true, message: "受理渠道不能为空", trigger: "blur"}
+        ],
+          itemCode: [
+          {required: true, message: "服务项目不能为空", trigger: "blur"}
+        ],
+          priorityLevel: [
+          {required: true, message: "优先级不能为空", trigger: "blur"}
+        ],
+          'contactsPerson.name': [
+          {required: true, message: "联系人不能为空", trigger: "blur"}
+        ],
+          organCode: [
+          {required: true, message: "出单机构不能为空", trigger: "blur"}
+        ],
+          content: [
+          {required: true, message: "业务内容不能为空", trigger: "blur"}
+        ],
+
+      };
 
       return {
         //下拉框
@@ -330,51 +402,11 @@
         },
         totalCount: 0,
         // 表单校验
-        rules: {
-          editReason: [
-            {required: true, message: "修改原因不能为空", trigger: "blur"}
-          ],
-          editRemark: [
-            {required: true, message: "修改说明不能为空", trigger: "blur"}
-          ],
-          contactsMobilePhone:[
-            {required: true, message: "联系人手机不能为空", trigger: "blur"}
-          ],
-          channelCode: [
-            {required: true, message: "受理渠道不能为空", trigger: "blur"}
-          ],
-          itemCode: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priorityLevel: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          ContactsMobilePhone:[
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          content: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
-          ],
-
-        },
+        rules1:rules_bank,
+        rules2:rules_noBank,
+        changeForm:{
+          rules:rules_noBank
+        },//用来区分有无转账的校验
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -426,6 +458,15 @@
     },
 
     methods: {
+      //监听是否银行转账事件
+      bankChange(s){
+        if (s=="1"){
+          this.changeForm.rules=this.rules1
+        }else {
+          this.changeForm.rules=this.rules2
+        }
+
+      },
       //提交页面数据
       submit(){
         this.$refs.workPoolData.validate((valid) => {
@@ -475,9 +516,9 @@
               workPoolData.officeNumber=""
               workPoolData.officeQuhao=""
               workPoolData.officeSecondNumber=""
-
               this.workPoolData = workPoolData;
-              this.totalCount = res.total
+              this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
+                this.totalCount = res.total
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -502,6 +543,7 @@
               workPoolData.officeQuhao=""
               workPoolData.officeSecondNumber=""
               this.workPoolData = workPoolData;
+              this.bankChange(workPoolData.bankTransfer),
               this.totalCount = res.total
               if (res.rows.length <= 0) {
                 return this.$message.warning(
@@ -514,6 +556,7 @@
           })
 
         }
+
       },
       //查询轨迹表
       searchFlowLog() {

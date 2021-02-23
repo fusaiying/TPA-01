@@ -110,6 +110,7 @@
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentTime">
               <el-date-picker
+                disabled=""
                 v-model="sendForm.appointmentTime"
                 class="item-width"
                 type="daterange"
@@ -234,10 +235,9 @@
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
-<!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope" class="link-type">
-              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
@@ -446,10 +446,9 @@
 
         }else {
            const workOrderNos=this.ids
-           console.log("ids:",workOrderNos)
            demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              alert("success")
+
             }
           }).catch(res => {
 
@@ -511,11 +510,9 @@
         queryParams.pageNum = this.pageNum;
         queryParams.pageSize = this.pageSize;
         demandListAndPublicPool(queryParams).then(res => {
-          console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
-            console.log('response',res.total)
+            this.totalCount = res.rows.length
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -539,11 +536,9 @@
         queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;
         demandListAndPersonalPool(this.sendForm).then(res => {
-          console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
-            console.log('response',res.total)
+            this.totalPersonCount = res.rows.length
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

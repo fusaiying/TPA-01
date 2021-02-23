@@ -53,8 +53,13 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
-    @GetMapping("/accept")
-    public AjaxResult selectDemandAcceptVo(@RequestBody String workOrderNo){
+    /**
+     * 征求意见  信息需求页面查询
+     * @param workOrderNo
+     * @return
+     */
+    @GetMapping("/accept")//信息需求受理
+    public AjaxResult selectDemandAcceptVo(@RequestParam("workOrderNo") String workOrderNo){
         DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);
         return AjaxResult.success(demandAcceptVo);
     }
@@ -97,12 +102,22 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iDemandAcceptVoService.updateServiceInfo(demandAcceptVo));
     }
 
+    /**
+     * 信息需求处理页面
+     * @param serviceProcessingVo
+     * @return
+     */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertServiceProcessing")
     public AjaxResult insertServiceProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
     {
-        return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
+     if(serviceProcessingVo.getSign().equals("01")){
+         return toAjax(iWorkHandleInfoService.insertServiceInfo(serviceProcessingVo));
+     }else{
+         return toAjax(iWorkHandleInfoService.insertSaveServiceInfo(serviceProcessingVo));
+     }
+
     }
 
     /**
@@ -168,7 +183,6 @@ public class CustomServiceDemandController extends BaseController {
      * @param demandAcceptVo
      * @return
      */
-
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemandOne")

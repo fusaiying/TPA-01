@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.FlowLog;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface EditDetailMapper
      */
     public EditDetail selectEditDetailById(String detailId);
 
-    public List<EditDetail> selectEdit(String workOrderNo);
+    public List<EditDetail> selectEdit(FlowLog flowLog);
 
     /**
      * 查询修改明细 列表

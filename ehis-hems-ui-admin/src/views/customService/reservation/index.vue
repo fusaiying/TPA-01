@@ -175,12 +175,12 @@
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
-          <el-table-column prop="acceptTime" label="预约日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="预约医院" show-overflow-tooltip/>
+          <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -237,12 +237,12 @@
 <!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
-          <el-table-column prop="modifyTime" label="预约日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="预约医院" show-overflow-tooltip/>
+          <el-table-column align="center" prop="medicalInstitution" label="预约医院" show-overflow-tooltip/>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -289,7 +289,7 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
+  import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/reservation'
   import secondPhone from "../common/modul/secondPhone";
 
   export default {
@@ -398,7 +398,7 @@
       //修改按钮
       modifyButton(s){
         this.$router.push({
-          path: '/customService/modify',
+          path: '/customService/reservation/modify',
           query:{
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
@@ -410,7 +410,7 @@
       //取消按钮
       cancleBytton(s){
         this.$router.push({
-          path: '/customService/cancle',
+          path: '/customService/reservation/cancle',
           query:{
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
@@ -451,7 +451,7 @@
       //处理按钮
       dealButton(s){
           this.$router.push({
-            path: '/customService/deal',
+            path: '/customService/reservation/deal',
             query:{
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
@@ -469,7 +469,7 @@
       //增加按钮
       add(row) {
         this.$router.push({
-          path: '/customService/demand-edit',
+          path: '/customService/reservation/add',
           isEmpty: false
         })
       },

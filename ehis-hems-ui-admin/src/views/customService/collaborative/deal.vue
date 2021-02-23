@@ -395,15 +395,46 @@
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
           <el-divider/>
+
           <el-row>
-        <el-form-item label="处理说明：" prop="remark">
-          <el-input
-            type="textarea"
-            :rows="2"
-            placeholder="请输入内容"
-            v-model="ruleForm.remark">
-          </el-input>
-        </el-form-item>
+            <el-col :span="8">
+              <el-form-item label="业务处理情况" prop="businessProcess" >
+                <el-radio-group v-model="sendForm.businessProcess">
+                  <el-radio   :label="1">成功</el-radio>
+                  <el-radio   :label="2">响应</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-form-item label="处理说明：" prop="remark">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="sendForm.remark">
+              </el-input>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="客户反馈：" prop="customerFeedback" >
+              <el-radio-group v-model="sendForm.customerFeedback">
+                <el-radio   :label="1">满意</el-radio>
+                <el-radio   :label="2">接受</el-radio>
+                <el-radio   :label="3">不接受</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="结案类型：" prop="closeType">
+                <el-select v-model="sendForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+                  <el-option v-for="item in serves" :key="item.value" :label="item.label"
+                             :value="item.value"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
     </el-card>
@@ -496,19 +527,7 @@
         // 表单校验
         rules: {
           Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
-          priority: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+            {required: true, message: "处理说明不能为空", trigger: "blur"}
           ],
 
         },
@@ -568,7 +587,6 @@
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()
-      this.searchHCS()
       // this.getDicts("sys_oper_type").then(response => {
       //   this.states = response.data;
       //   console.log("response:",response)

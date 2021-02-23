@@ -319,7 +319,7 @@
   }
 </style>
 <style>
-  .batchInfo_class .el-tag--small {
+  .abatchInfo_class .el-tag--small {
     margin-right: 10px !important;
   }
 

@@ -26,62 +26,82 @@
         <result property="contactsPersonId" column="contacts_person_id"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="insuredNo" column="insured_no"/>
+        <result property="callCenterId" column="call_center_id"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="priorityLevel" column="priority_level"/>
+        <result property="content" column="content"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
-        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
-        from accept_detail_info t1
-        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
-        <where>
-            <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
-            <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
-            <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
-            <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
-            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
-            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
-            <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
-            <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
-            <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
-            <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
-            <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-            <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
-            <if test="status != null  and status != ''"> and a.status = #{status}</if>
-            <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
-            <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t1.status
+        from work_order_accept t1
+        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
+        left join person_info c  on  t1.insured_no = c.person_id
+        where
+        t1.work_order_no = t2.work_order_no
+        and t1.business_type='03'
+        and t1.status='01'
+        <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-        </where>
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
-        select t1.work_order_no,t1.channel_code,t1.item_code,t2.policy_no,t2.policy_item_no,t2.risk_code,t2.insured_name,t2.holder_name,t2.accept_time,t2.accept_by,t2.modify_time,t2.vip_flag,t1.priority_level,t1.organ_code,t1.status
-        from accept_detail_info t1
-        left join work_order_accept  t2  on t1.work_order_no=t2.work_order_no   and t1.status='01'
-        <where>
-            <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
-            <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
-            <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
-            <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
-            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
-            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="workOrderNo != null and workOrderNo != ''" > and a.work_order_no= #{workOrderNo}</if>
-            <if test="policyNo != null  and policyNo != ''"> and a.policy_no = #{policyNo}</if>
-            <if test="policyItemNo != null  and policyItemNo != ''"> and a.policy_item_no = #{policyItemNo}</if>
-            <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%')</if>
-            <if test="holderName != null  and holderName != ''"> and a.holder_name like concat('%', #{holderName}, '%')</if>
-            <if test="vipFlag != null  and vipFlag != ''"> and a.vip_flag = #{vipFlag}</if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-            <if test="priorityLevel != null  and priorityLevel != ''"> and b.priority_level = #{priorityLevel}</if>
-            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,
+        CASE
+        WHEN (
+        t1.STATUS = '02'
+        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = t1.work_order_no ) = 1
+        ) THEN
+        '06' ELSE t1.STATUS
+        END
+        from work_order_accept t1
+        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
+        left join person_info c  on  t1.insured_no = c.person_id
+        where
+        t1.work_order_no = t2.work_order_no
+        and t1.business_type='03'
+        and t1.status='02'
+            <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+            <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+            <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+            <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+            <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+            <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+            <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+            <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+            <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+            <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+            <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+            <if test="status != null  and status != ''"> and t2.status = #{status}</if>
             <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-        </where>
     </select>
-
+    <update id="updateComplaintStatus" parameterType="String" >
+        update work_order_accept set status = '02'
+        where status='01'and work_order_no = #{workOrderNo}
+    </update>
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
 SELECT
 	a.work_order_no,
@@ -93,6 +113,7 @@ SELECT
 	a.email,
 	a.organ_code,
 	a.complaint_person_id,
+	a.content,
 	b.insured_no
 FROM
 	accept_detail_info a,

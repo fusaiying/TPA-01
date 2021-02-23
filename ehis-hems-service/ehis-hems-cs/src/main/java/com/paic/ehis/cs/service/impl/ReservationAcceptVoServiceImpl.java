@@ -293,7 +293,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setEditId(editDetail.getEditId());
                 editInfo.setWorkOrderId(workOrderNo);
                 editInfo.setCreatedBy(SecurityUtils.getUsername());
                 editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -333,7 +333,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setEditId(editDetail.getEditId());
                 editInfo.setWorkOrderId(workOrderNo);
                 editInfo.setCreatedBy(SecurityUtils.getUsername());
                 editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -370,7 +370,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(Long.valueOf(editDetail.getEditId()));
+                editInfo.setEditId(editDetail.getEditId());
                 editInfo.setWorkOrderId(workOrderNo);
                 editInfo.setCreatedBy(SecurityUtils.getUsername());
                 editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

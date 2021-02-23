@@ -69,6 +69,21 @@ public class AcceptDetailInfo extends BaseEntity
     @Excel(name = "投诉人编号 person_info中的编号")
     private String complaintPersonId;
 
+    /** 是否涉及银行转账*/
+    private String bankTransfer;
+
+    /** 开户行*/
+    private String bankName;
+
+    /** 开户地*/
+    private String bankLocation;
+
+    /** 账号*/
+    private String accountNumber;
+
+    /** 户名*/
+    private String bankHolder;
+
     /** 状态 */
     @Excel(name = "状态")
     private String status;
@@ -177,7 +192,47 @@ public class AcceptDetailInfo extends BaseEntity
     @Excel(name = "见转意表")
     private String prop25;
 
-    public void setWorkOrderNo(String workOrderNo) 
+    public String getBankTransfer() {
+        return bankTransfer;
+    }
+
+    public void setBankTransfer(String bankTransfer) {
+        this.bankTransfer = bankTransfer;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankLocation() {
+        return bankLocation;
+    }
+
+    public void setBankLocation(String bankLocation) {
+        this.bankLocation = bankLocation;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getBankHolder() {
+        return bankHolder;
+    }
+
+    public void setBankHolder(String bankHolder) {
+        this.bankHolder = bankHolder;
+    }
+
+    public void setWorkOrderNo(String workOrderNo)
     {
         this.workOrderNo = workOrderNo;
     }

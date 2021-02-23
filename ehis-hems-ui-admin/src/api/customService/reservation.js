@@ -1,22 +1,42 @@
 import request from '@/utils/request'
 
-//# 查询未处理的信息需求数据
+//#预约页面index的待处理
 export function demandListAndPublicPool(query) {
   return request({
-    url: '/cs/demand/internal/listAndPublicPool',
+    url: '/cs/reservation/internal/listAndPublicPool',
+    method: 'get',
+    params: query
+  })
+}
+//#预约页面index的处理中
+export function demandListAndPersonalPool(query) {
+  return request({
+    url: '/cs/reservation/internal/listAndPersonalPool',
     method: 'get',
     params: query
   })
 }
 
-//# 查询未处理的信息需求数据
-export function demandListAndPersonalPool(query) {
-  return request({
-    url: '/cs/demand/internal/listAndPersonalPool',
-    method: 'get',
-    params: query
-  })
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //#二次来电查询
 export function selectCallAgain() {
   return request({

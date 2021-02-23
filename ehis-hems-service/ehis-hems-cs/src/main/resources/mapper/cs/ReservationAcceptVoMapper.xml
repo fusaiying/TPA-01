@@ -93,7 +93,7 @@
         WHERE
         a.work_order_no = b.work_order_no
         AND a.insured_no = c.person_id
-        AND a.business_type = '预约'
+        AND a.business_type = '02'
         AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -177,7 +177,7 @@
         WHERE
         a.work_order_no = b.work_order_no
         AND a.insured_no = c.person_id
-        AND a.business_type = '预约'
+        AND a.business_type = '02'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -202,7 +202,7 @@
 
     <update id="updateStatusM" parameterType="String" >
         update work_order_accept set status = '02'
-        where status='01'and business_type='预约' and work_order_no in
+        where status='01'and business_type='02' and work_order_no in
         <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
             #{workOrderNo}
         </foreach>

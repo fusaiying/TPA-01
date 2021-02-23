@@ -75,4 +75,27 @@ public interface WorkHandleInfoMapper
      * @return
      */
     public int insertServiceProcessing(WorkHandleInfo workHandleInfo);
+
+    /**
+     * 服务处理已有数据时修改表中数据并将其余数据状态改为N
+     * @param workHandleInfo
+     * @return
+     */
+    public int updateServiceProcessing(WorkHandleInfo workHandleInfo);
+
+    /**
+     * 将所有数据置为N
+     * @param workHandleInfo
+     * @return
+     */
+    public int updateStatus(WorkHandleInfo workHandleInfo);
+
+
+
+    /**
+     * 根据工单号查询当前创建人
+     * @param workHandleInfo
+     * @return
+     */
+    public WorkHandleInfo selectCreatedBy(WorkHandleInfo workHandleInfo);
 }

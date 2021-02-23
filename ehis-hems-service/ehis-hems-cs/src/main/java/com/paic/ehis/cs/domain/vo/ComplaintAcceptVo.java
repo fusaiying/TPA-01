@@ -12,6 +12,9 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    private String callCenterId;
+
+
     /** 工单编号 */
     private String workOrderNo;
 

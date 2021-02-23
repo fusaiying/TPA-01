@@ -26,6 +26,14 @@ export function  dealSearch(data) {
   })
 }
 
+//# 查询信息需求页面数据
+export function demandAccept(workOrderNo) {
+  return request({
+    url: '/cs/demand/accept?workOrderNo=' + workOrderNo,
+    method: 'get'
+  })
+}
+
 
 //# 投诉
 export function  comSearch(data) {

@@ -179,7 +179,8 @@
         rpt_no,
         operator,
         operation,
-        history_flag
+        history_flag,
+        update_time
         FROM
         claim_case_record a
         WHERE

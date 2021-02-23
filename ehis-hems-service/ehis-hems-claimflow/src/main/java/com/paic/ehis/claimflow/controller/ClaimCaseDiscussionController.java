@@ -51,7 +51,7 @@ public class ClaimCaseDiscussionController extends BaseController
      */
   //  @PreAuthorize("@ss.hasPermi('system:discussion:list')")
     @GetMapping(value = "/history/{rptNo}")
-    public TableDataInfo discussionList(String rptNo)
+    public TableDataInfo discussionList(@PathVariable("rptNo") String rptNo)
     {
         TableSupport.setOrderByColumn("disc_id");
         TableSupport.setSort("asc");

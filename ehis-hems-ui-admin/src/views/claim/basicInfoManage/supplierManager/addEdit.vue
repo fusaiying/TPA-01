@@ -1083,7 +1083,8 @@
       ,
       deleteService(row) {
         let data = {
-          websiteCode: row.websiteCode
+          websiteCode: row.websiteCode,
+          supplierCode: this.supplier.serialNo
         }
         this.$confirm(`是否确定删除?`, '提示', {
           confirmButtonText: '确定',

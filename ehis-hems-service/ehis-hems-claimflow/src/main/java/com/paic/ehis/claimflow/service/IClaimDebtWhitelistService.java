@@ -55,6 +55,6 @@ public interface IClaimDebtWhitelistService
     /**
      *根据报案号查询欠款
      */
-    public ClaimDebtWhitelist  selectResidualList(String rptNo);
+    public ClaimDebtWhitelist  selectResidualList(String insuredNo);
 
 }

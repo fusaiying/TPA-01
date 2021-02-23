@@ -316,7 +316,7 @@ export default {
     /** 核销 */
     handleWrite() {
       if (this.params.payAmount > 0) {
-        let amount;
+        let amount = 0;
         this.balanceInvoiceList.forEach(item => {
           amount += item.amount;
         })

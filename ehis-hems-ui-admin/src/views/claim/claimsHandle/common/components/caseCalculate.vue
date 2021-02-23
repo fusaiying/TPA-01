@@ -135,7 +135,7 @@
                            :value="option.dictValue"/>
               </el-select>
             </el-form-item>
-            <span class="size" v-if="scope.row.isEdit">{{scope.row.payConclusion}}</span>
+            <span class="size" v-if="scope.row.isEdit">{{selectDictLabel(conclusionOptions,scope.row.payConclusion)}}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="copay" label="自付额" show-overflow-tooltip/>
@@ -300,6 +300,22 @@
               showClose: true
             })
           }
+          detailsList(data).then(res => {
+            if (res != null && res.code === 200 && res.rows.length > 0) {
+              this.caseForm.caseData = res.rows
+              this.caseForm.caseData.forEach(item => {
+                item.isEdit = true
+                if (item.minData.length > 0) {
+                  item.minData.forEach(option => {
+                    option.isEdit = true
+                    option.selectFData = []
+                    option.selectSData = []
+                  })
+                }
+              })
+            }
+          })
+          this.getCalSummary()
         }).catch(res=>{
           this.$message({
             message: '理算失败!',
@@ -311,22 +327,6 @@
         let data = {
           rptNo: this.fixInfo.rptNo,
         }
-        detailsList(data).then(res => {
-          if (res != null && res.code === 200 && res.rows.length > 0) {
-            this.caseForm.caseData = res.rows
-            this.caseForm.caseData.forEach(item => {
-              item.isEdit = true
-              if (item.minData.length > 0) {
-                item.minData.forEach(option => {
-                  option.isEdit = true
-                  option.selectFData = []
-                  option.selectSData = []
-                })
-              }
-            })
-          }
-        })
-        this.getCalSummary()
       },
       save() {
         this.$refs.caseForm.validate((valid) => {
@@ -566,7 +566,7 @@
           rptNo: this.fixInfo.rptNo,
         }
         detailsList(data).then(res => {
-          if (res != null && res.code === 200 && res.rows.length > 0) {
+          if (res != null && res.code === 200) {
             this.caseForm.caseData = res.rows
             this.caseForm.caseData.forEach(item => {
               item.isEdit = true

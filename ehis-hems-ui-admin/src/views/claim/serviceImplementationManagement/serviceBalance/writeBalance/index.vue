@@ -76,6 +76,7 @@
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          highlight-current-row
         >
           <el-table-column prop="taskNo" label="任务号" width="150%" align="center" show-overflow-tooltip>
             <template slot-scope="scope">

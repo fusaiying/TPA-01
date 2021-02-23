@@ -202,7 +202,7 @@
             <el-col :span="8">
               <el-form-item label="调查机构：" prop="invOrganCode">
                 <el-select v-model="surveyForm.invOrganCode" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="item in inquiryOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
+                  <el-option v-for="item in inquiryOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -210,7 +210,7 @@
             <el-col :span="8">
               <el-form-item label="提调机构：" prop="organCode">
                 <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
+                  <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>

@@ -75,8 +75,10 @@
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          highlight-current-row
+          :default-sort = "{prop: 'taskNo', order: 'descending'}"
         >
-          <el-table-column prop="taskNo" label="任务号" width="150%" align="center" show-overflow-tooltip/>
+          <el-table-column sortable prop="taskNo" label="任务号" width="150%" align="center" show-overflow-tooltip/>
           <el-table-column prop="supplierCode" label="供应商名称" width="150%" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(supplierOptions, scope.row.supplierCode)}}</span>

@@ -87,6 +87,7 @@
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           highlight-current-row
           @row-click="handelDetail"
+          :default-sort = "{prop: 'invoiceStatus', order: 'ascending'}"
         >
           <el-table-column prop="taskNo" label="任务号" width="150%" align="center" show-overflow-tooltip/>
           <el-table-column prop="areaCode" label="地区代码" align="center" show-overflow-tooltip />
@@ -98,7 +99,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="payAmount" label="支付金额" align="center" show-overflow-tooltip/>
-          <el-table-column prop="invoiceStatus" label="状态" align="center" show-overflow-tooltip>
+          <el-table-column sortable prop="invoiceStatus" label="状态" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{selectDictLabel(invoiceStatusOptions, scope.row.invoiceStatus)}}</span>
             </template>
@@ -182,7 +183,9 @@ export default {
         //是否为添加
         isAdd: false,
         //任务号
-        taskNo: null
+        taskNo: null,
+        //支付金额
+        payAmount: null
       },
       //日期限制
       dateOptions: {
@@ -311,7 +314,7 @@ export default {
       }
       this.invoice.taskNo = row.taskNo;
       //支付金额
-      this.payAmount = row.payAmount;
+      this.invoice.payAmount = row.payAmount;
     }
 
   }

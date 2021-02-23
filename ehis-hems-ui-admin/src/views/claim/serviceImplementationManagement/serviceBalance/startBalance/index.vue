@@ -93,10 +93,12 @@
           tooltip-effect="dark"
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          highlight-current-row
+          :default-sort = "{prop: 'taskNo', order: 'descending'}"
         >
-          <el-table-column prop="taskNo" label="任务号" width="120%" align="center" show-overflow-tooltip>
+          <el-table-column sortable prop="taskNo" label="任务号" width="120%" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <a style="color: #3CB4E5;text-decoration: underline" href="javascript:void(0)" @click="handelDetail(scope.row)">{{scope.row.taskNo}}</a>
+              <el-link style="font-size: 11px" type="primary" @click="handelDetail(scope.row)">{{scope.row.taskNo}}</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="supplierCode" label="供应商名称" width="120%" align="center" show-overflow-tooltip>
@@ -429,7 +431,7 @@ export default {
           message: response.msg,
           type: 'warning',
           showClose: true,
-          duration: 0
+          duration: 5000
         })
       }
     },

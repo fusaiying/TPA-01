@@ -43,8 +43,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update_time
         from claim_debt_whitelist
         <where>
-            <if test="name != null  and name != ''"> and name = #{name}</if>
-            <if test="idNo != null  and idNo != ''"> and id_no = #{idNo}</if>
+            <if test="insuredNos != null  and insuredNos != ''">
+                insured_no in
+                <foreach collection="array" item="roleId" open="(" separator="," close=")">
+                    #{insuredNos}
+                </foreach>
+            </if>
             <if test="level != null  and level != ''"> and level = #{level}</if>
             <if test="debtAmountUp != null "> and debt_amount_up like concat('%', #{debtAmountUp}, '%')</if>
             AND STATUS = 'Y'

@@ -1,6 +1,5 @@
 package com.paic.ehis.claimflow.controller;
 
-import com.paic.ehis.claimflow.domain.dto.ClaimDebtWhitelistDTO;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -34,10 +33,10 @@ public class ClaimDebtWhitelistController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:whitelist:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ClaimDebtWhitelistDTO claimDebtWhitelistDTO)
+    public TableDataInfo list(ClaimDebtWhitelist claimDebtWhitelist)
     {
         startPage();
-        List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelistDTO);
+        List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelist);
         return getDataTable(list);
     }
 
@@ -47,9 +46,9 @@ public class ClaimDebtWhitelistController extends BaseController
    // @PreAuthorize("@ss.hasPermi('system:whitelist:export')")
     @Log(title = "案件追讨白名单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, ClaimDebtWhitelistDTO claimDebtWhitelistDTO) throws IOException
+    public void export(HttpServletResponse response, ClaimDebtWhitelist claimDebtWhitelist) throws IOException
     {
-        List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelistDTO);
+        List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelist);
         ExcelUtil<ClaimDebtWhitelist> util = new ExcelUtil<ClaimDebtWhitelist>(ClaimDebtWhitelist.class);
         util.exportExcel(response, list, "whitelist");
     }
@@ -97,7 +96,7 @@ public class ClaimDebtWhitelistController extends BaseController
         return toAjax(claimDebtWhitelistService.deleteClaimDebtWhitelistById(debtWhitelistId));
     }
 
-    /*根据被保人客户号查询欠款信息*/
+    /*根据被保人客户号号查询欠款信息*/
     //@PreAuthorize("@ss.hasPermi('system:whitelist:ResidualList')")
     @GetMapping("/residualList")
     public AjaxResult residualList(String insuredNo)

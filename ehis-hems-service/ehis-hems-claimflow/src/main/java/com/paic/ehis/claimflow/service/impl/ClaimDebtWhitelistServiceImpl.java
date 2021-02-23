@@ -2,7 +2,6 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
 import com.paic.ehis.claimflow.domain.PolicyInsured;
-import com.paic.ehis.claimflow.domain.dto.ClaimDebtWhitelistDTO;
 import com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper;
 import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
@@ -30,13 +29,15 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
 
     /**
      * 查询案件追讨白名单列表
+     *
+     * @param claimDebtWhitelist 案件追讨白名单
      * @return 案件追讨白名单
      */
     @Override
-    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelistDTO claimDebtWhitelistDTO)
+    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist)
     {
 
-        List<ClaimDebtWhitelist> claimDebtWhitelists=claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelistDTO);
+        List<ClaimDebtWhitelist> claimDebtWhitelists=claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
         for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
             String insuredNo = claimDebtWhitelist1.getInsuredNo();
             PolicyInsured policyInsured = new PolicyInsured();

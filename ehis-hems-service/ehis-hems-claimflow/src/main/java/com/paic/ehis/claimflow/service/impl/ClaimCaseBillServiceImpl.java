@@ -288,8 +288,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             // 监控时效
             caseInfo.setMonitorAging(claimCaseRecordMapper.selectMinAcceptTime(caseInfo.getRptNo()));
             // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if (null == claimCaseInvestigation){
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+            if (claimCaseInvestigation.size() > 0){
                 caseInfo.setInvestigation("02");
             } else {
                 caseInfo.setInvestigation("01");
@@ -336,8 +336,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         // 获取是否调查、出单公司、承保机构
         for (BillAccomplishVo accomplishVo : accomplishList){
             // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(accomplishVo.getRptNo());
-            if (null == claimCaseInvestigation){
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(accomplishVo.getRptNo());
+            if (claimCaseInvestigation.size() > 0){
                 accomplishVo.setInvestigation("02");
             } else {
                 accomplishVo.setInvestigation("01");

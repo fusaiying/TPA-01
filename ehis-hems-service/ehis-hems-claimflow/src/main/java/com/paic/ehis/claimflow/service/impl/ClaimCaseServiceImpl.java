@@ -1301,8 +1301,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         List<ClaimInformationVo> caseList = claimCaseMapper.selectClaimInformation(claimInformationDTO);
         for (ClaimInformationVo caseInfo : caseList
         ) { // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if (null == claimCaseInvestigation) {
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+            if ( claimCaseInvestigation.size() > 0) {
                 caseInfo.setInvestigation("02");
             } else {
                 caseInfo.setInvestigation("01");

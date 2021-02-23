@@ -99,8 +99,8 @@ public class ClaimDebtWhitelistController extends BaseController
     /*根据报案号查询欠款信息*/
     //@PreAuthorize("@ss.hasPermi('system:whitelist:ResidualList')")
     @GetMapping("/residualList")
-    public AjaxResult residualList(String rptNo)
+    public AjaxResult residualList(String insuredNo)
     {
-        return AjaxResult.success(claimDebtWhitelistService.selectResidualList(rptNo));
+        return AjaxResult.success(claimDebtWhitelistService.selectResidualList(insuredNo));
     }
 }

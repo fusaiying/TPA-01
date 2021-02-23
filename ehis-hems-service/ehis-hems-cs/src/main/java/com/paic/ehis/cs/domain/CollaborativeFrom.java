@@ -82,6 +82,7 @@ public class CollaborativeFrom extends BaseEntity
 
     private String itemCode;
     private String organCode;
+    private String businessType;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")

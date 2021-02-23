@@ -171,7 +171,7 @@
         ccr.operator,
         ccr.operation,
         ccr.history_flag,
-        ccr.updateTime
+        ccr.update_time
         FROM
         claim_case cc
         LEFT JOIN (

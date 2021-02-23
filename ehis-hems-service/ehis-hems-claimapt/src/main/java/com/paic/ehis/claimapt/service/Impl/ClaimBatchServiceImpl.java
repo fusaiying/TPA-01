@@ -69,7 +69,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
     }
 
     /**
-     * 查询机构交单状态理赔批次 列表
+     * 查询机构待处理理赔批次 列表
      *
      * @param batchDTO 理赔批次
      * @return 理赔批次 集合
@@ -141,14 +141,12 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
-        Long userId = SecurityUtils.getUserId();
-        SysUser sysUser = sysUserMapper.selectUserById(userId);
-        // 获取用户的所属机构
-        batchDTO.setOrgancode( sysUser.getDeptId().toString());
         batchDTO.setClaimtype("01");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
         batchDTO.setUpdateBy("");
+        // 获取用户的所属机构
+        batchDTO.setOrgancode( sysUserMapper.selectUserById(SecurityUtils.getUserId()).getDeptId().toString());
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 

@@ -17,7 +17,7 @@
     <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
     <el-table-column align="center" prop="organCode" label="承保机构" show-overflow-tooltip/>
     <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
-    <el-table-column align="center"  v-if="status === '01'" prop="stayTime" label="停留时长" show-overflow-tooltip/>
+    <el-table-column align="center"  v-if="status === '01'" prop="stopTime" label="停留时长" show-overflow-tooltip/>
     <el-table-column align="center"  v-if="status === '01'" prop="monitoringTime" label="监控时效" show-overflow-tooltip/>
     <el-table-column align="center" prop="source" :formatter="getDeliverySourceName" label="交单来源" show-overflow-tooltip/>
     <el-table-column align="center" prop="createBy" label="提交用户" show-overflow-tooltip/>

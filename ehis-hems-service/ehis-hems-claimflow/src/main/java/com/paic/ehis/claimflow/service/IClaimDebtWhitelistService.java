@@ -13,25 +13,12 @@ import java.util.List;
 public interface IClaimDebtWhitelistService 
 {
     /**
-     * 查询案件追讨白名单
-     * 
-     * @param debtWhitelistId 案件追讨白名单ID
-     * @return 案件追讨白名单
-     */
-    public ClaimDebtWhitelist selectClaimDebtWhitelistById(Long debtWhitelistId);
-
-    /**
      * 查询案件追讨白名单列表
      * 
      * @param claimDebtWhitelist 案件追讨白名单
      * @return 案件追讨白名单集合
      */
     public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist);
-
-    /**
-     * 白名单维护界面初始化或未录入任何查询条件，点击查询按钮时，默认查询状态不为失效，追缴通知为是的白名单信息
-     */
-    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList1(ClaimDebtWhitelist claimDebtWhitelist);
 
     /**
      * 新增案件追讨白名单
@@ -66,8 +53,8 @@ public interface IClaimDebtWhitelistService
     public int deleteClaimDebtWhitelistById(Long debtWhitelistId);
 
     /**
-     *根据报案号查询欠款
+     *根据被保人客户号查询欠款
      */
-    public ClaimDebtWhitelist  selectResidualList(String rptNo);
+    public ClaimDebtWhitelist  selectResidualList(String insuredNo);
 
 }

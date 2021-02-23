@@ -230,7 +230,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     public int updatecasediscussionStatus(String repNo) {
         return claimCaseMapper.updatecaseStatus(repNo);
     }
-/*查询基础信息表*/
+
+    /*查询基础信息表*/
     @Override
     public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo){
         return claimCaseDiscussionMapper.selectCaseBaseInfo(rptNo);

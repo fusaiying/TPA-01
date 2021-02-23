@@ -535,7 +535,7 @@
         if(saveflag){
           if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
             let data = {
-              ClaimCase:{rptNo: this.querys.rptNo},
+              claimCase:{rptNo: this.querys.rptNo},
               insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
               name: this.$refs.insuredForm.baseForm.name//被保人姓名
             }
@@ -557,7 +557,7 @@
                     type: 'warning'
                   }).then(() => {
                     let data = {
-                      ClaimCase:{rptNo: this.querys.rptNo},
+                      claimCase:{rptNo: this.querys.rptNo},
                       insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
                       name: this.$refs.insuredForm.baseForm.name,//被保人姓名
                       caseStypeFind:'02'
@@ -570,6 +570,8 @@
                           center: true,
                           showClose: true
                         })
+                        this.$store.dispatch("tagsView/delView", this.$route);
+                        this.$router.go(-1)
                       }
                     })
                   }).catch(() => {

@@ -2,6 +2,7 @@ package com.paic.ehis.claimcal.service;
 
 
 import com.paic.ehis.claimcal.domain.ClaimProductFeeitem;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 
 import java.util.List;
 
@@ -67,5 +68,5 @@ public interface IClaimProductFeeitemService
      * @param policys
      * @return
      */
-    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<String> policys);
+    public List<ClaimProductFeeitem> selectFeeitemByPolicys(List<ClaimCasePolicy> policys);
 }

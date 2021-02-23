@@ -59,6 +59,7 @@
         size="small"
         highlight-current-row
         tooltip-effect="dark"
+        @expand-change="getMinData"
         v-loading="loading"
         style="width: 100%;"> <!--   @expand-change="getMinData" -->
         <el-table-column  type="expand">
@@ -67,14 +68,14 @@
                       :header-cell-style="{color:'black',background:'#f8f8ff'}"
                       highlight-current-row
                       size="small"
-                      v-loading="loading"
+                      v-loading="minLoading"
                       tooltip-effect="dark"
                       style="width: 100%;">
               <el-table-column prop="rptNo" label="报案号" align="center"/>
               <el-table-column prop="name" label="被保险人" align="center"/>
               <el-table-column label="操作" align="center">
-                <template slot-scope="props">
-                  <el-button size="small" type="text" @click="codePrint">条码打印</el-button>
+                <template slot-scope="scope">
+                  <el-button v-if="scope.row.print == '01'" size="small" type="text" @click="codePrint">条码打印</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -192,7 +193,7 @@
 
   import { getAllBaseProviderInfo } from '@/api/contractManage/contractManagement'
   import moment from 'moment'
-  import {invoiceData, updateInvoice} from '@/api/invoice/api'
+  import {invoiceData, updateInvoice, childData} from '@/api/invoice/api'
 
   export default {
   filters: {
@@ -208,6 +209,7 @@
     return {
       searchBtn:false,
       loading : false,
+      minLoading:false,
       searchLoad : false,
       formSearch: {
         rptNo: '',
@@ -314,7 +316,7 @@
             if (_data.length !== 0) {
               _data.forEach(item => {
                 item.editing = false;
-                item.minData = [item]
+               // item.minData = [item]
               })
             }
             this.tableData= _data;
@@ -322,6 +324,34 @@
         }).finally(() => {
             this.loading = false;
       })
+    },
+    getMinData(row, expandedRows) {
+      //判断只有展开是做请求
+      let query = {
+        batchNo: row.batchNo
+      }
+      this.minLoading = true;
+      if (expandedRows.length > 0) {
+        childData(query).then(res => {
+          if (res != null && res.code === 200) {
+            this.tableData.forEach((temp, index) => {
+              if (temp.batchNo === row.batchNo) {
+                if(res.rows.length > 0) {
+                  for (let i=0; i<res.rows.length; i++) {
+                    if(res.rows[i].caseStatus != '98') {
+                      res.rows[i].print = '01';
+                      break;
+                    }
+                  }
+                }
+                this.tableData[index].minData = res.rows
+              }
+            })
+          }
+        }).finally(() => {
+         this.minLoading = false
+        })
+      }
     },
     allBaseProviderInfo(){
       const query ={
@@ -331,7 +361,6 @@
         status:'Y'
       };
       getAllBaseProviderInfo(query).then(response => {
-        console.log(response)
         for(let i=0; i<response.data.length; i++) {
           let obj= new Object();
           obj.dictLabel = response.data[i].chname1.toString();

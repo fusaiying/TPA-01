@@ -24,7 +24,7 @@ export function cancelAdjustment(data) {
 //查询 理算
 export function adIsData(query) {
   return request({
-    url: '/claiflow/calRule/listByRptNo',
+    url: '/claimflow/calRule/listByRptNo',
     method: 'get',
     params: query
   })
@@ -140,3 +140,10 @@ export function verifyCurrency(query) {
       data: data
     })
   }
+  // 调查基本信息查询
+export function investigationBaseInfo (rptNo) {
+  return request({
+    url: '/claimflow/investigation/invest/' + rptNo,
+    method: 'get',
+  })
+}

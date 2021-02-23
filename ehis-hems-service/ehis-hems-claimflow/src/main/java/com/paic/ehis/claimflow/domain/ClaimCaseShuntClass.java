@@ -10,8 +10,9 @@ public class ClaimCaseShuntClass extends BaseEntity {
     private ClaimCase claimCase;
 
     /**
-     * 01-提示：此被保人只有健康险保单，确认后将提交至健康险
-     * 02-提示：该被保人不存在保单信息，请撤件
+     * 02-提示：此被保人只有健康险保单，确认后将提交至健康险
+     * 03-提示：该被保人不存在保单信息，请撤件
+     * 01-通过
      */
     private String caseStypeFind;
 

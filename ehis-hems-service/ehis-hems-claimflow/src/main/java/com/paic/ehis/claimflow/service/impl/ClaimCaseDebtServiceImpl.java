@@ -1,7 +1,6 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
-import com.paic.ehis.claimflow.domain.ClaimCasePolicy;
 import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper;
@@ -10,6 +9,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseDebtService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,13 +66,18 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
     @Override
     public int insertClaimCaseDebt(ClaimCaseDebt claimCaseDebt)
     {
-        /*BigDecimal bigDecimal = new BigDecimal(0);
-        if (reviewCompletedDTO.getDebtAmount().compareTo(bigDecimal) > -1){}*/
-        claimCaseDebt.setStatus("Y");
-        claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
-        claimCaseDebt.setCreateTime(DateUtils.getNowDate());
-        claimCaseDebt.setCreateTime(DateUtils.getNowDate());
-        return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+        BigDecimal bigDecimal = new BigDecimal(0);
+        if (claimCaseDebt.getDebtAmount().compareTo(bigDecimal) > 0){
+            claimCaseDebt.setStatus("Y");
+            claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
+            claimCaseDebt.setCreateTime(DateUtils.getNowDate());
+            claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+            return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+        }else {
+            return 1;
+        }
+
     }
 
     /**

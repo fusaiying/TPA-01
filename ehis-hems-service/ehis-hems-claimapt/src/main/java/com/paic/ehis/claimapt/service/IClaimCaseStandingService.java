@@ -89,4 +89,8 @@ public interface IClaimCaseStandingService
     public int updateSysClaimCaseStanding(ClaimCaseStandingVo claimCaseStandingVo);//
 
     public List<ClaimCaseStandingVo> selectClaimCaseStandingByBatchno(ClaimBatch claimBatch);
+
+    public int updateClaimCaseStandingByBatchno(String batchno);
+
+    public List<ClaimCaseStanding> selectClaimCaseStandingByIdidType(ClaimCaseStanding claimCaseStanding);
 }

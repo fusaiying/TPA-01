@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="caseStatus"    column="case_status"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseInsured" id="ClaimCaseInsuredResult1">
@@ -244,8 +245,8 @@ FROM
         where rpt_no = #{rptNo} and status='Y'
     </select>
     <select id="selectRptNo" parameterType="String" resultMap="ClaimCaseInsuredResult">
-        select cci.rpt_no,cci.name from  claim_case_insured cci
+        select cci.rpt_no,cci.name, cc.case_status from  claim_case_insured cci
          left join claim_case cc   on cc.rpt_no=cci.rpt_no
-        where cc.batch_no="JGH2021X00000791"  order by  cci.rpt_no  asc
+        where cc.batch_no= #{batchNo} order by  cci.rpt_no  asc
     </select>
 </mapper>

@@ -97,19 +97,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
-    <select id="selectFeeitemByPolicyNos" parameterType="string" resultMap="ClaimProductFeeitemResult">
-        SELECT DISTINCT
-            a.feeitem_code,
-            a.feeitem_name
-        FROM
-            claim_product_feeitem a,
-            policy_risk_relation b
-        WHERE
-            a.risk_code = b.risk_code
-            AND b.policy_no IN
-            <foreach collection="list" item="policyNo" open="(" separator="," close=")">
-                #{policyNo}
-            </foreach>
+    <select id="selectFeeitemByPolicyNos" parameterType="com.paic.ehis.system.api.domain.ClaimCasePolicy" resultMap="ClaimProductFeeitemResult">
+<!--        SELECT DISTINCT-->
+<!--            a.feeitem_code,-->
+<!--            a.feeitem_name-->
+<!--        FROM-->
+<!--            claim_product_feeitem a,-->
+<!--            policy_risk_relation b-->
+<!--        WHERE-->
+<!--            a.risk_code = b.risk_code-->
+<!--            AND b.policy_no IN-->
+<!--            <foreach collection="list" item="policyNo" open="(" separator="," close=")">-->
+<!--                #{policyNo}-->
+<!--            </foreach>-->
+        <foreach collection="list" item="item" separator=" union ">
+            SELECT
+                a.feeitem_code,
+                a.feeitem_name
+            FROM
+                claim_product_feeitem a,
+                policy_risk_relation b
+            WHERE
+                a.risk_code = b.risk_code
+                AND b.policy_no = #{item.policyNo}
+                AND a.plan_code = #{item.planCode}
+        </foreach>
+
     </select>
     
 </mapper>

@@ -68,6 +68,23 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         return claimBatchMapper.selectClaimBatchList(claimBatch);
     }
 
+    /**
+     * 查询机构待处理理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    @Override
+    public List<BatchVo> selectPendingBatchList(BatchDTO batchDTO) {
+        batchDTO.setClaimtype("02");
+        batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
+        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+        }
+        return claimBatchMapper.selectDirectQueryList(batchDTO);
+    }
+
 
     /**
      * 查询已退回理赔批次 列表
@@ -124,13 +141,12 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public List<BatchVo> selectReviewPublicList(BatchDTO batchDTO) {
-        Long userId = SecurityUtils.getUserId();
-        SysUser sysUser = sysUserMapper.selectUserById(userId);
-        // 获取用户的所属机构
-        batchDTO.setOrgancode( sysUser.getDeptId().toString());
         batchDTO.setClaimtype("01");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
-        batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
+        batchDTO.setUpdateBy("");
+        // 获取用户的所属机构
+        batchDTO.setOrgancode( sysUserMapper.selectUserById(SecurityUtils.getUserId()).getDeptId().toString());
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
@@ -366,7 +382,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch) {
-        claimBatch.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());//01
+        claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
         //批次号
         String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);
@@ -395,7 +411,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(str1);
         String billrecevieflag = claimBatch.getBillrecevieflag();
-        if(billrecevieflag.equals("")) {
+        if(StringUtils.isBlank(billrecevieflag)) {
             claimBatchInvoiceFiling.setIsFiling("02");
         } else {
             claimBatchInvoiceFiling.setIsFiling(billrecevieflag);

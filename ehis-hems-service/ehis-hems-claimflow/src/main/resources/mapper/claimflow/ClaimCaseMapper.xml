@@ -170,7 +170,8 @@
         cb.claim_type,
         ccr.operator,
         ccr.operation,
-        ccr.history_flag
+        ccr.history_flag,
+        ccr.update_time
         FROM
         claim_case cc
         LEFT JOIN (
@@ -178,7 +179,8 @@
         rpt_no,
         operator,
         operation,
-        history_flag
+        history_flag,
+        update_time
         FROM
         claim_case_record a
         WHERE
@@ -209,7 +211,7 @@
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
             <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>
             <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
-            <if test="updateStartTime != null and updateEndTime != null"> and cc.updateTime between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
+            <if test="updateStartTime != null and updateEndTime != null"> and ccr.updateTime between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
         </where>
     </select>

@@ -8,6 +8,14 @@ export function getBackToList(query) {
     data: query
   })
 }
+//查询处理中理赔批次 列表
+export function getPendingList(query) {
+  return request({
+    url:'claimapt/batch/pendingList',
+    method:'post',
+    data:query
+  })
+}
 
 //查询已处理理赔批次 列表
 export function getDealWithList(query) {
@@ -184,6 +192,14 @@ export function getThisDept(parentId) {
 export function getInfoBaseCodeMappingNew(data) {
   return request({
     url: 'claimflow/case/getInfoBaseCodeMappingNew',
+    method: 'get',
+    params:data
+  })
+}
+//通过证件类型和证件号码获取保险人姓名
+export function getName(data) {
+  return request({
+    url: 'claimapt/batch/selectClaimCaseStandingByIdidType',
     method: 'get',
     params:data
   })

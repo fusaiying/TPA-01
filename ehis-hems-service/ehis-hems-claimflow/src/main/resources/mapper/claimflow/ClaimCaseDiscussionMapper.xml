@@ -42,7 +42,7 @@
         select disc_id, rpt_no, disc_type, disc_sub_type, dis_view, conclusion, conclusion_view, is_history, STATUS, create_by, create_time, update_by, update_time from claim_case_discussion
     </sql>
 
-    <select id="selectClaimCaseDiscussionList" parameterType="ClaimCaseDiscussion" resultMap="ClaimCaseDiscussionResult">
+    <select id="selectClaimCaseDiscussionList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion" resultMap="ClaimCaseDiscussionResult">
         <include refid="selectClaimCaseDiscussionVo"/>
         <where>
             <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
@@ -71,7 +71,7 @@
         where disc_id = #{discId}   and is_history='Y'
     </select>
 
-    <insert id="insertClaimCaseDiscussion" parameterType="ClaimCaseDiscussion" useGeneratedKeys="true" keyProperty="discId">
+    <insert id="insertClaimCaseDiscussion" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion" useGeneratedKeys="true" keyProperty="discId">
         insert into claim_case_discussion
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -103,7 +103,7 @@
         </trim>
     </insert>
 
-    <update id="updateClaimCaseDiscussion" parameterType="ClaimCaseDiscussion">
+    <update id="updateClaimCaseDiscussion" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion">
         update claim_case_discussion
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -132,7 +132,8 @@
             #{discId}
         </foreach>
     </delete>
-<!--未处理-->
+
+    <!--未处理-->
     <select id="selectCaseDisListUnder" resultMap="ClaimCaseDiscussionVOResult">
     select
     claim_case_discussion.rpt_no,/*案件受理报案号*/
@@ -150,7 +151,10 @@
     claim_case,
     claim_case_policy
     <where>
+        <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
+        <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
         <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
+        <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
         <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
         and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
         and claim_case_discussion.rpt_no = claim_case.rpt_no
@@ -166,7 +170,7 @@
     </where>
     </select>
 
-<!--已处理-->
+    <!--已处理-->
     <select id="selectCaseDisListOver" resultMap="ClaimCaseDiscussionVOResult">
         select
         claim_case_discussion.rpt_no,/*案件受理报案号*/
@@ -184,9 +188,11 @@
         claim_case,
         claim_case_policy
         <where>
+            <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
+            <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
             <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
-            <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
-            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+            <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
+            <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>  and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case_discussion.rpt_no = claim_case.rpt_no
             and claim_case_discussion.rpt_no = claim_case_policy.rpt_no
             and claim_case.batch_no = claim_batch.batch_no
@@ -199,11 +205,13 @@
         </where>
     </select>
 
+    <!--将协谈未处理改为已处理-->
     <update id="updatecasediscussionStatus" parameterType="String">
         update claim_case
         set case_status ='32'
         where rpt_no = #{rptNo}
     </update>
+
     <!--查询基本信息-->
     <select id="selectCaseBaseInfo" parameterType="String" resultMap="ClaimCaseDiscussionVOResult">
         select
@@ -216,7 +224,6 @@
             claim_case_accept.acc_date,/*出险日期*/
             claim_batch.source,/*交单来源*/
             claim_case_accept.acc_type/*事故类型*/
-
         from
             claim_case_discussion,
             claim_batch,

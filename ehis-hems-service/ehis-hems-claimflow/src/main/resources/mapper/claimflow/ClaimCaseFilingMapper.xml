@@ -89,8 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="caseBoxNo != null  and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
             <if test="rptNo != null  and rptNo != ''"> <![CDATA[and  rpt_no = #{rptNo} >= rpt_start_no and rpt_no = #{rptNo} <= rpt_end_no]]></if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="beginTime != null and beginTime != ''"><![CDATA[AND update_time >= #{beginTime} ]]></if>
-            <if test="endTime != null and endTime != ''"><![CDATA[AND update_time <= #{endTime}]]></if>
+            <if test="updateStartTime != null and updateStartTime != ''"><![CDATA[AND update_time >= #{updateStartTime} ]]></if>
+            <if test="updateEndTime != null and updateEndTime != ''"><![CDATA[AND update_time <= #{updateEndTime}]]></if>
         </where>
     </select>
 
@@ -163,6 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rptEndNo != null and rptEndNo != ''">rpt_end_no = #{rptEndNo},</if>
             <if test="claimType != null and claimType != ''">claim_type = #{claimType},</if>
             <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="batchNo != null  and batchNo != ''">batch_no = #{batchNo},</if>
         </trim>

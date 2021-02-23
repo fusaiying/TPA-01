@@ -2,7 +2,20 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
-import com.paic.ehis.claimflow.domain.*;
+import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
+import com.paic.ehis.claimflow.domain.ClaimBatch;
+import com.paic.ehis.claimflow.domain.ClaimCase;
+import com.paic.ehis.claimflow.domain.ClaimCaseAccept;
+import com.paic.ehis.claimflow.domain.ClaimCaseBill;
+import com.paic.ehis.claimflow.domain.ClaimCaseCal;
+import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
+import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
+import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
+import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
+import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
+import com.paic.ehis.claimflow.domain.ClaimProductTaskLog;
+import com.paic.ehis.claimflow.domain.PolicyInfo;
+import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
@@ -18,6 +31,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -164,7 +178,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         if (StringUtils.isNotEmpty(claimCaseDTO.getRptNo()) &&
                 StringUtils.isNotEmpty(claimCaseDTO.getBatchNo()) &&
                 StringUtils.isNotEmpty(claimCaseDTO.getName())
-        ){
+        ) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
             claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
@@ -335,7 +349,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCase claimCase = claimCaseShuntClass.getClaimCase();
         String caseProp = claimCase.getCaseProp();
-        if (!caseProp.equals("")) {
+        if (caseProp == null) {
             //查询TPA保单
             //policy_info
             List<PolicyInfo> listA = policyInfoMapper.selectPolicyInfoByInsuredNo(claimCaseShuntClass);
@@ -346,6 +360,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseShuntClass.setCaseStypeFind("01");
 
                 //走TPA流程
+
                 //判断是否为审核岗退回受理
                 // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -404,15 +419,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             } else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-提示：此被保人只有健康险保单，确认后将提交至健康险
                 claimCaseShuntClass.getClaimCase().setCaseProp("02");
                 claimCaseShuntClass.setCaseStypeFind("02");
-            }//若都没有-提示：请撤件
-            claimCaseShuntClass.getClaimCase().setCaseProp("03");
-            claimCaseShuntClass.setCaseStypeFind("03");
-
-        } else {
-            if (caseProp == "02") {
-//转去核心健康险
+            } else {//若都没有-提示：请撤件
+                claimCaseShuntClass.getClaimCase().setCaseProp("03");
+                claimCaseShuntClass.setCaseStypeFind("03");
             }
+        } else if (caseProp == "02") {
+//转去核心健康险
         }
+
         return claimCaseShuntClass;
 
         /*
@@ -1044,16 +1058,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return 结果
      */
     @Override
-    public int surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-        caseInvestigation.setIsHistory("N");
+    public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+        stringBuilder.append("ZWQR").append(investigation);
+        caseInvestigation.setInvNo(stringBuilder.toString());
         caseInvestigation.setInvDate(DateUtils.getNowDate());
-        caseInvestigation.setInvNo("ZWQR" + PubFun.createMySqlMaxNoUseCache("Investigation", 10, 7));
+        caseInvestigation.setIsHistory("N");
         caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
         caseInvestigation.setCreateBy(SecurityUtils.getUsername());
         caseInvestigation.setCreateTime(DateUtils.getNowDate());
         caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
         caseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        return claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+        return i==1? caseInvestigation:null;
     }
 
     /**
@@ -1283,11 +1301,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         List<ClaimInformationVo> caseList = claimCaseMapper.selectClaimInformation(claimInformationDTO);
         for (ClaimInformationVo caseInfo : caseList
         ) { // 是否调查
-            ClaimCaseInvestigation claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if (null == claimCaseInvestigation) {
-                caseInfo.setInvestigation("02");
-            } else {
+            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+            if ( claimCaseInvestigation.size() > 0) {
                 caseInfo.setInvestigation("01");
+            } else {
+                caseInfo.setInvestigation("02");
             }
             //获取就诊日期
             List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());

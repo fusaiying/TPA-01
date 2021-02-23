@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCalRuleMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCalRule" id="ClaimCaseCalRuleResult">
+        <result property="calRuleId"    column="cal_rule_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="calItemId"    column="cal_item_id"    />
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="usedValue"    column="used_value"    />
+        <result property="surplusValue"    column="surplus_value"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCalRuleVo">
+        select cal_rule_id, rpt_no, cal_item_id, rule_no, used_value, surplus_value, status, create_by, create_time, update_by, update_time from claim_case_cal_rule
+    </sql>
+
+    <select id="selectClaimCaseCalRuleList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRule" resultMap="ClaimCaseCalRuleResult">
+        <include refid="selectClaimCaseCalRuleVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="calItemId != null "> and cal_item_id = #{calItemId}</if>
+            <if test="ruleNo != null  and ruleNo != ''"> and rule_no = #{ruleNo}</if>
+            <if test="usedValue != null "> and used_value = #{usedValue}</if>
+            <if test="surplusValue != null "> and surplus_value = #{surplusValue}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseCalRuleById" parameterType="Long" resultMap="ClaimCaseCalRuleResult">
+        <include refid="selectClaimCaseCalRuleVo"/>
+        where cal_rule_id = #{calRuleId}
+    </select>
+        
+    <insert id="insertClaimCaseCalRule" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRule" useGeneratedKeys="true" keyProperty="calRuleId">
+        insert into claim_case_cal_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="calItemId != null">cal_item_id,</if>
+            <if test="ruleNo != null and ruleNo != ''">rule_no,</if>
+            <if test="usedValue != null">used_value,</if>
+            <if test="surplusValue != null">surplus_value,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="calItemId != null">#{calItemId},</if>
+            <if test="ruleNo != null and ruleNo != ''">#{ruleNo},</if>
+            <if test="usedValue != null">#{usedValue},</if>
+            <if test="surplusValue != null">#{surplusValue},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseCalRule" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCalRule">
+        update claim_case_cal_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="calItemId != null">cal_item_id = #{calItemId},</if>
+            <if test="ruleNo != null and ruleNo != ''">rule_no = #{ruleNo},</if>
+            <if test="usedValue != null">used_value = #{usedValue},</if>
+            <if test="surplusValue != null">surplus_value = #{surplusValue},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where cal_rule_id = #{calRuleId}
+    </update>
+
+    <delete id="deleteClaimCaseCalRuleById" parameterType="Long">
+        delete from claim_case_cal_rule where cal_rule_id = #{calRuleId}
+    </delete>
+
+    <delete id="deleteClaimCaseCalRuleByIds" parameterType="String">
+        delete from claim_case_cal_rule where cal_rule_id in 
+        <foreach item="calRuleId" collection="array" open="(" separator="," close=")">
+            #{calRuleId}
+        </foreach>
+    </delete>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.TheAdjustmentSubsidiaryOneVO" id="TheAdjustmentSubsidiaryOneVOTese">
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="dutyDetailName"    column="duty_detail_name"    />
+        <result property="feeitemName"    column="feeitem_name"    />
+        <result property="ruleDescription"    column="rule_description"    />
+        <result property="usedValue"    column="used_value"    />
+        <result property="surplusValue"    column="surplus_value"    />
+        <result property="calRuleId"    column="cal_rule_id"    />
+    </resultMap>
+    <select id="selectClaimCaseCalRuleListByRptNo" parameterType="String" resultMap="TheAdjustmentSubsidiaryOneVOTese">
+       select rulefour.cal_rule_id,rulefour.used_value,rulefour.surplus_value,rulefour.rule_no,rulefour.duty_detail_name,rulefour.feeitem_name,claimrule.rule_description from
+        ( select ruletwothree.cal_rule_id,ruletwothree.used_value,ruletwothree.surplus_value,ruletwothree.rule_no,ruletwothree.duty_detail_name,feeitem.feeitem_name from
+        ( select ruletwo.cal_rule_id,ruletwo.used_value,ruletwo.surplus_value,ruletwo.rule_no,ruletwo.duty_detail_code,detail.duty_detail_name from
+        ( select ruleone.cal_rule_id,ruleone.used_value,ruleone.surplus_value,ruleone.rule_no,item.duty_detail_code from
+        (select rule.cal_rule_id,rule.used_value,rule.surplus_value,rule.rule_no,rule.cal_item_id from claim_case_cal_rule rule where rule.rpt_no=#{rptNo} and rule.status='Y') ruleone
+        join claim_case_cal_item item on ruleone.cal_item_id=item.cal_item_id ) ruletwo
+        join claim_product_duty_detail detail on ruletwo.duty_detail_code=detail.duty_detail_code ) ruletwothree
+        join claim_product_feeitem feeitem on ruletwothree.duty_detail_code=feeitem.duty_detail_code ) rulefour
+        join claim_rule claimrule on rulefour.rule_no=claimrule.rule_no
+    </select>
+    
+</mapper>

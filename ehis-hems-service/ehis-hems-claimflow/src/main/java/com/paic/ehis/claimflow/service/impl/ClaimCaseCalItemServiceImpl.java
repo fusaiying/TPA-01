@@ -1,7 +1,10 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.paic.ehis.claimflow.domain.*;
+import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
+import com.paic.ehis.claimflow.domain.ClaimProductDutyDetail;
+import com.paic.ehis.claimflow.domain.ClaimProductFeeitem;
+import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCalItemMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper;
@@ -12,6 +15,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
+import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

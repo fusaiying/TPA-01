@@ -71,6 +71,33 @@ public class ClaimBatchController extends BaseController {
     }
 
     /**
+     * 查询待处理理赔批次 列表
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
+    @PostMapping("/pendingList")
+    public TableDataInfo PendingList(@RequestBody BatchDTO batchDTO)
+    {
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
+                case "batchno":
+                    batchDTO.setOrderByColumn("batch_no");
+                    break;
+                case "submitdate":
+                    batchDTO.setOrderByColumn("submit_date");
+                    break;
+                case "updateTime":
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
+            }
+        }else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
+        }
+        startPage(batchDTO);
+        List<BatchVo> list = claimBatchService.selectPendingBatchList(batchDTO);
+        return getDataTable(list);
+    }
+
+    /**
      * 查询已退回理赔批次 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")

@@ -128,7 +128,7 @@
             <el-row>
               <el-col :span="24">  <!--:readonly="read ? 'readonly' : false"-->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="read ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input :disabled="readbatchNo ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -221,6 +221,7 @@
           };
             return {
                read:false,
+               readbatchNo:false,
                 form: {
                   deptCode: '',
                   claimType: '',
@@ -252,7 +253,7 @@
                 rules: {
                   deptCode: {trigger: ['change'], required: false, message: '机构必填'},
                   claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
-                  batchNo: {trigger: ['change'], required: true, message: '批次号必填'},
+                  batchNo: {trigger: ['change'], required: false, message: '批次号必填'},
                   rptStartNo: {trigger: ['change'], required: true, message: '报案号起必填'},
                   rptEndNo: {trigger: ['change'], required: true, message: '报案号止必填'},
                   caseBoxNo: {trigger: ['change'],validator: checkExistInfo, required: true},
@@ -324,7 +325,6 @@
             currentDate.setMonth(currentDate.getMonth() - 1);
             createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
           }
-
           const params = {
             pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
             pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
@@ -333,21 +333,40 @@
             batchNo: this.form.batchNo ,
             rptNo:this.form.rptNo ,
             caseBoxNo:this.form.caseBoxNo ,
-            beginTime : createStartStr,
-            endTime : createEndStr,
+            updateStartTime : createStartStr,
+            updateEndTime : createEndStr,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-          this.loading = true;
-          caseFilingList(params).then(response => {
-            this.totalNum = response.total;
-            this.tableData = response.rows;
-            this.loading = false;
-            this.searchBtn = false;
-          }).catch(error => {
+
+          if(!this.searchBtn) {
+            getDept().then(response => {
+              if(response.deptId) {
+                this.loading = true;
+                params.deptCode = response.deptId.toString();
+                caseFilingList(params).then(response => {
+                  this.totalNum = response.total;
+                  this.tableData = response.rows;
+                  this.loading = false;
+                  this.searchBtn = false;
+                }).catch(error => {
+                  this.loading = true;
+                  console.log(error);
+                });
+              }
+            })
+          } else {
             this.loading = true;
-            console.log(error);
-          });
+            caseFilingList(params).then(response => {
+              this.totalNum = response.total;
+              this.tableData = response.rows;
+              this.loading = false;
+              this.searchBtn = false;
+            }).catch(error => {
+              this.loading = true;
+              console.log(error);
+            });
+          }
         },
         searchByFormParms(){
           this.searchBtn = true;
@@ -363,6 +382,12 @@
             this.pbaceCaseForm.rptStartNo = row.rptStartNo;
             this.pbaceCaseForm.rptEndNo = row.rptEndNo;
             this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+            if(row.batchNo != ''  && row.batchNo != null) {
+              this.readbatchNo = true;
+            } else {
+              this.readbatchNo = false;
+            }
+
           } else {
             this.resetInfo();
           }
@@ -480,6 +505,7 @@
           this.pbaceCaseForm.rptEndNo = '';
           this.pbaceCaseForm.caseBoxNo = '';
           this.read = false;
+          this.readbatchNo = false;
           this.$refs['pbaceCaseForm'].clearValidate();
         },
         getFullRptNo(row,col){

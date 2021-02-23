@@ -159,6 +159,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //生成一条数据操作记录
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
         workHandleInfo.setHandleType("协办");
+        workHandleInfo.setStatus("Y");
         workHandleInfo.setRemark(demandAcceptVo.getRemark());
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());

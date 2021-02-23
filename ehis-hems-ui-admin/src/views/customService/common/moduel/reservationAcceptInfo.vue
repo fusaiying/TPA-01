@@ -162,7 +162,7 @@ let dictss = [{dictType: 'claimType'}, {dictType: 'cs_channel'},]
 
 export default {
   props: {
-    reservationAcceptInfo: Object
+    acceptInfo: Object
   },
   data() {
     return {

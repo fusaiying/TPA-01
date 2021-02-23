@@ -124,7 +124,7 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 联系人分机号*/
     private String contactsSecondNumber;
     /** 联系人性别*/
-    private long contactsSex;
+    private String contactsSex;
     /** 联系人姓名*/
     private String contactsName;
     /** 联系人语言*/

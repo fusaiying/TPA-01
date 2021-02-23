@@ -1,15 +1,15 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>服务受理信息</span>
+      <span>{{selectDictLabel(businessTypeOptions, acceptForm.businessService.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, acceptForm.businessService.split('-')[1])}}</span>
     </div>
-    <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="100px"
+    <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="100px" :disabled="isDisabled"
              label-position="right" size="mini">
       <el-row>
-        <el-form-item label="受理渠道：" prop="channle" class=".to_right">
-          <el-radio-group v-model="acceptForm.acceptor">
+        <el-form-item label="受理渠道：" prop="channelCode" class=".to_right">
+          <el-radio-group v-model="acceptForm.channelCode">
             <el-radio
-              v-for="dict in cs_channelOptions"
+              v-for="dict in channelOptions"
               :key="dict.dictValue"
               :label="dict.dictValue"
             >{{dict.dictLabel}}
@@ -19,22 +19,22 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="服务项目：" prop="Service" class=".to_right">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-              <el-option v-for="item in serves" :key="item.value" :label="item.label"
-                         :value="item.value"/>
+          <el-form-item label="服务项目：" prop="serviceItem" class=".to_right">
+            <el-select v-model="acceptForm.serviceItem" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+              <el-option v-for="item in serviceItemOptions" :key="item.dictValue" :label="item.dictLabel"
+                         :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="联系人电话：" prop="phone" class=".to_right">
-            <el-input v-model="acceptForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="来电人电话：" prop="mobilePhone" class=".to_right">
+            <el-input v-model="acceptForm.callPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="优先级：" prop="priority" class=".to_right">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+          <el-form-item label="优先级：" prop="priorityLevel" class=".to_right">
+            <el-select v-model="acceptForm.priorityLevel" class="item-width" placeholder="请选择">
+              <el-option v-for="item in priorityOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -43,46 +43,46 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="来电人：" prop="phone" class=".to_right">
-            <el-input v-model="acceptForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="来电人：" prop="name" class=".to_right">
+            <el-input v-model="acceptForm.callPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="来电人与被保人关系：" prop="priority">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+            <el-select v-model="acceptForm.callRelationBy" class="item-width" placeholder="请选择">
+              <el-option v-for="item in relationOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="联系人：" prop="lxperson">
-            <el-input v-model="acceptForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="acceptForm.contactsPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
 
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="联系人性别：" prop="priority">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+          <el-form-item label="联系人性别：" prop="sex">
+            <el-select v-model="acceptForm.contactsPerson.sex" class="item-width" placeholder="请选择">
+              <el-option v-for="item in sexOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="联系人与被保人关系：" prop="priority">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+          <el-form-item label="联系人与被保人关系：" prop="contactsRelationBy">
+            <el-select v-model="acceptForm.contactsRelationBy" class="item-width" placeholder="请选择">
+              <el-option v-for="item in relationOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="联系人语言：" prop="priority">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+          <el-form-item label="联系人语言：" prop="language">
+            <el-select v-model="acceptForm.contactsPerson.language" class="item-width" placeholder="请选择">
+              <el-option v-for="item in communicationLanguageOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -92,22 +92,19 @@
       <el-row>
 
         <el-col :span="8">
-          <el-form-item label="联系人移动电话：" prop="phone">
-            <el-input v-model="acceptForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
-          </el-form-item>
-        </el-col>
-
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="E-MAIL：" prop="phone">
-            <el-input v-model="acceptForm.acceptor" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="联系人移动电话：" prop="mobilePhone">
+            <el-input v-model="acceptForm.contactsPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="出单机构：" prop="priority">
-            <el-select v-model="acceptForm.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+          <el-form-item label="E-MAIL：" prop="email">
+            <el-input v-model="acceptForm.contactsPerson.email" class="item-width" clearable size="mini" placeholder="请输入"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="出单机构：" prop="organCode">
+            <el-select v-model="acceptForm.organCode" class="item-width" placeholder="请选择">
+              <el-option v-for="item in organizationOptions" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -150,7 +147,7 @@
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
-          v-model="acceptInfo.acceptor">
+          v-model="acceptInfo.content">
         </el-input>
       </el-form-item>
     </el-form>
@@ -158,20 +155,70 @@
 
 </template>
 <script>
-let dictss = [{dictType: 'claimType'}, {dictType: 'cs_channel'},]
+let dictss = [{dictType: 'cs_service_item'}
+,{dictType: 'cs_channel'}
+,{dictType: 'cs_priority'}
+,{dictType: 'cs_sex'}
+,{dictType: 'cs_communication_language'}
+,{dictType: 'cs_organization'}
+,{dictType: 'cs_relation'}
+,{dictType: 'cs_business_type'}
+]
 
 export default {
   props: {
-    demandAcceptInfo: Object
+    isDisabled: {
+      type:Boolean,
+      default:false
+    },
+    acceptInfo: {
+      type: Object,
+      default: function (){
+        return {}
+      }
+    }
+  },
+  watch: {
+    acceptInfo: function (newValue){
+      this.acceptData = newValue
+      console.info("newValue");
+      console.info(newValue);
+      this.acceptForm.channelCode= this.acceptData.channelCode,
+        this.acceptForm.serviceItem= this.acceptData.serviceItem,
+        this.acceptForm.businessService= this.acceptData.businessService,
+        this.acceptForm.callRelationBy= this.acceptData.callRelationBy,
+        this.acceptForm.priorityLevel= this.acceptData.priorityLevel,
+        this.acceptForm.contactsRelationBy= this.acceptData.contactsRelationBy,
+        this.acceptForm.content= this.acceptData.content,
+        this.acceptForm.organCode= this.acceptData.organCode,
+        this.acceptForm.contactsPerson= this.acceptData.contactsPerson?this.acceptData.contactsPerson: {},
+        this.acceptForm.callPerson= this.acceptData.callPerson?this.acceptData.callPerson: {}
+    }
   },
   data() {
     return {
-      dutyLoading: false,
       dictList: [],
-      serves: [],
-      cs_channelOptions: [],
+      serviceItemOptions: [],
+      channelOptions: [],
+      priorityOptions: [],
+      sexOptions: [],
+      communicationLanguageOptions: [],
+      organizationOptions: [],
+      relationOptions: [],
+      businessTypeOptions:[],
+      acceptData: {},
+      divTitle:'',
       acceptForm: {
-        acceptor: undefined,
+        businessService:undefined,
+        channelCode: undefined,
+        serviceItem: undefined,
+        contactsPerson: {},
+        callRelationBy: undefined,
+        priorityLevel: undefined,
+        callPerson: {},
+        contactsRelationBy: undefined,
+        content: undefined,
+        organCode: undefined,
       },
     }
   },
@@ -179,11 +226,29 @@ export default {
     await this.getDictsList(dictss).then(response => {
       this.dictList = response.data
     })
-    this.claimTypeOptions = this.dictList.find(item => {
-      return item.dictType === 'claimType'
+    this.serviceItemOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_demand_item'
     }).dictDate
-    this.cs_channelOptions = this.dictList.find(item => {
+    this.channelOptions = this.dictList.find(item => {
       return item.dictType === 'cs_channel'
+    }).dictDate
+    this.priorityOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_priority'
+    }).dictDate
+    this.sexOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_sex'
+    }).dictDate
+    this.communicationLanguageOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_communication_language'
+    }).dictDate
+    this.organizationOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_organization'
+    }).dictDate
+    this.relationOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_relation'
+    }).dictDate
+    this.businessTypeOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_business_type'
     }).dictDate
   },
   methods: {}

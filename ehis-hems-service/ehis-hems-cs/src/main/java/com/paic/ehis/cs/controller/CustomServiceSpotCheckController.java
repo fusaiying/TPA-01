@@ -6,11 +6,13 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.UserInfo;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.service.IAttachmentInfoService;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
@@ -35,6 +37,9 @@ public class CustomServiceSpotCheckController extends BaseController {
     @Autowired
     private IQualityInspectionAcceptService qualityInspectionAcceptService;
 
+    @Autowired
+    private IAttachmentInfoService attachmentInfoService;
+
     /**
      * 发送质检工作池：数据来源
      * @param workOrderQueryDTO
@@ -47,34 +52,20 @@ public class CustomServiceSpotCheckController extends BaseController {
         startPage();
         //2.工单状态处理； 04-已完成的工单且没有被质检过
         workOrderQueryDTO.setAcceptStatus(CodeEnum.ORDER_STATE_04.getCode());
+        //3.业务类型为： 01-信息需求和03-投诉的才可以质检
+        List<String> businessTypeList=new ArrayList<>();
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_01.getCode());
+        businessTypeList.add(CodeEnum.BUSINESS_TYPE_03.getCode());
+        workOrderQueryDTO.setBusinessTypeList(businessTypeList);
         logger.debug("可发起质检工作池入参: {}",workOrderQueryDTO);
         List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-        for (int i = 0; i < list.size(); i++) {
-            PersonInfo personInfo01=new PersonInfo();
-            personInfo01.setPersonId("000001");
-            personInfo01.setName("平安01");
-            PersonInfo personInfo02=new PersonInfo();
-            personInfo02.setPersonId("000002");
-            personInfo02.setName("平安02");
-            UserInfo userInfo1=new UserInfo();
-            userInfo1.setUserId("1");
-            userInfo1.setUserName("马军");
-            userInfo1.setUmCode("MAJUN523");
-            UserInfo userInfo2=new UserInfo();
-            userInfo2.setUserId("2");
-            userInfo2.setUserName("高毅");
-            userInfo2.setUmCode("GAOYI231");
-
-            list.get(i).setInsuredPerson(personInfo01);
-            list.get(i).setHolderPerson(personInfo02);
-            list.get(i).setAcceptUser(userInfo1);
-            list.get(i).setModifyUser(userInfo2);
-            if(i==0){
-                list.get(i).setIsRedWord(true);
-            }else{
-                list.get(i).setIsRedWord(false);
-            }
-        }
+//        for (int i = 0; i < list.size(); i++) {
+//            if(i==0){
+//                list.get(i).setIsRedWord(true);
+//            }else{
+//                list.get(i).setIsRedWord(false);
+//            }
+//        }
         logger.debug("可发起质检工作池结果:{}",list);
         return getDataTable(list);
     }
@@ -92,35 +83,8 @@ public class CustomServiceSpotCheckController extends BaseController {
         startPage();
         //2.工单状态处理； 01-待质检
         workOrderQueryDTO.setAcceptStatus(CodeEnum.INSPECTION_STATE_01.getCode());
-
         logger.debug("待质检公共池查询入参：{}",workOrderQueryDTO);
         List<AcceptVo> list = qualityInspectionAcceptService.selectAcceptPoolData(workOrderQueryDTO);
-        for (int i = 0; i < list.size(); i++) {
-            PersonInfo personInfo01=new PersonInfo();
-            personInfo01.setPersonId("000001");
-            personInfo01.setName("平安01");
-            PersonInfo personInfo02=new PersonInfo();
-            personInfo02.setPersonId("000002");
-            personInfo02.setName("平安02");
-            UserInfo userInfo1=new UserInfo();
-            userInfo1.setUserId("1");
-            userInfo1.setUserName("马军");
-            userInfo1.setUmCode("MAJUN523");
-            UserInfo userInfo2=new UserInfo();
-            userInfo2.setUserId("2");
-            userInfo2.setUserName("高毅");
-            userInfo2.setUmCode("GAOYI231");
-
-            list.get(i).setInsuredPerson(personInfo01);
-            list.get(i).setHolderPerson(personInfo02);
-            list.get(i).setAcceptUser(userInfo1);
-            list.get(i).setModifyUser(userInfo2);
-            if(i==0){
-                list.get(i).setIsRedWord(true);
-            }else{
-                list.get(i).setIsRedWord(false);
-            }
-        }
         logger.debug("待质检公共池查询结果：{}",list);
         return getDataTable(list);
     }
@@ -141,32 +105,6 @@ public class CustomServiceSpotCheckController extends BaseController {
         workOrderQueryDTO.setUpdateBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
         logger.debug("待质检个人池查询入参：{}",workOrderQueryDTO);
         List<AcceptVo> list = qualityInspectionAcceptService.selectAcceptPoolData(workOrderQueryDTO);
-        for (int i = 0; i < list.size(); i++) {
-            PersonInfo personInfo01=new PersonInfo();
-            personInfo01.setPersonId("000001");
-            personInfo01.setName("平安01");
-            PersonInfo personInfo02=new PersonInfo();
-            personInfo02.setPersonId("000002");
-            personInfo02.setName("平安02");
-            UserInfo userInfo1=new UserInfo();
-            userInfo1.setUserId("1");
-            userInfo1.setUserName("马军");
-            userInfo1.setUmCode("MAJUN523");
-            UserInfo userInfo2=new UserInfo();
-            userInfo2.setUserId("2");
-            userInfo2.setUserName("高毅");
-            userInfo2.setUmCode("GAOYI231");
-
-            list.get(i).setInsuredPerson(personInfo01);
-            list.get(i).setHolderPerson(personInfo02);
-            list.get(i).setAcceptUser(userInfo1);
-            list.get(i).setModifyUser(userInfo2);
-            if(i==0){
-                list.get(i).setIsRedWord(true);
-            }else{
-                list.get(i).setIsRedWord(false);
-            }
-        }
         logger.debug("待质检个人池查询结果：{}",list);
         return getDataTable(list);
     }
@@ -211,12 +149,32 @@ public class CustomServiceSpotCheckController extends BaseController {
         return toAjax(qualityInspectionAcceptService.inspectionHandleStatusByIds(getIds,param));
     }
 
+    /**
+     * 根据条件获取受理对象
+     * @param workOrderQueryDTO
+     * @return
+     */
     @GetMapping("/internal/getAcceptInfo")
     public AjaxResult getAcceptInfo(WorkOrderQueryDTO workOrderQueryDTO)
     {
-
-        return null;
+        return AjaxResult.success(qualityInspectionAcceptService.getOneAcceptInfo(workOrderQueryDTO));
     }
 
+    /**
+     * 根据条件获取附件列表信息
+     * @param workOrderQueryDTO
+     * @return
+     */
+    @GetMapping("/internal/getAttachmentList")
+    public AjaxResult getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO){
+        AttachmentInfo attachmentInfo=new AttachmentInfo();
+        attachmentInfo.setBusinessNo(workOrderQueryDTO.getWorkOrderNo());
+        attachmentInfo.setBusinessType(workOrderQueryDTO.getBusinessType());
+        List<AttachmentInfo> attachmentInfoList=attachmentInfoService.selectAttachmentInfoList(attachmentInfo);
+        if(attachmentInfoList==null){
+            attachmentInfoList=new ArrayList<>();
+        }
+        return AjaxResult.success(attachmentInfoList);
+    }
 
 }

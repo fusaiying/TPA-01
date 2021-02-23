@@ -1,37 +1,57 @@
 <template>
   <div class="app-container">
-    <!-- 客户基本信息 -->
+<!--    客户基本信息 -->
     <div id="#anchor-1" class="personInfo_class" style="margin-top: 5px;">
       <personInfo ref="personForm" :policyNo="this.params.policyNo" :policyItemNo="this.params.policyItemNo" />
     </div>
 
-    <!-- 受理信息 -->
+<!--    受理信息 -->
     <div id="#anchor-21" v-if="this.params.businessType=='01'" class="personInfo_class" style="margin-top: 5px;">
-      <demandAcceptInfo :demandAcceptInfo="demandAcceptInfo" :isDisabled="isDisabled" />
+      <demandAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled" />
     </div>
+    <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
+      <complaintAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled"/>
+    </div>
+<!--    流转信息-->
+<!--    <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">-->
+<!--      <complaintAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled"/>-->
+<!--    </div>-->
+<!--    附件信息-->
+    <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
+      <attachmentList :attachmentInfoData="attachmentInfoData"/>
+    </div>
+<!--    处理信息-->
+<!--    信息需求-->
+    <div id="#anchor-51">
 
-    <div id="#anchor-22" v-if="this.params.businessType=='02'" class="personInfo_class" style="margin-top: 5px;">
-      <complaintAcceptInfo :complaintAcceptInfo="complaintAcceptInfo" :isDisabled="isDisabled"/>
     </div>
-    <div id="#anchor-23" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
-      <reservationAcceptInfo :reservationAcceptInfo="reservationAcceptInfo" :isDisabled="isDisabled"/>
-    </div>
+<!--    投诉-->
+    <div id="#anchor-52">
 
-    <!-- 处理信息 -->
+    </div>
+<!--    质检处理-->
+<!--    信息需求-->
+    <div id="#anchor-61">
+
+    </div>
+<!--    投诉-->
+    <div id="#anchor-62">
+
+    </div>
   </div>
 </template>
 <script>
 import personInfo from '@/views/customService/common/moduel/personInfo'; //客户基本信息
 import demandAcceptInfo from "@/views/customService/common/moduel/demandAcceptInfo";//信息需求
 import complaintAcceptInfo from "@/views/customService/common/moduel/complaintAcceptInfo";//投诉
-import reservationAcceptInfo from "@/views/customService/common/moduel/reservationAcceptInfo";//预约
+import flowLogList from "@/views/customService/common/moduel/attachmentList";//流转记录列表
+import attachmentList from "@/views/customService/common/moduel/attachmentList";//附件列表
 import {
   getAcceptInfoByTypeOrId,
+  getAttachmentListById
 } from '@/api/customService/spotCheck'
 
 import {mapGetters} from 'vuex'
-
-
 
 let dictss = [{dictType: 'delivery_source'},]
 
@@ -40,7 +60,7 @@ export default {
     personInfo,
     demandAcceptInfo,
     complaintAcceptInfo,
-    reservationAcceptInfo,
+    attachmentList,
   },
   computed: {
     disabled() {
@@ -58,12 +78,8 @@ export default {
       isSave: false,
       btnArr: [],
       //定义子页面对象
-      demandAcceptInfo: {
-      },
-      complaintAcceptInfo: {
-      },
-      reservationAcceptInfo: {
-      },
+      acceptInfo: {},
+      attachmentInfoData: [],
       //接收的参数对象
       params: {},
       isDisabled:true,
@@ -87,6 +103,15 @@ export default {
       getAcceptInfoByTypeOrId(query).then(res => {
         if (res != null && res.code === 200) {
           console.info(res.data);
+          this.acceptInfo=res.data;
+        }
+      }).catch(res => {
+      })
+      //获取附件列表信息
+      getAttachmentListById(query).then(res => {
+        if (res != null && res.code === 200) {
+          console.info(res.data);
+          this.attachmentInfoData=res.data;
         }
       }).catch(res => {
       })

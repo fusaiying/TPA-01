@@ -50,4 +50,6 @@ public class WorkOrderQueryDTO extends BaseEntity
     private List<String> acceptStatusList;
     /** 批量获取 */
     private List<String> workOrderNoList;
+    /** 多个业务类型 */
+    private List<String> businessTypeList;
 }

@@ -145,7 +145,7 @@ public class DemandAcceptVo extends BaseEntity {
     /** 来电人号码*/
     private String callMobilePhone;
     /** 联系人性别*/
-    private long contactsSex;
+    private String contactsSex;
     /** 联系人姓名*/
     private String contactsName;
     /** 联系人语言*/

@@ -82,3 +82,12 @@ export function getAcceptInfoByTypeOrId(params){
     params: params
   })
 }
+
+//# 通过工单号查询附件信息
+export function getAttachmentListById(params) {
+  return request({
+    url: '/cs/spotCheck/internal/getAttachmentList',
+    method: 'get',
+    params: params
+  })
+}

@@ -1,5 +1,6 @@
 package com.paic.ehis.cs.mapper;
 
+import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
@@ -30,10 +31,13 @@ public interface QualityInspectionAcceptMapper {
     public int insertAcceptBatch(List<QualityInspectionAccept> qualityInspectionAcceptList);
 
     /**
-     *
+     * 更新质检状态
      * @param workOrderQueryDTO
      * @return
      */
     public int updateAcceptByVoDTO(WorkOrderQueryDTO workOrderQueryDTO);
 
+    public AcceptVo getAcceptInfo(WorkOrderQueryDTO workOrderQueryDTO);
+
+    public AcceptDetailInfo getAcceptDetailInfo(WorkOrderQueryDTO workOrderQueryDTO);
 }

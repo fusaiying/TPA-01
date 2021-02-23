@@ -28,7 +28,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理人：" prop="updateBy">
-              <el-input v-model="poolQueryForm.updateBy" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="poolQueryForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,12 +91,16 @@
             </template>
           </el-table-column>
           <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="结案日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="updateBy" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(inspection_stateOptions, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="getOne(scope.row)">获取</el-button>
@@ -138,9 +142,9 @@
             </template>
           </el-table-column>
           <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="结案日期" align="center" show-overflow-tooltip>
+          <el-table-column prop="endDate" label="结案日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{parseTime(scope.row.endDate, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>

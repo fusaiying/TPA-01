@@ -9,23 +9,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="businessType" column="business_type"/>
         <result property="serviceItem" column="item_code"/>
         <result property="businessService" column="business_service"/>
-        <result property="channel" column="channel_code"/>
+        <result property="channelCode" column="channel_code"/>
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
         <result property="riskCode" column="risk_code"/>
-        <result property="acceptTime" column="create_time"/>
+        <result property="acceptTime" column="accept_time"/>
         <result property="modifyTime" column="modify_time"/>
         <result property="vipFlag" column="vip_flag"/>
         <result property="priorityLevel" column="priority_level"/>
         <result property="organCode" column="organ_code"/>
+        <result property="insuredPersonId" column="insured_no"/>
+        <result property="holderPersonId" column="holder_no"/>
+        <result property="acceptUserId" column="accept_by"/>
+        <result property="modifyUserId" column="modify_by"/>
         <result property="endDate" column="end_date"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="callRelationBy" column="call_relation_by"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="contactsRelationBy" column="contacts_relation_by"/>
+        <result property="content" column="content"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
         <result property="status" column="status"/>
-
     </resultMap>
-
+<!--可质检工单查询-->
     <sql id="selectAcceptVo">
         select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
-            woa.policy_no,woa.policy_item_no,woa.end_date,qia.status
+            woa.policy_no,woa.policy_item_no,woa.end_date,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time
         from quality_inspection_accept qia
             left join  work_order_accept woa on qia.work_order_no=woa.work_order_no
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
@@ -33,14 +43,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectSendVo">
         select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
-            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.create_time,woa.modify_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
         from work_order_accept woa
             left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
     </sql>
-
+<!--质检信息列表查询-->
     <select id="selectSendByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
         <include refid="selectSendVo"/>
         where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        <if test="businessTypeList != null ">
+            and woa.business_type IN (
+            <foreach collection="businessTypeList" item="businessType"
+                     separator=",">
+                #{businessType}
+            </foreach>
+            )
+        </if>
         <if test="endCaseStartTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
         </if>
@@ -54,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="acceptStatus != null  and acceptStatus != ''"> and woa.status = #{acceptStatus}</if>
 
         <if test="serviceItem != null  and serviceItem != ''"> and adi.item_code = #{serviceItem}</if>
+
     </select>
 
     <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
@@ -77,7 +96,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="updateBy !=null and updateBy !='' "> and qia.updated_by = #{updateBy}</if>
 
     </select>
-<!--    批量插入数据-->
+<!--    提取详细信息值-->
+    <select id="getAcceptDetailInfo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultType="com.paic.ehis.cs.domain.AcceptDetailInfo">
+        select * from accept_detail_info adi where 1=1
+        <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
+    </select>
+<!--    提取共同属性值-->
+    <select id="getAcceptInfo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.accept_time,woa.modify_time,woa.vip_flag,adi.priority_level,woa.organ_code,
+            woa.insured_no,woa.holder_no,woa.accept_by,woa.modify_by,woa.end_date,adi.call_person_id,adi.call_relation_by,adi.contacts_person_id,
+            adi.contacts_relation_by,adi.content,adi.complaint_person_id,adi.call_center_id
+        from work_order_accept woa
+            left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
+        where 1=1
+        <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
+    </select>
+<!--    批量发起质检数据-->
     <insert id="insertAcceptBatch" parameterType="java.util.List">
         INSERT INTO quality_inspection_accept
         (work_order_no, `result`, status, created_by, created_time, updated_by, updated_time)
@@ -94,10 +129,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             )
         </foreach>
     </insert>
-
-    <!-- 批量发送质检-->
-    <update id="updateAcceptByVoDTO"
-            parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO">
+<!--获取质检操作-->
+    <update id="updateAcceptByVoDTO" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO">
         UPDATE quality_inspection_accept
         SET
         status = #{acceptStatus},

@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 
+import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 
@@ -15,18 +16,18 @@ public interface IQualityInspectionAcceptService
 {
     /**
      * 发起质检工作池
-     * @param demandQuery
+     * @param workOrderQueryDTO
      * @return
      */
-    public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO demandQuery);
+    public List<AcceptVo> selectSendPoolData(WorkOrderQueryDTO workOrderQueryDTO);
 
 
     /**
      * 质检工作池
-     * @param demandQuery
+     * @param workOrderQueryDTO
      * @return
      */
-    public List<AcceptVo> selectAcceptPoolData(WorkOrderQueryDTO demandQuery);
+    public List<AcceptVo> selectAcceptPoolData(WorkOrderQueryDTO workOrderQueryDTO);
 
     /**
      * 发起质检操作
@@ -50,5 +51,19 @@ public interface IQualityInspectionAcceptService
      * @return
      */
     public List<AcceptVo> getAcceptVoByIds(String[] ids);
+
+    /**
+     * 获取单个工单受理对象
+     * @param workOrderQueryDTO
+     * @return
+     */
+    public AcceptVo getOneAcceptInfo(WorkOrderQueryDTO workOrderQueryDTO);
+
+//    /**
+//     * 根据条件查询工单附件列表
+//     * @param workOrderQueryDTO
+//     * @return
+//     */
+//    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
 
 }

@@ -10,90 +10,92 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 信息需求查询对象 demand_query
- * 
- * @author sino
- * @date 2021-01-14
+ * 返回前端对象
+ *
+ * by Louis
  */
 @Data
 public class AcceptVo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 工单号
-     */
+    /** 工单号 */
     private String workOrderNo;
-    /**
-     * 业务类型
-     */
+    /** 业务类型 */
     private String businessType;
-
-    /**
-     * 受理渠道
-     */
-    private String channel;
-
-    /**
-     * 服务项目
-     */
+    /** 服务项目 */
     private String serviceItem;
-
-    /**
-     * 业务-服务项目
-     */
+    /** 拼接显示 业务-服务项目 */
     private String businessService;
-
-    @Excel(name = "保单号")
+    /** 保单号 */
     private String policyNo;
-
-    @Excel(name = "分单号")
+    /** 分单号 */
     private String policyItemNo;
-
-    @Excel(name = "险种号")
+    /** 险种号 */
     private String riskCode;
-
-    private PersonInfo insuredPerson;
-
-    private PersonInfo holderPerson;
-
-    private UserInfo acceptUser;
-
-    private UserInfo modifyUser;
-
+    /** 被保险人信息 */
+    private String insuredPersonId;
+    private PersonInfo insuredPerson=new PersonInfo();
+    /** 投保人信息 */
+    private String holderPersonId;
+    private PersonInfo holderPerson=new PersonInfo();
+    /** 受理人信息 */
+    private String acceptUserId;
+    private UserInfo acceptUser=new UserInfo();
+    /** 处理人信息 */
+    private String modifyUserId;
+    private UserInfo modifyUser=new UserInfo();
+    /** 受理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date acceptTime;
+    /** 处理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+    /** 是否VIP */
     private String vipFlag;
-
+    /** 优先级 */
     private String priorityLevel;
-
+    /** 出单机构 */
     private String organCode;
-
+    /** 受理渠道 */
     private String channelCode;
-
+    /** 流程状态 */
     private String status;
 
+    /** 响应时间 */
 
-    private PersonInfo callPerson;
+    /** 响应内容 */
 
+    /** 来电人 */
+    private String callPersonId;
+    private PersonInfo callPerson=new PersonInfo();
+    /** 来电人与被保人关系 */
     private String callRelationBy;
-
-    private PersonInfo contactsPerson;
-
+    /** 联系人 */
+    private String contactsPersonId;
+    private PersonInfo contactsPerson=new PersonInfo();
+    /** 联系人与被保人关系 */
     private String contactsRelationBy;
-
+    /** E-MAIL */
+    private String email;
+    /** 业务内容/投诉内容 */
+    private String content;
+    /** 有无附件 */
+    private String attachmentFlag;
+    /** 电话中心业务流水号 */
     private String callCenterId;
 
-    private String email;
-
-    private String content;
-
-    private PersonInfo complaintPerson;
-
-    private String attachmentFlag;
+    /** 投诉人 */
+    private String complaintPersonId;
+    private PersonInfo complaintPerson=new PersonInfo();
+    /** 是否已劝解 */
+    private String persuasionFlag;
     /**
      * 投诉和预约中预约时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date complaintTime;
+
 
     /**
      * 门诊直接结算服务项目
@@ -163,23 +165,18 @@ public class AcceptVo extends BaseEntity
      * 客户反馈
      */
     private String customerFeedback;
-    /**
-     * 结案类型
-     */
-    private String closeType;
+
     /**
      * 安抚或通融发生费用成本
      */
     private String costsIncurred;
 
-    /** 受理日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date acceptTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "处理时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
+
+    /**
+     * 结案类型
+     */
+    private String closeType;
 
     /**
      * 结案日期
@@ -191,8 +188,5 @@ public class AcceptVo extends BaseEntity
      * 是否再次来电提醒记录
      */
     private Boolean isRedWord=false;
-
-
-
 
 }

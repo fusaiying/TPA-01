@@ -3,14 +3,15 @@ package com.paic.ehis.cs.service.impl;
 import java.util.List;
 
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
+import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
@@ -30,6 +31,8 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     private CollaborativeFromMapper collaborativeFromMapper;
     @Autowired
     private FlowLogMapper flowLogMapper;
+    @Autowired
+    private WorkHandleInfoMapper workHandleInfoMapper;
 
     /**
      * 查询协办信息 
@@ -147,8 +150,22 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLogMapper.updateFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
 
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        //将所有状态置为N
+        workHandleInfo.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        workHandleInfoMapper.updateStatus(workHandleInfo);
+        //生成一条数据操作记录
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+        workHandleInfo.setHandleType("协办");
+        workHandleInfo.setStatus("Y");
+        workHandleInfo.setRemark(demandAcceptVo.getRemark());
+        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
 
         //征求意见处理完毕后  将协办表中状态改为02
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();

@@ -131,7 +131,7 @@
       exportData(){
         const params = {};
         params.rptNo = this.rptNo;
-        this.download('system/case/exportClaimInformation', params, `FYX_${new Date().getTime()}.xlsx`);
+        this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框
       changeDialogVisable() {

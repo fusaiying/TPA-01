@@ -273,10 +273,19 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Override
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo) {
         String workOrderNo=demandAcceptVo.getWorkOrderNo();
-        AcceptDTO acceptDTO=new AcceptDTO();
-        acceptDTO.setWorkOrderNo(workOrderNo);
-        List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
-        DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
+//        String stauts=demandAcceptVo.getStatus();
+//        AcceptDTO acceptDTO=new AcceptDTO();
+//        acceptDTO.setWorkOrderNo(workOrderNo);
+//
+//        if (stauts =="01"){
+//            List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+//            DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);}
+//        else {
+//            List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
+//            DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
+//        }
+//        DemandAcceptVo demandAcceptVo1 =this.demandAcceptVo1;
+        DemandAcceptVo demandAcceptVo1=demandAcceptVoMapper.selectDemandAcceptVoById(workOrderNo);
      //   AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
      //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 

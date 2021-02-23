@@ -155,13 +155,13 @@
               <span class="info_span_col to_right">被保人：</span><span class="info_span_col">{{ surveyInfo.name}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{ surveyInfo.sex }}</span>
+              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{selectDictLabel(rgtSexs,surveyInfo.sex)}}</span>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{ surveyInfo.idType }}</span>
+              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{selectDictLabel(card_types,surveyInfo.idType)}}</span>
             </el-col>
             <el-col :span="8">
               <span class="info_span_col to_right">证件号码：</span><span class="info_span_col">{{ surveyInfo.idNo}}</span>
@@ -317,6 +317,9 @@
         }
       };
       return {
+        rgtSexs:[],
+        card_types: [],
+        inQuireConfirmBtn:false,
         policyNos :[],
         conSave:false,
         rptNo:'',
@@ -468,6 +471,14 @@
       //提调机构
       this.getDicts("initiate_org").then(response => {
         this.initiateOrg = response.data;
+      });
+      // rgtSex
+      this.getDicts("rgtSex").then(response => {
+        this.rgtSexs = response.data;
+      });
+      // card_type
+      this.getDicts("card_type").then(response => {
+        this.card_types = response.data;
       });
     },
     computed: {
@@ -698,6 +709,7 @@
 
             inQuireSave(params).then(res => {
               if (res.code == '200') {
+                this.getInvestigationBaseInfo();
                 this.$message({
                   message: '保存成功！',
                   type: 'success',
@@ -775,9 +787,25 @@
         investigationBaseInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.surveyInfo = res.data;
-            // console.log("res.data")
-            // console.log(res.data)
-            // console.log("res.data")
+            if(this.surveyInfo.invType != '' && this.surveyInfo.invType != null) {
+              this.surveyForm.invType = this.surveyInfo.invType;
+              this.inQuireConfirmBtn = true;
+            }
+            if(this.surveyInfo.invReason != '' && this.surveyInfo.invReason != null) {
+              this.surveyForm.invReason = this.surveyInfo.invReason;
+            }
+            if(this.surveyInfo.invOrganCode != '' && this.surveyInfo.invOrganCode != null) {
+              this.surveyForm.invOrganCode = this.surveyInfo.invOrganCode;
+            }
+            if(this.surveyInfo.organCode != '' && this.surveyInfo.organCode != null) {
+              this.surveyForm.organCode = this.surveyInfo.organCode;
+            }
+            if(this.surveyInfo.policyNo != '' && this.surveyInfo.policyNo != null) {
+             // this.surveyForm.policyNo = this.surveyInfo.policyNo;
+            }
+            if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
+              this.surveyForm.invView = this.surveyInfo.invView;
+            }
           }
         });
       },

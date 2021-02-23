@@ -346,6 +346,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseShuntClass.setCaseStypeFind("01");
 
                 //走TPA流程
+
                 //判断是否为审核岗退回受理
                 // 通过查询报案号为本报案号,数据状态为"Y",是否为历史节点："N",流程节点为："07"审核的上一流程节点ID；
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();

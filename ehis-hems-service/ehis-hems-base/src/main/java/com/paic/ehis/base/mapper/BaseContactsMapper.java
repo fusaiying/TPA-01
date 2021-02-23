@@ -79,12 +79,12 @@ public interface BaseContactsMapper
     /**
      * 删除base_contacts（联系人信息）
      * 
-     * @param serialno base_contacts（联系人信息）ID
+     * @param serialNo base_contacts（联系人信息）ID
      * @return 结果
      */
-    public int deleteBaseContactsById(String serialno);
+    public int deleteBaseContactsById(String serialNo);
 
-    public int deleteBaseContactsByIdNew(String serialno);
+    public int deleteBaseContactsByIdNew(String serialNo);
 
     /**
      * 批量删除base_contacts（联系人信息）

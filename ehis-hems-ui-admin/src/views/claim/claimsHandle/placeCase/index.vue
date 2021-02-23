@@ -252,7 +252,7 @@
                 rules: {
                   deptCode: {trigger: ['change'], required: false, message: '机构必填'},
                   claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
-                  batchNo: {trigger: ['change'], required: true, message: '批次号必填'},
+                  batchNo: {trigger: ['change'], required: false, message: '批次号必填'},
                   rptStartNo: {trigger: ['change'], required: true, message: '报案号起必填'},
                   rptEndNo: {trigger: ['change'], required: true, message: '报案号止必填'},
                   caseBoxNo: {trigger: ['change'],validator: checkExistInfo, required: true},
@@ -324,7 +324,6 @@
             currentDate.setMonth(currentDate.getMonth() - 1);
             createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
           }
-
           const params = {
             pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
             pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
@@ -333,21 +332,40 @@
             batchNo: this.form.batchNo ,
             rptNo:this.form.rptNo ,
             caseBoxNo:this.form.caseBoxNo ,
-            beginTime : createStartStr,
-            endTime : createEndStr,
+            updateStartTime : createStartStr,
+            updateEndTime : createEndStr,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-          this.loading = true;
-          caseFilingList(params).then(response => {
-            this.totalNum = response.total;
-            this.tableData = response.rows;
-            this.loading = false;
-            this.searchBtn = false;
-          }).catch(error => {
+
+          if(!this.searchBtn) {
+            getDept().then(response => {
+              if(response.deptId) {
+                this.loading = true;
+                params.deptCode = response.deptId.toString();
+                caseFilingList(params).then(response => {
+                  this.totalNum = response.total;
+                  this.tableData = response.rows;
+                  this.loading = false;
+                  this.searchBtn = false;
+                }).catch(error => {
+                  this.loading = true;
+                  console.log(error);
+                });
+              }
+            })
+          } else {
             this.loading = true;
-            console.log(error);
-          });
+            caseFilingList(params).then(response => {
+              this.totalNum = response.total;
+              this.tableData = response.rows;
+              this.loading = false;
+              this.searchBtn = false;
+            }).catch(error => {
+              this.loading = true;
+              console.log(error);
+            });
+          }
         },
         searchByFormParms(){
           this.searchBtn = true;

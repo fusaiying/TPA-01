@@ -283,16 +283,16 @@
           </el-col>
 
         </el-row>
-<!--        <el-row >-->
-<!--          <el-col :span="5">-->
-<!--            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">-->
-<!--              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly style="width: 75px"/>-->
-<!--              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
-<!--              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
-<!--              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <el-row >
+          <el-col :span="5">
+            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini" style="width: 145px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-form-item label="所在地："  prop="phone">
             <el-input v-model="workPoolData.contactsPerson.address" class="width-full"  size="mini" readonly/>
@@ -403,7 +403,7 @@
             type="textarea"
             :rows="2"
             placeholder="请输入内容"
-            v-model="submitForm.remark">
+            v-model="submitForm.opinion">
           </el-input>
         </el-form-item>
           </el-row>
@@ -433,6 +433,7 @@
           </el-table-column>
         </el-table>
       </div>
+      <modify-details ref="modifyDetails"></modify-details>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
@@ -452,11 +453,12 @@
   import {dealSubmit,demandAccept}  from  '@/api/customService/consultation'
 
   import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
     components: {
-                  coOrganizer,
+                  coOrganizer,modifyDetails
     },
     filters: {
       changeDate: function (value) {
@@ -492,7 +494,8 @@
         //新增的数据传输
         submitForm: {
           workOrderNo:"",
-          remark:"",
+          opinion:"",
+          collaborativeId:""
         },
         sendForm:{
 
@@ -554,25 +557,6 @@
     },
 
     methods: {
-      //新增按钮
-      add(){
-        let addQueryParams=this.ruleForm
-        addQueryParams.workOrderNo=this.workOrderNo
-        console.log("sdas",this.workOrderNo)
-        dealAdd(addQueryParams).then(res => {
-          console.log("增加",addQueryParams)
-          if (res != null && res.code === 200) {
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
-      },
       //取消
       deal(){},
       //上传附件
@@ -588,7 +572,7 @@
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+        this.$refs.modifyDetails.queryParams.flowId=s.flowId,
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
         },
@@ -600,7 +584,7 @@
 
       //提交
       submit(){
-        let insert=this.sendForm
+        let insert=this.submitForm
         insert.workOrderNo=this.$route.query.workOrderNo
         insert.collaborativeId=this.$route.query.collaborativeId
         dealSubmit(insert).then(res => {

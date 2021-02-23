@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedTime"    column="updated_time"    />
         <result property="itemCode"    column="item_code"    />
         <result property="organCode"    column="organ_code"    />
+        <result property="businessType"    column="business_type"    />
     </resultMap>
 
     <sql id="selectCollaborativeFromVo">

@@ -117,7 +117,7 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     }
 
     /**
-     *根据报案号查询欠款
+     *根据被保人客户号查询欠款
      */
     @Override
     public ClaimDebtWhitelist selectResidualList(String insuredNo) {

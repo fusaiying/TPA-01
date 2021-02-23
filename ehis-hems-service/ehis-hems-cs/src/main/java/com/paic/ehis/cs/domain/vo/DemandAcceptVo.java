@@ -499,11 +499,11 @@ public class DemandAcceptVo extends BaseEntity {
         this.callMobilePhone = callMobilePhone;
     }
 
-    public long getContactsSex() {
+    public String getContactsSex() {
         return contactsSex;
     }
 
-    public void setContactsSex(long contactsSex) {
+    public void setContactsSex(String contactsSex) {
         this.contactsSex = contactsSex;
     }
 

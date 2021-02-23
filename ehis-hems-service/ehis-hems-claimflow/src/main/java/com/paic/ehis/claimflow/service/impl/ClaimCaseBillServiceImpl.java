@@ -301,7 +301,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             LinkedHashSet<String> companyNameSet = new LinkedHashSet<>(companyNameList);
             ArrayList<String> companyName = new ArrayList<>(companyNameSet);
             String cs = StringUtils.join(companyName, "|");
-            // 承保机构 取sys_dept
+            // 承保机构 取sys_organ-info
             List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
@@ -310,7 +310,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
                 sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
-                String ms = StringUtils.join(sysOrganInfoList, "|");
+                List<String> organNameList = sysOrganInfoList.stream().map(SysOrganInfoVO::getOrganName).collect(Collectors.toList());
+                String ms = StringUtils.join(organNameList, "|");
                 caseInfo.setPolicyManageCom(ms);
             }
             caseInfo.setCompanyName(cs);
@@ -350,7 +351,7 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             ArrayList<String> companyName = new ArrayList<>(companyNameSet);
             String cs = StringUtils.join(companyName, "|");
             accomplishVo.setCompanyName(cs);
-            // 承保机构 取sys_dept
+            // 承保机构 取sys_organ_info
             List<String> manageComList = claimCasePolicyList.stream().map(ClaimCasePolicy::getPolicyManageCom).collect(Collectors.toList());
             LinkedHashSet<String> manageComSet = new LinkedHashSet<>(manageComList);
             ArrayList<String> manageComs = new ArrayList<>(manageComSet);
@@ -359,7 +360,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
             if(data != null){
                 String jsonOrganInfoStr = JSON.toJSONString(data);
                 sysOrganInfoList = JSON.parseArray(jsonOrganInfoStr, SysOrganInfoVO.class);
-                String ms = StringUtils.join(sysOrganInfoList, "|");
+                List<String> organNameList = sysOrganInfoList.stream().map(SysOrganInfoVO::getOrganName).collect(Collectors.toList());
+                String ms = StringUtils.join(organNameList, "|");
                 accomplishVo.setPolicyManageCom(ms);
             }
         }

@@ -320,3 +320,11 @@ export function deleteOne(data) {
     data
   })
 }
+//联系人信息删除
+export function deleteContactsInfo(data) {
+  return request({
+    url: 'provider/org/deleteContactsInfo',
+    method: 'post',
+    data
+  })
+}

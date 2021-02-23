@@ -335,7 +335,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCase claimCase = claimCaseShuntClass.getClaimCase();
         String caseProp = claimCase.getCaseProp();
-        if (!caseProp.equals("")) {
+        if (caseProp ==null) {
             //查询TPA保单
             //policy_info
             List<PolicyInfo> listA = policyInfoMapper.selectPolicyInfoByInsuredNo(claimCaseShuntClass);
@@ -408,11 +408,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCaseShuntClass.getClaimCase().setCaseProp("03");
             claimCaseShuntClass.setCaseStypeFind("03");
 
-        } else {
-            if (caseProp == "02") {
+        } else if (caseProp == "02") {
 //转去核心健康险
             }
-        }
+
         return claimCaseShuntClass;
 
         /*

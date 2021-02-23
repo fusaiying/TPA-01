@@ -1,16 +1,24 @@
 package com.paic.ehis.cs.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.paic.ehis.cs.domain.FieldMap;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.mapper.DemandAcceptVoMapper;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
+import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
+import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
+import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
@@ -30,6 +38,10 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     private CollaborativeFromMapper collaborativeFromMapper;
     @Autowired
     private FlowLogMapper flowLogMapper;
+    @Autowired
+    private WorkHandleInfoMapper workHandleInfoMapper;
+    @Autowired
+    private FieldMapMapper fieldMapMapper;
 
     /**
      * 查询协办信息 
@@ -147,12 +159,12 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLogMapper.updateFlowLog(flowLog);
+        flowLogMapper.insertFlowLog(flowLog);
 
 
-        //征求意见处理完毕后  将协办表中状态改为02
+
+        //征求意见处理完毕后  将协办表中状态改为02   增加处理意见
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        //collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setStatus("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
@@ -166,12 +178,12 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     }
     /**
      * 征求意见 投诉  服务处理 意见
-     * @param demandAcceptVo
+     * @param complaintDealVo
      * @return
      */
 
     @Override
-    public int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo) {
+    public int insertConsultationDemandOne(ComplaintDealVo complaintDealVo) {
         //轨迹表插入数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
@@ -181,19 +193,19 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLogMapper.updateFlowLog(flowLog);
+        flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        flowLogMapper.insertFlowLog(flowLog);
 
 
+        //征求意见处理完毕后  将协办表中状态改为02   增加投诉不成立理由 投诉是否成立  处理方案  处理依据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-       // collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
         collaborativeFrom.setStatus("02");
-        collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
-        collaborativeFrom.setValidFlag(demandAcceptVo.getValidFlag());
-        collaborativeFrom.setNonReason(demandAcceptVo.getNonReason());
-        collaborativeFrom.setTreatmentBasis(demandAcceptVo.getTreatmentBasis());
-        collaborativeFrom.setTreatmentPlan(demandAcceptVo.getTreatmentPlan());
+        collaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+        collaborativeFrom.setCollaborativeId(complaintDealVo.getCollaborativeId());
+        collaborativeFrom.setValidFlag(complaintDealVo.getValidFlag());
+        collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
+        collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
+        collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
         collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());

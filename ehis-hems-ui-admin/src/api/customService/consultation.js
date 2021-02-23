@@ -18,7 +18,7 @@ export function  complainSearch(workOrderNo) {
   })
 }
 //# 信息需求
-export function  dealSearch(data) {
+export function  dealSubmit(data) {
   return request({
     url: '/cs/demand/insertConsultationDemand',
     method: 'put',
@@ -33,7 +33,6 @@ export function demandAccept(workOrderNo) {
     method: 'get'
   })
 }
-
 
 //# 投诉
 export function  comSearch(data) {

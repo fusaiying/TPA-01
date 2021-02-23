@@ -312,8 +312,8 @@
           <el-col :span="8">
             <el-form-item label="是否涉及银行转账" prop="bank" >
               <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
+                <el-radio   label="1">是</el-radio>
+                <el-radio   label="2">否</el-radio>
 
               </el-radio-group>
             </el-form-item>

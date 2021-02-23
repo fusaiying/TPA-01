@@ -3,6 +3,7 @@ package com.paic.ehis.cs.service;
 import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
 /**
@@ -77,5 +78,5 @@ public interface ICollaborativeFromService
      */
 
     int insertConsultationDemand(DemandAcceptVo demandAcceptVo);
-    int insertConsultationDemandOne(DemandAcceptVo demandAcceptVo);
+    int insertConsultationDemandOne(ComplaintDealVo complaintDealVo);
 }

@@ -1,13 +1,14 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
+import com.paic.ehis.claimflow.domain.PolicyInsured;
 import com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper;
+import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -23,18 +24,8 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     @Autowired
     private ClaimDebtWhitelistMapper claimDebtWhitelistMapper;
 
-
-    /**
-     * 查询案件追讨白名单
-     * 
-     * @param debtWhitelistId 案件追讨白名单ID
-     * @return 案件追讨白名单
-     */
-    @Override
-    public ClaimDebtWhitelist selectClaimDebtWhitelistById(Long debtWhitelistId)
-    {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistById(debtWhitelistId);
-    }
+    @Autowired
+    PolicyInsuredMapper policyInsuredMapper;
 
     /**
      * 查询案件追讨白名单列表
@@ -45,16 +36,22 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     @Override
     public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist)
     {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
-    }
 
-    /**
-     * 白名单维护界面初始化或未录入任何查询条件，点击查询按钮时，默认查询状态不为失效，追缴通知为是的白名单信息
-     */
-    @Override
-    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList1(ClaimDebtWhitelist claimDebtWhitelist)
-    {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistList1(claimDebtWhitelist);
+        List<ClaimDebtWhitelist> claimDebtWhitelists=claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
+        for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
+            String insuredNo = claimDebtWhitelist1.getInsuredNo();
+            PolicyInsured policyInsured = new PolicyInsured();
+            policyInsured.setInsuredNo(insuredNo);
+            List<PolicyInsured> policyInsured1 = policyInsuredMapper.selectRecognizee(policyInsured);
+                for (PolicyInsured policyInfo : policyInsured1) {
+                        claimDebtWhitelist1.setName(policyInfo.getName());
+                        claimDebtWhitelist1.setIdType(policyInfo.getIdType());
+                        claimDebtWhitelist1.setIdNo(policyInfo.getIdNo());
+                        claimDebtWhitelist1.setSex(policyInfo.getSex());
+                        claimDebtWhitelist1.setBirthday(policyInfo.getBirthday());
+            }
+        }
+        return claimDebtWhitelists;
     }
 
     /**

@@ -196,5 +196,13 @@ export function getInfoBaseCodeMappingNew(data) {
     params:data
   })
 }
+//通过证件类型和证件号码获取保险人姓名
+export function getName(data) {
+  return request({
+    url: 'claimapt/batch/selectClaimCaseStandingByIdidType',
+    method: 'get',
+    params:data
+  })
+}
 
 

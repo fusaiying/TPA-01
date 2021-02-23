@@ -316,6 +316,7 @@
     getStanding,
     getThisDept,
     getInfoBaseCodeMappingNew,
+    getName,
   } from '@/api/claim/presentingReview'
   import {getDeptById} from '@/api/claim/standingBookSearch'
   import Hospital from "../../basicInfoManage/publicVue/hospital";
@@ -1219,9 +1220,22 @@
         //请求接口获取被保险人
         //证件号码录完失焦时时根据被保人证件类型及证件号码查询PQS及TPA系统，
         //查询到后将被保人姓名赋值至该字段，若已存在数据或若未查询到或查询到多个则无需赋值，后续人工补录
-        if ((row.name===''|| row.name==null)){
-
+        let data ={
+          idType:row.idType,
+          idno:row.idno,
         }
+        getName(data).then(res => {
+         if (res!==null && res.code===200 && res.data){
+           if ((row.name===''|| row.name==null) && res.data.length==1){
+             row.name=res.data[0]
+           }
+         }else {
+           return this.$message.warning(
+             "未查询到被保险人！"
+           )
+         }
+        })
+
       },
       getDeptName(deptId) {
         let deptName = ''

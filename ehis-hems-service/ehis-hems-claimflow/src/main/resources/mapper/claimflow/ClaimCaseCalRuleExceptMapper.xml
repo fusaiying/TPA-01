@@ -89,7 +89,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ruleExcId"    column="rule_exc_id"    />
     </resultMap>
     <select id="selectClaimCaseCalRuleListByRptNoTwo" parameterType="String" resultMap="TheAdjustmentSubsidiaryOneVOTeseTwo">
-        select rule.rule_exc_id,except.rule_no,rule.rule_description,rule.rule_element,rule.element_value,rule.element_unit from claim_case_cal_rule_except except
+        select except.rule_no,rule.rule_description,rule.rule_element,rule.element_value,rule.element_unit
+        from claim_case_cal_rule_except except
         join claim_rule rule on except.rule_no=rule.rule_no and except.rpt_no=#{rptNo} and except.status='Y'
     </select>
     

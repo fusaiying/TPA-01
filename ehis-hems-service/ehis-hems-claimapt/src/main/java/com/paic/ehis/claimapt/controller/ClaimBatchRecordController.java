@@ -124,45 +124,50 @@ public class ClaimBatchRecordController extends BaseController
     @PostMapping("/addBatchAndStanding")
     public AjaxResult addBatchAndStanding(@RequestBody StandingAndBatck standingAndBatck)
     {
-        String batchno = standingAndBatck.getClaimBatch().getBatchno();//获取批次号
-        //将批次号赋值给standingAndBatck里面list集合的批次号属性
-        List<ClaimCaseStandingVo> standingData1 = standingAndBatck.getStandingData();
-        for (ClaimCaseStandingVo claimCaseStandingVoBatchno : standingData1){
-            claimCaseStandingVoBatchno.setBatchno(batchno);
-        }
-        //得到所有批次号均已经改变的List<ClaimCaseStandingVo>集合
-        standingAndBatck.setStandingData(standingData1);
-        //还原传进来的standingAndBatck
+        if (standingAndBatck.getClaimBatch().getCasenum() < standingAndBatck.getStandingData().size()){
+            return AjaxResult.success(iClaimCaseStandingService.updateClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch().getBatchno()));
+        } else {
 
-        //List集合，里面的参数是对象ClaimCaseStandingVo
-        if(standingAndBatck.getClaimBatch().getBatchno() == null || standingAndBatck.getClaimBatch().getBatchno() == ""){
-            //第一次点击保存，添加理赔批次信息
-            return AjaxResult.success(iClaimBatchService.insertSysClaimBatch(standingAndBatck));
-        }else {
-            StandingAndBatck standingAndBatck1 = iClaimBatchService.updateSysClaimBatch(standingAndBatck);
+            String batchno = standingAndBatck.getClaimBatch().getBatchno();//获取批次号
+            //将批次号赋值给standingAndBatck里面list集合的批次号属性
+            List<ClaimCaseStandingVo> standingData1 = standingAndBatck.getStandingData();
+            for (ClaimCaseStandingVo claimCaseStandingVoBatchno : standingData1) {
+                claimCaseStandingVoBatchno.setBatchno(batchno);
+            }
+            //得到所有批次号均已经改变的List<ClaimCaseStandingVo>集合
+            standingAndBatck.setStandingData(standingData1);
+            //还原传进来的standingAndBatck
 
-            //第二次点击保存，改值理赔批次信息，添加报案台账信息
-            List<ClaimCaseStandingVo> standingData = standingAndBatck1.getStandingData();
+            //List集合，里面的参数是对象ClaimCaseStandingVo
+            if (standingAndBatck.getClaimBatch().getBatchno() == null || standingAndBatck.getClaimBatch().getBatchno() == "") {
+                //第一次点击保存，添加理赔批次信息
+                return AjaxResult.success(iClaimBatchService.insertSysClaimBatch(standingAndBatck));
+            } else {
+                StandingAndBatck standingAndBatck1 = iClaimBatchService.updateSysClaimBatch(standingAndBatck);
+
+                //第二次点击保存，改值理赔批次信息，添加报案台账信息
+                List<ClaimCaseStandingVo> standingData = standingAndBatck1.getStandingData();
 
 //            ArrayList<ClaimCaseStandingVo> claimCaseStandingVos = new ArrayList<>();
-            if(standingData!=null || standingData.size()!=0) {//null == list || list.size() ==0
-                for (ClaimCaseStandingVo claimCaseStandingVo : standingData) {
+                if (standingData != null || standingData.size() != 0) {//null == list || list.size() ==0
+                    for (ClaimCaseStandingVo claimCaseStandingVo : standingData) {
 //                    claimCaseStandingVo.setBatchno(batchno);
-                    if (claimCaseStandingVo.getStandingId() == null || claimCaseStandingVo.getStandingId() == "") {
+                        if (claimCaseStandingVo.getStandingId() == null || claimCaseStandingVo.getStandingId() == "") {
 //                        claimCaseStandingVos.add(iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo));
-                        iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo);
-                    } else {
+                            iClaimCaseStandingService.insertSysClaimCaseStanding(claimCaseStandingVo);
+                        } else {
 //                        claimCaseStandingVos.add(iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo));
-                        iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo);
-                    }
+                            iClaimCaseStandingService.updateSysClaimCaseStanding(claimCaseStandingVo);
+                        }
 //                    standingAndBatck1.setStandingData(claimCaseStandingVos);
+                    }
+                    List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+                    standingAndBatck1.setStandingData(claimCaseStandingVos1);
                 }
-                List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
-                standingAndBatck1.setStandingData(claimCaseStandingVos1);
-            }
 
-            //判断传过来得台账信息数目与案件数目是否一致，》=则无操作，《=则先查询排序，然后将最后得台账信息置为无效
-            return AjaxResult.success(standingAndBatck1);
+                //判断传过来得台账信息数目与案件数目是否一致，》=则无操作，《=则先查询排序，然后将最后得台账信息置为无效
+                return AjaxResult.success(standingAndBatck1);
+            }
         }
     }
 
@@ -209,8 +214,8 @@ public class ClaimBatchRecordController extends BaseController
 //        standingAndBatck.getClaimBatch().getCasenum();//案件数量
 
         //得改参数累接受得
-//        List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
-//        standingAndBatck1.setStandingData(claimCaseStandingVos1);
+        List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+        standingAndBatck1.setStandingData(claimCaseStandingVos1);
 
         return AjaxResult.success(standingAndBatck);
     }

@@ -24,7 +24,7 @@ export function cancelAdjustment(data) {
 //查询 理算
 export function adIsData(query) {
   return request({
-    url: '/claiflow/calRule/listByRptNo',
+    url: '/claimflow/calRule/listByRptNo',
     method: 'get',
     params: query
   })

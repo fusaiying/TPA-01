@@ -119,7 +119,6 @@ public class ClaimBatchInvoiceFilingController extends BaseController
     @GetMapping("/selectRptNo")
     public TableDataInfo selectRptNo(InvoiceFileVo invoiceFileVo)
     {
-        startPage();
         List<InvoiceFileVo> list = claimBatchInvoiceFilingService.selectRptNo(invoiceFileVo);
         return getDataTable(list);
     }

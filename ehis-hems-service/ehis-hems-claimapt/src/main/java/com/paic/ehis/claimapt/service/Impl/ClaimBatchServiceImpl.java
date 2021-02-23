@@ -384,7 +384,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      */
     @Override
     public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch) {
-        claimBatch.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());//01
+        claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
         //批次号
         String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);
@@ -413,7 +413,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
         claimBatchInvoiceFiling.setBatchNo(str1);
         String billrecevieflag = claimBatch.getBillrecevieflag();
-        if(billrecevieflag.equals("")) {
+        if(StringUtils.isBlank(billrecevieflag)) {
             claimBatchInvoiceFiling.setIsFiling("02");
         } else {
             claimBatchInvoiceFiling.setIsFiling(billrecevieflag);

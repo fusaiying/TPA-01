@@ -119,7 +119,7 @@ public class ClaimCaseBillController extends BaseController
         ClaimCaseBill claimCaseBill = new ClaimCaseBill();
         claimCaseBill.setBillId(billId);
         claimCaseBillInfo.setBill(claimCaseBill);
-        return toAjax(claimCaseBillService.updateClaimCaseBill(claimCaseBillInfo));
+        return toAjax(claimCaseBillService.deleteClaimCaseBill(claimCaseBillInfo));
     }
 
     /**

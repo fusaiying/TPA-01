@@ -395,4 +395,18 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         claimCalService.Calculate(rptNo);
         return true;
     }
+
+    /**
+     * 账单删除-主表及诊断表、明细表
+     *
+     * @param claimCaseBill
+     * @return
+     */
+    @Override
+    public int deleteClaimCaseBill(ClaimCaseBillInfoVO claimCaseBill) {
+        Long billId = claimCaseBill.getBill().getBillId();
+        claimCaseBillDiagnosisMapper.updateClaimCaseBillDiagnosisByBillId(billId);
+        claimCaseBillDetailMapper.updateClaimCaseBillDetailByBillId(billId);
+        return claimCaseBillMapper.updateClaimCaseBillById(billId);
+    }
 }

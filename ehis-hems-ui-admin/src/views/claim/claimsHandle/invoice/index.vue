@@ -259,6 +259,7 @@
       updateInvoice(row).then(res => {
         if (res.code == '200') {
           row.editing = false;
+          this.initData();
           this.$message({
             message: '更新成功！',
             type: 'success',

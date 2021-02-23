@@ -149,34 +149,34 @@
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">调查任务号：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
+              <span class="info_span_col to_right">调查任务号：</span><span class="info_span_col">{{ surveyInfo.invNo }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">被保人：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">被保人：</span><span class="info_span_col">{{ surveyInfo.name}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{ surveyInfo.contractName }}</span>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="8">
-              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">证件号码：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
-            </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">出险日期：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">性别：</span><span class="info_span_col">{{ surveyInfo.sex }}</span>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.contractNo }}</span>
+              <span class="info_span_col to_right">证件类型：</span><span class="info_span_col">{{ surveyInfo.idType }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.amount}}</span>
+              <span class="info_span_col to_right">证件号码：</span><span class="info_span_col">{{ surveyInfo.idNo}}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">出险日期：</span><span class="info_span_col">{{ surveyInfo.accDate}}</span>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accAddress}}</span>
             </el-col>
           </el-row>
 
@@ -266,6 +266,7 @@
           verifyProReset,
           verifyCurrency,
           addRecoveryInfo,
+          investigationBaseInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -296,7 +297,8 @@
         this.rptNo = this.fixInfoData.rptNo;
         this.batchNo = this.fixInfoData.batchNo;
         if(this.rptNo != '') {
-          this.getCalInfo()
+          this.getCalInfo();
+          this.getInvestigationBaseInfo();
         }
       },
       value: function (newValue) {
@@ -368,7 +370,22 @@
 
         //调查信息 start
         surveyInfo:{
-
+          invNo:'', // 调查任务号
+          name : '', // 被保人
+          sex:'', //性别
+          idType:'', // 证件类型
+          idNo:'', // 证件号码
+          accDate:'', // 出险日期
+          accProvince:'',
+          accCity:'',
+          accDistrict:'',
+          accAddress:'',
+          invType:'', // 提调类型
+          invReason:'', // 提调原因
+          invOrganCode:'', // 调查机构
+          organCode:'', // 提调机构
+          policyNo:'',
+          invView:'',
         },
         surveyForm:{
           invType:'',
@@ -680,7 +697,6 @@
             params.rptNo = this.rptNo;
 
             inQuireSave(params).then(res => {
-              console.log(res);
               if (res.code == '200') {
                 this.$message({
                   message: '保存成功！',
@@ -749,6 +765,16 @@
             if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
             }
+            // console.log("res.data")
+            // console.log(res.data)
+            // console.log("res.data")
+          }
+        });
+      },
+      getInvestigationBaseInfo() {
+        investigationBaseInfo(this.rptNo).then(res => {
+          if(res.code == '200' && res.data) {
+            this.surveyInfo = res.data;
             // console.log("res.data")
             // console.log(res.data)
             // console.log("res.data")

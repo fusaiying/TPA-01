@@ -140,3 +140,10 @@ export function verifyCurrency(query) {
       data: data
     })
   }
+  // 调查基本信息查询
+export function investigationBaseInfo (rptNo) {
+  return request({
+    url: '/claimflow/investigation/invest/' + rptNo,
+    method: 'get',
+  })
+}

@@ -228,8 +228,18 @@ export default {
       if (flag != null && flag >= 0) {
 
         let reg = /^(\d+|\d+\.)$/
-        if (value != null && value != '') {
 
+        if (value != null && value != '') {
+          //
+          //判断优先次序是否重复
+          let flag=true
+            let list=new Set(this.multipleSelection.map(item=>{
+              return item.priority}//过滤掉尼不想重复的字段
+            ))
+            if(list.size!=this.multipleSelection.length){//去除重复字段后的数据条数，相同数据只计算一次
+               flag=false
+            }
+        if(flag) {
           if (value <= 0) {
             callback(new Error("只能输入正整数"));
           } else if (!reg.test(value)) {
@@ -237,6 +247,13 @@ export default {
           } else {
             callback();
           }
+        }
+        else {
+          callback(new Error("优先级次序不能重复"))
+        }
+
+
+
         } else {
           callback(new Error("已选中供应商,此项不能为空"))
         }
@@ -298,7 +315,7 @@ export default {
         /*   number: [{required: true, message: '配置供应商不能为空', trigger: 'blur'}],*/
       },
       supplierInfoRules: {
-        priority: [{required: true, validator: checkPriority, trigger: 'blur'}]
+        priority: [{required: true, validator: checkPriority, trigger: ['blur','change']}]
       },
 
 
@@ -349,6 +366,7 @@ export default {
     },
     //选中供应商的个数
     handleSelectionChange(val, row) {
+
       console.log(row.index)
       this.multipleSelection = []
       this.multipleSelection = val;
@@ -513,6 +531,7 @@ export default {
 //默认选中
     checkSelection() {
       this.$nextTick(() => {
+
         if (this.multipleSelection.length > 0) {
           this.multipleSelection.forEach(row => {
             this.$refs.medicalRecordTable.toggleRowSelection(row, true);
@@ -558,7 +577,9 @@ export default {
     },
 //供应商信息保存
     saveHandle() {
+
       if (this.multipleSelection.length > 0) {
+
         //调用供应商保存的接口
         //
         this.$refs.supplierInfo.validate(valid => {

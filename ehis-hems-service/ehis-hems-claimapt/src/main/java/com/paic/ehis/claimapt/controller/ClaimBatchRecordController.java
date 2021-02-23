@@ -208,8 +208,9 @@ public class ClaimBatchRecordController extends BaseController
 //        standingData.size();//传过来得台账
 //        standingAndBatck.getClaimBatch().getCasenum();//案件数量
 
-        List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
-        standingAndBatck1.setStandingData(claimCaseStandingVos1);
+        //得改参数累接受得
+//        List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
+//        standingAndBatck1.setStandingData(claimCaseStandingVos1);
 
         return AjaxResult.success(standingAndBatck);
     }

@@ -381,6 +381,7 @@
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
         </el-table>
+        <modify-details ref="modifyDetails"></modify-details>
 
         <pagination
           v-show="flowLogCount>0"
@@ -427,7 +428,12 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool ,FlowLogSearch,orderDetailSearch} from '@/api/customService/demand'
+  import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
   export default {
+    components: {
+      coOrganizer,modifyDetails
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {

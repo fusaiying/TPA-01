@@ -81,7 +81,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
             <template slot-scope="scope" class="link-type">
-              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="collaborativeId" label="流转号" show-overflow-tooltip/>
@@ -178,6 +178,33 @@
     },
 
     methods: {
+
+      //工单页面超链接
+      workOrderButton(s){
+        if (s.businessType=="01"){
+          this.$router.push({
+            path: '/customService/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+        }else {
+          this.$router.push({
+            path: '/customService/complaint/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+
+        }
+
+      },
 
       //处理按钮
       dealButton(s){

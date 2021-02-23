@@ -172,8 +172,12 @@
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
-
+          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
+            </template>
+          </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -261,9 +265,13 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,modifySubmit} from '@/api/customService/demand'
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: {
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -458,6 +466,12 @@
     },
 
     methods: {
+      //超链接用
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.flowId=s.flowId,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.open()
+        ;},
       //监听是否银行转账事件
       bankChange(s){
         if (s=="1"){
@@ -475,7 +489,6 @@
             insert.workOrderNo=this.$route.query.workOrderNo
             modifySubmit(insert).then(res => {
               if (res != null && res.code === 200) {
-                console.log("insert",insert)
                 alert("修改成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(

@@ -378,6 +378,7 @@
               <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -467,9 +468,13 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: {
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {

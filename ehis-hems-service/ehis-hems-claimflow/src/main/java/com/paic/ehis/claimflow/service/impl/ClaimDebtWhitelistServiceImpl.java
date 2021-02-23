@@ -45,8 +45,13 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
             policyInsured.setIdNo(claimDebtWhitelist.getIdNo());
             policyInsured.setName(claimDebtWhitelist.getName());
             List<PolicyInsured> policyInsuredList = policyInsuredMapper.selectRecognizee(policyInsured);
-            String[] insurdNos = policyInsuredList.toArray(new String[policyInsuredList.size()]);
-            claimDebtWhitelist.setInsuredNos(insurdNos);
+            if(!policyInsuredList.isEmpty()) {
+                String[] insurdNos = new String[policyInsuredList.size()];
+                for(int i=0 ;i<policyInsuredList.size(); i++) {
+                    insurdNos[i] = policyInsuredList.get(i).getInsuredNo();
+                }
+                claimDebtWhitelist.setInsuredNos(insurdNos);
+            }
         }
         List<ClaimDebtWhitelist> claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
         for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {

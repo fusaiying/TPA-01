@@ -35,7 +35,7 @@ public class ClaimDebtWhitelistController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ClaimDebtWhitelist claimDebtWhitelist)
     {
-        startPage();
+        startPage(claimDebtWhitelist);
         List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelist);
         return getDataTable(list);
     }

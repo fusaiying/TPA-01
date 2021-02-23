@@ -362,8 +362,8 @@
             level:this.form.level,
             debtAmountUp:this.form.debtAmountUp,
 
-            orderByColumn:'create_time',
-            isAsc:'desc'
+            // orderByColumn:'create_time',
+            // isAsc:'desc'
           };
 
           this.loading = true;

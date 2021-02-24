@@ -300,4 +300,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND b.`status` = 'Y'
     </select>
 
+    <update id="updateClaimConclusionNull" parameterType="ClaimCaseCal">
+        update claim_case_cal set  pay_conclusion = null
+        where rpt_no = #{rptNo}
+    </update>
+
 </mapper>

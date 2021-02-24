@@ -181,7 +181,8 @@
     billDetailsSave,
     insurancePolicyList,
     calculate,
-    calSummary
+    calSummary,
+    claimConclusionNull
   } from '@/api/claim/handleCom'
   import adjustmentDetail from '../modul/adjustmentDetail'
   import moment from 'moment'
@@ -393,6 +394,7 @@
                   let data = {
                     rptNo: this.fixInfo.rptNo,
                   }
+                  this.updateClaimConclusionNull();
                   detailsList(data).then(res => {
                     if (res != null && res.code === 200 && res.rows.length > 0) {
                       res.rows.forEach(item => {
@@ -428,6 +430,14 @@
             }
 
           }
+        })
+      },
+      updateClaimConclusionNull(){
+        claimConclusionNull(this.fixInfo.rptNo).then(res => {
+          if (res != null && res.code === 200 ) {
+
+          }
+        }).catch(res => {
         })
       },
       getMinData(row, expandedRows) {

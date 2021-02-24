@@ -210,4 +210,16 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     {
         return claimCaseCalMapper.deleteClaimCaseCalById(calId);
     }
+
+    /***
+     * 案件理算  保存后 更新 claim_case_cal 表 赔付结论 为 空
+     * @param rptNo
+     * @return
+     * auth: hjw
+     */
+    @Override
+    public int updateClaimConclusionNull(String rptNo) {
+        return claimCaseCalMapper.updateClaimConclusionNull(rptNo);
+    }
+
 }

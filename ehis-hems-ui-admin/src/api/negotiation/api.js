@@ -6,7 +6,7 @@ export function updateDiss(data) {
   return request({
     url:  '/claimflow/discussion/updateClaimCaseDiscussion',
     method: 'put',
-    data
+    data:data
   })
 }
 

@@ -234,7 +234,7 @@
           } else if (value>(parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount))){
             callback(new Error("录入金额有误"));
           }else {
-            this.caseForm.caseData[index].refusedAmount=parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount)-parseFloat(this.caseForm.caseData[index].payAmount)
+            this.caseForm.caseData[index].refusedAmount=(parseFloat(this.getZero(this.caseForm.caseData[index].billAmount))-parseFloat(this.getZero(this.caseForm.caseData[index].hosDiscountAmount))-parseFloat(this.getZero(this.caseForm.caseData[index].payAmount))).toFixed(2)
             callback();
           }
         } else {
@@ -649,6 +649,13 @@
           }
         }).catch(res => {
         })
+      },
+      getZero(str) {
+        if (str === undefined || str === null || str === '') {
+          return 0;
+        } else {
+          return str
+        }
       }
     }
   }

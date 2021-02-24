@@ -141,11 +141,11 @@ public class ClaimCaseDiscussionController extends BaseController
         return getDataTable(list);
     }
 
-
+    //将未处理改为已处理
    @PutMapping("/updatecasediscussionStatus")
-    public AjaxResult updatecasediscussionStatus(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
+    public AjaxResult updatecasediscussionStatus(@RequestBody String repNo)
     {
-        return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
+        return toAjax(claimCaseDiscussionService.updatecasediscussionStatus(repNo));
     }
 
     /*查询基本信息表*/

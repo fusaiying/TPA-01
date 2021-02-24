@@ -1345,16 +1345,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public List<ClaimCaseStanding> postHocAccountingOfCases(String batchNo) {
         List<ClaimCaseStanding> ClaimCaseStandingList = new ArrayList<>();
         //根据批次号去查报案号
-        List<String> strings = claimCaseMapper.selepostHocAccountingOfCases(batchNo);
-        if (strings.size() != 0) {
-            for (String rptno : strings) {
+       // List<String> strings = claimCaseMapper.selepostHocAccountingOfCases(batchNo);
+
+            if(StringUtils.isNotEmpty(batchNo)) {
                 //根据报案号去查台账信息
-                ClaimCaseStanding claimCaseStanding = claimCaseStandingMapper.selectClaimCaseStandingByIdOne(rptno);
-                if (claimCaseStanding != null) {
-                    ClaimCaseStandingList.add(claimCaseStanding);
-                }
+                ClaimCaseStandingList= claimCaseStandingMapper.selectClaimCaseStandingByIdOne(batchNo);
             }
-        }
+
+
         return ClaimCaseStandingList;
     }
 

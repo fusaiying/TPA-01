@@ -699,6 +699,9 @@
           this.searchForm.expressnumber = undefined
           this.searchForm.receivedate = undefined
           this.searchForm.sendby = undefined
+          this.searchForm.chname1 = undefined
+          this.searchForm.currency = undefined
+
         } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
           if (this.$route.query.status || this.querys.status !== 'editReview') {
             this.isSaveSub = false
@@ -706,6 +709,9 @@
           }
           this.isAfter = true
           this.isDirect = false
+          this.searchForm.chname1 = undefined
+          this.searchForm.currency = undefined
+
         }
       },
       save() {
@@ -721,6 +727,7 @@
               let table = this.afterTable.filter(item => {
                 return item.idno != null && item.idno !== ''
               })
+
               table.forEach((v, i) => {
                 for (const val in v) {
                   if (this.hasBlock) {

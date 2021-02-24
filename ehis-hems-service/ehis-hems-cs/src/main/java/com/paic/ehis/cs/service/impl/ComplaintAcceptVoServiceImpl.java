@@ -445,7 +445,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
         workHandleInfo.setHandleType("处理");
-        workHandleInfo.setStatus("03");
+        workHandleInfo.setStatus("Y");
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -470,7 +470,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
-            workHandleInfo.setStatus("03");
+            workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());

@@ -1,28 +1,13 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
-import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
-import com.paic.ehis.claimflow.domain.ClaimBatch;
-import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseAccept;
-import com.paic.ehis.claimflow.domain.ClaimCaseBill;
-import com.paic.ehis.claimflow.domain.ClaimCaseCal;
-import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
-import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
-import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
-import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
-import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
-import com.paic.ehis.claimflow.domain.ClaimProductTaskLog;
-import com.paic.ehis.claimflow.domain.PolicyInfo;
-import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
+import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
-//import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
-//import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
@@ -85,6 +70,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     PolicyAndRiskService policyAndRiskService;
+
+    @Autowired
+    IClaimCaseInvestigationService claimCaseInvestigationService;
 
 //    @Autowired
 //    private IClaimBatchService iClaimBatchService;
@@ -1060,19 +1048,36 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-        StringBuilder stringBuilder = new StringBuilder();
-        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
-        stringBuilder.append("ZWQR").append(investigation);
-        caseInvestigation.setInvNo(stringBuilder.toString());
-        caseInvestigation.setInvDate(DateUtils.getNowDate());
-        caseInvestigation.setIsHistory("N");
-        caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
-        caseInvestigation.setCreateBy(SecurityUtils.getUsername());
-        caseInvestigation.setCreateTime(DateUtils.getNowDate());
-        caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
-        caseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
-        return i==1? caseInvestigation:null;
+
+        /***
+         *  如果 当前 调查存在且 不是历史， 则保存按钮为更新，否则新增
+         *  modify by : hjw
+         */
+        try{
+            CaseInvestigationVO exist = claimCaseInvestigationService.selectClaimCaseInvestigationByRptNo(caseInvestigation.getRptNo());
+            if(null != exist) {
+                caseInvestigation.setInvNo(exist.getInvNo());
+                caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+                caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+                claimCaseInvestigationMapper.updateClaimCaseInvestigation(caseInvestigation);
+            } else {
+                StringBuilder stringBuilder = new StringBuilder();
+                String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+                stringBuilder.append("ZWQR").append(investigation);
+                caseInvestigation.setInvNo(stringBuilder.toString());
+                caseInvestigation.setInvDate(DateUtils.getNowDate());
+                caseInvestigation.setIsHistory("N");
+                caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
+                caseInvestigation.setCreateBy(SecurityUtils.getUsername());
+                caseInvestigation.setCreateTime(DateUtils.getNowDate());
+                caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+                caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+                claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return caseInvestigation;
     }
 
     /**

@@ -203,6 +203,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
         editInfoMapper.insertEditInfo(editInfo);
 
+
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));

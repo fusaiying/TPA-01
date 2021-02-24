@@ -81,14 +81,14 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
             <template slot-scope="scope" class="link-type">
-              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="channelCode" label="流转号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="collaborativeId" label="流转号" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column align="center" prop="policyNo" label="案件发起人" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="处理状态" show-overflow-tooltip/>
+          <el-table-column align="center" prop="createdBy" label="案件发起人" show-overflow-tooltip/>
+          <el-table-column prop="status" align="handleState" label="处理状态" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="流转时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -101,7 +101,7 @@
           </el-table-column>
           <el-table-column align="center" prop="policyNo" label="处理时效（工作日）" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="scope.row.status!='02'">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
             </template>
           </el-table-column>
@@ -179,9 +179,36 @@
 
     methods: {
 
+      //工单页面超链接
+      workOrderButton(s){
+        if (s.businessType=="01"){
+          this.$router.push({
+            path: '/customService/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+        }else {
+          this.$router.push({
+            path: '/customService/complaint/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+
+        }
+
+      },
+
       //处理按钮
       dealButton(s){
-      if (s.itemCode=="01"){
+      if (s.businessType=="01"){
           this.$router.push({
             path: '/customService/consultation/deal',
             query:{

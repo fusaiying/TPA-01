@@ -324,37 +324,79 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
      */
     @Override
     public int assistInComplaint(ComplaintDealVo complaintDealVo) {
-        WorkHandleInfo workHandleInfo = new WorkHandleInfo();
-        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
-        workHandleInfo.setHandleType("处理");
-        workHandleInfo.setStatus("Y");
-        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
-        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
-        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-        workHandleInfo.setRemark(complaintDealVo.getRemark());
-        List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
-        for (FieldMap fieldMap : KVMap) {
-            fieldMap.getTargetColumnName();
-            fieldMap.getSourceFiledName();
-            Map map = new HashMap<String, String>();
-            map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
-            VoUtils voUtils = new VoUtils<ComplaintDealVo>();
-            workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
-        }
-        return workHandleInfoMapper.assistInComplaint(complaintDealVo);
-    }
+        workHandleInfo.setCreatedBy(complaintDealVo.getCreatedBy());
+        WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        if (workHandleInfo1==null) {
 
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("N");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfo.setRemark(complaintDealVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ComplaintDealVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ComplaintDealVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,complaintDealVo);}
+            return workHandleInfoMapper.assistInComplaint(workHandleInfo);}
+        else {
+
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("N");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfo.setRemark(complaintDealVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","complaintDealVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ComplaintDealVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,complaintDealVo);}
+
+            return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
+
+        }
+    }
     /**
-     * 预约处理
+     * 预约处理    暂存
      * @param reservationDealVo
      * @return
      */
     @Override
     public int insertResevationDeal(ReservationDealVo reservationDealVo) {
-        if(reservationDealVo.getSign()=="01"){
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+        workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
+        WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        if (workHandleInfo1==null) {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
+        //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
         workHandleInfo.setHandleType("处理");
         workHandleInfo.setStatus("02");
@@ -377,19 +419,12 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
         return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
         else {
-            FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-            //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setStatus("03");
-            flowLog.setCreatedBy(SecurityUtils.getUsername());
-            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            flowLog.setUpdatedBy(SecurityUtils.getUsername());
-            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-            flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            flowLogMapper.updateFlowLog(flowLog);
 
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
 
-            WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("03");
@@ -408,7 +443,97 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
                 VoUtils voUtils=new VoUtils<ReservationDealVo>();
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
 
-            return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
+            return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
+
+        }
+    }
+
+    /**
+     * 预约处理   保存
+     * @param reservationDealVo
+     * @return
+     */
+    @Override
+    public int insertResevationSaveDeal(ReservationDealVo reservationDealVo) {
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+        workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
+        WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
+        if (workHandleInfo1==null) {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+            //生成轨迹表
+            FlowLog flowLog=new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            flowLogMapper.updateFlowLog(flowLog);
+
+        //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+        workHandleInfo.setHandleType("处理");
+        workHandleInfo.setStatus("02");
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+        workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+        workHandleInfo.setRemark(reservationDealVo.getRemark());
+       //获取处理时长
+        workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+            VoUtils voUtils=new VoUtils<ReservationDealVo>();
+            workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
+        return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);}
+        else {
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+            //生成轨迹表
+            FlowLog flowLog=new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            flowLogMapper.updateFlowLog(flowLog);
+
+
+            //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("03");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workHandleInfo.setRemark(reservationDealVo.getRemark());
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+                VoUtils voUtils=new VoUtils<ReservationDealVo>();
+                workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,reservationDealVo);}
+
+            return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
 
         }
     }
@@ -422,6 +547,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
         //获取处理时长
        // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
+
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setStatus("Y");
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());

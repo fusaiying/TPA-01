@@ -84,11 +84,9 @@ export default {
 
     searchHandle() {
       selectCallAgain().then(res => {
-        console.log('第二次来电',res.rows)
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total
-          console.log('response',res.total)
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"

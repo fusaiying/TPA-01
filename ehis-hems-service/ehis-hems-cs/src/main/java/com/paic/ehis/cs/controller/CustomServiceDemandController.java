@@ -10,6 +10,7 @@ import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.service.ICollaborativeFromService;
@@ -53,8 +54,13 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
+    /**
+     * 征求意见  信息需求页面查询
+     * @param workOrderNo
+     * @return
+     */
     @GetMapping("/accept")//信息需求受理
-    public AjaxResult selectDemandAcceptVo(@RequestBody String workOrderNo){
+    public AjaxResult selectDemandAcceptVo(@RequestParam("workOrderNo") String workOrderNo){
         DemandAcceptVo demandAcceptVo=iDemandAcceptVoService.selectDemandAcceptVo(workOrderNo);
         return AjaxResult.success(demandAcceptVo);
     }
@@ -97,6 +103,11 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iDemandAcceptVoService.updateServiceInfo(demandAcceptVo));
     }
 
+    /**
+     * 信息需求处理页面
+     * @param serviceProcessingVo
+     * @return
+     */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertServiceProcessing")
@@ -120,7 +131,8 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/insertTeamwork")
     public AjaxResult insertTeamwork (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
     {
-        return toAjax(iCollaborativeFromService.insertTeamwork(demandAcceptVo));
+        iCollaborativeFromService.insertTeamwork(demandAcceptVo);
+        return AjaxResult.success();
     }
 
 /**
@@ -170,15 +182,15 @@ public class CustomServiceDemandController extends BaseController {
     }
     /**
      * 征求意见投诉需求处理意见
-     * @param demandAcceptVo
+     * @param complaintDealVo
      * @return
      */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemandOne")
-    public AjaxResult insertConsultationDemandOne(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+    public AjaxResult insertConsultationDemandOne(@Validated @RequestBody ComplaintDealVo complaintDealVo)
     {
-        return toAjax(iCollaborativeFromService.insertConsultationDemandOne(demandAcceptVo));
+        return toAjax(iCollaborativeFromService.insertConsultationDemandOne(complaintDealVo));
     }
 
 

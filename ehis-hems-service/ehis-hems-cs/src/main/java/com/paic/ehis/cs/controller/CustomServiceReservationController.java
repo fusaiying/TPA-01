@@ -84,14 +84,15 @@ public class CustomServiceReservationController extends BaseController {
     /**
      *预约处理页面  服务处理
      */
-
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceProcessing")
-    public AjaxResult serviceProcessing(@Validated @RequestBody ReservationDealVo reservationDealVo)
-    {
-        return toAjax(iWorkHandleInfoService.insertResevationDeal(reservationDealVo));
+    public AjaxResult serviceProcessing(@Validated @RequestBody ReservationDealVo reservationDealVo) {
+        if (reservationDealVo.getSign().equals("01")) {
+            return toAjax(iWorkHandleInfoService.insertResevationDeal(reservationDealVo));
+        } else {
+            return toAjax(iWorkHandleInfoService.insertResevationSaveDeal(reservationDealVo));
+        }
     }
-
 
 }

@@ -82,7 +82,7 @@ person_info c
 WHERE
 a.work_order_no = b.work_order_no
   and a.insured_no=c.person_id
-and a.business_type='信息需求'
+and a.business_type='01'
 and a.status='01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -160,7 +160,7 @@ and a.status='01'
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND a.work_order_no = b.work_order_no
         AND a.insured_no = c.person_id
-        AND a.business_type = '信息需求'
+        AND a.business_type = '01'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -228,7 +228,7 @@ person_info c
 WHERE
 a.work_order_no = b.work_order_no
 and a.insured_no=c.person_id
-  and a.business_type='信息需求'
+  and a.business_type='01'
   and a.work_order_no=#{workOrderNo}
     </select>
 
@@ -267,7 +267,7 @@ FROM
 
     <update id="updateStatusM" parameterType="String" >
          update work_order_accept set status = '02'
-        where status='01'and business_type='信息需求' and work_order_no in
+        where status='01' and work_order_no in
         <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
             #{workOrderNo}
         </foreach>
@@ -511,36 +511,32 @@ FROM
 
     <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
         select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type
-        from work_order_accept t1
-        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
+        from collaborative_from t3
+        left join  accept_detail_info t2  on t3.work_order_no=t2.work_order_no
+        left join  work_order_accept t1 on t1.work_order_no=t3.work_order_no
         left join person_info c on t1.insured_no=c.person_id
-        left join collaborative_from t3  on t1.work_order_no=t3.work_order_no
-        where
-        t1.work_order_no = t2.work_order_no
-        and t1.business_type='投诉'  or t1.business_type='信息需求'
+        where  t1.business_type in("01","03")
         and t1.status='02'
         and t3.status='01'
-    <where>
-            <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
-            <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
-            <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
-            <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
-            <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
-            <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
-            <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
-            <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
-            <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
-            <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
-            <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
-            <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
-            <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
-            <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
-            <if test="status != null  and status != ''"> and t1.status = #{status}</if>
-            <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
-            <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
-            <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-    </where>
+        <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
     </select>
 
 

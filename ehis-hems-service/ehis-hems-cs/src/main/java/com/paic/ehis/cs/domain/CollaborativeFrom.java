@@ -47,7 +47,7 @@ public class CollaborativeFrom extends BaseEntity
 
     /** 状态 协办中；已经协办； */
     @Excel(name = "状态 协办中；已经协办；")
-    private Long status;
+    private String status;
 
     @Excel(name="处理意见")
     private String opinion;
@@ -82,6 +82,7 @@ public class CollaborativeFrom extends BaseEntity
 
     private String itemCode;
     private String organCode;
+    private String businessType;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -142,12 +143,12 @@ public class CollaborativeFrom extends BaseEntity
     {
         return attachmentFlag;
     }
-    public void setStatus(Long status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public String getStatus()
     {
         return status;
     }

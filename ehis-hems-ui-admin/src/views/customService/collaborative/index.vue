@@ -329,20 +329,9 @@
     methods: {
       //工单页面超链接
       workOrderButton(s){
-        this.$router.push({
-          path: '/customService/collaborative/complaint',
-          query:{
-            workOrderNo:s.workOrderNo,
-            policyNo:s.policyNo,
-            policyItemNo:s.policyItemNo,
-            status:s.status
-          }
-        })
-      },
-      //处理按钮
-      dealButton(s){
+        if (s.businessType=="01"){
           this.$router.push({
-            path: '/customService/collaborative/deal',
+            path: '/customService/orderDetails',
             query:{
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
@@ -350,6 +339,44 @@
               status:s.status
             }
           })
+        }else {
+          this.$router.push({
+            path: '/customService/complaint/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+
+        }
+
+      },
+      //处理按钮
+      dealButton(s){
+        if(s.businessType=="01") {
+          this.$router.push({
+            path: '/customService/collaborative/deal',
+            query: {
+              workOrderNo: s.workOrderNo,
+              policyNo: s.policyNo,
+              policyItemNo: s.policyItemNo,
+              status: s.status
+            }
+          })
+        }else {
+          this.$router.push({
+            path: '/customService/collaborative/complaint',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+        }
+
       },
       resetForm() {
         this.$refs.sendForm.resetFields()

@@ -191,10 +191,10 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="165px"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
 
-        <span style="color: blue">信息需求-理赔类-质疑理赔结果</span>
+        <span style="color: blue">信息需求-理赔类</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
@@ -204,7 +204,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="workPoolData.callPerson.mobilephone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -312,8 +312,8 @@
           <el-col :span="8">
             <el-form-item label="是否涉及银行转账" prop="bank" >
               <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
+                <el-radio   label="1">是</el-radio>
+                <el-radio   label="2">否</el-radio>
 
               </el-radio-group>
             </el-form-item>
@@ -373,7 +373,12 @@
               <span>{{ scope.row.makeTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
+          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
+            </template>
+          </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -418,12 +423,12 @@
     </el-card>
 
     <el-card>
-      <el-form  :model="submitForm"  style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="submitForm" :model="submitForm"  :rules="rules" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因"  >
+          <el-form-item label="取消原因：" prop="cancelReason" >
             <el-radio-group v-model="submitForm.cancelReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
@@ -433,7 +438,7 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="处理说明：">
+          <el-form-item label="处理说明："prop="editRemark">
             <el-input
               type="textarea"
               :rows="2"
@@ -463,9 +468,13 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: {
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -493,6 +502,7 @@
           editRemark:"",
           workOrderNo:"",
         },
+        serves:[],
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
@@ -530,24 +540,26 @@
           pageSize: 10
         },
         loading: true,
-        workPoolData: {},
+        workPoolData:{
+          contactsPerson:{
+            homePhone1:[]
+          },
+          callPerson: {},
+          callCenterId:"",
+
+        },
         isinit: 'Y',
         totalCount: 0,
         changeSerchData: {},
         states: [],
-        serves: [{
-          value: '1',
-          label: '服务1'
-        }, {
-          value: '2',
-          label: '服务2'
-        }, {
-          value: '3',
-          label: '服务3'
-        }, {
-          value: '4',
-          label: '服务4'
-        }],
+        rules: {
+          cancelReason:[
+            {required: true, message: "取消原因不能为空", trigger: "blur"}
+          ],
+          editRemark: [
+            {required: true, message: "处理说明不能为空", trigger: "blur"}
+          ],
+        },
         sysUserOptions: [],
       }
     },
@@ -560,31 +572,41 @@
       this.searchFlowLog()
       this.getDicts("sys_oper_type").then(response => {
         this.states = response.data;
-        console.log("response:",response)
       });
 
     },
 
     methods: {
+      //超链接用
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.open()
+        ;},
       //上传附件
       upload(){},
       //下载
       download(){},
       //提交页面数据
       submit(){
-        let insert=this.submitForm
-        insert.workOrderNo=this.$route.query.workOrderNo
-        cancelSubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
+        this.$refs.submitForm.validate((valid) => {
+          if (valid){ let insert = this.submitForm
+            insert.workOrderNo = this.$route.query.workOrderNo
+            cancelSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                console.log("insert", insert)
+                alert("提交成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+
+            })}else {
+            return false;
           }
-        }).catch(res => {
 
         })
       },
@@ -593,38 +615,61 @@
       },
       //反显信息需求
       searchHandle() {
-        let query=this.queryParams
-        console.log("query",query)
-        demandListAndPersonalPool(query).then(res => {
-          console.log('共公池',res.rows)
-          if (res != null && res.code === 200) {
-            this.workPoolData = res.rows[0]
-            this.totalCount = res.total
-            console.log('response',res.total)
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
+        if (this.queryParams.status=="01") {
+          const query = this.queryParams
+          demandListAndPublicPool(query).then(res => {
+            if (res!=null && res.code === 200) {
+              this.workPoolData =  res.rows[0];
+              this.totalCount = res.total
+              console.log('公共', res.rows)
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
             }
-          }
-        }).catch(res => {
+          }).catch(res => {
 
-        })
-      },
-      handleSelectionChange(val) {
-        this.dataonLineListSelections = val
+          })
+        }else {
+          let query = this.queryParams
+          demandListAndPersonalPool(query).then(res => {
+            console.log('公共', this.workPoolData)
+            if (res!= null && res.code === 200) {
+              let workPoolData = res.rows[0];
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo=editInfo
+              workPoolData.officeCountry=""
+              workPoolData.officeNumber=""
+              workPoolData.officeQuhao=""
+              workPoolData.officeSecondNumber=""
+              this.workPoolData = workPoolData;
+              this.totalCount = res.total
+              console.log(this.workPoolData)
+
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+
+        }
       },
       //查询轨迹表
       searchFlowLog() {
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(

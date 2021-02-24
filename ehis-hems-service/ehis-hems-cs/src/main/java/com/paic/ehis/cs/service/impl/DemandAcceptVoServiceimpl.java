@@ -26,8 +26,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Autowired
     private PersonInfoMapper personInfoMapper;
     @Autowired
-    private UserInfoMapper userInfoMapper;
-    @Autowired
     private FieldMapMapper fieldMapMapper;
     @Autowired
     private AcceptDetailInfoMapper acceptDetailInfoMapper;
@@ -142,8 +140,27 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         String sourceName="DemandAcceptVo";
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-        demandAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId()));
-        demandAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId()));
+        PersonInfo callPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
+        if (callPerson != null) {
+            demandAcceptVo.setCallPerson(callPerson);
+        } else {
+            demandAcceptVo.setCallPerson(new PersonInfo());
+        }
+        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
+        if (contactsPerson != null) {
+            String linePhone=contactsPerson.getLinePhone();
+            String[] linePhone1=linePhone.split("\\-");
+            contactsPerson.setLinePhone1(linePhone1);
+            String homePhone=contactsPerson.getHomePhone();
+            String[] homePhone1=homePhone.split("\\-");
+            contactsPerson.setHomePhone1(homePhone1);
+            String workPhone=contactsPerson.getWorkPhone();
+            String[] workPhone1=workPhone.split("\\-");
+            contactsPerson.setWorkPhone1(workPhone1);
+            demandAcceptVo.setContactsPerson(contactsPerson);
+        } else {
+            demandAcceptVo.setContactsPerson(new PersonInfo());
+        }
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo.getWorkOrderNo());
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -154,6 +171,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             demandAcceptVo= (DemandAcceptVo) voUtils.fromVoToVo(demandAcceptVo,map,acceptDetailInfo);
         }
         return demandAcceptVo;
+
     }
 
     @Override
@@ -255,22 +273,31 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Override
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo) {
         String workOrderNo=demandAcceptVo.getWorkOrderNo();
-        AcceptDTO acceptDTO=new AcceptDTO();
-        acceptDTO.setWorkOrderNo(workOrderNo);
-        List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
-        DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
+//        String stauts=demandAcceptVo.getStatus();
+//        AcceptDTO acceptDTO=new AcceptDTO();
+//        acceptDTO.setWorkOrderNo(workOrderNo);
+//
+//        if (stauts =="01"){
+//            List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+//            DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);}
+//        else {
+//            List<DemandAcceptVo> demandAcceptVos=demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
+//            DemandAcceptVo demandAcceptVo1=demandAcceptVos.get(0);
+//        }
+//        DemandAcceptVo demandAcceptVo1 =this.demandAcceptVo1;
+        DemandAcceptVo demandAcceptVo1=demandAcceptVoMapper.selectDemandAcceptVoById(workOrderNo);
      //   AcceptDetailInfo acceptDetailInfo1= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
      //   WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
-        AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         PersonInfo callPerson= personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
         FlowLog flowLog=new FlowLog();
-        WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
-
+        workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         //工单表修改
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -295,6 +322,16 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
+        acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
+        acceptDetailInfo.setPriorityLevel(demandAcceptVo.getPriorityLevel());
+        acceptDetailInfo.setEmail(demandAcceptVo.getEmail());
+        acceptDetailInfo.setBankTransfer(demandAcceptVo.getBankTransfer());
+        acceptDetailInfo.setBankHolder(demandAcceptVo.getBankHolder());
+        acceptDetailInfo.setBankLocation(demandAcceptVo.getBankLocation());
+        acceptDetailInfo.setAccountNumber(demandAcceptVo.getAccountNumber());
+        acceptDetailInfo.setBankName(demandAcceptVo.getBankName());
+        acceptDetailInfo.setContent(demandAcceptVo.getContent());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -476,17 +513,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        /*Map map3 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept1), Map.class);
-        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(workOrderAccept2), Map.class);
-        Iterator<String> iter2 = map3.keySet().iterator();
-        while(iter1.hasNext()){
-            String map3key=iter2.next();
-            String map3value = String.valueOf(map3.get(map3key));
-            String map4value = String.valueOf(map4.get(map3key));
-            if (!map3value.equals(map4value)) {
-          }
-        }*/
-
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 

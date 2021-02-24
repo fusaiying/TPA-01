@@ -8,3 +8,24 @@ export function selectAssist(query) {
   })
 }
 
+
+
+//------------------------------------------------------------投诉处理页面
+//投诉暂存
+export function collaborativeTemporary(data) {
+  return request({
+    url: '/cs/from/assistInComplaint',
+    method: 'put',
+    data: data
+  })
+}
+
+//# 投诉处理的池
+export function  complainSearch(workOrderNo) {
+  return request({
+    url: '/cs/complaint/'+workOrderNo,
+    method: 'get',
+
+  })
+}
+

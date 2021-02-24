@@ -143,15 +143,12 @@
     claim_case_insured.name,/*被保人姓名*/
     claim_case_discussion.disc_type,/*协谈类型*/
     claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
-    claim_case.case_status,/*案件状态*/
-    claim_case_policy.policy_manage_com as organ_code,/*承保机构*/
-    claim_case_policy.company_name/*出单公司名称*/
+    claim_case.case_status/*案件状态*/
     from
     claim_case_discussion,
     claim_batch,
     claim_case_insured,
-    claim_case,
-    claim_case_policy
+    claim_case
     <where>
         <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
         <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
@@ -160,7 +157,6 @@
         <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
         and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
         and claim_case_discussion.rpt_no = claim_case.rpt_no
-        and claim_case_discussion.rpt_no = claim_case_policy.rpt_no
         and claim_case.batch_no = claim_batch.batch_no
         AND claim_case_discussion.is_history = 'N'
         AND claim_case.case_status = '31'
@@ -168,7 +164,6 @@
         AND claim_batch.STATUS = 'Y'
         AND claim_case_insured.STATUS = 'Y'
         AND claim_case.STATUS = 'Y'
-        AND claim_case_policy.STATUS = 'Y'
     </where>
     </select>
 
@@ -180,15 +175,12 @@
         claim_case_insured.name,/*被保人姓名*/
         claim_case_discussion.disc_type,/*协谈类型*/
         claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
-        claim_case.case_status,/*案件状态*/
-        claim_case_policy.policy_manage_com as organ_code,/*承保机构*/
-        claim_case_policy.company_name/*出单公司名称*/
+        claim_case.case_status/*案件状态*/
         from
         claim_case_discussion,
         claim_batch,
         claim_case_insured,
-        claim_case,
-        claim_case_policy
+        claim_case
         <where>
             <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
             <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
@@ -196,21 +188,20 @@
             <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
             <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>  and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case_discussion.rpt_no = claim_case.rpt_no
-            and claim_case_discussion.rpt_no = claim_case_policy.rpt_no
+            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case.batch_no = claim_batch.batch_no
             AND claim_case_discussion.is_history = 'Y'
             and claim_case_discussion.status = 'Y'
             AND claim_batch.STATUS = 'Y'
             AND claim_case_insured.STATUS = 'Y'
             AND claim_case.STATUS = 'Y'
-            AND claim_case_policy.STATUS = 'Y'
         </where>
     </select>
 
     <!--将协谈未处理改为已处理-->
     <update id="updatecasediscussionStatus" parameterType="String">
         update claim_case
-        set case_status ='32'
+        set case_status = '07'
         where rpt_no = #{rptNo}
     </update>
 

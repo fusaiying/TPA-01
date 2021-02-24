@@ -11,7 +11,6 @@ import com.paic.ehis.claimflow.domain.ClaimCaseDiscussion;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseDiscussionDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO;
 import com.paic.ehis.claimflow.service.IClaimCaseDiscussionService;
-import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,6 @@ public class ClaimCaseDiscussionController extends BaseController
     @Autowired
     private IClaimCaseDiscussionService claimCaseDiscussionService;
 
-    @Autowired
-    private IClaimCaseRecordService claimCaseRecordService;
     /**
      * 查询案件协谈信息列表
      */
@@ -141,11 +138,11 @@ public class ClaimCaseDiscussionController extends BaseController
         return getDataTable(list);
     }
 
-
+    //将未处理改为已处理
    @PutMapping("/updatecasediscussionStatus")
-    public AjaxResult updatecasediscussionStatus(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
+    public AjaxResult updatecasediscussionStatus(@RequestBody String repNo)
     {
-        return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
+        return toAjax(claimCaseDiscussionService.updatecasediscussionStatus(repNo));
     }
 
     /*查询基本信息表*/

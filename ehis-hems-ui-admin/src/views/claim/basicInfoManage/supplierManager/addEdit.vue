@@ -981,6 +981,7 @@
       ,
 
       returnHistory() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       }
       ,
@@ -1238,7 +1239,8 @@
       }
       ,
       closeAll() {
-        this.$router.go(-1);
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1)
       }
       ,
       addService() {

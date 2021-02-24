@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="myDiv">
-      <span style="font-size: 12px;color: red">老系统待受理: 3</span>
+      <span style="font-size: 12px;color: red">老系统待受理: {{oldCaseNum}}</span>
     </div>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
@@ -90,7 +90,7 @@
 
 <script>
   import claimsTable from './components/claimsTable'
-  import {getBackList, getFinishList, getHangUpList} from '@/api/claim/handleCom'
+  import {getBackList, getFinishList, getHangUpList,selectCoreCase} from '@/api/claim/handleCom'
 
   export default {
     name: 'Accecpt',
@@ -99,6 +99,7 @@
     },
     data() {
       return {
+        oldCaseNum:0,//老系统待受理案件数
         isListExport:false,
         total: 0,
         finishTotal: 0,
@@ -153,6 +154,12 @@
       }).catch(res => {
 
       })
+      //查询老系统待受理案件数
+   /*   selectCoreCase().then(res=>{
+        if (res!=null && res.code===200){
+          this.oldCaseNum=res.data
+        }
+      })*/
     },
     computed: {},
     methods: {

@@ -41,7 +41,7 @@
       </form>
     </el-card>
 
-    <el-card class="box-card" style="margin-top: 10px;">
+    <el-card v-if="HistoryData.length > 0" class="box-card" style="margin-top: 10px;">
         <div slot="header" class="clearfix">
         <span>历史协谈信息</span>
       </div>
@@ -165,7 +165,7 @@
          this.claimStatusSelect = response.data;
        });
        //性别
-       this.getDicts("sex").then(response => {
+       this.getDicts("rgtSex").then(response => {
          this.gender = response.data;
        });
 

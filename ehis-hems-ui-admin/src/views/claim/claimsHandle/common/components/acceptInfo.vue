@@ -29,7 +29,7 @@
             <el-input v-model="baseForm.claimAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>-->
-       <!-- <el-col :span="8">
+        <el-col :span="8">
           <el-form-item label="客户申请日期：" prop="customerApplicationDate">
             <el-date-picker
               v-model="baseForm.customerApplicationDate"
@@ -39,7 +39,7 @@
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
-        </el-col>-->
+        </el-col>
         <el-col :span="8">
           <el-form-item label="出险日期：" prop="accDate">
             <el-date-picker

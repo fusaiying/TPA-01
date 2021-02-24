@@ -561,11 +561,6 @@
             <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
             <if test="name != null  and name != ''"> and act.name like concat('%', #{name}, '%')</if>
-            and ccr.operator = #{operator}
-            and ccr.history_flag = 'Y'
-            and cc.case_status in ('08','99')
-            and ccr.updateTime between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
-            and ccr.operator = '07' and cc.status ='Y'
         </where>
     </select>
 

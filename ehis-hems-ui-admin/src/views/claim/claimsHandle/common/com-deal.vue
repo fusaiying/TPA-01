@@ -631,14 +631,50 @@
               }
               editCaseAndRecordInfoSuspend(data).then(res => {
                 if (res != null && res.code === 200) {
-                  this.$message({
-                    message: '提交成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.$store.dispatch("tagsView/delView", this.$route);
-                  this.$router.go(-1)
+                  if (res.data.caseStypeFind==='01'){
+                    this.$message({
+                      message: '提交成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    this.$store.dispatch("tagsView/delView", this.$route);
+                    this.$router.go(-1)
+                  }else if (res.data.caseStypeFind==='02'){
+                    this.$confirm(`此被保人只有健康险保单，确认后将提交至健康险?`, '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
+                      let data = {
+                        claimCase:{rptNo: this.querys.rptNo},
+                        insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+                        name: this.$refs.insuredForm.baseForm.name,//被保人姓名
+                        caseStypeFind:'02'
+                      }
+                      editCaseAndRecordInfoSuspend(data).then(response => {
+                        if (res != null && response.code === 200) {
+                          this.$message({
+                            message: '提交成功！',
+                            type: 'success',
+                            center: true,
+                            showClose: true
+                          })
+                          this.$store.dispatch("tagsView/delView", this.$route);
+                          this.$router.go(-1)
+                        }
+                      })
+                    }).catch(() => {
+                      this.$message({
+                        type: 'info',
+                        message: '已取消！'
+                      })
+                    })
+                  }else if (res.data.caseStypeFind==='03'){
+                    return this.$message.warning(
+                      "该被保人不存在保单信息，请撤件！"
+                    )
+                  }
                 }
               }).catch(res => {
                 this.$message({

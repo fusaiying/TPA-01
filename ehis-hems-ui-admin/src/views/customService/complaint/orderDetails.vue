@@ -567,21 +567,10 @@
           <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
             </template>
           </el-table-column>
         </el-table>
-      </div>
-      <div style="text-align: right; margin-right: 1px;">
-        <modify-details ref="modifyDetails"></modify-details>
-        <transfer ref="transfer"></transfer>
-        <up-load ref="upload"></up-load>
-        <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
-        <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
       </div>
     </el-card>
 
@@ -593,17 +582,14 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
-  import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
-  import coOrganizer from "../common/modul/coOrganizer";
-  import modifyDetails from "../common/modul/modifyDetails";
+
 
   let dictss = [{dictType: 'product_status'}]
   export default {
-    components: { transfer ,
+    components: {
       upLoad,
-      coOrganizer,
-      modifyDetails,
+
     },
     filters: {
       changeDate: function (value) {

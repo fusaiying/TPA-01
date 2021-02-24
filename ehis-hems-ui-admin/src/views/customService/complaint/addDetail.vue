@@ -484,31 +484,25 @@
           priorityLevel: [
             {required: true, message: "优先级不能为空", trigger: "blur"}
           ],
-          contactsRelationBy: [
-              {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+          'contactsPerson.sex': [
+              {required: true, message: "联系人性别", trigger: "blur"}
             ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
+          'contactsPerson.name': [
+            {required: true, message: "联系人姓名不能为空", trigger: "blur"}
           ],
-          ContactsMobilePhone:[
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          'complainantPerson.name':[
+            {required: true, message: "投诉人姓名不能为空", trigger: "blur"}
           ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
+          'complainantPerson.sex': [
+            {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
+          'callPerson.mobilePhone': [
+            {required: true, message: "来电号码不能为空", trigger: "blur"}
           ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
+          organCode:  [
+        {required: true, message: "出单机构不能为空", trigger: "blur"}
           ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          Content: [
+          content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
         },
@@ -598,18 +592,24 @@
       download(){},
       //提交页面数据
        submit(){
-           let insert=this.ruleForm
-           complaintAddInsert(insert).then(res => {
-           if (res != null && res.code === 200) {
-             alert("插入成功")
-             if (res.rows.length <= 0) {
-               return this.$message.warning(
-                 "失败！"
-               )
-             }
-           }
-         }).catch(res => {
+         this.$refs.ruleForm.validate((valid) => {
+           if (valid) {
+             let insert = this.ruleForm
+             complaintAddInsert(insert).then(res => {
+               if (res != null && res.code === 200) {
+                 alert("插入成功")
+                 if (res.rows.length <= 0) {
+                   return this.$message.warning(
+                     "失败！"
+                   )
+                 }
+               }
+             }).catch(res => {
 
+             })
+           }else {
+             return false
+           }
          })
 
        },

@@ -492,7 +492,7 @@
         dialogFormVisible: false,
         updateBy: undefined,
         //新增的数据传输
-        sendForm: {
+        sendFormsendForm: {
           workOrderNo:'',
           validFlag:"",
           nonReason:"",

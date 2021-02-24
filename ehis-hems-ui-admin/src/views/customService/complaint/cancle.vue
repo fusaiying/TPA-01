@@ -194,7 +194,7 @@
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
-        <span style="color: blue">投诉-服务受理信息</span>
+        <span style="color: blue">基因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">

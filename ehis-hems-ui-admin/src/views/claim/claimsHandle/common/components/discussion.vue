@@ -42,7 +42,7 @@
             <el-col :span="8">
               <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}}</span>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="appealCase">
               <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }}</span>
             </el-col>
           </el-row>
@@ -68,7 +68,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="赔付结论：" prop="payConclusion">
-                <el-select  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
+                <el-select disabled="disabled"  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
                   <el-option v-for="dict in conclusionSelect" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
                 </el-select>
               </el-form-item>
@@ -323,6 +323,7 @@
         }
       };
       return {
+        appealCase:false,
         dictList: [],
         rgtSexs:[],
         card_types: [],
@@ -777,6 +778,9 @@
             }
             if(this.conclusionInfo.claimCheck != '' && this.conclusionInfo.claimCheck != null) {
               this.conclusionForm.claimCheck = this.conclusionInfo.claimCheck; // 核赔依据
+            }
+            if(res.data.isAppeal == '01') {
+              this.appealCase = true;
             }
             // console.log("res.data")
             // console.log(res.data)

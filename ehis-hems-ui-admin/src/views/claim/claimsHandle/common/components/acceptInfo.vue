@@ -29,6 +29,17 @@
             <el-input v-model="baseForm.claimAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>-->
+       <!-- <el-col :span="8">
+          <el-form-item label="客户申请日期：" prop="customerApplicationDate">
+            <el-date-picker
+              v-model="baseForm.customerApplicationDate"
+              class="item-width"
+              type="date"
+              clearable
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"/>
+          </el-form-item>
+        </el-col>-->
         <el-col :span="8">
           <el-form-item label="出险日期：" prop="accDate">
             <el-date-picker
@@ -356,6 +367,7 @@
           applyTypes: [],
           rptNo: undefined,
           accDate: undefined,
+          customerApplicationDate: undefined,
           firstSerIllnessDate: undefined,
           accType: undefined,
           currSituation: undefined,
@@ -458,6 +470,7 @@
           claimCaseAccept: {
             rptNo: this.fixInfo.rptNo,
             accDate: this.baseForm.accDate,
+            customerApplicationDate: this.baseForm.customerApplicationDate,
             firstSerIllnessDate: this.baseForm.firstSerIllnessDate,
             accType: this.baseForm.accType,
             currSituation: this.baseForm.currSituation,

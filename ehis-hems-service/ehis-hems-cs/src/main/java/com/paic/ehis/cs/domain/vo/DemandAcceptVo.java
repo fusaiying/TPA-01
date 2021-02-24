@@ -183,7 +183,7 @@ public class DemandAcceptVo extends BaseEntity {
     //征求处理意见
     private String solicitOpinion;
     //协办方UM帐号
-    private String[] umCode;
+    private List<UmCode> umCode;
 
 
     private Long CollaborativeId;

@@ -86,7 +86,6 @@
     mounted() {
         this.getDicts("cs_service_item").then(response => {
           this.cs_service_item = response.data;
-          console.log("服务项目:",response)
         });
     },
     methods: {

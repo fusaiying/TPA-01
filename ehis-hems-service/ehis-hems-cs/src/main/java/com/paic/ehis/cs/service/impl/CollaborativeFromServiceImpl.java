@@ -15,6 +15,7 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
+import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
@@ -128,12 +129,12 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public void insertTeamwork(DemandAcceptVo demandAcceptVo) {
         //修改个人池状态为已协办
-        //demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
-        String[] umCode1=demandAcceptVo.getUmCode();
+       // demandAcceptVoMapper.updateTeamwork(demandAcceptVo.getWorkOrderNo());
+        List<UmCode> umCode1=demandAcceptVo.getUmCode();
         //往协办池加数据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
-        for(String um:umCode1){
-            collaborativeFrom.setUmCode(um);
+        for(UmCode um:umCode1){
+            collaborativeFrom.setUmCode(um.getValue());
             //随机生成流水号
             collaborativeFrom.setCollaborativeId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("collaborative_id",10,6)));
             collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());//接受工单号

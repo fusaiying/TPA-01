@@ -6,37 +6,46 @@
       :close-on-click-modal="true"
       :before-close="changeDialogVisable"
       title=""
-      width="80%">
-      <el-form :model="coOrganizerForm"  label-width="170px" size="mini">
+      width="60%">
+      <el-card>
+      <el-form :model="dynamicValidateForm"   ref="dynamicValidateForm" label-width="170px" size="mini">
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span style="font-size: 20px">协办方UM账号：</span>
+          <span style="font-size: 20px ;color:blue;" >协办信息</span>
+          <el-divider/>
           <el-row>
-            <el-form-item  prop="attachmentType">
-              <el-select v-model="coOrganizerForm.umCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="attachmentTypes">
-              <el-input size="mini" v-model="coOrganizerForm.umCode"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <span style="color: gray">下拉框只能选择一个主账号，文本框可以填写多个以“，”分隔</span>
-            </el-form-item>
+
+              <el-form-item    v-for="(umCode, index) in dynamicValidateForm.umCode"
+                               :label="'协办方UM账号' + index+':'"
+                               :key="umCode.key"
+                               :prop="'umCode.' + index + '.value'"
+                               :rules="{
+                               required: true, message: '域名不能为空', trigger: 'blur'
+                               }"
+                               >
+                <el-col :span="12">
+                  <el-input v-model="umCode.value"></el-input>
+                </el-col>
+                <el-button size="mini" type="primary" @click="addDomain" v-show="index==0">增加行</el-button>
+                <el-button size="mini" type="primary" @click="removeDomain(umCode)" v-show="index!=0">删除行</el-button>
+              </el-form-item>
+
+
           </el-row>
           <el-row>
-            <el-form-item label="征求处理意见：" prop="textarea">
+            <el-form-item label="征求处理意见：" prop="solicitOpinion" :rules="{
+             required: true, message: '征求处理意见', trigger: 'blur'
+            }">
               <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="不超过500字符："
-                v-model="coOrganizerForm.solicitOpinion">
+                v-model="dynamicValidateForm.solicitOpinion">
               </el-input>
             </el-form-item>
           </el-row>
           <el-row>
             <el-form-item label="附件类型：" prop="attachmentType">
-              <el-select v-model="coOrganizerForm.attachmentType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+              <el-select v-model="dynamicValidateForm.attachmentType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
                 <el-option v-for="item in serves" :key="item.value" :label="item.label"
                            :value="item.value"/>
               </el-select>
@@ -44,14 +53,14 @@
 
           </el-row>
           <el-row>
-            <el-form-item label="附件文件" prop="attachmentFile">
+            <el-form-item label="附件文件：" prop="attachmentFile">
 
-              <el-input v-model="coOrganizerForm.attachmentFile" class="item-width"  size="mini" placeholder="请选择上传文件">
+              <el-input v-model="dynamicValidateForm.attachmentFile" class="item-width"  size="mini" placeholder="请选择上传文件">
               </el-input>
-              <el-button>上传附件</el-button>
+              <el-button size="mini" type="primary" disabled>上传附件</el-button>
             </el-form-item>
           </el-row>
-          <span >
+          <span  >
 
             *上传文件大小不能超过10MB<br>
             *支持文件格式：xls.doc.jpg.htm.bmp.tif.ppt.gif.mht.mpp.msg.rtf.rar.zip.txt.log.html.docx.xlsx.pptx.csv.pdf<br>
@@ -60,13 +69,14 @@
           </span>
 
           <span style="float: right;">
-          <el-button size="mini" @click="submitButton">提交</el-button>
-          <el-button size="mini" @click="changeDialogVisable">取消</el-button>
+          <el-button size="mini" type="primary" @click="submitButton('dynamicValidateForm')">提交</el-button>
+          <el-button size="mini" type="primary" @click="changeDialogVisable">取消</el-button>
         </span>
         </div>
 
 
       </el-form>
+      </el-card>
     </el-dialog>
   </div>
 </template>
@@ -78,59 +88,107 @@
     name:'upLoad',
     data() {
       return {
-        serves:[],
-        rules: {
-          attachmentTypes: [{
-            required: true, message: "UM账号必填", trigger: "blur"
-          }
-
-          ],
-          textarea: [{
-            required: true, message: "出理原因必填", trigger: "blur"
-          }
-
-          ]
+        dynamicValidateForm: {
+          umCode: [{
+            key:'00000001',
+            value: ''
+                    }],
+          solicitOpinion: "",
+          workOrderNo: ""
         },
+          serves: [],
+          // rules: {
+          //   attachmentTypes: [{
+          //     required: true, message: "UM账号必填", trigger: "blur"
+          //   }
+          //
+          //   ],
+          //   textarea: [{
+          //     required: true, message: "出理原因必填", trigger: "blur"
+          //   }
+          //
+          //   ]
+          // },
 
-        cs_service_item:[],
-        dialogVisable: false,
-        coOrganizerForm:{
-          umCode:"",
-          solicitOpinion:"",
-          workOrderNo:""
+          cs_service_item: [],
+          dialogVisable: false,
+          coOrganizerForm: {
+            umCode: "",
+            solicitOpinion: "",
+            workOrderNo: ""
 
+          }
         }
-      }
-    },
+      },
+
+
+
+
+
+
+
     mounted() {
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
-        console.log("服务项目:", response)
       });
     },
     methods: {
+      removeDomain(item) {
+        const index = this.dynamicValidateForm.umCode.indexOf(item);
+        if (index !== -1) {
+          this.dynamicValidateForm.umCode.splice(index, 1)
+        }
+      },
+      addDomain() {
+        this.dynamicValidateForm.umCode.push({
+          value: '',
+          key: Date.now()
+        });
+      },
       //打开窗口
       open(){
         console.log("调用到了子组件")
         this.dialogVisable=true
       },
-      //确定保存数据
-      submitButton() {
-        let insert=this.coOrganizerForm
-        coOrganizerSubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
+      submitButton(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let insert=this.dynamicValidateForm
+            coOrganizerSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                alert("修改成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
           }
-        }).catch(res => {
-
-        })
-
+        });
       },
+      //确定保存数据
+      // submitButton() {
+      //   let insert=this.coOrganizerForm
+      //   coOrganizerSubmit(insert).then(res => {
+      //     if (res != null && res.code === 200) {
+      //       alert("修改成功")
+      //       if (res.rows.length <= 0) {
+      //         return this.$message.warning(
+      //           "失败！"
+      //         )
+      //       }
+      //     }
+      //   }).catch(res => {
+      //
+      //   })
+      //
+      // },
       //关闭对话框
       changeDialogVisable() {
         //清空对话框中的数据

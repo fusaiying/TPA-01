@@ -242,7 +242,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority">
               <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -266,7 +266,7 @@
           <el-col :span="8">
             <el-form-item label="练习人与被保人关系：" prop="contactsRelationBy">
               <el-select v-model="ruleForm.contactsRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -483,6 +483,7 @@
       };
 
       return {
+        cs_relation:[],//关系
         cs_service_item:[],//服务项目
         cs_sex:[],//性别
         cs_priority:[],//优先级
@@ -582,6 +583,11 @@
       this.getDicts("cs_organization").then(response => {
         this.cs_organization = response.data;
       });
+      this.getDicts("cs_relation").then(response => {
+        this.cs_relation = response.data;
+      });
+
+
 
     },
 

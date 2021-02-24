@@ -16,6 +16,7 @@
             <if test="callCenterId != null">call_center_id,</if>
             <if test="email != null">email,</if>
             <if test="content != null">content,</if>
+            <if test="workOrderNo != null">work_order_no,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
@@ -35,6 +36,7 @@
             <if test="callCenterId != null">#{callCenterId},</if>
             <if test="email != null">#{email},</if>
             <if test="content != null">#{content},</if>
+            <if test="workOrderNo != null">#{workOrderNo},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
@@ -58,6 +60,10 @@
             <if test="mobilePhone != null">mobile_phone,</if>
             <if test="homePhone != null">home_phone,</if>
             <if test="identity != null">identity,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="personId != null">#{personId},</if>
@@ -68,24 +74,42 @@
             <if test="mobilePhone != null">#{mobilePhone},</if>
             <if test="homePhone != null">#{homePhone},</if>
             <if test="identity != null">#{identity},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
         </trim>
     </insert>
 
     <insert id="insertWorkOrderAcceptTable">
         insert into work_order_accept
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="status != null">status,</if>
             <if test="acceptBy != null">accept_by,</if>
             <if test="businessType != null">business_type,</if>
             <if test="acceptTime != null">accept_time,</if>
             <if test="policyItemNo != null">policy_item_no,</if>
             <if test="insuredNo != null">insured_no,</if>
+            <if test="policyNo != null">policy_no,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="status != null">#{status},</if>
             <if test="acceptBy != null">#{acceptBy},</if>
             <if test="businessType != null">#{businessType},</if>
             <if test="acceptTime != null">#{acceptTime},</if>
             <if test="policyItemNo != null">#{policyItemNo},</if>
             <if test="insuredNo != null">#{insuredNo},</if>
+            <if test="policyNo != null">#{policyNo},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
         </trim>
     </insert>
 

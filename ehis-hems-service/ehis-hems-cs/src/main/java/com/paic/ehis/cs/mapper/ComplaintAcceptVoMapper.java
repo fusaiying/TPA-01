@@ -34,11 +34,6 @@ public interface ComplaintAcceptVoMapper {
      */
     public int updateReservedCancelStatus(String workOrderNo);
 
-    /**
-     * 获取操作
-     * @param workOrderNo
-     * @return
-     */
-    public int updateComplaintStatus(String workOrderNo);
+
 
 }

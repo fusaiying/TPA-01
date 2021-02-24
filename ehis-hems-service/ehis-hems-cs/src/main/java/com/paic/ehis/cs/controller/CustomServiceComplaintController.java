@@ -75,6 +75,7 @@ public class CustomServiceComplaintController extends BaseController {
     {
         complaintAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         complaintAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+        complaintAcceptVo.setComplaintPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         complaintAcceptVo.setBusinessType("03");
         complaintAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
         return toAjax(iComplaintAcceptVoService.insertComplaintInfo(complaintAcceptVo));
@@ -104,13 +105,6 @@ public class CustomServiceComplaintController extends BaseController {
         return toAjax(iEditInfoService.reservedCancelSubmit(complaintAcceptVo));
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
-    @Log(title = "获取 ", businessType = BusinessType.UPDATE)
-    @PutMapping("/obtain")
-    public AjaxResult updateComplaintStatus(@RequestBody String workOrderNo)
-    {
-        return toAjax(iComplaintAcceptVoService.updateComplaintStatus(workOrderNo));
-    }
 
     /**
      * 投诉需求处理意见
@@ -119,8 +113,8 @@ public class CustomServiceComplaintController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
-    @PutMapping("/complaintHandling")
-    public AjaxResult complaintHandling(@RequestBody ComplaintDealVo complaintDealVo)
+    @PutMapping("/complaintHandling ")
+    public AjaxResult complaintHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
     {
         if(complaintDealVo.getSign().equals("01")){
             return toAjax(iComplaintAcceptVoService.complaintHandling(complaintDealVo));

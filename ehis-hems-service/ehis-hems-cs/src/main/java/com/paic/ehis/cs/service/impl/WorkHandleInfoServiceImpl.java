@@ -359,7 +359,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
-            workHandleInfo.setStatus("N");
+            workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -397,7 +397,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
         workHandleInfo.setHandleType("处理");
-        workHandleInfo.setStatus("02");
+        workHandleInfo.setStatus("Y");
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -425,7 +425,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
-            workHandleInfo.setStatus("03");
+            workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -605,5 +605,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
         }
         return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
+    }
+
+    @Override
+    public List<WorkHandleInfo> selectWorkHandleInfoByNo(Long workOrderNo) {
+        return workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
     }
 }

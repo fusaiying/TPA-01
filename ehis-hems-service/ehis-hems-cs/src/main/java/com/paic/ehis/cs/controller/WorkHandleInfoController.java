@@ -135,4 +135,9 @@ public class WorkHandleInfoController extends BaseController
         List<WorkHandleInfo> list = workHandleInfoService.selectComplaintWorkOrder(complaintDealVo);
         return getDataTable(list);
     }
+
+    @GetMapping("/selectworkHandleInfoByNo")
+    public AjaxResult selectWorkHandleInfoById(@PathVariable("workOrderNo") Long workOrderNo) {
+        return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));
+    }
 }

@@ -116,7 +116,8 @@ public class BusinessData implements Serializable {
     /** 联系人手机号*/
     private String contaMobileNo;
 
-    //private String policyList;
+    /** 保单号*/
+    private String policyList;
 
     /** 服务项目编码*/
     private String questionType;

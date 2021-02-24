@@ -127,10 +127,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setChannelCode(complaintAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(complaintAcceptVo.getItemCode());
         acceptDetailInfo.setCallPersonId(complaintAcceptVo.getCallPersonId());
-        acceptDetailInfo.setCallRelationBy(complaintAcceptVo.getCallRelationBy());
         acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
         acceptDetailInfo.setContactsPersonId(complaintAcceptVo.getContactsPersonId());
-        acceptDetailInfo.setContactsRelationBy(complaintAcceptVo.getContactsRelationBy());
+        acceptDetailInfo.setComplaintPersonId(complaintAcceptVo.getComplaintPersonId());
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setStatus(complaintAcceptVo.getStatus());
@@ -153,6 +152,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         //插入来电人
         personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
+        personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
@@ -160,23 +160,26 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complaintAcceptVoMapper.insertPersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
-        personInfo2.setSex(complaintAcceptVo.getContactsSex());
-        personInfo2.setName(complaintAcceptVo.getContactsName());
+        personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
+        personInfo2.setName(complaintAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        //personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        personInfo2.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo2);
         //插入投诉人
-        personInfo3.setPersonId(complaintAcceptVo.getCallPersonId());
-        personInfo2.setSex(complaintAcceptVo.getContactsSex());
-        personInfo2.setName(complaintAcceptVo.getContactsName());
-        personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
-        personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        personInfo3.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        personInfo3.setSex(complaintAcceptVo.getComplainantPerson().getSex());
+        personInfo3.setName(complaintAcceptVo.getComplainantPerson().getName());
+        personInfo3.setLanguage(complaintAcceptVo.getContactsLanguage());
+        personInfo3.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
+       // personInfo3.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
+      //  personInfo3.setWorkPhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
         personInfo3.setCreatedBy(SecurityUtils.getUsername());
         personInfo3.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo3.setUpdatedBy(SecurityUtils.getUsername());
@@ -451,7 +454,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
         workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-        workHandleInfo.setRemark(complaintDealVo.getRemark());
         List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
         for (FieldMap fieldMap : KVMap) {
             fieldMap.getTargetColumnName();
@@ -498,20 +500,21 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
      */
     @Override
     public int complaintSaveHandling(ComplaintDealVo complaintDealVo) {
-        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+     /*   WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
         workHandleInfo.setCreatedBy(complaintDealVo.getCreatedBy());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
 
-        if (workHandleInfo1==null) {
-
-            //将所有状态置为N
+        if (workHandleInfo1==null) {*/
+        //将所有状态置为N
+        WorkHandleInfo workHandleInfo = new WorkHandleInfo();
+        if (complaintDealVo.getItemCode().isEmpty()) {
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
 
             //插入轨迹表
-            FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            FlowLog flowLog = new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setStatus("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -537,10 +540,91 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 Map map = new HashMap<String, String>();
                 map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
                 VoUtils voUtils = new VoUtils<ComplaintDealVo>();
-                workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,complaintDealVo);
+                workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
             }
-            return workHandleInfoMapper.assistInComplaint(workHandleInfo);}
-        else {
+            return workHandleInfoMapper.assistInComplaint(workHandleInfo);
+        } else {
+            //将主表状态置为已处理
+            WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(complaintDealVo.getWorkOrderNo());
+            WorkOrderAccept workOrderAccept2=workOrderAccept1;
+            workOrderAccept2.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
+            workOrderAccept2.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAccept2.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+            workOrderAccept2.setUpdateBy(SecurityUtils.getUsername());
+            workOrderAccept2.setCreateBy(SecurityUtils.getUsername());
+            workOrderAcceptMapper.insertWorkOrderAccept(workOrderAccept2);
+            workOrderAccept1.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderStatus(workOrderAccept1);
+
+
+            AcceptDetailInfo acceptDetailInfo1=new AcceptDetailInfo();
+            acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintDealVo.getWorkOrderNo());
+            //生成一条数据  状态置为根因改善
+            AcceptDetailInfo acceptDetailInfo2=acceptDetailInfo1;
+            acceptDetailInfo2.setItemCode("B00034");//置为根因改善
+            acceptDetailInfo2.setWorkOrderNo(workOrderAccept1.getWorkOrderNo());
+            acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo1);
+
+            //生成一条一样的数据
+            AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+            acceptDetailInfo.setItemCode("B00034");//置为根因改善
+
+            //将所有状态置为N
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfoMapper.updateStatus(workHandleInfo);
+
+            //插入轨迹表
+            FlowLog flowLog = new FlowLog();
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog.setStatus("03");
+            flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            flowLogMapper.updateFlowLog(flowLog);
+
+            FlowLog flowLog2 = new FlowLog();
+            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
+            //flowLog.setWorkOrderNo();从前端获得
+            flowLog2.setStatus("02");
+            flowLog2.setCreatedBy(SecurityUtils.getUsername());
+            flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setUpdatedBy(SecurityUtils.getUsername());
+            flowLog2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            flowLog2.setWorkOrderNo(workOrderAccept2.getWorkOrderNo());
+            flowLogMapper.insertFlowLog(flowLog2);
+
+            // 第一条元数据转义
+            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
+            workHandleInfo.setHandleType("处理");
+            workHandleInfo.setStatus("Y");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
+            workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workHandleInfo.setRemark(complaintDealVo.getRemark());
+            List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
+            for (FieldMap fieldMap : KVMap) {
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map = new HashMap<String, String>();
+                map.put(fieldMap.getTargetColumnName(), fieldMap.getSourceFiledName());
+                VoUtils voUtils = new VoUtils<ComplaintDealVo>();
+                workHandleInfo = (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo, map, complaintDealVo);
+            }
+            workHandleInfoMapper.assistInComplaint(workHandleInfo);
+            //新生成数据转义字段
+            WorkHandleInfo workHandleInfo2=workHandleInfo;
+            workHandleInfo2.setWorkOrderNo(workOrderAccept2.getWorkOrderNo());
+            workHandleInfoMapper.assistInComplaint(workHandleInfo2);
+
+            return workHandleInfoMapper.assistInComplaint(workHandleInfo);
+        }
+    }
+        /*else {
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
@@ -576,18 +660,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,complaintDealVo);}
 
             return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
+*/
 
-        }
+
     }
-
-    /**
-     * 投诉页面获取处理
-     * @param workOrderNo
-     * @return
-     */
-    @Override
-    public int updateComplaintStatus(String workOrderNo) {
-        return complaintAcceptVoMapper.updateComplaintStatus(workOrderNo);
-    }
-
-}

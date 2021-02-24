@@ -103,7 +103,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
-        return claimBatchMapper.selectDirectQueryList(batchDTO);
+        return claimBatchMapper.selectReturnedBatchList(batchDTO);
     }
 
     /**
@@ -129,7 +129,6 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-
         if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
                 || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
                 || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {

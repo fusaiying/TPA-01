@@ -105,17 +105,79 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         on cb.batch_no=record.batch_no and record.operation='04' and record.status='Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
-            <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
-            <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
+            <if test="claimtype != null  and claimtype != ''"> and cb.claim_type = #{claimtype}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
                 SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
                 UNION
                 SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))
             </if>
-            <if test="submitstartdate != null and submitenddate != null "> and submit_date between #{submitstartdate} and #{submitenddate}</if>
-            <if test="organcode != null  and organcode != ''"> and organ_code = #{organcode}</if>
-            <if test="batchstatus != null  and batchstatus != ''"> and batch_status =#{batchstatus}</if>
+            <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status =#{batchstatus}</if>
             and cb.update_by = #{updateBy}
             <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectReturnedBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
+        SELECT DISTINCT
+        cb.batch_no,
+        cb.source,
+        cb.hospital_code,
+        cb.claim_type,
+        cb.submit_date,
+        cb.caseload,
+        cb.batch_total,
+        cb.organ_code,
+        cb.currency,
+        cb.cont_type,
+        cb.batch_status,
+        record.update_by,
+        record.update_time,
+        record.remark,
+        bpi.chname1,
+        bpi.enname1
+        FROM
+        claim_batch cb
+        LEFT JOIN (
+        SELECT
+        batch_no,
+        update_by,
+        update_time,
+        remark,
+        status
+        FROM
+        claim_batch_record a
+        WHERE
+        record_id = (
+        SELECT
+        record_id
+        FROM
+        claim_batch_record b
+        WHERE
+        a.batch_no = b.batch_no
+        AND b.operation = '04'
+        AND b.STATUS = 'Y'
+        ORDER BY
+        create_time
+        LIMIT 1
+        )
+        )record on record.batch_no=cb.batch_no and record.status='Y'
+        LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
+        AND bpi.STATUS = 'Y'
+        <where>
+            <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
+                SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
+                UNION
+                SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))</if>
+            <if test="claimtype != null  and claimtype != ''"> and cb.claim_type = #{claimtype}</if>
+            <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status = #{batchstatus} </if>
+            <if test="updateBy != null  and updateBy != ''"> and record.create_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and record.create_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
     </select>
@@ -155,7 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '01'
+        AND b.operation = '02'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time

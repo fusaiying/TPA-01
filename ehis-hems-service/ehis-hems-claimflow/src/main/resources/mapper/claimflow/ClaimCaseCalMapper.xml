@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '04') > 0
         then '04'
         when (select count(1) from (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' GROUP BY pay_conclusion) t
-        ) = 1 then  (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y')
+        ) = 1 then  (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' limit 1)
 
         when (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y') = (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' and pay_conclusion in ('05','10'))
         then '05'

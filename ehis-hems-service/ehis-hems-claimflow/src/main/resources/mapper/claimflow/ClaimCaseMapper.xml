@@ -749,6 +749,7 @@
         </where>
     </select>
 
+
     <update id="updateClaimCaseVo" parameterType="string">
         update claim_case
         <trim prefix="SET" suffixOverrides=",">
@@ -756,6 +757,13 @@
         </trim>
         where batch_no = #{batchNo}
     </update>
+
+    <select id="selectCaseBorrowByRptNo" parameterType="String" resultType="Integer">
+        select count(rpt_no) from finance_borrow_info
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+        </where>
+    </select>
     <!-- <update id="updateCaseUpdateBy" parameterType="String">
          update claim_case
          set case_status ='31'

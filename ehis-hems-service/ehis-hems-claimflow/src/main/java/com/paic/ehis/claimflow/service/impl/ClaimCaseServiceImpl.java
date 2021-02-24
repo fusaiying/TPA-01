@@ -1527,6 +1527,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         return baseCodeMappingNew1;
     }
 
+    @Override
+    public int selectCaseBorrowByRptNo(String rptNo) {
+        return claimCaseMapper.selectCaseBorrowByRptNo(rptNo);
+    }
+
     /**
      * 案件交单完成进入受理阶段分配操作人
      */

@@ -300,12 +300,21 @@ export function getInsured(rptNo) {
   })
 }
 
-//撤件体检按钮
+//撤件提交按钮
 export function removeCase(data) {
   return request({
     url: '/claimflow/case/editCaseAndRecordInfoCancel',
     method: 'post',
     data: data
+  })
+}
+
+//根据报案号查看当前案件是否存在借款
+export function borrowByRptNo(rptNo) {
+  return request({
+    url: '/claimflow/case/borrowByRptNo',
+    method: 'post',
+    data:rptNo
   })
 }
 

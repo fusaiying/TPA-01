@@ -365,44 +365,57 @@
       save() {
         this.$refs.caseForm.validate((valid) => {
           if (valid) {
-            let item = {
-              billDetailList: this.caseForm.caseData
-            }
-            billDetailsSave(item).then(res => {
-              if (res != null && res.code === 200) {
+           let flag=true
+            this.caseForm.caseData.forEach(item=>{
+               if (item.payAmount!=this.item.calAmount){
+                 flag=false
+              }
+            })
+            if (flag){
+              let item = {
+                billDetailList: this.caseForm.caseData
+              }
+              billDetailsSave(item).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                }
+                let data = {
+                  rptNo: this.fixInfo.rptNo,
+                }
+                detailsList(data).then(res => {
+                  if (res != null && res.code === 200 && res.rows.length > 0) {
+                    res.rows.forEach(item => {
+                      item.isEdit = true
+                      if (item.minData.length > 0) {
+                        item.minData.forEach(option => {
+                          option.isEdit = true
+                        })
+                      }
+                    })
+                    this.caseForm.caseData = res.rows
+                  }
+                }).catch(res => {
+                })
+                this.getCalSummary()
+              }).catch(res => {
                 this.$message({
-                  message: '保存成功！',
-                  type: 'success',
+                  message: '保存失败!',
+                  type: 'error',
                   center: true,
                   showClose: true
                 })
-              }
-              let data = {
-                rptNo: this.fixInfo.rptNo,
-              }
-              detailsList(data).then(res => {
-                if (res != null && res.code === 200 && res.rows.length > 0) {
-                  res.rows.forEach(item => {
-                    item.isEdit = true
-                    if (item.minData.length > 0) {
-                      item.minData.forEach(option => {
-                        option.isEdit = true
-                      })
-                    }
-                  })
-                  this.caseForm.caseData = res.rows
-                }
-              }).catch(res => {
               })
-              this.getCalSummary()
-            }).catch(res => {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
-            })
+            }else {
+              return this.$message.warning(
+                "赔付金额与理算金额不相等时备注必录！"
+              )
+            }
+
           }
         })
       },

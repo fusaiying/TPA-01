@@ -136,7 +136,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="12">
-              <el-button type="primary" size="mini" @click="discussionSave">保存</el-button>
+              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">保存</el-button>
             </el-col>
           </el-row>
           <!--保存 end-->
@@ -267,6 +267,7 @@
           verifyCurrency,
           addRecoveryInfo,
           investigationBaseInfo,
+          discussionBaseInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -303,6 +304,7 @@
         if(this.rptNo != '') {
           this.getCalInfo();
           this.getInvestigationBaseInfo();
+          this.getDiscussionInfo();
         }
       },
       value: function (newValue) {
@@ -326,7 +328,7 @@
         card_types: [],
         inQuireConfirmBtn:false,
         policyNos :[],
-        conSave:false,
+        dissSave:false,
         rptNo:'',
         batchNo:'',
         fixInfoData:'',
@@ -527,7 +529,6 @@
 
       // 赔付结论保存
       updateCalInfo(){
-          this.conSave = false
           this.$refs.conclusionForm.validate((valid) => {
             if (valid) {
               if(this.rptNo == '') {
@@ -556,7 +557,6 @@
                     showClose: true
                   });
                 } else {
-                  this.conSave = true
                   this.$message({
                     message: '保存失败！',
                     type: 'error',
@@ -566,7 +566,6 @@
                 }
               });
             } else {
-              this.conSave = true
             }
           })
       },
@@ -764,9 +763,6 @@
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;
-            if(this.conclusionInfo.payConclusion == '' || this.conclusionInfo.payConclusion == null) {
-              this.conSave = true;
-            }
             if(this.conclusionInfo.billCurrency != '' && this.conclusionInfo.billCurrency != null) {
               this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
             }
@@ -810,6 +806,22 @@
             }
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;
+            }
+          }
+        });
+      },
+      getDiscussionInfo() {
+        discussionBaseInfo(/*this.rptNo*/ '96JGH0X0000000066').then(res => {
+          if(res.code == '200' && res.data) {
+            this.dissSave = true;
+            if(res.data.discType != '' && res.data.discType != null) {
+              this.discussionForm.discType = res.data.discType;
+            }
+            if(res.data.discSubType != '' && res.data.discSubType != null) {
+              this.discussionForm.discSubType = res.data.discSubType;
+            }
+            if(res.data.disView != '' && res.data.disView != null) {
+              this.discussionForm.disView = res.data.disView;
             }
           }
         });

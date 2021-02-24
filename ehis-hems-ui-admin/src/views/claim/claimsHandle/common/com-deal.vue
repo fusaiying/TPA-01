@@ -93,7 +93,7 @@
       <!-- 案件理算 -->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-18" class="batchInfo_class"
            style="margin-top: 10px;">
-        <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"
+        <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"  @refresh-item="refreshList"
                         :node="querys.node"/>
       </div>
       <!--赔案备注-->
@@ -112,7 +112,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion ref="discussion" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
@@ -492,6 +492,8 @@
           })
         } else if (item === 'calculate') {
           this.$refs.caseCalculate.getDataCase()
+        }else if (item === 'discussion') {
+          this.$refs.discussion.getCalInfo()
         }
       },
       changeSaveFlag() {

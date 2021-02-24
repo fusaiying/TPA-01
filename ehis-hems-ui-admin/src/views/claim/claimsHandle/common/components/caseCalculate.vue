@@ -389,6 +389,7 @@
                       showClose: true
                     })
                   }
+                  this.$emit("refresh-item", 'discussion')
                   let data = {
                     rptNo: this.fixInfo.rptNo,
                   }

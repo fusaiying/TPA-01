@@ -77,7 +77,13 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processingList")
     public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
-        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+            claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        }else {
+            claimCaseDTO.setOrderByColumn("rpt_no");
+            claimCaseDTO.setIsAsc("desc");
+        }
+
         startPage(claimCaseDTO);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectProcessingClaimCaseList(claimCaseDTO);
         return getDataTable(processingCaseVos);
@@ -89,7 +95,13 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processedList")
     public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
-        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+            claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        }else {
+            claimCaseDTO.setOrderByColumn("rpt_no");
+            claimCaseDTO.setIsAsc("desc");
+        }
+
         startPage(claimCaseDTO);
         List<ClaimCase> list = claimCaseService.selectProcessedClaimCaseList(claimCaseDTO);
         return getDataTable(list);
@@ -101,7 +113,13 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/suspensionList")
     public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
-        claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+            claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
+        }else {
+            claimCaseDTO.setOrderByColumn("rpt_no");
+            claimCaseDTO.setIsAsc("desc");
+        }
+
         startPage(claimCaseDTO);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
         return getDataTable(processingCaseVos);

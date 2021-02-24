@@ -9,10 +9,14 @@ import com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseCalService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,6 +31,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     @Autowired
     private ClaimCaseCalMapper claimCaseCalMapper;
 
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
     /**
      * 查询案件赔付信息
      * 
@@ -58,8 +64,71 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
      */
     @Override
     public CalConclusionVo selectClaimCaseCalInformation(String rptNo) {
-        //需要判断，是否申诉案件；若是，则需计算差额——暂未实现
-        return claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
+
+        CalConclusionVo calConclusionVo = claimCaseCalMapper.selectClaimCaseCalInformation(rptNo);
+        if(null != calConclusionVo) {
+            // TODO: 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
+            if(StringUtils.isNotBlank(calConclusionVo.getHospitalCode())) {
+                BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+                baseProviderSettle.setProviderCode(calConclusionVo.getHospitalCode());
+                if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+                    List<BaseProviderSettle> settleList = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+                    if(!settleList.isEmpty()) {
+                        String claimFlag = settleList.get(0).getClaimFlag();
+                        calConclusionVo.setClaimFlag(claimFlag);
+
+                        // TODO: 需要判断，是否申诉案件；若是 计算 本次支付差额
+                        if(calConclusionVo.getIsAppeal().equals("01")) {
+                            /***
+                             * 本次支付差额
+                             * 1、当前案件为申诉案件时显示该字段；
+                             * 2、本次支付差额（人民币）=本次赔付金额（非全赔）/折后金额（全赔）-申诉原案件赔付金额/折后金额；
+                             * 3、本次支付差额（外币）=本次外币给付金额-申诉原案件外币给付金额；
+                             * 4、若本次支付差额为负值则显示负号，代表需要收费
+                             * 5、显示格式为金额+币种
+                             */
+//                        BigDecimal payAmount = calConclusionVo.getPayAmount(); // 赔付金额
+//                        BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+                        }
+
+                        /**
+                         * 外币给付金额
+                         * 1、非全赔医院：根据账单币种及汇率对赔付金额进行汇率转换
+                         * 2、全赔医院：根据账单币种及汇率对折后金额进行汇率转换
+                         * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
+                         * 外币给付金额：900CNY/0.9=1000HKD
+                         */
+                        BigDecimal exchangeRate = calConclusionVo.getExchangeRate();
+                        BigDecimal payAmount = calConclusionVo.getPayAmount();
+
+                        BigDecimal billAmount = calConclusionVo.getSumBillAmount();
+                        BigDecimal discountAmount = calConclusionVo.getSumHosDiscountAmount();// 折扣金额
+
+                        if(exchangeRate != null) {
+                            //01-非全赔
+                            if("01".equals(claimFlag)) {
+                                if(payAmount != null) {
+                                    BigDecimal payAmountForeign = payAmount.divide(exchangeRate,20,BigDecimal.ROUND_HALF_UP);
+                                    calConclusionVo.setPayAmountForeign(payAmountForeign);
+
+                                }
+                            }
+                            //02-全赔
+                            if("02".equals(claimFlag)) {
+                                if(billAmount != null && discountAmount != null) {
+                                    BigDecimal subtractVal = billAmount.subtract(discountAmount);
+                                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate,20,BigDecimal.ROUND_HALF_UP);
+                                    calConclusionVo.setPayAmountForeign(payAmountForeign);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return calConclusionVo;
     }
 
     /**

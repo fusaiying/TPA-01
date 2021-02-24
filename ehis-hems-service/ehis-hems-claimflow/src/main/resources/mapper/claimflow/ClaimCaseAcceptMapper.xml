@@ -30,10 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="acceptId"    column="accept_id"    />
+        <result property="customerApplicationDate"    column="customer_application_date"    />
     </resultMap>
 
     <sql id="selectClaimCaseAcceptVo">
-        select accept_id,rpt_no, claim_amount, acc_date, acc_type, curr_situation, first_ser_illness_date, death_date, disability_date, pre_auth_flag, pre_auth_item, pre_auth_no, material_complete_date, receipt_date, pri_reason, acc_province, acc_city, acc_district, acc_address, acc_describe, status, create_by, create_time, update_by, update_time from claim_case_accept
+        select customer_application_date,accept_id,rpt_no, claim_amount, acc_date, acc_type, curr_situation, first_ser_illness_date, death_date, disability_date, pre_auth_flag, pre_auth_item, pre_auth_no, material_complete_date, receipt_date, pri_reason, acc_province, acc_city, acc_district, acc_address, acc_describe, status, create_by, create_time, update_by, update_time from claim_case_accept
     </sql>
 
     <select id="selectClaimCaseAcceptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseAccept" resultMap="ClaimCaseAcceptResult">
@@ -98,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="customerApplicationDate != null">customer_application_date,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="rptNo != null">#{rptNo},</if>
@@ -124,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="customerApplicationDate != null">#{customerApplicationDate},</if>
          </trim>
     </insert>
 

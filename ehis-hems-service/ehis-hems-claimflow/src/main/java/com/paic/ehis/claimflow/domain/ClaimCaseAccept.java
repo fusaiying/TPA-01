@@ -146,6 +146,21 @@ public class ClaimCaseAccept extends BaseEntity {
     @Excel(name = "数据状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
+    /**
+     * 客户申请日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "出险日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date customerApplicationDate;
+
+    public Date getCustomerApplicationDate() {
+        return customerApplicationDate;
+    }
+
+    public void setCustomerApplicationDate(Date customerApplicationDate) {
+        this.customerApplicationDate = customerApplicationDate;
+    }
+
     public void setRptNo(String rptNo) {
         this.rptNo = rptNo;
     }
@@ -342,6 +357,7 @@ public class ClaimCaseAccept extends BaseEntity {
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
                 .append("acceptId", getAcceptId())
+                .append("customerApplicationDate", getCustomerApplicationDate())
                 .toString();
     }
 }

@@ -245,8 +245,15 @@ FROM
         where rpt_no = #{rptNo} and status='Y'
     </select>
     <select id="selectRptNo" parameterType="String" resultMap="ClaimCaseInsuredResult">
-        select cci.rpt_no,cci.name, cc.case_status from  claim_case_insured cci
-         left join claim_case cc   on cc.rpt_no=cci.rpt_no
-        where cc.batch_no= #{batchNo} order by  cci.rpt_no  asc
+        SELECT
+            cc.rpt_no,
+            (select cci. NAME from claim_case_insured cci where cc.rpt_no=cci.rpt_no) name,
+            cc.case_status
+        FROM
+            claim_case cc
+        WHERE
+            cc.batch_no = #{batchNo}
+        ORDER BY
+            cc.rpt_no ASC
     </select>
 </mapper>

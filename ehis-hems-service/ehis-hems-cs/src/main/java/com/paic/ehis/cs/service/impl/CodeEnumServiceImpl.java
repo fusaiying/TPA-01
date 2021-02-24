@@ -56,18 +56,19 @@ public class CodeEnumServiceImpl implements ICodeEnumService
         //库里的code值
         List codeEnum2 =codeEnumMapper.selectComplaintBusiness(codeEnum);
         for (int i=0;i<list.size()-1;i++){
-            if (codeEnum1.contains(list.get(i).getComplaintBusinessCode())){
-                if (codeEnum1.contains(list.get(i).getComplaintBusinessCode())){
+            if (codeEnum2.contains(list.get(i).getInsuranceSourceCode())){
+                if (codeEnum1.contains(list.get(i).getInsuranceSourceCode())){
                     list1.add(list.get(i));
                 }else {
                     list2.add(list.get(i));
                 }
-
             }
         }
         codeEnumVoMapper.updateCodeEnumInfo(list1);
         codeEnumVoMapper.insertCodeEnumInfo(list2);
-        return list;
+        CodeEnumDTO codeEnumDTO=new CodeEnumDTO();
+        codeEnumDTO.setComplaintBusinessType("cs_complaint_business_item");
+        return codeEnumVoMapper.selectCodeEnumVoList(codeEnumDTO);
     }
 
     public List<CodeEnumVo> selectCodeEnumVo(CodeEnumDTO codeEnumDTO){

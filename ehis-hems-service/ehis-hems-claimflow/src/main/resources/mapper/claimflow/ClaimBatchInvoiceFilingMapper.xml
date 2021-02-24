@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invoiceBoxNo != null  and invoiceBoxNo != ''"> and cbii.invoice_box_no = #{invoiceBoxNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>
-            <if test="rptNo != null  and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
+            <if test="rptNo != null  and rptNo != ''"> and cb.batch_no = (select batch_no from claim_case where rpt_no  = #{rptNo} )</if>
             <if test="billrecevieflag != null  and billrecevieflag != ''"> and cbii.is_filing = #{billrecevieflag}</if>
     </select>
 

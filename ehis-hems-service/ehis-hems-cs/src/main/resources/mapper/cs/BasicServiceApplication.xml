@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.BasicServiceApplicationMapper">
+
+
+    <insert id="insertAcceptDetialInfoTable" >
+        insert into accept_detail_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelCode != null">channel_code,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="callRelationBy != null">call_relation_by,</if>
+            <if test="priorityLevel != null">priority_level,</if>
+            <if test="contactsRelationBy != null">contacts_relation_by,</if>
+            <if test="callCenterId != null">call_center_id,</if>
+            <if test="email != null">email,</if>
+            <if test="content != null">content,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="prop2 != null">prop2,</if>
+            <if test="prop7 != null">prop7,</if>
+            <if test="prop8 != null">prop8,</if>
+            <if test="prop10 != null">prop10,</if>
+            <if test="prop11 != null">prop11,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelCode != null">#{channelCode},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="callRelationBy != null">#{callRelationBy},</if>
+            <if test="priorityLevel != null">#{priorityLevel},</if>
+            <if test="contactsRelationBy != null">#{contactsRelationBy},</if>
+            <if test="callCenterId != null">#{callCenterId},</if>
+            <if test="email != null">#{email},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="prop2 != null">#{prop2},</if>
+            <if test="prop7 != null">#{prop7},</if>
+            <if test="prop8 != null">#{prop8},</if>
+            <if test="prop10 != null">#{prop10},</if>
+            <if test="prop11 != null">#{prop11},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertPersonInfoTable">
+        insert into person_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personId != null">person_id,</if>
+            <if test="name != null">name,</if>
+            <if test="sex != null">sex,</if>
+            <if test="language != null">language,</if>
+            <if test="email != null">email,</if>
+            <if test="mobilePhone != null">mobile_phone,</if>
+            <if test="homePhone != null">home_phone,</if>
+            <if test="identity != null">identity,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">#{personId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="language != null">#{language},</if>
+            <if test="email != null">#{email},</if>
+            <if test="mobilePhone != null">#{mobilePhone},</if>
+            <if test="homePhone != null">#{homePhone},</if>
+            <if test="identity != null">#{identity},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertWorkOrderAcceptTable">
+        insert into work_order_accept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="acceptBy != null">accept_by,</if>
+            <if test="businessType != null">business_type,</if>
+            <if test="acceptTime != null">accept_time,</if>
+            <if test="policyItemNo != null">policy_item_no,</if>
+            <if test="insuredNo != null">insured_no,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="acceptBy != null">#{acceptBy},</if>
+            <if test="businessType != null">#{businessType},</if>
+            <if test="acceptTime != null">#{acceptTime},</if>
+            <if test="policyItemNo != null">#{policyItemNo},</if>
+            <if test="insuredNo != null">#{insuredNo},</if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -257,6 +257,7 @@ public class ClaimCaseController extends BaseController {
         return AjaxResult.success(claimCaseService.updateCaseAndRecordInfoSuspend(claimCaseShuntClass));
     }
 
+
     /**
      * 撤件弹框确认按钮
      * 修改案件信息

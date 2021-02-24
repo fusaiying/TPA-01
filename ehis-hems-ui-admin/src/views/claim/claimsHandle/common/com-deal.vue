@@ -625,7 +625,9 @@
             if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
               addInsuredAndPolicy(insuredInfoData)
               let data = {
-                rptNo: this.querys.rptNo
+                claimCase:{rptNo: this.querys.rptNo},
+                insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+                name: this.$refs.insuredForm.baseForm.name//被保人姓名
               }
               editCaseAndRecordInfoSuspend(data).then(res => {
                 if (res != null && res.code === 200) {

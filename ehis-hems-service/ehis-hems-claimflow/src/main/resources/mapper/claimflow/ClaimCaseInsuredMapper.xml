@@ -247,7 +247,7 @@ FROM
     <select id="selectRptNo" parameterType="String" resultMap="ClaimCaseInsuredResult">
         SELECT
             cc.rpt_no,
-            (select cci. NAME from claim_case_insured cci where cc.rpt_no=cci.rpt_no) name,
+            (select cci. NAME from claim_case_insured cci where cc.rpt_no=cci.rpt_no limit 1) name,
             cc.case_status
         FROM
             claim_case cc

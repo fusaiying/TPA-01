@@ -129,9 +129,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-        if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
-                || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
-                || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
+        if (StringUtils.isNull(batchDTO.getSubmitstartdate()) && StringUtils.isNull(batchDTO.getOrgancode())
+                && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
+                && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
             Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);

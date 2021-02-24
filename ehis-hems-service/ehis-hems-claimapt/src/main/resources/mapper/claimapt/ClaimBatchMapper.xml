@@ -132,6 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.organ_code,
         cb.currency,
         cb.cont_type,
+        cb.update_by,
+        cb.update_time,
         cb.batch_status,
         record.create_by,
         record.create_time,
@@ -217,7 +219,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time

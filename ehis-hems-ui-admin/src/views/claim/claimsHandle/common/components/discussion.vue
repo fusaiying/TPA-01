@@ -811,7 +811,7 @@
         });
       },
       getDiscussionInfo() {
-        discussionBaseInfo(/*this.rptNo*/ '96JGH0X0000000066').then(res => {
+        discussionBaseInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {

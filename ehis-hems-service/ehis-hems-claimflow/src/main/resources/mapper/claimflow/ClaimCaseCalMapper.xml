@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.pay_amount,
         ccc.exchange_rate,
         ccc.pay_amount_foreign,
-        ccc.pay_conclusion,
+      --   ccc.pay_conclusion,
         ccc.refused_reason,
         ccc.remark,
         ccc.claim_check,
@@ -104,7 +104,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insured.insured_no,
         bill.sumBillAmount,
         bill.sumHosDiscountAmount,
-        (select hospital_code from claim_batch where batch_no = cc.batch_no) hospital_code
+        (select hospital_code from claim_batch where batch_no = cc.batch_no) hospital_code,
+        ifnull(ccc.pay_conclusion,(
+        case when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'
+        ) > 0 then '03'
+        when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '04') > 0
+        then '04'
+        when (select count(1) from (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' GROUP BY pay_conclusion) t
+        ) = 1 then  (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y')
+
+        when (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y') = (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' and pay_conclusion in ('05','10'))
+        then '05'
+        else '02'
+        end
+        )) pay_conclusion
         FROM
         claim_case_cal ccc
         left join claim_case cc on cc.rpt_no=ccc.rpt_no

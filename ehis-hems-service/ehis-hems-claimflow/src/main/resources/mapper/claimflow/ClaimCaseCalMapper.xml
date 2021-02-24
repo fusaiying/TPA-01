@@ -43,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payAmount"    column="pay_amount"    />
         <result property="sumBillAmount"    column="sumBillAmount"    />
         <result property="sumHosDiscountAmount"    column="sumHosDiscountAmount"    />
+        <result property="hospitalCode"    column="hospital_code"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
@@ -102,7 +103,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cc.is_appeal,
         insured.insured_no,
         bill.sumBillAmount,
-        bill.sumHosDiscountAmount
+        bill.sumHosDiscountAmount,
+        (select hospital_code from claim_batch where batch_no = cc.batch_no) hospital_code
         FROM
         claim_case_cal ccc
         left join claim_case cc on cc.rpt_no=ccc.rpt_no

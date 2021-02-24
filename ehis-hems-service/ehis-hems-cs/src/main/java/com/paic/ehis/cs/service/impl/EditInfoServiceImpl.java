@@ -216,6 +216,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         flowLogMapper.insertFlowLog(flowLog);
 
+        //将主表状态改为已取消
         complaintAcceptVo.setStatus("05");
         return complaintAcceptVoMapper.updateReservedCancelStatus(complaintAcceptVo.getWorkOrderNo());
     }

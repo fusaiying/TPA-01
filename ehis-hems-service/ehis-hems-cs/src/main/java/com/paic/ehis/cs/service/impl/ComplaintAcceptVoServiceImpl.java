@@ -127,10 +127,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setChannelCode(complaintAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(complaintAcceptVo.getItemCode());
         acceptDetailInfo.setCallPersonId(complaintAcceptVo.getCallPersonId());
-        acceptDetailInfo.setCallRelationBy(complaintAcceptVo.getCallRelationBy());
         acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
         acceptDetailInfo.setContactsPersonId(complaintAcceptVo.getContactsPersonId());
-        acceptDetailInfo.setContactsRelationBy(complaintAcceptVo.getContactsRelationBy());
+        acceptDetailInfo.setComplaintPersonId(complaintAcceptVo.getComplaintPersonId());
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setStatus(complaintAcceptVo.getStatus());
@@ -153,6 +152,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         //插入来电人
         personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
+        personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
@@ -160,23 +160,26 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complaintAcceptVoMapper.insertPersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
-        personInfo2.setSex(complaintAcceptVo.getContactsSex());
-        personInfo2.setName(complaintAcceptVo.getContactsName());
+        personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
+        personInfo2.setName(complaintAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        //personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        personInfo2.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo2);
         //插入投诉人
-        personInfo3.setPersonId(complaintAcceptVo.getCallPersonId());
-        personInfo2.setSex(complaintAcceptVo.getContactsSex());
-        personInfo2.setName(complaintAcceptVo.getContactsName());
-        personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
-        personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
+        personInfo3.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        personInfo3.setSex(complaintAcceptVo.getComplainantPerson().getSex());
+        personInfo3.setName(complaintAcceptVo.getComplainantPerson().getName());
+        personInfo3.setLanguage(complaintAcceptVo.getContactsLanguage());
+        personInfo3.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
+       // personInfo3.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
+      //  personInfo3.setWorkPhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
         personInfo3.setCreatedBy(SecurityUtils.getUsername());
         personInfo3.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo3.setUpdatedBy(SecurityUtils.getUsername());
@@ -580,14 +583,5 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         }
     }
 
-    /**
-     * 投诉页面获取处理
-     * @param workOrderNo
-     * @return
-     */
-    @Override
-    public int updateComplaintStatus(String workOrderNo) {
-        return complaintAcceptVoMapper.updateComplaintStatus(workOrderNo);
-    }
 
 }

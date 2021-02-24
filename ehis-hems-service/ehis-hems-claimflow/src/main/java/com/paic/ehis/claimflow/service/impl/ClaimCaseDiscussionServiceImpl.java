@@ -296,7 +296,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     //将未处理改为已处理
     @Override
     public int updatecasediscussionStatus(String repNo) {
-        return claimCaseMapper.updatecaseStatus(repNo);
+        return claimCaseDiscussionMapper.updatecasediscussionStatus(repNo);
     }
 
     /*查询基础信息表*/

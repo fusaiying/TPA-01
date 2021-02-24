@@ -37,9 +37,6 @@
             <span class="info_span to_right">交单来源：</span>
             <span class="info_span">{{ getDeliverySourceName(baseInfo.source) }}  </span>
           </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">事故类型：</span><span class="info_span">{{ baseInfo.accType }}</span>
-          </el-col>
        </el-row>
       </form>
     </el-card>

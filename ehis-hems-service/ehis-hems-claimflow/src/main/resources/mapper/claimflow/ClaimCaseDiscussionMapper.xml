@@ -36,6 +36,8 @@
         <result property="accDate"    column="acc_date"   />
         <result property="accType"    column="acc_type"    />
         <result property="sex"    column="sex"    />
+        <result property="discSubType"    column="disc_sub_type"    />
+        <result property="disView"    column="dis_view"    />
     </resultMap>
 
     <sql id="selectClaimCaseDiscussionVo">
@@ -223,7 +225,10 @@
             claim_case_insured.sex, /*性别*/
             claim_case_accept.acc_date,/*出险日期*/
             claim_batch.source,/*交单来源*/
-            claim_case_accept.acc_type/*事故类型*/
+            claim_case_accept.acc_type, /*事故类型*/
+            claim_case_discussion.disc_type,
+            claim_case_discussion.disc_sub_type, /**协谈系类*/
+            claim_case_discussion.dis_view /**转出意见*/
         from
             claim_case_discussion,
             claim_batch,

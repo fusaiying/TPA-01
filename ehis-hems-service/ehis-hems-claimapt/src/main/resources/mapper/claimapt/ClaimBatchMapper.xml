@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join claim_batch_record record
         on cb.batch_no=record.batch_no and record.operation='04' and record.status='Y'
         <where>
-            <if test="batchno != null  and batchno != ''"> and batch_no = #{batchno}</if>
+            <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
             <if test="claimtype != null  and claimtype != ''"> and claim_type = #{claimtype}</if>
             <if test="hospitalname != null  and hospitalname != ''"> and hospital_code in (
                 SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')

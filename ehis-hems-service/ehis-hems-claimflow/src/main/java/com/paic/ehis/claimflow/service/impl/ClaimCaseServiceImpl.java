@@ -1113,6 +1113,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseInvestigationMapper.updateClaimCaseInvestigation(caseInvestigation);
 
         ClaimCase claimCase = new ClaimCase();
+        claimCase.setRptNo(caseInvestigation.getRptNo());
         claimCase.setCaseStatus(ClaimStatus.CASESURVEY.getCode());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());

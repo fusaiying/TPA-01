@@ -230,10 +230,10 @@
             callback(new Error("最小允许录入0"));
           } else if (!regx.test(value)) {
             callback(new Error("请保留两位小数"));
-          } else if (value>(parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount))){
+          } else if (value>(parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount))){
             callback(new Error("录入金额有误"));
           }else {
-            this.baseForm.caseData[index].refusedAmount=parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount)-parseFloat(this.baseForm.caseData[index].payAmount)
+            this.caseForm.caseData[index].refusedAmount=parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount)-parseFloat(this.caseForm.caseData[index].payAmount)
             callback();
           }
         } else {
@@ -245,9 +245,9 @@
         if (value) {
           callback();
         } else {
-          if (this.baseForm.caseData[index].payAmount==0 && this.baseForm.caseData[index].calAmount==0){
+          if (this.caseForm.caseData[index].payAmount==0 && this.caseForm.caseData[index].calAmount==0){
             callback();
-          }else if (this.baseForm.caseData[index].payAmount!=this.baseForm.caseData[index].calAmount){
+          }else if (this.caseForm.caseData[index].payAmount!=this.caseForm.caseData[index].calAmount){
             callback(new Error("请录入备注"));
           }else {
             callback();

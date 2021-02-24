@@ -564,6 +564,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -605,6 +610,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -635,6 +645,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -1202,13 +1217,12 @@
       },
       getClaimmaterials(value) {
         let material = ''
-        if (value !== null && value !== undefined && value !== '') {
-          let list = value.split(',')
-          for (let i = 0; i < list.length; i++) {
-            if (i === list.length - 1) {
-              material = material + this.selectDictLabel(this.claim_materialOptions, list[i])
+        if (value !== null && value.length>0) {
+          for (let i = 0; i < value.length; i++) {
+            if (i === value.length - 1) {
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
             } else {
-              material = material + this.selectDictLabel(this.claim_materialOptions, list[i]) + '，'
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i]) + '，'
             }
           }
         }

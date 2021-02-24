@@ -79,7 +79,7 @@
         </span>
       </div>
 
-      <el-form ref="clussionForm" :model="clussionForm" style="padding-bottom: 30px;margin-left: 2%" label-width="130px">
+      <el-form ref="clussionForm" :model="clussionForm" style="padding-bottom: 30px;margin-left: 2%" label-width="130px"  :rules="rules">
         <el-row>
           <el-col :span="8">
             <el-form-item label="审核转出意见：" prop="bussinessStatus">
@@ -90,7 +90,7 @@
 
         <el-row >
           <el-col :span="8">
-            <el-form-item label="协谈处理结论：" prop="bussinessStatus">
+            <el-form-item label="协谈处理结论：" prop="conclusion">
               <el-select v-model="clussionForm.conclusion" class="item-width" size="mini" placeholder="请选择">
                 <el-option v-for="item in clusionSelect" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
               </el-select>
@@ -100,7 +100,7 @@
 
         <el-row >
           <el-col :span="8">
-            <el-form-item label="协谈意见：" :style="{width:'100%'}" :class="['long-input']" prop="remark" maxlength="2000" >
+            <el-form-item label="协谈意见：" :style="{width:'100%'}" :class="['long-input']" prop="conclusionView" maxlength="2000" >
               <el-input maxlength="2000" type="textarea" :rows="3"  v-model="clussionForm.conclusionView"  clearable/>
             </el-form-item>
           </el-col>
@@ -143,6 +143,11 @@
         claimStatusSelect:[],
         gender:[],
 
+        rules: {
+          conclusion: {trigger: ['change'], required: true, message: '处理结论必填'},
+          conclusionView: {trigger: ['change'], required: true, message: '协谈意见必填'}
+
+        },
       }
     },
 
@@ -178,33 +183,37 @@
     },
       methods: {
         dealFun(){
-          const param = {};
-          param.rptNo = this.rptNo;
-          param.discId = this.discId;
-          param.conclusion = this.clussionForm.conclusion;
-          param.conclusionView = this.clussionForm.conclusionView;
-          param.isHistory = 'Y';
-          let vm = this;
-          this.$confirm('确认提交本次协谈处理?', "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }).then(function () {
-            updateDiss(param).then(res => {
-              if(res.code == '200') {
-                vm.dealBtn = false;
-                vm.$message({
-                  message: '处理成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
+          this.$refs.clussionForm.validate((valid) => {
+            if (valid) {
+              const param = {};
+              param.rptNo = this.rptNo;
+              param.discId = this.discId;
+              param.conclusion = this.clussionForm.conclusion;
+              param.conclusionView = this.clussionForm.conclusionView;
+              param.isHistory = 'Y';
+              let vm = this;
+              this.$confirm('确认提交本次协谈处理?', "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              }).then(function () {
+                updateDiss(param).then(res => {
+                  if(res.code == '200') {
+                    vm.dealBtn = false;
+                    vm.$message({
+                      message: '处理成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    });
+                  }
                 });
-              }
-            });
-          }).then(() => {
-          }).catch(function (error) {
-            console.log(error)
-          });
+              }).then(() => {
+              }).catch(function (error) {
+                console.log(error)
+              });
+            }
+          })
         },
         getBaseInfo(){
           baseInfo(this.rptNo).then(res => {

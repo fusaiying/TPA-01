@@ -60,6 +60,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="billType"    column="bill_type"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimBill" id="ClaimBillResult">
+        <result property="billAmt"    column="bill_amount"    />
+        <result property="reasonableAmt"    column="reasonable_amt"    />
+        <result property="ownAmt"    column="self_amount"    />
+        <result property="subownAmt"    column="part_self_amount"    />
+        <result property="totalImmoAmt"    column="unable_amount"    />
+        <result property="preAmt"    column="pre_amt"    />
+        <result property="seqno"    column="bill_id"    />
+        <result property="billno"    column="bill_no"    />
+        <result property="treatDate"    column="treatment_start_date"    />
+        <result property="therapyType"    column="treatment_type"    />
+        <result property="hospitalName"    column="hospital_code"    />
+        <result property="diseaseDessc"    column="clinical_diagnosis"    />
+    </resultMap>
+
     <sql id="selectClaimCaseBillVo">
         SELECT
             bill_id,
@@ -101,6 +116,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             claim_case_bill
     </sql>
+
+    <select id="selectClaimBillList" parameterType="String" resultMap="ClaimBillResult">
+    SELECT
+	bill_amount,
+	bill_amount - unable_amount reasonable_amt,
+	self_amount,
+	part_self_amount,
+	unable_amount,
+	ss_advance_payment+tp_advance_payment+is_share_ap pre_amt,
+	bill_id,
+	bill_no,
+	treatment_start_date,
+	treatment_type,
+	hospital_code,
+	clinical_diagnosis
+FROM
+	claim_case_bill
+	WHERE status='Y' and rpt_no=#{rptNo}
+    </select>
 
     <select id="selectClaimCaseBillList" parameterType="ClaimCaseBill" resultMap="ClaimCaseBillResult">
         <include refid="selectClaimCaseBillVo"/>

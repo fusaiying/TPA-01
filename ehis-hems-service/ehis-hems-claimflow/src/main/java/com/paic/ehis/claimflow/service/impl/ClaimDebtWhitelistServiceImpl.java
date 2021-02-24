@@ -10,6 +10,8 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +39,7 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     @Override
     public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist)
     {
-
-
+        List<ClaimDebtWhitelist> claimDebtWhitelists = new ArrayList<>();
         // 如果不为空  姓名  证件号
         if(StringUtils.isNotBlank(claimDebtWhitelist.getName()) || StringUtils.isNotBlank(claimDebtWhitelist.getIdNo())) {
             PolicyInsured policyInsured = new PolicyInsured();
@@ -51,9 +52,11 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
                     insurdNos[i] = policyInsuredList.get(i).getInsuredNo();
                 }
                 claimDebtWhitelist.setInsuredNos(insurdNos);
+            } else {
+                return claimDebtWhitelists;
             }
         }
-        List<ClaimDebtWhitelist> claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
+        claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
         for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
             String insuredNo = claimDebtWhitelist1.getInsuredNo();
             PolicyInsured policyInsured = new PolicyInsured();

@@ -368,7 +368,7 @@
            let flag=true
            let flag2=true
             this.caseForm.caseData.forEach(item=>{
-               if (item.payAmount!=item.calAmount && (item.remark!=null && item.remark!='' && item.remark!=undefined )){
+               if (item.payAmount!=item.calAmount && (item.remark==null || item.remark=='' || item.remark==undefined )){
                  flag=false
               }
               if (item.payConclusion==null || item.payConclusion=='' || item.payConclusion==undefined ){

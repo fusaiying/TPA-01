@@ -47,17 +47,24 @@
         default: false
       },
       fixInfo: Object,
+      preHistoryData : {
+        type: Array,
+        default: []
+      },
     },
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue;
         if(this.dialogVisable) {
-          this.getHistoryDisInfo();
+         // this.getHistoryDisInfo();
         }
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
         this.rptNo = this.fixInfoData.rptNo;
+      },
+      preHistoryData: function (newValue) {
+        this.HistoryData = newValue;
       },
     },
     data() {

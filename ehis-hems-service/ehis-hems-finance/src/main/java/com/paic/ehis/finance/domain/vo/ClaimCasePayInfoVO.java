@@ -23,6 +23,18 @@ public class ClaimCasePayInfoVO implements Serializable {
     /** 批次号 */
     private String batchNo;
 
+    /** 被保人客户号 */
+    private String insuredNo;
+    /** 交单来源/业务来源类型 */
+    private String source;
+    /* 部门 */
+    /** 交单机构编码/业务受理机构 */
+    private String organCode;
+    /** 险种代码 */
+    private String riskCode;
+    /** 机构代码 */
+
+
     /** 姓名 */
     @Excel(name = "姓名")
     private String name;

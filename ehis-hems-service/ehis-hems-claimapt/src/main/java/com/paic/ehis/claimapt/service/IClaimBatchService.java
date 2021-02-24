@@ -34,6 +34,14 @@ public interface IClaimBatchService
     public List<ClaimBatch> selectClaimBatchList(ClaimBatch claimBatch);
 
     /**
+     * 查询机构交单状态理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectPendingBatchList(BatchDTO batchDTO);
+
+    /**
      * 查询已退回理赔批次 列表
      *
      * @param batchDTO 理赔批次
@@ -47,6 +55,13 @@ public interface IClaimBatchService
      * @return 理赔批次 集合
      */
     public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO);
+    /**
+     * 导出查询已处理理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectExportDealWithBatchList(BatchDTO batchDTO);
     /**
      * 查询直结复核理赔批次公共池 列表
      *
@@ -148,4 +163,6 @@ public interface IClaimBatchService
      * @return 结果
      */
     public StandingAndBatck updateSysClaimBatchPresent(StandingAndBatck standingAndBatck);//
+
+
 }

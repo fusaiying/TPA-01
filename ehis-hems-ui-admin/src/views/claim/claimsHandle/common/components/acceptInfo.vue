@@ -24,9 +24,20 @@
             </el-checkbox-group>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!--<el-col :span="8">
           <el-form-item label="索赔金额：" prop="claimAmount">
             <el-input v-model="baseForm.claimAmount" class="item-width" clearable size="mini" placeholder="请输入"/>
+          </el-form-item>
+        </el-col>-->
+        <el-col :span="8">
+          <el-form-item label="客户申请日期：" prop="customerApplicationDate">
+            <el-date-picker
+              v-model="baseForm.customerApplicationDate"
+              class="item-width"
+              type="date"
+              clearable
+              placeholder="选择日期"
+              value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -40,7 +51,7 @@
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+      <!--  <el-col :span="8">
           <el-form-item v-if="firstSerIllnessDateShow" label="首次重疾确诊日期：" prop="firstSerIllnessDate">
             <el-date-picker
               v-model="baseForm.firstSerIllnessDate"
@@ -50,8 +61,8 @@
               placeholder="选择日期"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
+        </el-col>-->
+        <!--<el-col :span="8">
           <el-form-item label="出险类型：" prop="accType">
             <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
@@ -66,7 +77,7 @@
                          :value="option.dictValue"/>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col>-->
         <el-col :span="8">
           <el-form-item label="死亡时间：" prop="deathDate">
             <el-date-picker
@@ -216,7 +227,7 @@
     components: {},
     filters: {},
     data() {
-      const checkClaimAmount = (rule, value, callback) => {
+     /* const checkClaimAmount = (rule, value, callback) => {
         const regx = /^(\d+|\d+\.\d{1,2})$/
         if (value) {
           if (value < 0) {
@@ -235,7 +246,7 @@
         } else {
           callback();
         }
-      }
+      }*/
       const checkDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1
@@ -354,9 +365,9 @@
         collapsed: true,
         baseForm: {
           applyTypes: [],
-          claimAmount: undefined,
           rptNo: undefined,
           accDate: undefined,
+          customerApplicationDate: undefined,
           firstSerIllnessDate: undefined,
           accType: undefined,
           currSituation: undefined,
@@ -377,7 +388,6 @@
         regions: [],
         region: [],
         baseFormRule: {
-          claimAmount: [{validator: checkClaimAmount,  trigger: ['blur']}],
           applyTypes:[{required: true, message: '请选择申请原因', trigger: ['blur','change']}],
           accDate: [{validator: checkDate, required: true, trigger: ['blur','change']}],
           firstSerIllnessDate: [{validator: checkFirstSerIllnessDate, required: true, trigger: ['blur','change']}],
@@ -459,8 +469,8 @@
           applyTypes: this.baseForm.applyTypes,
           claimCaseAccept: {
             rptNo: this.fixInfo.rptNo,
-            claimAmount: this.baseForm.claimAmount,
             accDate: this.baseForm.accDate,
+            customerApplicationDate: this.baseForm.customerApplicationDate,
             firstSerIllnessDate: this.baseForm.firstSerIllnessDate,
             accType: this.baseForm.accType,
             currSituation: this.baseForm.currSituation,

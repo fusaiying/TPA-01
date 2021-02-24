@@ -186,6 +186,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where serial_no = #{serialNo}
     </update>
 
+    <update id="updateBaseContactsNew" parameterType="BaseContacts">
+        update base_contacts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
+            <if test="supplierType != null">supplier_type = #{supplierType},</if>
+            <if test="placeType != null">place_type = #{placeType},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="workingStart != null">working_start = #{workingStart},</if>
+            <if test="workingEnd != null">working_end = #{workingEnd},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
 
 
     <update id="updateBaseContactsStatus" parameterType="String" >
@@ -193,9 +217,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where status='Y'and supplier_code = #{supplierCode}
     </update>
 
-    <delete id="deleteBaseContactsById" parameterType="String">
-        delete from base_contacts_bak where serial_no = #{serialNo}
-    </delete>
+    <update id="deleteBaseContactsById" parameterType="String">
+        update  base_contacts_bak set status = 'N' where serial_no = #{serialNo}
+    </update>
+
+    <update id="deleteBaseContactsByIdNew" parameterType="String">
+        update  base_contacts set status = 'N' where serial_no = #{serialNo}
+    </update>
 
     <delete id="deleteBaseContactsByIds" parameterType="String">
         delete from base_contacts_bak where serial_no in

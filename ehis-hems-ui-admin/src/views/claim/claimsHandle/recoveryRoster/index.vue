@@ -64,10 +64,14 @@
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
             <el-table-column prop="name" label="被保人名称" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNoType" label="证件类型" width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="idType" label="证件类型" :formatter="getCardTypeName" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="idNo" label="证件号码" width="150%" align="center" show-overflow-tooltip />
             <el-table-column prop="sex" :formatter="getsexName" label="性别" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="birthday" label="出生日期"  width="150%" align="center" show-overflow-tooltip />
+            <el-table-column prop="birthday" label="出生日期"  width="150%" align="center" show-overflow-tooltip >
+              <template slot-scope="scope">
+                <span>{{ scope.row.birthday|changeDate }}</span>
+              </template>
+            </el-table-column>
 
             <el-table-column prop="level" :formatter="getLevelName" label="等级"  align="center" show-overflow-tooltip />
             <el-table-column prop="debtAmountUp" label="金额上限" align="center" show-overflow-tooltip />
@@ -274,7 +278,7 @@
               ysOrNo:[],
               custLevel:[],
               rgtSexs:[],
-
+              card_types: [],
             }
         },
       mounted(){
@@ -290,6 +294,10 @@
         this.getDicts("rgtSex").then(response => {
           this.rgtSexs = response.data;
         });
+        // card_type
+        this.getDicts("card_type").then(response => {
+          this.card_types = response.data;
+        });
       },
       computed: {
 
@@ -301,6 +309,9 @@
       methods: {
         getsexName(row,col) {
           return this.selectDictLabel(this.rgtSexs, row.sex)
+        },
+        getCardTypeName(row,col) {
+          return this.selectDictLabel(this.card_types, row.idType)
         },
         getLevelName(row,col) {
           return this.selectDictLabel(this.custLevel, row.level)
@@ -351,8 +362,8 @@
             level:this.form.level,
             debtAmountUp:this.form.debtAmountUp,
 
-            orderByColumn:'create_time',
-            isAsc:'desc'
+            // orderByColumn:'create_time',
+            // isAsc:'desc'
           };
 
           this.loading = true;
@@ -382,10 +393,8 @@
           this.recoveryForm.insuredNo =  row.insuredNo;
         },
         delFun(row) {
-
-          console.log(row.rptNo)
           const params = {
-            rptNo:row.rptNo
+            insuredNo:row.insuredNo
           };
           // 存在欠款 ？
           checkMoney(params).then(response => {

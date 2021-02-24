@@ -169,6 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="name"    column="name"    />
         <result property="riskName"    column="risk_name"    />
         <result property="validStartDate"    column="valid_start_date"    />
+        <result property="orgPolicyItemNo"    column="org_policy_item_no"    />
         <result property="validEndDate"    column="valid_end_date"    />
         <result property="policyRiskType"    column="policy_risk_type"    />
         <result property="policyStatus"    column="policy_status"    />
@@ -194,9 +195,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="planCode"    column="plan_code"    />
         <result property="insuredNo"    column="insured_no"    />
     </resultMap>
-    <select id="selectInsuredList" parameterType="com.paic.ehis.claimflow.domain.dto.PolicyDTO" resultMap="PolicyVo">
+    <select id="selectInsuredList" parameterType="String" resultMap="PolicyVo">
         select  insured_no,policy_no,policy_item_no,name,app_name,valid_start_date,valid_end_date,policy_risk_type,policy_status,special_agreement,company_name,
-                company_code,policy_type,plan_code,org_policy_no,policy_type,ss_flag,policy_manage_com
+                company_code,policy_type,plan_code,org_policy_no,policy_type,ss_flag,policy_manage_com,org_policy_item_no
         from policy_info
         where insured_no = #{insuredNo}  and status='Y'
     </select>
@@ -213,7 +214,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             on c.duty_code=cpdd.duty_code
                  inner join policy_info pi on pi.plan_code=cpdd.plan_code
         where c.risk_name = #{riskName}  and pi.insured_no=#{insuredNo}
-       <!-- <if test="insuredNo != null  and insuredNo != ''"> and pi.insured_no = #{insuredNo}</if>-->
     </select>
     
     <select id="selectPolicyRiskType"   parameterType="String" resultMap="PolicyVo">

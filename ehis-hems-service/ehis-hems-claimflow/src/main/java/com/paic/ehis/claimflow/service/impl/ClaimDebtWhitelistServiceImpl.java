@@ -1,13 +1,17 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
+import com.paic.ehis.claimflow.domain.PolicyInsured;
 import com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper;
+import com.paic.ehis.claimflow.mapper.PolicyInsuredMapper;
 import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,38 +27,51 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     @Autowired
     private ClaimDebtWhitelistMapper claimDebtWhitelistMapper;
 
-
-    /**
-     * 查询案件追讨白名单
-     * 
-     * @param debtWhitelistId 案件追讨白名单ID
-     * @return 案件追讨白名单
-     */
-    @Override
-    public ClaimDebtWhitelist selectClaimDebtWhitelistById(Long debtWhitelistId)
-    {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistById(debtWhitelistId);
-    }
+    @Autowired
+    PolicyInsuredMapper policyInsuredMapper;
 
     /**
      * 查询案件追讨白名单列表
-     * 
+     *
      * @param claimDebtWhitelist 案件追讨白名单
      * @return 案件追讨白名单
      */
     @Override
     public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList(ClaimDebtWhitelist claimDebtWhitelist)
     {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
-    }
+        List<ClaimDebtWhitelist> claimDebtWhitelists = new ArrayList<>();
+        // 如果不为空  姓名  证件号
+        if(StringUtils.isNotBlank(claimDebtWhitelist.getName()) || StringUtils.isNotBlank(claimDebtWhitelist.getIdNo())) {
+            PolicyInsured policyInsured = new PolicyInsured();
+            policyInsured.setIdNo(claimDebtWhitelist.getIdNo());
+            policyInsured.setName(claimDebtWhitelist.getName());
+            List<PolicyInsured> policyInsuredList = policyInsuredMapper.selectRecognizee(policyInsured);
+            if(!policyInsuredList.isEmpty()) {
+                String[] insurdNos = new String[policyInsuredList.size()];
+                for(int i=0 ;i<policyInsuredList.size(); i++) {
+                    insurdNos[i] = policyInsuredList.get(i).getInsuredNo();
+                }
+                claimDebtWhitelist.setInsuredNos(insurdNos);
+            } else {
+                return claimDebtWhitelists;
+            }
+        }
+        claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
+        for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
+            String insuredNo = claimDebtWhitelist1.getInsuredNo();
+            PolicyInsured policyInsured = new PolicyInsured();
+            policyInsured.setInsuredNo(insuredNo);
+            List<PolicyInsured> policyInsured1 = policyInsuredMapper.selectRecognizee(policyInsured);
+            for (PolicyInsured policyInfo : policyInsured1) {
+                claimDebtWhitelist1.setName(policyInfo.getName());
+                claimDebtWhitelist1.setIdType(policyInfo.getIdType());
+                claimDebtWhitelist1.setIdNo(policyInfo.getIdNo());
+                claimDebtWhitelist1.setSex(policyInfo.getSex());
+                claimDebtWhitelist1.setBirthday(policyInfo.getBirthday());
+            }
+        }
 
-    /**
-     * 白名单维护界面初始化或未录入任何查询条件，点击查询按钮时，默认查询状态不为失效，追缴通知为是的白名单信息
-     */
-    @Override
-    public List<ClaimDebtWhitelist> selectClaimDebtWhitelistList1(ClaimDebtWhitelist claimDebtWhitelist)
-    {
-        return claimDebtWhitelistMapper.selectClaimDebtWhitelistList1(claimDebtWhitelist);
+        return claimDebtWhitelists;
     }
 
     /**
@@ -120,10 +137,10 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
     }
 
     /**
-     *根据报案号查询欠款
+     *根据被保人客户号查询欠款
      */
     @Override
-    public ClaimDebtWhitelist selectResidualList(String rptNo) {
-        return claimDebtWhitelistMapper.selectResidualList(rptNo);
+    public ClaimDebtWhitelist selectResidualList(String insuredNo) {
+        return claimDebtWhitelistMapper.selectResidualList(insuredNo);
     }
 }

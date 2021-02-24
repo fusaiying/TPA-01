@@ -25,7 +25,7 @@ public interface ClaimCaseInvestigationMapper
      */
     public ClaimCaseInvestigation selectClaimCaseInvestigationById(String invNo);
     public ClaimCaseInvestigation selectClaimCaseInvestigationByNew(String rptNo);
-    public ClaimCaseInvestigation selectClaimCaseInvestigationByIdOne(String rptNo);
+    public List<ClaimCaseInvestigation> selectClaimCaseInvestigationByIdOne(String rptNo);
     public CaseInvestigationVO selectClaimCaseInvestigationByRptNo(String rptNo);
 
 

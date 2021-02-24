@@ -5,8 +5,6 @@ import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class ClaimCaseFilingDTO extends BaseEntity {
 
@@ -47,10 +45,10 @@ public class ClaimCaseFilingDTO extends BaseEntity {
     private String status;
 
     /** 创建日期起 */
-    private Date updateStartTime;
+    private String updateStartTime;
 
     /** 创建日期止 */
-    private Date updateEndTime;
+    private String updateEndTime;
 
 
 }

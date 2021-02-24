@@ -71,6 +71,33 @@ public class ClaimBatchController extends BaseController {
     }
 
     /**
+     * 查询待处理理赔批次 列表
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
+    @PostMapping("/pendingList")
+    public TableDataInfo PendingList(@RequestBody BatchDTO batchDTO)
+    {
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
+                case "batchno":
+                    batchDTO.setOrderByColumn("batch_no");
+                    break;
+                case "submitdate":
+                    batchDTO.setOrderByColumn("submit_date");
+                    break;
+                case "updateTime":
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
+            }
+        }else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
+        }
+        startPage(batchDTO);
+        List<BatchVo> list = claimBatchService.selectPendingBatchList(batchDTO);
+        return getDataTable(list);
+    }
+
+    /**
      * 查询已退回理赔批次 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
@@ -102,22 +129,7 @@ public class ClaimBatchController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/dealWithList")
     public TableDataInfo dealWithList(@RequestBody BatchDTO batchDTO) {
-        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
-            switch (batchDTO.getOrderByColumn()) {
-                case "batchno":
-                    batchDTO.setOrderByColumn("batch_no");
-                    break;
-                case "submitdate":
-                    batchDTO.setOrderByColumn("submit_date");
-                    break;
-                case "updateTime":
-                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
-            }
-        } else {
-            batchDTO.setIsAsc("desc");
-            batchDTO.setOrderByColumn("submit_date");
-        }
-        startPage(batchDTO);
+
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
         return getDataTable(list);
     }
@@ -163,7 +175,7 @@ public class ClaimBatchController extends BaseController {
 //        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
 //        batchDTO.setHospitalname(hospitalname);
         System.out.println("我叒导出已处理Excel了！！！");
-        List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
+        List<BatchVo> list = claimBatchService.selectExportDealWithBatchList(batchDTO);
         for (BatchVo batchVo : list) {
             batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
             batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
@@ -210,7 +222,7 @@ public class ClaimBatchController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/publicList")
     public TableDataInfo reviewPublicList(@RequestBody BatchDTO batchDTO) {
-        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+        /*if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
             switch (batchDTO.getOrderByColumn()) {
                 case "batchno":
                     batchDTO.setOrderByColumn("batch_no");
@@ -225,7 +237,7 @@ public class ClaimBatchController extends BaseController {
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-        startPage(batchDTO);
+        startPage(batchDTO);*/
         List<BatchVo> batchVoList = claimBatchService.selectReviewPublicList(batchDTO);
         return getDataTable(batchVoList);
     }
@@ -360,8 +372,8 @@ public class ClaimBatchController extends BaseController {
     }
 
     //根据证件类型和证件号去查被保人信息表policy_insured
-    @GetMapping(value = "/getInfoQueryTheHospital")
-    public AjaxResult getInfoQueryTheHospital(ClaimCaseStanding claimCaseStanding) {
+    @GetMapping(value = "/selectClaimCaseStandingByIdidType")
+    public AjaxResult selectClaimCaseStandingByIdidType(ClaimCaseStanding claimCaseStanding) {
 
         List<String> str=new ArrayList<>();
         //先查tpa--policy_insured

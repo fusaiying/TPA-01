@@ -1,6 +1,5 @@
 package com.paic.ehis.claimflow.service.impl;
 
-import com.paic.ehis.claimflow.domain.ClaimBatchInvoiceFiling;
 import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
@@ -15,13 +14,11 @@ import com.paic.ehis.claimflow.service.IClaimCaseFilingService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -85,6 +82,8 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         claimCaseFiling.setStatus("Y");
         claimCaseFiling.setCreateBy(username);
         claimCaseFiling.setCreateTime(nowDate);
+        claimCaseFiling.setUpdateTime(nowDate);
+        claimCaseFiling.setUpdateBy(username);
         return claimCaseFilingMapper.insertClaimCaseFiling(claimCaseFiling);
     }
 
@@ -98,6 +97,8 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     public int updateClaimCaseFiling(ClaimCaseFiling claimCaseFiling)
     {
         claimCaseFiling.setUpdateTime(DateUtils.getNowDate());
+        String username = SecurityUtils.getUsername();
+        claimCaseFiling.setUpdateBy(username);
         return claimCaseFilingMapper.updateClaimCaseFiling(claimCaseFiling);
     }
 
@@ -130,17 +131,17 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     public List<ClaimCaseFilingListVO> selectCaseClaimCaseFilingList(ClaimCaseFilingDTO claimCaseFilingDTO) {
 
         //默认展示当前登录机构最近一个月的归档数据,因为前端已经将时间设置为一个月前，进行传输，所以只需判断机构为空就查询当前登录机构，不为空则查询传输的数据
-        if(StringUtils.isEmpty(claimCaseFilingDTO.getDeptCode())
-                && StringUtils.isEmpty(claimCaseFilingDTO.getClaimType())
-                && StringUtils.isEmpty(claimCaseFilingDTO.getBatchNo())
-                && StringUtils.isEmpty(claimCaseFilingDTO.getRptNo())
-                && StringUtils.isEmpty(claimCaseFilingDTO.getCaseBoxNo())){
-
-            //获取用户的所属机构,设置当前登录机构
-            Long userId = SecurityUtils.getUserId();
-            SysUser sysUser = sysUserMapper.selectUserById(userId);
-            claimCaseFilingDTO.setDeptCode( sysUser.getDeptId().toString());
-        }
+//        if(StringUtils.isEmpty(claimCaseFilingDTO.getDeptCode())
+//                && StringUtils.isEmpty(claimCaseFilingDTO.getClaimType())
+//                && StringUtils.isEmpty(claimCaseFilingDTO.getBatchNo())
+//                && StringUtils.isEmpty(claimCaseFilingDTO.getRptNo())
+//                && StringUtils.isEmpty(claimCaseFilingDTO.getCaseBoxNo())){
+//
+//            //获取用户的所属机构,设置当前登录机构
+//            Long userId = SecurityUtils.getUserId();
+//            SysUser sysUser = sysUserMapper.selectUserById(userId);
+//            claimCaseFilingDTO.setDeptCode( sysUser.getDeptId().toString());
+//        }
         //查询出所有数据记录
         List<ClaimCaseFilingVO> claimCaseFilingVoS = claimCaseFilingMapper.selectCaseClaimCaseFilingList(claimCaseFilingDTO);
         List<ClaimCaseFilingListVO> list = new ArrayList<>();

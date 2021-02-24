@@ -19,6 +19,10 @@ import java.math.BigDecimal;
 public class CalConclusionVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
+    private String  claimFlag ;
+    private String hospitalCode;
+
     /** 赔付ID */
     private Long calId;
 

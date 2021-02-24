@@ -9,6 +9,13 @@ export function getHospitalInfo(data) {
   })
 }
 
+//# 老系统待受理案件数
+export function selectCoreCase() {
+  return request({
+    url: '/claimflow/core/selectCoreCase',
+    method: 'get',
+  })
+}
 //# 查询处理中受理案件信息 列表
 export function getBackList(query) {
   return request({

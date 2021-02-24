@@ -63,18 +63,17 @@ public interface IClaimCaseDiscussionService
      */
     public int deleteClaimCaseDiscussionByIds(Long[] discIds);
 
+
     /**
-     * 删除案件协谈信息信息
-     *
-     * @param discId 案件协谈信息ID
-     * @return 结果
+     * 查询案件未处理协谈工作池
      */
-    public int deleteClaimCaseDiscussionById(Long discId);
-
-    public int updatecasediscussionStatus(String repNo);
-
     List<ClaimCaseDiscussionVO> selectCaseDisListUnder(ClaimCaseDiscussionDTO claimCaseDiscussionDTO);
+
+    /**
+     * 查询案件已处理协谈工作池
+     */
     List<ClaimCaseDiscussionVO> selectCaseDisListOver(ClaimCaseDiscussionDTO claimCaseDiscussionDTO);
-/*查询基本信息表*/
+
+    /*查询基本信息表*/
     public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo);
 }

@@ -319,16 +319,18 @@
       listExport() {
         this.searchForm.pageNum = 1
         this.searchForm.pageSize = 10
+        this.searchForm.receiveStartDate=this.searchForm.receiveDate ? this.searchForm.receiveDate[0] : ''
+        this.searchForm.receiveEndDate=this.searchForm.receiveDate ? this.searchForm.receiveDate[1] : ''
         listNew(this.searchForm).then(res => {
 
           if (res.rows.length > 0) {
             this.isListExport = true
-            let subDate = ''
+           /* let subDate = ''
             if (this.searchForm.receiveDate.length > 0) {
               subDate = '&receiveStartDate=' + this.searchForm.receiveDate[0] + '&receiveEndDate=' + this.searchForm.receiveDate[1]
-            }
-            this.download('claimmgt/standing/exportNew' + '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
-              + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate, {
+            }*/
+            this.download('claimmgt/standing/exportNew' /*+ '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
+              + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate*/, {
               ...this.searchForm
             }, `FYX_${new Date().getTime()}.xlsx`)
           } else {

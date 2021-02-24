@@ -120,7 +120,7 @@
           <template slot-scope="scope">
             <el-link style="font-size: 11px" v-if="scope.row.remark" type="primary"
                      @click="changeRemark(scope.$index,scope.row.remark)">{{ scope.row.remark }}
-            </el-link>
+              </el-link>
             <el-link style="font-size: 11px" type="primary" v-else @click="changeRemark(scope.$index)">请点击输入备注</el-link>
           </template>
         </el-table-column>
@@ -220,7 +220,40 @@
       },
 
     },
+
     data() {
+      const checkPayAmount = (rule, value, callback) => {
+        const index = rule.field.replace('caseData.', '').replace('.payAmount', '')
+        const regx = /^(\d+|\d+\.\d{1,2})$/
+        if (value) {
+          if (value < 0) {
+            callback(new Error("最小允许录入0"));
+          } else if (!regx.test(value)) {
+            callback(new Error("请保留两位小数"));
+          } else if (value>(parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount))){
+            callback(new Error("录入金额有误"));
+          }else {
+            this.caseForm.caseData[index].refusedAmount=parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount)-parseFloat(this.caseForm.caseData[index].payAmount)
+            callback();
+          }
+        } else {
+          callback(new Error("赔付金额不能为空"));
+        }
+      }
+      const checkRemark = (rule, value, callback) => {
+        const index = rule.field.replace('caseData.', '').replace('.remark', '')
+        if (value) {
+          callback();
+        } else {
+          if (this.caseForm.caseData[index].payAmount==0 && this.caseForm.caseData[index].calAmount==0){
+            callback();
+          }else if (this.caseForm.caseData[index].payAmount!=this.caseForm.caseData[index].calAmount){
+            callback(new Error("请录入备注"));
+          }else {
+            callback();
+          }
+        }
+      }
       return {
         isSum: false,
         calSummaryData: {},
@@ -232,7 +265,8 @@
           caseData: []
         },
         caseRules: {
-          payAmount: [{required: true, message: '赔付金额不能为空', trigger: 'blur'}],//赔付金额
+          payAmount: [{validator: checkPayAmount,required: true,trigger: ['blur','change']}],//赔付金额
+          remark: [{validator: checkRemark,required: true,trigger: ['blur']}],//赔付金额
           payConclusion: [{required: true, message: '请选择赔付结论', trigger: 'blur'}],//赔付结论
           riskCode: [{required: true, message: '请选择', trigger: 'blur,change'}],//
           dutyDetailCode: [{required: true, message: '请选择', trigger: 'blur,change'}],//
@@ -331,44 +365,68 @@
       save() {
         this.$refs.caseForm.validate((valid) => {
           if (valid) {
-            let item = {
-              billDetailList: this.caseForm.caseData
-            }
-            billDetailsSave(item).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
+           let flag=true
+           let flag2=true
+            this.caseForm.caseData.forEach(item=>{
+               if (item.payAmount!=item.calAmount && (item.remark==null || item.remark=='' || item.remark==undefined )){
+                 flag=false
               }
-              let data = {
-                rptNo: this.fixInfo.rptNo,
+              if (item.payConclusion==null || item.payConclusion=='' || item.payConclusion==undefined ){
+                flag2=false
               }
-              detailsList(data).then(res => {
-                if (res != null && res.code === 200 && res.rows.length > 0) {
-                  res.rows.forEach(item => {
-                    item.isEdit = true
-                    if (item.minData.length > 0) {
-                      item.minData.forEach(option => {
-                        option.isEdit = true
-                      })
-                    }
-                  })
-                  this.caseForm.caseData = res.rows
-                }
-              }).catch(res => {
-              })
-              this.getCalSummary()
-            }).catch(res => {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
             })
+            if (flag){
+              if (flag2){
+                let item = {
+                  billDetailList: this.caseForm.caseData
+                }
+                billDetailsSave(item).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                  }
+                  this.$emit("refresh-item", 'discussion')
+                  let data = {
+                    rptNo: this.fixInfo.rptNo,
+                  }
+                  detailsList(data).then(res => {
+                    if (res != null && res.code === 200 && res.rows.length > 0) {
+                      res.rows.forEach(item => {
+                        item.isEdit = true
+                        if (item.minData.length > 0) {
+                          item.minData.forEach(option => {
+                            option.isEdit = true
+                          })
+                        }
+                      })
+                      this.caseForm.caseData = res.rows
+                    }
+                  }).catch(res => {
+                  })
+                  this.getCalSummary()
+                }).catch(res => {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                })
+              }else {
+                return this.$message.warning(
+                  "存在未录入的赔付结论！"
+                )
+              }
+            }else {
+              return this.$message.warning(
+                "赔付金额与理算金额不相等时备注必录！"
+              )
+            }
+
           }
         })
       },

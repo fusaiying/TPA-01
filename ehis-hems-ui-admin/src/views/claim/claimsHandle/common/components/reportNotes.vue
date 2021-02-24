@@ -124,7 +124,6 @@
           createTime: '',
         },
         rule: {
-          remarkType: {required: true, message: ' ', trigger: 'change'},
           remark: {required: true, message: ' ', trigger: 'change'},
         },
         dictList: [],
@@ -268,7 +267,7 @@
         if (status==='add'){
           this.baseForm= {
             rptNo:'',
-            remarkType: '',
+            remarkType: '01',
             remark: '',
             station: '',
             createBy: '',

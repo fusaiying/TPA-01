@@ -70,7 +70,7 @@ public class ClaimCaseInvestigationController extends BaseController
      * 理算审核 获取案件调查任务信息
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:investigation:query')")
-    @GetMapping(value = "/{rptNo}")
+    @GetMapping(value = "/invest/{rptNo}")
     public AjaxResult getInvestigation(@PathVariable("rptNo") String rptNo)
     {
         return AjaxResult.success(claimCaseInvestigationService.selectClaimCaseInvestigationByRptNo(rptNo));

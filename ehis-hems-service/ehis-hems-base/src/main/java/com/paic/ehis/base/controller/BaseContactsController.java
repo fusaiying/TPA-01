@@ -81,6 +81,12 @@ public class BaseContactsController extends BaseController
         return toAjax(baseContactsService.addBaseContacts(baseContactsVo));
     }
 
+    @PostMapping("/delete")
+    public AjaxResult delete(@RequestBody BaseContacts baseContacts)
+    {
+        return toAjax(baseContactsService.deleteBaseContact(baseContacts));
+    }
+
     @PutMapping
     public AjaxResult delete(@PathVariable String supplierCode){
         return toAjax(baseContactsService.updateBaseContactsStatus(supplierCode));

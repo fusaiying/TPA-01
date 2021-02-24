@@ -208,14 +208,14 @@
         },
         getBaseInfo(){
           baseInfo(this.rptNo).then(res => {
-            if(res.code == '200') {
+            if(res.code == '200' && res.data) {
               this.baseInfo = res.data;
             }
           });
         },
         getHistoryDisInfo(){
           historyDisInfo(this.rptNo).then(res => {
-            if(res.code == '200') {
+            if(res.code == '200' && res.rows) {
               this.HistoryData = res.rows;
             }
           });

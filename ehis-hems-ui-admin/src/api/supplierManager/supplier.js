@@ -138,3 +138,12 @@ export function addInfo(data) {
     data: data
   })
 }
+
+// 联系人删除
+export function deleteContacts(data) {
+  return request({
+    url: '/provider/contacts/delete',
+    method: 'post',
+    data: data
+  })
+}

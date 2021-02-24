@@ -14,7 +14,7 @@ public interface IClaimDebtWhitelistService
 {
     /**
      * 查询案件追讨白名单列表
-     * 
+     *
      * @param claimDebtWhitelist 案件追讨白名单
      * @return 案件追讨白名单集合
      */

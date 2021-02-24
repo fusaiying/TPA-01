@@ -31,13 +31,13 @@
       <el-table-column align="center" prop="payeeName" label="领款人" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02'" key="2" prop="payeeMobile" label="手机号"
                        show-overflow-tooltip/>
-      <el-table-column align="center" prop="accAttribute" label="账户属性" show-overflow-tooltip>
+     <!-- <el-table-column align="center" prop="accAttribute" label="账户属性" show-overflow-tooltip>
         <template slot-scope="scope">
           <span v-if="baseInfo.claimtype==='02'">{{ selectDictLabel(account_attributeOptions, '0') }}</span>
           <span v-else>{{ selectDictLabel(account_attributeOptions, '1') }}</span>
         </template>
 
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
       <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
@@ -209,7 +209,7 @@
                           placeholder="请输入"/>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <!--<el-col :span="8">
               <el-form-item label="账户属性：" prop="accAttribute">
                 <el-select v-model="baseForm.accAttribute" filterable class="item-width"
                            placeholder="请选择" clearable>
@@ -218,7 +218,7 @@
                              :value="option.dictValue"/>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
           </el-row>
           <el-row>
             <el-col :span="8">
@@ -373,7 +373,6 @@
           payeeRatio: '100',
           payeeOccupation: undefined,
           accNo: undefined,
-          accAttribute: '0',
           accNoCheck: undefined,
           province: undefined,
           city: undefined,
@@ -407,7 +406,6 @@
           payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur','change']}],
           payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur','change']}],
           payeeOccupation:[{required: true, message: '职业不能为空!', trigger: ['blur','change']}],
-          accAttribute: [{required: true, message: '账户属性不能为空!', trigger: ['blur','change']}],
           accNo: {validator: checkAccNo, required: true, trigger: ['blur','change']},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
           address: {validator: checkAddress, required: true, trigger: ['blur','change']},
@@ -534,7 +532,6 @@
           payeeRatio: '100',
           payeeOccupation: undefined,
           accNo: undefined,
-          accAttribute: '0',
           accNoCheck: undefined,
           province: undefined,
           city: undefined,

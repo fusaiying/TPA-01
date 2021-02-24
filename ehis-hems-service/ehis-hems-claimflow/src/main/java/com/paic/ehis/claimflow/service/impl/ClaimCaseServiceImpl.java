@@ -709,6 +709,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+        auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
@@ -1524,6 +1525,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
         BaseCodeMappingNew baseCodeMappingNew1 = claimCaseInvestigationMapper.selectBaseCodeMappingNew(baseCodeMappingNew);
         return baseCodeMappingNew1;
+    }
+
+    @Override
+    public int selectCaseBorrowByRptNo(String rptNo) {
+        return claimCaseMapper.selectCaseBorrowByRptNo(rptNo);
     }
 
     /**

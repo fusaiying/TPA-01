@@ -320,6 +320,7 @@
                   center: true,
                   showClose: true
                 })
+                this.$store.dispatch("tagsView/delView", this.$route);
                 this.$router.go(-1)
               }
             }).catch(() => {
@@ -343,6 +344,7 @@
         }
       },
       goBack() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       getMinData(row, expandedRows) {

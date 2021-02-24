@@ -67,4 +67,6 @@ public class ClaimDebtWhitelist extends BaseEntity
     /** 报案号 */
     @Excel(name = "报案号")
     private String rptNo;
+
+    private String[] insuredNos;
 }

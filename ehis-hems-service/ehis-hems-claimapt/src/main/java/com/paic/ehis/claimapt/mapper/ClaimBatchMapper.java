@@ -42,6 +42,15 @@ public interface ClaimBatchMapper
      */
     public List<BatchVo> selectDirectQueryList(BatchDTO batchDTO);
 
+
+    /**
+     * 查询已退回理赔批次 列表
+     *
+     * @param batchDTO 理赔批次
+     * @return 理赔批次 集合
+     */
+    public List<BatchVo> selectReturnedBatchList(BatchDTO batchDTO);
+
     /**
      * 查询已处理理赔批次 列表
      *

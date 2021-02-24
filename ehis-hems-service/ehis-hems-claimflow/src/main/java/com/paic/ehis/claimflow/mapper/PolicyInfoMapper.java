@@ -66,10 +66,10 @@ public interface PolicyInfoMapper
 
     /**
      * 被保人保单信息页面
-     * @param policyDTO
+     * @param insuredNo
      * @return
      */
-    List<PolicyVo> selectInsuredList(PolicyDTO policyDTO);
+    List<PolicyVo> selectInsuredList(String insuredNo);
 
     PolicyVo selectPolicyRiskType(String policyNo);
 

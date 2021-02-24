@@ -35,7 +35,7 @@ public class ClaimDebtWhitelistController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ClaimDebtWhitelist claimDebtWhitelist)
     {
-        startPage();
+        startPage(claimDebtWhitelist);
         List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelist);
         return getDataTable(list);
     }
@@ -96,7 +96,7 @@ public class ClaimDebtWhitelistController extends BaseController
         return toAjax(claimDebtWhitelistService.deleteClaimDebtWhitelistById(debtWhitelistId));
     }
 
-    /*根据被保人客户号查询欠款信息*/
+    /*根据被保人客户号号查询欠款信息*/
     //@PreAuthorize("@ss.hasPermi('system:whitelist:ResidualList')")
     @GetMapping("/residualList")
     public AjaxResult residualList(String insuredNo)

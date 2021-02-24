@@ -75,13 +75,14 @@
     <el-table-column align="center" min-width="100" prop="batchstatus" label="批次状态" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
+       <!-- <span v-else>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}-{{scope.row.remark}}</span>-->
       </template>
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="94" fixed="right">
       <template slot-scope="scope">
         <el-button v-if="status==='02'" size="small" type="text" @click="editPresenting(scope.row,'show')">查看
         </el-button>
-        <el-button v-if="status==='01'" size="small" type="text" @click="editPresenting(scope.row,'edit')">处理
+        <el-button v-if="status==='01' || status==='03'" size="small" type="text" @click="editPresenting(scope.row,'edit')">处理
         </el-button>
       </template>
     </el-table-column>

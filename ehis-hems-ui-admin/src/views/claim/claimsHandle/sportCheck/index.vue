@@ -178,8 +178,7 @@
           listCaseCheck(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/case/exportcaseCheck'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/case/exportcaseCheck', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {
@@ -194,8 +193,7 @@
           listConditionsForTheAdjustmentOverNew(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportcaseCheckOver'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('system/case/exportcaseCheckOver', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {

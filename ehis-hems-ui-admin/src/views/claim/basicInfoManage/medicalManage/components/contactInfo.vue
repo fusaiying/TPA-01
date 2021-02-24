@@ -453,7 +453,7 @@ export default {
         type: 'warning'
       }).then(() => {
         let query = {
-          orgflag: this.status,
+          orgFlag: this.status,
           serialNo: row.serialNo
         }
         deleteContactsInfo(query).then(res => {

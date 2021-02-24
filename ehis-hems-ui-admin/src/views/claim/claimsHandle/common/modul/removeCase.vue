@@ -53,7 +53,7 @@
 </template>
 
 <script>
-  import {removeCase} from '@/api/claim/handleCom'
+  import {removeCase,borrowByRptNo} from '@/api/claim/handleCom'
 
   let dictss = [{dictType: 'pullout_type'},]
   export default {
@@ -128,52 +128,65 @@
         this.$emit('closeRemoveDialog')
       },
       save() {
-        this.baseForm.rptNo=this.fixInfo.rptNo
-        this.$refs.baseForm.validate((valid) => {
-          if (valid) {
-            this.$confirm(`是否确定撤件?`, '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              removeCase(this.baseForm).then(res=>{
-                if(res!=null && res.code===200){
-                  this.$message({
-                    message: '撤件成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.changeDialogVisable()
-                }
-              }).catch(res=>{
-                this.$message({
-                  message: '撤件失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              })
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消！'
-              })
-            })
+        borrowByRptNo(this.fixInfo.rptNo).then(res=>{
+         if (res!=null && res.code===200){
+           if (res.data==0){
+             this.baseForm.rptNo=this.fixInfo.rptNo
+             this.$refs.baseForm.validate((valid) => {
+               if (valid) {
+                 this.$confirm(`是否确定撤件?`, '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+                   type: 'warning'
+                 }).then(() => {
+                   removeCase(this.baseForm).then(res=>{
+                     if(res!=null && res.code===200){
+                       this.$message({
+                         message: '撤件成功！',
+                         type: 'success',
+                         center: true,
+                         showClose: true
+                       })
+                       this.changeDialogVisable()
+                       this.$store.dispatch("tagsView/delView", this.$route);
+                       this.$router.go(-1)
+                     }
+                   }).catch(res=>{
+                     this.$message({
+                       message: '撤件失败!',
+                       type: 'error',
+                       center: true,
+                       showClose: true
+                     })
+                   })
+                 }).catch(() => {
+                   this.$message({
+                     type: 'info',
+                     message: '已取消！'
+                   })
+                 })
 
-          }else {
-            if (this.baseForm.pulloutType==null || this.baseForm.pulloutType===''){
-              return this.$message.warning(
-                "请选择撤案类型！"
-              )
-            }else {
-              return this.$message.warning(
-                "录入不完整，请检查！"
-              )
-            }
+               }else {
+                 if (this.baseForm.pulloutType==null || this.baseForm.pulloutType===''){
+                   return this.$message.warning(
+                     "请选择撤案类型！"
+                   )
+                 }else {
+                   return this.$message.warning(
+                     "录入不完整，请检查！"
+                   )
+                 }
 
-          }
+               }
+             })
+           }else {
+             return this.$message.warning(
+               "该案件存在借款，不能做撤件操作，请核实！"
+             )
+           }
+         }
         })
+
       }
     }
   }

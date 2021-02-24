@@ -11,7 +11,6 @@ import com.paic.ehis.claimflow.domain.ClaimCaseDiscussion;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseDiscussionDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO;
 import com.paic.ehis.claimflow.service.IClaimCaseDiscussionService;
-import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,6 @@ public class ClaimCaseDiscussionController extends BaseController
     @Autowired
     private IClaimCaseDiscussionService claimCaseDiscussionService;
 
-    @Autowired
-    private IClaimCaseRecordService claimCaseRecordService;
     /**
      * 查询案件协谈信息列表
      */
@@ -51,7 +48,7 @@ public class ClaimCaseDiscussionController extends BaseController
      */
   //  @PreAuthorize("@ss.hasPermi('system:discussion:list')")
     @GetMapping(value = "/history/{rptNo}")
-    public TableDataInfo discussionList(String rptNo)
+    public TableDataInfo discussionList(@PathVariable("rptNo") String rptNo)
     {
         TableSupport.setOrderByColumn("disc_id");
         TableSupport.setSort("asc");
@@ -99,7 +96,7 @@ public class ClaimCaseDiscussionController extends BaseController
      */
    // @PreAuthorize("@ss.hasPermi('system:discussion:edit')")
     @Log(title = "案件协谈信息", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PutMapping("/updateClaimCaseDiscussion")
     public AjaxResult edit(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
     {
         return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
@@ -139,13 +136,6 @@ public class ClaimCaseDiscussionController extends BaseController
         startPage();
         List<ClaimCaseDiscussionVO> list = claimCaseDiscussionService.selectCaseDisListOver(claimCaseDiscussionDTO);
         return getDataTable(list);
-    }
-
-
-   @PutMapping("/updatecasediscussionStatus")
-    public AjaxResult updatecasediscussionStatus(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
-    {
-        return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
     }
 
     /*查询基本信息表*/

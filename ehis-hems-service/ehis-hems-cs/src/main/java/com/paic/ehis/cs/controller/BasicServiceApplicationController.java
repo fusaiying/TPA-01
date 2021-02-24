@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
+@RequestMapping("/baseServiceApplication")
 public class BasicServiceApplicationController extends BaseController {
     @Autowired
     private IBasicServiceApplicationService basicServiceApplicationService;
-    @PostMapping
-    public AjaxResult add(BasicServiceAppilcation basicServiceAppilcation) {
+    @PostMapping("/addBasicServiceApplication")
+    public AjaxResult addBasicServiceApplication(BasicServiceAppilcation basicServiceAppilcation) {
         return toAjax(basicServiceApplicationService.insertBasicServiceApplication(basicServiceAppilcation));
     }
 }

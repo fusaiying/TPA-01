@@ -94,19 +94,15 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                     policyVo1.setOrgPolicyNo(policyVo.getOrgPolicyNo());
                     policyVo1.setOrgPolicyItemNo(policyVo.getPolicyItemNo());
                     policyVo1.setSsFlag(policyVo.getSsFlag());
-                    //查询保单险种关联表
-                    List<PolicyRiskRelation> policyRiskRelations = policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
-                    if (policyRiskRelations.size() != 0) {
-                        for (PolicyRiskRelation policyRiskRelation : policyRiskRelations) {
-                            policyVo1.setRiskName(policyRiskRelation.getRiskName());
-                            policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
-                        }
+                    policyVo1.setPolicyManageCom(policyVo.getPolicyManageCom());
+                    List<PolicyRiskRelation> policyRiskRelations=policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
+                    for (PolicyRiskRelation policyRiskRelation:policyRiskRelations
+                    ) {policyVo1.setRiskName(policyRiskRelation.getRiskName());
+                        policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
                     }
                     List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
-                    if (dutyVos.size()!=0){
-                        policyVo1.setMinData(dutyVos);
-                    }
-                    l.add(policyVo1);
+                    policyVo.setMinData(dutyVos);
+                    l.add(policyVo);
                 }
                 claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
             }

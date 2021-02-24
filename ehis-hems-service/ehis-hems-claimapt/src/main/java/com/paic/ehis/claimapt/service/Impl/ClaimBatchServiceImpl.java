@@ -246,12 +246,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchRecordDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchRecordDTO.setBatchstatus("'03','04','05'");
         batchRecordDTO.setClaimtype("01");
-        batchRecordDTO.setOperation(ClaimStatus.BATCHRETURN.getCode());
+        batchRecordDTO.setOperation(ClaimStatus.BATCHREVIEW.getCode());
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 1);
-        batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
-        batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        if (!StringUtils.isNull(batchRecordDTO.getSubmitstartdate())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
+            batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
+            batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        }
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
     }
 

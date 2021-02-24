@@ -91,7 +91,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         caseRecord.setRptNo(claimCaseDiscussion.getRptNo());
         caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
         caseRecord.setHistoryFlag("N");
-        caseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());
+        caseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(caseRecord);
         if (StringUtils.isNotNull(claimCaseRecord)) {
             claimCaseRecord.setHistoryFlag("Y");
@@ -102,7 +102,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         }
 
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
-        caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());
+        caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());//31
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
         caseRecord.setUpdateBy(SecurityUtils.getUsername());

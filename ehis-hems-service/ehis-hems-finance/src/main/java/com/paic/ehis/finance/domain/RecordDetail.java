@@ -104,7 +104,7 @@ public class RecordDetail {
     /** 险种保险期限类型代码（极短期-0、短期不定期(一年期)-1、短险-2、长期险-3） */
     private String planPeriodTypeCode;
 
-    /** 责任大类 （保障-C、服务-S、税-T、不区分-N）*/
+    /** 责任大类 （保障-C、服务-S、税-T、不区分）*/
     private String liabType;
 
     /** 赠险标识 （非赠险-N、赠险-Y）*/

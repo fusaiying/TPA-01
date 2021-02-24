@@ -230,10 +230,10 @@
             callback(new Error("最小允许录入0"));
           } else if (!regx.test(value)) {
             callback(new Error("请保留两位小数"));
-          } else if (value>(parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount))){
+          } else if (value>(parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount))){
             callback(new Error("录入金额有误"));
           }else {
-            this.baseForm.caseData[index].refusedAmount=parseFloat(this.baseForm.caseData[index].billAmount)-parseFloat(this.baseForm.caseData[index].hosDiscountAmount)-parseFloat(this.baseForm.caseData[index].payAmount)
+            this.caseForm.caseData[index].refusedAmount=parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount)-parseFloat(this.caseForm.caseData[index].payAmount)
             callback();
           }
         } else {
@@ -245,9 +245,9 @@
         if (value) {
           callback();
         } else {
-          if (this.baseForm.caseData[index].payAmount==0 && this.baseForm.caseData[index].calAmount==0){
+          if (this.caseForm.caseData[index].payAmount==0 && this.caseForm.caseData[index].calAmount==0){
             callback();
-          }else if (this.baseForm.caseData[index].payAmount!=this.baseForm.caseData[index].calAmount){
+          }else if (this.caseForm.caseData[index].payAmount!=this.caseForm.caseData[index].calAmount){
             callback(new Error("请录入备注"));
           }else {
             callback();
@@ -365,44 +365,67 @@
       save() {
         this.$refs.caseForm.validate((valid) => {
           if (valid) {
-            let item = {
-              billDetailList: this.caseForm.caseData
-            }
-            billDetailsSave(item).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
+           let flag=true
+           let flag2=true
+            this.caseForm.caseData.forEach(item=>{
+               if (item.payAmount!=item.calAmount && (item.remark==null || item.remark=='' || item.remark==undefined )){
+                 flag=false
               }
-              let data = {
-                rptNo: this.fixInfo.rptNo,
+              if (item.payConclusion==null || item.payConclusion=='' || item.payConclusion==undefined ){
+                flag2=false
               }
-              detailsList(data).then(res => {
-                if (res != null && res.code === 200 && res.rows.length > 0) {
-                  res.rows.forEach(item => {
-                    item.isEdit = true
-                    if (item.minData.length > 0) {
-                      item.minData.forEach(option => {
-                        option.isEdit = true
-                      })
-                    }
-                  })
-                  this.caseForm.caseData = res.rows
-                }
-              }).catch(res => {
-              })
-              this.getCalSummary()
-            }).catch(res => {
-              this.$message({
-                message: '保存失败!',
-                type: 'error',
-                center: true,
-                showClose: true
-              })
             })
+            if (flag){
+              if (flag2){
+                let item = {
+                  billDetailList: this.caseForm.caseData
+                }
+                billDetailsSave(item).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                  }
+                  let data = {
+                    rptNo: this.fixInfo.rptNo,
+                  }
+                  detailsList(data).then(res => {
+                    if (res != null && res.code === 200 && res.rows.length > 0) {
+                      res.rows.forEach(item => {
+                        item.isEdit = true
+                        if (item.minData.length > 0) {
+                          item.minData.forEach(option => {
+                            option.isEdit = true
+                          })
+                        }
+                      })
+                      this.caseForm.caseData = res.rows
+                    }
+                  }).catch(res => {
+                  })
+                  this.getCalSummary()
+                }).catch(res => {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                })
+              }else {
+                return this.$message.warning(
+                  "存在未录入的赔付结论！"
+                )
+              }
+            }else {
+              return this.$message.warning(
+                "赔付金额与理算金额不相等时备注必录！"
+              )
+            }
+
           }
         })
       },

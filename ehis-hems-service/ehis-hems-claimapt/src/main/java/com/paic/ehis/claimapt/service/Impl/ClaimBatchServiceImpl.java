@@ -103,7 +103,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
-        return claimBatchMapper.selectDirectQueryList(batchDTO);
+        return claimBatchMapper.selectReturnedBatchList(batchDTO);
     }
 
     /**
@@ -129,7 +129,6 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-
         if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
                 || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
                 || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
@@ -461,7 +460,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
 
         claimBatch.setCreateBy(SecurityUtils.getUsername());
         claimBatch.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatch.setUpdateBy(SecurityUtils.getUsername());
+        claimBatch.setUpdateBy("");
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
         //二条
@@ -480,21 +479,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchMapper.insertClaimBatch(claimBatch);
 
         //生成发表归档信息
-        ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
-        claimBatchInvoiceFiling.setBatchNo(str1);
-        String billrecevieflag = claimBatch.getBillrecevieflag();
-        if(StringUtils.isBlank(billrecevieflag)) {
-            claimBatchInvoiceFiling.setIsFiling("02");
-        } else {
-            claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
-        }
-        claimBatchInvoiceFiling.setStatus("Y");
-        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
-
+        this.addInvoiceFiling(str1 ,claimBatch.getBillrecevieflag());
         return claimBatch;
     }
 
@@ -595,16 +580,29 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         }
 
         //生成发表归档信息
+        this.addInvoiceFiling(claimBatch.getBatchno(),claimBatch.getBillrecevieflag());
+        return standingAndBatck;
+    }
+
+    /**
+     * 生成发表归档信息  modify by  :  hjw
+     * @param batchNo
+     * @param billrecevieflag
+     */
+    private void  addInvoiceFiling(String batchNo, String billrecevieflag){
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
-        claimBatchInvoiceFiling.setBatchNo(claimBatch.getBatchno());
+        claimBatchInvoiceFiling.setBatchNo(batchNo);
+        if(StringUtils.isBlank(billrecevieflag)) {
+            claimBatchInvoiceFiling.setIsFiling("02");
+        } else {
+            claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
+        }
         claimBatchInvoiceFiling.setStatus("Y");
         claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
-
-        return standingAndBatck;
     }
 
 }

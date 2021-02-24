@@ -60,6 +60,12 @@ public class ClaimCaseDiscussionVO extends BaseEntity implements Serializable {
     @Excel(name = "生日")
     private Date birthday;
 
+    /**协谈细类*/
+    private String discSubType;
+
+    /** 转出意见 */
+    private String disView;
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -198,5 +204,21 @@ public class ClaimCaseDiscussionVO extends BaseEntity implements Serializable {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getDiscSubType() {
+        return discSubType;
+    }
+
+    public void setDiscSubType(String discSubType) {
+        this.discSubType = discSubType;
+    }
+
+    public String getDisView() {
+        return disView;
+    }
+
+    public void setDisView(String disView) {
+        this.disView = disView;
     }
 }

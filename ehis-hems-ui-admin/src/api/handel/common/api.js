@@ -147,3 +147,12 @@ export function investigationBaseInfo (rptNo) {
     method: 'get',
   })
 }
+
+
+// 查询协谈信息  /discussion/{rptNo}
+export function discussionBaseInfo(rptNo) {
+  return request({
+    url:  '/claimflow/discussion/caseInfo/' + rptNo,
+    method: 'get',
+  })
+}

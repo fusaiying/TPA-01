@@ -180,8 +180,7 @@
           processingList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/bill/exportProcess'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/bill/exportProcess', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {
@@ -196,8 +195,7 @@
           accomplishList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/bill/exportAccomplish'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/bill/exportAccomplish', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {

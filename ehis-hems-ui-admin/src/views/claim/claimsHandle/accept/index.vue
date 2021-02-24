@@ -216,8 +216,7 @@
           getBackList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/case/exportProcessingList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/case/exportProcessingList', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {
@@ -232,8 +231,7 @@
           getFinishList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/case/exportProcessedList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/case/exportProcessedList', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {
@@ -248,8 +246,7 @@
           getHangUpList(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('claimflow/case/exportSuspensionList'+'?batchNo='+this.searchForm.batchNo+'&rptNo='+this.searchForm.rptNo
-                +'&name='+this.searchForm.name, {
+              this.download('claimflow/case/exportSuspensionList', {
                 ...this.searchForm
               }, `FYX_${new Date().getTime()}.xlsx`)
             }else {

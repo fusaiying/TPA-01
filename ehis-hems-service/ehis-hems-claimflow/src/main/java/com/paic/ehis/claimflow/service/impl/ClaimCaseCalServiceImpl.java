@@ -168,16 +168,23 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
      */
     @Transactional
     @Override
-    public CalConclusionVo updateClaimCaseCal(ClaimCaseCal claimCaseCal)
-    {
-        claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseCal.setUpdateTime(DateUtils.getNowDate());
-        int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
-        if (1==i){
-            return claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
-        }else {
-            return null;
+    public CalConclusionVo updateClaimCaseCal(ClaimCaseCal claimCaseCal) {
+
+        /**
+         * modify by  :  hjw   更新数据可能多于一条， 还有无效数据也更新了
+         */
+        CalConclusionVo reult = null;
+        try {
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+            if (i > 0){
+                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
+            }
+        } catch (Exception e){
+
         }
+        return reult;
     }
 
     /**

@@ -401,7 +401,9 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api/customService/demand'
- // import upload from "../../claim/claimsHandle/common/modul/upload";
+  import {complaintAddInsert} from '@/api/customService/complaint'
+
+
   import upLoad from "../common/modul/upload";
 
 
@@ -597,7 +599,7 @@
       //提交页面数据
        submit(){
            let insert=this.ruleForm
-           addInsert(insert).then(res => {
+           complaintAddInsert(insert).then(res => {
            if (res != null && res.code === 200) {
              alert("插入成功")
              if (res.rows.length <= 0) {

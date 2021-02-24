@@ -297,23 +297,25 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     @Override
     public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo){
         ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(rptNo);
-        List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
-        if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
-            List<String> companyNameList = new ArrayList<>();//出单公司
-            for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                //去重出单公司名称拼接
-                companyNameList.add(claimCasePoliciesOne.getCompanyName());
-            }
-            StringBuilder stringBuilder2 = new StringBuilder();
-            Set set1 = new HashSet<>(companyNameList);
-            List newCompanyNameList = new ArrayList<>(set1);
-            if (!newCompanyNameList.isEmpty()) {
-                stringBuilder2.append(newCompanyNameList.get(0));
-                for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
-                    stringBuilder2.append("|").append(newCompanyNameList.get(i));
+        if(null != claimCaseDiscussionVO) {
+            List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
+            if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
+                List<String> companyNameList = new ArrayList<>();//出单公司
+                for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
+                    //去重出单公司名称拼接
+                    companyNameList.add(claimCasePoliciesOne.getCompanyName());
                 }
+                StringBuilder stringBuilder2 = new StringBuilder();
+                Set set1 = new HashSet<>(companyNameList);
+                List newCompanyNameList = new ArrayList<>(set1);
+                if (!newCompanyNameList.isEmpty()) {
+                    stringBuilder2.append(newCompanyNameList.get(0));
+                    for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                        stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                    }
+                }
+                claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
             }
-            claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
         }
         return claimCaseDiscussionVO;
     }

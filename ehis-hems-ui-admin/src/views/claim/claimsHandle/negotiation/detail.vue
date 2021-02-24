@@ -75,7 +75,7 @@
         <div slot="header" class="clearfix">
         <span>本次协谈处理</span>
         <span style="float: right;">
-          <el-button  v-if="dealBtn" type="primary" size="mini" @click="dealFun(rptNo,clussionForm)">确认</el-button>
+          <el-button  v-if="dealBtn" type="primary" size="mini" @click="dealFun">确认</el-button>
         </span>
       </div>
 
@@ -135,6 +135,7 @@
           conclusionView:'',
         },
         rptNo:'',
+        discId:'',
         handleView:false,
         HistoryData :[],
         clusionSelect:[],
@@ -147,6 +148,7 @@
 
      mounted() {
        this.rptNo = this.$route.query.rptNo ;
+       this.discId = this.$route.query.discId ;
        if (this.$route.query.type != 'show') {
          this.handleView  = true;
         // this.getPendingData();
@@ -175,18 +177,19 @@
        }
     },
       methods: {
-        dealFun(rptNo,conclusionForm){
+        dealFun(){
+          const param = {};
+          param.rptNo = this.rptNo;
+          param.discId = this.discId;
+          param.conclusion = this.clussionForm.conclusion;
+          param.conclusionView = this.clussionForm.conclusionView;
+          param.isHistory = 'Y';
           let vm = this;
           this.$confirm('确认提交本次协谈处理?', "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
           }).then(function () {
-            const param = {};
-            param.rptNo = rptNo;
-            param.conclusion = conclusionForm.conclusion;
-            param.conclusionView = conclusionForm.conclusionView;
-            param.isHistory = 'Y';
             updateDiss(param).then(res => {
               if(res.code == '200') {
                 vm.dealBtn = false;

@@ -149,7 +149,7 @@
                        })
                        this.changeDialogVisable()
                        this.$store.dispatch("tagsView/delView", this.$route);
-                       this.$router.go(-1)
+                       this.$router.push({path: '/claims-handle/pbclaim'});
                      }
                    }).catch(res=>{
                      this.$message({

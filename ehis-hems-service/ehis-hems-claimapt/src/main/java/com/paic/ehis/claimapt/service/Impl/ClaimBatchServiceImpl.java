@@ -479,21 +479,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchMapper.insertClaimBatch(claimBatch);
 
         //生成发表归档信息
-        ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
-        claimBatchInvoiceFiling.setBatchNo(str1);
-        String billrecevieflag = claimBatch.getBillrecevieflag();
-        if(StringUtils.isBlank(billrecevieflag)) {
-            claimBatchInvoiceFiling.setIsFiling("02");
-        } else {
-            claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
-        }
-        claimBatchInvoiceFiling.setStatus("Y");
-        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
-
+        this.addInvoiceFiling(str1 ,claimBatch.getBillrecevieflag());
         return claimBatch;
     }
 
@@ -594,16 +580,29 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         }
 
         //生成发表归档信息
+        this.addInvoiceFiling(claimBatch.getBatchno(),claimBatch.getBillrecevieflag());
+        return standingAndBatck;
+    }
+
+    /**
+     * 生成发表归档信息  modify by  :  hjw
+     * @param batchNo
+     * @param billrecevieflag
+     */
+    private void  addInvoiceFiling(String batchNo, String billrecevieflag){
         ClaimBatchInvoiceFiling claimBatchInvoiceFiling = new ClaimBatchInvoiceFiling();
-        claimBatchInvoiceFiling.setBatchNo(claimBatch.getBatchno());
+        claimBatchInvoiceFiling.setBatchNo(batchNo);
+        if(StringUtils.isBlank(billrecevieflag)) {
+            claimBatchInvoiceFiling.setIsFiling("02");
+        } else {
+            claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
+        }
         claimBatchInvoiceFiling.setStatus("Y");
         claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
         claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
-
-        return standingAndBatck;
     }
 
 }

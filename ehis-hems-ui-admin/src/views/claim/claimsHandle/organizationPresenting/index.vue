@@ -208,7 +208,7 @@
         pageSize: 10,
         finishPage: 1,
         finishPageSize: 10,
-        activeName: '01',
+        activeName: '03',
         changeSerchData: {},
         dictList: [],
         claimTypeOptions: [],
@@ -296,8 +296,51 @@
         this.$refs.queryParams.resetFields()
       },
       searchProcessed() {//处理中查询
-        getPendingList().then(res => {
+        const query = {
+          pageNum: this.processedNum,
+          pageSize: this.processedSize,
+          orderByColumn: this.$refs.claimsTable3.prop,
+          isAsc: this.$refs.claimsTable3.order,
+          submitstartdate: undefined,
+          submitenddate: undefined,
+          organcode: this.queryParams.organcode,
+          hospitalname: this.queryParams.hospitalname,
+          updatestartTime: undefined,
+          updateendTime: undefined,
+          batchno: this.queryParams.batchno,
+          claimtype: this.queryParams.claimtype,
+          applicationsource: this.queryParams.applicationsource,
+          caseNumber: this.queryParams.caseNumber,
+          rptno: this.queryParams.rptno,
+          updateBy: this.queryParams.updateBy,
+        }
+        if (this.queryParams.submitdate) {
+          query.submitstartdate = this.queryParams.submitdate[0]
+          query.submitenddate = this.queryParams.submitdate[1]
+        }
+        if (this.queryParams.updateTime) {
+          query.updatestartTime = this.queryParams.updateTime[0]
+          query.updateendTime = this.queryParams.updateTime[1]
+        }
+        getPendingList(query).then(res => {
+          if (res != null && res.code === 200) {
+            this.processedData = res.rows
+            this.processedTotal = res.total
+            if (this.processedData.length !== 0) {
+              this.processedData.forEach(item => {
+                item.minData = []
+              })
+            }
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).finally(() => {
+          this.loading = false
         })
+
       },
       searchHandle() {
         const params = {
@@ -444,7 +487,7 @@
           getBackToList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              let subDate = ''
+            /*  let subDate = ''
               if (this.queryParams.submitdate.length > 0) {
                 subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
                   + '&updatestartTime=' + this.queryParams.updateTime[0]
@@ -453,10 +496,10 @@
               if (this.queryParams.updateTime.length > 0) {
                 upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
               }
-
-              this.download('claimapt/batch/exportReturnedPool' + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
+*/
+              this.download('claimapt/batch/exportReturnedPool'/* + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
-                + upDate, {
+                + upDate*/, {
                 ...query
               }, `FYX_${new Date().getTime()}.xlsx`)
             } else {
@@ -470,7 +513,7 @@
           getDealWithList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              let subDate = ''
+             /* let subDate = ''
               if (this.queryParams.submitdate.length > 0) {
                 subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
                   + '&updatestartTime=' + this.queryParams.updateTime[0]
@@ -478,10 +521,10 @@
               let upDate = ''
               if (this.queryParams.updateTime.length > 0) {
                 upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
-              }
-              this.download('claimapt/batch/exportProcessedPool' + '?hospitalname=' + this.queryParams.hospitalname
+              }*/
+              this.download('claimapt/batch/exportProcessedPool'/* + '?hospitalname=' + this.queryParams.hospitalname
                 + '&organcode=' + this.queryParams.organcode + '&batchno=' + this.queryParams.batchno + '&claimtype=' +
-                this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate + upDate, {
+                this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate + upDate*/, {
                 ...query
               }, `FYX_${new Date().getTime()}.xlsx`)
             } else {

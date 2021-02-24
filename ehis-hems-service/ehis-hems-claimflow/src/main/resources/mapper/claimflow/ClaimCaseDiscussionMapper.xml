@@ -216,7 +216,8 @@
             claim_case_accept.acc_type, /*事故类型*/
             claim_case_discussion.disc_type,
             claim_case_discussion.disc_sub_type, /**协谈系类*/
-            claim_case_discussion.dis_view /**转出意见*/
+            claim_case_discussion.dis_view, /**转出意见*/
+            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age
         from
             claim_case_discussion,
             claim_batch,

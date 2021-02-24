@@ -359,7 +359,7 @@
             if (res != null && res.code === 200) {
               res.data.forEach(item => {
                 let option={
-                  payMode:'',
+                  payMode:'1',
                   payeeName:item.accountName,
                   accAttribute:item.accAttribute,
                   payeeBank:item.bankName,

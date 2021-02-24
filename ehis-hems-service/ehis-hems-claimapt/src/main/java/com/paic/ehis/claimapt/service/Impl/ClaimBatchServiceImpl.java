@@ -461,7 +461,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
 
         claimBatch.setCreateBy(SecurityUtils.getUsername());
         claimBatch.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatch.setUpdateBy(SecurityUtils.getUsername());
+        claimBatch.setUpdateBy("");
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
         //二条

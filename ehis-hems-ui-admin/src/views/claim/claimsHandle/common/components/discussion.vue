@@ -352,8 +352,8 @@
           billCurrency:'',
           payConclusion:'',
           refusedReason:'',
-          remark:'',
-          claimCheck:'',
+          remark:'Min[上限，Σ费用项（合理金额-免赔额）*赔付比例]',
+          claimCheck:'Min[上限，Σ费用项（合理金额-免赔额）*赔付比例]',
         },
         //赔付结论信息 end
         conRules: {

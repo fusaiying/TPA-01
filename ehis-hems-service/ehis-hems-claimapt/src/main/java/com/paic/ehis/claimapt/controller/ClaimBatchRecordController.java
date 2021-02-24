@@ -248,7 +248,7 @@ public class ClaimBatchRecordController extends BaseController {
     //通过batchno批次号查询sys_claim_batch_record表得到RecordByBatchnoDto输出流
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:record:list')")
     @PostMapping("/selectRecordByBatchno")
-    public AjaxResult selectRecordByBatchno(String batchno) {
+    public AjaxResult selectRecordByBatchno(@RequestBody String batchno) {
         if (batchno != null || batchno != "") {
             List<ClaimBatchRecord> batchnoList = claimBatchRecordService.selectSysClaimBatchRecordListByBatchno(batchno);
             return AjaxResult.success(batchnoList);

@@ -65,6 +65,7 @@
             <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
             <if test="status != null  and status != ''"> and STATUS = #{status}</if>
             and is_history='Y'
+            and status='Y'
         </where>
     </select>
 

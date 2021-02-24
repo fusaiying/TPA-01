@@ -15,10 +15,10 @@ public interface OrderInfoMapper
     /**
      * 查询order_info(工单信息)
      * 
-     * @param serialNo order_info(工单信息)ID
+     * @param orderCode order_info(工单信息)ID
      * @return order_info(工单信息)
      */
-    public OrderInfo selectOrderInfoById(String serialNo);
+    public OrderInfo selectOrderInfoById(String orderCode);
 
     public OrderInfo selectOrderInfoByIdNew(OrderInfo orderInfo);
 
@@ -58,10 +58,10 @@ public interface OrderInfoMapper
     /**
      * 删除order_info(工单信息)
      * 
-     * @param serialNo order_info(工单信息)ID
+     * @param orderCode order_info(工单信息)ID
      * @return 结果
      */
-    public int deleteOrderInfoById(String serialNo);
+    public int deleteOrderInfoById(String orderCode);
 
     /**
      * 批量删除order_info(工单信息)
@@ -84,6 +84,9 @@ public interface OrderInfoMapper
     //获取医院信息
     public List<HospitalInfoVo> getHospitalInfo();
 
+    //获取医院信息
+    public List<HospitalInfoVo> getHospitalInfo1(AddressInfo addressInfo);
+
     //获取一级科室
     public List<FirstDeptInfoVo> getFirstDeptInfo();
 
@@ -99,6 +102,12 @@ public interface OrderInfoMapper
     //设置超时状态
     public int updateOverTime(OrderInfo orderInfo);
 
+    //设置PC端的超时超时状态
+    public int updateOverTimeToPC(OrderInfo orderInfo);
+
+    //获取轮询中数据不为超时的数据
     public List<Ordertaking> getOrdertaking(OrderInfo orderInfo);
 
+    //获取所有可预约的供应商
+    public List<Ordertaking> getOrdertakingList(OrderInfo orderInfo);
 }

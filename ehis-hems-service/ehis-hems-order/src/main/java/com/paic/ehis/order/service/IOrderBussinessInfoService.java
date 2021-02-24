@@ -3,6 +3,7 @@ package com.paic.ehis.order.service;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.order.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public interface IOrderBussinessInfoService
 
     /**
      * 接单操作
-     */
+     getHosptialInfo */
     public int receivingOrder(RoleLoginInfo roleLoginInfo);
 
 
@@ -45,6 +46,13 @@ public interface IOrderBussinessInfoService
      * 实施操作
      */
     public int implementtOrder(OrderInfo orderInfo);
+
+
+    public List<HospitalInfoVo> getHosptialInfo(AddressInfo addressInfo);
+
+
+    public List<AddressVO> getAddress(AddressInfo addressInfo);
+
 
 
 }

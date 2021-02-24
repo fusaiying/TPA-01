@@ -50,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="firstDept"    column="first_dept"    />
         <result property="secondDept"    column="second_dept"    />
         <result property="director"    column="director"    />
+        <result property="forNum"    column="for_num"    />
     </resultMap>
 
 
@@ -84,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="firstDeptName"    column="firstDeptName"    />
     </resultMap>
 
-    <resultMap type="OrderInfo" id="OrdertakingResult">
+    <resultMap type="Ordertaking" id="OrdertakingResult">
         <result property="supplierCode"    column="supplier_code"    />
         <result property="num"    column="num"    />
         <result property="priority"    column="priority"    />
@@ -93,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectOrderInfoVo">
-        select serial_no, order_code, policy_no, policy_certificate_no, product_code, service_code, supplier_code, customer_no, contact_name, phone, Inpatient_area, expected_area, visiting_area, city, service_type, apply_time, expectation_hospital, expected_department, serious_disease, operation, final_diagnosis, symptom_description, remark, reason, node_status, bussiness_status, status, create_by, create_time, update_by, update_time from order_info
+        select serial_no, order_code, policy_no, policy_certificate_no, for_num,product_code, service_code, supplier_code, customer_no, contact_name, phone, Inpatient_area, expected_area, visiting_area, city, service_type, apply_time, expectation_hospital, serious_disease, operation, final_diagnosis, symptom_description, remark, reason, node_status, bussiness_status, status, create_by, create_time, update_by, update_time from order_info
     </sql>
 
     <select id="selectOrderInfoList" parameterType="OrderInfo" resultMap="OrderInfoResult">
@@ -245,6 +246,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="symptomDescription != null">symptom_description,</if>
             <if test="remark != null">remark,</if>
             <if test="reason != null">reason,</if>
+            <if test="forNum != null">for_num,</if>
             <if test="nodeStatus != null">node_status,</if>
             <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status,</if>
             <if test="status != null and status != ''">status,</if>
@@ -252,6 +254,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="firstDept != null">first_dept,</if>
+            <if test="secondDept != null">second_dept,</if>
+            <if test="director != null">director,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -278,6 +284,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="symptomDescription != null">#{symptomDescription},</if>
             <if test="remark != null">#{remark},</if>
             <if test="reason != null">#{reason},</if>
+            <if test="forNum != null">#{forNum},</if>
             <if test="nodeStatus != null">#{nodeStatus},</if>
             <if test="bussinessStatus != null and bussinessStatus != ''">#{bussinessStatus},</if>
             <if test="status != null and status != ''">#{status},</if>
@@ -285,6 +292,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="firstDept != null">#{firstDept},</if>
+            <if test="secondDept != null">#{secondDept},</if>
+            <if test="director != null">#{director},</if>
          </trim>
     </insert>
 
@@ -326,7 +337,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteOrderInfoById" parameterType="String">
-        delete from order_info where serial_no = #{serialNo}
+        delete from order_info where order_code = #{orderCode}
     </delete>
 
     <delete id="deleteOrderInfoByIds" parameterType="String">
@@ -350,6 +361,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getHospitalInfo"  resultMap="HospitalInfoVoResult">
         select provider_code hospitalCode,chname1 hospitalName from base_provider_info where org_flag = '01' and status ='Y'
+    </select>
+
+    <select id="getHospitalInfo1" parameterType="AddressInfo" resultMap="HospitalInfoVoResult">
+         SELECT
+            so.website_code hospitalCode,
+            so.websitec_name hospitalName
+         FROM base_supplier_outlets so
+         JOIN base_provider_info pi ON pi.provider_code = so.website_code
+        <where>
+            <if test="supplierCode != null  and supplierCode != ''"> and so.supplier_code = #{supplierCode}</if>
+            <if test="province != null  and province != ''"> and pi.province = #{province}</if>
+            <if test="city != null  and city != ''"> and pi.city = #{city}</if>
+            <if test="district != null  and district != ''"> and pi.district = #{district}</if>
+            and so.status = 'Y' and pi.update_flag ='0'
+        </where>
     </select>
 
     <select id="getFirstDeptInfo"  resultMap="FirstDeptInfoVoResult">
@@ -401,6 +427,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update order_info set node_status = #{nodeStatus},update_flag = '1' where update_flag = '0' and order_code = #{orderCode}
     </update>
 
+    <update id="updateOverTimeToPC" parameterType="OrderInfo">
+        update order_info set node_status = #{nodeStatus},bussiness_status = '02',update_flag= '0' where order_code = #{orderCode} and supplier_code= #{supplierCode}
+    </update>
+
     <select id="getOrdertaking" parameterType="OrderInfo" resultMap ="OrdertakingResult">
         SELECT
             psi.supplier_code,
@@ -437,7 +467,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             SELECT
                 MAX(serial_no)
             FROM
-                base_contract_service
+                base_contract_service bcs
             WHERE
                 bcs.service_code = oi.service_code
             AND bcs.supplier_code = psi.supplier_code
@@ -449,10 +479,81 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 FROM
                     order_info
                 WHERE
-                    node_status = '08'
+                    node_status = '04'
                 AND order_code = #{orderCode}
                 AND supplier_code = psi.supplier_code
-            )
+            ) and  bcs.limitnum- (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) &gt;0 ORDER BY priority
+    </select>
+
+    <select id="getOrdertakingList" parameterType="OrderInfo" resultMap ="OrdertakingResult">
+        SELECT DISTINCT
+            psi.supplier_code,
+            psi.priority,
+            (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) num,
+            bcs.limitnum limitnum,
+            limitnum - (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) availablenum
+        FROM
+            order_info oi
+        LEFT JOIN product_supplier_info psi ON psi.product_code = oi.product_code
+        AND psi.service_code = oi.service_code
+        AND psi. STATUS = 'Y'
+        LEFT JOIN base_contract_service bcs ON bcs.service_code = oi.service_code
+        AND bcs.supplier_code = psi.supplier_code
+        AND bcs.serial_no = (
+            SELECT
+                MAX(serial_no)
+            FROM
+                base_contract_service bcs
+            WHERE
+                bcs.service_code = oi.service_code
+            AND bcs.supplier_code = psi.supplier_code
+        )
+        WHERE
+             EXISTS (
+                SELECT
+                    supplier_code
+                FROM
+                    order_info
+                WHERE
+                order_code = #{orderCode}
+                AND supplier_code = psi.supplier_code
+            ) and  bcs.limitnum- (
+                SELECT
+                    count(0)
+                FROM
+                    order_info oi1
+                WHERE
+                    oi1.node_status = '02'
+                AND DATE_FORMAT(oi1.create_time, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+                AND oi1.supplier_code = psi.supplier_code
+            ) &gt;0 ORDER BY priority
     </select>
 
 </mapper>

@@ -74,6 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="refuseReason"    column="refuse_reason"    />
     </resultMap>
 
+    <resultMap type="Sn_base_addressDO" id="SnaseddressDOBResult">
+        <result property="placename"    column="placename"    />
+        <result property="placecode"    column="placecode"    />
+    </resultMap>
+
     <select id="checkpassWord"  resultMap="RoleLoginInfoResult">
        select distinct role,password from base_contacts where role = #{role}
     </select>
@@ -165,5 +170,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where order_code = #{orderCode}
     </update>
+
+    <select id="selectProvinceByPlacetype" parameterType="AddressInfo" resultMap="SnaseddressDOBResult">
+        SELECT DISTINCT
+            pi.province placecode,
+            sba.placename
+        FROM
+            base_supplier_outlets so
+        JOIN base_provider_info pi ON pi.provider_code = so.website_code
+        JOIN sn_base_address sba ON sba.placecode = pi.province
+        AND so.supplier_code = #{supplierCode}
+        AND so. STATUS = 'Y'
+        AND pi.update_flag = '0'
+    </select>
+
+    <select id="selectCityByPlacetype" parameterType="AddressInfo" resultMap="SnaseddressDOBResult">
+        SELECT DISTINCT
+            pi.city placecode,
+            sba.placename
+        FROM
+            base_supplier_outlets so
+        JOIN base_provider_info pi ON pi.provider_code = so.website_code
+        JOIN sn_base_address sba ON sba.placecode = pi.city
+        AND so.supplier_code = #{supplierCode}
+        AND so. STATUS = 'Y'
+        AND pi.update_flag = '0'
+    </select>
+
+
+    <select id="selectDistrictByPlacetype" parameterType="AddressInfo" resultMap="SnaseddressDOBResult">
+        SELECT DISTINCT
+            pi.district placecode,
+            sba.placename
+        FROM
+            base_supplier_outlets so
+        JOIN base_provider_info pi ON pi.provider_code = so.website_code
+        JOIN sn_base_address sba ON sba.placecode = pi.district
+        AND so.supplier_code = #{supplierCode}
+        AND so. STATUS = 'Y'
+        AND pi.update_flag = '0'
+    </select>
 
 </mapper>

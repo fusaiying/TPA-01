@@ -22,8 +22,8 @@ public class ComplaintDealVo extends BaseEntity {
     private String workOrderNo;
 
     /** 标志 */
-    @Excel(name = "标志")
-    private String flag;
+   // @Excel(name = "标志")
+   // private String flag;
 
     /** 状态 */
     @Excel(name = "状态")
@@ -46,8 +46,8 @@ public class ComplaintDealVo extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
-    @Excel(name="业务说明")
-    private String remark;
+   // @Excel(name="业务说明")
+    //private String remark;
     /*一级投诉分类*/
     private String level1;
 

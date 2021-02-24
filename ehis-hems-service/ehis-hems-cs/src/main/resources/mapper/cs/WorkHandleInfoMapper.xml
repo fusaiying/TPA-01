@@ -234,7 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where handle_id = #{handleId}
     </update>
 
-    <insert id="assistInComplaint" parameterType="WorkHandleInfo">
+    <insert id="assistInComplaint" parameterType="com.paic.ehis.cs.domain.WorkHandleInfo">
         insert into work_handle_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="handleId != null">handle_id,</if>

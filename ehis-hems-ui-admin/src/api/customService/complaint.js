@@ -55,6 +55,14 @@ export function complaintCancelSubmit(data) {
   })
 }
 
+//# addDetail页面添加
+export function complaintAddInsert(data) {
+  return request({
+    url: '/cs/complaint/serviceAdd',
+    method: 'put',
+    data: data
+  })
+}
 
 
 

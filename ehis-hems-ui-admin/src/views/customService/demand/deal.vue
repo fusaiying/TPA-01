@@ -714,7 +714,7 @@
         },
       //协办
       coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.coOrganizer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.coOrganizer.open()
       },
       //超链接用

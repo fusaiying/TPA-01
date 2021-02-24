@@ -199,13 +199,6 @@
         </where>
     </select>
 
-    <!--将协谈未处理改为已处理-->
-    <update id="updatecasediscussionStatus" parameterType="String">
-        update claim_case
-        set case_status = '07'
-        where rpt_no = #{rptNo}
-    </update>
-
     <!--查询基本信息-->
     <select id="selectCaseBaseInfo" parameterType="String" resultMap="ClaimCaseDiscussionVOResult">
         select

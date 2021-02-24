@@ -96,7 +96,7 @@ public class ClaimCaseDiscussionController extends BaseController
      */
    // @PreAuthorize("@ss.hasPermi('system:discussion:edit')")
     @Log(title = "案件协谈信息", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PutMapping("/updateClaimCaseDiscussion")
     public AjaxResult edit(@RequestBody ClaimCaseDiscussion claimCaseDiscussion)
     {
         return toAjax(claimCaseDiscussionService.updateClaimCaseDiscussion(claimCaseDiscussion));
@@ -136,13 +136,6 @@ public class ClaimCaseDiscussionController extends BaseController
         startPage();
         List<ClaimCaseDiscussionVO> list = claimCaseDiscussionService.selectCaseDisListOver(claimCaseDiscussionDTO);
         return getDataTable(list);
-    }
-
-    //将未处理改为已处理
-   @PutMapping("/updatecasediscussionStatus")
-    public AjaxResult updatecasediscussionStatus(@RequestBody String repNo)
-    {
-        return toAjax(claimCaseDiscussionService.updatecasediscussionStatus(repNo));
     }
 
     /*查询基本信息表*/

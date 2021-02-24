@@ -159,7 +159,6 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);
-
         return claimCaseDiscussionMapper.updateClaimCaseDiscussion(claimCaseDiscussion);
     }
 
@@ -293,11 +292,6 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
             return claimCaseDiscussionVOS;
     }
 
-    //将未处理改为已处理
-    @Override
-    public int updatecasediscussionStatus(String repNo) {
-        return claimCaseDiscussionMapper.updatecasediscussionStatus(repNo);
-    }
 
     /*查询基础信息表*/
     @Override

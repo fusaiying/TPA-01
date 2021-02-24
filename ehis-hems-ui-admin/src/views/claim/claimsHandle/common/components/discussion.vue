@@ -761,6 +761,7 @@
         });
       },
       getCalInfo() {
+        //  test rpt :  96JGH0X0000000041
         calInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             this.conclusionInfo = res.data;

@@ -461,6 +461,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
+            //修改主表状态为已处理
+            WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workOrderAccept.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
@@ -499,6 +504,12 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
+
+            //修改主表状态为已处理
+            WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
+            workOrderAccept.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));

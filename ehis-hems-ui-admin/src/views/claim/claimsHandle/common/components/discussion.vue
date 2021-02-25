@@ -239,7 +239,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="20">
-              <el-button type="primary" size="mini" @click="inQuireSaveFun" >保存</el-button>
+              <el-button type="primary" size="mini" @click="inQuireSaveFun" >确定</el-button>
               <el-button type="primary" size="mini"  @click="inQuireConfirmFun">确认提调</el-button>
               <el-button type="primary" size="mini"  @click="formReset('surveyForm')">重置</el-button>
             </el-col>

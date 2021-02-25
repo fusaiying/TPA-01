@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
@@ -54,13 +55,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             if (contactsPerson != null) {
               //  demandAcceptVo1.setContactsPerson(contactsPerson);
                 String linePhone=contactsPerson.getLinePhone();
-                String[] linePhone1=linePhone.split("\\-");
+                String[] linePhone1=StringUtils.isEmpty(linePhone)?new String[4]:linePhone.split("\\-");
                 contactsPerson.setLinePhone1(linePhone1);
                 String homePhone=contactsPerson.getHomePhone();
-                String[] homePhone1=homePhone.split("\\-");
+                String[] homePhone1=StringUtils.isEmpty(homePhone)?new String[4]:homePhone.split("\\-");
                 contactsPerson.setHomePhone1(homePhone1);
                 String workPhone=contactsPerson.getWorkPhone();
-                String[] workPhone1=workPhone.split("\\-");
+                String[] workPhone1=StringUtils.isEmpty(workPhone)?new String[4]:workPhone.split("\\-");
                 contactsPerson.setWorkPhone1(workPhone1);
                 demandAcceptVo1.setContactsPerson(contactsPerson);
 
@@ -71,6 +72,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             //   demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
            // demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo1.getWorkOrderNo());
+            if(acceptDetailInfo==null){
+                continue;
+            }
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();
                 fieldMap.getSourceFiledName();

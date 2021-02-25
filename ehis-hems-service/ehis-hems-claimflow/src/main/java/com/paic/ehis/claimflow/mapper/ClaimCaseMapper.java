@@ -207,4 +207,9 @@ public interface ClaimCaseMapper
     public int updateClaimCaseCore(ClaimCase claimCase);
     /** 见未被使用-flint-List<ClaimCase> */
     public List<ProcessingCaseVo> selectCaseOne(ClaimCase claimCase);
+
+    /**
+     *根据报案号查看当前案件是否存在借款
+     */
+    public int selectCaseBorrowByRptNo(String rtpNo);
 }

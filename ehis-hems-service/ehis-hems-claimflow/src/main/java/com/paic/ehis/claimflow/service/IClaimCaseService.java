@@ -252,6 +252,11 @@ public interface IClaimCaseService
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew);
 
     /**
+     *根据报案号查看当前案件是否存在借款
+     */
+
+    public int selectCaseBorrowByRptNo(String rptNo);
+    /**
      * 案件交单完成进入受理阶段分配操作人
      */
     //public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);

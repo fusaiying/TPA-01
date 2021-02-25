@@ -50,4 +50,10 @@ public interface OrderBussinessInfoMapper
      * 实施操作
      */
     public int implementtOrder(OrderInfo orderInfo);
+
+    public List<Sn_base_addressDO> selectProvinceByPlacetype(AddressInfo addressInfo);
+
+    public List<Sn_base_addressDO> selectCityByPlacetype(AddressInfo addressInfo);
+
+    public List<Sn_base_addressDO> selectDistrictByPlacetype(AddressInfo addressInfo);
 }

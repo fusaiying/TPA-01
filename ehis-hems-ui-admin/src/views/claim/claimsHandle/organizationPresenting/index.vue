@@ -25,6 +25,7 @@
                 v-model="queryParams.organcode"
                 filterable
                 remote
+                clearable
                 reserve-keyword
                 placeholder="请选择机构"
                 :remote-method="remoteMethod"
@@ -78,6 +79,7 @@
             <el-form-item label="操作人：" prop="updateBy">
               <el-select v-model="queryParams.updateBy" class="item-width" placeholder="请选择"
                          remote
+                         clearable
                          reserve-keyword
                          filterable
                          :remote-method="remoteUserMethod">
@@ -163,7 +165,7 @@
 <script>
   import claimsTable from './components/claimsTable'
   import {getUser, getDept} from '@/api/claim/standingBookSearch'
-
+  import {logInfo} from '@/api/dispatch/api'
   import {getBackToList, getDealWithList, getPendingList} from '@/api/claim/presentingReview'
 
   let dictss = [{dictType: 'claimType'},]
@@ -227,49 +229,59 @@
         return item.dictType === 'claimType'
       }).dictDate
       //this.searchHandle();
-      let query = {
-        pageNum: 1,
-        pageSize: 10,
-      }
-      getPendingList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.processedData = res.rows
-          this.processedTotal = res.total
-          if (this.processedData.length !== 0) {
-            this.processedData.forEach(item => {
-              item.minData = []
-            })
+      logInfo().then(res=>{
+        if (res!=null && res.code===200){
+          this.queryParams.updateBy=res.user.userName
+          let query = {
+            pageNum: 1,
+            pageSize: 10,
+            updateBy:res.user.userName
           }
+          getPendingList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.processedData = res.rows
+              this.processedTotal = res.total
+              if (this.processedData.length !== 0) {
+                this.processedData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+          getBackToList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.backData = res.rows
+              this.backTotal = res.total
+              if (this.backData.length !== 0) {
+                this.backData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+          getDealWithList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.dealData = res.rows
+              this.dealTotal = res.total
+              if (this.dealData.length !== 0) {
+                this.dealData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
         }
-      }).finally(() => {
-        this.loading = false
       })
-      getBackToList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.backData = res.rows
-          this.backTotal = res.total
-          if (this.backData.length !== 0) {
-            this.backData.forEach(item => {
-              item.minData = []
-            })
-          }
-        }
-      }).finally(() => {
-        this.loading = false
-      })
-      getDealWithList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.dealData = res.rows
-          this.dealTotal = res.total
-          if (this.dealData.length !== 0) {
-            this.dealData.forEach(item => {
-              item.minData = []
-            })
-          }
-        }
-      }).finally(() => {
-        this.loading = false
-      })
+
+
+
+
       let item = {
         pageNum: 1,
         pageSize: 200,
@@ -509,7 +521,7 @@
             }
           }).finally(() => {
           })
-        } else {//已处理
+        } else if (this.activeName === '02'){//已处理
           getDealWithList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
@@ -534,6 +546,32 @@
             }
           }).finally(() => {
           })
+        }else {
+          getPendingList(query).then(res => {
+            if (res.rows.length > 0) {
+              this.isListExport = true
+              /*  let subDate = ''
+                if (this.queryParams.submitdate.length > 0) {
+                  subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
+                    + '&updatestartTime=' + this.queryParams.updateTime[0]
+                }
+                let upDate = ''
+                if (this.queryParams.updateTime.length > 0) {
+                  upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
+                }
+  */
+              this.download('claimapt/batch/exportPendingList'/* + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
+                '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
+                + upDate*/, {
+                ...query
+              }, `FYX_${new Date().getTime()}.xlsx`)
+            } else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+          })
         }
       },
       handleClick(tab, event) {
@@ -545,44 +583,54 @@
         }
       },
       remoteMethod(query) {
-        let data = {
-          deptName: query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getDept(data).then(res => {
-            this.sysDeptOptions = res.deptlist
-          }).catch(res => {
-          })
+        if (query!=null && query!='' && query!=undefined){
+
+          let data = {
+            deptName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getDept(data).then(res => {
+              this.sysDeptOptions = res.deptlist
+            }).catch(res => {
+            })
+          }
         }
       },
       remoteUserMethod(query) {
-        let data = {
-          organcode: this.queryParams.organcode,
-          userName: query,
-          pageNum: 1,
-          pageSize: 200,
+        if (query!=null && query!='' && query!=undefined){
+
+          let data = {
+            organcode: this.queryParams.organcode,
+            userName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getUser(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.sysUserOptions = res.data
+              }
+            })
+          }
         }
-        if (query !== '' && query != null) {
+      },
+      getUsers(val) {
+        if (val!=null && val!='' && val!=undefined){
+          let data = {
+            organcode: val,
+            pageNum: 1,
+            pageSize: 200,
+          }
           getUser(data).then(res => {
             if (res != null && res.code === 200) {
               this.sysUserOptions = res.data
             }
           })
+        }else {
+          this.sysUserOptions=[]
         }
-      },
-      getUsers(val) {
-        let data = {
-          organcode: val,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        getUser(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.sysUserOptions = res.data
-          }
-        })
       }
     }
   }

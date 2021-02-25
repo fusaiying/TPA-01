@@ -284,9 +284,9 @@
         default: false
       },
       policySelectData: {
-        type: Object,
+        type: Array,
         default: function () {
-          return {}
+          return []
         }
       },
       fixInfo:Object,
@@ -507,7 +507,6 @@
             };
 
             addDiscussion(params).then(res => {
-              console.log(res);
               if (res.code == '200') {
                 this.$message({
                   message: '保存成功！',
@@ -742,7 +741,6 @@
         params.rptNo = this.rptNo;
 
         inQuireConfirm(params).then(res => {
-          console.log(res);
           if (res.code == '200') {
             this.$message({
               message: '提调成功！',
@@ -807,7 +805,7 @@
               this.surveyForm.organCode = this.surveyInfo.organCode;
             }
             if(this.surveyInfo.policyNo != '' && this.surveyInfo.policyNo != null) {
-             // this.surveyForm.policyNo = this.surveyInfo.policyNo;
+              this.surveyForm.policyNo = this.surveyInfo.policyNo;
             }
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;

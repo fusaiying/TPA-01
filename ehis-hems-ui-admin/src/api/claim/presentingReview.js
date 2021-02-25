@@ -139,9 +139,8 @@ export function updateClaimBatch(data) {
 // 查询理赔批次流程记录表
 export function selectRecordByBatchno(data) {
   return request({
-    url: '/claimapt/record/selectRecordByBatchno',
+    url: '/claimapt/record/selectRecordByBatchno?batchno='+data,
     method: 'post',
-    data: data
   })
 }
 

@@ -93,7 +93,8 @@
       <!-- 案件理算 -->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-18" class="batchInfo_class"
            style="margin-top: 10px;">
-        <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"  @refresh-item="refreshList"
+        <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"
+                        @refresh-item="refreshList"
                         :node="querys.node"/>
       </div>
       <!--赔案备注-->
@@ -106,7 +107,8 @@
         <problemCase :sonProblemData="sonProblemData" :fixInfo="fixInfo" :node="querys.node" :status="querys.status"/>
       </div>
       <!--赔付结论-->
-      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='02'" class="batchInfo_class" style="margin-top: 10px;">
+      <div v-if="(querys.node==='calculateReview' || querys.node==='sport') && fixInfo.isAppeal==='02'"
+           class="batchInfo_class" style="margin-top: 10px;">
         <pay-conclusion :fixInfo="fixInfo"/>
       </div>
       <!--赔付结论-->
@@ -170,6 +172,7 @@
     changeBillStatus,
     infoList,
     insurancePolicyList,
+    checkThePayment,
     adjustRemarkList, addInsuredAndPolicy
   } from '@/api/claim/handleCom'
 
@@ -215,7 +218,7 @@
           claimCaseInsured: '',
           policyInfominData: []
         },
-        policySelectData:[],
+        policySelectData: [],
         sonRegisterData: {},
         sonPayeeInfoData: [],
         sonBillingInfoData: [],
@@ -313,10 +316,10 @@
         selectHistoricalProblem(item).then(res => {
           if (res != null && res.code === 200) {
             this.historicalProblemData = res.data.claimCaseProblems
-            if (res.data.problemStatus==='Y'){
-              this.historicalProblemDataTotal='?'
-            }else {
-              if (res.data.total!=null){
+            if (res.data.problemStatus === 'Y') {
+              this.historicalProblemDataTotal = '?'
+            } else {
+              if (res.data.total != null) {
                 this.historicalProblemDataTotal = res.data.total
               }
             }
@@ -358,12 +361,12 @@
           getHospital(data).then(res => {
             if (res != null && res.code === 200) {
               res.data.forEach(item => {
-                let option={
-                  payMode:'',
-                  payeeName:item.accountName,
-                  accAttribute:item.accAttribute,
-                  payeeBank:item.bankName,
-                  accNo:item.accountNo,
+                let option = {
+                  payMode: '1',
+                  payeeName: item.accountName,
+                  accAttribute: item.accAttribute,
+                  payeeBank: item.bankName,
+                  accNo: item.accountNo,
                 }
                 this.sonPayeeInfoData.push(option)
               })
@@ -428,7 +431,7 @@
         });
       },
       //获取领款人信息数据
-      getPayeeInfoData(){
+      getPayeeInfoData() {
         return this.$refs.payeeInfoForm.tableData
       },
       //录入完毕
@@ -492,7 +495,7 @@
           })
         } else if (item === 'calculate') {
           this.$refs.caseCalculate.getDataCase()
-        }else if (item === 'discussion') {
+        } else if (item === 'discussion') {
           this.$refs.discussion.getCalInfo()
         }
       },
@@ -523,117 +526,28 @@
         }
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
-        let flag=this.$refs.insuredForm.validataForm()
+        let flag = this.$refs.insuredForm.validataForm()
         //理赔类型事后 false  直结true
-        let saveflag=true
-        if(this.batchInfo.claimtype==='02'){
-          saveflag=false
+        let saveflag = true
+        if (this.batchInfo.claimtype === '02') {
+          saveflag = false
+        } else {
+          saveflag = true
         }
-        else {
-          saveflag=true
-        }
+
 
         //
-        if(saveflag){
-          if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
-            let data = {
-              claimCase:{rptNo: this.querys.rptNo},
-              insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
-              name: this.$refs.insuredForm.baseForm.name//被保人姓名
-            }
-            editCaseAndRecordInfoSuspend(data).then(res => {
-              if (res != null && res.code === 200) {
-                if (res.data.caseStypeFind==='01'){
-                  this.$message({
-                    message: '提交成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.$store.dispatch("tagsView/delView", this.$route);
-                  this.$router.go(-1)
-                }else if (res.data.caseStypeFind==='02'){
-                  this.$confirm(`此被保人只有健康险保单，确认后将提交至健康险?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                  }).then(() => {
-                    let data = {
-                      claimCase:{rptNo: this.querys.rptNo},
-                      insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
-                      name: this.$refs.insuredForm.baseForm.name,//被保人姓名
-                      caseStypeFind:'02'
-                    }
-                    editCaseAndRecordInfoSuspend(data).then(response => {
-                      if (res != null && response.code === 200) {
-                        this.$message({
-                          message: '提交成功！',
-                          type: 'success',
-                          center: true,
-                          showClose: true
-                        })
-                        this.$store.dispatch("tagsView/delView", this.$route);
-                        this.$router.go(-1)
-                      }
-                    })
-                  }).catch(() => {
-                    this.$message({
-                      type: 'info',
-                      message: '已取消！'
-                    })
-                  })
-                }else if (res.data.caseStypeFind==='03'){
-                  return this.$message.warning(
-                    "该被保人不存在保单信息，请撤件！"
-                  )
-                }
-
-              }
-            }).catch(res => {
-
-            })
-          } else {
-            if (!(isInsuredSave || hasInsuredId)) {
-              return this.$message.warning(
-                "请保存被保人信息！"
-              )
-            } else if (!(isApplicantSave || hasApplicantId)) {
-              return this.$message.warning(
-                "请保存申请人信息！"
-              )
-            } else if (!(isAcceptInfoSave || hasAcceptId)) {
-              return this.$message.warning(
-                "请保存受理信息！"
-              )
-            }
-          }
-        }
-        else {
-          if (flag) {
-
-            //获取被保人信息数据   保存被保人信息
-           let insuredData= this.$refs.insuredForm.baseForm
-           let  tableData=this.$refs.insuredForm.tableData
-            const subFormSearch = JSON.parse(JSON.stringify(insuredData))
-            subFormSearch.rptNo = this.querys.rptNo
-
-
-            let insuredInfoData = {
-              policyNos: tableData,
-              claimCaseInsured: subFormSearch
-            }
-
-
+        if (this.$refs.insuredForm.tableData != null && this.$refs.insuredForm.tableData.length > 0) {
+          if (saveflag) {
             if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
-              addInsuredAndPolicy(insuredInfoData)
               let data = {
-                claimCase:{rptNo: this.querys.rptNo},
+                claimCase: {rptNo: this.querys.rptNo},
                 insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
                 name: this.$refs.insuredForm.baseForm.name//被保人姓名
               }
               editCaseAndRecordInfoSuspend(data).then(res => {
                 if (res != null && res.code === 200) {
-                  if (res.data.caseStypeFind==='01'){
+                  if (res.data.caseStypeFind === '01') {
                     this.$message({
                       message: '提交成功！',
                       type: 'success',
@@ -642,17 +556,17 @@
                     })
                     this.$store.dispatch("tagsView/delView", this.$route);
                     this.$router.go(-1)
-                  }else if (res.data.caseStypeFind==='02'){
+                  } else if (res.data.caseStypeFind === '02') {
                     this.$confirm(`此被保人只有健康险保单，确认后将提交至健康险?`, '提示', {
                       confirmButtonText: '确定',
                       cancelButtonText: '取消',
                       type: 'warning'
                     }).then(() => {
                       let data = {
-                        claimCase:{rptNo: this.querys.rptNo},
+                        claimCase: {rptNo: this.querys.rptNo},
                         insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
                         name: this.$refs.insuredForm.baseForm.name,//被保人姓名
-                        caseStypeFind:'02'
+                        caseStypeFind: '02'
                       }
                       editCaseAndRecordInfoSuspend(data).then(response => {
                         if (res != null && response.code === 200) {
@@ -672,19 +586,15 @@
                         message: '已取消！'
                       })
                     })
-                  }else if (res.data.caseStypeFind==='03'){
+                  } else if (res.data.caseStypeFind === '03') {
                     return this.$message.warning(
                       "该被保人不存在保单信息，请撤件！"
                     )
                   }
+
                 }
               }).catch(res => {
-                this.$message({
-                  message: '提交失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+
               })
             } else {
               if (!(isInsuredSave || hasInsuredId)) {
@@ -701,11 +611,125 @@
                 )
               }
             }
+
           } else {
-            return this.$message.warning(
-              "领款人信息中与被保人关系存在本人时，被保人信息的职业和国籍必录！"
-            )
+            let option = {
+              rptNo: this.querys.rptNo
+            }
+            checkThePayment(option).then(res => {
+              if (res!=null && res.code===200) {
+                if (res.data==1){
+                  if (flag) {
+
+                    //获取被保人信息数据   保存被保人信息
+                    let insuredData = this.$refs.insuredForm.baseForm
+                    let tableData = this.$refs.insuredForm.tableData
+                    const subFormSearch = JSON.parse(JSON.stringify(insuredData))
+                    subFormSearch.rptNo = this.querys.rptNo
+
+
+                    let insuredInfoData = {
+                      policyNos: tableData,
+                      claimCaseInsured: subFormSearch
+                    }
+
+
+                    if ((isInsuredSave || hasInsuredId) && (isApplicantSave || hasApplicantId) && (isAcceptInfoSave || hasAcceptId)) {
+                      addInsuredAndPolicy(insuredInfoData)
+                      let data = {
+                        claimCase: {rptNo: this.querys.rptNo},
+                        insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+                        name: this.$refs.insuredForm.baseForm.name//被保人姓名
+                      }
+                      editCaseAndRecordInfoSuspend(data).then(res => {
+                        if (res != null && res.code === 200) {
+                          if (res.data.caseStypeFind === '01') {
+                            this.$message({
+                              message: '提交成功！',
+                              type: 'success',
+                              center: true,
+                              showClose: true
+                            })
+                            this.$store.dispatch("tagsView/delView", this.$route);
+                            this.$router.go(-1)
+                          } else if (res.data.caseStypeFind === '02') {
+                            this.$confirm(`此被保人只有健康险保单，确认后将提交至健康险?`, '提示', {
+                              confirmButtonText: '确定',
+                              cancelButtonText: '取消',
+                              type: 'warning'
+                            }).then(() => {
+                              let data = {
+                                claimCase: {rptNo: this.querys.rptNo},
+                                insuredNo: this.$refs.insuredForm.baseForm.insuredNo,//被保人客户号
+                                name: this.$refs.insuredForm.baseForm.name,//被保人姓名
+                                caseStypeFind: '02'
+                              }
+                              editCaseAndRecordInfoSuspend(data).then(response => {
+                                if (res != null && response.code === 200) {
+                                  this.$message({
+                                    message: '提交成功！',
+                                    type: 'success',
+                                    center: true,
+                                    showClose: true
+                                  })
+                                  this.$store.dispatch("tagsView/delView", this.$route);
+                                  this.$router.go(-1)
+                                }
+                              })
+                            }).catch(() => {
+                              this.$message({
+                                type: 'info',
+                                message: '已取消！'
+                              })
+                            })
+                          } else if (res.data.caseStypeFind === '03') {
+                            return this.$message.warning(
+                              "该被保人不存在保单信息，请撤件！"
+                            )
+                          }
+                        }
+                      }).catch(res => {
+                        this.$message({
+                          message: '提交失败!',
+                          type: 'error',
+                          center: true,
+                          showClose: true
+                        })
+                      })
+                    } else {
+                      if (!(isInsuredSave || hasInsuredId)) {
+                        return this.$message.warning(
+                          "请保存被保人信息！"
+                        )
+                      } else if (!(isApplicantSave || hasApplicantId)) {
+                        return this.$message.warning(
+                          "请保存申请人信息！"
+                        )
+                      } else if (!(isAcceptInfoSave || hasAcceptId)) {
+                        return this.$message.warning(
+                          "请保存受理信息！"
+                        )
+                      }
+                    }
+                  } else {
+                    return this.$message.warning(
+                      "领款人信息中与被保人关系存在本人时，被保人信息的职业和国籍必录！"
+                    )
+                  }
+                }else {
+                  return this.$message.warning(
+                    "领款人分配比例有误，请检查！"
+                  )
+                }
+              }
+            })
+
+
           }
+        } else {
+          return this.$message.warning(
+            "该被保人不存在保单信息，请撤件！"
+          )
         }
 
 

@@ -57,7 +57,8 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     @Override
     public int insertClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
-        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(BigDecimal.valueOf(100),2));
+
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2, BigDecimal.ROUND_HALF_UP));
         claimCasePayee.setStatus("Y");
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
@@ -67,14 +68,25 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     }
 
     /**
+     * 校验案件领款人领款比例
+     * @param rptNo
+     * @return
+     */
+    @Override
+    public int CheckThePaymentRatio(String rptNo){
+        return 1==claimCasePayeeMapper.CheckClaimCasePayeeByRptNo(rptNo)?1:0;
+    }
+
+    /**
      * 修改案件领款人信息
      * 
-     * @param claimCasePayee 案件领款人信息
+     * @param claimCasePayee 案件领款人信息+
      * @return 结果
      */
     @Override
     public int updateClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2, BigDecimal.ROUND_HALF_UP));
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
         return claimCasePayeeMapper.updateClaimCasePayee(claimCasePayee);
@@ -128,7 +140,11 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     @Override
     public List<ClaimCasePayee> selectClaimCasePayeeByRptNo(String rptNo){
 
-        return claimCasePayeeMapper.selectClaimCasePayeeByRptNo(rptNo);
+        List<ClaimCasePayee> claimCasePayees = claimCasePayeeMapper.selectClaimCasePayeeByRptNo(rptNo);
+        for (ClaimCasePayee claimCasePayee : claimCasePayees) {
+            claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().multiply(new BigDecimal(String.valueOf(100))));
+        }
+        return claimCasePayees;
     }
 
 

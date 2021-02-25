@@ -155,6 +155,15 @@ public interface IClaimBatchService
      */
     public StandingAndBatck updateSysClaimBatch(StandingAndBatck standingAndBatck);//
 
+
+    /**
+     * 机构交单-事后-保存-修改理赔批次 不增加轨迹表
+     *
+     * @param standingAndBatck 理赔批次
+     * @return 结果
+     */
+    public StandingAndBatck updateSysClaimBatchTwo(StandingAndBatck standingAndBatck);//
+
     /**
      * 机构交单-事后-新增-修改理赔批次
      * 机构交单-事后-提交-修改理赔批次
@@ -163,6 +172,8 @@ public interface IClaimBatchService
      * @return 结果
      */
     public StandingAndBatck updateSysClaimBatchPresent(StandingAndBatck standingAndBatck);//
+
+
 
 
 }

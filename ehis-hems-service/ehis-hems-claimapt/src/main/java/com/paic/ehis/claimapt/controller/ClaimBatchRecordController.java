@@ -121,6 +121,7 @@ public class ClaimBatchRecordController extends BaseController {
             iClaimCaseStandingService.updateClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch().getBatchno());
             List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
             standingAndBatck.setStandingData(claimCaseStandingVos1);
+           iClaimBatchService.updateSysClaimBatchTwo(standingAndBatck);
             return AjaxResult.success(standingAndBatck);
         } else {
 
@@ -248,7 +249,7 @@ public class ClaimBatchRecordController extends BaseController {
     //通过batchno批次号查询sys_claim_batch_record表得到RecordByBatchnoDto输出流
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:record:list')")
     @PostMapping("/selectRecordByBatchno")
-    public AjaxResult selectRecordByBatchno(@RequestBody String batchno) {
+    public AjaxResult selectRecordByBatchno(String batchno) {
         if (batchno != null || batchno != "") {
             List<ClaimBatchRecord> batchnoList = claimBatchRecordService.selectSysClaimBatchRecordListByBatchno(batchno);
             return AjaxResult.success(batchnoList);
@@ -256,4 +257,6 @@ public class ClaimBatchRecordController extends BaseController {
             return AjaxResult.success(123);
         }
     }
+
+
 }

@@ -4,6 +4,7 @@ import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
 import com.paic.ehis.claimflow.domain.CustomerInfoMap;
 import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
+import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.DutyVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 
@@ -83,4 +84,6 @@ public interface PolicyInfoMapper
     PolicyInfo selectPolicyInfoByIdThree(String insuredNo);
 
     List<PolicyInfo> selectPolicyInfoByInsuredNo(ClaimCaseShuntClass claimCaseShuntClass);
+
+    List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName claimCaseShuntClass);
 }

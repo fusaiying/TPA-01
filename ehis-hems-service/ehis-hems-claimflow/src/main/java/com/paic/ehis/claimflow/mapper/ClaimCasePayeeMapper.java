@@ -75,4 +75,6 @@ public interface ClaimCasePayeeMapper
      * @return
      */
     public List<ClaimCasePayee> selectClaimCasePayeeByRptNo(String rptNo);
+
+    public int CheckClaimCasePayeeByRptNo(String rptNo);
 }

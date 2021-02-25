@@ -239,4 +239,9 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         where insured_no = #{insuredNo} AND name = #{name}
     </select>
 
+    <select id="selectPolicyInfoListByinsuredNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseShuntClass" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        where insured_no = #{insuredNo} AND name = #{name}
+    </select>
+
 </mapper>

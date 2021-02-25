@@ -83,9 +83,6 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchDTO.setClaimtype("02");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
-        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
-        }
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
@@ -99,10 +96,10 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     @Override
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
-        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());
-        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
-        }
+        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());//04
+//        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+//            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//        }
         return claimBatchMapper.selectReturnedBatchList(batchDTO);
     }
 
@@ -129,19 +126,20 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-        if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
-                || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
-                || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
+        if (StringUtils.isNull(batchDTO.getSubmitstartdate()) && StringUtils.isNull(batchDTO.getOrgancode())
+                && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
+                && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
             Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);
             // 获取用户的所属机构
             batchDTO.setOrgancode( sysUser.getDeptId().toString());
-        } else {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
+//        else {
+//            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//        }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'01','02','03','05'");
+        batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
@@ -173,7 +171,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'01','02','03','05'");
+        batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
@@ -246,12 +244,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchRecordDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchRecordDTO.setBatchstatus("'03','04','05'");
         batchRecordDTO.setClaimtype("01");
-        batchRecordDTO.setOperation(ClaimStatus.BATCHRETURN.getCode());
+        batchRecordDTO.setOperation(ClaimStatus.BATCHREVIEW.getCode());
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 1);
-        batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
-        batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        if (!StringUtils.isNull(batchRecordDTO.getSubmitstartdate())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
+            batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
+            batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        }
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
     }
 
@@ -333,6 +333,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
             claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
             //生成对应的案件信息数据（报案号）
             for (int i = 0; i < claimBatch.getCasenum(); i++) {
@@ -342,7 +343,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 claimCase.setRptNo(rptNo);
                 claimCase.setFilingNo("JGHDQQW" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 10));//归档号
                 claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
-                claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());//05
+                claimCase.setCaseStatus(ClaimStatus.CASETHREE.getCode());//扫描04
                 claimCase.setCreateBy(SecurityUtils.getUsername());
                 claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
                 claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -351,14 +352,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 //生成新的案件操作记录表
                 claimCaseRecord.setRptNo(rptNo);
                 claimCaseRecord.setOperator(SecurityUtils.getUsername());//操作人
-                claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//操作节点05-受理
+                claimCaseRecord.setOperation(ClaimStatus.CASETHREE.getCode());//扫描04
                 claimCaseRecord.setHistoryFlag(ClaimStatus.DATANO.getCode());//N
                 claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
                 claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
                 claimCaseRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
                 claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-                claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+                //claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
             }
             //将批次信息改变为：交单完成
             return claimBatchMapper.updateClaimBatch(claimBatch);
@@ -370,7 +371,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
             claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
-            claimBatchRecord.setOperation(ClaimStatus.DATAYES.getCode());//Y
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setOperation(ClaimStatus.BATCHRETURN.getCode());//04
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
@@ -463,18 +464,21 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatch.setUpdateBy("");
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
-        //二条
+
         ClaimBatchRecord claimBatchRecord1 = new ClaimBatchRecord();
         //批次号一样
         claimBatchRecord1.setBatchno(str1);
         claimBatchRecord1.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord1.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord1.setUpdateBy("");
+        claimBatchRecord1.setUpdateBy(SecurityUtils.getUsername());
         claimBatchRecord1.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord1.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
         claimBatchRecord1.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        //新增02
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord1);
-
+        //新增01
+        claimBatchRecord1.setOperation(ClaimStatus.BATCHTENDER.getCode());//01
+        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord1);
         claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchMapper.insertClaimBatch(claimBatch);
 
@@ -507,6 +511,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02为提交
         claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+
+        claimBatchRecord.setOperation(ClaimStatus.BATCHTENDER.getCode());//01为提交
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
         claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
@@ -542,6 +549,22 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         }
+
+        return standingAndBatck;
+    }
+
+    /**
+     *
+     * @param standingAndBatck 理赔批次
+     * @return 结果
+     */
+    @Override
+    public StandingAndBatck updateSysClaimBatchTwo(StandingAndBatck standingAndBatck) {
+        //不增加轨迹表
+        standingAndBatck.getClaimBatch().setUpdateBy(SecurityUtils.getUsername());
+        standingAndBatck.getClaimBatch().setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         return standingAndBatck;
     }
 
@@ -570,7 +593,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecordMapper.updateClaimBatchRecord(claimBatchRecord);
 
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
-            claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+           // claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
             claimBatch.setUpdateBy(SecurityUtils.getUsername());
             claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));

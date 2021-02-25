@@ -4,9 +4,9 @@ import request from '@/utils/request'
 // 本次协谈处理
 export function updateDiss(data) {
   return request({
-    url:  '/claimflow/discussion/updatecasediscussionStatus',
+    url:  '/claimflow/discussion/updateClaimCaseDiscussion',
     method: 'put',
-    data
+    data:data
   })
 }
 

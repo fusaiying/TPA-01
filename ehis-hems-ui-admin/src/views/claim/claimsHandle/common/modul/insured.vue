@@ -466,6 +466,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$store.dispatch("tagsView/delView", this.$route);
                   this.$router.push({path: '/claims-handle/pbclaim'});
                 }
               })
@@ -698,7 +699,7 @@
         }
         else if(this.searchForm.name){
 
-            if((this.searchForm.birthday!=null && this.searchForm.birthday!='')||(this.searchForm.policyNo!=null && this.searchForm.policyNo!='') ){
+            if((this.searchForm.birthday!=null && this.searchForm.birthday!='') ||(this.searchForm.policyNo!=null && this.searchForm.policyNo!='') ){
               this.getSelectRecogn()
             }
             else {
@@ -760,7 +761,7 @@
         selectRecognizee(this.searchForm).then(res => {
           //查询成功
           if (res != null && res.code == '200' ) {
-            if(res.data.flag=='false'){
+            if(res.data.flag=='1'){
               this.tableData = res.data.policyInsuredList;
               if(res.data.policyInsuredList.length>0) {
                 this.tableData.map((item, index) => {
@@ -773,8 +774,11 @@
                 this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
               }
             }
-            else {
+            else if(res.data.flag=='2') {
               this.$message({message: '团单不可单独用保单号查询', type: 'warning', showClose: true, center: true})
+            }
+            else if(res.data.flag=='3') {
+              this.$message({message: '请同时录入保单号和姓名', type: 'warning', showClose: true, center: true})
             }
 
 

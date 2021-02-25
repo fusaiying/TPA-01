@@ -38,6 +38,7 @@
         <result property="sex"    column="sex"    />
         <result property="discSubType"    column="disc_sub_type"    />
         <result property="disView"    column="dis_view"    />
+        <result property="discId"    column="disc_id"    />
     </resultMap>
 
     <sql id="selectClaimCaseDiscussionVo">
@@ -144,7 +145,8 @@
     claim_case_insured.name,/*被保人姓名*/
     claim_case_discussion.disc_type,/*协谈类型*/
     claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
-    claim_case.case_status/*案件状态*/
+    claim_case.case_status,/*案件状态*/
+    claim_case_discussion.disc_id
     from
     claim_case_discussion,
     claim_batch,
@@ -176,7 +178,8 @@
         claim_case_insured.name,/*被保人姓名*/
         claim_case_discussion.disc_type,/*协谈类型*/
         claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
-        claim_case.case_status/*案件状态*/
+        claim_case.case_status,/*案件状态*/
+        claim_case_discussion.disc_id
         from
         claim_case_discussion,
         claim_batch,
@@ -213,7 +216,8 @@
             claim_case_accept.acc_type, /*事故类型*/
             claim_case_discussion.disc_type,
             claim_case_discussion.disc_sub_type, /**协谈系类*/
-            claim_case_discussion.dis_view /**转出意见*/
+            claim_case_discussion.dis_view, /**转出意见*/
+            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age
         from
             claim_case_discussion,
             claim_batch,

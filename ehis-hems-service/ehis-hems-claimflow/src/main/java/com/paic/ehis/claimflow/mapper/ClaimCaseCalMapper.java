@@ -96,4 +96,7 @@ public interface ClaimCaseCalMapper
      * @return
      */
     public List<ClaimCaseCal> selectClaimCaseCalByBatchNo(String batchNo);
+
+    public int updateClaimConclusionNull(String rptNo);
+
 }

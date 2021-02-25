@@ -513,8 +513,13 @@
           this.baseForm.dateRange = []
         } else {
           this.$set(this.baseForm, 'checked', false)
-          this.baseForm.dateRange[0] = this.baseForm.idStartDate
-          this.baseForm.dateRange[1] = this.baseForm.idEndDate
+          if ((this.baseForm.idStartDate==null || this.baseForm.idStartDate=='') || (this.baseForm.idEndDate==null || this.baseForm.idEndDate=='')){
+            this.baseForm.dateRange = []
+          }else {
+            this.baseForm.dateRange[0] = this.baseForm.idStartDate
+            this.baseForm.dateRange[1] = this.baseForm.idEndDate
+          }
+
         }
 
 
@@ -568,21 +573,13 @@
         else {
           this.$set(this.baseForm, 'checked', false)
 
-          if(baseFormData.idStartDate!=null && baseFormData.idStartDate!=''){
+          if ((baseFormData.idStartDate==null || baseFormData.idStartDate=='') || (baseFormData.idEndDate==null || baseFormData.idEndDate=='')){
+            this.baseForm.dateRange = []
+          }else {
+            this.baseForm.dateRange[0] = baseFormData.idStartDate
+            this.baseForm.dateRange[1] = baseFormData.idEndDate
+          }
 
-            this.baseForm.dateRange[0] =  baseFormData.idStartDate
-
-          }
-          else {
-
-            this.baseForm.dateRange[0] = undefined
-          }
-          if(baseFormData.idEndDate!=null && baseFormData.idEndDate!=''){
-            this.baseForm.dateRange[1] =  this.baseForm.idEndDate
-          }
-          else {
-            this.baseForm.dateRange[1] = undefined
-          }
         }
 
 
@@ -682,8 +679,7 @@
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             let policyNoList = []
-
-            if (this.tableData.length > 0) {
+            if (this.tableData!=null && this.tableData.length > 0) {
               this.tableData.forEach(item => {
                 policyNoList.push(item.policyNo)
               })
@@ -693,9 +689,12 @@
             subFormSearch.city = this.region[1]
             subFormSearch.district = this.region[2]
             subFormSearch.rptNo = this.copyFixInfo.rptNo
-            if(this.baseForm.dateRange.length>=2){
+            if(this.baseForm.dateRange!=null && this.baseForm.dateRange.length>=2){
               this.baseForm.idStartDate= this.baseForm.dateRange[0]
               this.baseForm.idEndDate  =this.baseForm.dateRange[1]
+            }else if (this.baseForm.checked==false){
+              this.baseForm.idStartDate=''
+              this.baseForm.idEndDate =''
             }
             subFormSearch.idStartDate = this.baseForm.idStartDate
             subFormSearch.idEndDate = this.baseForm.idEndDate

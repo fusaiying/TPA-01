@@ -15,7 +15,7 @@ public class ConditionsForTheAdjustmentVO implements Serializable {
     @Excel(name = "报案号")
     private String rptNo;//claim_case
     //案件状态
-    @Excel(name = "批次状态 00-挂起 01-交单复核 02-交单退回 03-交单失败 04-交单完成 05-受理 30-问题件 97-撤件可申诉 98-撤件 06-录入 07-审核 31-协谈 32-调查 08-抽检 99-结案")
+    @Excel(name = "案件状态", readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失败,04=交单完成,05=受理,30=问题件,97=撤件可申诉,98=撤件,06=录入,07=审核,31=协谈,32=调查,08=抽检,99=结案")
     private String caseStatus;//claim_case
     //被保人姓名
     @Excel(name = "被保人姓名")

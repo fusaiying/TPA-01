@@ -136,9 +136,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.batch_status,
         record.create_by,
         record.create_time,
-        record.remark,
         bpi.chname1,
-        bpi.enname1
+        bpi.enname1,
+        (select r.remark from claim_batch_record r where operation = '04'
+        AND STATUS = 'Y' and cb.batch_no=r.batch_no
+        ORDER BY
+        create_time
+        desc
+        LIMIT 1) as remark
         FROM
         claim_batch cb
         LEFT JOIN (
@@ -146,7 +151,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         batch_no,
         create_by,
         create_time,
-        remark,
         status,
         update_by
         FROM
@@ -159,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
@@ -230,6 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )record on record.batch_no=cb.batch_no and record.status='Y'
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
         AND bpi.STATUS = 'Y'
+        LEFT JOIN claim_case ca on ca.batch_no=cb.batch_no AND ca.STATUS = 'Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
             <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (

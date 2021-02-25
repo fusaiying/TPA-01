@@ -25,6 +25,7 @@
                 v-model="queryParams.organcode"
                 filterable
                 remote
+                clearable
                 reserve-keyword
                 placeholder="请选择机构"
                 :remote-method="remoteMethod"
@@ -78,6 +79,7 @@
             <el-form-item label="操作人：" prop="updateBy">
               <el-select v-model="queryParams.updateBy" class="item-width" placeholder="请选择"
                          remote
+                         clearable
                          reserve-keyword
                          filterable
                          :remote-method="remoteUserMethod">
@@ -581,44 +583,54 @@
         }
       },
       remoteMethod(query) {
-        let data = {
-          deptName: query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getDept(data).then(res => {
-            this.sysDeptOptions = res.deptlist
-          }).catch(res => {
-          })
+        if (query!=null && query!='' && query!=undefined){
+
+          let data = {
+            deptName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getDept(data).then(res => {
+              this.sysDeptOptions = res.deptlist
+            }).catch(res => {
+            })
+          }
         }
       },
       remoteUserMethod(query) {
-        let data = {
-          organcode: this.queryParams.organcode,
-          userName: query,
-          pageNum: 1,
-          pageSize: 200,
+        if (query!=null && query!='' && query!=undefined){
+
+          let data = {
+            organcode: this.queryParams.organcode,
+            userName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getUser(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.sysUserOptions = res.data
+              }
+            })
+          }
         }
-        if (query !== '' && query != null) {
+      },
+      getUsers(val) {
+        if (val!=null && val!='' && val!=undefined){
+          let data = {
+            organcode: val,
+            pageNum: 1,
+            pageSize: 200,
+          }
           getUser(data).then(res => {
             if (res != null && res.code === 200) {
               this.sysUserOptions = res.data
             }
           })
+        }else {
+          this.sysUserOptions=[]
         }
-      },
-      getUsers(val) {
-        let data = {
-          organcode: val,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        getUser(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.sysUserOptions = res.data
-          }
-        })
       }
     }
   }

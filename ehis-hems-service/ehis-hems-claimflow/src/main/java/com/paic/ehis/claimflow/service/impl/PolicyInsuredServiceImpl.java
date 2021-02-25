@@ -107,26 +107,29 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
     @Override
     public PolicyFlagVo selectRecognizee(PolicyInsured policyInsured) {
         PolicyFlagVo policyFlagVo=new PolicyFlagVo();
+        //保单号是否为空
         if(policyInsured.getPolicyNo().isEmpty()){
             policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
-            policyFlagVo.setFlag("false");
+            policyFlagVo.setFlag("1");
         }/*else if(policyInsured.getPolicyNo() ){
 
         }*/
         else
         {
+
+            PolicyVo policyVos = policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
+
             if(policyInsured.getName().isEmpty()) {
-                PolicyVo policyVos = policyInfoMapper.selectPolicyRiskType(policyInsured.getPolicyNo());
+
                 if (policyVos.getPolicyRiskType().equals("G")) {
-                    policyFlagVo.setFlag("true");
+                    policyFlagVo.setFlag("2");
                 } else {
-                    policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
-                    policyFlagVo.setFlag("false");
+                    policyFlagVo.setFlag("3");
                 }
             }
             else {
                 policyFlagVo.setPolicyInsuredList(policyInsuredMapper.selectRecognizee(policyInsured));
-                policyFlagVo.setFlag("false");
+                policyFlagVo.setFlag("1");
             }
 
         }

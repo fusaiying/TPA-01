@@ -693,11 +693,23 @@
         <result property="claimType" column="claim_type"  />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
-        select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by, cb.claim_type
-        from claim_case cc
-        left join  claim_batch cb on cc.batch_no=cb.batch_no  and cc.status='Y'
-        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no  and cci.status='Y'
-        inner join  claim_case_policy ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
+        SELECT
+        cb.batch_no,
+        cc.rpt_no,
+        cc.case_status,
+        cc.update_by,
+        cb.claim_type,
+        ccp.NAME,
+        cci.id_no,
+        ccp.policy_item_no
+        FROM
+        claim_batch cb
+        LEFT JOIN claim_case cc ON cb.batch_no = cc.batch_no
+        AND cc.STATUS = 'Y'
+        LEFT JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
+        AND cci.STATUS = 'Y'
+        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
+        AND ccp.STATUS = 'Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>

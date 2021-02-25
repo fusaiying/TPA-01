@@ -289,11 +289,15 @@
           return []
         }
       },
+      insuredData:Object,
       fixInfo:Object,
       node:String,
 
     },
     watch: {
+      insuredData: function (newValue) {
+        this.surveyInfo = newValue;
+      },
       policySelectData: function (newValue) {
         this.policyNos = newValue;
       },
@@ -500,6 +504,9 @@
     computed: {
     },
     methods: {
+      goHistory(){
+        this.$router.go(-1);
+      },
       validSubType(value){
         this.negotiationSubTypes = [];
         this.discussionForm.discSubType = '';
@@ -537,6 +544,7 @@
                   center: true,
                   showClose: true
                 });
+                this.goHistory();
               } else {
                 this.$message({
                   message: '保存成功！',
@@ -679,7 +687,7 @@
               center: true,
               showClose: true
             });
-            this.$router.go(-1);
+           this.goHistory();
           } else {
             this.$message({
               message: '审核失败！',
@@ -761,6 +769,10 @@
         if(this.rptNo == '') {
           return false;
         }
+        if(!this.inQuireConfirmBtn) {
+          this.$message.info('请先保存再进行提调！')
+          return false;
+        }
         const params = {};
         params.rptNo = this.rptNo;
 
@@ -772,6 +784,7 @@
               center: true,
               showClose: true
             });
+            this.goHistory();
           } else {
             this.$message({
               message: '提调失败！',

@@ -114,7 +114,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion ref="discussion" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion ref="discussion" :insuredData="insuredData" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
@@ -244,6 +244,7 @@
           source: undefined,
         },
         insuredNo: undefined,
+        insuredData:undefined,
         batchInfo: {},//批次信息
         querys: {},
         navFlag: true,
@@ -333,6 +334,7 @@
             if (res.data.claimCaseInsured != null && res.data.claimCaseInsured !== '') {
               this.sonInsuredData.claimCaseInsured = res.data.claimCaseInsured
               this.insuredNo = this.sonInsuredData.claimCaseInsured.insuredNo;
+              this.insuredData = res.data.claimCaseInsured
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {

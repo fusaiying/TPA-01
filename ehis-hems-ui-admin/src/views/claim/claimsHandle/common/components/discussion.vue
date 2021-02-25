@@ -854,11 +854,15 @@
         });
       },
       formReset(fromName){
-        this.$refs[fromName].resetFields()
+       // this.$refs[fromName].resetFields()
+        this.surveyForm.invType ='';
+        this.surveyForm.invReason ='';
         this.surveyForm.invOrganCode ='';
         this.surveyForm.organCode ='';
         this.surveyForm.policyNo ='';
         this.surveyForm.invView ='';
+        this.$refs['surveyForm'].clearValidate();
+
       },
       activeFun(id){
         switch(id) {

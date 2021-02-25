@@ -166,10 +166,6 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "已处理受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedList")
     public void exportProcessedList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
-        PageDomain pageDomain = new PageDomain();
-        pageDomain.setIsAsc("desc");
-        pageDomain.setOrderByColumn("rpt_no");
-        startPage();
         List<ClaimCase> list = claimCaseService.selectProcessedClaimCaseList(claimCaseDTO);
         ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
         util.exportExcel(response, list, "已处理受理案件");

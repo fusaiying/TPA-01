@@ -58,7 +58,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     public int insertClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
 
-        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2));
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2, BigDecimal.ROUND_HALF_UP));
         claimCasePayee.setStatus("Y");
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
@@ -86,7 +86,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     @Override
     public int updateClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
-        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2));
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2, BigDecimal.ROUND_HALF_UP));
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
         return claimCasePayeeMapper.updateClaimCasePayee(claimCasePayee);

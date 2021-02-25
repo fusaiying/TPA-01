@@ -45,7 +45,7 @@
           </el-col>
         </el-row>
         <div style="text-align: right; margin-right: 10px;">
-          <el-button :loading="searchLoad" size="mini" type="success" icon="el-icon-search" @click="searchHandle" >查询</el-button>
+          <el-button  size="mini" type="success" icon="el-icon-search" @click="searchHandle" >查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-refresh" @click="resetForm">重置</el-button>
 <!--          <el-button size="mini" type="primary" icon="el-icon-refresh" @click="viewDetail">详情</el-button>-->
         </div>

@@ -263,6 +263,9 @@ public class OrderInfo extends BaseEntity
     @Excel(name = "不通过原因")
     private String refuseReason;
 
+    /** 循环次数 */
+    @Excel(name = "循环次数")
+    private int forNum;
 
 
     public void setSerialNo(String serialNo) 

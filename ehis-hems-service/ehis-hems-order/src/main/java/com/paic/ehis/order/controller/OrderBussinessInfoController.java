@@ -6,9 +6,7 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.order.domain.OrderEvaluateInfo;
-import com.paic.ehis.order.domain.OrderInfo;
-import com.paic.ehis.order.domain.RoleLoginInfo;
+import com.paic.ehis.order.domain.*;
 import com.paic.ehis.order.service.ICustomerInfoService;
 import com.paic.ehis.order.service.IOrderBussinessInfoService;
 import com.paic.ehis.order.service.IOrderEvaluateInfoService;
@@ -89,6 +87,27 @@ public class OrderBussinessInfoController extends BaseController
     public AjaxResult implementtOrder(@RequestBody OrderInfo orderInfo)
     {
         return toAjax(orderBussinessInfoService.implementtOrder(orderInfo));
+    }
+
+
+    /**
+     * 根据省市区查询医院，并且获取一级二级科室
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/getHosptialInfo")
+    public AjaxResult getHosptialInfo(@RequestBody AddressInfo addressInfo)
+    {
+        return AjaxResult.success(orderBussinessInfoService.getHosptialInfo(addressInfo));
+    }
+
+    /**
+     * 获取供应商下的省市区数据
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/getAddress")
+    public AjaxResult getAddress(@RequestBody AddressInfo addressInfo)
+    {
+        return AjaxResult.success(orderBussinessInfoService.getAddress(addressInfo));
     }
 
 }

@@ -99,7 +99,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     @Override
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
-        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());//04
         if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
@@ -129,9 +129,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setIsAsc("desc");
             batchDTO.setOrderByColumn("submit_date");
         }
-        if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
-                || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
-                || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
+        if (StringUtils.isNull(batchDTO.getSubmitstartdate()) && StringUtils.isNull(batchDTO.getOrgancode())
+                && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
+                && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
             Long userId = SecurityUtils.getUserId();
             SysUser sysUser = sysUserMapper.selectUserById(userId);
@@ -246,12 +246,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchRecordDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchRecordDTO.setBatchstatus("'03','04','05'");
         batchRecordDTO.setClaimtype("01");
-        batchRecordDTO.setOperation(ClaimStatus.BATCHRETURN.getCode());
+        batchRecordDTO.setOperation(ClaimStatus.BATCHREVIEW.getCode());
         batchRecordDTO.setUpdateBy(SecurityUtils.getUsername());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 1);
-        batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
-        batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        if (!StringUtils.isNull(batchRecordDTO.getSubmitstartdate())) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
+            batchRecordDTO.setSubmitstartdate(DateUtils.parseDate(calendar.getTime()));
+            batchRecordDTO.setSubmitenddate(DateUtils.parseDate(DateUtils.getTime()));
+        }
         return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
     }
 

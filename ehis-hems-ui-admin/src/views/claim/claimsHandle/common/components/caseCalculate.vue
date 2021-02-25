@@ -181,7 +181,8 @@
     billDetailsSave,
     insurancePolicyList,
     calculate,
-    calSummary
+    calSummary,
+    claimConclusionNull
   } from '@/api/claim/handleCom'
   import adjustmentDetail from '../modul/adjustmentDetail'
   import moment from 'moment'
@@ -233,7 +234,7 @@
           } else if (value>(parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount))){
             callback(new Error("录入金额有误"));
           }else {
-            this.caseForm.caseData[index].refusedAmount=parseFloat(this.caseForm.caseData[index].billAmount)-parseFloat(this.caseForm.caseData[index].hosDiscountAmount)-parseFloat(this.caseForm.caseData[index].payAmount)
+            this.caseForm.caseData[index].refusedAmount=(parseFloat(this.getZero(this.caseForm.caseData[index].billAmount))-parseFloat(this.getZero(this.caseForm.caseData[index].hosDiscountAmount))-parseFloat(this.getZero(this.caseForm.caseData[index].payAmount))).toFixed(2)
             callback();
           }
         } else {
@@ -393,6 +394,7 @@
                   let data = {
                     rptNo: this.fixInfo.rptNo,
                   }
+                  this.updateClaimConclusionNull();
                   detailsList(data).then(res => {
                     if (res != null && res.code === 200 && res.rows.length > 0) {
                       res.rows.forEach(item => {
@@ -428,6 +430,14 @@
             }
 
           }
+        })
+      },
+      updateClaimConclusionNull(){
+        claimConclusionNull(this.fixInfo.rptNo).then(res => {
+          if (res != null && res.code === 200 ) {
+
+          }
+        }).catch(res => {
         })
       },
       getMinData(row, expandedRows) {
@@ -639,6 +649,13 @@
           }
         }).catch(res => {
         })
+      },
+      getZero(str) {
+        if (str === undefined || str === null || str === '') {
+          return 0;
+        } else {
+          return str
+        }
       }
     }
   }

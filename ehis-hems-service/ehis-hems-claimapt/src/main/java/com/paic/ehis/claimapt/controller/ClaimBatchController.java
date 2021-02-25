@@ -393,4 +393,16 @@ public class ClaimBatchController extends BaseController {
         return AjaxResult.success(str);
     }
 
+    /**
+     * 查询待处理理赔批次 列表
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
+    @PostMapping("/exportPendingList")
+    public void ExportPendingList( HttpServletResponse response ,BatchDTO batchDTO)throws IOException
+    {
+        List<BatchVo> list = claimBatchService.selectPendingBatchList(batchDTO);
+        ExcelUtil<BatchVo> util = new ExcelUtil<BatchVo>(BatchVo.class);
+        util.exportExcel(response, list, "交单工作池处理中理赔批次表");
+    }
+
 }

@@ -29,6 +29,9 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     @Autowired
     private OrderBussinessInfoMapper orderBussinessInfoMapper;
 
+    @Autowired
+    private OrderInfoMapper orderInfoMapper;
+
     /**
      * 查询order_info(工单信息)
      * 
@@ -94,5 +97,74 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     @Override
     public int implementtOrder(OrderInfo orderInfo){
         return orderBussinessInfoMapper.implementtOrder(orderInfo);
+    }
+
+
+    /* 获取医院以及科室信息*/
+    @Override
+    public List<HospitalInfoVo> getHosptialInfo(AddressInfo addressInfo){
+        log.info("********获取工单中医院以及科室信息********");
+        //获取医院信息
+        List<HospitalInfoVo> hospitalInfos= orderInfoMapper.getHospitalInfo1(addressInfo);
+        //获取一级科室
+        List<FirstDeptInfoVo> firstDeptInfos= orderInfoMapper.getFirstDeptInfo();
+        //获取二级科室
+        List<SecondDeptInfoVo> secondDeptInfos= orderInfoMapper.getSecondDeptInfo();
+        List<HospitalInfoVo> hospitalInfoList = new ArrayList();
+        if(!hospitalInfos.isEmpty()){
+            for(HospitalInfoVo hospitalInfo : hospitalInfos){
+                List<FirstDeptInfoVo> firstDeptInfoList = new ArrayList();
+                for(FirstDeptInfoVo firstDeptInfo :firstDeptInfos) {
+                    if(hospitalInfo.getHospitalCode().equals(firstDeptInfo.getHospitalCode())){
+                        firstDeptInfoList.add(firstDeptInfo);
+                    }
+                    List<SecondDeptInfoVo> secondDeptInfoList = new ArrayList();
+                    for(SecondDeptInfoVo SecondDeptInfo :secondDeptInfos ){
+                        if(SecondDeptInfo.getFirstDeptName().equals(firstDeptInfo.getFirstDeptName())){
+                            secondDeptInfoList.add(SecondDeptInfo);
+                        }
+                        firstDeptInfo.setSecondDeptInfos(secondDeptInfoList);
+                    }
+                    hospitalInfo.setFirstdeptInfos(firstDeptInfoList);
+                }
+                hospitalInfoList.add(hospitalInfo);
+            }
+        }
+        return hospitalInfoList;
+    }
+
+    @Override
+    public List<AddressVO> getAddress(AddressInfo addressInfo){
+        List<Sn_base_addressDO> sn_base_addressList1 = orderBussinessInfoMapper.selectProvinceByPlacetype(addressInfo);
+        List<Sn_base_addressDO> sn_base_addressList2 = orderBussinessInfoMapper.selectCityByPlacetype(addressInfo);
+        List<Sn_base_addressDO> sn_base_addressList3 = orderBussinessInfoMapper.selectDistrictByPlacetype(addressInfo);
+        ArrayList<AddressVO> addressList = new ArrayList<AddressVO>();
+        for (int i = 0; i < sn_base_addressList1.size(); i++) {
+            AddressVO addressVO1 = new AddressVO();
+            addressVO1.setValue(sn_base_addressList1.get(i).getPlacecode());
+            addressVO1.setLabel(sn_base_addressList1.get(i).getPlacename());
+            ArrayList<AddressVO> children1 = new ArrayList<AddressVO>();
+            for (int j = 0; j < sn_base_addressList2.size(); j++) {
+                if ((sn_base_addressList2.get(j).getPlacecode().substring(0,2)).equals((sn_base_addressList1.get(i).getPlacecode().substring(0,2)))) {
+                    AddressVO addressVO2 = new AddressVO();
+                    addressVO2.setValue(sn_base_addressList2.get(j).getPlacecode());
+                    addressVO2.setLabel(sn_base_addressList2.get(j).getPlacename());
+                    ArrayList<AddressVO> children2 = new ArrayList<AddressVO>();
+                    for (int p = 0; p < sn_base_addressList3.size(); p++) {
+                        if (sn_base_addressList3.get(p).getPlacecode().substring(0,4).equals(sn_base_addressList2.get(j).getPlacecode().substring(0,4))) {
+                            AddressVO addressVO3 = new AddressVO();
+                            addressVO3.setValue(sn_base_addressList3.get(p).getPlacecode());
+                            addressVO3.setLabel(sn_base_addressList3.get(p).getPlacename());
+                            children2.add(addressVO3);
+                        }
+                    }
+                    addressVO2.setChildren(children2);
+                    children1.add(addressVO2);
+                }
+            }
+            addressVO1.setChildren(children1);
+            addressList.add(addressVO1);
+        }
+        return addressList;
     }
 }

@@ -126,9 +126,9 @@
             </el-row>
 
             <el-row>
-              <el-col :span="24">  <!--:readonly="read ? 'readonly' : false"-->
+              <el-col :span="24">  <!-- :disabled="readbatchNo ? 'disabled' : false" -->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="readbatchNo ? 'disabled' : false" v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input  v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>

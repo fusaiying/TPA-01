@@ -807,7 +807,7 @@
               this.surveyForm.organCode = this.surveyInfo.organCode;
             }
             if(this.surveyInfo.policyNo != '' && this.surveyInfo.policyNo != null) {
-             // this.surveyForm.policyNo = this.surveyInfo.policyNo;
+              this.surveyForm.policyNo = this.surveyInfo.policyNo;
             }
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;

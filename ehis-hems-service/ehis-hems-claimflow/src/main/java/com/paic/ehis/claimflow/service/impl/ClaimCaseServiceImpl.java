@@ -1,28 +1,13 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.paic.ehis.claimapt.domain.DTO.ClaimBatchDTO;
-import com.paic.ehis.claimflow.domain.BaseCodeMappingNew;
-import com.paic.ehis.claimflow.domain.ClaimBatch;
-import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseAccept;
-import com.paic.ehis.claimflow.domain.ClaimCaseBill;
-import com.paic.ehis.claimflow.domain.ClaimCaseCal;
-import com.paic.ehis.claimflow.domain.ClaimCaseInvestigation;
-import com.paic.ehis.claimflow.domain.ClaimCaseProblem;
-import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
-import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
-import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
-import com.paic.ehis.claimflow.domain.ClaimProductTaskLog;
-import com.paic.ehis.claimflow.domain.PolicyInfo;
-import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
+import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
-//import com.paic.ehis.claimmgt.domain.ClaimCaseDist;
-//import com.paic.ehis.claimmgt.mapper.ClaimCaseDistMapper;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
@@ -85,6 +70,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     PolicyAndRiskService policyAndRiskService;
+
+    @Autowired
+    IClaimCaseInvestigationService claimCaseInvestigationService;
 
 //    @Autowired
 //    private IClaimBatchService iClaimBatchService;
@@ -181,8 +169,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
-            claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
-            claimCaseDTO.setUpdateEndTime(DateUtils.getNowDate());
+            claimCaseDTO.setUpdateStartTime(calendar.getTime());
+            claimCaseDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
         }
         claimCaseDTO.setOperation("05");
         claimCaseDTO.setIsHistory("Y");
@@ -1060,19 +1048,36 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public ClaimCaseInvestigation surveyInformationPreservation(ClaimCaseInvestigation caseInvestigation) {
-        StringBuilder stringBuilder = new StringBuilder();
-        String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
-        stringBuilder.append("ZWQR").append(investigation);
-        caseInvestigation.setInvNo(stringBuilder.toString());
-        caseInvestigation.setInvDate(DateUtils.getNowDate());
-        caseInvestigation.setIsHistory("N");
-        caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
-        caseInvestigation.setCreateBy(SecurityUtils.getUsername());
-        caseInvestigation.setCreateTime(DateUtils.getNowDate());
-        caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
-        caseInvestigation.setUpdateTime(DateUtils.getNowDate());
-        int i = claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
-        return i==1? caseInvestigation:null;
+
+        /***
+         *  如果 当前 调查存在且 不是历史， 则保存按钮为更新，否则新增
+         *  modify by : hjw
+         */
+        try{
+            CaseInvestigationVO exist = claimCaseInvestigationService.selectClaimCaseInvestigationByRptNo(caseInvestigation.getRptNo());
+            if(null != exist) {
+                caseInvestigation.setInvNo(exist.getInvNo());
+                caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+                caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+                claimCaseInvestigationMapper.updateClaimCaseInvestigation(caseInvestigation);
+            } else {
+                StringBuilder stringBuilder = new StringBuilder();
+                String investigation = PubFun.createMySqlMaxNoUseCache("investigation", 10, 8);
+                stringBuilder.append("ZWQR").append(investigation);
+                caseInvestigation.setInvNo(stringBuilder.toString());
+                caseInvestigation.setInvDate(DateUtils.getNowDate());
+                caseInvestigation.setIsHistory("N");
+                caseInvestigation.setStatus(ClaimStatus.DATAYES.getCode());
+                caseInvestigation.setCreateBy(SecurityUtils.getUsername());
+                caseInvestigation.setCreateTime(DateUtils.getNowDate());
+                caseInvestigation.setUpdateBy(SecurityUtils.getUsername());
+                caseInvestigation.setUpdateTime(DateUtils.getNowDate());
+                claimCaseInvestigationMapper.insertClaimCaseInvestigation(caseInvestigation);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();;
+        }
+        return caseInvestigation;
     }
 
     /**
@@ -1108,6 +1113,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseInvestigationMapper.updateClaimCaseInvestigation(caseInvestigation);
 
         ClaimCase claimCase = new ClaimCase();
+        claimCase.setRptNo(caseInvestigation.getRptNo());
         claimCase.setCaseStatus(ClaimStatus.CASESURVEY.getCode());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -1340,16 +1346,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public List<ClaimCaseStanding> postHocAccountingOfCases(String batchNo) {
         List<ClaimCaseStanding> ClaimCaseStandingList = new ArrayList<>();
         //根据批次号去查报案号
-        List<String> strings = claimCaseMapper.selepostHocAccountingOfCases(batchNo);
-        if (strings.size() != 0) {
-            for (String rptno : strings) {
+       // List<String> strings = claimCaseMapper.selepostHocAccountingOfCases(batchNo);
+
+            if(StringUtils.isNotEmpty(batchNo)) {
                 //根据报案号去查台账信息
-                ClaimCaseStanding claimCaseStanding = claimCaseStandingMapper.selectClaimCaseStandingByIdOne(rptno);
-                if (claimCaseStanding != null) {
-                    ClaimCaseStandingList.add(claimCaseStanding);
-                }
+                ClaimCaseStandingList= claimCaseStandingMapper.selectClaimCaseStandingByIdOne(batchNo);
             }
-        }
+
+
         return ClaimCaseStandingList;
     }
 
@@ -1525,6 +1529,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public BaseCodeMappingNew selectBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
         BaseCodeMappingNew baseCodeMappingNew1 = claimCaseInvestigationMapper.selectBaseCodeMappingNew(baseCodeMappingNew);
         return baseCodeMappingNew1;
+    }
+
+    @Override
+    public int selectCaseBorrowByRptNo(String rptNo) {
+        return claimCaseMapper.selectCaseBorrowByRptNo(rptNo);
     }
 
     /**

@@ -195,6 +195,14 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo getCaseListByBatchNo(ClaimCase claimCase) {
         return getDataTable(claimCaseService.selectClaimCaseByBatchNo(claimCase));
     }
+    /**
+     * 根据报案号查看当前案件是否存在借款
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:query')")
+    @PostMapping("/borrowByRptNo")
+    public AjaxResult getCaseBorrowByRptNo(@RequestBody String rptNo) {
+        return AjaxResult.success(claimCaseService.selectCaseBorrowByRptNo(rptNo));
+    }
 
     /**
      * 新增案件信息

@@ -118,4 +118,17 @@ public class ClaimCaseCalController extends BaseController
     {
         return toAjax(claimCaseCalService.deleteClaimCaseCalByIds(calIds));
     }
+
+    /***
+     * 案件理算  保存后 更新 claim_case_cal 表 赔付结论 为 空
+     * @param rptNo
+     * @return
+     * auth: hjw
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:cal:edit')")
+    @PutMapping(value = "/claimConclusionNull/{rptNo}")
+    public AjaxResult claimConclusionNull(@PathVariable("rptNo") String rptNo)
+    {
+        return AjaxResult.success(claimCaseCalService.updateClaimConclusionNull(rptNo));
+    }
 }

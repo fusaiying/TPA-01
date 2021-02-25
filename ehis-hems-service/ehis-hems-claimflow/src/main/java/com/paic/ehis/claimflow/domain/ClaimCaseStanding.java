@@ -26,6 +26,9 @@ public class ClaimCaseStanding extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dNow;
 
+    private String standingId;
+
+
     /**
      * 报案号
      */
@@ -106,6 +109,18 @@ public class ClaimCaseStanding extends BaseEntity {
 
     public Date getdNow() {
         return dNow;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getStandingId() {
+        return standingId;
+    }
+
+    public void setStandingId(String standingId) {
+        this.standingId = standingId;
     }
 
     public void setdNow(Date dNow) {
@@ -210,18 +225,22 @@ public class ClaimCaseStanding extends BaseEntity {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("rptno", getRptno())
-                .append("idno", getIdno())
-                .append("name", getName())
-                .append("claimmaterials", getClaimmaterials())
-                .append("remark", getRemark())
-                .append("otherinfo", getOtherinfo())
-                .append("status", getStatus())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .toString();
+        return "ClaimCaseStanding{" +
+                "dBefore=" + dBefore +
+                ", dNow=" + dNow +
+                ", standingId='" + standingId + '\'' +
+                ", rptno='" + rptno + '\'' +
+                ", idno='" + idno + '\'' +
+                ", name='" + name + '\'' +
+                ", claimmaterials='" + claimmaterials + '\'' +
+                ", otherinfo='" + otherinfo + '\'' +
+                ", status='" + status + '\'' +
+                ", organcode='" + organcode + '\'' +
+                ", expressnumber='" + expressnumber + '\'' +
+                ", receivedate=" + receivedate +
+                ", sendby='" + sendby + '\'' +
+                ", policyNo='" + policyNo + '\'' +
+                ", companyName='" + companyName + '\'' +
+                '}';
     }
 }

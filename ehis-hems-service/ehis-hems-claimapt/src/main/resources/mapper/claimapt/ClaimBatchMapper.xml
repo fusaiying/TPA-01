@@ -45,7 +45,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="chname1"    column="chname1"    />
         <result property="enname1"    column="enname1"    />
-        <result property="conclusion"    column="conclusion"    />
         <result property="remark"    column="remark"    />
     </resultMap>
 
@@ -132,6 +131,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.organ_code,
         cb.currency,
         cb.cont_type,
+        cb.update_by,
+        cb.update_time,
         cb.batch_status,
         record.create_by,
         record.create_time,
@@ -157,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '04'
+        AND b.operation = '02'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
@@ -176,8 +177,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
             <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
             <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status = #{batchstatus} </if>
-            <if test="updateBy != null  and updateBy != ''"> and record.create_by = #{updateBy}</if>
-            <if test="updatestartTime != null and updateendTime != null"> and record.create_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="updateBy != null  and updateBy != ''"> and record.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
     </select>
@@ -217,7 +218,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time

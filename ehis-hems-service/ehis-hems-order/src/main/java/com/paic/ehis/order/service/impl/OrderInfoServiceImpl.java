@@ -1,6 +1,7 @@
 package com.paic.ehis.order.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.order.domain.*;
@@ -229,35 +230,55 @@ public class OrderInfoServiceImpl implements IOrderInfoService
 
 
     //供应商超时进行自动分配
+    @Override
     public int getAutoMode(OrderInfo orderInfo){
-        boolean flag = false;
         //1、获取工单信息
         OrderInfo order = orderInfoMapper.selectOrderInfoById(orderInfo.getOrderCode());
         //改变原先的供应商状态，重新分配供应商
         orderInfoMapper.updateOverTime(orderInfo);//设置超时状态
         //2、根据产品编码和服务编码查询可提供服务的供应商信息，可预约次数等信息
         List<Ordertaking> Ordertakings = orderInfoMapper.getOrdertaking(order);
-        //3、存在可提供服务的供应商信息
-        if(!Ordertakings.isEmpty()){
+        //3、提取可提供服务的供应商信息
+        /*if(!Ordertakings.isEmpty()){
             for(Ordertaking ordertaking :Ordertakings){
                 if(Integer.valueOf(ordertaking.getAvailablenum() )>0){ //
-                    flag = true;
+                    OrdertakingList.add(ordertaking);
+                  *//*  flag = true;
                     order.setSupplierCode(ordertaking.getSupplierCode());
-                    break;
+                    break;*//*
+                }
+            }*/
+            if(!Ordertakings.isEmpty()){
+                //存在可预约的供应商，则开始分配供应商
+                order.setSupplierCode(Ordertakings.get(0).getSupplierCode());
+                order.setUpdateFlag("0");
+                order.setNodeStatus("01"); //节点状态待接单
+                order.setBussinessStatus("01"); //业务状态待处理
+                order.setStatus("Y");
+                order.setSerialNo(PubFun.createMySqlMaxNoUseCache("OrderInfoSer",12,12));
+                return orderInfoMapper.insertOrderInfo(order);//重新分配的供应商信息
+            }else{
+                //判断是循环的次数是否满足三次循环，不满足，进行新的循环，重新开始分配供应商
+                if(order.getForNum()+1<=3){
+                    order.setForNum(order.getForNum()+1);
+                    //查询所有可提供该服务的供应商,并将之前的数据删除
+
+                    List<Ordertaking> OrdertakingList = orderInfoMapper.getOrdertakingList(order);
+                    order.setSupplierCode(OrdertakingList.get(0).getSupplierCode());
+                    order.setUpdateFlag("0");
+                    order.setNodeStatus("01"); //节点状态待接单
+                    order.setBussinessStatus("01"); //业务状态待处理
+                    order.setStatus("Y");
+                    order.setSerialNo(PubFun.createMySqlMaxNoUseCache("OrderInfoSer",12,12));
+                    orderInfoMapper.deleteOrderInfoById(order.getOrderCode());
+                    return orderInfoMapper.insertOrderInfo(order);//重新分配的供应商信息
+                }else{
+                    //进入到PC端的超时工单
+                    return orderInfoMapper.updateOverTimeToPC(orderInfo);
                 }
             }
-            if(flag){
-
-                order.setUpdateFlag("0");
-                order.setNodeStatus(""); //节点状态待接单
-                order.setBussinessStatus(""); //业务状态待处理
-                order.setStatus("Y");
-                return orderInfoMapper.insertOrderInfo(order);//重新分配的供应商信息
-
-            }
-        }
             //将C端改成超时状态
-        return orderInfoMapper.updateOverTime(orderInfo);//设置超时状态
+        //return orderInfoMapper.updateOverTime(orderInfo);//设置超时状态
 
 
 

@@ -63,8 +63,6 @@ public interface IClaimCaseDiscussionService
      */
     public int deleteClaimCaseDiscussionByIds(Long[] discIds);
 
-    //将未处理改为已处理
-    public int updatecasediscussionStatus(String repNo);
 
     /**
      * 查询案件未处理协谈工作池

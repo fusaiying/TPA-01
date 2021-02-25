@@ -67,6 +67,21 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     }
 
     /**
+     * 校验案件领款人领款比例
+     * @param rptNo
+     * @return
+     */
+    @Override
+    public int CheckThePaymentRatio(String rptNo){
+        BigDecimal proportion = new BigDecimal(0);
+        List<ClaimCasePayee> claimCasePayees = claimCasePayeeMapper.selectClaimCasePayeeByRptNo(rptNo);
+        for (ClaimCasePayee claimCasePayee : claimCasePayees) {
+            proportion=proportion.add(claimCasePayee.getPayeeRatio());
+        }
+        return 0==proportion.compareTo(new BigDecimal(1))?1:0;
+    }
+
+    /**
      * 修改案件领款人信息
      * 
      * @param claimCasePayee 案件领款人信息

@@ -30,6 +30,13 @@ public interface IClaimCasePayeeService
     public List<ClaimCasePayee> selectClaimCasePayeeList(ClaimCasePayee claimCasePayee);
 
     /**
+     * 校验案件领款人领款比例
+     * @param rptNo
+     * @return
+     */
+    public int CheckThePaymentRatio(String rptNo);
+
+    /**
      * 新增案件领款人信息
      * 
      * @param claimCasePayee 案件领款人信息

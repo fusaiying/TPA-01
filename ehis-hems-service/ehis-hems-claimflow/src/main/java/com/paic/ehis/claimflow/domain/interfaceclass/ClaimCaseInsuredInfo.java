@@ -103,6 +103,6 @@ public class ClaimCaseInsuredInfo extends BaseEntity
     private String status;
 
     /** 保单信息 */
-    private List<ClaimCasePolicy> casePolicyInfoList;
+    private List<ClaimCasePolicyInfo> casePolicyInfoList;
 
 }

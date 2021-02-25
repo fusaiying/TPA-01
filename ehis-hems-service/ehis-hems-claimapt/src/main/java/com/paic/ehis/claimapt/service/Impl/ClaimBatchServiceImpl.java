@@ -133,13 +133,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
                 && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
-            Long userId = SecurityUtils.getUserId();
-            SysUser sysUser = sysUserMapper.selectUserById(userId);
-            // 获取用户的所属机构
-            batchDTO.setOrgancode( sysUser.getDeptId().toString());
+
         } else {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
+        Long userId = SecurityUtils.getUserId();
+        SysUser sysUser = sysUserMapper.selectUserById(userId);
+        // 获取用户的所属机构
+        batchDTO.setOrgancode( sysUser.getDeptId().toString());
         batchDTO.setStatus("Y");
         batchDTO.setBatchstatus("'01','02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
@@ -475,8 +476,11 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchRecord1.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord1.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
         claimBatchRecord1.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        //新增02
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord1);
-
+        //新增01
+        claimBatchRecord1.setOperation(ClaimStatus.BATCHTENDER.getCode());//01
+        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord1);
         claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimBatchMapper.insertClaimBatch(claimBatch);
 
@@ -509,6 +513,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02为提交
         claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+
+        claimBatchRecord.setOperation(ClaimStatus.BATCHTENDER.getCode());//01为提交
         claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
         claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y

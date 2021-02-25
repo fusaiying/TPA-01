@@ -234,6 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )record on record.batch_no=cb.batch_no and record.status='Y'
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
         AND bpi.STATUS = 'Y'
+        LEFT JOIN claim_case ca on ca.batch_no=cb.batch_no AND ca.STATUS = 'Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
             <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (

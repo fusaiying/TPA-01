@@ -74,7 +74,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
      */
     @Override
     public int CheckThePaymentRatio(String rptNo){
-        return 1==claimCasePayeeMapper.CheckClaimCasePayeeByRptNo(rptNo)?1:0;
+        return 0==claimCasePayeeMapper.CheckClaimCasePayeeByRptNo(rptNo).compareTo(new BigDecimal(String.valueOf(1)))?1:0;
     }
 
     /**

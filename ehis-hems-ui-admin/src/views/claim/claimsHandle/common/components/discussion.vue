@@ -855,6 +855,10 @@
       },
       formReset(fromName){
         this.$refs[fromName].resetFields()
+        this.surveyForm.invOrganCode ='';
+        this.surveyForm.organCode ='';
+        this.surveyForm.policyNo ='';
+        this.surveyForm.invView ='';
       },
       activeFun(id){
         switch(id) {

@@ -73,12 +73,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
      */
     @Override
     public int CheckThePaymentRatio(String rptNo){
-        BigDecimal proportion = new BigDecimal(0);
-        List<ClaimCasePayee> claimCasePayees = claimCasePayeeMapper.selectClaimCasePayeeByRptNo(rptNo);
-        for (ClaimCasePayee claimCasePayee : claimCasePayees) {
-            proportion=proportion.add(claimCasePayee.getPayeeRatio());
-        }
-        return 0==proportion.compareTo(new BigDecimal(1))?1:0;
+        return 1==claimCasePayeeMapper.CheckClaimCasePayeeByRptNo(rptNo)?1:0;
     }
 
     /**

@@ -172,8 +172,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCaseDTO.setUpdateStartTime(calendar.getTime());
             claimCaseDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
         }
-        claimCaseDTO.setOperation("05");
-        claimCaseDTO.setIsHistory("Y");
         claimCaseDTO.setCaseStatus("'05','30'");
         claimCaseDTO.setOperator(SecurityUtils.getUsername());
         claimCaseDTO.setStatus("Y");

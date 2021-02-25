@@ -632,10 +632,12 @@
         FROM
         claim_case cases
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation in ('31','32','00')
+        AND record.operation = '07'
         AND record.STATUS = 'Y'
         AND record.history_flag = 'N'
         AND record.operator = #{operator}
+        and cases.case_status in ('08','99','97','98')
+        and cases.status='Y'
         ORDER BY
         record.update_time DESC
         ) act

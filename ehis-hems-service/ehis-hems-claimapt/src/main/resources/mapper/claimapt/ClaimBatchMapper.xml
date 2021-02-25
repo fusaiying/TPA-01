@@ -136,9 +136,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.batch_status,
         record.create_by,
         record.create_time,
-        record.remark,
         bpi.chname1,
-        bpi.enname1
+        bpi.enname1,
+        (select r.remark from claim_batch_record r where operation = '04'
+        AND STATUS = 'Y' and cb.batch_no=r.batch_no) as remark
         FROM
         claim_batch cb
         LEFT JOIN (
@@ -146,7 +147,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         batch_no,
         create_by,
         create_time,
-        remark,
         status,
         update_by
         FROM
@@ -159,7 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time

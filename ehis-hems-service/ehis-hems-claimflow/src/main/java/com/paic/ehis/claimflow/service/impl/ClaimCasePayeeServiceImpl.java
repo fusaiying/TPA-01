@@ -58,7 +58,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     public int insertClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
 
-        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(BigDecimal.valueOf(100),2));
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2));
         claimCasePayee.setStatus("Y");
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
@@ -86,7 +86,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     @Override
     public int updateClaimCasePayee(ClaimCasePayee claimCasePayee)
     {
-        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(BigDecimal.valueOf(100),2));
+        claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().divide(new BigDecimal(String.valueOf(100)),2));
         claimCasePayee.setUpdateTime(DateUtils.getNowDate());
         claimCasePayee.setUpdateBy(SecurityUtils.getUsername());
         return claimCasePayeeMapper.updateClaimCasePayee(claimCasePayee);
@@ -142,7 +142,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
 
         List<ClaimCasePayee> claimCasePayees = claimCasePayeeMapper.selectClaimCasePayeeByRptNo(rptNo);
         for (ClaimCasePayee claimCasePayee : claimCasePayees) {
-            claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().multiply(new BigDecimal(100)));
+            claimCasePayee.setPayeeRatio(claimCasePayee.getPayeeRatio().multiply(new BigDecimal(String.valueOf(100))));
         }
         return claimCasePayees;
     }

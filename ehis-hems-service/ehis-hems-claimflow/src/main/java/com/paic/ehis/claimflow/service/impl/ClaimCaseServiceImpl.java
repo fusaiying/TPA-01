@@ -169,8 +169,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         ) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
-            claimCaseDTO.setUpdateStartTime(DateUtils.parseDate(calendar.getTime()));
-            claimCaseDTO.setUpdateEndTime(DateUtils.getNowDate());
+            claimCaseDTO.setUpdateStartTime(calendar.getTime());
+            claimCaseDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
         }
         claimCaseDTO.setOperation("05");
         claimCaseDTO.setIsHistory("Y");

@@ -99,7 +99,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     @Override
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
-        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());
+        batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());//04
         if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }

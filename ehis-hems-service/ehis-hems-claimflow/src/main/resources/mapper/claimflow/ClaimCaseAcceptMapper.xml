@@ -33,9 +33,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customerApplicationDate"    column="customer_application_date"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.AccidentInfoMap" id="AccidentInfoMapResult">
+        <result property="acciPlace"    column="acc_address"    />
+    </resultMap>
+
     <sql id="selectClaimCaseAcceptVo">
         select customer_application_date,accept_id,rpt_no, claim_amount, acc_date, acc_type, curr_situation, first_ser_illness_date, death_date, disability_date, pre_auth_flag, pre_auth_item, pre_auth_no, material_complete_date, receipt_date, pri_reason, acc_province, acc_city, acc_district, acc_address, acc_describe, status, create_by, create_time, update_by, update_time from claim_case_accept
     </sql>
+
+    <select id="selectacciPlace" parameterType="String" resultMap="AccidentInfoMapResult">
+      select acc_address FROM claim_case_accept WHERE status='Y' and rpt_no=#{rptNo}
+    </select>
 
     <select id="selectClaimCaseAcceptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseAccept" resultMap="ClaimCaseAcceptResult">
         <include refid="selectClaimCaseAcceptVo"/>

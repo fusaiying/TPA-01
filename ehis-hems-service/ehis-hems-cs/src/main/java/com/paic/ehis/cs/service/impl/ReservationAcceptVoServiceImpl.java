@@ -234,6 +234,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
         //工单表修改
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
@@ -241,6 +242,26 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        acceptDetailInfo.setChannelCode(reservationAcceptVo.getChannelCode());
+        acceptDetailInfo.setCallCenterId(reservationAcceptVo.getCallCenterId());
+        acceptDetailInfo.setPriorityLevel(reservationAcceptVo.getPriorityLevel());
+        acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
+        acceptDetailInfo.setOutpatientSettlement(reservationAcceptVo.getOutpatientSettlement());
+        acceptDetailInfo.setVisitType(reservationAcceptVo.getVisitType());
+        acceptDetailInfo.setDisease(reservationAcceptVo.getDisease());
+        acceptDetailInfo.setSymptomsSigns(reservationAcceptVo.getSymptomsSigns());
+        acceptDetailInfo.setSymptomTimes(reservationAcceptVo.getSymptomTimes());
+        acceptDetailInfo.setTimeUnit(reservationAcceptVo.getTimeUnit());
+        acceptDetailInfo.setAccidentFlag(reservationAcceptVo.getAccidentFlag());
+        acceptDetailInfo.setAccidentReason(reservationAcceptVo.getAccidentReason());
+        acceptDetailInfo.setValidCertificate(reservationAcceptVo.getValidCertificate());
+        acceptDetailInfo.setSettlementCard(reservationAcceptVo.getSettlementCard());
+        acceptDetailInfo.setComplaintTime(reservationAcceptVo.getComplaintTime());
+        acceptDetailInfo.setHospitalDays(reservationAcceptVo.getHospitalDays());
+        acceptDetailInfo.setMedicalInstitution(reservationAcceptVo.getMedicalInstitution());
+        acceptDetailInfo.setDepartment(reservationAcceptVo.getDepartment());
+        acceptDetailInfo.setBunk(reservationAcceptVo.getBunk());
+        acceptDetailInfo.setCompensationRatio(reservationAcceptVo.getCompensationRatio());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ReservationAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -254,8 +275,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
         //插入来电人
         personInfo1.setPersonId(reservationAcceptVo.getCallPersonId());
-        //      personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
-        //       personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
+        personInfo1.setName(reservationAcceptVo.getCallPerson().getName());
+        personInfo1.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
@@ -263,11 +284,11 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfoMapper.updatePersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(reservationAcceptVo.getContactsPersonId());
-        /*personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
+        personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(reservationAcceptVo.getContactsName());
-        personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
-        personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());*/
+        personInfo2.setLanguage(reservationAcceptVo.getContactsLanguage());
+        personInfo2.setMobilePhone(reservationAcceptVo.getContactsMobilePhone());
+        personInfo2.setLinePhone(reservationAcceptVo.getContactsCountry()+"-"+reservationAcceptVo.getContactsQuhao()+"-"+reservationAcceptVo.getContactsNumber()+"-"+reservationAcceptVo.getContactsSecondNumber());
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());

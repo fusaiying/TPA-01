@@ -226,7 +226,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
-        acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag);
+        acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag());
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
@@ -252,17 +252,17 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //插入联系人
         personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
         personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
-        personInfo2.setName(demandAcceptVo.getContactsName());
-        personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
-        personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());
+        personInfo2.setName(complaintAcceptVo.getContactsName());
+        personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
+        personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
+        personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(personInfo2);
         //插入投诉人
-        personInfo1.setPersonId(complaintAcceptVo.getComplaintPersonId);
+        personInfo1.setPersonId(complaintAcceptVo.getComplaintPersonId());
         personInfo1.setName(complaintAcceptVo.getComplainantPerson().getName());
         personInfo1.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());

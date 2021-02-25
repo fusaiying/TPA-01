@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
+        <result property="idType"    column="id_type"    />
         <result property="name"    column="name"    />
         <result property="claimmaterials"    column="claim_materials"    />
         <result property="standingId"    column="standing_id"    />
@@ -40,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseStandingVo">
-        select standing_id, rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
+        select id_type,standing_id, rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">

@@ -132,7 +132,7 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         String bahtime="96"+"JGH0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseStandingVo.getRptno());
-        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//受理05
+        claimCaseRecord.setOperation(ClaimStatus.CASETHREE.getCode());//扫描04
         claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setHistoryFlag(ClaimStatus.DATANO.getCode());//N
         claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
@@ -147,16 +147,16 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         claimCase.setBatchNo(claimCaseStandingVo.getBatchno());//批次号
         claimCase.setRptNo(claimCaseStandingVo.getRptno());//报案号
         claimCase.setFilingNo(claimCaseNumber1);//归档号
-        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());//案件状态05
+        claimCase.setCaseStatus(ClaimStatus.CASETHREE.getCode());//扫描04
         claimCase.setCreateBy(SecurityUtils.getUsername());
         claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimCase.setRptNo(bahtime);
-        claimCaseMapper.insertClaimCase(claimCase);
+        return claimCaseMapper.insertClaimCase(claimCase);
 
-        return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        //return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
     }
 
 }

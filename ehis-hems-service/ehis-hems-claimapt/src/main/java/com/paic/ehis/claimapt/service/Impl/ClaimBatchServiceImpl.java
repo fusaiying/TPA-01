@@ -139,7 +139,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
 //            batchDTO.setUpdateBy(SecurityUtils.getUsername());
 //        }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'01','02','03','05'");
+        batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
@@ -343,7 +343,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 claimCase.setRptNo(rptNo);
                 claimCase.setFilingNo("JGHDQQW" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 10));//归档号
                 claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
-                claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());//05
+                claimCase.setCaseStatus(ClaimStatus.CASETHREE.getCode());//扫描04
                 claimCase.setCreateBy(SecurityUtils.getUsername());
                 claimCase.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
                 claimCase.setUpdateBy(SecurityUtils.getUsername());
@@ -352,14 +352,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 //生成新的案件操作记录表
                 claimCaseRecord.setRptNo(rptNo);
                 claimCaseRecord.setOperator(SecurityUtils.getUsername());//操作人
-                claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//操作节点05-受理
+                claimCaseRecord.setOperation(ClaimStatus.CASETHREE.getCode());//扫描04
                 claimCaseRecord.setHistoryFlag(ClaimStatus.DATANO.getCode());//N
                 claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
                 claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
                 claimCaseRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
                 claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
                 claimCaseRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-                claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+                //claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
             }
             //将批次信息改变为：交单完成
             return claimBatchMapper.updateClaimBatch(claimBatch);
@@ -470,7 +470,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchRecord1.setBatchno(str1);
         claimBatchRecord1.setCreateBy(SecurityUtils.getUsername());
         claimBatchRecord1.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchRecord1.setUpdateBy("");
+        claimBatchRecord1.setUpdateBy(SecurityUtils.getUsername());
         claimBatchRecord1.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchRecord1.setOperation(ClaimStatus.BATCHREVIEW.getCode());//02
         claimBatchRecord1.setStatus(ClaimStatus.DATAYES.getCode());//Y
@@ -549,6 +549,22 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         }
+
+        return standingAndBatck;
+    }
+
+    /**
+     *
+     * @param standingAndBatck 理赔批次
+     * @return 结果
+     */
+    @Override
+    public StandingAndBatck updateSysClaimBatchTwo(StandingAndBatck standingAndBatck) {
+        //不增加轨迹表
+        standingAndBatck.getClaimBatch().setUpdateBy(SecurityUtils.getUsername());
+        standingAndBatck.getClaimBatch().setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         return standingAndBatck;
     }
 
@@ -577,7 +593,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecordMapper.updateClaimBatchRecord(claimBatchRecord);
 
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
-            claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
+           // claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
 
             claimBatch.setUpdateBy(SecurityUtils.getUsername());
             claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));

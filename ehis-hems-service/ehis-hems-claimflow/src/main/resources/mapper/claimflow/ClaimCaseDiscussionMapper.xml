@@ -67,6 +67,7 @@
         a.dis_view,
         a.conclusion,
         a.conclusion_view,
+        a.create_by,
         a.update_by,
         b.create_time
         FROM

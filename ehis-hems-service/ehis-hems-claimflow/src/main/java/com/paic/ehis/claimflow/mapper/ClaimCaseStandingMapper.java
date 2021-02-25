@@ -25,6 +25,14 @@ public interface ClaimCaseStandingMapper
     public ClaimCaseStanding selectClaimCaseStandingById(String rptNo);
 
     /**
+     * 修改报案台账信息
+     *
+     * @param claimCaseStanding 报案台账信息
+     * @return 报案台账信息
+     */
+    public int updateClaimCaseStandingRptNo(ClaimCaseStanding claimCaseStanding);
+
+    /**
      * 查询报案台账信息 列表
      * 
      * @param claimCaseStanding 报案台账信息 

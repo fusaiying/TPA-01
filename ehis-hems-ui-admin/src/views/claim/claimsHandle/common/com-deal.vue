@@ -173,6 +173,7 @@
     infoList,
     insurancePolicyList,
     checkThePayment,
+    setRptNo,
     adjustRemarkList, addInsuredAndPolicy
   } from '@/api/claim/handleCom'
 
@@ -537,7 +538,6 @@
           saveflag = true
         }
 
-
         //
         if (this.$refs.insuredForm.tableData != null && this.$refs.insuredForm.tableData.length > 0) {
           if (saveflag) {
@@ -652,6 +652,15 @@
                               center: true,
                               showClose: true
                             })
+
+                            let option={
+                              rptNo: this.fixInfo.rptNo,
+                              batchNo:this.fixInfo.batchNo,
+                              idType:this.$refs.insuredForm.baseForm.idType,
+                              name:this.$refs.insuredForm.baseForm.name,
+                              idNo:this.$refs.insuredForm.baseForm.idNo,
+                            }
+                            setRptNo(option).then(res=>{}).catch(res=>{})
                             this.$store.dispatch("tagsView/delView", this.$route);
                             this.$router.go(-1)
                           } else if (res.data.caseStypeFind === '02') {

@@ -40,6 +40,8 @@ import java.util.List;
 public class ClaimCaseController extends BaseController {
     @Autowired
     private IClaimCaseService claimCaseService;
+    @Autowired
+    private ClaimStandingRptNoService claimStandingRptNoService;
 
     @Autowired
     private IClaimCaseProblemService claimCaseProblemService;
@@ -564,6 +566,14 @@ public class ClaimCaseController extends BaseController {
         String batchNo = claimCase.getBatchNo();
         List<ClaimCaseStanding> claimCaseStandings = claimCaseService.postHocAccountingOfCases(batchNo);
         return getDataTable(claimCaseStandings);
+    }
+
+    //受理完成匹配事后案件台账 插入报案号
+//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PostMapping("/setRptNo")
+    public AjaxResult setRptNo(ClaimStandingRptNoDTO claimStandingRptNoDTO) {
+        claimStandingRptNoService.selectClaimHistory(claimStandingRptNoDTO);
+        return AjaxResult.success(claimStandingRptNoService.selectClaimHistory(claimStandingRptNoDTO));
     }
 
     //base_code_mapping

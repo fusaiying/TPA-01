@@ -139,7 +139,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
 //            batchDTO.setUpdateBy(SecurityUtils.getUsername());
 //        }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'01','02','03','05'");
+        batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);

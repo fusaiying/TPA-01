@@ -84,7 +84,7 @@ public class ClaimCasePayeeServiceImpl implements IClaimCasePayeeService
     /**
      * 修改案件领款人信息
      * 
-     * @param claimCasePayee 案件领款人信息
+     * @param claimCasePayee 案件领款人信息+
      * @return 结果
      */
     @Override

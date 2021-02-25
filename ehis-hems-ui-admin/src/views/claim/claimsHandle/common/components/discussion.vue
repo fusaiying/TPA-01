@@ -284,9 +284,9 @@
         default: false
       },
       policySelectData: {
-        type: Object,
+        type: Array,
         default: function () {
-          return {}
+          return []
         }
       },
       fixInfo:Object,
@@ -507,7 +507,6 @@
             };
 
             addDiscussion(params).then(res => {
-              console.log(res);
               if (res.code == '200') {
                 this.$message({
                   message: '保存成功！',
@@ -742,7 +741,6 @@
         params.rptNo = this.rptNo;
 
         inQuireConfirm(params).then(res => {
-          console.log(res);
           if (res.code == '200') {
             this.$message({
               message: '提调成功！',

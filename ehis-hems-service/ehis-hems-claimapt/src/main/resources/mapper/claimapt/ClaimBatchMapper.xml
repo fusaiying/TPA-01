@@ -222,6 +222,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         )record on record.batch_no=cb.batch_no and record.status='Y'

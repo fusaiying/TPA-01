@@ -83,9 +83,6 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchDTO.setClaimtype("02");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
-        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
-        }
         return claimBatchMapper.selectDirectQueryList(batchDTO);
     }
 
@@ -100,9 +97,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     public List<BatchVo> selectBackToBatchList(BatchDTO batchDTO) {
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHRETURN.getCode());//04
-        if (StringUtils.isEmpty(batchDTO.getUpdateBy())) {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
-        }
+//        if (StringUtils.isNull(batchDTO.getUpdateBy())) {
+//            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//        }
         return claimBatchMapper.selectReturnedBatchList(batchDTO);
     }
 
@@ -133,14 +130,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
                 && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
                 && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
-
-        } else {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+            Long userId = SecurityUtils.getUserId();
+            SysUser sysUser = sysUserMapper.selectUserById(userId);
+            // 获取用户的所属机构
+            batchDTO.setOrgancode( sysUser.getDeptId().toString());
         }
-        Long userId = SecurityUtils.getUserId();
-        SysUser sysUser = sysUserMapper.selectUserById(userId);
-        // 获取用户的所属机构
-        batchDTO.setOrgancode( sysUser.getDeptId().toString());
+//        else {
+//            batchDTO.setUpdateBy(SecurityUtils.getUsername());
+//        }
         batchDTO.setStatus("Y");
         batchDTO.setBatchstatus("'01','02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
@@ -174,7 +171,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setUpdateBy(SecurityUtils.getUsername());
         }
         batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'01','02','03','05'");
+        batchDTO.setBatchstatus("'02','03','05'");
         if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);

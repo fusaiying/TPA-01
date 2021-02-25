@@ -571,9 +571,8 @@ public class ClaimCaseController extends BaseController {
     //受理完成匹配事后案件台账 插入报案号
 //    @PreAuthorize("@ss.hasPermi('system:case:list')")
     @PostMapping("/setRptNo")
-    public AjaxResult setRptNo(ClaimStandingRptNoDTO claimStandingRptNoDTO) {
-        claimStandingRptNoService.selectClaimHistory(claimStandingRptNoDTO);
-        return AjaxResult.success(claimStandingRptNoService.selectClaimHistory(claimStandingRptNoDTO));
+    public AjaxResult setRptNo(@RequestBody ClaimStandingRptNoDTO claimStandingRptNoDTO) {
+        return AjaxResult.success(claimStandingRptNoService.updateStandingRptNo(claimStandingRptNoDTO));
     }
 
     //base_code_mapping

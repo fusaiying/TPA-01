@@ -74,14 +74,15 @@
         claim_case_discussion a,
         claim_case_record b
         <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-            a.rpt_no = b.rpt_no
-            AND a.is_history = 'Y'
-            AND a.STATUS = 'Y'
-            AND b.history_flag = 'N'
-            AND b.STATUS = 'Y'
-            and b.operation='07'
+            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         </where>
+        and a.rpt_no = b.rpt_no
+        AND a.is_history = 'Y'
+        AND a.STATUS = 'Y'
+        AND b.history_flag = 'N'
+        AND b.STATUS = 'Y'
+        and b.operation='07'
+
     </select>
 
     <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">

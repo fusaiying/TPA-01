@@ -43,18 +43,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectClaimCaseStandingVo">
         select id_type,standing_id, rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
-    <update id="updateClaimCaseStandingRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseStanding">
+    <update id="updateClaimCaseStandingRptNo" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimStandingRptNoDTO">
         update claim_case_standing
         <trim prefix="SET" suffixOverrides=",">
-            <if test="idType != null and idType != ''">id_type = #{idType},</if>
-            <if test="batchno != null and batchno != ''">batch_no = #{batchno},</if>
-            <if test="idno != null and idno != ''">id_no = #{idno},</if>
-            <if test="name != null and name != ''">name = #{name},</if>
-            <if test="claimmaterials != null and claimmaterials != ''">claim_materials = #{claimmaterials},</if>
-            <if test="remark != null and remark != ''">remark = #{remark},</if>
-            <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
+            <if test="rptNo != null and rptNo != ''"> rpt_no = #{rptNo}</if>
         </trim>
-        where standing_id=#{standingId} and status='Y'
+        <where>
+            <if test="idNo != null  and idNo != '' and name != null  and name != '' and idType != null  and idType != '' "> and id_no = #{idNo} and name = #{name} and id_type = #{idType}</if>
+        </where>
+        AND batch_no = #{batchNo} and status='Y'
     </update>
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">

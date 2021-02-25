@@ -400,7 +400,12 @@ public class ClaimBatchController extends BaseController {
     @PostMapping("/exportPendingList")
     public void ExportPendingList(HttpServletResponse response ,BatchDTO batchDTO)throws IOException
     {
+        System.out.println("我叒导出已处理Excel了！！！");
         List<BatchVo> list = claimBatchService.selectPendingBatchList(batchDTO);
+        for (BatchVo batchVo : list) {
+            batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
+            batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
+        }
         ExcelUtil<BatchVo> util = new ExcelUtil<BatchVo>(BatchVo.class);
         util.exportExcel(response, list, "交单工作池处理中理赔批次表");
     }

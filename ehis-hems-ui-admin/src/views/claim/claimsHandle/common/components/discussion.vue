@@ -128,7 +128,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="转出意见：" prop="disView">
-                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
+                <el-input  style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -231,7 +231,7 @@
           <el-row>
             <el-col :span="23">
               <el-form-item label="提调事项：" :style="{width:'100%'}" prop="invView">
-                <el-input v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
+                <el-input maxlength="1000" v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -289,11 +289,15 @@
           return []
         }
       },
+      insuredData:Object,
       fixInfo:Object,
       node:String,
 
     },
     watch: {
+      insuredData: function (newValue) {
+        this.surveyInfo = newValue;
+      },
       policySelectData: function (newValue) {
         this.policyNos = newValue;
       },
@@ -500,6 +504,9 @@
     computed: {
     },
     methods: {
+      goHistory(){
+        this.$router.go(-1);
+      },
       validSubType(value){
         this.negotiationSubTypes = [];
         this.discussionForm.discSubType = '';
@@ -537,6 +544,7 @@
                   center: true,
                   showClose: true
                 });
+                this.goHistory();
               } else {
                 this.$message({
                   message: '保存成功！',
@@ -679,7 +687,7 @@
               center: true,
               showClose: true
             });
-            this.$router.go(-1);
+           this.goHistory();
           } else {
             this.$message({
               message: '审核失败！',
@@ -761,6 +769,10 @@
         if(this.rptNo == '') {
           return false;
         }
+        if(!this.inQuireConfirmBtn) {
+          this.$message.info('请先保存再进行提调！')
+          return false;
+        }
         const params = {};
         params.rptNo = this.rptNo;
 
@@ -772,6 +784,7 @@
               center: true,
               showClose: true
             });
+            this.goHistory();
           } else {
             this.$message({
               message: '提调失败！',

@@ -23,23 +23,9 @@ public class ClaimStandingRptNoImpl implements ClaimStandingRptNoService {
     private ClaimCaseStandingMapper claimCaseStandingMapper;
 
     @Override
-    public int selectClaimHistory(ClaimStandingRptNoDTO claimStandingRptNoDTO) {
-        List<ClaimCaseStanding> claimCaseStandingList = new ArrayList<>();
-        //根据批次号去查报案号
-        if(StringUtils.isNotEmpty(claimStandingRptNoDTO.getBatchNo())) {
-            //根据报案号去查台账信息
-            claimCaseStandingList= claimCaseStandingMapper.selectClaimCaseStandingByIdOne(claimStandingRptNoDTO.getBatchNo());
-        }
-        int i=0;
-        for (ClaimCaseStanding claimCaseStanding : claimCaseStandingList) {
-            if (claimCaseStanding.getIdno().equals(claimStandingRptNoDTO.getIdNo()) && claimCaseStanding.getIdType().equals(claimStandingRptNoDTO.getIdType())
-                    && claimCaseStanding.getName().equals(claimStandingRptNoDTO.getName())){
-                claimCaseStanding.setRptno(claimStandingRptNoDTO.getRptNo());
-                i=i+claimCaseStandingMapper.updateClaimCaseStandingRptNo(claimCaseStanding);
-            }
-        }
+    public int updateStandingRptNo(ClaimStandingRptNoDTO claimStandingRptNoDTO) {
 
-        return i;
+        return claimCaseStandingMapper.updateClaimCaseStandingRptNo(claimStandingRptNoDTO);
 
     }
 }

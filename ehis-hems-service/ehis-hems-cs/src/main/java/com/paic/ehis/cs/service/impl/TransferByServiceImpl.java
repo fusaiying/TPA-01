@@ -5,6 +5,7 @@ import java.util.List;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.mapper.TransferByMapper;
 import com.paic.ehis.cs.service.ITransferByService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,16 @@ public class TransferByServiceImpl implements ITransferByService
     @Override
     public int insertTransferBy(TransferBy transferBy)
     {
-        transferBy.setCreatedBy(SecurityUtils.getUsername());
-        transferBy.setCreatedTime(DateUtils.getNowDate());
-        transferBy.setUpdatedBy(SecurityUtils.getUsername());
-        transferBy.setUpdatedTime(DateUtils.getNowDate());
-        return transferByMapper.insertTransferBy(transferBy);
+        List<UmCode> list=transferBy.getUmCodeList();
+        int count=0;
+        for (UmCode umCode:list){
+            transferBy.setCreatedBy(SecurityUtils.getUsername());
+            transferBy.setCreatedTime(DateUtils.getNowDate());
+            transferBy.setUpdatedBy(SecurityUtils.getUsername());
+            transferBy.setUpdatedTime(DateUtils.getNowDate());
+            transferByMapper.insertTransferBy(transferBy);
+        }count++;
+        return count;
     }
 
     /**

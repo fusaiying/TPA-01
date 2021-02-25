@@ -9,4 +9,6 @@ public class UmCode {
     private String key;
     /** 工单编号 */
     private String value;
+
+    private String umCode;
 }

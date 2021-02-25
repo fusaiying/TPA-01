@@ -1,10 +1,13 @@
 package com.paic.ehis.cs.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import com.paic.ehis.cs.domain.vo.UmCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -32,6 +35,9 @@ public class TransferBy extends BaseEntity
     /** 接收方UM账号 */
     @Excel(name = "接收方UM账号")
     private String umCode;
+
+    private List<UmCode> umCodeList;
+
 
     /** 转交处理原因 */
     @Excel(name = "转交处理原因")
@@ -63,7 +69,15 @@ public class TransferBy extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setTransferId(Long transferId) 
+    public List<UmCode> getUmCodeList() {
+        return umCodeList;
+    }
+
+    public void setUmCodeList(List<UmCode> umCodeList) {
+        this.umCodeList = umCodeList;
+    }
+
+    public void setTransferId(Long transferId)
     {
         this.transferId = transferId;
     }

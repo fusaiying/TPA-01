@@ -4,9 +4,9 @@
       <div style="position: relative">
         <div slot="header" class="clearfix">
           <div style="width: 100%;cursor: pointer;">
-            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun">赔付结论</span>
-            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
-            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
+            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
+            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
+            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
             <div style="float: right;">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
@@ -855,10 +855,8 @@
       formReset(fromName){
         this.$refs[fromName].resetFields()
       },
-      activeFun(obj){
-
-        let id = obj.id;
-        switch(obj.toElement.id) {
+      activeFun(id){
+        switch(id) {
           case 'span1':
             this.isButtonShow=true;
             this.isActiveSpan1 = true;

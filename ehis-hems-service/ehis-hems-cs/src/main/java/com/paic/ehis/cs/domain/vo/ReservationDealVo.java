@@ -57,7 +57,7 @@ public class ReservationDealVo extends BaseEntity {
     /**结案类型*/
     private String closeType;
 
-    /**安抚或通融发生费用成本*/
+    /**是否需要担保函*/
     private String costsIncurred;
 
     /**判断暂存保存标记*/

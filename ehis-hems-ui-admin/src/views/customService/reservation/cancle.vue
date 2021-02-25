@@ -530,9 +530,13 @@
   import {FlowLogSearch} from '@/api/customService/demand'
   import {demandListAndPublicPool,demandListAndPersonalPool,cancelReservationSubmit} from '@/api/customService/reservation'
   import modifyDetails from "../common/modul/modifyDetails";
+  import transfer from "@/views/customService/common/modul/transfer";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: { transfer ,
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {

@@ -184,7 +184,7 @@
           <el-table-column prop="remarks" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -201,7 +201,7 @@
 
     <el-card>
       <el-form   style="padding-bottom: 30px;" label-width="145px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" v-if="this.queryParams.businessType=='05'">
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
@@ -469,7 +469,7 @@
             editRemark:""
           }
         },
-
+        businessType:"",
         totalCount: 0,
         // 表单校验
         rules: {
@@ -506,6 +506,7 @@
         },
         // 查询参数
         queryParams: {
+          businessType:"",
           pageNum: 1,
           pageSize: 10,
           workOrderNo:"",
@@ -535,6 +536,7 @@
       this.queryParams.policyNo=this.$route.query.policyNo;
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
+      this.queryParams.businessType=this.$route.query.businessType;
       this.getDicts("cs_sex").then(response => {
         this.cs_sex = response.data;
       });

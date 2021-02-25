@@ -409,7 +409,8 @@
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
             policyItemNo:s.policyItemNo,
-            status:s.status
+            status:s.status,
+            businessType:s.businessType
           }
         })
       },
@@ -421,7 +422,7 @@
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
             policyItemNo:s.policyItemNo,
-            status:s.status
+            status:s.status,
           }
         })
       },
@@ -547,6 +548,7 @@
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.rows.length
+            console.log("dasd",res.rows)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

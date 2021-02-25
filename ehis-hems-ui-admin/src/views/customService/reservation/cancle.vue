@@ -488,7 +488,7 @@
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因" prop="bank" >
+          <el-form-item label="取消原因：" prop="bank" >
             <el-radio-group v-model="submitForm.editReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>

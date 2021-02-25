@@ -725,8 +725,9 @@
         send.sign="02",
         send.workOrderNo=this.queryParams.workOrderNo=this.$route.query.workOrderNo
         dealReservationSubmit(send).then(res => {
-          console.log("tijiao",send)
+
           if (res != null && res.code === 200) {
+            alert("保存成功！")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "提交失败！"
@@ -743,8 +744,9 @@
         send.sign="01",
         send.workOrderNo=this.queryParams.workOrderNo=this.$route.query.workOrderNo
         dealReservationSubmit(send).then(res => {
-          console.log("zancun",send)
+
           if (res != null && res.code === 200) {
+            alert("暂存成功！")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "提交失败！"

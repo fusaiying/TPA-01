@@ -32,7 +32,7 @@
 
             </el-row>
             <el-row>
-              <el-form-item label="转交处理原因：：" prop="solicitOpinion" :rules="{
+              <el-form-item label="转交处理原因：：" prop="reason" :rules="{
              required: true, message: '转交处理原因不能而为空', trigger: 'blur'
             }">
                 <el-input

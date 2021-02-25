@@ -37,7 +37,7 @@ public class ProcessingCaseVo implements Serializable {
     private String claimType;
 
     /** 案件状态 */
-    @Excel(name = "案件状态",readConverterExp = "05=受理")
+    @Excel(name = "案件状态",readConverterExp = "05=受理,30=问题件")
     private String caseStatus;
 
     /** 停留时长 */

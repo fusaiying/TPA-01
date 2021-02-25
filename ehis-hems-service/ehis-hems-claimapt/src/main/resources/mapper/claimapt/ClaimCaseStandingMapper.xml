@@ -62,6 +62,10 @@
         select standing_id,batch_no,id_type,rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
 
+    <sql id="selectClaimPolicyInsured">
+        select name from policy_insured
+    </sql>
+
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         <where>
@@ -208,7 +212,7 @@
     </update>
 
     <select id="selectClaimCaseStandingByIdidType" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
-        <include refid="selectClaimCaseStandingVo"/>
+        <include refid="selectClaimPolicyInsured"/>
         where id_type = #{idType} and id_no = #{idno} and status='Y'
     </select>
 

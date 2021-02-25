@@ -29,6 +29,9 @@ public class ClaimCaseStanding extends BaseEntity {
     private String standingId;
 
 
+    private String idType;
+
+
     /**
      * 报案号
      */
@@ -223,12 +226,21 @@ public class ClaimCaseStanding extends BaseEntity {
         this.status = status;
     }
 
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
     @Override
     public String toString() {
         return "ClaimCaseStanding{" +
                 "dBefore=" + dBefore +
                 ", dNow=" + dNow +
                 ", standingId='" + standingId + '\'' +
+                ", idType='" + idType + '\'' +
                 ", rptno='" + rptno + '\'' +
                 ", idno='" + idno + '\'' +
                 ", name='" + name + '\'' +

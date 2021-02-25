@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 
+import com.paic.ehis.claimflow.domain.AccidentInfoMap;
 import com.paic.ehis.claimflow.domain.ClaimCaseAccept;
 
 import java.util.List;
@@ -37,6 +38,8 @@ public interface ClaimCaseAcceptMapper
      * @return 案件受理信息 集合
      */
     public List<ClaimCaseAccept> selectClaimCaseAcceptList(ClaimCaseAccept claimCaseAccept);
+
+    public AccidentInfoMap selectacciPlace(String rptNo);
 
     /**
      * 新增案件受理信息 

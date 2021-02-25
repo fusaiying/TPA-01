@@ -37,7 +37,7 @@ public class BatchVo implements Serializable {
     private String hospitalcode;
 
     /** 批次理赔类型 */
-    @Excel(name = "理赔类型",readConverterExp="01=直结 02=事后")
+    @Excel(name = "理赔类型",readConverterExp="01=直结,02=事后")
     private String claimtype;
 
     /** 交单日期 */
@@ -71,7 +71,7 @@ public class BatchVo implements Serializable {
     private String organcode;
 
     /** 批次状态 01-处理中 02-交单复核 03-交单完成 04-交单退回 05-交单无效 */
-    @Excel(name = "批次状态 " ,readConverterExp="01=处理中 02=交单复核 03=交单完成 04=交单退回 05=交单无效")
+    @Excel(name = "批次状态 " ,readConverterExp="01=处理中,02=交单复核,03=交单完成,04=交单退回,05=交单无效")
     private String batchstatus;
 
     /** 结论 */

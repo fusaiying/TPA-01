@@ -716,6 +716,7 @@
             <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and ccp.policy_item_no = #{policyItemNo}</if>
             <if test="name != null  and name != ''"> and ccp.name like concat('%', #{name}, '%')</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and cci.insured_no = #{insuredNo}</if>
         </where>
     </select>
 

@@ -53,7 +53,8 @@
         type: Boolean,
         default: false
       },
-      fixInfo:Object
+      fixInfo:Object,
+      insuredNo:String,
     },
     watch: {
       value: function (newValue) {
@@ -61,6 +62,9 @@
         if(this.dialogVisable) {
           this.initData();
         }
+      },
+      insuredNo:function (newValue) {
+        this.paramInsuredNo = newValue;
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
@@ -71,6 +75,7 @@
       return {
         fixInfoData : '',
         rptNo :'',
+        paramInsuredNo:'',
         dialogVisable: false,
         tableData: [],
         totalNum: 0,
@@ -103,15 +108,14 @@
     },
     methods: {
       initData(){
-        if(this.rptNo == '') {
+        if(this.paramInsuredNo == '') {
           return false;
         }
-
         this.loading = true;
         const params = {};
         params.pageNum = this.pageInfo.currentPage;
         params.pageSize = this.pageInfo.pageSize;
-        params.rptNo = this.rptNo;
+        params.insuredNo = this.paramInsuredNo;
 
         claimInformation(params).then(res => {
           console.log(res);

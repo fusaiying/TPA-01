@@ -496,7 +496,7 @@
                 ORDER BY
                     record.update_time DESC
             ) act
-                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
     </select>
 
     <!-- lihy -->
@@ -556,7 +556,7 @@
         ORDER BY
         record.update_time DESC
         ) act
-        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
@@ -641,7 +641,7 @@
         ORDER BY
         record.update_time DESC
         ) act
-        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
         <where>
             <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>

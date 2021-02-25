@@ -490,7 +490,7 @@
           console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.totalCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -516,7 +516,7 @@
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
+            this.totalPersonCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(

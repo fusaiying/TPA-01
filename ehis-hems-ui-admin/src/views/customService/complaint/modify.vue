@@ -78,17 +78,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="phone">
-              <el-input  v-model="workPoolData.ContactsMobilePhone"  clearable size="mini" style="width: 50px" class="item-width" placeholder="请输入"></el-input>
 
-              <el-select v-model="workPoolData.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 30px" class="item-width"  :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>时
-              <el-select v-model="workPoolData.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 30px" class="item-width"  :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>分
+            <el-form-item label="预约时间："  style="white-space: nowrap">
+              <el-date-picker
+                v-model="workPoolData.complaintTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
             </el-form-item>
           </el-col>
 

@@ -714,12 +714,12 @@
         },
       //协办
       coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.coOrganizer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.coOrganizer.open()
       },
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowId,
+        this.$refs.modifyDetails.queryParams.flowId=s.flowId,
         this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
       ;},

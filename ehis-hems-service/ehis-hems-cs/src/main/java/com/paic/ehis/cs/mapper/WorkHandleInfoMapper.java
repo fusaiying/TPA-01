@@ -98,4 +98,7 @@ public interface WorkHandleInfoMapper
      * @return
      */
     public WorkHandleInfo selectCreatedBy(WorkHandleInfo workHandleInfo);
+
+    List<WorkHandleInfo> selectWorkHandleInfoByNo(Long workOrderNo);
+
 }

@@ -130,6 +130,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where work_order_no = #{workOrderNo}
     </update>
+    <update id="updateWorkOrderStatus" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
+        UPDATE work_order_accept set status = #{status}  where work_order_no=#{workOrderNo}
+    </update>
 
     <delete id="deleteWorkOrderAcceptById" parameterType="String">
         delete from work_order_accept where work_order_no = #{workOrderNo}

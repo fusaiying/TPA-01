@@ -98,10 +98,7 @@
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
     </select>
-    <update id="updateComplaintStatus" parameterType="String" >
-        update work_order_accept set status = '02'
-        where status='01'and work_order_no = #{workOrderNo}
-    </update>
+
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
 SELECT
 	a.work_order_no,

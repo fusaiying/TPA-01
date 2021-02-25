@@ -22,9 +22,11 @@ public class ComplaintDealVo extends BaseEntity {
     private String workOrderNo;
 
     /** 标志 */
-    @Excel(name = "标志")
-    private String flag;
-
+   // @Excel(name = "标志")
+   // private String flag;
+    /** 服务项目 */
+    @Excel(name = "服务项目")
+    private String itemCode;
     /** 状态 */
     @Excel(name = "状态")
     private String status;
@@ -46,8 +48,8 @@ public class ComplaintDealVo extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
-    @Excel(name="业务说明")
-    private String remark;
+   // @Excel(name="业务说明")
+    //private String remark;
     /*一级投诉分类*/
     private String level1;
 
@@ -140,4 +142,46 @@ public class ComplaintDealVo extends BaseEntity {
     /** 处理依据 */
     @Excel(name = "处理依据")
     private String treatmentBasis;
+    @Excel(name = "受理渠道 信息需求受理渠道")
+    private String channelCode;
+
+    /** 来电人编号 person_info中的编号 */
+    @Excel(name = "来电人编号 person_info中的编号")
+    private String callPersonId;
+
+    /** 来电人与被保人关系 */
+    @Excel(name = "来电人与被保人关系")
+    private String callRelationBy;
+
+    /** 优先级 */
+    @Excel(name = "优先级")
+    private String priorityLevel;
+
+    /** 联系人编号 person_info中的编号 */
+    @Excel(name = "联系人编号 person_info中的编号")
+    private String contactsPersonId;
+
+    /** 联系人与被保人关系 */
+    @Excel(name = "联系人与被保人关系")
+    private String contactsRelationBy;
+
+    /** 电话中心业务流水号 */
+    @Excel(name = "电话中心业务流水号")
+    private String callCenterId;
+
+    /** E-MAIL */
+    @Excel(name = "E-MAIL")
+    private String email;
+
+    /** 出单机构 */
+    @Excel(name = "出单机构")
+    private String organCode;
+
+    /** 业务内容 */
+    @Excel(name = "业务内容")
+    private String content;
+
+    /** 投诉人编号 person_info中的编号 */
+    @Excel(name = "投诉人编号 person_info中的编号")
+    private String complaintPersonId;
 }

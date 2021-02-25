@@ -191,155 +191,130 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
-        <span style="color: blue">根因改善-服务受理信息</span>
-        <el-divider></el-divider>
+        <span style="color: blue">基因改善-服务受理信息</span>
+        <el-divider/>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" />
+            <el-form-item label="受理渠道：" prop="phone">
+              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="contactsName">
-              <el-input  v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" />
+            <el-form-item label="联系人姓名：" prop="callCenterId">
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
-
-
-
-
-
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="联系人性别：" prop="sex" >
+              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人地址：" prop="contactsLanguage"  >
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="联系人地址：" prop="address">
+              <el-input v-model="workPoolData.contactsPerson.address" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="客户号：" prop="contactsLanguage"  >
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="workPoolData.priorityLevel" class="item-width"  >
-                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="来电人号码：" prop="callMobilePhone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="E-MAIL：" prop="email">
-              <el-input v-model="workPoolData.email" class="item-width"  size="mini" />
+            <el-form-item label="客户号：" prop="phone">
+              <el-input v-model="workPoolData.insuredNo" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人手机：" prop="contactsMobilePhone">
-              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" />
+            <el-form-item label="优先级：" prop="priorityLevel">
+              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="contactsLanguage"  >
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="来电号码：" prop="phone">
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉人姓名：" prop="callMobilePhone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
+            <el-form-item label="E-MAIL：" prop="phone">
+              <el-input v-model="workPoolData.email" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row >
-          <el-col :span="8">
-            <el-form-item label="投诉人性别：" prop="callMobilePhone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="联系人身份：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="家庭电话：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="办公电话：" prop="callMobilePhone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini"/>
+            <el-form-item label="联系人移动电话：" prop="mobilePhone">
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+            <el-form-item label="联系人语言：" prop="priority"  >
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否已劝解：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="投诉人姓名：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="投诉人性别：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投诉人身份：" prop="phone">
+              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="客户电话：" prop="phone">
+              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="办公电话：" prop="phone">
+              <el-input v-model="workPoolData.insurer.workPhone" class="item-width"  size="mini" readonly/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
 
         </el-row>
-        <el-form-item label="投诉内容：" prop="content">
-          <el-input
-            type="textarea"
-            :rows="2"
-            v-model="workPoolData.textarea">
-          </el-input>
+        <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
+          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini" readonly/>
         </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="投诉内容：" prop="phone">
+            <el-input
+              disabled
+              type="textarea"
+              :rows="2"
+              v-model="workPoolData.content">
+            </el-input>
+          </el-form-item>
+        </el-row>
+
+
+
       </el-form>
     </el-card>
 
@@ -551,7 +526,7 @@
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因" >
+          <el-form-item label="取消原因：" >
             <el-radio-group v-model="ruleForm.editReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
@@ -591,6 +566,7 @@
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
   import {complaintCancelSubmit} from '@/api/customService/complaint'
+  import {complainSearch,comSearch}  from  '@/api/customService/consultation'
 
   let dictss = [{dictType: 'product_status'}]
   export default {
@@ -654,8 +630,12 @@
         },
         loading: true,
         workPoolData: {
-          contactsPerson:{},
-          callPerson:{},
+          contactsPerson:{
+            homePhone1:[]
+          },
+          callPerson: {},
+          complainantPerson:{},
+          insurer:{},
         }
 
         ,
@@ -664,17 +644,17 @@
         changeSerchData: {},
         states: [],
         serves: [{
-          value: '1',
-          label: '服务1'
+          dictValue: '1',
+          dictLabel: '服务1'
         }, {
-          value: '2',
-          label: '服务2'
+          dictValue: '2',
+          dictLabel: '服务2'
         }, {
-          value: '3',
-          label: '服务3'
+          dictValue: '3',
+          dictLabel: '服务3'
         }, {
-          value: '4',
-          label: '服务4'
+          dictValue: '4',
+          dictLabel: '服务4'
         }],
         sysUserOptions: [],
       }
@@ -705,7 +685,7 @@
         complaintCancelSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
             console.log("insert",insert)
-            alert("修改成功")
+            alert("取消成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "失败！"
@@ -721,14 +701,11 @@
       },
       //反显信息需求
       searchHandle() {
-        let query=this.queryParams
-        console.log("query",query)
-        demandListAndPersonalPool(query).then(res => {
-          console.log('共公池',res.rows)
+        let workOrderNo=this.queryParams.workOrderNo
+        complainSearch(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
-            this.workPoolData = res.rows[0]
-            this.totalCount = res.total
-            console.log('response',res.total)
+            this.workPoolData = res.data
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

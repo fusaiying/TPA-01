@@ -116,4 +116,6 @@ public interface IWorkHandleInfoService
      * 查询工单业处理信息 投诉
      */
     List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo);
+
+    List<WorkHandleInfo> selectWorkHandleInfoByNo(Long workOrderNo);
 }

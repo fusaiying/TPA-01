@@ -128,7 +128,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="转出意见：" prop="disView">
-                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
+                <el-input  style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -231,7 +231,7 @@
           <el-row>
             <el-col :span="23">
               <el-form-item label="提调事项：" :style="{width:'100%'}" prop="invView">
-                <el-input v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
+                <el-input maxlength="1000" v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>

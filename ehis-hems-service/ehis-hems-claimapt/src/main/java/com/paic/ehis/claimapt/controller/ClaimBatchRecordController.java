@@ -121,6 +121,7 @@ public class ClaimBatchRecordController extends BaseController {
             iClaimCaseStandingService.updateClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch().getBatchno());
             List<ClaimCaseStandingVo> claimCaseStandingVos1 = iClaimCaseStandingService.selectClaimCaseStandingByBatchno(standingAndBatck.getClaimBatch());
             standingAndBatck.setStandingData(claimCaseStandingVos1);
+           iClaimBatchService.updateSysClaimBatchTwo(standingAndBatck);
             return AjaxResult.success(standingAndBatck);
         } else {
 
@@ -256,4 +257,6 @@ public class ClaimBatchRecordController extends BaseController {
             return AjaxResult.success(123);
         }
     }
+
+
 }

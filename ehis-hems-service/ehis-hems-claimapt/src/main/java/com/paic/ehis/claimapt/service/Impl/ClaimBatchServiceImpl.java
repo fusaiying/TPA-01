@@ -549,6 +549,22 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         }
+
+        return standingAndBatck;
+    }
+
+    /**
+     *
+     * @param standingAndBatck 理赔批次
+     * @return 结果
+     */
+    @Override
+    public StandingAndBatck updateSysClaimBatchTwo(StandingAndBatck standingAndBatck) {
+        //不增加轨迹表
+        standingAndBatck.getClaimBatch().setUpdateBy(SecurityUtils.getUsername());
+        standingAndBatck.getClaimBatch().setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+        standingAndBatck.getClaimBatch().setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatchMapper.updateClaimBatch(standingAndBatck.getClaimBatch());
         return standingAndBatck;
     }
 

@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 
 
+import com.paic.ehis.claimflow.domain.Claim;
 import com.paic.ehis.claimflow.domain.ClaimBill;
 import com.paic.ehis.claimflow.domain.ClaimCaseBill;
 import com.paic.ehis.system.api.domain.dto.ClaimCaseBillDTO;
@@ -31,6 +32,8 @@ public interface ClaimCaseBillMapper
      * @return 案件账单明细集合
      */
     public List<ClaimCaseBill> selectClaimCaseBillList(ClaimCaseBill claimCaseBill);
+
+    public Claim selectPaidAmt(String rptNo);
 
     public List<ClaimBill> selectClaimBillList(String rptNo);
 

@@ -29,9 +29,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bestStartDate"    column="bestStartDate"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimHistory" id="ClaimHistoryResult">
+        <result property="mainPlanCode"    column="risk_code"    />
+        <result property="mainPlanName"    column="risk_name"    />
+    </resultMap>
+
     <sql id="selectPolicyRiskRelationVo">
         select relation_id, policy_no, risk_code, risk_name, status, create_by, create_time, update_by, update_time from policy_risk_relation
     </sql>
+
+    <select id="selectRisk" parameterType="String" resultMap="ClaimHistoryResult">
+    SELECT risk_code,risk_name FROM policy_risk_relation WHERE policy_no=#{policyNo}
+   </select>
 
     <select id="selectPolicyRiskRelationList" parameterType="PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
         <include refid="selectPolicyRiskRelationVo"/>

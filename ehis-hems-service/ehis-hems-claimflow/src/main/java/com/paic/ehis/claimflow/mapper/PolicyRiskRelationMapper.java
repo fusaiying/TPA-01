@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.mapper;
 import com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo;
 import com.paic.ehis.claimflow.domain.PolicyAndRiskRelation;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
+import com.paic.ehis.claimflow.domain.vo.ClaimHistory;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public interface PolicyRiskRelationMapper
      * @return 保单险种关联集合
      */
     public List<PolicyRiskRelation> selectPolicyRiskRelationList(PolicyRiskRelation policyRiskRelation);
+
+    public ClaimHistory selectRisk(String policyNo);
 
     /**
      * 跨服务调用   查询保单险种关联列表

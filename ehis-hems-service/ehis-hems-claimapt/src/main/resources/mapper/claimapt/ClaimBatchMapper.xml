@@ -139,7 +139,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bpi.chname1,
         bpi.enname1,
         (select r.remark from claim_batch_record r where operation = '04'
-        AND STATUS = 'Y' and cb.batch_no=r.batch_no) as remark
+        AND STATUS = 'Y' and cb.batch_no=r.batch_no
+        ORDER BY
+        create_time
+        desc
+        LIMIT 1) as remark
         FROM
         claim_batch cb
         LEFT JOIN (

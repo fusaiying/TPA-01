@@ -30,7 +30,7 @@
           <el-table-column prop="accDate" label="就诊日期"  align="center" show-overflow-tooltip />
           <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论"  align="center" show-overflow-tooltip />
           <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
-          <el-table-column prop="operator" label="审核人"  align="center" show-overflow-tooltip />
+          <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
           <el-table-column prop="investigation" :formatter="getInvestigationName" label="有无调查"  align="center" show-overflow-tooltip />
         </el-table>
         <!--分页组件-->

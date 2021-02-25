@@ -854,7 +854,7 @@
         });
       },
       formReset(fromName){
-        this.$refs['surveyForm'].clearValidate();
+     //   this.$refs[fromName].resetFields()
         this.surveyForm.invType ='';
         this.surveyForm.invReason ='';
         this.surveyForm.invOrganCode ='';
@@ -863,7 +863,6 @@
         this.surveyForm.invView ='';
 
         this.$refs['surveyForm'].clearValidate();
-        this.$refs['surveyForm'].resetFields()
 
 
 

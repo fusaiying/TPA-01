@@ -68,7 +68,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="赔付结论：" prop="payConclusion">
-                <el-select disabled="disabled"  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
+                <el-select :disabled="payConclusionDisabled ? 'disabled' : ''"  size="mini" v-model="conclusionForm.payConclusion" class= "el-select item-width el-select--mini" placeholder="请选择" @change="payConclusionChange">
                   <el-option v-for="dict in conclusionSelect" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
                 </el-select>
               </el-form-item>
@@ -323,6 +323,7 @@
         }
       };
       return {
+        payConclusionDisabled:true,
         appealCase:false,
         dictList: [],
         rgtSexs:[],
@@ -770,6 +771,8 @@
             }
             if(this.conclusionInfo.payConclusion != '' && this.conclusionInfo.payConclusion != null) {
               this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论
+            } else {
+              this.payConclusionDisabled = false;
             }
             if(this.conclusionInfo.refusedReason != '' && this.conclusionInfo.refusedReason != null) {
               this.conclusionForm.refusedReason = this.conclusionInfo.refusedReason; // 拒赔原因

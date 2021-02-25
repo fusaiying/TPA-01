@@ -208,7 +208,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="提调机构：" prop="organCode" key="organCode">
+              <el-form-item label="提调机构：" prop="organCode" key="organCode1">
                 <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
@@ -216,7 +216,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="保单号：" prop="policyNo"  key="policyNo">
+              <el-form-item label="保单号：" prop="policyNo"  key="policyNo1">
                 <el-select v-model="surveyForm.policyNo" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="dict in policyNos"
                              :key="dict.policyNo"
@@ -854,15 +854,20 @@
         });
       },
       formReset(fromName){
-       // this.$refs[fromName].resetFields()
         this.$refs['surveyForm'].clearValidate();
         this.surveyForm.invType ='';
         this.surveyForm.invReason ='';
         this.surveyForm.invOrganCode ='';
-        this.surveyForm.organCode ='';
+        this.surveyForm.organCode = '';
         this.surveyForm.policyNo ='';
         this.surveyForm.invView ='';
+
         this.$refs['surveyForm'].clearValidate();
+        this.$refs['surveyForm'].resetFields()
+
+
+
+
 
       },
       activeFun(id){

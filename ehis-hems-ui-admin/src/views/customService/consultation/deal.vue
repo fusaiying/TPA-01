@@ -572,10 +572,10 @@
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowId=s.flowId,
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
-        },
+        ;},
 
       resetForm() {
         this.$refs.sendForm.resetFields()

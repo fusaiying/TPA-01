@@ -648,10 +648,11 @@
       //协办
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
-      modifyDetails(){
-        this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
-      ;},
+        ;},
 
       resetForm() {
         this.$refs.sendForm.resetFields()

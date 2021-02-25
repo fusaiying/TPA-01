@@ -138,13 +138,6 @@
     },
 
     methods: {
-      //跳过
-      jumpButton() {
-        this.$router.push({
-          path: '/customService/demand-editDetail',
-          isEmpty: false
-        })
-      },
       //受理
       acceptButton(s) {
         this.$router.push({
@@ -174,10 +167,7 @@
             beInsuredNo: this.sendForm.beInsuredNo,
             organization: this.sendForm.organCode,
           }
-          debugger;
-          console.log('query: ', query)
           demandListAndPublicPool(query).then(res => {
-            console.log('------------: ', res)
             if (res != null && res.code === 200) {
               this.workPoolData = res.rows
               this.totalCount = res.total

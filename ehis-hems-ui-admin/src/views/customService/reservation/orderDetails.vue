@@ -371,7 +371,12 @@
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="Acceptor" align="center" label="说明" show-overflow-tooltip/>
+          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
+            </template>
+          </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="Handler" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="vip" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="priority" align="center" label="流传原因" show-overflow-tooltip/>
@@ -421,7 +426,7 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool} from '@/api/customService/demand'
-
+  import modifyDetails from "../common/modul/modifyDetails";
   let dictss = [{dictType: 'product_status'}]
   export default {
     filters: {
@@ -566,6 +571,12 @@
     },
 
     methods: {
+      //超链接用
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.open()
+        ;},
       //上传附件
       upload(){},
       //下载

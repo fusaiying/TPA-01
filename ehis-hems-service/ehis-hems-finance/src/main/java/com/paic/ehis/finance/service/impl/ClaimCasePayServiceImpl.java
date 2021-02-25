@@ -18,6 +18,7 @@ import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import com.paic.ehis.finance.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -56,6 +57,13 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     private FinancePayDetailInfoMapper financePayDetailInfoMapper;
     @Autowired
     private FinanceBorrowInfoMapper financeBorrowInfoMapper;
+
+    /*
+    * 财务appId
+    **/
+
+    @Value("${esg.financeid}")
+    private String financeid;
 
     /**
      * 查询当前登录用户所属机构下支付状态不全为已支付的批次信息
@@ -148,6 +156,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 payInfo.setBorrowAmount(financeBorrowInfo.getBorrowAmount());
             } else {
                 payInfo.setBorrowAmount(new BigDecimal("0"));
+            }
+            for (ClaimCasePolicy claimCasePolicy : policyList) {
+
             }
         }
         claimCasePayVO.setCaseInfoList(payInfoList);

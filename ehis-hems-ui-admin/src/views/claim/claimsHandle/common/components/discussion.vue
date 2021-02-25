@@ -4,9 +4,9 @@
       <div style="position: relative">
         <div slot="header" class="clearfix">
           <div style="width: 100%;cursor: pointer;">
-            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun">赔付结论</span>
-            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
-            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
+            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
+            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
+            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
             <div style="float: right;">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
@@ -112,7 +112,7 @@
           <el-row>
             <el-col :span="20" :xs="24">
                 <el-form-item label="协谈类型：" prop="discType">
-                  <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择">
+                  <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择" @change="validSubType">
                     <el-option v-for="item in negotiationTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                   </el-select>
                 </el-form-item>
@@ -322,6 +322,18 @@
           callback();
         }
       };
+      const checkDiscSubType = (rule, value, callback) => {
+        let discTypeValue = this.discussionForm.discType;
+        if(discTypeValue === '04' || discTypeValue === '08' || discTypeValue === '09') {
+          if (!value) {
+            callback(new Error("协谈细类必填"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
       return {
         appealCase:false,
         dictList: [],
@@ -375,7 +387,7 @@
         disRules: {
           discType: {trigger: ['change'], required: true, message: '协谈类型必填'},
           disView: {trigger: ['change'], required: true, message: '转出意见必填'},
-          discSubType: {trigger: ['change'], required: true, message: '协谈细类必填'},
+          discSubType: {trigger: ['change'], required: false, validator: checkDiscSubType,},
         },
         //协谈信息 end
 
@@ -438,7 +450,9 @@
         //拒赔原因
         rejectedReasons :[],
         //协谈细类
-        negotiationSubTypes:[]
+        negotiationSubTypes:[],
+        //所有协谈细类
+        negotiationSubAllTypes:[]
 
       }
     },
@@ -461,7 +475,7 @@
       this.negotiationTypes = this.dictList.find(item => {
         return item.dictType === 'negotiation_type'
       }).dictDate
-      this.negotiationSubTypes = this.dictList.find(item => {
+      this.negotiationSubAllTypes = this.dictList.find(item => {
         return item.dictType === 'negotiation_sub_type'
       }).dictDate
       this.dispatchTypes = this.dictList.find(item => {
@@ -486,6 +500,14 @@
     computed: {
     },
     methods: {
+      validSubType(value){
+        this.negotiationSubTypes = [];
+        for(let i=0 ; i<this.negotiationSubAllTypes.length; i++) {
+          if(this.negotiationSubAllTypes[i].listClass === value) {
+            this.negotiationSubTypes.push(this.negotiationSubAllTypes[i])
+          }
+        }
+      },
       payConclusionChange(value){
         if(value != '05'){
           this.conclusionForm.refusedReason = '';
@@ -656,6 +678,7 @@
               center: true,
               showClose: true
             });
+            this.$router.go(-1);
           } else {
             this.$message({
               message: '审核失败！',
@@ -832,10 +855,8 @@
       formReset(fromName){
         this.$refs[fromName].resetFields()
       },
-      activeFun(obj){
-
-        let id = obj.id;
-        switch(obj.toElement.id) {
+      activeFun(id){
+        switch(id) {
           case 'span1':
             this.isButtonShow=true;
             this.isActiveSpan1 = true;

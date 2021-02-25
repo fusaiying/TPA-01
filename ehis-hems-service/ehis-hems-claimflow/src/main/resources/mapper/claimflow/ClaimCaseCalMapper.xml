@@ -106,7 +106,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cc.hospital_code,
         cc.currency,
         ifnull(ccc.pay_conclusion,(
-        case when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'
+        case when (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y') = (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' and pay_conclusion = '01')
+        when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'
         ) > 0 then '03'
         when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '04') > 0
         then '04'

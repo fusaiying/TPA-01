@@ -36,7 +36,7 @@ public class TransferBy extends BaseEntity
     @Excel(name = "接收方UM账号")
     private String umCode;
 
-    private List<UmCode> umCodeList;
+    private List<UmCode> umCodes;
 
 
     /** 转交处理原因 */
@@ -69,13 +69,6 @@ public class TransferBy extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public List<UmCode> getUmCodeList() {
-        return umCodeList;
-    }
-
-    public void setUmCodeList(List<UmCode> umCodeList) {
-        this.umCodeList = umCodeList;
-    }
 
     public void setTransferId(Long transferId)
     {
@@ -100,20 +93,37 @@ public class TransferBy extends BaseEntity
         this.toUserId = toUserId;
     }
 
-    public String getToUserId() 
+    public String getToUserId()
     {
         return toUserId;
     }
-    public void setUmCode(String umCode) 
-    {
+
+    public String getUmCode() {
+        return umCode;
+    }
+
+    public void setUmCode(String umCode) {
         this.umCode = umCode;
     }
 
-    public String getUmCode() 
-    {
-        return umCode;
+    public List<UmCode> getUmCodes() {
+        return umCodes;
     }
-    public void setReason(String reason) 
+
+    public void setUmCodes(List<UmCode> umCodes) {
+        this.umCodes = umCodes;
+    }
+
+    //    public void setUmCode(String umCode)
+//    {
+//        this.umCode = umCode;
+//    }
+//
+//    public String getUmCode()
+//    {
+//        return umCode;
+//    }
+    public void setReason(String reason)
     {
         this.reason = reason;
     }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.service.ITransferByService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +78,10 @@ public class TransferByController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:by:add')")
     @Log(title = "转办信息 ", businessType = BusinessType.INSERT)
     @PostMapping("/transferSubmit")
-    public AjaxResult add(@RequestBody TransferBy transferBy)
+    public AjaxResult add(@RequestBody DemandAcceptVo demandAcceptVo)
     {
-        return toAjax(transferByService.insertTransferBy(transferBy));
+        transferByService.insertTransferBy(demandAcceptVo);
+        return AjaxResult.success();
     }
 
     /**

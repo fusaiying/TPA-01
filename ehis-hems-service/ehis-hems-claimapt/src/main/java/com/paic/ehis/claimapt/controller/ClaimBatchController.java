@@ -398,7 +398,39 @@ public class ClaimBatchController extends BaseController {
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @PostMapping("/exportPendingList")
-    public void ExportPendingList( HttpServletResponse response ,BatchDTO batchDTO)throws IOException
+    public void ExportPendingList(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            HttpServletResponse response ,BatchDTO batchDTO)throws IOException
     {
         List<BatchVo> list = claimBatchService.selectPendingBatchList(batchDTO);
         ExcelUtil<BatchVo> util = new ExcelUtil<BatchVo>(BatchVo.class);

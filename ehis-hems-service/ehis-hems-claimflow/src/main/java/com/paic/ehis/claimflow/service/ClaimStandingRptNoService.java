@@ -13,5 +13,5 @@ import java.util.List;
  * @Company:
  */
 public interface ClaimStandingRptNoService {
-    public int selectClaimHistory(ClaimStandingRptNoDTO claimStandingRptNoDTO);
+    public int updateStandingRptNo(ClaimStandingRptNoDTO claimStandingRptNoDTO);
 }

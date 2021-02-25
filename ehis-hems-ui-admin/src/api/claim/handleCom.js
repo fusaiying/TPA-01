@@ -481,3 +481,12 @@ export function claimConclusionNull(rptNo) {
     method: 'PUT'
   })
 }
+
+//  校验领款人信息领款比列
+export function checkThePayment(data) {
+  return request({
+    url: 'claimflow/payee/proportion',
+    method: 'get',
+    params:data
+  })
+}

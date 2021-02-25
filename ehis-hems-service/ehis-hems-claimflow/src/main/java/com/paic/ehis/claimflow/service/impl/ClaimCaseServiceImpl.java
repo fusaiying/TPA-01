@@ -163,9 +163,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      */
     @Override
     public List<ClaimCase> selectProcessedClaimCaseList(ClaimCaseDTO claimCaseDTO) {
-        if (StringUtils.isNotEmpty(claimCaseDTO.getRptNo()) &&
-                StringUtils.isNotEmpty(claimCaseDTO.getBatchNo()) &&
-                StringUtils.isNotEmpty(claimCaseDTO.getName())
+        if (StringUtils.isNull(claimCaseDTO.getRptNo()) &&
+                StringUtils.isNull(claimCaseDTO.getBatchNo()) &&
+                StringUtils.isNull(claimCaseDTO.getName())
         ) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);

@@ -147,7 +147,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         create_by,
         create_time,
         remark,
-        status
+        status,
+        update_by
         FROM
         claim_batch_record a
         WHERE
@@ -162,6 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         )record on record.batch_no=cb.batch_no and record.status='Y'
@@ -222,6 +224,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         )record on record.batch_no=cb.batch_no and record.status='Y'
@@ -282,6 +285,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         ) cbr ON cbr.batch_no = cb.batch_no

@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
@@ -144,5 +145,16 @@ public class PolicyInfoServiceImpl implements IPolicyInfoService
             l.add(policyVo);
             }
        return  l;
+    }
+
+    /**
+     * 查询TPA保单
+     * @param insuredNoAndName 客户号和案件号
+     * @return
+     */
+    @Override
+    public List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName insuredNoAndName){
+        List<PolicyInfo> policyInfos = policyInfoMapper.selectPolicyInfoListByinsuredNo(insuredNoAndName);
+        return policyInfos;
     }
 }

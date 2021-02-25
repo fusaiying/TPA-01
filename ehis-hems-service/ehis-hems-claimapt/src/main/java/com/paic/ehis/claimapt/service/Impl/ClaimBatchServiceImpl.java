@@ -465,7 +465,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatch.setUpdateBy("");
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
 
-        //二条
+
         ClaimBatchRecord claimBatchRecord1 = new ClaimBatchRecord();
         //批次号一样
         claimBatchRecord1.setBatchno(str1);

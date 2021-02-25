@@ -4,6 +4,7 @@ package com.paic.ehis.claimflow.service.impl;
 import com.paic.ehis.claimflow.domain.ClaimBatch;
 import com.paic.ehis.claimflow.mapper.ClaimBatchMapper;
 import com.paic.ehis.claimflow.service.IClaimBatchService;
+import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -139,17 +140,17 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
 //        return claimBatchMapper.selectStraightAndReview(batchRecordDTO);
 //    }
 //
-//    /**
-//     * 新增理赔批次
-//     *
-//     * @param claimBatch 理赔批次
-//     * @return 结果
-//     */
-//    @Override
-//    public int insertClaimBatch(ClaimBatch claimBatch) {
-//        claimBatch.setCreateTime(DateUtils.getNowDate());
-//        return claimBatchMapper.insertClaimBatch(claimBatch);
-//    }
+    /**
+     * 新增理赔批次
+     *
+     * @param claimBatch 理赔批次
+     * @return 结果
+     */
+    @Override
+    public int insertClaimBatch(ClaimBatch claimBatch) {
+        claimBatch.setCreateTime(DateUtils.getNowDate());
+        return claimBatchMapper.insertClaimBatch(claimBatch);
+    }
 //
 //    /**
 //     * 交单复核无效化处理理赔批次

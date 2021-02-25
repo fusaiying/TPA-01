@@ -2,10 +2,16 @@ package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
+import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoDTO;
+import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoVO;
+import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
+import com.paic.ehis.claimflow.domain.interfaceclass.RptNoAndFilingNo;
 import com.paic.ehis.claimflow.domain.vo.*;
-import com.paic.ehis.claimflow.service.IClaimCaseProblemService;
-import com.paic.ehis.claimflow.service.IClaimCaseRecordService;
-import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.claimflow.service.*;
+import com.paic.ehis.common.core.enums.ClaimStatus;
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -21,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,8 +49,11 @@ public class ClaimCaseController extends BaseController {
     @Autowired
     private IClaimCaseRecordService claimCaseRecordService;
 
+    @Autowired
+    private IClaimBatchService claimBatchService;
 
-
+    @Autowired
+    private IPolicyInfoService policyInfoService;
     /**
      * 理算审核调查 保存按钮
      */
@@ -51,6 +62,7 @@ public class ClaimCaseController extends BaseController {
     public AjaxResult saveInvestigation(@RequestBody ClaimCaseInvestigation caseInvestigation) {
         return AjaxResult.success(claimCaseService.surveyInformationPreservation(caseInvestigation));
     }
+
     /**
      * 理算审核提调 按钮
      */
@@ -77,9 +89,9 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processingList")
     public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
-        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+        if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
-        }else {
+        } else {
             claimCaseDTO.setOrderByColumn("rpt_no");
             claimCaseDTO.setIsAsc("desc");
         }
@@ -95,9 +107,9 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/processedList")
     public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
-        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+        if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
-        }else {
+        } else {
             claimCaseDTO.setOrderByColumn("rpt_no");
             claimCaseDTO.setIsAsc("desc");
         }
@@ -113,9 +125,9 @@ public class ClaimCaseController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/suspensionList")
     public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
-        if(claimCaseDTO.getOrderByColumn()!=null && !claimCaseDTO.getOrderByColumn().equals("")){
+        if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
-        }else {
+        } else {
             claimCaseDTO.setOrderByColumn("rpt_no");
             claimCaseDTO.setIsAsc("desc");
         }
@@ -310,7 +322,6 @@ public class ClaimCaseController extends BaseController {
         List<ClaimCase> list = claimCaseService.selectCaseDispatchList(claimCase);
         return getDataTable(list);
     }*/
-
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
     @GetMapping("/selectCaseDispatchList")
     public TableDataInfo selectCaseDispatchList(DispatchDTO dispatchDTO) {
@@ -559,7 +570,6 @@ public class ClaimCaseController extends BaseController {
     //BaseCodeMappingNew
 
     /**
-     *
      * @param baseCodeMappingNew
      * @return
      */
@@ -570,14 +580,101 @@ public class ClaimCaseController extends BaseController {
 
     /**
      * PBW在线理赔请求接口
-     * @param baseCodeMappingNew
+     *
+     * @param batchNoRptNoDTO
      * @return
      */
-//    @GetMapping("/getBatchNoRptNo")
-//    public AjaxResult getBatchNoRptNo(BaseCodeMappingNew baseCodeMappingNew) {
-//
-//
-//        return AjaxResult.success(claimCaseService.selectBaseCodeMappingNew(baseCodeMappingNew));
-//    }
+    @PostMapping("/getBatchAndNoRptNo")
+    public AjaxResult getBatchNoRptNo(BatchNoRptNoDTO batchNoRptNoDTO) {
+        int caseload = batchNoRptNoDTO.getCasenum();
+        if (caseload > 0) {
+            BatchNoRptNoVO batchNoRptNoVO = new BatchNoRptNoVO();
+            List<RptNoAndFilingNo> RptNoAndFilingNoList = new ArrayList<>();
+            RptNoAndFilingNo rptNoAndFilingNo = new RptNoAndFilingNo();
+            for (int i = 0; i <= caseload; i++) {
+                //报案号
+                String bahtime = "96" + "JGH0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+                rptNoAndFilingNo.setRptNo(bahtime);
 
+                //归档号
+                String claimCaseNumber1 = "JGHDQQW" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 10);
+                rptNoAndFilingNo.setFilingNo(claimCaseNumber1);
+
+                RptNoAndFilingNoList.add(rptNoAndFilingNo);
+            }
+
+            //批次号
+            String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+            batchNoRptNoVO.setBatchNo(str1);
+            batchNoRptNoVO.setRptNoAndFilingNoList(RptNoAndFilingNoList);
+            Date nowDate = DateUtils.getNowDate();
+            batchNoRptNoVO.setCreateBatchTime(nowDate);
+
+            ClaimBatch claimBatch = new ClaimBatch();
+            claimBatch.setBatchno(str1);
+            claimBatch.setSource(batchNoRptNoDTO.getSource());
+            claimBatch.setHospitalcode(batchNoRptNoDTO.getHospitalCode());
+            claimBatch.setClaimtype(batchNoRptNoDTO.getClaimType());
+            claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());
+            claimBatch.setCasenum(batchNoRptNoDTO.getCasenum());
+            claimBatch.setBatchtotal(batchNoRptNoDTO.getBatchTotal());
+            claimBatch.setOrgancode(batchNoRptNoDTO.getHospitalCode());
+            claimBatch.setCurrency(batchNoRptNoDTO.getCurrency());
+            claimBatch.setConttype(batchNoRptNoDTO.getClaimType());
+            claimBatch.setBillrecevieflag(batchNoRptNoDTO.getBillRecevieFlag());
+            claimBatch.setPrireason(batchNoRptNoDTO.getPriReason());
+            claimBatch.setRemark(batchNoRptNoDTO.getRemark());
+            claimBatch.setBatchstatus(ClaimStatus.BATCHFINISH.getCode());//03
+            claimBatch.setExpressnumber(batchNoRptNoDTO.getExpressNumber());
+            claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());
+            claimBatch.setSendby(batchNoRptNoDTO.getSendBy());
+            claimBatch.setSpeccasetype(batchNoRptNoDTO.getClaimType());
+            claimBatch.setIssuingunit(batchNoRptNoDTO.getIssuingUnit());
+            claimBatch.setContno(batchNoRptNoDTO.getContNo());
+            claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
+            //claimBatch.setCreateBy(SecurityUtils.getUsername());
+            claimBatch.setCreateTime(nowDate);
+            //claimBatch.setUpdateBy(SecurityUtils.getUsername());
+            //claimBatch.setUpdateTime(nowDate);
+            claimBatchService.insertClaimBatch(claimBatch);
+
+            return AjaxResult.success(batchNoRptNoVO);
+        } else {
+            return AjaxResult.success("案件数不能小于等于0！");
+        }
+    }
+
+
+    /**
+     * PBW在线理赔/E结算接口
+     *
+     * @param
+     * @return
+     */
+    /*
+    @PostMapping("/giveBatchNoRptNoMessage")
+    public AjaxResult giveBatchNoRptNoMessage(Class classnimber) {
+
+        //查询TPA保单-根据被保人客户号和被保人姓名
+        //policy_info
+        InsuredNoAndName insuredNoAndName = new InsuredNoAndName();
+        List<PolicyInfo> listA = policyInfoService.selectPolicyInfoListByinsuredNo(insuredNoAndName);
+
+        //查询核心健康险保单-？
+        ArrayList<Object> listB = new ArrayList<>();
+
+        if (listA.size()!=0){//若存在TPA保单-走TPA
+            if (?){
+
+            }else if (?){
+
+            }
+        }else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-走核心
+
+        } else {//若都没有-提示：请撤件
+
+        }
+        return AjaxResult.success();
+    }
+    */
 }

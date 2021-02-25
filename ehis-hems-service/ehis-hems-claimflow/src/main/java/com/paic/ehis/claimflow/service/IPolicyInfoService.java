@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.service;
 
 import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
+import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 
 import java.util.List;
@@ -68,4 +69,12 @@ public interface IPolicyInfoService
      * @return
      */
     public List<PolicyVo> selectInsuredList(PolicyDTO policyDTO);
+
+    /**
+     * 查询TPA保单
+     *
+     * @param insuredNoAndName 客户号和案件号
+     * @return 保单信息集合
+     */
+    public List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName insuredNoAndName);
 }

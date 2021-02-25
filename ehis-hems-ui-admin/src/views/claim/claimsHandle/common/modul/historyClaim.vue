@@ -134,7 +134,7 @@
       },
       exportData(){
         const params = {};
-        params.rptNo = this.rptNo;
+        params.insuredNo = this.paramInsuredNo;
         this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框

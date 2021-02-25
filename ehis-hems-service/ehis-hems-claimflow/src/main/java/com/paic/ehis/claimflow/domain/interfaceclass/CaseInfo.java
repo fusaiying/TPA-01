@@ -23,16 +23,22 @@ public class CaseInfo extends BaseEntity {
     private String caseSource;
 
     /** 案件信息 */
+    private ClaimCase caseInfo;
 
     /** 申请人信息 */
+    private ClaimCaseRegister registerInfo;
 
     /** 被保人信息 */
+    private ClaimCaseInsured caseInsuredInfo;
 
     /** 受理信息 */
+    private ClaimCaseAccept caseAcceptInfo;
 
     /** 领款人信息 */
+    private List<ClaimCasePayee> payeeInfoList;
 
     /** 账单信息  List*/
+    private List<ClaimCaseBill> caseBillList;
 
     /** 影像信息 */
 

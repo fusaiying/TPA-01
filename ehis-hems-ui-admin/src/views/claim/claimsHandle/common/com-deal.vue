@@ -125,7 +125,7 @@
     <!-- 申述信息 -->
     <appeal-info :value="appealDialog" :fixInfo="fixInfo" @closeAppealDialog="closeAppealDialog"/>
     <!-- 历史理赔 -->
-    <history-claim :value="historyClaimDialog" :fixInfo="fixInfo" @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
+    <history-claim :value="historyClaimDialog" :insuredNo="insuredNo" :fixInfo="fixInfo" @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
     <!-- 历史协谈 -->
     <history-discussion :preHistoryData="preHistoryData" :value="historyDiscussionDialog" :fixInfo="fixInfo"
                         @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
@@ -242,6 +242,7 @@
           rptNo: undefined,
           source: undefined,
         },
+        insuredNo: undefined,
         batchInfo: {},//批次信息
         querys: {},
         navFlag: true,
@@ -330,6 +331,7 @@
           if (res != null && res.code === 200) {
             if (res.data.claimCaseInsured != null && res.data.claimCaseInsured !== '') {
               this.sonInsuredData.claimCaseInsured = res.data.claimCaseInsured
+              this.insuredNo = this.sonInsuredData.claimCaseInsured.insuredNo;
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {

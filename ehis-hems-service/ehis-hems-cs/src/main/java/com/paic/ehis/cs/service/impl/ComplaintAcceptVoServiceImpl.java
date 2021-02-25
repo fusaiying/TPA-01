@@ -509,9 +509,14 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //将所有状态置为N
         WorkHandleInfo workHandleInfo = new WorkHandleInfo();
         if (complaintDealVo.getRootImprovement().isEmpty()) {
+            //将所有数据置为n
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
-
+            //修改主表状态为已处理
+            WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            workOrderAccept.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+            workOrderAccept.setStatus("03");
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));

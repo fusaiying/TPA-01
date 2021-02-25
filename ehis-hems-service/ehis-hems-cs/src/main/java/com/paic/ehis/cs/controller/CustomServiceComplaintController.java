@@ -113,7 +113,7 @@ public class CustomServiceComplaintController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
-    @PutMapping("/complaintHandling ")
+    @PutMapping("/complaintHandling")
     public AjaxResult complaintHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
     {
         if(complaintDealVo.getSign().equals("01")){

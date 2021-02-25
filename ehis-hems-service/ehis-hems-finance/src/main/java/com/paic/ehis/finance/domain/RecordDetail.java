@@ -1,5 +1,7 @@
 package com.paic.ehis.finance.domain;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -24,7 +26,7 @@ public class RecordDetail {
     private String businessNo;
 
     /** 分单号 */
-    private String certno;
+    private List<String> certno;
 
     /** 币种 */
     private String curno;
@@ -54,13 +56,13 @@ public class RecordDetail {
     private String payMode;
 
     /** 险种代码 */
-    private String planCode;
+    private List<String> planCode;
 
     /** 险种计划 */
     private String planCodeProject;
 
     /** 保单号 */
-    private String polno;
+    private List<String> polno;
 
     /** 产品代码 */
     private String productCode;
@@ -148,11 +150,11 @@ public class RecordDetail {
         this.businessNo = businessNo;
     }
 
-    public String getCertno() {
+    public List<String> getCertno() {
         return certno;
     }
 
-    public void setCertno(String certno) {
+    public void setCertno(List<String> certno) {
         this.certno = certno;
     }
 
@@ -228,11 +230,11 @@ public class RecordDetail {
         this.payMode = payMode;
     }
 
-    public String getPlanCode() {
+    public List<String> getPlanCode() {
         return planCode;
     }
 
-    public void setPlanCode(String planCode) {
+    public void setPlanCode(List<String> planCode) {
         this.planCode = planCode;
     }
 
@@ -244,11 +246,11 @@ public class RecordDetail {
         this.planCodeProject = planCodeProject;
     }
 
-    public String getPolno() {
+    public List<String> getPolno() {
         return polno;
     }
 
-    public void setPolno(String polno) {
+    public void setPolno(List<String> polno) {
         this.polno = polno;
     }
 

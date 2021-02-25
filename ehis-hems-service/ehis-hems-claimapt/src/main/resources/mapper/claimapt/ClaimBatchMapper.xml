@@ -147,7 +147,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         create_by,
         create_time,
         remark,
-        status
+        status,
+        update_by
         FROM
         claim_batch_record a
         WHERE

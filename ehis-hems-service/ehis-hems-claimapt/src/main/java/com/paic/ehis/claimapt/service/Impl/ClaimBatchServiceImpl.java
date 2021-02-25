@@ -333,6 +333,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
             claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setOperation(ClaimStatus.BATCHFINISH.getCode());//03
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
             //生成对应的案件信息数据（报案号）
             for (int i = 0; i < claimBatch.getCasenum(); i++) {
@@ -370,7 +371,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecord.setCreateBy(SecurityUtils.getUsername());
             claimBatchRecord.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setUpdateBy(SecurityUtils.getUsername());
-            claimBatchRecord.setOperation(ClaimStatus.DATAYES.getCode());//Y
+            claimBatchRecord.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatchRecord.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
             claimBatchRecord.setOperation(ClaimStatus.BATCHRETURN.getCode());//04
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);

@@ -760,9 +760,9 @@
 
     <select id="selectCaseBorrowByRptNo" parameterType="String" resultType="Integer">
         select count(rpt_no) from finance_borrow_info
-        <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-        </where>
+        WHERE STATUS = 'Y'
+        <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+
     </select>
     <!-- <update id="updateCaseUpdateBy" parameterType="String">
          update claim_case

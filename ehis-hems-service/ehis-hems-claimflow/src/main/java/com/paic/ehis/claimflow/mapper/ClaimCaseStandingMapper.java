@@ -71,8 +71,8 @@ public interface ClaimCaseStandingMapper
 
     /**
      *
-     * @param rptno
+     * @param batch_no
      * @return
      */
-    public ClaimCaseStanding selectClaimCaseStandingByIdOne(String rptno);
+    public List<ClaimCaseStanding> selectClaimCaseStandingByIdOne(String batch_no);
 }

@@ -509,7 +509,7 @@
             }
           }).finally(() => {
           })
-        } else {//已处理
+        } else if (this.activeName === '02'){//已处理
           getDealWithList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
@@ -525,6 +525,32 @@
               this.download('claimapt/batch/exportProcessedPool'/* + '?hospitalname=' + this.queryParams.hospitalname
                 + '&organcode=' + this.queryParams.organcode + '&batchno=' + this.queryParams.batchno + '&claimtype=' +
                 this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate + upDate*/, {
+                ...query
+              }, `FYX_${new Date().getTime()}.xlsx`)
+            } else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+          })
+        }else {
+          getPendingList(query).then(res => {
+            if (res.rows.length > 0) {
+              this.isListExport = true
+              /*  let subDate = ''
+                if (this.queryParams.submitdate.length > 0) {
+                  subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
+                    + '&updatestartTime=' + this.queryParams.updateTime[0]
+                }
+                let upDate = ''
+                if (this.queryParams.updateTime.length > 0) {
+                  upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
+                }
+  */
+              this.download('claimapt/batch/exportPendingList'/* + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
+                '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
+                + upDate*/, {
                 ...query
               }, `FYX_${new Date().getTime()}.xlsx`)
             } else {

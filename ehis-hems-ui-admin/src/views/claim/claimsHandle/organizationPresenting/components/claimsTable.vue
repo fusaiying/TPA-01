@@ -74,8 +74,8 @@
     </el-table-column>
     <el-table-column align="center" min-width="100" prop="batchstatus" label="批次状态" show-overflow-tooltip>
       <template slot-scope="scope">
-        <span>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
-       <!-- <span v-else>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}-{{scope.row.remark}}</span>-->
+        <span v-if="status!='01'">{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
+        <span v-else>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}-{{scope.row.remark}}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="94" fixed="right">

@@ -132,6 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.organ_code,
         cb.currency,
         cb.cont_type,
+        cb.update_by,
+        cb.update_time,
         cb.batch_status,
         record.create_by,
         record.create_time,

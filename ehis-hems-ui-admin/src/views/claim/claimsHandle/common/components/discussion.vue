@@ -678,6 +678,7 @@
               center: true,
               showClose: true
             });
+            this.$router.go(-1);
           } else {
             this.$message({
               message: '审核失败！',

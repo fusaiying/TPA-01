@@ -502,6 +502,7 @@
     methods: {
       validSubType(value){
         this.negotiationSubTypes = [];
+        this.discussionForm.discSubType = '';
         for(let i=0 ; i<this.negotiationSubAllTypes.length; i++) {
           if(this.negotiationSubAllTypes[i].listClass === value) {
             this.negotiationSubTypes.push(this.negotiationSubAllTypes[i])

@@ -51,8 +51,18 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (ReservationAcceptVo reservationAcceptVo:reservationAcceptVos){
-            reservationAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId()));
-            reservationAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId()));
+            PersonInfo callPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
+            if (callPerson!= null) {
+                reservationAcceptVo.setCallPerson(callPerson);
+            } else {
+                reservationAcceptVo.setCallPerson(new PersonInfo());
+            }
+            PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
+            if (contactsPerson!= null) {
+                reservationAcceptVo.setContactsPerson(contactsPerson);
+            } else {
+                reservationAcceptVo.setContactsPerson(new PersonInfo());
+            }
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());
@@ -75,8 +85,19 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (ReservationAcceptVo reservationAcceptVo:reservationAcceptVos){
-            reservationAcceptVo.setCallPerson(personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId()));
-            reservationAcceptVo.setContactsPerson(personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId()));
+            PersonInfo callPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
+            if (callPerson!= null) {
+                reservationAcceptVo.setCallPerson(callPerson);
+            } else {
+                reservationAcceptVo.setCallPerson(new PersonInfo());
+            }
+            PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
+            if (contactsPerson!= null) {
+                reservationAcceptVo.setContactsPerson(contactsPerson);
+            } else {
+                reservationAcceptVo.setContactsPerson(new PersonInfo());
+            }
+
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());

@@ -141,6 +141,8 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 原操作人*/
     private UserInfo OperatorLast;
 
+
+
     /** 修改人 */
     private UserInfo Reviser;
 

@@ -84,6 +84,9 @@ public class AcceptDetailInfo extends BaseEntity
     /** 户名*/
     private String bankHolder;
 
+    /*是否已劝解*/
+    private  String persuasionFlag;
+
     /** 状态 */
     @Excel(name = "状态")
     private String status;
@@ -191,6 +194,14 @@ public class AcceptDetailInfo extends BaseEntity
     /** 见转意表 */
     @Excel(name = "见转意表")
     private String prop25;
+
+    public String getPersuasionFlag() {
+        return persuasionFlag;
+    }
+
+    public void setPersuasionFlag(String persuasionFlag) {
+        this.persuasionFlag = persuasionFlag;
+    }
 
     public String getBankTransfer() {
         return bankTransfer;

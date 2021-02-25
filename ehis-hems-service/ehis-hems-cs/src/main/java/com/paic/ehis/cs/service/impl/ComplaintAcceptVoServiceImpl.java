@@ -226,6 +226,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
+        acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag);
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
@@ -241,8 +242,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         //插入来电人
         personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
-  //      personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
- //       personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
+        personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
+        personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
@@ -250,16 +251,25 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfoMapper.updatePersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
-      /*  personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
+        personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());*/
+        personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(personInfo2);
+        //插入投诉人
+        personInfo1.setPersonId(complaintAcceptVo.getComplaintPersonId);
+        personInfo1.setName(complaintAcceptVo.getComplainantPerson().getName());
+        personInfo1.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
+        personInfo1.setCreatedBy(SecurityUtils.getUsername());
+        personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfo1.setUpdatedBy(SecurityUtils.getUsername());
+        personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(personInfo1);
 
         //轨迹表插入
         flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));

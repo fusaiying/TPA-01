@@ -406,6 +406,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             payableRecordReq.setBusiOrderId("");
             payableRecordReq.setBusiType("");
             payableRecordReq.setRecordDetails(recordDetails);
+            //--------------调用财务应付接口
+
 
             return AjaxResult.success("确认支付成功！",1);
         }

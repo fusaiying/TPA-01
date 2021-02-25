@@ -60,6 +60,7 @@ public class TransferByServiceImpl implements ITransferByService
         List<UmCode> list=transferBy.getUmCodeList();
         int count=0;
         for (UmCode umCode:list){
+            transferBy.setUmCode(umCode.getValue());
             transferBy.setCreatedBy(SecurityUtils.getUsername());
             transferBy.setCreatedTime(DateUtils.getNowDate());
             transferBy.setUpdatedBy(SecurityUtils.getUsername());

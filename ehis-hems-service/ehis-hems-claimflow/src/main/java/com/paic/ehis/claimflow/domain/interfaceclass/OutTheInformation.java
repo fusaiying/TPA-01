@@ -2,7 +2,14 @@ package com.paic.ehis.claimflow.domain.interfaceclass;
 
 import lombok.Data;
 import org.apache.poi.hpsf.Date;
-
+/**
+ * Created by IntelliJ IDEA
+ * User: fusaiying-傅赛赢
+ *
+ * @author: 傅赛赢
+ * Date: 2021/2/25
+ * subject:出险人及出险信息
+ */
 @Data
 public class OutTheInformation {
     /**

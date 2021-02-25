@@ -8,7 +8,7 @@ import lombok.Data;
  *
  * @author: 傅赛赢
  * Date: 2021/2/25
- * subject:
+ * subject:申请人信息
  */
 @Data
 public class ApplicantInformationDTO {

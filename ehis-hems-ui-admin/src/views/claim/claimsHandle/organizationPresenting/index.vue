@@ -163,7 +163,7 @@
 <script>
   import claimsTable from './components/claimsTable'
   import {getUser, getDept} from '@/api/claim/standingBookSearch'
-
+  import {logInfo} from '@/api/dispatch/api'
   import {getBackToList, getDealWithList, getPendingList} from '@/api/claim/presentingReview'
 
   let dictss = [{dictType: 'claimType'},]
@@ -227,49 +227,59 @@
         return item.dictType === 'claimType'
       }).dictDate
       //this.searchHandle();
-      let query = {
-        pageNum: 1,
-        pageSize: 10,
-      }
-      getPendingList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.processedData = res.rows
-          this.processedTotal = res.total
-          if (this.processedData.length !== 0) {
-            this.processedData.forEach(item => {
-              item.minData = []
-            })
+      logInfo().then(res=>{
+        if (res!=null && res.code===200){
+          this.queryParams.updateBy=res.user.userName
+          let query = {
+            pageNum: 1,
+            pageSize: 10,
+            updateBy:res.user.userName
           }
+          getPendingList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.processedData = res.rows
+              this.processedTotal = res.total
+              if (this.processedData.length !== 0) {
+                this.processedData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+          getBackToList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.backData = res.rows
+              this.backTotal = res.total
+              if (this.backData.length !== 0) {
+                this.backData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+          getDealWithList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.dealData = res.rows
+              this.dealTotal = res.total
+              if (this.dealData.length !== 0) {
+                this.dealData.forEach(item => {
+                  item.minData = []
+                })
+              }
+            }
+          }).finally(() => {
+            this.loading = false
+          })
         }
-      }).finally(() => {
-        this.loading = false
       })
-      getBackToList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.backData = res.rows
-          this.backTotal = res.total
-          if (this.backData.length !== 0) {
-            this.backData.forEach(item => {
-              item.minData = []
-            })
-          }
-        }
-      }).finally(() => {
-        this.loading = false
-      })
-      getDealWithList(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.dealData = res.rows
-          this.dealTotal = res.total
-          if (this.dealData.length !== 0) {
-            this.dealData.forEach(item => {
-              item.minData = []
-            })
-          }
-        }
-      }).finally(() => {
-        this.loading = false
-      })
+
+
+
+
       let item = {
         pageNum: 1,
         pageSize: 200,

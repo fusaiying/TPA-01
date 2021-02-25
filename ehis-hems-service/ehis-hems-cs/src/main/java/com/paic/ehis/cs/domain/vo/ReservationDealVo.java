@@ -62,4 +62,6 @@ public class ReservationDealVo extends BaseEntity {
 
     /**判断暂存保存标记*/
     private String sign;
+    /*处理时长*/
+    private String times;
 }

@@ -405,7 +405,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
         workHandleInfo.setRemark(reservationDealVo.getRemark());
        //获取处理时长
-        workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+   //    workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
 
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
         for (FieldMap fieldMap:KVMap){
@@ -484,7 +484,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
         workHandleInfo.setRemark(reservationDealVo.getRemark());
        //获取处理时长
-        workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+        //workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
 
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("work_handle_info","ReservationDealVo");
         for (FieldMap fieldMap:KVMap){

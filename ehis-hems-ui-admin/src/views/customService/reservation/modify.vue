@@ -312,7 +312,7 @@
               <el-col :span="15">
                 <el-input v-model="sendForm.beInsuredName" input-w readonly size="mini" placeholder="请输入"/>
               </el-col>
-              <el-button type="primary" @click="searchHandle">详细信息</el-button>
+              <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
             </el-form-item>
           </el-col>
 
@@ -390,10 +390,7 @@
             <el-input v-model="sendForm.beInsuredName" class="width-full" readonly size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-row>
-        <div style="text-align: right; margin-right: 8px;">
-          <el-button type="primary" size="mini" @click="submit">提交</el-button>
-          <el-button type="primary" size="mini" @click="hiddenShow">关闭</el-button>
-        </div>
+
 
       </el-form>
     </el-card>

@@ -814,8 +814,7 @@
       upload(){ this.$refs.upload.open();},
       //下载
       download(){},
-      //提交页面数据
-      submit(){},
+
       //转办
       transfer(){ this.$refs.transfer.open();},
       //协办

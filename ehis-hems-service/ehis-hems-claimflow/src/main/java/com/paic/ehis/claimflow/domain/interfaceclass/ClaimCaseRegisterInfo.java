@@ -14,7 +14,7 @@ import lombok.Data;
  * @date 2021-02-24
  */
 @Data
-public class ClaimCaseRegister extends BaseEntity
+public class ClaimCaseRegisterInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

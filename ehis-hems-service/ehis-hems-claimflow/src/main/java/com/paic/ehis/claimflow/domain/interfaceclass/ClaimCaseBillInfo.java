@@ -16,7 +16,7 @@ import lombok.Data;
  * @date 2021-02-25
  */
 @Data
-public class ClaimCaseBill extends BaseEntity
+public class ClaimCaseBillInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -148,9 +148,9 @@ public class ClaimCaseBill extends BaseEntity
     private String doctorName;
 
     /** 疾病代码、疾病描述 */
-    private List<ClaimCaseBillDiagnosis> billDiagnosis;
+    private List<ClaimCaseBillDiagnosisInfo> billDiagnosis;
 
     /** 账单费用明细 */
-    private List<ClaimCaseBillDetail> billDetailList;
+    private List<ClaimCaseBillDetailInfo> billDetailList;
 
 }

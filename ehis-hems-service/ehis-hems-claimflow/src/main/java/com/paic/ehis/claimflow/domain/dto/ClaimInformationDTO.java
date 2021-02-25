@@ -9,6 +9,10 @@ import lombok.Data;
 public class ClaimInformationDTO extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+
+    private String insuredNo;
+
     /** 报案号 */
     private String rptNo;
 

@@ -4,21 +4,18 @@ import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoDTO;
 import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoVO;
-import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.interfaceclass.RptNoAndFilingNo;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.*;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.PageDomain;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
-import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
@@ -542,7 +539,7 @@ public class ClaimCaseController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:case:list')")
     @GetMapping("/selectClaimInformation")
     public TableDataInfo selectClaimInformation(ClaimInformationDTO claimInformationDTO) {
-        startPage();
+        startPage(claimInformationDTO);
         List<ClaimInformationVo> list = claimCaseService.selectClaimInformation(claimInformationDTO);
         return getDataTable(list);
     }

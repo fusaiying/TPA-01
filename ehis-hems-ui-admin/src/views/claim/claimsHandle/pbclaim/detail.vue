@@ -45,14 +45,17 @@
             <span class="info_span to_right">问题件类型：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ (item.updateTime) }}</span>
+            <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ index == 0 ? item.createTime : item.updateTime }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">处理人：</span><span class="info_span">{{ item.updateBy }}</span>
+            <span class="info_span to_right">处理人：</span><span class="info_span">{{ index == 0 ?  item.createBy : item.updateBy }}</span>
           </el-col>
           <el-col :span="8">
+            <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.problemView) }}</span>
+          </el-col>
+<!--          <el-col :span="8">
             <span class="info_span to_right">处理意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
-          </el-col>
+          </el-col>-->
         </el-row>
       </form>
     </el-card>
@@ -191,6 +194,12 @@
         historicalProblem(param).then(res => {
           if(res.code == '200' && res.data.claimCaseProblems.length >0) {
             this.HistoryData = res.data.claimCaseProblems;
+            if(!this.handleView) {
+                let  vdata = this.HistoryData[this.HistoryData.length - 1];
+                this.dealInfo.problemType = vdata.problemType;
+                this.dealInfo.problemView = vdata.problemView;
+                this.clussionForm.conclusionView = vdata.conclusionView;
+            }
           }
         });
       },

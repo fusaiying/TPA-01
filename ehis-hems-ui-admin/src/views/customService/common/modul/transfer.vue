@@ -82,12 +82,6 @@
         serves: [],
         cs_service_item: [],
         dialogVisable: false,
-        coOrganizerForm: {
-          umCode: "",
-          solicitOpinion: "",
-          workOrderNo: ""
-
-        }
       }
     },
 

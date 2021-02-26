@@ -578,11 +578,12 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
+        <el-button  type="primary"  size="mini" @click="transfer" disabled>工单挂起</el-button>
         <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
         <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>
+        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
+        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
       </div>
     </el-card>
 
@@ -593,7 +594,7 @@
 
 <script>
   import moment from 'moment'
-  import {dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
+  import {FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
   import {complaintDealSubmit} from '@/api/customService/complaint'
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
 
@@ -753,25 +754,7 @@
     },
 
     methods: {
-      //新增按钮
-      add(){
-        let addQueryParams=this.ruleForm
-        addQueryParams.workOrderNo=this.workOrderNo
-        console.log("sdas",this.workOrderNo)
-        dealAdd(addQueryParams).then(res => {
-          console.log("增加",addQueryParams)
-          if (res != null && res.code === 200) {
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
-          }
-        }).catch(res => {
 
-        })
-
-      },
       //取消
       deal(){},
       //反显信息需求
@@ -780,8 +763,8 @@
         let workOrderNo=this.queryParams.workOrderNo
         complainSearch(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
+            console.log("投诉页面反显数据",res.data)
             this.workPoolData = res.data
-
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -798,12 +781,12 @@
       download(){},
       //转办
       transfer(){
-        this.$refs.transfer.transferForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.transfer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.transfer.open()
-        },
+      },
       //协办
       coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.coOrganizer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.coOrganizer.open()
       },
       //超链接用
@@ -843,7 +826,6 @@
         insert.workOrderNo=this.$route.query.workOrderNo
         complaintDealSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
-            console.log("insert",insert)
             alert("修改成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -865,7 +847,6 @@
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -882,8 +863,6 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS',res.rows)
           if (res != null && res.code === 200) {
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total

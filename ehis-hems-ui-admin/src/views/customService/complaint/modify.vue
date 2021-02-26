@@ -91,8 +91,8 @@
         </el-row>
         <el-row >
           <el-col :span="8">
-            <el-form-item label="投诉人姓名：" prop="complainantPerson.mobilePhone">
-              <el-input v-model="workPoolData.complainantPerson.mobilePhone" class="item-width"  size="mini"/>
+            <el-form-item label="投诉人姓名：" prop="complainantPerson.name">
+              <el-input v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -145,7 +145,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否已劝解：" prop="contactsSex">
-              <el-select v-model="workPoolData.contactsPerson.persuasionFlag" class="item-width"  >
+              <el-select v-model="workPoolData.persuasionFlag" class="item-width"  >
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -395,9 +395,9 @@
         <el-row>
             <el-form-item label="修改原因"  >
               <el-radio-group v-model="workPoolData.editInfo.editReason">
-                <el-radio label="1">客户申请变动</el-radio>
-                <el-radio label="2">操作失误</el-radio>
-                <el-radio label="3">其他原因</el-radio>
+                <el-radio label="01">客户申请变动</el-radio>
+                <el-radio label="02">操作失误</el-radio>
+                <el-radio label="03">其他原因</el-radio>
               </el-radio-group>
             </el-form-item>
         </el-row>
@@ -427,9 +427,11 @@
 
 <script>
   import moment from 'moment'
-  import {FlowLogSearch,modifySubmit} from '@/api/customService/demand'
+  import {FlowLogSearch} from '@/api/customService/demand'
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
+  import {modifyComplaintSubmit}  from  '@/api/customService/complaint'
+
 
 
   let dictss = [{dictType: 'product_status'}]
@@ -458,50 +460,59 @@
         //回显服务项目
         //需要填入数据的部分
         workPoolData: {
+          channelCode:"",//受理渠道
+          callCenterId:"",//电话中心业务流水号
+          callPerson:{},
           contactsPerson:{
-            homePhone1:[]
+            homePhone1:[],
+            name:"",
+            sex:"",
+            mobilePhone:"",
+            address:"",
+            homePhone:"",
+            workPhone:"",
+            language:"",
+          },//联系人
+          persuasionFlag:"",
+          callPerson: {
+            mobilePhone:"",
           },
-          callPerson: {},
-          complainantPerson:{},
-          insurer:{},
+          priorityLevel:"",//优先级
+          email:"",//邮件
+          workOrderNo:"",//工单号
+          complaintTime: "",
+          organCode:"",//出单机构
+
+          complainantPerson:{
+            name:"",
+            sex:"",
+            identity:"",
+
+          },
+          content:"",
           editInfo:{
-            editReason:"",
-            editRemark:""
-          }
+            editReason:"",//修改原因
+            editRemark:"" //修改说明
+
+          },
+
+
+
+
+
         },
         businessType:"",
         totalCount: 0,
         // 表单校验
         rules: {
-          channelCode: [
-            {required: true, message: "受理渠道不能为空", trigger: "blur"}
+          'complainantPerson.name': [
+            {required: true, message: "投诉人姓名不能为空", trigger: "blur"}
           ],
-          priorityLevel: [
-            {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          contactsMobilePhone: [
-            {required: true, message: "联系人手机不能为空", trigger: "blur"}
-          ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
+        'complainantPerson.sex': [
+            {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           content: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
+            {required: true, message: "投诉内容不能为空", trigger: "blur"}
           ],
         },
         // 查询参数
@@ -559,20 +570,27 @@
     methods: {
       //提交页面数据
       submit(){
-        let insert=this.workPoolData
-        insert.workOrderNo=this.$route.query.workOrderNo
-        modifySubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            alert("修改成功")
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "失败！"
-              )
-            }
-          }
-        }).catch(res => {
+        this.$refs.workPoolData.validate((valid) => {
+          if (valid) {
+            let insert=this.workPoolData
+            insert.workOrderNo=this.$route.query.workOrderNo
+            modifyComplaintSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                alert("修改成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
 
+            })}else {
+            return false
+          }
         })
+
+
 
       },
       //关闭页面
@@ -623,23 +641,6 @@
       handleSelectionChange(val) {
         this.dataonLineListSelections = val
       },
-        //提交页面数据
-        submit(){
-          let insert=this.workPoolData
-          modifySubmit(insert).then(res => {
-            if (res != null && res.code === 200) {
-              alert("修改成功")
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "失败！"
-                )
-              }
-            }
-          }).catch(res => {
-
-          })
-
-        },
       //关闭按钮
       hiddenShow:function () {
         // 返回上级路由并关闭当前路由

@@ -484,6 +484,7 @@
       //提交页面数据
       submit(){
         this.$refs.workPoolData.validate((valid) => {
+
           if (valid) {
             let insert=this.workPoolData
             insert.workOrderNo=this.$route.query.workOrderNo

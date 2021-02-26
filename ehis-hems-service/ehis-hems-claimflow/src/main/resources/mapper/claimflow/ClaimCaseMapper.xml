@@ -610,6 +610,7 @@
     <!--fu  理算审核 悬挂-->
     <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
+        DISTINCT
         acto.rpt_no,
         acto.batch_no,
         acto.case_status,

@@ -66,6 +66,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());
+            if(acceptDetailInfo==null){
+                continue;
+            }
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();
                 fieldMap.getSourceFiledName();
@@ -101,6 +104,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());
+            if(acceptDetailInfo==null){
+                continue;
+            }
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();
                 fieldMap.getSourceFiledName();

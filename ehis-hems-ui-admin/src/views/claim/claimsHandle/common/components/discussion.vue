@@ -414,6 +414,7 @@
           organCode:'', // 提调机构
           policyNo:'',
           invView:'',
+          accDescribe:'',
         },
         surveyForm:{
           invType:'',
@@ -529,19 +530,16 @@
         acceptInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             let data = res.data;
-            console.log("****************")
-            console.log(data)
-            console.log("****************")
-
             if(null != data.claimCaseAccept) {
+              data = data.claimCaseAccept ;
               if(data.accProvinceName != '') {
                 this.surveyInfo.accProvince = data.accProvinceName;
               }
               if(data.accCityName != '') {
-                this.surveyInfo.accProvince += data.accCityName;
+                this.surveyInfo.accCity  = data.accCityName;
               }
               if(data.accDistrictName != '') {
-                this.surveyInfo.accProvince += data.accDistrictName;
+                this.surveyInfo.accDistrict  = data.accDistrictName;
               }
               if(data.accDescribe != '') {
                 this.surveyInfo.accDescribe =  data.accDescribe;

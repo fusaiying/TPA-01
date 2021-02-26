@@ -94,7 +94,7 @@
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-18" class="batchInfo_class"
            style="margin-top: 10px;">
         <case-calculate ref="caseCalculate" :sonCalculateData="sonCalculateData" :fixInfo="fixInfo"
-                        @refresh-item="refreshList"
+                        @refresh-item="refreshList" :status="querys.status"
                         :node="querys.node"/>
       </div>
       <!--赔案备注-->
@@ -114,7 +114,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion ref="discussion" :insuredData="insuredData" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion ref="discussion" :status="querys.status" :insuredData="insuredData" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->

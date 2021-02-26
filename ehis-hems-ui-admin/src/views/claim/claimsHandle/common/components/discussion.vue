@@ -7,7 +7,7 @@
             <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
-            <div style="float: right;">
+            <div style="float: right;" v-if="status==='edit' && (node==='sport' || node==='calculateReview') ">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
@@ -23,7 +23,7 @@
 
         <!-- 赔付结论 start -->
         <el-form v-if="isActiveSpan1" ref="conclusionForm" :model="conclusionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="conRules"
-                 label-position="right" size="mini">
+                 label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
               <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
@@ -108,7 +108,8 @@
         <!-- 赔付结论 end -->
 
         <!-- 协谈 start -->
-        <el-form v-if="isActiveSpan2" ref="discussionForm" :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
+        <el-form v-if="isActiveSpan2" ref="discussionForm"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
           <el-row>
             <el-col :span="20" :xs="24">
                 <el-form-item label="协谈类型：" prop="discType">
@@ -145,7 +146,8 @@
         <!-- 协谈 end -->
 
         <!-- 调查 start -->
-        <el-form v-if="isActiveSpan3" ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
+        <el-form v-if="isActiveSpan3"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
@@ -280,6 +282,7 @@
     components: {
     },
     props: {
+      status: String,
       value: {
         type: Boolean,
         default: false

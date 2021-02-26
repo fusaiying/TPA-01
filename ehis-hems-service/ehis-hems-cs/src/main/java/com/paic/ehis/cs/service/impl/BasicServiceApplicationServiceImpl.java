@@ -58,7 +58,7 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
         if ("informationApplication".equals(basicServiceAppilcation.getBusinessData().getType())) {
             //personInfo表新增数据
             personInfo1.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
-            personInfo1.setSex(Long.valueOf(basicServiceAppilcation.getBusinessData().getContaGenderCode()));
+            personInfo1.setSex(basicServiceAppilcation.getBusinessData().getContaGenderCode());
             personInfo1.setName(basicServiceAppilcation.getBusinessData().getContaName());
             personInfo1.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo1.setMobilePhone(basicServiceAppilcation.getBusinessData().getContaMobileNo());
@@ -138,7 +138,7 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
             basicServiceApplicationMapper.insertAcceptDetialInfoTable(acceptDetailInfo);
         } else if("complainApplication".equals(basicServiceAppilcation.getBusinessData().getType())){
             personInfo1.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
-            personInfo1.setSex(Long.valueOf(basicServiceAppilcation.getBusinessData().getComplainGenderCode()));
+            personInfo1.setSex(basicServiceAppilcation.getBusinessData().getComplainGenderCode());
             personInfo1.setName(basicServiceAppilcation.getBusinessData().getContaName());
             personInfo1.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo1.setMobilePhone(basicServiceAppilcation.getBusinessData().getContaMobileNo());

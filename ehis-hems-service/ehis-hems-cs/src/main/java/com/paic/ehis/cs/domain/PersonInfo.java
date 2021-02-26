@@ -27,7 +27,7 @@ public class PersonInfo extends BaseEntity
 
     /** 性别 */
     @Excel(name = "性别")
-    private Long sex;
+    private String sex;
 
     /** 身份 */
     @Excel(name = "身份")
@@ -144,12 +144,12 @@ public class PersonInfo extends BaseEntity
     {
         return name;
     }
-    public void setSex(Long sex) 
+    public void setSex(String sex)
     {
         this.sex = sex;
     }
 
-    public Long getSex() 
+    public String getSex()
     {
         return sex;
     }

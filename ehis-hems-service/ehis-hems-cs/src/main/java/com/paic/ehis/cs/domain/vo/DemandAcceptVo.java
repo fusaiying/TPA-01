@@ -147,7 +147,7 @@ public class DemandAcceptVo extends BaseEntity {
     /** 来电人号码*/
     private String callMobilePhone;
     /** 联系人性别*/
-    private long contactsSex;
+    private String contactsSex;
     /** 联系人姓名*/
     private String contactsName;
     /** 联系人语言*/
@@ -503,11 +503,11 @@ public class DemandAcceptVo extends BaseEntity {
         this.callMobilePhone = callMobilePhone;
     }
 
-    public long getContactsSex() {
+    public String getContactsSex() {
         return contactsSex;
     }
 
-    public void setContactsSex(long contactsSex) {
+    public void setContactsSex(String contactsSex) {
         this.contactsSex = contactsSex;
     }
 

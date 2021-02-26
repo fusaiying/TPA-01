@@ -178,7 +178,7 @@
               <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
             <el-col :span="16">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col el-col-10">{{ surveyInfo.accDescribe}}</span>
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col_left el-col-10">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -1073,6 +1073,18 @@
     margin: 0 0;
   }
   ::v-deep.info_span_col {
+    text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  ::v-deep.info_span_col_left {
     text-align: right;
     vertical-align: middle;
     float: left;

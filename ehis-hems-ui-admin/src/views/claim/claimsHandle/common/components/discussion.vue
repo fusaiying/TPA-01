@@ -832,8 +832,6 @@
             if(res.data.isAppeal == '01') {
               this.appealCase = true;
             }
-          } else {
-            this.getAcceptInfo();
           }
         });
       },
@@ -860,6 +858,8 @@
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;
             }
+          }else {
+            this.getAcceptInfo();
           }
         });
       },

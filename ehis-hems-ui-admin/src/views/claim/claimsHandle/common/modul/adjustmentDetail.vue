@@ -27,7 +27,7 @@
           <el-table-column prop="ruleDescription" label="规则描述"  align="center" show-overflow-tooltip />
           <el-table-column prop="usedValue" label="使用值"  align="center" show-overflow-tooltip />
           <el-table-column prop="surplusValue" label="剩余值"  align="center" show-overflow-tooltip />
-          <el-table-column label="操作" align="center" style="padding-top: 0px;">
+          <el-table-column v-if="status!='show'" label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="revokeAdjustmentRule(scope.row)" style="z-index: 1;padding:0px;margin-top:0px;" >
                 不参与理算
@@ -60,7 +60,7 @@
         <el-table-column prop="ruleElement" :formatter="getRuleelementName" label="规则要素" align="center"  show-overflow-tooltip />
         <el-table-column prop="elementValue" label="要素值"  align="center" show-overflow-tooltip />
         <el-table-column prop="elementUnit" :formatter="getUnitofelementName" label="要素单位"  align="center" show-overflow-tooltip />
-        <el-table-column label="操作" align="center" style="padding-top: 0px;">
+        <el-table-column v-if="status!='show'" label="操作" align="center" style="padding-top: 0px;">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="cancelAdjustmentRule(scope.row)" style="z-index: 1;padding:0px;margin-top:0px;"  >
               撤销
@@ -86,6 +86,7 @@
   import { adIsData, adNoData,revokeAdjustment,cancelAdjustment } from '@/api/handel/common/api'
   export default {
     props: {
+      status: String,
       value: {
         type: Boolean,
         default: false

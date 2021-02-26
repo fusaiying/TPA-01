@@ -292,7 +292,7 @@ export default {
         if (res.rows.length>0){
           this.isListExport=true
           this.download('provider/icd10/export', {
-          }, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
+            ...query}, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
             this.$message({
               message: res,
               type: 'error',

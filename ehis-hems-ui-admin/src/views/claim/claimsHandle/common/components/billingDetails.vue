@@ -63,7 +63,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button type="text" size="mini" v-if="node==='calculateReview'"
+      <el-button type="text" size="mini" v-if="node==='calculateReview'" :disabled="status === 'show'"
                  style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
                  @click="addBill"> + 添加
       </el-button>

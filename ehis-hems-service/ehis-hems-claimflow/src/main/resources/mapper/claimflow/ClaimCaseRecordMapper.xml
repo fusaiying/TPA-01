@@ -19,7 +19,7 @@
     </resultMap>
 
     <sql id="selectClaimCaseRecordVo">
-        select record_id, rpt_no, operation, operator, history_flag, status, create_by, create_time, update_by, update_time from claim_case_record
+        select record_id, rpt_no, operation, operator, history_flag,org_record_id, status, create_by, create_time, update_by, update_time from claim_case_record
     </sql>
 
     <select id="selectClaimCaseRecordList" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
@@ -45,6 +45,7 @@
             <if test="operation != null and operation != ''">operation,</if>
             <if test="operator != null and operator != ''">operator,</if>
             <if test="historyFlag != null and historyFlag != ''">history_flag,</if>
+            <if test="orgRecordId != null and orgRecordId != ''">org_record_id,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -56,6 +57,7 @@
             <if test="operation != null and operation != ''">#{operation},</if>
             <if test="operator != null and operator != ''">#{operator},</if>
             <if test="historyFlag != null and historyFlag != ''">#{historyFlag},</if>
+            <if test="orgRecordId != null and orgRecordId != ''">#{orgRecordId},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>

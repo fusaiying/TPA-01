@@ -513,7 +513,7 @@
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
                 + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -538,7 +538,7 @@
                 + '&organcode=' + this.queryParams.organcode + '&batchno=' + this.queryParams.batchno + '&claimtype=' +
                 this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -564,7 +564,7 @@
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
                 + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,6 +118,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         claimCaseCal.setRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
         claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
         claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+        BigDecimal pay = new BigDecimal(String.valueOf(0));
         if (StringUtils.isNotEmpty(billDetailDTO.getBillDetailList())) {
             for (CaseCalBillVo caseCalBillVo : billDetailDTO.getBillDetailList()) {
                 ClaimCaseCalBill claimCaseCalBill = new ClaimCaseCalBill();
@@ -125,8 +127,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
                 claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
-                claimCaseCal.setCalAmount(claimCaseCalBill.getPayAmount());
-                claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+                pay=pay.add(claimCaseCalBill.getPayAmount());
                 claimCaseCalBills.add(claimCaseCalBill);
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
@@ -144,6 +145,9 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         if (StringUtils.isNotEmpty(claimCaseCalItems)) {
             claimCaseCalItemMapper.bulkUpdateClaimCaseCalItem(claimCaseCalItems);
         }
+        claimCaseCal.setCalAmount(pay);
+
+        claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }
 

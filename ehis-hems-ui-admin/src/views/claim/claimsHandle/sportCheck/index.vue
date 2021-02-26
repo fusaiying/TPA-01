@@ -180,7 +180,7 @@
               this.isListExport=true
               this.download('claimflow/case/exportcaseCheck', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `sportCheck_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -195,7 +195,7 @@
               this.isListExport=true
               this.download('system/case/exportcaseCheckOver', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `sportCheck_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

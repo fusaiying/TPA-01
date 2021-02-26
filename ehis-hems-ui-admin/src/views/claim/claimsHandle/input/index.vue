@@ -182,7 +182,7 @@
               this.isListExport=true
               this.download('claimflow/bill/exportProcess', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `input_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -197,7 +197,7 @@
               this.isListExport=true
               this.download('claimflow/bill/exportAccomplish', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `input_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

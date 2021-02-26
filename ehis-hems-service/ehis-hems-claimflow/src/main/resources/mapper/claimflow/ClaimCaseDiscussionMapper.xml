@@ -253,6 +253,7 @@
           AND claim_case_insured.STATUS = 'Y'
           AND claim_case.STATUS = 'Y'
           AND claim_case_accept.STATUS = 'Y'
+         and  claim_case_discussion.is_history = 'N'
     </select>
 
 </mapper>

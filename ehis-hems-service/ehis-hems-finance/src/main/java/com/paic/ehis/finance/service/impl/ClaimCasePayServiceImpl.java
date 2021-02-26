@@ -229,7 +229,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
-        baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
@@ -599,7 +599,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
-        baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());

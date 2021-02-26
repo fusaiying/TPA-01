@@ -464,6 +464,7 @@
     },
 
     created() {
+      this.getAcceptInfo();
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
@@ -528,6 +529,10 @@
           return false;
         }
         acceptInfo(this.rptNo).then(res => {
+          console.log("******************")
+          console.log(res.data)
+          console.log("******************")
+
           if(res.code == '200' && res.data) {
             let data = res.data;
             if(null != data.claimCaseAccept) {

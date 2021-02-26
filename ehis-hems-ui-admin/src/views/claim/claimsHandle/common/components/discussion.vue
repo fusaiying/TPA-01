@@ -757,6 +757,7 @@
                 center: true,
                 showClose: true
               });
+              this.goHistory();
             } else {
               this.$message({
                 message: '退回失败！',

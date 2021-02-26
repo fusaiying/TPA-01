@@ -126,6 +126,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         //    demandAcceptVo1.setOperatorLast(userInfoMapper.selectUserInfoById(demandAcceptVo1.getCreateBy()));
          //   demandAcceptVo1.setReviser(userInfoMapper.selectUserInfoById(demandAcceptVo1.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(demandAcceptVo1.getWorkOrderNo());
+            if(acceptDetailInfo==null){
+                continue;
+            }
             for (FieldMap fieldMap:KVMap){
                 fieldMap.getTargetColumnName();
                 fieldMap.getSourceFiledName();

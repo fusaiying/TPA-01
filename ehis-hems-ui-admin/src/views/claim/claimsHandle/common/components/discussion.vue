@@ -531,6 +531,11 @@
         if(this.rptNo == '') {
           return false;
         }
+          this.surveyInfo.accProvince = '';
+          this.surveyInfo.accCity  = '';
+          this.surveyInfo.accDistrict  = '';
+          this.surveyInfo.accDescribe =  '';
+          this.surveyInfo.accDate =  '';
         acceptInfo(this.rptNo).then(res => {
           console.log("******************")
           console.log(res.data)

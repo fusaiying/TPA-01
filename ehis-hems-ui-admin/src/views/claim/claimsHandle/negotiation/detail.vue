@@ -200,6 +200,9 @@
        });
 
        if('' != this.rptNo) {
+         console.log(this.handleView)
+         console.log(this.handleView)
+         console.log(this.handleView)
          if(this.handleView) {
            this.getBaseInfo();
          } else {

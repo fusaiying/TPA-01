@@ -211,7 +211,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">#{contractType},</if>
             <if test="servcomNo != null">#{servcomNo},</if>
             <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
-            <if test="providerCode != null and providerCode != ''">(select concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code = #{providerCode}),</if>
+            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code = #{providerCode}),</if>
             <if test="contracttermType != null">#{contracttermType},</if>
             <if test="signDate != null">#{signDate},</if>
             <if test="cvaliDate != null">#{cvaliDate},</if>
@@ -258,7 +258,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBaseContactsByCodeNew" parameterType="String">
-        update base_supplier_contract_bak set status = 'N' where provider_code=#{providerCode}
+        delete from base_supplier_contract where provider_code=#{providerCode}
     </update>
 
     <update id="updateBaseSupplierContract" parameterType="BaseSupplierContract">

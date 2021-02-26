@@ -299,8 +299,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
 
     /*查询基础信息表*/
     @Override
-    public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo){
-        ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(rptNo);
+    public ClaimCaseDiscussionVO  selectCaseBaseInfo(ClaimCaseDiscussionVO dto){
+        ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(dto);
         if(null != claimCaseDiscussionVO) {
             List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
             if (claimCasePolicies != null || claimCasePolicies.size() != 0) {

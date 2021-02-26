@@ -173,10 +173,10 @@
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince }}</span>
+              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accAddress}}</span>
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -527,10 +527,20 @@
           return false;
         }
         acceptInfo(this.rptNo).then(res => {
-          console.log(res)
           if(res.code == '200' && res.data) {
-            console.log(res.code);
-            //this.conclusionInfo = res.data;
+            let data = res.data;
+            if(data.accProvinceName != '') {
+              this.surveyInfo.accProvince = data.accProvinceName;
+            }
+            if(data.accCityName != '') {
+              this.surveyInfo.accProvince += data.accCityName;
+            }
+            if(data.accDistrictName != '') {
+              this.surveyInfo.accProvince += data.accDistrictName;
+            }
+            if(data.accDescribe != '') {
+              this.surveyInfo.accDescribe =  data.accDescribe;
+            }
           }
         });
       },

@@ -335,6 +335,7 @@
               showClose: true
             })
           }
+          this.$emit("refresh-item", 'discussion')
           detailsList(data).then(res => {
             if (res != null && res.code === 200 && res.rows.length > 0) {
               this.caseForm.caseData = res.rows

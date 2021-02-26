@@ -21,19 +21,39 @@ public interface IOrderBussinessInfoService
      */
     public AjaxResult checkpassWord(RoleLoginInfo roleLoginInfo);
 
+    /**
+     * 获取用户信息
+     *
+     * @param roleLoginInfo
+     */
+    public RoleLoginInfo getUser(RoleLoginInfo roleLoginInfo);
+
+    /**
+     * 变更用户密码
+     *
+     * @param roleLoginInfo
+     */
+    public AjaxResult updatePassword(RoleLoginInfo roleLoginInfo);
+
 
     /**
      * 查询接单人拥有的接单数量
      *
-     * @param role
+     * @param roleLoginInfo
      */
-    public OrderNumInfo getOrderNum(String role);
+    public OrderNumInfo getOrderNum(RoleLoginInfo roleLoginInfo);
 
 
     /**
      * 查询不同节点状态下的工单列表
      */
     public List<OrderInfo> getOrderList(RoleLoginInfo roleLoginInfo);
+
+
+    /**
+     * 查询不同节点状态下的工单列表
+     */
+    public OrderInfo getOrderDetail(RoleLoginInfo roleLoginInfo);
 
 
     /**

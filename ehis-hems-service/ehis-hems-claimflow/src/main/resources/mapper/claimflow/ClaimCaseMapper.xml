@@ -717,6 +717,7 @@
             <if test="name != null  and name != ''"> and ccp.name like concat('%', #{name}, '%')</if>
             <if test="insuredNo != null  and insuredNo != ''"> and cci.insured_no = #{insuredNo}</if>
             <if test="unEqRptNo != null  and unEqRptNo != ''"> and cc.rpt_no != #{unEqRptNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
         </where>
     </select>
 

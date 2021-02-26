@@ -113,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
             <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
             <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status =#{batchstatus}</if>
-            and cb.update_by = #{updateBy}
+            <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
             <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>

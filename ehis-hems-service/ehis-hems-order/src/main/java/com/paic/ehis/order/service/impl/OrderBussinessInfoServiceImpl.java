@@ -55,20 +55,46 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
         return AjaxResult.success();
     }
 
+    @Override
+    public RoleLoginInfo getUser(RoleLoginInfo roleLoginInfo){
+
+        RoleLoginInfo info = orderBussinessInfoMapper.getUser(roleLoginInfo);
+        orderBussinessInfoMapper.updateIsLogin(roleLoginInfo);
+        return info;
+    }
+
+
+    /*变更用户密码*/
+    @Override
+    public AjaxResult updatePassword(RoleLoginInfo roleLoginInfo){
+        String role = roleLoginInfo.getRole();
+        String password = roleLoginInfo.getPassword();
+        //根据用户名查询密码
+        RoleLoginInfo info = orderBussinessInfoMapper.checkpassWord(role);
+        if(info != null){
+            if(!password.equals(info.getPassword())){
+                return AjaxResult.error("操作失败","用户名或密码不正确");
+            }
+        }else{
+            return AjaxResult.error("操作失败","登录用户不存在");
+        }
+        orderBussinessInfoMapper.updatePassword(roleLoginInfo);
+        return AjaxResult.success();
+    }
 
     /**
      * 查询接单人拥有的接单数量
      *
      */
     @Override
-    public OrderNumInfo getOrderNum(String role){
+    public OrderNumInfo getOrderNum(RoleLoginInfo roleLoginInfo){
         OrderNumInfo orderNumInfo = new OrderNumInfo();
         //根据角色查询接单总数
-        orderNumInfo.setReceivedTimes(orderBussinessInfoMapper.getReceivedTimes(role));
+        orderNumInfo.setReceivedTimes(orderBussinessInfoMapper.getReceivedTimes(roleLoginInfo.getRole()));
         //根据角色查询已完成接单
-        orderNumInfo.setCompletionTimes(orderBussinessInfoMapper.getCompletionTimes(role));
+        orderNumInfo.setCompletionTimes(orderBussinessInfoMapper.getCompletionTimes(roleLoginInfo.getRole()));
         //根据角色查询进行中接单
-        orderNumInfo.setProgressTimes(orderBussinessInfoMapper.getProgressTimes(role));
+        orderNumInfo.setProgressTimes(orderBussinessInfoMapper.getProgressTimes(roleLoginInfo.getRole()));
         return orderNumInfo;
     }
 
@@ -86,7 +112,23 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
      * 查询不同节点状态下的工单列表
      */
     @Override
+    public OrderInfo getOrderDetail(RoleLoginInfo roleLoginInfo){
+        OrderInfo orderInfo =orderBussinessInfoMapper.getOrderDetail(roleLoginInfo);
+        String inpatientArea = orderInfo.getInpatientArea();
+        String province = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(0));
+        String city = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(1));
+        String district = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(2));
+        orderInfo.setInpatientArea(province+"-"+city+"-"+district);
+        return orderInfo;
+    }
+
+
+    /**
+     * 查询不同节点状态下的工单列表
+     */
+    @Override
     public int receivingOrder(RoleLoginInfo roleLoginInfo){
+        roleLoginInfo.setReceivingTime(DateUtils.getNowDate());
         return orderBussinessInfoMapper.receivingOrder(roleLoginInfo);
     }
 
@@ -96,6 +138,12 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
      */
     @Override
     public int implementtOrder(OrderInfo orderInfo){
+        if("01".equals(orderInfo.getDetailStatus()) || "02".equals(orderInfo.getDetailStatus())){
+            orderInfo.setApplyResultTime(DateUtils.getNowDate());
+        }
+        if(orderInfo.getSettlePrice() !=null && orderInfo.getSettlePrice() !=""){
+            orderInfo.setOrderCompleteTime(DateUtils.getNowDate());
+        }
         return orderBussinessInfoMapper.implementtOrder(orderInfo);
     }
 
@@ -120,7 +168,7 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
                     }
                     List<SecondDeptInfoVo> secondDeptInfoList = new ArrayList();
                     for(SecondDeptInfoVo SecondDeptInfo :secondDeptInfos ){
-                        if(SecondDeptInfo.getFirstDeptName().equals(firstDeptInfo.getFirstDeptName())){
+                        if(SecondDeptInfo.getFirstDeptName().equals(firstDeptInfo.getDeptName())){
                             secondDeptInfoList.add(SecondDeptInfo);
                         }
                         firstDeptInfo.setSecondDeptInfos(secondDeptInfoList);

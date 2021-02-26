@@ -22,6 +22,9 @@ public class SecondDeptInfoVo extends BaseEntity
     @Excel(name = "一级科室名称")
     private String firstDeptName;
 
+    /** 二级科室名称（B端） */
+    private String deptName;
+
 
 
 }

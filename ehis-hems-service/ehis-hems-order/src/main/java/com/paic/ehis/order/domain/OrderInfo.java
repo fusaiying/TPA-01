@@ -161,6 +161,10 @@ public class OrderInfo extends BaseEntity
     @Excel(name = "生日")
     private String birthday;
 
+    /** 年龄 */
+    @Excel(name = "年龄")
+    private String age;
+
     /** 产品名称 */
     @Excel(name = "产品名称")
     private String productChname;
@@ -259,6 +263,9 @@ public class OrderInfo extends BaseEntity
     @Excel(name = "寄送方式")
     private String dealingMethod;
 
+    /** 寄送说明 */
+    private String dealingShow;
+
     /** 不通过原因 */
     @Excel(name = "不通过原因")
     private String refuseReason;
@@ -266,6 +273,14 @@ public class OrderInfo extends BaseEntity
     /** 循环次数 */
     @Excel(name = "循环次数")
     private int forNum;
+
+    /** 毫秒数 */
+    private long millisecond;
+
+    private String idtypeName;
+
+    private String chname1;
+
 
 
     public void setSerialNo(String serialNo) 

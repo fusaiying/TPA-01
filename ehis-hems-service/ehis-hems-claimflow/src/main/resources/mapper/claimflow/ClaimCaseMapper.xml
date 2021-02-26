@@ -635,9 +635,9 @@
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
         AND record.operation = '07'
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
+        AND record.history_flag = 'y'
         AND record.operator = #{operator}
-        and cases.case_status in ('08','99','97','98')
+        and cases.case_status in ('00','30','31','32')
         and cases.status='Y'
         ORDER BY
         record.update_time DESC

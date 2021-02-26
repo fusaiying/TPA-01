@@ -177,8 +177,8 @@
             <el-col :span="8">
               <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accDescribe}}</span>
+            <el-col :span="16">
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col el-col-10">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -537,10 +537,6 @@
           this.surveyInfo.accDescribe =  '';
           this.surveyInfo.accDate =  '';
         acceptInfo(this.rptNo).then(res => {
-          console.log("******************")
-          console.log(res.data)
-          console.log("******************")
-
           if(res.code == '200' && res.data) {
             let data = res.data;
             if(null != data.claimCaseAccept) {

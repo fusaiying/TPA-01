@@ -355,168 +355,168 @@
       </div>
     </el-card>
 
-    <el-card>
-      <el-form   style="padding-bottom: 30px;" label-width="145px"
-                 label-position="right" size="mini">
-        <span style="color: blue">服务处理</span>
-        <el-divider/>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="一级投诉分类：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="二级投诉分类：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投诉是否成立：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="一级投诉原因：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
+<!--    <el-card>-->
+<!--      <el-form   style="padding-bottom: 30px;" label-width="145px"-->
+<!--                 label-position="right" size="mini">-->
+<!--        <span style="color: blue">服务处理</span>-->
+<!--        <el-divider/>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="一级投诉分类：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="二级投诉分类：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="投诉是否成立：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="一级投诉原因：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
-          <el-col :span="8">
-            <el-form-item label="投诉不成立理由：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="二级投诉原因：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="三级投诉原因：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投诉环节(报保监)：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投诉问题(报保监)：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="投诉不成立理由：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="二级投诉原因：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
 
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="行协调解或外部鉴定状态：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="险种类型：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="营销渠道：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="是否记件：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="撤诉状态：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="投诉业务类别：：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="三级投诉原因：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="投诉环节(报保监)：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="投诉问题(报保监)：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
 
-        </el-row>
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="行协调解或外部鉴定状态：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="险种类型：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="营销渠道：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="是否记件：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="撤诉状态：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="投诉业务类别：：" prop="priority"  >-->
+<!--              <el-select v-model="workPoolData.contactsLanguage" class="item-width" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
 
-        <el-row>
-          <el-form-item label="投诉根因部门：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="质诉根因：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="处理结果：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>
-          </el-form-item>
-        </el-row>
-      </el-form>
+
+<!--        </el-row>-->
+
+<!--        <el-row>-->
+<!--          <el-form-item label="投诉根因部门：" prop="policyNo" >-->
+<!--            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-form-item label="质诉根因：" prop="policyNo" >-->
+<!--            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-form-item label="处理结果：" prop="policyNo" >-->
+<!--            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" readonly/>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--      </el-form>-->
 
 
-    </el-card>
+<!--    </el-card>-->
 
 
 
@@ -668,7 +668,6 @@
       this.searchFlowLog()
       this.getDicts("sys_oper_type").then(response => {
         this.states = response.data;
-        console.log("response:",response)
       });
 
     },
@@ -705,6 +704,7 @@
         complainSearch(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.data
+            console.log("投诉取消页面数据",this.workPoolData)
 
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -724,8 +724,6 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total

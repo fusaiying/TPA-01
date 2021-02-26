@@ -10,7 +10,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="分单号：" prop="secondNumber">
+            <el-form-item label="分单号：" prop="policyItemNo">
               <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -25,7 +25,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人生日：" prop="beBirthday">
+            <el-form-item style="white-space: nowrap" label="被保人生日：" prop="beInsuredBirthday">
               <el-input v-model="sendForm.beInsuredBirthday" class="item-width" clearable size="mini" placeholder="请输入格式为YYYYMMDD"/>
             </el-form-item>
           </el-col>
@@ -42,7 +42,7 @@
 
 
         <div style="text-align: right; margin-right: 1px;">
-<!--          <el-button size="mini" type="primary" @click="acceptButton">测试用</el-button>-->
+          <el-button size="mini" type="primary" @click="acceptButton">测试用</el-button>
           <el-button size="mini" type="primary" @click="searchHandle">查询</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
@@ -157,29 +157,29 @@
         {
           alert("查询条件不能为空")
         }else {
-          let query = {
-            pageNum: this.queryParams.pageNum ? this.queryParams.pageNum : undefined,
-            pageSize: this.queryParams.pageSize,
-            policyNumber: this.sendForm.policyNumber,
-            policyItemNo: this.sendForm.policyItemNo,
-            beInsuredName: this.sendForm.beInsuredName,
-            beInsuredBirthday: this.sendForm.beInsuredBirthday,
-            beInsuredNo: this.sendForm.beInsuredNo,
-            organization: this.sendForm.organCode,
-          }
-          demandListAndPublicPool(query).then(res => {
-            if (res != null && res.code === 200) {
-              this.workPoolData = res.rows
-              this.totalCount = res.total
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
-            }
-          }).catch(res => {
-
-          })
+          // let query = {
+          //   pageNum: this.queryParams.pageNum ? this.queryParams.pageNum : undefined,
+          //   pageSize: this.queryParams.pageSize,
+          //   policyNumber: this.sendForm.policyNumber,
+          //   policyItemNo: this.sendForm.policyItemNo,
+          //   beInsuredName: this.sendForm.beInsuredName,
+          //   beInsuredBirthday: this.sendForm.beInsuredBirthday,
+          //   beInsuredNo: this.sendForm.beInsuredNo,
+          //   organization: this.sendForm.organCode,
+          // }
+          // demandListAndPublicPool(query).then(res => {
+          //   if (res != null && res.code === 200) {
+          //     this.workPoolData = res.rows
+          //     this.totalCount = res.total
+          //     if (res.rows.length <= 0) {
+          //       return this.$message.warning(
+          //         "未查询到数据！"
+          //       )
+          //     }
+          //   }
+          // }).catch(res => {
+          //
+          // })
         }
       },
       handleSelectionChange(val) {

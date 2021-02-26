@@ -406,7 +406,7 @@
       //工单页面超链接
       workOrderButton(s){
         this.$router.push({
-          path: '/customService/reservation/orderDetails',
+          path: '/customService/reservation/orderDetail',
           query:{
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,

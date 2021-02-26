@@ -35,5 +35,7 @@ public class CaseInfo extends BaseEntity {
     /** 账单信息  List*/
     private List<ClaimCaseBillInfo> caseBillList;
 
+    /** 案件备注信息 */
+    private List<ClaimCaseRemarkInfo> remarkInfoList;
 
 }

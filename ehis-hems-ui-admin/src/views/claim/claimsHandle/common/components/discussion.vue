@@ -882,10 +882,10 @@
       },
       getDiscussionInfo() {
         discussionBaseInfo(this.rptNo).then(res => {
-          if(res.code == '200' && res.data) {
+          if(res.code == '200' && res.data && res.data.isHistory != 'Y') {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {
-              this.discussionForm.discType = res.data.discType; // AAAAAAAAAAAAAAA
+              this.discussionForm.discType = res.data.discType;
               this.validSubType(res.data.discType)
               if(res.data.discSubType != '' && res.data.discSubType != null) {
                 this.discussionForm.discSubType = res.data.discSubType;

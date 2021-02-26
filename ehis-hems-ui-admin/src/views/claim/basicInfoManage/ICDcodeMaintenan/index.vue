@@ -36,7 +36,7 @@
           <span>ICD列表（{{ totalCount }}）</span>
           <span style="float: right;">
             <el-button icon="el-icon-plus" type="primary" size="mini" @click="editHandle">新增</el-button>
-            <el-button type="primary" size="mini" @click="listExport" :disabled="isListExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport"  >清单导出</el-button>
             <!--            <el-button icon="el-icon-download" type="warning" size="mini">导出</el-button>-->
           </span>
         </div>

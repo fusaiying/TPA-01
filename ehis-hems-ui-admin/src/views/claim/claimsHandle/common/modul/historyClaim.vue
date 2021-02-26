@@ -116,9 +116,9 @@
         params.pageNum = this.pageInfo.currentPage;
         params.pageSize = this.pageInfo.pageSize;
         params.insuredNo = this.paramInsuredNo;
-
+        params.unEqRptNo = this.rptNo;
+        params.caseStatus = '99';
         claimInformation(params).then(res => {
-          console.log(res);
           if (res.code == '200') {
             this.totalNum = res.total;
             this.tableData = res.rows;
@@ -135,6 +135,8 @@
       exportData(){
         const params = {};
         params.insuredNo = this.paramInsuredNo;
+        params.unEqRptNo = this.rptNo;
+        params.caseStatus = '99';
         this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框

@@ -161,6 +161,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);
+        claimCaseDiscussion.setUpdateTime(DateUtils.getNowDate());//处理时间
+        claimCaseDiscussion.setUpdateBy(SecurityUtils.getUsername());//处理人
         return claimCaseDiscussionMapper.updateClaimCaseDiscussion(claimCaseDiscussion);
     }
 

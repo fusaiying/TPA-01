@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
 
       <span style="color: blue">服务受理信息</span>
@@ -205,18 +205,18 @@
         </el-row>
         <el-row>
         <el-col :span="8">
-          <el-form-item label="电话中心业务流水号：" prop="callCenterNo">
-            <el-input v-model="ruleForm.callName" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="电话中心业务流水号：" prop="callCenterId">
+            <el-input v-model="ruleForm.callCenterId" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
           <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="phone">
-              <el-input v-model="ruleForm.callName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="来电人姓名：" prop="callPerson.name">
+              <el-input v-model="ruleForm.callPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
+              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           </el-row>
@@ -230,7 +230,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="来电人与申请人关系：" prop="priority">
+            <el-form-item label="来电人与申请人关系：" prop="callRelationBy">
               <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -238,8 +238,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="门诊直接结算服务项目：" prop="priority">
-              <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
+            <el-form-item label="门诊直接结算服务项目：" prop="outpatientSettlement">
+              <el-select v-model="ruleForm.outpatientSettlement" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -248,24 +248,24 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="ContactsLanguage">
-              <el-select v-model="ruleForm.contactsLanguage" class="item-width" placeholder="请选择">
+            <el-form-item label="联系人语言：" prop="contactsPerson.language">
+              <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="就诊类型：" prop="ContactsSex">
-              <el-select v-model="ruleForm.contactsSex" class="item-width" placeholder="请选择">
+            <el-form-item label="就诊类型：" prop="visitType">
+              <el-select v-model="ruleForm.visitType" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="疾病名称：" prop="ContactsMobilePhone">
-              <el-input v-model="ruleForm.ContactsMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="疾病名称：" prop="disease">
+              <el-input v-model="ruleForm.disease" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -274,21 +274,21 @@
         <el-row>
 
           <el-col :span="8">
-            <el-form-item label="症状或体征：" prop="ContactsMobilePhone">
-              <el-input v-model="ruleForm.ContactsMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="症状或体征：" prop="symptomsSigns">
+              <el-input v-model="ruleForm.symptomsSigns" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
+              <el-select v-model="ruleForm.symptomTimes" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否意外" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="是否意外" prop="accidentFlag">
+              <el-select v-model="ruleForm.accidentFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -298,38 +298,38 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="意外原因：" prop="email">
+            <el-form-item label="意外原因：" prop="accidentReason">
+              <el-input v-model="ruleForm.accidentReason" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人姓名：" prop="contactsPerson.name">
+              <el-input v-model="ruleForm.contactsPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="联系人电话：" prop="contactsPerson.mobilePhone">
+              <el-input v-model="ruleForm.contactsPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人性别" prop="contactsPerson.sex">
+              <el-select v-model="ruleForm.contactsPerson.sex" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="E-MAIL：" prop="email">
               <el-input v-model="ruleForm.email" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="联系人电话：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="联系人性别" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="E-MAIL：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="是否持有效证件" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="是否持有效证件" prop="validCertificate">
+              <el-select v-model="ruleForm.validCertificate" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -339,17 +339,17 @@
         <el-row>
 
           <el-col :span="8">
-            <el-form-item label="是否持有直结卡：" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="是否持有直结卡：" prop="settlementCard">
+              <el-select v-model="ruleForm.settlementCard" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentTime">
+            <el-form-item label="预约日期：" prop="appointmentDate">
               <el-date-picker
-                v-model="sendForm.appointmentTime"
+                v-model="ruleForm.appointmentDate"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -359,64 +359,64 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预计住院天数：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="预计住院天数：" prop="hospitalDays">
+              <el-input v-model="ruleForm.hospitalDays" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约医院：：" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="预约医院：" prop="medicalInstitution">
+              <el-select v-model="ruleForm.medicalInstitution" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="beInsuredName" >
+            <el-form-item label="医疗机构：" prop="medicalInstitution" >
               <el-col :span="16">
-              <el-input v-model="sendForm.beInsuredName" input-w clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
               </el-col>
               <el-button type="primary" @click="searchHandle">查询</el-button>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="科室：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="科室：" prop="department">
+              <el-input v-model="ruleForm.department" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="床位：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="床位：" prop="bunk">
+              <el-input v-model="ruleForm.bunk" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-          <el-form-item label="医院地址：" prop="beInsuredName">
-            <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="医院地址：" prop="province">
+            <el-input v-model="ruleForm.province" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
           <el-col :span="8">
-          <el-form-item label="医院赔付比例：" prop="beInsuredName">
-            <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>%
+          <el-form-item label="医院赔付比例：" prop="compensationRatio">
+            <el-input v-model="ruleForm.compensationRatio" class="item-width" clearable size="mini" placeholder="请输入"/>%
           </el-form-item>
         </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="医院电话：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="医院电话：" prop="hospitalWorkCall">
+              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
+              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -425,8 +425,8 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="业务内容：" prop="beInsuredName">
-            <el-input v-model="sendForm.beInsuredName" class="width-full" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="业务内容：" prop="content">
+            <el-input v-model="ruleForm.content" class="width-full" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-row>
         <div style="text-align: right; margin-right: 8px;">
@@ -448,6 +448,7 @@
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api/customService/demand'
   import upLoad from "../common/modul/upload";
+  import {addReservationInsert} from '@/api/customService/reservation'
 
 
   let dictss = [{dictType: 'product_status'}]
@@ -472,25 +473,45 @@
         cs_handle_state:[],// 状态：
         //需要填入数据的部分
         ruleForm:{
+          hospitalWorkCall:"",
           channelCode:[],//受理渠道
-          itemCode:"",//服务项目
+          callCenterId:"",//中心
+
+          callPerson:{
+            name:"",
+            mobilePhone:"",
+          },
           callMobilePhone:"",//来电人电话
           priorityLevel:"",//优先级
+
           callName:"",//来电人
           callRelationBy:"",//来电人与被保人关系
-          contactsName:"",//联系人
-          contactsSex: 0,//联系人性别
+          outpatientSettlement:"",
+          contactsPerson:{
+            language:"",
+            name:"",
+            mobilePhone:"",
+            sex:"",
+          },
+          visitType:"",
+          disease:"",
+          symptomsSigns:"",
+          symptomTimes:"",
+          accidentFlag:"",
+          accidentReason:"",
+          validCertificate:"",
+          settlementCard:"",
+          hospitalDays:"",
+          medicalInstitution:"",
+          department:"",
+          bunk:"",
+          province:"",
+          compensationRatio:"",
           contactsRelationBy: "",//联系人与别抱人关系
           contactsLanguage: "",//联系人语言
           contactsMobilePhone: "",//联系人电话
           email:"",//邮件
           organCode:"",//出单机构
-          bankTransfer:"",//是否涉及转账
-          bankName:"",//开户行
-          bankLocation:"",//开户地
-          accountNumber:"",//账号
-          bankHolder:"",//户名
-          Content:"",
 
         },
         // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
@@ -628,7 +649,7 @@
       //提交页面数据
        submit(){
            let insert=this.ruleForm
-           addInsert(insert).then(res => {
+           addReservationInsert(insert).then(res => {
              console.log("insert",insert)
            if (res != null && res.code === 200) {
              console.log("insert",insert)

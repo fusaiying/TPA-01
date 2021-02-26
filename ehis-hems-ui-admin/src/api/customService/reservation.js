@@ -38,10 +38,27 @@ export function dealReservationSubmit(data) {
   })
 }
 
+//-----------------修改页面
 
 
+export function modifyReservationSubmit(data) {
+  return request({
+    url: '/cs/reservation/updateReservationAcceptVo',
+    method: 'put',
+    data: data
+  })
+}
 
 
+//-----------新增 页面
+
+export function addReservationInsert(data) {
+  return request({
+    url: '/cs/reservation/serviceAdd',
+    method: 'put',
+    data: data
+  })
+}
 
 
 

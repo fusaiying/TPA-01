@@ -247,7 +247,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="传真：" >
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.fax" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -304,12 +304,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="就诊日期：">
-              <el-input v-model="ruleForm.complaintTime" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.clinicDate" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊时间：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.clinicTime" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -325,7 +325,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="医院工作来电：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -342,7 +342,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否持有效证件：" >
-              <el-input v-model="ruleForm.validCertificatevalidCertificate" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.validCertificate" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -359,7 +359,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.symptomTimes" class="item-width" readonly size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -386,7 +386,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否申请直结：" >
-              <el-input v-model="ruleForm.email" class="item-width" readonly  size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.settlementFlag" class="item-width" readonly  size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -451,33 +451,33 @@
 
 
 
-    <el-card>
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
-        <span style="color: blue">服务处理</span>
-        <el-divider/>
-        <el-row>
-          <el-form-item label="处理时常：" prop="beInsuredName">
-            <el-input v-model="sendForm.beInsuredName" class="width-full" readonly size="mini" />
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="业务处理情况" prop="bank" >
-             <el-input v-model="ruleForm.phone" class="width-full"  size="mini" readonly></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="处理说明：" >
-            <el-input
-              type="textarea"
-              :rows="2"
-              v-model="ruleForm.textarea" readonly>
-            </el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
+<!--    <el-card>-->
+<!--      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"-->
+<!--               label-position="right" size="mini">-->
+<!--        <span style="color: blue">服务处理</span>-->
+<!--        <el-divider/>-->
+<!--        <el-row>-->
+<!--          <el-form-item label="处理时常：" prop="beInsuredName">-->
+<!--            <el-input v-model="sendForm.beInsuredName" class="width-full" readonly size="mini" />-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="业务处理情况" prop="bank" >-->
+<!--             <el-input v-model="ruleForm.phone" class="width-full"  size="mini" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-form-item label="处理说明：" >-->
+<!--            <el-input-->
+<!--              type="textarea"-->
+<!--              :rows="2"-->
+<!--              v-model="ruleForm.textarea" readonly>-->
+<!--            </el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-row>-->
+<!--      </el-form>-->
 
 
     </el-card>

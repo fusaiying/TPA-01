@@ -514,8 +514,6 @@
 <!--          </el-form-item>-->
 <!--        </el-row>-->
 <!--      </el-form>-->
-
-
 <!--    </el-card>-->
 
 
@@ -727,7 +725,6 @@
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(

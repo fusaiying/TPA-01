@@ -445,7 +445,10 @@
 
       return {
         //最下面数据
-        orderDetailSearch:{},
+        orderDetailSearch:{
+          handleProp1:"",
+          remark:""
+        },
         //客户信息查询
         sendForm:{},
         //质疑理赔结果用
@@ -498,8 +501,11 @@
         let query=this.search
         orderDetailSearch(query).then(res => {
           if (res != null && res.code === 200) {
-            this.orderDetailSearch = res.rows[0]
-            console.log('工单详情',this.orderDetailSearch)
+            if (res.rows[0]!="undefined"&&res.rows[0]!=null){
+              this.orderDetailSearch = res.rows[0]
+              console.log('工单详情',this.orderDetailSearch)
+            }
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

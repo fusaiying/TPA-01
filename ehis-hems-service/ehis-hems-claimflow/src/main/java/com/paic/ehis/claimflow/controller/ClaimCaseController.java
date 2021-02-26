@@ -14,7 +14,6 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.web.page.PageDomain;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
@@ -549,6 +548,26 @@ public class ClaimCaseController extends BaseController {
         return getDataTable(list);
     }
 
+    /**历史理赔信息*/
+    @GetMapping("/historyClaimInformation")
+    public TableDataInfo historyClaimInformation(ClaimInformationDTO dto) {
+        dto.setUnEqRptNo(dto.getRptNo());
+        dto.setRptNo(null);
+        startPage(dto);
+        List<ClaimInformationVo> list = claimCaseService.selectClaimInformation(dto);
+        return getDataTable(list);
+    }
+    //历史理赔信息-导出清单
+    @Log(title = "历史理赔信息-导出清单 ", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportHistoryClaimInformation")
+    public void exportHistoryClaimInformation(HttpServletResponse response, ClaimInformationDTO dto) throws IOException {
+
+        dto.setUnEqRptNo(dto.getRptNo());
+        dto.setRptNo(null);
+        List<ClaimInformationVo> caseList = claimCaseService.selectClaimInformation(dto);
+        ExcelUtil<ClaimInformationVo> util = new ExcelUtil<ClaimInformationVo>(ClaimInformationVo.class);
+        util.exportExcel(response, caseList, "悬挂中理算案件");
+    }
     //理赔信息查询-导出清单
 //    @PreAuthorize("@ss.hasPermi('system:case:export')")
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)

@@ -129,7 +129,7 @@
 
 </template>
 <script>
-import {addcontactsInfo, getNewtworktypeList,deleteContactsInfo} from "@/api/baseInfo/medicalManage";
+import {addcontactsInfo, getNewtworktypeList, deleteContactsInfo, getcontactsInfo} from "@/api/baseInfo/medicalManage";
 import {validPhone} from "@/utils/validate";
 import {delPayee, listRemarkRptNo} from "@/api/claim/handleCom";
 
@@ -301,6 +301,21 @@ export default {
                             center: true,
                             showClose: true
                           })
+                          let queryData={
+                            providerCode: this.supplierCode,
+                            orgFlag: '01'
+                          }
+                          //调用查询接口
+                          getcontactsInfo(queryData).then(res => {
+                            if(res.data!=null && res.data.length>0) {
+                              this.contactInfoForm.contacts = res.data
+                              this.contactInfoForm.contacts.map((data, index) => {
+                                data.id = index + 1
+                                data.isSet = false
+                              })
+                            }
+                          }).catch(res => {
+                          })
                         } else {
                           this.$message({
                             message: '保存失败!',
@@ -452,27 +467,32 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let query = {
-          orgFlag: this.status,
-          serialNo: row.serialNo
-        }
-        deleteContactsInfo(query).then(res => {
-          if (res != null && res.code === 200) {
-            this.$message({
-              message: '删除成功',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-            this.contactInfoForm.contacts.splice(this.index, 1)
+        if(row.serialNo!=null && row.serialNo!='') {
+          let query = {
+            orgFlag: this.status,
+            serialNo: row.serialNo
           }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+          deleteContactsInfo(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '删除成功',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              this.contactInfoForm.contacts.splice(this.index, 1)
+            }
+          })
+        }
+        else {
+          this.contactInfoForm.contacts.splice(this.index, 1)
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         });
-      })
+      });
     },
     /*    delConfirm() {
           this.dialogVisible = false

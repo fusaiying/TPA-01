@@ -225,7 +225,7 @@
               this.isListExport=true
               this.download('claimflow/case/exportProcessingList', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `accept_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -240,7 +240,7 @@
               this.isListExport=true
               this.download('claimflow/case/exportProcessedList', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `accept_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -255,7 +255,7 @@
               this.isListExport=true
               this.download('claimflow/case/exportSuspensionList', {
                 ...this.searchForm
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `accept_${new Date().getTime()}.xlsx`)
             }else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

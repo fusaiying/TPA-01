@@ -855,10 +855,11 @@
           if(res.code == '200' && res.data) {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {
-              this.discussionForm.discType = res.data.discType;
-            }
-            if(res.data.discSubType != '' && res.data.discSubType != null) {
-              this.discussionForm.discSubType = res.data.discSubType;
+              this.discussionForm.discType = res.data.discType; // AAAAAAAAAAAAAAA
+              this.validSubType(res.data.discType)
+              if(res.data.discSubType != '' && res.data.discSubType != null) {
+                this.discussionForm.discSubType = res.data.discSubType;
+              }
             }
             if(res.data.disView != '' && res.data.disView != null) {
               this.discussionForm.disView = res.data.disView;

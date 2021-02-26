@@ -136,7 +136,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="12">
-              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">保存</el-button>
+              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">确认</el-button>
             </el-col>
           </el-row>
           <!--保存 end-->

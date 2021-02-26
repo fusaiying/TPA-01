@@ -397,6 +397,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseRecord2.setHistoryFlag("Y");
                     claimCaseRecord2.setRecordId(s);
                     claimCaseRecord2.setOperator(SecurityUtils.getUsername());
+                    claimCaseRecord2.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseRecord2.setUpdateBy(SecurityUtils.getUsername());
                     claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
 
                     claimCaseRecord1.setOrgRecordId(s);

@@ -135,12 +135,12 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
-        flowLog.setStatus("05");
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLogMapper.insertFlowLog(flowLog);
 
         demandAcceptVo.setStatus("05");
@@ -169,7 +169,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         //flowLog.setWorkOrderNo();从前端获得
-        flowLog.setStatus("05");
+        flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -208,7 +208,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
-        flowLog.setStatus("05");//05 取消状态
+        flowLog.setLinkCode("05");//05 取消状态
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

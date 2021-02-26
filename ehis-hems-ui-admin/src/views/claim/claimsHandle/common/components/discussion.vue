@@ -1085,7 +1085,7 @@
   }
 
   ::v-deep.info_span_col_left {
-    text-align: right;
+    text-align: left;
     vertical-align: middle;
     float: left;
     font-size: 14px;

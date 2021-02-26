@@ -132,7 +132,7 @@
 <script>
 
   import moment from 'moment'
-  import { baseInfo ,historyDisInfo, updateDiss} from '@/api/negotiation/api'
+  import { baseInfo ,historyDisInfo, updateDiss,historyBaseInfo} from '@/api/negotiation/api'
 
   export default {
     filters: {
@@ -200,7 +200,11 @@
        });
 
        if('' != this.rptNo) {
-         this.getBaseInfo();
+         if(this.handleView) {
+           this.getBaseInfo();
+         } else {
+           this.getHistoryBaseInfo();
+         }
          this.getHistoryDisInfo();
        }
     },
@@ -240,6 +244,13 @@
         },
         getBaseInfo(){
           baseInfo(this.rptNo).then(res => {
+            if(res.code == '200' && res.data) {
+              this.baseInfo = res.data;
+            }
+          });
+        },
+        getHistoryBaseInfo(){
+          historyBaseInfo(this.rptNo).then(res => {
             if(res.code == '200' && res.data) {
               this.baseInfo = res.data;
             }

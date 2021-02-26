@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where transfer_id = #{transferId}
     </select>
         
-    <insert id="insertTransferBy" parameterType="TransferBy" useGeneratedKeys="true" keyProperty="transferId">
+    <insert id="insertTransferBy" parameterType="DemandAcceptVo" useGeneratedKeys="true" keyProperty="transferId">
         insert into transfer_by
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null and workOrderNo != ''">work_order_no,</if>

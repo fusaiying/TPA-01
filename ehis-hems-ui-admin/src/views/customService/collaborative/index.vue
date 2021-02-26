@@ -329,19 +329,33 @@
     methods: {
       //工单页面超链接
       workOrderButton(s){
-        this.$router.push({
-          path: '/customService/collaborative/complaint',
-          query:{
-            workOrderNo:s.workOrderNo,
-            policyNo:s.policyNo,
-            policyItemNo:s.policyItemNo,
-            status:s.status
-          }
-        })
+        if (s.businessType=="01"){
+          this.$router.push({
+            path: '/customService/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+        }else {
+          this.$router.push({
+            path: '/customService/complaint/orderDetails',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+
+        }
+
       },
       //处理按钮
       dealButton(s){
-        if(s.businessType=="信息需求") {
+        if(s.businessType=="01") {
           this.$router.push({
             path: '/customService/collaborative/deal',
             query: {

@@ -52,6 +52,8 @@ public interface WorkOrderAcceptMapper
      */
     public int updateWorkOrderAccept(WorkOrderAccept workOrderAccept);
 
+    public int updateWorkOrderStatus(WorkOrderAccept workOrderAccept);
+
     /**
      * 删除工单申请信息 
      * 

@@ -75,7 +75,7 @@
         left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
         left join person_info c  on  t1.insured_no = c.person_id
         where
-        t1.work_order_no = t2.work_order_no
+        t1.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         and t1.business_type='03'
         and t1.status='02'
             <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
@@ -98,10 +98,7 @@
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
     </select>
-    <update id="updateComplaintStatus" parameterType="String" >
-        update work_order_accept set status = '02'
-        where status='01'and work_order_no = #{workOrderNo}
-    </update>
+
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
 SELECT
 	a.work_order_no,

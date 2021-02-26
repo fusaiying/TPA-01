@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 
 import java.util.List;
 
@@ -32,15 +33,15 @@ public interface ITransferByService
     /**
      * 新增转办信息 
      * 
-     * @param transferBy 转办信息 
+     * @param demandAcceptVo 转办信息
      * @return 结果
      */
-    public int insertTransferBy(TransferBy transferBy);
+    public void insertTransferBy(DemandAcceptVo demandAcceptVo);
 
     /**
      * 修改转办信息 
      * 
-     * @param transferBy 转办信息 
+     * @param transferBy 转办信息
      * @return 结果
      */
     public int updateTransferBy(TransferBy transferBy);

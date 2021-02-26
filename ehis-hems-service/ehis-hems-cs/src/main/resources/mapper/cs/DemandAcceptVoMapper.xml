@@ -37,53 +37,51 @@
     </resultMap>
 
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.status,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.call_center_id,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
-FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-  and a.insured_no=c.person_id
-and a.business_type='01'
-and a.status='01'
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.call_center_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        WHERE
+        a.business_type = '01'
+        AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -140,7 +138,7 @@ and a.status='01'
         b.organ_code,
         b.content,
         b.complaint_person_id,
-        b.create_by ,
+        b.create_by,
         b.create_time create_time2,
         b.update_by update_by2,
         b.update_time update_time2,
@@ -153,13 +151,11 @@ and a.status='01'
         '06' ELSE a.STATUS
         END
         FROM
-        work_order_accept a,
-        accept_detail_info b,
-        person_info c
+        work_order_accept a
+        LEFT JOIN accept_detail_info b ON a.work_order_no = b.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
         WHERE
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
-        AND a.work_order_no = b.work_order_no
-        AND a.insured_no = c.person_id
         AND a.business_type = '01'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
@@ -515,9 +511,7 @@ FROM
         left join  accept_detail_info t2  on t3.work_order_no=t2.work_order_no
         left join  work_order_accept t1 on t1.work_order_no=t3.work_order_no
         left join person_info c on t1.insured_no=c.person_id
-        where
-        t1.work_order_no = t2.work_order_no
-        and t1.business_type='03'  or t1.business_type='01'
+        where  t1.business_type in("01","03")
         and t1.status='02'
         and t3.status='01'
         <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>

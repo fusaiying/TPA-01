@@ -173,7 +173,11 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+            <template slot-scope="scope" class="link-type">
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -235,7 +239,11 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
 <!--          <el-table-column type="selection" align="center" name/> sd-->
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+            <template slot-scope="scope" class="link-type">
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -395,6 +403,18 @@
     },
 
     methods: {
+      //工单页面超链接
+      workOrderButton(s){
+        this.$router.push({
+          path: '/customService/reservation/orderDetail',
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
+        })
+      },
       //修改按钮
       modifyButton(s){
         this.$router.push({
@@ -490,7 +510,7 @@
           console.log('共公池',res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.totalCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -516,7 +536,7 @@
           console.log('个人池：',res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
+            this.totalPersonCount = res.rows.length
             console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(

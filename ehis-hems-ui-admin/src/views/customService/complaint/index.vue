@@ -236,7 +236,7 @@
 <!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope" class="link-type">
-              <span  @click="dealButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
@@ -409,7 +409,8 @@
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
             policyItemNo:s.policyItemNo,
-            status:s.status
+            status:s.status,
+            businessType:s.businessType
           }
         })
       },
@@ -421,7 +422,7 @@
             workOrderNo:s.workOrderNo,
             policyNo:s.policyNo,
             policyItemNo:s.policyItemNo,
-            status:s.status
+            status:s.status,
           }
         })
       },
@@ -465,6 +466,17 @@
       },
       //处理按钮
       dealButton(s){
+        if(s.itemCode=="B00034"){
+          this.$router.push({
+            path: '/customService/complaint/dealGy',
+            query:{
+              workOrderNo:s.workOrderNo,
+              policyNo:s.policyNo,
+              policyItemNo:s.policyItemNo,
+              status:s.status
+            }
+          })
+        }else {
           this.$router.push({
             path: '/customService/complaint/deal',
             query:{
@@ -474,6 +486,9 @@
               status:s.status
             }
           })
+
+        }
+
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
@@ -507,7 +522,6 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.rows.length
-            console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -534,8 +548,7 @@
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.rows.length
-            console.log("sd",res.rows)
-            console.log('response',res.total)
+            console.log("dasd",res.rows)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

@@ -381,6 +381,7 @@
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
         </el-table>
+        <modify-details ref="modifyDetails"></modify-details>
 
         <pagination
           v-show="flowLogCount>0"
@@ -427,7 +428,12 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool ,FlowLogSearch,orderDetailSearch} from '@/api/customService/demand'
+  import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
   export default {
+    components: {
+      coOrganizer,modifyDetails
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -439,7 +445,10 @@
 
       return {
         //最下面数据
-        orderDetailSearch:{},
+        orderDetailSearch:{
+          handleProp1:"",
+          remark:""
+        },
         //客户信息查询
         sendForm:{},
         //质疑理赔结果用
@@ -492,8 +501,11 @@
         let query=this.search
         orderDetailSearch(query).then(res => {
           if (res != null && res.code === 200) {
-            this.orderDetailSearch = res.rows[0]
-            console.log('工单详情',this.orderDetailSearch)
+            if (res.rows[0]!="undefined"&&res.rows[0]!=null){
+              this.orderDetailSearch = res.rows[0]
+              console.log('工单详情',this.orderDetailSearch)
+            }
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -506,7 +518,7 @@
       },
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
         ;},

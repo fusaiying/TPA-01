@@ -709,17 +709,17 @@
       download(){},
       //转办
       transfer(){
-        this.$refs.transfer.transferForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.transfer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.transfer.open()
         },
       //协办
       coOrganizer(){
-        this.$refs.coOrganizer.coOrganizerForm.workOrderNo=this.queryParams.workOrderNo
+        this.$refs.coOrganizer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo
         this.$refs.coOrganizer.open()
       },
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
         this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
       ;},

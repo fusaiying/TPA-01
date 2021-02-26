@@ -197,15 +197,15 @@
         <el-row>
       <el-form-item label="受理渠道" prop="channelCode">
         <el-radio-group v-model="ruleForm.channelCode">
-          <el-radio   :label="1">电话中心</el-radio>
-          <el-radio   :label="2">在线客服</el-radio>
-          <el-radio   :label="3">邮箱</el-radio>
-          <el-radio   :label="4">网站</el-radio>
-          <el-radio   :label="5">柜面</el-radio>
-          <el-radio   :label="6">寿险</el-radio>
-          <el-radio   :label="7">微信</el-radio>
-          <el-radio   :label="8">监管</el-radio>
-          <el-radio   :label="9">媒体</el-radio>
+          <el-radio   label="01">电话中心</el-radio>
+          <el-radio   label="02">在线客服</el-radio>
+          <el-radio   label="03">邮箱</el-radio>
+          <el-radio   label="04">网站</el-radio>
+          <el-radio   label="05">柜面</el-radio>
+          <el-radio   label="06">寿险</el-radio>
+          <el-radio   label="07">微信</el-radio>
+          <el-radio   label="08">监管</el-radio>
+          <el-radio   label="09">媒体</el-radio>
         </el-radio-group>
       </el-form-item>
         </el-row>
@@ -242,7 +242,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority">
               <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -266,7 +266,7 @@
           <el-col :span="8">
             <el-form-item label="练习人与被保人关系：" prop="contactsRelationBy">
               <el-select v-model="ruleForm.contactsRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -483,6 +483,7 @@
       };
 
       return {
+        cs_relation:[],//关系
         cs_service_item:[],//服务项目
         cs_sex:[],//性别
         cs_priority:[],//优先级
@@ -504,16 +505,7 @@
           contactsMobilePhone: "",//联系人电话
           email:"",//邮件
           organCode:"",//出单机构
-          bankTransfer:"2",//是否涉及转账
-          bankName:"",//开户行
-          bankLocation:"",//开户地
-          accountNumber:"",//账号
-          bankHolder:"",//户名
-          content:"",
-          contactsCountry:"",//
-          contactsQuhao:"",
-           contactsNumber:"",
-          contactsSecondNumber:""
+
 
         },
         rules1:rules_bank,
@@ -582,6 +574,11 @@
       this.getDicts("cs_organization").then(response => {
         this.cs_organization = response.data;
       });
+      this.getDicts("cs_relation").then(response => {
+        this.cs_relation = response.data;
+      });
+
+
 
     },
 

@@ -65,6 +65,7 @@ FROM
 	flow_log f
 WHERE
 	i.edit_id = d.edit_id
+	and i.edit_id=f.sub_id
 	AND i.work_order_id=#{workOrderNo} and f.sub_id=#{subId}
     </select>
         

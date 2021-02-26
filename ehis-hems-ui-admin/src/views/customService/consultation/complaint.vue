@@ -492,7 +492,7 @@
         dialogFormVisible: false,
         updateBy: undefined,
         //新增的数据传输
-        sendForm: {
+        sendFormsendForm: {
           workOrderNo:'',
           validFlag:"",
           nonReason:"",
@@ -589,7 +589,6 @@
       searchHandle() {
         let workOrderNo=this.queryParams.workOrderNo
         complainSearch(workOrderNo).then(res => {
-          console.log('callcenter',res.data)
           if (res != null && res.code === 200) {
             this.workPoolData = res.data
 
@@ -612,7 +611,7 @@
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
         ;},

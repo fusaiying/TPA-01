@@ -234,7 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where handle_id = #{handleId}
     </update>
 
-    <insert id="assistInComplaint" parameterType="WorkHandleInfo">
+    <insert id="assistInComplaint" parameterType="com.paic.ehis.cs.domain.WorkHandleInfo">
         insert into work_handle_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="handleId != null">handle_id,</if>
@@ -384,6 +384,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCreatedBy" parameterType="WorkHandleInfo" resultMap="WorkHandleInfoResult">
         select  handle_id from work_handle_info   where work_order_no=#{workOrderNo}  and created_by=#{createdBy}
+    </select>
+    <select id="selectWorkHandleInfoByNo" resultType="com.paic.ehis.cs.domain.WorkHandleInfo">
+        select * from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
     </select>
     <update id="updateStatus"   parameterType="WorkHandleInfo" >
         update work_handle_info set status="N"  where status="Y"  and work_order_no=#{workOrderNo}

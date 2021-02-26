@@ -10,6 +10,7 @@ import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.service.ICollaborativeFromService;
@@ -88,7 +89,7 @@ public class CustomServiceDemandController extends BaseController {
     {
         demandAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         demandAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
-        demandAcceptVo.setBusinessType("信息需求");
+        demandAcceptVo.setBusinessType("01");
         demandAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
         return toAjax(iDemandAcceptVoService.insertServiceInfo(demandAcceptVo));
     }
@@ -130,7 +131,8 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/insertTeamwork")
     public AjaxResult insertTeamwork (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
     {
-        return toAjax(iCollaborativeFromService.insertTeamwork(demandAcceptVo));
+        iCollaborativeFromService.insertTeamwork(demandAcceptVo);
+        return AjaxResult.success();
     }
 
 /**
@@ -180,15 +182,15 @@ public class CustomServiceDemandController extends BaseController {
     }
     /**
      * 征求意见投诉需求处理意见
-     * @param demandAcceptVo
+     * @param complaintDealVo
      * @return
      */
     @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemandOne")
-    public AjaxResult insertConsultationDemandOne(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
+    public AjaxResult insertConsultationDemandOne(@Validated @RequestBody ComplaintDealVo complaintDealVo)
     {
-        return toAjax(iCollaborativeFromService.insertConsultationDemandOne(demandAcceptVo));
+        return toAjax(iCollaborativeFromService.insertConsultationDemandOne(complaintDealVo));
     }
 
 

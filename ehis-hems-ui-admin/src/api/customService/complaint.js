@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-//# 查询未处理的信息需求数据
+//# 查询待处理的信息需求数据
 export function complaintListAndPublicPool(query) {
   return request({
     url: '/cs/complaint/complaint/selectComplaintAcceptVoList',
@@ -9,7 +9,7 @@ export function complaintListAndPublicPool(query) {
   })
 }
 
-//# 查询未处理的信息需求数据
+//# 查询处理中的信息需求数据
 export function complaintListAndPersonalPool(query) {
   return request({
     url: '/cs/complaint/complaint/selectComplaintAcceptVoListOne',
@@ -54,6 +54,24 @@ export function complaintCancelSubmit(data) {
     data: data
   })
 }
+
+//# addDetail页面添加
+export function complaintAddInsert(data) {
+  return request({
+    url: '/cs/complaint/serviceAdd',
+    method: 'put',
+    data: data
+  })
+}
+//-----------------------------修改页面
+export function modifyComplaintSubmit(data) {
+  return request({
+    url: '/cs/complaint/updateComplaintAcceptVo',
+    method: 'put',
+    data: data
+  })
+}
+
 
 
 

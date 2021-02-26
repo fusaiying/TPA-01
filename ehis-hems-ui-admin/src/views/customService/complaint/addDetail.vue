@@ -219,8 +219,8 @@
         </el-form-item>
         </el-col>
           <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
+              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -235,37 +235,37 @@
           </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="phone">
-              <el-input v-model="ruleForm.callName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人姓名：" prop="contactsPerson.name">
+              <el-input v-model="ruleForm.contactsPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="priority">
-              <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
+            <el-form-item label="联系人性别：" prop="contactsPerson.sex">
+              <el-select v-model="ruleForm.contactsPerson.sex" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉人姓名：" prop="contactsName">
-              <el-input v-model="ruleForm.contactsName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="投诉人姓名：" prop="complainantPerson.name">
+              <el-input v-model="ruleForm.complainantPerson.name" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投诉人性别：" prop="ContactsSex">
-              <el-select v-model="ruleForm.contactsSex" class="item-width" placeholder="请选择">
+            <el-form-item label="投诉人性别：" prop="complainantPerson.sex">
+              <el-select v-model="ruleForm.complainantPerson.sex" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉人身份：" prop="contactsRelationBy">
-              <el-select v-model="ruleForm.contactsRelationBy" class="item-width" placeholder="请选择">
+            <el-form-item label="投诉人身份：" prop="complainantPerson.identity">
+              <el-select v-model="ruleForm.complainantPerson.identity" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -279,13 +279,13 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人手机：" prop="ContactsMobilePhone">
-              <el-input v-model="ruleForm.ContactsMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人手机：" prop="contactsPerson.mobilePhone">
+              <el-input v-model="ruleForm.contactsPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="organCode">
-              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
+            <el-form-item label="联系人语言：" prop="contactsPerson.language">
+              <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -297,10 +297,10 @@
         <el-row>
           <el-col :span="5">
             <el-form-item label="家庭电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="ruleForm.contactsQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="ruleForm.contactsNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="ruleForm.contactsSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号:+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="ruleForm.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="ruleForm.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="ruleForm.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
 
@@ -308,34 +308,29 @@
         <el-row>
           <el-col :span="5">
             <el-form-item label="办公电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsCountry" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="ruleForm.contactsQuhao" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="ruleForm.contactsNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="ruleForm.contactsSecondNumber" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号:+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="ruleForm.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="ruleForm.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="ruleForm.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
-          <el-form-item label="联系地址："  style="white-space: nowrap" prop="phone">
-           <el-input class="width-full"  v-model="ruleForm.ContactsMobilePhone"  clearable size="mini" placeholder="请输入"></el-input>
+          <el-form-item label="联系地址："  style="white-space: nowrap" prop="contactsPerson.address">
+           <el-input class="width-full"  v-model="ruleForm.contactsPerson.address"  clearable size="mini" placeholder="请输入"></el-input>
           </el-form-item>
 
         </el-row>
         <el-row>
-          <el-col :span="16">
+          <el-col :span="8">
 
-          <el-form-item label="预约时间："  style="white-space: nowrap" prop="phone">
-            <el-input  v-model="ruleForm.ContactsMobilePhone"  clearable size="mini" style="width: 150px" class="item-width" placeholder="请输入"></el-input>
-
-              <el-select v-model="ruleForm.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 150px" class="item-width"  :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>时
-              <el-select v-model="ruleForm.organCode" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" style="width: 150px" class="item-width"  :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>分
+          <el-form-item label="预约时间："  style="white-space: nowrap">
+            <el-date-picker
+              v-model="ruleForm.complaintTime"
+              type="datetime"
+              placeholder="选择日期时间">
+            </el-date-picker>
           </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -349,7 +344,7 @@
 
         </el-row>
 
-        <el-form-item label="业务内容：" prop="Content">
+        <el-form-item label="业务内容：" prop="content">
         <el-input
           type="textarea"
           :rows="2"
@@ -366,7 +361,7 @@
         <span style="color: blue">附件信息</span>
                 <div  style="text-align: right; margin-right: 1px;">
                  <up-load ref="upload" > </up-load>
-                  <el-button size="mini" type="primary" @click="upload()" >上传附件</el-button>
+                  <el-button size="mini" type="primary" @click="upload()" disabled>上传附件</el-button>
                 </div>
         </el-row>
         <el-divider/>
@@ -386,7 +381,7 @@
           <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -406,7 +401,9 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,addInsert} from '@/api/customService/demand'
- // import upload from "../../claim/claimsHandle/common/modul/upload";
+  import {complaintAddInsert} from '@/api/customService/complaint'
+
+
   import upLoad from "../common/modul/upload";
 
 
@@ -433,7 +430,27 @@
         ruleForm:{
           channelCode:"",//受理渠道
           itemCode:"",//服务项目
-          callMobilePhone:"",//来电人电话
+          callPerson:{
+            mobilePhone:"",//来电人电话
+
+          },
+          contactsPerson:{
+            name:"",
+            sex:"",
+            mobilePhone:"",
+            address:"",
+            workPhone1:[],
+            homePhone1:[],
+
+
+          },
+          complainantPerson:{
+            name:"",
+            sex:"",
+            identity:"",
+
+          },
+          complaintTime:"",
           priorityLevel:"",//优先级
           callName:"",//来电人
           callRelationBy:"",//来电人与被保人关系
@@ -467,31 +484,25 @@
           priorityLevel: [
             {required: true, message: "优先级不能为空", trigger: "blur"}
           ],
-          contactsRelationBy: [
-              {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+          'contactsPerson.sex': [
+              {required: true, message: "联系人性别", trigger: "blur"}
             ],
-          contactsName: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
+          'contactsPerson.name': [
+            {required: true, message: "联系人姓名不能为空", trigger: "blur"}
           ],
-          ContactsMobilePhone:[
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+          'complainantPerson.name':[
+            {required: true, message: "投诉人姓名不能为空", trigger: "blur"}
           ],
-          organCode: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
+          'complainantPerson.sex': [
+            {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
+          'callPerson.mobilePhone': [
+            {required: true, message: "来电号码不能为空", trigger: "blur"}
           ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
+          organCode:  [
+        {required: true, message: "出单机构不能为空", trigger: "blur"}
           ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          Content: [
+          content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
         },
@@ -581,20 +592,24 @@
       download(){},
       //提交页面数据
        submit(){
-           let insert=this.ruleForm
-           addInsert(insert).then(res => {
-             console.log("insert",insert)
-           if (res != null && res.code === 200) {
-             console.log("insert",insert)
-             alert("插入成功")
-             if (res.rows.length <= 0) {
-               return this.$message.warning(
-                 "失败！"
-               )
-             }
-           }
-         }).catch(res => {
+         this.$refs.ruleForm.validate((valid) => {
+           if (valid) {
+             let insert = this.ruleForm
+             complaintAddInsert(insert).then(res => {
+               if (res != null && res.code === 200) {
+                 alert("插入成功")
+                 if (res.rows.length <= 0) {
+                   return this.$message.warning(
+                     "失败！"
+                   )
+                 }
+               }
+             }).catch(res => {
 
+             })
+           }else {
+             return false
+           }
          })
 
        },
@@ -625,10 +640,7 @@
           phone:this.sendForm.phone,
           state:this.sendForm.state
         }
-        debugger;
-        console.log('query: ',query)
         demandListAndPublicPool(query).then(res => {
-          console.log('------------: ',res)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total

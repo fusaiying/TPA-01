@@ -513,6 +513,7 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.rows.length
+            console.log("gonggongchi",this.workPoolData)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -539,6 +540,8 @@
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.rows.length
+            console.log("gonggongchi",this.workPersonPoolData)
+
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

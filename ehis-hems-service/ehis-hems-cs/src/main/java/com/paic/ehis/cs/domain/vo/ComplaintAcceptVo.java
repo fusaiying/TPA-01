@@ -7,7 +7,7 @@ import com.paic.ehis.cs.domain.*;
 import lombok.Data;
 
 import java.util.Date;
-@Data
+
 public class ComplaintAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -141,6 +141,8 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 原操作人*/
     private UserInfo OperatorLast;
 
+
+
     /** 修改人 */
     private UserInfo Reviser;
 
@@ -165,4 +167,380 @@ public class ComplaintAcceptVo extends BaseEntity {
      * 修改说明
      */
     private String editRemark;
+
+    public String getCallCenterId() {
+        return callCenterId;
+    }
+
+    public void setCallCenterId(String callCenterId) {
+        this.callCenterId = callCenterId;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+    }
+
+    public String getInsuredName() {
+        return insuredName;
+    }
+
+    public void setInsuredName(String insuredName) {
+        this.insuredName = insuredName;
+    }
+
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public void setHolderName(String holderName) {
+        this.holderName = holderName;
+    }
+
+    public String getAcceptBy() {
+        return acceptBy;
+    }
+
+    public void setAcceptBy(String acceptBy) {
+        this.acceptBy = acceptBy;
+    }
+
+    public Date getAcceptTime() {
+        return acceptTime;
+    }
+
+    public void setAcceptTime(Date acceptTime) {
+        this.acceptTime = acceptTime;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCallRelationBy() {
+        return callRelationBy;
+    }
+
+    public void setCallRelationBy(String callRelationBy) {
+        this.callRelationBy = callRelationBy;
+    }
+
+    public String getContactsRelationBy() {
+        return contactsRelationBy;
+    }
+
+    public void setContactsRelationBy(String contactsRelationBy) {
+        this.contactsRelationBy = contactsRelationBy;
+    }
+
+    public String getCallPersonId() {
+        return callPersonId;
+    }
+
+    public void setCallPersonId(String callPersonId) {
+        this.callPersonId = callPersonId;
+    }
+
+    public String getContactsPersonId() {
+        return contactsPersonId;
+    }
+
+    public void setContactsPersonId(String contactsPersonId) {
+        this.contactsPersonId = contactsPersonId;
+    }
+
+    public String getComplaintPersonId() {
+        return complaintPersonId;
+    }
+
+    public void setComplaintPersonId(String complaintPersonId) {
+        this.complaintPersonId = complaintPersonId;
+    }
+
+    public PersonInfo getCallPerson() {
+        return callPerson;
+    }
+
+    public void setCallPerson(PersonInfo callPerson) {
+        this.callPerson = callPerson;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public PersonInfo getContactsPerson() {
+        return contactsPerson;
+    }
+
+    public void setContactsPerson(PersonInfo contactsPerson) {
+        this.contactsPerson = contactsPerson;
+    }
+
+    public String getContactsCountry() {
+        return contactsCountry;
+    }
+
+    public void setContactsCountry(String contactsCountry) {
+        this.contactsCountry = contactsCountry;
+    }
+
+    public String getContactsQuhao() {
+        return contactsQuhao;
+    }
+
+    public void setContactsQuhao(String contactsQuhao) {
+        this.contactsQuhao = contactsQuhao;
+    }
+
+    public String getContactsNumber() {
+        return contactsNumber;
+    }
+
+    public void setContactsNumber(String contactsNumber) {
+        this.contactsNumber = contactsNumber;
+    }
+
+    public String getContactsSecondNumber() {
+        return contactsSecondNumber;
+    }
+
+    public void setContactsSecondNumber(String contactsSecondNumber) {
+        this.contactsSecondNumber = contactsSecondNumber;
+    }
+
+    public long getContactsSex() {
+        return contactsSex;
+    }
+
+    public void setContactsSex(long contactsSex) {
+        this.contactsSex = contactsSex;
+    }
+
+    public String getContactsName() {
+        return contactsName;
+    }
+
+    public void setContactsName(String contactsName) {
+        this.contactsName = contactsName;
+    }
+
+    public String getContactsLanguage() {
+        return contactsLanguage;
+    }
+
+    public void setContactsLanguage(String contactsLanguage) {
+        this.contactsLanguage = contactsLanguage;
+    }
+
+    public String getContactsMobilePhone() {
+        return contactsMobilePhone;
+    }
+
+    public void setContactsMobilePhone(String contactsMobilePhone) {
+        this.contactsMobilePhone = contactsMobilePhone;
+    }
+
+    public PersonInfo getComplainantPerson() {
+        return complainantPerson;
+    }
+
+    public void setComplainantPerson(PersonInfo complainantPerson) {
+        this.complainantPerson = complainantPerson;
+    }
+
+    public String getComplaintTime() {
+        return complaintTime;
+    }
+
+    public void setComplaintTime(String complaintTime) {
+        this.complaintTime = complaintTime;
+    }
+
+    public String getAttachmentFlag() {
+        return attachmentFlag;
+    }
+
+    public void setAttachmentFlag(String attachmentFlag) {
+        this.attachmentFlag = attachmentFlag;
+    }
+
+    public EditInfo getEditInfo() {
+        return editInfo;
+    }
+
+    public void setEditInfo(EditInfo editInfo) {
+        this.editInfo = editInfo;
+    }
+
+    public EditDetail getEditDetail() {
+        return editDetail;
+    }
+
+    public void setEditDetail(EditDetail editDetail) {
+        this.editDetail = editDetail;
+    }
+
+    public String getEditReason() {
+        return editReason;
+    }
+
+    public void setEditReason(String editReason) {
+        this.editReason = editReason;
+    }
+
+    public String getEditRemark() {
+        return editRemark;
+    }
+
+    public void setEditRemark(String editRemark) {
+        this.editRemark = editRemark;
+    }
+
+    public String getWorkOrderNo() {
+        return workOrderNo;
+    }
+
+    public void setWorkOrderNo(String workOrderNo) {
+        this.workOrderNo = workOrderNo;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getPolicyNo() {
+        return policyNo;
+    }
+
+    public void setPolicyNo(String policyNo) {
+        this.policyNo = policyNo;
+    }
+
+    public String getPolicyItemNo() {
+        return policyItemNo;
+    }
+
+    public void setPolicyItemNo(String policyItemNo) {
+        this.policyItemNo = policyItemNo;
+    }
+
+    public String getRiskCode() {
+        return riskCode;
+    }
+
+    public void setRiskCode(String riskCode) {
+        this.riskCode = riskCode;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getVipFlag() {
+        return vipFlag;
+    }
+
+    public void setVipFlag(String vipFlag) {
+        this.vipFlag = vipFlag;
+    }
+
+    public String getOrganCode() {
+        return organCode;
+    }
+
+    public void setOrganCode(String organCode) {
+        this.organCode = organCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public String getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(String priorityLevel) {
+        this.priorityLevel = priorityLevel;
+    }
+
+    public String getInsuredNo() {
+        return insuredNo;
+    }
+
+    public void setInsuredNo(String insuredNo) {
+        this.insuredNo = insuredNo;
+    }
+
+    public PersonInfo getInsurer() {
+        return insurer;
+    }
+
+    public void setInsurer(PersonInfo insurer) {
+        this.insurer = insurer;
+    }
+
+    public UserInfo getOperatorLast() {
+        return OperatorLast;
+    }
+
+    public void setOperatorLast(UserInfo operatorLast) {
+        OperatorLast = operatorLast;
+    }
+
+    public UserInfo getReviser() {
+        return Reviser;
+    }
+
+    public void setReviser(UserInfo reviser) {
+        Reviser = reviser;
+    }
+
+    public String getPersuasionFlag() {
+        return persuasionFlag;
+    }
+
+    public void setPersuasionFlag(String persuasionFlag) {
+        this.persuasionFlag = persuasionFlag;
+    }
 }

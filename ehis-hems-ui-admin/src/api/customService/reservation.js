@@ -18,13 +18,47 @@ export function demandListAndPersonalPool(query) {
 }
 
 
+//取消页面提交
+export function cancelReservationSubmit(data) {
+  return request({
+    url: '/cs/reservation/orderCancelSubmit',
+    method: 'put',
+    data: data
+  })
+}
 
 
+//--------------------------------处理页面
+//提交保存
+export function dealReservationSubmit(data) {
+  return request({
+    url: '/cs/reservation/serviceProcessing',
+    method: 'put',
+    data: data
+  })
+}
+
+//-----------------修改页面
 
 
+export function modifyReservationSubmit(data) {
+  return request({
+    url: '/cs/reservation/updateReservationAcceptVo',
+    method: 'put',
+    data: data
+  })
+}
 
 
+//-----------新增 页面
 
+export function addReservationInsert(data) {
+  return request({
+    url: '/cs/reservation/serviceAdd',
+    method: 'put',
+    data: data
+  })
+}
 
 
 

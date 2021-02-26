@@ -312,8 +312,8 @@
           <el-col :span="8">
             <el-form-item label="是否涉及银行转账" prop="bank" >
               <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
+                <el-radio   label="1">是</el-radio>
+                <el-radio   label="2">否</el-radio>
 
               </el-radio-group>
             </el-form-item>
@@ -378,6 +378,7 @@
               <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -467,9 +468,13 @@
 <script>
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: {
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -574,7 +579,7 @@
     methods: {
       //超链接用
       modifyDetails(s){
-        this.$refs.modifyDetails.queryParams.flowNo=s.flowNo,
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
           this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
         ;},
@@ -589,7 +594,6 @@
             insert.workOrderNo = this.$route.query.workOrderNo
             cancelSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
-                console.log("insert", insert)
                 alert("提交成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(

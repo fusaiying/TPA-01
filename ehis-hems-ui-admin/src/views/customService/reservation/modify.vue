@@ -9,17 +9,17 @@
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
             <el-form-item label="保单号：" prop="Service"  >
-              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" placeholder="请输入"/>
+              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,17 +27,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件类型:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人姓名:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -189,105 +189,153 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="195px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
         <el-divider/>
 
         <el-row>
+          <el-form-item label="受理渠道：" prop="channelCode" >
+            <el-radio-group v-model="workPoolData.channelCode">
+              <el-radio   label="01">电话</el-radio>
+              <el-radio   label="02">邮箱</el-radio>
+              <el-radio   label="03">网站</el-radio>
+              <el-radio   label="04">电话中心</el-radio>
+              <el-radio   label="05">柜面</el-radio>
+              <el-radio   label="06">医网</el-radio>
+              <el-radio   label="07">平安内网</el-radio>
+              <el-radio   label="08">APP</el-radio>
+              <el-radio   label="09">寿险</el-radio>
+              <el-radio   label="10">微信</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-row>
+        <el-row>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="callCenterNo">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="电话中心业务流水号：" prop="callCenterId">
+              <el-input v-model="workPoolData.callCenterId" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="电话中心业务流水号：" prop="callCenterNo">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="申请人姓名：" prop="complainantPerson.name">
+              <el-input  v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="ruleForm.priorityLevel" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="phone">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="传真：" prop="phone">
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="来电人与申请人关系：" prop="priority">
-              <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
+              <el-select v-model="workPoolData.priorityLevel" class="item-width"  >
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="来电人姓名：" prop="callPerson.name">
+              <el-input v-model="workPoolData.callPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="与申请人关系：" prop="callRelationBy">
+              <el-select v-model="workPoolData.callRelationBy" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人语言：" prop="ContactsLanguage">
-              <el-select v-model="ruleForm.contactsLanguage" class="item-width" placeholder="请选择">
+            <el-form-item label="传真：" prop="callPerson.fax">
+              <el-input v-model="workPoolData.callPerson.fax" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="就诊类型：" prop="visitType">
+              <el-select v-model="workPoolData.visitType" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="联系人电话：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
+              <el-select v-model="workPoolData.hospitalWorkCall" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="联系人姓名：" prop="contactsPerson.name">
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="联系人家庭电话：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人性别：" prop="contactsPerson.sex">
+              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="手机：" prop="contactsPerson.mobilePhone">
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="E-MAIL：" prop="email">
+              <el-input v-model="workPoolData.email" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="联系人语言：" prop="contactsPerson.language">
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="家庭电话：" prop="contactsPerson.homePhone">
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="联系人办公电话：" prop="beInsuredNo">
-              <el-input v-model="sendForm.beInsuredNo" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item style="white-space: nowrap" label="办公电话：" prop="contactsPerson.workPhone">
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
-            <el-form-item label="E-MAIL：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" readonly size="mini" placeholder="请输入"/>
+
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
+              <el-date-picker
+                v-model="workPoolData.complaintTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
             </el-form-item>
           </el-col>
+
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
+              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -298,102 +346,92 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
+              <el-form-item label="就诊医院：" prop="medicalInstitution">
+                省份：<el-input v-model="workPoolData.province" style="width: 60px"  />
+                城市：<el-input v-model="workPoolData.city" style="width: 60px" />
+              </el-form-item>
+
           </el-col>
+
           <el-col :span="8">
-            <el-form-item label="预约时间：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="email">
+            <el-form-item label="医疗机构：" prop="medicalInstitution">
               <el-col :span="15">
-                <el-input v-model="sendForm.beInsuredName" input-w readonly size="mini" placeholder="请输入"/>
+                <el-input v-model="workPoolData.medicalInstitution"  readonly size="mini" />
               </el-col>
-              <el-button type="primary" @click="searchHandle">详细信息</el-button>
+              <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="科室：" prop="department">
+              <el-input v-model="workPoolData.department" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
+
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="是否持有效证件：" prop="validCertificate">
+              <el-input v-model="workPoolData.validCertificate" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="是否持保险卡：" prop="settlementCard">
+              <el-input v-model="workPoolData.settlementCard" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="医院赔付比例：" prop="compensationRatio">
+              <el-input v-model="workPoolData.compensationRatio" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="疾病名称：" prop="disease">
+              <el-input v-model="workPoolData.disease" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
+              <el-input v-model="workPoolData.symptomTimes" class="item-width"  size="mini" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="类似疾病症状最早发生时间：" prop="earliestTime">
+              <el-input v-model="workPoolData.earliestTime" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="医院工作来电：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="科室：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="医院赔付比例：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+          <el-col >
+            <el-form-item label="疾病或体征：" prop="symptomsSigns">
+              <el-input v-model="workPoolData.symptomsSigns" class="width-full"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
+
           <el-col :span="8">
-            <el-form-item label="是否持有效证件：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="是否意外：" prop="accidentFlag">
+              <el-input v-model="workPoolData.accidentFlag" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否持保险卡：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="意外原因：" prop="accidentReason">
+              <el-input v-model="workPoolData.accidentReason" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="类似疾病症状最早发生时间：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="疾病名称：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="疾病或体征：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="是否首次就诊：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly  size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="是否意外：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="意外原因：" prop="email">
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="业务内容：" prop="beInsuredName">
-            <el-input v-model="sendForm.beInsuredName" class="width-full" readonly size="mini" placeholder="请输入"/>
+          <el-form-item label="业务内容：" prop="content">
+            <el-input v-model="workPoolData.content" class="width-full"  size="mini" />
           </el-form-item>
         </el-row>
-        <div style="text-align: right; margin-right: 8px;">
-          <el-button type="primary" size="mini" @click="submit">提交</el-button>
-          <el-button type="primary" size="mini" @click="hiddenShow">关闭</el-button>
-        </div>
+
 
       </el-form>
     </el-card>
@@ -418,7 +456,12 @@
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip/>
+          <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
+            </template>
+          </el-table-column>
+          <modify-details ref="modifyDetails"></modify-details>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
           <el-table-column prop="toDepartment" align="center" label="流转部门" show-overflow-tooltip/>
           <el-table-column prop="toReason" align="center" label="流传原因" show-overflow-tooltip/>
@@ -436,8 +479,8 @@
 
 
     <el-card>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="100px"
+               label-position="right" size="mini" v-if="this.queryParams.status=='05'">
         <span style="color: blue">服务处理</span>
         <el-divider></el-divider>
         <el-row>
@@ -455,7 +498,7 @@
             <el-input
               type="textarea"
               :rows="2"
-              placeholder="请输入内容"
+              placeholder=""
               v-model="ruleForm.textarea"
               disabled
             >
@@ -466,26 +509,26 @@
     </el-card>
 
     <el-card>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="ruleForm" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
-            <el-form-item label="修改原因" prop="bank" >
-              <el-radio-group v-model="ruleForm.bank">
-                <el-radio   :label="1">客户申请变动</el-radio>
-                <el-radio   :label="2">操作失误</el-radio>
-                <el-radio   :label="3">其他原因</el-radio>
+            <el-form-item label="修改原因" prop="editReason" >
+              <el-radio-group v-model="workPoolData.editReason">
+                <el-radio   label="01">客户申请变动</el-radio>
+                <el-radio   label="02">操作失误</el-radio>
+                <el-radio   label="03">其他原因</el-radio>
               </el-radio-group>
             </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="修改说明：" prop="textarea">
+          <el-form-item label="修改说明：" prop="editRemark">
             <el-input
               type="textarea"
               :rows="2"
               placeholder="请输入内容"
-              v-model="ruleForm.textarea">
+              v-model="workPoolData.editRemark">
             </el-input>
           </el-form-item>
         </el-row>
@@ -505,10 +548,16 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch} from '@/api/customService/demand'
+  import {FlowLogSearch} from '@/api/customService/demand'
+  import modifyDetails from "../common/modul/modifyDetails";
+  import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
+
 
   let dictss = [{dictType: 'product_status'}]
   export default {
+    components: {
+      modifyDetails,
+    },
     filters: {
       changeDate: function (value) {
         if (value !== null) {
@@ -519,61 +568,69 @@
     data() {
 
       return {
+        cs_relation:[],//关系
+        cs_service_item:[],//服务项目
+        cs_sex:[],//性别
+        cs_priority:[],//优先级
+        cs_communication_language:[],//语言
+        cs_organization:[],//机构
+        cs_handle_state:[],// 状态：
         cs_channel:[],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
         //服务项目
-        workPoolData:"",
+        workPoolData: {
+          complainantPerson:{
+            name:"",
+          },
+          medicalInstitution:"",
+          callRelationBy:"",
+          workOrderNo:"",
+          hospitalWorkCall:"",
+          channelCode:"",
+          callCenterId:"",
+          priorityLevel:"",
+          callPerson: {
+            name:"",
+            sex:"",
+            mobilePhone:"",
+            fax:"",
+          },
+          fax:"",
+          visitType:"",
+          settlementCard:"",
+          compensationRatio:"",
+          disease:"",
+          symptomTimes:"",
+          earliestTime:"",
+          contactsPerson:{
+            homePhone1:[],
+            name:"",
+            sex:"",
+            mobilePhone:"",
+            address:"",
+            homePhone:"",
+            workPhone:"",
+            language:"",
+            homePhone:"",
+          },//联系人
+          symptomsSigns:"",
+          accidentFlag:"",
+          accidentReason:"",
+          content:"",
+          editReason:"",
+          editRemark:"",
+        },
         totalCount: 0,
         //需要填入数据的部分
         ruleForm:{
-          radio:"",
-          service:"",
-          phone:"",
-          priority:"",
-          lxperson:"",
-          bankaa: "",
-          bankbb: "",
-          bankcc: "",
-          bankdd: "",
-          bank:"2",
-          textarea:"",
+
         },
         // 表单校验
         rules: {
-          Service: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
-          ],
           priority: [
             {required: true, message: "优先级不能为空", trigger: "blur"}
-          ],
-          lxperson: [
-            {required: true, message: "联系人不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-          ],
-          orderNum: [
-            {required: true, message: "出单机构不能为空", trigger: "blur"}
-          ],
-          bankaa: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankbb: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          bankcc: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankdd: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
-          textarea: [
-            {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
         },
 
@@ -644,15 +701,51 @@
       this.queryParams.status=this.$route.query.status;
       this.searchHandle()
       this.searchFlowLog()
-      this.getDicts("cs_channel").then(response => {
-        this.cs_channel = response.data;
+      this.getDicts("cs_service_item").then(response => {
+        this.cs_service_item = response.data;
+      });
+      this.getDicts("cs_priority").then(response => {
+        this.cs_priority = response.data;
+      });
+      this.getDicts("cs_sex").then(response => {
+        this.cs_sex = response.data;
+      });
+      this.getDicts("cs_communication_language").then(response => {
+        this.cs_communication_language = response.data;
+      });
+      this.getDicts("cs_organization").then(response => {
+        this.cs_organization = response.data;
+      });
+      this.getDicts("cs_relation").then(response => {
+        this.cs_relation = response.data;
       });
 
     },
 
     methods: {
+      //超链接用
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
+        this.$refs.modifyDetails.open()
+        ;},
       //提交页面数据
-      submit(){},
+      submit(){
+        this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
+        let send=this.workPoolData
+        modifyReservationSubmit(send).then(res => {
+          if (res != null && res.code === 200) {
+            alert("保存成功！")
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "提交失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
       //关闭页面
       close(){
 

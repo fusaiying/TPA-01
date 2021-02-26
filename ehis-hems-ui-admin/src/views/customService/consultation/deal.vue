@@ -374,8 +374,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="modifyDetails" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.umNum}}</span>
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="opinion" align="center" label="处理意见" show-overflow-tooltip/>
@@ -433,6 +433,7 @@
           </el-table-column>
         </el-table>
       </div>
+      <modify-details ref="modifyDetails"></modify-details>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
@@ -449,14 +450,15 @@
 <script>
   import moment from 'moment'
   import {dealAdd,FlowLogSearch} from '@/api/customService/demand'
-  import {dealSearch,demandAccept}  from  '@/api/customService/consultation'
+  import {dealSubmit,demandAccept}  from  '@/api/customService/consultation'
 
   import coOrganizer from "../common/modul/coOrganizer";
+  import modifyDetails from "../common/modul/modifyDetails";
 
   let dictss = [{dictType: 'product_status'}]
   export default {
     components: {
-                  coOrganizer,
+                  coOrganizer,modifyDetails
     },
     filters: {
       changeDate: function (value) {
@@ -493,13 +495,14 @@
         submitForm: {
           workOrderNo:"",
           opinion:"",
+          collaborativeId:""
         },
         sendForm:{
 
         },
         workPoolData:{
           contactsPerson:{
-            homePhone1:[]
+            homePhone1:[],
           },
           callPerson: {},
 
@@ -554,25 +557,6 @@
     },
 
     methods: {
-      //新增按钮
-      add(){
-        let addQueryParams=this.ruleForm
-        addQueryParams.workOrderNo=this.workOrderNo
-        console.log("sdas",this.workOrderNo)
-        dealAdd(addQueryParams).then(res => {
-          console.log("增加",addQueryParams)
-          if (res != null && res.code === 200) {
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "提交失败！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-
-      },
       //取消
       deal(){},
       //上传附件
@@ -587,10 +571,11 @@
       //协办
       coOrganizer(){ this.$refs.coOrganizer.open();},
       //超链接用
-      modifyDetails(){
-        this.$refs.modifyDetails.workOrderNo=this.queryParams.workOrderNo;
+      modifyDetails(s){
+        this.$refs.modifyDetails.queryParams.subId=s.subId,
+          this.$refs.modifyDetails.queryParams.workOrderNo=this.queryParams.workOrderNo;
         this.$refs.modifyDetails.open()
-      ;},
+        ;},
 
       resetForm() {
         this.$refs.sendForm.resetFields()
@@ -599,10 +584,10 @@
 
       //提交
       submit(){
-        let insert=this.sendForm
+        let insert=this.submitForm
         insert.workOrderNo=this.$route.query.workOrderNo
         insert.collaborativeId=this.$route.query.collaborativeId
-        dealSearch(insert).then(res => {
+        dealSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
             console.log("insert",insert)
             alert("保存成功")
@@ -641,14 +626,8 @@
       searchHandle() {
         demandAccept(this.queryParams.workOrderNo).then(res => {
             if (res!= null && res.code === 200) {
-              this.workPoolData = res.rows[0];
-              this.totalCount = res.total
-              console.log("?",res.rows)
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
+              console.log("77777",res.data)
+              this.workPoolData = res.data;
             }
           }).catch(res => {
 

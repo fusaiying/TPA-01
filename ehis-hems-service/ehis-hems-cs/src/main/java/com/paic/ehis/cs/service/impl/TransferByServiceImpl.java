@@ -3,8 +3,11 @@ package com.paic.ehis.cs.service.impl;
 import java.util.List;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.mapper.TransferByMapper;
 import com.paic.ehis.cs.service.ITransferByService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,17 +53,30 @@ public class TransferByServiceImpl implements ITransferByService
     /**
      * 新增转办信息 
      * 
-     * @param transferBy 转办信息 
+     * @param demandAcceptVo 转办信息
      * @return 结果
      */
     @Override
-    public int insertTransferBy(TransferBy transferBy)
+    public void insertTransferBy(DemandAcceptVo demandAcceptVo)
     {
-        transferBy.setCreatedBy(SecurityUtils.getUsername());
-        transferBy.setCreatedTime(DateUtils.getNowDate());
-        transferBy.setUpdatedBy(SecurityUtils.getUsername());
-        transferBy.setUpdatedTime(DateUtils.getNowDate());
-        return transferByMapper.insertTransferBy(transferBy);
+        List<UmCode> list=demandAcceptVo.getUmCode();
+        TransferBy transferBy=new TransferBy();
+      // int count=0;
+        for (UmCode umCode:list){
+            //获得工单号
+            transferBy.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+            //随机生成流水号
+            transferBy.setTransferId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("transfer_id",10,6)));
+
+            transferBy.setUmCode(umCode.getValue());
+            transferBy.setReason(demandAcceptVo.getReason());
+            transferBy.setCreatedBy(SecurityUtils.getUsername());
+            transferBy.setCreatedTime(DateUtils.getNowDate());
+            transferBy.setUpdatedBy(SecurityUtils.getUsername());
+            transferBy.setUpdatedTime(DateUtils.getNowDate());
+            transferByMapper.insertTransferBy(transferBy);
+        }/*count++*/;
+       // return count;
     }
 
     /**

@@ -544,6 +544,10 @@
               if(data.accDescribe != '') {
                 this.surveyInfo.accDescribe =  data.accDescribe;
               }
+              if(data.accDate != '') {
+                this.surveyInfo.accDate =  data.accDate;
+              }
+
             }
           }
         });

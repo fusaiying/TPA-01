@@ -31,6 +31,7 @@
         <result property="contactsRelationBy" column="contacts_relation_by"/>
         <result property="email" column="email"/>
         <result property="organCode" column="organ_code"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
     </resultMap>
     <select id="selectReservationAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
         SELECT
@@ -54,6 +55,7 @@
         a.create_time create_time1,
         a.update_by update_by1,
         a.update_time update_time1,
+        b.complaint_person_id,
         b.channel_code,
         b.item_code,
         b.call_person_id,
@@ -85,7 +87,14 @@
         b.prop12,
         b.prop16,
         b.prop17,
-        b.prop18
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25
         FROM
         work_order_accept a,
         accept_detail_info b,
@@ -138,6 +147,7 @@
         a.create_time create_time1,
         a.update_by update_by1,
         a.update_time update_time1,
+        b.complaint_person_id,
         b.channel_code,
         b.item_code,
         b.call_person_id,
@@ -169,7 +179,14 @@
         b.prop12,
         b.prop16,
         b.prop17,
-        b.prop18
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25
         FROM
         work_order_accept a,
         accept_detail_info b,

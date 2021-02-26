@@ -45,10 +45,10 @@
             <span class="info_span to_right">问题件类型：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ item.updateTime }}</span>
+            <span class="info_span to_right">发起时间 ：</span><span class="info_span">{{item.createTime}}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">处理人：</span><span class="info_span">{{item.updateBy }}</span>
+            <span class="info_span to_right">发起人：</span><span class="info_span">{{item.createBy}}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.problemView) }}</span>
@@ -60,12 +60,11 @@
             <span class="info_span to_right">处理意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">发起时间 ：</span><span class="info_span">{{item.createTime}}</span>
+            <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ item.updateTime }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">发起人：</span><span class="info_span">{{item.createBy}}</span>
+            <span class="info_span to_right">处理人：</span><span class="info_span">{{item.updateBy }}</span>
           </el-col>
-
         </el-row>
       </form>
     </el-card>

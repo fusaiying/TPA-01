@@ -809,33 +809,45 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let data={
-            serialNo:row.serialNo
-          }
-          deleteContacts(data).then(res=>{
-            if (res!=null && res.code===200){
-              this.$message({
-                message: '删除成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              //查询联系人信息
-              const query = {
-                supplierCode: this.querys.serialNo
-              }
-              listContacts(query).then(res => {
-                if (res != null && res.code === 200) {
-                  this.contactForm.contacts = res.rows
-                  this.contactForm.contacts.forEach(item => {
-                    item.isShow = false
-                  })
-                }
-              })
-            }else {
-              this.$message.error('删除失败！')
+          if (row.supplierCode!='' && row.supplierCode!=null){
+            let data={
+              serialNo:row.serialNo
             }
-          })
+            deleteContacts(data).then(res=>{
+              if (res!=null && res.code===200){
+                this.$message({
+                  message: '删除成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                //查询联系人信息
+                const query = {
+                  supplierCode: this.querys.serialNo
+                }
+                listContacts(query).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.contactForm.contacts = res.rows
+                    this.contactForm.contacts.forEach(item => {
+                      item.isShow = false
+                    })
+                  }
+                })
+              }else {
+                this.$message.error('删除失败！')
+              }
+            })
+          }else {
+            this.contactForm.contacts.splice(index, 1)
+            this.$message({
+              message: '删除成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          }
+
+
 
         }).catch(() => {
           this.$message({

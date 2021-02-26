@@ -182,7 +182,7 @@
           if (res.rows.length>0){
             this.isListExport=true
             this.download('provider/feeitem/export', {
-            }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
+            }, `feeitem_${new Date().getTime()}.xlsx`).catch(res=>{
               this.$message({
                 message: res,
                 type: 'error',

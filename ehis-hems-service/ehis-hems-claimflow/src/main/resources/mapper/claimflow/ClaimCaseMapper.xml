@@ -498,6 +498,7 @@
                     record.update_time DESC
             ) act
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
+
     </select>
 
     <!-- lihy -->
@@ -560,7 +561,7 @@
         <where>
             <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
-            <if test="name != null  and name != ''"> and act.name like concat('%', #{name}, '%')</if>
+            <if test="name != null  and name != ''"> and insured.name like concat('%', #{name}, '%')</if>
         </where>
     </select>
 

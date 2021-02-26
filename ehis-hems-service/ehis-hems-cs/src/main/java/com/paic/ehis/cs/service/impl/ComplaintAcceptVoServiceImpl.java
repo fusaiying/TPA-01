@@ -86,7 +86,12 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         } else {
             complaintAcceptVo.setComplainantPerson(new PersonInfo());
         }
-        complaintAcceptVo.setInsurer(personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo()));
+        PersonInfo personInfo4 =  personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo());
+        if (personInfo4 != null) {
+            complaintAcceptVo.setInsurer(personInfo4);
+        } else {
+            complaintAcceptVo.setInsurer(new PersonInfo());
+        }
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();

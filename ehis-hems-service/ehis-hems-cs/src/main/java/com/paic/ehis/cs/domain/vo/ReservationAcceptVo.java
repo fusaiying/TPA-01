@@ -182,6 +182,37 @@ public class ReservationAcceptVo extends BaseEntity {
 
     /*医院赔付比例*/
     private String compensationRatio;
+
+    /**传真*/
+    private String fax;
+
+    /**预约日期*/
+    private String appointmentDate;
+
+    /**医院工作来电*/
+    private String hospitalWorkCall;
+
+    /**类似疾病症状最早发生时间*/
+    private String earliestTime;
+
+    /**是否首次就诊*/
+    private String firstFlag;
+
+    /**就诊日期*/
+    private String clinicDate;
+
+    /**就诊时间*/
+    private String clinicTime;
+
+    /**就诊医院省*/
+    private String province;
+
+    /**就诊医院市*/
+    private String city;
+
+    /**是否申请直结*/
+    private String settlementFlag;
+
     /** 业务内容 */
     @Excel(name = "业务内容")
     private String content;

@@ -109,17 +109,20 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
                 demandAcceptVo1.setCallPerson(new PersonInfo());
             }
             PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo1.getContactsPersonId());
+
             if (contactsPerson != null) {
+                //  demandAcceptVo1.setContactsPerson(contactsPerson);
                 String linePhone=contactsPerson.getLinePhone();
-                String[] linePhone1=linePhone.split("\\-");
+                String[] linePhone1=StringUtils.isEmpty(linePhone)?new String[4]:linePhone.split("\\-");
                 contactsPerson.setLinePhone1(linePhone1);
                 String homePhone=contactsPerson.getHomePhone();
-                String[] homePhone1=homePhone.split("\\-");
+                String[] homePhone1=StringUtils.isEmpty(homePhone)?new String[4]:homePhone.split("\\-");
                 contactsPerson.setHomePhone1(homePhone1);
                 String workPhone=contactsPerson.getWorkPhone();
-                String[] workPhone1=workPhone.split("\\-");
+                String[] workPhone1=StringUtils.isEmpty(workPhone)?new String[4]:workPhone.split("\\-");
                 contactsPerson.setWorkPhone1(workPhone1);
                 demandAcceptVo1.setContactsPerson(contactsPerson);
+
             } else {
                 demandAcceptVo1.setContactsPerson(new PersonInfo());
             }

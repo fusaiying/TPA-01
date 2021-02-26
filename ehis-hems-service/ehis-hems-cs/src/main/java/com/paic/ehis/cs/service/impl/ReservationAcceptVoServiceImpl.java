@@ -141,9 +141,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
     public int insertServiceInfo(ReservationAcceptVo reservationAcceptVo) {
-        reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
-        reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
-        reservationAcceptVo.setBusinessType("预约");
+        //reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+       // reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
+        //reservationAcceptVo.setBusinessType("02");
         AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
@@ -151,6 +151,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         //工单表插入
         workOrderAccept.setStatus("01");
+        //workOrderAccept.setBusinessType("02");
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -170,19 +171,19 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setContactsRelationBy(reservationAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
         acceptDetailInfo.setContent(reservationAcceptVo.getContent());
-        acceptDetailInfo.setStatus(reservationAcceptVo.getStatus());
+        acceptDetailInfo.setStatus("01");
         acceptDetailInfo.setCreateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setCallCenterId(reservationAcceptVo.getCallCenterId());
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","DemandAcceptVo");
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ReservationAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
-            map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
-            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+                map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
+            VoUtils voUtils=new VoUtils<ReservationAcceptVo>();
             acceptDetailInfo= (AcceptDetailInfo) voUtils.fromVoToVo(acceptDetailInfo,map,reservationAcceptVo);
         }
         //详细表插入

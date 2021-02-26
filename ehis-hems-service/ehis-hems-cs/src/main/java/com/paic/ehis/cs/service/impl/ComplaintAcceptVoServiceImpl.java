@@ -536,7 +536,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
             //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setStatus("03");
+            flowLog.setLinkCode("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -601,7 +601,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
             //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setStatus("03");
+            flowLog.setLinkCode("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());

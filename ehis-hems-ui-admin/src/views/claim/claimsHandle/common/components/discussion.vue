@@ -136,7 +136,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="12">
-              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">保存</el-button>
+              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">确认</el-button>
             </el-col>
           </el-row>
           <!--保存 end-->
@@ -173,10 +173,10 @@
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince }}</span>
+              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accAddress}}</span>
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -268,6 +268,7 @@
           addRecoveryInfo,
           investigationBaseInfo,
           discussionBaseInfo,
+          acceptInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -307,8 +308,8 @@
         this.batchNo = this.fixInfoData.batchNo;
         if(this.rptNo != '') {
           this.getCalInfo();
-          this.getInvestigationBaseInfo();
           this.getDiscussionInfo();
+          this.getInvestigationBaseInfo();
         }
       },
       value: function (newValue) {
@@ -413,6 +414,7 @@
           organCode:'', // 提调机构
           policyNo:'',
           invView:'',
+          accDescribe:'',
         },
         surveyForm:{
           invType:'',
@@ -520,6 +522,35 @@
         if(value != '05'){
           this.conclusionForm.refusedReason = '';
         }
+      },
+      getAcceptInfo(){
+        if(this.rptNo == '') {
+          return false;
+        }
+        acceptInfo(this.rptNo).then(res => {
+          if(res.code == '200' && res.data) {
+            let data = res.data;
+            if(null != data.claimCaseAccept) {
+              data = data.claimCaseAccept ;
+              if(data.accProvinceName != '') {
+                this.surveyInfo.accProvince = data.accProvinceName;
+              }
+              if(data.accCityName != '') {
+                this.surveyInfo.accCity  = data.accCityName;
+              }
+              if(data.accDistrictName != '') {
+                this.surveyInfo.accDistrict  = data.accDistrictName;
+              }
+              if(data.accDescribe != '') {
+                this.surveyInfo.accDescribe =  data.accDescribe;
+              }
+              if(data.accDate != '') {
+                this.surveyInfo.accDate =  data.accDate;
+              }
+
+            }
+          }
+        });
       },
       discussionSave(){
 
@@ -818,9 +849,6 @@
             if(res.data.isAppeal == '01') {
               this.appealCase = true;
             }
-            // console.log("res.data")
-            // console.log(res.data)
-            // console.log("res.data")
           }
         });
       },
@@ -847,6 +875,8 @@
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;
             }
+          }else {
+            this.getAcceptInfo();
           }
         });
       },

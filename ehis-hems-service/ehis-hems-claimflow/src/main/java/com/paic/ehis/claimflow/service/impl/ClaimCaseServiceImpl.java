@@ -397,6 +397,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseRecord2.setHistoryFlag("Y");
                     claimCaseRecord2.setRecordId(s);
                     claimCaseRecord2.setOperator(SecurityUtils.getUsername());
+                    claimCaseRecord2.setUpdateTime(DateUtils.getNowDate());
+                    claimCaseRecord2.setUpdateBy(SecurityUtils.getUsername());
                     claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord2);
 
                     claimCaseRecord1.setOrgRecordId(s);
@@ -700,9 +702,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
-        if (batchNo == null || "".equals(batchNo)) {
-            if (rptNo == null || "".equals(rptNo)) {
-                if (name == null || "".equals(name)) {
+        if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
@@ -768,9 +768,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                             }
                             ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
                         }
-                    }
                 }
-            }
+
         } else {
             //按条件查询
             auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());

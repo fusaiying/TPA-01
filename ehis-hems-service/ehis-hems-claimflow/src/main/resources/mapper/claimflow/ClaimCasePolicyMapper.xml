@@ -136,6 +136,7 @@
             <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>

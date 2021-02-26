@@ -60,11 +60,11 @@
 
 
       <!-- 本次问题件处理 start -->
-      <el-card v-if="handleView" class="box-card" style="margin-top: 10px;">
+      <el-card  class="box-card" style="margin-top: 10px;">
         <div slot="header" class="clearfix">
         <span>本次问题件处理</span>
         <span style="float: right;">
-          <el-button v-if="dealBtn" type="primary" size="mini" @click="dealFun(rptNo,clussionForm.conclusionView)">确认</el-button>
+          <el-button v-if="handleView" type="primary" size="mini" @click="dealFun(rptNo,clussionForm.conclusionView)">确认</el-button>
         </span>
       </div>
 
@@ -105,8 +105,6 @@
   export default {
     data() {
       return {
-
-        dealBtn :true,
         baseInfo: {
           rptNo:'',
           caseStatus: '',
@@ -223,7 +221,7 @@
               param.isHistory = 'Y';
               updateProblem(param).then(res => {
                 if(res.code == '200') {
-                  vm.dealBtn = false;
+                  vm.handleView = false;
                   vm.$message({
                     message: '处理成功！',
                     type: 'success',

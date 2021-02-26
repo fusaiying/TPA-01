@@ -173,4 +173,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCasePayeeVo"/>
         where rpt_no = #{rptNo} and status = 'Y' order by update_time desc
     </select>
+
+    <select id="CheckClaimCasePayeeByRptNo" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(sum( ifnull( payee_ratio, 0 ) ),0)
+        FROM
+            claim_case_payee
+        where rpt_no = #{rptNo} and status = 'Y'
+    </select>
 </mapper>

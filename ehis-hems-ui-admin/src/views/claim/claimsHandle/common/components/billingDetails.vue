@@ -169,6 +169,7 @@
                 class="item-width"
                 type="date"
                 clearable
+                @change="changeTime"
                 placeholder="选择日期"
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
@@ -179,6 +180,7 @@
                 :disabled="this.$route.query.status==='add'"
                 v-model="baseForm.treatmentEndDate"
                 class="item-width"
+                @change="changeTime"
                 type="date"
                 clearable
                 placeholder="选择日期"
@@ -194,12 +196,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="发票号：" prop="invoiceNo">
-              <el-input v-model="baseForm.invoiceNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="baseForm.invoiceNo" @change="changeNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="账单号：" prop="billNo">
-              <el-input v-model="baseForm.billNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="baseForm.billNo" @change="changeNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -347,7 +349,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.billDetailAmount'"
                             :rules="accountRules.billDetailAmount" style="display: inline-flex !important;">
-                <el-input v-model="scope.row.billDetailAmount" placeholder="请输入" size="mini"/>
+                <el-input v-model="scope.row.billDetailAmount" @change="changeAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.billDetailAmount}}</span>
             </template>
@@ -759,7 +761,6 @@
                 }
                 this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
               }
-
               callback();
             } else {
               callback(new Error("录入费用金额有误，请检查！"));
@@ -980,7 +981,7 @@
         },
         accountRules: {
           feeItemCode: [{required: true, message: '请选择费用项名称', trigger: ['blur', 'change']}],
-          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur', 'change']}],
+          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur']}],
           selfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
           partSelfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
           unableAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
@@ -1118,6 +1119,10 @@
             this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
 
             this.costForm.costData = res.data.billDetail
+            this.costForm.costData.forEach(item=>{
+              item.isShow=false
+            })
+
             if (this.baseForm.icdCodes === null || this.baseForm.icdCodes.length === 0) {
               this.baseForm.icdCodes = [{
                 icdCode: ''
@@ -1342,7 +1347,6 @@
       },
       saveBill() {
         this.baseForm.rptNo = this.fixInfo.rptNo
-        console.log(this.baseForm);
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             this.$refs.costForm.validate((valid) => {
@@ -1549,7 +1553,16 @@
           strNo = row.invoiceNo
         }
         return strNo
-      }
+      },
+      changeTime(){
+        this.$refs.baseForm.validateField(['treatmentStartDate', 'treatmentEndDate'])
+      } ,
+      changeNo(){
+        this.$refs.baseForm.validateField(['invoiceNo', 'billNo'])
+      },
+      changeAmount(){
+        this.$refs.costForm.validate()
+      },
     }
 
   }

@@ -25,7 +25,7 @@ public class ClaimInformationVo extends BaseEntity {
     private String rptNo;
 
     /** 案件状态 */
-    @Excel(name = "案件状态")
+    @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失效,04=交单完成,05=受理,06=录入,07=审核,08=抽检,30=问题件,31=协谈,32=调查,97=撤件可申诉,98=撤件,99=结案")
     private String caseStatus;
 
     /** 被保人姓名 */
@@ -46,7 +46,7 @@ public class ClaimInformationVo extends BaseEntity {
     private Date accDate;
 
     /** 赔付结论 */
-    @Excel(name = "赔付结论")
+    @Excel(name = "赔付结论",readConverterExp = "01=正常给付,02=部分给付,05=拒付,04=协议给付,03=通融给付,10=未达免赔")
     private String payConclusion;
 
     /** 给付金额 */

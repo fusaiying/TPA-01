@@ -7,8 +7,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
         <result property="rptno"    column="rpt_no"    />
         <result property="idno"    column="id_no"    />
+        <result property="idType"    column="id_type"    />
         <result property="name"    column="name"    />
         <result property="claimmaterials"    column="claim_materials"    />
+        <result property="standingId"    column="standing_id"    />
         <result property="remark"    column="remark"    />
         <result property="otherinfo"    column="other_info"    />
         <result property="status"    column="status"    />
@@ -39,8 +41,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseStandingVo">
-        select rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
+        select id_type,standing_id, rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
     </sql>
+    <update id="updateClaimCaseStandingRptNo" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimStandingRptNoDTO">
+        update claim_case_standing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''"> rpt_no = #{rptNo}</if>
+        </trim>
+        <where>
+            <if test="idNo != null  and idNo != '' and name != null  and name != '' and idType != null  and idType != '' "> and id_no = #{idNo} and name = #{name} and id_type = #{idType}</if>
+        </where>
+        AND batch_no = #{batchNo} and status='Y'
+    </update>
 
     <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
@@ -167,6 +179,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseStandingByIdOne" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
-        where rpt_no = #{rptno} and status='Y'
+        where batch_no = #{batch_no} and status='Y'
     </select>
 </mapper>

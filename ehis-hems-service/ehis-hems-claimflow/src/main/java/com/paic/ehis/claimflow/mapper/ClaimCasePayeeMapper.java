@@ -4,6 +4,7 @@ package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -75,4 +76,6 @@ public interface ClaimCasePayeeMapper
      * @return
      */
     public List<ClaimCasePayee> selectClaimCasePayeeByRptNo(String rptNo);
+
+    public BigDecimal CheckClaimCasePayeeByRptNo(String rptNo);
 }

@@ -89,6 +89,16 @@ public class ClaimCasePayeeController extends BaseController {
     }
 
     /**
+     * 校验案件领款人信息领款比例
+     */
+//    @PreAuthorize("@ss.hasPermi('system:payee:add')")
+    @Log(title = "案件领款人信息", businessType = BusinessType.INSERT)
+    @GetMapping("/proportion")
+    public AjaxResult proportion(ClaimCasePayee claimCasePayee) {
+        return AjaxResult.success(claimCasePayeeService.CheckThePaymentRatio(claimCasePayee.getRptNo()));
+    }
+
+    /**
      * 修改案件领款人信息
      */
 //    @PreAuthorize("@ss.hasPermi('system:payee:edit')")

@@ -30,7 +30,7 @@
           <el-table-column prop="accDate" label="就诊日期"  align="center" show-overflow-tooltip />
           <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论"  align="center" show-overflow-tooltip />
           <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
-          <el-table-column prop="operator" label="审核人"  align="center" show-overflow-tooltip />
+          <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
           <el-table-column prop="investigation" :formatter="getInvestigationName" label="有无调查"  align="center" show-overflow-tooltip />
         </el-table>
         <!--分页组件-->
@@ -53,7 +53,8 @@
         type: Boolean,
         default: false
       },
-      fixInfo:Object
+      fixInfo:Object,
+      insuredNo:String,
     },
     watch: {
       value: function (newValue) {
@@ -61,6 +62,9 @@
         if(this.dialogVisable) {
           this.initData();
         }
+      },
+      insuredNo:function (newValue) {
+        this.paramInsuredNo = newValue;
       },
       fixInfo: function (newValue) {
         this.fixInfoData = newValue;
@@ -71,6 +75,7 @@
       return {
         fixInfoData : '',
         rptNo :'',
+        paramInsuredNo:'',
         dialogVisable: false,
         tableData: [],
         totalNum: 0,
@@ -103,18 +108,17 @@
     },
     methods: {
       initData(){
-        if(this.rptNo == '') {
+        if(this.paramInsuredNo == '') {
           return false;
         }
-
         this.loading = true;
         const params = {};
         params.pageNum = this.pageInfo.currentPage;
         params.pageSize = this.pageInfo.pageSize;
-        params.rptNo = this.rptNo;
-
+        params.insuredNo = this.paramInsuredNo;
+        params.unEqRptNo = this.rptNo;
+        params.caseStatus = '99';
         claimInformation(params).then(res => {
-          console.log(res);
           if (res.code == '200') {
             this.totalNum = res.total;
             this.tableData = res.rows;
@@ -130,7 +134,9 @@
       },
       exportData(){
         const params = {};
-        params.rptNo = this.rptNo;
+        params.insuredNo = this.paramInsuredNo;
+        params.unEqRptNo = this.rptNo;
+        params.caseStatus = '99';
         this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框

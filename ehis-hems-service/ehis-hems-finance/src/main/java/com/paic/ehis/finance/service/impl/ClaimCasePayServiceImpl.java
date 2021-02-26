@@ -18,6 +18,7 @@ import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import com.paic.ehis.finance.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -56,6 +57,13 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     private FinancePayDetailInfoMapper financePayDetailInfoMapper;
     @Autowired
     private FinanceBorrowInfoMapper financeBorrowInfoMapper;
+
+    /*
+    * 财务appId
+    **/
+
+    @Value("${esg.financeid}")
+    private String financeid;
 
     /**
      * 查询当前登录用户所属机构下支付状态不全为已支付的批次信息
@@ -149,6 +157,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             } else {
                 payInfo.setBorrowAmount(new BigDecimal("0"));
             }
+            for (ClaimCasePolicy claimCasePolicy : policyList) {
+                ArrayList<String> policyNos = new ArrayList<>();
+                ArrayList<String> policyItemNos = new ArrayList<>();
+                policyNos.add(claimCasePolicy.getPolicyNo());
+                policyItemNos.add(claimCasePolicy.getPolicyItemNo());
+                payInfo.setPolicyNo(policyNos);
+                payInfo.setPolicyItemNo(policyItemNos);
+            }
         }
         claimCasePayVO.setCaseInfoList(payInfoList);
 
@@ -218,7 +234,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
-        baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
@@ -335,6 +351,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             financePayInfo.setDeptCode(sysUser.getDeptId().toString());
             // 01-非全赔 02-全赔
             String claimFlag = payment.getClaimFlag();
+
+            ArrayList<RecordDetail> recordDetails = new ArrayList<>();
             // 生成支付信息-附表
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 if ("01".equals(caseInfo.getPayStatus())) {
@@ -359,8 +377,38 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     claimCase.setPayStatus("02");
                     claimCaseMapper.updateClaimCase(claimCase);
                 }
+                //--------------对公支付明细推送接口--明细数据
+                RecordDetail recordDetail = new RecordDetail();
+                recordDetail.setBranchCode(caseInfo.getOrganCode());
+                recordDetail.setBusiSrcType(caseInfo.getSource());
+                recordDetail.setBusinessNo(caseInfo.getRptNo());
+                recordDetail.setCertno(caseInfo.getPolicyItemNo());
+                recordDetail.setCurno(caseInfo.getCurrency());
+                recordDetail.setDeptno("");
+                recordDetail.setDetailTradAmount("");
+                recordDetail.setPayMode("");
+                recordDetail.setPlanCode(null);
+                recordDetail.setPolno(caseInfo.getPolicyNo());
+                recordDetail.setRegionCode("");
+                recordDetail.setClientno(caseInfo.getInsuredNo());
+                recordDetail.setBranchCode(caseInfo.getName());
+                recordDetail.setLiabType("");
+                recordDetail.setIsPresent("");
+                recordDetails.add(recordDetail);
             }
             financePayInfoMapper.insertFinancePayInfo(financePayInfo);
+
+            //--------------对公支付明细推送接口--明细数据
+            PayableRecordReq payableRecordReq = new PayableRecordReq();
+            payableRecordReq.setSceneCode("");
+            payableRecordReq.setSystemCode("");
+            payableRecordReq.setBusiApplyNo(claimCasePayVO.getBatchNo());
+            payableRecordReq.setBusiOrderId("");
+            payableRecordReq.setBusiType("");
+            payableRecordReq.setRecordDetails(recordDetails);
+            //--------------调用财务应付接口
+
+
             return AjaxResult.success("确认支付成功！",1);
         }
     }
@@ -588,7 +636,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         }
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
-        baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());

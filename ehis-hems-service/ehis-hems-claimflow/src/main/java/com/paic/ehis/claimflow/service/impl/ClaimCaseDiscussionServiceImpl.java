@@ -91,7 +91,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         caseRecord.setRptNo(claimCaseDiscussion.getRptNo());
         caseRecord.setStatus(ClaimStatus.DATAYES.getCode());
         caseRecord.setHistoryFlag("N");
-        caseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());
+        caseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(caseRecord);
         if (StringUtils.isNotNull(claimCaseRecord)) {
             claimCaseRecord.setHistoryFlag("Y");
@@ -102,7 +102,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         }
 
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
-        caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());
+        caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());//31
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
         caseRecord.setUpdateBy(SecurityUtils.getUsername());
@@ -139,26 +139,30 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setHistoryFlag("Y");
         claimCaseRecord.setStatus("Y");
         claimCaseRecord.setOperation("07");
-        ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
+     //   ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
         ClaimCase claimCase=claimCaseMapper.selectClaimCaseById(claimCaseDiscussion.getRptNo());
-        claimCase.setUpdateBy(caseRecord.getOperator());
+        claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("07");
 
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoFive(claimCaseDiscussion.getRptNo());
-        record.setOperator(SecurityUtils.getUsername());
-        record.setHistoryFlag("Y");
-        record.setUpdateBy(SecurityUtils.getUsername());
-        record.setUpdateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.updateClaimCaseRecord(record);
+        if(null != record) {
+            claimCaseRecord.setOrgRecordId(record.getRecordId());
 
+            record.setOperator(SecurityUtils.getUsername());
+            record.setHistoryFlag("Y");
+            record.setUpdateBy(SecurityUtils.getUsername());
+            record.setUpdateTime(DateUtils.getNowDate());
+            claimCaseRecordMapper.updateClaimCaseRecord(record);
+        }
         claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOperation("07");
-        claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);
+        claimCaseDiscussion.setUpdateTime(DateUtils.getNowDate());//处理时间
+        claimCaseDiscussion.setUpdateBy(SecurityUtils.getUsername());//处理人
         return claimCaseDiscussionMapper.updateClaimCaseDiscussion(claimCaseDiscussion);
     }
 
@@ -297,23 +301,25 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
     @Override
     public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo){
         ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(rptNo);
-        List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
-        if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
-            List<String> companyNameList = new ArrayList<>();//出单公司
-            for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                //去重出单公司名称拼接
-                companyNameList.add(claimCasePoliciesOne.getCompanyName());
-            }
-            StringBuilder stringBuilder2 = new StringBuilder();
-            Set set1 = new HashSet<>(companyNameList);
-            List newCompanyNameList = new ArrayList<>(set1);
-            if (!newCompanyNameList.isEmpty()) {
-                stringBuilder2.append(newCompanyNameList.get(0));
-                for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
-                    stringBuilder2.append("|").append(newCompanyNameList.get(i));
+        if(null != claimCaseDiscussionVO) {
+            List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
+            if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
+                List<String> companyNameList = new ArrayList<>();//出单公司
+                for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
+                    //去重出单公司名称拼接
+                    companyNameList.add(claimCasePoliciesOne.getCompanyName());
                 }
+                StringBuilder stringBuilder2 = new StringBuilder();
+                Set set1 = new HashSet<>(companyNameList);
+                List newCompanyNameList = new ArrayList<>(set1);
+                if (!newCompanyNameList.isEmpty()) {
+                    stringBuilder2.append(newCompanyNameList.get(0));
+                    for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                        stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                    }
+                }
+                claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
             }
-            claimCaseDiscussionVO.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
         }
         return claimCaseDiscussionVO;
     }

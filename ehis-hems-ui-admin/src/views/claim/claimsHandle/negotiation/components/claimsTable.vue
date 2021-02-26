@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import { changeDate } from '@/utils/commenMethods.js'
-import {encrypt} from "@/utils/rsaEncrypt"
 export default {
   props: {
     tableData: {
@@ -80,7 +78,7 @@ export default {
     editHandle(row, type) {
       this.$router.push({
         path: '/claims-handle/nagotDetail',
-        query: {type:type,rptNo: row.rptNo}
+        query: {type:type,rptNo: row.rptNo,discId:row.discId}
 
       })
     },

@@ -19,6 +19,10 @@ import java.util.Date;
 public class ClaimCaseAccept extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    private String accProvinceName;
+    private String accCityName;
+    private String accDistrictName;
+
     private Long acceptId;
 
     /**
@@ -327,6 +331,30 @@ public class ClaimCaseAccept extends BaseEntity {
 
     public void setAcceptId(Long acceptId) {
         this.acceptId = acceptId;
+    }
+
+    public String getAccProvinceName() {
+        return accProvinceName;
+    }
+
+    public void setAccProvinceName(String accProvinceName) {
+        this.accProvinceName = accProvinceName;
+    }
+
+    public String getAccCityName() {
+        return accCityName;
+    }
+
+    public void setAccCityName(String accCityName) {
+        this.accCityName = accCityName;
+    }
+
+    public String getAccDistrictName() {
+        return accDistrictName;
+    }
+
+    public void setAccDistrictName(String accDistrictName) {
+        this.accDistrictName = accDistrictName;
     }
 
     @Override

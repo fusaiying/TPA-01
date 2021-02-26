@@ -195,6 +195,7 @@
         AND b.history_flag = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         AND STATUS = 'Y'
@@ -209,9 +210,9 @@
             <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status not in (${caseStatus})</if>
             <if test="status != null  and status != ''"> and cc.status = #{status}</if>
             <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
-            <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>
-            <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
-            <if test="updateStartTime != null and updateEndTime != null"> and ccr.updateTime between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
+--             <if test="operation  != null  and operation  != ''"> and ccr.operation  = #{operation}</if>
+--             <if test="isHistory != null  and isHistory != ''"> and ccr.history_flag = #{isHistory}</if>
+            <if test="updateStartTime != null and updateEndTime != null"> and ccr.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)</if>
             <if test="name != null  and name != ''"> and name like concat('%',#{name},'%')</if>
         </where>
     </select>
@@ -496,7 +497,8 @@
                 ORDER BY
                     record.update_time DESC
             ) act
-                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+                INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
+
     </select>
 
     <!-- lihy -->
@@ -550,17 +552,16 @@
         AND record.STATUS = 'Y'
         AND record.history_flag = 'Y'
         AND record.operator = #{operator}
-        AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
         and cases.case_status in ('08','99','97','98')
         and cases.status='Y'
         ORDER BY
         record.update_time DESC
         ) act
-        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and act.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and act.batch_no = #{batchNo}</if>
-            <if test="name != null  and name != ''"> and act.name like concat('%', #{name}, '%')</if>
+            <if test="name != null  and name != ''"> and insured.name like concat('%', #{name}, '%')</if>
         </where>
     </select>
 
@@ -632,14 +633,16 @@
         FROM
         claim_case cases
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
-        AND record.operation in ('31','32','00')
+        AND record.operation = '07'
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'N'
+        AND record.history_flag = 'y'
         AND record.operator = #{operator}
+        and cases.case_status in ('00','30','31','32')
+        and cases.status='Y'
         ORDER BY
         record.update_time DESC
         ) act
-        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no
+        INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         ) acto
         <where>
             <if test="rptNo != null  and rptNo != ''"> and acto.rpt_no = #{rptNo}</if>
@@ -690,17 +693,32 @@
         <result property="claimType" column="claim_type"  />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
-        select cc.batch_no,cc.rpt_no,cc.case_status,ccp.name,cci.id_no,ccp.policy_item_no,cc.update_by, cb.claim_type
-        from claim_case cc
-        left join  claim_batch cb on cc.batch_no=cb.batch_no  and cc.status='Y'
-        inner join  claim_case_insured cci on cc.rpt_no=cci.rpt_no  and cci.status='Y'
-        inner join  claim_case_policy ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
+        SELECT
+        cb.batch_no,
+        cc.rpt_no,
+        cc.case_status,
+        cc.update_by,
+        cb.claim_type,
+        ccp.NAME,
+        cci.id_no,
+        ccp.policy_item_no
+        FROM
+        claim_batch cb
+        LEFT JOIN claim_case cc ON cb.batch_no = cc.batch_no
+        AND cc.STATUS = 'Y'
+        LEFT JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
+        AND cci.STATUS = 'Y'
+        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
+        AND ccp.STATUS = 'Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
             <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and ccp.policy_item_no = #{policyItemNo}</if>
             <if test="name != null  and name != ''"> and ccp.name like concat('%', #{name}, '%')</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and cci.insured_no = #{insuredNo}</if>
+            <if test="unEqRptNo != null  and unEqRptNo != ''"> and cc.rpt_no != #{unEqRptNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
         </where>
     </select>
 
@@ -760,9 +778,9 @@
 
     <select id="selectCaseBorrowByRptNo" parameterType="String" resultType="Integer">
         select count(rpt_no) from finance_borrow_info
-        <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-        </where>
+        WHERE STATUS = 'Y'
+        <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+
     </select>
     <!-- <update id="updateCaseUpdateBy" parameterType="String">
          update claim_case

@@ -1,13 +1,11 @@
 package com.paic.ehis.claimcal.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.claimcal.domain.ClaimProductDutyDetail;
 import com.paic.ehis.claimcal.domain.PolicyRiskRelation;
 import com.paic.ehis.claimcal.mapper.ClaimProductDutyDetailMapper;
 import com.paic.ehis.claimcal.mapper.PolicyRiskRelationMapper;
 import com.paic.ehis.claimcal.service.IClaimCalService;
-import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.RemoteClaimCalService;
@@ -93,6 +91,9 @@ public class ClaimCalServiceImpl implements IClaimCalService {
         BigDecimal sumCalAmount = new BigDecimal(0);
         BigDecimal sumFeeAmount = new BigDecimal(0);
 
+        //自付额
+        BigDecimal sumSelfAmount = new BigDecimal(0);
+
         for (ClaimCaseBillInfo ccbI : claimCaseBillInfoList) {
             ClaimCaseBillDTO claimCaseBillDTO = ccbI.getClaimCaseBill();
             List<ClaimCaseBillDetailDTO> ccbDList = ccbI.getClaimCaseBillDetailList();
@@ -118,6 +119,8 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 sumBillCalAmount = sumBillCalAmount.add(cccID.getCalAmount());
                 sumFeeAmount = sumFeeAmount.add(ccbD.getBillDetailAmount());
 
+                sumSelfAmount = sumSelfAmount.add(ccbD.getSelfAmount());
+
                 cccIDList.add(cccID);
             }
 
@@ -139,7 +142,9 @@ public class ClaimCalServiceImpl implements IClaimCalService {
         cccD.setCalAmount(sumCalAmount);
         cccD.setPayAmount(sumCalAmount);
         cccD.setRefusedAmount(new BigDecimal(0));
-        cccD.setDebtAmount(sumFeeAmount.subtract(sumCalAmount));
+
+        //追讨金额 =  账单金额 - 折扣金额 -  赔付金额 -  自付额
+        cccD.setDebtAmount(sumFeeAmount.subtract(sumCalAmount).subtract(sumSelfAmount));
         cccD.setExchangeRate(new BigDecimal(1));
         cccD.setPayAmountForeign(sumCalAmount);
 

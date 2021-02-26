@@ -564,6 +564,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -605,6 +610,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -635,6 +645,11 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
+                this.afterTable.forEach(item=>{
+                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                    item.claimmaterials = item.claimmaterials.split(',')
+                  }
+                })
               }
             }).catch(res => {
             })
@@ -699,6 +714,9 @@
           this.searchForm.expressnumber = undefined
           this.searchForm.receivedate = undefined
           this.searchForm.sendby = undefined
+          this.searchForm.chname1 = undefined
+          this.searchForm.currency = undefined
+
         } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
           if (this.$route.query.status || this.querys.status !== 'editReview') {
             this.isSaveSub = false
@@ -706,6 +724,9 @@
           }
           this.isAfter = true
           this.isDirect = false
+          this.searchForm.chname1 = undefined
+          this.searchForm.currency = undefined
+
         }
       },
       save() {
@@ -721,6 +742,7 @@
               let table = this.afterTable.filter(item => {
                 return item.idno != null && item.idno !== ''
               })
+
               table.forEach((v, i) => {
                 for (const val in v) {
                   if (this.hasBlock) {
@@ -1195,13 +1217,12 @@
       },
       getClaimmaterials(value) {
         let material = ''
-        if (value !== null && value !== undefined && value !== '') {
-          let list = value.split(',')
-          for (let i = 0; i < list.length; i++) {
-            if (i === list.length - 1) {
-              material = material + this.selectDictLabel(this.claim_materialOptions, list[i])
+        if (value !== null && value.length>0) {
+          for (let i = 0; i < value.length; i++) {
+            if (i === value.length - 1) {
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
             } else {
-              material = material + this.selectDictLabel(this.claim_materialOptions, list[i]) + '，'
+              material = material + this.selectDictLabel(this.claim_materialOptions, value[i]) + '，'
             }
           }
         }

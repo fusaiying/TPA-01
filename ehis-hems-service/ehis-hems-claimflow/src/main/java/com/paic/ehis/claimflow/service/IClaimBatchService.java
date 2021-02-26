@@ -70,13 +70,13 @@ public interface IClaimBatchService
 //     */
 //    public List<BatchVo> selectProcessedPersonalList();
 //
-//    /**
-//     * 新增理赔批次
-//     *
-//     * @param claimBatch 理赔批次
-//     * @return 结果
-//     */
-//    public int insertClaimBatch(ClaimBatch claimBatch);
+    /**
+     * 新增理赔批次
+     *
+     * @param claimBatch 理赔批次
+     * @return 结果
+     */
+    public int insertClaimBatch(ClaimBatch claimBatch);
 //
 //    /**机构交单复核
 //     * 修改理赔批次

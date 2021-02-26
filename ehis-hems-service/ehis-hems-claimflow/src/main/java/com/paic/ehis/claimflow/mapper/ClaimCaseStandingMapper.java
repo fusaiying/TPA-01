@@ -4,6 +4,7 @@ package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseStanding;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseStandingDTO;
+import com.paic.ehis.claimflow.domain.dto.ClaimStandingRptNoDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseStandingVo1;
 
 import java.util.List;
@@ -23,6 +24,14 @@ public interface ClaimCaseStandingMapper
      * @return 报案台账信息 
      */
     public ClaimCaseStanding selectClaimCaseStandingById(String rptNo);
+
+    /**
+     * 修改报案台账信息
+     *
+     * @param claimCaseStanding 报案台账信息
+     * @return 报案台账信息
+     */
+    public int updateClaimCaseStandingRptNo(ClaimStandingRptNoDTO claimStandingRptNoDTO);
 
     /**
      * 查询报案台账信息 列表
@@ -71,8 +80,8 @@ public interface ClaimCaseStandingMapper
 
     /**
      *
-     * @param rptno
+     * @param batch_no
      * @return
      */
-    public ClaimCaseStanding selectClaimCaseStandingByIdOne(String rptno);
+    public List<ClaimCaseStanding> selectClaimCaseStandingByIdOne(String batch_no);
 }

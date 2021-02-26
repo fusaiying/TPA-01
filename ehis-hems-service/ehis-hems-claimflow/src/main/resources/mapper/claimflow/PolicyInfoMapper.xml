@@ -30,10 +30,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.CustomerInfoMap" id="CustomerInfoMapResult">
+        <result property="liveBranch"    column="policy_manage_com"    />
+        <result property="polno"    column="policy_no"    />
+        <result property="customerNo"    column="insured_no"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="profession"    column="occupation"    />
+    </resultMap>
+
 
     <sql id="selectPolicyInfoVo">
         select policy_no, policy_item_no, insured_no, name, valid_start_date, valid_end_date, policy_risk_type, policy_status, special_agreement, company_code, company_name, policy_manage_com, policy_type, plan_code, org_policy_no, org_policy_item_no, ss_flag, status, create_by, create_time, update_by, update_time from policy_info
     </sql>
+
+    <select id="selectCustomerInfoMap" parameterType="String" resultMap="CustomerInfoMapResult">
+SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM policy_info a,policy_insured b WHERE a.insured_no=b.insured_no and a.insured_no=#{insuredNo}
+    </select>
 
     <select id="selectPolicyInfoList" parameterType="com.paic.ehis.claimflow.domain.PolicyInfo" resultMap="PolicyInfoResult">
         <include refid="selectPolicyInfoVo"/>
@@ -223,6 +235,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectPolicyInfoByInsuredNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseShuntClass" resultMap="PolicyInfoResult">
+        <include refid="selectPolicyInfoVo"/>
+        where insured_no = #{insuredNo} AND name = #{name}
+    </select>
+
+    <select id="selectPolicyInfoListByinsuredNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseShuntClass" resultMap="PolicyInfoResult">
         <include refid="selectPolicyInfoVo"/>
         where insured_no = #{insuredNo} AND name = #{name}
     </select>

@@ -24,6 +24,14 @@ export function getBackList(query) {
     params: query
   })
 }
+//# 给台账匹配赋值rptNo
+export function setRptNo(data) {
+  return request({
+    url: '/claimflow/case/setRptNo',
+    method: 'post',
+    data: data
+  })
+}
 
 //# 查询已处理受理案件信息 列表
 export function getFinishList(query) {
@@ -479,5 +487,14 @@ export function claimConclusionNull(rptNo) {
   return request({
     url: '/claimflow/cal/claimConclusionNull/' + rptNo,
     method: 'PUT'
+  })
+}
+
+//  校验领款人信息领款比列
+export function checkThePayment(data) {
+  return request({
+    url: 'claimflow/payee/proportion',
+    method: 'get',
+    params:data
   })
 }

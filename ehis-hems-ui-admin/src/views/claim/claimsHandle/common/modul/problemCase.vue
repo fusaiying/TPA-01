@@ -37,8 +37,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="处理结论：" prop="conclusion">
-            <el-input v-model="item.conclusion" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="处理结论：" prop="problemType">
+            <el-input :value='getProblemType(item.problemType)' class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">

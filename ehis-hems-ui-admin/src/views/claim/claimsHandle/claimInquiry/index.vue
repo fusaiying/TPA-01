@@ -54,11 +54,13 @@
         <el-divider/>
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-            <span>理赔案件列表（{{totalNum}}）</span>
-            <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini" @click="exportData">清单导出
+<!--            <span>理赔案件列表（{{totalNum}}）@click="isSearch" </span>-->
+            <span :class="[showTable ? 'el-icon-arrow-down':'el-icon-arrow-right']" >&nbsp;理赔案件列表（{{totalNum}}）</span>
+            <el-button  v-show="showTable" style="float: right; margin-top: 10px;" type="primary" size="mini" @click="exportData">清单导出
             </el-button>
           </div>
           <el-table
+            v-show="showTable"
             :data="tableData"
             v-loading="loading"
             size="mini"
@@ -124,7 +126,7 @@
             loading: false,
             claimStatusSelect:[],
             conclusionSelect:[],
-
+            showTable:false,
           }
       },
       mounted(){
@@ -142,18 +144,26 @@
       },
 
       created: function() {
-        this.initData();
+       // this.initData();
       },
       methods: {
-        /*getCaseStatusName(row,col){
-          return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
-        },*/
+        // isSearch(){
+        //   if(this.showTable) {
+        //     this.showTable = false;
+        //   } else {
+        //     this.showTable = true;
+        //     this.initData();
+        //   }
+        // },
         initData(){
           this.getTableData();
         },
         //重置
         reset(form) {
-            this.$refs[form].resetFields()
+          this.$refs[form].resetFields();
+          this.showTable = false;
+          this.totalNum =0;
+          this.tableData = [];
         },
         //查询
         getTableData () {
@@ -179,6 +189,7 @@
         searchHandel(){
           this.pageInfo.currentPage = 1;
           this.pageInfo.pageSize = 10;
+          this.showTable = true;
           this.getTableData();
         },
         getClaimStatusName(row,col){

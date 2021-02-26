@@ -66,6 +66,8 @@ public class ClaimCaseDiscussionVO extends BaseEntity implements Serializable {
     /** 转出意见 */
     private String disView;
 
+    private String discId;
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -220,5 +222,13 @@ public class ClaimCaseDiscussionVO extends BaseEntity implements Serializable {
 
     public void setDisView(String disView) {
         this.disView = disView;
+    }
+
+    public String getDiscId() {
+        return discId;
+    }
+
+    public void setDiscId(String discId) {
+        this.discId = discId;
     }
 }

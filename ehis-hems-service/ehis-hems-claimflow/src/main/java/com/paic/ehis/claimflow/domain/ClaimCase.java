@@ -42,16 +42,15 @@ public class ClaimCase extends BaseEntity {
     /**
      *
      */
-    @Excel(name = "案件类型")
+    @Excel(name = "是否直结 ",readConverterExp = "01=是,02=否")
     private String claimType;
 
-    @Excel(name = "案件性质", readConverterExp = "01=TPA案件，02=核心案件")
     private String caseProp;
 
     /**
      * 案件状态
      */
-    @Excel(name = "案件状态")
+    @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失败,04=交单完成,05=受理,30=问题件,97=撤件可申诉,98=撤件,06=录入,07=审核,31=协谈,32=调查,08=抽检,99=结案")
     private String caseStatus;
 
     /**
@@ -73,57 +72,50 @@ public class ClaimCase extends BaseEntity {
     /**
      * 出单公司编码
      */
-    @Excel(name = "出单公司编码")
     private String companyCode;
 
     /**
      * 被保人姓名
      */
-    @Excel(name = "被保人姓名")
+
     private String name;
 
     /**
      * 被保人证件号
      */
-    @Excel(name = "被保人证件号")
+
     private String idNo;
 
     /**
      * 交单日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "交单日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date submitdate;
 
     /**
      * 保单号
      */
-    @Excel(name = "保单号")
     private String policyNo;
 
     /**
      * 结案日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "结案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endCaseTime;
 
     /**
      * 是否申诉案件
      */
-    @Excel(name = "是否申诉案件")
     private String isAppeal;
 
     /**
      * 支付状态
      */
-    @Excel(name = "支付状态")
     private String payStatus;
 
     /**
      * 是否财务回退
      */
-    @Excel(name = "是否财务回退")
     private String isFinanceBack;
 
     public String getClaimType() {

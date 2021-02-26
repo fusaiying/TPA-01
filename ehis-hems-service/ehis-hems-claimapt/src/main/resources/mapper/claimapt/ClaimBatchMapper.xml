@@ -45,7 +45,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="chname1"    column="chname1"    />
         <result property="enname1"    column="enname1"    />
-        <result property="conclusion"    column="conclusion"    />
         <result property="remark"    column="remark"    />
     </resultMap>
 
@@ -114,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
             <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
             <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status =#{batchstatus}</if>
-            and cb.update_by = #{updateBy}
+            <if test="updateBy != null  and updateBy != ''"> and cb.update_by = #{updateBy}</if>
             <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
@@ -132,12 +131,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cb.organ_code,
         cb.currency,
         cb.cont_type,
+        cb.update_by,
+        cb.update_time,
         cb.batch_status,
         record.create_by,
         record.create_time,
-        record.remark,
         bpi.chname1,
-        bpi.enname1
+        bpi.enname1,
+        (select r.remark from claim_batch_record r where operation = '04'
+        AND STATUS = 'Y' and cb.batch_no=r.batch_no
+        ORDER BY
+        create_time
+        desc
+        LIMIT 1) as remark
         FROM
         claim_batch cb
         LEFT JOIN (
@@ -145,8 +151,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         batch_no,
         create_by,
         create_time,
-        remark,
-        status
+        status,
+        update_by
         FROM
         claim_batch_record a
         WHERE
@@ -157,10 +163,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '04'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         )record on record.batch_no=cb.batch_no and record.status='Y'
@@ -176,8 +183,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
             <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
             <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status = #{batchstatus} </if>
-            <if test="updateBy != null  and updateBy != ''"> and record.create_by = #{updateBy}</if>
-            <if test="updatestartTime != null and updateendTime != null"> and record.create_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="updateBy != null  and updateBy != ''"> and record.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
         </where>
     </select>
@@ -217,15 +224,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         claim_batch_record b
         WHERE
         a.batch_no = b.batch_no
-        AND b.operation = '02'
+        AND b.operation = '01'
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         )record on record.batch_no=cb.batch_no and record.status='Y'
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = cb.hospital_code
         AND bpi.STATUS = 'Y'
+        LEFT JOIN claim_case ca on ca.batch_no=cb.batch_no AND ca.STATUS = 'Y'
         <where>
             <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
             <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
@@ -239,6 +248,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''"> and record.update_by = #{updateBy}</if>
             <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+            <if test="rptno != null  and rptno != ''"> and ca.rpt_no = #{rptno}</if>
         </where>
     </select>
 
@@ -281,6 +291,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND b.STATUS = 'Y'
         ORDER BY
         create_time
+        desc
         LIMIT 1
         )
         ) cbr ON cbr.batch_no = cb.batch_no
@@ -420,6 +431,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.batch_total "batchTotal",
             b.is_appeal "isAppeal",
             a.organ_code "organCode",
+            a.source,
+            a.currency,
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
         FROM
@@ -450,6 +463,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.batch_total "batchTotal",
             b.is_appeal "isAppeal",
             a.organ_code "organCode",
+            a.source,
+            a.currency,
             a.submit_date "submitDate",
             SUM( c.cal_amount ) "calAmount"
         FROM

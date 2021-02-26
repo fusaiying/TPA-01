@@ -75,6 +75,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="diseaseDessc"    column="clinical_diagnosis"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.claimflow.domain.Claim" id="ClaimResult">
+        <result property="paidAmt"    column="hos_discount_amount"    />
+    </resultMap>
+
     <sql id="selectClaimCaseBillVo">
         SELECT
             bill_id,
@@ -135,6 +139,17 @@ FROM
 	claim_case_bill
 	WHERE status='Y' and rpt_no=#{rptNo}
     </select>
+
+    <select id="selectPaidAmt" resultType="String" resultMap="ClaimResult">
+    SELECT
+        sum( claim_case_bill.bill_amount ) - sum( claim_case_bill.hos_discount_amount ) AS hos_discount_amount
+    FROM
+        claim_case_bill
+    where
+        rpt_no=#{rptNo}
+    AND
+        claim_case_bill.status="Y"
+</select>
 
     <select id="selectClaimCaseBillList" parameterType="ClaimCaseBill" resultMap="ClaimCaseBillResult">
         <include refid="selectClaimCaseBillVo"/>

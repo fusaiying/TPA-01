@@ -18,6 +18,8 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,19 +94,15 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                     policyVo1.setOrgPolicyNo(policyVo.getOrgPolicyNo());
                     policyVo1.setOrgPolicyItemNo(policyVo.getPolicyItemNo());
                     policyVo1.setSsFlag(policyVo.getSsFlag());
-                    //查询保单险种关联表
-                    List<PolicyRiskRelation> policyRiskRelations = policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
-                    if (policyRiskRelations.size() != 0) {
-                        for (PolicyRiskRelation policyRiskRelation : policyRiskRelations) {
-                            policyVo1.setRiskName(policyRiskRelation.getRiskName());
-                            policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
-                        }
+                    policyVo1.setPolicyManageCom(policyVo.getPolicyManageCom());
+                    List<PolicyRiskRelation> policyRiskRelations=policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
+                    for (PolicyRiskRelation policyRiskRelation:policyRiskRelations
+                    ) {policyVo1.setRiskName(policyRiskRelation.getRiskName());
+                        policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
                     }
                     List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
-                    if (dutyVos.size()!=0){
-                        policyVo1.setMinData(dutyVos);
-                    }
-                    l.add(policyVo1);
+                    policyVo.setMinData(dutyVos);
+                    l.add(policyVo);
                 }
                 claimCaseInsureAndPoliyVo.setPolicyInfominData(l);
             }
@@ -180,6 +178,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
      * @param insuredAndPolicy
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseInsuredAndPolicy(InsuredAndPolicy insuredAndPolicy) {
 //        private List<PolicyVo> policyNos;//保单号集合
@@ -194,7 +193,6 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
         int i;
         Long relationId = null;
         List<ClaimCaseInsured> claimCaseInsureds = claimCaseInsuredMapper.selectClaimCaseInsuredListByRptNo(claimCaseInsured.getRptNo());//案件被保人信息表
-
         if (claimCaseInsureds.size() != 0) {//为空
             for (ClaimCaseInsured claimCaseInsuredsOne : claimCaseInsureds) {//全部变为无效
                 ClaimCaseInsured claimCaseInsured1 = new ClaimCaseInsured();
@@ -206,6 +204,17 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
         } else {
             i = claimCaseInsuredMapper.insertClaimCaseInsured(claimCaseInsured);
         }
+        List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseInsured.getRptNo());//案件保单关联表
+        if (claimCasePolicies != null && claimCasePolicies.size() > 0){
+            for (ClaimCasePolicy claimCasePoliciesTwo : claimCasePolicies) {//全部置为无效
+                ClaimCasePolicy claimCasePolicy1 = new ClaimCasePolicy();
+                relationId = claimCasePoliciesTwo.getRelationId();
+                claimCasePolicy1.setStatus("N");
+                claimCasePolicy1.setRelationId(relationId);
+                claimCasePolicyMapper.updateClaimCasePolicy(claimCasePolicy1);
+            }
+        }
+
         for (PolicyVo policyNo : policyNos) {
             ClaimCasePolicy claimCasePolicy = new ClaimCasePolicy();
             claimCasePolicy.setPolicyNo(policyNo.getPolicyNo());//保单号
@@ -222,7 +231,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             claimCasePolicy.setName(policyNo.getName());
             claimCasePolicy.setOrgPolicyItemNo(policyNo.getOrgPolicyItemNo());
             claimCasePolicy.setOrgPolicyNo(policyNo.getOrgPolicyNo());
-            claimCasePolicy.setPolicyManageCom(policyNo.getPolicyItemNo());
+            claimCasePolicy.setPolicyManageCom(policyNo.getPolicyManageCom());
             claimCasePolicy.setValidStartDate(policyNo.getValidStartDate());
             claimCasePolicy.setValidEndDate(policyNo.getValidEndDate());
             claimCasePolicy.setSsFlag(policyNo.getSsFlag());
@@ -233,19 +242,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             claimCasePolicy.setPolicyRiskType(policyNo.getPolicyRiskType());
             claimCasePolicy.setPlanCode(policyNo.getPlanCode());
             //claimCasePolicy.setSearchValue(policyNo.getSearchValue);
-            List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCasePolicy.getRptNo());//案件保单关联表
-            if (claimCasePolicies == null || claimCasePolicies.size() == 0) {//为空
-                i = claimCasePolicyMapper.insertClaimCasePolicy(claimCasePolicy);
-            } else {//非空
-                for (ClaimCasePolicy claimCasePoliciesTwo : claimCasePolicies) {//全部置为无效
-                    ClaimCasePolicy claimCasePolicy1 = new ClaimCasePolicy();
-                    relationId = claimCasePoliciesTwo.getRelationId();
-                    claimCasePolicy1.setStatus("N");
-                    claimCasePolicy1.setRelationId(relationId);
-                    claimCasePolicyMapper.updateClaimCasePolicy(claimCasePolicy1);
-                }
-                i = claimCasePolicyMapper.insertClaimCasePolicy(claimCasePolicy);
-            }
+            i = claimCasePolicyMapper.insertClaimCasePolicy(claimCasePolicy);
         }
         return i;
     }

@@ -1,8 +1,10 @@
 package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
+import com.paic.ehis.claimflow.domain.CustomerInfoMap;
 import com.paic.ehis.claimflow.domain.PolicyInfo;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
+import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.DutyVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 
@@ -31,6 +33,8 @@ public interface PolicyInfoMapper
      * @return 保单信息集合
      */
     public List<PolicyInfo> selectPolicyInfoList(PolicyInfo policyInfo);
+
+    public CustomerInfoMap selectCustomerInfoMap(String insuredNo);
 
     /**
      * 新增保单信息
@@ -80,4 +84,6 @@ public interface PolicyInfoMapper
     PolicyInfo selectPolicyInfoByIdThree(String insuredNo);
 
     List<PolicyInfo> selectPolicyInfoByInsuredNo(ClaimCaseShuntClass claimCaseShuntClass);
+
+    List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName claimCaseShuntClass);
 }

@@ -26,7 +26,7 @@ public class BatchVo implements Serializable {
     private String batchno;
 
     /** 交单来源 */
-    @Excel(name = "交单来源")
+    @Excel(name = "交单来源",readConverterExp="01=线上-PBW,02=线上-E结算,03=线下-机构交单,04=寿险app")
     private String source;
 
     /** 就诊医院 */
@@ -37,7 +37,7 @@ public class BatchVo implements Serializable {
     private String hospitalcode;
 
     /** 批次理赔类型 */
-    @Excel(name = "理赔类型",readConverterExp="01=直结 02=事后")
+    @Excel(name = "理赔类型",readConverterExp="01=直结,02=事后")
     private String claimtype;
 
     /** 交单日期 */
@@ -55,11 +55,11 @@ public class BatchVo implements Serializable {
     private Integer casenum;
 
     /** 批次总金额 */
-//    @Excel(name = "批次总金额")
+    @Excel(name = "批次总金额")
     private BigDecimal batchtotal;
 
     /** 账单币种 */
-    @Excel(name = "批次总金额")
+   // @Excel(name = "账单币种")
     private String currency;
 
     /** 操作人 */
@@ -67,11 +67,11 @@ public class BatchVo implements Serializable {
     private String updateBy;
 
     /** 交单机构编码 */
-    @Excel(name = "交单机构")
+    @Excel(name = "交单机构" ,readConverterExp="103=研发部门")
     private String organcode;
 
     /** 批次状态 01-处理中 02-交单复核 03-交单完成 04-交单退回 05-交单无效 */
-    @Excel(name = "批次状态 " ,readConverterExp="01=处理中 02=交单复核 03=交单完成 04=交单退回 05=交单无效")
+    @Excel(name = "批次状态 " ,readConverterExp="01=处理中,02=交单复核,03=交单完成,04=交单退回,05=交单无效")
     private String batchstatus;
 
     /** 结论 */

@@ -52,7 +52,7 @@
             <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ item.discId }}-下发</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ (item.createTime) }}</span>
+            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
@@ -70,7 +70,7 @@
             <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ item.discId }}-回调</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ (item.updateTime) }}</span>
+            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.updateTime | changeDate }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
@@ -131,10 +131,17 @@
 </template>
 <script>
 
+  import moment from 'moment'
   import { baseInfo ,historyDisInfo, updateDiss} from '@/api/negotiation/api'
 
-
   export default {
+    filters: {
+      changeDate: function(value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      }
+    },
     data() {
       return {
         baseInfo: {

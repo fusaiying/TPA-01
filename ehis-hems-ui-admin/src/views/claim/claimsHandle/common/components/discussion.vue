@@ -529,17 +529,23 @@
         acceptInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             let data = res.data;
-            if(data.accProvinceName != '') {
-              this.surveyInfo.accProvince = data.accProvinceName;
-            }
-            if(data.accCityName != '') {
-              this.surveyInfo.accProvince += data.accCityName;
-            }
-            if(data.accDistrictName != '') {
-              this.surveyInfo.accProvince += data.accDistrictName;
-            }
-            if(data.accDescribe != '') {
-              this.surveyInfo.accDescribe =  data.accDescribe;
+            console.log("****************")
+            console.log(data)
+            console.log("****************")
+
+            if(null != data.claimCaseAccept) {
+              if(data.accProvinceName != '') {
+                this.surveyInfo.accProvince = data.accProvinceName;
+              }
+              if(data.accCityName != '') {
+                this.surveyInfo.accProvince += data.accCityName;
+              }
+              if(data.accDistrictName != '') {
+                this.surveyInfo.accProvince += data.accDistrictName;
+              }
+              if(data.accDescribe != '') {
+                this.surveyInfo.accDescribe =  data.accDescribe;
+              }
             }
           }
         });

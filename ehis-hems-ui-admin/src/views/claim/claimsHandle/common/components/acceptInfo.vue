@@ -500,6 +500,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$emit("refresh-item", 'discussions')
                   this.isAcceptInfoSave = true
                 }).catch(res => {
                   this.$message({
@@ -526,6 +527,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$emit("refresh-item", 'discussions')
                   this.isAcceptInfoSave = true
                 }).catch(res => {
                   this.$message({

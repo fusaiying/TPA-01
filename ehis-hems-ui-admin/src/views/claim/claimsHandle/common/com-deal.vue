@@ -78,7 +78,7 @@
       <!-- 受理信息 -->
       <div id="#anchor-13" class="batchInfo_class" style="margin-top: 10px;">
         <acceptInfo :sonAcceptInfoData="sonAcceptInfoData" ref="acceptInfoForm" :claimtype="querys.claimType"
-                    :baseInfo="batchInfo" :isSave="isSave"
+                    :baseInfo="batchInfo" :isSave="isSave"  @refresh-item="refreshList"
                     :node="querys.node" :status="querys.status" :fixInfo="fixInfo"/>
       </div>
       <!-- 账单明细 -->
@@ -502,6 +502,8 @@
           this.$refs.caseCalculate.getDataCase()
         } else if (item === 'discussion') {
           this.$refs.discussion.getCalInfo()
+        }else if (item === 'discussions') {
+          this.$refs.discussion.getAcceptInfo()
         }
       },
       changeSaveFlag() {

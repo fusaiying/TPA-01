@@ -99,9 +99,9 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
             claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
             claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
             claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
+            caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         }
 
-        caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());//31
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
@@ -111,7 +111,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
 
         ClaimCase claimCase = new ClaimCase();
         claimCase.setRptNo(claimCaseDiscussion.getRptNo());
-        claimCase.setCaseStatus(ClaimStatus.CASETALKING.getCode());
+        claimCase.setCaseStatus(ClaimStatus.CASETALKING.getCode());//31
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCaseMapper.updateClaimCase(claimCase);

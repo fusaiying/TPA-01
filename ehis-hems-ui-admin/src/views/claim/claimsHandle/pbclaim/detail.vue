@@ -57,6 +57,9 @@
 
         <el-row style="margin: -10px 10px;" v-if="HistoryData.length != (index+1)">
           <el-col :span="8">
+            <span class="info_span to_right">处理结论：</span><span class="info_span">{{ getProblemTypeName(item.conclusion) }}</span>
+          </el-col>
+          <el-col :span="8">
             <span class="info_span to_right">处理意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
           </el-col>
           <el-col :span="8">
@@ -113,6 +116,7 @@
 <script>
 
   import { baseInfo,historicalProblem,PendingData,updateProblem } from '@/api/pbclaim/api'
+  let dictss = [{dictType: 'rgtSex'},{dictType: 'problem_shipment_type'},{dictType: 'delivery_source'},{dictType: 'claim_status'}]
 
   export default {
     data() {
@@ -143,31 +147,51 @@
         deliverySource:[],
         claimStatusSelect:[],
         gender:[],
-
+        dictList:[],
         rules: {
           conclusionView: {trigger: ['blur'], required: true, message: '处理意见必填'}
         },
       }
     },
 
-     mounted() {
-
+    async  mounted() {
+       await this.getDictsList(dictss).then(response => {
+         this.dictList = response.data
+       })
       //性别
-       this.getDicts("rgtSex").then(response => {
-         this.gender = response.data;
-       });
-       //问题件类型
-       this.getDicts("problem_shipment_type").then(response => {
-         this.problemTypes = response.data;
-       });
-       //交单来源
-       this.getDicts("delivery_source").then(response => {
-         this.deliverySource = response.data;
-       });
-       //案件状态 claim_status
-       this.getDicts("claim_status").then(response => {
-         this.claimStatusSelect = response.data;
-       });
+       this.gender = this.dictList.find(item => {
+         return item.dictType === 'rgtSex'
+       }).dictDate
+      //问题件类型
+      this.problemTypes = this.dictList.find(item => {
+        return item.dictType === 'problem_shipment_type'
+      }).dictDate
+      //交单来源
+      this.deliverySource = this.dictList.find(item => {
+        return item.dictType === 'delivery_source'
+      }).dictDate
+      //案件状态 claim_status
+      this.claimStatusSelect = this.dictList.find(item => {
+        return item.dictType === 'claim_status'
+      }).dictDate
+
+       // //性别
+       // this.getDicts("rgtSex").then(response => {
+       //   this.gender = response.data;
+       // });
+       // //问题件类型
+       // this.getDicts("problem_shipment_type").then(response => {
+       //   this.problemTypes = response.data;
+       // });
+       // //交单来源
+       // this.getDicts("delivery_source").then(response => {
+       //   this.deliverySource = response.data;
+       // });
+       // //案件状态 claim_status
+       // this.getDicts("claim_status").then(response => {
+       //   this.claimStatusSelect = response.data;
+       // });
+
 
        this.rptNo = this.$route.query.rptNo ;
        this.problemId = this.$route.query.problemId ;

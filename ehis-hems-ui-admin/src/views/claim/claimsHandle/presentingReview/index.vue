@@ -107,7 +107,7 @@
       <div slot="header" class="clearfix">
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">

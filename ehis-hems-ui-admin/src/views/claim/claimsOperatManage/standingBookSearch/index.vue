@@ -91,7 +91,7 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>台账信息列表（{{totalCount}}）</span>
           <span style="float: right;">
-            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-form ref="standingForm" :rules="standingRules" :model="standingForm" size="small">

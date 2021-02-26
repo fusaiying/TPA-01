@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.QualityInspectionHandleMapper">
+    
+    <resultMap type="com.paic.ehis.cs.domain.QualityInspectionHandle" id="QualityInspectionHandleResult">
+        <result property="inspectionId"    column="inspection_id"    />
+        <result property="workOrderId"    column="work_order_id"    />
+        <result property="score"    column="score"    />
+        <result property="appealFlag"    column="appeal_flag"    />
+        <result property="appealReason"    column="appeal_reason"    />
+        <result property="status"    column="status"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectQualityInspectionHandleVo">
+        select inspection_id, work_order_id, score, appeal_flag, appeal_reason, status, created_by, created_time, updated_by, updated_time from quality_inspection_handle
+    </sql>
+
+    <select id="selectQualityInspectionHandleList" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle" resultMap="QualityInspectionHandleResult">
+        <include refid="selectQualityInspectionHandleVo"/>
+        <where>  
+            <if test="workOrderId != null  and workOrderId != ''"> and work_order_id = #{workOrderId}</if>
+            <if test="score != null  and score != ''"> and score = #{score}</if>
+            <if test="appealFlag != null  and appealFlag != ''"> and appeal_flag = #{appealFlag}</if>
+            <if test="appealReason != null  and appealReason != ''"> and appeal_reason = #{appealReason}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectQualityInspectionHandleById" parameterType="String" resultMap="QualityInspectionHandleResult">
+        <include refid="selectQualityInspectionHandleVo"/>
+        where inspection_id = #{inspectionId}
+    </select>
+        
+    <insert id="insertQualityInspectionHandle" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle">
+        insert into quality_inspection_handle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectionId != null">inspection_id,</if>
+            <if test="workOrderId != null and workOrderId != ''">work_order_id,</if>
+            <if test="score != null">score,</if>
+            <if test="appealFlag != null">appeal_flag,</if>
+            <if test="appealReason != null">appeal_reason,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectionId != null">#{inspectionId},</if>
+            <if test="workOrderId != null and workOrderId != ''">#{workOrderId},</if>
+            <if test="score != null">#{score},</if>
+            <if test="appealFlag != null">#{appealFlag},</if>
+            <if test="appealReason != null">#{appealReason},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQualityInspectionHandle" parameterType="com.paic.ehis.cs.domain.QualityInspectionHandle">
+        update quality_inspection_handle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderId != null and workOrderId != ''">work_order_id = #{workOrderId},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="appealFlag != null">appeal_flag = #{appealFlag},</if>
+            <if test="appealReason != null">appeal_reason = #{appealReason},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where inspection_id = #{inspectionId}
+    </update>
+
+    <delete id="deleteQualityInspectionHandleById" parameterType="String">
+        delete from quality_inspection_handle where inspection_id = #{inspectionId}
+    </delete>
+
+    <delete id="deleteQualityInspectionHandleByIds" parameterType="String">
+        delete from quality_inspection_handle where inspection_id in 
+        <foreach item="inspectionId" collection="array" open="(" separator="," close=")">
+            #{inspectionId}
+        </foreach>
+    </delete>
+    
+</mapper>

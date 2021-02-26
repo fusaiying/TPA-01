@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.QualityInspectionItemMapper">
+    
+    <resultMap type="com.paic.ehis.cs.domain.QualityInspectionItem" id="QualityInspectionItemResult">
+        <result property="itemId"    column="item_id"    />
+        <result property="inspectionId"    column="inspection_id"    />
+        <result property="itemType"    column="item_type"    />
+        <result property="itemKey"    column="item_key"    />
+        <result property="value"    column="value"    />
+        <result property="itemRemark"    column="item_remark"    />
+        <result property="status"    column="status"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectQualityInspectionItemVo">
+        select item_id, inspection_id, item_type, item_key, value, item_remark, status, created_by, created_time, updated_by, updated_time from quality_inspection_item
+    </sql>
+
+    <select id="selectQualityInspectionItemList" parameterType="QualityInspectionItem" resultMap="QualityInspectionItemResult">
+        <include refid="selectQualityInspectionItemVo"/>
+        <where>  
+            <if test="inspectionId != null  and inspectionId != ''"> and inspection_id = #{inspectionId}</if>
+            <if test="itemType != null  and itemType != ''"> and item_type = #{itemType}</if>
+            <if test="itemKey != null  and itemKey != ''"> and item_key = #{itemKey}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="itemRemark != null  and itemRemark != ''"> and item_remark = #{itemRemark}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectQualityInspectionItemById" parameterType="String" resultMap="QualityInspectionItemResult">
+        <include refid="selectQualityInspectionItemVo"/>
+        where item_id = #{itemId}
+    </select>
+        
+    <insert id="insertQualityInspectionItem" parameterType="QualityInspectionItem">
+        insert into quality_inspection_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">item_id,</if>
+            <if test="inspectionId != null and inspectionId != ''">inspection_id,</if>
+            <if test="itemType != null">item_type,</if>
+            <if test="itemKey != null">item_key,</if>
+            <if test="value != null">value,</if>
+            <if test="itemRemark != null">item_remark,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemId != null">#{itemId},</if>
+            <if test="inspectionId != null and inspectionId != ''">#{inspectionId},</if>
+            <if test="itemType != null">#{itemType},</if>
+            <if test="itemKey != null">#{itemKey},</if>
+            <if test="value != null">#{value},</if>
+            <if test="itemRemark != null">#{itemRemark},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQualityInspectionItem" parameterType="QualityInspectionItem">
+        update quality_inspection_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionId != null and inspectionId != ''">inspection_id = #{inspectionId},</if>
+            <if test="itemType != null">item_type = #{itemType},</if>
+            <if test="itemKey != null">item_key = #{itemKey},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="itemRemark != null">item_remark = #{itemRemark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="deleteQualityInspectionItemById" parameterType="String">
+        delete from quality_inspection_item where item_id = #{itemId}
+    </delete>
+
+    <delete id="deleteQualityInspectionItemByIds" parameterType="String">
+        delete from quality_inspection_item where item_id in 
+        <foreach item="itemId" collection="array" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+    </delete>
+    <insert id="insertExtDocList" parameterType="java.util.List">
+    INSERT INTO quality_inspection_item
+    (item_id,inspection_id,item_type,item_key,value,item_remark,status,created_by,created_time,updated_by,updated_time)
+    VALUES
+    <foreach collection="list" item="qualityInspectionHandle" index="index" separator=","> <!--  list 为传来的集合数据 -->
+        (null,#{qualityInspectionHandle.inspectionId},#{qualityInspectionHandle.itemType},#{qualityInspectionHandle.itemKey},#{qualityInspectionHandle.value},#{qualityInspectionHandle.status},#{qualityInspectionHandle.createdBy},now(),#{qualityInspectionHandle.updatedBy},#{qualityInspectionHandle.updatedTime})
+    </foreach>
+</insert>
+    <select id="selectItemInspectionById" parameterType="String" resultMap="QualityInspectionItemResult">
+        <include refid="selectQualityInspectionItemVo"/>
+        where inspection_id = #{inspectionId}
+    </select>
+</mapper>

@@ -527,7 +527,6 @@
           return false;
         }
         acceptInfo(this.rptNo).then(res => {
-          alert(res);
           console.log(res)
           if(res.code == '200' && res.data) {
             console.log(res.code);

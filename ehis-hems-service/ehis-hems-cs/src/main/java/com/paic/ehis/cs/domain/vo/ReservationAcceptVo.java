@@ -215,6 +215,8 @@ public class ReservationAcceptVo extends BaseEntity {
 
     private String complaintPersonId;
 
+    private PersonInfo complaintPerson;
+
     /** 业务内容 */
     @Excel(name = "业务内容")
     private String content;

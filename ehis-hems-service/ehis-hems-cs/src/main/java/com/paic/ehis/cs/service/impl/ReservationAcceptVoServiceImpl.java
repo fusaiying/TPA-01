@@ -63,6 +63,12 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             } else {
                 reservationAcceptVo.setContactsPerson(new PersonInfo());
             }
+            PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
+            if (complaintPerson!= null) {
+                reservationAcceptVo.setComplaintPerson(contactsPerson);
+            } else {
+                reservationAcceptVo.setComplaintPerson(new PersonInfo());
+            }
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());
@@ -100,7 +106,12 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             } else {
                 reservationAcceptVo.setContactsPerson(new PersonInfo());
             }
-
+            PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
+            if (complaintPerson!= null) {
+                reservationAcceptVo.setComplaintPerson(contactsPerson);
+            } else {
+                reservationAcceptVo.setComplaintPerson(new PersonInfo());
+            }
             reservationAcceptVo.setOperatorLast(userInfoMapper.selectUserInfoById(reservationAcceptVo.getCreateBy()));
             reservationAcceptVo.setReviser(userInfoMapper.selectUserInfoById(reservationAcceptVo.getUpdateBy()));
             AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo.getWorkOrderNo());

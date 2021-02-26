@@ -158,7 +158,12 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 payInfo.setBorrowAmount(new BigDecimal("0"));
             }
             for (ClaimCasePolicy claimCasePolicy : policyList) {
-
+                ArrayList<String> policyNos = new ArrayList<>();
+                ArrayList<String> policyItemNos = new ArrayList<>();
+                policyNos.add(claimCasePolicy.getPolicyNo());
+                policyItemNos.add(claimCasePolicy.getPolicyItemNo());
+                payInfo.setPolicyNo(policyNos);
+                payInfo.setPolicyItemNo(policyItemNos);
             }
         }
         claimCasePayVO.setCaseInfoList(payInfoList);
@@ -346,6 +351,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             financePayInfo.setDeptCode(sysUser.getDeptId().toString());
             // 01-非全赔 02-全赔
             String claimFlag = payment.getClaimFlag();
+
+            ArrayList<RecordDetail> recordDetails = new ArrayList<>();
             // 生成支付信息-附表
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 if ("01".equals(caseInfo.getPayStatus())) {
@@ -370,8 +377,38 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     claimCase.setPayStatus("02");
                     claimCaseMapper.updateClaimCase(claimCase);
                 }
+                //--------------对公支付明细推送接口--明细数据
+                RecordDetail recordDetail = new RecordDetail();
+                recordDetail.setBranchCode(caseInfo.getOrganCode());
+                recordDetail.setBusiSrcType(caseInfo.getSource());
+                recordDetail.setBusinessNo(caseInfo.getRptNo());
+                recordDetail.setCertno(caseInfo.getPolicyItemNo());
+                recordDetail.setCurno(caseInfo.getCurrency());
+                recordDetail.setDeptno("");
+                recordDetail.setDetailTradAmount("");
+                recordDetail.setPayMode("");
+                recordDetail.setPlanCode(null);
+                recordDetail.setPolno(caseInfo.getPolicyNo());
+                recordDetail.setRegionCode("");
+                recordDetail.setClientno(caseInfo.getInsuredNo());
+                recordDetail.setBranchCode(caseInfo.getName());
+                recordDetail.setLiabType("");
+                recordDetail.setIsPresent("");
+                recordDetails.add(recordDetail);
             }
             financePayInfoMapper.insertFinancePayInfo(financePayInfo);
+
+            //--------------对公支付明细推送接口--明细数据
+            PayableRecordReq payableRecordReq = new PayableRecordReq();
+            payableRecordReq.setSceneCode("");
+            payableRecordReq.setSystemCode("");
+            payableRecordReq.setBusiApplyNo(claimCasePayVO.getBatchNo());
+            payableRecordReq.setBusiOrderId("");
+            payableRecordReq.setBusiType("");
+            payableRecordReq.setRecordDetails(recordDetails);
+            //--------------调用财务应付接口
+
+
             return AjaxResult.success("确认支付成功！",1);
         }
     }

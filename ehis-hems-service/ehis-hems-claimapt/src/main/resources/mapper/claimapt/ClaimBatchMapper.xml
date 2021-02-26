@@ -248,7 +248,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''"> and record.update_by = #{updateBy}</if>
             <if test="updatestartTime != null and updateendTime != null"> and record.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
             <if test="status != null  and status != ''"> and cb.status = #{status}</if>
-            <if test="rptno != null  and rptno != ''"> and ca.rpt_no = #{batchno}</if>
+            <if test="rptno != null  and rptno != ''"> and ca.rpt_no = #{rptno}</if>
         </where>
     </select>
 

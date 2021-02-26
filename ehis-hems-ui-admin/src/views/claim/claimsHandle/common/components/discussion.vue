@@ -128,7 +128,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="转出意见：" prop="disView">
-                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
+                <el-input  style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -208,7 +208,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="提调机构：" prop="organCode">
+              <el-form-item label="提调机构：" prop="organCode" key="organCode1da">
                 <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
@@ -216,7 +216,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="保单号：" prop="policyNo">
+              <el-form-item label="保单号：" prop="policyNo"  key="policyNo1df">
                 <el-select v-model="surveyForm.policyNo" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="dict in policyNos"
                              :key="dict.policyNo"
@@ -231,7 +231,7 @@
           <el-row>
             <el-col :span="23">
               <el-form-item label="提调事项：" :style="{width:'100%'}" prop="invView">
-                <el-input v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
+                <el-input maxlength="1000" v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -239,7 +239,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="20">
-              <el-button type="primary" size="mini" @click="inQuireSaveFun" >保存</el-button>
+              <el-button type="primary" size="mini" @click="inQuireSaveFun" >确定</el-button>
               <el-button type="primary" size="mini"  @click="inQuireConfirmFun">确认提调</el-button>
               <el-button type="primary" size="mini"  @click="formReset('surveyForm')">重置</el-button>
             </el-col>
@@ -289,11 +289,15 @@
           return []
         }
       },
+      insuredData:Object,
       fixInfo:Object,
       node:String,
 
     },
     watch: {
+      insuredData: function (newValue) {
+        this.surveyInfo = newValue;
+      },
       policySelectData: function (newValue) {
         this.policyNos = newValue;
       },
@@ -500,6 +504,9 @@
     computed: {
     },
     methods: {
+      goHistory(){
+        this.$router.go(-1);
+      },
       validSubType(value){
         this.negotiationSubTypes = [];
         this.discussionForm.discSubType = '';
@@ -537,6 +544,7 @@
                   center: true,
                   showClose: true
                 });
+                this.goHistory();
               } else {
                 this.$message({
                   message: '保存成功！',
@@ -679,7 +687,7 @@
               center: true,
               showClose: true
             });
-            this.$router.go(-1);
+           this.goHistory();
           } else {
             this.$message({
               message: '审核失败！',
@@ -761,6 +769,10 @@
         if(this.rptNo == '') {
           return false;
         }
+        if(!this.inQuireConfirmBtn) {
+          this.$message.info('请先保存再进行提调！')
+          return false;
+        }
         const params = {};
         params.rptNo = this.rptNo;
 
@@ -772,6 +784,7 @@
               center: true,
               showClose: true
             });
+            this.goHistory();
           } else {
             this.$message({
               message: '提调失败！',
@@ -842,10 +855,11 @@
           if(res.code == '200' && res.data) {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {
-              this.discussionForm.discType = res.data.discType;
-            }
-            if(res.data.discSubType != '' && res.data.discSubType != null) {
-              this.discussionForm.discSubType = res.data.discSubType;
+              this.discussionForm.discType = res.data.discType; // AAAAAAAAAAAAAAA
+              this.validSubType(res.data.discType)
+              if(res.data.discSubType != '' && res.data.discSubType != null) {
+                this.discussionForm.discSubType = res.data.discSubType;
+              }
             }
             if(res.data.disView != '' && res.data.disView != null) {
               this.discussionForm.disView = res.data.disView;
@@ -854,7 +868,21 @@
         });
       },
       formReset(fromName){
-        this.$refs[fromName].resetFields()
+     //   this.$refs[fromName].resetFields()
+        this.surveyForm.invType = '';
+        this.surveyForm.invReason = '';
+        this.surveyForm.invOrganCode = '';
+        this.surveyForm.organCode = ' ';
+        this.surveyForm.policyNo = ' ';
+        this.surveyForm.invView = '';
+        this.surveyForm.organCode = '';
+        this.surveyForm.policyNo = '';
+        this.$refs['surveyForm'].clearValidate();
+
+
+
+
+
       },
       activeFun(id){
         switch(id) {

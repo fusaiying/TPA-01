@@ -114,7 +114,7 @@
       <!--赔付结论-->
       <div v-if="querys.node==='calculateReview' || querys.node==='sport'" id="#anchor-17" class="batchInfo_class"
            style="margin-top: 10px;">
-        <discussion ref="discussion" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
+        <discussion ref="discussion" :insuredData="insuredData" :policySelectData="policySelectData" :fixInfo="fixInfo" :node="querys.node"/>
       </div>
     </div>
     <!-- 历史问题件模态框 -->
@@ -173,6 +173,7 @@
     infoList,
     insurancePolicyList,
     checkThePayment,
+    setRptNo,
     adjustRemarkList, addInsuredAndPolicy
   } from '@/api/claim/handleCom'
 
@@ -243,6 +244,7 @@
           source: undefined,
         },
         insuredNo: undefined,
+        insuredData:undefined,
         batchInfo: {},//批次信息
         querys: {},
         navFlag: true,
@@ -332,6 +334,7 @@
             if (res.data.claimCaseInsured != null && res.data.claimCaseInsured !== '') {
               this.sonInsuredData.claimCaseInsured = res.data.claimCaseInsured
               this.insuredNo = this.sonInsuredData.claimCaseInsured.insuredNo;
+              this.insuredData = res.data.claimCaseInsured
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {
@@ -537,7 +540,6 @@
           saveflag = true
         }
 
-
         //
         if (this.$refs.insuredForm.tableData != null && this.$refs.insuredForm.tableData.length > 0) {
           if (saveflag) {
@@ -652,6 +654,15 @@
                               center: true,
                               showClose: true
                             })
+
+                            let option={
+                              rptNo: this.fixInfo.rptNo,
+                              batchNo:this.fixInfo.batchNo,
+                              idType:this.$refs.insuredForm.baseForm.idType,
+                              name:this.$refs.insuredForm.baseForm.name,
+                              idNo:this.$refs.insuredForm.baseForm.idNo,
+                            }
+                            setRptNo(option).then(res=>{}).catch(res=>{})
                             this.$store.dispatch("tagsView/delView", this.$route);
                             this.$router.go(-1)
                           } else if (res.data.caseStypeFind === '02') {

@@ -60,14 +60,29 @@
     </select>
 
     <select id="selectDiscussionListByRptNo" parameterType="String" resultMap="ClaimCaseDiscussionResult">
-        <include refid="selectClaimCaseDiscussionVo"/>
+        select a.disc_id,
+        a.rpt_no,
+        a.disc_type,
+        a.disc_sub_type,
+        a.dis_view,
+        a.conclusion,
+        a.conclusion_view,
+        a.create_by,
+        a.update_by,
+        b.create_time
+        FROM
+        claim_case_discussion a,
+        claim_case_record b
         <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-            <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
-            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
-            and is_history='Y'
-            and status='Y'
+            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         </where>
+        and a.rpt_no = b.rpt_no
+        AND a.is_history = 'Y'
+        AND a.STATUS = 'Y'
+        AND b.history_flag = 'N'
+        AND b.STATUS = 'Y'
+        and b.operation='07'
+
     </select>
 
     <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">

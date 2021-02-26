@@ -19,6 +19,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,8 @@ import java.util.List;
 public class ClaimCaseController extends BaseController {
     @Autowired
     private IClaimCaseService claimCaseService;
+    @Autowired
+    private ClaimStandingRptNoService claimStandingRptNoService;
 
     @Autowired
     private IClaimCaseProblemService claimCaseProblemService;
@@ -166,10 +169,6 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "已处理受理案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportProcessedList")
     public void exportProcessedList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
-        PageDomain pageDomain = new PageDomain();
-        pageDomain.setIsAsc("desc");
-        pageDomain.setOrderByColumn("rpt_no");
-        startPage();
         List<ClaimCase> list = claimCaseService.selectProcessedClaimCaseList(claimCaseDTO);
         ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
         util.exportExcel(response, list, "已处理受理案件");
@@ -183,8 +182,14 @@ public class ClaimCaseController extends BaseController {
     @PostMapping("/exportSuspensionList")
     public void exportSuspensionList(HttpServletResponse response, ClaimCaseDTO claimCaseDTO) throws IOException {
         List<ProcessingCaseVo> list = claimCaseService.selectSuspensionClaimCaseList(claimCaseDTO);
-        ExcelUtil<ProcessingCaseVo> util = new ExcelUtil<ProcessingCaseVo>(ProcessingCaseVo.class);
-        util.exportExcel(response, list, "悬挂中受理案件");
+        ArrayList<ClaimCase> claimCases = new ArrayList<>();
+        for (ProcessingCaseVo processingCaseVo : list) {
+            ClaimCase claimCase = new ClaimCase();
+            BeanUtils.copyProperties(processingCaseVo,claimCase);
+            claimCases.add(claimCase);
+        }
+        ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
+        util.exportExcel(response, claimCases, "悬挂中受理案件");
     }
 
     /**
@@ -561,6 +566,13 @@ public class ClaimCaseController extends BaseController {
         String batchNo = claimCase.getBatchNo();
         List<ClaimCaseStanding> claimCaseStandings = claimCaseService.postHocAccountingOfCases(batchNo);
         return getDataTable(claimCaseStandings);
+    }
+
+    //受理完成匹配事后案件台账 插入报案号
+//    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PostMapping("/setRptNo")
+    public AjaxResult setRptNo(@RequestBody ClaimStandingRptNoDTO claimStandingRptNoDTO) {
+        return AjaxResult.success(claimStandingRptNoService.updateStandingRptNo(claimStandingRptNoDTO));
     }
 
     //base_code_mapping

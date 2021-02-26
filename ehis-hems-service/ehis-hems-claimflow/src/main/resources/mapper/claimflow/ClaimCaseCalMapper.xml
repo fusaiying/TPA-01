@@ -89,7 +89,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT DISTINCT
         ccc.cal_id,
         ccc.rpt_no,
---         ccc.bill_currency,
         ccc.cal_amount,
         ccc.refused_amount,
         ccc.debt_amount,
@@ -104,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bill.sumBillAmount,
         bill.sumHosDiscountAmount,
         cc.hospital_code,
-        cc.currency,
+        ifnull(ccc.bill_currency,cc.currency) bill_currency,
         ifnull(ccc.pay_conclusion,(
         case when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'
         ) > 0 then '03'

@@ -37,17 +37,17 @@ public class ProcessingCaseVo implements Serializable {
     private String claimType;
 
     /** 案件状态 */
-    @Excel(name = "案件状态")
+    @Excel(name = "案件状态",readConverterExp = "05=受理,30=问题件")
     private String caseStatus;
 
     /** 停留时长 */
     @Excel(name = "停留时长")
     private String stayTime;
 
-    /** 操作时间 */
+    /** 操作人 */
     private String updateBy;
 
-    /** 操作人 */
+    /** 操作时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 }

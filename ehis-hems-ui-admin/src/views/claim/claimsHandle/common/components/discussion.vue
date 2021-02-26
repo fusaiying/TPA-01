@@ -268,6 +268,7 @@
           addRecoveryInfo,
           investigationBaseInfo,
           discussionBaseInfo,
+          acceptInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -307,8 +308,8 @@
         this.batchNo = this.fixInfoData.batchNo;
         if(this.rptNo != '') {
           this.getCalInfo();
-          this.getInvestigationBaseInfo();
           this.getDiscussionInfo();
+          this.getInvestigationBaseInfo();
         }
       },
       value: function (newValue) {
@@ -520,6 +521,19 @@
         if(value != '05'){
           this.conclusionForm.refusedReason = '';
         }
+      },
+      getAcceptInfo(){
+        if(this.rptNo == '') {
+          return false;
+        }
+        acceptInfo(this.rptNo).then(res => {
+          alert(res);
+          console.log(res)
+          if(res.code == '200' && res.data) {
+            console.log(res.code);
+            //this.conclusionInfo = res.data;
+          }
+        });
       },
       discussionSave(){
 
@@ -818,9 +832,8 @@
             if(res.data.isAppeal == '01') {
               this.appealCase = true;
             }
-            // console.log("res.data")
-            // console.log(res.data)
-            // console.log("res.data")
+          } else {
+            this.getAcceptInfo();
           }
         });
       },

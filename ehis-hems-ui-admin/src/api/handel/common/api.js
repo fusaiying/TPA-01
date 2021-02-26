@@ -156,3 +156,11 @@ export function discussionBaseInfo(rptNo) {
     method: 'get',
   })
 }
+
+// 案件受理信息
+export function acceptInfo (rptNo) {
+  return request({
+    url: '/claimflow/accept/' + rptNo,
+    method: 'get',
+  })
+}

@@ -175,10 +175,14 @@ public class ClaimCaseBillController extends BaseController
         claimCaseRecord1.setOperation("06");
         claimCaseRecord1.setUpdateBy(username);
         claimCaseRecord1.setHistoryFlag("Y");
+        //查询上个节点的id   给 07 org_record_id  赋值
+        long orgRecordId = claimCaseRecordService.selectClaimCaseRecordByRptNo(rptNo);
         // 06轨迹关掉
         claimCaseRecordService.updateClaimCaseRecordByRptNoAndOperator(claimCaseRecord1);
+       
         ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
         claimCaseRecord2.setRptNo(rptNo);
+        claimCaseRecord2.setOrgRecordId(orgRecordId);
         claimCaseRecord2.setOperation("07");
         claimCaseRecord2.setHistoryFlag("N");
         claimCaseRecord2.setStatus("Y");

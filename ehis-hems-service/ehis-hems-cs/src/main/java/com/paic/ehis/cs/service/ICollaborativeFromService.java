@@ -79,4 +79,11 @@ public interface ICollaborativeFromService
 
     int insertConsultationDemand(DemandAcceptVo demandAcceptVo);
     int insertConsultationDemandOne(ComplaintDealVo complaintDealVo);
+
+    /**
+     * 撤销协办修改状态
+     * @param collaborativeFrom
+     * @return
+     */
+    int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom);
 }

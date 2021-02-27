@@ -7,7 +7,7 @@
             <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
             <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
             <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
-            <div style="float: right;">
+            <div style="float: right;" v-if="status==='edit' && (node==='sport' || node==='calculateReview') ">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
@@ -23,7 +23,7 @@
 
         <!-- 赔付结论 start -->
         <el-form v-if="isActiveSpan1" ref="conclusionForm" :model="conclusionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="conRules"
-                 label-position="right" size="mini">
+                 label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
               <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
@@ -108,7 +108,8 @@
         <!-- 赔付结论 end -->
 
         <!-- 协谈 start -->
-        <el-form v-if="isActiveSpan2" ref="discussionForm" :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
+        <el-form v-if="isActiveSpan2" ref="discussionForm"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
           <el-row>
             <el-col :span="20" :xs="24">
                 <el-form-item label="协谈类型：" prop="discType">
@@ -145,7 +146,8 @@
         <!-- 协谈 end -->
 
         <!-- 调查 start -->
-        <el-form v-if="isActiveSpan3" ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
+        <el-form v-if="isActiveSpan3"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
@@ -175,8 +177,8 @@
             <el-col :span="8">
               <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accDescribe}}</span>
+            <el-col :span="16">
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col_left el-col-10">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -280,6 +282,7 @@
     components: {
     },
     props: {
+      status: String,
       value: {
         type: Boolean,
         default: false
@@ -464,6 +467,7 @@
     },
 
     created() {
+      this.getAcceptInfo();
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
@@ -527,6 +531,11 @@
         if(this.rptNo == '') {
           return false;
         }
+          this.surveyInfo.accProvince = '';
+          this.surveyInfo.accCity  = '';
+          this.surveyInfo.accDistrict  = '';
+          this.surveyInfo.accDescribe =  '';
+          this.surveyInfo.accDate =  '';
         acceptInfo(this.rptNo).then(res => {
           if(res.code == '200' && res.data) {
             let data = res.data;
@@ -752,6 +761,7 @@
                 center: true,
                 showClose: true
               });
+              this.goHistory();
             } else {
               this.$message({
                 message: '退回失败！',
@@ -882,10 +892,10 @@
       },
       getDiscussionInfo() {
         discussionBaseInfo(this.rptNo).then(res => {
-          if(res.code == '200' && res.data) {
+          if(res.code == '200' && res.data && res.data.isHistory != 'Y') {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {
-              this.discussionForm.discType = res.data.discType; // AAAAAAAAAAAAAAA
+              this.discussionForm.discType = res.data.discType;
               this.validSubType(res.data.discType)
               if(res.data.discSubType != '' && res.data.discSubType != null) {
                 this.discussionForm.discSubType = res.data.discSubType;
@@ -1064,6 +1074,18 @@
   }
   ::v-deep.info_span_col {
     text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  ::v-deep.info_span_col_left {
+    text-align: left;
     vertical-align: middle;
     float: left;
     font-size: 14px;

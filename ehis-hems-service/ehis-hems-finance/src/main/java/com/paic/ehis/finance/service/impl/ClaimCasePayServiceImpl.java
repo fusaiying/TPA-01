@@ -62,8 +62,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     * 财务appId
     **/
 
-    @Value("${esg.financeid}")
-    private String financeid;
+//    @Value("${esg.financeid}")
+//    private String financeid;
 
     /**
      * 查询当前登录用户所属机构下支付状态不全为已支付的批次信息
@@ -178,7 +178,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
                 payAmount = payAmount.add(claimCaseCal.getPayAmount());
                 calAmount = calAmount.add(claimCaseCal.getCalAmount());
-                // 是否已存在轨迹为“支付环节”
+                // 是否已存在轨迹为“支付环节” 
                 ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
                 claimCaseRecord.setOperation("09");
                 claimCaseRecord.setRptNo(payInfoVO.getRptNo());

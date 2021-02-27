@@ -119,6 +119,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectDirectQueryListTwo" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
+        SELECT DISTINCT
+        cb.batch_no,
+        cb.source,
+        cb.hospital_code,
+        cb.claim_type,
+        cb.submit_date,
+        cb.caseload,
+        cb.batch_total,
+        cb.organ_code,
+        cb.currency,
+        cb.cont_type,
+        cb.batch_status,
+        cb.update_by,
+        cb.update_time,
+        bpi.chname1,
+        bpi.enname1,
+        record.conclusion,
+        record.remark
+        FROM
+        claim_batch cb
+        left join base_provider_info bpi
+        on bpi.provider_code=cb.hospital_code and bpi.status='Y'
+        left join claim_batch_record record
+        on cb.batch_no=record.batch_no and record.operation='04' and record.status='Y'
+        <where>
+            <if test="batchno != null  and batchno != ''"> and cb.batch_no = #{batchno}</if>
+            <if test="claimtype != null  and claimtype != ''"> and cb.claim_type = #{claimtype}</if>
+            <if test="hospitalname != null  and hospitalname != ''"> and cb.hospital_code in (
+                SELECT provider_code from base_provider_info WHERE chname1 like CONCAT(CONCAT('%',#{hospitalname}),'%')
+                UNION
+                SELECT provider_code from base_provider_info WHERE enname1 like CONCAT(CONCAT('%',#{hospitalname}),'%'))
+            </if>
+            <if test="submitstartdate != null and submitenddate != null "> and cb.submit_date between #{submitstartdate} and #{submitenddate}</if>
+            <if test="organcode != null  and organcode != ''"> and cb.organ_code = #{organcode}</if>
+            <if test="batchstatus != null  and batchstatus != ''"> and cb.batch_status =#{batchstatus}</if>
+            <if test="updateBy != null  and updateBy != ''"> and   cb.update_by = #{updateBy}</if>
+            <if test="updatestartTime != null and updateendTime != null"> and cb.update_time between #{updatestartTime} and DATE_ADD(#{updateendTime},INTERVAL 1 DAY)</if>
+            <if test="status != null  and status != ''"> and cb.status = #{status}</if>
+        </where>
+    </select>
+
     <select id="selectReturnedBatchList" parameterType="com.paic.ehis.claimapt.domain.DTO.BatchDTO" resultMap="ClaimBatchVO">
         SELECT DISTINCT
         cb.batch_no,

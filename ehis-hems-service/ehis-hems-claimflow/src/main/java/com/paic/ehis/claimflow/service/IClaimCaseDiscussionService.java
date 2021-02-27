@@ -75,5 +75,5 @@ public interface IClaimCaseDiscussionService
     List<ClaimCaseDiscussionVO> selectCaseDisListOver(ClaimCaseDiscussionDTO claimCaseDiscussionDTO);
 
     /*查询基本信息表*/
-    public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo);
+    public ClaimCaseDiscussionVO  selectCaseBaseInfo(ClaimCaseDiscussionVO dto);
 }

@@ -83,7 +83,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         batchDTO.setClaimtype("02");
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
-        return claimBatchMapper.selectDirectQueryList(batchDTO);
+        return claimBatchMapper.selectDirectQueryListTwo(batchDTO);
     }
 
 

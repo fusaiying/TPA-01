@@ -36,7 +36,7 @@
           <span>ICD列表（{{ totalCount }}）</span>
           <span style="float: right;">
             <el-button icon="el-icon-plus" type="primary" size="mini" @click="editHandle">新增</el-button>
-            <el-button type="primary" size="mini" @click="listExport" :disabled="isListExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport"  >清单导出</el-button>
             <!--            <el-button icon="el-icon-download" type="warning" size="mini">导出</el-button>-->
           </span>
         </div>
@@ -292,7 +292,7 @@ export default {
         if (res.rows.length>0){
           this.isListExport=true
           this.download('provider/icd10/export', {
-          }, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
+            ...query}, `icd_${new Date().getTime()}.xlsx`).catch(res=>{
             this.$message({
               message: res,
               type: 'error',

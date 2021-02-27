@@ -28,10 +28,17 @@ export function processedData(query) {
   })
 }
 
-// 查询 案件基本信息  /discussion/{rptNo}历史协谈信息
+// 查询 案件基本信息  /discussion/{rptNo} 非历史
 export function baseInfo(rptNo) {
   return request({
     url:  '/claimflow/discussion/caseInfo/' + rptNo,
+    method: 'get',
+  })
+}
+// 查询 案件基本信息  /discussion/{rptNo} 历史协谈信息
+export function historyBaseInfo(rptNo) {
+  return request({
+    url:  '/claimflow/discussion/caseInfo/history/' + rptNo,
     method: 'get',
   })
 }

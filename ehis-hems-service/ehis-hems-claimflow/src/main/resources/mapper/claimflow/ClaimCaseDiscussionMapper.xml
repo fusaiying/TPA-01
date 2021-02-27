@@ -39,6 +39,7 @@
         <result property="discSubType"    column="disc_sub_type"    />
         <result property="disView"    column="dis_view"    />
         <result property="discId"    column="disc_id"    />
+        <result property="isHistory"    column="is_history"    />
     </resultMap>
 
     <sql id="selectClaimCaseDiscussionVo">
@@ -69,7 +70,8 @@
         a.conclusion_view,
         a.create_by,
         a.update_by,
-        b.create_time
+        b.create_time,
+        b.update_time
         FROM
         claim_case_discussion a,
         claim_case_record b
@@ -218,7 +220,7 @@
     </select>
 
     <!--查询基本信息-->
-    <select id="selectCaseBaseInfo" parameterType="String" resultMap="ClaimCaseDiscussionVOResult">
+    <select id="selectCaseBaseInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO" resultMap="ClaimCaseDiscussionVOResult">
         select
             claim_case_discussion.rpt_no,/*报案号*/
             claim_case_insured.name,/*被保人姓名*/
@@ -232,7 +234,8 @@
             claim_case_discussion.disc_type,
             claim_case_discussion.disc_sub_type, /**协谈系类*/
             claim_case_discussion.dis_view, /**转出意见*/
-            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age
+            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age ,
+            claim_case_discussion.is_history
         from
             claim_case_discussion,
             claim_batch,
@@ -250,6 +253,7 @@
           AND claim_case_insured.STATUS = 'Y'
           AND claim_case.STATUS = 'Y'
           AND claim_case_accept.STATUS = 'Y'
+         and  claim_case_discussion.is_history = #{isHistory}
     </select>
 
 </mapper>

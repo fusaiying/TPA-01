@@ -107,7 +107,7 @@
       <div slot="header" class="clearfix">
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
@@ -359,7 +359,7 @@
           getUntreatedList().then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              this.download('claimapt/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
+              this.download('claimapt/batch/exportPersonalUntreated', {}, `organizationReview_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -371,7 +371,7 @@
           getProcessedList().then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              this.download('claimapt/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
+              this.download('claimapt/batch/exportPersonalProcessed', {}, `organizationReview_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

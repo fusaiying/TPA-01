@@ -231,7 +231,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             claimCasePolicy.setName(policyNo.getName());
             claimCasePolicy.setOrgPolicyItemNo(policyNo.getOrgPolicyItemNo());
             claimCasePolicy.setOrgPolicyNo(policyNo.getOrgPolicyNo());
-            claimCasePolicy.setPolicyManageCom(policyNo.getPolicyItemNo());
+            claimCasePolicy.setPolicyManageCom(policyNo.getPolicyManageCom());
             claimCasePolicy.setValidStartDate(policyNo.getValidStartDate());
             claimCasePolicy.setValidEndDate(policyNo.getValidEndDate());
             claimCasePolicy.setSsFlag(policyNo.getSsFlag());

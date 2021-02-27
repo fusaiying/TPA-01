@@ -33,7 +33,7 @@ export function getUser(data) {
     params:data
   })
 }
-//获取部门
+//获取部门  以前用的
 export function getDept(parentId) {
   return request({
     url: '/claimmgt/dept/getdepts',
@@ -41,6 +41,13 @@ export function getDept(parentId) {
     params:parentId
   })
 }
+/*//获取部门
+export function getDept() {
+  return request({
+    url: '/system/organInfo/getList',
+    method: 'get',
+  })
+}*/
 //根据部门Id获取部门
 export function getDeptById(deptId) {
   return request({

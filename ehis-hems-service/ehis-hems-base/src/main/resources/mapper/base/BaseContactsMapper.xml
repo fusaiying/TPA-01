@@ -251,8 +251,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where update_flag = '0'  and supplier_code = #{supplierCode}
     </update>
 
-    <update id="updateBaseContactsByCodeNew" parameterType="BaseContacts">
-        update base_contacts set update_flag = '1' ,status = 'N'
-        where status = 'Y'  and supplier_code = #{supplierCode}
-    </update>
+    <delete id="updateBaseContactsByCodeNew" parameterType="BaseContacts">
+        delete from base_contacts where supplier_code = #{supplierCode}
+    </delete>
 </mapper>

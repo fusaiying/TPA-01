@@ -139,6 +139,8 @@ public class ClaimCaseProblemServiceImpl implements IClaimCaseProblemService {
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);
+        claimCaseProblem.setUpdateTime(DateUtils.getNowDate());//处理时间
+        claimCaseProblem.setUpdateBy(SecurityUtils.getUsername());//处理人
         return claimCaseProblemMapper.updateClaimCaseProblem(claimCaseProblem);
     }
 

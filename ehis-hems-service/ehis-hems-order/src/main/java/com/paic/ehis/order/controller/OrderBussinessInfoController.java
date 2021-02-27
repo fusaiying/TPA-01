@@ -49,13 +49,31 @@ public class OrderBussinessInfoController extends BaseController
 
 
     /**
+     * 获取B端登录的用户信息
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/getUser")
+    public AjaxResult getUser(@RequestBody RoleLoginInfo roleLoginInfo)
+    {
+        return AjaxResult.success(orderBussinessInfoService.getUser(roleLoginInfo));
+    }
+
+    /**
+     * 变更B端登录密码接口
+     */
+    @PostMapping("/updatePassword")
+    public AjaxResult updatePassword(@RequestBody RoleLoginInfo roleLoginInfo)
+    {
+        return orderBussinessInfoService.updatePassword(roleLoginInfo);
+    }
+    /**
      * 查询接单人拥有的接单数量
      */
     //@PreAuthorize("@ss.hasPermi('system:info:list')")
     @PostMapping("/getOrderNum")
-    public AjaxResult getOrderNum(@RequestBody String role)
+    public AjaxResult getOrderNum(@RequestBody RoleLoginInfo roleLoginInfo)
     {
-        return AjaxResult.success(orderBussinessInfoService.getOrderNum(role));
+        return AjaxResult.success(orderBussinessInfoService.getOrderNum(roleLoginInfo));
     }
 
     /**
@@ -63,9 +81,16 @@ public class OrderBussinessInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:list')")
     @PostMapping("/getOrderList")
-    public AjaxResult getOrderList(@RequestBody RoleLoginInfo roleLoginInfo)
+    public TableDataInfo getOrderList(@RequestBody RoleLoginInfo roleLoginInfo)
     {
-        return AjaxResult.success(orderBussinessInfoService.getOrderList(roleLoginInfo));
+        startPage(roleLoginInfo);
+        return getDataTable(orderBussinessInfoService.getOrderList(roleLoginInfo));
+    }
+
+    @PostMapping("/getOrderDetail")
+    public AjaxResult getOrderDetail(@RequestBody RoleLoginInfo roleLoginInfo)
+    {
+        return AjaxResult.success(orderBussinessInfoService.getOrderDetail(roleLoginInfo));
     }
 
 

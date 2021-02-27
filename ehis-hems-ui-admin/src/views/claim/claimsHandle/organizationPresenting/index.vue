@@ -117,7 +117,7 @@
         <span>批次工作池</span>
         <span style="float: right;">
             <el-button type="primary" size="mini" @click="addPresenting('add')">新增交单</el-button>
-            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
@@ -499,21 +499,21 @@
           getBackToList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-            /*  let subDate = ''
-              if (this.queryParams.submitdate.length > 0) {
-                subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
-                  + '&updatestartTime=' + this.queryParams.updateTime[0]
-              }
-              let upDate = ''
-              if (this.queryParams.updateTime.length > 0) {
-                upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
-              }
-*/
+              /*  let subDate = ''
+                if (this.queryParams.submitdate.length > 0) {
+                  subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
+                    + '&updatestartTime=' + this.queryParams.updateTime[0]
+                }
+                let upDate = ''
+                if (this.queryParams.updateTime.length > 0) {
+                  upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
+                }
+  */
               this.download('claimapt/batch/exportReturnedPool'/* + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
                 + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -525,20 +525,20 @@
           getDealWithList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-             /* let subDate = ''
-              if (this.queryParams.submitdate.length > 0) {
-                subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
-                  + '&updatestartTime=' + this.queryParams.updateTime[0]
-              }
-              let upDate = ''
-              if (this.queryParams.updateTime.length > 0) {
-                upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
-              }*/
+              /* let subDate = ''
+               if (this.queryParams.submitdate.length > 0) {
+                 subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
+                   + '&updatestartTime=' + this.queryParams.updateTime[0]
+               }
+               let upDate = ''
+               if (this.queryParams.updateTime.length > 0) {
+                 upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
+               }*/
               this.download('claimapt/batch/exportProcessedPool'/* + '?hospitalname=' + this.queryParams.hospitalname
                 + '&organcode=' + this.queryParams.organcode + '&batchno=' + this.queryParams.batchno + '&claimtype=' +
                 this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"
@@ -564,7 +564,7 @@
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
                 + upDate*/, {
                 ...query
-              }, `FYX_${new Date().getTime()}.xlsx`)
+              }, `organization_${new Date().getTime()}.xlsx`)
             } else {
               return this.$message.warning(
                 "没有查询到能导出的数据！"

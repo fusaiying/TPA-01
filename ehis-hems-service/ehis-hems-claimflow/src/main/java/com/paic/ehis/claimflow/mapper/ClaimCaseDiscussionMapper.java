@@ -74,6 +74,6 @@ public interface ClaimCaseDiscussionMapper
 
     List<ClaimCaseDiscussionVO> selectCaseDisListOver(ClaimCaseDiscussionDTO claimCaseDiscussionDTO);
 
-    public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo);
+    public ClaimCaseDiscussionVO  selectCaseBaseInfo(ClaimCaseDiscussionVO dto);
 
 }

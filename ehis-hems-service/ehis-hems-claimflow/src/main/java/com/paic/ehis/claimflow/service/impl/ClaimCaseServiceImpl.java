@@ -1,6 +1,8 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -8,6 +10,7 @@ import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
@@ -704,12 +707,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS;
+        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize());
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
@@ -717,7 +722,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
                     auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
                     auditWorkPoolDTO.setUpdateBy(SecurityUtils.getUsername());
-                    List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+                    conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
                     if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                             //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -781,7 +786,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         } else {
             //按条件查询
             auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-            List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
+            conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
             if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                     //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -842,7 +847,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//已处理
 
     /**

@@ -483,7 +483,8 @@
                     cases.rpt_no,
                     cases.batch_no,
                     cases.case_status,
-                    record.operator
+                    record.operator,
+                    record.update_time
                 FROM
                     claim_case cases
                         INNER JOIN (SELECT r.operation, r.rpt_no ,r.operator,r.update_time  FROM claim_case_record r where r.RECORD_ID in   (SELECT   MAX(RECORD_ID) FROM claim_case_record
@@ -492,10 +493,10 @@
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
 						and cases.case_status in ('08','99','97','98','05')
 						and cases.status='Y'
-                ORDER BY
-                    record.update_time DESC
             ) act
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
+                ORDER BY
+                    act.update_time DESC
 
     </select>
 

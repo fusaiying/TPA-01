@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -15,6 +16,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -382,7 +384,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentOver")
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理理算案件");
     }
@@ -394,9 +397,8 @@ public class ClaimCaseController extends BaseController {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
-        startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+       // startPage(auditWorkPoolDTO);
+        return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }
 
     //审核工作池接口-导出悬挂中清单

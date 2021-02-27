@@ -43,13 +43,19 @@ public class PersonInfo extends BaseEntity
     @Excel(name = "固定电话")
     private String linePhone;
 
+    private String[] linePhone1;
+
     /** 家庭电话 国家区号-区号-号码-分机号;"-"不能丢 */
     @Excel(name = "家庭电话")
     private String homePhone;
 
+    private String[] homePhone1;
+
     /** 办公电话 国家区号-区号-号码-分机号;"-"不能丢 */
     @Excel(name = "办公电话")
     private String workPhone;
+
+    private String[] workPhone1;
 
     /** 语言 */
     @Excel(name = "语言")

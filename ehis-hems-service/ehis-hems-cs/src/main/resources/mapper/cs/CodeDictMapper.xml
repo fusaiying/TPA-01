@@ -2,16 +2,15 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.cs.mapper.CodeEnumMapper">
+<mapper namespace="com.paic.ehis.cs.mapper.CodeDictMapper">
     
-    <resultMap type="CodeEnum" id="CodeEnumResult">
-        <result property="codeId"    column="code_id"    />
+    <resultMap type="CodeDict" id="CodeDictResult">
         <result property="codeType"    column="code_type"    />
         <result property="code"    column="code"    />
         <result property="codeName"    column="code_name"    />
         <result property="codeAlias"    column="code_alias"    />
         <result property="status"    column="status"    />
-        <result property="pCodeId"    column="p_code_id"    />
+        <result property="parentCode"    column="parent_code"    />
         <result property="remarks"    column="remarks"    />
         <result property="orderNo"    column="order_no"    />
         <result property="createdBy"    column="created_by"    />
@@ -20,17 +19,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedTime"    column="updated_time"    />
     </resultMap>
 
-    <sql id="selectCodeEnumVo">
-        select code_id, code_type, code, code_name, code_alias, status, p_code_id, remarks, order_no, created_by, created_time, updated_by, updated_time from code_enum
+
+    <resultMap type="com.paic.ehis.cs.domain.vo.CodeEnumVo" id="CodeEnumVoResult">
+        <result property="complaintBusinessCode"    column="complaint_business_code"    />
+        <result property="complaintBusinessName"    column="complaint_business_name"    />
+        <result property="insuranceSourceCode"    column="insurance_source_code"    />
+        <result property="insuranceSourceName"    column="insurance_source_name"    />
+    </resultMap>
+
+    <select id="selectCodeEnumVoList" parameterType="com.paic.ehis.cs.domain.dto.CodeEnumDTO" resultMap="CodeEnumVoResult">
+        SELECT
+        a.CODE complaint_business_code,
+        a.code_name complaint_business_name,
+        b.CODE insurance_source_code,
+        b.code_name insurance_source_name
+        FROM
+        code_enum a
+        LEFT JOIN code_enum b ON a.code_id = b.p_code_id
+        WHERE
+        a.code_type = #{complaintBusinessType}
+        <if test="complaintBusinessCode != null  and complaintBusinessCode != ''"> and complaint_business_code = #{complaintBusinessCode}</if>
+        <if test="complaintBusinessName != null  and complaintBusinessName != ''"> and complaint_business_name = #{complaintBusinessName}</if>
+        <if test="insuranceSourceCode != null  and insuranceSourceCode != ''"> and insurance_source_code = #{insuranceSourceCode}</if>
+        <if test="insuranceSourceName != null  and insuranceSourceName != ''"> and insurance_source_name = #{insuranceSourceName}</if>
+    </select>
+
+
+    <sql id="selectCodeDictVo">
+        select code_type, code, code_name, code_alias, status, parent_code, remarks, order_no, created_by, created_time, updated_by, updated_time from code_dict
     </sql>
 
-    <select id="selectCodeEnumList" parameterType="CodeEnum" resultMap="CodeEnumResult">
-        <include refid="selectCodeEnumVo"/>
+    <select id="selectCodeDictList" parameterType="CodeDict" resultMap="CodeDictResult">
+        <include refid="selectCodeDictVo"/>
         <where>  
             <if test="codeName != null  and codeName != ''"> and code_name like concat('%', #{codeName}, '%')</if>
             <if test="codeAlias != null  and codeAlias != ''"> and code_alias = #{codeAlias}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="pCodeId != null "> and p_code_id = #{pCodeId}</if>
+            <if test="parentCode != null  and parentCode != ''"> and parent_code = #{parentCode}</if>
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
             <if test="orderNo != null "> and order_no = #{orderNo}</if>
             <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
@@ -40,30 +65,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectComplaintBusiness" parameterType="CodeEnum" resultMap="CodeEnumResult">
+    <select id="selectComplaintBusiness" parameterType="CodeDict" resultMap="CodeDictResult">
     SELECT code,code_name FROM `code_enum` where code_type= #{codeType}
     </select>
 
-    <select id="selectInsuranceSource" parameterType="CodeEnum" resultMap="CodeEnumResult">
+    <select id="selectInsuranceSource" parameterType="CodeDict" resultMap="CodeDictResult">
     SELECT code,code_name FROM `code_enum` where p_code_id= #{pCodeId}
     </select>
-
-
     
-    <select id="selectCodeEnumById" parameterType="Long" resultMap="CodeEnumResult">
-        <include refid="selectCodeEnumVo"/>
-        where code_id = #{codeId}
+    <select id="selectCodeDictById" parameterType="String" resultMap="CodeDictResult">
+        <include refid="selectCodeDictVo"/>
+        where code_type = #{codeType}
     </select>
         
-    <insert id="insertCodeEnum" parameterType="CodeEnum" useGeneratedKeys="true" keyProperty="codeId">
-        insert into code_enum
+    <insert id="insertCodeDict" parameterType="CodeDict">
+        insert into code_dict
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="codeType != null">code_type,</if>
             <if test="code != null">code,</if>
             <if test="codeName != null">code_name,</if>
             <if test="codeAlias != null">code_alias,</if>
             <if test="status != null and status != ''">status,</if>
-            <if test="pCodeId != null">p_code_id,</if>
+            <if test="parentCode != null">parent_code,</if>
             <if test="remarks != null">remarks,</if>
             <if test="orderNo != null">order_no,</if>
             <if test="createdBy != null and createdBy != ''">created_by,</if>
@@ -77,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="codeName != null">#{codeName},</if>
             <if test="codeAlias != null">#{codeAlias},</if>
             <if test="status != null and status != ''">#{status},</if>
-            <if test="pCodeId != null">#{pCodeId},</if>
+            <if test="parentCode != null">#{parentCode},</if>
             <if test="remarks != null">#{remarks},</if>
             <if test="orderNo != null">#{orderNo},</if>
             <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
@@ -87,16 +110,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-
-    <update id="updateCodeEnum" parameterType="CodeEnum">
-        update code_enum
+    <update id="updateCodeDict" parameterType="CodeDict">
+        update code_dict
         <trim prefix="SET" suffixOverrides=",">
-            <if test="codeType != null">code_type = #{codeType},</if>
             <if test="code != null">code = #{code},</if>
             <if test="codeName != null">code_name = #{codeName},</if>
             <if test="codeAlias != null">code_alias = #{codeAlias},</if>
             <if test="status != null and status != ''">status = #{status},</if>
-            <if test="pCodeId != null">p_code_id = #{pCodeId},</if>
+            <if test="parentCode != null">parent_code = #{parentCode},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="orderNo != null">order_no = #{orderNo},</if>
             <if test="createdBy != null and createdBy != ''">created_by = #{createdBy},</if>
@@ -104,18 +125,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
             <if test="updatedTime != null">updated_time = #{updatedTime},</if>
         </trim>
-        where code_id = #{codeId}
+        where code_type = #{codeType}
     </update>
 
-    <delete id="deleteCodeEnumById" parameterType="Long">
-        delete from code_enum where code_id = #{codeId}
+    <delete id="deleteCodeDictById" parameterType="String">
+        delete from code_dict where code_type = #{codeType}
     </delete>
 
-    <delete id="deleteCodeEnumByIds" parameterType="String">
-        delete from code_enum where code_id in 
-        <foreach item="codeId" collection="array" open="(" separator="," close=")">
-            #{codeId}
+    <delete id="deleteCodeDictByIds" parameterType="String">
+        delete from code_dict where code_type in 
+        <foreach item="codeType" collection="array" open="(" separator="," close=")">
+            #{codeType}
         </foreach>
     </delete>
+
+    <select id="selectInCodeEnum" parameterType="com.paic.ehis.cs.domain.vo.CodeEnumVo1" resultMap="CodeDictResult">
+        SELECT
+        *
+        FROM
+        code_enum
+        WHERE
+        code_type = #{codeTYpe}
+        AND CODE IN
+        <foreach item="item" collection="voList" open="(" separator="," close=")">
+            #{item.code}
+        </foreach>
+    </select>
     
 </mapper>

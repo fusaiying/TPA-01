@@ -19,6 +19,10 @@ public class CodeEnumVo extends BaseEntity {
     @Excel(name = "投保来源描述")
     private String insuranceSourceName;
 
+    private String parCodeType;
+
+    private String subCodeType;
+
     public String getComplaintBusinessCode() {
         return complaintBusinessCode;
     }
@@ -49,5 +53,21 @@ public class CodeEnumVo extends BaseEntity {
 
     public void setInsuranceSourceName(String insuranceSourceName) {
         this.insuranceSourceName = insuranceSourceName;
+    }
+
+    public String getParCodeType() {
+        return parCodeType;
+    }
+
+    public void setParCodeType(String parCodeType) {
+        this.parCodeType = parCodeType;
+    }
+
+    public String getSubCodeType() {
+        return subCodeType;
+    }
+
+    public void setSubCodeType(String subCodeType) {
+        this.subCodeType = subCodeType;
     }
 }

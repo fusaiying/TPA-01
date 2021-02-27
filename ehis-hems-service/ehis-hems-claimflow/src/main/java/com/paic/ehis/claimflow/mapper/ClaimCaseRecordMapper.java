@@ -182,4 +182,14 @@ public interface ClaimCaseRecordMapper
     public int updateRecordHistoricalState(ClaimCaseRecord claimCaseRecord);
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);
+
+    public long selectClaimCaseRecordByRptNo(String rptNo);
+
+    /**
+     * 找到最近的一条轨迹表的record_id
+     * @param rptNo
+     * @return long
+     */
+    public long selectRecentlyClaimCaseRecordByRptNo(String rptNo);
+
 }

@@ -160,6 +160,16 @@
         where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'N'
     </select>
 
+    <select id="selectClaimCaseRecordByRptNo" parameterType="String" resultType="Long">
+        select record_id from claim_case_record
+        where rpt_no = #{rptNo} and operation = '06' and status = 'Y' and  history_flag = 'N'
+    </select>
+
+    <select id="selectRecentlyClaimCaseRecordByRptNo" parameterType="String" resultType="Long">
+        select record_id from claim_case_record
+        where rpt_no = #{rptNo} and status = 'Y' and  history_flag = 'N' order by record_id desc limit 1
+    </select>
+
     <!-- lihy -->
     <select id="selectClaimCaseRecordByRptNoOperation" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>

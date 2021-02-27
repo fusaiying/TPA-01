@@ -109,8 +109,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="pageNum"
-          :limit.sync="pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
         />
       </div>

@@ -203,5 +203,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{collaborativeId}
         </foreach>
     </delete>
-    
+    <update id="updateCollaborativeStatus"   parameterType="CollaborativeFrom" >
+        update collaborative_from set status="03"  where work_order_no=#{workOrderNo}
+    </update>
 </mapper>

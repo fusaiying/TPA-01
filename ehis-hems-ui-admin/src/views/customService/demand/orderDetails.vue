@@ -530,13 +530,18 @@
           demandListAndPublicPool(query).then(res => {
             if (res!=null && res.code === 200) {
               let workPoolData = res.rows[0];
-              //修改原因
-              workPoolData.editInfo.editReason = "";
-              //修改说明
-              workPoolData.editInfo.editRemark = "";
+              let editInfo = {
+                editReason: "",
+                editRemark: ""
+              };
+              workPoolData.editInfo=editInfo
+              workPoolData.officeCountry=""
+              workPoolData.officeNumber=""
+              workPoolData.officeQuhao=""
+              workPoolData.officeSecondNumber=""
               this.workPoolData = workPoolData;
               this.totalCount = res.total
-              console.log('公共', this.workPoolData)
+              console.log("公共",this.workPoolData)
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"

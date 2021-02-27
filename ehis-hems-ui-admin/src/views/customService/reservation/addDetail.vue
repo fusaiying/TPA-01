@@ -281,7 +281,7 @@
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
               <el-select v-model="ruleForm.symptomTimes" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -289,7 +289,7 @@
           <el-col :span="8">
             <el-form-item label="是否意外" prop="accidentFlag">
               <el-select v-model="ruleForm.accidentFlag" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -317,7 +317,7 @@
           <el-col :span="8">
             <el-form-item label="联系人性别" prop="contactsPerson.sex">
               <el-select v-model="ruleForm.contactsPerson.sex" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -330,7 +330,7 @@
           <el-col :span="8">
             <el-form-item label="是否持有效证件" prop="validCertificate">
               <el-select v-model="ruleForm.validCertificate" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -341,21 +341,19 @@
           <el-col :span="8">
             <el-form-item label="是否持有直结卡：" prop="settlementCard">
               <el-select v-model="ruleForm.settlementCard" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentDate">
+
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker
                 v-model="ruleForm.appointmentDate"
-                class="item-width"
-                type="daterange"
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd"/>
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -369,7 +367,7 @@
           <el-col :span="8">
             <el-form-item label="预约医院：" prop="medicalInstitution">
               <el-select v-model="ruleForm.medicalInstitution" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -379,7 +377,7 @@
               <el-col :span="16">
               <el-input v-model="ruleForm.medicalInstitution" input-w clearable size="mini" placeholder="请输入"/>
               </el-col>
-              <el-button type="primary" @click="searchHandle">查询</el-button>
+              <el-button type="primary" @click="searchHandle" disabled>查询</el-button>
             </el-form-item>
           </el-col>
 
@@ -417,7 +415,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
               <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -473,8 +471,9 @@
         cs_handle_state:[],// 状态：
         //需要填入数据的部分
         ruleForm:{
+          appointmentDate:"",
           hospitalWorkCall:"",
-          channelCode:[],//受理渠道
+          channelCode:"",//受理渠道
           callCenterId:"",//中心
 
           callPerson:{

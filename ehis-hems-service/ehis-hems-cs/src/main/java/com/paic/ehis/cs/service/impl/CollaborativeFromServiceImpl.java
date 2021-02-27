@@ -218,4 +218,15 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);
     }
+
+    /**
+     * 撤销协办修改状态
+     * @param collaborativeFrom
+     * @return
+     */
+    @Override
+    public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom) {
+       // collaborativeFrom.getWorkOrderNo();
+        return collaborativeFromMapper.updateCollaborativeStatus(collaborativeFrom);
+    }
 }

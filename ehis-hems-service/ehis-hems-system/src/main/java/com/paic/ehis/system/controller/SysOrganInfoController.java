@@ -113,4 +113,13 @@ public class SysOrganInfoController extends BaseController
     public AjaxResult getOrganInfo(@RequestBody List<String> organCodes){
         return AjaxResult.success(sysOrganInfoService.selectOrganInfoByOrganCodes(organCodes));
     }
+
+    /**
+     * 获取当前机构及下属机构详细信息
+     */
+    @GetMapping(value = "getOrganList/{organCode}")
+    public AjaxResult getInfo(@PathVariable("organCode") String organCode)
+    {
+        return AjaxResult.success(sysOrganInfoService.selectOrganListByUpOrganCode(organCode));
+    }
 }

@@ -23,6 +23,7 @@ import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -936,7 +937,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCase 案件信息
      * @return 结果
      */
-    @Transactional
+    @@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int backToClaimCase(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -1049,7 +1050,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCaseCal 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
         //暂未实现判断被保人当前匹配到的赔付责任所属的保单是否存在在途保全（个别保全项：）对理赔进行挂起操作，待保全处理完成后理赔继续并进行重新理算
@@ -1114,7 +1115,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param caseInvestigation 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();

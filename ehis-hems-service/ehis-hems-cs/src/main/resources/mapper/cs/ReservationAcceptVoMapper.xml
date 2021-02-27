@@ -96,13 +96,11 @@
         b.prop24,
         b.prop25
         FROM
-        work_order_accept a,
-        accept_detail_info b,
-        person_info c
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
         WHERE
-        a.work_order_no = b.work_order_no
-        AND a.insured_no = c.person_id
-        AND a.business_type = '02'
+         a.business_type = '02'
         AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -188,13 +186,11 @@
         b.prop24,
         b.prop25
         FROM
-        work_order_accept a,
-        accept_detail_info b,
-        person_info c
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
         WHERE
-        a.work_order_no = b.work_order_no
-        AND a.insured_no = c.person_id
-        AND a.business_type = '02'
+        a.business_type = '02'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>

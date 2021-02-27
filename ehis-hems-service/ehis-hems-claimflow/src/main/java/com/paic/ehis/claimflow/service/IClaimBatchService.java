@@ -77,6 +77,16 @@ public interface IClaimBatchService
      * @return 结果
      */
     public int insertClaimBatch(ClaimBatch claimBatch);
+
+
+    /**
+     * 修改理赔批次
+     *
+     * @param batchNo 理赔批次
+     * @return 结果
+     */
+    public int updateClaimBatchBybatchNo(String batchNo);
+
 //
 //    /**机构交单复核
 //     * 修改理赔批次

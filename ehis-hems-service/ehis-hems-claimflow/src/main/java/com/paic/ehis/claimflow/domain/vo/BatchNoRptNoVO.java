@@ -1,4 +1,4 @@
-package com.paic.ehis.claimflow.domain.interfaceclass;
+package com.paic.ehis.claimflow.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class BatchNoRptNoVO {
 
-    /**报案号和归档号集合*/
-    private List<RptNoAndFilingNo> RptNoAndFilingNoList;
+    /**报案号集合*/
+    private List<String> rptNoList;
 
     /**批次号*/
 

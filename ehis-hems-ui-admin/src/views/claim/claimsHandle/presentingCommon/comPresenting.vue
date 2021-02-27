@@ -314,11 +314,10 @@
     updateClaimBatch,
     selectRecordByBatchno,
     getStanding,
-    getThisDept,
     getInfoBaseCodeMappingNew,
     getName,
   } from '@/api/claim/presentingReview'
-  import {getDeptById} from '@/api/claim/standingBookSearch'
+  import {getUserInfo} from '@/api/claim/standingBookSearch'
   import Hospital from "../../basicInfoManage/publicVue/hospital";
   import {getHospitalInfo} from '@/api/claim/handleCom'
   //医院
@@ -464,7 +463,6 @@
         examine_resultOptions: [],
         hospitalOptions: [],
         claim_currencyOptions: [],
-        deptOptions: [],
       }
     },
 
@@ -499,9 +497,9 @@
       this.card_typeOptions = this.dictList.find(item => {
         return item.dictType === 'card_type'
       }).dictDate
-      getThisDept().then(res => {
-        this.deptOptions = res.deptlist
-      })
+
+
+
     },
     async mounted() {
       let date = new Date()
@@ -522,9 +520,10 @@
             this.isAfter = true
           }
         })
-        getDeptById(this.searchForm.organcode).then(res => {
+
+        getUserInfo().then(res => {
           if (res != null && res.code === 200) {
-            this.deptName = res.data.deptName
+            this.deptName  = res.data.organName
           }
         })
         if (this.querys.status === 'show') {
@@ -659,19 +658,12 @@
           this.isPrint = false
         }
       } else {
-        getThisDept().then(res => {
-          if (res != null) {
-            this.searchForm.organcode = res.deptId
-            if (res.deptId != null && res.deptId !== '') {
-              getDeptById(res.deptId).then(res => {
-                if (res != null && res.code === 200) {
-                  this.deptName = res.data.deptName
-                }
-              })
-            }
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            this.searchForm.organcode = res.data.organCode
+            this.deptName = res.data.organName
           }
         })
-
       }
       let data = {
         //医院编码
@@ -1261,14 +1253,12 @@
       },
       getDeptName(deptId) {
         let deptName = ''
-        if (deptId != null && deptId !== '') {
-          getDeptById(deptId).then(res => {
-            if (res != null && res.code === 200) {
-              deptName = res.data.deptName
-              return deptName
-            }
-          })
-        }
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            deptName = res.data.organName
+            return deptName
+          }
+        })
       }
     }
   }

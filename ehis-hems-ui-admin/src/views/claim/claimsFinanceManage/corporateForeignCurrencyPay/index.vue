@@ -130,7 +130,7 @@
 
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
-  import {getThisDept} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   import {initForeignList, foreignList} from '@/api/claim/corporatePay'
   import {getHospitalInfo} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'sys_yes_no'}]
@@ -172,13 +172,22 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      let item={
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getThisDept(item).then(res => {
+      getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.deptListOptions = res.data
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptListOptions = res.data.sysOrganInfoList
+            }
+          }).catch(res => {
+          })
         }
       })
       initForeignList(this.queryParams).then(res => {
@@ -250,8 +259,8 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == parseIntvalue) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

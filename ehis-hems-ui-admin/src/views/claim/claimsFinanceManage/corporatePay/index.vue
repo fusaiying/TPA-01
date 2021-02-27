@@ -61,9 +61,9 @@
                          reserve-keyword
                          placeholder="请选择机构"
                          :remote-method="remoteDeptMethod">
-                <el-option v-for="option in deptOptions" :key="option.deptId"
-                           :label="option.deptName"
-                           :value="option.deptId"/>
+                <el-option v-for="option in deptOptions" :key="option.organCode"
+                           :label="option.organName"
+                           :value="option.organCode"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -119,7 +119,7 @@
           </el-table-column>
           <el-table-column align="center" prop="organCode" label="交单机构" width="100" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{getDeptName( deptOptions,scope.row.organCode)}}</span>
+              <span>{{getDeptName( sysDeptOptions,scope.row.organCode)}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="submitDate" label="交单日期" show-overflow-tooltip/>
@@ -143,7 +143,7 @@
 
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
-  import {getDept, getDeptById} from '@/api/claim/standingBookSearch'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   import {initList, list} from '@/api/claim/corporatePay'
   import {getHospitalInfo} from '@/api/claim/handleCom'
 
@@ -174,6 +174,7 @@
         totalCount: 0,
         dictList: [],
         deptOptions: [],
+        sysDeptOptions: [],
         hospitalOptions: [],
         sys_yes_noOptions: [],
         hospitals: [],
@@ -186,15 +187,27 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      let item = {
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getDept(item).then(res => {
-        this.deptOptions = res.deptlist
-        this.searchForm.organCode = res.deptId
-      }).catch(res => {
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.searchForm.organCode = res.data.sysOrganInfo.organCode
+              this.deptOptions = res.data.sysOrganInfoList
+              this.sysDeptOptions = res.data.sysOrganInfoList
+            }
+          }).catch(res => {
+          })
+        }
       })
+
       initList(this.queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.tableData = res.rows
@@ -265,23 +278,26 @@
         }
       },
       remoteDeptMethod(query) {
-        let data = {
-          deptName: query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getDept(data).then(res => {
-            this.deptOptions = res.deptlist
-          }).catch(res => {
-          })
+        if (query != null && query != '' && query != undefined) {
+          let data = {
+            organCode: this.searchForm.organCode,
+            organName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getOrganList(data).then(res => {
+              this.deptOptions = res.data.sysOrganInfoList
+            }).catch(res => {
+            })
+          }
         }
       },
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

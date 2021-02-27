@@ -90,8 +90,8 @@
 </template>
 
 <script>
-  import {getMinData, getThisDept} from '@/api/claim/presentingReview'
-
+  import {getMinData} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}, {dictType: 'claim_status'}]
   export default {
 
@@ -133,12 +133,23 @@
       this.claim_statusOptions = this.dictList.find(item => {
         return item.dictType === 'claim_status'
       }).dictDate
-      let item = {
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getThisDept(item).then(res => {
-        this.deptOptions = res.deptlist
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptOptions = res.data.sysOrganInfoList
+            }
+          }).catch(res => {
+          })
+        }
       })
     },
     methods: {
@@ -184,8 +195,8 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

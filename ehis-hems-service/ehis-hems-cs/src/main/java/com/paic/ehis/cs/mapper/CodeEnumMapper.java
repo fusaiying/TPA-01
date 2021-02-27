@@ -1,6 +1,6 @@
 package com.paic.ehis.cs.mapper;
 
-import com.paic.ehis.cs.domain.CodeEnum;
+import com.paic.ehis.cs.utils.CodeEnum;
 
 import java.util.List;
 

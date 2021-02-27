@@ -21,6 +21,7 @@ public class AcceptVo extends BaseEntity
 
     /** 工单号 */
     private String workOrderNo;
+    private String workOrderId;
     /** 业务类型 */
     private String businessType;
     /** 服务项目 */

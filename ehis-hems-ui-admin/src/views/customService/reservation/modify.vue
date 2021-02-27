@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="195px"
+      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="195px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -219,7 +219,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="申请人姓名：" prop="complainantPerson.name">
-              <el-input  v-model="workPoolData.complainantPerson.name" class="item-width"  size="mini" />
+              <el-input  v-model="workPoolData.complaintPerson.name" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -621,6 +621,10 @@
           content:"",
           editReason:"",
           editRemark:"",
+
+          complaintPerson:{
+            name:"",
+          }
         },
         totalCount: 0,
         //需要填入数据的部分
@@ -753,7 +757,6 @@
       //反显信息需求
       searchHandle() {
         if (this.queryParams.status=="01") {
-          console.log("status:",this.queryParams.status="01")
           let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res != null && res.code === 200) {

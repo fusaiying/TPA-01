@@ -130,4 +130,15 @@ public class CollaborativeFromController extends BaseController
     {
         return toAjax(iWorkHandleInfoService.assistInComplaint(complaintDealVo));
     }
+
+    /**
+     * 修改协办信息
+     */
+    @PreAuthorize("@ss.hasPermi('system:from:edit')")
+    @Log(title = "协办信息 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateCollaborativeStatus")
+    public AjaxResult updateCollaborativeStatus(@RequestBody CollaborativeFrom collaborativeFrom)
+    {
+        return toAjax(collaborativeFromService.updateCollaborativeStatus(collaborativeFrom));
+    }
 }

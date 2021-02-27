@@ -347,15 +347,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="appointmentDate">
+
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="appointmentDate">
               <el-date-picker
                 v-model="ruleForm.appointmentDate"
-                class="item-width"
-                type="daterange"
-                range-separator="~"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd"/>
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -473,8 +471,9 @@
         cs_handle_state:[],// 状态：
         //需要填入数据的部分
         ruleForm:{
+          appointmentDate:"",
           hospitalWorkCall:"",
-          channelCode:[],//受理渠道
+          channelCode:"",//受理渠道
           callCenterId:"",//中心
 
           callPerson:{

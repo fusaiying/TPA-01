@@ -213,6 +213,10 @@ public class ReservationAcceptVo extends BaseEntity {
     /**是否申请直结*/
     private String settlementFlag;
 
+    private String complaintPersonId;
+
+    private PersonInfo complaintPerson;
+
     /** 业务内容 */
     @Excel(name = "业务内容")
     private String content;

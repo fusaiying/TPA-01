@@ -52,6 +52,13 @@ public interface CollaborativeFromMapper
     public int updateConsultationDemandOne(CollaborativeFrom collaborativeFrom);
 
     /**
+     * 撤销协办修改状态
+     * @param collaborativeFrom
+     * @return
+     */
+    public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom);
+
+    /**
      * 删除协办信息 
      * 
      * @param collaborativeId 协办信息 ID

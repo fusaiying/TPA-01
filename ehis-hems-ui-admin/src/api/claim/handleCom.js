@@ -498,3 +498,12 @@ export function checkThePayment(data) {
     params:data
   })
 }
+
+// 账单汇总信息
+export function getBillSum(data) {
+  return request({
+    url: 'claimflow/bill/billSum',
+    method: 'get',
+    params:data
+  })
+}

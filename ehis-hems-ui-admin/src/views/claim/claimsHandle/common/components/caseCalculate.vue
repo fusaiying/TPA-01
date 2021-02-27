@@ -621,7 +621,7 @@
       cellStyle({row, column, rowIndex, columnIndex}) {
         if (rowIndex===0 && this.isSum){
           // 改变合计行样式
-          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
+          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[1]
           const child_tr = s_table.getElementsByTagName('tr')[0]
           child_tr.childNodes.forEach(item => {
             if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2) {

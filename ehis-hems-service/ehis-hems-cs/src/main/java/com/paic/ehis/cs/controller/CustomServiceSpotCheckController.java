@@ -7,10 +7,12 @@ import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AttachmentInfo;
+import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.service.IAttachmentInfoService;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
+import com.paic.ehis.cs.service.IQualityInspectionHandleService;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     @Autowired
     private IAttachmentInfoService attachmentInfoService;
+    @Autowired
+    private IQualityInspectionHandleService qualityInspectionHandleService;
 
     /**
      * 发送质检工作池：数据来源
@@ -172,4 +176,24 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success(attachmentInfoList);
     }
 
+
+    /**
+     * 质检差错   修改是否申述等字段
+     */
+    @Log(title = "受理详情 ", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody QualityInspectionHandle qualityInspectionHandle)
+    {
+        return toAjax(qualityInspectionHandleService.updateQualityHandle(qualityInspectionHandle));
+    }
+
+/**
+ *质检差错确认工作池查询
+ */
+@GetMapping("/internal/selectHandle")
+public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
+{
+    List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
+    return getDataTable(list);
+}
 }

@@ -3,6 +3,8 @@ package com.paic.ehis.cs.service.impl;
 import java.util.List;
 
 import com.paic.ehis.cs.domain.QualityInspectionItem;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
+import com.paic.ehis.cs.domain.vo.AcceptVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.QualityInspectionHandleMapper;
@@ -119,5 +121,14 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         qualityInspectionHandle.setScore(qualityInspectionHandle.getScore());
         qualityInspectionHandle.setStatus(qualityInspectionHandle.getStatus());
         return qualityInspectionHandleMapper.updateQualityInspectionHandle(qualityInspectionHandle);
+    }
+
+    /**
+     *质检差错确认工作池查询
+     */
+    @Override
+    public List<AcceptVo> selectHandle(WorkOrderQueryDTO workOrderQueryDTO) {
+
+        return qualityInspectionHandleMapper.selectHandle(workOrderQueryDTO);
     }
 }

@@ -95,5 +95,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{inspectionId}
         </foreach>
     </delete>
-    
+    <!-- 工作池返回对象 -->
+    <resultMap type="com.paic.ehis.cs.domain.vo.AcceptVo" id="AcceptResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="workOrderId" column="work_order_id"/>
+        <result property="businessType" column="business_type"/>
+        <result property="serviceItem" column="item_code"/>
+        <result property="businessService" column="business_service"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="priorityLevel" column="priority_level"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="insuredPersonId" column="insured_no"/>
+        <result property="holderPersonId" column="holder_no"/>
+        <result property="acceptUserId" column="accept_by"/>
+        <result property="modifyUserId" column="modify_by"/>
+        <result property="endDate" column="end_date"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="callRelationBy" column="call_relation_by"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="contactsRelationBy" column="contacts_relation_by"/>
+        <result property="content" column="content"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="selectHandle" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        SELECT
+        qih.work_order_id,
+        adi.item_code,
+        woa.update_by,
+        qih.updated_by
+        FROM
+        quality_inspection_handle qih
+        LEFT JOIN accept_detail_info adi ON adi.work_order_no = qih.work_order_id   and qih.status="01"
+        LEFT JOIN work_order_accept woa ON  woa.work_order_no =  qih.work_order_id
+        where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+        <if test="workOrderId != null and workOrderId != ''">work_order_id,</if>
+    </select>
 </mapper>

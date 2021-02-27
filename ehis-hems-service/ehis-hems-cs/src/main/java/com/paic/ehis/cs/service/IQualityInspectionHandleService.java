@@ -2,6 +2,8 @@ package com.paic.ehis.cs.service;
 
 import java.util.List;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
+import com.paic.ehis.cs.domain.vo.AcceptVo;
 
 /**
  * 质检处理 Service接口
@@ -77,4 +79,9 @@ public interface IQualityInspectionHandleService
      * @return
      */
     int updateQualityHandle(QualityInspectionHandle qualityInspectionHandle);
+
+    /**
+     *质检差错确认工作池查询
+     */
+    List<AcceptVo> selectHandle(WorkOrderQueryDTO workOrderQueryDTO);
 }

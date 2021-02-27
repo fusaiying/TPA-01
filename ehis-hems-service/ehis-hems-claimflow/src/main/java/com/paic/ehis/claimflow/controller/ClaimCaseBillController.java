@@ -200,4 +200,13 @@ public class ClaimCaseBillController extends BaseController
     public AjaxResult selectFeeitemList(String rptNo){
         return AjaxResult.success(claimCaseBillService.selectFeeitemList(rptNo));
     }
+
+    /** 汇总信息 */
+    @GetMapping("/billSum")
+    public AjaxResult billSum(ClaimCaseBill claimCaseBill)
+    {
+        claimCaseBill.setStatus("Y");
+        ClaimCaseBill billSum = claimCaseBillService.getBillSum(claimCaseBill);
+        return AjaxResult.success(billSum);
+    }
 }

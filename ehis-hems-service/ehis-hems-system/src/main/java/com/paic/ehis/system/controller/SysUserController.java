@@ -240,4 +240,9 @@ public class SysUserController extends BaseController
         user.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(userService.updateUserStatus(user));
     }
+
+    @GetMapping("/getUserInfo")
+    public AjaxResult getUserInfo(){
+        return AjaxResult.success(userService.selectUserByUserName(SecurityUtils.getUsername()));
+    }
 }

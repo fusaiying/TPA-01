@@ -270,6 +270,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="directReceiptSign != null">direct_receipt_sign,</if>
+            <if test="caseFlag != null">case_flag,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="batchno != null">#{batchno},</if>
@@ -297,6 +299,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="directReceiptSign != null">#{directReceiptSign},</if>
+            <if test="caseFlag != null">#{caseFlag},</if>
          </trim>
     </insert>
 

@@ -441,7 +441,7 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload" disabled>上传附件</el-button></span>
        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -457,7 +457,7 @@
           <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -481,8 +481,8 @@
 
 <script>
   import moment from 'moment'
-  import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
-  import {coSearch,coCancel} from '@/api/customService/collaborative'
+  import {dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
+  import {coSearch,coCancel,demandAccept,selectAssist} from '@/api/customService/collaborative'
 
   import transfer from "../common/modul/transfer";
   import upLoad from "../common/modul/upload";
@@ -508,7 +508,7 @@
       return {
         ids:[],//多选框
         //流转用
-        colStatus:"",//是否协办
+        colStatus:"03",//是否协办
         flowLogData:[],
         flowLogCount: 0,
         // //传过来的工单号
@@ -635,44 +635,22 @@
       deal(){},
       //反显信息需求
       searchHandle() {
-        if (this.queryParams.status=="02"){
-          let query=this.queryParams
-          demandListAndPersonalPool(query).then(res => {
-            if (res != null && res.code === 200) {
-              if (res.rows.length>0){
-                this.workPoolData = res.rows[0]
-                this.totalCount = res.total
-              }
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
+        let workOrderNo = this.queryParams.workOrderNo
+        demandAccept(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+              this.workPoolData = res.data
+              this.totalCount = res.total
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
             }
-          }).catch(res => {
+          }
+        }).catch(res => {
 
-          })
-        }else {
-          let query=this.queryParams
-          demandListAndPublicPool(query).then(res => {
-            if (res != null && res.code === 200) {
-              if (res.rows.length>0){
-                this.workPoolData = res.rows[0]
-                this.totalCount = res.total
-              }
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
-            }
-          }).catch(res => {
-
-          })
-
-        }
-
+        })
       },
+
       //上传附件
       upload(){ this.$refs.upload.open();},
       //下载
@@ -749,12 +727,17 @@
       //查询协办表
       coSearch(){
         let send=this.queryParams
-        coSearch(send).then(res => {
+        selectAssist(send).then(res => {
           if (res != null && res.code === 200) {
-            this.colStatus = res.rows[0].status
+            if (res.rows.length!=0){
+              this.colStatus = res.rows[0].status
+              console.log(this.colStatus)
+            }
+            this.colStatus="03"
+             console.log(this.colStatus)
             if (res.rows.length <= 0) {
               return this.$message.warning(
-                "未查询到数据！"
+
               )
             }
           }
@@ -765,11 +748,10 @@
       },
       //撤销
       coCancel(){
-        let send=this.queryParams
-        coCancel(send).then(res => {
+        let workOrderNo=this.queryParams
+        coCancel(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
               alert("撤销成功")
-            this.coSearch()
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -779,6 +761,7 @@
         }).catch(res => {
 
         })
+        this.coSearch()
 
       },
 

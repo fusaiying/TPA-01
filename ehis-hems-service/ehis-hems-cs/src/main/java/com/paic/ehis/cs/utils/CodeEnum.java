@@ -32,7 +32,12 @@ public enum CodeEnum {
     INSPECTION_STATE_01("cs_inspection_state","01","待质检"),
     INSPECTION_STATE_02("cs_inspection_state","02","质检中"),
     INSPECTION_STATE_03("cs_inspection_state","03","质检完成"),
-
+    /*
+    *质检处理状态
+     */
+    CONFIRM_STATE_01("cs_confirm_state","01","待质检"),
+    CONFIRM_STATE_02("cs_confirm_state","02","质检中"),
+    CONFIRM_STATE_03("cs_confirm_state","03","质检完成"),
     /**
      * 业务类型
      */

@@ -136,4 +136,9 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         return claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
     }
 
+    @Override
+    public long selectClaimCaseRecordByRptNo(String rptNo) {
+        return claimCaseRecordMapper.selectClaimCaseRecordByRptNo(rptNo);
+    }
+
 }

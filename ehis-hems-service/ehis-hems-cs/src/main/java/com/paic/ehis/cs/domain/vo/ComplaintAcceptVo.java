@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.util.Date;
 
+
 public class ComplaintAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -328,11 +329,11 @@ public class ComplaintAcceptVo extends BaseEntity {
         this.contactsSecondNumber = contactsSecondNumber;
     }
 
-    public long getContactsSex() {
+    public String getContactsSex() {
         return contactsSex;
     }
 
-    public void setContactsSex(long contactsSex) {
+    public void setContactsSex(String contactsSex) {
         this.contactsSex = contactsSex;
     }
 

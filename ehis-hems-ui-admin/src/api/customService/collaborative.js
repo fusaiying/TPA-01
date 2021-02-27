@@ -29,3 +29,21 @@ export function  complainSearch(workOrderNo) {
   })
 }
 
+//-------------------------------------------------------------------信息需求
+
+
+export function  coCancel(query) {
+  return request({
+    url: '/cs/from/updateCollaborativeStatus',
+    method: 'get',
+    params: query
+  })
+}
+export function  coSearch(query) {
+  return request({
+    url: '/cs/from/list',
+    method: 'get',
+    params: query
+
+  })
+}

@@ -470,7 +470,7 @@
         <el-button  type="primary" size="mini" @click="temporary" >暂存</el-button>
         <el-button  type="primary"  size="mini" @click="transfer" v-if="this.colStatus!='03'">转办</el-button>
         <el-button  type="primary" size="mini" @click="urge" disabled>催办</el-button>
-        <el-button  type="primary"  size="mini" @click="cancle" v-if="this.colStatus!='03'">撤销</el-button>
+        <el-button  type="primary"  size="mini" @click="coCancel" v-if="this.colStatus!='03'">撤销</el-button>
       </div>
     </el-card>
 
@@ -766,9 +766,10 @@
       //撤销
       coCancel(){
         let send=this.queryParams
-        coSearch(send).then(res => {
+        coCancel(send).then(res => {
           if (res != null && res.code === 200) {
               alert("撤销成功")
+            this.coSearch()
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

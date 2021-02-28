@@ -9,13 +9,17 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.SysOrganInfo;
 import com.paic.ehis.system.domain.SysPost;
 import com.paic.ehis.system.domain.SysUserPost;
 import com.paic.ehis.system.domain.SysUserRole;
+import com.paic.ehis.system.domain.dto.OrganListDTO;
+import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
 import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.mapper.*;
 import com.paic.ehis.system.service.ISysConfigService;
+import com.paic.ehis.system.service.ISysOrganInfoService;
 import com.paic.ehis.system.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户 业务层处理
@@ -55,6 +60,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Autowired
     private ISysConfigService configService;
 
+    @Autowired
+    private ISysOrganInfoService sysOrganInfoService;
+
     /**
      * 根据条件分页查询用户列表
      * 
@@ -72,6 +80,22 @@ public class SysUserServiceImpl implements ISysUserService
     public int selectDept(String username) {
         String name = SecurityUtils.getUsername();
         return userMapper.selectDept(name);
+    }
+
+    /**
+     * 根据机构编码获取操作人
+     * @param sysUserByOrganCodeDTO
+     * @return
+     */
+    @Override
+    public List<SysUser> getUsersByOrganCode(SysUserByOrganCodeDTO sysUserByOrganCodeDTO) {
+        OrganListDTO organListDTO = new OrganListDTO();
+        organListDTO.setOrganCode(sysUserByOrganCodeDTO.getOrganCode());
+        List<SysOrganInfo> organInfoList = sysOrganInfoService.selectOrganListByUpOrganCode(organListDTO);
+        List<String> organCodeList = organInfoList.stream().map(soi -> soi.getOrganCode()).collect(Collectors.toList());
+        List<SysUser> sysUserList = userMapper.selectUserListByOrganCode(organCodeList);
+
+        return sysUserList;
     }
 
 

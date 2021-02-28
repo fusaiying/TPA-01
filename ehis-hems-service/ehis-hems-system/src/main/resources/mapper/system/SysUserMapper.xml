@@ -88,6 +88,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		${params.dataScope}
 	</select>
 
+	<select id="selectUserListByOrganCode" parameterType="String" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+        where organ_code in
+		<foreach collection="list" item="organCode" open="(" separator="," close=")">
+			#{organCode}
+		</foreach>
+	</select>
+
 	<select id="selectDept" parameterType="String" resultType="int">
     SELECT dept_id FROM sys_user WHERE user_name=#{username}
 	</select>

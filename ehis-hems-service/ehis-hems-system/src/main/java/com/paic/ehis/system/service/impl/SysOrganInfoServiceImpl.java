@@ -1,8 +1,9 @@
 package com.paic.ehis.system.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.system.domain.SysOrganInfo;
-import com.paic.ehis.system.domain.vo.SysOrganInfoDownVo;
+import com.paic.ehis.system.domain.dto.OrganListDTO;
 import com.paic.ehis.system.mapper.SysOrganInfoMapper;
 import com.paic.ehis.system.service.ISysOrganInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,35 +111,43 @@ public class SysOrganInfoServiceImpl implements ISysOrganInfoService
 
     /**
      * 根据当前机构编码查询下属机构清单
-     * @param organCode
+     * @param organListDTO
      * @return
      */
     @Override
-    public SysOrganInfoDownVo selectOrganListByUpOrganCode(String organCode) {
-        SysOrganInfoDownVo sysOrganInfoDownVo = new SysOrganInfoDownVo();
+    public List<SysOrganInfo> selectOrganListByUpOrganCode(OrganListDTO organListDTO) {
         SysOrganInfoServiceImpl s = new SysOrganInfoServiceImpl();
-        SysOrganInfo sysOrganInfo = sysOrganInfoMapper.selectSysOrganInfoByOrganCode(organCode);
-        sysOrganInfoDownVo.setSysOrganInfo(sysOrganInfo);
+        SysOrganInfo sysOrganInfo = sysOrganInfoMapper.selectSysOrganInfoByOrganCode(organListDTO.getOrganCode());
 
         List<SysOrganInfo> sysOrganInfoList  = new ArrayList<SysOrganInfo>();
-        sysOrganInfoList.add(sysOrganInfo);
+        if(checkAddOrganList(organListDTO.getOrganName(),sysOrganInfo.getOrganName())){
+            sysOrganInfoList.add(sysOrganInfo);
+        }
 
-        List<SysOrganInfo> sysOrganInfoTempList = sysOrganInfoMapper.selectOrganListByUpOrganCode(organCode);
+        List<SysOrganInfo> sysOrganInfoTempList = sysOrganInfoMapper.selectOrganListByUpOrganCode(organListDTO.getOrganCode());
         if(sysOrganInfoTempList != null && sysOrganInfoTempList.size() > 0){
             for (SysOrganInfo sog :sysOrganInfoTempList) {
-                sysOrganInfoList.add(sog);
+                if(checkAddOrganList(organListDTO.getOrganName(),sog.getOrganName())){
+                    sysOrganInfoList.add(sog);
+                }
                 List<SysOrganInfo> sysOrganInfoTempList1 = sysOrganInfoMapper.selectOrganListByUpOrganCode(sog.getOrganCode());
                 if(sysOrganInfoTempList1 != null && sysOrganInfoTempList1.size() > 0){
                     for (SysOrganInfo sog1:sysOrganInfoTempList1) {
-                        sysOrganInfoList.add(sog1);
+                        if(checkAddOrganList(organListDTO.getOrganName(),sog1.getOrganName())){
+                            sysOrganInfoList.add(sog1);
+                        }
                         List<SysOrganInfo> sysOrganInfoTempList2 = sysOrganInfoMapper.selectOrganListByUpOrganCode(sog1.getOrganCode());
                         if(sysOrganInfoTempList1 != null && sysOrganInfoTempList1.size() > 0){
                             for (SysOrganInfo sog2:sysOrganInfoTempList2) {
-                                sysOrganInfoList.add(sog2);
+                                if(checkAddOrganList(organListDTO.getOrganName(),sog2.getOrganName())){
+                                    sysOrganInfoList.add(sog2);
+                                }
                                 List<SysOrganInfo> sysOrganInfoTempList3 = sysOrganInfoMapper.selectOrganListByUpOrganCode(sog2.getOrganCode());
                                 if(sysOrganInfoTempList1 != null && sysOrganInfoTempList1.size() > 0){
                                     for (SysOrganInfo sog3:sysOrganInfoTempList3) {
-                                        sysOrganInfoList.add(sog3);
+                                        if(checkAddOrganList(organListDTO.getOrganName(),sog3.getOrganName())){
+                                            sysOrganInfoList.add(sog3);
+                                        }
                                     }
                                 }else{
                                     continue;
@@ -154,7 +163,22 @@ public class SysOrganInfoServiceImpl implements ISysOrganInfoService
             }
         }
 
-        sysOrganInfoDownVo.setSysOrganInfoList(sysOrganInfoList);
-        return sysOrganInfoDownVo;
+        return sysOrganInfoList;
+    }
+
+    /**
+     * 判断是否需要添加到返回集合
+     * @param checkOrganName
+     * @param organName
+     * @return
+     */
+    private static boolean checkAddOrganList(String checkOrganName,String organName){
+        if(StringUtils.isNotEmpty(checkOrganName)){
+            if(organName.indexOf(checkOrganName) == -1){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

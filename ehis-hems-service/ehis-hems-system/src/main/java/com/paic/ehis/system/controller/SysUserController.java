@@ -14,6 +14,7 @@ import com.paic.ehis.common.security.annotation.PreAuthorize;
 import com.paic.ehis.system.api.domain.SysRole;
 import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.api.model.LoginUser;
+import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.service.ISysPermissionService;
 import com.paic.ehis.system.service.ISysPostService;
 import com.paic.ehis.system.service.ISysRoleService;
@@ -244,5 +245,12 @@ public class SysUserController extends BaseController
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo(){
         return AjaxResult.success(userService.selectUserByUserName(SecurityUtils.getUsername()));
+    }
+
+    @PostMapping("/getUsersByOrganCode")
+    public TableDataInfo getUsersByOrganCode(@RequestBody SysUserByOrganCodeDTO sysUserByOrganCodeDTO){
+        startPage(sysUserByOrganCodeDTO);
+        List<SysUser> list = userService.getUsersByOrganCode(sysUserByOrganCodeDTO);
+        return getDataTable(list);
     }
 }

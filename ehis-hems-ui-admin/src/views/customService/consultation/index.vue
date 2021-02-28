@@ -32,7 +32,7 @@
           <el-col :span="8">
             <el-form-item label="任务状态：" prop="handleState">
               <el-select v-model="sendForm.handleState" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_opinion_handle" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>

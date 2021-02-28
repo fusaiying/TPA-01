@@ -139,7 +139,7 @@
           <el-col :span="8">
           <el-form-item label="状态：" prop="status">
             <el-select v-model="sendForm.status" class="item-width" placeholder="请选择">
-              <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
+              <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>

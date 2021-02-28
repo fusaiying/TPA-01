@@ -130,7 +130,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="vip标识：" prop="vipFlag">
+            <el-form-item label="VIP标识：" prop="vipFlag">
               <el-select v-model="sendForm.vipFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -171,14 +171,20 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;"
-          @selection-change="handleSelectionChange">
+          @selection-change="handleSelectionChange"
+
+        >
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.itemCode">
+              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.acceptTime | changeDate}}</span>
@@ -203,9 +209,22 @@
 
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="modifyBy" align="center" label="原处理人" show-overflow-tooltip/>
-          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.vipFlag">
+              <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+            <!--      如果没有配置字典数据会异常-->
+            <template slot-scope="scope" v-if="scope.row.organCode">
+              <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
@@ -238,13 +257,16 @@
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
-<!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.itemCode">
+              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="complaintTime" label="预约日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -268,16 +290,28 @@
           </el-table-column>
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
-          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.vipFlag">
+              <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+            <!--      如果没有配置字典数据会异常-->
+            <template slot-scope="scope" v-if="scope.row.organCode">
+              <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
           <!--fixed="right"控制固定某一列-->
           <el-table-column align="center" label="操作" fixed="right" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
               <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
               <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
             </template>
           </el-table-column>
         </el-table>
@@ -319,7 +353,7 @@
         cs_organization:[],//出单机构
         cs_priority:[],//优先级
         cs_vip_flag:[],// vip标识
-        cs_handle_state:[],// 状态：
+        cs_order_state:[],// 状态：
         secondPhone:[],
         riskCodes:[],
         dialogFormVisible: false,
@@ -391,8 +425,8 @@
       this.getDicts("cs_vip_flag").then(response => {
         this.cs_vip_flag = response.data;
       });
-      this.getDicts("cs_handle_state").then(response => {
-        this.cs_handle_state = response.data;
+      this.getDicts("cs_order_state").then(response => {
+        this.cs_order_state = response.data;
       });
       this.getDicts("cs_channel").then(response => {
         this.cs_channel = response.data;

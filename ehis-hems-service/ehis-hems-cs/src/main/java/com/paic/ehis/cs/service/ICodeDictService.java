@@ -1,8 +1,8 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.CodeDict;
-import com.paic.ehis.cs.domain.dto.CodeEnumDTO;
-import com.paic.ehis.cs.domain.vo.CodeEnumVo;
+import com.paic.ehis.cs.domain.dto.CodeDictDTO;
+import com.paic.ehis.cs.domain.vo.CodeDictVo;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public interface ICodeDictService
      */
     public CodeDict selectCodeDictById(String codeType);
 
-    public List<CodeEnumVo> updateCodeEnumVo(List<CodeEnumVo> list);
+    public List<CodeDictVo> updateCodeDictVo(List<CodeDictVo> list);
 
-    public List<CodeEnumVo> selectCodeEnumVo(CodeEnumDTO codeEnumDTO);
+    public List<CodeDictVo> selectCodeEnumVo(CodeDictDTO codeEnumDTO);
 
     /**
      * 查询业务码 列表
@@ -34,6 +34,8 @@ public interface ICodeDictService
      * @return 业务码 集合
      */
     public List<CodeDict> selectCodeDictList(CodeDict codeDict);
+
+    public List<CodeDictVo> selectCodeDictVoList(CodeDictDTO codeDictDTO);
 
     /**
      * 新增业务码 

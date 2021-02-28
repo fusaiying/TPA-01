@@ -1,16 +1,16 @@
 package com.paic.ehis.cs.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.paic.ehis.cs.domain.CodeDict;
-import com.paic.ehis.cs.domain.dto.CodeEnumDTO;
-import com.paic.ehis.cs.domain.vo.CodeEnumVo;
+import com.paic.ehis.cs.domain.dto.CodeDictDTO;
+import com.paic.ehis.cs.domain.vo.CodeDictVo;
 import com.paic.ehis.cs.domain.vo.CodeEnumVo1;
 import com.paic.ehis.cs.mapper.CodeDictMapper;
 import com.paic.ehis.cs.service.ICodeDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,7 +40,7 @@ public class CodeDictServiceImpl implements ICodeDictService
     }
 
     @Override
-    public List<CodeEnumVo> updateCodeEnumVo(List<CodeEnumVo> list) {
+    public List<CodeDictVo> updateCodeDictVo(List<CodeDictVo> list) {
         //一级
         List<CodeDict> parList = new ArrayList<>();
         //二级
@@ -69,7 +69,7 @@ public class CodeDictServiceImpl implements ICodeDictService
         CodeEnumVo1 codeEnumVo1 = new CodeEnumVo1();
         codeEnumVo1.setCodeType("cs_complaint_business_item");
         codeEnumVo1.setVoList(parList);
-        List<CodeDict> codeEnumListUpdate = codeDictMapper.selectInCodeEnum(codeEnumVo1);
+        List<CodeDict> codeEnumListUpdate = codeDictMapper.selectInCodeDict(codeEnumVo1);
         List<CodeDict> codeEnumListInsert = new ArrayList<>();
 
         for (int i = 0; i < parList.size(); i++) {
@@ -92,7 +92,7 @@ public class CodeDictServiceImpl implements ICodeDictService
             CodeEnumVo1 codeEnumVo11 = new CodeEnumVo1();
             codeEnumVo11.setCodeType("cs_insurance_source");
             codeEnumVo11.setVoList(subList);
-            List<CodeDict> codeEnumListUpdate1 = codeDictMapper.selectInCodeEnum(codeEnumVo11);
+            List<CodeDict> codeEnumListUpdate1 = codeDictMapper.selectInCodeDict(codeEnumVo11);
             List<CodeDict> codeEnumListInsert1 = new ArrayList<>();
             for (int i = 0; i < subList.size(); i++) {
                 CodeDict tempEnum = subList.get(i);
@@ -115,21 +115,27 @@ public class CodeDictServiceImpl implements ICodeDictService
     }
 
     @Override
-    public List<CodeEnumVo> selectCodeEnumVo(CodeEnumDTO codeEnumDTO) {
+    public List<CodeDictVo> selectCodeEnumVo(CodeDictDTO codeEnumDTO) {
         codeEnumDTO.setComplaintBusinessType("cs_complaint_business_item");
-        return codeDictMapper.selectCodeEnumVoList(codeEnumDTO);
+        return codeDictMapper.selectCodeDictVoList(codeEnumDTO);
     }
 
     /**
      * 查询业务码 列表
      * 
-     * @param codeDict 业务码 
+     * @param codeDict 业务码
      * @return 业务码 
      */
     @Override
     public List<CodeDict> selectCodeDictList(CodeDict codeDict)
     {
         return codeDictMapper.selectCodeDictList(codeDict);
+    }
+
+    @Override
+    public List<CodeDictVo> selectCodeDictVoList(CodeDictDTO codeDictDTO)
+    {
+        return codeDictMapper.selectCodeDictVoList(codeDictDTO);
     }
 
     /**

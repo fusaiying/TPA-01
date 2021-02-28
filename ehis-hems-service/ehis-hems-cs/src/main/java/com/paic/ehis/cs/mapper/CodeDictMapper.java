@@ -1,9 +1,10 @@
 package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.CodeDict;
-import com.paic.ehis.cs.domain.dto.CodeEnumDTO;
-import com.paic.ehis.cs.domain.vo.CodeEnumVo;
+import com.paic.ehis.cs.domain.dto.CodeDictDTO;
+import com.paic.ehis.cs.domain.vo.CodeDictVo;
 import com.paic.ehis.cs.domain.vo.CodeEnumVo1;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author sino
  * @date 2021-02-27
  */
+@Component
 public interface CodeDictMapper 
 {
     /**
@@ -24,7 +26,7 @@ public interface CodeDictMapper
      */
     public CodeDict selectCodeDictById(String codeType);
 
-    public List<CodeEnumVo> selectCodeEnumVoList(CodeEnumDTO codeEnumDTO);
+    public List<CodeDictVo> selectCodeDictVoList(CodeDictDTO codeDictDTO);
 
     /**
      * 查询业务码 列表
@@ -33,7 +35,6 @@ public interface CodeDictMapper
      * @return 业务码 集合
      */
     public List<CodeDict> selectCodeDictList(CodeDict codeDict);
-
 
     public List<CodeDict> selectComplaintBusiness(CodeDict codeDict);
 
@@ -72,5 +73,5 @@ public interface CodeDictMapper
     public int deleteCodeDictByIds(String[] codeTypes);
 
 
-    public List<CodeDict> selectInCodeEnum(CodeEnumVo1 codeEnumVo1);
+    public List<CodeDict> selectInCodeDict(CodeEnumVo1 codeEnumVo1);
 }

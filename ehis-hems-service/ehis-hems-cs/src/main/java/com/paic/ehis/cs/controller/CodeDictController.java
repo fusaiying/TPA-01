@@ -1,30 +1,23 @@
 package com.paic.ehis.cs.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.cs.domain.CodeDict;
-import com.paic.ehis.cs.domain.dto.CodeEnumDTO;
-import com.paic.ehis.cs.domain.vo.CodeEnumVo;
-import com.paic.ehis.cs.service.ICodeDictService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
-
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.cs.domain.CodeDict;
+import com.paic.ehis.cs.domain.dto.CodeDictDTO;
+import com.paic.ehis.cs.domain.vo.CodeDictVo;
+import com.paic.ehis.cs.service.ICodeDictService;
+import com.paic.ehis.cs.utils.CodeTypeEnum;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 业务码 Controller
@@ -33,11 +26,24 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-02-27
  */
 @RestController
-@RequestMapping("/dict")
+@RequestMapping("/dict/internal")
 public class CodeDictController extends BaseController
 {
     @Autowired
     private ICodeDictService codeDictService;
+
+    /**
+     * 查询业务码 列表
+     */
+    @GetMapping("/listWithParent")
+    public TableDataInfo listWithParent(CodeDictDTO codeDictDTO)
+    {
+        startPage();
+        codeDictDTO.setInsuranceSourceType(CodeTypeEnum.CS_INSURANCE_SOURCE.getCodeType());
+        codeDictDTO.setComplaintBusinessType(CodeTypeEnum.CS_COMPLAINT_BUSINESS_ITEM.getCodeType());
+        List<CodeDictVo> list = codeDictService.selectCodeDictVoList(codeDictDTO);
+        return getDataTable(list);
+    }
 
     /**
      * 查询业务码 列表
@@ -71,17 +77,17 @@ public class CodeDictController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:enum:export')")
     @Log(title = "业务码 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportNew")
-    public void export(HttpServletResponse response, CodeEnumDTO codeEnumDTO) throws IOException
+    public void export(HttpServletResponse response, CodeDictDTO codeDictDTO) throws IOException
     {
-        List<CodeEnumVo> list = codeDictService.selectCodeEnumVo(codeEnumDTO);
-        ExcelUtil<CodeEnumVo> util = new ExcelUtil<CodeEnumVo>(CodeEnumVo.class);
-        util.exportExcel(response, list, "enum");
+        List<CodeDictVo> list = codeDictService.selectCodeEnumVo(codeDictDTO);
+        ExcelUtil<CodeDictVo> util = new ExcelUtil<CodeDictVo>(CodeDictVo.class);
+        util.exportExcel(response, list, "投诉业务类别");
     }
 
 
     @GetMapping("/updateCodeEnumVo")
-    public AjaxResult updateCodeEnumVo(List<CodeEnumVo> list){
-        return AjaxResult.success(codeDictService.updateCodeEnumVo(list));
+    public AjaxResult updateCodeEnumVo(List<CodeDictVo> list){
+        return AjaxResult.success(codeDictService.updateCodeDictVo(list));
     }
 
 

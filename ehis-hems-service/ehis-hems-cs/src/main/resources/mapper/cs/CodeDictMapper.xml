@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.cs.mapper.CodeDictMapper">
     
-    <resultMap type="CodeDict" id="CodeDictResult">
+    <resultMap type="com.paic.ehis.cs.domain.CodeDict" id="CodeDictResult">
         <result property="codeType"    column="code_type"    />
         <result property="code"    column="code"    />
         <result property="codeName"    column="code_name"    />
@@ -20,28 +20,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
 
-    <resultMap type="com.paic.ehis.cs.domain.vo.CodeEnumVo" id="CodeEnumVoResult">
+    <resultMap type="com.paic.ehis.cs.domain.dto.CodeDictDTO" id="CodeDictDTOResult">
         <result property="complaintBusinessCode"    column="complaint_business_code"    />
         <result property="complaintBusinessName"    column="complaint_business_name"    />
+        <result property="complaintBusinessType"    column="complaint_business_type"    />
         <result property="insuranceSourceCode"    column="insurance_source_code"    />
         <result property="insuranceSourceName"    column="insurance_source_name"    />
+        <result property="insuranceSourceType"    column="insurance_source_type"    />
     </resultMap>
 
-    <select id="selectCodeEnumVoList" parameterType="com.paic.ehis.cs.domain.dto.CodeEnumDTO" resultMap="CodeEnumVoResult">
+    <select id="selectCodeDictVoList" parameterType="com.paic.ehis.cs.domain.vo.CodeDictVo" resultMap="CodeDictDTOResult">
         SELECT
-        a.CODE complaint_business_code,
-        a.code_name complaint_business_name,
-        b.CODE insurance_source_code,
-        b.code_name insurance_source_name
+        a.code insurance_source_code,
+        a.code_name insurance_source_name,
+        b.code complaint_business_code,
+        b.code_name complaint_business_name
         FROM
-        code_enum a
-        LEFT JOIN code_enum b ON a.code_id = b.p_code_id
-        WHERE
-        a.code_type = #{complaintBusinessType}
-        <if test="complaintBusinessCode != null  and complaintBusinessCode != ''"> and complaint_business_code = #{complaintBusinessCode}</if>
-        <if test="complaintBusinessName != null  and complaintBusinessName != ''"> and complaint_business_name = #{complaintBusinessName}</if>
-        <if test="insuranceSourceCode != null  and insuranceSourceCode != ''"> and insurance_source_code = #{insuranceSourceCode}</if>
-        <if test="insuranceSourceName != null  and insuranceSourceName != ''"> and insurance_source_name = #{insuranceSourceName}</if>
+        code_Dict a
+        LEFT JOIN code_Dict b ON a.parent_code = b.code
+        WHERE 1=1
+         AND a.code_type = #{insuranceSourceType}
+         AND b.code_type = #{complaintBusinessType}
+        <if test="insuranceSourceCode != null  and insuranceSourceCode != ''"> AND a.code = #{insuranceSourceCode}</if>
+        <if test="insuranceSourceName != null  and insuranceSourceName != ''"> AND a.code_name like concat('%', #{insuranceSourceName}, '%')</if>
+        <if test="complaintBusinessCode != null  and complaintBusinessCode != ''"> AND b.code = #{complaintBusinessCode}</if>
+        <if test="complaintBusinessName != null  and complaintBusinessName != ''"> AND b.code_name like concat('%', #{complaintBusinessName}, '%')</if>
     </select>
 
 
@@ -49,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select code_type, code, code_name, code_alias, status, parent_code, remarks, order_no, created_by, created_time, updated_by, updated_time from code_dict
     </sql>
 
-    <select id="selectCodeDictList" parameterType="CodeDict" resultMap="CodeDictResult">
+    <select id="selectCodeDictList" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
         <include refid="selectCodeDictVo"/>
         <where>  
             <if test="codeName != null  and codeName != ''"> and code_name like concat('%', #{codeName}, '%')</if>
@@ -65,12 +68,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectComplaintBusiness" parameterType="CodeDict" resultMap="CodeDictResult">
-    SELECT code,code_name FROM `code_enum` where code_type= #{codeType}
+    <select id="selectComplaintBusiness" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
+    SELECT code,code_name FROM `code_Dict` where code_type= #{codeType}
     </select>
 
-    <select id="selectInsuranceSource" parameterType="CodeDict" resultMap="CodeDictResult">
-    SELECT code,code_name FROM `code_enum` where p_code_id= #{pCodeId}
+    <select id="selectInsuranceSource" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
+    SELECT code,code_name FROM `code_Dict` where p_code_id= #{pCodeId}
     </select>
     
     <select id="selectCodeDictById" parameterType="String" resultMap="CodeDictResult">
@@ -78,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where code_type = #{codeType}
     </select>
         
-    <insert id="insertCodeDict" parameterType="CodeDict">
+    <insert id="insertCodeDict" parameterType="com.paic.ehis.cs.domain.CodeDict">
         insert into code_dict
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="codeType != null">code_type,</if>
@@ -110,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateCodeDict" parameterType="CodeDict">
+    <update id="updateCodeDict" parameterType="com.paic.ehis.cs.domain.CodeDict">
         update code_dict
         <trim prefix="SET" suffixOverrides=",">
             <if test="code != null">code = #{code},</if>
@@ -139,11 +142,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectInCodeEnum" parameterType="com.paic.ehis.cs.domain.vo.CodeEnumVo1" resultMap="CodeDictResult">
+    <select id="selectInCodeDict" parameterType="com.paic.ehis.cs.domain.vo.CodeEnumVo1" resultMap="CodeDictResult">
         SELECT
         *
         FROM
-        code_enum
+        code_dict
         WHERE
         code_type = #{codeTYpe}
         AND CODE IN

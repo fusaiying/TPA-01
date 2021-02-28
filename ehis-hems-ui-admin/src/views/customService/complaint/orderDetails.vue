@@ -608,9 +608,6 @@
             {required: true, message: "联系人不能为空", trigger: "blur"}
           ],
           orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
             {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
           ],
 

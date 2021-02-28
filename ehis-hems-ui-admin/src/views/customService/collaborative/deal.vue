@@ -489,7 +489,12 @@
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [{dictType: 'cs_channel'}
+    ,{dictType: 'cs_service_item'}
+    ,{dictType: 'cs_vip_flag'}
+    ,{dictType: 'cs_drop_status'}
+    ,{dictType: 'cs_whether_flag'}
+  ]
   export default {
     components: { transfer ,
                   upLoad,
@@ -598,6 +603,9 @@
           label: '服务4'
         }],
         sysUserOptions: [],
+        dictList: [],
+        cs_drop_status: [],
+        cs_whether_flag: []
       }
     },
     created() {
@@ -611,7 +619,27 @@
       this.coSearch()
 
     },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_drop_status = this.dictList.find(item => {
+        return item.dictType === 'cs_drop_status'
+      }).dictDate
+      this.cs_vip_flagOptions = this.dictList.find(item => {
+        return item.dictType === 'cs_vip_flag'
+      }).dictDate
+      this.cs_priorityOptions = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_organizationOptions = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
 
+    },
     methods: {
       //新增按钮
       add(){

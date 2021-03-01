@@ -190,6 +190,7 @@
       }).dictDate
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,

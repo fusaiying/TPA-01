@@ -345,7 +345,7 @@
             this.download('claimmgt/standing/exportNew' /*+ '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
               + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate*/, {
               ...this.searchForm
-            }, `FYX_${new Date().getTime()}.xlsx`)
+            }, `standingBook_${new Date().getTime()}.xlsx`)
           } else {
             return this.$message.warning(
               "没有查询到能导出的数据！"

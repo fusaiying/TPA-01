@@ -66,8 +66,8 @@
         <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-    <el-table-column prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
+    <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
+    <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
       </template>

@@ -73,3 +73,13 @@ export function exportInitiate(query) {
  // #  params: query  此处？传参&拼接
 })
 }
+
+
+//tpa 收款明细
+export function receiptColList(query) {
+  return request({
+    url: '/finance/tpaTask/tpaReceiptColList',
+    method: 'get',
+    params: query
+  })
+}

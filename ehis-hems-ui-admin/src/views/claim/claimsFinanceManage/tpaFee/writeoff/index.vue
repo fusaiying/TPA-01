@@ -92,7 +92,7 @@
       </div>
 
       <!--收款明细 start-->
-      <gatheringTable :table-data="gatherTableData" />
+      <gatheringTable :table-data="gatherTableData" @radioVue="radioVue"/>
       <!--收款明细 end -->
 
       <pagination
@@ -111,7 +111,7 @@
   import feeTable from '../components/feeTable'
   import gatheringTable from '../components/gatheringTable'
 
-  import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
+  import {companyList,riskList, listInfo,receiptColList} from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
   export default {
@@ -151,6 +151,10 @@
         companySelect:[],
         settlementTypeSelect:[],
         riskCodeSelect:[],
+        // 实收ID
+        collectionId:'',
+        // 复选框任务号
+        taskNoList:[],
       }
     },
     mounted(){
@@ -163,6 +167,7 @@
       this.getRiskList('');
       this.getCompanyList();
       this.initData();
+      this.initGatherData();
     },
     watch: {
 
@@ -170,8 +175,23 @@
     computed: {
     },
     methods: {
+      radioVue(value){
+        this.collectionId = value;
+      },
+      checkBoxVue(checkVue){
+        this.taskNoList = checkVue;
+      },
       initGatherData(){
-
+        const params = {};
+        params.pageNum = this.gatherPageInfo.page;
+        params.pageSize = this.gatherPageInfo.pageSize;
+        params.companyCode = this.formSearch.companyCode;
+        receiptColList(params).then(res => {
+          if (res.code == '200') {
+            this.gatherTotal = res.total;
+            this.gatherTableData = res.rows;
+          }
+        });
       },
       resetForm() {
         this.$refs.formSearch.resetFields()
@@ -228,8 +248,11 @@
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.pageStatus = '03';
-
+        if(this.btnSearch) {
+          params.pageType = '03';
+        } else {
+          params.settleStatus = '02';
+        }
         this.searchLoad = true;
         listInfo(params).then(res => {
           if (res.code == '200') {

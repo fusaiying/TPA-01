@@ -160,6 +160,7 @@
         },
 
         fixInfo:{},
+        btnSearch:false,
         importDialog:false,
         detailDialog:false,
         status:'01',
@@ -259,6 +260,14 @@
         params.settleEndDate = this.formSearch.settleEndDate;
         params.pageStatus = '01';
         this.searchLoad = true;
+
+        if(!this.btnSearch) {
+          params.pageType = '01';
+          let startDate  = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+          let endDate =  moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+          params.creationStartDate = startDate;
+          params.creationEndDate = endDate;
+        }
         listInfo(params).then(res => {
           if (res.code == '200') {
             this.total = res.total;

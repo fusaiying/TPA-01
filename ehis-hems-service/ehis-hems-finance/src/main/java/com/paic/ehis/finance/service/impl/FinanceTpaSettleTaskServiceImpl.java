@@ -281,9 +281,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     @Override
     public  List<FinanceTpaSettleTask>  selectTpaSettleTaskList(TpaSettleDTO tpaSettleDTO) {
         tpaSettleDTO.setStatus("Y");
-        if ("03".equals(tpaSettleDTO.getPageStatus())){
-            tpaSettleDTO.setSettleStatus("'02','03'");
-        }
         return financeTpaSettleTaskMapper.selectTpaSettleTaskList(tpaSettleDTO);
     }
 

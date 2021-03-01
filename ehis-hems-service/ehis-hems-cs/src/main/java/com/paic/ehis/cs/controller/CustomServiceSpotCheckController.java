@@ -8,13 +8,17 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
+import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.mapper.AttachmentInfoMapper;
 import com.paic.ehis.cs.service.IAttachmentInfoService;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.service.IQualityInspectionHandleService;
+import com.paic.ehis.cs.service.IQualityInspectionItemService;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +39,11 @@ public class CustomServiceSpotCheckController extends BaseController {
     private IQualityInspectionAcceptService qualityInspectionAcceptService;
 
     @Autowired
-    private IAttachmentInfoService attachmentInfoService;
-    @Autowired
     private IQualityInspectionHandleService qualityInspectionHandleService;
+    @Autowired
+    private IQualityInspectionItemService qualityInspectionItemService;
+    @Autowired
+    private IAttachmentInfoService attachmentInfoService;
 
     /**
      * 发送质检工作池：数据来源
@@ -176,6 +182,49 @@ public class CustomServiceSpotCheckController extends BaseController {
         return AjaxResult.success(attachmentInfoList);
     }
 
+
+    /**
+     * 新增质检处理
+     * @param qualityInspectionHandle
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:handle:add')")
+    @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
+    @PostMapping("/insertHandle")
+    public AjaxResult insertHandle(@RequestBody QualityInspectionHandle qualityInspectionHandle)
+    {
+        Map<String,String> param=new HashMap<>();
+        //操作后主流程状态
+        param.put("status",CodeEnum.CONFIRM_STATE_01.getCode());
+        return toAjax(qualityInspectionHandleService.insertHandle(qualityInspectionHandle));
+    }
+    /**
+     * 新增质检项目
+     * @param sendIds
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('system:handle:add')")
+    @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
+    @PostMapping("/insertItem")
+    public AjaxResult insertItem(@RequestBody String[] sendIds)
+    {
+        Map<String,String> param=new HashMap<>();
+
+        //操作前主流程状态
+        param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+        return toAjax(qualityInspectionItemService.insertHandle(sendIds,param));
+    }
+    /**
+     * 质检差错查询反显数据
+     */
+    @PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/list")
+    public TableDataInfo list(QualityInspectionItem qualityInspectionItem)
+    {
+        startPage();
+        List<QualityInspectionItem> list = qualityInspectionItemService.selectItemInspectionById(qualityInspectionItem);
+        return getDataTable(list);
+    }
 
     /**
      * 质检差错   修改是否申述等字段

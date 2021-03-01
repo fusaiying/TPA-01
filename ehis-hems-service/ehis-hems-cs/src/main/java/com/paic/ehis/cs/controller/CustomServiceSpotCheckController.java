@@ -230,8 +230,8 @@ public class CustomServiceSpotCheckController extends BaseController {
      * 质检差错   修改是否申述等字段
      */
     @Log(title = "受理详情 ", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody QualityInspectionHandle qualityInspectionHandle)
+    @PutMapping("/updateQualityHandle")
+    public AjaxResult updateQualityHandle(@RequestBody QualityInspectionHandle qualityInspectionHandle)
     {
         return toAjax(qualityInspectionHandleService.updateQualityHandle(qualityInspectionHandle));
     }

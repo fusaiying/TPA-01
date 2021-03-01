@@ -1,5 +1,6 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -14,11 +15,11 @@ import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IClaimCasePayService;
 import com.paic.ehis.finance.utils.ObjectNullUtil;
 import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.RemoteUserService;
 import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
-import com.paic.ehis.finance.domain.SysUser;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -38,8 +39,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     @Autowired
     private ClaimBatchMapper claimBatchMapper;
     @Autowired
-    private SysUserMapper sysUserMapper;
-    @Autowired
     private ClaimCasePayMapper claimCasePayMapper;
     @Autowired
     private ClaimCasePolicyMapper claimCasePolicyMapper;
@@ -57,6 +56,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     private FinancePayDetailInfoMapper financePayDetailInfoMapper;
     @Autowired
     private FinanceBorrowInfoMapper financeBorrowInfoMapper;
+    @Autowired
+    private RemoteUserService userService;
 
     /*
     * 财务appId
@@ -72,10 +73,15 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectInitList() {
-        Long userId = SecurityUtils.getUserId();
-        SysUser sysUser = sysUserMapper.selectUserById(userId);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
         // 获取用户的所属机构
-        String deptId = sysUser.getDeptId().toString();
+        String deptId = "";
+        if (null != info){
+            deptId = info.getOrganCode();
+        }
+
         List<Map<String,Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
         for (Map<String,Object> map : initList){
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
@@ -103,10 +109,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     @Override
     public List<Map<String, Object>> selectBatchList(ClaimCasePayDTO claimCasePayDTO) {
         if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            Long userId = SecurityUtils.getUserId();
-            SysUser sysUser = sysUserMapper.selectUserById(userId);
+            ObjectMapper objectMapper = new ObjectMapper();
+            SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
+            String organCode = "";
+            if (null != info){
+                organCode = info.getOrganCode();
+            }
             // 获取用户的所属机构
-            claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());
+            claimCasePayDTO.setOrganCode(organCode);
         }
         List<Map<String, Object>> batchList = claimBatchMapper.selectPayBatchList(claimCasePayDTO);
         // 调用微服务获取医院中文名称
@@ -299,6 +309,15 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public AjaxResult confirmPayment(ClaimCaseForeignPayVO claimCasePayVO) {
+        // 获取当前登录用户信息
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
+        // 获取当前用户所属机构
+        String organCode = "";
+        if (null != info) {
+            organCode = info.getOrganCode();
+        }
+        String username = SecurityUtils.getUsername();
         // 批次号
         String batchNo = claimCasePayVO.getBatchNo();
         // 外币 判断该批次下所有案件审核岗赔付结论中的账单币种是否一致
@@ -326,8 +345,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         if (finanBackList.size() > 0){
             return AjaxResult.error("此批次存在回退案件，请结案后进行支付");
         } else {
-            String username = SecurityUtils.getUsername();
-            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
             // 支付信息
             ClaimCasePaymentVO payment = claimCasePayVO.getPayment();
             // 案件信息
@@ -348,7 +365,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             financePayInfo.setStatus("Y");
             financePayInfo.setCreateBy(username);
             financePayInfo.setCreateTime(DateUtils.getNowDate());
-            financePayInfo.setDeptCode(sysUser.getDeptId().toString());
+            financePayInfo.setDeptCode(organCode);
             // 01-非全赔 02-全赔
             String claimFlag = payment.getClaimFlag();
 
@@ -369,7 +386,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     financePayDetailInfo.setStatus("Y");
                     financePayDetailInfo.setCreateBy(username);
                     financePayDetailInfo.setCreateTime(DateUtils.getNowDate());
-                    financePayDetailInfo.setDeptCode(sysUser.getDeptId().toString());
+                    financePayDetailInfo.setDeptCode(organCode);
                     financePayDetailInfoMapper.insertFinancePayDetailInfo(financePayDetailInfo);
                     // 修改案件信息支付状态为‘支付中’
                     ClaimCase claimCase = new ClaimCase();
@@ -421,6 +438,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public AjaxResult borrowingCase(ClaimCaseForeignPayVO claimCasePayVO) {
+        // 获取当前登录用户信息
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
+        String organCode = "";
+        if (null != info){
+            organCode = info.getOrganCode();
+        }
+        String username = SecurityUtils.getUsername();
         // 批次号
         String batchNo = claimCasePayVO.getBatchNo();
         // 外币 判断该批次下所有案件审核岗赔付结论中的账单币种是否一致
@@ -438,8 +463,6 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         if (finanBackList.size() > 0){
             return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
         } else {
-            String username = SecurityUtils.getUsername();
-            SysUser sysUser = sysUserMapper.selectUserById(SecurityUtils.getUserId());
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
                 // 支付状态置为可支付
@@ -455,7 +478,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 financeBorrowInfo.setStatus("Y");
                 financeBorrowInfo.setCreateBy(username);
                 financeBorrowInfo.setCreateTime(DateUtils.getNowDate());
-                financeBorrowInfo.setDeptCode(sysUser.getDeptId().toString());
+                financeBorrowInfo.setDeptCode(organCode);
                 financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo);
         }
             return AjaxResult.success("借款成功！",1);
@@ -469,9 +492,13 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectInitForeignList() {
-        Long userId = SecurityUtils.getUserId();
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
         // 获取用户的所属机构
-        String deptId = sysUserMapper.selectUserById(userId).getDeptId().toString();
+        String deptId = "";
+        if (null != info) {
+            deptId = info.getOrganCode();
+        }
         List<Map<String,Object>> initList = claimBatchMapper.selectPayForeignBatchInit(deptId);
         for (Map<String,Object> map : initList){
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
@@ -499,10 +526,10 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     @Override
     public List<Map<String, Object>> selectForeignBatchList(ClaimCasePayDTO claimCasePayDTO) {
         if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            Long userId = SecurityUtils.getUserId();
-            SysUser sysUser = sysUserMapper.selectUserById(userId);
+            ObjectMapper objectMapper = new ObjectMapper();
+            SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
             // 获取用户的所属机构
-            claimCasePayDTO.setOrganCode( sysUser.getDeptId().toString());
+            claimCasePayDTO.setOrganCode(null == info ? "" : info.getOrganCode());
         }
         List<Map<String, Object>> batchList = claimBatchMapper.selectPayForeignBatchList(claimCasePayDTO);
         for (Map<String,Object> map : batchList){

@@ -48,8 +48,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     @Autowired
     private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
 
-    @Autowired
-    SysUserMapper sysUserMapper;
+//    @Autowired
+//    SysUserMapper sysUserMapper;
 
     @Autowired
     private BaseIssuingcompanyRuleMapper baseIssuingcompanyRuleMapper;

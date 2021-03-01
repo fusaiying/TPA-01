@@ -38,4 +38,12 @@ public interface RemoteUserService
      */
     @PostMapping("/organInfo/getOrganInfo")
     public AjaxResult getOrganInfo(@RequestBody List<String> organCodes);
+
+    /**
+     * 获取登录用户信息
+     *
+     * @return
+     */
+    @GetMapping("/getUserInfo")
+    public AjaxResult userInfo();
 }

@@ -49,7 +49,7 @@
       <form  v-for="(item,index) in HistoryData">
         <el-row style="margin: 20px 10px;">
           <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{index +1 }}-下发</span>
+            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 }}-下发</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
@@ -67,7 +67,7 @@
 
         <el-row style="margin: -10px 10px;" v-if="HistoryData.length != (index+1)">
           <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ index +1 }}-回调</span>
+            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 - 1 }}-回调</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.updateTime | changeDate }}</span>

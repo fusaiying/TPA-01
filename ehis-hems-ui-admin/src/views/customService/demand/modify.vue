@@ -405,8 +405,8 @@
             editReason:"",//修改原因
             editRemark:"" //修改说明
 
-          }
-
+          },
+          alterId:[]
         },
         totalCount: 0,
         // 表单校验
@@ -487,6 +487,9 @@
 
           if (valid) {
             let insert=this.workPoolData
+            if (this.$route.query.alterId!=null){
+              insert.alterId=JSON.parse(this.$route.query.alterId)
+            }
             insert.workOrderNo=this.$route.query.workOrderNo
             modifySubmit(insert).then(res => {
               if (res != null && res.code === 200) {
@@ -530,6 +533,7 @@
               workPoolData.officeNumber=""
               workPoolData.officeQuhao=""
               workPoolData.officeSecondNumber=""
+              workPoolData.item=[]
               this.workPoolData = workPoolData;
               this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
                 this.totalCount = res.total

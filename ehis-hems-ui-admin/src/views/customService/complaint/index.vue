@@ -510,7 +510,7 @@
       dealButton(s){
         if(s.itemCode=="B00034"){
           this.$router.push({
-            path: '/customService/complaint/dealGy',
+            path: '/customService/complaint/gyDeal',
             query:{
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,

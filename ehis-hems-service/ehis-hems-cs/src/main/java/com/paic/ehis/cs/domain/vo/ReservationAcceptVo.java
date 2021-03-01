@@ -183,8 +183,6 @@ public class ReservationAcceptVo extends BaseEntity {
     /*医院赔付比例*/
     private String compensationRatio;
 
-    /**传真*/
-    private String fax;
 
     /**预约日期*/
     private String appointmentDate;
@@ -235,5 +233,7 @@ public class ReservationAcceptVo extends BaseEntity {
      * 修改说明
      */
     private String editRemark;
+
+    private String[] alterId;
 
 }

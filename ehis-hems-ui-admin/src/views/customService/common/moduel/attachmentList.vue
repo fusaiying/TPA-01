@@ -11,9 +11,17 @@
       tooltip-effect="dark"
       style=" width: 100%;">
       <el-table-column prop="attachmentName" align="center" label="附件名称" show-overflow-tooltip/>
-      <el-table-column prop="attachmentType" align="center" label="附件类型" show-overflow-tooltip/>
+      <el-table-column prop="attachmentType" align="center" label="附件类型" show-overflow-tooltip>
+        <template slot-scope="scope" v-if="scope.row.attachmentType">
+          <span>{{selectDictLabel(cs_attachment_type, scope.row.attachmentType)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="uplodBy" align="center" label="上传人" show-overflow-tooltip/>
-      <el-table-column prop="uploadTime" align="center" label="上传时间 " show-overflow-tooltip/>
+      <el-table-column prop="uploadTime" align="center" label="上传时间 " show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.uploadTime | changeDate}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="remark" align="center" label="备注" show-overflow-tooltip/>
       <el-table-column align="center" fixed="right" label="操作" width="140">
         <template slot-scope="scope">
@@ -27,6 +35,8 @@
 <script>
 
 
+import moment from "moment";
+
 export default {
   props: {
     attachmentInfoData: {
@@ -36,11 +46,22 @@ export default {
       }
     }
   },
+  filters: {
+    changeDate: function (value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      }
+    }
+  },
   data() {
     return {
+      cs_attachment_type: [],
     }
   },
   async mounted() {
+    await this.getDicts("cs_attachment_type").then(response => {
+      this.cs_attachment_type = response.data;
+    })
   },
   methods: {}
 }

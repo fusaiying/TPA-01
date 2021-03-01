@@ -303,14 +303,28 @@
         </el-row>
 
         <el-row>
-          <el-form-item label="投诉内容：" prop="phone">
+          <el-form-item label="改善措施：" prop="phone">
             <el-input
               disabled
               type="textarea"
               :rows="2"
-              v-model="workPoolData.content">
+              v-model="workPoolData.content" disabled>
             </el-input>
           </el-form-item>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="GCC附件：" prop="actPromptly">
+              <el-input v-model="sendForm.actPromptly" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="附件：" prop="actPromptly">
+              <el-input v-model="sendForm.actPromptly" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
         </el-row>
 
 
@@ -366,15 +380,15 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="priority"  >
-              <el-select v-model="sendForm.level1" class="item-width" >
-                <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="sendForm.level1" class="item-width" disabled>
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉分类：" prop="priority"  >
-              <el-select v-model="sendForm.level2" class="item-width" >
+              <el-select v-model="sendForm.level2" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -382,7 +396,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否计件：" prop="pieceworkFlag"  >
-              <el-select v-model="sendForm.pieceworkFlag" class="item-width" >
+              <el-select v-model="sendForm.pieceworkFlag" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -392,15 +406,15 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="撤诉状态：" prop="priority"  >
-              <el-select v-model="sendForm.complaintStatus" class="item-width" >
-                <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="sendForm.complaintStatus" class="item-width" disabled>
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉是否成立：" prop="complaintTenable"  >
-              <el-select v-model="sendForm.complaintTenable" class="item-width" >
+              <el-select v-model="sendForm.complaintTenable" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -408,7 +422,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉不成立理由：" prop="faseReason"  >
-              <el-select v-model="sendForm.faseReason" class="item-width" >
+              <el-select v-model="sendForm.faseReason" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -420,7 +434,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="重复投诉：" prop="repeatedComplaint"  >
-              <el-select v-model="sendForm.repeatedComplaint" class="item-width" >
+              <el-select v-model="sendForm.repeatedComplaint" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -428,7 +442,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="一级投诉原因：" prop="reason1"  >
-              <el-select v-model="sendForm.reason1" class="item-width" >
+              <el-select v-model="sendForm.reason1" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -436,7 +450,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉原因：" prop="reason2"  >
-              <el-select v-model="sendForm.reason2" class="item-width" >
+              <el-select v-model="sendForm.reason2" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -446,7 +460,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="三级投诉原因：" prop="reason1"  >
-              <el-select v-model="sendForm.reason3" class="item-width" >
+              <el-select v-model="sendForm.reason3" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -454,15 +468,15 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉环节(报保监)：" prop="complaintLink"  >
-              <el-select v-model="sendForm.complaintLink" class="item-width" >
-                <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="sendForm.complaintLink" class="item-width" disabled>
+                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion"  >
-              <el-select v-model="sendForm.complaintQuestion" class="item-width" >
+              <el-select v-model="sendForm.complaintQuestion" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -474,7 +488,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState"  >
-              <el-select v-model="sendForm.outsideState" class="item-width" >
+              <el-select v-model="sendForm.outsideState" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -482,7 +496,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="险种类型：" prop="riskType"  >
-              <el-select v-model="sendForm.riskType" class="item-width" >
+              <el-select v-model="sendForm.riskType" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -490,7 +504,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="营销渠道：" prop="marketChannel"  >
-              <el-select v-model="sendForm.marketChannel" class="item-width" >
+              <el-select v-model="sendForm.marketChannel" class="item-width" disabled>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -501,47 +515,56 @@
         </el-row>
         <el-row>
           <el-form-item label="投诉业务类别：" prop="complaintCategory" >
-            <el-input v-model="sendForm.complaintCategory"  clearable size="mini" class="width-full"/>
+            <el-input v-model="sendForm.complaintCategory"  readonly size="mini" class="width-full" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="投诉根因部门：" prop="rootDepartment" >
-            <el-input v-model="sendForm.rootDepartment"  clearable size="mini" class="width-full" />
+            <el-input v-model="sendForm.rootDepartment"  readonly size="mini" class="width-full" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="质诉根因：" prop="actionCause" >
-            <el-input v-model="sendForm.actionCause"  clearable size="mini" class="width-full" />
+            <el-input v-model="sendForm.actionCause"  readonly size="mini" class="width-full" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="处理进展：" prop="treatmentProgress">
-            <el-input v-model="sendForm.treatmentProgress"  clearable size="mini" class="width-full"/>
+            <el-input v-model="sendForm.treatmentProgress"  readonly size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="处理结果：" prop="treatmentResult" >
-            <el-input v-model="sendForm.treatmentResult"  clearable size="mini" class="width-full"/>
+            <el-input v-model="sendForm.treatmentResult"  readonly size="mini" class="width-full"/>
           </el-form-item>
         </el-row>
         <el-row>
         </el-row>
         <el-col :span="8">
           <el-form-item label="客户反馈：" prop="customerFeedback"  >
-            <el-select v-model="sendForm.customerFeedback" class="item-width" >
+            <el-select v-model="sendForm.customerFeedback" class="item-width" disabled>
               <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement">
-            <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
+          <el-form-item label="跟因改善：" prop="rootImprovement" >
+            <el-input v-model="sendForm.rootImprovement" class="item-width" readonly size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="投诉损失：" prop="actPromptly">
-            <el-input v-model="sendForm.actPromptly" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="sendForm.actPromptly" class="item-width" readonly size="mini" placeholder="请输入"/>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="改善措施：" prop="phone">
+            <el-input
+              type="textarea"
+              :rows="2"
+              v-model="workPoolData.content">
+            </el-input>
           </el-form-item>
         </el-col>
       </el-form>
@@ -551,7 +574,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
-       <el-divider/>
+        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="HCSPoolData"
@@ -606,8 +629,8 @@
   let dictss = [{dictType: 'product_status'}]
   export default {
     components: { transfer ,
-                  upLoad,
-                  coOrganizer,
+      upLoad,
+      coOrganizer,
       modifyDetails,
     },
     filters: {
@@ -648,6 +671,9 @@
           lxperson: [
             {required: true, message: "联系人不能为空", trigger: "blur"}
           ],
+          // orderNum: [
+          //   {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+          // ],
           orderNum: [
             {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
           ],
@@ -730,33 +756,23 @@
           dictValue: '4',
           dictLabel: '服务4'
         }],
-        cs_link_circ: [],
-        cs_classify_level1: [],
-        cs_drop_status: [],
-        cs_reason_level1: [],
+        sysUserOptions: [],
       }
     },
     created() {
-        this.queryParams.workOrderNo=this.$route.query.workOrderNo;
-        this.queryParams.policyNo=this.$route.query.policyNo;
-        this.queryParams.policyItemNo=this.$route.query.policyItemNo;
-        this.queryParams.status=this.$route.query.status;
+      this.queryParams.workOrderNo=this.$route.query.workOrderNo;
+      this.queryParams.policyNo=this.$route.query.policyNo;
+      this.queryParams.policyItemNo=this.$route.query.policyItemNo;
+      this.queryParams.status=this.$route.query.status;
       //window.aaa = this;
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
-      this.getDicts("cs_link_circ").then(response => {
-        this.cs_link_circ = response.data;
-      });
-      this.getDicts("cs_classify_level1").then(response => {
-        this.cs_classify_level1 = response.data;
-      });
-      this.getDicts("cs_drop_status").then(response => {
-        this.cs_drop_status = response.data;
-      });
-      this.getDicts("cs_reason_level1").then(response => {
-        this.cs_reason_level1 = response.data;
-      });
+      // this.getDicts("sys_oper_type").then(response => {
+      //   this.states = response.data;
+      //   console.log("response:",response)
+      // });
+
     },
 
     methods: {

@@ -27,8 +27,8 @@ public class PersonInfo extends BaseEntity
     @Excel(name = "姓名")
     private String name;
 
-    /** 性别 */
-    @Excel(name = "性别")
+    /** 性别 01-男；02-女 */
+    @Excel(name = "性别 01-男；02-女")
     private String sex;
 
     /** 身份 */
@@ -64,6 +64,10 @@ public class PersonInfo extends BaseEntity
     /** E-MAIL */
     @Excel(name = "E-MAIL")
     private String email;
+
+    /** 传真 */
+    @Excel(name = "传真")
+    private String fax;
 
     /** 证件号 */
     @Excel(name = "证件号")

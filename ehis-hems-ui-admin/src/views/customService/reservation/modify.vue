@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="195px"
+      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -309,19 +309,37 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="家庭电话：" prop="contactsPerson.homePhone">
-              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width"  size="mini" />
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row >
+          <el-col :span="16">
+            <el-form-item label="家庭电话:"  style="white-space: nowrap" >
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="5">
+            <el-form-item label="办公室电话:"  style="white-space: nowrap">
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
-          <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="办公电话：" prop="contactsPerson.workPhone">
-              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width"  size="mini" />
-            </el-form-item>
-          </el-col>
-
           <el-col :span="8">
 
             <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
@@ -333,14 +351,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
+
         </el-row>
 
 
@@ -606,6 +617,7 @@
           earliestTime:"",
           contactsPerson:{
             homePhone1:[],
+            workPhone1:[],
             name:"",
             sex:"",
             mobilePhone:"",
@@ -613,7 +625,6 @@
             homePhone:"",
             workPhone:"",
             language:"",
-            homePhone:"",
           },//联系人
           symptomsSigns:"",
           accidentFlag:"",

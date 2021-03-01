@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author sino
  * @date 2021-01-23
  */
+@Data
 public class WorkOrderAccept extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -83,6 +85,14 @@ public class WorkOrderAccept extends BaseEntity
 信息需求公共查询中状态：01-待处理；02-处理中；03-已处理；04-已完成；05-已取消； */
     @Excel(name = "状态 每个业务流程中的状态；如：待处理、处理中", readConverterExp = "&=协办表=协办中")
     private String status;
+    /** 结案日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date endDate;
+    /** 结案日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date clickTime;
 
     public void setWorkOrderNo(String workOrderNo) 
     {

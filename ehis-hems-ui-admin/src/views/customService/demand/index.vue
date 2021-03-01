@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <second-phone :work-pool-data="workPoolData"></second-phone>
+      <second-phone ref="secondPhone"></second-phone>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
@@ -340,6 +340,8 @@
   import moment from 'moment'
   import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObtainMany} from '@/api/customService/demand'
   import secondPhone from "../common/modul/secondPhone";
+  import {selectCallAgain} from '@/api/customService/demand'
+
 
   export default {
     components:{secondPhone},
@@ -425,6 +427,7 @@
       }
     },
     created() {
+      this.searchSecondHandle();
       this.searchHandles();
       this.getDicts("cs_business_type").then(response => {
         this.cs_business_type = response.data;
@@ -612,8 +615,26 @@
 
       //查询按钮
       searchHandles() {
-        this.searchHandle();
-        this.searchHandle1();
+        this.searchHandle()
+        this.searchHandle1()
+      },
+      //二次来电查询
+      searchSecondHandle() {
+        selectCallAgain().then(res => {
+          if (res != null && res.code === 200) {
+            if (res.rows.length>=1){
+              this.$refs.secondPhone.workPoolData=res.rows
+              this.$refs.secondPhone.open()
+            }
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "没有再次来电到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
       },
     }
   }

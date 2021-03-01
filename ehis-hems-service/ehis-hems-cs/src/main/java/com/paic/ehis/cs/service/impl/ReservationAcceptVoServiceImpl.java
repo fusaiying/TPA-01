@@ -43,6 +43,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     private EditDetailMapper editDetailMapper;
     @Autowired
     private EditInfoMapper editInfoMapper;
+    @Autowired
+    private HcsModificationMapper hcsModificationMapper;
 
     @Override
     public List<ReservationAcceptVo> selectReservationAcceptVoList(AcceptDTO acceptDTO) {
@@ -59,6 +61,15 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             }
             PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
             if (contactsPerson!= null) {
+                String linePhone=contactsPerson.getLinePhone();
+                String[] linePhone1=linePhone.split("\\-");
+                contactsPerson.setLinePhone1(linePhone1);
+                String homePhone=contactsPerson.getHomePhone();
+                String[] homePhone1=homePhone.split("\\-");
+                contactsPerson.setHomePhone1(homePhone1);
+                String workPhone=contactsPerson.getWorkPhone();
+                String[] workPhone1=workPhone.split("\\-");
+                contactsPerson.setWorkPhone1(workPhone1);
                 reservationAcceptVo.setContactsPerson(contactsPerson);
             } else {
                 reservationAcceptVo.setContactsPerson(new PersonInfo());
@@ -102,6 +113,27 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             }
             PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
             if (contactsPerson!= null) {
+                String linePhone=contactsPerson.getLinePhone();
+                if (linePhone!=null){
+                    String[] linePhone1=linePhone.split("\\-");
+                    contactsPerson.setLinePhone1(linePhone1);
+                }else{
+                    contactsPerson.setLinePhone1(new String[4]);
+                }
+                String homePhone=contactsPerson.getHomePhone();
+                if (homePhone!=null){
+                    String[] homePhone1=homePhone.split("\\-");
+                    contactsPerson.setHomePhone1(homePhone1);
+                }else {
+                    contactsPerson.setHomePhone1(new String[4]);
+                }
+                String workPhone=contactsPerson.getWorkPhone();
+                if (workPhone!=null){
+                    String[] workPhone1=workPhone.split("\\-");
+                    contactsPerson.setWorkPhone1(workPhone1);
+                }else{
+                    contactsPerson.setWorkPhone1(new String[4]);
+                }
                 reservationAcceptVo.setContactsPerson(contactsPerson);
             } else {
                 reservationAcceptVo.setContactsPerson(new PersonInfo());
@@ -216,6 +248,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
+        personInfo2.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        personInfo2.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
@@ -240,24 +274,27 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     @Override
     public int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
         String workOrderNo=reservationAcceptVo.getWorkOrderNo();
-        AcceptDTO acceptDTO=new AcceptDTO();
-        acceptDTO.setWorkOrderNo(workOrderNo);
-        List<ReservationAcceptVo> reservationAcceptVos=reservationAcceptVoMapper.selectReservationAcceptVoList(acceptDTO);
-        ReservationAcceptVo reservationAcceptVo1=reservationAcceptVos.get(0);
+//        AcceptDTO acceptDTO=new AcceptDTO();
+//        acceptDTO.setWorkOrderNo(workOrderNo);
+//        List<ReservationAcceptVo> reservationAcceptVos=reservationAcceptVoMapper.selectReservationAcceptVoList(acceptDTO);
+//        ReservationAcceptVo reservationAcceptVo1=reservationAcceptVos.get(0);
+        ReservationAcceptVo reservationAcceptVo1=reservationAcceptVoMapper.selectReservationAcceptVo(workOrderNo);
         PersonInfo callPerson= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
+        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
         PersonInfo personInfo1=new PersonInfo();
         PersonInfo personInfo2=new PersonInfo();
+        PersonInfo personInfo3=new PersonInfo();
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
-        WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
-        AcceptDetailInfo acceptDetailInfo=new AcceptDetailInfo();
+        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
         acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
         acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setChannelCode(reservationAcceptVo.getChannelCode());
@@ -280,6 +317,15 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setDepartment(reservationAcceptVo.getDepartment());
         acceptDetailInfo.setBunk(reservationAcceptVo.getBunk());
         acceptDetailInfo.setCompensationRatio(reservationAcceptVo.getCompensationRatio());
+        acceptDetailInfo.setAppointmentDate(reservationAcceptVo.getAppointmentDate());
+        acceptDetailInfo.setHospitalWorkCall(reservationAcceptVo.getHospitalWorkCall());
+        acceptDetailInfo.setEarliestTime(reservationAcceptVo.getEarliestTime());
+        acceptDetailInfo.setFirstFlag(reservationAcceptVo.getFirstFlag());
+        acceptDetailInfo.setClinicDate(reservationAcceptVo.getClinicDate());
+        acceptDetailInfo.setClinicTime(reservationAcceptVo.getClinicTime());
+        acceptDetailInfo.setProvince(reservationAcceptVo.getProvince());
+        acceptDetailInfo.setCity(reservationAcceptVo.getCity());
+        acceptDetailInfo.setSettlementFlag(reservationAcceptVo.getSettlementFlag());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ReservationAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -293,6 +339,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 
         //插入来电人
         personInfo1.setPersonId(reservationAcceptVo.getCallPersonId());
+        personInfo1.setFax(reservationAcceptVo.getCallPerson().getFax());
         personInfo1.setName(reservationAcceptVo.getCallPerson().getName());
         personInfo1.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
@@ -306,27 +353,21 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo2.setName(reservationAcceptVo.getContactsName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(reservationAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(reservationAcceptVo.getContactsCountry()+"-"+reservationAcceptVo.getContactsQuhao()+"-"+reservationAcceptVo.getContactsNumber()+"-"+reservationAcceptVo.getContactsSecondNumber());
+        personInfo2.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        personInfo2.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(personInfo2);
 
-        //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
-        flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
-        flowLog.setOperateCode("01");
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
 //        demandAcceptVoMapper.insertFlowLog(flowLog);
 
 //        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
 //        WorkOrderAccept workOrderAccept2=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
-
+        String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo), Map.class);
 
@@ -336,7 +377,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter1 = map1.keySet().iterator();
         while(iter1.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
+        //    EditInfo editInfo=new EditInfo();
             String map1key=iter1.next();
             String map1value = String.valueOf(map1.get(map1key));
             String map2value = String.valueOf(map2.get(map1key));
@@ -347,21 +388,21 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
                 editDetail.setOldValue(map1value);
                 editDetail.setNowValue(map2value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(editId);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(editDetail.getEditId());
-                editInfo.setWorkOrderId(workOrderNo);
-                editInfo.setCreatedBy(SecurityUtils.getUsername());
-                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-               /* editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
-                editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());*/
-                editInfoMapper.insertEditInfo(editInfo);
+//                editInfo.setEditId(editDetail.getEditId());
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//               /* editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());*/
+//                editInfoMapper.insertEditInfo(editInfo);
 
             }
 
@@ -376,32 +417,32 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter2 = map3.keySet().iterator();
         while(iter2.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
+          //  EditInfo editInfo=new EditInfo();
             String map3key=iter2.next();
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
             if (!map3value.equals(map4value)) {
                 keyList.add(map3key);
-                editDetail.setKeyDictType("complaintAcceptVo");
+                editDetail.setKeyDictType("reservationAcceptVo");
                 editDetail.setItemKey(map3key);
                 editDetail.setOldValue(map3value);
                 editDetail.setNowValue(map4value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(editId);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(editDetail.getEditId());
-                editInfo.setWorkOrderId(workOrderNo);
-                editInfo.setCreatedBy(SecurityUtils.getUsername());
-                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-               /* editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());*/
-                editInfoMapper.insertEditInfo(editInfo);
+//                editInfo.setEditId(editDetail.getEditId());
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//               /* editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());*/
+//                editInfoMapper.insertEditInfo(editInfo);
 
             }
 
@@ -413,35 +454,95 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Iterator<String> iter3 = map5.keySet().iterator();
         while(iter3.hasNext()){
             EditDetail editDetail=new EditDetail();
-            EditInfo editInfo=new EditInfo();
+         //   EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
             String map5value = String.valueOf(map5.get(map5key));
             String map6value = String.valueOf(map6.get(map5key));
             if (!map5value.equals(map6value)) {
                 keyList.add(map5key);
-                editDetail.setKeyDictType("complaintAcceptVo");
+                editDetail.setKeyDictType("reservationAcceptVo");
                 editDetail.setItemKey(map5key);
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8));
+                editDetail.setEditId(editId);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-                editInfo.setEditId(editDetail.getEditId());
-                editInfo.setWorkOrderId(workOrderNo);
-                editInfo.setCreatedBy(SecurityUtils.getUsername());
-                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-               /* editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
-                editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());*/
-                editInfoMapper.insertEditInfo(editInfo);
+//                editInfo.setEditId(editDetail.getEditId());
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//               /* editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
+//                editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());*/
+//                editInfoMapper.insertEditInfo(editInfo);
 
             }
 
+        }
+
+        Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson), Map.class);
+        Map map8 = JSONObject.parseObject(JSONObject.toJSONString(personInfo3), Map.class);
+
+        Iterator<String> iter4 = map7.keySet().iterator();
+        while(iter4.hasNext()){
+            EditDetail editDetail=new EditDetail();
+          //  EditInfo editInfo=new EditInfo();
+            String map7key=iter4.next();
+            String map7value = String.valueOf(map7.get(map7key));
+            String map8value = String.valueOf(map8.get(map7key));
+            if (!map7value.equals(map8value)) {
+                keyList.add(map7key);
+                editDetail.setKeyDictType("reservationAcceptVo");
+                editDetail.setItemKey(map7key);
+                editDetail.setOldValue(map7value);
+                editDetail.setNowValue(map8value);
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                editDetail.setEditId(editId);
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
+//                editInfo.setEditId(editDetail.getEditId());
+//                editInfo.setWorkOrderId(workOrderNo);
+//                editInfo.setCreatedBy(SecurityUtils.getUsername());
+//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
+//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
+//                editInfo.setEditReason(reservationAcceptVo.getEditReason());
+//                editInfoMapper.insertEditInfo(editInfo);
+            }
+        }
+
+        EditInfo editInfo=new EditInfo();
+        editInfo.setEditId(editId);
+        editInfo.setWorkOrderId(workOrderNo);
+        editInfo.setCreatedBy(SecurityUtils.getUsername());
+        editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setUpdatedBy(SecurityUtils.getUsername());
+        editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
+        editInfo.setEditReason(reservationAcceptVo.getEditReason());
+        editInfoMapper.insertEditInfo(editInfo);
+
+        //轨迹表插入
+        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
+        flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
+        flowLog.setOperateCode("01");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+        //Hcs
+        if (reservationAcceptVo.getAlterId() != null){
+            hcsModificationMapper.updateHcsStauts(reservationAcceptVo.getAlterId());
         }
 
         return  flowLogMapper.insertFlowLog(flowLog);

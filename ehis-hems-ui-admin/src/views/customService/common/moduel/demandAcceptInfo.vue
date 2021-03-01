@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>{{selectDictLabel(businessTypeOptions, acceptForm.businessService.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, acceptForm.businessService.split('-')[1])}}</span>
+      <span>{{selectDictLabel(businessTypeOptions, divTitle.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, divTitle.split('-')[1])}}</span>
     </div>
     <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="100px" :disabled="isDisabled"
              label-position="right" size="mini">
@@ -163,6 +163,7 @@ let dictss = [{dictType: 'cs_service_item'}
 ,{dictType: 'cs_organization'}
 ,{dictType: 'cs_relation'}
 ,{dictType: 'cs_business_type'}
+,{dictType: 'cs_demand_item'}
 ]
 
 export default {
@@ -185,7 +186,8 @@ export default {
       console.info(newValue);
       this.acceptForm.channelCode= this.acceptData.channelCode,
         this.acceptForm.serviceItem= this.acceptData.serviceItem,
-        this.acceptForm.businessService= this.acceptData.businessService,
+        this.divTitle= this.acceptData.businessService,
+        console.info(this.divTitle);
         this.acceptForm.callRelationBy= this.acceptData.callRelationBy,
         this.acceptForm.priorityLevel= this.acceptData.priorityLevel,
         this.acceptForm.contactsRelationBy= this.acceptData.contactsRelationBy,
@@ -226,6 +228,7 @@ export default {
     await this.getDictsList(dictss).then(response => {
       this.dictList = response.data
     })
+    console.info(this.dictList);
     this.serviceItemOptions = this.dictList.find(item => {
       return item.dictType === 'cs_demand_item'
     }).dictDate

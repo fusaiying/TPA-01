@@ -11,7 +11,6 @@ import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.mapper.*;
-import com.paic.ehis.cs.service.ICallAgainService;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     private EditInfoMapper editInfoMapper;
     @Autowired
     private EditDetailMapper editDetailMapper;
+    @Autowired
+    private HcsModificationMapper hcsModificationMapper;
 
 
     @Override
@@ -160,14 +161,26 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         if (contactsPerson != null) {
             String linePhone=contactsPerson.getLinePhone();
-            String[] linePhone1=linePhone.split("\\-");
-            contactsPerson.setLinePhone1(linePhone1);
+            if (linePhone!=null){
+                String[] linePhone1=linePhone.split("\\-");
+                contactsPerson.setLinePhone1(linePhone1);
+            }else{
+                contactsPerson.setLinePhone1(new String[4]);
+            }
             String homePhone=contactsPerson.getHomePhone();
-            String[] homePhone1=homePhone.split("\\-");
-            contactsPerson.setHomePhone1(homePhone1);
+            if (homePhone!=null){
+                String[] homePhone1=homePhone.split("\\-");
+                contactsPerson.setHomePhone1(homePhone1);
+            }else {
+                contactsPerson.setHomePhone1(new String[4]);
+            }
             String workPhone=contactsPerson.getWorkPhone();
-            String[] workPhone1=workPhone.split("\\-");
-            contactsPerson.setWorkPhone1(workPhone1);
+            if (workPhone!=null){
+                String[] workPhone1=workPhone.split("\\-");
+                contactsPerson.setWorkPhone1(workPhone1);
+            }else{
+                contactsPerson.setWorkPhone1(new String[4]);
+            }
             demandAcceptVo.setContactsPerson(contactsPerson);
         } else {
             demandAcceptVo.setContactsPerson(new PersonInfo());
@@ -279,6 +292,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
 //        demandAcceptVoMapper.insertFlowLog(flowLog);
+
+
+
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 
@@ -526,6 +542,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+
+        //Hcs
+        if (demandAcceptVo.getAlterId() != null){
+            hcsModificationMapper.updateHcsStauts(demandAcceptVo.getAlterId());
+        }
         return  demandAcceptVoMapper.insertFlowLog(flowLog);
     }
 

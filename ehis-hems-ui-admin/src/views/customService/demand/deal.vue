@@ -312,8 +312,8 @@
           <el-col :span="8">
             <el-form-item label="是否涉及银行转账" prop="bank" >
               <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
+                <el-radio   label="01">是</el-radio>
+                <el-radio   label="02">否</el-radio>
 
               </el-radio-group>
             </el-form-item>
@@ -321,23 +321,23 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" >
+            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='01'" >
               <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" >
+            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='01'" >
               <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" >
+            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='01'" >
               <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" >
+            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='01'" >
               <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
             </el-form-item>
           </el-col>
@@ -660,7 +660,6 @@
       this.searchHCS()
       // this.getDicts("sys_oper_type").then(response => {
       //   this.states = response.data;
-      //   console.log("response:",response)
       // });
 
     },
@@ -692,7 +691,6 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows[0]
             this.totalCount = res.total
-            console.log('response',res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -738,7 +736,6 @@
             insert.workOrderNo = this.$route.query.workOrderNo
             dealADD(insert).then(res => {
               if (res != null && res.code === 200) {
-                console.log("insert", insert)
                 alert("提交成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
@@ -764,7 +761,6 @@
             insert.workOrderNo=this.$route.query.workOrderNo
             dealADD(insert).then(res => {
               if (res != null && res.code === 200) {
-                console.log("insert",insert)
                 alert("暂存成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
@@ -786,12 +782,9 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         FlowLogSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('轨迹表',res.rows)
           if (res != null && res.code === 200) {
             this.flowLogData = res.rows
             this.flowLogCount=res.total
-            console.log("searchFlowLog",this.flowLogData)
             this.flowLogCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -808,8 +801,6 @@
         let workOrderNo=this.queryParams
         workOrderNo.status=""
         HMSSearch(workOrderNo).then(res => {
-          console.log(workOrderNo)
-          console.log('HCS',res.rows)
           if (res != null && res.code === 200) {
             this.HCSPoolData = res.rows
             this.HCSTotal = res.total
@@ -825,23 +816,29 @@
       },
       //修改按钮
       modify() {
-        if (this.ids.length==0){
+        var items;
+
+        if (this.ids.length == 0) {
           alert("先选中一行")
-        }else {if(this.ids.length>2){
-          alert("选中一行")
-        }else {
-          this.$router.push({
-            path: '/customService/modify',
-            query: {
-              workOrderNo: this.queryParams.workOrderNo,
-              policyNo: this.queryParams.policyNo,
-              policyItemNo: this.queryParams.policyItemNo,
-              status: this.queryParams.status
-            }
-          })
+        } else {
+          items = JSON.stringify(this.ids)
+          // if (this.ids.length > 2) {
+          //   // alert("选中一行")
+          // } else {
+            this.$router.push({
+              path: '/customService/modify',
+              query: {
+                workOrderNo: this.queryParams.workOrderNo,
+                policyNo: this.queryParams.policyNo,
+                policyItemNo: this.queryParams.policyItemNo,
+                status: this.queryParams.status,
+                alterId: items
+
+              }
+            })
+          }
         }
-        }
-      },
+      ,
       //取消按钮
       cancle() {
         this.$router.push({
@@ -856,7 +853,7 @@
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
-        this.ids = selection.map(item => item.workOrderNo);
+        this.ids = selection.map(item => item.alterId);
 
       },
 

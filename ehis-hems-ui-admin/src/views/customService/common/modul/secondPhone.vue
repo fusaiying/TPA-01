@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+  <el-dialog :title="title" :visible.sync="dialogVisable" width="600px" append-to-body>
     <el-form  label-width="80px" style="margin-top: 1px;">
       <el-card class="box-card" style="margin-top: 1px;">
         <div slot="header" class="clearfix">
@@ -23,20 +23,20 @@
             <el-table-column align="center"  prop="remark" label="说明" show-overflow-tooltip/>
             <!--fixed="right"控制固定某一列-->
           </el-table>
-          <pagination
-            v-show="totalCount>0"
-            :total="totalCount"
-            :page.sync="queryParams.pageNum"
-            :limit.sync="queryParams.pageSize"
-            @pagination="searchHandle"
-          />
+<!--          <pagination-->
+<!--            v-show="totalCount>0"-->
+<!--            :total="totalCount"-->
+<!--            :page.sync="queryParams.pageNum"-->
+<!--            :limit.sync="queryParams.pageSize"-->
+<!--            @pagination="searchHandle"-->
+<!--          />-->
         </div>
 
       </el-card>
 
     </el-form>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="open = false" type="primary">关 闭</el-button>
+    <el-button @click="dialogVisable = false" type="primary">关 闭</el-button>
   </span>
   </el-dialog>
 </template>
@@ -53,10 +53,9 @@ export default {
     }
   },
   name:'secondPhone',
-
   data() {
     return {
-      open:true,
+      dialogVisable:false,
       cs_service_item:[],
       queryParams: {
         pageNum: 1,
@@ -74,25 +73,30 @@ export default {
       }
     }
   },
-  async mounted() {
-    this.searchHandle()
+  mounted() {
+    // this.searchHandle()
   },
   methods: {
-    searchHandle() {
-      selectCallAgain().then(res => {
-        if (res != null && res.code === 200) {
-          this.workPoolData = res.rows
-          this.totalCount = res.total
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
-        }
-      }).catch(res => {
 
-      })
+    open(){
+      this.dialogVisable=true
     },
+
+    // searchHandle() {
+    //   selectCallAgain().then(res => {
+    //     if (res != null && res.code === 200) {
+    //       this.workPoolData = res.rows
+    //       this.totalCount = res.total
+    //       if (res.rows.length <= 0) {
+    //         return this.$message.warning(
+    //           "未查询到数据！"
+    //         )
+    //       }
+    //     }
+    //   }).catch(res => {
+    //
+    //   })
+    // },
   }
 }
 </script>

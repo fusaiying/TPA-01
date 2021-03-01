@@ -135,6 +135,34 @@ public class AcceptDetailInfo extends BaseEntity
     /*医院赔付比例*/
     private String compensationRatio;
 
+    /**预约日期*/
+    private String appointmentDate;
+
+    /**医院工作来电*/
+    private String hospitalWorkCall;
+
+    /**类似疾病症状最早发生时间*/
+    private String earliestTime;
+
+    /**是否首次就诊*/
+    private String firstFlag;
+
+    /**就诊日期*/
+    private String clinicDate;
+
+    /**就诊时间*/
+    private String clinicTime;
+
+    /**就诊医院省*/
+    private String province;
+
+    /**就诊医院市*/
+    private String city;
+
+    /**是否申请直结*/
+    private String settlementFlag;
+
+
     /** 状态 */
     @Excel(name = "状态")
     private String status;
@@ -242,6 +270,78 @@ public class AcceptDetailInfo extends BaseEntity
     /** 见转意表 */
     @Excel(name = "见转意表")
     private String prop25;
+
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getHospitalWorkCall() {
+        return hospitalWorkCall;
+    }
+
+    public void setHospitalWorkCall(String hospitalWorkCall) {
+        this.hospitalWorkCall = hospitalWorkCall;
+    }
+
+    public String getEarliestTime() {
+        return earliestTime;
+    }
+
+    public void setEarliestTime(String earliestTime) {
+        this.earliestTime = earliestTime;
+    }
+
+    public String getFirstFlag() {
+        return firstFlag;
+    }
+
+    public void setFirstFlag(String firstFlag) {
+        this.firstFlag = firstFlag;
+    }
+
+    public String getClinicDate() {
+        return clinicDate;
+    }
+
+    public void setClinicDate(String clinicDate) {
+        this.clinicDate = clinicDate;
+    }
+
+    public String getClinicTime() {
+        return clinicTime;
+    }
+
+    public void setClinicTime(String clinicTime) {
+        this.clinicTime = clinicTime;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getSettlementFlag() {
+        return settlementFlag;
+    }
+
+    public void setSettlementFlag(String settlementFlag) {
+        this.settlementFlag = settlementFlag;
+    }
 
     public String getOutpatientSettlement() {
         return outpatientSettlement;

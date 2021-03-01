@@ -32,7 +32,81 @@
         <result property="email" column="email"/>
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
     </resultMap>
+
+
+    <select id="selectReservationAcceptVo" parameterType="String" resultMap="ReservationAcceptVoResult">
+SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.complaint_person_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        b.prop0,
+        b.prop1,
+        b.prop2,
+        b.prop3,
+        b.prop4,
+        b.prop5,
+        b.prop6,
+        b.prop7,
+        b.prop8,
+        b.prop9,
+        b.prop10,
+        b.prop11,
+        b.prop12,
+        b.prop16,
+        b.prop17,
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        WHERE
+          a.work_order_no=#{workOrderNo}
+    </select>
+
+
     <select id="selectReservationAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
         SELECT
         a.work_order_no,

@@ -586,9 +586,10 @@
 
   let dictss = [{dictType: 'product_status'}]
   export default {
-    components: { transfer ,
-                  upLoad,
-                  coOrganizer,
+    components: {
+      transfer ,
+      upLoad,
+      coOrganizer,
       modifyDetails,
     },
     filters: {

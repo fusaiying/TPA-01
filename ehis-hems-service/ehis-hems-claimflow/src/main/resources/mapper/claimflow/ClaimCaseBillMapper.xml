@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             trans_Serial_copay,
             copay,
             is_share_copay,
-            hos_discount_amount,
+            ifnull(hos_discount_amount,0) hos_discount_amount,
             is_share_dis_amount,
             self_amount,
             part_self_amount,

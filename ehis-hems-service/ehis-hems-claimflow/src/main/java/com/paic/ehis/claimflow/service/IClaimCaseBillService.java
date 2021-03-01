@@ -111,4 +111,11 @@ public interface IClaimCaseBillService
      * @return
      */
     public int deleteClaimCaseBill(ClaimCaseBillInfoVO claimCaseBill);
+
+    /**
+     * 汇总信息
+     * @param claimCaseBill
+     * @return
+     */
+    public ClaimCaseBill getBillSum(ClaimCaseBill claimCaseBill);
 }

@@ -4,10 +4,10 @@
       <div style="position: relative">
         <div slot="header" class="clearfix">
           <div style="width: 100%;cursor: pointer;">
-            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun">赔付结论</span>
-            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun">协谈</span>
-            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun">调查</span>
-            <div style="float: right;">
+            <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
+            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
+            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
+            <div style="float: right;" v-if="status==='edit' && (node==='sport' || node==='calculateReview') ">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
               </el-button>
@@ -23,7 +23,7 @@
 
         <!-- 赔付结论 start -->
         <el-form v-if="isActiveSpan1" ref="conclusionForm" :model="conclusionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="conRules"
-                 label-position="right" size="mini">
+                 label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
               <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
@@ -108,11 +108,12 @@
         <!-- 赔付结论 end -->
 
         <!-- 协谈 start -->
-        <el-form v-if="isActiveSpan2" ref="discussionForm" :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
+        <el-form v-if="isActiveSpan2" ref="discussionForm"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 :inline="true" :model="discussionForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px"  :rules="disRules"  label-position="right" size="mini">
           <el-row>
             <el-col :span="20" :xs="24">
                 <el-form-item label="协谈类型：" prop="discType">
-                  <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择">
+                  <el-select v-model="discussionForm.discType" class="item-width" size="mini" placeholder="请选择" @change="validSubType">
                     <el-option v-for="item in negotiationTypes" :key="item.dictValue"  :label="item.dictLabel" :value="item.dictValue"/>
                   </el-select>
                 </el-form-item>
@@ -128,7 +129,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="转出意见：" prop="disView">
-                <el-input style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
+                <el-input  style="min-width: 700px" col="2" type="textarea" row="4" maxlength="1000" v-model="discussionForm.disView" clearable size="mini"  placeholder=""/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -136,7 +137,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="12">
-              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">保存</el-button>
+              <el-button :disabled="dissSave" type="primary" size="mini" @click="discussionSave">确认</el-button>
             </el-col>
           </el-row>
           <!--保存 end-->
@@ -145,7 +146,8 @@
         <!-- 协谈 end -->
 
         <!-- 调查 start -->
-        <el-form v-if="isActiveSpan3" ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
+        <el-form v-if="isActiveSpan3"  :disabled="status === 'show'  && (node==='sport' || node==='calculateReview')"
+                 ref="surveyForm" :model="surveyForm"  style="padding-bottom: 30px;margin-top:20px;margin-left: 5%" label-width="130px" :rules="surRules"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
@@ -173,10 +175,10 @@
 
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince }}</span>
+              <span class="info_span_col to_right">事故地点：</span><span class="info_span_col">{{ surveyInfo.accProvince  }}  {{ surveyInfo.accCity  }}  {{ surveyInfo.accDistrict  }}</span>
             </el-col>
-            <el-col :span="8">
-              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col">{{ surveyInfo.accAddress}}</span>
+            <el-col :span="16">
+              <span class="info_span_col to_right">事故经过：</span><span class="info_span_col_left el-col-18">{{ surveyInfo.accDescribe}}</span>
             </el-col>
           </el-row>
 
@@ -208,7 +210,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="提调机构：" prop="organCode">
+              <el-form-item label="提调机构：" prop="organCode" key="organCode1da">
                 <el-select v-model="surveyForm.organCode" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="item in initiateOrg" :key="item.dictValue"  :label="item.dictLabel + ' - ' +item.dictValue" :value="item.dictValue"/>
                 </el-select>
@@ -216,7 +218,7 @@
             </el-col>
 
             <el-col :span="8">
-              <el-form-item label="保单号：" prop="policyNo">
+              <el-form-item label="保单号：" prop="policyNo"  key="policyNo1df">
                 <el-select v-model="surveyForm.policyNo" class="item-width" size="mini" placeholder="请选择">
                   <el-option v-for="dict in policyNos"
                              :key="dict.policyNo"
@@ -231,7 +233,7 @@
           <el-row>
             <el-col :span="23">
               <el-form-item label="提调事项：" :style="{width:'100%'}" prop="invView">
-                <el-input v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
+                <el-input maxlength="1000" v-model="surveyForm.invView" :class="['long-input']" clearable size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -239,7 +241,7 @@
           <!--保存 start-->
           <el-row >
             <el-col :span="6" :offset="20">
-              <el-button type="primary" size="mini" @click="inQuireSaveFun" >保存</el-button>
+              <el-button type="primary" size="mini" @click="inQuireSaveFun" >确定</el-button>
               <el-button type="primary" size="mini"  @click="inQuireConfirmFun">确认提调</el-button>
               <el-button type="primary" size="mini"  @click="formReset('surveyForm')">重置</el-button>
             </el-col>
@@ -268,6 +270,7 @@
           addRecoveryInfo,
           investigationBaseInfo,
           discussionBaseInfo,
+          acceptInfo,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -279,6 +282,7 @@
     components: {
     },
     props: {
+      status: String,
       value: {
         type: Boolean,
         default: false
@@ -289,11 +293,15 @@
           return []
         }
       },
+      insuredData:Object,
       fixInfo:Object,
       node:String,
 
     },
     watch: {
+      insuredData: function (newValue) {
+        this.surveyInfo = newValue;
+      },
       policySelectData: function (newValue) {
         this.policyNos = newValue;
       },
@@ -303,8 +311,8 @@
         this.batchNo = this.fixInfoData.batchNo;
         if(this.rptNo != '') {
           this.getCalInfo();
-          this.getInvestigationBaseInfo();
           this.getDiscussionInfo();
+          this.getInvestigationBaseInfo();
         }
       },
       value: function (newValue) {
@@ -315,6 +323,18 @@
         if(this.conclusionForm.payConclusion != '' && '05' == this.conclusionForm.payConclusion) {
           if (!value) {
             callback(new Error("拒赔原因必填"));// XXXXXXXXXXXX
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
+      const checkDiscSubType = (rule, value, callback) => {
+        let discTypeValue = this.discussionForm.discType;
+        if(discTypeValue === '04' || discTypeValue === '08' || discTypeValue === '09') {
+          if (!value) {
+            callback(new Error("协谈细类必填"));
           } else {
             callback();
           }
@@ -375,7 +395,7 @@
         disRules: {
           discType: {trigger: ['change'], required: true, message: '协谈类型必填'},
           disView: {trigger: ['change'], required: true, message: '转出意见必填'},
-          discSubType: {trigger: ['change'], required: true, message: '协谈细类必填'},
+          discSubType: {trigger: ['change'], required: false, validator: checkDiscSubType,},
         },
         //协谈信息 end
 
@@ -397,6 +417,7 @@
           organCode:'', // 提调机构
           policyNo:'',
           invView:'',
+          accDescribe:'',
         },
         surveyForm:{
           invType:'',
@@ -438,12 +459,15 @@
         //拒赔原因
         rejectedReasons :[],
         //协谈细类
-        negotiationSubTypes:[]
+        negotiationSubTypes:[],
+        //所有协谈细类
+        negotiationSubAllTypes:[]
 
       }
     },
 
     created() {
+      this.getAcceptInfo();
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
@@ -461,7 +485,7 @@
       this.negotiationTypes = this.dictList.find(item => {
         return item.dictType === 'negotiation_type'
       }).dictDate
-      this.negotiationSubTypes = this.dictList.find(item => {
+      this.negotiationSubAllTypes = this.dictList.find(item => {
         return item.dictType === 'negotiation_sub_type'
       }).dictDate
       this.dispatchTypes = this.dictList.find(item => {
@@ -486,10 +510,56 @@
     computed: {
     },
     methods: {
+      goHistory(){
+        this.$router.go(-1);
+      },
+      validSubType(value){
+        this.negotiationSubTypes = [];
+        this.discussionForm.discSubType = '';
+        for(let i=0 ; i<this.negotiationSubAllTypes.length; i++) {
+          if(this.negotiationSubAllTypes[i].listClass === value) {
+            this.negotiationSubTypes.push(this.negotiationSubAllTypes[i])
+          }
+        }
+      },
       payConclusionChange(value){
         if(value != '05'){
           this.conclusionForm.refusedReason = '';
         }
+      },
+      getAcceptInfo(){
+        if(this.rptNo == '') {
+          return false;
+        }
+          this.surveyInfo.accProvince = '';
+          this.surveyInfo.accCity  = '';
+          this.surveyInfo.accDistrict  = '';
+          this.surveyInfo.accDescribe =  '';
+          this.surveyInfo.accDate =  '';
+        acceptInfo(this.rptNo).then(res => {
+          if(res.code == '200' && res.data) {
+            let data = res.data;
+            if(null != data.claimCaseAccept) {
+              data = data.claimCaseAccept ;
+              if(data.accProvinceName != '') {
+                this.surveyInfo.accProvince = data.accProvinceName;
+              }
+              if(data.accCityName != '') {
+                this.surveyInfo.accCity  = data.accCityName;
+              }
+              if(data.accDistrictName != '') {
+                this.surveyInfo.accDistrict  = data.accDistrictName;
+              }
+              if(data.accDescribe != '') {
+                this.surveyInfo.accDescribe =  data.accDescribe;
+              }
+              if(data.accDate != '') {
+                this.surveyInfo.accDate =  data.accDate;
+              }
+
+            }
+          }
+        });
       },
       discussionSave(){
 
@@ -514,6 +584,7 @@
                   center: true,
                   showClose: true
                 });
+                this.goHistory();
               } else {
                 this.$message({
                   message: '保存成功！',
@@ -656,6 +727,7 @@
               center: true,
               showClose: true
             });
+           this.goHistory();
           } else {
             this.$message({
               message: '审核失败！',
@@ -689,6 +761,7 @@
                 center: true,
                 showClose: true
               });
+              this.goHistory();
             } else {
               this.$message({
                 message: '退回失败！',
@@ -737,6 +810,10 @@
         if(this.rptNo == '') {
           return false;
         }
+        if(!this.inQuireConfirmBtn) {
+          this.$message.info('请先保存再进行提调！')
+          return false;
+        }
         const params = {};
         params.rptNo = this.rptNo;
 
@@ -748,6 +825,7 @@
               center: true,
               showClose: true
             });
+            this.goHistory();
           } else {
             this.$message({
               message: '提调失败！',
@@ -781,9 +859,6 @@
             if(res.data.isAppeal == '01') {
               this.appealCase = true;
             }
-            // console.log("res.data")
-            // console.log(res.data)
-            // console.log("res.data")
           }
         });
       },
@@ -810,18 +885,21 @@
             if(this.surveyInfo.invView != '' && this.surveyInfo.invView != null) {
               this.surveyForm.invView = this.surveyInfo.invView;
             }
+          }else {
+            this.getAcceptInfo();
           }
         });
       },
       getDiscussionInfo() {
         discussionBaseInfo(this.rptNo).then(res => {
-          if(res.code == '200' && res.data) {
+          if(res.code == '200' && res.data && res.data.isHistory != 'Y') {
             this.dissSave = true;
             if(res.data.discType != '' && res.data.discType != null) {
               this.discussionForm.discType = res.data.discType;
-            }
-            if(res.data.discSubType != '' && res.data.discSubType != null) {
-              this.discussionForm.discSubType = res.data.discSubType;
+              this.validSubType(res.data.discType)
+              if(res.data.discSubType != '' && res.data.discSubType != null) {
+                this.discussionForm.discSubType = res.data.discSubType;
+              }
             }
             if(res.data.disView != '' && res.data.disView != null) {
               this.discussionForm.disView = res.data.disView;
@@ -830,12 +908,24 @@
         });
       },
       formReset(fromName){
-        this.$refs[fromName].resetFields()
-      },
-      activeFun(obj){
+     //   this.$refs[fromName].resetFields()
+        this.surveyForm.invType = '';
+        this.surveyForm.invReason = '';
+        this.surveyForm.invOrganCode = '';
+        this.surveyForm.organCode = ' ';
+        this.surveyForm.policyNo = ' ';
+        this.surveyForm.invView = '';
+        this.surveyForm.organCode = '';
+        this.surveyForm.policyNo = '';
+        this.$refs['surveyForm'].clearValidate();
 
-        let id = obj.id;
-        switch(obj.toElement.id) {
+
+
+
+
+      },
+      activeFun(id){
+        switch(id) {
           case 'span1':
             this.isButtonShow=true;
             this.isActiveSpan1 = true;
@@ -984,6 +1074,18 @@
   }
   ::v-deep.info_span_col {
     text-align: right;
+    vertical-align: middle;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  ::v-deep.info_span_col_left {
+    text-align: left;
     vertical-align: middle;
     float: left;
     font-size: 14px;

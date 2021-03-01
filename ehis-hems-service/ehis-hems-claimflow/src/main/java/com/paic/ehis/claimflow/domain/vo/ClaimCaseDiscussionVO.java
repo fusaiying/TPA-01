@@ -68,6 +68,16 @@ public class ClaimCaseDiscussionVO extends BaseEntity implements Serializable {
 
     private String discId;
 
+    private String isHistory;
+
+    public String getIsHistory() {
+        return isHistory;
+    }
+
+    public void setIsHistory(String isHistory) {
+        this.isHistory = isHistory;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

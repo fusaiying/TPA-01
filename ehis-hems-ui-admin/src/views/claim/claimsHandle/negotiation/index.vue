@@ -199,8 +199,8 @@ export default {
       params.name = name;
       params.discType = discType;
       params.createBy = createBy;
-      params.pageno = this.pendPageInfo.pageNum;
-      params.pagesize = this.pendPageInfo.pageSize;
+      params.pageNum = this.pendPageInfo.pageNum;
+      params.pageSize = this.pendPageInfo.pageSize;
       PendingData(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -226,8 +226,8 @@ export default {
       params.name = name;
       params.discType = discType;
       params.createBy = createBy;
-      params.pageno = this.completePageInfo.pageNum;
-      params.pagesize = this.completePageInfo.pageSize;
+      params.pageNum = this.completePageInfo.pageNum;
+      params.pageSize = this.completePageInfo.pageSize;
       processedData(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;

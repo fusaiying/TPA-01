@@ -141,7 +141,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
         int count = 0;
         List<BaseSupplierContract> baseSupplierContracts = baseSupplierContractMapper.selectSupplierContractByCode(providerCode);
         List<BaseSupplierContract> baseSupplierContractsNew = baseSupplierContractMapper.selectBaseproviderCode(providerCode);
-        if(baseSupplierContractsNew.isEmpty()){ //存在则修改已存在的数据
+        if(!baseSupplierContractsNew.isEmpty()){ //存在则删除已存在的数据
             baseSupplierContractMapper.updateBaseContactsByCodeNew(providerCode);
         }
         for(BaseSupplierContract baseSupplierContract :baseSupplierContracts){

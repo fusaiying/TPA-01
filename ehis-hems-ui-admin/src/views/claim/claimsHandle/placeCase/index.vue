@@ -175,6 +175,7 @@
 
 <script>
 
+   import {getUserInfo, getOrganList,getUsersByOrganCode,} from '@/api/claim/standingBookSearch'
    import caseList from './components/caseList'
    import moment from 'moment'
    import {getDepts, caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
@@ -340,10 +341,10 @@
           };
 
           if(!this.searchBtn) {
-            getDept().then(response => {
-              if(response.deptId) {
+            getUserInfo().then(response => {
+              if(response.data.deptId) {
                 this.loading = true;
-                params.deptCode = response.deptId.toString();
+                params.deptCode = response.data.deptId.toString();
                 caseFilingList(params).then(response => {
                   this.totalNum = response.total;
                   this.tableData = response.rows;
@@ -485,11 +486,11 @@
                 this.sysDepts.push(obj);
               }
             }
-            //当前登陆人部门
-            getDept().then(response => {
-              if(response.deptId) {
-                this.form.deptCode = response.deptId.toString();
-                this.pbaceCaseForm.deptCode  = response.deptId.toString();
+            //当前登陆人部门 getUserInfo
+            getUserInfo().then(response => {
+              if(response.code == '200' && response.data) {
+                this.form.deptCode = response.data.deptId.toString();
+                this.pbaceCaseForm.deptCode  = response.data.deptId.toString();
               }
             })
           })

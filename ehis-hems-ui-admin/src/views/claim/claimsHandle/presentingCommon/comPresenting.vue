@@ -314,17 +314,16 @@
     updateClaimBatch,
     selectRecordByBatchno,
     getStanding,
-    getThisDept,
     getInfoBaseCodeMappingNew,
     getName,
   } from '@/api/claim/presentingReview'
-  import {getDeptById} from '@/api/claim/standingBookSearch'
+  import {getUserInfo} from '@/api/claim/standingBookSearch'
   import Hospital from "../../basicInfoManage/publicVue/hospital";
   import {getHospitalInfo} from '@/api/claim/handleCom'
   //医院
   let dictss = [{dictType: 'priority_reason'}, {dictType: 'insurance_type'}, {dictType: 'claimType'}
     , {dictType: 'sys_yes_no'}, {dictType: 'special_case'}, {dictType: 'claim_material'},
-    {dictType: 'examine_result'}, {dictType: 'claim_currency'},{dictType: 'card_type'},]
+    {dictType: 'examine_result'}, {dictType: 'claim_currency'}, {dictType: 'card_type'},]
   export default {
     components: {Hospital},
     data() {
@@ -464,7 +463,6 @@
         examine_resultOptions: [],
         hospitalOptions: [],
         claim_currencyOptions: [],
-        deptOptions: [],
       }
     },
 
@@ -499,9 +497,9 @@
       this.card_typeOptions = this.dictList.find(item => {
         return item.dictType === 'card_type'
       }).dictDate
-      getThisDept().then(res => {
-        this.deptOptions = res.deptlist
-      })
+
+
+
     },
     async mounted() {
       let date = new Date()
@@ -522,9 +520,10 @@
             this.isAfter = true
           }
         })
-        getDeptById(this.searchForm.organcode).then(res => {
+
+        getUserInfo().then(res => {
           if (res != null && res.code === 200) {
-            this.deptName = res.data.deptName
+            this.deptName  = res.data.organName
           }
         })
         if (this.querys.status === 'show') {
@@ -564,8 +563,8 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
-                this.afterTable.forEach(item=>{
-                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                this.afterTable.forEach(item => {
+                  if (item.claimmaterials !== null && item.claimmaterials !== undefined && item.claimmaterials !== '') {
                     item.claimmaterials = item.claimmaterials.split(',')
                   }
                 })
@@ -610,8 +609,8 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
-                this.afterTable.forEach(item=>{
-                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                this.afterTable.forEach(item => {
+                  if (item.claimmaterials !== null && item.claimmaterials !== undefined && item.claimmaterials !== '') {
                     item.claimmaterials = item.claimmaterials.split(',')
                   }
                 })
@@ -645,8 +644,8 @@
             getStanding(item).then(res => {
               if (res != null && res.code === 200) {
                 this.afterTable = res.rows
-                this.afterTable.forEach(item=>{
-                  if ( item.claimmaterials !== null &&  item.claimmaterials !== undefined &&  item.claimmaterials !== '') {
+                this.afterTable.forEach(item => {
+                  if (item.claimmaterials !== null && item.claimmaterials !== undefined && item.claimmaterials !== '') {
                     item.claimmaterials = item.claimmaterials.split(',')
                   }
                 })
@@ -659,19 +658,12 @@
           this.isPrint = false
         }
       } else {
-        getThisDept().then(res => {
-          if (res != null) {
-            this.searchForm.organcode = res.deptId
-            if (res.deptId != null && res.deptId !== '') {
-              getDeptById(res.deptId).then(res => {
-                if (res != null && res.code === 200) {
-                  this.deptName = res.data.deptName
-                }
-              })
-            }
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            this.searchForm.organcode = res.data.organCode
+            this.deptName = res.data.organName
           }
         })
-
       }
       let data = {
         //医院编码
@@ -738,117 +730,60 @@
               num = this.searchForm.casenum
             }
 
-              //筛选已填写身份证号的  后面都必须填写
-              let table = this.afterTable.filter(item => {
-                return item.idno != null && item.idno !== ''
-              })
+            //筛选已填写身份证号的  后面都必须填写
+            let table = this.afterTable.filter(item => {
+              return item.idno != null && item.idno !== ''
+            })
 
-              table.forEach((v, i) => {
-                for (const val in v) {
-                  if (this.hasBlock) {
-                    break
-                  }
-                  if (v[val] === "" || v[val] === null || v[val].loading) {
-                    for (const childrenVal in v) {
-                      if (v[childrenVal] === "" || v[childrenVal] === null) {
-                        //el-table中列绑定的字段
-                        if (`${childrenVal}` === "idType") {
-                          this.hasBlock = true;
-                          return this.$message.warning(
-                            "证件类型不能为空"
-                          );
-                        }else if (`${childrenVal}` === "claimmaterials") {
-                          this.hasBlock = true;
-                          return this.$message.warning(
-                            "理赔材料不能为空"
-                          );
-                        } else if (`${childrenVal}` === "remark") {
-                          this.hasBlock = true;
-                          return this.$message.warning(
-                            "备注不能为空"
-                          );
-                        } else if (`${childrenVal}` === "otherinfo") {
-                          this.hasBlock = true;
-                          return this.$message.warning(
-                            "其他（案件去向）不能为空"
-                          );
-                        }
+            table.forEach((v, i) => {
+              for (const val in v) {
+                if (this.hasBlock) {
+                  break
+                }
+                if (v[val] === "" || v[val] === null || v[val].loading) {
+                  for (const childrenVal in v) {
+                    if (v[childrenVal] === "" || v[childrenVal] === null) {
+                      //el-table中列绑定的字段
+                      if (`${childrenVal}` === "idType") {
+                        this.hasBlock = true;
+                        return this.$message.warning(
+                          "证件类型不能为空"
+                        );
+                      } else if (`${childrenVal}` === "claimmaterials") {
+                        this.hasBlock = true;
+                        return this.$message.warning(
+                          "理赔材料不能为空"
+                        );
+                      } else if (`${childrenVal}` === "remark") {
+                        this.hasBlock = true;
+                        return this.$message.warning(
+                          "备注不能为空"
+                        );
+                      } else if (`${childrenVal}` === "otherinfo") {
+                        this.hasBlock = true;
+                        return this.$message.warning(
+                          "其他（案件去向）不能为空"
+                        );
                       }
                     }
-                  }
-                  if (v.claimmaterials.length <= 0) {
-                    this.hasBlock = true;
-                    return this.$message.warning(
-                      "理赔材料不能为空"
-                    );
                   }
                 }
-              });
-              //前面都通过则继续进行
-              if (!this.hasBlock) {
-                if (num<table.length){
-                  this.$confirm(`案件数量与台账数不相符，请核实!`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                  }).then(() => {
-                    //请求接口保存table获取afterTable  给afterTableTotal赋值
-                    //then里面的
-                    let data = {
-                      claimBatch: this.searchForm, //
-                      standingData: table//
-                    }
-                    addBatchAndStanding(data).then(res => {
-                      if (res != null && res.code === 200) {
-                        this.$message({
-                          message: '保存成功！',
-                          type: 'success',
-                          center: true,
-                          showClose: true
-                        })
-                        if (res.data.standingData != null) {
-                          this.afterTable = res.data.standingData
-                          this.afterTableTotal = res.data.standingData.length
-                        } else {
-                          this.afterTable = []
-                        }
-
-
-                        this.searchForm = res.data.claimBatch
-                        let data = {
-                          //医院编码
-                          providerCode: res.data.claimBatch.hospitalcode
-                        }
-                        getHospitalInfo(data).then(response => {
-                          if (response != null && response !== '') {
-                            this.$set(this.searchForm, 'chname1', this.selectHospitalName(response.rows, res.data.claimBatch.hospitalcode))
-                          }
-                        })
-                        this.show = true;
-                        for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
-                          let data = {
-                            rptno: '',
-                            idType: '1',
-                            idno: '',
-                            name: '',
-                            claimmaterials: '',
-                            remark: '',
-                            otherinfo: '',
-                          }
-                          this.afterTable.push(data);
-                        }
-                      } else {
-                        this.$message.error('保存失败！')
-                      }
-                    })
-
-                  }).catch(() => {
-                    this.$message({
-                      type: 'info',
-                      message: '已取消！'
-                    })
-                  })
-                }else {
+                if (v.claimmaterials.length <= 0) {
+                  this.hasBlock = true;
+                  return this.$message.warning(
+                    "理赔材料不能为空"
+                  );
+                }
+              }
+            });
+            //前面都通过则继续进行
+            if (!this.hasBlock) {
+              if (num < table.length) {
+                this.$confirm(`案件数量与台账数不相符，请核实!`, '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
                   //请求接口保存table获取afterTable  给afterTableTotal赋值
                   //then里面的
                   let data = {
@@ -869,6 +804,8 @@
                       } else {
                         this.afterTable = []
                       }
+
+
                       this.searchForm = res.data.claimBatch
                       let data = {
                         //医院编码
@@ -896,9 +833,64 @@
                       this.$message.error('保存失败！')
                     }
                   })
-                }
 
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消！'
+                  })
+                })
+              } else {
+                //请求接口保存table获取afterTable  给afterTableTotal赋值
+                //then里面的
+                let data = {
+                  claimBatch: this.searchForm, //
+                  standingData: table//
+                }
+                addBatchAndStanding(data).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    if (res.data.standingData != null) {
+                      this.afterTable = res.data.standingData
+                      this.afterTableTotal = res.data.standingData.length
+                    } else {
+                      this.afterTable = []
+                    }
+                    this.searchForm = res.data.claimBatch
+                    let data = {
+                      //医院编码
+                      providerCode: res.data.claimBatch.hospitalcode
+                    }
+                    getHospitalInfo(data).then(response => {
+                      if (response != null && response !== '') {
+                        this.$set(this.searchForm, 'chname1', this.selectHospitalName(response.rows, res.data.claimBatch.hospitalcode))
+                      }
+                    })
+                    this.show = true;
+                    for (let i = 0; i < res.data.claimBatch.casenum - this.afterTableTotal; i++) {
+                      let data = {
+                        rptno: '',
+                        idType: '1',
+                        idno: '',
+                        name: '',
+                        claimmaterials: '',
+                        remark: '',
+                        otherinfo: '',
+                      }
+                      this.afterTable.push(data);
+                    }
+                  } else {
+                    this.$message.error('保存失败！')
+                  }
+                })
               }
+
+            }
 
           } else {
             return this.$message.warning(
@@ -984,7 +976,7 @@
                           return this.$message.warning(
                             "证件类型不能为空"
                           );
-                        }else if (`${childrenVal}` === "idno") {
+                        } else if (`${childrenVal}` === "idno") {
                           this.hasBlock = true;
                           // el-table中列表头内容
                           return this.$message.warning(
@@ -1051,7 +1043,7 @@
                     }
                   })
                 }
-              } else if(parseInt(this.searchForm.casenum) < table.length){
+              } else if (parseInt(this.searchForm.casenum) < table.length) {
                 this.$confirm(`案件数量与台账数不相符，请核实!`, '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
@@ -1091,7 +1083,7 @@
                     message: '已取消！'
                   })
                 })
-              }else {
+              } else {
                 this.$confirm(`存在未登记台账的案件，是否确认提交?`, '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
@@ -1217,7 +1209,7 @@
       },
       getClaimmaterials(value) {
         let material = ''
-        if (value !== null && value.length>0) {
+        if (value !== null && value.length > 0) {
           for (let i = 0; i < value.length; i++) {
             if (i === value.length - 1) {
               material = material + this.selectDictLabel(this.claim_materialOptions, value[i])
@@ -1238,37 +1230,35 @@
         })
         return actions.join('');
       },
-      getName(row){
+      getName(row) {
         //请求接口获取被保险人
         //证件号码录完失焦时时根据被保人证件类型及证件号码查询PQS及TPA系统，
         //查询到后将被保人姓名赋值至该字段，若已存在数据或若未查询到或查询到多个则无需赋值，后续人工补录
-        let data ={
-          idType:row.idType,
-          idno:row.idno,
+        let data = {
+          idType: row.idType,
+          idno: row.idno,
         }
         getName(data).then(res => {
-         if (res!==null && res.code===200 && res.data){
-           if ((row.name===''|| row.name==null) && res.data.length==1){
-             row.name=res.data[0]
-           }
-         }else {
-           return this.$message.warning(
-             "未查询到被保险人！"
-           )
-         }
+          if (res !== null && res.code === 200 && res.data) {
+            if ((row.name === '' || row.name == null) && res.data.length == 1) {
+              row.name = res.data[0]
+            }
+          } else {
+            return this.$message.warning(
+              "未查询到被保险人！"
+            )
+          }
         })
 
       },
       getDeptName(deptId) {
         let deptName = ''
-        if (deptId != null && deptId !== '') {
-          getDeptById(deptId).then(res => {
-            if (res != null && res.code === 200) {
-              deptName = res.data.deptName
-              return deptName
-            }
-          })
-        }
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            deptName = res.data.organName
+            return deptName
+          }
+        })
       }
     }
   }

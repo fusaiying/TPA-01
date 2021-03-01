@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.domain.interfaceclass;
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
@@ -16,24 +17,25 @@ public class CaseInfo extends BaseEntity {
     /** 报案号 */
     private String rptNo;
 
-    /** 理赔申请原因      TODO:理赔申请原因实体类更换String*/
-    private List<String> applicationReason;
-
-    /** 案件来源 */
-    private String caseSource;
-
-    /** 案件信息 */
+    /** 归档号 */
+    private String filingNo;
 
     /** 申请人信息 */
+    private ClaimCaseRegisterInfo registerInfo;
 
     /** 被保人信息 */
+    private ClaimCaseInsuredInfo caseInsuredInfo;
 
     /** 受理信息 */
+    private ClaimCaseAcceptInfo caseAcceptInfo;
 
     /** 领款人信息 */
+    private List<ClaimCasePayeeInfo> payeeInfoList;
 
     /** 账单信息  List*/
+    private List<ClaimCaseBillInfo> caseBillList;
 
-    /** 影像信息 */
+    /** 案件备注信息 */
+    private List<ClaimCaseRemarkInfo> remarkInfoList;
 
 }

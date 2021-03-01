@@ -7,6 +7,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="RoleLoginInfo" id="RoleLoginInfoResult">
         <result property="role"    column="role"    />
         <result property="password"    column="password"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="name"    column="name"    />
+        <result property="isLogin"    column="is_login"    />
+        <result property="newPassword"    column="new_password"    />
     </resultMap>
 
     <resultMap type="OrderInfo" id="OrderInfoResult">
@@ -46,9 +50,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="phone"    column="phone"    />
         <result property="idType"    column="id_type"    />
         <result property="idCode"    column="id_code"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="age"    column="age"    />
         <result property="productChname"    column="product_chname"    />
         <result property="serviceName"    column="service_name"    />
         <result property="chname"    column="chname"    />
+        <result property="chname1"    column="chname1"    />
+        <result property="idtypeName"    column="idtypeName"    />
         <result property="applyStartTime"    column="applyStartTime"    />
         <result property="applyEndTime"    column="applyEndTime"    />
         <result property="updateFlag"    column="update_flag"    />
@@ -72,6 +80,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dealingMethod"    column="dealing_method"    />
         <result property="dealingShow"    column="dealing_show"    />
         <result property="refuseReason"    column="refuse_reason"    />
+        <result property="millisecond "    column="millisecond "    />
+    </resultMap>
+
+    <resultMap type="OrderInfo" id="OrderInfoToBResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="customerNo"    column="customer_no"    />
+        <result property="nodeStatus"    column="node_status"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="phone"    column="phone"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idCode"    column="id_code"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="productChname"    column="product_chname"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="chname"    column="chname"    />
+        <result property="millisecond "    column="millisecond "    />
     </resultMap>
 
     <resultMap type="Sn_base_addressDO" id="SnaseddressDOBResult">
@@ -80,8 +111,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="checkpassWord"  resultMap="RoleLoginInfoResult">
-       select distinct role,password from base_contacts where role = #{role}
+       select distinct role,password from base_contacts where role = #{role} and place_type ='01'
     </select>
+
+    <select id="getUser"  resultMap="RoleLoginInfoResult">
+       SELECT
+            supplier_code,
+            NAME,
+            role,
+            is_login
+        FROM
+            base_contacts
+        WHERE
+            STATUS = 'Y'
+        AND role = #{role} and place_type ='01'
+    </select>
+
+    <update id="updateIsLogin" >
+       update base_contacts set is_login = '1' where STATUS = 'Y' AND role = #{role} and place_type ='01'
+    </update>
+
+    <update id="updatePassword" >
+       update base_contacts set password = #{newPassword} where STATUS = 'Y' AND role = #{role} and place_type ='01'
+    </update>
 
     <select id="getReceivedTimes"  resultType="int">
        select count(0) from order_info where status = 'Y' and role = #{role}
@@ -95,8 +147,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select count(0) from order_info where status = 'Y' and role = #{role} and node_status = '02'
     </select>
 
-    <select id="getOrderList" parameterType="OrderInfo" resultMap="OrderInfoResult">
+    <select id="getOrderList" parameterType="roleLoginInfo" resultMap="OrderInfoResult">
        SELECT
+            order_code,
+            bsi.chname,
+            oi.service_code,
+            bso.service_name,
+            oi.supplier_code,
+            oi.product_code,
+            oi.create_time,
+            ci.NAME,
+            ci.sex,
+            ci.birthday,
+            ci.phone,
+            ci.age,
+            ci.id_code,
+            ci.id_type,
+            aging*60*1000 millisecond,
+            oi.customer_no
+        FROM
+            order_info oi
+        LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code
+        AND bsi. STATUS = 'Y'
+        LEFT JOIN base_service_info bso ON bso.service_code = oi.service_code
+        LEFT JOIN base_service_process bsp ON bsp.service_code = oi.service_code and  bsp.process_node ='03' and bsp.status = 'Y'
+        <where>
+            <if test="role != null  and role != ''"> and oi.role = #{role}</if>
+            <if test="nodeStatus != null  and nodeStatus != ''"> and oi.node_status = #{nodeStatus}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
+            and oi.status = 'Y'
+        </where>
+    </select>
+
+    <select id="getOrderDetail" parameterType="roleLoginInfo" resultMap="OrderInfoResult">
+        SELECT
             order_code,
             policy_no,
             bsi.chname,
@@ -113,6 +198,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.visiting_area,
             oi.expected_area,
             oi.expectation_hospital,
+            bpi.chname1,
             oi.first_dept,
             oi.second_dept,
             oi.director,
@@ -131,6 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ci.phone,
             ci.id_code,
             ci.id_type,
+            sdd.dict_label idtypeName,
             oi.customer_no
         FROM
             order_info oi
@@ -138,11 +225,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code
         AND bsi. STATUS = 'Y'
         LEFT JOIN base_service_info bso ON bso.service_code = oi.service_code
-        where oi.role = #{role} and oi.node_status = #{nodeStatus} and oi.status = 'Y'
+        LEFT JOIN sys_dict_data sdd ON sdd.dict_type = 'card_type'
+        AND sdd.dict_value = ci.id_type
+        LEFT JOIN base_provider_info bpi ON bpi.provider_code = oi.expectation_hospital
+        AND bpi. STATUS = 'Y'
+        <where>
+            <if test="role != null  and role != ''"> and oi.role = #{role}</if>
+            <if test="orderCode != null  and orderCode != ''"> and oi.order_code = #{orderCode}</if>
+            <if test="nodeStatus != null  and nodeStatus != ''"> and oi.node_status = #{nodeStatus}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
+            and oi.status = 'Y'
+        </where>
     </select>
 
-    <update id="receivingOrder" parameterType="OrderInfo">
-        update order_info set node_status = #{nodeStatus},role = #{role} where order_code = #{orderCode} and status = 'Y'
+    <update id="receivingOrder" parameterType="RoleLoginInfo">
+        update order_info set receiving_time=#{receivingTime}, node_status = #{nodeStatus},role = #{role} where order_code = #{orderCode} and status = 'Y'
     </update>
 
 
@@ -167,6 +264,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="consultant != null and consultant != ''">consultant = #{consultant},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="nodeStatus != null and nodeStatus != ''">node_status = #{nodeStatus},</if>
+            <if test="applyResultTime != null ">apply_result_time = #{applyResultTime},</if>
+            <if test="orderCompleteTime != null ">order_complete_time = #{orderCompleteTime},</if>
         </trim>
         where order_code = #{orderCode}
     </update>
@@ -209,6 +308,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND so.supplier_code = #{supplierCode}
         AND so. STATUS = 'Y'
         AND pi.update_flag = '0'
+    </select>
+
+    <select id="getPlacename" parameterType="String" resultType="String">
+         SELECT placename from sn_base_address where placecode = #{placecode}
     </select>
 
 </mapper>

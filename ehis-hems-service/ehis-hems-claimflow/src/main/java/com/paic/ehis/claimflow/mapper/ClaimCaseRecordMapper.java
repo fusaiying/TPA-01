@@ -92,6 +92,13 @@ public interface ClaimCaseRecordMapper
      */
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOne(String rptNo);
 
+    /**
+     *  通过报案号查询轨迹表状态07的创建时间
+     * @param rptNo 报案号
+     * @return
+     */
+    public ClaimCaseRecord selectClaimCaseRecordByrptNoPending(String rptNo);
+
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoFive(String rptNo);
 
@@ -182,4 +189,14 @@ public interface ClaimCaseRecordMapper
     public int updateRecordHistoricalState(ClaimCaseRecord claimCaseRecord);
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);
+
+    public long selectClaimCaseRecordByRptNo(String rptNo);
+
+    /**
+     * 找到最近的一条轨迹表的record_id
+     * @param rptNo
+     * @return long
+     */
+    public long selectRecentlyClaimCaseRecordByRptNo(String rptNo);
+
 }

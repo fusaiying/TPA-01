@@ -46,7 +46,7 @@ public class ClaimInformationVo extends BaseEntity {
     private Date accDate;
 
     /** 赔付结论 */
-    @Excel(name = "赔付结论")
+    @Excel(name = "赔付结论",readConverterExp = "01=正常给付,02=部分给付,05=拒付,04=协议给付,03=通融给付,10=未达免赔")
     private String payConclusion;
 
     /** 给付金额 */

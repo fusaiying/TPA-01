@@ -77,12 +77,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="FirstDeptInfoVo" id="FirstDeptInfoVoResult">
         <result property="hospitalCode"    column="hospitalCode"    />
-        <result property="firstDeptName"    column="firstDeptName"    />
+        <result property="deptName"    column="deptName"    />
     </resultMap>
 
     <resultMap type="SecondDeptInfoVo" id="SecondDeptInfoVoResult">
         <result property="secondDeptName"    column="secondDeptName"    />
         <result property="firstDeptName"    column="firstDeptName"    />
+        <result property="deptName"    column="deptName"    />
     </resultMap>
 
     <resultMap type="Ordertaking" id="OrdertakingResult">
@@ -379,11 +380,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getFirstDeptInfo"  resultMap="FirstDeptInfoVoResult">
-        select DISTINCT provider_code hospitalCode,first_dept firstDeptName from base_provider_dep where  status = 'Y'
+        select DISTINCT provider_code hospitalCode,first_dept deptName from base_provider_dep where  status = 'Y'
     </select>
 
     <select id="getSecondDeptInfo"  resultMap="SecondDeptInfoVoResult">
-        select DISTINCT first_dept firstDeptName,second_dept secondDeptName from base_provider_dep where  status = 'Y'
+        select DISTINCT first_dept firstDeptName,second_dept deptName from base_provider_dep where  status = 'Y'
     </select>
 
     <select id="getSupplierInfoByService"  parameterType="OrderInfo" resultMap="SupplierInfoResult">

@@ -143,7 +143,20 @@ public class ClaimCaseDiscussionController extends BaseController
     @GetMapping(value = "/caseInfo/{rptNo}")
     public AjaxResult getInfo(@PathVariable("rptNo") String rptNo)
     {
-        ClaimCaseDiscussionVO claimCaseDiscussionVO = claimCaseDiscussionService.selectCaseBaseInfo(rptNo);
+        ClaimCaseDiscussionVO  dto = new ClaimCaseDiscussionVO();
+        dto.setRptNo(rptNo);
+        dto.setIsHistory("N");
+        ClaimCaseDiscussionVO claimCaseDiscussionVO = claimCaseDiscussionService.selectCaseBaseInfo(dto);
+        return AjaxResult.success(claimCaseDiscussionVO);
+    }
+
+    @GetMapping(value = "/caseInfo/history/{rptNo}")
+    public AjaxResult getHistoryInfo(@PathVariable("rptNo") String rptNo)
+    {
+        ClaimCaseDiscussionVO  dto = new ClaimCaseDiscussionVO();
+        dto.setRptNo(rptNo);
+        dto.setIsHistory("Y");
+        ClaimCaseDiscussionVO claimCaseDiscussionVO = claimCaseDiscussionService.selectCaseBaseInfo(dto);
         return AjaxResult.success(claimCaseDiscussionVO);
     }
 

@@ -66,8 +66,7 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
     @Override
     public int insertClaimCaseDebt(ClaimCaseDebt claimCaseDebt)
     {
-        BigDecimal bigDecimal = new BigDecimal(0);
-        if (claimCaseDebt.getDebtAmount().compareTo(bigDecimal) != 0){
+        if (claimCaseDebt.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
             claimCaseDebt.setStatus("Y");
             claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
             claimCaseDebt.setCreateTime(DateUtils.getNowDate());

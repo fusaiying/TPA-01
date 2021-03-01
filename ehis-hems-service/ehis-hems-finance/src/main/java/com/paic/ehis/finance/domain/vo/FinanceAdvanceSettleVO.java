@@ -70,15 +70,15 @@ public class FinanceAdvanceSettleVO implements Serializable {
     private Date treatmentStartDate;
 
     /** 账单号 */
-    @Excel(name = "账单号")
+    @Excel(name = "账单号/发票号")
     private String billNo;
 
     /** 发票号 */
-    @Excel(name = "发票号")
+  //  @Excel(name = "发票号")
     private String invoiceNo;
 
     /** 案件状态 */
-    @Excel(name = "案件状态")
+    @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失效,04=交单完成,05=受理,06=录入,07=审核,08=抽检,30=问题件,31=协谈,32=调查,97=撤件可申诉,98=撤件,99=结案")
     private String caseStatus;
 
     /** 账单总金额 */

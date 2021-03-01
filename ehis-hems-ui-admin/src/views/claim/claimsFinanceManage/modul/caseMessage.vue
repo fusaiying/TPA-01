@@ -5,7 +5,7 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>案件信息列表</span>
           <span style="float: right;">
-            <el-button type="primary" size="mini" :disabled="isListExport" @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-table
@@ -300,7 +300,7 @@
           this.isListExport = true
           this.download('finance/pay/export', {
 
-          }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
+          }, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -312,7 +312,7 @@
           this.isListExport = true
           this.download('finance/pay/exportForeign', {
 
-          }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
+          }, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',

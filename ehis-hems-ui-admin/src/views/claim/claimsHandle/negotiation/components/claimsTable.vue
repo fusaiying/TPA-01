@@ -42,19 +42,19 @@ export default {
     status: String,
 
     claimStatusSelect: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }
     },
     negotiationTypes: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }
     },
     deliverySource: {
-      type: Object,
+      type: Array,
       default: function() {
         return []
       }

@@ -21,6 +21,22 @@ public interface OrderBussinessInfoMapper
     public RoleLoginInfo checkpassWord(String role);
 
     /**
+     * 获取用户信息
+     */
+    public RoleLoginInfo getUser(RoleLoginInfo roleLoginInfo);
+
+    /**
+     * 变更用户是否第一次登录
+     */
+    public int updateIsLogin(RoleLoginInfo roleLoginInfo);
+
+    /**
+     * 变更用户的密码
+     */
+    public int updatePassword(RoleLoginInfo roleLoginInfo);
+
+
+    /**
      * 查询接单总数
      */
     public int getReceivedTimes(String role);
@@ -40,6 +56,10 @@ public interface OrderBussinessInfoMapper
      */
     public List<OrderInfo> getOrderList(RoleLoginInfo roleLoginInfo);
 
+
+    public OrderInfo getOrderDetail(RoleLoginInfo roleLoginInfo);
+
+    public String getPlacename(String placecode);
 
     /**
      * 接单操作

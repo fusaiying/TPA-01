@@ -7,14 +7,14 @@
         <span style="float: right;">
         <el-button v-if="!isOpen" type="primary" :disabled="!collapsed" size="mini" @click="openAll">一键展开</el-button>
         <el-button v-else type="primary" :disabled="!collapsed" size="mini" @click="closeAll">一键收起</el-button>
-        <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
+        <el-button v-if="status==='edit' && node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
                    @click="calculate">赔付计算</el-button>
-        <el-button v-if="node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
+        <el-button v-if="status==='edit' && node==='calculateReview'" type="primary" :disabled="!collapsed" size="mini"
                    @click="save">保存</el-button>
       </span>
       </div>
     </div>
-    <el-form ref="caseForm" :rules="caseRules" :model="caseForm" size="small" v-show="collapsed">
+    <el-form ref="caseForm" :disabled="status === 'show'" :rules="caseRules" :model="caseForm" size="small" v-show="collapsed">
       <el-table
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
         :cell-style="cellStyle"
@@ -150,7 +150,7 @@
       title="备注明细"
       width="40%" height="35%">
       <div style="height: 200px">
-        <el-form ref="remarkForm" :model="remarkForm" size="mini" :rules="remarkRule">
+        <el-form ref="remarkForm" :disabled="status==='show'" :model="remarkForm" size="mini" :rules="remarkRule">
           <el-row>
             <el-col :span="8">
               <el-form-item prop="pulloutDescribe" style="position:relative;width: 550px">
@@ -168,7 +168,7 @@
       </div>
     </el-dialog>
     <!-- 理算明细 -->
-    <adjustment-detail :fixInfo="fixInfo" :value="adjustmentDialog" @closeAdjustmentDialog="closeAdjustmentDialog"/>
+    <adjustment-detail :status="status" :fixInfo="fixInfo" :value="adjustmentDialog" @closeAdjustmentDialog="closeAdjustmentDialog"/>
   </el-card>
 </template>
 <script>
@@ -335,6 +335,7 @@
               showClose: true
             })
           }
+          this.$emit("refresh-item", 'discussion')
           detailsList(data).then(res => {
             if (res != null && res.code === 200 && res.rows.length > 0) {
               this.caseForm.caseData = res.rows
@@ -620,7 +621,7 @@
       cellStyle({row, column, rowIndex, columnIndex}) {
         if (rowIndex===0 && this.isSum){
           // 改变合计行样式
-          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
+          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[1]
           const child_tr = s_table.getElementsByTagName('tr')[0]
           child_tr.childNodes.forEach(item => {
             if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2) {

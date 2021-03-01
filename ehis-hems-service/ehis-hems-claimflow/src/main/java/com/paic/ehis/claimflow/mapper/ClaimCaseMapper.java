@@ -200,11 +200,6 @@ public interface ClaimCaseMapper
     ClaimCaseDistVo selectCaseDistNumber(String batchNo);
     ClaimCaseDistVo selectCaseDistNumberOne(String rptNo,String caseStatus);
 
-    //核心案件同步接口
-    public int selectClaimCaseCore(String rptNo);
-    public ClaimCase selectClaimCaseNewCore(String rptNo);
-    public int insertClaimCaseCore(ClaimCase claimCase);
-    public int updateClaimCaseCore(ClaimCase claimCase);
     /** 见未被使用-flint-List<ClaimCase> */
     public List<ProcessingCaseVo> selectCaseOne(ClaimCase claimCase);
 

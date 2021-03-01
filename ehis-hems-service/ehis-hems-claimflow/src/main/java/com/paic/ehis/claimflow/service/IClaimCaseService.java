@@ -6,6 +6,7 @@ import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 
 import java.util.List;
 
@@ -155,7 +156,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
+    public TableDataInfo selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
 
     /**条件理算审核
      * 悬挂

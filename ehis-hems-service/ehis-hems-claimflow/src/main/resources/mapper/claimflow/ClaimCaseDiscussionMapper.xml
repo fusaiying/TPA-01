@@ -39,6 +39,7 @@
         <result property="discSubType"    column="disc_sub_type"    />
         <result property="disView"    column="dis_view"    />
         <result property="discId"    column="disc_id"    />
+        <result property="isHistory"    column="is_history"    />
     </resultMap>
 
     <sql id="selectClaimCaseDiscussionVo">
@@ -60,14 +61,24 @@
     </select>
 
     <select id="selectDiscussionListByRptNo" parameterType="String" resultMap="ClaimCaseDiscussionResult">
-        <include refid="selectClaimCaseDiscussionVo"/>
+        select a.disc_id,
+        a.rpt_no,
+        a.disc_type,
+        a.disc_sub_type,
+        a.dis_view,
+        a.conclusion,
+        a.conclusion_view,
+        a.create_by,
+        a.update_by,
+        a.create_time,
+        a.update_time
+        FROM
+        claim_case_discussion a
         <where>
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
-            <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
-            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
-            and is_history='Y'
-            and status='Y'
+            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         </where>
+        AND a.is_history = 'Y'
+        AND a.STATUS = 'Y'
     </select>
 
     <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">
@@ -203,7 +214,7 @@
     </select>
 
     <!--查询基本信息-->
-    <select id="selectCaseBaseInfo" parameterType="String" resultMap="ClaimCaseDiscussionVOResult">
+    <select id="selectCaseBaseInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO" resultMap="ClaimCaseDiscussionVOResult">
         select
             claim_case_discussion.rpt_no,/*报案号*/
             claim_case_insured.name,/*被保人姓名*/
@@ -217,7 +228,8 @@
             claim_case_discussion.disc_type,
             claim_case_discussion.disc_sub_type, /**协谈系类*/
             claim_case_discussion.dis_view, /**转出意见*/
-            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age
+            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age ,
+            claim_case_discussion.is_history
         from
             claim_case_discussion,
             claim_batch,
@@ -235,6 +247,8 @@
           AND claim_case_insured.STATUS = 'Y'
           AND claim_case.STATUS = 'Y'
           AND claim_case_accept.STATUS = 'Y'
+         and  claim_case_discussion.is_history = #{isHistory}
+         limit 1
     </select>
 
 </mapper>

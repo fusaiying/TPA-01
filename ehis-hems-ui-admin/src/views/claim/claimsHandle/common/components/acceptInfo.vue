@@ -11,7 +11,7 @@
       </div>
     </div>
     <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule" :model="baseForm" style="padding-bottom: 30px;"
-             :disabled="(node === 'accept' && status === 'show') || node==='input' || node==='sport'"
+             :disabled=" status === 'show' || (node === 'accept' && status === 'show') || node==='input' || node==='sport'"
              label-width="150px" label-position="right" size="mini">
       <el-row>
         <el-col :span="24">
@@ -500,6 +500,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$emit("refresh-item", 'discussions')
                   this.isAcceptInfoSave = true
                 }).catch(res => {
                   this.$message({
@@ -526,6 +527,7 @@
                     center: true,
                     showClose: true
                   })
+                  this.$emit("refresh-item", 'discussions')
                   this.isAcceptInfoSave = true
                 }).catch(res => {
                   this.$message({

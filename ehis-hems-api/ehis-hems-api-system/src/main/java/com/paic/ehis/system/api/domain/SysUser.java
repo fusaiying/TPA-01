@@ -76,6 +76,12 @@ public class SysUser extends BaseEntity
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
+    /** 机构编码 */
+    private String organCode;
+
+    /** 机构名称 */
+    private String organName;
+
     /** 部门对象 */
     @Excels({
         @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
@@ -85,6 +91,22 @@ public class SysUser extends BaseEntity
 
     /** 角色对象 */
     private List<SysRole> roles;
+
+    public void setOrganCode(String organCode) {
+        this.organCode = organCode;
+    }
+
+    public void setOrganName(String organName) {
+        this.organName = organName;
+    }
+
+    public String getOrganCode() {
+        return organCode;
+    }
+
+    public String getOrganName() {
+        return organName;
+    }
 
     /** 角色组 */
     private Long[] roleIds;

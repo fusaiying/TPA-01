@@ -54,32 +54,34 @@
         <el-divider/>
         <div>
           <div style="line-height: 50px;margin-right: 10px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-            <span>理赔案件列表（{{totalNum}}）</span>
-            <el-button  style="float: right; margin-top: 10px;" type="primary" size="mini" @click="exportData">清单导出
+<!--            <span>理赔案件列表（{{totalNum}}）@click="isSearch" </span>-->
+            <span :class="[showTable ? 'el-icon-arrow-down':'el-icon-arrow-right']" >&nbsp;理赔案件列表（{{totalNum}}）</span>
+            <el-button  v-show="showTable" style="float: right; margin-top: 10px;" type="primary" size="mini" @click="exportData">清单导出
             </el-button>
           </div>
           <el-table
+            v-show="showTable"
             :data="tableData"
             v-loading="loading"
             size="mini"
             tooltip-effect="darky"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
-            <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip >
+            <el-table-column prop="batchNo" label="批次号" min-width="170" align="center" show-overflow-tooltip />
+            <el-table-column prop="rptNo" label="报案号" min-width="170" align="center" show-overflow-tooltip >
               <template slot-scope="scope">
-                <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+                <el-button width="170" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="name" label="被保险人" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="证件号码"   width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="policyItemNo" label="分单号"  align="center" show-overflow-tooltip />
-            <el-table-column prop="accDate" label="就诊日期" align="center" show-overflow-tooltip />
-            <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论" align="center" show-overflow-tooltip />
-            <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
-            <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
-            <el-table-column prop="investigation" label="有无调查" :formatter="getInvestigation" align="center" show-overflow-tooltip />
+            <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="name" label="被保险人" min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="idNo" label="证件号码"   min-width="150" align="center" show-overflow-tooltip />
+            <el-table-column prop="policyItemNo" label="分单号"  min-width="130"  align="center" show-overflow-tooltip />
+            <el-table-column prop="accDate" label="就诊日期"  min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="payConclusion" :formatter="getConclusionName"  min-width="130" label="赔付结论" align="center" show-overflow-tooltip />
+            <el-table-column prop="paymentAmount" label="给付金额"   min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="updateBy" label="审核人"  min-width="130"  align="center" show-overflow-tooltip />
+            <el-table-column prop="investigation"  label="有无调查" :formatter="getInvestigation" align="center" show-overflow-tooltip />
           </el-table>
           <!--分页组件-->
           <pagination
@@ -124,7 +126,7 @@
             loading: false,
             claimStatusSelect:[],
             conclusionSelect:[],
-
+            showTable:false,
           }
       },
       mounted(){
@@ -142,18 +144,26 @@
       },
 
       created: function() {
-        this.initData();
+       // this.initData();
       },
       methods: {
-        /*getCaseStatusName(row,col){
-          return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
-        },*/
+        // isSearch(){
+        //   if(this.showTable) {
+        //     this.showTable = false;
+        //   } else {
+        //     this.showTable = true;
+        //     this.initData();
+        //   }
+        // },
         initData(){
           this.getTableData();
         },
         //重置
         reset(form) {
-            this.$refs[form].resetFields()
+          this.$refs[form].resetFields();
+          this.showTable = false;
+          this.totalNum =0;
+          this.tableData = [];
         },
         //查询
         getTableData () {
@@ -179,6 +189,7 @@
         searchHandel(){
           this.pageInfo.currentPage = 1;
           this.pageInfo.pageSize = 10;
+          this.showTable = true;
           this.getTableData();
         },
         getClaimStatusName(row,col){

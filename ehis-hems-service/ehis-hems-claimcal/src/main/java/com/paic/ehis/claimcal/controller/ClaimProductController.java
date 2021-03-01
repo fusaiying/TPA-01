@@ -17,6 +17,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -189,7 +190,7 @@ public class ClaimProductController extends BaseController
     /**
      * 获取产品信息至个人池
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 //    @PreAuthorize("@ss.hasPermi('system:product:edit')")
     @Log(title = "获取产品信息至个人池", businessType = BusinessType.UPDATE)
     @PutMapping(value = "/riskCodes")

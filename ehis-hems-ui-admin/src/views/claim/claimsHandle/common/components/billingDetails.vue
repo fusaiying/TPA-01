@@ -15,6 +15,7 @@
     <div v-show="collapsed">
       <el-table
         :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        :cell-style="cellStyles"
         :data="tableData"
         size="small"
         highlight-current-row
@@ -22,6 +23,8 @@
         :expand-row-keys="expands"
         @expand-change="getCostData"
         tooltip-effect="dark"
+        show-summary
+        :summary-method="getSums"
         style="width: 100%;">
         <el-table-column type="expand" v-if="node==='calculateReview' || node==='sport' || status==='show'"/>
         <el-table-column align="center" width="110" prop="billNo" label="账单号/发票号" show-overflow-tooltip>
@@ -63,11 +66,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button type="text" size="mini" v-if="node==='calculateReview'"
+      <el-button type="text" size="mini" v-if="node==='calculateReview'" :disabled="status === 'show'"
                  style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
                  @click="addBill"> + 添加
       </el-button>
-      <div style="background-color: #bedbf1;width: 400px;height: 55px;text-align: center;line-height: 55px">汇总信息</div>
+     <!-- <div style="background-color: #bedbf1;width: 400px;height: 55px;text-align: center;line-height: 55px">汇总信息</div>-->
       <pagination
         v-show="total>0"
         :total="total"
@@ -169,6 +172,7 @@
                 class="item-width"
                 type="date"
                 clearable
+                @change="changeTime"
                 placeholder="选择日期"
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
@@ -179,6 +183,7 @@
                 :disabled="this.$route.query.status==='add'"
                 v-model="baseForm.treatmentEndDate"
                 class="item-width"
+                @change="changeTime"
                 type="date"
                 clearable
                 placeholder="选择日期"
@@ -194,12 +199,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="发票号：" prop="invoiceNo">
-              <el-input v-model="baseForm.invoiceNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="baseForm.invoiceNo" @change="changeNo" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="账单号：" prop="billNo">
-              <el-input v-model="baseForm.billNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="baseForm.billNo" @change="changeNo" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -347,7 +354,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.billDetailAmount'"
                             :rules="accountRules.billDetailAmount" style="display: inline-flex !important;">
-                <el-input v-model="scope.row.billDetailAmount" placeholder="请输入" size="mini"/>
+                <el-input v-model="scope.row.billDetailAmount" @change="changeAmount" placeholder="请输入" size="mini"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ scope.row.billDetailAmount}}</span>
             </template>
@@ -461,7 +468,7 @@
 <script>
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
   import {getInfoBaseCodeMappingNew,} from '@/api/claim/presentingReview'
-
+  import {getBillSum} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
     {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'claim_currency'},]
   import {getBillList, saveBill, editBill, getFee, getHospitalInfo, deleteBill} from '@/api/claim/handleCom'
@@ -511,6 +518,7 @@
         }
       },
       fixInfo: function (newVal) {
+        this.getBillSum()
         if (newVal !== null && newVal !== undefined) {
           getFee(newVal.rptNo).then(res => {
             if (res != null && res.code === 200) {
@@ -556,7 +564,7 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length > 0) {
               let paymentSum = 0
               for (let i = 0; i < this.costForm.costData.length - 1; i++) {
                 this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
@@ -567,7 +575,7 @@
             callback();
           }
         } else {
-          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length > 0) {
             let paymentSum = 0
             for (let i = 0; i < this.costForm.costData.length - 1; i++) {
               this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
@@ -586,7 +594,7 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+            if (this.baseForm.isShareAp === '01' && this.costForm.costData.length > 0) {
               let paymentSum = 0
               for (let i = 0; i < this.costForm.costData.length - 1; i++) {
                 this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
@@ -597,7 +605,7 @@
             callback();
           }
         } else {
-          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length>0) {
+          if (this.baseForm.isShareAp === '01' && this.costForm.costData.length > 0) {
             let paymentSum = 0
             for (let i = 0; i < this.costForm.costData.length - 1; i++) {
               this.costForm.costData[i].advancePayment = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * (parseFloat(this.getZero(this.baseForm.ssAdvancePayment)) + parseFloat(this.getZero(this.baseForm.tpAdvancePayment))).toFixed(2)).toFixed(2)
@@ -616,14 +624,14 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length>0 ) {
+            if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length > 0) {
               let copayNum = 0
               for (let i = 0; i < this.costForm.costData.length - 1; i++) {
                 this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
                 copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
               }
               this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
-            } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length>0 ) {
+            } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length > 0) {
               let copayNum = 0
               for (let i = 0; i < this.costForm.costData.length - 1; i++) {
                 this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
@@ -634,14 +642,14 @@
             callback();
           }
         } else {
-          if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length>0 ) {
+          if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay == null || this.baseForm.transSerialCopay === '') && this.costForm.costData.length > 0) {
             let copayNum = 0
             for (let i = 0; i < this.costForm.costData.length - 1; i++) {
               this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.copay)).toFixed(2)
               copayNum = copayNum + parseFloat(this.costForm.costData[i].billDetailCopay)
             }
             this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.copay) - copayNum).toFixed(2)
-          } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length>0 ) {
+          } else if (this.baseForm.isShareCopay === '01' && (this.baseForm.transSerialCopay !== null || this.baseForm.transSerialCopay !== '') && this.costForm.costData.length > 0) {
             let copayNum = 0
             for (let i = 0; i < this.costForm.costData.length - 1; i++) {
               this.costForm.costData[i].billDetailCopay = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.transSerialCopay)).toFixed(2)
@@ -660,7 +668,7 @@
           } else if (!regx.test(value)) {
             callback(new Error("允许录入正数，保留两位小数"));
           } else {
-            if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length>0 ) {
+            if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length > 0) {
               let hosDiscountAmountNum = 0
               for (let i = 0; i < this.costForm.costData.length - 1; i++) {
                 this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
@@ -671,7 +679,7 @@
             callback();
           }
         } else {
-          if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length>0 ) {
+          if (this.baseForm.isShareDisAmount === '01' && this.costForm.costData.length > 0) {
             let hosDiscountAmountNum = 0
             for (let i = 0; i < this.costForm.costData.length - 1; i++) {
               this.costForm.costData[i].hosDiscountAmount = (this.costForm.costData[i].billDetailAmount / this.baseForm.billAmount * this.getZero(this.baseForm.hosDiscountAmount)).toFixed(2)
@@ -759,7 +767,6 @@
                 }
                 this.costForm.costData[this.costForm.costData.length - 1].billDetailCopay = (this.getZero(this.baseForm.transSerialCopay) - copayNum).toFixed(2)
               }
-
               callback();
             } else {
               callback(new Error("录入费用金额有误，请检查！"));
@@ -788,7 +795,7 @@
           if (this.baseForm.treatmentType === '1' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate) + 1
           }
-          if (this.baseForm.treatmentType === '2'&& (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
+          if (this.baseForm.treatmentType === '2' && (this.baseForm.treatmentStartDate !== null && this.baseForm.treatmentStartDate !== '') && (this.baseForm.treatmentEndDate !== null && this.baseForm.treatmentEndDate !== '')) {
             this.baseForm.treatmentDays = this.DateDiff(this.baseForm.treatmentEndDate, this.baseForm.treatmentStartDate)
           }
           callback();
@@ -918,6 +925,8 @@
         },
         expands: [],
         tableData: [],
+        billSumData: {},
+        isSum: false,
         total: 1,
         pageNum: 1,
         pageSize: 10,
@@ -959,19 +968,19 @@
         },
         baseFormRule: {
           hospitalName: [{required: true, message: '就诊医院不能为空', trigger: ['blur']}],
-          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur','change']}],
+          billCurrency: [{required: true, message: '账户币种不能为空', trigger: ['blur', 'change']}],
           billAmount: [{validator: checkBillAmount, required: true, trigger: ['blur']}],
-          treatmentType: [{validator: checkTreatmentType,required: true, trigger: ['blur', 'change']}],
+          treatmentType: [{validator: checkTreatmentType, required: true, trigger: ['blur', 'change']}],
           treatmentStartDate: [{validator: checkTreatmentStartDate, required: true, trigger: ['blur', 'change']}],
           treatmentEndDate: [{validator: checkTreatmentEndDate, required: true, trigger: ['blur', 'change']}],
           treatmentDays: [{validator: checkTreatmentDays, required: true, trigger: ['blur', 'change']}],
-          ssAdvancePayment: [{validator: checkSsAdvancePayment, trigger: ['blur','change']}],
-          tpAdvancePayment: [{validator: checkTpAdvancePayment, trigger: ['blur','change']}],
+          ssAdvancePayment: [{validator: checkSsAdvancePayment, trigger: ['blur', 'change']}],
+          tpAdvancePayment: [{validator: checkTpAdvancePayment, trigger: ['blur', 'change']}],
           isShareAp: [{required: true, message: '请选择是否分摊先期给付', trigger: ['blur', 'change']}],
           transSerialCopay: [{validator: checkIsShareCopay, required: true, trigger: ['blur', 'change']}],
-          copay: [{validator: checkCopay, trigger: ['blur','change']}],
+          copay: [{validator: checkCopay, trigger: ['blur', 'change']}],
           isShareCopay: [{required: true, message: '请选择是否分摊自付额', trigger: ['blur', 'change']}],
-          hosDiscountAmount: [{validator: checkHosDiscountAmount, trigger:  ['blur','change']}],
+          hosDiscountAmount: [{validator: checkHosDiscountAmount, trigger: ['blur', 'change']}],
           isShareDisAmount: [{required: true, message: '请选择是否分摊折扣', trigger: ['blur', 'change']}],
           icdCode: [{required: true, message: '请选择主要诊断(ICD)', trigger: ['blur', 'change']}],
           clinicalDiagnosis: [{required: true, message: '临床诊断不能为空', trigger: ['blur', 'change']}],
@@ -980,7 +989,7 @@
         },
         accountRules: {
           feeItemCode: [{required: true, message: '请选择费用项名称', trigger: ['blur', 'change']}],
-          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur', 'change']}],
+          billDetailAmount: [{validator: checkBillDetailAmount, required: true, trigger: ['blur']}],
           selfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
           partSelfAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
           unableAmount: [{validator: checkNums, trigger: ['blur', 'change']}],
@@ -1118,6 +1127,10 @@
             this.baseForm.clinicalDiagnosis = res.data.bill.clinicalDiagnosis
 
             this.costForm.costData = res.data.billDetail
+            this.costForm.costData.forEach(item => {
+              item.isShow = false
+            })
+
             if (this.baseForm.icdCodes === null || this.baseForm.icdCodes.length === 0) {
               this.baseForm.icdCodes = [{
                 icdCode: ''
@@ -1267,7 +1280,7 @@
         this.isFormShow = true
         this.isCostShow = false
       },
-      getRowKeys(row){
+      getRowKeys(row) {
         return row.billId   //这里看这一行中需要根据哪个属性值是id
       },
       getCostData(row, expandedRows) {
@@ -1342,7 +1355,6 @@
       },
       saveBill() {
         this.baseForm.rptNo = this.fixInfo.rptNo
-        console.log(this.baseForm);
         this.$refs.baseForm.validate((valid) => {
           if (valid) {
             this.$refs.costForm.validate((valid) => {
@@ -1379,6 +1391,7 @@
                         center: true,
                         showClose: true
                       })
+                      this.getBillSum()
                       this.isBillInfoSave = true
                       if (this.node === 'calculateReview') {
                         this.$emit("refresh-item", 'calculate')
@@ -1394,7 +1407,7 @@
                       }
                     }).catch(res => {
                     })
-                    if (this.node==='input'){
+                    if (this.node === 'input') {
                       this.$refs.baseForm.resetFields()
                       this.baseForm = {
                         billId: undefined,
@@ -1549,7 +1562,78 @@
           strNo = row.invoiceNo
         }
         return strNo
-      }
+      },
+      changeTime() {
+        this.$refs.baseForm.validateField(['treatmentStartDate', 'treatmentEndDate'])
+      },
+      changeNo() {
+        this.$refs.baseForm.validateField(['invoiceNo', 'billNo'])
+      },
+      changeAmount() {
+        this.$refs.costForm.validate()
+      },
+      getSums(param) {
+        const sums = []
+        if (this.billSumData!==null && this.billSumData!==undefined && this.billSumData.billAmount){
+          this.isSum = true
+          const {columns, data} = param;
+          columns.forEach((column, index) => {
+            if (index === 2) {
+              sums[index] = '汇总信息';
+              return;
+            }
+            switch (column.property) {
+              case "billAmount":
+                sums[index] = this.billSumData.billAmount;// 账单金额
+                break;
+              case "hosDiscountAmount":
+                sums[index] = this.billSumData.hosDiscountAmount;//折扣金额
+                break;
+              case "reasonAmount":
+                sums[index] = this.billSumData.reasonAmount;//合理金额
+                break;
+              case "selfAmount":
+                sums[index] = this.billSumData.selfAmount;//自费金额
+                break;
+              case "partSelfAmount":
+                sums[index] = this.billSumData.partSelfAmount;//部分自费
+                break;
+              case "advancePayment":
+                sums[index] = this.billSumData.advancePayment;//先期给付
+                break;
+              case "unableAmount":
+                sums[index] = this.billSumData.unableAmount;//不合理金额
+                break;
+              default:
+                break;
+            }
+          })
+        }
+
+        return sums;
+      },
+      getBillSum() {
+        let data = {
+          rptNo: this.fixInfo.rptNo
+        }
+        getBillSum(data).then(res => {
+          if (res != null && res.code === 200) {
+            this.billSumData = res.data
+          }
+        })
+      },
+      cellStyles({row, column, rowIndex, columnIndex}) {
+        if (rowIndex===0 && this.isSum){
+          // 改变合计行样式
+          const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
+          const child_tr = s_table.getElementsByTagName('tr')[0]
+          child_tr.childNodes.forEach(item => {
+            if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3|| item.cellIndex === 4) {
+              item.setAttribute('style', 'background: #bedbf1')
+            }
+          })
+        }
+      },
     }
 
   }

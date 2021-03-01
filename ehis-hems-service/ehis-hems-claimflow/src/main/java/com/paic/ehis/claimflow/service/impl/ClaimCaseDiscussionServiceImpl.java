@@ -12,6 +12,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseDiscussionService;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -83,7 +84,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
      * @param claimCaseDiscussion 案件协谈信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseDiscussion(ClaimCaseDiscussion claimCaseDiscussion)
     {
@@ -99,9 +100,9 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
             claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
             claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
             claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
+            caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         }
 
-        caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setOperation(ClaimStatus.CASETALKING.getCode());//31
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
@@ -111,7 +112,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
 
         ClaimCase claimCase = new ClaimCase();
         claimCase.setRptNo(claimCaseDiscussion.getRptNo());
-        claimCase.setCaseStatus(ClaimStatus.CASETALKING.getCode());
+        claimCase.setCaseStatus(ClaimStatus.CASETALKING.getCode());//31
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCaseMapper.updateClaimCase(claimCase);
@@ -161,6 +162,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);
+        claimCaseDiscussion.setUpdateTime(DateUtils.getNowDate());//处理时间
+        claimCaseDiscussion.setUpdateBy(SecurityUtils.getUsername());//处理人
         return claimCaseDiscussionMapper.updateClaimCaseDiscussion(claimCaseDiscussion);
     }
 
@@ -297,8 +300,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
 
     /*查询基础信息表*/
     @Override
-    public ClaimCaseDiscussionVO  selectCaseBaseInfo(String rptNo){
-        ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(rptNo);
+    public ClaimCaseDiscussionVO  selectCaseBaseInfo(ClaimCaseDiscussionVO dto){
+        ClaimCaseDiscussionVO claimCaseDiscussionVO=claimCaseDiscussionMapper.selectCaseBaseInfo(dto);
         if(null != claimCaseDiscussionVO) {
             List<com.paic.ehis.system.api.domain.ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseDiscussionVO.getRptNo());
             if (claimCasePolicies != null || claimCasePolicies.size() != 0) {

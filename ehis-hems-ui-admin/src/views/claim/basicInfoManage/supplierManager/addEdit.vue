@@ -269,7 +269,7 @@
               <span v-if="!scope.row.isShow">{{ scope.row.accountName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountNo" align="center" header-align="center" label="账户号" min-width="2"
+          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号" min-width="2"
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'account.' + scope.$index + '.accountNo'"
@@ -809,33 +809,45 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let data={
-            serialNo:row.serialNo
-          }
-          deleteContacts(data).then(res=>{
-            if (res!=null && res.code===200){
-              this.$message({
-                message: '删除成功！',
-                type: 'success',
-                center: true,
-                showClose: true
-              })
-              //查询联系人信息
-              const query = {
-                supplierCode: this.querys.serialNo
-              }
-              listContacts(query).then(res => {
-                if (res != null && res.code === 200) {
-                  this.contactForm.contacts = res.rows
-                  this.contactForm.contacts.forEach(item => {
-                    item.isShow = false
-                  })
-                }
-              })
-            }else {
-              this.$message.error('删除失败！')
+          if (row.supplierCode!='' && row.supplierCode!=null){
+            let data={
+              serialNo:row.serialNo
             }
-          })
+            deleteContacts(data).then(res=>{
+              if (res!=null && res.code===200){
+                this.$message({
+                  message: '删除成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                //查询联系人信息
+                const query = {
+                  supplierCode: this.querys.serialNo
+                }
+                listContacts(query).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.contactForm.contacts = res.rows
+                    this.contactForm.contacts.forEach(item => {
+                      item.isShow = false
+                    })
+                  }
+                })
+              }else {
+                this.$message.error('删除失败！')
+              }
+            })
+          }else {
+            this.contactForm.contacts.splice(index, 1)
+            this.$message({
+              message: '删除成功！',
+              type: 'success',
+              center: true,
+              showClose: true
+            })
+          }
+
+
 
         }).catch(() => {
           this.$message({
@@ -1248,7 +1260,7 @@
         let params = {
           pageNum: 1,
           pageSize: 10,
-          supplierCode: this.querys.serialNo,
+          supplierCode: this.supplier.serialNo,
         }
         getService(params).then(res => {
           if (res != null && res.code === 200) {

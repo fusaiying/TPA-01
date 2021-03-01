@@ -12,7 +12,7 @@
       </div>
     </div>
     <el-form v-show="collapsed" ref="baseForm" :rules="baseFormRule"
-             :disabled="(node === 'accept' && status === 'show') || node==='input'  || node==='sport' "
+             :disabled="status === 'show' || (node === 'accept' && status === 'show') || node==='input'  || node==='sport' "
              :model="baseForm" style="padding-bottom: 30px;" label-width="136px" label-position="right" size="mini">
       <el-row>
         <el-col :span="8">

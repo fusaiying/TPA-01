@@ -174,9 +174,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where rpt_no = #{rptNo} and status = 'Y' order by update_time desc
     </select>
 
-    <select id="CheckClaimCasePayeeByRptNo" parameterType="String" resultType="java.lang.Integer">
+    <select id="CheckClaimCasePayeeByRptNo" parameterType="String" resultType="java.math.BigDecimal">
         SELECT
-            sum( ifnull( payee_ratio, 0 ) )
+            IFNULL(sum( ifnull( payee_ratio, 0 ) ),0)
         FROM
             claim_case_payee
         where rpt_no = #{rptNo} and status = 'Y'

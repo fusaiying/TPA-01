@@ -89,6 +89,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>收款明细</span>
+        <el-button  style="float: right; margin-right: 10px;" type="primary" size="mini" @click="dealFun">核销</el-button>
       </div>
 
       <!--收款明细 start-->
@@ -114,6 +115,7 @@
   import {companyList,riskList, listInfo,receiptColList} from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
+  import {updateSettleEndStatus} from "@/api/paymentFee/api";
   export default {
     components: {
       feeDetail,
@@ -180,6 +182,41 @@
       },
       checkBoxVue(checkVue){
         this.taskNoList = checkVue;
+      },
+      dealFun(){
+        if(this.taskNoList.length === 0) {
+          this.$message({ type: 'info',  message: '请选择需要进行核销的结算!'});
+          return false;
+        }
+        if(this.collectionId === '') {
+          this.$message({ type: 'info',  message: '请选择收款明细!'});
+          return false;
+        }
+        let settleTaskNo  = this.taskNoList;
+        this.$confirm('确定核销', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          /*updateSettleEndStatus(settleTaskNo).then(response => {
+            if(response.code == '200') {
+              this.initData();
+              this.initGatherData();
+              this.$message({
+                type: 'success',
+                message: '核销成功!'
+              });
+            } else {
+              this.$message({
+                type: 'info',
+                message: '核销失败'
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          })*/
+        }).catch(() => {
+        })
       },
       initGatherData(){
         const params = {};

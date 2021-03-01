@@ -56,22 +56,9 @@ export default {
   },
   watch: {
     status: function (newValue) {
-      console.log("************************")
-      console.log("************************")
-      console.log(newValue)
-      console.log("************************")
-      console.log("************************")
-
       this.dataType = newValue;
     },
     loading: function (newVal){
-      console.log("********444444444****************")
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log("*******4444444444444444444*****************")
     },
     tableData:function(newValue) {
       this.dataSearchLoad = false;

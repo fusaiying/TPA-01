@@ -1,26 +1,26 @@
 <template>
   <el-table
-    :data="gatherTable"
+    :data="tableData"
     :header-cell-style="{color:'black',background:'#f8f8ff'}"
     size="small"
     highlight-current-row
+    v-loading="gatherSearchLoad"
     tooltip-effect="dark"
     style="width: 100%;">
 
-    <el-table-column align="center" prop="companyName" label="账户名" show-overflow-tooltip/>
-    <el-table-column align="center" prop="companyName" label="收款金额CNY" show-overflow-tooltip/>
-    <el-table-column align="center" prop="organCode" label="收款日期" show-overflow-tooltip/>
-    <el-table-column align="center" prop="name" label="收款备注" show-overflow-tooltip/>
-    <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
+    <el-table-column align="center" prop="receiptAccName" label="账户名" show-overflow-tooltip/>
+    <el-table-column align="center" prop="receiptAmount" label="收款金额CNY" show-overflow-tooltip/>
+    <el-table-column align="center" prop="receiptDate" label="收款日期" show-overflow-tooltip/>
+    <el-table-column align="center" prop="remark" label="收款备注" show-overflow-tooltip/>
+    <el-table-column align="center" prop="updateBy" label="操作人" show-overflow-tooltip/>
   </el-table>
 </template>
 
 <script>
-import { changeDate } from '@/utils/commenMethods.js'
-import {encrypt} from "@/utils/rsaEncrypt"
+
 export default {
   props: {
-    gatherTable: {
+    tableData: {
       type: Array,
       default: function() {
         return []
@@ -29,18 +29,14 @@ export default {
     status: String,
 
   },
+  watch:{
+    tableData:function(newValue) {
+      this.gatherSearchLoad = false;
+    }
+  },
   data() {
     return {
-      gatherTableData: [],
-      gatherTotal: 0,
-      gatherPageInfo: {
-        page: 1,
-        pageSize: 10
-      },
-      // detailInfo:{
-      //   row:'',
-      //   type:'',
-      // },
+      gatherSearchLoad:true,
     }
   },
   methods: {

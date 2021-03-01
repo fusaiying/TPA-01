@@ -111,7 +111,7 @@
   import feeTable from '../components/feeTable'
   import gatheringTable from '../components/gatheringTable'
 
-  import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
+  import {companyList,riskList, listInfo,receiptColList} from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
   export default {
@@ -163,6 +163,7 @@
       this.getRiskList('');
       this.getCompanyList();
       this.initData();
+      this.initGatherData();
     },
     watch: {
 
@@ -171,7 +172,16 @@
     },
     methods: {
       initGatherData(){
-
+        const params = {};
+        params.pageNum = this.gatherPageInfo.page;
+        params.pageSize = this.gatherPageInfo.pageSize;
+        params.companyCode = this.formSearch.companyCode;
+        receiptColList(params).then(res => {
+          if (res.code == '200') {
+            this.gatherTotal = res.total;
+            this.gatherTableData = res.rows;
+          }
+        });
       },
       resetForm() {
         this.$refs.formSearch.resetFields()

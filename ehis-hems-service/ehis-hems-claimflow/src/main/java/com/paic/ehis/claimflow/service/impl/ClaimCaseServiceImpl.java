@@ -937,7 +937,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCase 案件信息
      * @return 结果
      */
-    @@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int backToClaimCase(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();

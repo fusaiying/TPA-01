@@ -297,7 +297,7 @@
               }
               getUsersByOrganCode(option).then(res => {
                 if (res!=null && res.code===200){
-                  this.sysUserOptions=res.data
+                  this.sysUserOptions=res.rows
                 }
               })
             }
@@ -615,7 +615,7 @@
            if (query !== '' && query != null) {
              getUsersByOrganCode(data).then(res => {
                if (res != null && res.code === 200) {
-                 this.sysUserOptions = res.data
+                 this.sysUserOptions = res.rows
                }
              })
            }
@@ -630,7 +630,7 @@
           }
           getUsersByOrganCode(data).then(res => {
             if (res != null && res.code === 200) {
-              this.sysUserOptions = res.data
+              this.sysUserOptions = res.rows
             }
           })
         } else {

@@ -75,7 +75,7 @@
             </el-table-column>
             <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="130" align="center" show-overflow-tooltip />
             <el-table-column prop="name" label="被保险人" min-width="130" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="证件号码"   min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="idNo" label="证件号码"   min-width="150" align="center" show-overflow-tooltip />
             <el-table-column prop="policyItemNo" label="分单号"  min-width="130"  align="center" show-overflow-tooltip />
             <el-table-column prop="accDate" label="就诊日期"  min-width="130" align="center" show-overflow-tooltip />
             <el-table-column prop="payConclusion" :formatter="getConclusionName"  min-width="130" label="赔付结论" align="center" show-overflow-tooltip />

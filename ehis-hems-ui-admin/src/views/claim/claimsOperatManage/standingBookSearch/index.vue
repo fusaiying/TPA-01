@@ -262,8 +262,8 @@
           getOrganList(item).then(res => {
             if (res != null && res.code === 200) {
               this.searchForm.organcode = res.data.sysOrganInfo.organCode
-              this.deptOptions = res.data.sysOrganInfoList
-              this.sysDeptOptions = res.data.sysOrganInfoList
+              this.deptOptions = res.rows
+              this.sysDeptOptions = res.rows
               let option = {
                 organCode: res.data.sysOrganInfo.organCode ,
                 pageNum: 1,
@@ -413,7 +413,7 @@
           }
           if (query !== '' && query != null) {
             getOrganList(data).then(res => {
-              this.deptOptions = res.data.sysOrganInfoList
+              this.deptOptions = res.rows
             }).catch(res => {
             })
           }

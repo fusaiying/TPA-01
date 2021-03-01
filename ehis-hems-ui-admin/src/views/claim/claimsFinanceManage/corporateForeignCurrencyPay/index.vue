@@ -184,7 +184,7 @@
           }
           getOrganList(item).then(res => {
             if (res != null && res.code === 200) {
-              this.deptListOptions = res.data.sysOrganInfoList
+              this.deptListOptions = res.rows
             }
           }).catch(res => {
           })

@@ -29,11 +29,26 @@
   </el-card>
 </template>
 <script>
-  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'}, {dictType: 'special_case'},{dictType: 'currency'},]
+  let dictss = [{dictType: 'claimType'}, {dictType: 'insurance_type'}, {dictType: 'special_case'}, {dictType: 'currency'},]
   import {getHospitalInfo} from '@/api/claim/handleCom'
+
   export default {
     props: {
-      baseInfo:Object
+      baseInfo: Object
+    },
+    watch: {
+      baseInfo: function (newVal) {
+        if (newVal !== null && newVal !== undefined) {
+          if (newVal.hospitalcode!=null && newVal.hospitalcode!=''){
+            getHospitalInfo({providerCode: newVal.hospitalcode}).then(res => {
+              if (res != null && res !== '') {
+                this.hospitalOptions = res.rows
+
+              }
+            })
+          }
+        }
+      }
     },
     data() {
       return {
@@ -45,11 +60,11 @@
               casenum:undefined,
               batchtotal:undefined,
             },*/
-        dictList:[],
-        claimTypeOptions:[],
-        insurance_typeOptions:[],
-        special_caseOptions:[],
-        hospitalOptions:[],
+        dictList: [],
+        claimTypeOptions: [],
+        insurance_typeOptions: [],
+        special_caseOptions: [],
+        hospitalOptions: [],
       }
     },
     async mounted() {
@@ -65,14 +80,14 @@
       this.special_caseOptions = this.dictList.find(item => {
         return item.dictType === 'special_case'
       }).dictDate
-      getHospitalInfo({}).then(res => {
+     /* getHospitalInfo({}).then(res => {
         if (res != null && res !== '') {
           this.hospitalOptions = res.rows
 
         }
-      })
+      })*/
     },
-    methods:{
+    methods: {
       selectHospitalName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
@@ -129,6 +144,7 @@
   .el-checkbox-group ::v-deep .el-checkbox {
     display: block;
   }
+
   ::v-deep.to_right {
     width: 130px;
     text-align: right;
@@ -154,6 +170,7 @@
   .el-tooltip__popper {
     max-width: 400px;
   }
+
   .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }

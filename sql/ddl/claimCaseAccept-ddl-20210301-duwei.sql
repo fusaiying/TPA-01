@@ -1,0 +1,1 @@
+alter table claim_case_accept add customer_application_date date null comment '客户申请日期' after acc_describe;

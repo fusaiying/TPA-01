@@ -1260,7 +1260,7 @@
         let params = {
           pageNum: 1,
           pageSize: 10,
-          supplierCode: this.querys.serialNo,
+          supplierCode: this.supplier.serialNo,
         }
         getService(params).then(res => {
           if (res != null && res.code === 200) {

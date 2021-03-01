@@ -77,8 +77,9 @@
         <where>
             <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         </where>
-        AND a.is_history = 'Y'
+       --  AND a.is_history = 'Y'
         AND a.STATUS = 'Y'
+        order by a.create_time asc
     </select>
 
     <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">

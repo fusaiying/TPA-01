@@ -133,10 +133,12 @@
             <if test="riskCode != null  and riskCode != ''"> and bir.risk_code = #{riskCode}</if>
             <if test="settlementType != null  and settlementType != ''"> and ftsk.settlement_type = #{settlementType}</if>
             <if test="settleEndDate != null "> and ftsk.settle_end_date = #{settleEndDate}</if>
-            <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status in (${settleStatus})</if>
+            <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status =  #{settleStatus})</if>
             <if test="status != null  and status != ''"> and ftsk.status = #{status}</if>
             <if test="creationStartDate != null  and creationEndDate != null"> and ftsk.create_time between #{creationStartDate} and #{creationEndDate}</if>
             <if test="deptCode != null  and deptCode != ''"> and ftsk.dept_code = #{deptCode}</if>
+            <if test="pageType != null  and pageType == '01'"> and ftsk.settle_status in ('01','02')</if>
+            <if test="pageType != null  and pageType == '03'"> and ftsk.settle_status in ('02','03')</if>
         </where>
     </select>
 

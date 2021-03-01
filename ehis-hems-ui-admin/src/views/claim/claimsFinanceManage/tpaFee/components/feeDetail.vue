@@ -15,7 +15,7 @@
         </el-button>
         <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">清单导入
         </el-button>
-        <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="importData">确认
+        <el-button v-if="confimInfo" style="float: right; margin-top: 10px;margin-right: 10px" type="primary" size="mini" @click="confirmDataInfo">确认
         </el-button>
       </div>
       <el-table
@@ -49,11 +49,11 @@
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="batchNo"  label="出单公司" show-overflow-tooltip/>
-        <el-table-column align="center" prop="batchNo" label="险种" show-overflow-tooltip/>
-        <el-table-column align="center" prop="batchNo" label="总人数" show-overflow-tooltip/>
-        <el-table-column align="center" prop="batchNo" label="服务费总金额CNY" show-overflow-tooltip/>
-        <el-table-column align="center" prop="updateBy" label="备注" show-overflow-tooltip/>
+        <el-table-column align="center" prop="companyName"  label="出单公司" show-overflow-tooltip/>
+        <el-table-column align="center" prop="riskName" label="险种" show-overflow-tooltip/>
+        <el-table-column align="center" prop="totalPeople" label="总人数" show-overflow-tooltip/>
+        <el-table-column align="center" prop="serviceSettleAmount" label="服务费总金额CNY" show-overflow-tooltip/>
+        <el-table-column align="center" prop="remark" label="备注" show-overflow-tooltip/>
       </el-table>
       <!--分页组件-->
       <pagination
@@ -70,8 +70,7 @@
 <script>
 
   import moment from 'moment'
-  import {taskViewDetail, initiateTask} from '@/api/tpaFee/api'
-  import {updateConfirm} from "@/api/paymentFee/api";
+  import {taskViewDetail, initiateTask,updateConfirm} from '@/api/tpaFee/api'
 
   export default {
   props: {
@@ -175,7 +174,7 @@
             if (_data.length !== 0) {
               _data.forEach(item => {
                 item.editing = false;
-                item.minData = [item]
+                item.minData = [item.detailInfos]
               })
             }
             this.tableData= _data;
@@ -212,6 +211,16 @@
     },
     //导出
     exportData(){
+      const params = {};
+      params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
+
+      let type = this.fixInfoDetail.type ;
+      if(type == "launch") {
+        params.settlementType = this.fixInfoDetail.rowData.settlementType;
+        params.companyCode = this.fixInfoDetail.rowData.companyCode;
+        params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;
+      }
+      this.download('finance/tpaTask/exportInitiate', params, `结算明细_${new Date().getTime()}.xlsx`);
     },
     //导入
     importData(){

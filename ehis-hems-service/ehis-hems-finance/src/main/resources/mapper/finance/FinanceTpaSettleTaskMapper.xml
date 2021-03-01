@@ -149,6 +149,7 @@
 
     <select id="selectTpaTaskReceiptColList" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="FinanceCollectionInfoResult">
         SELECT
+        info.collection_id,
         info.receipt_acc_name,
         info.receipt_amount,
         info.receipt_date,

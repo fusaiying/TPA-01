@@ -16,6 +16,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
@@ -707,6 +708,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param auditWorkPoolDTO
      * @return
      */
+
     @Override
     public TableDataInfo selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
@@ -715,7 +717,11 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
         List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS;
-        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize());
+
+        String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
+        //检查字符，防止注入绕过
+          orderBy = SqlUtil.escapeOrderBySql(orderBy);
+        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();

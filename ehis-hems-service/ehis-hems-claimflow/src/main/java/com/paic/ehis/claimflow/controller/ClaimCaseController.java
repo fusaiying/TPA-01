@@ -397,6 +397,10 @@ public class ClaimCaseController extends BaseController {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
+        else {
+            auditWorkPoolDTO.setOrderByColumn("updateTime");
+            auditWorkPoolDTO.setIsAsc("desc");
+        }
        // startPage(auditWorkPoolDTO);
         return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }

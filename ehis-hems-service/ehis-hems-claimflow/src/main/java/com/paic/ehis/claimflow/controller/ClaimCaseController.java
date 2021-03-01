@@ -87,8 +87,8 @@ public class ClaimCaseController extends BaseController {
      * 查询处理中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processingList")
-    public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processingList")
+    public TableDataInfo processingList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -105,8 +105,8 @@ public class ClaimCaseController extends BaseController {
      * 查询已处理受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processedList")
-    public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processedList")
+    public TableDataInfo processedList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -123,8 +123,8 @@ public class ClaimCaseController extends BaseController {
      * 查询悬挂中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/suspensionList")
-    public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/suspensionList")
+    public TableDataInfo suspensionList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {

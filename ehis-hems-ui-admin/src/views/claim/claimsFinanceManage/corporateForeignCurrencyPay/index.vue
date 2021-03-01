@@ -16,6 +16,7 @@
                 v-model="searchForm.hospitalCode"
                 filterable
                 remote
+                clearable
                 reserve-keyword
                 placeholder="请选择医院"
                 :remote-method="remoteMethod"
@@ -32,7 +33,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否申述：" prop="complainStatus">
-              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择"
+              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择" clearable
                          @change="">
                 <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -48,6 +49,7 @@
                 v-model="searchForm.caseDate"
                 class="item-width"
                 type="daterange"
+                clearable
                 range-separator="~"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
@@ -83,11 +85,7 @@
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
                            prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{selectDictLabel( hospitals, scope.row.hospitalCode)}}</span>
-            </template>
-          </el-table-column>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
           <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
           <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -259,7 +257,7 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].organCode == parseIntvalue) {
+          if (datas[key].organCode == value) {
             actions.push(datas[key].organName);
             return true;
           }

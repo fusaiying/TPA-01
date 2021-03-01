@@ -229,6 +229,7 @@
         dictList: [],
         claim_materialOptions: [],
         deptOptions: [],
+        sysDeptOptions: [],
         userOptions: [],
       }
     },

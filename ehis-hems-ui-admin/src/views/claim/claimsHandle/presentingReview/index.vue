@@ -154,6 +154,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -215,7 +216,7 @@
 
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-
+          this.organCode=res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -406,7 +407,7 @@
       remoteMethod(query) {
         if (query != null && query != '' && query != undefined) {
           let data = {
-            organCode: this.queryParams.organcode,
+            organCode: this.organCode,
             organName: query,
             pageNum: 1,
             pageSize: 200,

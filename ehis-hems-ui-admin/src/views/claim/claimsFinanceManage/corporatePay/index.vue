@@ -152,6 +152,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         queryParams: {
           pageNum: 1,
           pageSize: 10,
@@ -197,11 +198,11 @@
           if (res.data != null) {
             item.organCode = res.data.organCode
           }
-          getOrganList(item).then(res => {
-            if (res != null && res.code === 200) {
-              this.searchForm.organCode = res.data.sysOrganInfo.organCode
-              this.deptOptions = res.rows
-              this.sysDeptOptions = res.rows
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.searchForm.organCode = res.data.organCode
+              this.deptOptions = response.rows
+              this.sysDeptOptions = response.rows
             }
           }).catch(res => {
           })
@@ -280,7 +281,7 @@
       remoteDeptMethod(query) {
         if (query != null && query != '' && query != undefined) {
           let data = {
-            organCode: this.searchForm.organCode,
+            organCode: this.organCode,
             organName: query,
             pageNum: 1,
             pageSize: 200,

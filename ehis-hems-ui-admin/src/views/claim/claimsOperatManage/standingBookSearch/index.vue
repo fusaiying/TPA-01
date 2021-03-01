@@ -199,6 +199,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         queryParams: {
           pageNum: 1,
           pageSize: 10,
@@ -250,6 +251,7 @@
       })
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -259,19 +261,19 @@
             item.organCode = res.data.organCode
             this.searchForm.createBy = res.data.userName
           }
-          getOrganList(item).then(res => {
-            if (res != null && res.code === 200) {
-              this.searchForm.organcode = res.data.sysOrganInfo.organCode
-              this.deptOptions = res.rows
-              this.sysDeptOptions = res.rows
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.deptOptions = response.rows
+              this.sysDeptOptions = response.rows
+              this.searchForm.organcode = res.data.organCode
               let option = {
-                organCode: res.data.sysOrganInfo.organCode ,
+                organCode: this.searchForm.organcode ,
                 pageNum: 1,
                 pageSize: 200,
               }
               getUsersByOrganCode(option).then(res => {
                 if (res!=null && res.code===200){
-                  this.userOptions=res.data
+                  this.userOptions=res.rows
                 }
               })
             }
@@ -396,7 +398,7 @@
           }
           getUsersByOrganCode(data).then(res => {
             if (res != null && res.code === 200) {
-              this.userOptions = res.data
+              this.userOptions = res.rows
             }
           })
         } else {
@@ -406,7 +408,7 @@
       remoteMethod(query) {
         if (query != null && query != '' && query != undefined) {
           let data = {
-            organCode: this.searchForm.organcode,
+            organCode: this.organCode,
             organName: query,
             pageNum: 1,
             pageSize: 200,
@@ -431,7 +433,7 @@
           if (query !== '' && query != null) {
             getUsersByOrganCode(data).then(res => {
               if (res != null && res.code === 200) {
-                this.userOptions = res.data
+                this.userOptions = res.rows
               }
             })
           }

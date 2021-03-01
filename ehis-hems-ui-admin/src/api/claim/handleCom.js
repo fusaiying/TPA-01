@@ -20,8 +20,8 @@ export function selectCoreCase() {
 export function getBackList(query) {
   return request({
     url: '/claimflow/case/processingList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 //# 给台账匹配赋值rptNo
@@ -37,8 +37,8 @@ export function setRptNo(data) {
 export function getFinishList(query) {
   return request({
     url: '/claimflow/case/processedList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -46,8 +46,8 @@ export function getFinishList(query) {
 export function getHangUpList(query) {
   return request({
     url: '/claimflow/case/suspensionList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

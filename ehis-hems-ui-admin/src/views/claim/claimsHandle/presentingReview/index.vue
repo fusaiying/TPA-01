@@ -24,6 +24,7 @@
               <el-select
                 v-model="searchForm.organcode"
                 filterable
+                clearable
                 remote
                 reserve-keyword
                 placeholder="请选择机构"

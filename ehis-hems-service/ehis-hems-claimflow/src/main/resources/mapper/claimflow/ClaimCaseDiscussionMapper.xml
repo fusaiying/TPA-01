@@ -70,8 +70,8 @@
         a.conclusion_view,
         a.create_by,
         a.update_by,
-        b.create_time,
-        b.update_time
+        a.create_time,
+        a.update_time
         FROM
         claim_case_discussion a,
         claim_case_record b

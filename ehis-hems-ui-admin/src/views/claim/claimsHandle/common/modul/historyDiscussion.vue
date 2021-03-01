@@ -56,9 +56,17 @@
 </template>
 <script>
 
+  import moment from 'moment'
   import {  historyDisInfo } from '@/api/negotiation/api'
 
   export default {
+    filters: {
+      changeDate: function(value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      }
+    },
     props: {
       value: {
         type: Boolean,
@@ -96,7 +104,9 @@
     },
 
     mounted() {
-
+      this.getDicts("handleconclusion").then(response => {
+        this.clusionSelect = response.data;
+      });
     },
     created: function() {
 

@@ -523,7 +523,7 @@
 
         getUserInfo().then(res => {
           if (res != null && res.code === 200) {
-            this.deptName  = res.data.organName
+            this.deptName  = res.user.organName
           }
         })
         if (this.querys.status === 'show') {
@@ -660,8 +660,8 @@
       } else {
         getUserInfo().then(res => {
           if (res != null && res.code === 200) {
-            this.searchForm.organcode = res.data.organCode
-            this.deptName = res.data.organName
+            this.searchForm.organcode = res.user.organCode
+            this.deptName = res.user.organName
           }
         })
       }
@@ -1255,7 +1255,7 @@
         let deptName = ''
         getUserInfo().then(res => {
           if (res != null && res.code === 200) {
-            deptName = res.data.organName
+            deptName = res.user.organName
             return deptName
           }
         })

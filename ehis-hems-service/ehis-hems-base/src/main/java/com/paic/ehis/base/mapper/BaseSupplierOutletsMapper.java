@@ -61,5 +61,5 @@ public interface BaseSupplierOutletsMapper
      */
     public int deleteBaseSupplierOutletsByIds(String[] servcomnos);
 
-   public int  updateBaseSupplierOutletsStatus(String websiteCode);
+   public int  updateBaseSupplierOutletsStatus(BaseSupplierOutlets baseSupplierOutlets);
 }

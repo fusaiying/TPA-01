@@ -61,7 +61,7 @@
             <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
+            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.disView) }}</span>
           </el-col>
         </el-row>
 

@@ -92,7 +92,7 @@
       </div>
 
       <!--收款明细 start-->
-      <gatheringTable :table-data="gatherTableData" />
+      <gatheringTable :table-data="gatherTableData" @radioVue="radioVue"/>
       <!--收款明细 end -->
 
       <pagination
@@ -151,6 +151,10 @@
         companySelect:[],
         settlementTypeSelect:[],
         riskCodeSelect:[],
+        // 实收ID
+        collectionId:'',
+        // 复选框任务号
+        taskNoList:[],
       }
     },
     mounted(){
@@ -171,6 +175,12 @@
     computed: {
     },
     methods: {
+      radioVue(value){
+        this.collectionId = value;
+      },
+      checkBoxVue(checkVue){
+        this.taskNoList = checkVue;
+      },
       initGatherData(){
         const params = {};
         params.pageNum = this.gatherPageInfo.page;

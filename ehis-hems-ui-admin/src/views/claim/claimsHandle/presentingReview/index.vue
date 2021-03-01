@@ -216,14 +216,14 @@
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
 
-          this.searchForm.organcode = res.user.organCode
+          this.searchForm.organcode = res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
             pageSize: 200,
           }
           if (res.data != null) {
-            item.organCode = res.user.organCode
+            item.organCode = res.data.organCode
           }
           getOrganList(item).then(res => {
             if (res != null && res.code === 200) {

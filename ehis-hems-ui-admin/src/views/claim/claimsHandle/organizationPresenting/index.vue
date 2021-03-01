@@ -232,7 +232,7 @@
       //this.searchHandle();
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.queryParams.organcode = res.user.organCode
+          this.queryParams.organcode = res.data.organCode
           let query = {
             pageNum: 1,
             pageSize: 10,
@@ -244,9 +244,9 @@
             pageSize: 200,
           }
           if (res.data != null) {
-            item.organCode = res.user.organCode
-            this.queryParams.updateBy = res.user.userName
-            query.updateBy = res.user.userName
+            item.organCode = res.data.organCode
+            this.queryParams.updateBy = res.data.userName
+            query.updateBy = res.data.userName
           }
           getPendingList(query).then(res => {
             if (res != null && res.code === 200) {

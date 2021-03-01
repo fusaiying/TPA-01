@@ -32,7 +32,7 @@
           </el-col>
         </el-row>
 
-        <el-row style="margin: -10px 10px;" v-if="HistoryData.length != (index+1)">
+        <el-row style="margin: -10px 10px;" v-if="item.conclusion != ''">
           <el-col :span="8">
             <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 }}-回调</span>
           </el-col>
@@ -107,6 +107,10 @@
     mounted() {
       this.getDicts("handleconclusion").then(response => {
         this.clusionSelect = response.data;
+      });
+      //协谈类型
+      this.getDicts("negotiation_type").then(response => {
+        this.negotiationTypes = response.data;
       });
     },
     created: function() {

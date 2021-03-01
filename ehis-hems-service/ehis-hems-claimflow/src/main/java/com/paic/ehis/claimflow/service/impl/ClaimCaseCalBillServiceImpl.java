@@ -16,6 +16,7 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -109,7 +110,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
      * @param billDetailDTO 案件赔付账单明细
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();

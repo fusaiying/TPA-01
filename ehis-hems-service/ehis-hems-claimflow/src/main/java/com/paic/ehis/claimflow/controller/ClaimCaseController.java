@@ -1,10 +1,8 @@
 package com.paic.ehis.claimflow.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
-import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoDTO;
-import com.paic.ehis.claimflow.domain.interfaceclass.BatchNoRptNoVO;
-import com.paic.ehis.claimflow.domain.interfaceclass.RptNoAndFilingNo;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.*;
 import com.paic.ehis.common.core.enums.ClaimStatus;
@@ -18,12 +16,14 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +53,7 @@ public class ClaimCaseController extends BaseController {
 
     @Autowired
     private IPolicyInfoService policyInfoService;
+
     /**
      * 理算审核调查 保存按钮
      */
@@ -184,7 +185,7 @@ public class ClaimCaseController extends BaseController {
         ArrayList<ClaimCase> claimCases = new ArrayList<>();
         for (ProcessingCaseVo processingCaseVo : list) {
             ClaimCase claimCase = new ClaimCase();
-            BeanUtils.copyProperties(processingCaseVo,claimCase);
+            BeanUtils.copyProperties(processingCaseVo, claimCase);
             claimCases.add(claimCase);
         }
         ExcelUtil<ClaimCase> util = new ExcelUtil<ClaimCase>(ClaimCase.class);
@@ -208,6 +209,7 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo getCaseListByBatchNo(ClaimCase claimCase) {
         return getDataTable(claimCaseService.selectClaimCaseByBatchNo(claimCase));
     }
+
     /**
      * 根据报案号查看当前案件是否存在借款
      */
@@ -382,7 +384,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentOver")
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理理算案件");
     }
@@ -394,9 +397,12 @@ public class ClaimCaseController extends BaseController {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
-        startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        else {
+            auditWorkPoolDTO.setOrderByColumn("updateTime");
+            auditWorkPoolDTO.setIsAsc("desc");
+        }
+       // startPage(auditWorkPoolDTO);
+        return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }
 
     //审核工作池接口-导出悬挂中清单
@@ -587,59 +593,48 @@ public class ClaimCaseController extends BaseController {
     }
 
     /**
-     * PBW在线理赔请求接口
+     * PBW在线理赔请求接口-完成机构交单动作
      *
      * @param batchNoRptNoDTO
-     * @return
+     * @return batchNoRptNoVO
      */
     @PostMapping("/getBatchAndNoRptNo")
     public AjaxResult getBatchNoRptNo(BatchNoRptNoDTO batchNoRptNoDTO) {
-        int caseload = batchNoRptNoDTO.getCasenum();
-        if (caseload > 0) {
+        String batchCount = batchNoRptNoDTO.getBatchCount();
+        int i1 = Integer.parseInt(batchCount);
+        if (i1 > 0) {
             BatchNoRptNoVO batchNoRptNoVO = new BatchNoRptNoVO();
-            List<RptNoAndFilingNo> RptNoAndFilingNoList = new ArrayList<>();
-            RptNoAndFilingNo rptNoAndFilingNo = new RptNoAndFilingNo();
-            for (int i = 0; i <= caseload; i++) {
+            List<String> rptNoList = new ArrayList<>();
+
+            for (int i = 0; i <= i1; i++) {
                 //报案号
                 String bahtime = "96" + "JGH0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
-                rptNoAndFilingNo.setRptNo(bahtime);
-
-                //归档号
-                String claimCaseNumber1 = "JGHDQQW" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 10);
-                rptNoAndFilingNo.setFilingNo(claimCaseNumber1);
-
-                RptNoAndFilingNoList.add(rptNoAndFilingNo);
+                rptNoList.add(bahtime);
             }
 
             //批次号
             String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+
             batchNoRptNoVO.setBatchNo(str1);
-            batchNoRptNoVO.setRptNoAndFilingNoList(RptNoAndFilingNoList);
+            batchNoRptNoVO.setRptNoList(rptNoList);
             Date nowDate = DateUtils.getNowDate();
             batchNoRptNoVO.setCreateBatchTime(nowDate);
 
             ClaimBatch claimBatch = new ClaimBatch();
-            claimBatch.setBatchno(str1);
-            claimBatch.setSource(batchNoRptNoDTO.getSource());
-            claimBatch.setHospitalcode(batchNoRptNoDTO.getHospitalCode());
-            claimBatch.setClaimtype(batchNoRptNoDTO.getClaimType());
-            claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());
-            claimBatch.setCasenum(batchNoRptNoDTO.getCasenum());
-            claimBatch.setBatchtotal(batchNoRptNoDTO.getBatchTotal());
-            claimBatch.setOrgancode(batchNoRptNoDTO.getHospitalCode());
-            claimBatch.setCurrency(batchNoRptNoDTO.getCurrency());
-            claimBatch.setConttype(batchNoRptNoDTO.getClaimType());
-            claimBatch.setBillrecevieflag(batchNoRptNoDTO.getBillRecevieFlag());
-            claimBatch.setPrireason(batchNoRptNoDTO.getPriReason());
-            claimBatch.setRemark(batchNoRptNoDTO.getRemark());
+            claimBatch.setBatchno(str1);//批次号
+            claimBatch.setSource(batchNoRptNoDTO.getSource());//交单来源
+            claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
+            claimBatch.setClaimtype(batchNoRptNoDTO.getClaimType());//理赔类型
+            claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
+            claimBatch.setCasenum(i1);//案件数量
+            BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
+            claimBatch.setBatchtotal(bd);//批次总金额
+            claimBatch.setOrgancode(batchNoRptNoDTO.getBranchRegion());//交单机构编码
             claimBatch.setBatchstatus(ClaimStatus.BATCHFINISH.getCode());//03
-            claimBatch.setExpressnumber(batchNoRptNoDTO.getExpressNumber());
-            claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());
-            claimBatch.setSendby(batchNoRptNoDTO.getSendBy());
-            claimBatch.setSpeccasetype(batchNoRptNoDTO.getClaimType());
-            claimBatch.setIssuingunit(batchNoRptNoDTO.getIssuingUnit());
-            claimBatch.setContno(batchNoRptNoDTO.getContNo());
+            claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());//接单日期
             claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
+            claimBatch.setDirectReceiptSign(batchNoRptNoDTO.getDirectReceiptSign());//批次是否单张发票
+            claimBatch.setCaseFlag(batchNoRptNoDTO.getCaseFlag());//案件第五位标识码
             //claimBatch.setCreateBy(SecurityUtils.getUsername());
             claimBatch.setCreateTime(nowDate);
             //claimBatch.setUpdateBy(SecurityUtils.getUsername());
@@ -654,35 +649,26 @@ public class ClaimCaseController extends BaseController {
 
 
     /**
-     * PBW在线理赔/E结算接口
+     * PBW在校交单撤件接口
+     * updateOnlineClaimWithdrawal
      *
-     * @param
+     * @param batchNo
      * @return
      */
-    /*
-    @PostMapping("/giveBatchNoRptNoMessage")
-    public AjaxResult giveBatchNoRptNoMessage(Class classnimber) {
-
-        //查询TPA保单-根据被保人客户号和被保人姓名
-        //policy_info
-        InsuredNoAndName insuredNoAndName = new InsuredNoAndName();
-        List<PolicyInfo> listA = policyInfoService.selectPolicyInfoListByinsuredNo(insuredNoAndName);
-
-        //查询核心健康险保单-？
-        ArrayList<Object> listB = new ArrayList<>();
-
-        if (listA.size()!=0){//若存在TPA保单-走TPA
-            if (?){
-
-            }else if (?){
-
-            }
-        }else if (listB.size() != 0 && listA.size() == 0) {//若只存在核心健康险保单-走核心
-
-        } else {//若都没有-提示：请撤件
-
+    @PostMapping("/updateOnlineClaimWithdrawal")
+    public AjaxResult updateOnlineClaimWithdrawal(String batchNo) {
+        //查询是否已经进行影像件扫描
+        ClaimCase claimCase = new ClaimCase();
+        claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimCase.setBatchNo(batchNo);
+        List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectClaimCaseByBatchNo(claimCase);
+        if (processingCaseVos.size()==0) {//已经进行影像件扫描
+            return AjaxResult.error("该批次已经完成影像件扫描，不能撤件！");
+        } else {//未进行影像件扫描-完成撤件
+            return toAjax(claimBatchService.updateClaimBatchBybatchNo(batchNo));
         }
-        return AjaxResult.success();
+
     }
-    */
+
+
 }

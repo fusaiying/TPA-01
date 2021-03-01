@@ -34,6 +34,17 @@ public class SysOrganInfo extends BaseEntity
     @Excel(name = "上级机构编码")
     private String parentOrganCode;
 
+    public void setOrganLev(int organLev) {
+        this.organLev = organLev;
+    }
+
+    public int getOrganLev() {
+        return organLev;
+    }
+
+    /** 机构等级 */
+    private int organLev;
+
     /** 状态（Y-有效，N-无效） */
     @Excel(name = "状态", readConverterExp = "Y=-有效，N-无效")
     private String status;

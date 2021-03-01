@@ -179,6 +179,7 @@
 </template>
 
 <script>
+import {getUserInfo} from '@/api/claim/standingBookSearch'
   import { selectCaseDispatchList
            ,getDspatchUser
            ,dispatchUpdate
@@ -313,24 +314,15 @@
         },
         getRole(value){
           this.userNameValue = this.userIdName[value];
-          // value  = this.userIdName[value];
            if(value == '') {
              return false;
            }
-          // roleInfo(value).then(response => {
-          //   if (response.code == '200') {
-          //     //console.log(response.data.roles[0].roleName)
-          //     this.checkRoleName = response.data.roles[0].roleName;
-          //   }
-          // }).catch(error => {
-          //   console.log(error);
-          // });
         },
         getLogRole(){
-          logInfo().then(response => {
-            if (response.code == '200') {
-              //console.log(response.user.roles[0].roleName)
-              this.logRoleName = response.user.roles[0].roleName;
+          getUserInfo().then(response => {
+            if (response.code == '200' && response.data) {
+              //console.log(response)
+              this.logRoleName = response.data.roles[0].roleName;
             }
           }).catch(error => {
             console.log(error);

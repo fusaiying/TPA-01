@@ -140,6 +140,16 @@ public class ClaimBatch extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
+    /**
+     * 批次是否单张发票
+     */
+    private String directReceiptSign;
+
+    /**
+         * 案件第五位标识码
+     */
+    private String caseFlag;
+
     public String getBatchno() {
         return batchno;
     }
@@ -300,6 +310,22 @@ public class ClaimBatch extends BaseEntity {
         this.status = status;
     }
 
+    public String getDirectReceiptSign() {
+        return directReceiptSign;
+    }
+
+    public void setDirectReceiptSign(String directReceiptSign) {
+        this.directReceiptSign = directReceiptSign;
+    }
+
+    public String getCaseFlag() {
+        return caseFlag;
+    }
+
+    public void setCaseFlag(String caseFlag) {
+        this.caseFlag = caseFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -328,6 +354,8 @@ public class ClaimBatch extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("directReceiptSign", getDirectReceiptSign())
+                .append("caseFlag", getCaseFlag())
                 .toString();
     }
 }

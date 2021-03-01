@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.system.domain.SysOrganInfo;
+import com.paic.ehis.system.domain.dto.OrganListDTO;
 import com.paic.ehis.system.service.ISysOrganInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,5 +113,16 @@ public class SysOrganInfoController extends BaseController
     @PostMapping("/getOrganInfo")
     public AjaxResult getOrganInfo(@RequestBody List<String> organCodes){
         return AjaxResult.success(sysOrganInfoService.selectOrganInfoByOrganCodes(organCodes));
+    }
+
+    /**
+     * 获取当前机构及下属机构详细信息
+     */
+    @PostMapping(value = "getOrganList")
+    public TableDataInfo getInfo(@RequestBody OrganListDTO organListDTO)
+    {
+        startPage(organListDTO);
+        List<SysOrganInfo> list = sysOrganInfoService.selectOrganListByUpOrganCode(organListDTO);
+        return getDataTable(list);
     }
 }

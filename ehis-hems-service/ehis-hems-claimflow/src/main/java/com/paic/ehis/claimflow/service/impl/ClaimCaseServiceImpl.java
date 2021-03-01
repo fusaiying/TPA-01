@@ -1,6 +1,8 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -8,11 +10,13 @@ import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
@@ -20,6 +24,7 @@ import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -656,7 +661,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
 
                 //停留时长
-                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
+                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoPending(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (null != claimCaseRecord) {
                     Date begin = claimCaseRecord.getCreateTime();
                     Date end = new Date();
@@ -703,13 +708,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param auditWorkPoolDTO
      * @return
      */
+
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS;
+
+        String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
+        //检查字符，防止注入绕过
+          orderBy = SqlUtil.escapeOrderBySql(orderBy);
+        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
@@ -717,7 +729,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
                     auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
                     auditWorkPoolDTO.setUpdateBy(SecurityUtils.getUsername());
-                    List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+                    conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
                     if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                             //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -781,7 +793,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         } else {
             //按条件查询
             auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-            List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
+            conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
             if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                     //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -842,7 +854,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//已处理
 
     /**
@@ -924,7 +943,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCase 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int backToClaimCase(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
@@ -1037,7 +1056,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCaseCal 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
         //暂未实现判断被保人当前匹配到的赔付责任所属的保单是否存在在途保全（个别保全项：）对理赔进行挂起操作，待保全处理完成后理赔继续并进行重新理算
@@ -1102,7 +1121,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param caseInvestigation 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();

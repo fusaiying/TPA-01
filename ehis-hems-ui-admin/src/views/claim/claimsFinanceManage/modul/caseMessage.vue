@@ -300,7 +300,7 @@
           this.isListExport = true
           this.download('finance/pay/export', {
 
-          }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
+          }, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -312,7 +312,7 @@
           this.isListExport = true
           this.download('finance/pay/exportForeign', {
 
-          }, `FYX_${new Date().getTime()}.xlsx`).catch(res => {
+          }, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',

@@ -21,6 +21,14 @@ public interface SysOrganInfoMapper
     public SysOrganInfo selectSysOrganInfoById(Long organId);
 
     /**
+     * 查询机构信息
+     *
+     * @param organCode 机构编码
+     * @return 机构信息
+     */
+    public SysOrganInfo selectSysOrganInfoByOrganCode(String organCode);
+
+    /**
      * 查询机构信息列表
      * 
      * @param sysOrganInfo 机构信息
@@ -67,4 +75,11 @@ public interface SysOrganInfoMapper
      * @return
      */
     public List<SysOrganInfo> selectOrganInfoByOrganCodes(List<String> organCodes);
+
+    /**
+     * 根据当前机构编码查询下属机构清单
+     * @param organCode
+     * @return
+     */
+    public List<SysOrganInfo> selectOrganListByUpOrganCode(String organCode);
 }

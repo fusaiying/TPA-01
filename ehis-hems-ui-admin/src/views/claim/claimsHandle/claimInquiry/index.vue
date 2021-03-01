@@ -67,21 +67,21 @@
             tooltip-effect="darky"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
-            <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip >
+            <el-table-column prop="batchNo" label="批次号" min-width="170" align="center" show-overflow-tooltip />
+            <el-table-column prop="rptNo" label="报案号" min-width="170" align="center" show-overflow-tooltip >
               <template slot-scope="scope">
-                <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+                <el-button width="170" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="name" label="被保险人" width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="idNo" label="证件号码"   width="150%" align="center" show-overflow-tooltip />
-            <el-table-column prop="policyItemNo" label="分单号"  align="center" show-overflow-tooltip />
-            <el-table-column prop="accDate" label="就诊日期" align="center" show-overflow-tooltip />
-            <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论" align="center" show-overflow-tooltip />
-            <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
-            <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
-            <el-table-column prop="investigation" label="有无调查" :formatter="getInvestigation" align="center" show-overflow-tooltip />
+            <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="name" label="被保险人" min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="idNo" label="证件号码"   min-width="150" align="center" show-overflow-tooltip />
+            <el-table-column prop="policyItemNo" label="分单号"  min-width="130"  align="center" show-overflow-tooltip />
+            <el-table-column prop="accDate" label="就诊日期"  min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="payConclusion" :formatter="getConclusionName"  min-width="130" label="赔付结论" align="center" show-overflow-tooltip />
+            <el-table-column prop="paymentAmount" label="给付金额"   min-width="130" align="center" show-overflow-tooltip />
+            <el-table-column prop="updateBy" label="审核人"  min-width="130"  align="center" show-overflow-tooltip />
+            <el-table-column prop="investigation"  label="有无调查" :formatter="getInvestigation" align="center" show-overflow-tooltip />
           </el-table>
           <!--分页组件-->
           <pagination

@@ -269,7 +269,7 @@
               <span v-if="!scope.row.isShow">{{ scope.row.accountName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountNo" align="center" header-align="center" label="账户号" min-width="2"
+          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号" min-width="2"
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'account.' + scope.$index + '.accountNo'"
@@ -1260,7 +1260,7 @@
         let params = {
           pageNum: 1,
           pageSize: 10,
-          supplierCode: this.querys.serialNo,
+          supplierCode: this.supplier.serialNo,
         }
         getService(params).then(res => {
           if (res != null && res.code === 200) {

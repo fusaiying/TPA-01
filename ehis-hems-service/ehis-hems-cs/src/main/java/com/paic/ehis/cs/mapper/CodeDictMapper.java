@@ -74,4 +74,8 @@ public interface CodeDictMapper
 
 
     public List<CodeDict> selectInCodeDict(CodeEnumVo1 codeEnumVo1);
+
+    public int insertCodeDictList(List<CodeDict> list);
+
+    public int updateCodeDictList(List<CodeDict> list);
 }

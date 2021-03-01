@@ -150,9 +150,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE
         code_type = #{codeTYpe}
         AND CODE IN
-        <foreach item="item" collection="voList" open="(" separator="," close=")">
+        <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item.code}
         </foreach>
     </select>
+
+    <insert id="insertCodeDictList" parameterType="com.paic.ehis.cs.domain.CodeDict">
+        insert into code_dict
+        (code_type,code, code_name, code_alias
+        ,parent_code,order_no,remark,status
+        ,create_by, create_time, update_by, update_time)
+        values
+        <foreach collection="list" item="listDO" index="index" separator=",">
+            (#{listDO.codeType}, #{listDO.code},#{listDO.codeName}, #{listDO.codeAlias}
+            , #{listDO.parentCode}, #{listDO.orderNo},#{listDO.remark}, #{listDO.status}
+            , #{listDO.createBy}, #{listDO.createTime}, #{listDO.updateBy}, #{listDO.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="updateCodeDictList" parameterType="com.paic.ehis.cs.domain.CodeDict">
+        update code_dict set
+        (code_type,code, code_name, code_alias
+        ,parent_code,order_no,remark,status
+        ,create_by, create_time, update_by, update_time)
+        values
+        <foreach collection="list" item="listDO" index="index" separator=",">
+            (#{listDO.codeType}, #{listDO.code},#{listDO.codeName}, #{listDO.codeAlias}
+            , #{listDO.parentCode}, #{listDO.orderNo},#{listDO.remark}, #{listDO.status}
+            , #{listDO.createBy}, #{listDO.createTime}, #{listDO.updateBy}, #{listDO.updateTime})
+        </foreach>
+    </update>
     
 </mapper>

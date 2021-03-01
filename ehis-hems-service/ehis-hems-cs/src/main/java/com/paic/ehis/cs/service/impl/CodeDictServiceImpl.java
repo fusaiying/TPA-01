@@ -85,9 +85,8 @@ public class CodeDictServiceImpl implements ICodeDictService
                 }
             }
         }
-
-            //codeEnumVoMapper.insertCodeEnumInfo(codeEnumListInsert);
-           // codeEnumVoMapper.updateCodeEnumInfo(codeEnumListUpdate);
+        codeDictMapper.insertCodeDictList(codeEnumListInsert);
+        codeDictMapper.updateCodeDictList(codeEnumListUpdate);
 
             CodeEnumVo1 codeEnumVo11 = new CodeEnumVo1();
             codeEnumVo11.setCodeType("cs_insurance_source");
@@ -108,8 +107,9 @@ public class CodeDictServiceImpl implements ICodeDictService
                     }
                 }
             }
-                   // codeEnumVoMapper.insertCodeEnumInfo(codeEnumListInsert1);
-                   // codeEnumVoMapper.updateCodeEnumInfo(codeEnumListUpdate1);
+
+        codeDictMapper.insertCodeDictList(codeEnumListInsert1);
+        codeDictMapper.updateCodeDictList(codeEnumListUpdate1);
 
         return list;
     }

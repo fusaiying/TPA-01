@@ -232,7 +232,7 @@
       //this.searchHandle();
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.queryParams.organcode = res.data.organCode
+
           let query = {
             pageNum: 1,
             pageSize: 10,
@@ -287,9 +287,10 @@
           }).finally(() => {
             this.loading = false
           })
-          getOrganList(item).then(res => {
-            if (res != null && res.code === 200) {
-              this.sysDeptOptions = res.rows
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.sysDeptOptions = response.rows
+              this.queryParams.organcode = res.data.organCode
               let option = {
                 organCode:  this.queryParams.organcode ,
                 pageNum: 1,

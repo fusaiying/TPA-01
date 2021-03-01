@@ -216,7 +216,6 @@
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
 
-          this.searchForm.organcode = res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -225,9 +224,10 @@
           if (res.data != null) {
             item.organCode = res.data.organCode
           }
-          getOrganList(item).then(res => {
-            if (res != null && res.code === 200) {
-              this.sysDeptOptions = res.rows
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.sysDeptOptions = response.rows
+              this.searchForm.organcode = res.data.organCode
             }
           }).catch(res => {
           })

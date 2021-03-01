@@ -92,6 +92,13 @@ public interface ClaimCaseRecordMapper
      */
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOne(String rptNo);
 
+    /**
+     *  通过报案号查询轨迹表状态07的创建时间
+     * @param rptNo 报案号
+     * @return
+     */
+    public ClaimCaseRecord selectClaimCaseRecordByrptNoPending(String rptNo);
+
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoFive(String rptNo);
 

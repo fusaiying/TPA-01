@@ -661,7 +661,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
 
                 //停留时长
-                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
+                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoPending(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (null != claimCaseRecord) {
                     Date begin = claimCaseRecord.getCreateTime();
                     Date end = new Date();

@@ -209,7 +209,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled >
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -217,7 +220,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
               <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -230,7 +233,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.callRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -246,7 +249,7 @@
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority" >
               <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -254,7 +257,7 @@
           <el-col :span="8">
             <el-form-item label="联系人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.contactsRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -265,7 +268,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -304,7 +307,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
               <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -456,10 +459,18 @@
           </el-row>
           <el-row>
             <el-form-item label="客户反馈" prop="customerFeedback" >
+<!--              <el-radio-group v-model="ruleForm.customerFeedback">-->
+<!--                <el-radio   :label="1">满意</el-radio>-->
+<!--                <el-radio   :label="2">接受</el-radio>-->
+<!--                <el-radio   :label="3">不接受</el-radio>-->
+<!--              </el-radio-group>-->
               <el-radio-group v-model="ruleForm.customerFeedback">
-                <el-radio   :label="1">满意</el-radio>
-                <el-radio   :label="2">接受</el-radio>
-                <el-radio   :label="3">不接受</el-radio>
+                <el-radio
+                  v-for="dict in cs_feedback_type"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{dict.dictLabel}}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
 
@@ -539,7 +550,17 @@
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_feedback_type'},
+  ]
   export default {
     components: { transfer ,
                   upLoad,
@@ -646,7 +667,16 @@
           value: '4',
           label: '服务4'
         }],
-        sysUserOptions: [],
+        dictList: [],
+        cs_channel: [],
+        cs_priority: [],
+        cs_sex: [],
+        cs_communication_language: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_organization: [],
+        cs_relation: [],
+        cs_feedback_type: [],
       }
     },
     created() {
@@ -663,7 +693,46 @@
       // });
 
     },
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
 
+
+
+    },
     methods: {
       //新增按钮
       add(){

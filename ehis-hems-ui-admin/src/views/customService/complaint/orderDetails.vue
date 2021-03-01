@@ -191,15 +191,17 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="150px"
                label-position="right" size="mini">
-
         <span style="color: blue">基因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled>
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -216,7 +218,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="sex" >
-              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -225,7 +230,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="客户号：" prop="phone">
+            <el-form-item label="客户号：" prop="insuredNo">
               <el-input v-model="workPoolData.insuredNo" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
@@ -233,7 +238,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled>
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -256,7 +264,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -270,12 +278,18 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉人性别：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width" disabled>
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width" disabled>
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -292,13 +306,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.organCode" class="item-width" disabled>
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
-          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini" readonly/>
+          <el-select v-model="workPoolData.persuasionFlag" class="item-width" disabled>
+            <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                       :value="item.dictValue"/>
+          </el-select>
         </el-form-item>
         </el-row>
 
@@ -560,7 +580,15 @@
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
 
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    ]
   export default {
     components: {
       upLoad,
@@ -666,7 +694,14 @@
           value: '4',
           label: '服务4'
         }],
-        sysUserOptions: [],
+        dictList: [],
+        cs_channel: [],
+        cs_priority: [],
+        cs_sex: [],
+        cs_communication_language: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_organization: [],
       }
     },
     created() {
@@ -684,7 +719,37 @@
       // });
 
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+    },
     methods: {
       //新增按钮
       //取消

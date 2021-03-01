@@ -80,7 +80,10 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public List<BatchVo> selectPendingBatchList(BatchDTO batchDTO) {
-        batchDTO.setClaimtype("02");
+        //batchDTO.setClaimtype("02");
+        if(StringUtils.isEmpty(batchDTO.getClaimtype())){
+            batchDTO.setClaimtype("02");
+        }
         batchDTO.setStatus(ClaimStatus.DATAYES.getCode());
         batchDTO.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());
         return claimBatchMapper.selectDirectQueryListTwo(batchDTO);

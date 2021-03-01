@@ -2,7 +2,6 @@ package com.paic.ehis.finance.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
@@ -174,26 +173,25 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
         FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
-        //获取用户的所属机构,设置当前登录机构
-//        Long userId = SecurityUtils.getUserId();
-//        SysUser sysUser = sysUserMapper.selectUserById(userId);
         ObjectMapper objectMapper = new ObjectMapper();
         SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
         // 获取当前用户所属机构
-        String organCode = info.getOrganCode();
-        String username = info.getUserName();
+        String organCode = "";
+        if (null != info) {
+            organCode = info.getOrganCode();
+        }
         financeAdvanceSettleTask.setSettleStatus("01");
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
         financeAdvanceSettleTask.setStatus("Y");
-        financeAdvanceSettleTask.setDeptCode(info.getOrganCode());
+        financeAdvanceSettleTask.setDeptCode(organCode);
         financeAdvanceSettleTask.setCreateBy(info.getUserName());
         financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
         financeAdvanceSettleTask.setUpdateBy(info.getUserName());
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
-        financeAdvanceSettleDetail.setDeptCode(info.getOrganCode());
+        financeAdvanceSettleDetail.setDeptCode(organCode);
         financeAdvanceSettleDetail.setCreateBy(info.getUserName());
         financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
         financeAdvanceSettleDetail.setUpdateBy(info.getUserName());
@@ -204,7 +202,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
-        financeSettleRecord.setDeptCode(info.getOrganCode());
+        financeSettleRecord.setDeptCode(organCode);
         financeSettleRecord.setCreateBy(info.getUserName());
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
         financeSettleRecord.setUpdateBy(info.getUserName());

@@ -190,7 +190,7 @@
       const params = {};
       params.pageNum =  this.pageInfo.currentPage;
       params.pageSize =  this.pageInfo.pageSize;
-
+      params.settlementType = this.fixInfoDetail.rowData.settlementType;
       params.settleTaskNo = this.fixInfoDetail.rowData.settleTaskNo;
       params.companyCode = this.fixInfoDetail.rowData.companyCode;
       params.settleEndDate = this.fixInfoDetail.rowData.settleEndDate;

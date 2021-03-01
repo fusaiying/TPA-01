@@ -9,17 +9,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * 业务码 对象 code_enum
+ * 业务码 对象 code_dict
  * 
  * @author sino
- * @date 2021-02-23
+ * @date 2021-02-27
  */
 public class CodeDict extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
-    /** 编码流水号 code流水号 */
-    private Long codeId;
 
     /** 编码类型 类型code */
     private String codeType;
@@ -39,9 +36,9 @@ public class CodeDict extends BaseEntity
     @Excel(name = "编码状态 有效状态: 1-有效；0-无效")
     private String status;
 
-    /** 父节点流水号 父节点id号 */
-    @Excel(name = "父节点流水号 父节点id号")
-    private Long pCodeId;
+    /** 父节点 父节点Code值 */
+    @Excel(name = "父节点 父节点Code值")
+    private String parentCode;
 
     /** 备注 */
     @Excel(name = "备注")
@@ -69,15 +66,6 @@ public class CodeDict extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setCodeId(Long codeId) 
-    {
-        this.codeId = codeId;
-    }
-
-    public Long getCodeId() 
-    {
-        return codeId;
-    }
     public void setCodeType(String codeType) 
     {
         this.codeType = codeType;
@@ -123,14 +111,14 @@ public class CodeDict extends BaseEntity
     {
         return status;
     }
-    public void setpCodeId(Long pCodeId) 
+    public void setParentCode(String parentCode) 
     {
-        this.pCodeId = pCodeId;
+        this.parentCode = parentCode;
     }
 
-    public Long getpCodeId() 
+    public String getParentCode() 
     {
-        return pCodeId;
+        return parentCode;
     }
     public void setRemarks(String remarks) 
     {
@@ -190,13 +178,12 @@ public class CodeDict extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-            .append("codeId", getCodeId())
             .append("codeType", getCodeType())
             .append("code", getCode())
             .append("codeName", getCodeName())
             .append("codeAlias", getCodeAlias())
             .append("status", getStatus())
-            .append("pCodeId", getpCodeId())
+            .append("parentCode", getParentCode())
             .append("remarks", getRemarks())
             .append("orderNo", getOrderNo())
             .append("createdBy", getCreatedBy())

@@ -54,7 +54,6 @@ export default {
   },
   name:'secondPhone',
 
-
   data() {
     return {
       open:true,
@@ -62,8 +61,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10
-
-
       },
       title:"再次来电工单提醒",
       totalCount:0,
@@ -77,11 +74,10 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     this.searchHandle()
   },
   methods: {
-
     searchHandle() {
       selectCallAgain().then(res => {
         if (res != null && res.code === 200) {

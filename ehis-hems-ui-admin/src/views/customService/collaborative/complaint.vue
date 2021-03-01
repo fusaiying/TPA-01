@@ -394,7 +394,7 @@
           <el-col :span="8">
             <el-form-item label="是否计件：" prop="pieceworkFlag"  >
               <el-select v-model="sendForm.pieceworkFlag" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -412,7 +412,7 @@
           <el-col :span="8">
             <el-form-item label="投诉是否成立：" prop="complaintTenable"  >
               <el-select v-model="sendForm.complaintTenable" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -432,7 +432,7 @@
           <el-col :span="8">
             <el-form-item label="重复投诉：" prop="repeatedComplaint"  >
               <el-select v-model="sendForm.repeatedComplaint" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -466,7 +466,7 @@
           <el-col :span="8">
             <el-form-item label="投诉环节(报保监)：" prop="complaintLink"  >
               <el-select v-model="sendForm.complaintLink" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -474,7 +474,7 @@
           <el-col :span="8">
             <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion"  >
               <el-select v-model="sendForm.complaintQuestion" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_question_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -486,7 +486,7 @@
           <el-col :span="8">
             <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState"  >
               <el-select v-model="sendForm.outsideState" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_mediation_appraisal" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -494,7 +494,7 @@
           <el-col :span="8">
             <el-form-item label="险种类型：" prop="riskType"  >
               <el-select v-model="sendForm.riskType" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_risk_type" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -542,7 +542,7 @@
         <el-col :span="8">
           <el-form-item label="客户反馈：" prop="customerFeedback"  >
             <el-select v-model="sendForm.customerFeedback" class="item-width" >
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-option v-for="item in cs_feedback_type" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -610,7 +610,14 @@
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [{dictType: 'cs_question_circ'}
+    ,{dictType: 'cs_link_circ'}
+    ,{dictType: 'cs_risk_type'}
+    ,{dictType: 'cs_drop_status'}
+    ,{dictType: 'cs_whether_flag'}
+    ,{dictType: 'cs_mediation_appraisal'}
+    ,{dictType: 'cs_feedback_type'}
+  ]
   export default {
     components: { transfer ,
                   upLoad,
@@ -729,6 +736,14 @@
           dictLabel: '服务4'
         }],
         sysUserOptions: [],
+        dictList: [],
+        cs_drop_status: [],
+        cs_risk_type: [],
+        cs_link_circ: [],
+        cs_question_circ: [],
+        cs_mediation_appraisal: [],
+        cs_feedback_type: [],
+        cs_whether_flag: []
       }
     },
     created() {
@@ -745,6 +760,38 @@
       //   this.states = response.data;
       //   console.log("response:",response)
       // });
+
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_drop_status = this.dictList.find(item => {
+        return item.dictType === 'cs_drop_status'
+      }).dictDate
+      this.cs_risk_type = this.dictList.find(item => {
+        return item.dictType === 'cs_risk_type'
+      }).dictDate
+      this.cs_link_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_link_circ'
+      }).dictDate
+      this.cs_question_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_question_circ'
+      }).dictDate
+      this.cs_mediation_appraisal = this.dictList.find(item => {
+        return item.dictType === 'cs_mediation_appraisal'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+
+
+
+
+
 
     },
 

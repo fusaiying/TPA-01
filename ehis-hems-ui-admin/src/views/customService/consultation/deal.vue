@@ -412,7 +412,7 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload" disabled>上传附件</el-button></span>
        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -438,7 +438,7 @@
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
         <el-button type="primary" size="mini" @click="submit">提交</el-button>
-        <el-button  type="primary"  size="mini" @click="transfer">关闭</el-button>
+        <el-button  type="primary"  size="mini" @click="close">关闭</el-button>
       </div>
     </el-card>
 
@@ -639,6 +639,15 @@
         this.ids = selection.map(item => item.workOrderNo);
 
       },
+      //关闭按钮
+      close:function () {
+        // 返回上级路由并关闭当前路由
+        this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
+        this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
+
+
+      },
+
 
     }
   }

@@ -32,11 +32,11 @@ export function  complainSearch(workOrderNo) {
 //-------------------------------------------------------------------信息需求
 
 
-export function  coCancel(query) {
+export function  coCancel(data) {
   return request({
     url: '/cs/from/updateCollaborativeStatus',
-    method: 'get',
-    params: query
+    method: 'put',
+    data: data
   })
 }
 export function  coSearch(query) {
@@ -45,5 +45,14 @@ export function  coSearch(query) {
     method: 'get',
     params: query
 
+  })
+}
+
+
+//# 查询信息需求页面数据
+export function demandAccept(workOrderNo) {
+  return request({
+    url: '/cs/demand/accept?workOrderNo=' + workOrderNo,
+    method: 'get'
   })
 }

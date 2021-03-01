@@ -32,7 +32,7 @@
           <el-col :span="8">
             <el-form-item label="任务状态：" prop="handleState">
               <el-select v-model="sendForm.handleState" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_opinion_handle" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -80,15 +80,28 @@
           tooltip-effect="dark"
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="collaborativeId" label="流转号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.itemCode">
+              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+            <!--      如果没有配置字典数据会异常-->
+            <template slot-scope="scope" v-if="scope.row.organCode">
+              <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="createdBy" label="案件发起人" show-overflow-tooltip/>
-          <el-table-column prop="status" align="handleState" label="处理状态" show-overflow-tooltip/>
+          <el-table-column prop="status" align="handleState" label="处理状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.handleState">
+              <span>{{selectDictLabel(cs_opinion_handle, scope.row.handleState)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="modifyTime" label="流转时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
@@ -109,8 +122,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="pageNum"
-          :limit.sync="pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
         />
       </div>
@@ -137,7 +150,8 @@
         open:"",//是否弹出
         title:"",//弹出框名称
         cs_service_item:[],//服务项目
-        cs_handle_state:[],// 状态：
+        cs_organization:[],
+        cs_opinion_handle:[],// 状态：
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
@@ -156,7 +170,6 @@
         workPoolData: [],//公共池
         pageNum: 1,
         pageSize: 10,
-        workPoolData:[],
         pageNumPerson: 1,
         pageSizePerson: 10,
         totalCount: 0,
@@ -170,8 +183,11 @@
       this.getDicts("cs_service_item").then(response => {
         this.cs_service_item = response.data;
       });
-      this.getDicts("cs_handle_state").then(response => {
-        this.cs_handle_state = response.data;
+      this.getDicts("cs_organization").then(response => {
+        this.cs_organization = response.data;
+      });
+      this.getDicts("cs_opinion_handle").then(response => {
+        this.cs_opinion_handle = response.data;
       });
 
 

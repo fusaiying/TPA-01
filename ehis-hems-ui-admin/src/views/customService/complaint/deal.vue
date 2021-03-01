@@ -367,7 +367,7 @@
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="priority"  >
               <el-select v-model="sendForm.level1" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -393,7 +393,7 @@
           <el-col :span="8">
             <el-form-item label="撤诉状态：" prop="priority"  >
               <el-select v-model="sendForm.complaintStatus" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -455,7 +455,7 @@
           <el-col :span="8">
             <el-form-item label="投诉环节(报保监)：" prop="complaintLink"  >
               <el-select v-model="sendForm.complaintLink" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -650,9 +650,6 @@
             {required: true, message: "联系人不能为空", trigger: "blur"}
           ],
           orderNum: [
-            {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
-          ],
-          orderNum: [
             {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
           ],
 
@@ -734,7 +731,10 @@
           dictValue: '4',
           dictLabel: '服务4'
         }],
-        sysUserOptions: [],
+        cs_link_circ: [],
+        cs_classify_level1: [],
+        cs_drop_status: [],
+        cs_reason_level1: [],
       }
     },
     created() {
@@ -746,11 +746,18 @@
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
-      // this.getDicts("sys_oper_type").then(response => {
-      //   this.states = response.data;
-      //   console.log("response:",response)
-      // });
-
+      this.getDicts("cs_link_circ").then(response => {
+        this.cs_link_circ = response.data;
+      });
+      this.getDicts("cs_classify_level1").then(response => {
+        this.cs_classify_level1 = response.data;
+      });
+      this.getDicts("cs_drop_status").then(response => {
+        this.cs_drop_status = response.data;
+      });
+      this.getDicts("cs_reason_level1").then(response => {
+        this.cs_reason_level1 = response.data;
+      });
     },
 
     methods: {

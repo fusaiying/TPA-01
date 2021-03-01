@@ -24,7 +24,8 @@ public class DemandAcceptVo extends BaseEntity {
     /** 业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义； */
     @Excel(name = "业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义；")
     private String businessType;
-
+    /** 拼接显示 业务-服务项目 */
+    private String businessService;
     @Excel(name = "受理渠道 信息需求受理渠道")
     private String channelCode;
 
@@ -205,6 +206,9 @@ public class DemandAcceptVo extends BaseEntity {
     /** 处理依据 */
     @Excel(name = "处理依据")
     private String treatmentBasis;
+
+    /** 是否再次来电提醒记录 */
+    private int isRedWord;
 
 
     public String getCallCenterId() {
@@ -678,5 +682,37 @@ public class DemandAcceptVo extends BaseEntity {
 
     public void setTreatmentBasis(String treatmentBasis) {
         this.treatmentBasis = treatmentBasis;
+    }
+
+    public String getBusinessService() {
+        return businessService;
+    }
+
+    public void setBusinessService(String businessService) {
+        this.businessService = businessService;
+    }
+
+    public List<UmCode> getUmCode() {
+        return umCode;
+    }
+
+    public void setUmCode(List<UmCode> umCode) {
+        this.umCode = umCode;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public int getRedWord() {
+        return isRedWord;
+    }
+
+    public void setRedWord(int redWord) {
+        isRedWord = redWord;
     }
 }

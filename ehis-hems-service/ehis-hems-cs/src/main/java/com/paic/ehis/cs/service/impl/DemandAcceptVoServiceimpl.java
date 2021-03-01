@@ -11,6 +11,7 @@ import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.mapper.*;
+import com.paic.ehis.cs.service.ICallAgainService;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,7 +261,9 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
         personInfo2.setMobilePhone(demandAcceptVo.getContactsMobilePhone());
-        personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());
+        if (demandAcceptVo.getContactsCountry()!=null&&demandAcceptVo.getContactsCountry()!=""){
+            personInfo2.setLinePhone(demandAcceptVo.getContactsCountry()+"-"+demandAcceptVo.getContactsQuhao()+"-"+demandAcceptVo.getContactsNumber()+"-"+demandAcceptVo.getContactsSecondNumber());
+        }
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());

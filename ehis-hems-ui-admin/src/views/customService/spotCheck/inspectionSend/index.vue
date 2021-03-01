@@ -201,7 +201,7 @@ let dictss = [{dictType: 'cs_service_item'}
 ,{dictType: 'cs_organization'}
 ,{dictType: 'cs_priority'}
 ,{dictType: 'cs_vip_flag'}
-,{dictType: 'cs_handle_state'}
+,{dictType: 'cs_order_state'}
 ]
 // 默认输出
 export default {
@@ -302,7 +302,7 @@ export default {
       return item.dictType === 'cs_vip_flag'
     }).dictDate
     this.statusOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_handle_state'
+      return item.dictType === 'cs_order_state'
     }).dictDate
 
     this.searchHandle()

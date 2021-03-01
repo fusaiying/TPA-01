@@ -9,18 +9,14 @@ public class CodeDictDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "code")
     private String complaintBusinessCode;
 
-    @Excel(name = "中文描述")
     private String complaintBusinessName;
 
     private String complaintBusinessType;
 
-    @Excel(name = "对应投保来源code")
     private String insuranceSourceCode;
 
-    @Excel(name = "投保来源描述")
     private String insuranceSourceName;
 
     private String insuranceSourceType;

@@ -129,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="vip标识：" prop="vipFlag">
+            <el-form-item label="VIP标识：" prop="vipFlag">
               <el-select v-model="sendForm.vipFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -139,7 +139,7 @@
           <el-col :span="8">
           <el-form-item label="状态：" prop="status">
             <el-select v-model="sendForm.status" class="item-width" placeholder="请选择">
-              <el-option v-for="item in cs_handle_state" :key="item.dictValue" :label="item.dictLabel"
+              <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -173,12 +173,20 @@
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip/>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.channelCode">
+              <span>{{selectDictLabel(cs_channel, scope.row.channelCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.itemCode">
+              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -197,10 +205,27 @@
 
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
-          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.vipFlag">
+              <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="priorityLevel" align="center" label="优先级" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.priorityLevel">
+              <span>{{selectDictLabel(cs_priority, scope.row.priorityLevel)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+            <!--      如果没有配置字典数据会异常-->
+            <template slot-scope="scope" v-if="scope.row.organCode">
+              <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="obtainButton(scope.row)">获取</el-button>
@@ -235,11 +260,15 @@
           @selection-change="handleSelectionChange">
 <!--          <el-table-column type="selection" align="center" name/> sd-->
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
-            <template slot-scope="scope" class="link-type">
-              <span  @click="workOrderButton(scope.row)" a style="color: #3CB4E5;text-decoration: underline" href=" " >{{scope.row.workOrderNo}}</span>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.itemCode">
+              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
@@ -256,7 +285,11 @@
             </template>
           </el-table-column>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
-          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip/>
+          <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.vipFlag">
+              <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
           <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip>
@@ -265,8 +298,17 @@
             </template>
           </el-table-column>
           <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
+          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+            <!--      如果没有配置字典数据会异常-->
+            <template slot-scope="scope" v-if="scope.row.organCode">
+              <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
           <!--fixed="right"控制固定某一列-->
           <el-table-column align="center" label="操作" fixed="right" width="140">
             <template slot-scope="scope">
@@ -313,7 +355,7 @@
         cs_organization:[],//出单机构
         cs_priority:[],//优先级
         cs_vip_flag:[],// vip标识
-        cs_handle_state:[],// 状态：
+        cs_order_state:[],// 状态：
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
@@ -389,8 +431,8 @@
       this.getDicts("cs_vip_flag").then(response => {
         this.cs_vip_flag = response.data;
       });
-      this.getDicts("cs_handle_state").then(response => {
-        this.cs_handle_state = response.data;
+      this.getDicts("cs_order_state").then(response => {
+        this.cs_order_state = response.data;
       });
       this.getDicts("cs_channel").then(response => {
         this.cs_channel = response.data;

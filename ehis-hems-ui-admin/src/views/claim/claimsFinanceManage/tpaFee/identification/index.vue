@@ -103,6 +103,7 @@
       return {
         fixInfo:{},
         detailDialog:false,
+        btnSearch:false,
         status:'02',
         searchLoad:false,
         tableData: [],
@@ -197,8 +198,9 @@
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.pageStatus = '02';
-
+        if(!this.btnSearch) {
+          params.settleStatus = '01';
+        }
         this.searchLoad = true;
         listInfo(params).then(res => {
           if (res.code == '200') {

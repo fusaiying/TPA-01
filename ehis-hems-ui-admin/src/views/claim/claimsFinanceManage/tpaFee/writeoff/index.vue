@@ -228,8 +228,11 @@
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.pageStatus = '03';
-
+        if(this.btnSearch) {
+          params.pageType = '03';
+        } else {
+          params.settleStatus = '02';
+        }
         this.searchLoad = true;
         listInfo(params).then(res => {
           if (res.code == '200') {

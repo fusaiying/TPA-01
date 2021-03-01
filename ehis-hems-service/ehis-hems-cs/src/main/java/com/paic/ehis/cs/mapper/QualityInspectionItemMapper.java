@@ -48,7 +48,7 @@ public interface QualityInspectionItemMapper
      * @param qualityInspectionDTO
      * @return
      */
-    public int insertExtDocList(QualityInspectionDTO qualityInspectionDTO);
+    public int insertExtDocList(List<QualityInspectionDTO> qualityInspectionDTO);
 
     /**
      * 修改质检项目 

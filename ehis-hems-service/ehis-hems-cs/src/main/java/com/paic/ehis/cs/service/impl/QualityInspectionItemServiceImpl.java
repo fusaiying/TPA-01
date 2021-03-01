@@ -9,6 +9,7 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,13 +112,10 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
     @Transactional
     @Override
     public int insertHandle(String[] ids, Map<String, String> param) {
-        QualityInspectionDTO qualityInspectionDTO=new QualityInspectionDTO();
-        List<String> idList= Arrays.asList(ids);
+        List<QualityInspectionDTO> qualityInspectionDTO=new ArrayList<>();
+       QualityInspectionDTO qualityInspectionItem=null;
         //从前端获取质检编号
-        qualityInspectionDTO.setInspectionId(qualityInspectionDTO.getInspectionId());
-        qualityInspectionDTO.setWorkOrderNoList(idList);
-        qualityInspectionDTO.setUpdateBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
-        qualityInspectionDTO.setUpdateTime(DateUtils.getNowDate());
+
         List<FlowLog> flowLogList=new ArrayList<>();
         FlowLog flowLog=null;
         for (int i = 0; i < ids.length; i++) {
@@ -135,6 +133,14 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             flowLog.setLinkCode(param.get("linkCode"));
             flowLog.setOperateCode(param.get("operateCode"));
             flowLogList.add(flowLog);
+
+            qualityInspectionItem=new QualityInspectionDTO();
+            qualityInspectionItem.setWorkOrderId(ids[i]);
+            qualityInspectionItem.setStatus("01");
+            qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());
+            qualityInspectionItem.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setCreatedTime(DateUtils.getNowDate());
         }
         //记录操作轨迹
         flowLogMapper.insertBatch(flowLogList);

@@ -21,7 +21,7 @@
             <el-col :span="8">
               <el-form-item label="等级：" prop="level">
                 <el-select v-model="form.level" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+                  <el-option v-for="option in custLevel" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>

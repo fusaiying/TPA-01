@@ -27,8 +27,8 @@
               style=" width: 100%;"
             >
               <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip/>
-              <el-table-column align="center" prop="oldValue" label="新值" show-overflow-tooltip/>
-              <el-table-column align="center" prop="nowValue" label="旧值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
+              <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip/>
 
               <!--fixed="right"控制固定某一列-->
             </el-table>

@@ -12,8 +12,8 @@
             tooltip-effect="dark"
             style=" width: 100%;"
           >
-            <el-table-column align="center" width="140" prop="callSerialNum" label="序号" show-overflow-tooltip/>
-            <el-table-column align="center" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+            <el-table-column align="center"  prop="callSerialNum" label="序号" show-overflow-tooltip/>
+            <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
             <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.acceptTime | changeDate}}</span>

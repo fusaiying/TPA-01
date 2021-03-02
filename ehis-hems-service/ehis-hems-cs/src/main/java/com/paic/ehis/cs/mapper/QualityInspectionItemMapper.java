@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.mapper;
 
 import java.util.List;
+
+import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 
@@ -45,10 +47,10 @@ public interface QualityInspectionItemMapper
 
     /**
      * 批量新增  质检处理信息
-     * @param qualityInspectionDTO
+     * @param qualityInspectionItemList
      * @return
      */
-    public int insertExtDocList(List<QualityInspectionDTO> qualityInspectionDTO);
+    public int insertExtDocList(List<QualityInspectionItem> qualityInspectionItemList);
 
     /**
      * 修改质检项目 

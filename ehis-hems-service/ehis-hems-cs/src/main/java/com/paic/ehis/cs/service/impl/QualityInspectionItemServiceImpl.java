@@ -112,8 +112,8 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
     @Transactional
     @Override
     public int insertHandle(String[] ids, Map<String, String> param) {
-        List<QualityInspectionDTO> qualityInspectionDTO=new ArrayList<>();
-       QualityInspectionDTO qualityInspectionItem=null;
+        List<QualityInspectionItem> list=new ArrayList<>();
+        QualityInspectionItem qualityInspectionItem=null;
         //从前端获取质检编号
 
         List<FlowLog> flowLogList=new ArrayList<>();
@@ -134,17 +134,19 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             flowLog.setOperateCode(param.get("operateCode"));
             flowLogList.add(flowLog);
 
-            qualityInspectionItem=new QualityInspectionDTO();
-            qualityInspectionItem.setWorkOrderId(ids[i]);
+            qualityInspectionItem=new QualityInspectionItem();
+            qualityInspectionItem.setItemId(ids[i]);
             qualityInspectionItem.setStatus("01");
             qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
             qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());
             qualityInspectionItem.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
             qualityInspectionItem.setCreatedTime(DateUtils.getNowDate());
+
+            list.add(qualityInspectionItem);
         }
         //记录操作轨迹
         flowLogMapper.insertBatch(flowLogList);
-        return qualityInspectionItemMapper.insertExtDocList(qualityInspectionDTO);
+        return qualityInspectionItemMapper.insertExtDocList(list);
     }
 
     /**

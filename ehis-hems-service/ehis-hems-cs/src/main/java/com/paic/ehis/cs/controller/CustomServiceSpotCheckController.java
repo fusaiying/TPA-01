@@ -235,8 +235,11 @@ public class CustomServiceSpotCheckController extends BaseController {
     {
         return toAjax(qualityInspectionHandleService.updateQualityHandle(qualityInspectionHandle));
     }
-
 /**
+ * 质检差错修改item表字段是否时效内响应客户等
+ */
+
+    /**
  *质检差错确认工作池查询
  */
 @GetMapping("/internal/selectHandle")

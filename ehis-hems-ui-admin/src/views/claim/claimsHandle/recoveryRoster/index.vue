@@ -8,13 +8,13 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="被保人名称：" prop="name">
-                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
               <el-form-item label="证件号码：" prop="idNo">
-                <el-input v-model="form.idNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.idNo" class="item-width" size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
 
@@ -32,7 +32,7 @@
 
             <el-col :span="8">
               <el-form-item label=" 金额上限：" prop="debtAmountUp" >
-                <el-input v-model="form.debtAmountUp" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.debtAmountUp" class="item-width" size="mini" @input="changePrice('form')" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -170,7 +170,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="金额上限：" prop="debtAmountUp">
-                  <el-input maxlength="14" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input maxlength="14" @input="changePrice('recoveryForm')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -308,6 +308,25 @@
         this.initData();
       },
       methods: {
+        changePrice(formName){
+          let name  = formName == 'recoveryForm' ? 'debtAmountUp' : 'debtAmountUp';
+          if(formName == 'recoveryForm') {
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/\.{2,}/g,".") //清除第二个小数点
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/^\./g,""); //验证第一个字符是数字而不是字符
+            this.recoveryForm[name] = this.recoveryForm[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+            this.recoveryForm[name] = this.recoveryForm[name].indexOf(".") > 0? this.recoveryForm[name].split(".")[0].substring(0, 11) + "." + this.recoveryForm[name].split(".")[1]: this.recoveryForm[name].substring(0, 11); //限制只能输入7位正整数
+          }
+          if(formName == 'form') {
+            this.form[name] = this.form[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+            this.form[name] = this.form[name].replace(/\.{2,}/g,".") //清除第二个小数点
+            this.form[name] = this.form[name].replace(/^\./g,""); //验证第一个字符是数字而不是字符
+            this.form[name] = this.form[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            this.form[name] = this.form[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+            this.form[name] = this.form[name].indexOf(".") > 0? this.form[name].split(".")[0].substring(0, 11) + "." + this.form[name].split(".")[1]: this.form[name].substring(0, 11); //限制只能输入7位正整数
+          }
+        },
         getsexName(row,col) {
           return this.selectDictLabel(this.rgtSexs, row.sex)
         },

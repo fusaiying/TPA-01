@@ -707,7 +707,7 @@
         insert.workOrderNo=this.$route.query.workOrderNo
         dealADD(insert).then(res => {
           if (res != null && res.code === 200) {
-            alert("暂存成功")
+            this.$message.success("暂存成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "失败！"
@@ -779,7 +779,7 @@
         let workOrderNo=this.queryParams
         coCancel(workOrderNo).then(res => {
           if (res != null && res.code === 200) {
-              alert("撤销成功")
+            this.$message.success("撤销成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

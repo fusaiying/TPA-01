@@ -847,7 +847,7 @@
         collaborativeTemporary(insert).then(res => {
           if (res != null && res.code === 200) {
             console.log("insert",insert)
-            alert("修改成功")
+            this.$message.success("修改成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "失败！"
@@ -905,10 +905,12 @@
       //修改按钮
       modify() {
         if (this.ids.length==0){
-          alert("先选中一行")
-        }else {if(this.ids.length>2){
-          alert("选中一行")
-        }else {
+          this.$message.success("先选中一行")
+        }
+        // else {if(this.ids.length>2){
+        //   this.$message.success("选中一行")
+        // }
+        else {
           this.$router.push({
             path: '/customService/modify',
             query: {
@@ -918,7 +920,7 @@
               status: this.queryParams.status
             }
           })
-        }
+       // }
         }
       },
       //取消按钮

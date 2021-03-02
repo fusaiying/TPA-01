@@ -656,7 +656,7 @@
             insert.workOrderNo = this.$route.query.workOrderNo
             cancelReservationSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
-                alert("提交成功")
+                this.$message.success("提交成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "失败！"

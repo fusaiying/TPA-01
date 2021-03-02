@@ -805,7 +805,7 @@
             insert.workOrderNo = this.$route.query.workOrderNo
             dealADD(insert).then(res => {
               if (res != null && res.code === 200) {
-                alert("提交成功")
+                this.$message.success("提交成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "失败！"
@@ -830,7 +830,7 @@
             insert.workOrderNo=this.$route.query.workOrderNo
             dealADD(insert).then(res => {
               if (res != null && res.code === 200) {
-                alert("暂存成功")
+                this.$message.success("暂存成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "失败！"
@@ -888,7 +888,7 @@
         var items;
 
         if (this.ids.length == 0) {
-          alert("先选中一行")
+          this.$message.warning("先选中一行")
         } else {
           items = JSON.stringify(this.ids)
           // if (this.ids.length > 2) {

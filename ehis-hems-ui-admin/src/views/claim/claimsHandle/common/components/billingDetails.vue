@@ -1582,10 +1582,18 @@
           this.isSum = true
           const {columns, data} = param;
           columns.forEach((column, index) => {
-            if (index === 2) {
-              sums[index] = '汇总信息';
-              return;
+            if (this.node==='calculateReview' || this.node==='sport' || this.status==='show'){
+              if (index === 2) {
+                sums[index] = '汇总信息';
+                return;
+              }
+            }else {
+              if (index === 1) {
+                sums[index] = '汇总信息';
+                return;
+              }
             }
+
             switch (column.property) {
               case "billAmount":
                 sums[index] = this.billSumData.billAmount;// 账单金额
@@ -1631,11 +1639,20 @@
           // 改变合计行样式
           const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
           const child_tr = s_table.getElementsByTagName('tr')[0]
-          child_tr.childNodes.forEach(item => {
-            if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3|| item.cellIndex === 4) {
-              item.setAttribute('style', 'background: #bedbf1')
-            }
-          })
+          if (this.node==='calculateReview' || this.node==='sport' || this.status==='show'){
+            child_tr.childNodes.forEach(item => {
+              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3|| item.cellIndex === 4) {
+                item.setAttribute('style', 'background: #bedbf1')
+              }
+            })
+          }else {
+            child_tr.childNodes.forEach(item => {
+              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3) {
+                item.setAttribute('style', 'background: #bedbf1')
+              }
+            })
+          }
+
         }
       },
     }

@@ -40,35 +40,37 @@
       </div>
 
       <form  v-for="(item,index) in HistoryData">
-        <el-row style="margin: 20px 10px;">
-          <el-col :span="8">
-            <span class="info_span to_right">问题件类型：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">发起时间 ：</span><span class="info_span">{{item.createTime}}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">发起人：</span><span class="info_span">{{item.createBy}}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.problemView) }}</span>
-          </el-col>
-        </el-row>
+        <div class="div_b" style="margin-bottom: 20px">
+          <el-row style="margin: 10px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">问题件类型：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">发起时间 ：</span><span class="info_span">{{item.createTime}}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">发起人：</span><span class="info_span">{{item.createBy}}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.problemView) }}</span>
+            </el-col>
+          </el-row>
 
-        <el-row style="margin: -10px 10px;" v-if="HistoryData.length != (index+1)">
-          <el-col :span="8">
-            <span class="info_span to_right">处理结论：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ item.updateTime }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">处理人：</span><span class="info_span">{{item.updateBy }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">处理意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
-          </el-col>
-        </el-row>
+          <el-row style="margin: 10px 10px;" v-if="HistoryData.length != (index+1)">
+            <el-col :span="8">
+              <span class="info_span to_right">处理结论：</span><span class="info_span">{{ getProblemTypeName(item.problemType) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">处理时间 ：</span><span class="info_span">{{ item.updateTime }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">处理人：</span><span class="info_span">{{item.updateBy }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">处理意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
+            </el-col>
+          </el-row>
+        </div>
       </form>
     </el-card>
       <!-- 历史问题附件信息 end -->
@@ -316,4 +318,5 @@
   .el-table /deep/ .el-table__expanded-cell {
     padding: 10px;
   }
+  .div_b{border:1px solid #E6EBF5}
 </style>

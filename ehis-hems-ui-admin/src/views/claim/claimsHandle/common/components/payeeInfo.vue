@@ -4,8 +4,10 @@
       <div style="width: 100%;cursor: pointer;">
         <span style="font-size:16px;color:black">领款人信息</span>
         <div style="float: right;">
-          <el-button v-if="status==='edit' && (node==='accept' || node==='calculateReview') && baseInfo.claimtype==='02'" type="primary" size="mini"
-                     @click="addOrEdit('add')">新增
+          <el-button
+            v-if="status==='edit' && (node==='accept' || node==='calculateReview') && baseInfo.claimtype==='02'"
+            type="primary" size="mini"
+            @click="addOrEdit('add')">新增
           </el-button>
         </div>
       </div>
@@ -31,13 +33,13 @@
       <el-table-column align="center" prop="payeeName" label="领款人" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02'" key="2" prop="payeeMobile" label="手机号"
                        show-overflow-tooltip/>
-     <!-- <el-table-column align="center" prop="accAttribute" label="账户属性" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <span v-if="baseInfo.claimtype==='02'">{{ selectDictLabel(account_attributeOptions, '0') }}</span>
-          <span v-else>{{ selectDictLabel(account_attributeOptions, '1') }}</span>
-        </template>
+      <!-- <el-table-column align="center" prop="accAttribute" label="账户属性" show-overflow-tooltip>
+         <template slot-scope="scope">
+           <span v-if="baseInfo.claimtype==='02'">{{ selectDictLabel(account_attributeOptions, '0') }}</span>
+           <span v-else>{{ selectDictLabel(account_attributeOptions, '1') }}</span>
+         </template>
 
-      </el-table-column>-->
+       </el-table-column>-->
       <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
       <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
       <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
@@ -70,7 +72,8 @@
           style="width: 100%;margin-bottom: 10px">
           <el-table-column label="" width="40">
             <template slot-scope="scope">
-              <el-radio :label="scope.$index" v-model="radio" @change.native="getCurrentRow(scope.row)" style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
+              <el-radio :label="scope.$index" v-model="radio" @change.native="getCurrentRow(scope.row)"
+                        style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="polno" label="保单号" show-overflow-tooltip/>
@@ -181,7 +184,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="分配比例：" prop="payeeRatio">
-                <el-input v-model="baseForm.payeeRatio"  style="width: 185px" clearable size="mini"
+                <el-input v-model="baseForm.payeeRatio" style="width: 185px" clearable size="mini"
                           placeholder="请输入"/>
                 <span>%</span>
               </el-form-item>
@@ -261,6 +264,7 @@
       baseInfo: Object,
       fixInfo: Object,
       applicantData: Object,
+      insuredFormData: Object,
       sonPayeeInfoData: Array,
       status: String,
       node: String,
@@ -274,14 +278,14 @@
           this.baseForm.payeeNationality = this.insuredData.nationality,
           this.baseForm.payeeIdType = this.insuredData.idType,
           this.baseForm.payeeIdNo = this.insuredData.idNo
-          //this.baseForm.payeeOccupation = this.insuredData.occupation
-        if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
-          this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
-          if (this.insuredData.idEndDate==='9999-12-31'){
-            this.$set(this.baseForm,'checked',true)
+        //this.baseForm.payeeOccupation = this.insuredData.occupation
+        if (this.insuredData.idEndDate != null && this.insuredData.idEndDate !== '') {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate === '9999-12-31') {
+            this.$set(this.baseForm, 'checked', true)
           }
-        }else {
-          this.$set(this.baseForm,'idEndDate',this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
+        } else {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
         }
         if (this.baseForm.idEndDate === '9999-12-31') {
           this.checked = true
@@ -361,17 +365,17 @@
         batchInfoData: {},
         insuredData: {},
         isAddOrEdit: '',
-        radio:undefined,
-        isTkTableShow:false,
-        tkTableData:[{
-          polno:'B00001',
-          certNo:'F00001',
-          bankNo:'01',
-          bankDesc:'嘿嘿嘿',
-          acctNo:'123456',
-          bankClientName:'张三',
-          idType:'1',
-          idNo:'0100101',
+        radio: undefined,
+        isTkTableShow: false,
+        tkTableData: [{
+          polno: 'B00001',
+          certNo: 'F00001',
+          bankNo: '01',
+          bankDesc: '嘿嘿嘿',
+          acctNo: '123456',
+          bankClientName: '张三',
+          idType: '1',
+          idNo: '0100101',
         }],
         dialogFormVisible: false,
         baseForm: {
@@ -411,21 +415,21 @@
         card_typeOptions: [],
         rgtSexOptions: [],
         tableFormRules: {
-          payMode: [{required: true, message: '领款方式不能为空!', trigger: ['blur','change']}],
-          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: ['blur','change']}],
-          payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: ['blur','change']}],
-          payeeSex: [{required: true, message: '性别不能为空!', trigger:['blur','change']}],
-          payeeMobile: {validator: checkRequired, trigger: ['blur','change']},//与被保人关系非本人时必录，否则非必录
-          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: ['blur','change']}],
-          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: ['blur','change']}],
-          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: ['blur','change']}],
-          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur','change']}],
-          payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur','change']}],
-          payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur','change']}],
-          payeeOccupation:{validator: checkPayeeOccupation, trigger: ['blur','change']},
-          accNo: {validator: checkAccNo, required: true, trigger: ['blur','change']},//允许录入数字和字母
+          payMode: [{required: true, message: '领款方式不能为空!', trigger: ['blur', 'change']}],
+          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: ['blur', 'change']}],
+          payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: ['blur', 'change']}],
+          payeeSex: [{required: true, message: '性别不能为空!', trigger: ['blur', 'change']}],
+          payeeMobile: {validator: checkRequired, trigger: ['blur', 'change']},//与被保人关系非本人时必录，否则非必录
+          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: ['blur', 'change']}],
+          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: ['blur', 'change']}],
+          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: ['blur', 'change']}],
+          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}],
+          payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur', 'change']}],
+          payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur', 'change']}],
+          payeeOccupation: {validator: checkPayeeOccupation, trigger: ['blur', 'change']},
+          accNo: {validator: checkAccNo, required: true, trigger: ['blur', 'change']},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
-          address: {validator: checkAddress, required: true, trigger: ['blur','change']},
+          address: {validator: checkAddress, required: true, trigger: ['blur', 'change']},
         }
       };
     },
@@ -531,7 +535,7 @@
       },
       addOrEdit(status, row) {
         this.isAddOrEdit = status
-        this.isTkTableShow=false
+        this.isTkTableShow = false
         this.$emit('getApplicantData')
         this.dialogFormVisible = true
         this.baseForm = {
@@ -556,14 +560,14 @@
           district: undefined,
           address: undefined,
         }
-        this.region=[]
-        if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
-          this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
-          if (this.insuredData.idEndDate==='9999-12-31'){
-            this.$set(this.baseForm,'checked',true)
+        this.region = []
+        if (this.insuredData.idEndDate != null && this.insuredData.idEndDate !== '') {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate === '9999-12-31') {
+            this.$set(this.baseForm, 'checked', true)
           }
-        }else {
-          this.$set(this.baseForm,'idEndDate',this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
+        } else {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
         }
         if (this.baseForm.idEndDate === '9999-12-31') {
           this.checked = true
@@ -571,9 +575,9 @@
         if (status === 'edit') {
           this.isAddOrEdit = 'edit'
           this.baseForm = row
-          this.region[0]=row.province
-          this.region[1]=row.city
-          this.region[2]=row.district
+          this.region[0] = row.province
+          this.region[1] = row.city
+          this.region[2] = row.district
           if (row.idEndDate === '9999-12-31') {
             this.baseForm.checked = true
           }
@@ -626,16 +630,45 @@
         this.baseForm.city = this.region[1]
         this.baseForm.district = this.region[2]
       },
-      getCurrentRow(row){//获取当前行的数据
-        this.baseForm.payeeName=row.bankClientName//账户名
-        this.baseForm.payeeIdType=row.idType//证件类型
-        this.baseForm.payeeIdNo=row.idNo//证件号码
-        this.baseForm.payeeBank=row.bankNo//开户行
-        this.baseForm.accNo=row.acctNo//账号
+      getCurrentRow(row) {//获取当前行的数据
+        this.baseForm.payeeName = row.bankClientName//账户名
+        this.baseForm.payeeIdType = row.idType//证件类型
+        this.baseForm.payeeIdNo = row.idNo//证件号码
+        this.baseForm.payeeBank = row.bankNo//开户行
+        this.baseForm.accNo = row.acctNo//账号
       },
-      searchTkData(){
-        this.radio=undefined
-        this.isTkTableShow=true
+      searchTkData() {
+        //请求参数customerNo客户号  certno分单号 多个用，隔开（不知道是中英文的那个逗号）
+        this.radio = undefined
+        this.$emit('getInsuredData')
+        console.log(this.insuredFormData);
+        if (this.insuredFormData.caseInsuredData == undefined || this.insuredFormData.caseInsuredData == null) {
+          return this.$message.warning(
+            "请先保存被保人信息！"
+          )
+        }else {
+          if (this.insuredFormData.policyInfoData==undefined || this.insuredFormData.policyInfoData.length<=0){
+            return this.$message.warning(
+              "被保人信息未选择保单！"
+            )
+          }else {
+            let query = {
+              customerNo: this.insuredFormData.caseInsuredData.insuredNo,
+              certno: ''
+            }
+            let policyItemNoStr=''
+            for (let i = 0; i < this.insuredFormData.policyInfoData.length-1; i++) {
+              policyItemNoStr=policyItemNoStr+this.insuredFormData.policyInfoData[i].policyItemNo+','
+            }
+            policyItemNoStr = policyItemNoStr+this.insuredFormData.policyInfoData[this.insuredFormData.policyInfoData.length-1].policyItemNo
+            query.certno=policyItemNoStr
+            alert(query.certno)
+            this.isTkTableShow = true
+          }
+        }
+
+
+
       },
     }
   };

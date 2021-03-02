@@ -190,52 +190,53 @@
 	</select>
 
     <select id="selectDemandAcceptVoById" resultType="com.paic.ehis.cs.domain.vo.DemandAcceptVo">
-        SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.STATUS,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
-FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-and a.insured_no=c.person_id
-  and a.business_type='01'
-  and a.work_order_no=#{workOrderNo}
+         SELECT
+        a.work_order_no,
+        (select distinct 1 from call_again ca
+        where ca.work_order_no=a.work_order_no and ca.status='Y'
+        ) as isRedWord,
+        a.business_type,
+        concat(a.business_type,'-', b.item_code) as business_service,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.call_center_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        where a.work_order_no=#{workOrderNo}
     </select>
 
     <select id="selectDemandAcceptVo" parameterType="String" resultMap="DemandAcceptVoResult">

@@ -72,7 +72,14 @@ export function modifyComplaintSubmit(data) {
   })
 }
 
-
+//---------------------------根因改善页面查询
+export function complainSearchServer(query) {
+  return request({
+    url: '/cs/info3/selectComplaintWorkOrder',
+    method: 'get',
+    params: query
+  })
+}
 
 
 

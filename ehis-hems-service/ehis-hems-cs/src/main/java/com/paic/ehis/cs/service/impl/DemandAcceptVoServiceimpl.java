@@ -398,7 +398,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             if (!map3value.equals(map4value)) {
                 keyList.add(map3key);
                 editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setItemKey(map3key);
+                editDetail.setItemKey("callPerson."+map3key);
                 editDetail.setOldValue(map3value);
                 editDetail.setNowValue(map4value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
@@ -426,7 +426,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             if (!map5value.equals(map6value)) {
                 keyList.add(map5key);
                 editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setItemKey(map5key);
+                editDetail.setItemKey("contacts"+map5key);
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));

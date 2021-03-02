@@ -597,6 +597,7 @@
         this.isInsuredSave = true
         this.$emit('emitSaveFlag')
         this.$emit('getInsuredData')
+        this.$emit('getPropData', baseFormData)
       },
 
       closeDialogVisable() {

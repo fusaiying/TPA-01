@@ -414,6 +414,9 @@
           this.recoveryForm.debtAmountUp = row.debtAmountUp;
           this.recoveryForm.recMessageFlag = row.recMessageFlag;
           this.recoveryForm.insuredNo =  row.insuredNo;
+          if(row.birthday != '') {
+            this.recoveryInfo.age = this.getAge(row.birthday)
+          }
         },
         delFun(row) {
           const params = {
@@ -492,6 +495,29 @@
             return false;
           }
 
+          const param = {
+            pageNum:1,
+            pageSize:3,
+            insuredNo:this.recoveryForm.insuredNo
+          };
+          listInfo(param).then(response => {
+            let count = response.total;
+            if(count == 0) {
+              this.addInfoData();
+            } else {
+              this.$message({
+                message: '该被保人已在名单中',
+                type: 'info',
+                center: true,
+                showClose: true
+              });
+            }
+          }).catch(error => {
+            this.loading = false
+            console.log(error);
+          });
+        },
+        addInfoData(){
           this.$refs.recoveryForm.validate((valid) => {
             if (valid) {
               const params = this. recoveryForm;

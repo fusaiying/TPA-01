@@ -521,7 +521,9 @@
       },
       //自定义展开
       getCurrentRow(index, row) {
-        this.$refs.tableData.toggleRowExpansion(row, true) // 点击radio展开
+        if(this.saveVFlag) {
+          this.$refs.tableData.toggleRowExpansion(row, true) // 点击radio展开
+        }
         //调用查询保单信息接口
         //保单信息的table ref
 
@@ -617,31 +619,8 @@
       //确人按钮
       confirmHandle() {
         if(this.radio!=undefined && this.radio!=null ){
-          if(this.multipleSelection.length>0){
-            let propData = {
-              caseInsuredData: this.tableData[this.radio],
-              policyInfoData: this.multipleSelection
-            }
-            //调用被保人保存的接口
-            const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
-            subFormSearch.rptNo = this.copyFixInfo.rptNo
-            let insuredInfoData = {
-              policyNos: this.multipleSelection,
-              claimCaseInsured: subFormSearch
-            }
-            if(this.saveFlag) {
-              addInsuredAndPolicy(insuredInfoData)
-            }
-            //关闭清空
-            this.changeDialogVisable()
-            this.$emit('getPropData', propData)
-          }
-          else {
-            this.$confirm('未选择保单，是否确认?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+          if(this.saveVFlag) {
+            if(this.multipleSelection.length>0){
               let propData = {
                 caseInsuredData: this.tableData[this.radio],
                 policyInfoData: this.multipleSelection
@@ -659,13 +638,45 @@
               //关闭清空
               this.changeDialogVisable()
               this.$emit('getPropData', propData)
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消'
+            }
+            else {
+              this.$confirm('未选择保单，是否确认?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                let propData = {
+                  caseInsuredData: this.tableData[this.radio],
+                  policyInfoData: this.multipleSelection
+                }
+                //调用被保人保存的接口
+                const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
+                subFormSearch.rptNo = this.copyFixInfo.rptNo
+                let insuredInfoData = {
+                  policyNos: this.multipleSelection,
+                  claimCaseInsured: subFormSearch
+                }
+                if(this.saveFlag) {
+                  addInsuredAndPolicy(insuredInfoData)
+                }
+                //关闭清空
+                this.changeDialogVisable()
+                this.$emit('getPropData', propData)
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消'
+                });
               });
-            });
 
+            }
+          } else {
+            let propData = {
+              caseInsuredData: this.tableData[this.radio],
+              policyInfoData: this.multipleSelection
+            }
+            this.changeDialogVisable()
+            this.$emit('getPropData', propData)
           }
         }
         else {

@@ -426,7 +426,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
             if (!map5value.equals(map6value)) {
                 keyList.add(map5key);
                 editDetail.setKeyDictType("demandAcceptVo");
-                editDetail.setItemKey("contacts"+map5key);
+                editDetail.setItemKey("contactsPerson."+map5key);
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));

@@ -1181,7 +1181,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
 
-        return claimCaseMapper.updateClaimCase(claimCase);
+        return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 
     /**
@@ -1399,9 +1399,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public int judgeClaimCaseCheckRule(ClaimCaseCheckDTO claimCaseCheckDTO) {
 
         ClaimCaseCheckDTO claimCaseCheckDTO1 = claimCaseCheckRuleService.judgeClaimCaseCheckRule(claimCaseCheckDTO);
-
-        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
+        ClaimCase claimCase = new ClaimCase();
+        claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
+        claimCase.setUpdateBy(SecurityUtils.getUsername());
+        claimCase.setUpdateTime(DateUtils.getNowDate());
 
         //更新历史记录,并添加新的历史记录
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCaseCheckDTO.getRptNo());
@@ -1424,7 +1425,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
-        return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
+        return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 
     //案件抽检已处理

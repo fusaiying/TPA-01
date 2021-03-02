@@ -559,7 +559,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo((serviceProcessingVo.getWorkOrderNo()));
-        workHandleInfo.setStatus(serviceProcessingVo.getStatus());
+        workHandleInfo.setStatus("Y");
         String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -585,7 +585,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo((reservationDealVo.getWorkOrderNo()));
-        workHandleInfo.setStatus(reservationDealVo.getStatus());
+        workHandleInfo.setStatus("Y");
         String sourceName="ReservationDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -607,7 +607,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo((complaintDealVo.getWorkOrderNo()));
-        workHandleInfo.setStatus(complaintDealVo.getStatus());
+        workHandleInfo.setStatus("Y");
         String sourceName="ComplaintDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);

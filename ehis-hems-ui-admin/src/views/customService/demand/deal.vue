@@ -456,8 +456,8 @@
         <el-col :span="8">
         <el-form-item label="业务处理情况：" prop="businessProcess" >
           <el-radio-group v-model="ruleForm.businessProcess">
-            <el-radio   :label="1">成功</el-radio>
-            <el-radio   :label="2">响应</el-radio>
+            <el-radio   label="01">成功</el-radio>
+            <el-radio   label="02">响应</el-radio>
           </el-radio-group>
         </el-form-item>
         </el-col>
@@ -494,8 +494,8 @@
             <el-col :span="8">
               <el-form-item label="结案类型：" prop="closeType">
                 <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-                  <el-option v-for="item in cs_end_case" :key="item.value" :label="item.label"
-                             :value="item.value"/>
+                  <el-option v-for="item in cs_end_case" :key="item.dictValue" :label="item.dictLabel"
+                             :value="item.dictValue"/>
                 </el-select>
               </el-form-item>
             </el-col>

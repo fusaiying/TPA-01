@@ -108,7 +108,7 @@
     </update>
 
     <update id="updateHcsStauts" parameterType="HcsModification">
-        update hcs_modification set stauts='N' where alter_id in
+        update hcs_modification set status='N' where alter_id in
         <foreach item="alterId" collection="array" open="(" separator="," close=")">
             #{alterId}
         </foreach>

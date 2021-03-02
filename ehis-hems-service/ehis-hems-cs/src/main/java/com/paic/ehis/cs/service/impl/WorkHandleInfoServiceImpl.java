@@ -214,7 +214,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            if(serviceProcessingVo.getBusinessProcess().equals("01")){
+                    workOrderAccept.setStatus("03");
+            }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
+                workOrderAccept.setStatus("02");
+            }
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //无本人操作历史   则增加一条新数据
            // WorkHandleInfo workHandleInfo=new WorkHandleInfo();

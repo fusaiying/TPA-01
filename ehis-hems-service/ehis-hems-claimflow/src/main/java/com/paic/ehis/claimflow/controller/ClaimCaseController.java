@@ -369,8 +369,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池处理中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentUnder")
-    public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentUnder")
+    public TableDataInfo listConditionsForTheAdjustmentUnder(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -392,8 +392,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentOver")
-    public TableDataInfo listConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentOver")
+    public TableDataInfo listConditionsForTheAdjustmentOver(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -417,8 +417,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池悬挂中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentHang")
-    public TableDataInfo listConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentHang")
+    public TableDataInfo listConditionsForTheAdjustmentHang(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }

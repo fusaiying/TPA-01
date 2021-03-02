@@ -158,12 +158,15 @@
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
+         <span @click="show">
+          <i :class="showClass"/>
+        </span>
         <span style="color: blue">待处理（{{ totalCount }}）</span>
         <div style="text-align: right; margin-right: 8px;">
             <el-button type="primary" size="mini" @click="add">新增</el-button>
            <el-button type="primary" size="mini" @click="obtainButton">获取</el-button>
         </div>
-        <el-divider style=""/>
+        <el-divider style="" v-if="isShow"/>
         <el-table
           ref="multipleTable"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -173,7 +176,9 @@
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange"
-          :row-class-name="setRowStyle">
+          :row-class-name="setRowStyle"
+          v-if="isShow"
+        >
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -245,14 +250,12 @@
           :page.sync="pageNum"
           :limit.sync="pageSize"
           @pagination="searchHandle"
+          v-if="isShow"
         />
       </div>
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span @click="show">
-          <i :class="showClass"/>
-        </span>
         <span style="color: blue">处理中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
@@ -265,7 +268,6 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange"
           :row-class-name="setRowStyle"
-          v-if="isShow"
         >
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
@@ -334,7 +336,6 @@
           :page.sync="pageNumPerson"
           :limit.sync="pageSizePerson"
           @pagination="searchHandle1"
-          v-if="isShow"
         />
       </div>
     </el-card>

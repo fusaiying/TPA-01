@@ -1399,10 +1399,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public int judgeClaimCaseCheckRule(ClaimCaseCheckDTO claimCaseCheckDTO) {
 
         ClaimCaseCheckDTO claimCaseCheckDTO1 = claimCaseCheckRuleService.judgeClaimCaseCheckRule(claimCaseCheckDTO);
-        ClaimCase claimCase = new ClaimCase();
-        claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
-        claimCase.setUpdateBy(SecurityUtils.getUsername());
-        claimCase.setUpdateTime(DateUtils.getNowDate());
 
         //更新历史记录,并添加新的历史记录
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCaseCheckDTO.getRptNo());
@@ -1425,7 +1421,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
-        return claimCaseMapper.updateClaimCaseNew(claimCase);
+        if ("99".equals(claimCaseCheckDTO1.getCaseStatus())) {
+            ClaimCase claimCase = new ClaimCase();
+            claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
+            claimCase.setUpdateBy(SecurityUtils.getUsername());
+            claimCase.setUpdateTime(DateUtils.getNowDate());
+            return claimCaseMapper.updateClaimCaseNew(claimCase);
+        }
+        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
+        return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
     }
 
     //案件抽检已处理

@@ -13,6 +13,7 @@ import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
 import com.paic.ehis.finance.service.IFinanceCollectionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -152,5 +153,15 @@ public class FinanceAdvanceSettleDetailController extends BaseController
     {
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailService.InitiateAdvancePaymentTask(financeAdvanceSettleDTO);
         return getDataTable(financeAdvanceSettleVOS);
+    }
+
+    /**
+     * 导入TPA服务费结算任务列表
+     */
+    @Log(title = "垫付款服务费结算任务", businessType = BusinessType.IMPORT)
+    @PostMapping("/importInitiate")
+    public AjaxResult excelImport(MultipartFile file){
+
+        return toAjax(financeAdvanceSettleDetailService.importAdvanceSettleTask(file));
     }
 }

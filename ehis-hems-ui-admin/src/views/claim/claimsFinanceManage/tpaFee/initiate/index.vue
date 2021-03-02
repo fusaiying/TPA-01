@@ -132,8 +132,6 @@
   import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
-  /*import importTable from "../components/importTable";*/
-
   export default {
     components: {
       feeDetail,
@@ -156,7 +154,7 @@
           // 设置上传的请求头部
           headers: {Authorization: "Bearer " + getToken()},
           // 上传的地址
-          url:''// process.env.VUE_APP_BASE_API + "/system/user/importData"
+          url:  process.env.VUE_APP_BASE_API + "/finance/tpaTask/importInitiate"
         },
 
         fixInfo:{},
@@ -312,6 +310,8 @@
         this.importDialog = true;
       },
       closeImportDialog() {
+        this.$refs.upload.clearFiles()
+        this.upload.isUploading = false;
         this.importDialog = false
       },
       //导入弹框 end

@@ -264,12 +264,16 @@
           historyDisInfo(this.rptNo).then(res => {
             if(res.code == '200' && res.rows) {
               this.HistoryData = res.rows;
-
               if(!this.handleView) {
-                let  vdata = this.HistoryData[this.HistoryData.length - 1];
-                this.baseInfo.disView = vdata.disView;
-                this.clussionForm.conclusion = vdata.conclusion;
-                this.clussionForm.conclusionView = vdata.conclusionView;
+                let filterData = this.HistoryData.filter(item => {
+                  return item.discId == this.discId
+                })
+                if(filterData.length > 0){
+                  let  vdata = filterData[0];
+                  this.baseInfo.disView = vdata.disView;
+                  this.clussionForm.conclusion = vdata.conclusion;
+                  this.clussionForm.conclusionView = vdata.conclusionView;
+                }
               }
             }
           });

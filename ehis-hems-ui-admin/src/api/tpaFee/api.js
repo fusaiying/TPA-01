@@ -57,11 +57,11 @@ export function updateTask(data) {
 }
 
 // 确认TPA服务费结算
-export function confirm(query) {
+export function updateConfirm(settleTaskNo) {
   return request({
-    url: '/finance/tpaTask/confirm',
-    method: 'get',
-    params: query
+    url: '/finance/tpaTask/' + settleTaskNo,
+    method: 'put',
+    data: settleTaskNo
   })
 }
 

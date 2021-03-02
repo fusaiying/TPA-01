@@ -119,4 +119,6 @@ public interface IWorkHandleInfoService
 
     public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo);
 
+    public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo);
+
 }

@@ -551,11 +551,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         }
     }
 
-    /**
-     * 查询工单业处理信息   信息需求
-     * @param serviceProcessingVo
-     * @return
-     */
+
     @Override
     public List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
         //获取处理时长
@@ -602,27 +598,6 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
     }
 
-    /**
-     * 查询工单业处理信息 投诉
-     */
-//    @Override
-//    public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
-//        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-//        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-//        workHandleInfo.setStatus("Y");
-//        String sourceName="ComplaintDealVo";
-//        String targetTableName="work_handle_info";
-//        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-//        for (FieldMap fieldMap:KVMap){
-//            fieldMap.getTargetColumnName();
-//            fieldMap.getSourceFiledName();
-//            Map map=new HashMap<String,String>();
-//            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
-//            VoUtils voUtils=new VoUtils<ComplaintDealVo>();
-//            complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
-//        }
-//        return workHandleInfoMapper.selectWorkHandleInfoByNo(complaintDealVo.getWorkOrderNo());
-//    }
 
     @Override
     public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo) {
@@ -640,6 +615,29 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
         }
         return complaintDealVo;
+    }
+
+    /**
+     * 查询工单业处理信息   信息需求
+     * @param workOrderNo
+     * @return
+     */
+    @Override
+    public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo) {
+        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
+        ServiceProcessingVo serviceProcessingVo=workHandleInfoMapper.selectDemandDealVoByNo(workOrderNo);
+        String sourceName="ComplaintDealVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+            serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
+        }
+        return serviceProcessingVo;
     }
 
 }

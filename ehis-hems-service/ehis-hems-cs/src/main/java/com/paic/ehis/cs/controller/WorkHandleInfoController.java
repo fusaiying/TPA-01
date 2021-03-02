@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.EditInfo;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
@@ -120,10 +121,17 @@ public class WorkHandleInfoController extends BaseController
         return getDataTable(list);
     }
 
-    @GetMapping("/selectComp")
-    public AjaxResult selectWorkHandleInfoByNo(@RequestParam("workOrderNo")  String workOrderNo) {
-        return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));
-
+    @GetMapping("/selectDealVo")
+    public AjaxResult selectDealVo(WorkOrderAccept workOrderAccept) {
+        String workOrderNo=workOrderAccept.getWorkOrderNo();
+        String businessType=workOrderAccept.getBusinessType();
+        if (businessType=="01"){
+            return AjaxResult.success(workHandleInfoService.selectServiceProcessingVo(workOrderNo));
+        }else if (businessType=="02"){
+            return AjaxResult.success(workHandleInfoService.selectReservationDealVoByNo(workOrderNo));
+        }else{
+            return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));
+        }
     }
 
 }

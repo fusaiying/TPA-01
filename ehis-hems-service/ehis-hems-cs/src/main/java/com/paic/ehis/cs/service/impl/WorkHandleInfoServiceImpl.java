@@ -626,7 +626,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo) {
         WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
         ServiceProcessingVo serviceProcessingVo=workHandleInfoMapper.selectDemandDealVoByNo(workOrderNo);
-        String sourceName="ComplaintDealVo";
+        String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (FieldMap fieldMap:KVMap){
@@ -638,6 +638,24 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
         }
         return serviceProcessingVo;
+    }
+
+    @Override
+    public ReservationDealVo selectReservationDealVoByNo(String workOrderNo) {
+        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
+        ReservationDealVo reservationDealVo=workHandleInfoMapper.selectReservationDealVoByNo(workOrderNo);
+        String sourceName="ReservationDealVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+            reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
+        }
+        return reservationDealVo;
     }
 
 }

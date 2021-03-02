@@ -121,4 +121,6 @@ public interface IWorkHandleInfoService
 
     public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo);
 
+    public  ReservationDealVo selectReservationDealVoByNo(String workOrderNo);
+
 }

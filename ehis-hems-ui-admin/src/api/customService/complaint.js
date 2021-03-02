@@ -81,6 +81,28 @@ export function complainSearchServer(query) {
   })
 }
 
+//----------------------------------挂起解卦
+
+
+export function cancelHangUp(data) {
+  return request({
+    url: '/cs/complaint/updateHangReason',
+    method: 'put',
+    data: data
+  })
+}
+
+
+
+export function selectHangFlag(query) {
+  return request({
+    url: '/cs/complaint/selectHangFlag',
+    method: 'get',
+    params: query
+  })
+}
+
+
 
 
 

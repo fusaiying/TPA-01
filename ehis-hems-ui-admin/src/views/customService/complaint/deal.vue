@@ -576,12 +576,13 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer" disabled>工单挂起</el-button>
-        <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
-        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <hang-up  ref="hangUp"></hang-up>
+        <el-button  type="primary"  size="mini" @click="hangUp" >工单挂起</el-button>
+        <el-button  type="primary" size="mini" @click="temporary" :disabled="this.hangUps.hangFlag=='01'">暂存</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="this.hangUps.hangFlag=='01'">提交</el-button>
+        <el-button  type="primary"  size="mini" @click="matching" :disabled="this.hangUps.hangFlag=='01'">客户信息匹配</el-button>
+        <el-button  type="primary"  size="mini" @click="transfer" :disabled="this.hangUps.hangFlag=='01'">转办</el-button>
+        <el-button  type="primary" size="mini" @click="coOrganizer" :disabled="this.hangUps.hangFlag=='01'">协办</el-button>
       </div>
     </el-card>
 
@@ -593,9 +594,9 @@
 <script>
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
-  import {complaintDealSubmit} from '@/api/customService/complaint'
+  import {complaintDealSubmit,selectHangFlag} from '@/api/customService/complaint'
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
-
+  import hangUp from "../common/modul/hangUp";
 
 
   import transfer from "../common/modul/transfer";
@@ -609,6 +610,7 @@
                   upLoad,
                   coOrganizer,
       modifyDetails,
+      hangUp,
     },
     filters: {
       changeDate: function (value) {
@@ -620,6 +622,10 @@
     data() {
 
       return {
+        hangUps:{
+          hangUpFlag:"",
+        },
+
         flag:0,
         ids:[],//多选框
         //流转用
@@ -742,6 +748,7 @@
         this.queryParams.policyItemNo=this.$route.query.policyItemNo;
         this.queryParams.status=this.$route.query.status;
       //window.aaa = this;
+      this.hangUpSearch()
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
@@ -781,10 +788,49 @@
 
         })
       },
+      //客户信息匹配
+      matching(){
+        this.$router.push({
+          path: '/customService/complaint/search',
+          query: {
+            workOrderNo: this.queryParams.workOrderNo,
+            policyNo: this.queryParams.policyNo,
+            policyItemNo: this.queryParams.policyItemNo,
+            status: this.queryParams.status
+          }
+        })
+      },
       //上传附件
       upload(){ this.$refs.upload.open();},
       //下载
       download(){},
+      //工单挂起
+      hangUpSearch(){
+        let query={
+          workOrderNo:""
+        }
+        query.workOrderNo=this.$route.query.workOrderNo
+        selectHangFlag(query).then(res => {
+          if (res != null && res.code === 200) {
+            if (res.data!=null){
+              this.hangUps=res.data
+              this.$refs.hangUp.hangUpForm=res.data
+            }else {
+              this.$refs.hangUp.hangUpForm.workOrderNo=this.$route.query.workOrderNo
+            }
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "失败！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+      hangUp(){
+        this.$refs.hangUp.open()
+      },
       //转办
       transfer(){
         this.$refs.transfer.dynamicValidateForm.workOrderNo=this.queryParams.workOrderNo

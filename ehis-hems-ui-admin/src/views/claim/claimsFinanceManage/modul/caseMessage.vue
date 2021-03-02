@@ -112,8 +112,8 @@
 
           <div style="float: right;margin-top: 50px;margin-bottom: 10px">
             <el-button v-if="querys.status==='publicForeign'" type="primary" size="mini" @click="">保存</el-button>
-            <el-button type="primary" size="mini" @click="confirmPay">确认支付</el-button>
-            <el-button type="primary" :disabled="baseForm.claimFlag==='01'" size="mini" @click="caseBorrow">案件借款
+            <el-button type="primary" :disabled="isConfirmPayShow" size="mini" @click="confirmPay">确认支付</el-button>
+            <el-button type="primary" :disabled="isBorrowShow" size="mini" @click="caseBorrow">案件借款
             </el-button>
           </div>
         </el-form>
@@ -129,6 +129,8 @@
   export default {
     data() {
       return {
+        isConfirmPayShow:false,
+        isBorrowShow:false,
         querys: {},
         tableData: [],
         baseForm: {
@@ -197,9 +199,43 @@
       },
       confirmPay() {//确认支付
         if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount != this.querys.batchTotal) {
-          return this.$message.warning(
-            "支付总金额与批次总金额不符，请核实！"
-          )
+          this.$confirm(`支付总金额与批次总金额不符，请核实!`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let data={
+              batchNo: this.querys.batchNo,
+              caseInfoList:this.tableData,
+              payment:this.baseForm
+            }
+            confirmPayment(data).then(res => {
+              if (res != null && res.data === 1) {
+                this.$message({
+                  message: '提交成功！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
+                })
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              } else if (res != null && res.data === 2) {
+                return this.$message.warning(
+                  "此批次存在回退案件，请结案后进行支付！"
+                )
+              } else if (res != null && res.data === 3) {
+                return this.$message.warning(
+                  "批次下案件币种不统一，请核实！"
+                )
+              }
+            })
+            this.search()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消！'
+            })
+          })
         } else {
           let data={
             batchNo: this.querys.batchNo,
@@ -214,6 +250,8 @@
                 center: true,
                 showClose: true
               })
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.go(-1)
             } else if (res != null && res.data === 2) {
               return this.$message.warning(
                 "此批次存在回退案件，请结案后进行支付！"
@@ -258,12 +296,44 @@
       caseBorrow() {//案件借款
         if (this.baseForm.claimFlag === '01') {//非全陪
           //按钮置灰
-
+          this.isBorrowShow=true
         } else {
           if (this.baseForm.payAmount != this.querys.batchTotal) {
-            return this.$message.warning(
-              "支付总金额与批次总金额不符，请核实！"
-            )
+            this.$confirm(`支付总金额与批次总金额不符，请核实!`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              let data = {
+                batchNo: this.querys.batchNo,
+                caseInfoList:this.tableData,
+                payment:this.baseForm
+              }
+              borrowingCase(data).then(res => {
+                if (res != null && res.data === 1) {
+                  this.$message({
+                    message: '提交成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                } else if (res != null && res.data === 2) {
+                  return this.$message.warning(
+                    "此批次存在回退案件，请结案后进行支付！"
+                  )
+                } else if (res != null && res.data === 3) {
+                  return this.$message.warning(
+                    "批次下案件币种不统一，请核实！"
+                  )
+                }
+              })
+              this.search()
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消！'
+              })
+            })
           } else {
             let data = {
               batchNo: this.querys.batchNo,

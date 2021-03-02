@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.paic.ehis.claimflow.domain.ClaimDebtWhitelist;
 import com.paic.ehis.claimflow.domain.PolicyInsured;
 import com.paic.ehis.claimflow.mapper.ClaimDebtWhitelistMapper;
@@ -8,6 +9,9 @@ import com.paic.ehis.claimflow.service.IClaimDebtWhitelistService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.sql.SqlUtil;
+import com.paic.ehis.common.core.web.page.PageDomain;
+import com.paic.ehis.common.core.web.page.TableSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +49,7 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
             PolicyInsured policyInsured = new PolicyInsured();
             policyInsured.setIdNo(claimDebtWhitelist.getIdNo());
             policyInsured.setName(claimDebtWhitelist.getName());
+            PageHelper.startPage(1, 1000, null);
             List<PolicyInsured> policyInsuredList = policyInsuredMapper.selectRecognizee(policyInsured);
             if(!policyInsuredList.isEmpty()) {
                 String[] insurdNos = new String[policyInsuredList.size()];
@@ -56,6 +61,9 @@ public class ClaimDebtWhitelistServiceImpl implements IClaimDebtWhitelistService
                 return claimDebtWhitelists;
             }
         }
+        PageDomain pageDomain = TableSupport.buildPageRequest(claimDebtWhitelist);
+        String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+        PageHelper.startPage(claimDebtWhitelist.getPageNum(), claimDebtWhitelist.getPageSize(), orderBy);
         claimDebtWhitelists = claimDebtWhitelistMapper.selectClaimDebtWhitelistList(claimDebtWhitelist);
         for(ClaimDebtWhitelist claimDebtWhitelist1:claimDebtWhitelists) {
             String insuredNo = claimDebtWhitelist1.getInsuredNo();

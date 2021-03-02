@@ -17,7 +17,23 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊医院：" prop="hospitalCode">
-              <el-input v-model="searchForm.hospitalCode" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-select
+                v-model="searchForm.hospitalCode"
+                filterable
+                remote
+                clearable
+                reserve-keyword
+                placeholder="请选择医院"
+                :remote-method="remoteMethod"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in hospitalOptions"
+                  :key="ind"
+                  :label="item.chname1"
+                  :value="item.providerCode">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -44,7 +60,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="白名单标记：" prop="whiteStatus">
-              <el-input v-model="searchForm.whiteStatus" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-select v-model="searchForm.whiteStatus" class="item-width" placeholder="请选择" clearable
+                         @change="">
+                <el-option v-for="option in white_list_labelOptions" :key="option.dictValue"
+                           :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -152,7 +173,7 @@
 <script>
   import moment from 'moment'
   import {initDebt, initReceipt} from '@/api/claim/recoverMessage'
-
+  import {getListNew} from '@/api/insuranceRules/ruleDefin'
   let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'}, {dictType: 'white_list_label'},]
   export default {
     filters: {
@@ -192,6 +213,7 @@
         detailSize: 10,
         isinit: 'Y',
         totalCount: 0,
+        hospitalOptions: [],
         changeSerchData: {},
         product_statusOptions: [],
         approvalconclusionOptions: [],
@@ -328,6 +350,18 @@
       },
       getRiskStatus(row) {
         return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+      },
+      remoteMethod(query) {
+        if (query !== '' && query != null) {//调用特殊医院查询接口
+          let data = {
+            chname1: query,
+            pageNum:1,
+            pageSize:200
+          }
+          getListNew(data).then(res => {
+            this.hospitalOptions = res.rows
+          })
+        }
       },
       claimRouter(row){
         let data = encodeURI(

@@ -247,7 +247,9 @@
       remoteMethod(query) {
         if (query !== '' && query != null) {//调用特殊医院查询接口
           let data = {
-            chname1: query
+            chname1: query,
+            pageNum:1,
+            pageSize:200
           }
           getListNew(data).then(res => {
             this.hospitalOptions = res.rows

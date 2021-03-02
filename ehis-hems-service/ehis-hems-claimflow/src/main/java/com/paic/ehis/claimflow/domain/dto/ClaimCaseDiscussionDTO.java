@@ -5,6 +5,11 @@ import com.paic.ehis.common.core.annotation.Excel;
 import java.io.Serializable;
 
 public class ClaimCaseDiscussionDTO implements Serializable {
+
+    private String createStartTime;
+
+    private String createEndTime;
+
     /** 报案号 */
     @Excel(name = "报案号")
     private String rptNo;
@@ -59,5 +64,21 @@ public class ClaimCaseDiscussionDTO implements Serializable {
 
     public void setCreateBy(String createBy) {
         this.createBy = createBy;
+    }
+
+    public String getCreateStartTime() {
+        return createStartTime;
+    }
+
+    public void setCreateStartTime(String createStartTime) {
+        this.createStartTime = createStartTime;
+    }
+
+    public String getCreateEndTime() {
+        return createEndTime;
+    }
+
+    public void setCreateEndTime(String createEndTime) {
+        this.createEndTime = createEndTime;
     }
 }

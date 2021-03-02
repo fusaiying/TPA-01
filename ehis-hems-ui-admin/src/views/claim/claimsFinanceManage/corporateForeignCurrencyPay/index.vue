@@ -158,7 +158,6 @@
         totalCount: 0,
         dictList: [],
         hospitalOptions: [],
-        hospitals: [],
         deptListOptions: [],
         sys_yes_noOptions: [],
       }
@@ -194,10 +193,12 @@
           this.totalCount = res.total
         }
       })
-      getHospitalInfo({}).then(res => {
-        if (res != null && res !== '') {
-          this.hospitals = res.rows
-        }
+      let data = {
+        pageNum:1,
+        pageSize:200
+      }
+      getListNew(data).then(res => {
+        this.hospitalOptions = res.rows
       })
     },
     methods: {

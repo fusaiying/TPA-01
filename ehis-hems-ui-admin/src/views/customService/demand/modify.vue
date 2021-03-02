@@ -89,66 +89,70 @@
         </el-row>
         <el-row >
           <el-col :span="5">
-            <el-form-item label="家庭固定电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+            <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
+              国家区号:+<el-input v-model="workPoolData.contactsPerson.linePhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.linePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              号码<el-input v-model="workPoolData.contactsPerson.linePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.linePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row >
-          <el-col :span="5">
-            <el-form-item label="办公室电话:"  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
+<!--        <el-row >-->
+<!--          <el-col :span="5">-->
+<!--            <el-form-item label="办公室电话:"  style="white-space: nowrap" prop="phone">-->
+<!--              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>-->
+<!--              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>-->
+<!--              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>-->
+<!--              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
 
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="是否涉及银行转账" prop="bankTransfer" >-->
+<!--              <el-radio-group v-model="workPoolData.bankTransfer" @change="bankChange(workPoolData.bankTransfer)">-->
+<!--                <el-radio   label="1">是</el-radio>-->
+<!--                <el-radio   label="2">否</el-radio>-->
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" prop="bankName">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankName" ></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" prop="bankLocation">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankLocation" ></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" prop="accountNumber">-->
+<!--              <el-input size="mini" v-model="workPoolData.accountNumber" ></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" prop="bankHolder">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankHolder" ></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
-              <el-radio-group v-model="workPoolData.bankTransfer" @change="bankChange(workPoolData.bankTransfer)">
-                <el-radio   label="1">是</el-radio>
-                <el-radio   label="2">否</el-radio>
-              </el-radio-group>
+          <el-col :span="16">
+            <el-form-item label="业务内容：" prop="content">
+              <el-input
+                type="textarea"
+                :rows="2"
+                v-model="workPoolData.content">
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" prop="bankName">
-              <el-input size="mini" v-model="workPoolData.bankName" ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" prop="bankLocation">
-              <el-input size="mini" v-model="workPoolData.bankLocation" ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" prop="accountNumber">
-              <el-input size="mini" v-model="workPoolData.accountNumber" ></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" prop="bankHolder">
-              <el-input size="mini" v-model="workPoolData.bankHolder" ></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="业务内容：" prop="content">
-          <el-input
-            type="textarea"
-            :rows="2"
-            v-model="workPoolData.content">
-          </el-input>
-        </el-form-item>
       </el-form>
     </el-card>
 
@@ -305,18 +309,18 @@
           organCode: [
             {required: true, message: "出单机构不能为空", trigger: "blur"}
           ],
-          bankName: [
-            {required: true, message: "开户行不能为空", trigger: "blur"}
-          ],
-          bankLocation: [
-            {required: true, message: "开户地不能为空", trigger: "blur"}
-          ],
-          accountNumber: [
-            {required: true, message: "账号不能为空", trigger: "blur"}
-          ],
-          bankHolder: [
-            {required: true, message: "户名不能为空", trigger: "blur"}
-          ],
+          // bankName: [
+          //   {required: true, message: "开户行不能为空", trigger: "blur"}
+          // ],
+          // bankLocation: [
+          //   {required: true, message: "开户地不能为空", trigger: "blur"}
+          // ],
+          // accountNumber: [
+          //   {required: true, message: "账号不能为空", trigger: "blur"}
+          // ],
+          // bankHolder: [
+          //   {required: true, message: "户名不能为空", trigger: "blur"}
+          // ],
           content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"}
           ],
@@ -473,14 +477,14 @@
         this.$refs.modifyDetails.open()
         ;},
       //监听是否银行转账事件
-      bankChange(s){
-        if (s=="1"){
-          this.changeForm.rules=this.rules1
-        }else {
-          this.changeForm.rules=this.rules2
-        }
-
-      },
+      // bankChange(s){
+      //   if (s=="1"){
+      //     this.changeForm.rules=this.rules1
+      //   }else {
+      //     this.changeForm.rules=this.rules2
+      //   }
+      //
+      // },
       //提交页面数据
       submit(){
         this.$refs.workPoolData.validate((valid) => {
@@ -535,7 +539,7 @@
               workPoolData.officeSecondNumber=""
               workPoolData.item=[]
               this.workPoolData = workPoolData;
-              this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
+            //  this.bankChange(workPoolData.bankTransfer),//初始化是否校验银行
                 this.totalCount = res.total
               if (res.rows.length <= 0) {
                 return this.$message.warning(
@@ -561,7 +565,7 @@
               workPoolData.officeQuhao=""
               workPoolData.officeSecondNumber=""
               this.workPoolData = workPoolData;
-              this.bankChange(workPoolData.bankTransfer),
+             // this.bankChange(workPoolData.bankTransfer),
               this.totalCount = res.total
               if (res.rows.length <= 0) {
                 return this.$message.warning(

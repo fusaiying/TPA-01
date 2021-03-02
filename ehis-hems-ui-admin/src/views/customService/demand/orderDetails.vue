@@ -208,7 +208,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled>
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -216,7 +219,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
               <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -229,7 +232,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.callRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -245,7 +248,7 @@
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority" >
               <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -253,7 +256,7 @@
           <el-col :span="8">
             <el-form-item label="联系人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.contactsRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -264,7 +267,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -293,62 +296,76 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="16">
           <el-form-item label="所在地："  prop="phone">
             <el-input v-model="workPoolData.contactsPerson.address" class="width-full"  size="mini" readonly/>
           </el-form-item>
-
-        </el-row>
-        <el-row>
-
+          </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
               <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="是否涉及银行转账" prop="bank" >
-              <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   :label="1">是</el-radio>
-                <el-radio   :label="2">否</el-radio>
-
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
         </el-row>
+<!--        <el-row>-->
+
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="出单机构：" prop="priority">-->
+<!--              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>-->
+<!--                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="是否涉及银行转账" prop="bank" >-->
+<!--              <el-radio-group v-model="workPoolData.bankTransfer" disabled>-->
+<!--                <el-radio   :label="1">是</el-radio>-->
+<!--                <el-radio   :label="2">否</el-radio>-->
+
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" >-->
+<!--              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" >-->
+<!--              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" >-->
+<!--              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" >-->
+<!--              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='1'" >
-              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='1'" >
-              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='1'" >
-              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='1'" >
-              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
+          <el-col :span="16">
+            <el-form-item label="业务内容：" prop="textarea">
+              <el-input
+                type="textarea"
+                :rows="2"
+                readonly
+                v-model="workPoolData.content">
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="业务内容：" prop="textarea">
-          <el-input
-            type="textarea"
-            :rows="2"
-            readonly
-            v-model="workPoolData.content">
-          </el-input>
-        </el-form-item>
+
       </el-form>
     </el-card>
 
@@ -393,8 +410,6 @@
       </div>
     </el-card>
 
-
-
     <el-card>
       <el-form  style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
@@ -430,6 +445,18 @@
   import {demandListAndPublicPool,demandListAndPersonalPool ,FlowLogSearch,orderDetailSearch} from '@/api/customService/demand'
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
+
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+  ]
+
   export default {
     components: {
       coOrganizer,modifyDetails
@@ -478,7 +505,16 @@
         totalCount: 0,
         flowLogData:[],
         flowLogCount: 0,
-        sysUserOptions: [],
+        dictList: [],
+        cs_channel: [],
+        cs_priority: [],
+        cs_sex: [],
+        cs_communication_language: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_organization: [],
+        cs_relation: [],
+        attachmentInfoData: [],
       }
     },
     created() {
@@ -492,7 +528,40 @@
       this.searchHandle2()
 
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+    },
 
     methods: {
       //最下面结论用

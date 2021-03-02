@@ -549,27 +549,32 @@
         <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="HCSPoolData"
+          :data="attachmentInfoData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" prop="policyNumber" label="附件名称" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="secondNumber" label="附件类型" show-overflow-tooltip/>
-          <el-table-column prop="riskCode" align="center" label="上传人" show-overflow-tooltip/>
-          <el-table-column prop="beInsuredName" align="center" label="上传时间 " show-overflow-tooltip/>
-          <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>
+          <el-table-column align="center" prop="attachmentName" label="附件名称" show-overflow-tooltip/>
+          <el-table-column prop="attachmentType" align="center" label="附件类型" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.attachmentType">
+              <span>{{selectDictLabel(cs_attachment_type, scope.row.attachmentType)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="uplodBy" align="center" label="上传人" show-overflow-tooltip/>
+          <el-table-column prop="uploadTime" align="center" label="上传时间 " show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.uploadTime | changeDate}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="remark" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </el-card>
-
-
-
   </div>
 </template>
 
@@ -578,6 +583,7 @@
   import {demandListAndPublicPool,demandListAndPersonalPool,dealAdd,FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
   import upLoad from "../common/modul/upload";
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
+  import {getAttachmentListById} from "@/api/customService/spotCheck";
 
 
   let dictss = [
@@ -588,6 +594,7 @@
     {dictType: 'cs_identity'},
     {dictType: 'cs_whether_flag'},
     {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
     ]
   export default {
     components: {
@@ -702,6 +709,8 @@
         cs_identity: [],
         cs_whether_flag: [],
         cs_organization: [],
+        cs_relation: [],
+        attachmentInfoData: [],
       }
     },
     created() {
@@ -718,6 +727,18 @@
       //   console.log("response:",response)
       // });
 
+      let query = {
+        workOrderNo: this.params.workOrderNo,
+        businessType: this.params.businessType,
+      }
+      //获取附件列表信息
+      getAttachmentListById(query).then(res => {
+        if (res != null && res.code === 200) {
+          console.info(res.data);
+          this.attachmentInfoData=res.data;
+        }
+      }).catch(res => {
+      })
     },
     async mounted() {
       // 字典数据统一获取
@@ -748,6 +769,9 @@
       }).dictDate
       this.cs_organization = this.dictList.find(item => {
         return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
       }).dictDate
     },
     methods: {
@@ -829,6 +853,7 @@
         this.ids = selection.map(item => item.workOrderNo);
 
       },
+
 
     }
   }

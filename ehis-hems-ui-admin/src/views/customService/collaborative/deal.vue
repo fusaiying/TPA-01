@@ -291,13 +291,11 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="16">
           <el-form-item label="所在地："  prop="address">
             <el-input v-model="workPoolData.contactsPerson.address" class="width-full"  size="mini" readonly/>
           </el-form-item>
-
-        </el-row>
-        <el-row>
-
+          </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
               <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
@@ -306,47 +304,63 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="是否涉及银行转账" prop="bankTransfer" >
-              <el-radio-group v-model="workPoolData.bankTransfer" disabled>
-                <el-radio   label="1">是</el-radio>
-                <el-radio   label="2">否</el-radio>
-
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
         </el-row>
+<!--        <el-row>-->
+
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="出单机构：" prop="organCode">-->
+<!--              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>-->
+<!--                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"-->
+<!--                           :value="item.dictValue"/>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="是否涉及银行转账" prop="bankTransfer" >-->
+<!--              <el-radio-group v-model="workPoolData.bankTransfer" disabled>-->
+<!--                <el-radio   label="1">是</el-radio>-->
+<!--                <el-radio   label="2">否</el-radio>-->
+
+<!--              </el-radio-group>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户行：" v-show="ruleForm.bankTransfer=='1'" prop="bankaa">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="开户地：" v-show="ruleForm.bankTransfer=='1'" prop="bankbb">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="账号：" v-show="ruleForm.bankTransfer=='1'" prop="bankcc">-->
+<!--              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+
+<!--          <el-col :span="8">-->
+<!--            <el-form-item label="户名：" v-show="ruleForm.bankTransfer=='1'" prop="bankdd">-->
+<!--              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="开户行：" v-show="ruleForm.bankTransfer=='1'" prop="bankaa">
-              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="开户地：" v-show="ruleForm.bankTransfer=='1'" prop="bankbb">
-              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="账号：" v-show="ruleForm.bankTransfer=='1'" prop="bankcc">
-              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="户名：" v-show="ruleForm.bankTransfer=='1'" prop="bankdd">
-              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>
+          <el-col :span="16">
+            <el-form-item label="业务内容：" prop="textarea">
+              <el-input
+                type="textarea"
+                :rows="2"
+                readonly
+                v-model="workPoolData.content">
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="业务内容：" prop="textarea">
-          <el-input
-            type="textarea"
-            :rows="2"
-            readonly
-            v-model="workPoolData.content">
-          </el-input>
-        </el-form-item>
+
       </el-form>
     </el-card>
 
@@ -430,7 +444,7 @@
             <el-col :span="8">
               <el-form-item label="结案类型：" prop="closeType">
                 <el-select v-model="sendForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-                  <el-option v-for="item in serves" :key="item.value" :label="item.label"
+                  <el-option v-for="item in cs_end_case" :key="item.value" :label="item.label"
                              :value="item.value"/>
                 </el-select>
               </el-form-item>
@@ -494,6 +508,7 @@
     ,{dictType: 'cs_vip_flag'}
     ,{dictType: 'cs_drop_status'}
     ,{dictType: 'cs_whether_flag'}
+    ,{dictType: 'cs_end_case'}
   ]
   export default {
     components: { transfer ,
@@ -605,7 +620,8 @@
         sysUserOptions: [],
         dictList: [],
         cs_drop_status: [],
-        cs_whether_flag: []
+        cs_whether_flag: [],
+        cs_end_case: [],
       }
     },
     created() {
@@ -638,7 +654,9 @@
       this.cs_organizationOptions = this.dictList.find(item => {
         return item.dictType === 'cs_organization'
       }).dictDate
-
+      this.cs_end_case = this.dictList.find(item => {
+        return item.dictType === 'cs_end_case'
+      }).dictDate
     },
     methods: {
       //新增按钮

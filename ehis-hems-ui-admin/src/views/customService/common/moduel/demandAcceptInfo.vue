@@ -109,7 +109,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+<!--        <el-col :span="8">-->
 <!--          <el-form-item label="是否涉及银行转账" prop="bank" >-->
 <!--            <el-radio-group v-model="acceptInfo.acceptor">-->
 <!--              <el-radio   :label="1">是</el-radio>-->
@@ -117,7 +117,7 @@
 
 <!--            </el-radio-group>-->
 <!--          </el-form-item>-->
-        </el-col>
+<!--        </el-col>-->
       </el-row>
 <!--      <el-row>-->
 <!--        <el-col :span="8">-->
@@ -142,14 +142,18 @@
 <!--          </el-form-item>-->
 <!--        </el-col>-->
 <!--      </el-row>-->
-      <el-form-item label="业务内容：" prop="textarea">
-        <el-input
-          type="textarea"
-          :rows="2"
-          placeholder="请输入内容"
-          v-model="acceptInfo.content">
-        </el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="16">
+          <el-form-item label="业务内容：" prop="textarea">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="acceptInfo.content">
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </el-card>
 

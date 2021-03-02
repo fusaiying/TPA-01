@@ -263,7 +263,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="练习人与被保人关系：" prop="contactsRelationBy">
+            <el-form-item label="联系人与被保人关系：" prop="contactsRelationBy">
               <el-select v-model="ruleForm.contactsRelationBy" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -367,14 +367,19 @@
 <!--            </el-form-item>-->
 <!--          </el-col>-->
 <!--        </el-row>-->
-        <el-form-item label="业务内容：" prop="content">
-          <el-input
-            type="textarea"
-            :rows="2"
-            placeholder="请输入内容"
-            v-model="ruleForm.content">
-          </el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="16">
+            <el-form-item label="业务内容：" prop="content">
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="ruleForm.content">
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
       </el-form>
     </el-card>
 

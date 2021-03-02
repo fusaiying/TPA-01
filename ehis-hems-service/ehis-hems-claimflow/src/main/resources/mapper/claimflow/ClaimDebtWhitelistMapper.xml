@@ -118,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             claim_case_debt,claim_case_debt_col
         where claim_case_debt.insured_no=#{insuredNo}
+        and claim_case_debt.debt_id=claim_case_debt_col.debt_id
         GROUP BY claim_case_debt.rpt_no,claim_case_debt.debt_amount
     </select>
 </mapper>

@@ -176,6 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hangFlag != null">hang_flag = #{hangFlag},</if>
             <if test="hangReason != null">hang_reason = #{hangReason},</if>
         </trim>
+            where  work_order_no = #{workOrderNo}
     </update>
     <select id="selectHangFlag" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         select work_order_no,hang_flag,hang_reason from work_order_accept

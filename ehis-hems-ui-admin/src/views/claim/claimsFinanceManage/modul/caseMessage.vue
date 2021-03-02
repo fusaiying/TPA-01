@@ -296,7 +296,6 @@
       },
       listExport() {
         if (this.querys.status === 'public') {
-          alert(1)
           this.isListExport = true
           this.download('finance/pay/export', {
 

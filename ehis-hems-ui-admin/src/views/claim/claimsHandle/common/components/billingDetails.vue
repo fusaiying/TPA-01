@@ -528,28 +528,32 @@
         }
       },
       batchData: function (newVal) {
-        getHospitalInfo({}).then(res => {
-          if (res != null && res !== '') {
-            this.hospitalOptions = res.rows
-          }
-          if (newVal !== null && newVal !== undefined) {
-            let val = this.hospitalOptions.find(item => {
-              return item.providerCode === newVal.hospitalcode
-            })
-            if (val !== null && val !== undefined) {
-              if (val.enname1 != null && val.enname1 !== '') {
-                this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
-              } else {
-                this.baseForm.hospitalName = val.chname1
+        if (newVal !== null && newVal !== undefined) {
+          if (newVal.hospitalcode!=null && newVal.hospitalcode!='') {
+            getHospitalInfo({providerCode: newVal.hospitalcode}).then(res => {
+              if (res != null && res !== '') {
+                this.hospitalOptions = res.rows
               }
-              this.baseForm.hospitalCode = val.providerCode
+              if (newVal !== null && newVal !== undefined) {
+                let val = this.hospitalOptions.find(item => {
+                  return item.providerCode === newVal.hospitalcode
+                })
+                if (val !== null && val !== undefined) {
+                  if (val.enname1 != null && val.enname1 !== '') {
+                    this.baseForm.hospitalName = val.chname1 + '|' + val.enname1
+                  } else {
+                    this.baseForm.hospitalName = val.chname1
+                  }
+                  this.baseForm.hospitalCode = val.providerCode
 
-              this.baseForm.firstAttribute = val.firstAttribute
-              this.baseForm.secondAttribute = val.secondAttribute
-              this.baseForm.isDesHospital = val.flag
-            }
+                  this.baseForm.firstAttribute = val.firstAttribute
+                  this.baseForm.secondAttribute = val.secondAttribute
+                  this.baseForm.isDesHospital = val.flag
+                }
+              }
+            })
           }
-        })
+        }
         if (newVal !== null && newVal !== undefined) {
           this.baseForm.billCurrency = newVal.currency
         }

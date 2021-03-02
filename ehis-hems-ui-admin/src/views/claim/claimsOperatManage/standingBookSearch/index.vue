@@ -431,12 +431,14 @@
             pageNum: 1,
             pageSize: 200,
           }
-          if (query !== '' && query != null) {
-            getUsersByOrganCode(data).then(res => {
-              if (res != null && res.code === 200) {
-                this.userOptions = res.rows
-              }
-            })
+          if (data.organCode != null && data.organCode != '' && data.organCode != undefined){
+            if (query !== '' && query != null) {
+              getUsersByOrganCode(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.userOptions = res.rows
+                }
+              })
+            }
           }
         }
       },

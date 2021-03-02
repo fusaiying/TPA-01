@@ -45,11 +45,19 @@ public class TpaSettleDTO extends BaseEntity implements Serializable {
     /** 结算状态 (01-待确认、02-待结算、03-已结算) */
     private String settleStatus;
 
-    private String pageStatus;
+    private String pageType;
 
     private String status;
 
     private String deptCode;
+
+    public String getPageType() {
+        return pageType;
+    }
+
+    public void setPageType(String pageType) {
+        this.pageType = pageType;
+    }
 
     public String getSettleTaskNo() {
         return settleTaskNo;
@@ -115,14 +123,6 @@ public class TpaSettleDTO extends BaseEntity implements Serializable {
         this.settleStatus = settleStatus;
     }
 
-    public String getPageStatus() {
-        return pageStatus;
-    }
-
-    public void setPageStatus(String pageStatus) {
-        this.pageStatus = pageStatus;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -150,7 +150,6 @@ public class TpaSettleDTO extends BaseEntity implements Serializable {
                 ", creationStartDate=" + creationStartDate +
                 ", creationEndDate=" + creationEndDate +
                 ", settleStatus='" + settleStatus + '\'' +
-                ", pageStatus='" + pageStatus + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

@@ -55,13 +55,13 @@
             <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
+            <span class="info_span to_right">协谈类型：</span><span class="info_span">{{ getNegotiationTypesName(item.discType) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.disView) }}</span>
+            <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.disView) }}</span>
           </el-col>
         </el-row>
 
@@ -165,7 +165,7 @@
         deliverySource:[],
         claimStatusSelect:[],
         gender:[],
-
+        negotiationTypes:[],
         rules: {
           conclusion: {trigger: ['change'], required: true, message: '处理结论必填'},
           conclusionView: {trigger: ['change'], required: true, message: '协谈意见必填'}
@@ -197,6 +197,10 @@
        //性别
        this.getDicts("rgtSex").then(response => {
          this.gender = response.data;
+       });
+       //协谈类型
+       this.getDicts("negotiation_type").then(response => {
+         this.negotiationTypes = response.data;
        });
 
        if('' != this.rptNo) {
@@ -260,18 +264,25 @@
           historyDisInfo(this.rptNo).then(res => {
             if(res.code == '200' && res.rows) {
               this.HistoryData = res.rows;
-
               if(!this.handleView) {
-                let  vdata = this.HistoryData[this.HistoryData.length - 1];
-                this.baseInfo.disView = vdata.disView;
-                this.clussionForm.conclusion = vdata.conclusion;
-                this.clussionForm.conclusionView = vdata.conclusionView;
+                let filterData = this.HistoryData.filter(item => {
+                  return item.discId == this.discId
+                })
+                if(filterData.length > 0){
+                  let  vdata = filterData[0];
+                  this.baseInfo.disView = vdata.disView;
+                  this.clussionForm.conclusion = vdata.conclusion;
+                  this.clussionForm.conclusionView = vdata.conclusionView;
+                }
               }
             }
           });
         },
         getConclusionName(value) {
           return this.selectDictLabel(this.clusionSelect,value)
+        },
+        getNegotiationTypesName(value) {
+          return this.selectDictLabel(this.negotiationTypes,value)
         },
         getGenderName(value) {
           return this.selectDictLabel(this.gender, value)

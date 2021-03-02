@@ -201,7 +201,7 @@
       }
       // 获取所属服务机构下拉框
       getSupplierOptions().then(res =>{
-        if (response.code == 200) {
+        if (res.code == 200) {
           this.supplierOptions = res.data;
           console.log("data:", this.supplierOptions)
         }

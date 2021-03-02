@@ -57,11 +57,11 @@ export function updateTask(data) {
 }
 
 // 确认TPA服务费结算
-export function confirm(query) {
+export function updateConfirm(settleTaskNo) {
   return request({
-    url: '/finance/tpaTask/confirm',
-    method: 'get',
-    params: query
+    url: '/finance/tpaTask/' + settleTaskNo,
+    method: 'put',
+    data: settleTaskNo
   })
 }
 
@@ -72,4 +72,14 @@ export function exportInitiate(query) {
     method: 'post',
  // #  params: query  此处？传参&拼接
 })
+}
+
+
+//tpa 收款明细
+export function receiptColList(query) {
+  return request({
+    url: '/finance/tpaTask/tpaReceiptColList',
+    method: 'get',
+    params: query
+  })
 }

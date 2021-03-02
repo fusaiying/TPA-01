@@ -132,8 +132,6 @@
   import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
-  /*import importTable from "../components/importTable";*/
-
   export default {
     components: {
       feeDetail,
@@ -156,10 +154,11 @@
           // 设置上传的请求头部
           headers: {Authorization: "Bearer " + getToken()},
           // 上传的地址
-          url:''// process.env.VUE_APP_BASE_API + "/system/user/importData"
+          url:  process.env.VUE_APP_BASE_API + "/finance/tpaTask/importInitiate"
         },
 
         fixInfo:{},
+        btnSearch:false,
         importDialog:false,
         detailDialog:false,
         status:'01',
@@ -259,6 +258,14 @@
         params.settleEndDate = this.formSearch.settleEndDate;
         params.pageStatus = '01';
         this.searchLoad = true;
+
+        if(!this.btnSearch) {
+          params.pageType = '01';
+          let startDate  = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+          let endDate =  moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+          params.creationStartDate = startDate;
+          params.creationEndDate = endDate;
+        }
         listInfo(params).then(res => {
           if (res.code == '200') {
             this.total = res.total;
@@ -303,6 +310,8 @@
         this.importDialog = true;
       },
       closeImportDialog() {
+        this.$refs.upload.clearFiles()
+        this.upload.isUploading = false;
         this.importDialog = false
       },
       //导入弹框 end

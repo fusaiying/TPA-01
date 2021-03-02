@@ -88,7 +88,7 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>收款明细</span>
-        <el-button  style="float: right;" type="primary" size="mini" @click="dealFun">核销
+        <el-button style="float: right; margin-right: 10px;" type="primary" size="mini" @click="dealFun">核销
         </el-button>
       </div>
 

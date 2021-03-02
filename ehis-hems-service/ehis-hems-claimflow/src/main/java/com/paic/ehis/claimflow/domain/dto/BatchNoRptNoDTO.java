@@ -1,13 +1,15 @@
 package com.paic.ehis.claimflow.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author fusaiying
+ */
 @Data
-public class BatchNoRptNoDTO extends BaseEntity {
+public class BatchNoRptNoDTO{
 
     /**
      * 交单来源
@@ -65,4 +67,19 @@ public class BatchNoRptNoDTO extends BaseEntity {
      * 案件第五位标识码
      */
     private String caseFlag;
+
+    @Override
+    public String toString() {
+        return "BatchNoRptNoDTO{" +
+                "provider='" + provider + '\'' +
+                ", billDate=" + billDate +
+                ", batchCount='" + batchCount + '\'' +
+                ", batchAmount='" + batchAmount + '\'' +
+                ", branchRegion='" + branchRegion + '\'' +
+                ", isReceiptSubmit='" + isReceiptSubmit + '\'' +
+                ", receiveDate=" + receiveDate +
+                ", directReceiptSign='" + directReceiptSign + '\'' +
+                ", caseFlag='" + caseFlag + '\'' +
+                '}';
+    }
 }

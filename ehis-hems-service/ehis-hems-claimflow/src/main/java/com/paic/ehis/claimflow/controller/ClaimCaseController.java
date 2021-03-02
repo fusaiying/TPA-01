@@ -8,6 +8,7 @@ import com.paic.ehis.claimflow.service.*;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -606,7 +607,7 @@ public class ClaimCaseController extends BaseController {
             BatchNoRptNoVO batchNoRptNoVO = new BatchNoRptNoVO();
             List<String> rptNoList = new ArrayList<>();
 
-            for (int i = 0; i <= i1; i++) {
+            for (int i = 0; i < i1; i++) {
                 //报案号
                 String bahtime = "96" + "JGH0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
                 rptNoList.add(bahtime);
@@ -639,7 +640,7 @@ public class ClaimCaseController extends BaseController {
             claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
             claimBatch.setDirectReceiptSign(batchNoRptNoDTO.getDirectReceiptSign());//批次是否单张发票
             claimBatch.setCaseFlag(batchNoRptNoDTO.getCaseFlag());//案件第五位标识码
-            //claimBatch.setCreateBy(SecurityUtils.getUsername());
+            claimBatch.setCreateBy(SecurityUtils.getUsername());
             claimBatch.setCreateTime(nowDate);
             //claimBatch.setUpdateBy(SecurityUtils.getUsername());
             //claimBatch.setUpdateTime(nowDate);
@@ -666,7 +667,7 @@ public class ClaimCaseController extends BaseController {
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimCase.setBatchNo(batchNo);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectClaimCaseByBatchNo(claimCase);
-        if (processingCaseVos.size()==0) {//已经进行影像件扫描
+        if (processingCaseVos.size()!=0) {//已经进行影像件扫描
             return AjaxResult.error("该批次已经完成影像件扫描，不能撤件！");
         } else {//未进行影像件扫描-完成撤件
             return toAjax(claimBatchService.updateClaimBatchBybatchNo(batchNo));

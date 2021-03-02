@@ -414,6 +414,9 @@
           this.recoveryForm.debtAmountUp = row.debtAmountUp;
           this.recoveryForm.recMessageFlag = row.recMessageFlag;
           this.recoveryForm.insuredNo =  row.insuredNo;
+          if(row.birthday != '') {
+            this.recoveryInfo.age = this.getAge(row.birthday)
+          }
         },
         delFun(row) {
           const params = {

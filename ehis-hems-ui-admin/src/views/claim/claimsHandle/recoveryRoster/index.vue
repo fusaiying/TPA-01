@@ -225,6 +225,7 @@
       },
         data() {
             return {
+              searchBtn:false,
               saveVFlag:true,
               dialogPolicy:false,
               fixInfo: {
@@ -361,22 +362,25 @@
             idNo:this.form.idNo,
             level:this.form.level,
             debtAmountUp:this.form.debtAmountUp,
-
             // orderByColumn:'create_time',
             // isAsc:'desc'
           };
+          if(!this.searchBtn) {
+            params.recMessageFlag = '01';
+          }
 
           this.loading = true;
           listInfo(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+            this.totalNum = response.total;
+            this.tableData = response.rows;
+            this.loading = false
           }).catch(error => {
             this.loading = false
             console.log(error);
           });
         },
         searchByFormParms(){
+          this.searchBtn = true;
           this.pageInfo.currentPage = 1;
           this.pageInfo.pageSize = 10;
           this.gettableData();

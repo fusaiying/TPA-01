@@ -294,6 +294,29 @@
         where rpt_no = #{rptNo} and status = 'Y'
     </update>
 
+    <!--lhy-->
+    <update id="updateClaimCaseNew" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
+    update claim_case
+    <trim prefix="SET" suffixOverrides=",">
+        <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+        <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
+        <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
+        <if test="pulloutType != null">pullout_type = #{pulloutType},</if>
+        <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
+        <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
+        <if test="endCaseTime != null">end_case_time = #{endCaseTime},</if>
+        <if test="isAppeal != null">is_appeal = #{isAppeal},</if>
+        <if test="payStatus != null">pay_status = #{payStatus},</if>
+        <if test="status != null and status != ''">status = #{status},</if>
+        <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateBy != null">update_by = #{updateBy},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        is_finance_back = null
+    </trim>
+    where rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
     <update id="updatecaseStatus" parameterType="String">
         update claim_case
         set case_status ='05'

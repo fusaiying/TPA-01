@@ -49,6 +49,7 @@
             <el-form-item label="机构：" prop="organcode">
               <el-select v-model="searchForm.organcode" class="item-width" placeholder="请选择"
                          remote
+                         clearable
                          reserve-keyword
                          filterable
                          :remote-method="remoteMethod"
@@ -63,6 +64,7 @@
             <el-form-item label="操作人：" prop="createBy">
               <el-select v-model="searchForm.createBy" class="item-width" placeholder="请选择"
                          remote
+                         clearable
                          reserve-keyword
                          filterable
                          :remote-method="remoteUserMethod">
@@ -321,7 +323,7 @@
               item.isEdit = true
             })
             this.totalCount = res.total
-            if (res.deptlist.length <= 0) {
+            if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
               )

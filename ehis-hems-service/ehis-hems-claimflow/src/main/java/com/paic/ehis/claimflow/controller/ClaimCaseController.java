@@ -622,9 +622,13 @@ public class ClaimCaseController extends BaseController {
 
             ClaimBatch claimBatch = new ClaimBatch();
             claimBatch.setBatchno(str1);//批次号
-            claimBatch.setSource(batchNoRptNoDTO.getSource());//交单来源
+            if("D".equals(batchNoRptNoDTO.getCaseFlag())){
+                claimBatch.setSource("01");//交单来源（01-在线交单，02-E结算）
+            }else {
+                claimBatch.setSource("02");//交单来源（01-在线交单，02-E结算）
+            }
             claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
-            claimBatch.setClaimtype(batchNoRptNoDTO.getClaimType());//理赔类型
+            claimBatch.setClaimtype("01");//理赔类型(01-直结，02-事后)
             claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
             claimBatch.setCasenum(i1);//案件数量
             BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
@@ -667,8 +671,6 @@ public class ClaimCaseController extends BaseController {
         } else {//未进行影像件扫描-完成撤件
             return toAjax(claimBatchService.updateClaimBatchBybatchNo(batchNo));
         }
-
     }
-
 
 }

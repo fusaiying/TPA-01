@@ -2,7 +2,6 @@ package com.paic.ehis.claimflow.mapper;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCase;
-import com.paic.ehis.claimflow.domain.ClaimCaseRecord;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 
@@ -186,6 +185,9 @@ public interface ClaimCaseMapper
     public List<String>  selepostHocAccountingOfCases(String batchNo);
 
     int updateClaimCaseCheck(ClaimCaseCheckDTO claimCaseCheckDTO);
+
+    //修改case表
+    public int updateClaimCaseNew(ClaimCase claimCase);
 
     //抽检待处理
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderNew(AuditWorkPoolDTO auditWorkPoolDTO);//待处理

@@ -12,7 +12,7 @@ public class BatchNoRptNoDTO extends BaseEntity {
     /**
      * 交单来源
      */
-    private String source;
+    //private String source;
 
     /**
      * 就诊医院ID
@@ -22,7 +22,7 @@ public class BatchNoRptNoDTO extends BaseEntity {
     /**
      * 批次理赔类型
      */
-    private String claimType;
+    //private String claimType;
 
     /**
      * 交单日期

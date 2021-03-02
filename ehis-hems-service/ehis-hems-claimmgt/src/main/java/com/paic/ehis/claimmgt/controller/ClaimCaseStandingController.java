@@ -64,9 +64,9 @@ public class ClaimCaseStandingController extends BaseController
      * 查询台账
      * */
     @GetMapping("/listNew")
-    public TableDataInfo listNew(ClaimCaseStandingDTO claimCaseStandingDTO)
+    public TableDataInfo listNew(@RequestBody ClaimCaseStandingDTO claimCaseStandingDTO)
     {
-        startPage();
+        startPage(claimCaseStandingDTO);
         List<ClaimCaseStandingVo1> list = claimCaseStandingService.selectClaimCaseStandingListNew(claimCaseStandingDTO);
         return getDataTable(list);
     }

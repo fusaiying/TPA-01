@@ -64,7 +64,7 @@
             :data="tableData"
             v-loading="loading"
             size="mini"
-            tooltip-effect="darky"
+            tooltip-effect="dark"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
             <el-table-column prop="batchNo" label="批次号" min-width="170" align="center" show-overflow-tooltip />

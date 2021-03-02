@@ -597,12 +597,14 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer" disabled>工单挂起</el-button>
+<!--        <el-button  type="primary"  size="mini" @click="transfer" disabled>工单挂起</el-button>-->
         <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
         <el-button type="primary" size="mini" @click="submit">提交</el-button>
-        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>
+<!--        <el-button  type="primary"  size="mini" @click="upload" disabled>客户信息匹配</el-button>-->
         <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
         <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
+        <el-button  type="primary" size="mini" @click="hiddenShow">关闭</el-button>
+
       </div>
     </el-card>
 
@@ -977,6 +979,13 @@
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.ids = selection.map(item => item.workOrderNo);
+
+      },
+      //关闭按钮
+      hiddenShow: function () {
+        // 返回上级路由并关闭当前路由
+        this.$store.state.tagsView.visitedViews.splice(this.$store.state.tagsView.visitedViews.findIndex(item => item.path === this.$route.path), 1)
+        this.$router.push(this.$store.state.tagsView.visitedViews[this.$store.state.tagsView.visitedViews.length - 1].path)
 
       },
 

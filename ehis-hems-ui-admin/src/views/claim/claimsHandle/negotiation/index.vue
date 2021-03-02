@@ -95,6 +95,7 @@
 <script>
 import claimsTable from './components/claimsTable'
 import { PendingData,processedData } from '@/api/negotiation/api'
+import moment from "moment";
 export default {
   dicts: ['negotiation_mode', 'queue_claim_status', 'apply_sourcetype', 'negotiation_type'],
   name: 'Negotiation',
@@ -133,6 +134,7 @@ export default {
       deliverySource:[],
       claimStatusSelect:[],
       negotiationTypes:[],
+      searchBtn:false,
     }
   },
   mounted(){
@@ -150,9 +152,8 @@ export default {
     });
   },
   created() {
-    // this.getPendingData()
-    // this.getProcessedData()
-    this.searchHandle()
+    this.getPendingData();
+    this.getProcessedData();
   },
   watch: {
     totalChange: function(newVal, oldVal) {
@@ -174,6 +175,7 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
+      this.searchBtn = true;
       this.pendPageInfo.pageNum = 1;
       this.pendPageInfo.pageSize = 10;
       this.completePageInfo.pageNum = 1;
@@ -228,6 +230,15 @@ export default {
       params.createBy = createBy;
       params.pageNum = this.completePageInfo.pageNum;
       params.pageSize = this.completePageInfo.pageSize;
+
+      let startTime = '';
+      let endTime = '';
+      if (!this.searchBtn) {
+        startTime = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
+        endTime = moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
+      }
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
       processedData(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;

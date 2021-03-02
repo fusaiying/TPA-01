@@ -96,6 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y')  </if>
             <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
             <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
         GROUP BY
             a.batch_no
         ORDER BY
@@ -157,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
             <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
             <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
         GROUP BY
             a.batch_no
         ORDER BY

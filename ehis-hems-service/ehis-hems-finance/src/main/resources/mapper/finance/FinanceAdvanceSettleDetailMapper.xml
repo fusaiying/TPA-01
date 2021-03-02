@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFinanceAdvanceSettleDetailVo"/>
         where detail_id = #{detailId}
     </select>
-        
+
     <insert id="insertFinanceAdvanceSettleDetail" parameterType="com.paic.ehis.finance.domain.FinanceAdvanceSettleDetail" useGeneratedKeys="true" keyProperty="detailId">
         insert into finance_advance_settle_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">

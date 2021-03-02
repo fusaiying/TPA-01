@@ -596,7 +596,7 @@
         this.tableData = subFormSearch.policyInfoData
         this.isInsuredSave = true
         this.$emit('emitSaveFlag')
-
+        this.$emit('getInsuredData')
       },
 
       closeDialogVisable() {
@@ -712,6 +712,7 @@
                 })
                 this.isInsuredSave = true
                 this.$emit('emitSaveFlag')
+                this.$emit('getInsuredData')
               } else {
                 this.$message({
                   message: '保存失败!',

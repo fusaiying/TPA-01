@@ -449,13 +449,14 @@
         addRecovery() {
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = [];
+          this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = [];
+          this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
           this.addFlag = true;
           this.dialogVisible = true;
           this.$refs['recoveryForm'].clearValidate();
+
         },
         saveDataFun(){
           if(this.recoveryForm.insuredNo == '') {
@@ -511,16 +512,13 @@
         handleClose() {
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = [];
+          this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = [];
+          this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
           this.$refs['recoveryForm'].clearValidate();
           this.dialogVisible = false;
         },
-        // closeDialog(){
-        //   this.dialogVisible = false;
-        // },
         getAge (strBirthday) {
           let returnAge;
           let strBirthdayArr=strBirthday.split("-");

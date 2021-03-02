@@ -145,7 +145,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.placeType'"
                             :rules="constactRules.placeType">
-                <el-select v-model="scope.row.placeType" placeholder="请选择" size="mini">
+                <el-select v-model="scope.row.placeType" placeholder="请选择" size="mini" @change="isRepeated(scope.$index,scope.row)">
                   <el-option v-for="item in linkman_typeOptions" :key="item.dictValue" :label="item.dictLabel"
                              :value="item.dictValue"/>
                 </el-select>
@@ -781,6 +781,21 @@
 
       }
       ,
+
+      //运营负责人只能有一个
+      isRepeated(index,data) {
+
+      //找到联系人为运营服务人的数据
+        let placeType= this.contactForm.contacts.filter(item => {
+          return item.placeType==='02';
+        })
+        //重复了
+        if(placeType.length==2){
+         data.placeType=''
+          this.$message.warning('联系人信息中运营负责人只能存在一位')
+        }
+        },
+
       selectChange(row, value) {
         row.unitebankcode = value[3]
         /* this.accountForm.account[i].unitebankcode = ''

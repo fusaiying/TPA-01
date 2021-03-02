@@ -363,6 +363,7 @@
         //获取公共池
         getPublicList(query).then(res => {
           this.publicData = res.rows
+          this.publicTotal = res.total
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"

@@ -181,12 +181,12 @@
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
-          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
@@ -197,7 +197,7 @@
               <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>

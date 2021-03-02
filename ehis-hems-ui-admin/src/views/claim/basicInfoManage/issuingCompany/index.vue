@@ -64,7 +64,7 @@
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="editCompany(scope.row)">编辑</el-button>
-              <el-button type="text" size="mini" style="color: #f00;" @click="serviceRuleDefin(scope.row)">规则
+              <el-button type="text" size="mini" :class="{blueClass:scope.row.flag==false,redClass:scope.row.flag==true}" @click="serviceRuleDefin(scope.row)">规则
               </el-button>
             </template>
           </el-table-column>
@@ -90,6 +90,8 @@ import {listIssuingcompany} from '@/api/baseInfo/issuingCompany.js'
 export default {
   data() {
     return {
+      blueClass:'blueClass',
+      redClass:'redClass',
       loading: true,
       formSearch: {},
       totalCount: 0,
@@ -166,4 +168,10 @@ export default {
 .el-form-item ::v-deep label {
   font-weight: normal;
 }
+  .blueClass{
+    color: #1890ff;
+  }
+  .redClass{
+    color: #f00;
+  }
 </style>

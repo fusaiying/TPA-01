@@ -84,7 +84,7 @@
 
           <el-col :span="24" style="text-align: right;">
           <span style="padding-right: 20px;">
-            <el-button size="mini" type="primary" @click="problemOut">问题件转出</el-button>
+            <el-button v-if="saveVFlag" size="mini" type="primary" @click="problemOut">问题件转出</el-button>
 
              <el-button size="mini" type="primary" @click="restForm">重置</el-button>
             <el-button

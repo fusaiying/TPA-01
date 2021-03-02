@@ -471,7 +471,7 @@
       //获取按钮
       obtainButton(s){
         if(s.workOrderNo==null&&this.ids.length===0){
-          alert("请先选中一行！")
+          this.$message.warning("请先选中一行！")
         }else {
         if (s.workOrderNo!=null) {
           let workOrderNo=s.workOrderNo
@@ -485,7 +485,7 @@
            const workOrderNos=this.ids
           complaintObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              alert("success")
+              this.$message.success("批量获取成功")
             }
           }).catch(res => {
 

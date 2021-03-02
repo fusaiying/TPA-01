@@ -750,7 +750,7 @@
         let send=this.workPoolData
         modifyReservationSubmit(send).then(res => {
           if (res != null && res.code === 200) {
-            alert("保存成功！")
+            this.$message.success("保存成功！")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "提交失败！"

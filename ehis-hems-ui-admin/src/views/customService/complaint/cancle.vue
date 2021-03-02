@@ -681,8 +681,7 @@
         insert.workOrderNo=this.$route.query.workOrderNo
         complaintCancelSubmit(insert).then(res => {
           if (res != null && res.code === 200) {
-            console.log("insert",insert)
-            alert("取消成功")
+            this.$message.success("保存成功")
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "失败！"

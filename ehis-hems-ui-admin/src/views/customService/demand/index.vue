@@ -368,7 +368,6 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
-
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -492,7 +491,7 @@
       //获取按钮
       obtainButton(s){
         if(s.workOrderNo==null&&this.ids.length===0){
-          alert("请先选中一行！")
+          this.$message.warning("请先选中一行！")
         }else {
         if (s.workOrderNo!=null) {
           let workOrderNo=s.workOrderNo
@@ -573,7 +572,6 @@
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.rows.length
-            console.log("gonggongchi",this.workPoolData)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"

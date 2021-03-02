@@ -157,11 +157,10 @@ public class FinanceAdvanceSettleDetailController extends BaseController
 
     /**
      * 导入TPA服务费结算任务列表
-     */
     @Log(title = "垫付款服务费结算任务", businessType = BusinessType.IMPORT)
     @PostMapping("/importInitiate")
     public AjaxResult excelImport(MultipartFile file){
 
         return toAjax(financeAdvanceSettleDetailService.importAdvanceSettleTask(file));
-    }
+    }*/
 }

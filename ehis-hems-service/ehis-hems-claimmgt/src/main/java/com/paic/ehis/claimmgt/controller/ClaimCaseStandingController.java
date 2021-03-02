@@ -63,7 +63,7 @@ public class ClaimCaseStandingController extends BaseController
     /**
      * 查询台账
      * */
-    @GetMapping("/listNew")
+    @PostMapping("/listNew")
     public TableDataInfo listNew(@RequestBody ClaimCaseStandingDTO claimCaseStandingDTO)
     {
         startPage(claimCaseStandingDTO);

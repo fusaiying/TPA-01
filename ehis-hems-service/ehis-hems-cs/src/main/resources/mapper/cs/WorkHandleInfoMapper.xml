@@ -385,9 +385,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCreatedBy" parameterType="WorkHandleInfo" resultMap="WorkHandleInfoResult">
         select  handle_id from work_handle_info   where work_order_no=#{workOrderNo}  and created_by=#{createdBy}
     </select>
+
     <select id="selectWorkHandleInfoByNo" parameterType="string" resultType="com.paic.ehis.cs.domain.WorkHandleInfo">
         select * from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
     </select>
+
+    <select id="selectDealVoByNo" parameterType="string" resultType="com.paic.ehis.cs.domain.vo.ComplaintDealVo">
+    select handle_id, handle_type, work_order_no, flag, status, created_by, created_time, updated_by, updated_time, remark where work_order_no = #{workOrderNo}
+    </select>
+
     <update id="updateStatus"   parameterType="WorkHandleInfo" >
         update work_handle_info set status="N"  where status="Y"  and work_order_no=#{workOrderNo}
     </update>

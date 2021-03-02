@@ -235,9 +235,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         PersonInfo callPerson= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
         PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
         PersonInfo complainantPerson=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
-        PersonInfo personInfo1=new PersonInfo();
-        PersonInfo personInfo2=new PersonInfo();
-        PersonInfo personInfo3=new PersonInfo();
+        PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
+        PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
+        PersonInfo complaintPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
@@ -269,36 +269,37 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
-        personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
-        personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
-        personInfo1.setCreatedBy(SecurityUtils.getUsername());
-        personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfo1.setUpdatedBy(SecurityUtils.getUsername());
-        personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(personInfo1);
+        callPerson.setPersonId(complaintAcceptVo.getCallPersonId());
+        callPerson.setName(complaintAcceptVo.getCallPerson().getName());
+        callPerson.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
+        callPerson.setCreatedBy(SecurityUtils.getUsername());
+        callPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(callPerson);
         //插入联系人
-        personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
-        personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
-        personInfo2.setName(complaintAcceptVo.getContactsPerson().getName());
-        personInfo2.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
-        personInfo2.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
-        personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        personInfo2.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        personInfo2.setCreatedBy(SecurityUtils.getUsername());
-        personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfo2.setUpdatedBy(SecurityUtils.getUsername());
-        personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(personInfo2);
+        contactsPerson.setPersonId(complaintAcceptVo.getContactsPersonId());
+        contactsPerson.setSex(complaintAcceptVo.getContactsPerson().getSex());
+        contactsPerson.setName(complaintAcceptVo.getContactsPerson().getName());
+        contactsPerson.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
+        contactsPerson.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
+        contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
+        contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        contactsPerson.setCreatedBy(SecurityUtils.getUsername());
+        contactsPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(contactsPerson);
         //插入投诉人
-        personInfo1.setPersonId(complaintAcceptVo.getComplaintPersonId());
-        personInfo1.setName(complaintAcceptVo.getComplainantPerson().getName());
-        personInfo1.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
-        personInfo1.setCreatedBy(SecurityUtils.getUsername());
-        personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfo1.setUpdatedBy(SecurityUtils.getUsername());
-        personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(personInfo1);
+        complainantPerson.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        complainantPerson.setName(complaintAcceptVo.getComplainantPerson().getName());
+        complainantPerson.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
+        complainantPerson.setCreatedBy(SecurityUtils.getUsername());
+        complainantPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        complainantPerson.setUpdatedBy(SecurityUtils.getUsername());
+        complainantPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(complainantPerson);
 
         //轨迹表插入
         flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
@@ -308,10 +309,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//        demandAcceptVoMapper.insertFlowLog(flowLog);
 
-//        AcceptDetailInfo acceptDetailInfo2= acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
-//        WorkOrderAccept workOrderAccept2=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo1), Map.class);
@@ -340,22 +338,12 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-//                editInfo.setEditId(editDetail.getEditId());
-//                editInfo.setWorkOrderId(workOrderNo);
-//                editInfo.setCreatedBy(SecurityUtils.getUsername());
-//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-//                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
-//                editInfoMapper.insertEditInfo(editInfo);
-
             }
 
         }
 
-        Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
-        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(personInfo1), Map.class);
+        Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
+        Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
 
         //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
@@ -380,22 +368,13 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-//                editInfo.setEditId(editDetail.getEditId());
-//                editInfo.setWorkOrderId(workOrderNo);
-//                editInfo.setCreatedBy(SecurityUtils.getUsername());
-//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-//                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
-//                editInfoMapper.insertEditInfo(editInfo);
 
             }
 
         }
 
-        Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
-        Map map6 = JSONObject.parseObject(JSONObject.toJSONString(personInfo2), Map.class);
+        Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson1), Map.class);
+        Map map6 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
 
         Iterator<String> iter3 = map5.keySet().iterator();
         while(iter3.hasNext()){
@@ -417,22 +396,13 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-//                editInfo.setEditId(editDetail.getEditId());
-//                editInfo.setWorkOrderId(workOrderNo);
-//                editInfo.setCreatedBy(SecurityUtils.getUsername());
-//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-//                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
-//                editInfoMapper.insertEditInfo(editInfo);
 
             }
 
         }
 
-        Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complainantPerson), Map.class);
-        Map map8 = JSONObject.parseObject(JSONObject.toJSONString(personInfo3), Map.class);
+        Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson1), Map.class);
+        Map map8 = JSONObject.parseObject(JSONObject.toJSONString(complainantPerson), Map.class);
 
         Iterator<String> iter4 = map7.keySet().iterator();
         while(iter4.hasNext()){
@@ -454,15 +424,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-//                editInfo.setEditId(editDetail.getEditId());
-//                editInfo.setWorkOrderId(workOrderNo);
-//                editInfo.setCreatedBy(SecurityUtils.getUsername());
-//                editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setUpdatedBy(SecurityUtils.getUsername());
-//                editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//                editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
-//                editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
-//                editInfoMapper.insertEditInfo(editInfo);
             }
         }
 

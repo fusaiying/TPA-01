@@ -126,14 +126,11 @@ public class WorkHandleInfoController extends BaseController
         List<WorkHandleInfo> list = workHandleInfoService.selectOrderWorkOrder(reservationDealVo);
         return getDataTable(list);
     }
-    /**
-     * 查询工单业处理信息 投诉
-     */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectComplaintWorkOrder")
-    public TableDataInfo selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
-        List<WorkHandleInfo> list = workHandleInfoService.selectComplaintWorkOrder(complaintDealVo);
-        return getDataTable(list);
+
+    @GetMapping("/selectComp")
+    public AjaxResult selectWorkHandleInfoByNo(String workOrderNo) {
+        return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));
+
     }
 
 }

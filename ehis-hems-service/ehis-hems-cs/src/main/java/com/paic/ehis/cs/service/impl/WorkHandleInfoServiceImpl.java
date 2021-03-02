@@ -605,23 +605,41 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     /**
      * 查询工单业处理信息 投诉
      */
+//    @Override
+//    public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
+//        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+//        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
+//        workHandleInfo.setStatus("Y");
+//        String sourceName="ComplaintDealVo";
+//        String targetTableName="work_handle_info";
+//        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+//        for (FieldMap fieldMap:KVMap){
+//            fieldMap.getTargetColumnName();
+//            fieldMap.getSourceFiledName();
+//            Map map=new HashMap<String,String>();
+//            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+//            VoUtils voUtils=new VoUtils<ComplaintDealVo>();
+//            complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
+//        }
+//        return workHandleInfoMapper.selectWorkHandleInfoByNo(complaintDealVo.getWorkOrderNo());
+//    }
+
     @Override
-    public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
-        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-        workHandleInfo.setStatus("Y");
+    public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo) {
+        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
+        ComplaintDealVo complaintDealVo=workHandleInfoMapper.selectDealVoByNo(workOrderNo);
         String sourceName="ComplaintDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
-            fieldMap.getSourceFiledName();
+           fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
             map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
             VoUtils voUtils=new VoUtils<ComplaintDealVo>();
             complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
         }
-        return workHandleInfoMapper.selectWorkHandleInfoByNo(complaintDealVo.getWorkOrderNo());
+        return complaintDealVo;
     }
 
 }

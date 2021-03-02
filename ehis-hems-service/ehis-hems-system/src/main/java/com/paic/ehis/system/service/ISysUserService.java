@@ -3,6 +3,7 @@ package com.paic.ehis.system.service;
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
 import com.paic.ehis.system.domain.vo.UserVo;
 
@@ -195,5 +196,10 @@ public interface ISysUserService
 
     public int selectDept(String username);
 
-
+    /**
+     * 根据机构编码获取操作人
+     * @param sysUserByOrganCodeDTO
+     * @return
+     */
+    public List<SysUser> getUsersByOrganCode(SysUserByOrganCodeDTO sysUserByOrganCodeDTO);
 }

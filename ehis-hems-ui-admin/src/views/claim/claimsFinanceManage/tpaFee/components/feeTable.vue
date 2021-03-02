@@ -6,8 +6,9 @@
     highlight-current-row
     tooltip-effect="dark"
     v-loading="dataSearchLoad"
+    @selection-change="handleSelectionChange"
     style="width: 100%;">
-
+    <el-table-column v-if="status == '03'" type="selection" width="50" align="center"/>
     <el-table-column align="center" prop="settleTaskNo" label="任务号" show-overflow-tooltip/>
     <el-table-column align="center" prop="companyCode" label="出单公司" show-overflow-tooltip/>
     <el-table-column align="center" prop="settlementType" label="结算类型" :formatter="getSettlementName" show-overflow-tooltip/>
@@ -56,22 +57,9 @@ export default {
   },
   watch: {
     status: function (newValue) {
-      console.log("************************")
-      console.log("************************")
-      console.log(newValue)
-      console.log("************************")
-      console.log("************************")
-
       this.dataType = newValue;
     },
     loading: function (newVal){
-      console.log("********444444444****************")
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log(newVal)
-      console.log("*******4444444444444444444*****************")
     },
     tableData:function(newValue) {
       this.dataSearchLoad = false;
@@ -140,21 +128,12 @@ export default {
       this.detailInfo.type = type;
       this.$emit('openDetail',this.detailInfo);
       this.detailDialog = true;
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.settleTaskNos = (selection.map(item => item.settleTaskNo));
+      this.$emit('checkBoxVue',this.settleTaskNos);
     }
-    // detailHandle(row, status) {
-    //   let data = encodeURI(
-    //     JSON.stringify({
-    //       claimno: 'xxx',
-    //       node: 'review'
-    //     })
-    //   )
-    //   const newpage = this.$router.resolve({
-    //     name: 'casedetail',
-    //     params:{},
-    //     query:{ data }
-    //   })
-    //   window.open(newpage.href, '_blank');
-    // }
     ,getStatusName(row,col){
       return this.selectDictLabel(this.settleStatus, row.settleStatus)
     }

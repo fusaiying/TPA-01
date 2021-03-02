@@ -1,7 +1,7 @@
 package com.paic.ehis.system.service;
 
 import com.paic.ehis.system.domain.SysOrganInfo;
-import com.paic.ehis.system.domain.vo.SysOrganInfoDownVo;
+import com.paic.ehis.system.domain.dto.OrganListDTO;
 
 import java.util.List;
 
@@ -71,8 +71,8 @@ public interface ISysOrganInfoService
 
     /**
      * 根据当前机构编码查询下属机构清单
-     * @param organCode
+     * @param organListDTO
      * @return
      */
-    public SysOrganInfoDownVo selectOrganListByUpOrganCode(String organCode);
+    public List<SysOrganInfo> selectOrganListByUpOrganCode(OrganListDTO organListDTO);
 }

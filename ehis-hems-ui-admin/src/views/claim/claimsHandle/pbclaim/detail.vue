@@ -228,10 +228,15 @@
           if(res.code == '200' && res.data.claimCaseProblems.length >0) {
             this.HistoryData = res.data.claimCaseProblems;
             if(!this.handleView) {
-                let  vdata = this.HistoryData[this.HistoryData.length - 1];
+              let filterData = this.HistoryData.filter(item => {
+                return item.problemId == this.problemId
+              })
+              if(filterData.length > 0){
+                let  vdata = filterData[0];
                 this.dealInfo.problemType = vdata.problemType;
                 this.dealInfo.problemView = vdata.problemView;
                 this.clussionForm.conclusionView = vdata.conclusionView;
+              }
             }
           }
         });

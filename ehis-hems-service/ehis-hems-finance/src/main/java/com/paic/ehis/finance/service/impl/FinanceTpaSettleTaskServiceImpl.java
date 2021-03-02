@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.BeanUtils;
@@ -47,8 +48,8 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     @Autowired
     private BaseIssuingcompanyRiskrelaMapper baseIssuingcompanyRiskrelaMapper;
 
-    @Autowired
-    SysUserMapper sysUserMapper;
+//    @Autowired
+//    SysUserMapper sysUserMapper;
 
     @Autowired
     private BaseIssuingcompanyRuleMapper baseIssuingcompanyRuleMapper;
@@ -280,9 +281,6 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
     @Override
     public  List<FinanceTpaSettleTask>  selectTpaSettleTaskList(TpaSettleDTO tpaSettleDTO) {
         tpaSettleDTO.setStatus("Y");
-        if ("03".equals(tpaSettleDTO.getPageStatus())){
-            tpaSettleDTO.setSettleStatus("'02','03'");
-        }
         return financeTpaSettleTaskMapper.selectTpaSettleTaskList(tpaSettleDTO);
     }
 
@@ -303,7 +301,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
      * @param file TPA服务费结算任务
      * @return TPA服务费结算任务Map
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int importTpaSettleTask(MultipartFile file) {
         FinanceTpaSettleTask tpaSettleTask = new FinanceTpaSettleTask();
@@ -352,6 +350,7 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
             tpaSettleTask.setServiceSettleAmount(feeTotalAmount);
             tpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
             tpaSettleTask.setUpdateTime(DateUtils.getNowDate());
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -402,27 +401,30 @@ public class FinanceTpaSettleTaskServiceImpl implements IFinanceTpaSettleTaskSer
      * @param settleTaskNo TPA服务费结算任务
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int confirmTpaSettleTask(String settleTaskNo) {
         FinanceTpaSettleTask financeTpaSettleTask = new FinanceTpaSettleTask();
         FinanceSettleRecord settleRecord = new FinanceSettleRecord();
 
         financeTpaSettleTask.setSettleTaskNo(settleTaskNo);
-        financeTpaSettleTask.setSettleStatus("02");
+        financeTpaSettleTask.setSettleStatus("03");
         financeTpaSettleTask.setUpdateBy(SecurityUtils.getUsername());
         financeTpaSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         FinanceSettleRecord financeSettleRecord = financeSettleRecordMapper.selectNRecordBySettleTaskNo(settleTaskNo);
-        BeanUtils.copyProperties(financeSettleRecord,settleRecord);
         financeSettleRecord.setHistoryFlag("Y");
         financeSettleRecord.setOperator(SecurityUtils.getUsername());
         financeSettleRecord.setUpdateBy(SecurityUtils.getUsername());
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
         financeSettleRecordMapper.updateFinanceSettleRecord(financeSettleRecord);
-        settleRecord.setRecordId(null);
+        settleRecord.setOperator("");
+        settleRecord.setTaskType("01");
+        settleRecord.setHistoryFlag("N");
+        settleRecord.setSettleTaskNo(financeSettleRecord.getSettleTaskNo());
         settleRecord.setOperation("03");
         settleRecord.setOrgRecordId(financeSettleRecord.getRecordId());
+        settleRecord.setStatus("Y");
         settleRecord.setCreateBy(SecurityUtils.getUsername());
         settleRecord.setCreateTime(DateUtils.getNowDate());
         settleRecord.setUpdateBy(SecurityUtils.getUsername());

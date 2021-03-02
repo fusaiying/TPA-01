@@ -294,6 +294,29 @@
         where rpt_no = #{rptNo} and status = 'Y'
     </update>
 
+    <!--lhy-->
+    <update id="updateClaimCaseNew" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
+    update claim_case
+    <trim prefix="SET" suffixOverrides=",">
+        <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+        <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
+        <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
+        <if test="pulloutType != null">pullout_type = #{pulloutType},</if>
+        <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
+        <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
+        <if test="endCaseTime != null">end_case_time = #{endCaseTime},</if>
+        <if test="isAppeal != null">is_appeal = #{isAppeal},</if>
+        <if test="payStatus != null">pay_status = #{payStatus},</if>
+        <if test="status != null and status != ''">status = #{status},</if>
+        <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+        <if test="createTime != null">create_time = #{createTime},</if>
+        <if test="updateBy != null">update_by = #{updateBy},</if>
+        <if test="updateTime != null">update_time = #{updateTime},</if>
+        is_finance_back = null
+    </trim>
+    where rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
     <update id="updatecaseStatus" parameterType="String">
         update claim_case
         set case_status ='05'
@@ -483,7 +506,8 @@
                     cases.rpt_no,
                     cases.batch_no,
                     cases.case_status,
-                    record.operator
+                    record.operator,
+                    record.update_time
                 FROM
                     claim_case cases
                         INNER JOIN (SELECT r.operation, r.rpt_no ,r.operator,r.update_time  FROM claim_case_record r where r.RECORD_ID in   (SELECT   MAX(RECORD_ID) FROM claim_case_record
@@ -492,11 +516,8 @@
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
 						and cases.case_status in ('08','99','97','98','05')
 						and cases.status='Y'
-                ORDER BY
-                    record.update_time DESC
             ) act
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
-
     </select>
 
     <!-- lihy -->
@@ -542,7 +563,8 @@
         cases.rpt_no,
         cases.batch_no,
         cases.case_status,
-        record.operator
+        record.operator,
+        record.update_time
         FROM
         claim_case cases
         INNER JOIN (SELECT r.operation, r.rpt_no ,r.operator,r.update_time  FROM claim_case_record r where r.RECORD_ID in   (SELECT   MAX(RECORD_ID) FROM claim_case_record
@@ -550,8 +572,6 @@
         AND record.operation in ('07','06')
         and cases.case_status in ('08','99','97','98','05')
         and cases.status='Y'
-        ORDER BY
-        record.update_time DESC
         ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
         <where>

@@ -24,6 +24,7 @@
               <el-select
                 v-model="searchForm.organcode"
                 filterable
+                clearable
                 remote
                 reserve-keyword
                 placeholder="请选择机构"
@@ -33,8 +34,8 @@
                 <el-option
                   v-for="(item, ind) in sysDeptOptions"
                   :key="ind"
-                  :label="item.deptName"
-                  :value="item.deptId">
+                  :label="item.organName"
+                  :value="item.organCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -107,7 +108,7 @@
       <div slot="header" class="clearfix">
         <span>个人池</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
@@ -145,7 +146,8 @@
   import personTable from './components/personTable'
   import publicTable from './components/publicTable'
   import {getPublicList, getUntreatedList, getProcessedList} from '@/api/claim/presentingReview'
-  import {getUser,getDept} from '@/api/claim/standingBookSearch'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
+
   export default {
     components: {
       personTable, publicTable
@@ -153,6 +155,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -207,14 +210,30 @@
       }).finally(() => {
         this.loading = false
       })
-      let item={
+      let item = {
         pageNum: 1,
         pageSize: 200,
       }
-      getDept(item).then(res => {
-        this.sysDeptOptions = res.deptlist
-        this.searchForm.organcode = res.deptId
-      }).catch(res => {
+
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.sysDeptOptions = response.rows
+              this.searchForm.organcode = res.data.organCode
+            }
+          }).catch(res => {
+          })
+        }
       })
     },
     methods: {
@@ -236,8 +255,8 @@
       },
       searchHandleData() {
         const params = {
-          pageNum:1,
-          pageSize:10
+          pageNum: 1,
+          pageSize: 10
         }
         getUntreatedList(params).then(res => {
           this.backData = res.rows
@@ -293,14 +312,14 @@
         const params1 = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
           pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
-          orderByColumn:this.$refs.personTable1.prop,
-          isAsc:  this.$refs.personTable1.order,
+          orderByColumn: this.$refs.personTable1.prop,
+          isAsc: this.$refs.personTable1.order,
         }
         const params2 = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
           pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
-          orderByColumn:this.$refs.personTable2.prop,
-          isAsc:this.$refs.personTable2.order,
+          orderByColumn: this.$refs.personTable2.prop,
+          isAsc: this.$refs.personTable2.order,
         }
         //获取直结复核理赔批次待处理个人池
         getUntreatedList(params1).then(res => {
@@ -323,7 +342,7 @@
       },
       search() {
         const query = {
-          pageNum:1,
+          pageNum: 1,
           pageSize: 10,
           submitstartdate: undefined,
           submitenddate: undefined,
@@ -344,6 +363,7 @@
         //获取公共池
         getPublicList(query).then(res => {
           this.publicData = res.rows
+          this.publicTotal = res.total
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
@@ -387,16 +407,19 @@
         this.divShow = !this.divShow
       },
       remoteMethod(query) {
-        let data={
-          deptName:query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getDept(data).then(res => {
-            this.sysDeptOptions = res.deptlist
-          }).catch(res => {
-          })
+        if (query != null && query != '' && query != undefined) {
+          let data = {
+            organCode: this.organCode,
+            organName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getOrganList(data).then(res => {
+              this.sysDeptOptions = res.rows
+            }).catch(res => {
+            })
+          }
         }
       },
     }

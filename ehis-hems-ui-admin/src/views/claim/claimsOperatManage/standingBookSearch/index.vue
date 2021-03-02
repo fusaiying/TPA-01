@@ -53,9 +53,9 @@
                          filterable
                          :remote-method="remoteMethod"
                          @change="getUsers">
-                <el-option v-for="option in deptOptions" :key="option.deptId"
-                           :label="option.deptName"
-                           :value="option.deptId"/>
+                <el-option v-for="option in deptOptions" :key="option.organCode"
+                           :label="option.organName"
+                           :value="option.organCode"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -66,9 +66,9 @@
                          reserve-keyword
                          filterable
                          :remote-method="remoteUserMethod">
-                <el-option v-for="option in userOptions" :key="option"
-                           :label="option"
-                           :value="option"/>
+                <el-option v-for="option in userOptions" :key="option.userName"
+                           :label="option.userName"
+                           :value="option.userName"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -91,7 +91,7 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>台账信息列表（{{totalCount}}）</span>
           <span style="float: right;">
-            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-form ref="standingForm" :rules="standingRules" :model="standingForm" size="small">
@@ -166,7 +166,7 @@
             <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
             <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{selectDeptName(deptOptions,scope.row.organcode)}}</span>
+                <span>{{selectDeptName(sysDeptOptions,scope.row.organcode)}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
@@ -192,13 +192,14 @@
 </template>
 
 <script>
-  import {listNew, editStanding, getUser, getDept, listFirst} from '@/api/claim/standingBookSearch'
+  import {listNew, editStanding, getUserInfo, getOrganList,getUsersByOrganCode, listFirst} from '@/api/claim/standingBookSearch'
 
   let dictss = [{dictType: 'claim_material'}]
   export default {
     data() {
       return {
         isListExport: false,
+        organCode: '',
         queryParams: {
           pageNum: 1,
           pageSize: 10,
@@ -228,6 +229,7 @@
         dictList: [],
         claim_materialOptions: [],
         deptOptions: [],
+        sysDeptOptions: [],
         userOptions: [],
       }
     },
@@ -248,25 +250,37 @@
         }
       }).catch(res => {
       })
-      let item = {
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getDept(item).then(res => {
-        this.deptOptions = res.deptlist
-        this.searchForm.organcode = res.deptId
-        let data = {
-          organcode: res.deptId,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        getUser(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.userOptions = res.data
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
           }
-        })
-
-      }).catch(res => {
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+            this.searchForm.createBy = res.data.userName
+          }
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.deptOptions = response.rows
+              this.sysDeptOptions = response.rows
+              this.searchForm.organcode = res.data.organCode
+              let option = {
+                organCode: this.searchForm.organcode ,
+                pageNum: 1,
+                pageSize: 200,
+              }
+              getUsersByOrganCode(option).then(res => {
+                if (res!=null && res.code===200){
+                  this.userOptions=res.rows
+                }
+              })
+            }
+          }).catch(res => {
+          })
+        }
       })
     },
     methods: {
@@ -319,20 +333,20 @@
       listExport() {
         this.searchForm.pageNum = 1
         this.searchForm.pageSize = 10
-        this.searchForm.receiveStartDate=this.searchForm.receiveDate ? this.searchForm.receiveDate[0] : ''
-        this.searchForm.receiveEndDate=this.searchForm.receiveDate ? this.searchForm.receiveDate[1] : ''
+        this.searchForm.receiveStartDate = this.searchForm.receiveDate ? this.searchForm.receiveDate[0] : ''
+        this.searchForm.receiveEndDate = this.searchForm.receiveDate ? this.searchForm.receiveDate[1] : ''
         listNew(this.searchForm).then(res => {
 
           if (res.rows.length > 0) {
             this.isListExport = true
-           /* let subDate = ''
-            if (this.searchForm.receiveDate.length > 0) {
-              subDate = '&receiveStartDate=' + this.searchForm.receiveDate[0] + '&receiveEndDate=' + this.searchForm.receiveDate[1]
-            }*/
+            /* let subDate = ''
+             if (this.searchForm.receiveDate.length > 0) {
+               subDate = '&receiveStartDate=' + this.searchForm.receiveDate[0] + '&receiveEndDate=' + this.searchForm.receiveDate[1]
+             }*/
             this.download('claimmgt/standing/exportNew' /*+ '?expressnumber=' + this.searchForm.expressnumber + '&sendby=' + this.searchForm.sendby
               + '&organcode=' + this.searchForm.organcode + '&createBy=' + this.searchForm.createBy + subDate*/, {
               ...this.searchForm
-            }, `FYX_${new Date().getTime()}.xlsx`)
+            }, `standingBook_${new Date().getTime()}.xlsx`)
           } else {
             return this.$message.warning(
               "没有查询到能导出的数据！"
@@ -377,50 +391,62 @@
         this.search('form')
       },
       getUsers(val) {
-        let data = {
-          organcode: val,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        getUser(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.userOptions = res.data
+        if (val != null && val != '' && val != undefined) {
+          let data = {
+            organCode: val,
+            pageNum: 1,
+            pageSize: 200,
           }
-        })
+          getUsersByOrganCode(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.userOptions = res.rows
+            }
+          })
+        } else {
+          this.sysUserOptions = []
+        }
       },
       remoteMethod(query) {
-        let data = {
-          deptName: query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getDept(data).then(res => {
-            this.deptOptions = res.deptlist
-          }).catch(res => {
-          })
+        if (query != null && query != '' && query != undefined) {
+          let data = {
+            organCode: this.organCode,
+            organName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getOrganList(data).then(res => {
+              this.deptOptions = res.rows
+            }).catch(res => {
+            })
+          }
         }
       },
       remoteUserMethod(query) {
-        let data = {
-          organcode: this.searchForm.organcode,
-          userName: query,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        if (query !== '' && query != null) {
-          getUser(data).then(res => {
-            if (res != null && res.code === 200) {
-              this.userOptions = res.data
+        if (query != null && query != '' && query != undefined) {
+
+          let data = {
+            organCode: this.searchForm.organcode,
+            userName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (data.organCode != null && data.organCode != '' && data.organCode != undefined){
+            if (query !== '' && query != null) {
+              getUsersByOrganCode(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.userOptions = res.rows
+                }
+              })
             }
-          })
+          }
         }
       },
       selectDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

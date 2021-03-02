@@ -77,7 +77,6 @@ public class BaseIssuingcompanyRuleController extends BaseController
     /**
      * 新增或修改出单公司规则
      */
-    @Transactional
     //@PreAuthorize("@ss.hasPermi('system:rule:query')")
     @PostMapping ("/query")
     public AjaxResult getInfo(IssuingcompanyRuleDTO issuingcompanyRuleDTO) {

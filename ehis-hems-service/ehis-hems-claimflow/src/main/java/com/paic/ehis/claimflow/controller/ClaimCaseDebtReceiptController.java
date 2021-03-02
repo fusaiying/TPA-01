@@ -105,8 +105,8 @@ public class ClaimCaseDebtReceiptController extends BaseController
      * @param debtInfoDTO
      * @return
      */
-    @GetMapping("/initReceipt")
-    public TableDataInfo initReceipt(DebtInfoDTO debtInfoDTO){
+    @PostMapping("/initReceipt")
+    public TableDataInfo initReceipt(@RequestBody DebtInfoDTO debtInfoDTO){
         startPage();
         List<ClaimCaseDebtReceipt> receiptList = new ArrayList<>();
         if ((!"".equals(debtInfoDTO.getInsuredName()) && debtInfoDTO.getInsuredName() != null) || debtInfoDTO.getStartDate() != null){

@@ -24,6 +24,8 @@ public interface SysUserMapper
      */
     public List<SysUser> selectUserList(SysUser sysUser);
 
+    public List<SysUser> selectUserListByOrganCode(List<String> organCodeList);
+
     public int selectDept(String username);
 
     public List<String> selectuserName(int deptId);

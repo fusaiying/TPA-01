@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -15,6 +16,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -85,8 +87,8 @@ public class ClaimCaseController extends BaseController {
      * 查询处理中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processingList")
-    public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processingList")
+    public TableDataInfo processingList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -103,8 +105,8 @@ public class ClaimCaseController extends BaseController {
      * 查询已处理受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processedList")
-    public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processedList")
+    public TableDataInfo processedList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -121,8 +123,8 @@ public class ClaimCaseController extends BaseController {
      * 查询悬挂中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/suspensionList")
-    public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/suspensionList")
+    public TableDataInfo suspensionList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -367,8 +369,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池处理中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentUnder")
-    public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentUnder")
+    public TableDataInfo listConditionsForTheAdjustmentUnder(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -382,21 +384,25 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentOver")
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理理算案件");
     }
 
     //审核工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentOver")
-    public TableDataInfo listConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentOver")
+    public TableDataInfo listConditionsForTheAdjustmentOver(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
-        startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        else {
+            auditWorkPoolDTO.setOrderByColumn("updateTime");
+            auditWorkPoolDTO.setIsAsc("desc");
+        }
+       // startPage(auditWorkPoolDTO);
+        return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }
 
     //审核工作池接口-导出悬挂中清单
@@ -411,8 +417,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池悬挂中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentHang")
-    public TableDataInfo listConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentHang")
+    public TableDataInfo listConditionsForTheAdjustmentHang(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }

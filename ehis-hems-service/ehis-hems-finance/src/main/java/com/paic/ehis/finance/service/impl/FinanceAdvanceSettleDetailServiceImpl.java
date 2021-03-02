@@ -1,7 +1,7 @@
 package com.paic.ehis.finance.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.finance.mapper.*;
 import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
@@ -9,7 +9,8 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.finance.domain.*;
 import com.paic.ehis.finance.domain.dto.FinanceAdvanceSettleDTO;
 import com.paic.ehis.finance.domain.vo.FinanceAdvanceSettleVO;
-import com.paic.ehis.finance.domain.SysUser;
+import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.SysUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,13 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
     private FinanceAdvanceSettleDetailMapper financeAdvanceSettleDetailMapper;
 
     @Autowired
-    SysUserMapper sysUserMapper;
-
-    @Autowired
     FinanceAdvanceSettleTaskMapper financeAdvanceSettleTaskMapper;
 
     @Autowired
     FinanceSettleRecordMapper financeSettleRecordMapper;
+
+    @Autowired
+    private RemoteUserService userService;
 
     /**
      * 查询代垫费结算明细
@@ -172,35 +173,39 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
         FinanceSettleRecord financeSettleRecord = new FinanceSettleRecord();
-        //获取用户的所属机构,设置当前登录机构
-        Long userId = SecurityUtils.getUserId();
-        SysUser sysUser = sysUserMapper.selectUserById(userId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
+        // 获取当前用户所属机构
+        String organCode = "";
+        if (null != info) {
+            organCode = info.getOrganCode();
+        }
         financeAdvanceSettleTask.setSettleStatus("01");
         financeAdvanceSettleTask.setSettleEndDate(financeAdvanceSettleDTO.getSettleEndDate());
         financeAdvanceSettleTask.setCompanyCode(financeAdvanceSettleDTO.getCompanyCode());
         financeAdvanceSettleTask.setStatus("Y");
-        financeAdvanceSettleTask.setDeptCode(sysUser.getDeptId().toString());
-        financeAdvanceSettleTask.setCreateBy(sysUser.getUserName());
+        financeAdvanceSettleTask.setDeptCode(organCode);
+        financeAdvanceSettleTask.setCreateBy(info.getUserName());
         financeAdvanceSettleTask.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleTask.setUpdateBy(sysUser.getUserName());
+        financeAdvanceSettleTask.setUpdateBy(info.getUserName());
         financeAdvanceSettleTask.setUpdateTime(DateUtils.getNowDate());
 
         financeAdvanceSettleDetail.setStatus("Y");
-        financeAdvanceSettleDetail.setDeptCode(sysUser.getDeptId().toString());
-        financeAdvanceSettleDetail.setCreateBy(sysUser.getUserName());
+        financeAdvanceSettleDetail.setDeptCode(organCode);
+        financeAdvanceSettleDetail.setCreateBy(info.getUserName());
         financeAdvanceSettleDetail.setCreateTime(DateUtils.getNowDate());
-        financeAdvanceSettleDetail.setUpdateBy(sysUser.getUserName());
+        financeAdvanceSettleDetail.setUpdateBy(info.getUserName());
         financeAdvanceSettleDetail.setUpdateTime(DateUtils.getNowDate());
 
         financeSettleRecord.setTaskType("02");
-        financeSettleRecord.setOperator(sysUser.getUserName());
+        financeSettleRecord.setOperator(info.getUserName());
         financeSettleRecord.setHistoryFlag("N");
         financeSettleRecord.setOperation("01");
         financeSettleRecord.setStatus("Y");
-        financeSettleRecord.setDeptCode(sysUser.getDeptId().toString());
-        financeSettleRecord.setCreateBy(sysUser.getUserName());
+        financeSettleRecord.setDeptCode(organCode);
+        financeSettleRecord.setCreateBy(info.getUserName());
         financeSettleRecord.setCreateTime(DateUtils.getNowDate());
-        financeSettleRecord.setUpdateBy(sysUser.getUserName());
+        financeSettleRecord.setUpdateBy(info.getUserName());
         financeSettleRecord.setUpdateTime(DateUtils.getNowDate());
 
         String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);

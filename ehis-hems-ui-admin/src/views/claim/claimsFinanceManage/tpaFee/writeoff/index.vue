@@ -89,10 +89,11 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>收款明细</span>
+        <el-button  style="float: right; margin-right: 10px;" type="primary" size="mini" @click="dealFun">核销</el-button>
       </div>
 
       <!--收款明细 start-->
-      <gatheringTable :table-data="gatherTableData" />
+      <gatheringTable :table-data="gatherTableData" @radioVue="radioVue"/>
       <!--收款明细 end -->
 
       <pagination
@@ -111,9 +112,10 @@
   import feeTable from '../components/feeTable'
   import gatheringTable from '../components/gatheringTable'
 
-  import {companyList,riskList, listInfo } from '@/api/tpaFee/api'
+  import {companyList,riskList, listInfo,receiptColList} from '@/api/tpaFee/api'
   import feeDetail from "../components/feeDetail";
   import moment from "moment";
+  import {updateSettleEndStatus} from "@/api/paymentFee/api";
   export default {
     components: {
       feeDetail,
@@ -151,6 +153,10 @@
         companySelect:[],
         settlementTypeSelect:[],
         riskCodeSelect:[],
+        // 实收ID
+        collectionId:'',
+        // 复选框任务号
+        taskNoList:[],
       }
     },
     mounted(){
@@ -163,6 +169,7 @@
       this.getRiskList('');
       this.getCompanyList();
       this.initData();
+      this.initGatherData();
     },
     watch: {
 
@@ -170,8 +177,58 @@
     computed: {
     },
     methods: {
+      radioVue(value){
+        this.collectionId = value;
+      },
+      checkBoxVue(checkVue){
+        this.taskNoList = checkVue;
+      },
+      dealFun(){
+        if(this.taskNoList.length === 0) {
+          this.$message({ type: 'info',  message: '请选择需要进行核销的结算!'});
+          return false;
+        }
+        if(this.collectionId === '') {
+          this.$message({ type: 'info',  message: '请选择收款明细!'});
+          return false;
+        }
+        let settleTaskNo  = this.taskNoList;
+        this.$confirm('确定核销', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          /*updateSettleEndStatus(settleTaskNo).then(response => {
+            if(response.code == '200') {
+              this.initData();
+              this.initGatherData();
+              this.$message({
+                type: 'success',
+                message: '核销成功!'
+              });
+            } else {
+              this.$message({
+                type: 'info',
+                message: '核销失败'
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          })*/
+        }).catch(() => {
+        })
+      },
       initGatherData(){
-
+        const params = {};
+        params.pageNum = this.gatherPageInfo.page;
+        params.pageSize = this.gatherPageInfo.pageSize;
+        params.companyCode = this.formSearch.companyCode;
+        receiptColList(params).then(res => {
+          if (res.code == '200') {
+            this.gatherTotal = res.total;
+            this.gatherTableData = res.rows;
+          }
+        });
       },
       resetForm() {
         this.$refs.formSearch.resetFields()
@@ -228,8 +285,11 @@
         params.settlementType = this.formSearch.settlementType;
         params.riskCode = this.formSearch.riskCode;
         params.settleEndDate = this.formSearch.settleEndDate;
-        params.pageStatus = '03';
-
+        if(this.btnSearch) {
+          params.pageType = '03';
+        } else {
+          params.settleStatus = '02';
+        }
         this.searchLoad = true;
         listInfo(params).then(res => {
           if (res.code == '200') {

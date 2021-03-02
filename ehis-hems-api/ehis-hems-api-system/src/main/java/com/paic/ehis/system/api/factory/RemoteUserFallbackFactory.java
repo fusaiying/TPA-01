@@ -37,6 +37,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
             public AjaxResult getOrganInfo(List<String> organCodes) {
                 return AjaxResult.error("获取机构信息失败，原因：" + throwable.getMessage());
             }
+
+            @Override
+            public AjaxResult userInfo() {
+                return AjaxResult.error("获取用户信息失败，原因：" + throwable.getMessage());
+            }
         };
     }
 }

@@ -88,8 +88,8 @@ public class BaseSupplierOutletsServiceImpl implements IBaseSupplierOutletsServi
     @Override
     public int updateBaseSupplierOutletsStatus( BaseSupplierOutlets baseSupplierOutlets)
     {
-        String websiteCode=baseSupplierOutlets.getWebsiteCode();
-        return baseSupplierOutletsMapper.updateBaseSupplierOutletsStatus(websiteCode);
+      //  String websiteCode=baseSupplierOutlets.getWebsiteCode();
+        return baseSupplierOutletsMapper.updateBaseSupplierOutletsStatus(baseSupplierOutlets);
     }
 
     /**

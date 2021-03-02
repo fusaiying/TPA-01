@@ -111,8 +111,8 @@ public class ClaimCaseDebtController extends BaseController
      * 查询追讨工作池 - 初始化
      * @return
      */
-    @GetMapping("/initDebt")
-    public TableDataInfo initDebtList(DebtInfoDTO debtInfoDTO){
+    @PostMapping("/initDebt")
+    public TableDataInfo initDebtList(@RequestBody DebtInfoDTO debtInfoDTO){
         startPage();
         List<DebtInfoVO> list = new ArrayList<>();
         // 初始化或者查询条件为空

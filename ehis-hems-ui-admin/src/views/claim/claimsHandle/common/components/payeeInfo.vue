@@ -49,19 +49,19 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogFormVisible" width="80%" hight="90%">
+    <el-dialog :visible.sync="dialogFormVisible" width="80%" hight="90%" :before-close="goBack">
       <div>
         <div>
           <span style="font-size: 20px">账户信息维护</span>
           <span style="float: right;">
-          <el-button type="primary" size="mini" @click="">健康险客户账户查询</el-button>
+          <el-button type="primary" size="mini" @click="searchTkData">健康险客户账户查询</el-button>
           <el-button type="primary" size="mini" @click="save">保存</el-button>
           <el-button size="mini" @click="goBack">返回</el-button>
         </span>
         </div>
         <el-divider/>
         <el-table
-          v-if="false"
+          v-if="isTkTableShow"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="tkTableData"
           size="small"
@@ -73,16 +73,16 @@
               <el-radio :label="scope.$index" v-model="radio" @change.native="getCurrentRow(scope.row)" style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="payMode" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payMode" label="分单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="polno" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="certNo" label="分单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="payMode" label="保单生效日" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payMode" label="银行代码" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payMode" label="银行描述" show-overflow-tooltip/>
-          <el-table-column align="center" prop="accNo" label="银行账号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payeeName" label="账户名" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payeeIdType" label="证件类型" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payeeIdNo" label="证件号码" show-overflow-tooltip/>
-          <el-table-column align="center" prop="addressId" label="地区码" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankNo" label="银行代码" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankDesc" label="银行描述" show-overflow-tooltip/>
+          <el-table-column align="center" prop="acctNo" label="银行账号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankClientName" label="账户名" show-overflow-tooltip/>
+          <el-table-column align="center" prop="idType" label="证件类型" show-overflow-tooltip/>
+          <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
+          <el-table-column align="center" prop="regionCode" label="地区码" show-overflow-tooltip/>
         </el-table>
         <el-form ref="baseForm" :model="baseForm" :rules="tableFormRules"
                  style="padding-bottom: 30px;" label-width="150px" size="mini" class="baseInfo_class">
@@ -274,7 +274,7 @@
           this.baseForm.payeeNationality = this.insuredData.nationality,
           this.baseForm.payeeIdType = this.insuredData.idType,
           this.baseForm.payeeIdNo = this.insuredData.idNo
-          this.baseForm.payeeOccupation = this.insuredData.occupation
+          //this.baseForm.payeeOccupation = this.insuredData.occupation
         if (this.insuredData.idEndDate!=null && this.insuredData.idEndDate!==''){
           this.$set(this.baseForm,'idEndDate',this.insuredData.idEndDate)
           if (this.insuredData.idEndDate==='9999-12-31'){
@@ -298,6 +298,17 @@
     },
     data() {
       const checkRequired = (rule, value, callback) => {
+        if (this.baseForm.relationIns !== '1') {
+          if (!value) {
+            callback(new Error('与被保人关系非本人时必录'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+      const checkPayeeOccupation = (rule, value, callback) => {
         if (this.baseForm.relationIns !== '1') {
           if (!value) {
             callback(new Error('与被保人关系非本人时必录'))
@@ -350,11 +361,17 @@
         batchInfoData: {},
         insuredData: {},
         isAddOrEdit: '',
-        radio:false,
+        radio:undefined,
+        isTkTableShow:false,
         tkTableData:[{
-          payeeName:'a',
-        },{
-          payeeName:'b',
+          polno:'B00001',
+          certNo:'F00001',
+          bankNo:'01',
+          bankDesc:'嘿嘿嘿',
+          acctNo:'123456',
+          bankClientName:'张三',
+          idType:'1',
+          idNo:'0100101',
         }],
         dialogFormVisible: false,
         baseForm: {
@@ -405,7 +422,7 @@
           idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur','change']}],
           payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur','change']}],
           payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur','change']}],
-          payeeOccupation:[{required: true, message: '职业不能为空!', trigger: ['blur','change']}],
+          payeeOccupation:{validator: checkPayeeOccupation, trigger: ['blur','change']},
           accNo: {validator: checkAccNo, required: true, trigger: ['blur','change']},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
           address: {validator: checkAddress, required: true, trigger: ['blur','change']},
@@ -514,6 +531,7 @@
       },
       addOrEdit(status, row) {
         this.isAddOrEdit = status
+        this.isTkTableShow=false
         this.$emit('getApplicantData')
         this.dialogFormVisible = true
         this.baseForm = {
@@ -609,8 +627,16 @@
         this.baseForm.district = this.region[2]
       },
       getCurrentRow(row){//获取当前行的数据
-        console.log(row)
-      }
+        this.baseForm.payeeName=row.bankClientName//账户名
+        this.baseForm.payeeIdType=row.idType//证件类型
+        this.baseForm.payeeIdNo=row.idNo//证件号码
+        this.baseForm.payeeBank=row.bankNo//开户行
+        this.baseForm.accNo=row.acctNo//账号
+      },
+      searchTkData(){
+        this.radio=undefined
+        this.isTkTableShow=true
+      },
     }
   };
 </script>

@@ -16,16 +16,34 @@
       <form  v-for="(item,index) in HistoryData">
         <el-row style="margin: 20px 10px;">
           <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ item.discId }}</span>
+            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 -1 }}-下发</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ (item.createTime) }}</span>
+            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
+          </el-col>
+          <el-col :span="8">
+            <span class="info_span to_right">协谈类型：</span><span class="info_span">{{ getNegotiationTypesName(item.discType) }}</span>
+          </el-col>
+          <el-col :span="8">
+            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
+          </el-col>
+          <el-col :span="8">
+            <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.disView) }}</span>
+          </el-col>
+        </el-row>
+
+        <el-row style="margin: -10px 10px;" v-if="item.conclusion != ''">
+          <el-col :span="8">
+            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 }}-回调</span>
+          </el-col>
+          <el-col :span="8">
+            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.updateTime | changeDate }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
+            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.updateBy) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
@@ -38,9 +56,17 @@
 </template>
 <script>
 
+  import moment from 'moment'
   import {  historyDisInfo } from '@/api/negotiation/api'
 
   export default {
+    filters: {
+      changeDate: function(value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      }
+    },
     props: {
       value: {
         type: Boolean,
@@ -74,11 +100,18 @@
         fixInfoData : '',
         rptNo :'',
         clusionSelect:[],
+        negotiationTypes:[],
       }
     },
 
     mounted() {
-
+      this.getDicts("handleconclusion").then(response => {
+        this.clusionSelect = response.data;
+      });
+      //协谈类型
+      this.getDicts("negotiation_type").then(response => {
+        this.negotiationTypes = response.data;
+      });
     },
     created: function() {
 
@@ -93,6 +126,9 @@
       },
       getConclusionName(value) {
         return this.selectDictLabel(this.clusionSelect,value)
+      },
+      getNegotiationTypesName(value) {
+        return this.selectDictLabel(this.negotiationTypes,value)
       },
       //关闭对话框
       changeDialogVisable() {

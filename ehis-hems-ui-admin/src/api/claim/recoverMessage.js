@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function initDebt(data) {
   return request({
     url: '/claimflow/debt/initDebt',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -13,7 +13,7 @@ export function initDebt(data) {
 export function initReceipt(data) {
   return request({
     url: '/claimflow/receipt/initReceipt',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }

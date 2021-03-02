@@ -206,6 +206,13 @@
           }).catch(res => {
           })
         }
+        let data = {
+          pageNum:1,
+          pageSize:200
+        }
+        getListNew(data).then(res => {
+          this.hospitalOptions = res.rows
+        })
       })
 
       initList(this.queryParams).then(res => {

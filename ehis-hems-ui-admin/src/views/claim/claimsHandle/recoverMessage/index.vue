@@ -4,7 +4,6 @@
       <el-form ref="searchForm" :model="searchForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="报案号：" prop="rptNo">
               <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -36,6 +35,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="被保人姓名：" prop="insuredName">
               <el-input v-model="searchForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -58,6 +59,8 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="白名单标记：" prop="whiteStatus">
               <el-select v-model="searchForm.whiteStatus" class="item-width" placeholder="请选择" clearable
@@ -264,6 +267,13 @@
           this.detailTotal = res.total
         }
       }).catch(res => {})
+      let data = {
+        pageNum:1,
+        pageSize:200
+      }
+      getListNew(data).then(res => {
+        this.hospitalOptions = res.rows
+      })
     },
     methods: {
       resetForm() {
@@ -387,7 +397,7 @@
             claimType: '',
             rptNo: row.rptNo,
             status:'show',
-            node: 'accept',
+            node: 'calculateReview',
             styleFlag: 'list',
           })
         )

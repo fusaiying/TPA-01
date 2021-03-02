@@ -218,6 +218,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         //工单表插入
         workOrderAccept.setStatus("01");
+        /*workOrderAccept.setPolicyNo(demandAcceptVo.getPolicyNo());
+        workOrderAccept.setPolicyItemNo(demandAcceptVo.getPolicyItemNo());
+        workOrderAccept.setRiskCode(demandAcceptVo.getRiskCode());
+        workOrderAccept.setInsuredNo(demandAcceptVo.getInsuredNo());
+        workOrderAccept.setInsuredName(demandAcceptVo.getInsuredName());
+        workOrderAccept.setHolderNo(demandAcceptVo.getHolderNo());*/
+        workOrderAccept.setHolderName(demandAcceptVo.getHolderName());
+        workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));

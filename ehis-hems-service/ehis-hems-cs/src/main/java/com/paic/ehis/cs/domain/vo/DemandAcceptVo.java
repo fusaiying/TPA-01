@@ -45,10 +45,17 @@ public class DemandAcceptVo extends BaseEntity {
     @Excel(name = "险种号")
     private String riskCode;
 
+    /**被保人客户号*/
+    @Excel(name = "被保人客户号")
+    private String insuredNo;
+
     /** 被保人 */
     @Excel(name = "被保人")
     private String insuredName;
 
+    /** 投保人 */
+    @Excel(name = "投保人客户号")
+    private String holderNo;
     /** 投保人 */
     @Excel(name = "投保人")
     private String holderName;

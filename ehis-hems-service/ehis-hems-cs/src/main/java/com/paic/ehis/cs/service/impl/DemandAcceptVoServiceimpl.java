@@ -553,6 +553,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         //Hcs
         if (demandAcceptVo.getAlterId() != null){
+
             hcsModificationMapper.updateHcsStauts(demandAcceptVo.getAlterId());
         }
         return  demandAcceptVoMapper.insertFlowLog(flowLog);

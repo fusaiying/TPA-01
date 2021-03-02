@@ -60,13 +60,13 @@
       <!-- 被保人信息 -->
       <div id="#anchor-2" class="batchInfo_class" style="margin-top: 10px;">
         <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status"
-                     ref="insuredForm" @getInsuredData="getInsuredData"
+                     ref="insuredForm" @getInsuredData="getInsuredData" @getPropData="getPropData"
                      :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag"/>
       </div>
       <!-- 申请人信息 -->
       <div id="#anchor-12" class="batchInfo_class" style="margin-top: 10px;">
         <applicant-com :sonRegisterData="sonRegisterData" :node="querys.node" :status="querys.status"
-                       ref="applicantInfoForm" :applicantData="applicantData" :fixInfo="fixInfo"
+                       ref="applicantInfoForm" :applicantData="applicantData" :fixInfo="fixInfo" :caseInsuredData="caseInsuredData"
                        @getApplicantData="getApplicantData" :baseInfo="batchInfo" :isSave="isSave"/>
       </div>
       <!-- 领款人信息 -->
@@ -216,6 +216,7 @@
     data() {
       return {
         historyDisCount: 0,// 历史协谈个数
+        caseInsuredData: {},
         sonInsuredData: {
           claimCaseInsured: '',
           policyInfominData: []
@@ -802,6 +803,10 @@
           caseInsuredData:this.$refs.insuredForm.baseForm,
           policyInfoData:this.$refs.insuredForm.tableData,
         }
+      },
+      getPropData(val){
+        this.caseInsuredData=val
+        this.caseInsuredData.claimType=this.batchInfo.claimtype
       }
     }
   }

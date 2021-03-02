@@ -52,7 +52,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     /**
      * 查询工单处理信息 列表
      * 
-     * @param workHandleInfo 工单处理信息 
+     * @param workHandleInfo 工单处理信息
      * @return 工单处理信息 
      */
     @Override
@@ -558,8 +558,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
        // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setWorkOrderNo((serviceProcessingVo.getWorkOrderNo()));
         workHandleInfo.setStatus("Y");
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
         String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -581,11 +581,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public List<WorkHandleInfo> selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
 
         //获取处理时长
-         //workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+         workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setWorkOrderNo((reservationDealVo.getWorkOrderNo()));
-        workHandleInfo.setStatus("Y");
         String sourceName="ReservationDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -606,7 +604,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     @Override
     public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setWorkOrderNo((complaintDealVo.getWorkOrderNo()));
+        workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
         workHandleInfo.setStatus("Y");
         String sourceName="ComplaintDealVo";
         String targetTableName="work_handle_info";
@@ -619,6 +617,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             VoUtils voUtils=new VoUtils<ComplaintDealVo>();
             complaintDealVo= (ComplaintDealVo) voUtils.fromVoToVo(complaintDealVo,map,workHandleInfo);
         }
-        return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
+        return workHandleInfoMapper.selectWorkHandleInfoByNo(complaintDealVo.getWorkOrderNo());
     }
+
 }

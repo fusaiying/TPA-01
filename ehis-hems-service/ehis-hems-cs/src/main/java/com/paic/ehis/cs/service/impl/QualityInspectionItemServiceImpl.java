@@ -170,4 +170,12 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
 
         return qualityInspectionItems;
     }
+
+    /**
+     * 质检差错修改item表字段是否时效内响应客户等
+     */
+    @Override
+    public int updateQualityItem(QualityInspectionItem qualityInspectionItem) {
+        return 0;
+    }
 }

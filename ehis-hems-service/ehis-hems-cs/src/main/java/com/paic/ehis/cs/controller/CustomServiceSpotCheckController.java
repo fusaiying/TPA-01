@@ -212,6 +212,7 @@ public class CustomServiceSpotCheckController extends BaseController {
 
         //操作前主流程状态
         param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
+        //param.put("inspectionId",);
         return toAjax(qualityInspectionItemService.insertHandle(sendIds,param));
     }
     /**
@@ -229,19 +230,24 @@ public class CustomServiceSpotCheckController extends BaseController {
     /**
      * 质检差错   修改是否申述等字段
      */
-    @Log(title = "受理详情 ", businessType = BusinessType.UPDATE)
     @PutMapping("/updateQualityHandle")
     public AjaxResult updateQualityHandle(@RequestBody QualityInspectionHandle qualityInspectionHandle)
     {
         return toAjax(qualityInspectionHandleService.updateQualityHandle(qualityInspectionHandle));
     }
-/**
- * 质检差错修改item表字段是否时效内响应客户等
- */
+    /**
+     * 质检差错修改item表字段是否时效内响应客户等
+     */
+    @PutMapping("/updateQualityItem")
+    public AjaxResult updateQualityItem(@RequestBody QualityInspectionItem qualityInspectionItem)
+    {
+        return toAjax(qualityInspectionItemService.updateQualityItem(qualityInspectionItem));
+    }
+
 
     /**
- *质检差错确认工作池查询
- */
+     *质检差错确认工作池查询
+     */
 @GetMapping("/internal/selectHandle")
 public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
 {

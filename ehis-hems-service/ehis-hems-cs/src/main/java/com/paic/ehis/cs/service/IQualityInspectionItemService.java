@@ -73,4 +73,9 @@ public interface IQualityInspectionItemService
      * @return
      */
     List<QualityInspectionItem> selectItemInspectionById(QualityInspectionItem qualityInspectionItem);
+
+    /**
+     * 质检差错修改item表字段是否时效内响应客户等
+     */
+    int updateQualityItem(QualityInspectionItem qualityInspectionItem);
 }

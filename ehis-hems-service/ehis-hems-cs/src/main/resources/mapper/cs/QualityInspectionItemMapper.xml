@@ -112,4 +112,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectQualityInspectionItemVo"/>
         where inspection_id = #{inspectionId}
     </select>
+
 </mapper>

@@ -103,7 +103,7 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     @Override
     public int insertHandle(QualityInspectionHandle qualityInspectionHandle) {
         //从前端获取质检编号
-        qualityInspectionHandle.setInspectionId(qualityInspectionHandle.getInspectionId());
+        qualityInspectionHandle.getInspectionId();
         return qualityInspectionHandleMapper.insertQualityInspectionHandle(qualityInspectionHandle);
     }
     /**

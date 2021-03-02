@@ -117,5 +117,4 @@ public interface IWorkHandleInfoService
      */
     List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo);
 
-    List<WorkHandleInfo> selectWorkHandleInfoByNo(Long workOrderNo);
 }

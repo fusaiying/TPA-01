@@ -621,9 +621,4 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         }
         return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
     }
-
-    @Override
-    public List<WorkHandleInfo> selectWorkHandleInfoByNo(Long workOrderNo) {
-        return workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
-    }
 }

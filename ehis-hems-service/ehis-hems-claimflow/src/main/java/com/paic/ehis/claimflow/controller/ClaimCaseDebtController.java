@@ -116,11 +116,11 @@ public class ClaimCaseDebtController extends BaseController
         startPage();
         List<DebtInfoVO> list = new ArrayList<>();
         // 初始化或者查询条件为空
-        if (ObjectNullUtil.isNotNull(debtInfoDTO)){
-            list = claimCaseDebtService.selectDebtInitList();
-        } else {
+//        if (ObjectNullUtil.isNotNull(debtInfoDTO)){
+//            list = claimCaseDebtService.selectDebtInitList();
+//        } else {
             list = claimCaseDebtService.selectDebtList(debtInfoDTO);
-        }
+//        }
         return getDataTable(list);
     }
 

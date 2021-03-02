@@ -343,7 +343,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         financeCase.setStatus("Y");
         List<ClaimCase> finanBackList = claimCaseMapper.selectClaimCaseList(financeCase);
         if (finanBackList.size() > 0){
-            return AjaxResult.error("此批次存在回退案件，请结案后进行支付");
+            return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
         } else {
             // 支付信息
             ClaimCasePaymentVO payment = claimCasePayVO.getPayment();

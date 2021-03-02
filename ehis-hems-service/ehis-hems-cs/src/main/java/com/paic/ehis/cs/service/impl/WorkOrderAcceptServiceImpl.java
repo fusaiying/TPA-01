@@ -114,7 +114,6 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
      */
     @Override
     public WorkOrderAccept selectHangFlag(WorkOrderAccept workOrderAccept) {
-        workOrderAccept.getWorkOrderNo();
         return workOrderAcceptMapper.selectHangFlag(workOrderAccept);
     }
 }

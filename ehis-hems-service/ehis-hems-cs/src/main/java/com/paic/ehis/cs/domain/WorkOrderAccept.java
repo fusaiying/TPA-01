@@ -9,13 +9,13 @@ import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+
 /**
  * 工单申请信息 对象 work_order_accept
  * 
  * @author sino
- * @date 2021-01-23
+ * @date 2021-03-01
  */
-@Data
 public class WorkOrderAccept extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -23,8 +23,8 @@ public class WorkOrderAccept extends BaseEntity
     /** 工单号 */
     private String workOrderNo;
 
-    /** 业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义； */
-    @Excel(name = "业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义；")
+    /** 业务类型 01-信息需求，02-预约，03-投诉； */
+    @Excel(name = "业务类型 01-信息需求，02-预约，03-投诉；")
     private String businessType;
 
     /** 保单号 */
@@ -39,16 +39,16 @@ public class WorkOrderAccept extends BaseEntity
     @Excel(name = "险种号")
     private String riskCode;
 
-    /** 被保人客户号 */
-    @Excel(name = "被保人客户号")
+    /** 被保人客户号，person_info编号 */
+    @Excel(name = "被保人客户号，person_info编号")
     private String insuredNo;
 
     /** 被保人 */
     @Excel(name = "被保人")
     private String insuredName;
 
-    /** 投保人客户号 */
-    @Excel(name = "投保人客户号")
+    /** 投保人客户号，person_info编号 */
+    @Excel(name = "投保人客户号，person_info编号")
     private String holderNo;
 
     /** 投保人 */
@@ -85,14 +85,24 @@ public class WorkOrderAccept extends BaseEntity
 信息需求公共查询中状态：01-待处理；02-处理中；03-已处理；04-已完成；05-已取消； */
     @Excel(name = "状态 每个业务流程中的状态；如：待处理、处理中", readConverterExp = "&=协办表=协办中")
     private String status;
+
     /** 结案日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "结案日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endDate;
-    /** 结案日期 */
+
+    /** 处理时间 信息需求，预约点击处理超链接记录此时间；投诉为完成时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "处理时间 信息需求，预约点击处理超链接记录此时间；投诉为完成时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date clickTime;
+
+    /** 有无挂起 */
+    @Excel(name = "有无挂起")
+    private String hangFlag;
+
+    /** 挂起原因 */
+    @Excel(name = "挂起原因")
+    private String hangReason;
 
     public void setWorkOrderNo(String workOrderNo) 
     {
@@ -238,10 +248,46 @@ public class WorkOrderAccept extends BaseEntity
     {
         return status;
     }
+    public void setEndDate(Date endDate) 
+    {
+        this.endDate = endDate;
+    }
+
+    public Date getEndDate() 
+    {
+        return endDate;
+    }
+    public void setClickTime(Date clickTime) 
+    {
+        this.clickTime = clickTime;
+    }
+
+    public Date getClickTime() 
+    {
+        return clickTime;
+    }
+    public void setHangFlag(String hangFlag) 
+    {
+        this.hangFlag = hangFlag;
+    }
+
+    public String getHangFlag() 
+    {
+        return hangFlag;
+    }
+    public void setHangReason(String hangReason) 
+    {
+        this.hangReason = hangReason;
+    }
+
+    public String getHangReason() 
+    {
+        return hangReason;
+    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("workOrderNo", getWorkOrderNo())
             .append("businessType", getBusinessType())
             .append("policyNo", getPolicyNo())
@@ -258,6 +304,10 @@ public class WorkOrderAccept extends BaseEntity
             .append("vipFlag", getVipFlag())
             .append("organCode", getOrganCode())
             .append("status", getStatus())
+            .append("endDate", getEndDate())
+            .append("clickTime", getClickTime())
+            .append("hangFlag", getHangFlag())
+            .append("hangReason", getHangReason())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 
 import java.util.List;
 
@@ -60,4 +61,16 @@ public interface IWorkOrderAcceptService
      * @return 结果
      */
     public int deleteWorkOrderAcceptById(String workOrderNo);
+
+    /**
+     * 工单挂起
+     * @param complaintAcceptVo
+     * @return
+     */
+   public  int updateHangReason(ComplaintAcceptVo complaintAcceptVo);
+
+    /**
+     * 查询工单是否挂起
+     */
+    WorkOrderAccept selectHangFlag(WorkOrderAccept workOrderAccept);
 }

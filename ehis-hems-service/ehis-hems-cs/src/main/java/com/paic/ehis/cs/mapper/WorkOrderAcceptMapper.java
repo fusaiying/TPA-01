@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.mapper;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public interface WorkOrderAcceptMapper
     public WorkOrderAccept selectProcessingTime(String workOrderNo);
 
     /**
+     * 查询工单是否挂起
+     * @param workOrderAccept
+     * @return
+     */
+    public WorkOrderAccept selectHangFlag(WorkOrderAccept workOrderAccept);
+
+    /**
      * 查询工单申请信息 列表
      * 
      * @param workOrderAccept 工单申请信息 
@@ -51,6 +59,13 @@ public interface WorkOrderAcceptMapper
      * @return 结果
      */
     public int updateWorkOrderAccept(WorkOrderAccept workOrderAccept);
+    /**
+     * 工单挂起
+     * @param complaintAcceptVo
+     * @return
+     */
+
+    public int updateHangReason(ComplaintAcceptVo complaintAcceptVo);
 
     public int updateWorkOrderStatus(WorkOrderAccept workOrderAccept);
 

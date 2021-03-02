@@ -283,8 +283,8 @@
         <el-row>
 
           <el-col :span="8">
-            <el-form-item label="联系人移动电话：" prop="ContactsMobilePhone">
-              <el-input v-model="ruleForm.ContactsMobilePhone" class="item-width" clearable size="mini"
+            <el-form-item label="联系人移动电话：" prop="contactsMobilePhone">
+              <el-input v-model="ruleForm.contactsMobilePhone" class="item-width" clearable size="mini"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>

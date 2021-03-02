@@ -367,8 +367,8 @@ export function getFee(rptNo) {
 export function listConditionsForTheAdjustmentUnder(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentUnder',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -377,8 +377,8 @@ export function listConditionsForTheAdjustmentUnder(data) {
 export function listConditionsForTheAdjustmentOver(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentOver',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -387,8 +387,8 @@ export function listConditionsForTheAdjustmentOver(data) {
 export function listConditionsForTheAdjustmentHang(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentHang',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 

@@ -1,1 +1,0 @@
-alter table claim_case_policy modify department varchar(15) null comment '╡©це';

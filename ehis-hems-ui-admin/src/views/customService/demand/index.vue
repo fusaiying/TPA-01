@@ -250,6 +250,9 @@
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
+        <span @click="show">
+          <i :class="showClass"/>
+        </span>
         <span style="color: blue">处理中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
@@ -261,7 +264,9 @@
           tooltip-effect="dark"
           style=" width: 100%;"
           @selection-change="handleSelectionChange"
-          :row-class-name="setRowStyle">
+          :row-class-name="setRowStyle"
+          v-if="isShow"
+        >
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
@@ -329,6 +334,7 @@
           :page.sync="pageNumPerson"
           :limit.sync="pageSizePerson"
           @pagination="searchHandle1"
+          v-if="isShow"
         />
       </div>
     </el-card>
@@ -354,6 +360,8 @@
     },
     data() {
       return {
+        showClass:"el-icon-arrow-right",//图表样式
+        isShow:false,//控制是否显示个人池
         ids:[],//多选框
         open:"",//是否弹出
         title:"",//弹出框名称
@@ -546,6 +554,16 @@
 
       },
 
+      show(){
+        if (this.isShow==false){
+          this.isShow=true
+          this.showClass="el-icon-arrow-down"
+        }else {
+          this.isShow=false
+          this.showClass="el-icon-arrow-right"
+
+        }
+      },
       //增加按钮
       add(row) {
         this.$router.push({

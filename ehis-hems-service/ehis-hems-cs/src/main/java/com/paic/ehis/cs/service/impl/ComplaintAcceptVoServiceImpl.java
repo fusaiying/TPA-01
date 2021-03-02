@@ -356,7 +356,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
             if (!map3value.equals(map4value)) {
-                keyList.add(map3key);
+                keyList.add("callPerson."+map3key);
                 editDetail.setKeyDictType("complaintAcceptVo");
                 editDetail.setItemKey(map3key);
                 editDetail.setOldValue(map3value);
@@ -386,7 +386,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             if (!map5value.equals(map6value)) {
                 keyList.add(map5key);
                 editDetail.setKeyDictType("complaintAcceptVo");
-                editDetail.setItemKey(map5key);
+                editDetail.setItemKey("contactsPerson."+map5key);
                 editDetail.setOldValue(map5value);
                 editDetail.setNowValue(map6value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
@@ -414,7 +414,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             if (!map7value.equals(map8value)) {
                 keyList.add(map7key);
                 editDetail.setKeyDictType("complaintAcceptVo");
-                editDetail.setItemKey(map7key);
+                editDetail.setItemKey("complainPerson."+map7key);
                 editDetail.setOldValue(map7value);
                 editDetail.setNowValue(map8value);
                 editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));

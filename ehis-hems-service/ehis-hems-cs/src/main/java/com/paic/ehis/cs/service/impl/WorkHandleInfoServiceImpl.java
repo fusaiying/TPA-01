@@ -601,8 +601,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
     @Override
     public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo) {
-        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
-        ComplaintDealVo complaintDealVo=workHandleInfoMapper.selectDealVoByNo(workOrderNo);
+        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkComplaintByNo(workOrderNo);
+        ComplaintDealVo complaintDealVo=workHandleInfoMapper.selectComplaintDealVoByNo(workOrderNo);
         String sourceName="ComplaintDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);

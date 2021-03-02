@@ -101,8 +101,10 @@ public interface WorkHandleInfoMapper
     public WorkHandleInfo selectCreatedBy(WorkHandleInfo workHandleInfo);
 
     public WorkHandleInfo selectWorkHandleInfoByNo(String workOrderNo);
+    public WorkHandleInfo selectWorkComplaintByNo(String workOrderNo);
 
     public ComplaintDealVo selectDealVoByNo(String workOrderNo);
+    public ComplaintDealVo selectComplaintDealVoByNo(String workOrderNo);
     public ServiceProcessingVo selectDemandDealVoByNo(String workOrderNo);
     public ReservationDealVo selectReservationDealVoByNo(String workOrderNo);
 

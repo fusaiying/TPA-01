@@ -200,9 +200,16 @@
         <where>
             <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
             <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
-            <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
+            <if test="name != null and name != ''">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
             <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
-            <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>  and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+            <if test="createBy != null and createBy != ''">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createStartTime != null and createStartTime != ''">
+                <![CDATA[ AND claim_case_discussion.create_time >= #{createStartTime} ]]>
+            </if>
+            <if test="createEndTime != null and createEndTime != ''">
+                <![CDATA[ AND claim_case_discussion.create_time <= #{createEndTime}]]>
+            </if>
+            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case_discussion.rpt_no = claim_case.rpt_no
             and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case.batch_no = claim_batch.batch_no

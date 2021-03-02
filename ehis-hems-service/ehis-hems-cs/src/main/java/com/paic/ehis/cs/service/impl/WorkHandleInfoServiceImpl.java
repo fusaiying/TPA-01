@@ -558,8 +558,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
        // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-        workHandleInfo.setStatus("Y");
-        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        workHandleInfo.setWorkOrderNo((serviceProcessingVo.getWorkOrderNo()));
+        workHandleInfo.setStatus(serviceProcessingVo.getStatus());
         String sourceName="ServiceProcessingVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -581,9 +581,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public List<WorkHandleInfo> selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
 
         //获取处理时长
-         workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
+         //workOrderAcceptMapper.selectProcessingTime(reservationDealVo.getWorkOrderNo());
 
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo((reservationDealVo.getWorkOrderNo()));
+        workHandleInfo.setStatus(reservationDealVo.getStatus());
         String sourceName="ReservationDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
@@ -604,6 +606,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     @Override
     public List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setWorkOrderNo((complaintDealVo.getWorkOrderNo()));
+        workHandleInfo.setStatus(complaintDealVo.getStatus());
         String sourceName="ComplaintDealVo";
         String targetTableName="work_handle_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);

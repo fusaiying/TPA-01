@@ -43,7 +43,7 @@ public class ClaimDebtWhitelist extends BaseEntity
     private Date birthday;
 
     /** 等级 */
-    @Excel(name = "等级")
+    @Excel(name = "等级",readConverterExp = "1=特-VIP_0主,2=特-VIP_0连,3=特VIP_A主,4=特VIP_A连,5=企VIP_主,6=企VIP_连,7=个VIP_投,8=个VIP_被,9=特-VVIP主,10=特-VVIP连")
     private String level;
 
     /** 追讨金额上限 */
@@ -56,7 +56,7 @@ public class ClaimDebtWhitelist extends BaseEntity
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "创建时间")
+    @Excel(name = "创建时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
 
     /** 创建者 */

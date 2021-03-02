@@ -19,6 +19,9 @@ public class DebtInfoVO implements Serializable {
     @Excel(name = "报案号")
     private String rptNo;
 
+    /** 批次号 */
+    private String batchNo;
+
     /** 交单来源 */
     @Excel(name = "交单来源")
     private String source;

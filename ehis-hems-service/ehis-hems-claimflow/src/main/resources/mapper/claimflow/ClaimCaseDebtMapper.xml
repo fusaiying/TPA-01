@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endCaseTime" column="end_case_time"/>
         <result property="appntName" column="appnt_name"/>
         <result property="contNo" column="cont_no"/>
+        <result property="batchNo" column="batch_no"/>
     </resultMap>
 
     <sql id="selectClaimCaseDebtVo">
@@ -159,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             MIN( d.treatment_end_date ) treatment_end_date,
             e.source,
             e.hospital_code,
+            e.batch_no,
             f.end_case_time,
             CASE
                 b.debt_col_id

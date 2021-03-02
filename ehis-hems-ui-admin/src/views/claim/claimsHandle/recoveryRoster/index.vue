@@ -398,7 +398,7 @@
           };
           // 存在欠款 ？
           checkMoney(params).then(response => {
-            if(response.code == '200' && response.data.residualAmount >0) {
+            if(response.code == '200' && response.data && response.data.residualAmount >0) {
               this.$confirm(`该客户存在欠款，是否置为失效?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',

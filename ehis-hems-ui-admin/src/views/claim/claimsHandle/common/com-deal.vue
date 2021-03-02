@@ -59,7 +59,8 @@
       </div>
       <!-- 被保人信息 -->
       <div id="#anchor-2" class="batchInfo_class" style="margin-top: 10px;">
-        <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status" ref="insuredForm"
+        <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status"
+                     ref="insuredForm" @getInsuredData="getInsuredData"
                      :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag"/>
       </div>
       <!-- 申请人信息 -->
@@ -71,7 +72,7 @@
       <!-- 领款人信息 -->
       <div id="#anchor-11" class="batchInfo_class" style="margin-top: 10px;">
         <payeeInfo :sonPayeeInfoData="sonPayeeInfoData" ref="payeeInfoForm" :baseInfo="batchInfo" :fixInfo="fixInfo"
-                   @getApplicantData="getApplicantData"
+                   @getApplicantData="getApplicantData" @getInsuredData="getInsuredData" :insuredFormData="insuredFormData"
                    @refresh-item="refreshList" :applicantData="applicantData" :node="querys.node"
                    :status="querys.status"/>
       </div>
@@ -286,6 +287,7 @@
         dictList: [],
         delivery_sourceOption: [],
         applicantData: {},
+        insuredFormData: {},
         preHistoryData: [],
       }
 
@@ -331,15 +333,21 @@
         getInsured(this.querys.rptNo).then(res => {
 
           if (res != null && res.code === 200) {
+            this.insuredFormData={
+              caseInsuredData:undefined,
+              policyInfoData:undefined,
+            }
             if (res.data.claimCaseInsured != null && res.data.claimCaseInsured !== '') {
               this.sonInsuredData.claimCaseInsured = res.data.claimCaseInsured
               this.insuredNo = this.sonInsuredData.claimCaseInsured.insuredNo;
               this.insuredData = res.data.claimCaseInsured
+              this.insuredFormData.caseInsuredData = res.data.claimCaseInsured
               this.isSave = true
             }
             if (res.data.policyInfominData != null && res.data.policyInfominData.length > 0) {
               this.sonInsuredData.policyInfominData = res.data.policyInfominData;
               this.policySelectData = res.data.policyInfominData;
+              this.insuredFormData.policyInfoData = res.data.policyInfominData;
             }
           }
         })
@@ -789,7 +797,12 @@
       closeHistorySurveyDialog() {
         this.historySurveyDialog = false
       },
-
+      getInsuredData(){
+        this.insuredFormData={
+          caseInsuredData:this.$refs.insuredForm.baseForm,
+          policyInfoData:this.$refs.insuredForm.tableData,
+        }
+      }
     }
   }
 </script>

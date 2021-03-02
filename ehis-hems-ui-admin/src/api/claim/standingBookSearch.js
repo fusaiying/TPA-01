@@ -12,8 +12,8 @@ export function listFirst(data) {
 export function listNew(data) {
   return request({
     url: '/claimmgt/standing/listNew',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 

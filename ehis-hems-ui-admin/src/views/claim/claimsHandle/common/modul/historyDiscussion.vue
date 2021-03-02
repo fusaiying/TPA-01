@@ -14,43 +14,44 @@
         </span>
       </div>
       <form  v-for="(item,index) in HistoryData">
-        <el-row style="margin: 20px 10px;">
-          <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 -1 }}-下发</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈类型：</span><span class="info_span">{{ getNegotiationTypesName(item.discType) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.disView) }}</span>
-          </el-col>
-        </el-row>
+        <div class="div_b" style="margin-bottom: 20px">
+          <el-row style="margin: 10px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 -1 }}-下发</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.createTime | changeDate }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈类型：</span><span class="info_span">{{ getNegotiationTypesName(item.discType) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.createBy) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">转出意见：</span><span class="info_span">{{ (item.disView) }}</span>
+            </el-col>
+          </el-row>
 
-        <el-row style="margin: -10px 10px;" v-if="item.conclusion != ''">
-          <el-col :span="8">
-            <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 }}-回调</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.updateTime | changeDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.updateBy) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
-          </el-col>
-        </el-row>
+          <el-row style="margin: 10px 10px;" v-if="item.conclusion != ''">
+            <el-col :span="8">
+              <span class="info_span to_right">协谈序号：</span><span class="info_span">{{ (index +1) * 2 }}-回调</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈处理时间 ：</span><span class="info_span">{{ item.updateTime | changeDate }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈结论：</span><span class="info_span">{{ getConclusionName(item.conclusion) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈人：</span><span class="info_span">{{ (item.updateBy) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">协谈意见：</span><span class="info_span">{{ (item.conclusionView) }}</span>
+            </el-col>
+          </el-row>
+        </div>
       </form>
-
     </el-card>
   </el-dialog>
 </template>
@@ -150,4 +151,5 @@
   .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
+  .div_b{border:1px solid #E6EBF5}
 </style>

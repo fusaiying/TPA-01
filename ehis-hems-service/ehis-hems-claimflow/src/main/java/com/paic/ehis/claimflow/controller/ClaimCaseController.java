@@ -87,8 +87,8 @@ public class ClaimCaseController extends BaseController {
      * 查询处理中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processingList")
-    public TableDataInfo processingList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processingList")
+    public TableDataInfo processingList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -105,8 +105,8 @@ public class ClaimCaseController extends BaseController {
      * 查询已处理受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/processedList")
-    public TableDataInfo processedList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/processedList")
+    public TableDataInfo processedList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -123,8 +123,8 @@ public class ClaimCaseController extends BaseController {
      * 查询悬挂中受理案件信息 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/suspensionList")
-    public TableDataInfo suspensionList(ClaimCaseDTO claimCaseDTO) {
+    @PostMapping("/suspensionList")
+    public TableDataInfo suspensionList(@RequestBody ClaimCaseDTO claimCaseDTO) {
         if (claimCaseDTO.getOrderByColumn() != null && !claimCaseDTO.getOrderByColumn().equals("")) {
             claimCaseDTO.setOrderByColumn(StringUtils.humpToLine(claimCaseDTO.getOrderByColumn()));
         } else {
@@ -369,8 +369,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池处理中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentUnder")
-    public TableDataInfo listConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentUnder")
+    public TableDataInfo listConditionsForTheAdjustmentUnder(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -392,8 +392,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentOver")
-    public TableDataInfo listConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentOver")
+    public TableDataInfo listConditionsForTheAdjustmentOver(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -417,8 +417,8 @@ public class ClaimCaseController extends BaseController {
 
     //审核工作池接口-个人池悬挂中
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
-    @GetMapping("/listConditionsForTheAdjustmentHang")
-    public TableDataInfo listConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+    @PostMapping("/listConditionsForTheAdjustmentHang")
+    public TableDataInfo listConditionsForTheAdjustmentHang(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
@@ -622,9 +622,13 @@ public class ClaimCaseController extends BaseController {
 
             ClaimBatch claimBatch = new ClaimBatch();
             claimBatch.setBatchno(str1);//批次号
-            claimBatch.setSource(batchNoRptNoDTO.getSource());//交单来源
+            if("D".equals(batchNoRptNoDTO.getCaseFlag())){
+                claimBatch.setSource("01");//交单来源（01-在线交单，02-E结算）
+            }else {
+                claimBatch.setSource("02");//交单来源（01-在线交单，02-E结算）
+            }
             claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
-            claimBatch.setClaimtype(batchNoRptNoDTO.getClaimType());//理赔类型
+            claimBatch.setClaimtype("01");//理赔类型(01-直结，02-事后)
             claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
             claimBatch.setCasenum(i1);//案件数量
             BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
@@ -667,8 +671,6 @@ public class ClaimCaseController extends BaseController {
         } else {//未进行影像件扫描-完成撤件
             return toAjax(claimBatchService.updateClaimBatchBybatchNo(batchNo));
         }
-
     }
-
 
 }

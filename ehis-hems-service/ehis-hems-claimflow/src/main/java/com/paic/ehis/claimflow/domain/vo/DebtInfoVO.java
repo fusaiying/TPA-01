@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ public class DebtInfoVO implements Serializable {
     private String batchNo;
 
     /** 交单来源 */
-    @Excel(name = "交单来源")
+    @Excel(name = "交单来源",readConverterExp="01=PBW-在线理赔,02=PBW-E结算,03=机构交单,04=寿险app")
     private String source;
 
     /** 就诊医院 */
@@ -39,6 +40,7 @@ public class DebtInfoVO implements Serializable {
     private String idNo;
 
     /** 就诊日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "就诊日期")
     private String treatmentEndDate;
 

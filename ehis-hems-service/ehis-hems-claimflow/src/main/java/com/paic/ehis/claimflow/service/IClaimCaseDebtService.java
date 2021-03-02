@@ -1,7 +1,7 @@
 package com.paic.ehis.claimflow.service;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
-import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
+import com.paic.ehis.claimflow.domain.dto.DebtInfo;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 
 import java.util.List;
@@ -75,5 +75,5 @@ public interface IClaimCaseDebtService
      * @param debtInfoDTO
      * @return
      */
-    public List<DebtInfoVO> selectDebtList(DebtInfoDTO debtInfoDTO);
+    public List<DebtInfoVO> selectDebtList(DebtInfo debtInfoDTO);
 }

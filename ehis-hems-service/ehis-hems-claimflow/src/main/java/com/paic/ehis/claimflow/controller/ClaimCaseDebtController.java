@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
+import com.paic.ehis.claimflow.domain.dto.DebtInfo;
 import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 //import com.paic.ehis.claimflow.service.IClaimCaseDebtReceiptService;
@@ -58,7 +59,17 @@ public class ClaimCaseDebtController extends BaseController
             ExcelUtil<DebtInfoVO> util = new ExcelUtil<DebtInfoVO>(DebtInfoVO.class);
             util.exportExcel(response, list, "debt");
         } else {
-            List<DebtInfoVO> list = claimCaseDebtService.selectDebtList(debtInfoDTO);
+            DebtInfo debtInfo = new DebtInfo();
+            debtInfo.setRptNo(debtInfoDTO.getRptNo());
+            debtInfo.setPolicyNo(debtInfoDTO.getPolicyNo());
+            debtInfo.setHospitalCode(debtInfoDTO.getHospitalCode());
+            debtInfo.setInsuredName(debtInfoDTO.getInsuredName());
+            debtInfo.setIdNo(debtInfoDTO.getIdNo());
+            debtInfo.setStartDate(debtInfoDTO.getStartDate());
+            debtInfo.setEndDate(debtInfoDTO.getEndDate());
+            debtInfo.setWhiteStatus(debtInfoDTO.getWhiteStatus());
+            debtInfo.setPolicyItemNo(debtInfoDTO.getPolicyItemNo());
+            List<DebtInfoVO> list = claimCaseDebtService.selectDebtList(debtInfo);
             ExcelUtil<DebtInfoVO> util = new ExcelUtil<DebtInfoVO>(DebtInfoVO.class);
             util.exportExcel(response, list, "debt");
         }
@@ -115,12 +126,22 @@ public class ClaimCaseDebtController extends BaseController
     public TableDataInfo initDebtList(@RequestBody DebtInfoDTO debtInfoDTO){
         startPage(debtInfoDTO);
         List<DebtInfoVO> list = new ArrayList<>();
+        DebtInfo debtInfo = new DebtInfo();
+        debtInfo.setRptNo(debtInfoDTO.getRptNo());
+        debtInfo.setPolicyNo(debtInfoDTO.getPolicyNo());
+        debtInfo.setHospitalCode(debtInfoDTO.getHospitalCode());
+        debtInfo.setInsuredName(debtInfoDTO.getInsuredName());
+        debtInfo.setIdNo(debtInfoDTO.getIdNo());
+        debtInfo.setStartDate(debtInfoDTO.getStartDate());
+        debtInfo.setEndDate(debtInfoDTO.getEndDate());
+        debtInfo.setWhiteStatus(debtInfoDTO.getWhiteStatus());
+        debtInfo.setPolicyItemNo(debtInfoDTO.getPolicyItemNo());
         // 初始化或者查询条件为空
-//        if (ObjectNullUtil.isNotNull(debtInfoDTO)){
-//            list = claimCaseDebtService.selectDebtInitList();
-//        } else {
-            list = claimCaseDebtService.selectDebtList(debtInfoDTO);
-//        }
+        if (ObjectNullUtil.objectIsNull(debtInfo)){
+            list = claimCaseDebtService.selectDebtInitList();
+        } else {
+            list = claimCaseDebtService.selectDebtList(debtInfo);
+        }
         return getDataTable(list);
     }
 

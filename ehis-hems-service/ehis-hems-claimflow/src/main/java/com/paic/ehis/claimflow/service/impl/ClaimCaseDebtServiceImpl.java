@@ -1,14 +1,18 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
-import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
+import com.paic.ehis.claimflow.domain.dto.DebtInfo;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseDebtService;
+import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.exception.BaseException;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseProviderInfo;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,8 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
     private ClaimCaseDebtMapper claimCaseDebtMapper;
     @Autowired
     private ClaimCasePolicyMapper claimCasePolicyMapper;
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询案件追讨信息
@@ -145,6 +151,18 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
                 ArrayList<String> policyNoWithoutDup = new ArrayList<>(hashSetPolicyNo);
                 String contNo = StringUtils.join(policyNoWithoutDup, "|");
                 debtInfo.setContNo(contNo);
+                // 通过微服务获取医院名称
+                BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+                baseProviderInfo.setProviderCode(debtInfo.getHospitalCode());
+                R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+                if (R.FAIL == result.getCode())
+                {
+                    throw new BaseException(result.getMsg());
+                }
+                if (result.getData().size() > 0) {
+                    BaseProviderInfo hospital = result.getData().get(0);
+                    debtInfo.setHospitalCode(hospital.getChname1());
+                }
             } else {
                 // 剩余欠款小于0 移除
                 debtInfoList.remove(debtInfo);
@@ -160,7 +178,7 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
      * @return
      */
     @Override
-    public List<DebtInfoVO> selectDebtList(DebtInfoDTO debtInfoDTO) {
+    public List<DebtInfoVO> selectDebtList(DebtInfo debtInfoDTO) {
         List<DebtInfoVO> debtInfoVOList = claimCaseDebtMapper.selectDebtList(debtInfoDTO);
         for (DebtInfoVO debtInfo : debtInfoVOList){
             ClaimCasePolicy policy = new ClaimCasePolicy();
@@ -180,6 +198,18 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
             ArrayList<String> policyNoWithoutDup = new ArrayList<>(hashSetPolicyNo);
             String contNo = StringUtils.join(policyNoWithoutDup, "|");
             debtInfo.setContNo(contNo);
+            // 通过微服务获取医院名称
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(debtInfo.getHospitalCode());
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                debtInfo.setHospitalCode(hospital.getChname1());
+            }
         }
         return debtInfoVOList;
     }

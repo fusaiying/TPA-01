@@ -21,6 +21,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="vipFlag"    column="vip_flag"    />
         <result property="organCode"    column="organ_code"    />
         <result property="status"    column="status"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="clickTime"    column="click_time"    />
+        <result property="hangFlag"    column="hang_flag"    />
+        <result property="hangReason"    column="hang_reason"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -28,12 +32,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectWorkOrderAcceptVo">
-        select work_order_no, business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, create_by, create_time, update_by, update_time from work_order_accept
+        select work_order_no, business_type, policy_no, policy_item_no, risk_code, insured_no, insured_name, holder_no, holder_name, accept_by, accept_time, modify_by, modify_time, vip_flag, organ_code, status, end_date, click_time, hang_flag, hang_reason, create_by, create_time, update_by, update_time from work_order_accept
     </sql>
 
-    <select id="selectWorkOrderAcceptList" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+
+    <select id="selectWorkOrderAcceptList" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         <include refid="selectWorkOrderAcceptVo"/>
-        <where>  
+        <where>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
             <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and policy_item_no = #{policyItemNo}</if>
@@ -49,6 +54,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vipFlag != null  and vipFlag != ''"> and vip_flag = #{vipFlag}</if>
             <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="clickTime != null "> and click_time = #{clickTime}</if>
+            <if test="hangFlag != null  and hangFlag != ''"> and hang_flag = #{hangFlag}</if>
+            <if test="hangReason != null  and hangReason != ''"> and hang_reason = #{hangReason}</if>
         </where>
     </select>
     
@@ -76,11 +85,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vipFlag != null">vip_flag,</if>
             <if test="organCode != null">organ_code,</if>
             <if test="status != null and status != ''">status,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="clickTime != null">click_time,</if>
+            <if test="hangFlag != null">hang_flag,</if>
+            <if test="hangReason != null">hang_reason,</if>
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">#{workOrderNo},</if>
             <if test="businessType != null and businessType != ''">#{businessType},</if>
@@ -98,11 +111,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vipFlag != null">#{vipFlag},</if>
             <if test="organCode != null">#{organCode},</if>
             <if test="status != null and status != ''">#{status},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="clickTime != null">#{clickTime},</if>
+            <if test="hangFlag != null">#{hangFlag},</if>
+            <if test="hangReason != null">#{hangReason},</if>
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateWorkOrderAccept" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
@@ -123,6 +140,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vipFlag != null">vip_flag = #{vipFlag},</if>
             <if test="organCode != null">organ_code = #{organCode},</if>
             <if test="status != null and status != ''">status = #{status},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="clickTime != null">click_time = #{clickTime},</if>
+            <if test="hangFlag != null">hang_flag = #{hangFlag},</if>
+            <if test="hangReason != null">hang_reason = #{hangReason},</if>
             <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
@@ -145,8 +166,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectProcessingTime" parameterType="Long" resultMap="WorkOrderAcceptResult">
+    <select id="selectProcessingTime" parameterType="string" resultMap="WorkOrderAcceptResult">
         SELECT concat(DATEDIFF(click_time,accept_time),"天") as processing_time from work_order_accept
         where work_order_no = #{workOrderNo}
+    </select>
+    <update id="updateHangReason"  parameterType="com.paic.ehis.cs.domain.vo.ComplaintDealVo">
+        update work_order_accept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hangFlag != null">hang_flag = #{hangFlag},</if>
+            <if test="hangReason != null">hang_reason = #{hangReason},</if>
+        </trim>
+    </update>
+    <select id="selectHangFlag" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+        select work_order_no,hang_flag,hang_reason from work_order_accept
+            where work_order_no=#{workOrderNo}
     </select>
 </mapper>

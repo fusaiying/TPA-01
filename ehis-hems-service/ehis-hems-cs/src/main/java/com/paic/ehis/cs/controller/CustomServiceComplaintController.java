@@ -6,12 +6,15 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.cs.domain.CallAgain;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import com.paic.ehis.cs.service.IEditInfoService;
+import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +31,8 @@ public class CustomServiceComplaintController extends BaseController {
 
     @Autowired
     private IComplaintAcceptVoService iComplaintAcceptVoService;
+    @Autowired
+    private IWorkOrderAcceptService iWorkOrderAcceptService;
     @Autowired
     private IEditInfoService iEditInfoService;
 
@@ -121,5 +126,25 @@ public class CustomServiceComplaintController extends BaseController {
         }else{
             return toAjax(iComplaintAcceptVoService.complaintSaveHandling(complaintDealVo));
         }
+    }
+
+    /**
+     * 工单挂起
+     */
+    @Log(title = "修改 ", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateHangReason")
+    public AjaxResult updateHangReason(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
+    {
+        return toAjax(iWorkOrderAcceptService.updateHangReason(complaintAcceptVo));
+    }
+    /**
+     * 查询工单是否挂起
+     */
+    @PreAuthorize("@ss.hasPermi('system:again:list')")
+    @GetMapping("/selectHangFlag")
+    public AjaxResult selectHangFlag(WorkOrderAccept workOrderAccept)
+    {
+        WorkOrderAccept list =iWorkOrderAcceptService.selectHangFlag(workOrderAccept);
+        return AjaxResult.success(list);
     }
 }

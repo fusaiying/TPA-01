@@ -3,6 +3,7 @@ package com.paic.ehis.cs.service.impl;
 import java.util.List;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,26 @@ public class WorkOrderAcceptServiceImpl implements IWorkOrderAcceptService
     public int deleteWorkOrderAcceptById(String workOrderNo)
     {
         return workOrderAcceptMapper.deleteWorkOrderAcceptById(workOrderNo);
+    }
+
+    /**
+     * 工单挂起
+     * @param complaintAcceptVo
+     * @return
+     */
+    @Override
+    public int updateHangReason(ComplaintAcceptVo complaintAcceptVo) {
+        WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+        workOrderAccept.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+        workOrderAccept.setHangReason(complaintAcceptVo.getHangReason());
+        workOrderAccept.setHangFlag(complaintAcceptVo.getHangFlag());
+        return workOrderAcceptMapper.updateHangReason(complaintAcceptVo);
+    }
+    /**
+     * 查询工单是否挂起
+     */
+    @Override
+    public WorkOrderAccept selectHangFlag(WorkOrderAccept workOrderAccept) {
+        return workOrderAcceptMapper.selectHangFlag(workOrderAccept);
     }
 }

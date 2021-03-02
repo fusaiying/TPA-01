@@ -81,7 +81,7 @@
           style=" width: 100%;">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="collaborativeId" label="流转号" show-overflow-tooltip/>

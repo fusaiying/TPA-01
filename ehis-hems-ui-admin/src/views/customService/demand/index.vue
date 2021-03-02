@@ -264,7 +264,7 @@
           :row-class-name="setRowStyle">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="businessService" label="服务项目" show-overflow-tooltip>

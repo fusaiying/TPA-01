@@ -722,14 +722,9 @@
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
-      // this.getDicts("sys_oper_type").then(response => {
-      //   this.states = response.data;
-      //   console.log("response:",response)
-      // });
-
       let query = {
-        workOrderNo: this.params.workOrderNo,
-        businessType: this.params.businessType,
+        workOrderNo: this.queryParams.workOrderNo,
+        businessType: this.queryParams.businessType,
       }
       //获取附件列表信息
       getAttachmentListById(query).then(res => {

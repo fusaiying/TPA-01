@@ -258,7 +258,7 @@
           @selection-change="handleSelectionChange">
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{ scope.row.workOrderNo }}
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}
               </el-button>
             </template>
           </el-table-column>

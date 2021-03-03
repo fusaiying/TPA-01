@@ -645,10 +645,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 //是否调查
                 ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                 claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                claimCaseInvestigation.setIsHistory("N");
                 claimCaseInvestigation.setStatus("Y");
-                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+               // List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
+                if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -780,8 +780,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                             claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                             claimCaseInvestigation.setIsHistory("N");
                             claimCaseInvestigation.setStatus("Y");
-                            List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                            if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                            List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                            if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                                 conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                             } else {
                                 conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -844,8 +844,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     claimCaseInvestigation.setIsHistory("N");
                     claimCaseInvestigation.setStatus("Y");
-                    List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                    if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                    List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                     } else {
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -925,8 +925,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                 claimCaseInvestigation.setIsHistory("N");
                 claimCaseInvestigation.setStatus("Y");
-                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -1136,6 +1136,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
 
+        caseRecord.setOperation(ClaimStatus.CASESURVEY.getCode());
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());

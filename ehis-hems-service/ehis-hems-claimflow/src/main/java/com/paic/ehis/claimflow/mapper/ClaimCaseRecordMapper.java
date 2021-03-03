@@ -199,4 +199,11 @@ public interface ClaimCaseRecordMapper
      */
     public long selectRecentlyClaimCaseRecordByRptNo(String rptNo);
 
+    /**
+     * 轨迹表是否有调查的数据
+     * @param rptNo
+     * @return
+     */
+    public List<ClaimCaseRecord> selectClaimCaseRecordByrptNo(String rptNo);
+
 }

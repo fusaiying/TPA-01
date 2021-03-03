@@ -167,6 +167,12 @@
         where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'N'
     </select>
 
+
+    <select id="selectClaimCaseRecordByrptNo" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and  operation = '32' and status = 'Y'
+    </select>
+
     <select id="selectClaimCaseRecordByRptNo" parameterType="String" resultType="Long">
         select record_id from claim_case_record
         where rpt_no = #{rptNo} and operation = '06' and status = 'Y' and  history_flag = 'N'

@@ -96,16 +96,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCaseClaimCaseFilingInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" resultMap="ClaimCaseFilingInformationVOResult">
         select
-             ccf.case_box_no
-            ,ccf.dept_code
-            ,ccf.claim_type
-            ,cbif.is_filing
-            ,cbif.is_invoice_back
-            ,cbif.is_single
-            ,cbif.remark
-            ,ccf.status
+            ccf.case_box_no,
+            ccf.dept_code,
+            ccf.claim_type,
+            ccf.batch_no,
+            (select is_filing  from claim_batch_invoice_filing  cbif where ccf.batch_no=cbif.batch_no ) is_filing,
+            (select is_invoice_back  from claim_batch_invoice_filing  cbif where ccf.batch_no=cbif.batch_no ) is_invoice_back,
+            (select is_single  from claim_batch_invoice_filing  cbif where ccf.batch_no=cbif.batch_no ) is_single,
+            (select remark  from claim_batch_invoice_filing  cbif where ccf.batch_no=cbif.batch_no ) remark,
+            ccf.status
         from claim_case_filing ccf
-        inner join claim_batch_invoice_filing cbif on ccf.batch_no=cbif.batch_no
         <where>
             <if test="caseBoxNo != null and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
         </where>

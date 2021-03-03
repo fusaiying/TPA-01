@@ -974,9 +974,9 @@
       modify() {
         var items;
 
-        if (this.ids.length == 0) {
-          this.$message.warning("先选中一行")
-        } else {
+        // if (this.ids.length == 0) {
+        //   this.$message.warning("先选中一行")
+        // } else {
           items = JSON.stringify(this.ids)
           // if (this.ids.length > 2) {
           //   // alert("选中一行")
@@ -992,7 +992,7 @@
 
               }
             })
-          }
+        // }
         }
       ,
       //取消按钮

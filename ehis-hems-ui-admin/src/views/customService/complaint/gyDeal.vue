@@ -948,24 +948,24 @@
         })
       },
       //修改按钮
-      modify() {
-        if (this.ids.length==0){
-          alert("先选中一行")
-        }else {if(this.ids.length>2){
-          alert("选中一行")
-        }else {
-          this.$router.push({
-            path: '/customService/modify',
-            query: {
-              workOrderNo: this.queryParams.workOrderNo,
-              policyNo: this.queryParams.policyNo,
-              policyItemNo: this.queryParams.policyItemNo,
-              status: this.queryParams.status
-            }
-          })
-        }
-        }
-      },
+      // modify() {
+      //   if (this.ids.length==0){
+      //     alert("先选中一行")
+      //   }else {if(this.ids.length>2){
+      //     alert("选中一行")
+      //   }else {
+      //     this.$router.push({
+      //       path: '/customService/modify',
+      //       query: {
+      //         workOrderNo: this.queryParams.workOrderNo,
+      //         policyNo: this.queryParams.policyNo,
+      //         policyItemNo: this.queryParams.policyItemNo,
+      //         status: this.queryParams.status
+      //       }
+      //     })
+      //   }
+      //   }
+      // },
       //取消按钮
       cancle() {
         this.$router.push({

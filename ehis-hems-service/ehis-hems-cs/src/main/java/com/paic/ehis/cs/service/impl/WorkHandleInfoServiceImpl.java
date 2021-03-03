@@ -207,6 +207,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setOpinion(serviceProcessingVo.getRemark());
            //没有um帐号
             flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

@@ -197,7 +197,7 @@
         hm.nnn DESC
 	</select>
 
-    <select id="selectDemandAcceptVoById" resultType="com.paic.ehis.cs.domain.vo.DemandAcceptVo">
+    <select id="selectDemandAcceptVoById" resultMap="DemandAcceptVoResult">
          SELECT
         a.work_order_no,
         (select distinct 1 from call_again ca

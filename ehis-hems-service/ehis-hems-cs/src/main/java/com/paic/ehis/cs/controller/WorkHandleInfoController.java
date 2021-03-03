@@ -102,24 +102,6 @@ public class WorkHandleInfoController extends BaseController
         return toAjax(workHandleInfoService.deleteWorkHandleInfoByIds(handleIds));
     }
     //----------------------------------------------------------------------------------------------------
-    /**
-     * 查询工单业处理信息 信息需求
-     */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectWorkOrder")
-    public TableDataInfo selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
-        List<WorkHandleInfo> list = workHandleInfoService.selectWorkOrder(serviceProcessingVo);
-        return getDataTable(list);
-    }
-    /**
-     * 查询工单业处理信息 预约
-     */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
-    @GetMapping("/selectOrderWorkOrder")
-    public TableDataInfo selectOrderWorkOrder(ReservationDealVo reservationDealVo) {
-        List<WorkHandleInfo> list = workHandleInfoService.selectOrderWorkOrder(reservationDealVo);
-        return getDataTable(list);
-    }
 
     @GetMapping("/selectDealVo")
     public AjaxResult selectDealVo(WorkOrderAccept workOrderAccept) {

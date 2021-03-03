@@ -102,21 +102,6 @@ public interface IWorkHandleInfoService
     int insertResevationDeal(ReservationDealVo reservationDealVo);
     int insertResevationSaveDeal(ReservationDealVo reservationDealVo);
 
-    /**
-     * 查询工单业处理信息 预约  信息需求
-     * @param serviceProcessingVo
-     * @return
-     */
-    List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo);
-    /**
-     * 查询工单业处理信息 预约
-     */
-    List<WorkHandleInfo> selectOrderWorkOrder(ReservationDealVo reservationDealVo);
-    /**
-     * 查询工单业处理信息 投诉
-     */
-  //  List<WorkHandleInfo> selectComplaintWorkOrder(ComplaintDealVo complaintDealVo);
-
     public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo);
 
     public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo);

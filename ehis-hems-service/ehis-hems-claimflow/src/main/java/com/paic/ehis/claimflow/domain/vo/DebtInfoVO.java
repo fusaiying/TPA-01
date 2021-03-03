@@ -73,7 +73,7 @@ public class DebtInfoVO implements Serializable {
     private String whiteStatus;
 
     /** 状态 */
-    @Excel(name = "状态",readConverterExp = "01=已收款,02=代收款")
+    @Excel(name = "状态",readConverterExp = "01=已付款,02=未付款")
     private String colStatus;
 
 }

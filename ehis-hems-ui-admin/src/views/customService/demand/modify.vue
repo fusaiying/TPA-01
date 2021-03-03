@@ -8,20 +8,16 @@
         <el-divider></el-divider>
 
         <el-row>
-              <el-form-item label="受理渠道：" prop="channelCode" >
-                <el-radio-group v-model="workPoolData.channelCode">
-                  <el-radio   label="01">电话</el-radio>
-                  <el-radio   label="02">邮箱</el-radio>
-                  <el-radio   label="03">网站</el-radio>
-                  <el-radio   label="04">电话中心</el-radio>
-                  <el-radio   label="05">柜面</el-radio>
-                  <el-radio   label="06">医网</el-radio>
-                  <el-radio   label="07">平安内网</el-radio>
-                  <el-radio   label="08">APP</el-radio>
-                  <el-radio   label="09">寿险</el-radio>
-                  <el-radio   label="10">微信</el-radio>
-                </el-radio-group>
-              </el-form-item>
+          <el-form-item label="受理渠道：" prop="channelCode">
+            <el-radio-group v-model="workPoolData.channelCode">
+              <el-radio
+                v-for="dict in cs_channel"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
           </el-row>
         <el-row>
           <el-col :span="8">
@@ -462,8 +458,11 @@
       this.getDicts("cs_organization").then(response => {
         this.cs_organization = response.data;
       });
-      this.getDicts("cs_priority").then(response => {
+      this.getDicts("cs_priority").then(response =>{
         this.cs_priority = response.data;
+      });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
       });
       this.searchHandle()
       this.searchFlowLog()

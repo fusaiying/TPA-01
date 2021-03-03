@@ -126,6 +126,8 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
     @Override
     public int updateBaseIcd10One(BaseIcd10 baseIcd10) {
         baseIcd10.setStatus("N");
+        baseIcd10.setUpdateBy(SecurityUtils.getUsername());
+        baseIcd10.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         return baseIcd10Mapper.updateBaseIcd10(baseIcd10);
     }
 

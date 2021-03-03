@@ -168,7 +168,7 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" @closeListDialog="closeListDialog"/>
+    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>

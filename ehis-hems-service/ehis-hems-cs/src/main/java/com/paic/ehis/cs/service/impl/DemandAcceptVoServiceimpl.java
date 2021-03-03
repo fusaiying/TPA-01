@@ -220,6 +220,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
 
         acceptDetailInfo.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(demandAcceptVo.getItemCode());
         acceptDetailInfo.setCallPersonId(demandAcceptVo.getCallPersonId());
@@ -462,7 +463,6 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         //Hcs
         if (demandAcceptVo.getAlterId() != null) {
-
             hcsModificationMapper.updateHcsStauts(demandAcceptVo.getAlterId());
         }
         return demandAcceptVoMapper.insertFlowLog(flowLog);

@@ -49,7 +49,9 @@ public class EditDetailController extends BaseController
         return getDataTable(list);
     }
 
-
+    /**
+     * 查询修改说明
+     */
     @GetMapping("/edit")
     public TableDataInfo getEdit(FlowLog flowLog){
          List<EditDetail> list =editDetailService.selectEdit(flowLog);

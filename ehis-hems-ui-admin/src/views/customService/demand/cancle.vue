@@ -378,8 +378,16 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{selectDictLabel(cs_action_type, scope.row.operateCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
@@ -389,7 +397,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary" @click="modifyDetails(scope.row)">修改说明</el-link>
             </template>
           </el-table-column>
           <modify-details ref="modifyDetails"></modify-details>
@@ -499,6 +507,8 @@
     data() {
 
       return {
+        cs_order_state:[],//状态
+        cs_action_type:[],//操作类型
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -587,6 +597,12 @@
       this.searchFlowLog()
       this.getDicts("sys_oper_type").then(response => {
         this.states = response.data;
+      });
+      this.getDicts("cs_action_type").then(response => {
+        this.cs_action_type = response.data;
+      });
+      this.getDicts("cs_order_state").then(response => {
+        this.cs_order_state = response.data;
       });
 
     },

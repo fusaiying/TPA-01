@@ -156,7 +156,7 @@
             let insert=this.dynamicValidateForm
             coOrganizerSubmit(insert).then(res => {
               if (res != null && res.code === 200) {
-                alert("修改成功")
+                this.$message.success("协办成功")
                 if (res.rows.length <= 0) {
                   return this.$message.warning(
                     "失败！"

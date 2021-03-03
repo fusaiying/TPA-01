@@ -21,8 +21,8 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="证件号码：" prop="name">
-              <el-input v-model="formSearch.name" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-form-item label="证件号码：" prop="idNo">
+              <el-input v-model="formSearch.idNo" class="item-width" clearable size="mini" placeholder="请输入"
                         @keyup.native.enter="searchHandle"/>
             </el-form-item>
           </el-col>
@@ -37,21 +37,21 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="操作日期：" prop="effectiveSDate">
+            <el-form-item label="操作日期：" prop="operateDate">
               <el-date-picker
-                v-model="formSearch.effectiveSDate"
+                v-model="formSearch.operateDate"
                 style="width:220px;"
                 size="mini"
                 type="daterange"
                 value-format="yyyy-MM-dd"
-                placeholder="选择日期"
+                start-placeholder="开始日期" end-placeholder="结束日期"
               />
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="审核人：" prop="createBy">
-              <el-input v-model="formSearch.createBy" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-form-item label="审核人：" prop="updateBy">
+              <el-input v-model="formSearch.updateBy" class="item-width" clearable size="mini" placeholder="请输入"
                         @keyup.native.enter="searchHandle"/>
             </el-form-item>
           </el-col>
@@ -68,7 +68,7 @@
       <div slot="header" class="clearfix">
         <span>案件工作池</span>
       </div>
-      <claimTable :table-data="claimTableData"/>
+      <claimTable :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
       <pagination
         v-show="claimTotal>0"
         :total="claimTotal"
@@ -86,10 +86,10 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
-          <appealTable  :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
+          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="03">
-          <appealTable  :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
@@ -122,6 +122,9 @@ import { PendingData,processedData } from '@/api/negotiation/api'
 import { claimInfoList } from '@/api/appeal/api'
 
 import moment from "moment";
+
+let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
+
 export default {
   dicts: ['delivery_source'],
   components: {
@@ -136,13 +139,13 @@ export default {
         page: 1,
         pageSize: 10
       },
-      tableData: [],
       formSearch: {
         rptNo: '',
         source: '',
+        idNo:'',
         name: '',
-        discType: '',
-        createBy: '',
+        operateDate: '',
+        updateBy: '',
       },
       activeName: '01',
       pendingTableData: [],
@@ -158,18 +161,38 @@ export default {
         pageSize: 10
       },
       dialogVisible: false,
-      orderno: '',
-      negotiationno: '',
-      changeSerchData: {},
       deliverySource:[],
+      claimStatus:[],
+      dictList:[],
+      claimTypes:[],
+      payStatus:[],
       searchBtn:false,
     }
   },
-  mounted(){
+  async mounted(){
+
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
     //交单来源
-    this.getDicts("delivery_source").then(response => {
-      this.deliverySource = response.data;
-    });
+    this.deliverySource = this.dictList.find(item => {
+      return item.dictType === 'delivery_source'
+    }).dictDate
+
+    // 理赔类型
+    this.claimTypes = this.dictList.find(item => {
+      return item.dictType === 'claimType'
+    }).dictDate
+
+    // 案件状态
+    this.claimStatus = this.dictList.find(item => {
+      return item.dictType === 'claim_status'
+    }).dictDate
+
+    // 支付状态
+    this.payStatus = this.dictList.find(item => {
+      return item.dictType === 'case_pay_status'
+    }).dictDate
   },
   created() {
     this.initClaimData();
@@ -196,33 +219,40 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.searchBtn = true;
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
-      this.pendingTotal = 0;
-      this.completedTotal = 0;
-      this.getPendingData();
-      this.getProcessedData();
+      this.claimPageInfo.page  = 1;
+      this.claimPageInfo.pageSize = 10;
+      this.initClaimData();
+      // this.searchBtn = true;
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
+      // this.pendingTotal = 0;
+      // this.completedTotal = 0;
+      // this.getPendingData();
+      // this.getProcessedData();
     },
     // 查询处理中
     getPendingData() {
       this.searchLoad = true;
-      let rptNo = this.formSearch.rptNo ;
-      let source = this.formSearch.source ;
-      let name = this.formSearch.name ;
-      let discType = this.formSearch.discType ;
-      let createBy = this.formSearch.createBy ;
-
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
-      params.rptNo = rptNo;
-      params.source = source;
-      params.name = name;
-      params.discType = discType;
-      params.createBy = createBy;
-      params.pageNum = this.pendPageInfo.pageNum;
-      params.pageSize = this.pendPageInfo.pageSize;
+      params.pageNum = this.claimPageInfo.page;
+      params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
+
       PendingData(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -234,29 +264,23 @@ export default {
     },
     // 查询已处理
     getProcessedData() {
-      let rptNo = this.formSearch.rptNo ;
-      let source = this.formSearch.source ;
-      let name = this.formSearch.name ;
-      let discType = this.formSearch.discType ;
-      let createBy = this.formSearch.createBy ;
-
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
-      params.rptNo = rptNo;
-      params.source = source;
-      params.name = name;
-      params.discType = discType;
-      params.createBy = createBy;
-      params.pageNum = this.completePageInfo.pageNum;
-      params.pageSize = this.completePageInfo.pageSize;
-
-      let startTime = '';
-      let endTime = '';
-      // if (!this.searchBtn) {
-      //   startTime = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
-      //   endTime = moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
-      // }
+      params.pageNum = this.claimPageInfo.page;
+      params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
       processedData(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
@@ -265,9 +289,24 @@ export default {
       })
     },
     initClaimData(){
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
       params.pageNum = this.claimPageInfo.page;
       params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
+      params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {
           this.claimTotal = res.total;

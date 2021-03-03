@@ -856,6 +856,19 @@
            AND t2.status = 'Y'
            AND  t4.status = 'Y'
            AND  t5.status = 'Y'
+        <if test="rptNo != null  and rptNo != ''"> and t1.rpt_no = #{rptNo}</if>
+        <if test="source != null  and source != ''"> and t2.source = #{source}</if>
+        <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
+        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
+        <if test="updateBy != null  and updateBy != ''"> and t6.update_by = #{updateBy}</if>
+        <if test="pageType != null  and pageType != '' and pageType = '01'"> and t1.case_status in ('09','97') </if>
+
+        <if test="createStartTime != null and createStartTime != ''">
+            <![CDATA[AND t1.update_time >= #{createStartTime} ]]>
+        </if>
+        <if test="createEndTime != null and createEndTime != ''">
+            <![CDATA[AND t1.update_time <= #{createEndTime}]]>
+        </if>
 
     </select>
 </mapper>

@@ -7,7 +7,7 @@
     tooltip-effect="dark"
     style="width: 100%;">
     <el-table-column align="center" prop="discType" label="报案号" show-overflow-tooltip/>
-    <el-table-column width="200" align="center" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
+    <el-table-column :formatter="getDeliverySourceName" align="center" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
     <el-table-column align="center" prop="companyName" label="被保人姓名" show-overflow-tooltip/>
     <el-table-column align="center" prop="organCode" label="证件号码" show-overflow-tooltip/>
     <el-table-column align="center" prop="name" label="理赔类型" show-overflow-tooltip/>
@@ -35,6 +35,18 @@ export default {
         return []
       }
     },
+    deliverySource: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    claimTypes: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
     status: String,
   },
   data() {
@@ -42,6 +54,12 @@ export default {
     }
   },
   methods: {
+    getDeliverySourceName(row,col) {
+      return this.selectDictLabel(this.deliverySource, row.source)
+    },
+    getClaimTypeName(row,col) {
+      return this.selectDictLabel(this.deliverySource, row.source)
+    },
   }
 }
 </script>

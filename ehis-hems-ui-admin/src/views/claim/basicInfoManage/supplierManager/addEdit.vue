@@ -145,7 +145,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.placeType'"
                             :rules="constactRules.placeType">
-                <el-select v-model="scope.row.placeType" placeholder="请选择" size="mini">
+                <el-select v-model="scope.row.placeType" placeholder="请选择" size="mini" @change="isRepeated(scope.$index,scope.row)">
                   <el-option v-for="item in linkman_typeOptions" :key="item.dictValue" :label="item.dictLabel"
                              :value="item.dictValue"/>
                 </el-select>
@@ -269,7 +269,7 @@
               <span v-if="!scope.row.isShow">{{ scope.row.accountName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountNo" align="center" header-align="center" label="账户号" min-width="2"
+          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号" min-width="2"
                            show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'account.' + scope.$index + '.accountNo'"
@@ -781,6 +781,21 @@
 
       }
       ,
+
+      //运营负责人只能有一个
+      isRepeated(index,data) {
+
+      //找到联系人为运营服务人的数据
+        let placeType= this.contactForm.contacts.filter(item => {
+          return item.placeType==='02';
+        })
+        //重复了
+        if(placeType.length==2){
+         data.placeType=''
+          this.$message.warning('联系人信息中运营负责人只能存在一位')
+        }
+        },
+
       selectChange(row, value) {
         row.unitebankcode = value[3]
         /* this.accountForm.account[i].unitebankcode = ''
@@ -1260,7 +1275,7 @@
         let params = {
           pageNum: 1,
           pageSize: 10,
-          supplierCode: this.querys.serialNo,
+          supplierCode: this.supplier.serialNo,
         }
         getService(params).then(res => {
           if (res != null && res.code === 200) {

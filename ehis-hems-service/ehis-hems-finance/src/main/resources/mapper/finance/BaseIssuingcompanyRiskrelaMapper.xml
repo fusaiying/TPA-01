@@ -109,9 +109,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN claim_product product ON product.risk_code = bir.risk_code
         AND product.STATUS = 'Y'
         <where>
-            <if test="companyCode != null">and company_code = #{companyCode}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="settlementType  != null  and status != ''"> and settlement_type  = #{settlementType}</if>
+            <if test="companyCode != null">and rule.company_code = #{companyCode}</if>
+            <if test="status != null  and status != ''"> and rule.status = #{status}</if>
+            <if test="settlementType  != null  and status != ''"> and rule.settlement_type  = #{settlementType}</if>
         </where>
     </select>
 </mapper>

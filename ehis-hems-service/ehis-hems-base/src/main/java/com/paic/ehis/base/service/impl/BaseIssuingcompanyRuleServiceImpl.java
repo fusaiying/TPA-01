@@ -16,6 +16,7 @@ import com.paic.ehis.base.service.IBaseIssuingcompanyRuleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -85,7 +86,7 @@ public class BaseIssuingcompanyRuleServiceImpl implements IBaseIssuingcompanyRul
      * @param issuingcompanyRuleDTO 出单公司规则
      * @return 出单公司规则
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int addAndModifyBaseIssuingcompanyRule(IssuingcompanyRuleDTO issuingcompanyRuleDTO) {
         String[] riskcodes = issuingcompanyRuleDTO.getRiskcode().split(",");

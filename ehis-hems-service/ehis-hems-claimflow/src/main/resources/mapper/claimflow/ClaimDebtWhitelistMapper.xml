@@ -50,9 +50,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
             <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="recMessageFlag != null  and recMessageFlag != ''"> and rec_message_flag = #{recMessageFlag}</if>
             <if test="debtAmountUp != null "> and debt_amount_up like concat('%', #{debtAmountUp}, '%')</if>
+            <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
             AND STATUS = 'Y'
         </where>
+      order by create_time desc
     </select>
 
     <insert id="insertClaimDebtWhitelist" parameterType="com.paic.ehis.claimflow.domain.ClaimDebtWhitelist" useGeneratedKeys="true" keyProperty="debtWhitelistId">
@@ -111,13 +114,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--根据被保人客户号查询欠款-->
     <select id="selectResidualList" resultType="com.paic.ehis.claimflow.domain.ClaimDebtWhitelist">
         SELECT
-            claim_case_debt.insured_no,
-            claim_case_debt.debt_amount,
-            SUM( claim_case_debt_col.col_amount ),
-            ( claim_case_debt.debt_amount - SUM( claim_case_debt_col.col_amount ) ) as residualAmount
-        FROM
-            claim_case_debt,claim_case_debt_col
-        where claim_case_debt.insured_no=#{insuredNo}
-        GROUP BY claim_case_debt.rpt_no,claim_case_debt.debt_amount
+            de.insured_no,
+            SUM(de.debt_amount),
+            (SUM(de.debt_amount) - (SELECT sum(col_amount) FROM claim_case_debt_col where debt_id in (select debt_id from claim_case_debt where insured_no= #{insuredNo}) and status = 'Y'   )) as residualAmount
+        FROM claim_case_debt de
+        where de.insured_no= #{insuredNo} and de.status = 'Y'
+        GROUP BY de.insured_no
     </select>
 </mapper>

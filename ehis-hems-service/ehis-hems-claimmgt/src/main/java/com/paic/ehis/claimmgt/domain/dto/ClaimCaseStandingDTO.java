@@ -2,13 +2,14 @@ package com.paic.ehis.claimmgt.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 
 
 import java.io.Serializable;
 import java.util.Date;
 
 
-public class ClaimCaseStandingDTO implements Serializable {
+public class ClaimCaseStandingDTO extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

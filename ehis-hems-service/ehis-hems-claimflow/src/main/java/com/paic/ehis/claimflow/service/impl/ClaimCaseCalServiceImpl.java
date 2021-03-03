@@ -14,6 +14,7 @@ import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -169,7 +170,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
      * @param claimCaseCal 案件赔付信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public CalConclusionVo updateClaimCaseCal(ClaimCaseCal claimCaseCal) {
 

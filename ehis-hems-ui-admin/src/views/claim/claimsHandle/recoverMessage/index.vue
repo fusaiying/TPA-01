@@ -4,7 +4,6 @@
       <el-form ref="searchForm" :model="searchForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="报案号：" prop="rptNo">
               <el-input v-model="searchForm.rptNo" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -17,9 +16,27 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊医院：" prop="hospitalCode">
-              <el-input v-model="searchForm.hospitalCode" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-select
+                v-model="searchForm.hospitalCode"
+                filterable
+                remote
+                clearable
+                reserve-keyword
+                placeholder="请选择医院"
+                :remote-method="remoteMethod"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in hospitalOptions"
+                  :key="ind"
+                  :label="item.chname1"
+                  :value="item.providerCode">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="被保人姓名：" prop="insuredName">
               <el-input v-model="searchForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -42,9 +59,16 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="白名单标记：" prop="whiteStatus">
-              <el-input v-model="searchForm.whiteStatus" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-select v-model="searchForm.whiteStatus" class="item-width" placeholder="请选择" clearable
+                         @change="">
+                <el-option v-for="option in white_list_labelOptions" :key="option.dictValue"
+                           :label="option.dictLabel"
+                           :value="option.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -83,10 +107,14 @@
           style=" width: 100%;">
           <el-table-column align="center" prop="rptNo" label="报案号" show-overflow-tooltip><!--超链接，点击可查看“理赔详情”页面-->
             <template slot-scope="scope">
-              <el-link style="font-size: 11px" type="primary" @click="claimRouter">{{scope.row.rptNo}}</el-link>
+              <el-link style="font-size: 11px" type="primary" @click="claimRouter(scope.row)">{{scope.row.rptNo}}</el-link>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="source" label="交单来源" show-overflow-tooltip/>
+          <el-table-column align="center" prop="source" label="交单来源" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(delivery_sourceOptions, scope.row.source)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="hospitalCode" label="就诊医院" show-overflow-tooltip/>
           <el-table-column align="center" prop="insuredName" label="被保人姓名" width="90" show-overflow-tooltip/>
           <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
@@ -97,7 +125,11 @@
           <el-table-column align="center" prop="colAmount" label="收款金额" show-overflow-tooltip/>
           <el-table-column align="center" prop="residualAmount" label="剩余欠款CNY" width="100" show-overflow-tooltip/>
           <el-table-column align="center" prop="endCaseTime" label="结案日期" show-overflow-tooltip/>
-          <el-table-column align="center" prop="whiteStatus" label="白名单标记" width="90" show-overflow-tooltip/>
+          <el-table-column align="center" prop="whiteStatus" label="白名单标记" width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(white_list_labelOptions, scope.row.whiteStatus)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" :formatter="getRiskStatus" prop="colStatus" label="状态"
                            show-overflow-tooltip/>
           <el-table-column align="center" label="操作">
@@ -152,8 +184,9 @@
 <script>
   import moment from 'moment'
   import {initDebt, initReceipt} from '@/api/claim/recoverMessage'
-
-  let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'}, {dictType: 'white_list_label'},]
+  import {getListNew} from '@/api/insuranceRules/ruleDefin'
+  let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'}, {dictType: 'white_list_label'},
+    {dictType: 'delivery_source'},{dictType: 'recover_status'},]
   export default {
     filters: {
       changeDate: function (value) {
@@ -192,11 +225,14 @@
         detailSize: 10,
         isinit: 'Y',
         totalCount: 0,
+        hospitalOptions: [],
         changeSerchData: {},
         product_statusOptions: [],
         approvalconclusionOptions: [],
         sysUserOptions: [],
         white_list_labelOptions: [],
+        delivery_sourceOptions: [],
+        recover_statusOptions: [],
       }
     },
 
@@ -213,6 +249,12 @@
       this.white_list_labelOptions = this.dictList.find(item => {
         return item.dictType === 'white_list_label'
       }).dictDate
+      this.delivery_sourceOptions = this.dictList.find(item => {
+        return item.dictType === 'delivery_source'
+      }).dictDate
+      this.recover_statusOptions = this.dictList.find(item => {
+        return item.dictType === 'recover_status'
+      }).dictDate
       initDebt(this.queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
@@ -225,6 +267,13 @@
           this.detailTotal = res.total
         }
       }).catch(res => {})
+      let data = {
+        pageNum:1,
+        pageSize:200
+      }
+      getListNew(data).then(res => {
+        this.hospitalOptions = res.rows
+      })
     },
     methods: {
       resetForm() {
@@ -327,16 +376,28 @@
         })
       },
       getRiskStatus(row) {
-        return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+        return this.selectDictLabel(this.recover_statusOptions, row.colStatus)
+      },
+      remoteMethod(query) {
+        if (query !== '' && query != null) {//调用特殊医院查询接口
+          let data = {
+            chname1: query,
+            pageNum:1,
+            pageSize:200
+          }
+          getListNew(data).then(res => {
+            this.hospitalOptions = res.rows
+          })
+        }
       },
       claimRouter(row){
         let data = encodeURI(
           JSON.stringify({
-            batchNo: '',
+            batchNo: row.batchNo,
             claimType: '',
             rptNo: row.rptNo,
             status:'show',
-            node: 'accept',
+            node: 'calculateReview',
             styleFlag: 'list',
           })
         )

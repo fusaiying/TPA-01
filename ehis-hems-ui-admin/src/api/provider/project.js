@@ -30,8 +30,8 @@ export function getServerTypeName(query) {
 export function listProjectInfo(query) {
   return request({
     url: '/provider/projectInfo/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

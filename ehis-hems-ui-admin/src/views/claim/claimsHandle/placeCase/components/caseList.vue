@@ -48,7 +48,7 @@
               <template v-if="1==2" >
                 <el-input  v-model="scope.row.deptCode"  disabled style="width: 10px" size="mini"></el-input>
               </template>
-              <span  v-else>{{ scope.row.deptCode }}</span>
+              <span  v-else>{{getDeptName(scope.row.deptCode) }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="claimType" label="理赔类型"  align="center" width="150%"show-overflow-tooltip >
@@ -56,7 +56,7 @@
               <template v-if="1==2" >
                 <el-input  v-model="scope.row.claimType"  disabled style="width: 10px" size="mini"></el-input>
               </template>
-              <span  v-else>{{ scope.row.claimType }}</span>
+              <span  v-else>{{ getClaimTypeName(scope.row.claimType) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" min-width="120" prop="isFiling" label="发票是否归档" show-overflow-tooltip>
@@ -116,7 +116,7 @@
           <el-table-column align="center" prop="remark" min-width="110" label="备注" show-overflow-tooltip>
             <template slot-scope="scope" >
               <template  v-if="scope.row.status == 'Y'" >
-                <el-input v-model="scope.row.remark"  size="mini"></el-input>
+                <el-input maxlength="1000" v-model="scope.row.remark"  size="mini"></el-input>
               </template>
               <span  v-else>{{ scope.row.remark }}</span>
             </template>
@@ -142,6 +142,10 @@
         type: Boolean,
         default: false
       },
+      sysDepts: {
+        type: Array,
+        default: []
+      },
     },
     watch: {
       fixInfo: function (newValue) {
@@ -156,10 +160,14 @@
           this.initData();
         }
       },
+      sysDepts:function(newValue){
+        this.proSysDepts = newValue;
+      }
 
     },
     data() {
       return {
+        proSysDepts:[],
         dataForm:{
           tableData:[]
         },
@@ -188,6 +196,10 @@
       // sys_yes_no
       this.getDicts("sys_yes_no").then(response => {
         this.yesOrNo = response.data;
+      });
+      // claimType
+      this.getDicts("claimType").then(response => {
+        this.claimTypes = response.data;
       });
     },
     computed: {
@@ -256,6 +268,12 @@
       },
       getYesOrNoName(value){
         return this.selectDictLabel(this.yesOrNo, value)
+      },
+      getDeptName(value){
+        return this.selectDictLabel(this.proSysDepts, value)
+      },
+      getClaimTypeName(value){
+        return this.selectDictLabel(this.claimTypes, value)
       },
     }
   }

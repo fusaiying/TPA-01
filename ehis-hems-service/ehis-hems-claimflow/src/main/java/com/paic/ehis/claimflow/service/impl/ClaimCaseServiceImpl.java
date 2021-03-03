@@ -1,6 +1,8 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -8,11 +10,13 @@ import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
 import com.paic.ehis.claimflow.service.IClaimCaseInvestigationService;
 import com.paic.ehis.claimflow.service.IClaimCaseService;
+import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.PolicyAndRiskService;
@@ -20,6 +24,7 @@ import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.PolicyAndRiskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -387,8 +392,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseRecord1.setStatus("Y");
                 claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
                 claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
-                claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
-                claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
+               /* claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());*/
 
                 Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
                 if (s != null) {
@@ -508,13 +513,21 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord1.setStatus("Y");
         claimCaseRecord1.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord1.setCreateTime(DateUtils.getNowDate());
-        claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());
-
-        Long s = claimCaseRecordMapper.selectClaimCaseRecordSecondTwo(claimCase.getRptNo());
+       /* claimCaseRecord1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord1.setUpdateTime(DateUtils.getNowDate());*/
+//找到最近的一条轨迹表
+        Long s = claimCaseRecordMapper.selectRecentlyClaimCaseRecordByRptNo(claimCase.getRptNo());
         if (s != null) {
             ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
 //        claimCaseRecord2.setRptNo(claimCase.getRptNo());
+            /*claimCaseRecord.setOrgRecordId(record.getRecordId());
+
+            record.setOperator(SecurityUtils.getUsername());
+            record.setHistoryFlag("Y");
+            record.setUpdateBy(SecurityUtils.getUsername());
+            record.setUpdateTime(DateUtils.getNowDate());*/
+            claimCaseRecord2.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseRecord2.setUpdateTime(DateUtils.getNowDate());
             claimCaseRecord2.setOperator(SecurityUtils.getUsername());
             claimCaseRecord2.setHistoryFlag("Y");
             claimCaseRecord2.setRecordId(s);
@@ -632,10 +645,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 //是否调查
                 ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                 claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                claimCaseInvestigation.setIsHistory("N");
                 claimCaseInvestigation.setStatus("Y");
-                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+               // List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
+                if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -648,7 +661,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
 
                 //停留时长
-                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOne(conditionsForTheAdjustmentVOSLost.getRptNo());
+                ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByrptNoPending(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (null != claimCaseRecord) {
                     Date begin = claimCaseRecord.getCreateTime();
                     Date end = new Date();
@@ -695,13 +708,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param auditWorkPoolDTO
      * @return
      */
+
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentOver(AuditWorkPoolDTO auditWorkPoolDTO) {
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS;
+
+        String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
+        //检查字符，防止注入绕过
+          orderBy = SqlUtil.escapeOrderBySql(orderBy);
+        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
@@ -709,7 +729,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
                     auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
                     auditWorkPoolDTO.setUpdateBy(SecurityUtils.getUsername());
-                    List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
+                    conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
                     if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                         for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                             //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -760,8 +780,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                             claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                             claimCaseInvestigation.setIsHistory("N");
                             claimCaseInvestigation.setStatus("Y");
-                            List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                            if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                            List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                            if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                                 conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                             } else {
                                 conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -773,7 +793,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         } else {
             //按条件查询
             auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-            List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
+            conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwo(auditWorkPoolDTO);//查询出处理中的所有的数据
             if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                     //已经拥有：批次号、报案号、批次状态、被保人姓名
@@ -824,8 +844,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                     claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     claimCaseInvestigation.setIsHistory("N");
                     claimCaseInvestigation.setStatus("Y");
-                    List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                    if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                    List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                     } else {
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -834,7 +854,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//已处理
 
     /**
@@ -898,8 +925,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                 claimCaseInvestigation.setIsHistory("N");
                 claimCaseInvestigation.setStatus("Y");
-                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -916,39 +943,48 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCase 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int backToClaimCase(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCase.getRptNo());
-        claimCaseRecord.setHistoryFlag("Y");
+        claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());
-        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//05
-        ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
+        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
+
+//查询当前轨迹的id
+
+        ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
         /*List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
         if (claimCaseRecords.size() > 0) {
             claimCase.setUpdateBy(claimCaseRecords.get(0).getCreateBy());
         }*/
-        claimCase.setUpdateBy(caseRecord.getOperator());
-        claimCase.setUpdateTime(DateUtils.getNowDate());
-        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());
 
-        claimCaseRecord.setHistoryFlag("N");
+
+
+        //修改当前轨迹状态
+      /*  claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());
-        ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
+        ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);*/
         record.setHistoryFlag("Y");
         record.setOperator(SecurityUtils.getUsername());
         record.setUpdateBy(SecurityUtils.getUsername());
         record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateRecordHistoricalState(record);
 
-
+//新增一条05轨迹表
+        claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
-        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//05
+      /*  claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());*/
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        //修改案件信息表
+        claimCase.setUpdateBy(SecurityUtils.getUsername());
+        claimCase.setUpdateTime(DateUtils.getNowDate());
+        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());
         return claimCaseMapper.updateClaimCase(claimCase);
     }
 
@@ -1020,7 +1056,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param claimCaseCal 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int reviewCompletedClaimCase(ClaimCaseCal claimCaseCal) {
         //暂未实现判断被保人当前匹配到的赔付责任所属的保单是否存在在途保全（个别保全项：）对理赔进行挂起操作，待保全处理完成后理赔继续并进行重新理算
@@ -1085,7 +1121,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @param caseInvestigation 案件信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int raiseClaimCase(ClaimCaseInvestigation caseInvestigation) {
         ClaimCaseRecord caseRecord = new ClaimCaseRecord();
@@ -1100,6 +1136,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(claimCaseRecord);
 
+        caseRecord.setOperation(ClaimStatus.CASESURVEY.getCode());
         caseRecord.setOrgRecordId(claimCaseRecord.getRecordId());
         caseRecord.setCreateBy(SecurityUtils.getUsername());
         caseRecord.setCreateTime(DateUtils.getNowDate());
@@ -1145,7 +1182,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
 
-        return claimCaseMapper.updateClaimCase(claimCase);
+        return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
 
     /**
@@ -1364,9 +1401,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
         ClaimCaseCheckDTO claimCaseCheckDTO1 = claimCaseCheckRuleService.judgeClaimCaseCheckRule(claimCaseCheckDTO);
 
-        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
-
         //更新历史记录,并添加新的历史记录
         ClaimCaseRecord claimCaseRecord = claimCaseRecordMapper.selectClaimCaseRecordByRptNoOperation(claimCaseCheckDTO.getRptNo());
         claimCaseRecord.setHistoryFlag("Y");
@@ -1388,6 +1422,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         caseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(caseRecord);
 
+        if ("99".equals(claimCaseCheckDTO1.getCaseStatus())) {
+            ClaimCase claimCase = new ClaimCase();
+            claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
+            claimCase.setUpdateBy(SecurityUtils.getUsername());
+            claimCase.setUpdateTime(DateUtils.getNowDate());
+            return claimCaseMapper.updateClaimCaseNew(claimCase);
+        }
+        claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseCheckDTO1.setUpdateTime(DateUtils.getNowDate());
         return claimCaseMapper.updateClaimCaseCheck(claimCaseCheckDTO1);
     }
 

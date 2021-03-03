@@ -143,6 +143,13 @@
         where rpt_no = #{rptNo} and operation = '07' and status = 'Y' ORDER BY update_time DESC limit 1
     </select>
 
+
+    <select id="selectClaimCaseRecordByrptNoPending" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '07' and  history_flag = 'N'  and status = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+
     <select id="selectClaimCaseRecordByrptNoFive" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation = '30' and status = 'Y' and  history_flag = 'N' ORDER BY update_time DESC limit 1
@@ -158,6 +165,22 @@
     <select id="selectClaimCaseRecordByrptNoOneOld" parameterType="String" resultMap="ClaimCaseRecordResult">
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'N'
+    </select>
+
+
+    <select id="selectClaimCaseRecordByrptNo" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and  operation = '32' and status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseRecordByRptNo" parameterType="String" resultType="Long">
+        select record_id from claim_case_record
+        where rpt_no = #{rptNo} and operation = '06' and status = 'Y' and  history_flag = 'N'
+    </select>
+
+    <select id="selectRecentlyClaimCaseRecordByRptNo" parameterType="String" resultType="Long">
+        select record_id from claim_case_record
+        where rpt_no = #{rptNo} and status = 'Y' and  history_flag = 'N' order by record_id desc limit 1
     </select>
 
     <!-- lihy -->

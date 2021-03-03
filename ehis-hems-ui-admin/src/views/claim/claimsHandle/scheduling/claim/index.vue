@@ -37,7 +37,7 @@
             :data="tableData"
             v-loading="loading"
             size="mini"
-            tooltip-effect="darky"
+            tooltip-effect="dark"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 

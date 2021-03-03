@@ -8,20 +8,20 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="被保人名称：" prop="name">
-                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.name" class="item-width" size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
               <el-form-item label="证件号码：" prop="idNo">
-                <el-input v-model="form.idNo" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.idNo" class="item-width" size="mini" placeholder="请输入"/>
               </el-form-item>
             </el-col>
 
             <el-col :span="8">
               <el-form-item label="等级：" prop="level">
                 <el-select v-model="form.level" class="item-width" size="mini" placeholder="请选择">
-                  <el-option v-for="option in companySelect" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
+                  <el-option v-for="option in custLevel" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -32,7 +32,7 @@
 
             <el-col :span="8">
               <el-form-item label=" 金额上限：" prop="debtAmountUp" >
-                <el-input v-model="form.debtAmountUp" class="item-width" size="mini" placeholder="请输入" @keyup.enter.native="getTableData"/>
+                <el-input v-model="form.debtAmountUp" class="item-width" size="mini" @input="changePrice('form')" placeholder="请输入"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -59,7 +59,7 @@
             :data="tableData"
             v-loading="loading"
             size="mini"
-            tooltip-effect="darky"
+            tooltip-effect="dark"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}">
 
@@ -170,7 +170,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="金额上限：" prop="debtAmountUp">
-                  <el-input maxlength="14" oninput = "value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input maxlength="14" @input="changePrice('recoveryForm')" v-model="recoveryForm.debtAmountUp" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -225,6 +225,7 @@
       },
         data() {
             return {
+              searchBtn:false,
               saveVFlag:true,
               dialogPolicy:false,
               fixInfo: {
@@ -307,6 +308,25 @@
         this.initData();
       },
       methods: {
+        changePrice(formName){
+          let name  = formName == 'recoveryForm' ? 'debtAmountUp' : 'debtAmountUp';
+          if(formName == 'recoveryForm') {
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/\.{2,}/g,".") //清除第二个小数点
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/^\./g,""); //验证第一个字符是数字而不是字符
+            this.recoveryForm[name] = this.recoveryForm[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            this.recoveryForm[name] = this.recoveryForm[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+            this.recoveryForm[name] = this.recoveryForm[name].indexOf(".") > 0? this.recoveryForm[name].split(".")[0].substring(0, 11) + "." + this.recoveryForm[name].split(".")[1]: this.recoveryForm[name].substring(0, 11); //限制只能输入7位正整数
+          }
+          if(formName == 'form') {
+            this.form[name] = this.form[name].replace(/[^\d.]/g,"") //清除非 数字和小数点的字符
+            this.form[name] = this.form[name].replace(/\.{2,}/g,".") //清除第二个小数点
+            this.form[name] = this.form[name].replace(/^\./g,""); //验证第一个字符是数字而不是字符
+            this.form[name] = this.form[name].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            this.form[name] = this.form[name].replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //保留两位小数
+            this.form[name] = this.form[name].indexOf(".") > 0? this.form[name].split(".")[0].substring(0, 11) + "." + this.form[name].split(".")[1]: this.form[name].substring(0, 11); //限制只能输入7位正整数
+          }
+        },
         getsexName(row,col) {
           return this.selectDictLabel(this.rgtSexs, row.sex)
         },
@@ -361,22 +381,25 @@
             idNo:this.form.idNo,
             level:this.form.level,
             debtAmountUp:this.form.debtAmountUp,
-
             // orderByColumn:'create_time',
             // isAsc:'desc'
           };
+          if(!this.searchBtn) {
+            params.recMessageFlag = '01';
+          }
 
           this.loading = true;
           listInfo(params).then(response => {
-               this.totalNum = response.total;
-               this.tableData = response.rows;
-                this.loading = false
+            this.totalNum = response.total;
+            this.tableData = response.rows;
+            this.loading = false
           }).catch(error => {
             this.loading = false
             console.log(error);
           });
         },
         searchByFormParms(){
+          this.searchBtn = true;
           this.pageInfo.currentPage = 1;
           this.pageInfo.pageSize = 10;
           this.gettableData();
@@ -391,6 +414,9 @@
           this.recoveryForm.debtAmountUp = row.debtAmountUp;
           this.recoveryForm.recMessageFlag = row.recMessageFlag;
           this.recoveryForm.insuredNo =  row.insuredNo;
+          if(row.birthday != '') {
+            this.recoveryInfo.age = this.getAge(row.birthday)
+          }
         },
         delFun(row) {
           const params = {
@@ -398,7 +424,7 @@
           };
           // 存在欠款 ？
           checkMoney(params).then(response => {
-            if(response.code == '200' && response.data.residualAmount >0) {
+            if(response.code == '200' && response.data && response.data.residualAmount >0) {
               this.$confirm(`该客户存在欠款，是否置为失效?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -449,13 +475,14 @@
         addRecovery() {
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = [];
+          this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = [];
+          this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
           this.addFlag = true;
           this.dialogVisible = true;
           this.$refs['recoveryForm'].clearValidate();
+
         },
         saveDataFun(){
           if(this.recoveryForm.insuredNo == '') {
@@ -468,6 +495,29 @@
             return false;
           }
 
+          const param = {
+            pageNum:1,
+            pageSize:3,
+            insuredNo:this.recoveryForm.insuredNo
+          };
+          listInfo(param).then(response => {
+            let count = response.total;
+            if(count == 0) {
+              this.addInfoData();
+            } else {
+              this.$message({
+                message: '该被保人已在名单中',
+                type: 'info',
+                center: true,
+                showClose: true
+              });
+            }
+          }).catch(error => {
+            this.loading = false
+            console.log(error);
+          });
+        },
+        addInfoData(){
           this.$refs.recoveryForm.validate((valid) => {
             if (valid) {
               const params = this. recoveryForm;
@@ -511,16 +561,13 @@
         handleClose() {
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = [];
+          this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = [];
+          this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
           this.$refs['recoveryForm'].clearValidate();
           this.dialogVisible = false;
         },
-        // closeDialog(){
-        //   this.dialogVisible = false;
-        // },
         getAge (strBirthday) {
           let returnAge;
           let strBirthdayArr=strBirthday.split("-");

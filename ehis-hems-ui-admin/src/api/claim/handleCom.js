@@ -20,8 +20,8 @@ export function selectCoreCase() {
 export function getBackList(query) {
   return request({
     url: '/claimflow/case/processingList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 //# 给台账匹配赋值rptNo
@@ -37,8 +37,8 @@ export function setRptNo(data) {
 export function getFinishList(query) {
   return request({
     url: '/claimflow/case/processedList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -46,8 +46,8 @@ export function getFinishList(query) {
 export function getHangUpList(query) {
   return request({
     url: '/claimflow/case/suspensionList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -367,8 +367,8 @@ export function getFee(rptNo) {
 export function listConditionsForTheAdjustmentUnder(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentUnder',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -377,8 +377,8 @@ export function listConditionsForTheAdjustmentUnder(data) {
 export function listConditionsForTheAdjustmentOver(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentOver',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -387,8 +387,8 @@ export function listConditionsForTheAdjustmentOver(data) {
 export function listConditionsForTheAdjustmentHang(data) {
   return request({
     url: '/claimflow/case/listConditionsForTheAdjustmentHang',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -496,5 +496,23 @@ export function checkThePayment(data) {
     url: 'claimflow/payee/proportion',
     method: 'get',
     params:data
+  })
+}
+
+// 账单汇总信息
+export function getBillSum(data) {
+  return request({
+    url: 'claimflow/bill/billSum',
+    method: 'get',
+    params:data
+  })
+}
+
+// 健康险客户账户查询
+export function getCustomerAccount(data) {
+  return request({
+    url: '/claimflow/payeeAccount/getCustomerAccount',
+    method: 'post',
+    data: data
   })
 }

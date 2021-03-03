@@ -12,8 +12,8 @@ export function listFirst(data) {
 export function listNew(data) {
   return request({
     url: '/claimmgt/standing/listNew',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 
@@ -53,5 +53,29 @@ export function getDeptById(deptId) {
   return request({
     url: 'claimmgt/dept/'+deptId,
     method: 'get',
+  })
+}
+
+//获取当前机构及下属信息 支持模糊查询
+export function getOrganList(data) {
+  return request({
+    url: 'system/organInfo/getOrganList',
+    method: 'post',
+    data:data
+  })
+}
+//获取当前用户
+export function getUserInfo() {
+  return request({
+    url: 'system/user/getUserInfo',
+    method: 'get',
+  })
+}
+//通过机构编码获取用户 支持模糊查询/
+export function getUsersByOrganCode(data) {
+  return request({
+    url: 'system/user/getUsersByOrganCode',
+    method: 'post',
+    data:data
   })
 }

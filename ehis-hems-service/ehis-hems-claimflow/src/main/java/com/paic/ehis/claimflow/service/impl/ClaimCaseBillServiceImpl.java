@@ -17,8 +17,10 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.system.api.BaseService;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.BaseIcd10;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import com.paic.ehis.system.api.domain.SysOrganInfoVO;
@@ -60,6 +62,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     private ClaimCalService claimCalService;
     @Autowired
     private RemoteUserService remoteUserService;
+    @Autowired
+    private BaseService baseService;
 
     /**
      * 查询案件账单明细
@@ -414,5 +418,54 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         claimCaseBillDiagnosisMapper.updateClaimCaseBillDiagnosisByBillId(billId);
         claimCaseBillDetailMapper.updateClaimCaseBillDetailByBillId(billId);
         return claimCaseBillMapper.updateClaimCaseBillById(billId);
+    }
+
+    /**
+     * 账单汇总信息 - 账单金额、折扣金额、合理费用、自费金额、部分自费、先期给付、不合理金额
+     *
+     * @param claimCaseBill
+     * @return
+     */
+    @Override
+    public ClaimCaseBill getBillSum(ClaimCaseBill claimCaseBill) {
+        BigDecimal billSum = new BigDecimal("0.00");
+        BigDecimal discountSum = new BigDecimal("0.00");
+        BigDecimal reasonSum = new BigDecimal("0.00");
+        BigDecimal selfSum = new BigDecimal("0.00");
+        BigDecimal partSelfSum = new BigDecimal("0.00");
+        BigDecimal advanceSum = new BigDecimal("0.00");
+        BigDecimal unableSum = new BigDecimal("0.00");
+        List<ClaimCaseBill> billList = claimCaseBillMapper.selectClaimCaseBillList(claimCaseBill);
+        if (billList.size()>0){
+            for (ClaimCaseBill bill : billList){
+                billSum = billSum.add(bill.getBillAmount());
+                discountSum = discountSum.add(bill.getHosDiscountAmount());
+                reasonSum = reasonSum.add(bill.getReasonAmount());
+                selfSum = selfSum.add(bill.getSelfAmount());
+                partSelfSum = partSelfSum.add(bill.getPartSelfAmount());
+                advanceSum = advanceSum.add(bill.getAdvancePayment());
+                unableSum = unableSum.add(bill.getUnableAmount());
+            }
+        }
+        ClaimCaseBill gatherBill = new ClaimCaseBill();
+        gatherBill.setBillAmount(billSum);
+        gatherBill.setHosDiscountAmount(discountSum);
+        gatherBill.setReasonAmount(reasonSum);
+        gatherBill.setSelfAmount(selfSum);
+        gatherBill.setPartSelfAmount(partSelfSum);
+        gatherBill.setAdvancePayment(advanceSum);
+        gatherBill.setUnableAmount(unableSum);
+        return gatherBill;
+    }
+
+    /**
+     * 主要诊断、次要诊断
+     *
+     * @param baseIcd10
+     * @return
+     */
+    @Override
+    public List<BaseIcd10> selectICD(BaseIcd10 baseIcd10) {
+        return baseService.selectIcdFuzzy(baseIcd10);
     }
 }

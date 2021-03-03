@@ -12,6 +12,7 @@ import com.paic.ehis.claimflow.service.IClaimCaseDiscussionService;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -83,7 +84,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
      * @param claimCaseDiscussion 案件协谈信息
      * @return 结果
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseDiscussion(ClaimCaseDiscussion claimCaseDiscussion)
     {
@@ -141,7 +142,8 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setOperation("07");
      //   ClaimCaseRecord caseRecord = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
         ClaimCase claimCase=claimCaseMapper.selectClaimCaseById(claimCaseDiscussion.getRptNo());
-        claimCase.setUpdateBy(SecurityUtils.getUsername());
+        //updateBY 不要更新，否则该案件进入审核后， 操作人变更了，无法查询到该记录
+    //    claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("07");
 

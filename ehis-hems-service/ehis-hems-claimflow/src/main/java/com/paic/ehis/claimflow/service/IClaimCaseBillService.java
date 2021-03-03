@@ -5,6 +5,7 @@ import com.paic.ehis.claimflow.domain.dto.ClaimCaseDTO;
 import com.paic.ehis.claimflow.domain.vo.BillAccomplishVo;
 import com.paic.ehis.claimflow.domain.vo.BillProcessingVo;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseBillInfoVO;
+import com.paic.ehis.system.api.domain.BaseIcd10;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 
 import java.util.List;
@@ -111,4 +112,19 @@ public interface IClaimCaseBillService
      * @return
      */
     public int deleteClaimCaseBill(ClaimCaseBillInfoVO claimCaseBill);
+
+    /**
+     * 汇总信息
+     * @param claimCaseBill
+     * @return
+     */
+    public ClaimCaseBill getBillSum(ClaimCaseBill claimCaseBill);
+
+    /**
+     * 主要诊断、次要诊断
+     *
+     * @param baseIcd10
+     * @return
+     */
+    public List<BaseIcd10> selectICD(BaseIcd10 baseIcd10);
 }

@@ -79,4 +79,11 @@ public interface IClaimCaseRecordService
      * @return 结果
      */
     public int insertClaimCaseRecordAndBatchRecord(ClaimCaseStandingVo claimCaseStandingVo);
+
+    /**
+     * 根据报案号查询当前轨迹 流程节点ID
+     * @param rptNo  报案号
+     * @return
+     */
+    public long selectClaimCaseRecordByRptNo(String rptNo);
 }

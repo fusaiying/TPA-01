@@ -133,10 +133,12 @@
             <if test="riskCode != null  and riskCode != ''"> and bir.risk_code = #{riskCode}</if>
             <if test="settlementType != null  and settlementType != ''"> and ftsk.settlement_type = #{settlementType}</if>
             <if test="settleEndDate != null "> and ftsk.settle_end_date = #{settleEndDate}</if>
-            <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status in (${settleStatus})</if>
+            <if test="settleStatus != null  and settleStatus != ''"> and ftsk.settle_status =  #{settleStatus}</if>
             <if test="status != null  and status != ''"> and ftsk.status = #{status}</if>
             <if test="creationStartDate != null  and creationEndDate != null"> and ftsk.create_time between #{creationStartDate} and #{creationEndDate}</if>
             <if test="deptCode != null  and deptCode != ''"> and ftsk.dept_code = #{deptCode}</if>
+            <if test="pageType != null  and pageType == '01'"> and ftsk.settle_status in ('01','02')</if>
+            <if test="pageType != null  and pageType == '03'"> and ftsk.settle_status in ('02','03')</if>
         </where>
     </select>
 
@@ -147,6 +149,7 @@
 
     <select id="selectTpaTaskReceiptColList" parameterType="com.paic.ehis.finance.domain.dto.TpaSettleDTO" resultMap="FinanceCollectionInfoResult">
         SELECT
+        info.collection_id,
         info.receipt_acc_name,
         info.receipt_amount,
         info.receipt_date,
@@ -160,8 +163,6 @@
         AND task.STATUS = 'Y'
         <where>
             <if test="companyCode != null  and companyCode != ''"> and task.company_code = #{companyCode}</if>
-            <if test="receiptNo != null  and receiptNo != ''"> and col.receipt_no = #{receiptNo}</if>
---             <if test="taskNo != null  and taskNo != ''"> and task_no = #{taskNo}</if>
             <if test="status != null  and status != ''"> and task.status = #{status}</if>
             <if test="deptCode != null  and deptCode != ''"> and task.dept_code = #{deptCode}</if>
         </where>

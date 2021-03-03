@@ -32,6 +32,10 @@ public class BaseIssuingcompany extends BaseEntity {
     @Excel(name = "出单公司简写名称")
     private String simplename;
 
+
+
+    private Boolean flag;
+
     /**
      * 状态（Y-有效，N-无效）
      */
@@ -69,18 +73,22 @@ public class BaseIssuingcompany extends BaseEntity {
     public void setStatus(String status) {
         this.status = status;
     }
+    public Boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
+    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("companycode", getCompanycode())
-                .append("companyname", getCompanyname())
-                .append("simplename", getSimplename())
-                .append("status", getStatus())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .toString();
+        return "BaseIssuingcompany{" +
+                "companycode='" + companycode + '\'' +
+                ", companyname='" + companyname + '\'' +
+                ", simplename='" + simplename + '\'' +
+                ", flag=" + flag +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

@@ -115,4 +115,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where icd_no = #{icdNo}
     </update>
 
+    <select id="selectIcdFuzzy" parameterType="com.paic.ehis.base.domain.BaseIcd10" resultMap="BaseIcd10Result">
+        <include refid="selectBaseIcd10Vo"/>
+        <where>
+            <if test="icdcode != null  and icdcode != ''"> and icd_code = #{icdcode}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="icdmname != null  and icdmname != ''"> and icd_name like concat('%',#{icdmname},'%')</if>
+        </where>
+        limit 200
+    </select>
+
 </mapper>

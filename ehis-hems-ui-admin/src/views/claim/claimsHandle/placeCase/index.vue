@@ -64,7 +64,7 @@
             :data="tableData"
             v-loading="loading"
             size="mini"
-            tooltip-effect="darky"
+            tooltip-effect="dark"
             class="receive_table"
             :header-cell-style="{color:'black',background:'#f8f8ff'}"
           >
@@ -79,7 +79,7 @@
             <el-table-column prop="status" :formatter="getYesOrNo" label="是否销毁"  align="center" show-overflow-tooltip />
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
-                <el-button  size="small" type="text" @click="addRecovery(scope.row,'edit')">编辑</el-button>
+                <el-button :disabled="scope.row.status == 'N' ? 'disabled' : false"  size="small" type="text" @click="addRecovery(scope.row,'edit')">编辑</el-button>
                 <el-button  size="small" type="text" @click="openListDialog(scope.row,'show')">明细</el-button>
                 <el-button :disabled="scope.row.status == 'N' ? 'disabled' : false" size="small" type="text" @click="destroyFun(scope.row)">销毁</el-button>
               </template>
@@ -128,7 +128,7 @@
             <el-row>
               <el-col :span="24">  <!-- :disabled="readbatchNo ? 'disabled' : false" -->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input  v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input :disabled="readbatchNo ? 'disabled' : false"  v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -144,7 +144,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="报案号起止：" prop="rptStartNo">
-                  <el-input v-model="pbaceCaseForm.rptStartNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input :disabled="disRead ? 'disabled' : false" v-model="pbaceCaseForm.rptStartNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -152,15 +152,12 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="" prop="rptEndNo">
-                  <el-input v-model="pbaceCaseForm.rptEndNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input :disabled="disRead ? 'disabled' : false" v-model="pbaceCaseForm.rptEndNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
 
           </el-form>
-         <!-- <span style="margin-right:25px; margin-bottom: 25px;float: right;" class="dialog-footer">
-            <el-button size="mini" @click="saveInfo" type="primary">确认</el-button>
-          </span>-->
             <div slot="footer" class="dialog-footer" >
               <el-button type="primary" @click="saveInfo" >确 定</el-button>
             </div>
@@ -168,13 +165,14 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" @closeListDialog="closeListDialog"/>
+    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>
 
 <script>
 
+   import {getUserInfo, getOrganList,getUsersByOrganCode,} from '@/api/claim/standingBookSearch'
    import caseList from './components/caseList'
    import moment from 'moment'
    import {getDepts, caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
@@ -222,6 +220,7 @@
             return {
                read:false,
                readbatchNo:false,
+               disRead:false,
                 form: {
                   deptCode: '',
                   claimType: '',
@@ -340,10 +339,10 @@
           };
 
           if(!this.searchBtn) {
-            getDept().then(response => {
-              if(response.deptId) {
+            getUserInfo().then(response => {
+              if(response.data.deptId) {
                 this.loading = true;
-                params.deptCode = response.deptId.toString();
+                params.deptCode = response.data.deptId.toString();
                 caseFilingList(params).then(response => {
                   this.totalNum = response.total;
                   this.tableData = response.rows;
@@ -386,6 +385,12 @@
               this.readbatchNo = true;
             } else {
               this.readbatchNo = false;
+            }
+            if(row.status == 'N') {
+              this.disRead  = true;
+              this.readbatchNo = true;
+            } else {
+              this.disRead  = false;
             }
 
           } else {
@@ -485,11 +490,11 @@
                 this.sysDepts.push(obj);
               }
             }
-            //当前登陆人部门
-            getDept().then(response => {
-              if(response.deptId) {
-                this.form.deptCode = response.deptId.toString();
-                this.pbaceCaseForm.deptCode  = response.deptId.toString();
+            //当前登陆人部门 getUserInfo
+            getUserInfo().then(response => {
+              if(response.code == '200' && response.data) {
+                this.form.deptCode = response.data.deptId.toString();
+                this.pbaceCaseForm.deptCode  = response.data.deptId.toString();
               }
             })
           })

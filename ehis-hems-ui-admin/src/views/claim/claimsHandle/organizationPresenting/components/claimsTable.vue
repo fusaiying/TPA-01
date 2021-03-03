@@ -66,12 +66,8 @@
         <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-    <el-table-column prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
-      <template slot-scope="scope">
-        <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
-      </template>
-    </el-table-column>
+    <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
+    <el-table-column align="center" prop="organName" min-width="120" label="机构" show-overflow-tooltip/>
     <el-table-column align="center" min-width="100" prop="batchstatus" label="批次状态" show-overflow-tooltip>
       <template slot-scope="scope">
         <span v-if="status!='01'">{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
@@ -90,8 +86,8 @@
 </template>
 
 <script>
-  import {getMinData, getThisDept} from '@/api/claim/presentingReview'
-
+  import {getMinData} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}, {dictType: 'claim_status'}]
   export default {
 
@@ -133,12 +129,23 @@
       this.claim_statusOptions = this.dictList.find(item => {
         return item.dictType === 'claim_status'
       }).dictDate
-      let item = {
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getThisDept(item).then(res => {
-        this.deptOptions = res.deptlist
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptOptions = res.rows
+            }
+          }).catch(res => {
+          })
+        }
       })
     },
     methods: {
@@ -184,8 +191,8 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

@@ -16,6 +16,7 @@
                 v-model="searchForm.hospitalCode"
                 filterable
                 remote
+                clearable
                 reserve-keyword
                 placeholder="请选择医院"
                 :remote-method="remoteMethod"
@@ -32,7 +33,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否申述：" prop="complainStatus">
-              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择"
+              <el-select v-model="searchForm.complainStatus" class="item-width" placeholder="请选择" clearable
                          @change="">
                 <el-option v-for="option in sys_yes_noOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -48,6 +49,7 @@
                 v-model="searchForm.caseDate"
                 class="item-width"
                 type="daterange"
+                clearable
                 range-separator="~"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
@@ -83,11 +85,7 @@
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
                            prop="batchNo" label="批次号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{selectDictLabel( hospitals, scope.row.hospitalCode)}}</span>
-            </template>
-          </el-table-column>
+          <el-table-column align="center" prop="hospitalCode" label="医院名称" show-overflow-tooltip/>
           <el-table-column align="center" prop="caseload" label="批次案件总数" width="110" show-overflow-tooltip/>
           <el-table-column align="center" prop="batchTotal" label="账单总金额" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -130,7 +128,7 @@
 
 <script>
   import {getListNew} from '@/api/insuranceRules/ruleDefin'
-  import {getThisDept} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   import {initForeignList, foreignList} from '@/api/claim/corporatePay'
   import {getHospitalInfo} from '@/api/claim/handleCom'
   let dictss = [{dictType: 'sys_yes_no'}]
@@ -160,7 +158,6 @@
         totalCount: 0,
         dictList: [],
         hospitalOptions: [],
-        hospitals: [],
         deptListOptions: [],
         sys_yes_noOptions: [],
       }
@@ -172,13 +169,22 @@
       this.sys_yes_noOptions = this.dictList.find(item => {
         return item.dictType === 'sys_yes_no'
       }).dictDate
-      let item={
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getThisDept(item).then(res => {
+      getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.deptListOptions = res.data
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptListOptions = res.rows
+            }
+          }).catch(res => {
+          })
         }
       })
       initForeignList(this.queryParams).then(res => {
@@ -187,10 +193,12 @@
           this.totalCount = res.total
         }
       })
-      getHospitalInfo({}).then(res => {
-        if (res != null && res !== '') {
-          this.hospitals = res.rows
-        }
+      let data = {
+        pageNum:1,
+        pageSize:200
+      }
+      getListNew(data).then(res => {
+        this.hospitalOptions = res.rows
       })
     },
     methods: {
@@ -240,7 +248,9 @@
       remoteMethod(query) {
         if (query !== '' && query != null) {//调用特殊医院查询接口
           let data = {
-            chname1: query
+            chname1: query,
+            pageNum:1,
+            pageSize:200
           }
           getListNew(data).then(res => {
             this.hospitalOptions = res.rows
@@ -250,8 +260,8 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

@@ -195,6 +195,11 @@
             if (res != null && res.code === 200) {
               this.completedTableData = res.rows
               this.finishTotal = res.total
+              if (res.rows.length<=0){
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
             }
           }).catch(res => {
 
@@ -209,6 +214,11 @@
             if (res != null && res.code === 200) {
               this.hangUpTableData = res.rows
               this.hangUpTotal = res.total
+              if (res.rows.length<=0){
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
             }
           }).catch(res => {
 

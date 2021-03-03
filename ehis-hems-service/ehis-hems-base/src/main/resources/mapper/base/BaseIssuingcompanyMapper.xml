@@ -15,12 +15,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.base.domain.BaseIssuingcompany" id="BaseIssuingcompanyResultTwo">
+        <result property="companycode"    column="company_code"    />
+        <result property="companyname"    column="company_name"    />
+        <result property="simplename"    column="simple_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="flag"    column="flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
     <sql id="selectBaseIssuingcompanyVo">
         select company_code, company_name, simple_name, status, create_by, create_time, update_by, update_time from base_issuingcompany
     </sql>
 
-    <select id="selectBaseIssuingcompanyList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany" resultMap="BaseIssuingcompanyResult">
-        <include refid="selectBaseIssuingcompanyVo"/>
+    <select id="selectBaseIssuingcompanyList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany" resultMap="BaseIssuingcompanyResultTwo">
+        SELECT
+        b.company_code, b.company_name, b.simple_name, b.status, b.create_by, b.create_time, b.update_by, b.update_time,
+        case when (( SELECT count( 1 ) FROM base_issuingcompany_riskrela a WHERE a.company_code = b.company_code AND a.STATUS = 'y' )
+        = ( SELECT count( 2 ) FROM base_issuingcompany_rule c WHERE c.company_code = b.company_code AND c.STATUS = 'y' )
+        ) then 'false' ELSE 'true' END as flag
+        FROM
+        base_issuingcompany b
         <where>
             <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
             <if test="companyname != null  and companyname != ''"> and company_name like concat('%', #{companyname}, '%')</if>

@@ -43,11 +43,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-      <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
-        </template>
-      </el-table-column>
+      <el-table-column align="center" prop="organName" min-width="120" label="机构" show-overflow-tooltip/>
       <el-table-column v-if="status === '02'" align="center" min-width="100" prop="batchstatus" label="批次状态"
                        show-overflow-tooltip>
         <template slot-scope="scope">
@@ -69,6 +65,7 @@
 
 <script>
   import {invalid,getThisDept} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
   let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
@@ -105,8 +102,23 @@
       this.batchs_statusOptions = this.dictList.find(item => {
         return item.dictType === 'batchs_status'
       }).dictDate
-      getThisDept().then(res=>{
-          this.deptOptions=res.deptlist
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptOptions = res.rows
+            }
+          }).catch(res => {
+          })
+        }
       })
 
     },
@@ -154,8 +166,8 @@
       getDeptName(datas, value) {
         var actions = [];
         Object.keys(datas).some((key) => {
-          if (datas[key].deptId === parseInt(value)) {
-            actions.push(datas[key].deptName);
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
             return true;
           }
         })

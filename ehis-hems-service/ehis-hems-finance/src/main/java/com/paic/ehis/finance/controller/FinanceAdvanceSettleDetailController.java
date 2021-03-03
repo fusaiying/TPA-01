@@ -13,6 +13,7 @@ import com.paic.ehis.finance.service.IFinanceAdvanceSettleDetailService;
 import com.paic.ehis.finance.service.IFinanceCollectionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,14 +21,13 @@ import java.util.List;
 
 /**
  * 代垫费结算明细Controller
- * 
+ *
  * @author sino
  * @date 2021-01-30
  */
 @RestController
 @RequestMapping("/settleDetail")
-public class FinanceAdvanceSettleDetailController extends BaseController
-{
+public class FinanceAdvanceSettleDetailController extends BaseController {
     @Autowired
     private IFinanceAdvanceSettleDetailService financeAdvanceSettleDetailService;
     @Autowired
@@ -36,10 +36,9 @@ public class FinanceAdvanceSettleDetailController extends BaseController
     /**
      * 查询代垫费结算明细列表
      */
-  //  @PreAuthorize("@ss.hasPermi('system:detail:list')")
+    //  @PreAuthorize("@ss.hasPermi('system:detail:list')")
     @GetMapping("/list")
-    public TableDataInfo list(FinanceAdvanceSettleDetail financeAdvanceSettleDetail)
-    {
+    public TableDataInfo list(FinanceAdvanceSettleDetail financeAdvanceSettleDetail) {
         startPage();
         List<FinanceAdvanceSettleDetail> list = financeAdvanceSettleDetailService.selectFinanceAdvanceSettleDetailList(financeAdvanceSettleDetail);
         return getDataTable(list);
@@ -48,12 +47,11 @@ public class FinanceAdvanceSettleDetailController extends BaseController
     /**
      * 导出代垫费结算明细列表
      */
-  //  @PreAuthorize("@ss.hasPermi('system:detail:export')")
+    //  @PreAuthorize("@ss.hasPermi('system:detail:export')")
     @Log(title = "代垫费结算明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, FinanceAdvanceSettleDTO dto) throws IOException
-    {
-        List<FinanceAdvanceSettleVO> list =  financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOInfo(dto.getSettleTaskNo());
+    public void export(HttpServletResponse response, FinanceAdvanceSettleDTO dto) throws IOException {
+        List<FinanceAdvanceSettleVO> list = financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOInfo(dto.getSettleTaskNo());
         ExcelUtil<FinanceAdvanceSettleVO> util = new ExcelUtil<FinanceAdvanceSettleVO>(FinanceAdvanceSettleVO.class);
         util.exportExcel(response, list, "detail");
     }
@@ -61,43 +59,39 @@ public class FinanceAdvanceSettleDetailController extends BaseController
     /**
      * 获取代垫费结算明细详细信息
      */
-  //  @PreAuthorize("@ss.hasPermi('system:detail:query')")
+    //  @PreAuthorize("@ss.hasPermi('system:detail:query')")
     @GetMapping(value = "/{detailId}")
-    public AjaxResult getInfo(@PathVariable("detailId") Long detailId)
-    {
+    public AjaxResult getInfo(@PathVariable("detailId") Long detailId) {
         return AjaxResult.success(financeAdvanceSettleDetailService.selectFinanceAdvanceSettleDetailById(detailId));
     }
 
     /**
      * 新增代垫费结算明细
      */
-  // @PreAuthorize("@ss.hasPermi('system:detail:add')")
+    // @PreAuthorize("@ss.hasPermi('system:detail:add')")
     @Log(title = "代垫费结算明细", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody FinanceAdvanceSettleDetail financeAdvanceSettleDetail)
-    {
+    public AjaxResult add(@RequestBody FinanceAdvanceSettleDetail financeAdvanceSettleDetail) {
         return toAjax(financeAdvanceSettleDetailService.insertFinanceAdvanceSettleDetail(financeAdvanceSettleDetail));
     }
 
     /**
      * 修改代垫费结算明细
      */
-   // @PreAuthorize("@ss.hasPermi('system:detail:edit')")
+    // @PreAuthorize("@ss.hasPermi('system:detail:edit')")
     @Log(title = "代垫费结算明细", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody FinanceAdvanceSettleDetail financeAdvanceSettleDetail)
-    {
+    public AjaxResult edit(@RequestBody FinanceAdvanceSettleDetail financeAdvanceSettleDetail) {
         return toAjax(financeAdvanceSettleDetailService.updateFinanceAdvanceSettleDetail(financeAdvanceSettleDetail));
     }
 
     /**
      * 删除代垫费结算明细
      */
-   // @PreAuthorize("@ss.hasPermi('system:detail:remove')")
+    // @PreAuthorize("@ss.hasPermi('system:detail:remove')")
     @Log(title = "代垫费结算明细", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{detailIds}")
-    public AjaxResult remove(@PathVariable Long[] detailIds)
-    {
+    @DeleteMapping("/{detailIds}")
+    public AjaxResult remove(@PathVariable Long[] detailIds) {
         return toAjax(financeAdvanceSettleDetailService.deleteFinanceAdvanceSettleDetailByIds(detailIds));
     }
 
@@ -105,20 +99,20 @@ public class FinanceAdvanceSettleDetailController extends BaseController
     /**
      * 查询代垫费结算明细列表
      */
-   // @PreAuthorize("@ss.hasPermi('system:detail:FinanceAdvanceSettleVOList')")
+    // @PreAuthorize("@ss.hasPermi('system:detail:FinanceAdvanceSettleVOList')")
     @PostMapping("/FinanceAdvanceSettleVOList")
-    public TableDataInfo FinanceAdvanceSettleVOList(@RequestBody FinanceAdvanceSettleDTO financeAdvanceSettleDTO)
-    {
+    public TableDataInfo FinanceAdvanceSettleVOList(@RequestBody FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
         startPage(financeAdvanceSettleDTO);
         List<FinanceAdvanceSettleVO> list = financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO);
         return getDataTable(list);
     }
 
-    /** 根据结算任务号查询代垫费案件结算明细*/
-   // @PreAuthorize("@ss.hasPermi('system:detail:settleTaskNo')")
+    /**
+     * 根据结算任务号查询代垫费案件结算明细
+     */
+    // @PreAuthorize("@ss.hasPermi('system:detail:settleTaskNo')")
     @PostMapping(value = "/getInfoList")
-    public TableDataInfo selectFinanceAdvanceSettleVOInfo(@RequestBody FinanceAdvanceSettleDTO dto)
-    {
+    public TableDataInfo selectFinanceAdvanceSettleVOInfo(@RequestBody FinanceAdvanceSettleDTO dto) {
         startPage();
         List<FinanceAdvanceSettleVO> lista = financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOInfo(dto.getSettleTaskNo());
         return getDataTable(lista);
@@ -126,31 +120,42 @@ public class FinanceAdvanceSettleDetailController extends BaseController
 
     /*删除按钮修改状态为无效*/
     @DeleteMapping("/deleteFinanceInfo/{settleTaskNo}")
-    public AjaxResult deleteFinanceInfo(@PathVariable String settleTaskNo)
-    {
+    public AjaxResult deleteFinanceInfo(@PathVariable String settleTaskNo) {
         return toAjax(financeAdvanceSettleDetailService.deletefinanceinfo(settleTaskNo));
     }
 
-    /**任务确认环节确认按钮，将结算状态由待确认改为待核销(待结算)*/
+    /**
+     * 任务确认环节确认按钮，将结算状态由待确认改为待核销(待结算)
+     */
     @PutMapping("/updateSettleStatus1/{settleTaskNo}")
-    public AjaxResult updateSettleStatus1(@RequestBody String settleTaskNo)
-    {
+    public AjaxResult updateSettleStatus1(@RequestBody String settleTaskNo) {
         return toAjax(financeAdvanceSettleDetailService.updateSettleStatus1(settleTaskNo));
     }
 
-    /**核销按钮将结算状态由待核销改为已结算*/
+    /**
+     * 核销按钮将结算状态由待核销改为已结算
+     */
     @PutMapping("/updateSettleStatus2/{settleTaskNos}")
-    public AjaxResult updateSettleStatus2(@RequestBody String settleTaskNo,Long collectionId)
-    {
+    public AjaxResult updateSettleStatus2(@RequestBody String settleTaskNo, Long collectionId) {
         financeCollectionInfoService.deleteFinanceCollectionInfoById(collectionId);
         return toAjax(financeAdvanceSettleDetailService.updateSettleStatus2(settleTaskNo));
     }
 
-    /**发起垫付款任务*/
+    /**
+     * 发起垫付款任务
+     */
     @GetMapping("/InitiateAdvancePaymentTask")
-    public TableDataInfo InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO)
-    {
+    public TableDataInfo InitiateAdvancePaymentTask(FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
         List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailService.InitiateAdvancePaymentTask(financeAdvanceSettleDTO);
         return getDataTable(financeAdvanceSettleVOS);
+    }
+
+    /**
+     * 导入TPA服务费结算任务列表
+     */
+    @Log(title = "垫付款服务费结算任务", businessType = BusinessType.IMPORT)
+    @PostMapping("/importInitiate")
+    public AjaxResult excelImport(MultipartFile file) {
+        return toAjax(financeAdvanceSettleDetailService.importAdvanceSettleTask(file));
     }
 }

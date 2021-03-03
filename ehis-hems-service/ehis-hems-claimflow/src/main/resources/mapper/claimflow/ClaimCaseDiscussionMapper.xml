@@ -70,21 +70,16 @@
         a.conclusion_view,
         a.create_by,
         a.update_by,
-        b.create_time,
-        b.update_time
+        a.create_time,
+        a.update_time
         FROM
-        claim_case_discussion a,
-        claim_case_record b
+        claim_case_discussion a
         <where>
             <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
         </where>
-        and a.rpt_no = b.rpt_no
-        AND a.is_history = 'Y'
+       --  AND a.is_history = 'Y'
         AND a.STATUS = 'Y'
-        AND b.history_flag = 'N'
-        AND b.STATUS = 'Y'
-        and b.operation='07'
-
+        order by a.create_time asc
     </select>
 
     <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">
@@ -205,9 +200,16 @@
         <where>
             <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
             <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
-            <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
+            <if test="name != null and name != ''">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
             <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
-            <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>  and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+            <if test="createBy != null and createBy != ''">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createStartTime != null and createStartTime != ''">
+                <![CDATA[ AND claim_case_discussion.update_time >= #{createStartTime} ]]>
+            </if>
+            <if test="createEndTime != null and createEndTime != ''">
+                <![CDATA[ AND claim_case_discussion.update_time <= #{createEndTime}]]>
+            </if>
+            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case_discussion.rpt_no = claim_case.rpt_no
             and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
             and claim_case.batch_no = claim_batch.batch_no
@@ -254,6 +256,7 @@
           AND claim_case.STATUS = 'Y'
           AND claim_case_accept.STATUS = 'Y'
          and  claim_case_discussion.is_history = #{isHistory}
+         limit 1
     </select>
 
 </mapper>

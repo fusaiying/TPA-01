@@ -21,6 +21,7 @@ import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.system.api.ClaimCalService;
+import com.paic.ehis.system.api.domain.BaseIcd10;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -175,10 +176,14 @@ public class ClaimCaseBillController extends BaseController
         claimCaseRecord1.setOperation("06");
         claimCaseRecord1.setUpdateBy(username);
         claimCaseRecord1.setHistoryFlag("Y");
+        //查询上个节点的id   给 07 org_record_id  赋值
+        long orgRecordId = claimCaseRecordService.selectClaimCaseRecordByRptNo(rptNo);
         // 06轨迹关掉
         claimCaseRecordService.updateClaimCaseRecordByRptNoAndOperator(claimCaseRecord1);
+       
         ClaimCaseRecord claimCaseRecord2 = new ClaimCaseRecord();
         claimCaseRecord2.setRptNo(rptNo);
+        claimCaseRecord2.setOrgRecordId(orgRecordId);
         claimCaseRecord2.setOperation("07");
         claimCaseRecord2.setHistoryFlag("N");
         claimCaseRecord2.setStatus("Y");
@@ -199,5 +204,22 @@ public class ClaimCaseBillController extends BaseController
     @GetMapping("/feeitem")
     public AjaxResult selectFeeitemList(String rptNo){
         return AjaxResult.success(claimCaseBillService.selectFeeitemList(rptNo));
+    }
+
+    /** 汇总信息 */
+    @GetMapping("/billSum")
+    public AjaxResult billSum(ClaimCaseBill claimCaseBill)
+    {
+        claimCaseBill.setStatus("Y");
+        ClaimCaseBill billSum = claimCaseBillService.getBillSum(claimCaseBill);
+        return AjaxResult.success(billSum);
+    }
+
+    /**
+     *  主要诊断、次要诊断接口
+     */
+    @PostMapping("ICD")
+    public AjaxResult getICD(@RequestBody BaseIcd10 baseIcd10){
+        return AjaxResult.success(claimCaseBillService.selectICD(baseIcd10));
     }
 }

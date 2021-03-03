@@ -35,8 +35,8 @@
                 <el-option
                   v-for="(item, ind) in sysDeptOptions"
                   :key="ind"
-                  :label="item.deptName"
-                  :value="item.deptId">
+                  :label="item.organName"
+                  :value="item.organCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -83,7 +83,7 @@
                          reserve-keyword
                          filterable
                          :remote-method="remoteUserMethod">
-                <el-option v-for="(item,ind) in sysUserOptions" :label="item" :value="item"
+                <el-option v-for="(item,ind) in sysUserOptions" :label="item.userName" :value="item.userName"
                            :key="ind"/>
               </el-select>
             </el-form-item>
@@ -117,19 +117,21 @@
         <span>批次工作池</span>
         <span style="float: right;">
             <el-button type="primary" size="mini" @click="addPresenting('add')">新增交单</el-button>
-            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
         </span>
       </div>
       <div style="position: relative">
         <el-tabs v-model="activeName" v-loading="loading" @tab-click="handleClick">
           <el-tab-pane :label="`处理中(${processedTotal})`" name="03">
-            <claimsTable ref="claimsTable3" :table-data="processedData" :status="activeName"/>
+            <claimsTable ref="claimsTable3" :table-data="processedData" :status="activeName"
+                        />
           </el-tab-pane>
           <el-tab-pane :label="`已退回(${backTotal})`" name="01">
-            <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName"/>
+            <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName" />
           </el-tab-pane>
           <el-tab-pane :label="`已处理(${dealTotal})`" name="02">
-            <claimsTable ref="claimsTable2" @init-data="searchHandle" :table-data="dealData" :status="activeName"/>
+            <claimsTable ref="claimsTable2" @init-data="searchHandle" :table-data="dealData" :status="activeName"
+                         />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -164,8 +166,7 @@
 
 <script>
   import claimsTable from './components/claimsTable'
-  import {getUser, getDept} from '@/api/claim/standingBookSearch'
-  import {logInfo} from '@/api/dispatch/api'
+  import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
   import {getBackToList, getDealWithList, getPendingList} from '@/api/claim/presentingReview'
 
   let dictss = [{dictType: 'claimType'},]
@@ -176,6 +177,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         caseNumber: false,//查询条件（报案号）是否显示
         backNum: 1,
         backSize: 10,
@@ -229,13 +231,23 @@
         return item.dictType === 'claimType'
       }).dictDate
       //this.searchHandle();
-      logInfo().then(res=>{
-        if (res!=null && res.code===200){
-          this.queryParams.updateBy=res.user.userName
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
           let query = {
             pageNum: 1,
             pageSize: 10,
-            updateBy:res.user.userName
+            updateBy: ''
+          }
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+            this.queryParams.updateBy = res.data.userName
+            query.updateBy = res.data.userName
           }
           getPendingList(query).then(res => {
             if (res != null && res.code === 200) {
@@ -276,32 +288,27 @@
           }).finally(() => {
             this.loading = false
           })
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.sysDeptOptions = response.rows
+              this.queryParams.organcode = res.data.organCode
+              let option = {
+                organCode:  this.queryParams.organcode ,
+                pageNum: 1,
+                pageSize: 200,
+              }
+              getUsersByOrganCode(option).then(res => {
+                if (res!=null && res.code===200){
+                  this.sysUserOptions=res.rows
+                }
+              })
+            }
+          }).catch(res => {
+          })
         }
       })
 
 
-
-
-      let item = {
-        pageNum: 1,
-        pageSize: 200,
-      }
-      getDept(item).then(res => {
-        this.sysDeptOptions = res.deptlist
-        this.queryParams.organcode = res.deptId
-        let data = {
-          organcode: res.deptId,
-          pageNum: 1,
-          pageSize: 200,
-        }
-        getUser(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.sysUserOptions = res.data
-          }
-        })
-
-      }).catch(res => {
-      })
     },
     methods: {
       resetForm() {
@@ -372,6 +379,9 @@
           caseNumber: this.queryParams.caseNumber,
           rptno: this.queryParams.rptno,
           updateBy: this.queryParams.updateBy,
+        }
+        if (params.organcode==null || params.organcode=='' || params.organcode==undefined){
+          params.organcode=this.organCode
         }
         if (this.isinit === 'N') {
           params.pageNum = 1
@@ -521,7 +531,7 @@
             }
           }).finally(() => {
           })
-        } else if (this.activeName === '02'){//已处理
+        } else if (this.activeName === '02') {//已处理
           getDealWithList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
@@ -546,7 +556,7 @@
             }
           }).finally(() => {
           })
-        }else {
+        } else {
           getPendingList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
@@ -583,53 +593,56 @@
         }
       },
       remoteMethod(query) {
-        if (query!=null && query!='' && query!=undefined){
-
+        if (query != null && query != '' && query != undefined) {
           let data = {
-            deptName: query,
+            organCode: this.organCode,
+            organName: query,
             pageNum: 1,
             pageSize: 200,
           }
           if (query !== '' && query != null) {
-            getDept(data).then(res => {
-              this.sysDeptOptions = res.deptlist
+            getOrganList(data).then(res => {
+              this.sysDeptOptions = res.rows
             }).catch(res => {
             })
           }
         }
       },
       remoteUserMethod(query) {
-        if (query!=null && query!='' && query!=undefined){
+        if (query != null && query != '' && query != undefined) {
 
           let data = {
-            organcode: this.queryParams.organcode,
+            organCode: this.queryParams.organcode,
             userName: query,
             pageNum: 1,
             pageSize: 200,
           }
-          if (query !== '' && query != null) {
-            getUser(data).then(res => {
-              if (res != null && res.code === 200) {
-                this.sysUserOptions = res.data
-              }
-            })
+          if (data.organCode != null && data.organCode != '' && data.organCode != undefined){
+            if (query !== '' && query != null) {
+              getUsersByOrganCode(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.sysUserOptions = res.rows
+                }
+              })
+            }
           }
+
         }
       },
       getUsers(val) {
-        if (val!=null && val!='' && val!=undefined){
+        if (val != null && val != '' && val != undefined) {
           let data = {
-            organcode: val,
+            organCode: val,
             pageNum: 1,
             pageSize: 200,
           }
-          getUser(data).then(res => {
+          getUsersByOrganCode(data).then(res => {
             if (res != null && res.code === 200) {
-              this.sysUserOptions = res.data
+              this.sysUserOptions = res.rows
             }
           })
-        }else {
-          this.sysUserOptions=[]
+        } else {
+          this.sysUserOptions = []
         }
       }
     }

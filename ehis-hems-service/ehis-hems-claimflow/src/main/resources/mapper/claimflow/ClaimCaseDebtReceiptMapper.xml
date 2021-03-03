@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.receipt_date,
             a.remark,
             a.create_by,
-            (a.receipt_amount - SUM( c.col_amount )) residual
+            (a.receipt_amount - IFNULL(SUM( c.col_amount ),0)) residual
         FROM
             claim_case_debt_receipt a
             LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no AND a.status = 'Y' AND c.status = 'Y'
@@ -119,13 +119,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseDebtReceiptListByInsuredOrDate" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="ClaimCaseDebtReceiptResult">
         SELECT
             a.receipt_no,
-            distinct b.name insured_no,
+            b.name insured_no,
             a.receipt_amount,
             a.receipt_currency,
             a.receipt_date,
             a.remark,
             a.create_by,
-            (a.receipt_amount - SUM( c.col_amount )) residual
+            (a.receipt_amount - IFNULL(SUM( c.col_amount ),0)) residual
         FROM
             claim_case_debt_receipt a
             LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no

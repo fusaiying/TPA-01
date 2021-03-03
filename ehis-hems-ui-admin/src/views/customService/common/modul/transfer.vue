@@ -15,7 +15,7 @@
             <el-row>
 
               <el-form-item    v-for="(umCode, index) in dynamicValidateForm.umCode"
-                               :label="'转办方UM账号' + index+':'"
+                               :label="'转办方UM账号:'"
                                :key="umCode.key"
                                :prop="'umCode.' + index + '.value'"
                                :rules="{
@@ -32,7 +32,7 @@
 
             </el-row>
             <el-row>
-              <el-form-item label="转交处理原因：：" prop="reason" :rules="{
+              <el-form-item label="转交处理原因:" prop="reason" :rules="{
              required: true, message: '转交处理原因不能而为空', trigger: 'blur'
             }">
                 <el-input

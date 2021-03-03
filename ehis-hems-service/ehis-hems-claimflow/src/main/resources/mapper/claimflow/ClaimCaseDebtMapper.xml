@@ -127,15 +127,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             END AS white_status
         FROM
             claim_case_debt a
-            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id
-            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no
-            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no
-            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no
-            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no
+            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.STATUS = 'Y' and b.status = 'Y'
+            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y'
+            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
+            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status ='Y'
+            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no  and g.status = 'Y'
         WHERE
-            g.debt_whitelist_id IS NULL AND a.STATUS = 'Y' and b.status = 'Y'
-            and c.status = 'Y' and d.status = 'Y' and f.status = 'Y' and e.status ='Y' and g.status = 'Y'
+            g.debt_whitelist_id IS NULL and f.case_status = '99'
         GROUP BY
             b.debt_id,
             a.rpt_no,
@@ -183,6 +182,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no and g.status = 'Y'
             LEFT JOIN claim_case_policy h ON h.rpt_no = a.rpt_no and h.status = 'Y'
         <where>
+            f.case_status = '99'
             <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
             <if test="policyNo != null  and policyNo != ''"> and h.policy_no = #{policyNo}</if>
             <if test="hospitalCode != null and hospitalCode != ''"> and e.hospital_code = #{hospitalCode}</if>

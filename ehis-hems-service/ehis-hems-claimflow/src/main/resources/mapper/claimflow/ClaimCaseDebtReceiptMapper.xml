@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseDebtReceiptListNear" resultMap="ClaimCaseDebtReceiptResult">
         SELECT
             a.receipt_no,
-            ( SELECT name FROM claim_case_policy b WHERE a.insured_no = b.insured_no ) insured_no,
+            ( SELECT DISTINCT name FROM claim_case_insured b WHERE a.insured_no = b.insured_no ) insured_no,
             a.receipt_amount,
             a.receipt_currency,
             a.receipt_date,
@@ -109,10 +109,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (a.receipt_amount - SUM( c.col_amount )) residual
         FROM
             claim_case_debt_receipt a
-            LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no
+            LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no AND a.status = 'Y' AND c.status = 'Y'
         WHERE
-            a.status = 'Y' AND c.status = 'Y'
-            AND a.receipt_date > DATE_SUB( CURDATE(), INTERVAL 3 MONTH )
+            a.receipt_date > DATE_SUB( CURDATE(), INTERVAL 3 MONTH )
         GROUP BY
             a.receipt_no
     </select>
@@ -120,7 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseDebtReceiptListByInsuredOrDate" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="ClaimCaseDebtReceiptResult">
         SELECT
             a.receipt_no,
-            b.name insured_no,
+            distinct b.name insured_no,
             a.receipt_amount,
             a.receipt_currency,
             a.receipt_date,
@@ -130,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             claim_case_debt_receipt a
             LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no
-            LEFT JOIN claim_case_policy b ON a.insured_no = b.insured_no
+            LEFT JOIN claim_case_insured b ON a.insured_no = b.insured_no
         WHERE
             a.status = 'Y' AND c.status = 'Y' AND b.status = 'Y'
             <if test="insuredName != null  and insuredName != ''"> and b.name like concat('%', #{insuredName}, '%') </if>

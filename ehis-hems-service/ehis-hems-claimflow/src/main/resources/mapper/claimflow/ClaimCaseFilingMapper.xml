@@ -96,8 +96,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCaseClaimCaseFilingInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" resultMap="ClaimCaseFilingInformationVOResult">
         select
-        ccf.case_box_no,ccf.dept_code,ccf.claim_type,
-        cbif.is_filing,cbif.is_invoice_back,cbif.is_single,cbif.remark
+             ccf.case_box_no
+            ,ccf.dept_code
+            ,ccf.claim_type
+            ,cbif.is_filing
+            ,cbif.is_invoice_back
+            ,cbif.is_single
+            ,cbif.remark
+            ,ccf.status
         from claim_case_filing ccf
         inner join claim_batch_invoice_filing cbif on ccf.batch_no=cbif.batch_no
         <where>

@@ -214,7 +214,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
             claimCaseFilingInformationVO.setIsInvoiceBack(claimCaseFilingInformationVoS.getIsInvoiceBack());
             claimCaseFilingInformationVO.setIsSingle(claimCaseFilingInformationVoS.getIsSingle());
             claimCaseFilingInformationVO.setRemark(claimCaseFilingInformationVoS.getRemark());
-
+            claimCaseFilingInformationVO.setStatus(claimCaseFilingInformationVoS.getStatus());
             //将实体类添加到给前端的集合中
             claimCaseFilingInformationVo.add(claimCaseFilingInformationVO);
         }

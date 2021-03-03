@@ -67,11 +67,7 @@
       </template>
     </el-table-column>
     <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-    <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip>
-      <template slot-scope="scope">
-        <span>{{getDeptName( deptOptions, scope.row.organcode)}}</span>
-      </template>
-    </el-table-column>
+    <el-table-column align="center" prop="organName" min-width="120" label="机构" show-overflow-tooltip/>
     <el-table-column align="center" min-width="100" prop="batchstatus" label="批次状态" show-overflow-tooltip>
       <template slot-scope="scope">
         <span v-if="status!='01'">{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>

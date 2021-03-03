@@ -137,7 +137,9 @@ public class ClaimCaseDebtController extends BaseController
         debtInfo.setWhiteStatus(debtInfoDTO.getWhiteStatus());
         debtInfo.setPolicyItemNo(debtInfoDTO.getPolicyItemNo());
         // 初始化或者查询条件为空
-        if (ObjectNullUtil.objectIsNull(debtInfo)){
+//        if (ObjectNullUtil.objectIsNull(debtInfo)){
+        if (null==debtInfo.getRptNo() && null==debtInfo.getPolicyNo() && null==debtInfo.getHospitalCode() && null==debtInfo.getInsuredName()
+                && null==debtInfo.getIdNo() && null==debtInfo.getStartDate() && null==debtInfo.getWhiteStatus() && null==debtInfo.getPolicyItemNo()){
             list = claimCaseDebtService.selectDebtInitList();
         } else {
             list = claimCaseDebtService.selectDebtList(debtInfo);

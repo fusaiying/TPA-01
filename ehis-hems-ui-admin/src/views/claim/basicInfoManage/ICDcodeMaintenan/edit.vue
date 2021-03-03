@@ -63,7 +63,7 @@ export default {
       },
       totalCount: 0,
       baseFormRules: {
-        icdmname: [{ validator: checkChineseName, trigger: 'blur' }],
+        icdmname: [{ required: true, message: 'ICD中文名称不能为空', trigger: 'blur' }],
         /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
         // name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         // englishName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],

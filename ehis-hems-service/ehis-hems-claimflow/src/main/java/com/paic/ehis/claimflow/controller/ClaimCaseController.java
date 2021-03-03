@@ -681,4 +681,11 @@ public class ClaimCaseController extends BaseController {
         }
     }
 
+    //校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+    //    @PreAuthorize("@ss.hasPermi('system:case:list')")
+    @PostMapping("/checkBillAndPolicyDate")
+    public AjaxResult selectBillAndPolicyDateByRptNo(@RequestBody String rptNo) {
+        int i = claimCaseService.selectBillAndPolicyDateByRptNo(rptNo);
+        return AjaxResult.success(i);
+    }
 }

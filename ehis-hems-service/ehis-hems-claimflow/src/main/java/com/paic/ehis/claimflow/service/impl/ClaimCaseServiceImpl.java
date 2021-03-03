@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -1576,6 +1577,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     @Override
     public int selectCaseBorrowByRptNo(String rptNo) {
         return claimCaseMapper.selectCaseBorrowByRptNo(rptNo);
+    }
+
+    @Override
+    public int selectBillAndPolicyDateByRptNo(String rptNo) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int flag =0;
+
+        List<BillAndPolicyDate> billAndPolicyDates = claimCaseMapper.selectBillAndPolicyDateByRptNo(rptNo);
+        for (BillAndPolicyDate billAndPolicyDate : billAndPolicyDates) {
+            if ( billAndPolicyDate.getBillStartDate().compareTo(billAndPolicyDate.getPolicyStartDate())<0 || billAndPolicyDate.getBillEndDate().compareTo(billAndPolicyDate.getPolicyEndDate())>0 ){
+                flag=1;
+            }
+        }
+        return flag;
     }
 
     /**

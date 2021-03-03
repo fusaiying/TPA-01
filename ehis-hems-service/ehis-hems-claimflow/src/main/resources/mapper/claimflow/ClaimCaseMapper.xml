@@ -811,6 +811,13 @@
         <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
 
     </select>
+    <select id="selectBillAndPolicyDateByRptNo" parameterType="String" resultType="com.paic.ehis.claimflow.domain.BillAndPolicyDate">
+        SELECT ccb.treatment_start_date billStartDate,ccb.treatment_end_date billEndDate,ccp.valid_start_date policyStartDate,ccp.valid_end_date policyEndDate
+        FROM `claim_case_cal_item` cci  JOIN claim_case_bill ccb on cci.bill_id=ccb.bill_id AND ccb.rpt_no=#{rptNo} AND ccb.status='Y'  join
+        claim_case_policy ccp on cci.policy_no=ccp.policy_no AND ccp.rpt_no= #{rptNo} and ccp.status='Y'
+        where cci.rpt_no= #{rptNo} and cci.status='Y'
+
+    </select>
     <!-- <update id="updateCaseUpdateBy" parameterType="String">
          update claim_case
          set case_status ='31'

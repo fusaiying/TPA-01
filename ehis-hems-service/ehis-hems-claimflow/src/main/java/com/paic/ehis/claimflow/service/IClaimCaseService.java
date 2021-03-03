@@ -258,6 +258,10 @@ public interface IClaimCaseService
 
     public int selectCaseBorrowByRptNo(String rptNo);
     /**
+     *校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+     */
+    public int selectBillAndPolicyDateByRptNo(String rptNo);
+    /**
      * 案件交单完成进入受理阶段分配操作人
      */
     //public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);

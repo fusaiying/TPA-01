@@ -164,3 +164,11 @@ export function acceptInfo (rptNo) {
     method: 'get',
   })
 }
+//校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+export function checkBillAndPolicyDate(rptNo) {
+  return request({
+    url: '/claimflow/case/checkBillAndPolicyDate',
+    method: 'post',
+    data:rptNo
+  })
+}

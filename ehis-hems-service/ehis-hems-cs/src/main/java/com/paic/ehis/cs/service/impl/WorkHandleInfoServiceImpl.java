@@ -201,7 +201,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setLinkCode("03");
+            flowLog.setOperateCode("05");
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setMakeBy(SecurityUtils.getUsername());
            //没有um帐号
@@ -210,6 +213,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            if(serviceProcessingVo.getBusinessProcess().equals("01")){
+                flowLog.setStatus("03");
+            }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
+                flowLog.setStatus("02");
+            }
             flowLogMapper.insertFlowLog(flowLog);
             //if(serviceProcessingVo.getSign().equals("01")){
             //将其余状态置为N

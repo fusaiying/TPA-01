@@ -114,22 +114,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO) {
-        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
-            switch (batchDTO.getOrderByColumn()) {
-                case "batchno":
-                    batchDTO.setOrderByColumn("batch_no");
-                    break;
-                case "submitdate":
-                    batchDTO.setOrderByColumn("submit_date");
-                    break;
-                case "updateTime":
-                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
-            }
-        } else {
-            batchDTO.setIsAsc("desc");
-            batchDTO.setOrderByColumn("submit_date");
-        }
-        if (StringUtils.isNull(batchDTO.getSubmitstartdate()) && StringUtils.isNull(batchDTO.getOrgancode())
+/*        if (StringUtils.isNull(batchDTO.getSubmitstartdate()) && StringUtils.isNull(batchDTO.getOrgancode())
                 && StringUtils.isNull(batchDTO.getHospitalname()) && StringUtils.isNull(batchDTO.getUpdatestartTime())
                 && StringUtils.isNull(batchDTO.getBatchno()) && StringUtils.isNull(batchDTO.getClaimtype()) && StringUtils.isNull(batchDTO.getUpdateBy())) {
 //            机构层级  查询 暂未是实现
@@ -137,7 +122,7 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             SysUser sysUser = sysUserMapper.selectUserById(userId);
             // 获取用户的所属机构
             batchDTO.setOrgancode( sysUser.getDeptId().toString());
-        }
+        }*/
 //        else {
 //            batchDTO.setUpdateBy(SecurityUtils.getUsername());
 //        }
@@ -149,40 +134,8 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             batchDTO.setUpdatestartTime(calendar.getTime());
             batchDTO.setUpdateendTime(DateUtils.parseDate(DateUtils.getTime()));
         }
-        startPage(batchDTO);
         return claimBatchMapper.selectDealWithBatchList(batchDTO);
 
-    }
-
-    /**
-     * 导出时查询已处理理赔批次 列表
-     *
-     * @param batchDTO 理赔批次
-     * @return 理赔批次 集合
-     */
-    @Override
-    public List<BatchVo> selectExportDealWithBatchList(BatchDTO batchDTO) {
-        if (StringUtils.isNotNull(batchDTO.getSubmitstartdate()) || StringUtils.isNotEmpty(batchDTO.getOrgancode())
-                || StringUtils.isNotEmpty(batchDTO.getHospitalname()) || StringUtils.isNotNull(batchDTO.getUpdatestartTime())
-                || StringUtils.isNotEmpty(batchDTO.getBatchno()) || StringUtils.isNotEmpty(batchDTO.getClaimtype()) || StringUtils.isNotEmpty(batchDTO.getUpdateBy())) {
-//            机构层级  查询 暂未是实现
-            Long userId = SecurityUtils.getUserId();
-            SysUser sysUser = sysUserMapper.selectUserById(userId);
-            // 获取用户的所属机构
-            batchDTO.setOrgancode( sysUser.getDeptId().toString());
-        } else {
-            batchDTO.setUpdateBy(SecurityUtils.getUsername());
-        }
-        batchDTO.setStatus("Y");
-        batchDTO.setBatchstatus("'02','03','05'");
-        if (StringUtils.isNull(batchDTO.getUpdatestartTime())) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DATE) - 30);
-            batchDTO.setUpdatestartTime(calendar.getTime());
-            batchDTO.setUpdateendTime(DateUtils.parseDate(DateUtils.getTime()));
-        }
-
-        return claimBatchMapper.selectDealWithBatchList(batchDTO);
     }
 
 

@@ -129,7 +129,22 @@ public class ClaimBatchController extends BaseController {
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:list')")
     @PostMapping("/dealWithList")
     public TableDataInfo dealWithList(@RequestBody BatchDTO batchDTO) {
-
+        if (StringUtils.isNotEmpty(batchDTO.getOrderByColumn())) {
+            switch (batchDTO.getOrderByColumn()) {
+                case "batchno":
+                    batchDTO.setOrderByColumn("batch_no");
+                    break;
+                case "submitdate":
+                    batchDTO.setOrderByColumn("submit_date");
+                    break;
+                case "updateTime":
+                    batchDTO.setOrderByColumn(StringUtils.humpToLine(batchDTO.getOrderByColumn()));
+            }
+        } else {
+            batchDTO.setIsAsc("desc");
+            batchDTO.setOrderByColumn("submit_date");
+        }
+        startPage(batchDTO);
         List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
         return getDataTable(list);
     }
@@ -175,7 +190,7 @@ public class ClaimBatchController extends BaseController {
 //        String hospitalname = URLDecoder.decode(batchDTO.getHospitalname(),"utf-8");
 //        batchDTO.setHospitalname(hospitalname);
         System.out.println("我叒导出已处理Excel了！！！");
-        List<BatchVo> list = claimBatchService.selectExportDealWithBatchList(batchDTO);
+        List<BatchVo> list = claimBatchService.selectDealWithBatchList(batchDTO);
         for (BatchVo batchVo : list) {
             batchVo.setHospitalname(StringUtils.nvl(batchVo.getChname1(), "") + "|" + StringUtils.nvl(batchVo.getEnname1(), ""));
             batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
@@ -185,7 +200,7 @@ public class ClaimBatchController extends BaseController {
     }
 
     /**
-     * 导出交单复核已处理理赔批次 列表
+     * 导出交单复核待处理理赔批次 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
@@ -197,11 +212,11 @@ public class ClaimBatchController extends BaseController {
             batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
         }
         ExcelUtil<BatchVo> util = new ExcelUtil<BatchVo>(BatchVo.class);
-        util.exportExcel(response, batchVoList, "交单复核已处理理赔批次表");
+        util.exportExcel(response, batchVoList, "交单复核待处理理赔批次表");
     }
 
     /**
-     * 导出交单复核待处理理赔批次 列表
+     * 导出交单复核已处理理赔批次 列表
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:batch:export')")
     @Log(title = "理赔批次 ", businessType = BusinessType.EXPORT)
@@ -213,7 +228,7 @@ public class ClaimBatchController extends BaseController {
             batchVo.setCurrency(batchVo.getBatchtotal() + " " + batchVo.getCurrency());
         }
         ExcelUtil<BatchVo> util = new ExcelUtil<BatchVo>(BatchVo.class);
-        util.exportExcel(response, batchVoList, "交单复核待处理理赔批次表");
+        util.exportExcel(response, batchVoList, "交单复核已处理理赔批次表");
     }
 
     /**

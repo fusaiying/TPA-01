@@ -39,13 +39,10 @@
     </resultMap>
 
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-        SELECT
+        SELECT  DISTINCT
         a.work_order_no,
-        (select distinct 1 from call_again ca
-        where ca.work_order_no=a.work_order_no and ca.status='Y'
-        ) as isRedWord,
         a.business_type,
-        concat(a.business_type,'-', b.item_code) as business_service,
+        concat( a.business_type, '-', b.item_code ) AS business_service,
         a.policy_no,
         a.policy_item_no,
         a.risk_code,
@@ -80,14 +77,21 @@
         b.create_by create_by2,
         b.create_time create_time2,
         b.update_by update_by2,
-        b.update_time update_time2
+        b.update_time update_time2,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
         LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
         a.business_type = '01'
         AND a.STATUS = '01'
+        ORDER BY
+        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -113,9 +117,9 @@
     <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
         SELECT
         a.work_order_no,
-        (select distinct 1 from call_again ca
+        /*(select distinct 1 from call_again ca
             where ca.work_order_no=a.work_order_no and ca.status='Y'
-        ) as isRedWord,
+        ) as isRedWord,*/
         a.business_type,
         concat(a.business_type,'-', b.item_code) as business_service,
         a.policy_no,
@@ -153,21 +157,27 @@
         b.update_by update_by2,
         b.update_time update_time2,
         CASE
-
         WHEN (
         a.STATUS = '02'
         AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = a.work_order_no ) = 1
         ) THEN
         '06' ELSE a.STATUS
-        END
+        END,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
         FROM
-        work_order_accept a
-        LEFT JOIN accept_detail_info b ON a.work_order_no = b.work_order_no
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
         LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND a.business_type = '01'
         AND a.STATUS = '02'
+        ORDER BY
+        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>

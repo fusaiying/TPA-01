@@ -168,14 +168,21 @@ SELECT
         b.prop22,
         b.prop23,
         b.prop24,
-        b.prop25
+        b.prop25,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
         LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
          a.business_type = '02'
         AND a.STATUS = '01'
+        ORDER BY
+        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -258,14 +265,21 @@ SELECT
         b.prop22,
         b.prop23,
         b.prop24,
-        b.prop25
+        b.prop25,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
         LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
         a.business_type = '02'
         AND a.STATUS = '02'
+        ORDER BY
+        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>

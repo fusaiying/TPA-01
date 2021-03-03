@@ -33,14 +33,37 @@
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
-        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t1.status
-        from work_order_accept t1
-        left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
-        left join person_info c  on  t1.insured_no = c.person_id
-        where
+        SELECT
+        t1.work_order_no,
+        t2.channel_code,
+        t2.item_code,
+        t1.policy_no,
+        t1.policy_item_no,
+        t1.risk_code,
+        t1.insured_name,
+        t1.holder_name,
+        t1.accept_time,
+        t1.accept_by,
+        t1.modify_time,
+        t1.vip_flag,
+        t2.priority_level,
+        t2.organ_code,
+        t1.STATUS,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
+        FROM
+        work_order_accept t1
+        LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no
+        LEFT JOIN person_info c ON t1.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON t2.work_order_no = hm.nnn
+        WHERE
         t1.work_order_no = t2.work_order_no
-        and t1.business_type='03'
-        and t1.status='01'
+        AND t1.business_type = '03'
+        AND t1.STATUS = '01'
+        ORDER BY
+        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
@@ -70,14 +93,21 @@
         AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = t1.work_order_no ) = 1
         ) THEN
         '06' ELSE t1.STATUS
-        END
+        END,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE hm.nnn
+        END AS isRedWord
         from work_order_accept t1
         left join  accept_detail_info t2  on t1.work_order_no=t2.work_order_no
         left join person_info c  on  t1.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON t2.work_order_no = hm.nnn
         where
         t1.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         and t1.business_type='03'
         and t1.status='02'
+        ORDER BY
+        hm.nnn DESC
             <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
             <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>

@@ -102,7 +102,6 @@
         t2.priority_level,
         t2.organ_code,
         CASE
-
         WHEN (
         t1.STATUS = '02'
         AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = t1.work_order_no ) = 1
@@ -110,7 +109,6 @@
         '06' ELSE t1.STATUS
         END,
         CASE
-
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE hm.nnn
         END AS isRedWord

@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
         </where>
         and t1.status='Y' AND t3.STATUS = 'Y'
+        ORDER BY t1.call_serial_num  asc
     </select>
 
     <select id="selectCallAgainById" parameterType="String" resultMap="CallAgainResult">

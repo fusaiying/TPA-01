@@ -136,8 +136,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
         SELECT
+        DISTINCT
         ccc.rpt_no,
-        cal_id,
         billAmount,
         hosDiscountAmount,
         unableAmount,

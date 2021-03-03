@@ -188,7 +188,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
         }
-
+        claimCaseCal.setStatus(null);
         claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

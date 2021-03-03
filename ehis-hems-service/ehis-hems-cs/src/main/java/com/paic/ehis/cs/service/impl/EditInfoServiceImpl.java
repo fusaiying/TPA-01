@@ -134,8 +134,10 @@ public class EditInfoServiceImpl implements IEditInfoService
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-        //flowLog.setWorkOrderNo();从前端获得
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
         flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -168,7 +170,9 @@ public class EditInfoServiceImpl implements IEditInfoService
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-        //flowLog.setWorkOrderNo();从前端获得
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
         flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -209,6 +213,9 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setLinkCode("05");//05 取消状态
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

@@ -532,15 +532,16 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
-            //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             flowLogMapper.updateFlowLog(flowLog);
-            // WorkHandleInfo workHandleInfo = new WorkHandleInfo();
             workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id", 10, 6)));
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
@@ -632,8 +633,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
-            //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -643,8 +646,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
             FlowLog flowLog2 = new FlowLog();
             flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
-            //flowLog.setWorkOrderNo();从前端获得
             flowLog2.setStatus("02");
+            flowLog2.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog2.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog2.setCreatedBy(SecurityUtils.getUsername());
             flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog2.setUpdatedBy(SecurityUtils.getUsername());

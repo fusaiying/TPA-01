@@ -76,4 +76,8 @@ public interface OrderBussinessInfoMapper
     public List<Sn_base_addressDO> selectCityByPlacetype(AddressInfo addressInfo);
 
     public List<Sn_base_addressDO> selectDistrictByPlacetype(AddressInfo addressInfo);
+
+    public int insertOrderTrack(OrderTrack orderTrack);
+
+    public List<OrderTrack> getDealList(OrderInfo orderInfo);
 }

@@ -18,6 +18,7 @@ public class RoleLoginInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    private String serialNo;
     /** 账号 */
     private String role;
 

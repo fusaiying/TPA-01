@@ -85,6 +85,9 @@ public interface IOrderInfoService
     public List<ServcieInfoVo> getServiceBypro(OrderInfo orderInfo);*/
 
     //供应商超时进行自动分配
-    public int getAutoMode(OrderInfo orderInfo);
+    public int getAutoMode();
+
+    /*审核特药通过*/
+    public int checkPass(OrderInfo orderInfo);
 
 }

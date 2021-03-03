@@ -1,5 +1,6 @@
 package com.paic.ehis.order.controller;
 
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -126,7 +127,7 @@ public class OrderBussinessInfoController extends BaseController
     }
 
     /**
-     * 获取供应商下的省市区数据
+     * 获取供应商下的省市区数据getUserInfo
      */
     //@PreAuthorize("@ss.hasPermi('system:info:list')")
     @PostMapping("/getAddress")
@@ -135,4 +136,10 @@ public class OrderBussinessInfoController extends BaseController
         return AjaxResult.success(orderBussinessInfoService.getAddress(addressInfo));
     }
 
+    /*获取订单处理列表*/
+    @PostMapping("/getDealList")
+    public AjaxResult getDealList(@RequestBody OrderInfo orderInfo)
+    {
+        return AjaxResult.success(orderBussinessInfoService.getDealList(orderInfo));
+    }
 }

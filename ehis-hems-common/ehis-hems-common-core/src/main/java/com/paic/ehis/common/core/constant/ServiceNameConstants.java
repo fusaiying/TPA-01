@@ -41,4 +41,9 @@ public class ServiceNameConstants
      * 理算及规则设置模块的serviceid
      */
     public static final String CAL_SERVICE = "ehis-hems-claimcal";
+
+    /**
+     * 工单处理
+     */
+    public static final String ORDER_SERVICE = "ehis-hems-order";
 }

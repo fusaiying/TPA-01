@@ -210,6 +210,14 @@ public interface ClaimCaseMapper
      *根据报案号查看当前案件是否存在借款
      */
     public int selectCaseBorrowByRptNo(String rtpNo);
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto);
     /**
      *根据报案号校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
      */

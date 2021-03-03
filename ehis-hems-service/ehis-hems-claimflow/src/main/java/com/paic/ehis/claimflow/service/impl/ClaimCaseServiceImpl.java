@@ -1626,4 +1626,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         return  claimCaseMapper.updateClaimCase(claimCase);
     }*/
+
+
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    @Override
+    public List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto) {
+        return claimCaseMapper.claimInfoList(dto);
+    }
 }

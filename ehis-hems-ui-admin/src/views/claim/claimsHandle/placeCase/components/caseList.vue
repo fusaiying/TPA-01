@@ -56,7 +56,7 @@
               <template v-if="1==2" >
                 <el-input  v-model="scope.row.claimType"  disabled style="width: 10px" size="mini"></el-input>
               </template>
-              <span  v-else>{{ scope.row.claimType }}</span>
+              <span  v-else>{{ getClaimTypeName(scope.row.claimType) }}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" min-width="120" prop="isFiling" label="发票是否归档" show-overflow-tooltip>
@@ -197,6 +197,10 @@
       this.getDicts("sys_yes_no").then(response => {
         this.yesOrNo = response.data;
       });
+      // claimType
+      this.getDicts("claimType").then(response => {
+        this.claimTypes = response.data;
+      });
     },
     computed: {
 
@@ -266,8 +270,10 @@
         return this.selectDictLabel(this.yesOrNo, value)
       },
       getDeptName(value){
-        console.log(value)
         return this.selectDictLabel(this.proSysDepts, value)
+      },
+      getClaimTypeName(value){
+        return this.selectDictLabel(this.claimTypes, value)
       },
     }
   }

@@ -704,14 +704,22 @@
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
-        <result property="caseStatus"    column="case_status"    />
+        <result property="source"    column="source"    />
         <result property="name"    column="name"    />
         <result property="idNo"    column="id_no"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="endCaseTime" column="end_case_time"/>
+        <result property="updateTime"    column="update_time"    />
         <result property="accDate"    column="acc_date"    />
         <result property="investigation"    column="investigation"    />
         <result property="policyItemNo"    column="policy_item_no"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="claimType" column="claim_type"  />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         SELECT
@@ -818,9 +826,36 @@
         where cci.rpt_no= #{rptNo} and cci.status='Y'
 
     </select>
-    <!-- <update id="updateCaseUpdateBy" parameterType="String">
-         update claim_case
-         set case_status ='31'
-         where rpt_no = #{rptNo}
-     </update>-->
+
+    <select id="claimInfoList"  parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
+        SELECT
+                DISTINCT
+                t1.rpt_no,
+                t2.source,
+                t3.name,
+                t3.id_no,
+                t2.claim_type,
+                t4.company_code,
+                t4.company_name,
+                t4.policy_manage_com,
+                t5.pay_amount,
+                t6.update_by,
+                t1.case_status,
+                t1.pay_status,
+                t1.end_case_time,
+                t1.update_time
+          FROM claim_case t1
+     LEFT JOIN claim_batch t2        ON t1.batch_no = t2.batch_no
+     LEFT JOIN claim_case_insured t3 ON t1.rpt_no = t3.rpt_no
+     LEFT JOIN claim_case_policy t4  ON  t3.rpt_no = t4.rpt_no
+     LEFT JOIN claim_case_cal t5     ON t4.rpt_no = t5.rpt_no
+     LEFT JOIN (SELECT rpt_no,operation,update_by FROM claim_case_record WHERE operation = '07' AND status = 'Y' AND history_flag = 'Y'  GROUP BY rpt_no) t6 ON t5.rpt_no = t6.rpt_no
+         WHERE 1 = 1
+           AND t1.status = 'Y'
+           AND t2.status = 'Y'
+           AND t2.status = 'Y'
+           AND  t4.status = 'Y'
+           AND  t5.status = 'Y'
+
+    </select>
 </mapper>

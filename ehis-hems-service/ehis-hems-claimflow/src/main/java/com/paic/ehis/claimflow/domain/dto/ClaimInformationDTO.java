@@ -32,4 +32,8 @@ public class ClaimInformationDTO extends BaseEntity {
     private String caseStatus;
     /** 状态（Y-有效，N-无效） */
     private String status;
+
+    /**根据 pageType 查询固定的数据*/
+    private String pageType;
+
 }

@@ -74,7 +74,7 @@
         :total="claimTotal"
         :page.sync="claimPageInfo.page"
         :limit.sync="claimPageInfo.pageSize"
-        @pagination="initGatherData"
+        @pagination="initClaimData"
       />
     </el-card>
     <!--案件工作池 end -->
@@ -119,7 +119,7 @@ import appealTable from '../components/appealTable'
 import claimTable from '../components/claimTable'
 
 import { PendingData,processedData } from '@/api/negotiation/api'
-import { collectionInfoList } from '@/api/paymentFee/api'
+import { claimInfoList } from '@/api/appeal/api'
 
 import moment from "moment";
 export default {
@@ -172,7 +172,7 @@ export default {
     });
   },
   created() {
-    this.initGatherData();
+    this.initClaimData();
     this.getPendingData();
     this.getProcessedData();
   },
@@ -264,12 +264,11 @@ export default {
         }
       })
     },
-    initGatherData(){
+    initClaimData(){
       const params = {};
       params.pageNum = this.claimPageInfo.page;
       params.pageSize = this.claimPageInfo.pageSize;
-      params.companyCode = this.formSearch.companyCode;
-      collectionInfoList(params).then(res => {
+      claimInfoList(params).then(res => {
         if (res.code == '200') {
           this.claimTotal = res.total;
           this.claimTableData = res.rows;

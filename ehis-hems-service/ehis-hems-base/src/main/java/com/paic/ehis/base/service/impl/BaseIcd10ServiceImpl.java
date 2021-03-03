@@ -128,4 +128,16 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
         baseIcd10.setStatus("N");
         return baseIcd10Mapper.updateBaseIcd10(baseIcd10);
     }
+
+    /**
+     * 模糊查询ICD，默认展示200条
+     *
+     * @param baseIcd10
+     * @return
+     */
+    @Override
+    public List<BaseIcd10> selectIcdFuzzy(BaseIcd10 baseIcd10) {
+        baseIcd10.setStatus("Y");
+        return baseIcd10Mapper.selectIcdFuzzy(baseIcd10);
+    }
 }

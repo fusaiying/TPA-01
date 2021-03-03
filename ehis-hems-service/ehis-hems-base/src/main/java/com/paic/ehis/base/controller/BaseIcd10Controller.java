@@ -127,4 +127,15 @@ public class BaseIcd10Controller extends BaseController
     {
         return toAjax(baseIcd10Service.updateBaseIcd10One(baseIcd10));
     }
+
+    /**
+     * 模糊查询ICD，默认展示200条
+     *
+     * @param baseIcd
+     * @return
+     */
+    @PostMapping("/selectIcdFuzzy")
+    public List<BaseIcd10> selectIcdFuzzy(@RequestBody BaseIcd10 baseIcd){
+        return baseIcd10Service.selectIcdFuzzy(baseIcd);
+    }
 }

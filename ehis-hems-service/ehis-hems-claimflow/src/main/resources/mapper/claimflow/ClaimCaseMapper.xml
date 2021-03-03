@@ -415,6 +415,16 @@
         <result property="operator"    column="operator"    />
         <result property="name"    column="name"    />
     </resultMap>
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentTwoVO" id="ConditionsForTheAdjustmentTwoVO">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="surveyCode"    column="survey_code"    />
+        <result property="operator"    column="operator"    />
+        <result property="name"    column="name"    />
+    </resultMap>
     <!--    fu 理算审核 待处理-->
     <select id="selectConditionsForTheAdjustmentUnder" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
         SELECT
@@ -628,7 +638,7 @@
     </select>
 
     <!--fu  理算审核 悬挂-->
-    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentTwoVO">
         SELECT
         DISTINCT
         acto.rpt_no,

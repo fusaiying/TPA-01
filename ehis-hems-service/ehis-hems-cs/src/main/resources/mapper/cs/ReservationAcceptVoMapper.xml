@@ -201,7 +201,7 @@ SELECT
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn DESC
+        hm.nnn  DESC,b.priority_level ASC,a.accept_time DESC
     </select>
 
     <select id="selectReservationAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
@@ -298,7 +298,7 @@ SELECT
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn DESC
+        hm.nnn  DESC,b.priority_level ASC,a.accept_time DESC
     </select>
 
     <update id="updateStatusM" parameterType="String" >

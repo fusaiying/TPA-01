@@ -851,12 +851,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
-        List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
+    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+        List<ConditionsForTheAdjustmentTwoVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
         if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
-            for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
+            for (ConditionsForTheAdjustmentTwoVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                 //已经拥有：批次号、报案号、批次状态、被保人姓名
                 //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                 //查询案件保单关联表：claim_case_policy，rpt_no

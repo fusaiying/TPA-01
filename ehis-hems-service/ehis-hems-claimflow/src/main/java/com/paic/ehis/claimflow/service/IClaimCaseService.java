@@ -163,7 +163,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
+    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
 
     /** 抽检完毕，修改案件状态 */
     int editCaseCheck(ClaimCase claimCase);

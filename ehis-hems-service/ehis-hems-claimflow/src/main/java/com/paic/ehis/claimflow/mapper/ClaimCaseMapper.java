@@ -146,7 +146,7 @@ public interface ClaimCaseMapper
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
+    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
 
     /**
      * 查询录入工作池处理中的案件信息，包括批次号、报案号、案件状态、被保人姓名、停留时长、提交用户

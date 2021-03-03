@@ -1,8 +1,10 @@
 package com.paic.ehis.claimapt.service.Impl;
 
+import com.paic.ehis.claimapt.domain.ClaimBatch;
 import com.paic.ehis.claimapt.domain.ClaimCase;
 import com.paic.ehis.claimapt.domain.ClaimCaseRecord;
 import com.paic.ehis.claimapt.domain.Vo.ClaimCaseStandingVo;
+import com.paic.ehis.claimapt.mapper.ClaimBatchMapper;
 import com.paic.ehis.claimapt.mapper.ClaimCaseMapper;
 import com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper;
 import com.paic.ehis.claimapt.service.IClaimCaseRecordService;
@@ -30,6 +32,8 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
     @Autowired
     private ClaimCaseMapper claimCaseMapper;
 
+    @Autowired
+    private ClaimBatchMapper claimBatchMapper;
     /**
      * 查询案件操作记录 
      * 
@@ -129,7 +133,14 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
      */
     @Override
     public int insertClaimCaseRecordAndBatchRecord(ClaimCaseStandingVo claimCaseStandingVo){
-        String bahtime="96"+"JGH0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
+
+        //报案号
+        //根据批次信息去查-交单机构
+        ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchByBatchNo(claimCaseStandingVo.getBatchno());
+        String organcode = claimBatch.getOrgancode();
+        //报案号-取三四位
+        String substring1 = organcode.substring(2, 4);
+        String bahtime="96"+ substring1 +"0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseStandingVo.getRptno());
         claimCaseRecord.setOperation(ClaimStatus.CASETHREE.getCode());//扫描04

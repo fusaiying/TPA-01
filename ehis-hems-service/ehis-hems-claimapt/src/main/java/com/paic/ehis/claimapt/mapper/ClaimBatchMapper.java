@@ -143,4 +143,13 @@ public interface ClaimBatchMapper
      * @return
      */
     public List<Map<String,Object>> selectPayForeignBatchList(ClaimCasePayDTO claimCasePayDTO);
+
+    /**
+     * 查询理赔批次
+     *
+     * @param batchNo 理赔批次 ID
+     * @return 理赔批次
+     */
+    public ClaimBatch selectClaimBatchByBatchNo(String batchNo);
+
 }

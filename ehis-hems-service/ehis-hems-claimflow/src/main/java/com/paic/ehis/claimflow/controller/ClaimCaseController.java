@@ -17,7 +17,6 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
-import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -603,23 +602,32 @@ public class ClaimCaseController extends BaseController {
     public AjaxResult getBatchNoRptNo(BatchNoRptNoDTO batchNoRptNoDTO) {
         String batchCount = batchNoRptNoDTO.getBatchCount();
         int i1 = Integer.parseInt(batchCount);
+
+        String branchRegion = batchNoRptNoDTO.getBranchRegion();//机构交单编码
+
+        //批次号-取前三位
+        String substring = branchRegion.substring(0, 3);
+
+        //报案号-取三四位
+        String substring1 = branchRegion.substring(2, 4);
+
         if (i1 > 0) {
-            BatchNoRptNoVO batchNoRptNoVO = new BatchNoRptNoVO();
+            BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
             List<String> rptNoList = new ArrayList<>();
 
             for (int i = 0; i < i1; i++) {
                 //报案号
-                String bahtime = "96" + "JGH0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+                String bahtime = "96" + substring1 + "0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
                 rptNoList.add(bahtime);
             }
 
             //批次号
-            String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+            String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
 
-            batchNoRptNoVO.setBatchNo(str1);
-            batchNoRptNoVO.setRptNoList(rptNoList);
+            batchNoRptNoVO.setBatchNo(str1);//批次号
+            batchNoRptNoVO.setDocunoList(rptNoList);//报案号集合
             Date nowDate = DateUtils.getNowDate();
-            batchNoRptNoVO.setCreateBatchTime(nowDate);
+            batchNoRptNoVO.setCreateBatchTime(nowDate);//批次生成日期
 
             ClaimBatch claimBatch = new ClaimBatch();
             claimBatch.setBatchno(str1);//批次号
@@ -651,7 +659,6 @@ public class ClaimCaseController extends BaseController {
             return AjaxResult.success("案件数不能小于等于0！");
         }
     }
-
 
     /**
      * PBW在校交单撤件接口

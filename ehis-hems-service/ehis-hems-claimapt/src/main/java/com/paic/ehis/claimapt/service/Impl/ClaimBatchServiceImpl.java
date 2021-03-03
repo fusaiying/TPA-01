@@ -426,7 +426,13 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         ClaimBatch claimBatch = standingAndBatck.getClaimBatch();
         claimBatch.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());//01
         //批次号
-        String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+
+        //获取机构交单编码
+        String organcode = standingAndBatck.getClaimBatch().getOrgancode();
+        //批次号-取前三位
+        String substring = organcode.substring(0, 3);
+
+        String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);
         claimBatch.setCreateBy(SecurityUtils.getUsername());
         claimBatch.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -464,14 +470,19 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch) {
         claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
         //批次号
-        String str1 = "JGH" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+
+        //获取机构交单编码
+        String organcode = claimBatch.getOrgancode();
+        //批次号-取前三位
+        String substring = organcode.substring(0, 3);
+
+        String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);
 
         claimBatch.setCreateBy(SecurityUtils.getUsername());
         claimBatch.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatch.setUpdateBy("");
         claimBatch.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-
 
         ClaimBatchRecord claimBatchRecord1 = new ClaimBatchRecord();
         //批次号一样
@@ -638,4 +649,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
     }
 
+    /**
+     * 查询理赔批次
+     *
+     * @param batchNo 理赔批次 ID
+     * @return 理赔批次
+     */
+    @Override
+    public ClaimBatch selectClaimBatchByBatchNo(String batchNo) {
+        return claimBatchMapper.selectClaimBatchByBatchNo(batchNo);
+    }
 }

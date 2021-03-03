@@ -596,4 +596,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             a.submit_date desc
     </select>
 
+    <select id="selectClaimBatchByBatchNo" parameterType="String" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        where batch_no = #{batchno} and status='Y'
+    </select>
+
 </mapper>

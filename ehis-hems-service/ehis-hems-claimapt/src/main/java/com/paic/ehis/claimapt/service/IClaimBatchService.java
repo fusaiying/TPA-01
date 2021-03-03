@@ -173,7 +173,11 @@ public interface IClaimBatchService
      */
     public StandingAndBatck updateSysClaimBatchPresent(StandingAndBatck standingAndBatck);//
 
-
-
+    /**
+     * 根据批次号查交单机构
+     * @param batchNo
+     * @return
+     */
+    public ClaimBatch selectClaimBatchByBatchNo(String batchNo);//
 
 }

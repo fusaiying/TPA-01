@@ -78,7 +78,7 @@
           </el-table-column>
           <el-table-column align="center" prop="polno" label="保单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="certNo" label="分单号" show-overflow-tooltip/>
-          <el-table-column align="center" prop="payMode" label="保单生效日" show-overflow-tooltip/>
+          <el-table-column align="center" prop="" label="保单生效日" show-overflow-tooltip/>
           <el-table-column align="center" prop="bankNo" label="银行代码" show-overflow-tooltip/>
           <el-table-column align="center" prop="bankDesc" label="银行描述" show-overflow-tooltip/>
           <el-table-column align="center" prop="acctNo" label="银行账号" show-overflow-tooltip/>
@@ -255,7 +255,7 @@
 </template>
 <script>
   import {getAddress} from '@/api/supplierManager/supplier'
-  import {listRemark, addPayee, editPayee, delPayee, listRemarkRptNo} from '@/api/claim/handleCom'
+  import {listRemark, addPayee, editPayee, delPayee, listRemarkRptNo,getCustomerAccount} from '@/api/claim/handleCom'
 
   let dictss = [{dictType: 'relation_ship_apply'}, {dictType: 'card_type'}, {dictType: 'rgtSex'},
     {dictType: 'collectedmode'}, {dictType: 'account_attribute'},]
@@ -367,16 +367,7 @@
         isAddOrEdit: '',
         radio: undefined,
         isTkTableShow: false,
-        tkTableData: [{
-          polno: 'B00001',
-          certNo: 'F00001',
-          bankNo: '01',
-          bankDesc: '嘿嘿嘿',
-          acctNo: '123456',
-          bankClientName: '张三',
-          idType: '1',
-          idNo: '0100101',
-        }],
+        tkTableData: [],
         dialogFormVisible: false,
         baseForm: {
           rptNo: undefined,
@@ -536,6 +527,7 @@
       addOrEdit(status, row) {
         this.isAddOrEdit = status
         this.isTkTableShow = false
+        this.tkTableData=[]
         this.$emit('getApplicantData')
         this.dialogFormVisible = true
         this.baseForm = {
@@ -662,8 +654,20 @@
             }
             policyItemNoStr = policyItemNoStr+this.insuredFormData.policyInfoData[this.insuredFormData.policyInfoData.length-1].policyItemNo
             query.certno=policyItemNoStr
-            alert(query.certno)
-            this.isTkTableShow = true
+            getCustomerAccount(query).then(res=>{
+              if (res!=null && res.status=='00'){
+                if (res.bankInfoList.length>0){
+                  this.tkTableData=res.bankInfoList
+                  this.isTkTableShow = true
+                }else {
+                  return this.$message.warning(
+                    "未查询到健康险客户账户！"
+                  )
+                }
+
+              }
+            })
+
           }
         }
 

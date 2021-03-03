@@ -301,6 +301,9 @@
             this.loading = false
           })
         }
+        if (this.searchForm.organcode==null || this.searchForm.organcode=='' || this.searchForm.organcode==undefined){
+          this.searchForm.organcode=this.organCode
+        }
         getPublicList(this.searchForm).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total

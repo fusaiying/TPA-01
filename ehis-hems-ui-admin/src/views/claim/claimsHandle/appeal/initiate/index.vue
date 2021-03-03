@@ -21,8 +21,8 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="证件号码：" prop="name">
-              <el-input v-model="formSearch.name" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-form-item label="证件号码：" prop="idNo">
+              <el-input v-model="formSearch.idNo" class="item-width" clearable size="mini" placeholder="请输入"
                         @keyup.native.enter="searchHandle"/>
             </el-form-item>
           </el-col>
@@ -37,21 +37,21 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="操作日期：" prop="effectiveSDate">
+            <el-form-item label="操作日期：" prop="operateDate">
               <el-date-picker
-                v-model="formSearch.effectiveSDate"
+                v-model="formSearch.operateDate"
                 style="width:220px;"
                 size="mini"
                 type="daterange"
                 value-format="yyyy-MM-dd"
-                placeholder="选择日期"
+                start-placeholder="开始日期" end-placeholder="结束日期"
               />
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="审核人：" prop="createBy">
-              <el-input v-model="formSearch.createBy" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-form-item label="审核人：" prop="updateBy">
+              <el-input v-model="formSearch.updateBy" class="item-width" clearable size="mini" placeholder="请输入"
                         @keyup.native.enter="searchHandle"/>
             </el-form-item>
           </el-col>
@@ -68,7 +68,7 @@
       <div slot="header" class="clearfix">
         <span>案件工作池</span>
       </div>
-      <claimTable :table-data="claimTableData"/>
+      <claimTable :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
       <pagination
         v-show="claimTotal>0"
         :total="claimTotal"
@@ -86,10 +86,10 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
-          <appealTable  :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
+          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="03">
-          <appealTable  :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
+          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
@@ -122,6 +122,9 @@ import { PendingData,processedData } from '@/api/negotiation/api'
 import { claimInfoList } from '@/api/appeal/api'
 
 import moment from "moment";
+
+let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
+
 export default {
   dicts: ['delivery_source'],
   components: {
@@ -136,13 +139,13 @@ export default {
         page: 1,
         pageSize: 10
       },
-      tableData: [],
       formSearch: {
         rptNo: '',
         source: '',
+        idNo:'',
         name: '',
-        discType: '',
-        createBy: '',
+        operateDate: '',
+        updateBy: '',
       },
       activeName: '01',
       pendingTableData: [],
@@ -158,18 +161,38 @@ export default {
         pageSize: 10
       },
       dialogVisible: false,
-      orderno: '',
-      negotiationno: '',
-      changeSerchData: {},
       deliverySource:[],
+      claimStatus:[],
+      dictList:[],
+      claimTypes:[],
+      payStatus:[],
       searchBtn:false,
     }
   },
-  mounted(){
+  async mounted(){
+
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
     //交单来源
-    this.getDicts("delivery_source").then(response => {
-      this.deliverySource = response.data;
-    });
+    this.deliverySource = this.dictList.find(item => {
+      return item.dictType === 'delivery_source'
+    }).dictDate
+
+    // 理赔类型
+    this.claimTypes = this.dictList.find(item => {
+      return item.dictType === 'claimType'
+    }).dictDate
+
+    // 案件状态
+    this.claimStatus = this.dictList.find(item => {
+      return item.dictType === 'claim_status'
+    }).dictDate
+
+    // 支付状态
+    this.payStatus = this.dictList.find(item => {
+      return item.dictType === 'case_pay_status'
+    }).dictDate
   },
   created() {
     this.initClaimData();

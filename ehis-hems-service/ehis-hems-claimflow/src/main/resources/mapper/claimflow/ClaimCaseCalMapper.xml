@@ -126,8 +126,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         rpt_no
         FROM claim_case_bill ccb
         GROUP BY rpt_no ) bill
-        ON ccc.rpt_no = bill.rpt_no
-        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no
+        ON ccc.rpt_no = bill.rpt_no and bill.status='Y'
+        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no and insured.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
         </where>

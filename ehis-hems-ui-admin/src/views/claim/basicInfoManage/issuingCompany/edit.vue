@@ -315,17 +315,31 @@ export default {
             }
             addissuingAndCompanyDTO(params).then(res => {
               if (res != null && res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.baseForm = res.data
-                if (this.baseForm.companycode) {
-                  this.tableData[0].companycode = this.baseForm.companycode
+                if (res.data==1){
+                  return this.$message.warning(
+                    "出单公司简称已存在！"
+                  );
+                }else if(res.data==2){
+                  return this.$message.warning(
+                    "出单公司名称已存在！"
+                  );
+                }else if(res.data==3){
+                  return this.$message.warning(
+                    "出单公司名称和简称都已存在！"
+                  );
+                }else {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.baseForm = res.data
+                  if (this.baseForm.companycode) {
+                    this.tableData[0].companycode = this.baseForm.companycode
+                  }
+                  this.canUpload = true
                 }
-                this.canUpload = true
               } else {
                 this.$message.error('保存失败！')
               }

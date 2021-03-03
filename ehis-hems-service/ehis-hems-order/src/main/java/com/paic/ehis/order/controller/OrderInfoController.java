@@ -194,8 +194,15 @@ public class OrderInfoController extends BaseController
     //B端接口,第一个供应商超时后进行自动分配功能
     //@PreAuthorize("@ss.hasPermi('system:info:edit')")
     @PostMapping("/getAutoMode")
-    public AjaxResult getAutoMode(@RequestBody OrderInfo orderInfo)
+    public void getAutoMode()
     {
-        return toAjax(orderInfoService.getAutoMode(orderInfo));
+        orderInfoService.getAutoMode();
+    }
+
+    /*审核特药通过*/
+    @PostMapping("/checkPass")
+    public AjaxResult checkPass(@RequestBody OrderInfo orderInfo)
+    {
+        return toAjax(orderInfoService.checkPass(orderInfo));
     }
 }

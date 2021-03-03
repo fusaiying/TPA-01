@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseCalVo"/>
         where
             status = 'Y'
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>n
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
     </select>
 
     <select id="selectClaimCaseCalInformation" parameterType="String" resultMap="CalConclusionResult">
@@ -136,8 +136,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
         SELECT
+        DISTINCT
         ccc.rpt_no,
-        cal_id,
         billAmount,
         hosDiscountAmount,
         unableAmount,

@@ -4,7 +4,7 @@
       <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
         <span>ICD查询</span>
       </div>
-      <el-form ref="searchForm" :model="formSearch" :rules="rules" style="padding-bottom: 30px;" label-width="110px"
+      <el-form ref="searchForm" :model="formSearch"  style="padding-bottom: 30px;" label-width="110px"
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
@@ -112,22 +112,6 @@ export default {
 
   data() {
 
-    const checkChineseName = (rules, value, callback) => {
-      let reg1 = /[`~!@#$%^&*()_\-+=<>?:"{}|,./;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
-      let reg2 = /.*[A-Za-z0-9]{1,}.*/;
-      if(value) {
-        if (reg1.test(value)) {
-          callback(new Error("请录入中文名称"));
-        } else if (reg2.test(value)) {
-          callback(new Error("请录入中文名称"));
-        } else {
-          callback();
-        }
-      }
-      else {
-        callback();
-      }
-    }
     return {
       // 查询参数
       formSearch: {
@@ -139,10 +123,6 @@ export default {
       tableData: [],
       totalCount: 0,
       loading: false,
-      rules: {
-
-        icdmname: [{ validator: checkChineseName, trigger: 'blur' }]
-      },
       isListExport: false,
       dialogVisible: false,
       modalValue: false,

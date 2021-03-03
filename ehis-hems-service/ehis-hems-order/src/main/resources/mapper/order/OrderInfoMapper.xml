@@ -51,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="secondDept"    column="second_dept"    />
         <result property="director"    column="director"    />
         <result property="forNum"    column="for_num"    />
+        <result property="millisecond"    column="millisecond"    />
     </resultMap>
 
 
@@ -176,8 +177,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectOrderInfoById" parameterType="String" resultMap="OrderInfoResult">
-        <include refid="selectOrderInfoVo"/>
-        where order_code = #{orderCode} and update_flag = '0'
+        SELECT
+            order_code,
+            policy_no,
+            policy_certificate_no,
+            for_num,
+            product_code,
+            oi.service_code,
+            supplier_code,
+            customer_no,
+            contact_name,
+            phone,
+            Inpatient_area,
+            expected_area,
+            visiting_area,
+            city,
+            service_type,
+            apply_time,
+            expectation_hospital,
+            serious_disease,
+            operation,
+            final_diagnosis,
+            symptom_description,
+            remark,
+            reason,
+            node_status,
+            bussiness_status,
+            first_dept,
+            second_dept,
+            role,
+            (aging * 60  - TIMESTAMPDIFF(SECOND,oi.create_time,now())) millisecond
+        FROM
+            order_info oi
+        LEFT JOIN base_service_process bsp ON bsp.service_code = oi.service_code
+        AND bsp.process_node = '03'
+        AND bsp. STATUS = 'Y'
+        where node_status ='01' and oi.update_flag = '0'
     </select>
 
     <select id="selectOrderInfoByIdNew" parameterType="String" resultMap="OrderInfoResult">
@@ -259,6 +294,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="firstDept != null">first_dept,</if>
             <if test="secondDept != null">second_dept,</if>
             <if test="director != null">director,</if>
+            <if test="role != null">role,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -297,6 +333,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="firstDept != null">#{firstDept},</if>
             <if test="secondDept != null">#{secondDept},</if>
             <if test="director != null">#{director},</if>
+            <if test="role != null">#{role},</if>
          </trim>
     </insert>
 
@@ -425,15 +462,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="updateOverTime" parameterType="OrderInfo">
-        update order_info set node_status = #{nodeStatus},update_flag = '1' where update_flag = '0' and order_code = #{orderCode}
+        update order_info set node_status = '04',update_flag = '1' where update_flag = '0' and order_code = #{orderCode}
     </update>
 
     <update id="updateOverTimeToPC" parameterType="OrderInfo">
-        update order_info set node_status = #{nodeStatus},bussiness_status = '02',update_flag= '0' where order_code = #{orderCode} and supplier_code= #{supplierCode}
+        update order_info set node_status = #'04',bussiness_status = '02',update_flag= '0' where order_code = #{orderCode} and supplier_code= #{supplierCode}
     </update>
 
     <select id="getOrdertaking" parameterType="OrderInfo" resultMap ="OrdertakingResult">
-        SELECT
+        SELECT DISTINCT
             psi.supplier_code,
             psi.priority,
             (
@@ -544,7 +581,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     order_info
                 WHERE
                 order_code = #{orderCode}
-                AND supplier_code = psi.supplier_code
             ) and  bcs.limitnum- (
                 SELECT
                     count(0)
@@ -557,4 +593,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ) &gt;0 ORDER BY priority
     </select>
 
+
+    <update id="checkPass">
+        update order_info set bussiness_status = '02',node_status = '03' where order_code = #{orderCode}
+    </update>
 </mapper>

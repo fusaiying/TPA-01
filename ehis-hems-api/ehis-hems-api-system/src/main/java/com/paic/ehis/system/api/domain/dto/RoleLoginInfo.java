@@ -1,4 +1,4 @@
-package com.paic.ehis.order.domain;
+package com.paic.ehis.system.api.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
@@ -59,5 +59,6 @@ public class RoleLoginInfo extends BaseEntity
     /** 接单时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receivingTime;
+
 
 }

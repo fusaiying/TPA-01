@@ -73,6 +73,8 @@ public interface IOrderBussinessInfoService
 
     public List<AddressVO> getAddress(AddressInfo addressInfo);
 
+    public List<OrderTrack> getDealList(OrderInfo orderInfo);
+
 
 
 }

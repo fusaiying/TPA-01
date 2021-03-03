@@ -18,7 +18,7 @@ public interface OrderInfoMapper
      * @param orderCode order_info(工单信息)ID
      * @return order_info(工单信息)
      */
-    public OrderInfo selectOrderInfoById(String orderCode);
+    public List<OrderInfo> selectOrderInfoById();
 
     public OrderInfo selectOrderInfoByIdNew(OrderInfo orderInfo);
 
@@ -110,4 +110,6 @@ public interface OrderInfoMapper
 
     //获取所有可预约的供应商
     public List<Ordertaking> getOrdertakingList(OrderInfo orderInfo);
+
+    public int checkPass(OrderInfo orderInfo);
 }

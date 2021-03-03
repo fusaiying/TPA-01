@@ -119,7 +119,7 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 sumBillCalAmount = sumBillCalAmount.add(cccID.getCalAmount());
                 sumFeeAmount = sumFeeAmount.add(ccbD.getBillDetailAmount());
 
-                sumSelfAmount = sumSelfAmount.add(ccbD.getSelfAmount());
+                sumSelfAmount = sumSelfAmount.add(ccbD.getSelfAmount()==null?BigDecimal.ZERO:ccbD.getSelfAmount());
 
                 cccIDList.add(cccID);
             }

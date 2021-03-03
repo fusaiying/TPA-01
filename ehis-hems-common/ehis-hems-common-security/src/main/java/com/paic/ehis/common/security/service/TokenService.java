@@ -2,12 +2,10 @@ package com.paic.ehis.common.security.service;
 
 import com.paic.ehis.common.core.constant.CacheConstants;
 import com.paic.ehis.common.core.constant.Constants;
-import com.paic.ehis.common.core.utils.IdUtils;
-import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.common.core.utils.ServletUtils;
-import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.*;
 import com.paic.ehis.common.core.utils.ip.IpUtils;
 import com.paic.ehis.common.redis.service.RedisService;
+import com.paic.ehis.system.api.domain.dto.RoleLoginInfo;
 import com.paic.ehis.system.api.model.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,6 +43,29 @@ public class TokenService
         loginUser.setUserid(loginUser.getSysUser().getUserId());
         loginUser.setUsername(loginUser.getSysUser().getUserName());
         loginUser.setIpaddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        refreshToken(loginUser);
+
+        // 保存或更新用户token
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("access_token", token);
+        map.put("expires_in", EXPIRE_TIME);
+        redisService.setCacheObject(ACCESS_TOKEN + token, loginUser, EXPIRE_TIME, TimeUnit.SECONDS);
+        return map;
+    }
+
+
+    public Map<String, Object> createBToken(RoleLoginInfo roleLoginInfo)
+    {
+        // 生成token
+        RSAHelper rsaHelper=new RSAHelper();
+        rsaHelper.initKey("MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAqhHyZfSsYourNxaY7Nt+PrgrxkiA50efORdI5U5lsW79MmFnusUA355oaSXcLhu5xxB38SMSyP2KvuKNPuH3owIDAQABAkAfoiLyL+Z4lf4Myxk6xUDgLaWGximj20CUf+5BKKnlrK+Ed8gAkM0HqoTt2UZwA5E2MzS4EI2gjfQhz5X28uqxAiEA3wNFxfrCZlSZHb0gn2zDpWowcSxQAgiCstxGUoOqlW8CIQDDOerGKH5OmCJ4Z21v+F25WaHYPxCFMvwxpcw99EcvDQIgIdhDTIqD2jfYjPTY8Jj3EDGPbH2HHuffvflECt3Ek60CIQCFRlCkHpi7hthhYhovyloRYsM+IS9h/0BzlEAuO0ktMQIgSPT3aFAgJYwKpqRYKlLDVcflZFCKY7u3UP8iWi1Qw0Y=","MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKoR8mX0rGKLqzcWmOzbfj64K8ZIgOdHnzkXSOVOZbFu/TJhZ7rFAN+eaGkl3C4buccQd/EjEsj9ir7ijT7h96MCAwEAAQ==",2048);
+        LoginUser loginUser = new LoginUser();
+        String token = IdUtils.fastUUID();
+        loginUser.setToken(token);
+        loginUser.setIpaddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        loginUser.setUsername(roleLoginInfo.getRole());
+        loginUser.setUserid(Long.valueOf(roleLoginInfo.getSerialNo()));
+
         refreshToken(loginUser);
 
         // 保存或更新用户token
@@ -115,6 +136,21 @@ public class TokenService
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
         redisService.setCacheObject(userKey, loginUser, EXPIRE_TIME, TimeUnit.SECONDS);
+    }
+
+
+    /**
+     * 刷新B端令牌有效期
+     *
+     * @param roleLoginInfo 登录信息
+     */
+    public void refreshBToken(RoleLoginInfo roleLoginInfo)
+    {
+        roleLoginInfo.setLoginTime(System.currentTimeMillis());
+        roleLoginInfo.setExpireTime(roleLoginInfo.getLoginTime() + EXPIRE_TIME * MILLIS_SECOND);
+        // 根据uuid将loginUser缓存
+        String userKey = getTokenKey(roleLoginInfo.getToken());
+        redisService.setCacheObject(userKey, roleLoginInfo, EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     private String getTokenKey(String token)

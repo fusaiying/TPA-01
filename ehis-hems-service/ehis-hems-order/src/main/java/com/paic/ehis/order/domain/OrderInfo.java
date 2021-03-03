@@ -281,6 +281,9 @@ public class OrderInfo extends BaseEntity
 
     private String chname1;
 
+    private String sexName;
+
+    private String role;
 
 
     public void setSerialNo(String serialNo) 

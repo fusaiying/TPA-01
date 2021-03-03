@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.paic.ehis.order.mapper.OrderBussinessInfoMapper">
     
     <resultMap type="RoleLoginInfo" id="RoleLoginInfoResult">
+        <result property="serialNo"    column="serial_no"    />
         <result property="role"    column="role"    />
         <result property="password"    column="password"    />
         <result property="supplierCode"    column="supplier_code"    />
@@ -81,6 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dealingShow"    column="dealing_show"    />
         <result property="refuseReason"    column="refuse_reason"    />
         <result property="millisecond "    column="millisecond "    />
+        <result property="sexName "    column="sexName "    />
+        <result property="role "    column="role "    />
     </resultMap>
 
     <resultMap type="OrderInfo" id="OrderInfoToBResult">
@@ -105,13 +108,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="millisecond "    column="millisecond "    />
     </resultMap>
 
+    <resultMap type="OrderTrack" id="OrderTrackResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="nodeStatus"    column="node_status"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="detailStatus"    column="detail_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+
     <resultMap type="Sn_base_addressDO" id="SnaseddressDOBResult">
         <result property="placename"    column="placename"    />
         <result property="placecode"    column="placecode"    />
     </resultMap>
 
     <select id="checkpassWord"  resultMap="RoleLoginInfoResult">
-       select distinct role,password from base_contacts where role = #{role} and place_type ='01'
+       select distinct serial_no,role,password from base_contacts where role = #{role} and place_type ='01'
     </select>
 
     <select id="getUser"  resultMap="RoleLoginInfoResult">
@@ -156,14 +171,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.supplier_code,
             oi.product_code,
             oi.create_time,
+            oi.detail_status,
             ci.NAME,
             ci.sex,
+            sdd.dict_label sexName,
             ci.birthday,
             ci.phone,
             ci.age,
             ci.id_code,
             ci.id_type,
-            aging*60*1000 millisecond,
+            (aging * 60  - TIMESTAMPDIFF(SECOND,oi.create_time,now()))*1000 millisecond,
             oi.customer_no
         FROM
             order_info oi
@@ -172,11 +189,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND bsi. STATUS = 'Y'
         LEFT JOIN base_service_info bso ON bso.service_code = oi.service_code
         LEFT JOIN base_service_process bsp ON bsp.service_code = oi.service_code and  bsp.process_node ='03' and bsp.status = 'Y'
+        LEFT JOIN sys_dict_data sdd ON sdd.dict_type = 'sys_user_sex'
+        AND sdd.dict_value = ci.id_type
         <where>
             <if test="role != null  and role != ''"> and oi.role = #{role}</if>
             <if test="nodeStatus != null  and nodeStatus != ''"> and oi.node_status = #{nodeStatus}</if>
             <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
-            and oi.status = 'Y'
+            and oi.status = 'Y' and  (aging * 60  - TIMESTAMPDIFF(SECOND,oi.create_time,now())) &gt;0
+            <if test="nodeStatus == '02'">  order by receiving_time desc </if>
+            <if test="nodeStatus == '03'">  order by order_complete_time desc </if>
         </where>
     </select>
 
@@ -191,6 +212,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             policy_certificate_no,
             oi.product_code,
             oi.bussiness_status,
+            oi.detail_status,
             oi.service_code,
             oi.apply_time,
             oi.Inpatient_area,
@@ -211,8 +233,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.consultation,
             oi.consultant,
             oi.cancel_reason,
-            ci. NAME,
+            ci.NAME,
             ci.sex,
+            sdd1.dict_label sexName,
             ci.birthday,
             ci.phone,
             ci.id_code,
@@ -226,6 +249,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND bsi. STATUS = 'Y'
         LEFT JOIN base_service_info bso ON bso.service_code = oi.service_code
         LEFT JOIN sys_dict_data sdd ON sdd.dict_type = 'card_type'
+        AND sdd.dict_value = ci.id_type
+        LEFT JOIN sys_dict_data sdd1 ON sdd.dict_type = 'sys_user_sex'
         AND sdd.dict_value = ci.id_type
         LEFT JOIN base_provider_info bpi ON bpi.provider_code = oi.expectation_hospital
         AND bpi. STATUS = 'Y'
@@ -314,4 +339,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          SELECT placename from sn_base_address where placecode = #{placecode}
     </select>
 
+    <insert id="insertOrderTrack" parameterType="OrderTrack">
+        insert into order_track
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="orderCode != null and orderCode != ''">order_code,</if>
+            <if test="remark != null">remark_B,</if>
+            <if test="reason != null">reason,</if>
+            <if test="nodeStatus != null">node_status,</if>
+            <if test="detailStatus != null and detailStatus != ''">detail_status,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="orderCode != null and orderCode != ''">#{orderCode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="nodeStatus != null">#{nodeStatus},</if>
+            <if test="detailStatus != null and detailStatus != ''">#{detailStatus},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <select id="getDealList" parameterType="orderInfo" resultMap="OrderTrackResult">
+        select order_code,remark_B remark,reason,node_status,detail_status,create_by,create_time from order_track where order_code = #{orderCode}
+    </select>
 </mapper>

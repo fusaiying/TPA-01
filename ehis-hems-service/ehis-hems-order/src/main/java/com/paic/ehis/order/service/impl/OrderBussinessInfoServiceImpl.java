@@ -1,8 +1,6 @@
 package com.paic.ehis.order.service.impl;
 
-import com.paic.ehis.common.core.utils.DateUtils;
-import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.utils.*;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.order.domain.*;
 import com.paic.ehis.order.mapper.OrderBussinessInfoMapper;
@@ -43,23 +41,25 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     {
         String role = roleLoginInfo.getRole();
         String password = roleLoginInfo.getPassword();
+        RSAHelper rsaHelper=new RSAHelper();
+        rsaHelper.initKey("MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAqhHyZfSsYourNxaY7Nt+PrgrxkiA50efORdI5U5lsW79MmFnusUA355oaSXcLhu5xxB38SMSyP2KvuKNPuH3owIDAQABAkAfoiLyL+Z4lf4Myxk6xUDgLaWGximj20CUf+5BKKnlrK+Ed8gAkM0HqoTt2UZwA5E2MzS4EI2gjfQhz5X28uqxAiEA3wNFxfrCZlSZHb0gn2zDpWowcSxQAgiCstxGUoOqlW8CIQDDOerGKH5OmCJ4Z21v+F25WaHYPxCFMvwxpcw99EcvDQIgIdhDTIqD2jfYjPTY8Jj3EDGPbH2HHuffvflECt3Ek60CIQCFRlCkHpi7hthhYhovyloRYsM+IS9h/0BzlEAuO0ktMQIgSPT3aFAgJYwKpqRYKlLDVcflZFCKY7u3UP8iWi1Qw0Y=","MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKoR8mX0rGKLqzcWmOzbfj64K8ZIgOdHnzkXSOVOZbFu/TJhZ7rFAN+eaGkl3C4buccQd/EjEsj9ir7ijT7h96MCAwEAAQ==",2048);
+        password=rsaHelper.decrypt(password);
         //根据用户名查询密码
         RoleLoginInfo info = orderBussinessInfoMapper.checkpassWord(role);
         if(info != null){
-            if(!password.equals(info.getPassword())){
+            if (!SecurityUtils.matchesPassword(password, info.getPassword())) {
                 return AjaxResult.error("操作失败","用户名或密码不正确");
             }
         }else{
             return AjaxResult.error("操作失败","登录用户不存在");
         }
-        return AjaxResult.success();
+        return AjaxResult.success(info);
     }
 
     @Override
     public RoleLoginInfo getUser(RoleLoginInfo roleLoginInfo){
 
         RoleLoginInfo info = orderBussinessInfoMapper.getUser(roleLoginInfo);
-        orderBussinessInfoMapper.updateIsLogin(roleLoginInfo);
         return info;
     }
 
@@ -69,16 +69,26 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     public AjaxResult updatePassword(RoleLoginInfo roleLoginInfo){
         String role = roleLoginInfo.getRole();
         String password = roleLoginInfo.getPassword();
+        String newPassword = roleLoginInfo.getNewPassword();
         //根据用户名查询密码
         RoleLoginInfo info = orderBussinessInfoMapper.checkpassWord(role);
+        RSAHelper rsaHelper=new RSAHelper();
+        rsaHelper.initKey("MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAqhHyZfSsYourNxaY7Nt+PrgrxkiA50efORdI5U5lsW79MmFnusUA355oaSXcLhu5xxB38SMSyP2KvuKNPuH3owIDAQABAkAfoiLyL+Z4lf4Myxk6xUDgLaWGximj20CUf+5BKKnlrK+Ed8gAkM0HqoTt2UZwA5E2MzS4EI2gjfQhz5X28uqxAiEA3wNFxfrCZlSZHb0gn2zDpWowcSxQAgiCstxGUoOqlW8CIQDDOerGKH5OmCJ4Z21v+F25WaHYPxCFMvwxpcw99EcvDQIgIdhDTIqD2jfYjPTY8Jj3EDGPbH2HHuffvflECt3Ek60CIQCFRlCkHpi7hthhYhovyloRYsM+IS9h/0BzlEAuO0ktMQIgSPT3aFAgJYwKpqRYKlLDVcflZFCKY7u3UP8iWi1Qw0Y=","MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKoR8mX0rGKLqzcWmOzbfj64K8ZIgOdHnzkXSOVOZbFu/TJhZ7rFAN+eaGkl3C4buccQd/EjEsj9ir7ijT7h96MCAwEAAQ==",2048);
+        password=rsaHelper.decrypt(password);
+        newPassword=rsaHelper.decrypt(newPassword);
         if(info != null){
-            if(!password.equals(info.getPassword())){
+            if (!SecurityUtils.matchesPassword(password, info.getPassword())) {
                 return AjaxResult.error("操作失败","用户名或密码不正确");
             }
         }else{
             return AjaxResult.error("操作失败","登录用户不存在");
         }
+        if(password.equals(newPassword)){
+            return AjaxResult.error("操作失败","新密码不能与旧密码一致");
+        }
+        roleLoginInfo.setNewPassword(SecurityUtils.encryptPassword(newPassword));
         orderBussinessInfoMapper.updatePassword(roleLoginInfo);
+        orderBussinessInfoMapper.updateIsLogin(roleLoginInfo);
         return AjaxResult.success();
     }
 
@@ -115,10 +125,22 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     public OrderInfo getOrderDetail(RoleLoginInfo roleLoginInfo){
         OrderInfo orderInfo =orderBussinessInfoMapper.getOrderDetail(roleLoginInfo);
         String inpatientArea = orderInfo.getInpatientArea();
-        String province = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(0));
-        String city = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(1));
-        String district = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(2));
-        orderInfo.setInpatientArea(province+"-"+city+"-"+district);
+        String province = "";
+        String city ="";
+        String district ="";
+        if(inpatientArea!=null && inpatientArea!=""){
+            if(Arrays.asList((inpatientArea.split(","))).get(0)!=""&& Arrays.asList((inpatientArea.split(","))).get(0)!=null){
+                province = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(0));
+            }
+            if(Arrays.asList((inpatientArea.split(","))).get(0)!=""&& Arrays.asList((inpatientArea.split(","))).get(0)!=null){
+                city = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(1));
+            }
+            if(Arrays.asList((inpatientArea.split(","))).get(0)!=""&& Arrays.asList((inpatientArea.split(","))).get(0)!=null){
+                district = orderBussinessInfoMapper.getPlacename(Arrays.asList((inpatientArea.split(","))).get(2));
+            }
+
+            orderInfo.setInpatientArea(province+"-"+city+"-"+district);
+        }
         return orderInfo;
     }
 
@@ -129,6 +151,16 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     @Override
     public int receivingOrder(RoleLoginInfo roleLoginInfo){
         roleLoginInfo.setReceivingTime(DateUtils.getNowDate());
+        //数据落入轨迹表
+        OrderTrack orderTrack =new OrderTrack();
+        orderTrack.setNodeStatus(roleLoginInfo.getNodeStatus());
+        orderTrack.setCreateTime(DateUtils.getNowDate());
+        orderTrack.setUpdateTime(DateUtils.getNowDate());
+        orderTrack.setCreateBy(SecurityUtils.getUsername());
+        orderTrack.setUpdateBy(SecurityUtils.getUsername());
+        orderTrack.setOrderCode(roleLoginInfo.getOrderCode());
+        orderTrack.setSerialNo(PubFun.createMySqlMaxNoUseCache("OrderInfoSer",20,20));
+        orderBussinessInfoMapper.insertOrderTrack(orderTrack);
         return orderBussinessInfoMapper.receivingOrder(roleLoginInfo);
     }
 
@@ -141,10 +173,31 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
         if("01".equals(orderInfo.getDetailStatus()) || "02".equals(orderInfo.getDetailStatus())){
             orderInfo.setApplyResultTime(DateUtils.getNowDate());
         }
+        if("02".equals(orderInfo.getDetailStatus())){
+            orderInfo.setOrderCompleteTime(DateUtils.getNowDate());
+        }
         if(orderInfo.getSettlePrice() !=null && orderInfo.getSettlePrice() !=""){
             orderInfo.setOrderCompleteTime(DateUtils.getNowDate());
         }
+        //数据落入轨迹表
+        OrderTrack orderTrack =new OrderTrack();
+        orderTrack.setDetailStatus(orderInfo.getDetailStatus());
+        if(orderInfo.getNodeStatus() =="" || orderInfo.getNodeStatus() ==null){
+            orderTrack.setNodeStatus("02");
+        }else{
+            orderTrack.setNodeStatus(orderInfo.getNodeStatus());
+        }
+        orderTrack.setReason(orderInfo.getReason());
+        orderTrack.setRemark_B(orderInfo.getRemark());
+        orderTrack.setCreateTime(DateUtils.getNowDate());
+        orderTrack.setUpdateTime(DateUtils.getNowDate());
+        orderTrack.setCreateBy(SecurityUtils.getUsername());
+        orderTrack.setUpdateBy(SecurityUtils.getUsername());
+        orderTrack.setOrderCode(orderInfo.getOrderCode());
+        orderTrack.setSerialNo(PubFun.createMySqlMaxNoUseCache("OrderInfoSer",20,20));
+        orderBussinessInfoMapper.insertOrderTrack(orderTrack);
         return orderBussinessInfoMapper.implementtOrder(orderInfo);
+
     }
 
 
@@ -214,5 +267,10 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
             addressList.add(addressVO1);
         }
         return addressList;
+    }
+
+    @Override
+    public List<OrderTrack> getDealList(OrderInfo orderInfo){
+        return orderBussinessInfoMapper.getDealList(orderInfo);
     }
 }

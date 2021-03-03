@@ -196,7 +196,8 @@
 
     <el-card v-if="this.queryParams.status>2">
       <el-form ref="workPoolData2" :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+               label-position="right" size="mini"
+      >
         <span style="color: blue">服务处理</span>
         <el-divider></el-divider>
         <el-row>
@@ -226,11 +227,11 @@
 
     <el-card>
       <el-form ref="workPoolData3"  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :rules="changeForm.rules">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
-            <el-form-item label="修改原因："  >
+            <el-form-item label="修改原因："  prop="editInfo.editReason">
               <el-radio-group v-model="workPoolData.editInfo.editReason">
                 <el-radio label="1">客户申请变动</el-radio>
                 <el-radio label="2">操作失误</el-radio>
@@ -239,7 +240,7 @@
             </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="修改说明：" >
+          <el-form-item label="修改说明：" prop="editInfo.editRemark">
             <el-input
               type="textarea"
               :rows="2"
@@ -350,10 +351,19 @@
           content: [
           {required: true, message: "业务内容不能为空", trigger: "blur"}
         ],
+        'editInfo.editRemark':[
+          {required: true, message: "修改说明不能为空", trigger: "blur"},
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+        ],
+        'editInfo.editReason':[
+          {required: true, message: "修改原因不能为空", trigger: "blur"}
+        ]
 
       };
 
       return {
+        workPoolDataFlag:false,
+        workPoolDataFlag3:false,
         //下拉框
         cs_priority:[],//优先级
         cs_service_item:[],//服务项目
@@ -487,8 +497,12 @@
       //提交页面数据
       submit(){
         this.$refs.workPoolData.validate((valid) => {
-
-          if (valid) {
+           this.workPoolDataFlag=valid
+        })
+        this.$refs.workPoolData3.validate((valid) => {
+            this.workPoolDataFlag3=valid
+        })
+          if (this.workPoolDataFlag&&this.workPoolDataFlag3) {
             let insert=this.workPoolData
             if (this.$route.query.alterId!=null){
               insert.alterId=JSON.parse(this.$route.query.alterId)
@@ -507,10 +521,12 @@
 
             })
           }else {
-            return false
+            return this.$message.warning(
+              "请检查输入信息格式！"
+            )
           }
 
-        })
+
 
 
       },

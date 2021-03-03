@@ -155,7 +155,7 @@
       searchHandle() {
         if (this.sendForm.policyItemNo==""&&this.sendForm.policyNumber==""&&this.sendForm.organCode==""&&this.sendForm.beInsuredBirthday==""&&this.sendForm.beInsuredName==""&&this.sendForm.beInsuredNo=="")
         {
-          alert("查询条件不能为空")
+          this.$message.warning("查询条件不能为空")
         }else {
           // let query = {
           //   pageNum: this.queryParams.pageNum ? this.queryParams.pageNum : undefined,

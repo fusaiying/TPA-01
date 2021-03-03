@@ -389,7 +389,7 @@
           <span style="color: blue">附件信息</span>
           <div style="text-align: right; margin-right: 1px;">
             <up-load ref="upload"></up-load>
-            <el-button size="mini" type="primary" @click="upload()">上传附件</el-button>
+            <el-button size="mini" type="primary" @click="upload()" disabled>上传附件</el-button>
           </div>
         </el-row>
         <el-divider/>
@@ -408,7 +408,7 @@
           <el-table-column prop="insuredName" align="center" label="备注" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)">下载</el-button>
+              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -459,7 +459,7 @@ export default {
       contactsName: [
         {required: true, message: "联系人不能为空", trigger: "blur"}
       ],
-      ContactsMobilePhone: [
+      contactsMobilePhone: [
         {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
       ],
       organCode: [
@@ -497,14 +497,19 @@ export default {
       contactsName: [
         {required: true, message: "联系人不能为空", trigger: "blur"}
       ],
-      ContactsMobilePhone: [
-        {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+      contactsMobilePhone: [
+        {required: true, message: "联系电话不能为空", trigger: "blur"},
+        {required: true,
+          message: "目前只支持中国大陆的手机号码",
+          pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+          trigger: "blur"},
       ],
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
       ],
       content: [
-        {required: true, message: "业务内容不能为空", trigger: "blur"}
+        {required: true, message: "业务内容不能为空", trigger: "blur"},
+        { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
       ],
     };
 
@@ -645,7 +650,9 @@ export default {
 
           })
         } else {
-          return false;
+          return this.$message.warning(
+            "请检查信息格式！"
+          )
         }
       });
 

@@ -535,7 +535,8 @@
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
               policyItemNo:s.policyItemNo,
-              status:s.status
+              status:s.status,
+              businessType:s.businessType
             }
           })
         }else {
@@ -545,7 +546,8 @@
               workOrderNo:s.workOrderNo,
               policyNo:s.policyNo,
               policyItemNo:s.policyItemNo,
-              status:s.status
+              status:s.status,
+              businessType:s.businessType
             }
           })
 

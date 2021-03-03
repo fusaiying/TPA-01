@@ -1,19 +1,17 @@
 package com.paic.ehis.claimflow.service.impl;
 
 
-import com.paic.ehis.claimflow.domain.ClaimCaseCal;
-import com.paic.ehis.claimflow.domain.ClaimCaseCalBill;
-import com.paic.ehis.claimflow.domain.ClaimCaseCalItem;
+import com.paic.ehis.claimflow.domain.*;
 import com.paic.ehis.claimflow.domain.dto.BillDetailDTO;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
-import com.paic.ehis.claimflow.mapper.ClaimCaseCalBillMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseCalItemMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper;
+import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,6 +38,15 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
 
     @Autowired
     private ClaimCaseCalMapper claimCaseCalMapper;
+
+    @Autowired
+    private ClaimBatchMapper claimBatchMapper;
+
+    @Autowired
+    private ClaimCaseMapper claimCaseMapper;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询案件赔付账单明细
@@ -113,9 +120,10 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
+        String claimFlag = "";
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();
         ArrayList<ClaimCaseCalItem> claimCaseCalItems = new ArrayList<>();
-        ClaimCaseCal claimCaseCal = new ClaimCaseCal();
+        ClaimCaseCal claimCaseCal =claimCaseCalMapper.selectClaimCaseCalByRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
         claimCaseCal.setRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
         claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
         claimCaseCal.setUpdateTime(DateUtils.getNowDate());
@@ -145,6 +153,22 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         }
         if (StringUtils.isNotEmpty(claimCaseCalItems)) {
             claimCaseCalItemMapper.bulkUpdateClaimCaseCalItem(claimCaseCalItems);
+        }
+        //判断是否全赔医院
+        ClaimCase claimCase = claimCaseMapper.selectClaimCaseById(billDetailDTO.getBillDetailList().get(0).getRptNo());
+        ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(claimCase.getBatchNo());
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+            BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
+            claimFlag=settle.getClaimFlag();
+        }
+        if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
+            claimCaseCal.setPayAmount(pay);
+        }
+        if ("02".equals(claimFlag)){//全赔医院
+            claimCaseCal.setDebtAmount(claimCaseCal.getPayAmount()/*此处应为账单总金额*/.subtract(claimCaseCal.getCalAmount().add(pay)));
+        //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
         }
         claimCaseCal.setCalAmount(pay);
 

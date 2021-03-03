@@ -44,6 +44,6 @@ public interface RemoteUserService
      *
      * @return
      */
-    @GetMapping("/getUserInfo")
+    @GetMapping("/user/getUserInfo")
     public AjaxResult userInfo();
 }

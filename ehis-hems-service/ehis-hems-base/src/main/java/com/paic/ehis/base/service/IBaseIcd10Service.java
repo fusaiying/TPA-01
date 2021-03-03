@@ -75,4 +75,12 @@ public interface IBaseIcd10Service
      * @return
      */
     public int updateBaseIcd10One(BaseIcd10 baseIcd10);
+
+    /**
+     * 模糊查询ICD，默认展示200条
+     *
+     * @param baseIcd10
+     * @return
+     */
+    public List<BaseIcd10> selectIcdFuzzy(BaseIcd10 baseIcd10);
 }

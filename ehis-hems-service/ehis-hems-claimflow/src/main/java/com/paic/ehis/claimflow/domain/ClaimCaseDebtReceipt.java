@@ -101,6 +101,14 @@ public class ClaimCaseDebtReceipt extends BaseEntity
         return status;
     }
 
+    public BigDecimal getResidual() {
+        return residual;
+    }
+
+    public void setResidual(BigDecimal residual) {
+        this.residual = residual;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

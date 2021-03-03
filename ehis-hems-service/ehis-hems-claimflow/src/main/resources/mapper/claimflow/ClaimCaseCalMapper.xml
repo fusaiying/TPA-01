@@ -124,10 +124,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         sum( bill_amount ) AS sumBillAmount,
         sum( hos_discount_amount ) AS sumHosDiscountAmount,
         rpt_no
-        FROM claim_case_bill ccb
+        FROM claim_case_bill ccb where ccb.status='Y'
         GROUP BY rpt_no ) bill
         ON ccc.rpt_no = bill.rpt_no
-        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no
+        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no and insured.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
         </where>

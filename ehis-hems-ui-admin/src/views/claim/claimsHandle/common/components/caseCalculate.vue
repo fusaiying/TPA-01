@@ -338,6 +338,9 @@
           this.$emit("refresh-item", 'discussion')
           detailsList(data).then(res => {
             if (res != null && res.code === 200 && res.rows.length > 0) {
+              res.rows.forEach(item=>{
+                item.isEdit = true
+              })
               this.caseForm.caseData = res.rows
               this.caseForm.caseData.forEach(item => {
                 item.isEdit = true
@@ -398,6 +401,9 @@
                   this.updateClaimConclusionNull();
                   detailsList(data).then(res => {
                     if (res != null && res.code === 200 && res.rows.length > 0) {
+                      res.rows.forEach(item=>{
+                        item.isEdit = true
+                      })
                       res.rows.forEach(item => {
                         item.isEdit = true
                         if (item.minData.length > 0) {

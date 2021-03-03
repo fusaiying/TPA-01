@@ -219,33 +219,40 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.searchBtn = true;
-      this.pendPageInfo.pageNum = 1;
-      this.pendPageInfo.pageSize = 10;
-      this.completePageInfo.pageNum = 1;
-      this.completePageInfo.pageSize = 10;
-      this.pendingTotal = 0;
-      this.completedTotal = 0;
-      this.getPendingData();
-      this.getProcessedData();
+      this.claimPageInfo.page  = 1;
+      this.claimPageInfo.pageSize = 10;
+      this.initClaimData();
+      // this.searchBtn = true;
+      // this.pendPageInfo.pageNum = 1;
+      // this.pendPageInfo.pageSize = 10;
+      // this.completePageInfo.pageNum = 1;
+      // this.completePageInfo.pageSize = 10;
+      // this.pendingTotal = 0;
+      // this.completedTotal = 0;
+      // this.getPendingData();
+      // this.getProcessedData();
     },
     // 查询处理中
     getPendingData() {
       this.searchLoad = true;
-      let rptNo = this.formSearch.rptNo ;
-      let source = this.formSearch.source ;
-      let name = this.formSearch.name ;
-      let discType = this.formSearch.discType ;
-      let createBy = this.formSearch.createBy ;
-
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
-      params.rptNo = rptNo;
-      params.source = source;
-      params.name = name;
-      params.discType = discType;
-      params.createBy = createBy;
-      params.pageNum = this.pendPageInfo.pageNum;
-      params.pageSize = this.pendPageInfo.pageSize;
+      params.pageNum = this.claimPageInfo.page;
+      params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
+
       PendingData(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -257,29 +264,23 @@ export default {
     },
     // 查询已处理
     getProcessedData() {
-      let rptNo = this.formSearch.rptNo ;
-      let source = this.formSearch.source ;
-      let name = this.formSearch.name ;
-      let discType = this.formSearch.discType ;
-      let createBy = this.formSearch.createBy ;
-
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
-      params.rptNo = rptNo;
-      params.source = source;
-      params.name = name;
-      params.discType = discType;
-      params.createBy = createBy;
-      params.pageNum = this.completePageInfo.pageNum;
-      params.pageSize = this.completePageInfo.pageSize;
-
-      let startTime = '';
-      let endTime = '';
-      // if (!this.searchBtn) {
-      //   startTime = moment().subtract('month', 1).format('YYYY-MM-DD') + ' ' + '00:00:00'
-      //   endTime = moment(new Date().getTime()).format('YYYY-MM-DD') + ' ' + '23:59:59'
-      // }
+      params.pageNum = this.claimPageInfo.page;
+      params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
       processedData(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
@@ -288,9 +289,24 @@ export default {
       })
     },
     initClaimData(){
+      let startTime = "";
+      let endTime = "";
+      let operateDate = this.formSearch.operateDate;
+      if('' != operateDate) {
+        startTime = operateDate[0];
+        endTime = operateDate[1];
+      }
       const params = {};
       params.pageNum = this.claimPageInfo.page;
       params.pageSize = this.claimPageInfo.pageSize;
+      params.rptNo = this.formSearch.rptNo;
+      params.source = this.formSearch.source;
+      params.idNo = this.formSearch.idNo;
+      params.name = this.formSearch.name;
+      params.createStartTime = startTime;
+      params.createEndTime = endTime;
+      params.updateBy = this.formSearch.updateBy;
+      params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {
           this.claimTotal = res.total;

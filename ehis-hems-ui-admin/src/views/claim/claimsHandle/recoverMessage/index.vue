@@ -165,7 +165,7 @@
           <el-table-column align="center" prop="receiptCurrency" label="收款币种" width="90" show-overflow-tooltip/>
           <el-table-column align="center" prop="receiptDate" label="收款日期" show-overflow-tooltip/>
           <el-table-column align="center" prop="remark" label="收款备注" show-overflow-tooltip/>
-          <el-table-column align="center" prop="creatBy" label="操作人" show-overflow-tooltip/>
+          <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
           <el-table-column align="center" prop="residual" label="余额" show-overflow-tooltip/>
         </el-table>
         <pagination

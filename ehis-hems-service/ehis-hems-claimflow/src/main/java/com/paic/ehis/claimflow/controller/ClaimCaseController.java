@@ -681,6 +681,15 @@ public class ClaimCaseController extends BaseController {
         }
     }
 
+    /**
+     * 申诉发起 - 案件工作池
+     */
+    @GetMapping("/appeal/claimInfoList")
+    public TableDataInfo claimInfoList(ClaimInformationDTO dto) {
+        startPage(dto);
+        List<ClaimInformationVo> list = claimCaseService.claimInfoList(dto);
+        return getDataTable(list);
+    }
     //校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
     //    @PreAuthorize("@ss.hasPermi('system:case:list')")
     @PostMapping("/checkBillAndPolicyDate")

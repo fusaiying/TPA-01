@@ -148,7 +148,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBills.add(claimCaseCalBill);
                 billTotalAmount=billTotalAmount.add(caseCalBillVo.getBillAmount());//因账单总金额暂未实现，只能求和
                 totalDiscountAmount=totalDiscountAmount.add(caseCalBillVo.getHosDiscountAmount());//折扣总金额
-                totalSelfAmount=(totalSelfAmount.add(caseCalBillVo.getCopay()));
+                totalSelfAmount=totalSelfAmount.add(caseCalBillVo.getCopay()!=null?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getCopay());
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
                         ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
@@ -188,8 +188,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
         }
-
-        claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+        claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }
 

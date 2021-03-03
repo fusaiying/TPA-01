@@ -14,6 +14,31 @@ public class ClaimInformationVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    /** 出单公司 */
+    private String companyCode;
+    private String companyName;
+
+    /** 承保机构 */
+    private String policyManageCom;
+
+    /** 赔付金额 */
+    private BigDecimal payAmount;
+
+    /** 支付状态 */
+    private String payStatus;
+
+    /** 结案日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date endCaseTime;
+
+    /** 更新时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date updateTime;
+
+    /** 交单来源 */
+    private String source;
+
+    /** 理赔类型 */
     private String claimType;
 
     /** 批次号 */

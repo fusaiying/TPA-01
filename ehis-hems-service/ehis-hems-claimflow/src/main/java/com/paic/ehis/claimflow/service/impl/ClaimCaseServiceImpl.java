@@ -136,28 +136,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setIsHistory("N");
         claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
-        /*          实现多少天多少小时多少分的计算实现
-        ArrayList<ProcessingCaseVo> processingCaseVos = new ArrayList<>();
-        for (ClaimCase claimCase : claimCases) {
-            ProcessingCaseVo processingCaseVo = new ProcessingCaseVo();
-            BeanUtils.copyProperties(claimCase,processingCaseVo);
-            long times = now.getTime()-claimCase.getUpdateTime().getTime();
-            long day = times / (24 * 60 * 60 * 1000);
-            long hour = (times / (60 * 60 * 1000) - day * 24);
-            long min = ((times / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            StringBuilder sbTime = new StringBuilder();
-            if (day>0){
-                sbTime.append(day).append("天");
-            }
-            if (hour > 0) {
-                sbTime.append(hour).append("小时");
-            }
-            if (min > 0) {
-                sbTime.append(min).append("分钟");
-            }
-            processingCaseVo.setStayTime(sbTime.toString());
-            processingCaseVos.add(processingCaseVo);
-        }*/
+
         return claimCaseMapper.selectProcessingClaimCaseList(claimCaseDTO);
     }
 
@@ -1160,11 +1139,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 抽检完毕，修改案件状态
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int editCaseCheck(ClaimCase claimCase) {
         claimCase.setCaseStatus("99");
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
+        claimCase.setEndCaseTime(DateUtils.getNowDate());
 
         //查询原来操作记录并进行更新
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOneOld(claimCase.getRptNo());
@@ -1189,6 +1170,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 退回后流转至该案件理算审核环节操作人处理中工作池
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int editCaseCheckBack(ClaimCase claimCase) {
 //        claimCase.setCaseStatus("07");
@@ -1230,6 +1212,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 抽检工作池-处理中
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
@@ -1397,6 +1380,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 判断案件是否符合流程抽检岗规则
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int judgeClaimCaseCheckRule(ClaimCaseCheckDTO claimCaseCheckDTO) {
 
@@ -1428,6 +1412,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
             claimCase.setUpdateBy(SecurityUtils.getUsername());
             claimCase.setUpdateTime(DateUtils.getNowDate());
+            claimCase.setEndCaseTime(DateUtils.getNowDate());
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
@@ -1436,6 +1421,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     }
 
     //案件抽检已处理
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
@@ -1626,4 +1612,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         return  claimCaseMapper.updateClaimCase(claimCase);
     }*/
+
+
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    @Override
+    public List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto) {
+        return claimCaseMapper.claimInfoList(dto);
+    }
 }

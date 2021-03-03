@@ -315,17 +315,17 @@ export default {
             }
             addissuingAndCompanyDTO(params).then(res => {
               if (res != null && res.code === 200) {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.baseForm = res.data
-                if (this.baseForm.companycode) {
-                  this.tableData[0].companycode = this.baseForm.companycode
-                }
-                this.canUpload = true
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.baseForm = res.data
+                  if (this.baseForm.companycode) {
+                    this.tableData[0].companycode = this.baseForm.companycode
+                  }
+                  this.canUpload = true
               } else {
                 this.$message.error('保存失败！')
               }

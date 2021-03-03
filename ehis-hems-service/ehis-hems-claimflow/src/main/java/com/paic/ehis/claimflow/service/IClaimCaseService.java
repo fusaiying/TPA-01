@@ -269,4 +269,13 @@ public interface IClaimCaseService
      除受理阶段其余阶段分配操作人
      */
    // public int updateOtherCaseDist(String rptNo);
+
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto);
 }

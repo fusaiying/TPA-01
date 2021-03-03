@@ -155,8 +155,7 @@ public class FinanceAdvanceSettleDetailController extends BaseController {
      */
     @Log(title = "垫付款服务费结算任务", businessType = BusinessType.IMPORT)
     @PostMapping("/importInitiate")
-    public AjaxResult excelImport(MultipartFile file, FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
-        financeAdvanceSettleDetailService.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO);
-        return toAjax(financeAdvanceSettleDetailService.importAdvanceSettleTask(file, financeAdvanceSettleDTO));
+    public AjaxResult excelImport(MultipartFile file) {
+        return toAjax(financeAdvanceSettleDetailService.importAdvanceSettleTask(file));
     }
 }

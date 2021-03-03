@@ -96,5 +96,5 @@ public interface IFinanceAdvanceSettleDetailService {
     /**
      * 导入垫付款服务费结算
      */
-    public int importAdvanceSettleTask(MultipartFile file, FinanceAdvanceSettleDTO financeAdvanceSettleDTO);
+    public int importAdvanceSettleTask(MultipartFile file);
 }

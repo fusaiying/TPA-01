@@ -249,7 +249,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
 
     /*导入垫付款清单*/
     @Override
-    public int importAdvanceSettleTask(MultipartFile file, FinanceAdvanceSettleDTO financeAdvanceSettleDTO) {
+    public int importAdvanceSettleTask(MultipartFile file) {
         //先获取导入前的数据，然后查询导入后的数据进行比对
         FinanceAdvanceSettleTask financeAdvanceSettleTask = new FinanceAdvanceSettleTask();
         try {
@@ -259,11 +259,7 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
             ExcelUtils<FinanceAdvanceSettleVO> utils = new ExcelUtils<FinanceAdvanceSettleVO>(FinanceAdvanceSettleVO.class);
             FinanceAdvanceSettleDetail financeAdvanceSettleDetail = new FinanceAdvanceSettleDetail();
             FinanceAdvanceSettleVO financeAdvanceSettleVO = new FinanceAdvanceSettleVO();
-            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOList(financeAdvanceSettleDTO);
-            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
-                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
-                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
-            }
+
             for (int j = 0; j < sheetNum; j++) {
                 Sheet sheet = wb.getSheetAt(j);
                 if (1 == j) {//如果excel表里只有一条数据
@@ -284,6 +280,11 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                         if (StringUtils.isNotEmpty(taskList.get(i).getSettleTaskNo())) {
                             updateList.add(taskList.get(i));//取出excel集合中存在任务号的数据
                             BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);
+                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
+                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
+                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
+                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
+                            }
                             financeAdvanceSettleTask.setSettleStatus("01");//设置为待确认状态
                             financeAdvanceSettleDetail.setStatus("Y");
                             financeAdvanceSettleTask.setStatus("Y");
@@ -294,6 +295,11 @@ public class FinanceAdvanceSettleDetailServiceImpl implements IFinanceAdvanceSet
                         } else {
                             insertList.add(taskList.get(i));//取出excel集合中没有任务号的数据
                             BeanUtils.copyProperties(taskList.get(i), financeAdvanceSettleVO);//新增没有任务号的数据
+                            List<FinanceAdvanceSettleVO> financeAdvanceSettleVOS = financeAdvanceSettleDetailMapper.selectFinanceAdvanceSettleVOInfo(taskList.get(0).getSettleTaskNo());
+                            for (int p = 0; p < financeAdvanceSettleVOS.size(); p++) {
+                                String[] settleTaskNos = financeAdvanceSettleVOS.get(p).getSettleTaskNos();
+                                financeAdvanceSettleDetailMapper.deleteFinanceSettleDetailsettleTaskNos(settleTaskNos);//批量删除工作池的数据(修改状态不显示)
+                            }
                             String taskNo = "AS" + PubFun.createMySqlMaxNoUseCache("finance_advance_settle_detail", 10, 10);
                             financeAdvanceSettleDetail.setSettleTaskNo(taskNo);
                             financeAdvanceSettleTask.setSettleStatus("01");

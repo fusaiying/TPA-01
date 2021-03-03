@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseDebtReceiptListNear" resultMap="ClaimCaseDebtReceiptResult">
         SELECT
             a.receipt_no,
-            ( SELECT DISTINCT name FROM claim_case_insured b WHERE a.insured_no = b.insured_no ) insured_no,
+            ( SELECT DISTINCT name FROM claim_case_insured b WHERE a.insured_no = b.insured_no and b.status='Y' ) insured_no,
             a.receipt_amount,
             a.receipt_currency,
             a.receipt_date,

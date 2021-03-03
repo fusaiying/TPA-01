@@ -266,6 +266,7 @@
         return this.selectDictLabel(this.yesOrNo, value)
       },
       getDeptName(value){
+        console.log(value)
         return this.selectDictLabel(this.proSysDepts, value)
       },
     }

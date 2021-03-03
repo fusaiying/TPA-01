@@ -29,11 +29,11 @@ public class ClaimCaseCalBill extends BaseEntity
     @Excel(name = "账单ID")
     private Long billId;
 
-    /** 理算金额 */
+    /** 理算金额（初始） */
     @Excel(name = "理算金额")
     private BigDecimal calAmount;
 
-    /** 赔付金额 */
+    /** 赔付金额（最终） */
     @Excel(name = "理算金额")
     private BigDecimal payAmount;
 

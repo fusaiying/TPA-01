@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseCalVo"/>
         where
             status = 'Y'
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>n
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
     </select>
 
     <select id="selectClaimCaseCalInformation" parameterType="String" resultMap="CalConclusionResult">

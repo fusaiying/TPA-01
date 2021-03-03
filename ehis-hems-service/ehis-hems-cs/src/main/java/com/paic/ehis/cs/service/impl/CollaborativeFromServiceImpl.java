@@ -160,6 +160,9 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         flowLog.setLinkCode("06");//状态置为已协办
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -193,8 +196,10 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //轨迹表插入数据
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-        //flowLog.setWorkOrderNo();从前端获得
         flowLog.setLinkCode("06");
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        //没有um帐号
+        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

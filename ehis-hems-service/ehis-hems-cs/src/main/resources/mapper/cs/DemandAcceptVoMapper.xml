@@ -174,7 +174,6 @@
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND a.business_type = '01'
         AND a.STATUS = '02'
-
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>

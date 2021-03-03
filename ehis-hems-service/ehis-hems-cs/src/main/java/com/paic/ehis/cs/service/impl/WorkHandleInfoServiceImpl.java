@@ -203,6 +203,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+           //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -473,8 +476,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-            //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -517,8 +522,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
-            //flowLog.setWorkOrderNo();从前端获得
             flowLog.setStatus("03");
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());

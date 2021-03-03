@@ -384,6 +384,7 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentOver")
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
+        auditWorkPoolDTO.setFlag(true);
         TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
         List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
         ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
@@ -401,6 +402,7 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn("updateTime");
             auditWorkPoolDTO.setIsAsc("desc");
         }
+        auditWorkPoolDTO.setFlag(false);
        // startPage(auditWorkPoolDTO);
         return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }

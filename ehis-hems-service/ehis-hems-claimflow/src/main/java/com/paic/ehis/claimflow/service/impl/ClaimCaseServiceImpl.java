@@ -701,7 +701,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
         //检查字符，防止注入绕过
           orderBy = SqlUtil.escapeOrderBySql(orderBy);
-        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
+          if(!auditWorkPoolDTO.getFlag()) {
+              PageHelper.startPage(auditWorkPoolDTO.getPageNum(), auditWorkPoolDTO.getPageSize(), orderBy);
+          }
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();

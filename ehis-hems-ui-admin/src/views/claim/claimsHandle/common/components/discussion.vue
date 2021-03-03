@@ -271,6 +271,7 @@
           investigationBaseInfo,
           discussionBaseInfo,
           acceptInfo,
+    checkBillAndPolicyDate,
   } from '@/api/handel/common/api'
   import {editCaseCheckBack, editCaseCheck} from '@/api/claim/sportCheck'
 
@@ -718,25 +719,65 @@
           payConclusion: this.conclusionInfo.payConclusion,
           isAppeal: this.conclusionInfo.isAppeal,
         };
-        // 审核完毕
-        finishClaimCase(params).then(res => {
-          if (res.code == '200') {
-            this.$message({
-              message: '审核成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            });
-           this.goHistory();
-          } else {
-            this.$message({
-              message: '审核失败！',
-              type: 'error',
-              center: true,
-              showClose: true
-            });
+        checkBillAndPolicyDate(this.rptNo).then(res=>{
+          if (res!=null && res.code==200){
+            if (res.data==0){
+              // 审核完毕
+              finishClaimCase(params).then(res => {
+                if (res.code == '200') {
+                  this.$message({
+                    message: '审核成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  });
+                  this.goHistory();
+                } else {
+                  this.$message({
+                    message: '审核失败！',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  });
+                }
+              });
+            }else {
+              this.$confirm(`就诊日期不在保单有效期范围内，请确认是否继续?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                // 审核完毕
+                finishClaimCase(params).then(res => {
+                  if (res.code == '200') {
+                    this.$message({
+                      message: '审核成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    });
+                    this.goHistory();
+                  } else {
+                    this.$message({
+                      message: '审核失败！',
+                      type: 'error',
+                      center: true,
+                      showClose: true
+                    });
+                  }
+                });
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消！'
+                })
+              })
+
+            }
           }
-        });
+        })
+
+
       },
       // 赔付结论  退回受理
       backClaimCase(){

@@ -63,6 +63,10 @@
     <resultMap type="com.paic.ehis.claimflow.domain.vo.RptNoVo" id="RptNoVoResult">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
+        <result property="isFiling"    column="is_filing"    />
+        <result property="isInvoiceBack"    column="is_invoice_back"    />
+        <result property="isSingle"    column="is_single"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
 
@@ -777,7 +781,15 @@
     <!--lhy-->
 
     <select id="selectCaseClaimCaseFilingRptNo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultMap="RptNoVoResult">
-        select rpt_no from claim_case
+        select
+            rpt_no ,
+            batch_no ,
+            (select is_filing  from claim_batch_invoice_filing  cbif where t.batch_no=cbif.batch_no ) is_filing,
+            (select is_invoice_back  from claim_batch_invoice_filing  cbif where t.batch_no=cbif.batch_no ) is_invoice_back,
+            (select is_single  from claim_batch_invoice_filing  cbif where t.batch_no=cbif.batch_no ) is_single,
+            (select remark  from claim_batch_invoice_filing  cbif where t.batch_no=cbif.batch_no ) remark
+        from claim_case t
+
         <where>
             <if test="rptStartNo != null  and rptStartNo != ''"> <![CDATA[and  rpt_no >=  #{rptStartNo}]]></if>
             <if test="rptEndNo != null  and rptEndNo != ''"> <![CDATA[and rpt_no <= #{rptEndNo}]]></if>

@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="claimType != null  and claimType != ''"> and claim_type = #{claimType}</if>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
             <if test="caseBoxNo != null  and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
-            <if test="rptNo != null  and rptNo != ''"> and batch_no = (select batch_no from claim_case where rpt_no  = #{rptNo} )</if>
+            <if test="rptNo != null  and rptNo != ''"> and (batch_no = (select batch_no from claim_case where rpt_no  = #{rptNo} )  or rpt_start_no= #{rptNo} or rpt_end_no = #{rptNo})</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="updateStartTime != null and updateStartTime != ''"><![CDATA[AND update_time >= #{updateStartTime} ]]></if>
             <if test="updateEndTime != null and updateEndTime != ''"><![CDATA[AND update_time <= #{updateEndTime}]]></if>

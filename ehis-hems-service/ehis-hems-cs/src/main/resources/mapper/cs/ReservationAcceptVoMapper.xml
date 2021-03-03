@@ -181,8 +181,6 @@ SELECT
         WHERE
          a.business_type = '02'
         AND a.STATUS = '01'
-        ORDER BY
-        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -202,6 +200,8 @@ SELECT
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn DESC
     </select>
 
     <select id="selectReservationAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
@@ -278,8 +278,6 @@ SELECT
         WHERE
         a.business_type = '02'
         AND a.STATUS = '02'
-        ORDER BY
-        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -299,6 +297,8 @@ SELECT
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn DESC
     </select>
 
     <update id="updateStatusM" parameterType="String" >

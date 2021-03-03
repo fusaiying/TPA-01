@@ -88,8 +88,6 @@
         WHERE
         a.business_type = '01'
         AND a.STATUS = '01'
-        ORDER BY
-        hm.nnn DESC
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -109,6 +107,8 @@
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn DESC
 	</select>
 
 
@@ -174,8 +174,7 @@
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND a.business_type = '01'
         AND a.STATUS = '02'
-        ORDER BY
-        hm.nnn DESC
+
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -195,6 +194,8 @@
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
        <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn DESC
 	</select>
 
     <select id="selectDemandAcceptVoById" resultType="com.paic.ehis.cs.domain.vo.DemandAcceptVo">

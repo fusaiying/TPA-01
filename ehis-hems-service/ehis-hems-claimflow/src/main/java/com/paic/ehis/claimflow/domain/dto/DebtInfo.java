@@ -1,13 +1,12 @@
 package com.paic.ehis.claimflow.domain.dto;
 
-import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class DebtInfoDTO extends BaseEntity {
+public class DebtInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endCaseTime" column="end_case_time"/>
         <result property="appntName" column="appnt_name"/>
         <result property="contNo" column="cont_no"/>
+        <result property="batchNo" column="batch_no"/>
     </resultMap>
 
     <sql id="selectClaimCaseDebtVo">
@@ -112,6 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             MIN( d.treatment_end_date ) treatment_end_date,
             e.source,
             e.hospital_code,
+            e.batch_no,
             f.end_case_time,
         CASE
                 b.debt_col_id
@@ -144,7 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.id_no
     </select>
 
-    <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="DebtInfoResult">
+    <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfo" resultMap="DebtInfoResult">
         SELECT
             a.rpt_no,
             a.debt_amount,
@@ -159,6 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             MIN( d.treatment_end_date ) treatment_end_date,
             e.source,
             e.hospital_code,
+            e.batch_no,
             f.end_case_time,
             CASE
                 b.debt_col_id
@@ -172,16 +175,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 END AS white_status
         FROM
             claim_case_debt a
-            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id
-            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no
-            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no
-            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no
-            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no
-            LEFT JOIN claim_case_policy h ON h.rpt_no = a.rpt_no
-        where
-            a.status = 'Y' AND b.status = 'Y' and c.status = 'Y' and d.status = 'Y'
-            and f.status = 'Y' and e.status = 'Y' and g.status = 'Y' and h.status = 'Y'
+            LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.status = 'Y' AND b.status = 'Y'
+            LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y'
+            LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
+            LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status = 'Y'
+            LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no and g.status = 'Y'
+            LEFT JOIN claim_case_policy h ON h.rpt_no = a.rpt_no and h.status = 'Y'
+        <where>
             <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
             <if test="policyNo != null  and policyNo != ''"> and h.policy_no = #{policyNo}</if>
             <if test="hospitalCode != null and hospitalCode != ''"> and e.hospital_code = #{hospitalCode}</if>
@@ -191,6 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="whiteStatus == '01'"> and g.debt_whitelist_id is not null </if>
             <if test="whiteStatus == '02'"> and g.debt_whitelist_id is null </if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and h.policy_item_no = #{policyItemNo}</if>
+        </where>
         GROUP BY
             b.debt_id,
             a.rpt_no,

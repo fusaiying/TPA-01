@@ -103,6 +103,7 @@
   export default {
     mixins: [],
     props: {
+      caseInsuredData:Object,
       isSave:Boolean,
       baseInfo:Object,
       status: String,
@@ -138,9 +139,35 @@
 
         this.setInfo()
       },
+      caseInsuredData: function (newValue) {
+        if (newValue!=null && newValue.claimType==='01'){
+          if (this.baseForm.relationIns==='1' && (this.baseForm.rgtName=='' || this.baseForm.rgtName==undefined|| this.baseForm.rgtName==null)){
+            this.baseForm.rgtName = newValue.name
+            this.baseForm.rgtBirthday = newValue.birthday
+            this.baseForm.rgtIdType = newValue.idType
+            this.baseForm.rgtIdNo = newValue.idNo
+            this.baseForm.rgtSex = newValue.sex
+            this.baseForm.rgtPhone = newValue.phone
+            this.baseForm.rgtMobile = newValue.mobile
+            this.baseForm.rgtEmail =newValue.email
+            this.baseForm.rgtProvince = newValue.province
+            this.baseForm.rgtCity = newValue.city
+            this.baseForm.rgtDistrict = newValue.district
+            this.baseForm.rgtAddress = newValue.address
+            let regionArr=[]
+            regionArr[0] = newValue.province
+            regionArr[1] = newValue.city
+            regionArr[2] = newValue.district
+            this.$set(this,'region',regionArr)
+            this.relationsFlag=true
+          }
+        }
+
+      },
       baseInfo: function (newValue) {
         if (newValue.claimtype === '01'){
           this.collapsed=false
+          this.baseForm.relationIns='1'
         }
       },
       fixInfo: function (newVal) {
@@ -239,7 +266,7 @@
         saveHandleLoading: false,
         baseForm: {
           relationIns: undefined,
-          rgtName: undefined,
+          rgtName: '',
           rgtBirthday: undefined,
           rgtIdType: undefined,
           rgtIdNo: undefined,
@@ -414,7 +441,7 @@
             this.region.push(this.batchInfo.city)
             this.region.push(this.batchInfo.district)*/
         } else {
-          this.baseForm.rgtName = undefined
+          this.baseForm.rgtName = ''
           this.baseForm.rgtBirthday = undefined
           this.baseForm.rgtIdType = undefined
           this.baseForm.rgtIdNo = undefined

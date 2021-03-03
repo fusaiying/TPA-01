@@ -55,13 +55,7 @@ public interface IClaimBatchService
      * @return 理赔批次 集合
      */
     public List<BatchVo> selectDealWithBatchList(BatchDTO batchDTO);
-    /**
-     * 导出查询已处理理赔批次 列表
-     *
-     * @param batchDTO 理赔批次
-     * @return 理赔批次 集合
-     */
-    public List<BatchVo> selectExportDealWithBatchList(BatchDTO batchDTO);
+
     /**
      * 查询直结复核理赔批次公共池 列表
      *

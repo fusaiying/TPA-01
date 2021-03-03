@@ -67,8 +67,12 @@ public class BatchVo implements Serializable {
     private String updateBy;
 
     /** 交单机构编码 */
-    @Excel(name = "交单机构" ,readConverterExp="103=研发部门")
+   // @Excel(name = "交单机构" ,readConverterExp="103=研发部门")
     private String organcode;
+
+    /** 交单机构编码 */
+    @Excel(name = "交单机构")
+    private String organName;
 
     /** 批次状态 01-处理中 02-交单复核 03-交单完成 04-交单退回 05-交单无效 */
     @Excel(name = "批次状态 " ,readConverterExp="01=处理中,02=交单复核,03=交单完成,04=交单退回,05=交单无效")

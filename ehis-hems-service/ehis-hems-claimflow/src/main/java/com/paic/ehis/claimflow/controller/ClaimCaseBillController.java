@@ -21,6 +21,7 @@ import com.paic.ehis.common.core.web.page.TableSupport;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.system.api.ClaimCalService;
+import com.paic.ehis.system.api.domain.BaseIcd10;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -212,5 +213,13 @@ public class ClaimCaseBillController extends BaseController
         claimCaseBill.setStatus("Y");
         ClaimCaseBill billSum = claimCaseBillService.getBillSum(claimCaseBill);
         return AjaxResult.success(billSum);
+    }
+
+    /**
+     *  主要诊断、次要诊断接口
+     */
+    @PostMapping("ICD")
+    public AjaxResult getICD(@RequestBody BaseIcd10 baseIcd10){
+        return AjaxResult.success(claimCaseBillService.selectICD(baseIcd10));
     }
 }

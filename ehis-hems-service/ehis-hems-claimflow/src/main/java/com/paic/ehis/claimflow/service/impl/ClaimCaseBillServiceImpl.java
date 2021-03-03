@@ -17,8 +17,10 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.system.api.BaseService;
 import com.paic.ehis.system.api.ClaimCalService;
 import com.paic.ehis.system.api.RemoteUserService;
+import com.paic.ehis.system.api.domain.BaseIcd10;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
 import com.paic.ehis.system.api.domain.ClaimProductFeeitem;
 import com.paic.ehis.system.api.domain.SysOrganInfoVO;
@@ -60,6 +62,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
     private ClaimCalService claimCalService;
     @Autowired
     private RemoteUserService remoteUserService;
+    @Autowired
+    private BaseService baseService;
 
     /**
      * 查询案件账单明细
@@ -452,5 +456,16 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         gatherBill.setAdvancePayment(advanceSum);
         gatherBill.setUnableAmount(unableSum);
         return gatherBill;
+    }
+
+    /**
+     * 主要诊断、次要诊断
+     *
+     * @param baseIcd10
+     * @return
+     */
+    @Override
+    public List<BaseIcd10> selectICD(BaseIcd10 baseIcd10) {
+        return baseService.selectIcdFuzzy(baseIcd10);
     }
 }

@@ -397,11 +397,11 @@
 
     <el-card>
       <el-form  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" :rules="rules" ref="workPoolData3">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
-            <el-form-item label="修改原因"  >
+            <el-form-item label="修改原因："  prop="editInfo.editReason">
               <el-radio-group v-model="workPoolData.editInfo.editReason">
                 <el-radio label="01">客户申请变动</el-radio>
                 <el-radio label="02">操作失误</el-radio>
@@ -410,7 +410,7 @@
             </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="修改说明：" >
+          <el-form-item label="修改说明：" prop="editInfo.editRemark">
             <el-input
               type="textarea"
               :rows="2"
@@ -455,6 +455,8 @@
     data() {
 
       return {
+        workPoolDataFlag:false,
+        workPoolDataFlag3:false,
         //下拉框
         cs_priority:[],//优先级
         cs_service_item:[],//服务项目
@@ -520,8 +522,16 @@
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           content: [
-            {required: true, message: "投诉内容不能为空", trigger: "blur"}
+            {required: true, message: "投诉内容不能为空", trigger: "blur"},
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
           ],
+          'editInfo.editRemark':[
+            {required: true, message: "修改说明不能为空", trigger: "blur"},
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+          ],
+          'editInfo.editReason':[
+            {required: true, message: "修改原因不能为空", trigger: "blur"}
+          ]
         },
         // 查询参数
         queryParams: {
@@ -579,26 +589,31 @@
       //提交页面数据
       submit(){
         this.$refs.workPoolData.validate((valid) => {
-          if (valid) {
-            let insert=this.workPoolData
-            insert.workOrderNo=this.$route.query.workOrderNo
-            modifyComplaintSubmit(insert).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message.success("保存成功")
-                if (res.rows.length <= 0) {
-                  return this.$message.warning(
-                    "失败！"
-                  )
-                }
-              }
-            }).catch(res => {
-
-            })}else {
-            return false
-          }
+          this.workPoolDataFlag=valid
         })
+        this.$refs.workPoolData3.validate((valid) => {
+          this.workPoolDataFlag3=valid
+        })
+        if (this.workPoolDataFlag&&this.workPoolDataFlag3) {
+          let insert = this.workPoolData
+          insert.workOrderNo = this.$route.query.workOrderNo
+          modifyComplaintSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
 
-
+          })
+        }else {
+          return this.$message.warning(
+            "请检查输入信息格式！"
+          )
+        }
 
       },
       //关闭页面

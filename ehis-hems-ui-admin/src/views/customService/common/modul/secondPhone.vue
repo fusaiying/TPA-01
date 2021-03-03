@@ -13,8 +13,8 @@
             style=" width: 100%;"
           >
             <el-table-column align="center"  prop="callSerialNum" label="序号" show-overflow-tooltip/>
-            <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
-            <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip>
+            <el-table-column align="center" width="135" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+            <el-table-column prop="acceptTime" label="受理时间" align="center" show-overflow-tooltip  width="135">
               <template slot-scope="scope">
                 <span>{{ scope.row.acceptTime | changeDate}}</span>
               </template>
@@ -48,7 +48,7 @@ export default {
   filters: {
     changeDate: function (value) {
       if (value !== null) {
-        return moment(value).format('YYYY-MM-DD')
+        return moment(value).format('YYYY-MM-DD HH:MM:SS')
       }
     }
   },

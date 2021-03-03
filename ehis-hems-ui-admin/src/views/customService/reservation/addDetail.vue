@@ -190,7 +190,7 @@
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="170px"
-               label-position="right" size="mini">
+               label-position="right" size="mini" >
 
       <span style="color: blue">服务受理信息</span>
         <el-divider/>
@@ -287,7 +287,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否意外" prop="accidentFlag">
+            <el-form-item label="是否意外：" prop="accidentFlag">
               <el-select v-model="ruleForm.accidentFlag" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -315,7 +315,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人性别" prop="contactsPerson.sex">
+            <el-form-item label="联系人性别：" prop="contactsPerson.sex">
               <el-select v-model="ruleForm.contactsPerson.sex" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -328,7 +328,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否持有效证件" prop="validCertificate">
+            <el-form-item label="是否持有效证件：" prop="validCertificate">
               <el-select v-model="ruleForm.validCertificate" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -518,8 +518,8 @@
           channelCode: [
             {required: true, message: "受理渠道不能为空", trigger: "blur"}
           ],
-          itemCode: [
-            {required: true, message: "服务项目不能为空", trigger: "blur"}
+          'callPerson.name': [
+            {required: true, message: "来电人不能为空", trigger: "blur"}
           ],
           priorityLevel: [
             {required: true, message: "优先级不能为空", trigger: "blur"}

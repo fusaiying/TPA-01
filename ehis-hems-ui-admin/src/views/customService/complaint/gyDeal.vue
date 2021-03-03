@@ -751,7 +751,8 @@
           policyItemNo:"",
           status:"",
           pageNum: 1,
-          pageSize: 10
+          pageSize: 10,
+          businessType:""
         },
         loading: true,
         //数据反显用
@@ -790,6 +791,7 @@
       }
     },
     created() {
+      this.queryParams.businessType=this.$route.query.businessType;
       this.queryParams.workOrderNo=this.$route.query.workOrderNo;
       this.queryParams.policyNo=this.$route.query.policyNo;
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
@@ -829,8 +831,8 @@
       },
       //反显信息需求
       searchHandle() {
-        let workOrderNo=this.queryParams.workOrderNo
-        complainSearch(workOrderNo).then(res => {
+        let query=this.queryParams
+        complainSearch(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面反显数据",res.data)
             this.workPoolData = res.data

@@ -75,11 +75,12 @@ export function modifyComplaintSubmit(data) {
 //---------------------------根因改善页面查询
 export function complainSearchServer(query) {
   return request({
-    url: '/cs/info3/selectComplaintWorkOrder',
+    url: '/cs/info3/selectDealVo',
     method: 'get',
     params: query
   })
 }
+
 
 //----------------------------------挂起解卦
 

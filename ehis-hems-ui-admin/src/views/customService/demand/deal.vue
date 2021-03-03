@@ -191,7 +191,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
 
         <span style="color: blue">信息需求-理赔类</span>
@@ -444,7 +444,7 @@
     </el-card>
 
     <el-card>
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="100px"
+        <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;" label-width="100px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
           <div style="text-align: right; margin-right: 8px;">
@@ -455,7 +455,7 @@
        <el-row>
         <el-col :span="8">
         <el-form-item label="业务处理情况：" prop="businessProcess" >
-          <el-radio-group v-model="ruleForm.businessProcess">
+          <el-radio-group v-model="ruleForm.businessProcess" @change="isBusinessProcess(ruleForm.businessProcess)">
             <el-radio   label="01">成功</el-radio>
             <el-radio   label="02">响应</el-radio>
           </el-radio-group>
@@ -473,12 +473,7 @@
         </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="客户反馈" prop="customerFeedback" >
-<!--              <el-radio-group v-model="ruleForm.customerFeedback">-->
-<!--                <el-radio   :label="1">满意</el-radio>-->
-<!--                <el-radio   :label="2">接受</el-radio>-->
-<!--                <el-radio   :label="3">不接受</el-radio>-->
-<!--              </el-radio-group>-->
+            <el-form-item label="客户反馈：" prop="customerFeedback" >
               <el-radio-group v-model="ruleForm.customerFeedback">
                 <el-radio
                   v-for="dict in cs_feedback_type"
@@ -493,7 +488,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="结案类型：" prop="closeType">
-                <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0">
+                <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right" :min="0" @change="isCloseType(ruleForm.closeType)">
                   <el-option v-for="item in cs_end_case" :key="item.dictValue" :label="item.dictLabel"
                              :value="item.dictValue"/>
                 </el-select>
@@ -501,12 +496,13 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-form-item label="安抚或通融发生费用成本：" prop="costsIncurred">
+            <el-form-item label="安抚或通融发生费用成本：" prop="costsIncurred" v-if="ruleForm.closeType!='01'">
               <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="不超过500字符："
-                v-model="ruleForm.costsIncurred">
+                v-model="ruleForm.costsIncurred"
+              >
               </el-input>
             </el-form-item>
           </el-row>
@@ -544,10 +540,10 @@
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button  type="primary"  size="mini" @click="transfer">转办</el-button>
-        <el-button  type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button  type="primary"  size="mini" @click="upload">保单信息查询</el-button>
-        <el-button  type="primary" size="mini" @click="temporary">暂存</el-button>
+        <el-button  type="primary"  size="mini" @click="transfer" :disabled="ruleForm.businessProcess=='02'">转办</el-button>
+        <el-button  type="primary" size="mini" @click="coOrganizer" :disabled="ruleForm.businessProcess=='02'">协办</el-button>
+        <el-button  type="primary"  size="mini" @click="upload" disabled>保单信息查询</el-button>
+        <el-button  type="primary" size="mini" @click="temporary" :disabled="ruleForm.businessProcess=='02'">暂存</el-button>
         <el-button type="primary" size="mini" @click="submit">提交</el-button>
       </div>
     </el-card>
@@ -591,8 +587,62 @@
       }
     },
     data() {
+      // 表单校验
+      const isRule={
+        businessProcess: [
+          {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+        ],
+          remark: [
+          {required: true, message: "处理说明不能为空", trigger: "blur"},
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+
+        ],
+          customerFeedback: [
+          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+        ],
+          closeType: [
+          {required: true, message: "结案类型不能为空", trigger: "blur"}
+        ],
+          costsIncurred: [
+          {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"},
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+
+        ],
+
+      };
+      const isCloseType={
+        businessProcess: [
+          {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+        ],
+        remark: [
+          {required: true, message: "处理说明不能为空", trigger: "blur"},
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+
+        ],
+        customerFeedback: [
+          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+        ],
+        closeType: [
+          {required: true, message: "结案类型不能为空", trigger: "blur"}
+        ],
+      };
+      // 表单校验
+     const noRules ={
+        businessProcess: [
+          {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+        ],
+      };
+
 
       return {
+
+        rules1: isRule,
+        rules2: noRules,
+        rules3:isCloseType,
+
+        changeForm: {
+          rules: isRule
+        },//用来区分是否响应
         ids:[],//多选框
         //流转用
         flowLogData:[],
@@ -606,32 +656,14 @@
         //需要填入数据的部分
         ruleForm:{
           workOrderNo:"",
-          businessProcess:"",
+          businessProcess:"01",
           remark:"",
-          customerFeedback:"",
+          customerFeedback:"01",
           closeType:"",
           costsIncurred:"",
           sign:""
         },
-        // 表单校验
-        rules: {
-          businessProcess: [
-            {required: true, message: "业务处理情况不能为空", trigger: "blur"}
-          ],
-          remark: [
-            {required: true, message: "处理说明不能为空", trigger: "blur"}
-          ],
-          customerFeedback: [
-            {required: true, message: "客户反馈不能为空", trigger: "blur"}
-          ],
-          closeType: [
-            {required: true, message: "结案类型不能为空", trigger: "blur"}
-          ],
-          costsIncurred: [
-            {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"}
-          ],
 
-        },
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
@@ -754,6 +786,28 @@
 
     },
     methods: {
+      //是否响应
+      isBusinessProcess(s){
+        if (s == "01") {
+          this.changeForm.rules = this.rules1
+        } else {
+          this.changeForm.rules = this.rules2
+          this.$refs.ruleForm.clearValidate()
+        }
+
+      },
+      //结案类型是否正常
+      isCloseType(s){
+        if (this.ruleForm.businessProcess=='01'){
+          if (s == "01") {
+            this.changeForm.rules = this.rules3
+          } else {
+            this.changeForm.rules = this.rules1
+            this.$refs.ruleForm.clearValidate()
+          }
+        }
+
+      },
       //新增按钮
       add(){
         let addQueryParams=this.ruleForm

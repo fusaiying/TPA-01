@@ -442,8 +442,8 @@
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因：" prop="cancelReason" >
-            <el-radio-group v-model="submitForm.cancelReason">
+          <el-form-item label="取消原因：" prop="editReason" >
+            <el-radio-group v-model="submitForm.editReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
               <el-radio   label="3">其他原因</el-radio>
@@ -506,13 +506,13 @@
         workOrderNo:"",
         //需要填入数据的部分
         ruleForm:{
-          cancelReason:"",
+          editReason:"",
           editRemark:"",
           workOrderNo:"",
 
         },
         submitForm:{
-          cancelReason:"",
+          editReason:"",
           editRemark:"",
           workOrderNo:"",
         },
@@ -567,11 +567,12 @@
         changeSerchData: {},
         states: [],
         rules: {
-          cancelReason:[
+          editReason:[
             {required: true, message: "取消原因不能为空", trigger: "blur"}
           ],
           editRemark: [
-            {required: true, message: "处理说明不能为空", trigger: "blur"}
+            {required: true, message: "处理说明不能为空", trigger: "blur"},
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
           ],
         },
         sysUserOptions: [],
@@ -618,7 +619,9 @@
             }).catch(res => {
 
             })}else {
-            return false;
+            return this.$message.warning(
+              "请检查输入信息格式！"
+            )
           }
 
         })

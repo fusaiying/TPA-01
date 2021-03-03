@@ -519,12 +519,12 @@
 
 
     <el-card>
-      <el-form :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"
+               label-position="right" size="mini" :rules="rules">
         <span style="color: blue" >取消处理</span>
         <el-divider style="color: blue" ></el-divider>
         <el-row>
-          <el-form-item label="取消原因：" >
+          <el-form-item label="取消原因：" prop="editReason">
             <el-radio-group v-model="ruleForm.editReason">
               <el-radio   label="1">客户申请变动</el-radio>
               <el-radio   label="2">操作失误</el-radio>
@@ -534,7 +534,7 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="取消说明：">
+          <el-form-item label="取消说明：" prop="editRemark">
             <el-input
               type="textarea"
               :rows="2"
@@ -585,7 +585,7 @@
         workOrderNo:"",
         //需要填入数据的部分
         ruleForm:{
-          cancelReason:"",
+          editReason:"",
           editRemark:"",
           workOrderNo:"",
 
@@ -634,9 +634,16 @@
           callPerson: {},
           complainantPerson:{},
           insurer:{},
-        }
-
-        ,
+        },
+        rules: {
+          editReason:[
+            {required: true, message: "取消原因不能为空", trigger: "blur"}
+          ],
+          editRemark: [
+            {required: true, message: "处理说明不能为空", trigger: "blur"},
+            { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+          ],
+        },
         isinit: 'Y',
         totalCount: 0,
         changeSerchData: {},
@@ -655,6 +662,7 @@
           dictLabel: '服务4'
         }],
         sysUserOptions: [],
+
       }
     },
     created() {
@@ -677,20 +685,30 @@
       download(){},
       //提交页面数据
       submit(){
-        let insert=this.ruleForm
-        insert.workOrderNo=this.$route.query.workOrderNo
-        complaintCancelSubmit(insert).then(res => {
-          if (res != null && res.code === 200) {
-            this.$message.success("保存成功")
-            if (res.rows.length <= 0) {
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            let insert = this.ruleForm
+            insert.workOrderNo = this.$route.query.workOrderNo
+            complaintCancelSubmit(insert).then(res => {
+              if (res != null && res.code === 200) {
+                this.$message.success("保存成功")
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "失败！"
+                  )
+                }
+              }
+            }).catch(res => {
+
+            })
+          }else {
               return this.$message.warning(
-                "失败！"
+                "请检查输入信息格式！"
               )
             }
-          }
-        }).catch(res => {
 
-        })
+          })
+
       },
       resetForm() {
         this.$refs.sendForm.resetFields()

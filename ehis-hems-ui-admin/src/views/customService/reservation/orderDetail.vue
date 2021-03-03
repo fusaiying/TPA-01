@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>

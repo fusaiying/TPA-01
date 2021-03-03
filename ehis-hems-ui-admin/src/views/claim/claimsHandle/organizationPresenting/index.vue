@@ -380,6 +380,9 @@
           rptno: this.queryParams.rptno,
           updateBy: this.queryParams.updateBy,
         }
+        if (params.organcode==null || params.organcode=='' || params.organcode==undefined){
+          params.organcode=this.organCode
+        }
         if (this.isinit === 'N') {
           params.pageNum = 1
           params.pageSize = 10

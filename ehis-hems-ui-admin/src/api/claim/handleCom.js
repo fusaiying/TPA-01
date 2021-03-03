@@ -507,3 +507,12 @@ export function getBillSum(data) {
     params:data
   })
 }
+
+// 健康险客户账户查询
+export function getCustomerAccount(data) {
+  return request({
+    url: '/claimflow/payeeAccount/getCustomerAccount',
+    method: 'post',
+    data: data
+  })
+}

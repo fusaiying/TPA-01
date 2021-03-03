@@ -147,7 +147,13 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus("07");
 
-        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoFive(claimCaseDiscussion.getRptNo());
+        Map<String, Object> map = new HashMap<>();
+        map.put("rptNo",claimCaseDiscussion.getRptNo());
+        map.put("status","Y");
+        map.put("operation","31");
+        map.put("historyFlag","N");
+
+        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordInfoByParam(map);
         if(null != record) {
             claimCaseRecord.setOrgRecordId(record.getRecordId());
 
@@ -160,6 +166,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOperation("07");
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);

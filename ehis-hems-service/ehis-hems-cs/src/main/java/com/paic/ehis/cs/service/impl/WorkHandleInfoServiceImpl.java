@@ -559,6 +559,28 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     }
 
 
+    @Override
+    public List<WorkHandleInfo> selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
+        //获取处理时长
+       // workOrderAcceptMapper.selectProcessingTime(serviceProcessingVo.getWorkOrderNo());
+
+        WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+        workHandleInfo.setStatus("Y");
+        workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+        String sourceName="ServiceProcessingVo";
+        String targetTableName="work_handle_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+                VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+                serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
+            }
+        return workHandleInfoMapper.selectWorkHandleInfoList(workHandleInfo);
+    }
+
 
     @Override
     public ComplaintDealVo selectWorkHandleInfoByNo(String workOrderNo) {

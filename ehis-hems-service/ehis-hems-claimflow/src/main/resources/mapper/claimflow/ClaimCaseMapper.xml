@@ -788,7 +788,8 @@
                 ccp.policy_item_no,
                 CASE WHEN (SELECT count(1) FROM claim_case_investigation WHERE rpt_no =  cc.rpt_no ) > 0 THEN '01' ELSE '02' END  investigation ,
                 accept.acc_date,
-                CONCAT(cal.bill_currency,' ',cal.pay_amount) pay_amount ,
+                -- CONCAT(cal.bill_currency,' ',cal.pay_amount) pay_amount ,
+                cal.pay_amount ,
                 cal.pay_conclusion
          FROM claim_batch cb
     LEFT JOIN claim_case cc            ON cb.batch_no = cc.batch_no  AND cc.STATUS = 'Y'

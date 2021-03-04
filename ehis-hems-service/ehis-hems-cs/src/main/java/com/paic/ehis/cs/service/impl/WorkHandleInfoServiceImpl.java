@@ -201,7 +201,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setOperateCode("05");
+
             flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
             flowLog.setMakeBy(SecurityUtils.getUsername());
             flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -215,8 +215,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
+                flowLog.setOperateCode("05");
                 flowLog.setStatus("03");
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
+                flowLog.setOperateCode("14");
                 flowLog.setStatus("02");
             }
             flowLogMapper.insertFlowLog(flowLog);

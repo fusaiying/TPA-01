@@ -133,6 +133,8 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
             ClaimCaseCal claimCaseCal = new ClaimCaseCal();
             claimCaseCal.setRptNo(rptNo);
             claimCaseCal.setPayConclusion(calConclusionVo.getPayConclusion());
+            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
             claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
         }
 

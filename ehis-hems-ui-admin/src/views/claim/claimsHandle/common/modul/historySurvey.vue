@@ -13,108 +13,110 @@
           <el-button type="primary" size="mini" @click="changeDialogVisable">返回</el-button>
         </span>
       </div>
-      <form>
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">调查序号：</span><span class="info_span">{{ surveyInfo.contractNo }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">调查类型 ：</span><span class="info_span">{{ (surveyInfo.servcomNo) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">调查状态：</span><span class="info_span">{{ surveyInfo.contractName }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">调查原因：</span><span class="info_span">{{ (surveyInfo.contractType) }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">交查人：</span><span class="info_span">{{ (surveyInfo.contracttermType) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">交查时间：</span><span class="info_span">{{ (surveyInfo.contractsort) }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-        <el-col :span="8">
-            <span class="info_span to_right">调查项目：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">调查定性：：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">调查定性依据：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">事实与依据：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">结论：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">证明材料及件数：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">主管补充：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-              <span class="info_span to_right">是否有异地调查：</span><span class="info_span">{{ (surveyInfo.bussinessStatus) }}</span>
+      <form  v-for="(item,index) in HistoryData">
+        <div class="div_b" style="margin-bottom: 20px">
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">调查序号：</span><span class="info_span">{{ (index +1)}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span to_right">是否扫描：</span><span class="info_span">{{ surveyInfo.remark }}</span>
+              <span class="info_span to_right">调查类型 ：</span><span class="info_span">{{ (item.invDetailType) }}</span>
             </el-col>
-        </el-row>
+            <el-col :span="8">
+              <span class="info_span to_right">调查状态：</span><span class="info_span">{{ item.invDetailStatus }}</span>
+            </el-col>
+          </el-row>
 
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">查讫时间：</span><span class="info_span">{{ (surveyInfo.bussinessStatus) }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">调查机构：</span><span class="info_span">{{ surveyInfo.remark }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">调查人：</span><span class="info_span">{{ surveyInfo.remark }}</span>
-          </el-col>
-        </el-row>
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">调查原因：</span><span class="info_span">{{ (item.invDetailCause) }}</span>
+            </el-col>
+          </el-row>
 
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">任务退回理由：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">交查人：</span><span class="info_span">{{ (item.invDetailPeople) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">交查时间：</span><span class="info_span">{{ (item.invDetailTime) }}</span>
+            </el-col>
+          </el-row>
 
-        <el-row  style="margin: 0 40px;">
-          <el-col :span="8">
-            <span class="info_span to_right">结果退回理由：</span><span class="info_span">{{ surveyInfo.contractadvance }}</span>
-          </el-col>
-        </el-row>
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">调查项目：</span><span class="info_span">{{ item.invDetailItem }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">调查定性：：</span><span class="info_span">{{ item.invDetailNature }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">调查定性依据：</span><span class="info_span">{{ item.invDetailGist }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">事实与依据：</span><span class="info_span">{{ item.invDetailFace }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">结论：</span><span class="info_span">{{ item.conclusion }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">证明材料及件数：</span><span class="info_span">{{ item.invDetailNum }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">主管补充：</span><span class="info_span">{{ item.invDetailReplenish }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+                <span class="info_span to_right">是否有异地调查：</span><span class="info_span">{{ (item.invDetailSurvey) }}</span>
+              </el-col>
+              <el-col :span="8">
+                <span class="info_span to_right">是否扫描：</span><span class="info_span">{{ item.invDetailScan }}</span>
+              </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">查讫时间：</span><span class="info_span">{{ (item.invDetailAfterTime) }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">调查机构：</span><span class="info_span">{{ item.invDetailOrgan }}</span>
+            </el-col>
+            <el-col :span="8">
+              <span class="info_span to_right">调查人：</span><span class="info_span">{{ item.invDetailAfterPeople }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">任务退回理由：</span><span class="info_span">{{ item.contractadvance }}</span>
+            </el-col>
+          </el-row>
+
+          <el-row style="margin: 0px 10px;">
+            <el-col :span="8">
+              <span class="info_span to_right">结果退回理由：</span><span class="info_span">{{ item.invDetailArgument }}</span>
+            </el-col>
+          </el-row>
+        </div>
       </form>
 
     </el-card>
@@ -129,10 +131,17 @@ let dictss = [{dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'}, {dict
         type: Boolean,
         default: false
       },
+      preSurveyHistoryData : {
+        type: Array,
+        default: []
+      },
     },
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
+      },
+      preSurveyHistoryData: function (newValue) {
+        this.HistoryData = newValue;
       },
     },
     data() {
@@ -146,6 +155,7 @@ let dictss = [{dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'}, {dict
         //提调机构
         initiateOrg:[],
         dialogVisable: false,
+        HistoryData :[],
         surveyInfo: {
 
         },
@@ -197,4 +207,5 @@ let dictss = [{dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'}, {dict
   .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
+  .div_b{border:1px solid #E6EBF5}
 </style>

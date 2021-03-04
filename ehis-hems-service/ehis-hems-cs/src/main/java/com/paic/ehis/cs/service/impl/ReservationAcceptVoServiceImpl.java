@@ -61,15 +61,27 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
             }
             PersonInfo contactsPerson =personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
             if (contactsPerson!= null) {
-                String linePhone=contactsPerson.getLinePhone();
-                String[] linePhone1=linePhone.split("\\-");
-                contactsPerson.setLinePhone1(linePhone1);
-                String homePhone=contactsPerson.getHomePhone();
-                String[] homePhone1=homePhone.split("\\-");
-                contactsPerson.setHomePhone1(homePhone1);
-                String workPhone=contactsPerson.getWorkPhone();
-                String[] workPhone1=workPhone.split("\\-");
-                contactsPerson.setWorkPhone1(workPhone1);
+                String linePhone = contactsPerson.getLinePhone();
+                if (linePhone != null) {
+                    String[] linePhone1 = linePhone.split("\\-");
+                    contactsPerson.setLinePhone1(linePhone1);
+                } else {
+                    contactsPerson.setLinePhone1(new String[4]);
+                }
+                String homePhone = contactsPerson.getHomePhone();
+                if (homePhone != null) {
+                    String[] homePhone1 = homePhone.split("\\-");
+                    contactsPerson.setHomePhone1(homePhone1);
+                } else {
+                    contactsPerson.setHomePhone1(new String[4]);
+                }
+                String workPhone = contactsPerson.getWorkPhone();
+                if (workPhone != null) {
+                    String[] workPhone1 = workPhone.split("\\-");
+                    contactsPerson.setWorkPhone1(workPhone1);
+                } else {
+                    contactsPerson.setWorkPhone1(new String[4]);
+                }
                 reservationAcceptVo.setContactsPerson(contactsPerson);
             } else {
                 reservationAcceptVo.setContactsPerson(new PersonInfo());
@@ -194,6 +206,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         //workOrderAccept.setBusinessType("02");
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -245,8 +258,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
         personInfo2.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
-        personInfo2.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        personInfo2.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+ //        personInfo2.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
+ //       personInfo2.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         personInfo2.setCreatedBy(SecurityUtils.getUsername());
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());

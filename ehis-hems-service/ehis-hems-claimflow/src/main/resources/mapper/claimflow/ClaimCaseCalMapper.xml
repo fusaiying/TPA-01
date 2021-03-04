@@ -92,7 +92,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.cal_amount,
         ccc.refused_amount,
         ccc.debt_amount,
-        ccc.pay_amount,
         ccc.exchange_rate,
         ccc.pay_amount_foreign,
         ccc.refused_reason,

@@ -774,7 +774,8 @@
         LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
         WHERE
         a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
-        and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        and a.operation = #{caseStatus} and a.operator = #{updateBy}
+        <if test="updateDate != null"> and left(a.update_time,10) = #{updateDate}</if>
         <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>

@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBaseIcd10Vo"/>
         where icd_code in
         <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item.icdCode}
+            #{item.icdcode}
         </foreach>
         and status='Y'
     </select>

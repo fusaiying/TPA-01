@@ -8,20 +8,16 @@
         <el-divider></el-divider>
 
         <el-row>
-              <el-form-item label="受理渠道：" prop="channelCode" >
-                <el-radio-group v-model="workPoolData.channelCode">
-                  <el-radio   label="01">电话</el-radio>
-                  <el-radio   label="02">邮箱</el-radio>
-                  <el-radio   label="03">网站</el-radio>
-                  <el-radio   label="04">电话中心</el-radio>
-                  <el-radio   label="05">柜面</el-radio>
-                  <el-radio   label="06">医网</el-radio>
-                  <el-radio   label="07">平安内网</el-radio>
-                  <el-radio   label="08">APP</el-radio>
-                  <el-radio   label="09">寿险</el-radio>
-                  <el-radio   label="10">微信</el-radio>
-                </el-radio-group>
-              </el-form-item>
+          <el-form-item label="受理渠道：" prop="channelCode">
+              <el-radio-group v-model="workPoolData.channelCode">
+                <el-radio
+                  v-for="dict in cs_channel"
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{ dict.dictLabel }}
+                </el-radio>
+              </el-radio-group>
+          </el-form-item>
           </el-row>
         <el-row>
           <el-col :span="8">
@@ -71,10 +67,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人地址：" prop="contactsPerson.address"  >
-              <el-select v-model="workPoolData.contactsPerson.address" class="item-width" >
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+              <el-input v-model="workPoolData.contactsPerson.address" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -115,7 +108,7 @@
         </el-row>
           <el-row >
             <el-col :span="16">
-              <el-form-item label="办公室电话:"  style="white-space: nowrap" >
+              <el-form-item label="家庭电话:"  style="white-space: nowrap" >
                 国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
                 区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
                 号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -125,7 +118,7 @@
           </el-row>
         <el-row>
           <el-col :span="16">
-            <el-form-item label="办公室电话:"  style="white-space: nowrap">
+            <el-form-item label="办公电话:"  style="white-space: nowrap">
               国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
               区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -138,7 +131,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="contactsPerson.language">
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -146,7 +139,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
               <el-select v-model="workPoolData.organCode" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -154,7 +147,7 @@
           <el-col :span="8">
             <el-form-item label="是否已劝解：" prop="contactsSex">
               <el-select v-model="workPoolData.persuasionFlag" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -464,6 +457,7 @@
         cs_organization:[],//出单机构
         cs_sex:[],//性别
         cs_communication_language:[],//语言
+        cs_whether_flag:[],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -581,6 +575,13 @@
       this.getDicts("cs_priority").then(response => {
         this.cs_priority = response.data;
       });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
+      });
+      this.getDicts("cs_whether_flag").then(response => {
+        this.cs_whether_flag = response.data;
+      });
+
       this.searchHandle()
       this.searchFlowLog()
     },
@@ -647,19 +648,19 @@
       searchFlowLog() {
         let workOrderNo=this.queryParams
         workOrderNo.status=""
-        FlowLogSearch(workOrderNo).then(res => {
-          if (res != null && res.code === 200) {
-            this.flowLogData = res.rows
-            this.flowLogCount = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
+        // FlowLogSearch(workOrderNo).then(res => {
+        //   if (res != null && res.code === 200) {
+        //     this.flowLogData = res.rows
+        //     this.flowLogCount = res.total
+        //     if (res.rows.length <= 0) {
+        //       return this.$message.warning(
+        //         "未查询到数据！"
+        //       )
+        //     }
+        //   }
+        // }).catch(res => {
+        //
+        // })
       },
       handleSelectionChange(val) {
         this.dataonLineListSelections = val

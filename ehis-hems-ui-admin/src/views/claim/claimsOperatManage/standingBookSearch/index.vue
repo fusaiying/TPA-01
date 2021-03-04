@@ -166,11 +166,7 @@
             <el-table-column align="center" prop="receivedate" label="接单日期" show-overflow-tooltip/>
             <el-table-column align="center" prop="sendby" label="交件人" width="100" show-overflow-tooltip/>
             <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
-            <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{selectDeptName(sysDeptOptions,scope.row.organcode)}}</span>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="organname" label="机构" width="100" show-overflow-tooltip/>
             <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
             <el-table-column align="center" label="操作" fixed="right">
               <template slot-scope="scope">

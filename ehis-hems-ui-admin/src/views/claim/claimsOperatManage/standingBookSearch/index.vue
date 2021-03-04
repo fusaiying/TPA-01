@@ -315,22 +315,56 @@
 
         data.pageNum = this.queryParams.pageNum
         data.pageSize = this.queryParams.pageSize
-
-        listNew(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.standingForm.tableData = res.rows
-            this.standingForm.tableData.forEach(item => {
-              item.isEdit = true
+        let day=0
+        const getDaysDiffBetweenDates = (dateInitial, dateFinal) =>
+          (dateFinal - dateInitial) / (1000 * 3600 * 24);
+        if (data.receiveStartDate!=null && data.receiveStartDate!='' && data.receiveEndDate!=null && data.receiveEndDate!=''){
+          day=getDaysDiffBetweenDates(new Date(data.receiveStartDate), new Date(data.receiveEndDate));
+        }
+        if (day>90){
+          this.$confirm(`时间跨度过长，是否确认查询?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            listNew(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.standingForm.tableData = res.rows
+                this.standingForm.tableData.forEach(item => {
+                  item.isEdit = true
+                })
+                this.totalCount = res.total
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "未查询到数据！"
+                  )
+                }
+              }
+            }).catch(res => {
             })
-            this.totalCount = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消！'
+            })
+          })
+        }else {
+          listNew(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.standingForm.tableData = res.rows
+              this.standingForm.tableData.forEach(item => {
+                item.isEdit = true
+              })
+              this.totalCount = res.total
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
             }
-          }
-        }).catch(res => {
-        })
+          }).catch(res => {
+          })
+        }
       },
       listExport() {
         this.searchForm.pageNum = 1

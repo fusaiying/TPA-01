@@ -89,6 +89,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
     @Override
     public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO) {
+        acceptDTO.setUpdateBy(SecurityUtils.getUsername());
         List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";

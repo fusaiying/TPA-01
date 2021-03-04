@@ -189,6 +189,7 @@
         <if test="status != null  and status != ''"> and a.status = #{status}</if>
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <if test="updateBy != null  and updateBy != ''"> and a.update_by = #{updateBy}</if>
        <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
         isRedWord DESC,b.priority_level ASC,a.accept_time asc

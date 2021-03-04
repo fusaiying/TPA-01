@@ -176,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.rpt_no = #{rptNo} and ccc.status='Y'
     </select>
 
-    <insert id="insertClaimCaseCal" parameterType="ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">
+    <insert id="insertClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">
         insert into claim_case_cal
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -218,7 +218,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseCal" parameterType="ClaimCaseCal">
+    <update id="updateClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
         update claim_case_cal
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -242,7 +242,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where cal_id = #{calId}
     </update>
 
-    <update id="updateClaimCaseCalByRptNo" parameterType="ClaimCaseCal">
+    <update id="updateClaimCaseCalByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
         update claim_case_cal
         <trim prefix="SET" suffixOverrides=",">
             <if test="billCurrency != null and billCurrency != ''">bill_currency = #{billCurrency},</if>

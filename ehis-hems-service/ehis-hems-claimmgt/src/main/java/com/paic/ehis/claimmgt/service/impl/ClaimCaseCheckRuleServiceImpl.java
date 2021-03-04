@@ -13,6 +13,8 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -108,6 +110,7 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
     }
 
     /** 新增 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseCheckRuleNew(ClaimCaseCheckRuleDTO claimCaseCheckRuleDTO) {
 
@@ -136,6 +139,7 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
     }
 
     /** 修改 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseCheckRuleNew(ClaimCaseCheckRuleDTO claimCaseCheckRuleDTO) {
 
@@ -168,38 +172,6 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
         }
 
         return result;
-        //更改信息
-//        if(claimCaseCheckRuleDTO.getStatus().equals("N")) {
-//            claimCaseCheckRuleDTO.setUpdateBy(SecurityUtils.getUsername());
-//            claimCaseCheckRuleDTO.setUpdateTime(DateUtils.getNowDate());
-//        }
-//        claimCaseCheckRuleMapper.updateClaimCaseCheckRuleNew(claimCaseCheckRuleDTO);
-//
-//        List<ClaimCaseCheckRuleDTO> claimCaseCheckRuleDTOS = claimCaseCheckRuleMapper.selectClaimCaseCheckRuleNew(claimCaseCheckRuleDTO);
-//        //得到前端传的赔付结论
-//        List<String> payConclusion = Arrays.asList(claimCaseCheckRuleDTO.getPayConclusion().split(","));
-//
-//        for (ClaimCaseCheckRuleDTO dto:claimCaseCheckRuleDTOS) {
-//            //通过得到的抽检规则编码去查询ID
-//            List<Long> strings = claimCaseCheckRuleAttrMapper.selectClaimCaseCheckRuleAttrByCheckRuleNoNew(dto.getCheckRuleNo());
-//            //根据ID案件抽检规则属性表，修改数据状态为N
-//            for (Long s: strings) {
-//                ClaimCaseCheckRuleAttr claimCaseCheckRuleAttr = new ClaimCaseCheckRuleAttr();
-//                claimCaseCheckRuleAttr.setAttrId(s);
-//                claimCaseCheckRuleAttr.setStatus("N");
-//                claimCaseCheckRuleAttrMapper.updateClaimCaseCheckRuleAttrNew(claimCaseCheckRuleAttr);
-//                //新增同样数据状态为Y的数据
-//                for (String pc:payConclusion) {
-//                    claimCaseCheckRuleAttr.setCheckRuleNo(claimCaseCheckRuleDTO.getCheckRuleNo());
-//                    claimCaseCheckRuleAttr.setPayConclusion(pc);
-//                    claimCaseCheckRuleAttr.setCreateTime(DateUtils.getNowDate());
-//                    claimCaseCheckRuleAttr.setCreateBy(SecurityUtils.getUsername());
-//                    claimCaseCheckRuleAttr.setStatus("Y");
-//                    claimCaseCheckRuleAttrMapper.insertClaimCaseCheckRuleAttr(claimCaseCheckRuleAttr);
-//                }
-//            }
-//        }
-//        return 0;
     }
 
     /**

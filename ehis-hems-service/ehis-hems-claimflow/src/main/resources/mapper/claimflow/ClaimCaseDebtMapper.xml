@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             claim_case_debt a
             LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.STATUS = 'Y' and b.status = 'Y'
             LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y'
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (select min(treatment_end_date) from claim_case_bill )
             LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
             LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status ='Y'
             LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no  and g.status = 'Y'
@@ -175,11 +175,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             claim_case_debt a
             LEFT JOIN claim_case_debt_col b ON a.debt_id = b.debt_id AND a.status = 'Y' AND b.status = 'Y'
             LEFT JOIN claim_case_insured c ON c.rpt_no = a.rpt_no and c.status = 'Y'
-            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y'
+            LEFT JOIN claim_case_bill d ON d.rpt_no = a.rpt_no and d.status = 'Y' and d.treatment_end_date in (select min(treatment_end_date) from claim_case_bill )
             LEFT JOIN claim_case f ON f.rpt_no = a.rpt_no and f.status = 'Y'
             LEFT JOIN claim_batch e ON e.batch_no = f.batch_no and e.status = 'Y'
             LEFT JOIN claim_debt_whitelist g ON g.insured_no = a.insured_no and g.status = 'Y'
-            LEFT JOIN claim_case_policy h ON h.rpt_no = a.rpt_no and h.status = 'Y'
         <where>
             f.case_status = '99'
             <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>

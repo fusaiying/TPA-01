@@ -2387,8 +2387,14 @@
       save() {
         this.$refs.serverForm.validate((valid) => {
           if (valid) {
-
             let listDta = this.serverForm.serverInfo;
+            if(listDta.length === 0) {
+              this.$message({
+                message: '请至少添加一条供应商服务项目！',
+                type: 'warning'
+              });
+              return false;
+            }
             addContractServer(listDta).then(response => {
               // console.log(response)
               if(response.code == '200') {

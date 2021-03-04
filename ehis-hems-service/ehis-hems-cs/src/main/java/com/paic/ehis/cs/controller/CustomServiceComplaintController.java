@@ -12,6 +12,7 @@ import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.Level3;
 import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
@@ -146,5 +147,29 @@ public class CustomServiceComplaintController extends BaseController {
     {
         WorkOrderAccept list =iWorkOrderAcceptService.selectHangFlag(workOrderAccept);
         return AjaxResult.success(list);
+    }
+
+
+    /**
+     * 获取一级投诉原因的信息
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/selectLevel1")
+    public List<Level3> selectLevel1()
+    {
+        List<Level3> list = iComplaintAcceptVoService.selectLevel1();
+        return list;
+    }
+
+
+    /**
+     * 获取二三级投诉原因的信息
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/selectLevel2")
+    public List<Level3> selectLevel2(String parentCode)
+    {
+        List<Level3> list = iComplaintAcceptVoService.selectLevel2(parentCode);
+        return list;
     }
 }

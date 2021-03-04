@@ -452,6 +452,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="handleProp29 != null">handle_prop29 = #{handleProp29},</if>
             <if test="handleProp30 != null">handle_prop30 = #{handleProp30},</if>
         </trim>
-        where created_by=#{createdBy}
+        where created_by=#{createdBy}    and work_order_no=#{workOrderNo}
     </update>
 </mapper>

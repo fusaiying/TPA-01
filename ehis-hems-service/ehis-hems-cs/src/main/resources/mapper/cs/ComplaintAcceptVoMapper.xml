@@ -403,4 +403,16 @@ WHERE
         update work_order_accept set status = '05'
         where  work_order_no = #{workOrderNo}
     </update>
+    <select id="selectLevel1" resultType="com.paic.ehis.cs.domain.vo.Level3">
+        select code,code_name from code_dict where code_type = "cs_reason_level1"
+    </select>
+
+    <select id="selectLevel2" parameterType="string" resultType="com.paic.ehis.cs.domain.vo.Level3">
+        select code,code_name from code_dict where parent_code = #{parentCode}
+    </select>
+
+    <select id="selectAllByLevelType" parameterType="string" resultType="com.paic.ehis.cs.domain.CodeDict">
+        select code, code_name, parent_code, code_type from code_dict
+        where code_type = #{code_type,jdbcType=VARCHAR}
+    </select>
 </mapper>

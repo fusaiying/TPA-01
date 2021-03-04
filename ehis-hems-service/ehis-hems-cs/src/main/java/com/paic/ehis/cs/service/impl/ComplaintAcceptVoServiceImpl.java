@@ -6,10 +6,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
-import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
-import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.ReservationDealVo;
+import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
@@ -138,6 +135,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         //工单表插入
         workOrderAccept.setStatus("01");
+        workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -177,6 +175,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //插入来电人
         personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
         personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
+        personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
@@ -186,8 +185,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
         personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(complaintAcceptVo.getContactsPerson().getName());
-        personInfo2.setLanguage(complaintAcceptVo.getContactsLanguage());
-        personInfo2.setMobilePhone(complaintAcceptVo.getContactsMobilePhone());
+        personInfo2.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
+        personInfo2.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
+        personInfo2.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
         //personInfo2.setLinePhone(complaintAcceptVo.getContactsCountry()+"-"+complaintAcceptVo.getContactsQuhao()+"-"+complaintAcceptVo.getContactsNumber()+"-"+complaintAcceptVo.getContactsSecondNumber());
         if(complaintAcceptVo.getContactsPerson().getHomePhone1().length>3) {
             personInfo2.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
@@ -202,12 +202,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complaintAcceptVoMapper.insertPersonInfo(personInfo2);
         //插入投诉人
         personInfo3.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        personInfo3.setIdentity(complaintAcceptVo.getComplainantPerson().getIdentity());
         personInfo3.setSex(complaintAcceptVo.getComplainantPerson().getSex());
         personInfo3.setName(complaintAcceptVo.getComplainantPerson().getName());
         personInfo3.setLanguage(complaintAcceptVo.getContactsLanguage());
         personInfo3.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
-       // personInfo3.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
-      //  personInfo3.setWorkPhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getCallPerson().getLinePhone1()[0]);
         personInfo3.setCreatedBy(SecurityUtils.getUsername());
         personInfo3.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo3.setUpdatedBy(SecurityUtils.getUsername());
@@ -484,7 +483,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
 
-            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+           // workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -699,6 +698,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             return workHandleInfoMapper.assistInComplaint(workHandleInfo2);
         }
     }
+
+
         /*else {
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
@@ -738,4 +739,42 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 */
 
 
+    @Override
+    public List<ComplaintsCascade> selectComplaintsCascadeList() {
+        List level1 =new ArrayList<ComplaintsCascade>();
+        List level2 =new ArrayList<Level2>();
+        //获取一级投诉分类
+        List<Level3> level1s=complaintAcceptVoMapper.selectLevel1();
+        for(Level3 l :level1s) {
+            ComplaintsCascade adress = new ComplaintsCascade();
+            adress.setLevel1code(l.getCode());
+            adress.setLevel1name(l.getCodeNmae());
+            List<Level3> level2s = complaintAcceptVoMapper.selectLevel2(l.getCode());
+            for (Level3 city : level2s) {
+                Level2 level2Info = new Level2();
+                level2Info.setLevel2code(city.getCode());
+                level2Info.setLevel2name(city.getCodeNmae());
+                List<Level3> level3 = complaintAcceptVoMapper.selectLevel2(city.getCode());
+                level2Info.setLevel3(level3);
+                level2.add(level2Info);
+            }
+            adress.setLevel2(level2);
+            level1.add(adress);
+        }
+        return level1;
+    }
+
+
+    @Override
+    public List<Level3> selectLevel1()
+    {
+        return complaintAcceptVoMapper.selectLevel1();
+    }
+
+
+    @Override
+    public List<Level3> selectLevel2(String parentCode)
+    {
+        return complaintAcceptVoMapper.selectLevel2(parentCode);
+    }
     }

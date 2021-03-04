@@ -83,4 +83,12 @@ public interface IBaseIcd10Service
      * @return
      */
     public List<BaseIcd10> selectIcdFuzzy(BaseIcd10 baseIcd10);
+
+    /**
+     * 查询ICD信息
+     *
+     * @param icd10List
+     * @return
+     */
+    public List<BaseIcd10> selectICDList(List<BaseIcd10> icd10List);
 }

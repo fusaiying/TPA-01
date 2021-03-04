@@ -8,6 +8,8 @@ import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
@@ -147,6 +149,7 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
      * @param claimBatch 理赔批次
      * @return 结果
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimBatch(ClaimBatch claimBatch) {
         claimBatch.setCreateTime(DateUtils.getNowDate());

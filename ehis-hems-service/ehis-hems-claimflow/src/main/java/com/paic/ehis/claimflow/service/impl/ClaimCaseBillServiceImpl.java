@@ -335,7 +335,9 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         claimCaseDTO.setCaseStatus("06");
         claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
         claimCaseDTO.setStatus("Y");
-        claimCaseDTO.setUpdateDate(PubFun.getCurrentDate());
+        if ("".equals(claimCaseDTO.getRptNo()) && "".equals(claimCaseDTO.getBatchNo()) && "".equals(claimCaseDTO.getName())) {
+            claimCaseDTO.setUpdateDate(PubFun.getCurrentDate());
+        }
         // 获取批次号、报案号、案件状态、被保人姓名、提交用户
         List<BillAccomplishVo> accomplishList = claimCaseMapper.selectBillAccomplish(claimCaseDTO);
         // 获取是否调查、出单公司、承保机构

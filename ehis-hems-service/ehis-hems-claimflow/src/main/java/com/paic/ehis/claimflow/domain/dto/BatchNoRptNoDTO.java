@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.domain.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,55 +13,53 @@ import java.util.Date;
 public class BatchNoRptNoDTO{
 
     /**
-     * 交单来源
-     */
-    //private String source;
-
-    /**
      * 就诊医院ID
      */
+    @NotNull
     private String provider;
-
-    /**
-     * 批次理赔类型
-     */
-    //private String claimType;
 
     /**
      * 交单日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date billDate;
 
     /**
      * 案件数量
      */
+    @NotNull
     private String batchCount;
 
     /**
      * 批次总金额
      */
+    @NotNull
     private String batchAmount;
 
     /**
      * 交单机构编码
      */
+    @NotNull
     private String branchRegion;
 
     /**
      * 是否收到发票
      */
+    @NotNull
     private String isReceiptSubmit;
 
     /**
      * 收单日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private Date receiveDate;
 
     /**
      * 批次是否单张发票
      */
+    @NotNull
     private String directReceiptSign;
 
     /**

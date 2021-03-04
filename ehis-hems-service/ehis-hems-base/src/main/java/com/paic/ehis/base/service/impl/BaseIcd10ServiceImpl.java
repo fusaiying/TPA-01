@@ -142,4 +142,15 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
         baseIcd10.setStatus("Y");
         return baseIcd10Mapper.selectIcdFuzzy(baseIcd10);
     }
+
+    /**
+     * 查询批量ICD信息
+     *
+     * @param icd10List
+     * @return
+     */
+    @Override
+    public List<BaseIcd10> selectICDList(List<BaseIcd10> icd10List) {
+        return baseIcd10Mapper.selectICDList(icd10List);
+    }
 }

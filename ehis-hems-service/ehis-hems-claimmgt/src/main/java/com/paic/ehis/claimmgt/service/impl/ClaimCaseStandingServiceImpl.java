@@ -56,7 +56,6 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
     }
 
     /**
-     * @param batchno
      * @return java.util.List<com.paic.ehis.claimmgt.domain.ClaimCaseStanding>
      * @author 硠君
      * @Description 通过批次号查询报案台账信息
@@ -99,7 +98,7 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
         List<ClaimCaseStandingVo1> claimCaseStandingVos = claimCaseStandingMapper.selectClaimCaseStandingListNew(claimCaseStandingDTO);
         if(!claimCaseStandingVos.isEmpty()){
             for(ClaimCaseStandingVo1 claimCaseStandingVo1 :claimCaseStandingVos){
-                claimCaseStandingVo1.setCompanyName(claimCaseStandingMapper.selectCompanyName(claimCaseStandingVo1.getRptno()));
+                claimCaseStandingVo1.setCompanyName(claimCaseStandingMapper.selectCompanyName(claimCaseStandingVo1.getName()));
                 claimCaseStandingVo1.setClaimmaterialList(Arrays.asList((claimCaseStandingVo1.getClaimmaterials().split(","))));
             }
         }

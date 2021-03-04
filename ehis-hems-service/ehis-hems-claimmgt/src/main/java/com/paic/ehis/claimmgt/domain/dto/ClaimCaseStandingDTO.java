@@ -47,7 +47,7 @@ public class ClaimCaseStandingDTO extends BaseEntity {
     /**
      * 交单机构编码
      */
-    @Excel(name = "交单机构编码")
+    @Excel(name = "交单机构")
     private String organcode;
 
     /** 创建者 */

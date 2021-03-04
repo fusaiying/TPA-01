@@ -30,6 +30,7 @@
         <result property="channelCode" column="channel_code"/>
         <result property="priorityLevel" column="priority_level"/>
         <result property="content" column="content"/>
+        <result property="itemCode" column="item_code"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">

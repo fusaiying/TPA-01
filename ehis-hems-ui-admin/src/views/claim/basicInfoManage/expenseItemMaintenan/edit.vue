@@ -20,13 +20,13 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="费用项编码：" prop="feeitemcode">
-              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" maxlength="20" show-word-limit class="item-width" clearable
+              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" maxlength="20" clearable class="item-width"
                         size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="费用项中文名称：" prop="feeitemname">
-              <el-input v-model="baseForm.feeitemname" class="item-width" clearable maxlength="50" show-word-limit size="mini" placeholder="请输入"
+              <el-input v-model="baseForm.feeitemname" class="item-width" clearable maxlength="50" size="mini" placeholder="请输入"
               />
             </el-form-item>
           </el-col>

@@ -65,6 +65,7 @@ public class DebtInfoVO implements Serializable {
     private BigDecimal residualAmount;
 
     /** 结案日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结案日期")
     private Date endCaseTime;
 

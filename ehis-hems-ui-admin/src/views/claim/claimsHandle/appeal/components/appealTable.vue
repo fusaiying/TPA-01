@@ -18,9 +18,11 @@
     <el-table-column align="center" prop="createBy" label="申诉状态" show-overflow-tooltip/>
     <el-table-column align="center" prop="createBy" label="操作日期" show-overflow-tooltip/>
     <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
-    <el-table-column align="center"  v-if="status === '03'" prop="monitoringTime" label="修正理赔号" show-overflow-tooltip/>-->
+    <el-table-column align="center"  v-if="status === '02'" prop="monitoringTime" label="修正理赔号" show-overflow-tooltip/>-->
     <el-table-column align="center" label="操作">
       <template slot-scope="scope">
+        <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'1')">发起 </el-button>
+        <el-button  v-if="status === '03'" size="mini"  type="text" @click="handleFun(scope.row,'1')">处理 </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -54,6 +56,9 @@ export default {
     }
   },
   methods: {
+    handleFun(row,type) {
+
+    },
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)
     },

@@ -51,3 +51,14 @@ export function historyDisInfo(rptNo) {
   })
 }
 
+
+// 查询 历史调查信息
+export function historySurInfo(query) {
+  return request({
+    url:  '/claimflow/detail/listByRptNo/' ,
+    method: 'get',
+    params: query
+  })
+}
+
+

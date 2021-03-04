@@ -103,6 +103,7 @@
           name: '',
           orderByColumn: '',
           isAsc: '',
+          flag:''
         },
       }
     },
@@ -118,6 +119,7 @@
 
       })
       //已处理
+      this.searchForm.flag='0'
       accomplishList(this.searchForm).then(res => {
         if (res != null && res.code === 200) {
           this.completedTableData = res.rows
@@ -139,6 +141,7 @@
           this.searchForm.pageSize=this.backSize
           this.searchForm.orderByColumn=this.$refs.claimsTable1.prop
           this.searchForm.isAsc=this.$refs.claimsTable1.order
+          this.searchForm.flag='1'
           processingList(this.searchForm).then(res => {
             if (res != null && res.code === 200) {
               this.pendingTableData = res.rows

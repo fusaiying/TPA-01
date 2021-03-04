@@ -633,6 +633,10 @@
         // });
       },
       updateOperator() {
+        if(this.checkArra.length === 0) {
+          this.dialogVisible = false;
+          return false;
+        }
         const params = {
           rptNo: this.checkArra,
           operator: this.operatorForm.operator

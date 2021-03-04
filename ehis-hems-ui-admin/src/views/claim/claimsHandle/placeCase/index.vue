@@ -165,14 +165,14 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
+    <case-list @goInitData="initData" :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>
 
 <script>
 
-   import {getUserInfo, getOrganList,getUsersByOrganCode,} from '@/api/claim/standingBookSearch'
+   import {getUserInfo, getOrganList,} from '@/api/claim/standingBookSearch'
    import caseList from './components/caseList'
    import moment from 'moment'
    import {getDepts, caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
@@ -325,8 +325,8 @@
             createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
           }
           const params = {
-            pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
-            pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
+            pageNum : this.pageInfo.currentPage,
+            pageSize : this.pageInfo.pageSize,
             deptCode:this.form.deptCode ,
             claimType:this.form.claimType ,
             batchNo: this.form.batchNo ,
@@ -342,12 +342,11 @@
             getUserInfo().then(response => {
               if(response.data.deptId) {
                 this.loading = true;
-                params.deptCode = response.data.deptId.toString();
+                params.deptCode = response.data.organCode.toString();
                 caseFilingList(params).then(response => {
                   this.totalNum = response.total;
                   this.tableData = response.rows;
                   this.loading = false;
-                  this.searchBtn = false;
                 }).catch(error => {
                   this.loading = true;
                   console.log(error);
@@ -360,7 +359,6 @@
               this.totalNum = response.total;
               this.tableData = response.rows;
               this.loading = false;
-              this.searchBtn = false;
             }).catch(error => {
               this.loading = true;
               console.log(error);
@@ -369,6 +367,8 @@
         },
         searchByFormParms(){
           this.searchBtn = true;
+          this.pageInfo.currentPage = 1;
+          this.pageInfo.pageSize = 10;
           this.gettableData();
         },
         addRecovery(row,type) {
@@ -400,8 +400,6 @@
         },
         saveInfo(){
          let params = this.pbaceCaseForm;
-
-
           this.$refs.pbaceCaseForm.validate((valid) => {
             if (valid) {
               if(this.read) {  // 更新
@@ -477,26 +475,32 @@
 
         },
         getDepts() {
-          let query = {
-            deptName: ''
-          };
-          getDepts(query).then(response => {
-
-            if(response.data) {
-              for(let i=0; i<response.data.length; i++) {
-                let obj= new Object();
-                obj.dictLabel = response.data[i].deptName;
-                obj.dictValue = response.data[i].deptId.toString();
-                this.sysDepts.push(obj);
+          getUserInfo().then(res => {
+            if (res != null && res.code === 200) {
+              this.form.deptCode = res.data.organCode;
+              this.pbaceCaseForm.deptCode = res.data.organCode;
+              let item = {
+                organCode: '',
+                pageNum: 1,
+                pageSize: 200,
               }
+              if (res.data != null) {
+                item.organCode = res.data.organCode
+              }
+              getOrganList(item).then(response => {
+                if (response != null && response.code === 200) {
+                  if(response.rows) {
+                      for(let i=0; i<response.rows.length; i++) {
+                        let obj= new Object();
+                        obj.dictLabel = response.rows[i].organName;
+                        obj.dictValue = response.rows[i].organCode.toString();
+                        this.sysDepts.push(obj);
+                      }
+                    }
+                }
+              }).catch(res => {
+              })
             }
-            //当前登陆人部门 getUserInfo
-            getUserInfo().then(response => {
-              if(response.code == '200' && response.data) {
-                this.form.deptCode = response.data.deptId.toString();
-                this.pbaceCaseForm.deptCode  = response.data.deptId.toString();
-              }
-            })
           })
         },
         closeDialog(){

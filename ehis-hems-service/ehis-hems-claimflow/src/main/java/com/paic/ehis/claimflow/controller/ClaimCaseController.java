@@ -384,9 +384,10 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentOver")
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
+        auditWorkPoolDTO.setFlag(true);
         TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
-        ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
+        ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理理算案件");
     }
 
@@ -401,6 +402,7 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn("updateTime");
             auditWorkPoolDTO.setIsAsc("desc");
         }
+        auditWorkPoolDTO.setFlag(false);
        // startPage(auditWorkPoolDTO);
         return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }
@@ -410,8 +412,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentHang")
     public void exportConditionsForTheAdjustmentHang(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
-        ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "悬挂中理算案件");
     }
 
@@ -423,7 +425,7 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
         return getDataTable(conditionsForTheAdjustmentVoS);
     }
 /********************************************/
@@ -611,13 +613,15 @@ public class ClaimCaseController extends BaseController {
         //报案号-取三四位
         String substring1 = branchRegion.substring(2, 4);
 
+        String caseFlag = batchNoRptNoDTO.getCaseFlag();
+
         if (i1 > 0) {
             BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
             List<String> rptNoList = new ArrayList<>();
 
             for (int i = 0; i < i1; i++) {
                 //报案号
-                String bahtime = "96" + substring1 + "0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+                String bahtime = "96" + substring1 + caseFlag +"X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
                 rptNoList.add(bahtime);
             }
 

@@ -17,6 +17,8 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,6 +76,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
      * @param claimCaseFiling 案件归档
      * @return 结果
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseFiling(ClaimCaseFiling claimCaseFiling)
     {
@@ -93,6 +96,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
      * @param claimCaseFiling 案件归档
      * @return 结果
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFiling(ClaimCaseFiling claimCaseFiling)
     {
@@ -166,6 +170,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     }
 
     /** 改变是否销毁状态 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingDestroy(ClaimCaseFilingListVO claimCaseFilingListVO) {
         claimCaseFilingListVO.setStatus("N");
@@ -173,6 +178,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     }
 
     /** 编辑按钮 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO claimCaseFilingListVO) {
 
@@ -232,6 +238,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     }
 
     /** 保存案件归档详细信息 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingInfo(List<ClaimCaseFilingInformationVO> claimCaseFilingInformationVO) {
 

@@ -130,6 +130,14 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
             if ("05".equals(calConclusionVo.getPayConclusion()) || "10".equals(calConclusionVo.getPayConclusion())){
                 calConclusionVo.setCalAmount(new BigDecimal(String.valueOf(0)));
             }
+            if (StringUtils.isNotEmpty(calConclusionVo.getPayConclusion())) {
+                ClaimCaseCal claimCaseCal = new ClaimCaseCal();
+                claimCaseCal.setRptNo(rptNo);
+                claimCaseCal.setPayConclusion(calConclusionVo.getPayConclusion());
+                claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+                claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+            }
         }
 
         return calConclusionVo;

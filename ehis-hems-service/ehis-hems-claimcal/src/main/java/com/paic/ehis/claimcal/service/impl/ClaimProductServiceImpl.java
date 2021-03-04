@@ -160,6 +160,7 @@ public class ClaimProductServiceImpl implements IClaimProductService
     }
 
     /**修改任务改派操作人*/
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public void UpdateClaimProductDTO(UpdateClaimProductDTO updateClaimProductDTO)
     {

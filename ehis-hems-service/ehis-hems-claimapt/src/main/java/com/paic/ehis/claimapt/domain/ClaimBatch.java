@@ -140,6 +140,25 @@ public class ClaimBatch extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
     private String status;
 
+    private String directReceiptSign;
+    private String caseFlag;
+
+    public String getDirectReceiptSign() {
+        return directReceiptSign;
+    }
+
+    public void setDirectReceiptSign(String directReceiptSign) {
+        this.directReceiptSign = directReceiptSign;
+    }
+
+    public String getCaseFlag() {
+        return caseFlag;
+    }
+
+    public void setCaseFlag(String caseFlag) {
+        this.caseFlag = caseFlag;
+    }
+
     public String getBatchno() {
         return batchno;
     }
@@ -328,6 +347,8 @@ public class ClaimBatch extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("directReceiptSign", getDirectReceiptSign())
+                .append("caseFlag", getCaseFlag())
                 .toString();
     }
 }

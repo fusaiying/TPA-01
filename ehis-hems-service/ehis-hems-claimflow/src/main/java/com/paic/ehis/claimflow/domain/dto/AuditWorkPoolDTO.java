@@ -28,6 +28,8 @@ public class AuditWorkPoolDTO extends BaseEntity {
 
     /** 操作结束时间 */
     private Date updateEndTime;
+    /*审核处理池中是否为导出接口*/
+    private Boolean flag;
 
     @Override
     public String toString() {
@@ -38,6 +40,7 @@ public class AuditWorkPoolDTO extends BaseEntity {
                 ", operator='" + operator + '\'' +
                 ", updateStartTime=" + updateStartTime +
                 ", updateEndTime=" + updateEndTime +
+                ", flag=" + flag +
                 '}';
     }
 }

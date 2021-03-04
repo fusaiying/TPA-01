@@ -297,4 +297,9 @@
             and status='Y'
         </where>
     </update>
+
+    <select id="selectClaimCaseRecordInfoByParam" parameterType="map" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = #{operation} and status =  #{status} and  history_flag =  #{historyFlag}
+    </select>
 </mapper>

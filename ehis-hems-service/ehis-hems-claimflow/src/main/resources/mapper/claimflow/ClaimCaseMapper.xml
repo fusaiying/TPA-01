@@ -774,6 +774,7 @@
         <result property="accDate"    column="acc_date"    />
         <result property="investigation"    column="investigation"    />
         <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         SELECT
@@ -784,15 +785,21 @@
         cb.claim_type,
         ccp.NAME,
         cci.id_no,
-        ccp.policy_item_no
+        ccp.policy_item_no,
+        case when (select count(1) from claim_case_investigation where rpt_no =  cc.rpt_no ) > 0 then '01' else '02' end  investigation ,
+        accept.acc_date,
+        CONCAT(cal.bill_currency,' ',cal.pay_amount) pay_amount ,
+        cal.pay_conclusion
         FROM
         claim_batch cb
         LEFT JOIN claim_case cc ON cb.batch_no = cc.batch_no
         AND cc.STATUS = 'Y'
         LEFT JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
         AND cci.STATUS = 'Y'
-        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
-        AND ccp.STATUS = 'Y'
+        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no  AND ccp.STATUS = 'Y'
+        LEFT JOIN claim_case_accept accept on cc.rpt_no = accept.rpt_no and accept.status = 'Y'
+        left join claim_case_cal cal  on cal.rpt_no = accept.rpt_no and cal.status = 'Y'
+
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>

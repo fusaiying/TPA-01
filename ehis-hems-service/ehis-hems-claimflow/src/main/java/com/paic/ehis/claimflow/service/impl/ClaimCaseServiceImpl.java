@@ -1343,39 +1343,43 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 //获取批次号，报案号，按键状态，被保人，证件号  就诊日期  赔付结论
         //还差是否调查  分单号     给付金额  审核人
         List<ClaimInformationVo> caseList = claimCaseMapper.selectClaimInformation(claimInformationDTO);
-        for (ClaimInformationVo caseInfo : caseList
-        ) { // 是否调查
-            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if ( claimCaseInvestigation.size() > 0) {
-                caseInfo.setInvestigation("01");
-            } else {
-                caseInfo.setInvestigation("02");
-            }
+        /***
+         * 以下实体类赋值  直接在sql 中查询
+         * modify by : HJW
+         * modifyDate : 2021-03-04
+         */
+//        for (ClaimInformationVo caseInfo : caseList ) { // 是否调查
+//            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+//            if ( claimCaseInvestigation.size() > 0) {
+//                caseInfo.setInvestigation("01");
+//            } else {
+//                caseInfo.setInvestigation("02");
+//            }
             //获取就诊日期
-            List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseAccept c : claimCaseAccepts
-            ) {
-                caseInfo.setAccDate(c.getAccDate());
-            }
+//            List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseAccept c : claimCaseAccepts
+//            ) {
+//                caseInfo.setAccDate(c.getAccDate());
+//            }
             //获取给i付金额   即账单币种  账单金额
-            List<ClaimCaseBill> claimCaseBill = claimCaseBillMapper.selectClaimCaseBillByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseBill c : claimCaseBill
-            ) {
-                caseInfo.setPaymentAmount(c.getPaymentAmount());
-            }
-            //获取赔付结论
-            List<ClaimCaseCal> claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseCal c : claimCaseCal
-            ) {
-                caseInfo.setPayConclusion(c.getPayConclusion());
-            }
+//            List<ClaimCaseBill> claimCaseBill = claimCaseBillMapper.selectClaimCaseBillByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseBill c : claimCaseBill
+//            ) {
+//                caseInfo.setPaymentAmount(c.getPaymentAmount());
+//            }
+//            //获取赔付结论
+//            List<ClaimCaseCal> claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseCal c : claimCaseCal
+//            ) {
+//                caseInfo.setPayConclusion(c.getPayConclusion());
+//            }
             //获取审核人
           /*  List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordSecondThree(caseInfo.getRptNo());
             for (ClaimCaseRecord c : claimCaseRecords
             ) {
                 caseInfo.setUpdateBy(c.getUpdateBy());
             }*/
-        }
+//        }
         return caseList;
     }
 

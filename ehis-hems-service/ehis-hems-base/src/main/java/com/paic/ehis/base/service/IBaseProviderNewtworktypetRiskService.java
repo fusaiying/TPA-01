@@ -1,7 +1,8 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypetRisk;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet_risk(医疗网络险种信息)Service接口

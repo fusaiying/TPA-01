@@ -26,10 +26,10 @@ public interface IBaseBankService
     /**
      * 查询base_bank（银行信息）
      *
-     * @param providerCode base_bank（银行信息）ID
+     * @param baseBankinfo base_bank（银行信息）ID
      * @return base_bank（银行信息）
      */
-    public BaseBankVo selectBaseBankByCode(String providerCode);
+    public BaseBankVo selectBaseBankByCode(BaseBankVo baseBankinfo);
 
     /**
      * 查询base_bank（银行信息）列表
@@ -39,6 +39,8 @@ public interface IBaseBankService
      */
     public List<BaseBank> selectBaseBankList(BaseBank baseBank);
 
+    public List<BaseBank> selectBaseBankList1(BaseBank baseBank);
+
     /**
      * 新增base_bank（银行信息）
      * 
@@ -46,6 +48,16 @@ public interface IBaseBankService
      * @return 结果
      */
     public int insertBaseBank(BaseBankVo baseBank);
+
+    public int addBaseBank(List<BaseBank> baseBankList);
+
+    /**
+     * 新增base_bank（银行信息）
+     *
+     * @param ProviderCode base_bank（银行信息）
+     * @return 结果
+     */
+    public int insertBaseBankNew(String ProviderCode);
 
     /**
      * 修改base_bank（银行信息）

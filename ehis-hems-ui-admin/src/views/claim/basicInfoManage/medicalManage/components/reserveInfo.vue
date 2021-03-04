@@ -1,7 +1,7 @@
 <template>
   <el-form ref="reserveInfoForm" :rules="reserveFormRules" :model="reserveInfoForm"
            :disabled="disabledFlag"
-           label-width="200px" size="mini" >
+           label-width="200px" size="mini">
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>预约信息</span>
@@ -116,7 +116,7 @@
                       placeholder="请输入"/>
           </el-form-item>
           <el-form-item label="医院是否配合收取自付费：" prop="selfpaymentFlag">
-            <el-select v-model="reserveInfoForm.selfpaymentFlag" class="item-width" placeholder="请选择是/否" clearable>
+            <el-select v-model="reserveInfoForm.selfpaymentFlag" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
                          :key="item.dictValue"/>
             </el-select>
@@ -126,26 +126,29 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <el-col :span="5">
-            <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-              <el-select v-model="reserveInfoForm.continentFlag" class="item-width" placeholder="请选择是/否" clearable>
-                <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item prop="continent">
-              <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
-                        style="padding-left: 15px;width: 450px" maxlength="500"
-                        placeholder="请输入"/>
 
-            </el-form-item>
-          </el-col>
-
+          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+            <el-select v-model="reserveInfoForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                         :key="item.dictValue"/>
+            </el-select>
+            <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
+                      style="width: 60%" maxlength="500"
+                      placeholder="请输入"/>
+          </el-form-item>
         </el-col>
+        <!--          <el-col :span="10">
+                    <el-form-item prop="continent">
+                      <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
+                                style="padding-left: 15px;width: 450px" maxlength="500"
+                                placeholder="请输入"/>
+
+                    </el-form-item>
+                  </el-col>
+
+                </el-col>-->
         <el-col :span="8">
-          <el-form-item label="是否连锁机构(结算)：">
+          <el-form-item label="是否连锁机构(结算)：" prop="interlocking">
             <el-select v-model="reserveInfoForm.interlocking" class="item-width" placeholder="请选择是/否" clearable>
               <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
                          :key="item.dictValue"/>
@@ -230,8 +233,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="直接结算部门医保支付情况：">
-            <el-select v-model="reserveInfoForm.payment" class="item-width" placeholder="请选择是/否" clearable>
+          <el-form-item label="直接结算部门医保支付情况：" prop="payment">
+            <el-select v-model="reserveInfoForm.payment" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="item in paymentOptions" :label="item.dictLabel" :value="item.dictValue"
                          :key="item.dictValue"/>
 
@@ -240,7 +243,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="对非直结客户是否提供门诊预约：">
+          <el-form-item label="对非直结客户是否提供门诊预约：" prop="nondirectcustomer">
             <el-radio-group v-model="reserveInfoForm.nondirectcustomer">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
                 {{ item.dictLabel }}
@@ -301,7 +304,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否提供直接卡：">
+          <el-form-item label="是否提供直结卡：" prop="straightknotflag">
             <el-radio-group v-model="reserveInfoForm.straightknotflag">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
                 {{ item.dictLabel }}
@@ -311,7 +314,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否可自行预约：">
+          <el-form-item label="是否可自行预约：" prop="makeappointment">
             <el-radio-group v-model="reserveInfoForm.makeappointment">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
                 {{ item.dictLabel }}
@@ -324,7 +327,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="是否提供VIP门诊预约：">
+          <el-form-item label="是否提供VIP门诊预约：" prop="vipappointment">
             <el-radio-group v-model="reserveInfoForm.vipappointment">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
                 {{ item.dictLabel }}
@@ -391,7 +394,7 @@
       </el-row>
 
       <el-row>
-        <el-form-item style="margin-right: 20px;" label="网络医院直结类型备注：">
+        <el-form-item style="margin-right: 20px;" label="网络医院直结类型备注：" prop="remarks">
           <el-input
             type="textarea"
             placeholder="请输入内容"
@@ -411,8 +414,8 @@ let dictss = [{dictType: 'inter_hosp'}, {dictType: 'virtual_org'}, {dictType: 'f
   {dictType: 'second_attribute_b'}, {dictType: 'comprehensive_type'}, {dictType: 'yes_or_no'}, {dictType: 'visiting_type'},
   {dictType: 'spprocurement_flag'}, {dictType: 'classification'}, {dictType: 'cooperationStatus_flag'}, {dictType: 'servicelocator_flag'},
   {dictType: 'speciallanguage'}, {dictType: 'networkHospitalType'}, {dictType: 'type'}, {dictType: 'payment'},
-  {dictType: 'classification_type'}, {dictType: 'leadFlag'}, {dictType: 'place_type'}, {dictType: 'currency'},{dictType: 'payment'},
-  {dictType: 'account_type_new'},]
+  {dictType: 'classification_type'}, {dictType: 'leadFlag'}, {dictType: 'place_type'}, {dictType: 'currency'}, {dictType: 'payment'},
+  {dictType: 'account_type_new'}]
 export default {
   props: {
     reserveInfoForm: {
@@ -426,6 +429,7 @@ export default {
     isAdd: Boolean,
     status: String
   },
+
   data() {
     const checkSendWay = (rules, value, callback) => {
       if (!this.reserveInfoForm.inviteflag && !this.reserveInfoForm.fastmailflag) {
@@ -455,10 +459,75 @@ export default {
 
     const checkReceptionFlag = (rules, value, callback) => {
       if (this.isNetHospFlag) {
-        if(!value) {
+        if (value == undefined || value == null || value == '') {
           callback(new Error('直接结算手续接待处不能空'))
+        } else {
+          callback()
         }
-        else {
+      } else {
+        callback()
+      }
+    }
+    const checkMakeappointment = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.makeappointment) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkAppointmentCall = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.appointmentCall) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkAppointreminders = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.appointreminders) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkConfirmDeliverytime = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.confirmDeliverytime) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkStraightknotflag = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (!this.reserveInfoForm.straightknotflag) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkOutpatientearly = (rules, value, callback) => {
+      if (this.isNetHospFlag) {
+        if (this.reserveInfoForm.outpatientearly.length <= 0) {
+          callback(new Error('不能为空！'))
+        } else {
           callback()
         }
       } else {
@@ -475,10 +544,16 @@ export default {
       faxInputShow: true,
       phoneInputShow: true,
       reserveFormRules: {
-        confirmDeliverytime: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        confirmDeliverytime: [{validator: checkConfirmDeliverytime, trigger: 'blur'}],
         receptionFlag: [{validator: checkReceptionFlag, trigger: 'blur'}],
+        makeappointment: [{validator: checkMakeappointment, trigger: 'change'}],
+        appointmentCall: [{validator: checkAppointmentCall, trigger: 'blur'}],
+        appointreminders: [{validator: checkAppointreminders, trigger: 'blur'}],
+        outpatientearly: [{validator: checkOutpatientearly, trigger: 'change'}],
+        straightknotflag: [{validator: checkStraightknotflag, trigger: 'change'}],
+
       },
-      medicalTypeData:[],
+      medicalTypeData: [],
       yes_or_noOptions: [],
       leadFlagOptions: [],
       dictList: [],
@@ -486,9 +561,10 @@ export default {
     }
   },
   watch: {
-    providerCode: function (newVal){
+    providerCode: function (newVal) {
       this.getNewtworktype()
     }
+
   },
   async mounted() {
     await this.getDictsList(dictss).then(response => {
@@ -514,7 +590,7 @@ export default {
   methods: {
     // 调用查询维护的方法
     getNewtworktype() {
-      let query={
+      let query = {
         providerCode: this.providerCode
       }
       getNewtworktypeList(query).then(res => {
@@ -523,9 +599,10 @@ export default {
           return item.networktypeName == '网络医院'
         })[0].oldChoose == '02') {
           this.isNetHospFlag = true
+        } else {
+          this.isNetHospFlag = false
         }
       }).catch(res => {
-
       })
     },
 
@@ -536,35 +613,55 @@ export default {
 
 
     //预约信息保存
-    saveHandle() {
-      this.getNewtworktype()
-      this.reserveInfoForm.providerCode = this.providerCode
-      this.$refs.reserveInfoForm.validate((valid) => {
-        if (valid) {
-          //存在调用预约信息保存的接口
-          if (this.reserveInfoForm.providerCode) {
+    async saveHandle() {
+      let query = {
+        providerCode: this.providerCode
+      }
+      await new Promise((resolve, reject) => {
+        getNewtworktypeList(query).then(res => {
 
-            const subFormSearch = JSON.parse(JSON.stringify(this.reserveInfoForm))
-            subFormSearch.orgFlag=this.status
-            /* if (this.isAdd) {*/
-            addapplyInfo(subFormSearch).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else {
-                this.$message({
-                  message: '保存失败!',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          }/* else {
+          this.medicalTypeData = res.rows
+          if (this.medicalTypeData.filter(item => {
+            return item.networktypeName == '网络医院'
+          })[0].oldChoose == '02') {
+
+            this.isNetHospFlag = true
+          } else {
+            this.isNetHospFlag = false
+          }
+
+
+          resolve(this.isNetHospFlag)
+        })
+
+      }).then(res => {
+        this.reserveInfoForm.providerCode = this.providerCode
+        this.$refs.reserveInfoForm.validate((valid) => {
+
+          if (valid) {
+            //存在调用预约信息保存的接口
+            if (this.reserveInfoForm.providerCode) {
+              const subFormSearch = JSON.parse(JSON.stringify(this.reserveInfoForm))
+              subFormSearch.orgFlag = this.status
+              /* if (this.isAdd) {*/
+              addapplyInfo(subFormSearch).then(res => {
+                if (res.code == '200') {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+              })
+            }/* else {
               updateapplyInfo(this.reserveInfoForm).then(res => {
                 if (res.code == '200') {
                   this.$message({
@@ -586,11 +683,13 @@ export default {
 
           }*/
 
-        } else {
-          return false
-        }
+          } else {
+            this.$message.warning('预约信息必录项未必录')
+          }
 
+        })
       })
+
     },
     //体检确认单发送方式是否选中
     sendTypeChange() {
@@ -687,6 +786,7 @@ export default {
     resetForm() {
       //this.reserveInfoForm.outpatientearly = []
       this.$refs.reserveInfoForm.resetFields()
+      this.reserveInfoForm.continent = ''
       this.sendWayChange()
       this.sendTypeChange()
       this.outpatientearlyChange()
@@ -705,14 +805,32 @@ export default {
       this.reserveInfoForm.nightemergencyremark = ''
     },
     // 校验数据
-    validateForm() {
-      let flag = null
-      this.$refs['reserveInfoForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
+    async validateForm() {
+      let query = {
+        providerCode: this.providerCode
+      }
+      let flag
+      await new Promise((resolve, reject) => {
+        getNewtworktypeList(query).then(res => {
+          this.medicalTypeData = res.rows
+          if (this.medicalTypeData.filter(item => {
+            return item.networktypeName == '网络医院'
+          })[0].oldChoose == '02') {
+            this.isNetHospFlag = true
+          } else {
+            this.isNetHospFlag = false
+          }
+
+          resolve(this.isNetHospFlag)
+        })
+      }).then(res => {
+        this.$refs['reserveInfoForm'].validate(valid => {
+          if (valid) {
+            flag = true
+          } else {
+            flag = false
+          }
+        })
       })
       return flag
     }
@@ -726,7 +844,7 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 

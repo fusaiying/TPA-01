@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseInvestigationMapper">
+    
+    <resultMap type="ClaimCaseInvestigation" id="ClaimCaseInvestigationResult">
+        <result property="invNo"    column="inv_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="invType"    column="inv_type"    />
+        <result property="invReason"    column="inv_reason"    />
+        <result property="invOrganCode"    column="inv_organ_code"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="invView"    column="inv_view"    />
+        <result property="isHistory"    column="is_history"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CaseInvestigationVO" id="InvestigationResult">
+        <result property="invNo"    column="inv_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="invView"    column="inv_view"    />
+        <result property="invOrganCode"    column="inv_organ_code"    />
+        <result property="invReason"    column="inv_reason"    />
+        <result property="invType"    column="inv_type"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="accDescribe"    column="acc_describe"    />
+        <result property="accAddress"    column="acc_address"    />
+        <result property="accDistrict"    column="acc_district"    />
+        <result property="accCity"    column="acc_city"    />
+        <result property="accProvince"    column="acc_province"    />
+        <result property="accDate"    column="acc_date"    />
+        <result property="accType"    column="acc_type"    />
+        <result property="name"    column="NAME"    />
+        <result property="sex"    column="sex"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idNo"    column="id_no"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseInvestigationVo">
+        select inv_no, rpt_no, inv_type, inv_reason,inv_date, inv_organ_code, organ_code, policy_no, inv_view, is_history, status, create_by, create_time, update_by, update_time from claim_case_investigation
+    </sql>
+
+    <select id="selectClaimCaseInvestigationList" parameterType="ClaimCaseInvestigation" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="invType != null  and invType != ''"> and inv_type = #{invType}</if>
+            <if test="invReason != null  and invReason != ''"> and inv_reason = #{invReason}</if>
+            <if test="invOrganCode != null  and invOrganCode != ''"> and inv_organ_code = #{invOrganCode}</if>
+            <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="invView != null  and invView != ''"> and inv_view = #{invView}</if>
+            <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseInvestigationById" parameterType="String" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        where inv_no = #{invNo}
+    </select>
+
+    <select id="selectClaimCaseInvestigationByRptNo" parameterType="String" resultMap="InvestigationResult">
+        SELECT DISTINCT
+            inv.inv_no,
+            inv.inv_view,
+            inv.policy_no,
+            inv.inv_organ_code,
+            inv.inv_reason,
+            inv.inv_type,
+            inv.organ_code,
+            inv.rpt_no,
+            accept.acc_describe,
+            accept.acc_address,
+            (select  placename from sn_base_address where placetype = '03' and placecode = accept.acc_district) acc_district ,
+            (select  placename from sn_base_address where placetype = '02' and placecode = accept.acc_city) acc_city ,
+            (select  placename from sn_base_address where placetype = '01' and placecode = accept.acc_province) acc_province ,
+            accept.acc_date,
+            accept.acc_type,
+            insured.NAME,
+            insured.sex,
+            insured.id_type,
+            insured.id_no
+        FROM
+            claim_case_insured insured
+            LEFT JOIN claim_case_investigation inv ON insured.rpt_no = inv.rpt_no and inv.is_history='N'
+            AND inv.STATUS = 'Y'
+            INNER JOIN claim_case_accept accept ON accept.rpt_no = inv.rpt_no
+            AND accept.STATUS = 'Y'
+        where insured.rpt_no = #{rptNo} and insured.status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseInvestigationByNew" parameterType="String" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        where rpt_no = #{rptNo} and status = 'Y' and is_history='N'
+    </select>
+        
+    <insert id="insertClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
+        insert into claim_case_investigation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="invNo != null">inv_no,</if>
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="invType != null and invType != ''">inv_type,</if>
+            <if test="invReason != null and invReason != ''">inv_reason,</if>
+            <if test="invOrganCode != null and invOrganCode != ''">inv_organ_code,</if>
+            <if test="organCode != null and organCode != ''">organ_code,</if>
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="invView != null and invView != ''">inv_view,</if>
+            <if test="isHistory != null and isHistory != ''">is_history,</if>
+            <if test="invDate != null">inv_date,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="invNo != null">#{invNo},</if>
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="invType != null and invType != ''">#{invType},</if>
+            <if test="invReason != null and invReason != ''">#{invReason},</if>
+            <if test="invOrganCode != null and invOrganCode != ''">#{invOrganCode},</if>
+            <if test="organCode != null and organCode != ''">#{organCode},</if>
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="invView != null and invView != ''">#{invView},</if>
+            <if test="isHistory != null and isHistory != ''">#{isHistory},</if>
+            <if test="invDate != null">#{invDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseInvestigation" parameterType="ClaimCaseInvestigation">
+        update claim_case_investigation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="invType != null and invType != ''">inv_type = #{invType},</if>
+            <if test="invReason != null and invReason != ''">inv_reason = #{invReason},</if>
+            <if test="invOrganCode != null and invOrganCode != ''">inv_organ_code = #{invOrganCode},</if>
+            <if test="organCode != null and organCode != ''">organ_code = #{organCode},</if>
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="invView != null and invView != ''">inv_view = #{invView},</if>
+            <if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where inv_no = #{invNo}
+    </update>
+
+    <delete id="deleteClaimCaseInvestigationById" parameterType="Long">
+        delete from claim_case_investigation where inv_no = #{invNo}
+    </delete>
+
+    <delete id="deleteClaimCaseInvestigationByIds" parameterType="String">
+        delete from claim_case_investigation where inv_no in 
+        <foreach item="invNo" collection="array" open="(" separator="," close=")">
+            #{invNo}
+        </foreach>
+    </delete>
+    <select id="selectClaimCaseInvestigationByIdOne" parameterType="String" resultMap="ClaimCaseInvestigationResult">
+        <include refid="selectClaimCaseInvestigationVo"/>
+        where rpt_no = #{rptNo} and status = 'Y'
+    </select>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.BaseCodeMappingNew" id="selectBaseCodeMappingNewVO">
+        <result property="codeType"    column="code_type"    />
+        <result property="originalCode"    column="original_code"    />
+        <result property="targetCode"    column="target_code"    />
+    </resultMap>
+
+    <select id="selectBaseCodeMappingNew" parameterType="com.paic.ehis.claimflow.domain.BaseCodeMappingNew" resultMap="selectBaseCodeMappingNewVO">
+        select code_type,original_code,target_code from base_code_mapping
+        where code_type = #{codeType} and original_code = #{originalCode} and status='Y'
+    </select>
+
+</mapper>

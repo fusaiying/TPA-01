@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface IBaseSupplierOutletsService 
 {
+    List<BaseSupplierOutlets> selectOutletsList(BaseSupplierOutlets baseSupplierOutlets);
+
     /**
      * 查询base_supplier_outlets（服务网点配置）
      * 
@@ -44,6 +46,8 @@ public interface IBaseSupplierOutletsService
      * @return 结果
      */
     public int updateBaseSupplierOutlets(BaseSupplierOutlets baseSupplierOutlets);
+
+    public int updateBaseSupplierOutletsStatus(BaseSupplierOutlets baseSupplierOutlets);
 
     /**
      * 批量删除base_supplier_outlets（服务网点配置）

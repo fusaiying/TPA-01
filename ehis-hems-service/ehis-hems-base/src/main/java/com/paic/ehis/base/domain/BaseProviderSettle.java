@@ -1,12 +1,13 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.Date;
 
 /**
  * base_provider_settle(服务商结算信息)对象 base_provider_settle
@@ -14,12 +15,16 @@ import com.paic.ehis.common.core.annotation.Excel;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseProviderSettle extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 服务商编码 */
     private String providerCode;
+
+    /** 流水号 */
+    private String serialNo;
 
     /** 结算币种 */
     @Excel(name = "结算币种")
@@ -41,6 +46,16 @@ public class BaseProviderSettle extends BaseEntity
     /** 状态 */
     @Excel(name = "状态")
     private String status;
+
+    /** 状态 */
+    @Excel(name = "变更标志")
+    private String updateFlag;
+
+    private String currencyName;
+
+    private String claimFlagName;
+
+    private String orgFlag;
 
     public void setProviderCode(String providerCode) 
     {

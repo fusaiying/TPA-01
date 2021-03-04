@@ -1,15 +1,16 @@
 package com.paic.ehis.system.api.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.annotation.Excel.ColumnType;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 
+import java.util.Date;
+
 /**
  * 操作日志记录表 oper_log
  * 
- * @author admin
+ *
  */
 public class SysOperLog extends BaseEntity
 {

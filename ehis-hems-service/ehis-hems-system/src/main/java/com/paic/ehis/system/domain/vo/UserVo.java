@@ -1,5 +1,6 @@
 package com.paic.ehis.system.domain.vo;
 
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 /**
@@ -9,7 +10,7 @@ import lombok.Data;
  * @Company:
  */
 @Data
-public class UserVo {
+public class UserVo extends BaseEntity {
     private Long id;
-    private String username;
+    private String userName;
 }

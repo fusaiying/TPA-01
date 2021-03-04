@@ -1,12 +1,13 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
 import com.paic.ehis.system.api.domain.SysOperLog;
+
+import java.util.List;
 
 /**
  * 操作日志 服务层
  * 
- * @author admin
+ *
  */
 public interface ISysOperLogService
 {

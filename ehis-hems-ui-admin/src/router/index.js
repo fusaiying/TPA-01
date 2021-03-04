@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import ParentView from '@/components/ParentView';
 
 /**
  * Note: 路由配置项
@@ -17,7 +18,7 @@ import Layout from '@/layout'
  * redirect: noRedirect           // 当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
  * name:'router-name'             // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
  * meta : {
-    roles: ['admin','editor']    // 设置该路由进入的权限，支持多个权限叠加
+    noCache: true                // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
     title: 'title'               // 设置该路由在侧边栏和面包屑中展示的名字
     icon: 'svg-name'             // 设置该路由的图标，对应路径src/assets/icons/svg
     breadcrumb: false            // 如果设置为false，则不会在breadcrumb面包屑中显示
@@ -118,190 +119,6 @@ export const constantRoutes = [
       }
     ]
   },
-  // 报案处理
-  {
-    path: '/reportdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'reportdetail',
-    meta: { title: '报案处理', noCache: true },
-  },
-  // 受理处理
-  {
-    path: '/acceptdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'acceptdetail',
-    meta: { title: '受理处理', noCache: true },
-  },
-  // 初审
-  {
-    path: '/detail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'detail',
-    meta: { title: '初审处理', noCache: true },
-  },
-  // 新版本初审处理
-  {
-    path: '/newdetail',
-    component: () => import('../views/claim/claimsHandle/firstCommon/comdeal.vue'),
-    hidden: true,
-    name: 'newdetail',
-    meta: { title: '初审处理', noCache: true },
-  },
-  // 审核
-  {
-    path: '/reviewdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'reviewdetail',
-    meta: { title: '审核处理', noCache: true },
-  },
-  // 复核
-  {
-    path: '/complexdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'complexdetail',
-    meta: { title: '复核处理', noCache: true },
-  },
-  // 抽检
-  {
-    path: '/checkdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'checkdetail',
-    meta: { title: '抽检处理', noCache: true },
-  },
-  // 结案抽检
-  {
-    path: '/sportcheckdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'sportcheckdetail',
-    meta: { title: '抽检处理', noCache: true },
-  },
-  // 审批
-  {
-    path: '/correctdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'correctdetail',
-    meta: { title: '审批处理', noCache: true },
-  },
-  // 补材处理
-  {
-    path: '/materialesdetail',
-    component: () => import('../views/claim/claimsHandle/common/materialsHandle.vue'),
-    hidden: true,
-    name: 'materialesdetail',
-    meta: { title: '补材处理', noCache: true },
-  },
-  // 审物理件处理
-  {
-    path: '/physicaldetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'physicaldetail',
-    meta: { title: '审物理件处理', noCache: true },
-  },
-  // 退件处理
-  {
-    path: '/returndetail',
-    component: () => import('../views/claim/claimsHandle/return/returnEdit.vue'),
-    hidden: true,
-    name: 'returndetail',
-    meta: { title: '退件处理', noCache: true },
-  },
-  // 录入处理
-  {
-    path: '/inputdetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'inputdetail',
-    meta: { title: '录入处理', noCache: true },
-  },
-  // 录入处理
-  {
-    path: '/newinputdetail',
-    component: () => import('../views/claim/claimsHandle/inputCommon/inputDeal.vue'),
-    hidden: true,
-    name: 'newinputdetail',
-    meta: { title: '录入处理', noCache: true },
-  },
-  // 撤案重开处理
-  {
-    path: '/removecasedetail',
-    component: () => import('../views/claim/claimsHandle/common/materialsHandle.vue'),
-    hidden: true,
-    name: 'removecasedetail',
-    meta: { title: '撤案重开处理', noCache: true },
-  },
-  // 影像分类处理
-  {
-    path: '/ificatdetail',
-    component: () => import('../views/claim/claimsHandle/common/imgClassificat.vue'),
-    hidden: true,
-    name: 'ificatdetail',
-    meta: { title: '影像分类处理', noCache: true },
-  },
-  // 影像件查看
-  {
-    path: '/imageshow',
-    component: () => import('../views/claim/claimsHandle/common/components/imageContainer.vue'),
-    hidden: true,
-    name: 'imageshow',
-    meta: { title: '影像件处理/查看', noCache: true },
-  },
-  // 初审查看
-  {
-    path: '/imageshows',
-    component: () => import('../views/claim/claimsHandle/firstCommon/firstImage.vue'),
-    hidden: true,
-    name: 'imageshows',
-    meta: { title: '影像件处理/查看', noCache: true },
-  },
-  // 影像查看
-  {
-    path: '/classificatViewshow',
-    component: () => import('../views/claim/claimsHandle/classificat/imageVIEW.vue'),
-    hidden: true,
-    name: 'classificatViewshow',
-    meta: { title: '影像查看', noCache: true },
-  },
-  // 发票录入
-  {
-    path: '/invoiceHandle',
-    component: () => import('../views/claim/claimsHandle/common/imgClassificat.vue'),
-    hidden: true,
-    name: 'invoiceHandle',
-    meta: { title: '发票录入', noCache: true },
-  },
-  // 案件详情
-  {
-    path: '/casedetail',
-    component: () => import('../views/claim/claimsHandle/common/com-deal.vue'),
-    hidden: true,
-    name: 'casedetail',
-    meta: { title: '案件详情', noCache: true },
-  },
-  // 调查详情
-  {
-    path: '/serchDetail',
-    component: () => import('../../src/views/claim/claimsOperatManage/search/claimserch.vue'),
-    hidden: true,
-    name: 'serchDetail',
-    meta: { title: '调查详情', noCache: true },
-  },
-  // 调查详情
-  {
-    path: '/policyDetail',
-    component: () => import('../../src/views/claim/claimsOperatManage/search/policy-detail.vue'),
-    hidden: true,
-    name: 'policyDetail',
-    meta: { title: '保单详情', noCache: true },
-  },
   // 服务项目列表-新增/编辑
   {
     path: '/basicInfo',
@@ -313,34 +130,6 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/claim/basicInfoManage/projectManagement/info'], resolve),
         name: 'ProjectInfo',
         meta: { title: '服务项目信息', icon: '' }
-      }
-    ]
-  },
-  // 服务项目列表-服务流程配置
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'projectManagement/workflow/:projectno(\\w+)',
-        component: (resolve) => require(['@/views/claim/basicInfoManage/projectManagement/workflow'], resolve),
-        name: 'ProjectWorkFlow',
-        meta: { title: '流程配置', icon: '' }
-      }
-    ]
-  },
-  // 服务项目列表-服务流程配置-消息模板
-  {
-    path: '/basicInfo',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'projectManagement/messageTemp/',
-        component: () => import('@/views/claim/basicInfoManage/projectManagement/messageTemplate'),
-        name: 'messageTemplate',
-        meta: { title: '消息模板', noCache: true }
       }
     ]
   },
@@ -357,7 +146,7 @@ export const constantRoutes = [
         meta: { title: '医生信息新增/编辑', noCache: true }
       }
     ]
-  },
+  }
 
 ]
 

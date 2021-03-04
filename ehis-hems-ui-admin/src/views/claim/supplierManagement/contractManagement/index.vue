@@ -376,45 +376,45 @@
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 
-  .el-dialog__wrapper /deep/ .el-dialog__header {
+  .el-dialog__wrapper ::v-deep .el-dialog__header {
     padding:15px 20px 5px;
     border-bottom: 1px solid #ebebeb;
   }
 
-  .el-dialog__wrapper /deep/ .el-dialog__title{
+  .el-dialog__wrapper ::v-deep .el-dialog__title{
     font-size:16px;
     line-height: 20px;
   }
 
-  .el-dialog__wrapper /deep/ .el-dialog__headerbtn {
+  .el-dialog__wrapper ::v-deep .el-dialog__headerbtn {
     top:16px;
   }
 
-  /*.el-card /deep/ .el-card__header {*/
+  /*.el-card ::v-deep .el-card__header {*/
   /*height:40px;*/
   /*padding: 5px 0px;*/
   /*}*/
 
-  .el-card /deep/ .el-card__body {
+  .el-card ::v-deep .el-card__body {
     padding: 0px;
   }
 
-  .el-tabs /deep/ .el-tabs__item {
+  .el-tabs ::v-deep .el-tabs__item {
     height:40px;
     width: 200px;
     text-align: center;
     padding-bottom: 0px;
   }
 
-  .el-tabs /deep/ .el-tabs__active-bar {
+  .el-tabs ::v-deep .el-tabs__active-bar {
     width: 200px;
   }
 
-  .el-tabs /deep/ .el-tabs__nav-wrap::after{
+  .el-tabs ::v-deep .el-tabs__nav-wrap::after{
     height: 1px;
   }
 

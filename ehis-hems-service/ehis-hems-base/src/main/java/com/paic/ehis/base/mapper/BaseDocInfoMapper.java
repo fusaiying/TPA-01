@@ -4,6 +4,7 @@ import com.paic.ehis.base.domain.BaseDocInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
 /**
  * base_doctor(医生信息)Mapper接口
@@ -19,7 +20,7 @@ public interface BaseDocInfoMapper
      * @param docCode base_doctor(医生信息)ID
      * @return base_doctor(医生信息)
      */
-    public BaseDocInfo selectBaseDocInfoById(String docCode);
+    public  List<BaseDocInfo> selectBaseDocInfoById(String docCode);
 
     /**
      * 查询base_doctor(医生信息)列表
@@ -29,6 +30,11 @@ public interface BaseDocInfoMapper
      */
     public List<BaseDocInfo> selectBaseDocInfoList(BaseDocInfo baseDocInfo);
 
+    //主查询页面需默认显示截止当前时间在一个月内且合约状态为“有效”的数据
+    public List<BaseDocInfo> selectBaseMonth(BaseDocInfo baseDocInfo) throws Exception;
+
+
+    public List<BaseDocInfo> selectSupplierList();
     /**
      * 新增base_doctor(医生信息)
      * 
@@ -60,4 +66,8 @@ public interface BaseDocInfoMapper
      * @return 结果
      */
     public int deleteBaseDocInfoByIds(String[] docCodes);
+
+    List<String> selectproviderinfo(String docCode);
+
+    public String selectproviderchname1(String providerCode);
 }

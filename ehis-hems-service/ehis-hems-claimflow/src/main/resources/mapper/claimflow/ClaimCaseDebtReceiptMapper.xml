@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseDebtReceiptMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt" id="ClaimCaseDebtReceiptResult">
+        <result property="receiptNo"    column="receipt_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="receiptAmount"    column="receipt_amount"    />
+        <result property="receiptCurrency"    column="receipt_currency"    />
+        <result property="receiptDate"    column="receipt_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="residual" column="residual"/>
+    </resultMap>
+
+    <sql id="selectClaimCaseDebtReceiptVo">
+        select receipt_no, insured_no, receipt_amount, receipt_currency, receipt_date, remark, status, create_by, create_time, update_by, update_time from claim_case_debt_receipt
+    </sql>
+
+    <select id="selectClaimCaseDebtReceiptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt" resultMap="ClaimCaseDebtReceiptResult">
+        <include refid="selectClaimCaseDebtReceiptVo"/>
+        <where>  
+            <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
+            <if test="receiptAmount != null "> and receipt_amount = #{receiptAmount}</if>
+            <if test="receiptCurrency != null  and receiptCurrency != ''"> and receipt_currency = #{receiptCurrency}</if>
+            <if test="receiptDate != null "> and receipt_date = #{receiptDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseDebtReceiptById" parameterType="String" resultMap="ClaimCaseDebtReceiptResult">
+        <include refid="selectClaimCaseDebtReceiptVo"/>
+        where receipt_no = #{receiptNo}
+    </select>
+        
+    <insert id="insertClaimCaseDebtReceipt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt">
+        insert into claim_case_debt_receipt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null">receipt_no,</if>
+            <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="receiptAmount != null">receipt_amount,</if>
+            <if test="receiptCurrency != null and receiptCurrency != ''">receipt_currency,</if>
+            <if test="receiptDate != null">receipt_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptNo != null">#{receiptNo},</if>
+            <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="receiptAmount != null">#{receiptAmount},</if>
+            <if test="receiptCurrency != null and receiptCurrency != ''">#{receiptCurrency},</if>
+            <if test="receiptDate != null">#{receiptDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseDebtReceipt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt">
+        update claim_case_debt_receipt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="receiptAmount != null">receipt_amount = #{receiptAmount},</if>
+            <if test="receiptCurrency != null and receiptCurrency != ''">receipt_currency = #{receiptCurrency},</if>
+            <if test="receiptDate != null">receipt_date = #{receiptDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where receipt_no = #{receiptNo}
+    </update>
+
+    <delete id="deleteClaimCaseDebtReceiptById" parameterType="String">
+        delete from claim_case_debt_receipt where receipt_no = #{receiptNo}
+    </delete>
+
+    <delete id="deleteClaimCaseDebtReceiptByIds" parameterType="String">
+        delete from claim_case_debt_receipt where receipt_no in 
+        <foreach item="receiptNo" collection="array" open="(" separator="," close=")">
+            #{receiptNo}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimCaseDebtReceiptListNear" resultMap="ClaimCaseDebtReceiptResult">
+        SELECT
+            a.receipt_no,
+            ( SELECT DISTINCT name FROM claim_case_insured b WHERE a.insured_no = b.insured_no and b.status='Y' ) insured_no,
+            a.receipt_amount,
+            a.receipt_currency,
+            a.receipt_date,
+            a.remark,
+            a.create_by,
+            (a.receipt_amount - IFNULL(SUM( c.col_amount ),0)) residual
+        FROM
+            claim_case_debt_receipt a
+            LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no AND a.status = 'Y' AND c.status = 'Y'
+        WHERE
+            a.receipt_date > DATE_SUB( CURDATE(), INTERVAL 3 MONTH )
+        GROUP BY
+            a.receipt_no
+    </select>
+
+    <select id="selectClaimCaseDebtReceiptListByInsuredOrDate" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="ClaimCaseDebtReceiptResult">
+        SELECT
+            a.receipt_no,
+            b.name insured_no,
+            a.receipt_amount,
+            a.receipt_currency,
+            a.receipt_date,
+            a.remark,
+            a.create_by,
+            (a.receipt_amount - IFNULL(SUM( c.col_amount ),0)) residual
+        FROM
+            claim_case_debt_receipt a
+            LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no
+            LEFT JOIN claim_case_insured b ON a.insured_no = b.insured_no
+        WHERE
+            a.status = 'Y' AND c.status = 'Y' AND b.status = 'Y'
+            <if test="insuredName != null  and insuredName != ''"> and b.name like concat('%', #{insuredName}, '%') </if>
+            <if test="startDate != null "> and a.receipt_date between #{startDate} and #{endDate}</if>
+        GROUP BY
+            a.receipt_no,b.name
+    </select>
+    
+</mapper>

@@ -2,63 +2,63 @@
   <div class="projectList_div">
     <!--Form查询条件 -->
 
-      <el-card class="queryForm_card">
-        <el-form ref="resetData" :model="queryParams" label-width="110px" >
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="类别：" prop="categoryCode">
-                <el-select v-model="queryParams.categoryCode"
-                           style="width: 220px;"
-                           size="mini"
-                           placeholder="请选择"
-                           @change="changeCategory"
-                           clearable>
-                  <el-option v-for="option in projectCategoryOptions"
-                             :key="option.dictValue"
-                             :label="option.dictValue + ' - ' +option.dictLabel"
-                             :value="option.dictValue" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="种类：" prop="servertypeCode">
-                <el-select v-model="queryParams.servertypeCode" style="width: 220px;" size="mini" placeholder="请选择" clearable>
-                  <el-option v-for="option in serverTypeOptions"
-                             :key="option.dictValue"
-                             :label="option.dictValue + ' - ' +option.dictLabel"
-                             :value="option.dictValue" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="服务项目名称：" prop="serviceName">
-                <el-input v-model="queryParams.serviceName" style="width: 220px;" size="mini" placeholder="请输入" @keyup.enter.native="initData" clearable/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="别名：" prop="alias">
-                <el-input v-model="queryParams.alias" style="width: 220px;" size="mini" placeholder="请输入" @keyup.enter.native="initData" clearable/>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="来源：" prop="orgin">
-                <el-select v-model="queryParams.orgin" style="width: 220px;" size="mini" placeholder="请选择" clearable>
-                  <el-option v-for="option in projectOrginOptions"
-                             :key="option.dictValue"
-                             :label="option.dictLabel"
-                             :value="option.dictValue" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item class="queryForm_button">
-              <el-button size="mini" type="success" icon="el-icon-search" @click="initData" >查 询</el-button>
-              <el-button size="mini" type="primary" icon="el-icon-refresh" @click="reset('resetData')">重 置</el-button>
+    <el-card class="queryForm_card">
+      <el-form ref="resetData" :model="queryParams" label-width="110px" >
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="类别：" prop="categoryCode">
+              <el-select v-model="queryParams.categoryCode"
+                         style="width: 220px;"
+                         size="mini"
+                         placeholder="请选择"
+                         @change="changeCategory"
+                         clearable>
+                <el-option v-for="option in projectCategoryOptions"
+                           :key="option.dictValue"
+                           :label="option.dictValue + ' - ' +option.dictLabel"
+                           :value="option.dictValue" />
+              </el-select>
             </el-form-item>
-          </el-row>
-        </el-form>
-      </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="种类：" prop="servertypeCode">
+              <el-select v-model="queryParams.servertypeCode" style="width: 220px;" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="option in serverTypeOptions"
+                           :key="option.dictValue"
+                           :label="option.dictValue + ' - ' +option.dictLabel"
+                           :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="服务项目名称：" prop="serviceName">
+              <el-input v-model="queryParams.serviceName" style="width: 220px;" size="mini" placeholder="请输入" @keyup.enter.native="initData" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="别名：" prop="alias">
+              <el-input v-model="queryParams.alias" style="width: 220px;" size="mini" placeholder="请输入" @keyup.enter.native="initData" clearable/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="来源：" prop="orgin">
+              <el-select v-model="queryParams.orgin" style="width: 220px;" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="option in projectOrginOptions"
+                           :key="option.dictValue"
+                           :label="option.dictLabel"
+                           :value="option.dictValue" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item class="queryForm_button">
+            <el-button size="mini" type="success" icon="el-icon-search" @click="initData" >查 询</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-refresh" @click="reset('resetData')">重 置</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-card>
 
 
     <!-- 卡片、表格 -->
@@ -66,9 +66,7 @@
       <el-card class="projectList_card">
         <div slot="header">
           <span>服务项目列表({{ projectListNum }})</span>
-        </div>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+          <span style="float: right;">
             <el-button
               type="primary"
               icon="el-icon-plus"
@@ -77,8 +75,8 @@
               @click="handleAdd"
             >新增
             </el-button>
-          </el-col>
-        </el-row>
+          </span>
+        </div>
         <el-table :data="projectList"
                   ref="multipleTable"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -238,7 +236,7 @@
         const projectcodes = row.serviceCode;
         const serialNo = row.serialNo;
         this.$router.push( {
-        path: '/basicInfo/projectManagement/add/0',
+          path: '/basicInfo/projectManagement/add/0',
           query: {
             serialNo: serialNo,
             servicecode: projectcodes,
@@ -264,7 +262,14 @@
       /** 流程配置按钮  */
       handleFlow(row){
         const projectcode = row.serviceCode;
-        this.$router.push('/basicInfo/projectManagement/workflow/' + projectcode);
+        this.$router.push({
+          path: '/basic-info/projectManagement/workflow',
+          query: {
+            // 首页跳转到流程配置
+            flag: true,
+            code: projectcode
+          }
+        });
       },
 
     }
@@ -273,7 +278,7 @@
 
 <style scoped>
   /*自定义样式*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
   .projectList_div{

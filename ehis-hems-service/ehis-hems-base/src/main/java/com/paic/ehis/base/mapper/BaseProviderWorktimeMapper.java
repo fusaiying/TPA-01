@@ -1,7 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderWorktime;
+
+import java.util.List;
 
 /**
  * base_provider_worktime(服务商服务时间信息)Mapper接口
@@ -27,6 +28,15 @@ public interface BaseProviderWorktimeMapper
      */
     public List<BaseProviderWorktime> selectBaseProviderWorktimeBycode(String providercode);
 
+
+    /**
+     * 查询base_provider_worktime(服务商服务时间信息)
+     *
+     * @param providercode base_provider_worktime(服务商服务时间信息)ID
+     * @return base_provider_worktime(服务商服务时间信息)
+     */
+    public List<BaseProviderWorktime> selectBaseProviderWorktimeBycodeNew(String providercode);
+
     /**
      * 查询base_provider_worktime(服务商服务时间信息)列表
      * 
@@ -42,6 +52,14 @@ public interface BaseProviderWorktimeMapper
      * @return 结果
      */
     public int insertBaseProviderWorktime(BaseProviderWorktime baseProviderWorktime);
+
+    /**
+     * 新增base_provider_worktime(服务商服务时间信息)
+     *
+     * @param baseProviderWorktime base_provider_worktime(服务商服务时间信息)
+     * @return 结果
+     */
+    public int insertBaseProviderWorktimeNew(BaseProviderWorktime baseProviderWorktime);
 
     /**
      * 修改base_provider_worktime(服务商服务时间信息)
@@ -66,4 +84,20 @@ public interface BaseProviderWorktimeMapper
      * @return 结果
      */
     public int deleteBaseProviderWorktimeByIds(String[] providercodes);
+
+    /**
+     * 修改base_provider_worktime(服务商服务时间信息)
+     *
+     * @param providerCode base_provider_worktime(服务商服务时间信息)
+     * @return 结果
+     */
+    public int updateBaseProviderWorktimeByCode(String providerCode);
+
+    /**
+     * 修改base_provider_worktime(服务商服务时间信息)
+     *
+     * @param providerCode base_provider_worktime(服务商服务时间信息)
+     * @return 结果
+     */
+    public int updateBaseProviderWorktimeByCodeNew(String providerCode);
 }

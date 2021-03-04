@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception;
 /**
  * 演示模式异常
  * 
- * @author admin
+ *
  */
 public class DemoModeException extends RuntimeException
 {

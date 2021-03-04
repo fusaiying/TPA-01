@@ -4,7 +4,6 @@
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="100px"
                label-position="right" size="mini">
         <el-row>
-
           <el-col :span="8">
             <el-form-item label="产品编码：" prop="riskCode">
               <el-input v-model="sendForm.riskCode" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -12,9 +11,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="状态：" prop="riskStatus">
-              <el-select v-model="sendForm.riskStatus" class="item-width" placeholder="请选择">
-                <el-option v-for="item in product_statusOptions" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+              <el-select  v-model="sendForm.riskStatus" class="item-width" placeholder="请选择">
+                <el-option v-if="product_statusOptions.length>0" :key="product_statusOptions[1].dictValue" :label="product_statusOptions[1].dictLabel"
+                           :value="product_statusOptions[1].dictValue"/>
+                <el-option v-if="product_statusOptions.length>0" :key="product_statusOptions[2].dictValue" :label="product_statusOptions[2].dictLabel"
+                           :value="product_statusOptions[2].dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -30,6 +31,8 @@
                 value-format="yyyy-MM-dd"/>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="riskName">
               <el-input v-model="sendForm.riskName" class="item-width" clearable size="mini" placeholder="请输入"/>
@@ -93,7 +96,11 @@
           <el-table-column align="center" prop="riskClass" label="产品分类" show-overflow-tooltip/>
           <el-table-column align="center" :formatter="getRiskStatus" prop="riskStatus" label="状态"
                            show-overflow-tooltip/>
-          <el-table-column prop="conclusionExplanation" align="center" label="当前结论" show-overflow-tooltip/>
+          <el-table-column prop="examineConclusion" align="center" label="当前结论" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{selectDictLabel(approvalconclusionOptions, scope.row.examineConclusion)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="synchronizeTime" label="同步日期" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.synchronizeTime | changeDate}}</span>
@@ -107,7 +114,7 @@
           <el-table-column prop="updateBy" align="center" label="操作人" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="dialogFormVisible=true">改派</el-button>
+              <el-button size="mini" type="text" @click="sendOne(scope.row)">改派</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -129,10 +136,24 @@
 
           <el-col :span="10">
             <el-form-item label="操作人：" prop="updateBy">
-              <el-select v-model="updateBy" class="item-width" placeholder="请选择" clearable>
-                <el-option v-for="item in sysUserOptions" :key="item.userName" :label="item.userName"
-                           :value="item.userName"/>
+              <el-select
+                v-model="updateBy"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请选择操作人"
+                :remote-method="remoteMethod"
+                :loading="userLoading"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in sysUserOptions"
+                  :key="ind"
+                  :label="item.userName"
+                  :value="item.userName">
+                </el-option>
               </el-select>
+
             </el-form-item>
           </el-col>
         </el-row>
@@ -151,7 +172,7 @@
   import moment from 'moment'
   import {selectClaimProductList, updateClaimProductList, selectSysUser} from '@/api/insuranceRules/ruleDefin'
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'},]
   export default {
     filters: {
       changeDate: function (value) {
@@ -162,6 +183,8 @@
     },
     data() {
       return {
+        userLoading: false,
+        riskCodes: [],
         dialogFormVisible: false,
         updateBy: undefined,
         sendForm: {
@@ -185,6 +208,7 @@
         changeSerchData: {},
         dataonLineListSelections: [],
         product_statusOptions: [],
+        approvalconclusionOptions: [],
         sysUserOptions: [],
       }
     },
@@ -196,9 +220,16 @@
       this.product_statusOptions = this.dictList.find(item => {
         return item.dictType === 'product_status'
       }).dictDate
-      this.searchHandle()
-      selectSysUser().then(res => {
-        this.sysUserOptions = res.data
+      this.approvalconclusionOptions = this.dictList.find(item => {
+        return item.dictType === 'approvalconclusion'
+      }).dictDate
+      selectClaimProductList(this.queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          this.workPoolData = res.rows
+          this.totalCount = res.total
+        }
+      }).catch(res => {
+
       })
     },
     methods: {
@@ -242,13 +273,9 @@
       },
       send() {
         if (this.updateBy != null && this.updateBy !== '') {
-          let riskCodes = []
-          for (let i = 0; i < this.dataonLineListSelections.length; i++) {
-            riskCodes.push(this.dataonLineListSelections[i].riskCode)
-          }
           let data = {
             updateBy: this.updateBy,
-            riskCode: riskCodes
+            riskCode: this.riskCodes
           }
           updateClaimProductList(data).then(res => {
             if (res != null && res.code === 200) {
@@ -260,6 +287,7 @@
               })
               this.updateBy = undefined
               this.searchHandle()
+              this.dialogFormVisible = false
             }
           }).catch(res => {
             this.updateBy = undefined
@@ -271,42 +299,23 @@
           )
         }
       },
+      sendOne(row) {
+        this.updateBy = ''
+        this.dialogFormVisible = true
+        this.riskCodes = []
+        this.riskCodes.push(row.riskCode)
+      },
       sendMany() {
-
+        this.updateBy=''
         if (this.dataonLineListSelections.length <= 0) {
           return this.$message.warning(
             "请先选择需要改派的数据！"
           )
         } else {
           this.dialogFormVisible = true
-          if (this.updateBy != null && this.updateBy !== '') {
-            let riskCodes = []
-            for (let i = 0; i < this.dataonLineListSelections.length; i++) {
-              riskCodes.push(this.dataonLineListSelections[i].riskCode)
-            }
-            let data = {
-              updateBy: this.updateBy,
-              riskCode: riskCodes
-            }
-            updateClaimProductList(data).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message({
-                  message: '改派成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-                this.updateBy = undefined
-                this.searchHandle()
-              }
-            }).catch(res => {
-              this.updateBy = undefined
-              this.$message.error('改派失败！')
-            })
-          } else {
-            return this.$message.warning(
-              "请先选择操作人！"
-            )
+          this.riskCodes = []
+          for (let i = 0; i < this.dataonLineListSelections.length; i++) {
+            this.riskCodes.push(this.dataonLineListSelections[i].riskCode)
           }
         }
       },
@@ -315,13 +324,26 @@
       },
       getRiskStatus(row) {
         return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
+      },
+      remoteMethod(query) {
+        let data = {
+          userName: query
+        }
+        if (query !== '' && query != null) {
+          selectSysUser(data).then(res => {
+            this.sysUserOptions = res.data
+          })
+        }
       }
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 220px;
+  }
+  /*element原有样式修改*/
+  .el-form-item ::v-deep label {
+    font-weight: normal;
   }
 </style>

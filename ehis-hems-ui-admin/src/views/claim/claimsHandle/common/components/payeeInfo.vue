@@ -1,312 +1,699 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item name="1" style="position: relative;">
-        <el-button type="primary" :disabled="status == 'show'" size="mini"  @click="openBeneficDia" style="float:right;position:absolute;top:8px;right:30px">受益人信息</el-button>
-        <template slot="title">
-          <span style="font-size:16px;color:black">领款人信息</span>
-          <span v-show="!activeNames.length" style="font-size: 12px;color: #409EFF;position: absolute;right: 40px;">展开</span>
+    <div slot="header" class="clearfix">
+      <div style="width: 100%;cursor: pointer;">
+        <span style="font-size:16px;color:black">领款人信息</span>
+        <div style="float: right;">
+          <el-button
+            v-if="status==='edit' && (node==='accept' || node==='calculateReview') && baseInfo.claimtype==='02'"
+            type="primary" size="mini"
+            @click="addOrEdit('add')">新增
+          </el-button>
+        </div>
+      </div>
+    </div>
+    <el-table
+      :header-cell-style="{color:'black',background:'#f8f8ff'}"
+      :data="tableData"
+      size="small"
+      highlight-current-row
+      tooltip-effect="dark"
+      style="width: 100%;">
+      <el-table-column align="center" width="140" prop="payMode" label="收款方式" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ selectDictLabel(collectedmodeOptions, scope.row.payMode) }}</span>
         </template>
-        <el-form
-          style="padding-bottom: 30px;"
-          :model="payeeInfo"
-          :disabled="(status==='show' || node ==='physical')?true:false"
-          ref="payeeInfoForm"
-          size="mini"
-          :rules="payeeInfoRules">
-          <el-table
-            :data="Array.isArray(payeeInfo.data)?payeeInfo.data:[]"
-            size="small"
-            highlight-current-row
-            :header-cell-style="{color:'black',background:'#f8f8ff'}"
-            tooltip-effect="dark"
-            style="width: 100%">
-            <el-table-column align="center" label="序号" type="index" width="50"></el-table-column>
-            <el-table-column align="center" label="分配比例（%）" width="140">
-              <template slot-scope="scope">
-                <el-form-item
-                  :prop="'data.' + scope.$index + '.payoutratio'"
-                  :rules="payeeInfoRules.payoutratio">
-                  <el-input v-model="scope.row.payoutratio" placeholder="请输入" size="mini"/>
-                  <!-- <el-input-number style="width: 130px;" v-model="scope.row.payoutratio" :precision="2"></el-input-number> -->
-                </el-form-item>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="金额" width="140">
-              <template slot-scope="scope">
-                <el-form-item
-                  v-if="isAppeal"
-                  :prop="'data.' + scope.$index + '.payamount'"
-                  :rules="payeeInfoRules.payamount">
-                  <!-- <el-input :disabled="scope.row.payamountDisabled" v-model="scope.row.payamount" placeholder="请输入" size="mini"/> -->
-                  <el-input-number style="width: 130px;" v-model="scope.row.payamount" :precision="2"
-                    @change="val=>payamountChange(val, scope.$index)"></el-input-number>
-                </el-form-item>
-                <el-form-item
-                  v-else
-                  :prop="'data.' + scope.$index + '.payamount'"
-                  :rules="payeeInfoRules.payamount">
-                  <!-- <el-input :disabled="scope.row.payamountDisabled" v-model="scope.row.payamount" placeholder="请输入" size="mini"/> -->
-                  <el-input-number style="width: 130px;" v-model="scope.row.payamount" :min="0" :precision="2"
-                                   @change="val=>payamountChange(val, scope.$index)"></el-input-number>
-                </el-form-item>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="领款方式" prop="payeetype">
-              <template slot-scope="scope">
-                {{ /*dict.label.collectedmode[scope.row.payeetype]*/ getCollectedmodeOptions(scope.row.payeetype)}}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="与被保人关系" prop="relationship" width="120">
-              <template slot-scope="scope">
-                {{ /*dict.label.relation_ship_apply[scope.row.relationship]*/ getRelation_ship_applyOptions( scope.row.relationship)}}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="领款人" prop="payee"></el-table-column>
-            <el-table-column align="center" label="手机" width="100" prop="telephone"></el-table-column>
-            <el-table-column align="center" label="银行名称" width="160" prop="bankname"></el-table-column>
-            <el-table-column align="center" label="账户" width="160" prop="accountno"></el-table-column>
-            <el-table-column align="center" label="证件类型" prop="idtype">
-              <template slot-scope="scope">
-                {{ /*dict.label.applicant_idtype[scope.row.idtype]*/getapplicant_idtypeOptions(scope.row.idtype) }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="证件号码" width="150" prop="idcardno"></el-table-column>
-            <el-table-column align="center" min-width="220" label="证件有效期" prop="longterm"></el-table-column>
-            <el-table-column align="center" label="国籍" prop="nationality">
-              <template slot-scope="scope">
-                {{ /*dict.label.nativeplace[scope.row.nationality]*/getNativeplaceOptions(scope.row.nationality) }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="职业" prop="occupation">
-              <template slot-scope="scope">
-                {{ /*dict.label.payee_occupation[scope.row.occupation]*/getPayee_occupationOptions( scope.row.occupation) }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="详细地址" width="160" prop="address"></el-table-column>
-            <el-table-column align="center" label="操作" fixed="right">
-              <template slot-scope="scope">
-                <el-form-item>
-                  <el-button type="text" size="mini" @click="savePayeeInfo(scope.row)">保存</el-button>
-                </el-form-item>
-              </template>
-            </el-table-column>
-          </el-table>
+      </el-table-column>
+      <el-table-column align="center" v-if="baseInfo.claimtype==='02'" key="1" prop="relationIns" label="与被保人关系"
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ selectDictLabel(relation_ship_applyOptions, scope.row.relationIns) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="payeeName" label="领款人" show-overflow-tooltip/>
+      <el-table-column align="center" v-if="baseInfo.claimtype==='02'" key="2" prop="payeeMobile" label="手机号"
+                       show-overflow-tooltip/>
+      <!-- <el-table-column align="center" prop="accAttribute" label="账户属性" show-overflow-tooltip>
+         <template slot-scope="scope">
+           <span v-if="baseInfo.claimtype==='02'">{{ selectDictLabel(account_attributeOptions, '0') }}</span>
+           <span v-else>{{ selectDictLabel(account_attributeOptions, '1') }}</span>
+         </template>
+
+       </el-table-column>-->
+      <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
+      <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
+      <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
+                       label="操作" width="140" key="9">
+        <template slot-scope="scope">
+          <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
+          <el-button size="mini" style="color: red" type="text" @click="delPayee(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-dialog :visible.sync="dialogFormVisible" width="80%" hight="90%" :before-close="goBack">
+      <div>
+        <div>
+          <span style="font-size: 20px">账户信息维护</span>
+          <span style="float: right;">
+          <el-button type="primary" size="mini" @click="searchTkData">健康险客户账户查询</el-button>
+          <el-button type="primary" size="mini" @click="save">保存</el-button>
+          <el-button size="mini" @click="goBack">返回</el-button>
+        </span>
+        </div>
+        <el-divider/>
+        <el-table
+          v-if="isTkTableShow"
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          :data="tkTableData"
+          size="small"
+          highlight-current-row
+          tooltip-effect="dark"
+          style="width: 100%;margin-bottom: 10px">
+          <el-table-column label="" width="40">
+            <template slot-scope="scope">
+              <el-radio :label="scope.$index" v-model="radio" @change.native="getCurrentRow(scope.row)"
+                        style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="polno" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="certNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="" label="保单生效日" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankNo" label="银行代码" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankDesc" label="银行描述" show-overflow-tooltip/>
+          <el-table-column align="center" prop="acctNo" label="银行账号" show-overflow-tooltip/>
+          <el-table-column align="center" prop="bankClientName" label="账户名" show-overflow-tooltip/>
+          <el-table-column align="center" prop="idType" label="证件类型" show-overflow-tooltip/>
+          <el-table-column align="center" prop="idNo" label="证件号码" show-overflow-tooltip/>
+          <el-table-column align="center" prop="regionCode" label="地区码" show-overflow-tooltip/>
+        </el-table>
+        <el-form ref="baseForm" :model="baseForm" :rules="tableFormRules"
+                 style="padding-bottom: 30px;" label-width="150px" size="mini" class="baseInfo_class">
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="领款方式：" prop="payMode">
+                <el-select v-model="baseForm.payMode" class="item-width" placeholder="请选择" clearable>
+                  <el-option v-for="option in collectedmodeOptions" :key="option.dictValue" :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="与被保人关系：" prop="relationIns">
+                <el-select v-model="baseForm.relationIns" class="item-width" placeholder="请选择" clearable>
+                  <el-option v-for="option in relation_ship_applyOptions" :key="option.dictValue"
+                             :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="领款人姓名：" prop="payeeName">
+                <el-input v-model="baseForm.payeeName" class="item-width" clearable size="mini"
+                          placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="性别：" prop="payeeSex">
+                <el-select v-model="baseForm.payeeSex" class="item-width" placeholder="请选择" clearable>
+                  <el-option v-for="option in rgtSexOptions" :key="option.dictValue" :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="手机号码：" prop="payeeMobile">
+                <el-input v-model="baseForm.payeeMobile" class="item-width" clearable size="mini" placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="国籍：" prop="payeeNationality"
+                            :rules="tableFormRules.payeeNationality">
+                <el-select v-model="baseForm.payeeNationality" class="item-width"
+                           placeholder="请选择" clearable>
+                  <el-option key="01" label="中国"
+                             value="01"/>
+                  <!--<el-option v-for="option in nativeplaceOptions" :key="option.dictValue" :label="option.dictLabel"
+                             :value="option.dictValue"/>-->
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="证件类型：" prop="payeeIdType">
+                <el-select v-model="baseForm.payeeIdType" class="item-width" placeholder="请选择" clearable>
+                  <el-option v-for="option in card_typeOptions" :key="option.dictValue" :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="证件号码：" prop="payeeIdNo">
+                <el-input v-model="baseForm.payeeIdNo" class="item-width" clearable size="mini"
+                          placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="证件有效日期：" prop="idEndDate">
+                <el-date-picker
+                  v-model="baseForm.idEndDate"
+                  :disabled="baseForm.checked"
+                  style="width: 168px;"
+                  type="date"
+                  clearable
+                  placeholder="选择日期"/>
+                <el-checkbox v-model="baseForm.checked" @change="longDate">长期</el-checkbox>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="开户行：" prop="payeeBank">
+                <el-select v-model="baseForm.payeeBank" class="item-width" placeholder="请选择" clearable>
+                  <!-- <el-option v-for="option in card_typeOptions" :key="option.dictValue" :label="option.dictLabel"
+                             :value="option.dictValue"/>-->
+                  <el-option key="01" label="上海交通银行"
+                             value="01"/>
+                  <el-option key="02" label="上海中国银行"
+                             value="02"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="分配比例：" prop="payeeRatio">
+                <el-input v-model="baseForm.payeeRatio" style="width: 185px" clearable size="mini"
+                          placeholder="请输入"/>
+                <span>%</span>
+              </el-form-item>
+
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item label="职业：" prop="payeeOccupation">
+                <el-select v-model="baseForm.payeeOccupation" filterable class="item-width"
+                           placeholder="请选择" clearable>
+                  <!-- <el-option v-for="option in payee_occupationOptions" :key="option.dictValue" :label="option.dictLabel"
+                              :value="option.dictValue"/>-->
+                  <el-option key="01" label="老师"
+                             value="01"/>
+                  <el-option key="02" label="销售"
+                             value="02"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="账号：" prop="accNo">
+                <el-input v-model="baseForm.accNo" class="item-width" clearable size="mini"
+                          placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+            <!--<el-col :span="8">
+              <el-form-item label="账户属性：" prop="accAttribute">
+                <el-select v-model="baseForm.accAttribute" filterable class="item-width"
+                           placeholder="请选择" clearable>
+                  <el-option v-for="option in account_attributeOptions" :key="option.dictValue"
+                             :label="option.dictLabel"
+                             :value="option.dictValue"/>
+                </el-select>
+              </el-form-item>
+            </el-col>-->
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="确认账号：" prop="accNoCheck">
+                <el-input v-model="baseForm.accNoCheck" class="item-width" clearable size="mini"
+                          @paste.native.capture.prevent="handlePaste"
+                          placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="详细地址：" prop="address">
+                <el-cascader
+                  v-model="region"
+                  :options="regions"
+                  class="item-width"
+                  clearable
+                  filterable
+                  @change="changeAddress"/>
+                <el-input v-model="baseForm.address" show-word-limit maxlength="100"
+                          style="width:61%;" clearable size="mini" placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
-      </el-collapse-item>
-    </el-collapse>
-    <beneficiary v-model="beneficVis" :node="node" :claimno="claimno" :insured-info="insuredInfo"></beneficiary>
+      </div>
+    </el-dialog>
+
   </el-card>
 </template>
 <script>
-import { savePayeeInfo,calculationPayAmount } from "@/api/claim/handleDeal";
-import Beneficiary from "../modul/beneficiary";
-export default {
-  components: {Beneficiary},
-  //dicts: ['applicant_idtype', 'collectedmode', 'relation_ship_apply', 'nativeplace', 'payee_occupation'],
-  inject: ['getPayeeInfo'],
-  props: {
-    dictList:Array,
-    status: String,
-    node: String,
-    claimno: String,
-    isAppeal: {
-      type: Boolean,
-      default: function() {
-        return false
-      }
+  import {getAddress} from '@/api/supplierManager/supplier'
+  import {listRemark, addPayee, editPayee, delPayee, listRemarkRptNo,getCustomerAccount} from '@/api/claim/handleCom'
+
+  let dictss = [{dictType: 'relation_ship_apply'}, {dictType: 'card_type'}, {dictType: 'rgtSex'},
+    {dictType: 'collectedmode'}, {dictType: 'account_attribute'},]
+  export default {
+    props: {
+      baseInfo: Object,
+      fixInfo: Object,
+      applicantData: Object,
+      insuredFormData: Object,
+      sonPayeeInfoData: Array,
+      status: String,
+      node: String,
     },
-    payeeInfo: {
-      type: Object,
-      default: function() {
-        return {};
-      }
-    },
-    insuredInfo: Object,
-    finalamount: String
-  },
-  watch:{
-    finalamount(val, oldVal){
-      if(val){
-        this.$refs.payeeInfoForm.clearValidate()
-        if(this.payeeInfo.data.length){
-          this.payeeInfo.data.map((item, i) => {
-            if(item.payoutratio){
-              this.calculationPayAmount(item.payoutratio, i)
-            } else {
-              this.$set(this.payeeInfo.data[i],'payamount',null)
-            }
-          })
+    watch: {
+      applicantData: function (newValue) {
+        this.insuredData = newValue
+        this.baseForm.payeeName = this.insuredData.name,
+          this.baseForm.payeeSex = this.insuredData.sex,
+          this.baseForm.payeeMobile = this.insuredData.mobile,
+          this.baseForm.payeeNationality = this.insuredData.nationality,
+          this.baseForm.payeeIdType = this.insuredData.idType,
+          this.baseForm.payeeIdNo = this.insuredData.idNo
+        //this.baseForm.payeeOccupation = this.insuredData.occupation
+        if (this.insuredData.idEndDate != null && this.insuredData.idEndDate !== '') {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate === '9999-12-31') {
+            this.$set(this.baseForm, 'checked', true)
+          }
+        } else {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
+        }
+        if (this.baseForm.idEndDate === '9999-12-31') {
+          this.checked = true
+        }
+      },
+      fixInfo: function (newValue) {
+        this.fixInfoData = newValue
+      },
+      sonPayeeInfoData: function (newValue) {
+        if (newValue !== null && newValue !== undefined && newValue.length > 0) {
+          this.tableData = newValue
         }
       }
-    }
-  },
-  data() {
-    //校验金额（数字 最多三位小数）
-    console.log(11111,this.isAppeal)
-    const isAmount = (rule, value, callback) => {
-      const index = rule.field.replace("data.", "").replace(".payamount", "")
-      // this.$set(this.payeeInfo.data[index],'payoutratio',null)
-      if(this.finalamount){
-        if(this.amountFlag){
-          callback()
+    },
+    data() {
+      const checkRequired = (rule, value, callback) => {
+        if (this.baseForm.relationIns !== '1') {
+          if (!value) {
+            callback(new Error('与被保人关系非本人时必录'))
+          } else {
+            callback()
+          }
         } else {
-          if ((value==null||value=='')&&value!==0) {
-            callback(new Error("金额必填"))
+          callback()
+        }
+      }
+      const checkPayeeOccupation = (rule, value, callback) => {
+        if (this.baseForm.relationIns !== '1') {
+          if (!value) {
+            callback(new Error('与被保人关系非本人时必录'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+      const checkAccNo = (rule, value, callback) => {
+        let reg = /^[A-Za-z0-9]+$/;
+        if (!value) {
+          callback(new Error('请输入账号'))
+        } else {
+          if (!reg.test(value)) {
+            callback(new Error('只允许录入数字和字母'))
           } else {
             callback()
           }
         }
-      } else {
-        this.$set(this.payeeInfo.data[index],'payamount',null)
-        callback(new Error("请先录入实赔金额"))
       }
-    }
-    //比例（0-100 最多一位小数）
-    const isRatio = (rule, value, callback) => {
-      const index = rule.field.replace("data.", "").replace(".payoutratio", "")
-      // this.$set(this.payeeInfo.data[index],'payamount',null)
-      if(this.finalamount){
-        if (value) {
-          if (value > 100 || value < 0) {
-            callback(new Error("输入0-100之间的数字"))
-          } else {
-            const regx = /^(\d+|\d+\.\d{1,2})$/
-            if (!regx.test(value)) {
-              callback(new Error("最多保留两位小数"))
-            } else {
-              callback()
-              this.$refs.payeeInfoForm.clearValidate()
-              this.calculationPayAmount(this.payeeInfo.data[index].payoutratio,index)
-            }
-          }
+      const checkAccNoCheck = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请再次输入账号'))
         } else {
-          callback()
-        }
-      } else {
-        this.$set(this.payeeInfo.data[index],'payoutratio',null)
-        callback(new Error("请先录入实赔金额"))
-      }
-    }
-    return {
-      activeNames: ["1"],
-      amountFlag: false,
-      beneficVis: false,
-      //赔付信息规则
-      payeeInfoRules: {
-        payamount: [{ validator: isAmount, trigger: ["blur","change"], required: true }], //实赔金额
-        payoutratio: [{ validator: isRatio, trigger: "blur", required: false }] //赔付结论
-      },
-      /*'applicant_idtype', 'collectedmode', 'relation_ship_apply', 'nativeplace', 'payee_occupation'*/
-      applicant_idtypeOptions: [],
-      collectedmodeOptions: [],
-      relation_ship_applyOptions: [],
-      nativeplaceOptions: [],
-      payee_occupationOptions: []
-    };
-  },
-  mounted() {
-    if (this.dictList!=null && this.dictList.length!=0){
-      this.applicant_idtypeOptions=this.dictList.find(item=>{
-        return item.dictType=='applicant_idtype'
-      }).dictDate
-      this.collectedmodeOptions=this.dictList.find(item=>{
-        return item.dictType=='collectedmode'
-      }).dictDate
-      this.relation_ship_applyOptions=this.dictList.find(item=>{
-        return item.dictType=='relation_ship_apply'
-      }).dictDate
-      this.nativeplaceOptions=this.dictList.find(item=>{
-        return item.dictType=='nativeplace'
-      }).dictDate
-      this.payee_occupation=this.dictList.find(item=>{
-        return item.dictType=='payee_occupation'
-      }).dictDate
-    }
-  },
-  methods: {
-
-      getCollectedmodeOptions(data) {
-      return  this.selectDictLabel(this.collectedmodeOptions,data)
-      },
-    getRelation_ship_applyOptions(data) {
-      return  this.selectDictLabel(this.relation_ship_applyOptions,data)
-    },
-    getapplicant_idtypeOptions(data) {
-      return  this.selectDictLabel(this.applicant_idtypeOptions,data)
-    },
-    getNativeplaceOptions(data) {
-      return  this.selectDictLabel(this.nativeplaceOptions,data)
-    },
-    getPayee_occupationOptions(data) {
-      return  this.selectDictLabel(this.payee_occupationOptions,data)
-    },
-
-    openBeneficDia(){
-      this.beneficVis=true
-    },
-    payamountChange(val, index){
-      this.$set(this.payeeInfo.data[index],'payoutratio',null)
-    },
-    payoutratioChange(val, index){
-      // this.$set(this.payeeInfo.data[index],'payamount',null)
-    },
-    calculationPayAmount(payoutratio, index){
-      let params = {
-        claimno: this.claimno,
-        payoutratio
-      }
-      calculationPayAmount(params).then(res => {
-          if (res.status === "1") {
-            if(res.data===0){
-              this.amountFlag=true
-            }
-            this.$set(this.payeeInfo.data[index], 'payamount', res.data)
+          if (value !== this.baseForm.accNo) {
+            callback(new Error('输入的账号不一致，请重新输入'))
+            return this.$message.warning(
+              "输入的账号不一致，请重新输入!"
+            )
           } else {
-            this.$message({message: res.data.errMsg? res.data.errMsg:'操作失败！', type: "error"})
+            callback()
+          }
+        }
+      }
+      const checkAddress = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('详细地址不能为空'))
+        } else {
+          if (this.region.length <= 0) {
+            callback(new Error('省市区不能为空'))
+          } else {
+            callback()
+          }
+        }
+      }
+      return {
+        fixInfoData: {},
+        batchInfoData: {},
+        insuredData: {},
+        isAddOrEdit: '',
+        radio: undefined,
+        isTkTableShow: false,
+        tkTableData: [],
+        dialogFormVisible: false,
+        baseForm: {
+          rptNo: undefined,
+          checked: false,
+          payMode: undefined,
+          relationIns: '1',
+          payeeName: undefined,
+          payeeSex: undefined,
+          payeeMobile: undefined,
+          payeeNationality: undefined,
+          payeeIdType: undefined,
+          payeeIdNo: undefined,
+          idEndDate: undefined,
+          payeeBank: undefined,
+          payeeRatio: '100',
+          payeeOccupation: undefined,
+          accNo: undefined,
+          accNoCheck: undefined,
+          province: undefined,
+          city: undefined,
+          district: undefined,
+          address: undefined,
+        },
+        regions: [],
+        region: [],
+        activeNames: ["1"],
+        amountFlag: false,
+        beneficVis: false,
+        //赔付信息规则
+        payeeInfoRules: {},
+        tableData: [],
+        dictList: [],
+        relation_ship_applyOptions: [],
+        account_attributeOptions: [],
+        collectedmodeOptions: [],
+        card_typeOptions: [],
+        rgtSexOptions: [],
+        tableFormRules: {
+          payMode: [{required: true, message: '领款方式不能为空!', trigger: ['blur', 'change']}],
+          relationIns: [{required: true, message: '与被保人关系不能为空!', trigger: ['blur', 'change']}],
+          payeeName: [{required: true, message: '领款人姓名不能为空!', trigger: ['blur', 'change']}],
+          payeeSex: [{required: true, message: '性别不能为空!', trigger: ['blur', 'change']}],
+          payeeMobile: {validator: checkRequired, trigger: ['blur', 'change']},//与被保人关系非本人时必录，否则非必录
+          payeeNationality: [{required: true, message: '国籍不能为空!', trigger: ['blur', 'change']}],
+          payeeIdType: [{required: true, message: '证件类型不能为空!', trigger: ['blur', 'change']}],
+          payeeIdNo: [{required: true, message: '证件号码不能为空!', trigger: ['blur', 'change']}],
+          idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}],
+          payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur', 'change']}],
+          payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur', 'change']}],
+          payeeOccupation: {validator: checkPayeeOccupation, trigger: ['blur', 'change']},
+          accNo: {validator: checkAccNo, required: true, trigger: ['blur', 'change']},//允许录入数字和字母
+          accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
+          address: {validator: checkAddress, required: true, trigger: ['blur', 'change']},
+        }
+      };
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.relation_ship_applyOptions = this.dictList.find(item => {
+        return item.dictType === 'relation_ship_apply'
+      }).dictDate
+      this.card_typeOptions = this.dictList.find(item => {
+        return item.dictType === 'card_type'
+      }).dictDate
+      this.rgtSexOptions = this.dictList.find(item => {
+        return item.dictType === 'rgtSex'
+      }).dictDate
+      this.collectedmodeOptions = this.dictList.find(item => {
+        return item.dictType === 'collectedmode'
+      }).dictDate
+      this.account_attributeOptions = this.dictList.find(item => {
+        return item.dictType === 'account_attribute'
+      }).dictDate
+
+      getAddress().then(response => {
+        this.regions = response
+      }).catch(error => {
+        console.log(error)
+      })
+      this.getData()
+
+    },
+    methods: {
+      save() {//新增  编辑
+        this.baseForm.province = this.region[0]
+        this.baseForm.city = this.region[1]
+        this.baseForm.district = this.region[2]
+        this.$refs.baseForm.validate((valid) => {
+          if (valid) {
+            if (this.isAddOrEdit === 'add') {
+              this.baseForm.rptNo = this.fixInfoData.rptNo
+              addPayee(this.baseForm).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                }
+                this.$emit("refresh-item", 'payeeInfo')
+                this.dialogFormVisible = false
+              }).catch(res => {
+                this.$message({
+                  message: '保存失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              })
+            } else if (this.isAddOrEdit === 'edit') {
+              editPayee(this.baseForm).then(res => {
+                if (res != null && res.code === 200) {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                }
+                this.$emit("refresh-item", 'payeeInfo')
+                this.dialogFormVisible = false
+              }).catch(res => {
+                this.$message({
+                  message: '保存失败!',
+                  type: 'error',
+                  center: true,
+                  showClose: true
+                })
+              })
+            }
           }
         })
-    },
-    savePayeeInfo(row) {
-      this.$refs.payeeInfoForm.validate(valid => {
-        if (valid) {
-          const params = {
-            claimno: this.claimno,
-            payeeno: row.payeeno,
-            payoutratio: row.payoutratio,
-            payamount: row.payamount
+
+
+      },
+      goBack() {
+        this.dialogFormVisible = false
+        this.$refs.baseForm.resetFields()
+      },
+      handlePaste() {
+        //粘贴会触发来到这里,无操作就行
+      },
+      getData() {
+        if (this.batchInfoData != null && this.batchInfoData.claimtype === '02') {//事后
+          listRemark(this.fixInfoData.rptNo).then(res => {
+            this.tableData = res.rows
+          }).catch(error => {
+            console.log(error)
+          })
+        } else if (this.batchInfoData != null && this.batchInfoData.claimtype === '01') {//直结掉医院的接口
+
+        }
+      },
+      addOrEdit(status, row) {
+        this.isAddOrEdit = status
+        this.isTkTableShow = false
+        this.tkTableData=[]
+        this.$emit('getApplicantData')
+        this.dialogFormVisible = true
+        this.baseForm = {
+          rptNo: undefined,
+          checked: false,
+          payMode: undefined,
+          relationIns: '1',
+          payeeName: this.insuredData.name,
+          payeeSex: this.insuredData.sex,
+          payeeMobile: this.insuredData.mobile,
+          payeeNationality: this.insuredData.nationality,
+          payeeIdType: this.insuredData.idType,
+          payeeIdNo: this.insuredData.idNo,
+          idEndDate: '',
+          payeeBank: undefined,
+          payeeRatio: '100',
+          payeeOccupation: undefined,
+          accNo: undefined,
+          accNoCheck: undefined,
+          province: undefined,
+          city: undefined,
+          district: undefined,
+          address: undefined,
+        }
+        this.region = []
+        if (this.insuredData.idEndDate != null && this.insuredData.idEndDate !== '') {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.idEndDate)
+          if (this.insuredData.idEndDate === '9999-12-31') {
+            this.$set(this.baseForm, 'checked', true)
           }
-          savePayeeInfo(params).then(res => {
-              if (res.status === "1") {
-                // this.getPayeeInfo()
-                this.$message({message: "操作成功",type: "success"})
-              } else {
-                this.$message({message: res.data.errMsg? res.data.errMsg:'操作失败！', type: "error"})
+        } else {
+          this.$set(this.baseForm, 'idEndDate', this.insuredData.dateRange ? this.insuredData.dateRange[1] : '')
+        }
+        if (this.baseForm.idEndDate === '9999-12-31') {
+          this.checked = true
+        }
+        if (status === 'edit') {
+          this.isAddOrEdit = 'edit'
+          this.baseForm = row
+          this.region[0] = row.province
+          this.region[1] = row.city
+          this.region[2] = row.district
+          if (row.idEndDate === '9999-12-31') {
+            this.baseForm.checked = true
+          }
+        }
+      },
+      longDate() {
+        if (this.baseForm.checked) {
+          this.baseForm.idEndDate = '9999-12-31'
+        }
+
+      },
+      delPayee(row) {
+        this.$confirm('确认要删除当前数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          delPayee(row.payeeId).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '删除成功',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              //调用查询方法
+              listRemarkRptNo(this.fixInfo.rptNo).then(res => {
+                if (res != null && res.code === 200) {
+                  this.tableData = res.data
+                }
+              })
+            }
+          }).catch(res => {
+            this.$message({
+              message: '删除失败',
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      },
+      changeAddress() {
+        this.baseForm.province = this.region[0]
+        this.baseForm.city = this.region[1]
+        this.baseForm.district = this.region[2]
+      },
+      getCurrentRow(row) {//获取当前行的数据
+        this.baseForm.payeeName = row.bankClientName//账户名
+        this.baseForm.payeeIdType = row.idType//证件类型
+        this.baseForm.payeeIdNo = row.idNo//证件号码
+        this.baseForm.payeeBank = row.bankNo//开户行
+        this.baseForm.accNo = row.acctNo//账号
+      },
+      searchTkData() {
+        //请求参数customerNo客户号  certno分单号 多个用，隔开（不知道是中英文的那个逗号）
+        this.radio = undefined
+        this.$emit('getInsuredData')
+        console.log(this.insuredFormData);
+        if (this.insuredFormData.caseInsuredData == undefined || this.insuredFormData.caseInsuredData == null) {
+          return this.$message.warning(
+            "请先保存被保人信息！"
+          )
+        }else {
+          if (this.insuredFormData.policyInfoData==undefined || this.insuredFormData.policyInfoData.length<=0){
+            return this.$message.warning(
+              "被保人信息未选择保单！"
+            )
+          }else {
+            let query = {
+              customerNo: this.insuredFormData.caseInsuredData.insuredNo,
+              certno: ''
+            }
+            let policyItemNoStr=''
+            for (let i = 0; i < this.insuredFormData.policyInfoData.length-1; i++) {
+              policyItemNoStr=policyItemNoStr+this.insuredFormData.policyInfoData[i].policyItemNo+','
+            }
+            policyItemNoStr = policyItemNoStr+this.insuredFormData.policyInfoData[this.insuredFormData.policyInfoData.length-1].policyItemNo
+            query.certno=policyItemNoStr
+            getCustomerAccount(query).then(res=>{
+              if (res!=null && res.status=='00'){
+                if (res.bankInfoList.length>0){
+                  this.tkTableData=res.bankInfoList
+                  this.isTkTableShow = true
+                }else {
+                  return this.$message.warning(
+                    "未查询到健康险客户账户！"
+                  )
+                }
+
               }
             })
-        } else {
-          return false
+
+          }
         }
-      })
+
+
+
+      },
     }
-  }
-};
+  };
 </script>
 <style scoped>
-.item-width {
-  width: 200px;
-}
-.el-collapse {
-  border: none;
-}
-.el-tabs /deep/ .el-tabs__item {
-  width: 10%;
-}
-.el-collapse /deep/ .el-collapse-item__header {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  color: #555;
-  font-weight: 360;
-  font-size: 14px;
-}
+  .item-width {
+    width: 200px;
+  }
+
+  .el-collapse {
+    border: none;
+  }
+
+  .el-tabs ::v-deep .el-tabs__item {
+    width: 10%;
+  }
+
+  .el-collapse ::v-deep .el-collapse-item__header {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 14px;
+  }
 </style>

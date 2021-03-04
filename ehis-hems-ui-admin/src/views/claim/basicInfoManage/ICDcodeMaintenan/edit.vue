@@ -20,12 +20,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="ICD编码：" prop="icdcode">
-              <el-input :disabled="isShow" v-model="baseForm.icdcode" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input :disabled="isShow" v-model="baseForm.icdcode" class="item-width" maxlength="20"  clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="ICD中文名称：" prop="icdmname">
-              <el-input v-model="baseForm.icdmname" class="item-width" clearable size="mini" placeholder="请输入" @change="nameChange"/>
+              <el-input v-model="baseForm.icdmname" class="item-width" clearable size="mini" maxlength="50"  placeholder="请输入" @change="nameChange"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -63,11 +63,11 @@ export default {
       },
       totalCount: 0,
       baseFormRules: {
-        icdmname: [{ validator: checkChineseName, trigger: 'blur' }],
-       /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
+        icdmname: [{ required: true, message: 'ICD中文名称不能为空', trigger: 'blur' }],
+        /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
         // name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         // englishName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        icdcode: [{ required: true, message: 'ICD编码不可为空', trigger: 'blur' }]
+        icdcode: [{ required: true, message: 'ICD编码不能为空', trigger: 'blur' }]
       },
       loading: false
     }
@@ -79,9 +79,9 @@ export default {
       /*const params = this.baseForm
       params.pageNo = 0
       params.pageSize = 0*/
-     this.baseForm.icdcode = this.$route.query.icdcode,
+      this.baseForm.icdcode = this.$route.query.icdcode,
         this.baseForm.icdmname=this.$route.query.icdmname
-   /*   this.getByICDCode(params)*/
+      /*   this.getByICDCode(params)*/
     }else {
       this.isShow=false
     }
@@ -105,12 +105,22 @@ export default {
             // 编辑时保存
             updateICDCode(this.baseForm).then(res => {
               if (res.code === 200) {
-                this.$message({
-                  message: '修改成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
+                if(res.data!=121) {
+                  this.$message({
+                    message: '修改成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.push({
+                    path: '/basic-info/icd',
+                  })
+                }
+                else {
+                  this.$message.warning('ICD已存在，请核实')
+                }
+
               } else {
                 this.$message({
                   message: '修改失败！',
@@ -124,15 +134,25 @@ export default {
             //  新增时保存
             addICDCode(this.baseForm).then(res => {
               if (res!=null && res.code === 200) {
-                this.$message({
-                  message: '新增成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else {
+                if(res.data!=121) {
+                  this.$message({
+                    message: '新增成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.push({
+                    path: '/basic-info/icd',
+                  })
+                }
+                else {
+                  this.$message.warning('ICD已存在，请核实')
+                }
 
               }
+
+
             })
           }
         } else {
@@ -140,13 +160,13 @@ export default {
         }
       })
     },
-   /* //  打开方式为编辑时获取数据
-    getByICDCode(params) {
-      getICDList(params).then(res => {
-        this.baseForm = res.data.list[0]
-        this.loading = false
-      })
-    },*/
+    /* //  打开方式为编辑时获取数据
+     getByICDCode(params) {
+       getICDList(params).then(res => {
+         this.baseForm = res.data.list[0]
+         this.loading = false
+       })
+     },*/
     goBack() {
       this.$router.go(-1)
     }
@@ -155,11 +175,11 @@ export default {
 </script>
 
 <style scoped>
-  .item-width {
-    width: 200px;
-  }
-  /*element原有样式修改*/
-  .el-form-item /deep/ label {
-    font-weight: normal;
-  }
+.item-width {
+  width: 200px;
+}
+/*element原有样式修改*/
+.el-form-item ::v-deep label {
+  font-weight: normal;
+}
 </style>

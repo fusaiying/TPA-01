@@ -11,7 +11,7 @@
       <el-table ref="departmentTable" :data="departmentForm.form"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
-        <el-table-column label="就诊类型" prop="visitingType" align="center" >
+        <el-table-column label="就诊类型" prop="visitingType" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id " :prop="'form.' + scope.$index + '.visitingType'"
                           :rules="departmentFormRules.visitingType">
@@ -25,7 +25,7 @@
             <span v-else>{{ scope.row.visitingTypeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="一级科室" prop="firstDept" align="center" >
+        <el-table-column label="一级科室" prop="firstDept" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.firstDept'"
                           :rules="departmentFormRules.firstDept">
@@ -34,7 +34,7 @@
             <span v-else>{{ scope.row.firstDept }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="二级科室" prop="secondDept" align="center" >
+        <el-table-column label="二级科室" prop="secondDept" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.secondDept'"
                           :rules="departmentFormRules.secondDept">
@@ -43,7 +43,7 @@
             <span v-else>{{ scope.row.secondDept }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="就诊楼层" prop="visitingFloor" align="center" >
+        <el-table-column label="就诊楼层" prop="visitingFloor" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.visitingFloor'"
                           :rules="departmentFormRules.visitingFloor">
@@ -52,7 +52,7 @@
             <span v-else>{{ scope.row.visitingFloor }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center" width="160">
+        <el-table-column label="是否特色科室" prop="charactdeptFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.charactdeptFlag" class="item-width" placeholder="请选择" clearable
@@ -66,7 +66,7 @@
             <span v-else>{{getCharactdeptFlag(scope.row.charactdeptFlag) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否直结" prop="straightknotFlag" align="center" width="160">
+        <el-table-column label="是否直结" prop="straightknotFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.straightknotFlag" class="item-width" placeholder="请选择" clearable
@@ -79,7 +79,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.straightknotFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center" width="160">
+        <el-table-column label="是否可医保卡" prop="cartevitalFlag" align="center"  show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id ">
               <el-select v-model="scope.row.cartevitalFlag" class="item-width" placeholder="请选择" clearable
@@ -92,7 +92,7 @@
             <span v-else>{{ getCharactdeptFlag(scope.row.cartevitalFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" width="160">
+        <el-table-column label="是否特需" prop="spprocurementFlag" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id">
               <el-select v-model="scope.row.spprocurementFlag" class="item-width" placeholder="请选择" clearable
@@ -105,25 +105,25 @@
             <span v-else>{{  getCharactdeptFlag(scope.row.spprocurementFlag )}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="出诊时间" align="center" width="400">
-          <template slot-scope="scope">
-            <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callstarttime'"
-                          :rules="departmentFormRules.callstarttime" align="center">
-              <el-date-picker v-model="scope.row.callstarttime" type="datetime" placeholder="选择出诊开始时间" size="mini"  value-format="yyyy-MM-dd hh:mm:ss" @blur="compareStartTime(scope.$index,scope.row)"
-      style="width: 190px;"/>
+        <!--        <el-table-column label="出诊时间" align="center" width="400" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callstarttime'"
+                                  :rules="departmentFormRules.callstarttime" align="center">
+                      <el-date-picker v-model="scope.row.callstarttime" type="datetime" placeholder="选择出诊开始时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 190px;"/>
 
-            </el-form-item>
-            <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callendtime'"
-                          :rules="departmentFormRules.callendtime" align="center">
-              <el-date-picker v-model="scope.row.callendtime" type="datetime" placeholder="选择出诊结束时间" size="mini"  value-format="yyyy-MM-dd hh:mm:ss" @blur="compareEndTime(scope.$index,scope.row)"
+                    </el-form-item>
+                    <el-form-item v-if="!scope.row.id" :prop="'form.' + scope.$index + '.callendtime'"
+                                  :rules="departmentFormRules.callendtime" align="center">
+                      <el-date-picker v-model="scope.row.callendtime" type="datetime" placeholder="选择出诊结束时间" size="mini"  value-format="yyyy-MM-dd HH:mm:ss"
 
-                              style="width: 190px;padding-left: 10px"/>
+                                      style="width: 190px;padding-left: 10px"/>
 
-            </el-form-item>
-            <span v-else>{{ scope.row.callstarttime }}-{{ scope.row.callendtime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="100" >
+                    </el-form-item>
+                    <span v-else>{{ scope.row.callstarttime }}-{{ scope.row.callendtime }}</span>
+                  </template>
+                </el-table-column>-->
+        <el-table-column label="操作" align="center" width="100"  fixed="right">
           <template slot-scope="scope">
                     <span>
                       <el-button type="text" size="mini" v-if="departmentTableShow && !scope.row.isSet"
@@ -141,10 +141,23 @@
       </el-button>
 
     </el-card>
+    <!--    <el-dialog
+          :visible.sync="dialogVisible"
+          :modal="modalValue"
+          :close-on-click-modal="false"
+          title="提示"
+          width="30%">
+          <span>{{ '删除当前行科室信息？' }}</span>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="delConfirm">确 定</el-button>
+            </span>
+        </el-dialog>-->
   </el-form>
 </template>
 <script>
 import {getdepInfo, adddepInfo} from "@/api/baseInfo/medicalManage";
+
 
 export default {
   props: {
@@ -167,19 +180,64 @@ export default {
 
 
   data() {
+    const checkCallstarttime = (rules, value, callback) => {
+      const index = rules.field.replace('form.', '').replace('.callstarttime', '').replace('.callendtime', '')
+      const {callstarttime, callendtime} = this.departmentForm.form[index]
+      if ((callstarttime==undefined ||callstarttime == null || callstarttime == ''  ) ) {
+        console.log('---------------')
+        this.indexContacts[index] = 1
+        callback(new Error('出诊开始时间不能为空'))
+      }
+      else {
+        if(callendtime!=undefined ||callendtime!=null || callendtime !='') {
+          if (callstarttime >= callendtime) {
+            callback(new Error('出诊开始时间要小于出结束至时间'))
+          } else {
+            callback()
+          }
+        }
+        else {
+          callback()
+        }
+      }
+    }
+    const checkCallendtime = (rules, value, callback) => {
+      const index = rules.field.replace('form.', '').replace('.callstarttime', '').replace('.callendtime', '')
+      const {callstarttime, callendtime} = this.departmentForm.form[index]
+      if ((callendtime==undefined ||callendtime == null || callendtime == ''  ) ) {
+        this.indexContacts[index] = 1
+        callback(new Error('出诊结束时间不能为空'))
+      }
+      else {
+        if(callstarttime!= undefined || callstarttime !=null || callstarttime!=''  ) {
+          if (callstarttime >= callendtime) {
+            callback(new Error('出诊结束时间要大于出诊开始时间'))
+          } else {
+            callback()
+          }
+        }
+        else {
+          callback()
+        }
+      }
+    }
 
     return {
-
+      index: '',
+      dialogVisible: false,
+      modalValue: false,
+      //出诊开始时间下标
+      indexContacts: [],
       departmentFormRules: {
-        callendtime: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        callstarttime: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        callendtime: [{required: true,validator: checkCallendtime, trigger: 'blur'}],
+        callstarttime: [{required: true, validator: checkCallstarttime, trigger: 'blur'}],
         visitingType: [{required: true, message: '不能为空！', trigger: 'change'}],
         firstDept: [{required: true, message: '不能为空！', trigger: 'blur'}],
         secondDept: [{required: true, message: '不能为空！', trigger: 'blur'}],
         visitingFloor: [{required: true, message: '不能为空！', trigger: 'blur'}],
 
       },
-      saveFlag: true,
+
       visitingTypeOptions: [],
       yes_or_noOptions: [],
 
@@ -197,41 +255,7 @@ export default {
 
   },
   methods: {
-    //判断时间
-    compareStartTime(index,row){
-      if(row.callendtime!=null){
 
-        if(row.callendtime<row.callstarttime){
-
-          this.saveFlag=false
-          this.$message.warning('出诊开始时间要小于出诊截至时间')
-        }
-        else {
-
-          this.saveFlag=true
-
-        }
-
-      }
-      else {
-        this.saveFlag=true
-      }
-    },
-    compareEndTime(index,row){
-      if(row.callstarttime!=null){
-        if(row.callendtime<row.callstarttime){
-          this.saveFlag=false
-          this.$message.warning('出诊开始时间要小于出诊截至时间')
-        }
-        else {
-          this.saveFlag=true
-        }
-
-      }
-      else {
-        this.saveFlag=true
-      }
-    },
 
 
     getCharactdeptFlag(data) {
@@ -253,69 +277,65 @@ export default {
     saveHandle() {
       this.$refs.departmentForm.validate((valid) => {
         if(this.departmentForm.form!=null && this.departmentForm.form.length>0) {
-          if (this.saveFlag) {
-            if (valid) {
-              //存在调用科室信息保存的接口
-              if (this.providerCode) {
-                //调用新增的接口
-                /*  if(isAdd){*/
-                let formData = {
-                  providerCode: this.providerCode,
-                  form: this.departmentForm.form,
-                  orgFlag: this.status
-                }
-                adddepInfo(formData).then(res => {
-                  if (res.code == '200') {
-                    this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-
-                  } else {
-                    this.$message({
-                      message: '保存失败!',
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  }
-                })
+          if (valid) {
+            //存在调用科室信息保存的接口
+            if (this.providerCode) {
+              //调用新增的接口
+              /*  if(isAdd){*/
+              let formData = {
+                providerCode: this.providerCode,
+                form: this.departmentForm.form,
+                orgFlag: this.status
               }
-              /* //修改的接口
-           else{
-             updatedepInfo(this.departmentFrom.form).then(res => {
-               if (res.code=='200') {
-                 this.$message({
-                   message: '修改成功！',
-                   type: 'success',
-                   center: true,
-                   showClose: true
-                 })
+              adddepInfo(formData).then(res => {
+                if (res.code == '200') {
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
 
-               } else  {
-                 this.$message({
-                   message: '修改失败!',
-                   type: 'error',
-                   center: true,
-                   showClose: true
-                 })
-               }
-             })
-           }
-
-         }*/
-            } else {
-              return false
+                } else {
+                  this.$message({
+                    message: '保存失败!',
+                    type: 'error',
+                    center: true,
+                    showClose: true
+                  })
+                }
+              })
             }
+            /* //修改的接口
+         else{
+           updatedepInfo(this.departmentFrom.form).then(res => {
+             if (res.code=='200') {
+               this.$message({
+                 message: '修改成功！',
+                 type: 'success',
+                 center: true,
+                 showClose: true
+               })
+
+             } else  {
+               this.$message({
+                 message: '修改失败!',
+                 type: 'error',
+                 center: true,
+                 showClose: true
+               })
+             }
+           })
+         }
+
+       }*/
           } else {
-            this.$message.warning('出诊开始时间要小于出诊截至时间')
+            this.$message.warning('科室信息必录项未必录')
           }
         }
         else {
           this.$message({
-            message: '科室账号不能为空',
+            message: '至少添加一条科室信息！',
             center: true,
             type: "warning"
           });
@@ -323,10 +343,27 @@ export default {
 
       })
     },
-    //科室删除按钮  是否调用了数据库的接口
+
+    /*    delConfirm() {
+          this.dialogVisible = false
+          this.departmentForm.form.splice(this.index,1)
+        },*/
 
     delHandle(index, row) {
-      this.departmentForm.form.splice(index, 1)
+      //this.dialogVisible = true
+      this.index = index
+      this.$confirm('是否删除当前行科室信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.departmentForm.form.splice(this.index,1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     editHandle(index, row) {
       this.departmentForm.form[index].id = ''
@@ -367,13 +404,18 @@ export default {
 // 校验数据
     validateForm() {
       let flag = null
-      this.$refs['departmentForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
-      })
+      if(this.departmentForm.form!=null && this.departmentForm.form.length>0) {
+        this.$refs['departmentForm'].validate(valid => {
+          if (valid) {
+            flag = '01'
+          } else {
+            flag = '03'
+          }
+        })
+      }
+      else {
+        flag= '02'
+      }
       return flag
     }
 
@@ -387,7 +429,7 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 

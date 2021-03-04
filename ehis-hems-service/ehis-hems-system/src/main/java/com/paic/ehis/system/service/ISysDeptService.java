@@ -1,14 +1,14 @@
 package com.paic.ehis.system.service;
 
-import java.util.List;
-
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.domain.vo.TreeSelect;
+
+import java.util.List;
 
 /**
  * 部门管理 服务层
  * 
- * @author admin
+ *
  */
 public interface ISysDeptService
 {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.ClaimCasePolicyMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCasePolicy" id="ClaimCasePolicyResult">
+        <result property="policyNo"    column="policy_no"    />
+        <result property="relationId"    column="relation_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="name"    column="name"    />
+        <result property="appName"    column="app_name"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+        <result property="validEndDate"    column="valid_end_date"    />
+        <result property="policyRiskType"    column="policy_risk_type"    />
+        <result property="policyStatus"    column="policy_status"    />
+        <result property="specialAgreement"    column="special_agreement"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="policyType"    column="policy_type"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="orgPolicyNo"    column="org_policy_no"    />
+        <result property="orgPolicyItemNo"    column="org_policy_item_no"    />
+        <result property="ssFlag"    column="ss_flag"    />
+    </resultMap>
+
+    <sql id="selectClaimCasePolicyVo">
+        select relation_id, rpt_no, policy_no, status, create_by, create_time, update_by, update_time,policy_item_no,name,app_name,valid_end_date,valid_start_date,policy_risk_type,policy_status,special_agreement,company_code,company_name,policy_manage_com,policy_type,plan_code,org_policy_no,org_policy_item_no,ss_flag from claim_case_policy
+    </sql>
+
+    <select id="selectClaimCasePolicyByRptNo" parameterType="String" resultMap="ClaimCasePolicyResult">
+        <include refid="selectClaimCasePolicyVo"/>
+        where rpt_no = #{rptNo} and status='Y'
+    </select>
+
+</mapper>

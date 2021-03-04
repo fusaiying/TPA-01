@@ -1,13 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.SysNotice;
+
+import java.util.List;
 
 /**
  * 通知公告表 数据层
  * 
- * @author admin
+ *
  */
 public interface SysNoticeMapper
 {

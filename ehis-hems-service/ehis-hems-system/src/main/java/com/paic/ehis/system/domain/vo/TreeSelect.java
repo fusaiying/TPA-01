@@ -1,16 +1,17 @@
 package com.paic.ehis.system.domain.vo;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.domain.SysMenu;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Treeselect树结构实体类
  * 
- * @author admin
+ *
  */
 public class TreeSelect implements Serializable
 {

@@ -3,7 +3,7 @@ package com.paic.ehis.common.core.exception.job;
 /**
  * 计划策略异常
  * 
- * @author admin
+ *
  */
 public class TaskException extends Exception
 {

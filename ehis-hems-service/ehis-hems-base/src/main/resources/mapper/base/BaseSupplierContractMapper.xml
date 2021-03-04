@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseSupplierContractMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseSupplierContract" id="BaseSupplierContractResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="contractName"    column="contract_name"    />
+        <result property="contractType"    column="contract_type"    />
+        <result property="servcomNo"    column="servcom_no"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="providerName"    column="provider_name"    />
+        <result property="contracttermType"    column="contractterm_type"    />
+        <result property="signDate"    column="sign_date"    />
+        <result property="cvaliDate"    column="cvali_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="expiryDate"    column="expiry_date"    />
+        <result property="contractadvance"    column="contractadvance"    />
+        <result property="email"    column="email"    />
+        <result property="contractPartyA"    column="contract_party_a"    />
+        <result property="contractPartyB"    column="contract_party_b"    />
+        <result property="connectedContract"    column="connected_contract"    />
+        <result property="contractPartyC"    column="contract_party_c"    />
+        <result property="deposit"    column="deposit"    />
+        <result property="cooperativeUnit"    column="cooperative_unit"    />
+        <result property="straight"    column="straight"    />
+        <result property="flag"    column="flag"    />
+        <result property="contractControlFlag"    column="contract_control_flag"    />
+        <result property="treatmentDiscount"    column="treatment_discount"    />
+        <result property="examineDiscount"    column="examine_discount"    />
+        <result property="bedDiscount"    column="bed_discount"    />
+        <result property="allowance"    column="allowance"    />
+        <result property="specialDiscount"    column="special_discount"    />
+        <result property="costs"    column="costs"    />
+        <result property="project"    column="project"    />
+        <result property="discountinfo"    column="discountinfo"    />
+        <result property="averageCost"    column="average_cost"    />
+        <result property="type"    column="type"    />
+        <result property="advicenum"    column="advicenum"    />
+        <result property="averageCostExcept"    column="average_cost_except"    />
+        <result property="contractsort"    column="contractsort"    />
+        <result property="remark"    column="remark"    />
+        <result property="reason"    column="reason"    />
+        <result property="phone"    column="phone"    />
+        <result property="tel"    column="tel"    />
+        <result property="boxRidgeCode"    column="box_ridge_code"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="renewFlag"    column="renew_flag"    />
+        <result property="liaison"    column="liaison"    />
+        <result property="providerType"    column="provider_Type"    />
+    </resultMap>
+
+    <sql id="selectBaseSupplierContractVo">
+        select serial_no, bussiness_status, contract_no, contract_name, contract_type, servcom_no, provider_code, provider_name, contractterm_type, sign_date, cvali_date, end_date, expiry_date, contractadvance, email, contract_party_a, contract_party_b, connected_contract, contract_party_c, deposit, cooperative_unit, straight, flag, contract_control_flag, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, discountinfo, average_cost, type, advicenum, average_cost_except, contractsort, remark, reason, phone, tel, box_ridge_code, status, create_by, create_time, update_by, update_time,renew_flag,liaison,provider_Type from base_supplier_contract
+    </sql>
+
+    <select id="selectBaseSupplierContractList" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+        <include refid="selectBaseSupplierContractVo"/>
+        <where>
+            <if test="serialNo !=null and serialNo != ''"> and serial_no = #{serialNo}</if>
+            <if test="bussinessStatus !=null and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="contractName != null  and contractName != ''"> and contract_name =  #{contractName}</if>
+            <if test="contractType != null  and contractType != ''"> and contract_type = #{contractType}</if>
+            <if test="servcomNo != null  and servcomNo != ''"> and servcom_no = #{servcomNo}</if>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="providerName != null  and providerName != ''"> and provider_name like concat('%', #{providerName}, '%')</if>
+            <if test="contracttermType != null  and contracttermType != ''"> and contractterm_type = #{contracttermType}</if>
+            <if test="signDate != null "> and sign_date = #{signDate}</if>
+            <if test="expiryDate != null "> and expiry_date = #{expiryDate}</if>
+            <if test="contractadvance != null  and contractadvance != ''"> and contractadvance = #{contractadvance}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="contractPartyA != null  and contractPartyA != ''"> and contract_party_a = #{contractPartyA}</if>
+            <if test="contractPartyB != null  and contractPartyB != ''"> and contract_party_b = #{contractPartyB}</if>
+            <if test="connectedContract != null  and connectedContract != ''"> and connected_contract = #{connectedContract}</if>
+            <if test="contractPartyC != null  and contractPartyC != ''"> and contract_party_c = #{contractPartyC}</if>
+            <if test="deposit != null "> and deposit = #{deposit}</if>
+            <if test="cooperativeUnit != null  and cooperativeUnit != ''"> and cooperative_unit = #{cooperativeUnit}</if>
+            <if test="straight != null  and straight != ''"> and straight = #{straight}</if>
+            <if test="flag != null  and flag != ''"> and flag = #{flag}</if>
+            <if test="contractControlFlag != null  and contractControlFlag != ''"> and contract_control_flag = #{contractControlFlag}</if>
+            <if test="treatmentDiscount != null  and treatmentDiscount != ''"> and treatment_discount = #{treatmentDiscount}</if>
+            <if test="examineDiscount != null  and examineDiscount != ''"> and examine_discount = #{examineDiscount}</if>
+            <if test="bedDiscount != null  and bedDiscount != ''"> and bed_discount = #{bedDiscount}</if>
+            <if test="allowance != null  and allowance != ''"> and allowance = #{allowance}</if>
+            <if test="specialDiscount != null  and specialDiscount != ''"> and special_discount = #{specialDiscount}</if>
+            <if test="costs != null  and costs != ''"> and costs = #{costs}</if>
+            <if test="project != null  and project != ''"> and project = #{project}</if>
+            <if test="discountinfo != null  and discountinfo != ''"> and discountinfo = #{discountinfo}</if>
+            <if test="averageCost != null  and averageCost != ''"> and average_cost = #{averageCost}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="advicenum != null  and advicenum != ''"> and advicenum = #{advicenum}</if>
+            <if test="averageCostExcept != null  and averageCostExcept != ''"> and average_cost_except = #{averageCostExcept}</if>
+            <if test="contractsort != null  and contractsort != ''"> and contractsort = #{contractsort}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="boxRidgeCode != null  and boxRidgeCode != ''"> and box_ridge_code = #{boxRidgeCode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="providerType != null  and providerType != ''"> and provider_Type = #{providerType}</if>
+
+
+            <if test="cvaliDate != null">
+                <![CDATA[AND cvali_date >= #{cvaliDate} ]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[AND ifnull(end_date,cvali_date) <= #{endDate}]]>
+            </if>
+
+            <if test="createStartStr != null and createStartStr != ''">
+                <![CDATA[AND create_time >= #{createStartStr} ]]>
+            </if>
+            <if test="createEndStr != null and createEndStr != ''">
+                <![CDATA[AND create_time <= #{createEndStr}]]>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectBaseSupplierContractById" parameterType="String" resultMap="BaseSupplierContractResult">
+        <include refid="selectBaseSupplierContractVo"/>
+        where contract_no = #{contractNo}
+    </select>
+
+ <!--若供应商下已签订合约，合约列表中供应商对应的合约编码、合约名称、合约起止日期均有值，
+    且当供应商下存在多条合约信息时仅显示该供应商下合约终止日期最晚的一条合约信息（即供应商下创建时间最晚的一条合约信息）-->
+    <select id="selectBaseSupplierLast" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+        select *from base_supplier_contract order by end_date desc limit 0,1;
+    </select>
+
+    <!--供应商合约管理主查询页面需默认显示截止当前时间合约签约时间在三个月内且合约状态为“有效”的数据-->
+    <select id="selectBaseSupplierMonth" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+    select * from base_supplier_contract where (cvali_date between  #{dBefore} and  #{dNow}) and bussiness_status="01" order by cvali_date desc
+    </select>
+
+    <!--根据服务机构id查询合约信息-->
+    <select id="selectBaseproviderCode" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+        select  * from base_supplier_contract where provider_code=#{providerCode}
+    </select>
+
+    <!--根据服务机构id查询合约备份信息-->
+    <select id="selectSupplierContractByCode" parameterType="BaseSupplierContract" resultMap="BaseSupplierContractResult">
+        select  * from base_supplier_contract_bak where provider_code=#{providerCode}
+    </select>
+
+    <insert id="insertBaseSupplierContract" parameterType="BaseSupplierContract">
+        insert into base_supplier_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="bussinessStatus != null">bussiness_status,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="contractType != null">contract_type,</if>
+            <if test="servcomNo != null">servcom_no,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="providerCode != null and providerCode != ''">provider_name,</if>
+            <if test="contracttermType != null">contractterm_type,</if>
+            <if test="signDate != null">sign_date,</if>
+            <if test="cvaliDate != null">cvali_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="expiryDate != null">expiry_date,</if>
+            <if test="contractadvance != null">contractadvance,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="contractPartyA != null and contractPartyA != ''">contract_party_a,</if>
+            <if test="contractPartyB != null and contractPartyB != ''">contract_party_b,</if>
+            <if test="connectedContract != null and connectedContract != ''">connected_contract,</if>
+            <if test="contractPartyC != null and contractPartyC != ''">contract_party_c,</if>
+            <if test="deposit != null">deposit,</if>
+            <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit,</if>
+            <if test="straight != null and straight != ''">straight,</if>
+            <if test="flag != null">flag,</if>
+            <if test="contractControlFlag != null and contractControlFlag != ''">contract_control_flag,</if>
+            <if test="treatmentDiscount != null">treatment_discount,</if>
+            <if test="examineDiscount != null">examine_discount,</if>
+            <if test="bedDiscount != null">bed_discount,</if>
+            <if test="allowance != null">allowance,</if>
+            <if test="specialDiscount != null">special_discount,</if>
+            <if test="costs != null">costs,</if>
+            <if test="project != null and project != ''">project,</if>
+            <if test="discountinfo != null">discountinfo,</if>
+            <if test="averageCost != null and averageCost != ''">average_cost,</if>
+            <if test="type != null">type,</if>
+            <if test="advicenum != null">advicenum,</if>
+            <if test="averageCostExcept != null and averageCostExcept != ''">average_cost_except,</if>
+            <if test="contractsort != null">contractsort,</if>
+            <if test="remark != null">remark,</if>
+            <if test="reason != null and reason != ''">reason,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="tel != null and tel != ''">tel,</if>
+            <if test="boxRidgeCode != null">box_ridge_code,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="renewFlag != null  and renewFlag != ''">renew_flag,</if>
+            <if test="liaison != null  and liaison != ''">liaison,</if>
+            <if test="providerType != null  and providerType != ''">provider_Type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="bussinessStatus != null">#{bussinessStatus},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="contractType != null">#{contractType},</if>
+            <if test="servcomNo != null">#{servcomNo},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="providerCode != null and providerCode != ''">(select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code = #{providerCode}),</if>
+            <if test="contracttermType != null">#{contracttermType},</if>
+            <if test="signDate != null">#{signDate},</if>
+            <if test="cvaliDate != null">#{cvaliDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="expiryDate != null">#{expiryDate},</if>
+            <if test="contractadvance != null">#{contractadvance},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="contractPartyA != null and contractPartyA != ''">#{contractPartyA},</if>
+            <if test="contractPartyB != null and contractPartyB != ''">#{contractPartyB},</if>
+            <if test="connectedContract != null and connectedContract != ''">#{connectedContract},</if>
+            <if test="contractPartyC != null and contractPartyC != ''">#{contractPartyC},</if>
+            <if test="deposit != null">#{deposit},</if>
+            <if test="cooperativeUnit != null and cooperativeUnit != ''">#{cooperativeUnit},</if>
+            <if test="straight != null and straight != ''">#{straight},</if>
+            <if test="flag != null">#{flag},</if>
+            <if test="contractControlFlag != null and contractControlFlag != ''">#{contractControlFlag},</if>
+            <if test="treatmentDiscount != null">#{treatmentDiscount},</if>
+            <if test="examineDiscount != null">#{examineDiscount},</if>
+            <if test="bedDiscount != null">#{bedDiscount},</if>
+            <if test="allowance != null">#{allowance},</if>
+            <if test="specialDiscount != null">#{specialDiscount},</if>
+            <if test="costs != null">#{costs},</if>
+            <if test="project != null and project != ''">#{project},</if>
+            <if test="discountinfo != null">#{discountinfo},</if>
+            <if test="averageCost != null and averageCost != ''">#{averageCost},</if>
+            <if test="type != null">#{type},</if>
+            <if test="advicenum != null">#{advicenum},</if>
+            <if test="averageCostExcept != null and averageCostExcept != ''">#{averageCostExcept},</if>
+            <if test="contractsort != null">#{contractsort},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="reason != null and reason != ''">#{reason},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="tel != null and tel != ''">#{tel},</if>
+            <if test="boxRidgeCode != null">#{boxRidgeCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="renewFlag != null and renewFlag != ''">#{renewFlag},</if>
+            <if test="liaison != null  and liaison != ''">#{liaison},</if>
+            <if test="providerType != null  and providerType != ''">#{providerType},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseContactsByCodeNew" parameterType="String">
+        delete from base_supplier_contract where provider_code=#{providerCode}
+    </update>
+
+    <update id="updateBaseSupplierContract" parameterType="BaseSupplierContract">
+        update base_supplier_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNo !=null and serialNo != ''">serial_no = #{serialNo},</if>
+            <if test="bussinessStatus !=null and bussinessStatus != ''">bussiness_status = #{bussinessStatus},</if>
+            <if test="contractNo != null and contractNo != ''">contract_no = #{contractNo},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="servcomNo != null">servcom_no = #{servcomNo},</if>
+            <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
+            <if test="providerName != null and providerName != ''">provider_name = #{providerName},</if>
+            <if test="contracttermType != null">contractterm_type = #{contracttermType},</if>
+            <if test="signDate != null">sign_date = #{signDate},</if>
+            <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="expiryDate != null">expiry_date = #{expiryDate},</if>
+            <if test="contractadvance != null">contractadvance = #{contractadvance},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="contractPartyA != null and contractPartyA != ''">contract_party_a = #{contractPartyA},</if>
+            <if test="contractPartyB != null and contractPartyB != ''">contract_party_b = #{contractPartyB},</if>
+            <if test="connectedContract != null and connectedContract != ''">connected_contract = #{connectedContract},</if>
+            <if test="contractPartyC != null and contractPartyC != ''">contract_party_c = #{contractPartyC},</if>
+            <if test="deposit != null">deposit = #{deposit},</if>
+            <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit = #{cooperativeUnit},</if>
+            <if test="straight != null and straight != ''">straight = #{straight},</if>
+            <if test="flag != null">flag = #{flag},</if>
+            <if test="contractControlFlag != null and contractControlFlag != ''">contract_control_flag = #{contractControlFlag},</if>
+            <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>
+            <if test="examineDiscount != null">examine_discount = #{examineDiscount},</if>
+            <if test="bedDiscount != null">bed_discount = #{bedDiscount},</if>
+            <if test="allowance != null">allowance = #{allowance},</if>
+            <if test="specialDiscount != null">special_discount = #{specialDiscount},</if>
+            <if test="costs != null">costs = #{costs},</if>
+            <if test="project != null and project != ''">project = #{project},</if>
+            <if test="discountinfo != null">discountinfo = #{discountinfo},</if>
+            <if test="averageCost != null and averageCost != ''">average_cost = #{averageCost},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="advicenum != null">advicenum = #{advicenum},</if>
+            <if test="averageCostExcept != null and averageCostExcept != ''">average_cost_except = #{averageCostExcept},</if>
+            <if test="contractsort != null">contractsort = #{contractsort},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="reason != null and reason != ''">reason = #{reason},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="tel != null and tel != ''">tel = #{tel},</if>
+            <if test="boxRidgeCode != null">box_ridge_code = #{boxRidgeCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+
+            <if test="endDate == null">end_date = #{endDate},</if>
+            <if test="renewFlag != null and renewFlag != ''">renew_flag = #{renewFlag},</if>
+            <if test="renewFlag == null or renewFlag == ''">renew_flag = #{renewFlag},</if>
+            <if test="liaison != null  and liaison != ''">liaison = #{liaison},</if>
+            <if test="providerType != null  and providerType != ''">provider_Type = #{providerType},</if>
+        </trim>
+        where contract_no = #{contractNo}
+    </update>
+
+    <delete id="deleteBaseSupplierContractById" parameterType="String">
+        update base_supplier_contract set bussiness_status="02" where contract_no = #{contractNo}
+    </delete>
+
+    <delete id="deleteBaseSupplierContractByIds" parameterType="String">
+        update  base_supplier_contract set bussiness_status="02" where contract_no in
+        <foreach item="contractNo" collection="array" open="(" separator="," close=")">
+            #{contractNo}
+        </foreach>
+    </delete>
+
+    <select id="generatorContractName" parameterType="map" resultType="String">
+select concat( #{id}, '-',(select dict_label from sys_dict_data where dict_type = #{dictType} and dict_value = #{dictValue}) ,'-', date_format(now(), '%Y%m%d'))
+from dual
+    </select>
+    
+</mapper>

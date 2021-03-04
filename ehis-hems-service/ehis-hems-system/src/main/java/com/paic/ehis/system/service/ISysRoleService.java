@@ -1,14 +1,14 @@
 package com.paic.ehis.system.service;
 
+import com.paic.ehis.system.api.domain.SysRole;
+
 import java.util.List;
 import java.util.Set;
-
-import com.paic.ehis.system.api.domain.SysRole;
 
 /**
  * 角色业务层
  * 
- * @author admin
+ *
  */
 public interface ISysRoleService
 {

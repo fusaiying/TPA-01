@@ -60,4 +60,6 @@ public interface BaseSupplierOutletsMapper
      * @return 结果
      */
     public int deleteBaseSupplierOutletsByIds(String[] servcomnos);
+
+   public int  updateBaseSupplierOutletsStatus(BaseSupplierOutlets baseSupplierOutlets);
 }

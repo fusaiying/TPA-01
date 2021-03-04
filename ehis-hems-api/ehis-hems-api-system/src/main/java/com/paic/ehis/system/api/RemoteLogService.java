@@ -1,18 +1,18 @@
 package com.paic.ehis.system.api;
 
+import com.paic.ehis.common.core.constant.ServiceNameConstants;
+import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.system.api.domain.SysOperLog;
 import com.paic.ehis.system.api.factory.RemoteLogFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.paic.ehis.common.core.constant.ServiceNameConstants;
-import com.paic.ehis.common.core.domain.R;
 
 /**
  * 日志服务
  * 
- * @author admin
+ *
  */
 @FeignClient(contextId = "remoteLogService", value = ServiceNameConstants.SYSTEM_SERVICE, fallbackFactory = RemoteLogFallbackFactory.class)
 public interface RemoteLogService
@@ -36,5 +36,5 @@ public interface RemoteLogService
      */
     @PostMapping("/logininfor")
     R<Boolean> saveLogininfor(@RequestParam("username") String username, @RequestParam("status") String status,
-            @RequestParam("message") String message);
+                              @RequestParam("message") String message);
 }

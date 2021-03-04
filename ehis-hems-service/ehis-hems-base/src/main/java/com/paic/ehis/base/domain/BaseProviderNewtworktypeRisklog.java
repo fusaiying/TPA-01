@@ -1,12 +1,12 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.Date;
 
 /**
  * base_provider_newtworktype_risklog(医疗网络类型险种记录)对象 base_provider_newtworktype_risklog

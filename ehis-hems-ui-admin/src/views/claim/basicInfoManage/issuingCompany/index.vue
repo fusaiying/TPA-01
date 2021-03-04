@@ -53,18 +53,22 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="出单公司编码" prop="companycode" align="center"/>
-          <el-table-column label="出单公司名称" prop="companyname" align="center"/>
-          <el-table-column label="操作日期" prop="updateTime" align="center">
+          <el-table-column label="出单公司编码" prop="companycode" align="center" show-overflow-tooltip/>
+          <el-table-column label="出单公司名称" prop="companyname" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.companyname}} | {{scope.row.simplename}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作日期" prop="updateTime" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.updateTime, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作人" prop="updateBy" align="center"/>
+          <el-table-column label="操作人" prop="updateBy" align="center" show-overflow-tooltip/>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="editCompany(scope.row)">编辑</el-button>
-              <el-button type="text" size="mini" style="color: #f00;" @click="serviceRuleDefin(scope.row)">规则
+              <el-button type="text" size="mini" :class="{blueClass:scope.row.flag==false,redClass:scope.row.flag==true}" @click="serviceRuleDefin(scope.row)">规则
               </el-button>
             </template>
           </el-table-column>
@@ -85,85 +89,93 @@
 </template>
 
 <script>
-  import {listIssuingcompany} from '@/api/baseInfo/issuingCompany.js'
+import {listIssuingcompany} from '@/api/baseInfo/issuingCompany.js'
 
-  export default {
-    data() {
-      return {
-        loading: true,
-        formSearch: {},
-        totalCount: 0,
-        // 查询参数
-        queryParams: {
-          pageNum: 1,
-          pageSize: 10,
-          companycode: undefined,
-          companyname: undefined,
-          simplename: undefined
-        },
-        tableData: []
-      }
-    },
-    mounted() {
-      this.searchHandle()
-    },
-    created() {
+export default {
+  data() {
+    return {
+      blueClass:'blueClass',
+      redClass:'redClass',
+      loading: true,
+      formSearch: {},
+      totalCount: 0,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        companycode: undefined,
+        companyname: undefined,
+        simplename: undefined
+      },
+      tableData: []
+    }
+  },
+  mounted() {
+    this.searchHandle()
+  },
+  created() {
 
+  },
+  methods: {
+    resetForm() {
+      this.$refs.searchForm.resetFields()
     },
-    methods: {
-      resetForm() {
-        this.$refs.searchForm.resetFields()
-      },
-      searchHandle() {
-        this.queryParams.pageNum = 1
-        this.queryParams.pageSize = 10
-        this.getData()
-      },
-      getData() {
-        this.loading = true
-        listIssuingcompany(this.queryParams).then(res => {
-          this.tableData = res.rows
-          this.totalCount = res.total
-          this.loading = false
-          if (res.rows.length<=0){
-            return this.$message.warning(
-              "未查询到数据！"
-            )
-          }
-        }).catch(res => {
-          this.loading = false
-        })
-      },
-      serviceRuleDefin(row) {
-        this.$router.push({
-          path: '/basic-info/serviceRuleDefin',
-          query: {companycode: row.companycode, companyname: row.companyname}
-        })
-      },
-      editCompany(row) {
-        this.$router.push({
-          path: '/basic-info/companyEdit',
-          query: {companycode: row.companycode, companyname: row.companyname}
+    searchHandle() {
+      this.queryParams.pageNum = 1
+      this.queryParams.pageSize = 10
+      this.getData()
+    },
+    getData() {
+      this.loading = true
+      listIssuingcompany(this.queryParams).then(res => {
+        this.tableData = res.rows
+        this.totalCount = res.total
+        this.loading = false
+        if (res.rows.length<=0){
+          return this.$message.warning(
+            "未查询到数据！"
+          )
+        }
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+    serviceRuleDefin(row) {
+      this.$router.push({
+        path: '/basic-info/serviceRuleDefin',
+        query: {companycode: row.companycode, companyname: row.companyname}
+      })
+    },
+    editCompany(row) {
+      this.$router.push({
+        path: '/basic-info/companyEdit',
+        query: {companycode: row.companycode, companyname: row.companyname}
 
-        })
-      },
-      addCompany(row) {
-        this.$router.push({
-          path: '/basic-info/companyEdit',
-          isEmpty: false
-        })
-      }
+      })
+    },
+    addCompany(row) {
+      this.$router.push({
+        path: '/basic-info/companyEdit',
+        isEmpty: false
+      })
     }
   }
+}
 </script>
 
 <style scoped>
-  .item-width {
-    width: 200px;
-  }
+.item-width {
+  width: 200px;
+}
 
-  /*element原有样式修改*/
-  .el-form-item /deep/ label {
-    font-weight: normal;
+/*element原有样式修改*/
+.el-form-item ::v-deep label {
+  font-weight: normal;
+}
+  .blueClass{
+    color: #1890ff;
+  }
+  .redClass{
+    color: #f00;
   }
 </style>

@@ -1,15 +1,19 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
-import com.paic.ehis.base.service.IBaseProviderNewtworktypeService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.base.domain.BaseProviderNewtworktype;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
+import com.paic.ehis.base.domain.vo.BaseProviderNetworktypeVO;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper;
+import com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper;
+import com.paic.ehis.base.service.IBaseProviderNewtworktypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper;
-import com.paic.ehis.base.domain.BaseProviderNewtworktype;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet(医疗网络类型)Service业务层处理
@@ -18,7 +22,8 @@ import com.paic.ehis.base.domain.BaseProviderNewtworktype;
  * @date 2021-01-04
  */
 @Service
-public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtworktypeService
+@Transactional
+public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtworktypeService 
 {
     @Autowired
     private BaseProviderNewtworktypeMapper baseProviderNewtworktypeMapper;
@@ -47,7 +52,18 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
     @Override
     public List<BaseProviderNewtworktype> selectBaseProviderNewtworktypeList(BaseProviderNewtworktype baseProviderNewtworktype)
     {
-        return baseProviderNewtworktypeMapper.selectBaseProviderNewtworktypeList(baseProviderNewtworktype);
+        baseProviderNewtworktype.setSupplierCode(baseProviderNewtworktype.getProviderCode());
+        List<BaseProviderNewtworktype>  baseProviderNewtworktypes= baseProviderNewtworktypeMapper.selectBaseProviderNewtworktypeList(baseProviderNewtworktype);
+        /*List<BaseProviderNewtworktype>  baseProviderNewtworktypeinfos = new ArrayList<BaseProviderNewtworktype>();
+        for(BaseProviderNewtworktype baseProviderNewtwork :baseProviderNewtworktypes){
+           if(StringUtils.isNotBlank(baseProviderNewtwork.getNewChooseStr())){
+               baseProviderNewtwork.setNewChoose(Arrays.asList((baseProviderNewtwork.getNewChooseStr().split(","))));
+           }else{
+               baseProviderNewtwork.setNewChoose(new ArrayList());
+           }
+            baseProviderNewtworktypeinfos.add(baseProviderNewtwork);
+       }*/
+        return baseProviderNewtworktypes;
     }
 
     /**
@@ -66,25 +82,57 @@ public class BaseProviderNewtworktypeServiceImpl implements IBaseProviderNewtwor
     /**
      * 修改base_provider_newtworktypet(医疗网络类型)
      * 
-     * @param baseProviderNewtworktypes base_provider_newtworktypet(医疗网络类型)
+     * @param baseProviderNetworktypeVO base_provider_newtworktypet(医疗网络类型)
      * @return 结果
      */
     @Override
-    public int updateBaseProviderNewtworktype(List<BaseProviderNewtworktype> baseProviderNewtworktypes)
+    public int updateBaseProviderNewtworktype(BaseProviderNetworktypeVO baseProviderNetworktypeVO)
     {
         int count = 0;
-        for(BaseProviderNewtworktype baseProviderNewtworktype :baseProviderNewtworktypes){
-            baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
-            //修改当前选项
-            int i = baseProviderNewtworktypeMapper.updateBaseProviderNewtworktype(baseProviderNewtworktype);
-            //保存修改记录
+        List<String> networktypenames = baseProviderNewtworktypeMapper.getCodes(baseProviderNetworktypeVO.getProviderCode());
+        for(BaseProviderNewtworktype baseProviderNewtworktype :baseProviderNetworktypeVO.getMedicalTypeData()){
             BaseProviderNewtworktypeLog baseProviderNewtworktypeLog = new BaseProviderNewtworktypeLog();
-            baseProviderNewtworktypeLog.setNewChoose(baseProviderNewtworktype.getNewChoose());
+            String oldChoose= baseProviderNewtworktype.getOldChoose();
+            baseProviderNewtworktype.setOldChoose(baseProviderNewtworktype.getNewChoose());
+            baseProviderNewtworktype.setNewChoose(oldChoose);
+            baseProviderNewtworktype.setSupplierCode(baseProviderNetworktypeVO.getProviderCode());
+            if(!networktypenames.isEmpty()){
+                if(networktypenames.contains(String.valueOf(baseProviderNewtworktype.getNetworktypeCode()))){
+                    baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
+                    //修改当前选项
+                    //List<String>  arr2= baseProviderNewtworktype.getNewChoose();
+                    //baseProviderNewtworktype.setNewChooseStr(StringUtils.join(arr2, ","));
+                    baseProviderNewtworktypeMapper.updateBaseProviderNewtworktype(baseProviderNewtworktype);
+                    baseProviderNewtworktypeLog.setFailureTime(DateUtils.getNowDate());
+                }else{  //新增数据记录
+                    baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
+                    baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
+                    baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
+                    baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
+                    baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
+                    baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
+                }
+            }else{//新增数据记录
+                baseProviderNewtworktype.setSerialNo(PubFun.createMySqlMaxNoUseCache("newtworktypeSer",12,12));
+                baseProviderNewtworktype.setCreateBy(SecurityUtils.getUsername());
+                baseProviderNewtworktype.setUpdateBy(SecurityUtils.getUsername());
+                baseProviderNewtworktype.setCreateTime(DateUtils.getNowDate());
+                baseProviderNewtworktype.setUpdateTime(DateUtils.getNowDate());
+                baseProviderNewtworktypeMapper.insertBaseProviderNewtworktype(baseProviderNewtworktype);
+            }
+
+            //保存修改记录
+            baseProviderNewtworktypeLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("Ser",12,12));
+            baseProviderNewtworktypeLog.setNewChoose(baseProviderNewtworktype.getOldChoose());
             baseProviderNewtworktypeLog.setNewDate(baseProviderNewtworktype.getNewDate());
-            baseProviderNewtworktypeLog.setStatus(baseProviderNewtworktype.getSupplierCode());
+            baseProviderNewtworktypeLog.setSupplierCode(baseProviderNetworktypeVO.getProviderCode());
+            baseProviderNewtworktypeLog.setStatus("Y");
             baseProviderNewtworktypeLog.setNetworktypeCode(baseProviderNewtworktype.getNetworktypeCode());
+            baseProviderNewtworktypeLog.setCreateBy(SecurityUtils.getUsername());
+            baseProviderNewtworktypeLog.setUpdateBy(SecurityUtils.getUsername());
             baseProviderNewtworktypeLog.setCreateTime(DateUtils.getNowDate());
-            baseProviderNewtworktypeLogMapper.insertBaseProviderNewtworktypeLog(baseProviderNewtworktypeLog);
+            baseProviderNewtworktypeLog.setUpdateTime(DateUtils.getNowDate());
+            int i = baseProviderNewtworktypeLogMapper.insertBaseProviderNewtworktypeLog(baseProviderNewtworktypeLog);
             count += i;
         }
         return count;

@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function listDoc(query) {
   return request({
     url: '/provider/docinfo/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -54,7 +54,7 @@ export function saveDoctor(data) {
 export function nearDoc(query) {
   return request({
     url: '/provider/docinfo/month',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }

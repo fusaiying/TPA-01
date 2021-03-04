@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function getList(data) {
   return request({
     url: '/provider/org/getList',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -172,12 +172,20 @@ export function checkfield(data) {
     data
   })
 }
+//验证重名
+export function checkfieldNew(data) {
+  return request({
+    url: 'provider/org/checkfieldNew',
+    method: 'post',
+    data
+  })
+}
 //查询医疗网络类型
 export function getNewtworktypeList(data) {
   return request({
     url: 'provider/org/getNewtworktypeList',
-    method: 'post',
-    data: data
+    method: 'get',
+    params: data
   })
 }
 //修改医疗网络类型
@@ -224,8 +232,8 @@ export function updateStatus(data) {
 export function getCheckUpList(data) {
   return request({
     url: 'provider/org/getCheckUpList',
-    method: 'get',
-    params:data
+    method: 'post',
+    data:data
   })
 }
 
@@ -308,6 +316,14 @@ export function getOne(data) {
 export function deleteOne(data) {
   return request({
     url: '/baseinfo/claim/hospital/deleteOne',
+    method: 'post',
+    data
+  })
+}
+//联系人信息删除
+export function deleteContactsInfo(data) {
+  return request({
+    url: 'provider/org/deleteContactsInfo',
     method: 'post',
     data
   })

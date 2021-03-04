@@ -1,6 +1,7 @@
 package com.paic.ehis.base.service;
 
 import com.paic.ehis.base.domain.BaseContacts;
+import com.paic.ehis.base.domain.vo.BaseContactsVo;
 
 import java.util.List;
 
@@ -24,10 +25,10 @@ public interface IBaseContactsService
     /**
      * 查询base_contacts（联系人信息）
      *
-     * @param suppliercode base_contacts（联系人信息）ID
+     * @param baseContacts base_contacts（联系人信息）ID
      * @return base_contacts（联系人信息）
      */
-    public List<BaseContacts> selectBaseContactsByCode(String suppliercode);
+    public List<BaseContacts> selectBaseContactsByCode(BaseContacts baseContacts);
 
     /**
      * 查询base_contacts（联系人信息）列表
@@ -50,7 +51,19 @@ public interface IBaseContactsService
      *
      * @return 结果
      */
-    public int insertBaseContacts(List<BaseContacts> baseContactsVo);
+    public int insertBaseContacts(BaseContactsVo baseContactsVo);
+
+    public int insertBaseContactsNew(String providerCode);
+
+    public int deleteBaseContacts(BaseContacts baseContacts);
+
+    public int deleteBaseContact(BaseContacts baseContacts);
+
+    public int addBaseContacts(List<BaseContacts> baseContactsVo);
+
+
+    public  int updateBaseContactsStatus(String supplierCode);
+
 
     /**
      * 批量删除base_contacts（联系人信息）
@@ -67,4 +80,5 @@ public interface IBaseContactsService
      * @return 结果
      */
     public int deleteBaseContactsById(String serialno);
+
 }

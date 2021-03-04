@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimapt.mapper.ClaimCaseRecordMapper">
+
+    <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseRecord" id="ClaimCaseRecordResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="operation"    column="operation"    />
+        <result property="operator"    column="operator"    />
+        <result property="historyFlag"    column="history_flag"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseRecordVo">
+        select record_id, rpt_no, operation, operator, history_flag, status, create_by, create_time, update_by, update_time from claim_case_record
+    </sql>
+
+    <select id="selectClaimCaseRecordList" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="operation != null  and operation != ''"> and operation = #{operation}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="historyFlag != null  and historyFlag != ''"> and history_flag = #{historyFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseRecordById" parameterType="Long" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <insert id="insertClaimCaseRecord" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into claim_case_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="operation != null and operation != ''">operation,</if>
+            <if test="operator != null and operator != ''">operator,</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">#{historyFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateClaimCaseRecord" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord">
+        update claim_case_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteClaimCaseRecordById" parameterType="Long">
+        delete from claim_case_record where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteClaimCaseRecordByIds" parameterType="String">
+        delete from claim_case_record where record_id in
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+
+    <insert id="insertClaimCaseRecordSecond" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into claim_case_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="operation != null and operation != ''">operation,</if>
+            <if test="operator != null and operator != ''">operator,</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="orgRecordId != null">org_record_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="operation != null and operation != ''">#{operation},</if>
+            <if test="operator != null and operator != ''">#{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">#{historyFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="orgRecordId != null">#{orgRecordId},</if>
+        </trim>
+    </insert>
+
+    <resultMap type="com.paic.ehis.claimapt.domain.ClaimCaseRecord" id="ClaimCaseRecordResultNumber">
+        <result property="recordId"    column="record_id"    />
+    </resultMap>
+
+    <select id="selectClaimCaseRecordSecondTwo" parameterType="String" resultMap="ClaimCaseRecordResultNumber">
+        select record_id from claim_case_record where rpt_no=#{rptNo} and operation='05' and status='Y' and history_flag='N'
+    </select>
+    <select id="selectClaimCaseRecordSecondThree" parameterType="String" resultMap="ClaimCaseRecordResultNumber">
+        select update_by from claim_case_record where rpt_no=#{rptNo} /*and operation='07'*/ and status='Y' and history_flag='N'
+    </select>
+
+    <update id="updatehistoryFlag" parameterType="String">
+        update claim_case_record set history_flag = 'Y'
+        where  rpt_no = #{rptNo}
+    </update>
+
+    <select id="selectClaimCaseRecordByrptNoOne" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '07' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseRecordByrptNoOneNew" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '08' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+    <select id="selectClaimCaseRecordByrptNoThree" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo}
+    </select>
+
+    <select id="selectClaimCaseRecordByrptNoTwo" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '06' and status = 'Y' and  history_flag = 'Y' ORDER BY update_time DESC limit 1
+    </select>
+
+    <select id="selectClaimCaseRecordByrptNoCase" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''">and rpt_no= #{rptNo}</if>
+            <if test="status = null  and status = ''">and status='Y'</if>
+            <if test="operation = null  and operation = ''">and operation='08'</if>
+            <if test="historyFlag = null  and historyFlag = ''">and history_flag='N'</if>
+        </where>
+        order by create_time desc limit 0,1
+    </select>
+
+    <select id="selectMinAcceptTime" parameterType="String" resultType="String">
+        select CONCAT(
+                       FLOOR( TIMESTAMPDIFF( SECOND, min(update_time), now( ) ) / 86400 ),
+                       '天',
+                       TIMESTAMPDIFF( HOUR, min(update_time), now( ) ) % 24,
+                       '时',
+                       TIMESTAMPDIFF( MINUTE, min(update_time), now( ) ) % 60,
+                       '分'
+                   )  min_time
+        from claim_case_record
+        where operation = '05' and history_flag = 'Y' and rpt_no = #{rptNo}
+    </select>
+
+    <update id="updateClaimCaseRecordByRptNoAndOperator" parameterType="com.paic.ehis.claimapt.domain.ClaimCaseRecord">
+        update claim_case_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo} and operation = #{operation} and history_flag = 'N' and status = 'Y'
+    </update>
+    <update id="updateCaseDispatchList" parameterType="String">
+        update claim_case_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operation != null and operation != ''">operation = #{operation},</if>
+            <if test="operator != null and operator != ''">operator = #{operator},</if>
+            <if test="historyFlag != null and historyFlag != ''">history_flag = #{historyFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo} and history_flag='N'
+    </update>
+
+
+    <select id="selectClaimCaseRecordByrptNoFour" parameterType="String" resultMap="ClaimCaseRecordResult">
+        select record_id from claim_case_record where rpt_no=#{rptNo},operation='05',status='Y',history_flag='N'
+    </select>
+
+    <select id="selectClaimCaseRecordProblemShipment" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation = '30' and status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseRecordAcceptance" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation in ('06','07') and status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseRecordRevocation" parameterType="String" resultMap="ClaimCaseRecordResult">
+        <include refid="selectClaimCaseRecordVo"/>
+        where rpt_no = #{rptNo} and operation in ('97','98') and status = 'Y'
+    </select>
+</mapper>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseDiscussionMapper">
+
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion" id="ClaimCaseDiscussionResult">
+        <result property="discId"    column="disc_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="discType"    column="disc_type"    />
+        <result property="discSubType"    column="disc_sub_type"    />
+        <result property="disView"    column="dis_view"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="conclusionView"    column="conclusion_view"    />
+        <result property="isHistory"    column="is_history"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO" id="ClaimCaseDiscussionVOResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="monitoringTime"    column="monitoring_time"    />
+        <result property="stopTime"    column="stop_time"   />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="source"    column="source"   />
+        <result property="companyName"    column="company_name"    />
+        <result property="name"    column="name"   />
+        <result property="discType"    column="disc_type"    />
+        <result property="createBy"    column="create_by"   />
+        <result property="organCode"    column="organ_code"    />
+        <result property="idNo"    column="id_no"   />
+        <result property="age"    column="age"    />
+        <result property="accDate"    column="acc_date"   />
+        <result property="accType"    column="acc_type"    />
+        <result property="sex"    column="sex"    />
+        <result property="discSubType"    column="disc_sub_type"    />
+        <result property="disView"    column="dis_view"    />
+        <result property="discId"    column="disc_id"    />
+        <result property="isHistory"    column="is_history"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseDiscussionVo">
+        select disc_id, rpt_no, disc_type, disc_sub_type, dis_view, conclusion, conclusion_view, is_history, STATUS, create_by, create_time, update_by, update_time from claim_case_discussion
+    </sql>
+
+    <select id="selectClaimCaseDiscussionList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion" resultMap="ClaimCaseDiscussionResult">
+        <include refid="selectClaimCaseDiscussionVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="discType != null  and discType != ''"> and disc_type = #{discType}</if>
+            <if test="discSubType != null  and discSubType != ''"> and disc_sub_type = #{discSubType}</if>
+            <if test="disView != null  and disView != ''"> and dis_view = #{disView}</if>
+            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
+            <if test="conclusionView != null  and conclusionView != ''"> and conclusion_view = #{conclusionView}</if>
+            <if test="isHistory != null  and isHistory != ''"> and is_history = #{isHistory}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectDiscussionListByRptNo" parameterType="String" resultMap="ClaimCaseDiscussionResult">
+        select a.disc_id,
+        a.rpt_no,
+        a.disc_type,
+        a.disc_sub_type,
+        a.dis_view,
+        a.conclusion,
+        a.conclusion_view,
+        a.create_by,
+        a.update_by,
+        a.create_time,
+        a.update_time
+        FROM
+        claim_case_discussion a
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and a.rpt_no = #{rptNo}</if>
+        </where>
+       --  AND a.is_history = 'Y'
+        AND a.STATUS = 'Y'
+        order by a.create_time asc
+    </select>
+
+    <select id="selectClaimCaseDiscussionById" parameterType="Long" resultMap="ClaimCaseDiscussionResult">
+        <include refid="selectClaimCaseDiscussionVo"/>
+        where disc_id = #{discId}   and is_history='Y'
+    </select>
+
+    <insert id="insertClaimCaseDiscussion" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion" useGeneratedKeys="true" keyProperty="discId">
+        insert into claim_case_discussion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="discType != null and discType != ''">disc_type,</if>
+            <if test="discSubType != null and discSubType != ''">disc_sub_type,</if>
+            <if test="disView != null and disView != ''">dis_view,</if>
+            <if test="conclusion != null">conclusion,</if>
+            <if test="conclusionView != null">conclusion_view,</if>
+            <if test="isHistory != null and isHistory != ''">is_history,</if>
+            <if test="status != null">STATUS,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="discType != null and discType != ''">#{discType},</if>
+            <if test="discSubType != null and discSubType != ''">#{discSubType},</if>
+            <if test="disView != null and disView != ''">#{disView},</if>
+            <if test="conclusion != null">#{conclusion},</if>
+            <if test="conclusionView != null">#{conclusionView},</if>
+            <if test="isHistory != null and isHistory != ''">#{isHistory},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateClaimCaseDiscussion" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDiscussion">
+        update claim_case_discussion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="discType != null and discType != ''">disc_type = #{discType},</if>
+            <if test="discSubType != null and discSubType != ''">disc_sub_type = #{discSubType},</if>
+            <if test="disView != null and disView != ''">dis_view = #{disView},</if>
+            <if test="conclusion != null">conclusion = #{conclusion},</if>
+            <if test="conclusionView != null">conclusion_view = #{conclusionView},</if>
+            <if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
+            <if test="status != null">STATUS = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where disc_id = #{discId}
+    </update>
+
+    <delete id="deleteClaimCaseDiscussionById" parameterType="Long">
+        delete from claim_case_discussion where disc_id = #{discId}
+    </delete>
+
+    <delete id="deleteClaimCaseDiscussionByIds" parameterType="String">
+        delete from claim_case_discussion where disc_id in
+        <foreach item="discId" collection="array" open="(" separator="," close=")">
+            #{discId}
+        </foreach>
+    </delete>
+
+    <!--未处理-->
+    <select id="selectCaseDisListUnder" resultMap="ClaimCaseDiscussionVOResult">
+    select
+    claim_case_discussion.rpt_no,/*案件受理报案号*/
+    claim_batch.source,/*交单来源*/
+    claim_case_insured.name,/*被保人姓名*/
+    claim_case_discussion.disc_type,/*协谈类型*/
+    claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
+    claim_case.case_status,/*案件状态*/
+    claim_case_discussion.disc_id
+    from
+    claim_case_discussion,
+    claim_batch,
+    claim_case_insured,
+    claim_case
+    <where>
+        <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
+        <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
+        <if test="name != null and name != null">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
+        <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
+        <if test="createBy != null and createBy != null">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
+        and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+        and claim_case_discussion.rpt_no = claim_case.rpt_no
+        and claim_case.batch_no = claim_batch.batch_no
+        AND claim_case_discussion.is_history = 'N'
+        AND claim_case.case_status = '31'
+        and claim_case_discussion.status = 'Y'
+        AND claim_batch.STATUS = 'Y'
+        AND claim_case_insured.STATUS = 'Y'
+        AND claim_case.STATUS = 'Y'
+    </where>
+    </select>
+
+    <!--已处理-->
+    <select id="selectCaseDisListOver" resultMap="ClaimCaseDiscussionVOResult">
+        select
+        claim_case_discussion.rpt_no,/*案件受理报案号*/
+        claim_batch.source,/*交单来源*/
+        claim_case_insured.name,/*被保人姓名*/
+        claim_case_discussion.disc_type,/*协谈类型*/
+        claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
+        claim_case.case_status,/*案件状态*/
+        claim_case_discussion.disc_id
+        from
+        claim_case_discussion,
+        claim_batch,
+        claim_case_insured,
+        claim_case
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and claim_case_discussion.rpt_no = #{rptNo}</if>
+            <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
+            <if test="name != null and name != ''">  and claim_case_insured.name like concat('%', #{name}, '%')</if>
+            <if test="discType != null  and discType != ''"> and claim_case_discussion.disc_type = #{discType}</if>
+            <if test="createBy != null and createBy != ''">and claim_case_discussion.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createStartTime != null and createStartTime != ''">
+                <![CDATA[ AND claim_case_discussion.update_time >= #{createStartTime} ]]>
+            </if>
+            <if test="createEndTime != null and createEndTime != ''">
+                <![CDATA[ AND claim_case_discussion.update_time <= #{createEndTime}]]>
+            </if>
+            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+            and claim_case_discussion.rpt_no = claim_case.rpt_no
+            and claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+            and claim_case.batch_no = claim_batch.batch_no
+            AND claim_case_discussion.is_history = 'Y'
+            and claim_case_discussion.status = 'Y'
+            AND claim_batch.STATUS = 'Y'
+            AND claim_case_insured.STATUS = 'Y'
+            AND claim_case.STATUS = 'Y'
+        </where>
+    </select>
+
+    <!--查询基本信息-->
+    <select id="selectCaseBaseInfo" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseDiscussionVO" resultMap="ClaimCaseDiscussionVOResult">
+        select
+            claim_case_discussion.rpt_no,/*报案号*/
+            claim_case_insured.name,/*被保人姓名*/
+            claim_case.case_status,/*案件状态*/
+            claim_case_insured.id_no,/*证件号码*/
+            claim_case_insured.birthday,/*生日*/
+            claim_case_insured.sex, /*性别*/
+            claim_case_accept.acc_date,/*出险日期*/
+            claim_batch.source,/*交单来源*/
+            claim_case_accept.acc_type, /*事故类型*/
+            claim_case_discussion.disc_type,
+            claim_case_discussion.disc_sub_type, /**协谈系类*/
+            claim_case_discussion.dis_view, /**转出意见*/
+            (TIMESTAMPDIFF(YEAR,ifnull(claim_case_insured.birthday,now()),DATE_FORMAT(NOW(), '%Y-%m-%d')) + 1) age ,
+            claim_case_discussion.is_history
+        from
+            claim_case_discussion,
+            claim_batch,
+            claim_case_insured,
+            claim_case,
+            claim_case_accept
+        where
+              claim_case_discussion.rpt_no = claim_case_insured.rpt_no
+          and claim_case_discussion.rpt_no = claim_case.rpt_no
+          and claim_case_discussion.rpt_no = claim_case_accept.rpt_no
+          and claim_case.batch_no = claim_batch.batch_no
+          and claim_case_discussion.rpt_no=#{rptNo}
+          and claim_case_discussion.status = 'Y'
+          AND claim_batch.STATUS = 'Y'
+          AND claim_case_insured.STATUS = 'Y'
+          AND claim_case.STATUS = 'Y'
+          AND claim_case_accept.STATUS = 'Y'
+         and  claim_case_discussion.is_history = #{isHistory}
+         limit 1
+    </select>
+
+</mapper>

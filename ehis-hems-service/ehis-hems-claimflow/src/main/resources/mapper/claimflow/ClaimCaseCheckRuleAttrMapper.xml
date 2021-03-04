@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCheckRuleAttrMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCheckRuleAttr" id="ClaimCaseCheckRuleAttrResult">
+        <result property="attrId"    column="attr_id"    />
+        <result property="checkRuleNo"    column="check_rule_no"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCheckRuleAttrVo">
+        select attr_id, check_rule_no, pay_conclusion, status, create_by, create_time, update_by, update_time from claim_case_check_rule_attr
+    </sql>
+
+    <select id="selectClaimCaseCheckRuleAttrList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRuleAttr" resultMap="ClaimCaseCheckRuleAttrResult">
+        <include refid="selectClaimCaseCheckRuleAttrVo"/>
+        <where>  
+            <if test="checkRuleNo != null  and checkRuleNo != ''"> and check_rule_no = #{checkRuleNo}</if>
+            <if test="payConclusion != null  and payConclusion != ''"> and pay_conclusion = #{payConclusion}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseCheckRuleAttrById" parameterType="Long" resultMap="ClaimCaseCheckRuleAttrResult">
+        <include refid="selectClaimCaseCheckRuleAttrVo"/>
+        where attr_id = #{attrId}
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseCheckRuleAttrByCheckRuleNo" parameterType="String" resultType="java.lang.String">
+        select pay_conclusion from claim_case_check_rule_attr
+        where check_rule_no = #{checkRuleNo}
+    </select>
+
+    <!-- lihy -->
+    <select id="selectClaimCaseCheckRuleAttrByCheckRuleNoNew" parameterType="String" resultType="Long">
+        select attr_id from claim_case_check_rule_attr
+        where check_rule_no = #{checkRuleNo}
+    </select>
+    <insert id="insertClaimCaseCheckRuleAttr" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRuleAttr" useGeneratedKeys="true" keyProperty="attrId">
+        insert into claim_case_check_rule_attr
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no,</if>
+            <if test="payConclusion != null">pay_conclusion,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkRuleNo != null and checkRuleNo != ''">#{checkRuleNo},</if>
+            <if test="payConclusion != null">#{payConclusion},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseCheckRuleAttr" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRuleAttr">
+        update claim_case_check_rule_attr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no = #{checkRuleNo},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where attr_id = #{attrId}
+    </update>
+
+    <!-- lihy -->
+    <update id="updateClaimCaseCheckRuleAttrNew" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCheckRuleAttr">
+        update claim_case_check_rule_attr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkRuleNo != null and checkRuleNo != ''">check_rule_no = #{checkRuleNo},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+
+        <where>
+            <if test="attrId != null and attrId != ''"> and attr_id = #{attrId}</if>
+            <if test="checkRuleNo != null  and checkRuleNo != ''"> and check_Rule_No = #{checkRuleNo}</if>
+        </where>
+    </update>
+
+    <delete id="deleteClaimCaseCheckRuleAttrById" parameterType="Long">
+        delete from claim_case_check_rule_attr where attr_id = #{attrId}
+    </delete>
+
+    <delete id="deleteClaimCaseCheckRuleAttrByIds" parameterType="String">
+        delete from claim_case_check_rule_attr where attr_id in 
+        <foreach item="attrId" collection="array" open="(" separator="," close=")">
+            #{attrId}
+        </foreach>
+    </delete>
+    
+</mapper>

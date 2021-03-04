@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.HospitalMapper">
+    <resultMap type="com.paic.ehis.base.domain.vo.HospitalVO" id="HospitalVOResult">
+        <result property="partnerId"    column="provider_code"    />
+        <result property="hospitalNameCn"    column="chname1"    />
+        <result property="hospitalNameEn"    column="enname1"    />
+        <result property="address"    column="chaddreess"    />
+        <result property="specialInfo"    column="sellingpoint"    />
+        <result property="clinicBookPhone"    column="appointment_call"    />
+        <result property="specialInfoAbbr"    column="first_attribute"    />
+        <result property="hospitalIsselCode"    column="makeappointment"    />
+        <result property="county"    column="addressdetail"    />
+        <result property="hospitalDirectPayTypeCode"    column="networkHospital_type_str"    />
+        <result property="isSendAuthorization"    column="continent_flag"    />
+        <result property="provinceCode"    column="province"    />
+        <result property="cityCode"    column="city"    />
+        <result property="countyCode"    column="district"    />
+    </resultMap>
+    <sql id="selectHospitalVO">
+ SELECT
+	a.provider_code,
+	a.chname1,
+	a.enname1,
+		concat_ws(
+	'-',
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = a.province ),
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = a.city ),
+	( SELECT DISTINCT placename FROM sn_base_address WHERE placecode = a.district )
+	) addressdetail,
+	a.chaddreess,
+	b.makeappointment,
+	b.appointment_call,
+	c.continent_flag,
+	c.sellingpoint,
+	c.networkHospital_type_str
+	/*c.network_type,
+	d.risk_code,
+	d.risk_name */
+FROM
+	base_provider_info a,
+	base_provider_apply b,
+	base_provider_service c,
+	base_provider_dep e
+	/*base_provider_newtworktypet_risk d */
+WHERE
+	a.provider_code = b.provider_code
+	AND a.provider_code = c.provider_code
+	and a.provider_code = e.provider_code
+	AND a.STATUS = 'Y'
+	AND b.STATUS = 'Y'
+	AND c.STATUS = 'Y'
+	AND e.STATUS = 'Y'
+	/*AND a.provider_code = d.provider_code*/
+    </sql>
+
+    <select id="selectHospitalVOList" parameterType="com.paic.ehis.base.domain.vo.HospitalDTO" resultMap="HospitalVOResult">
+        <include refid="selectHospitalVO"/>
+        <where>
+           <!-- <if test="planCodes != null  and planCodes != ''"> and d.risk_code = #{planCodes}</if>
+            <if test="planName != null  and planName != ''"> and d.risk_name like concat('%', #{planName}, '%')</if>
+            <if test="hospitalTypeCodes != null  and hospitalTypeCodes != ''"> and c.network_type = #{hospitalTypeCodes}</if>-->
+            <if test="provinceCode != null  and provinceCode != ''"> and a.province = #{provinceCode}</if>
+            <if test="cityCode != null  and cityCode != ''"> and a.city = #{cityCode}</if>
+            <if test="countyCode != null  and countyCode != ''"> and a.district = #{countyCode}</if>
+            <if test="address != null  and address != ''"> and a.chaddreess like concat('%', #{address}, '%')</if>
+            <if test="hospitalNameCn != null  and hospitalNameCn != ''"> and a.chname1 like concat('%', #{hospitalNameCn}, '%')</if>
+            <if test="hospitalNameEn != null  and hospitalNameEn != ''"> and a.enname1 like concat('%', #{hospitalNameEn}, '%')</if>
+            <if test="hospitalPropertyCode != null  and hospitalPropertyCode != ''"> and a.first_attribute = #{hospitalPropertyCode}</if>
+            <if test="hospitalGradeCode != null  and hospitalGradeCode != ''"> and a.second_attribute = #{hospitalGradeCode}</if>
+            <if test="hospitalInnerGrade != null  and hospitalInnerGrade != ''"> and c.category = #{hospitalInnerGrade}</if>
+            <if test="hospitalSocialCode != null  and hospitalSocialCode != ''"> and a.flag = #{hospitalSocialCode}</if>
+            <if test="hospitalIsselCode != null  and hospitalIsselCode != ''"> and b.makeappointment = #{hospitalIsselCode}</if>
+            <if test="clinicBookPhone != null  and clinicBookPhone != ''"> and b.appointment_call = #{clinicBookPhone}</if>
+            <if test="isSupplyForNodirectbilling != null  and isSupplyForNodirectbilling != ''"> and b.nondirectcustomer = #{isSupplyForNodirectbilling}</if>
+            <if test="hospitalDirectPayTypeCode != null  and hospitalDirectPayTypeCode != ''"> and c.networkHospital_type_str = #{hospitalDirectPayTypeCode}</if>
+            <if test="isSupplyVipClinic != null  and isSupplyVipClinic != ''"> and b.vipappointment = #{isSupplyVipClinic}</if>
+            <if test="isSendAuthorization != null  and isSendAuthorization != ''"> and c.continent_flag = #{isSendAuthorization}</if>
+            <if test="specialInfo != null  and specialInfo != ''"> and c.sellingpoint like concat('%', #{specialInfo}, '%')</if>
+            <if test="specialLanguageCode != null  and specialLanguageCode != ''"> and c.speciallanguage_str = #{specialLanguageCode}</if>
+            <if test="isValid != null  and isValid != ''"> and a.bussiness_status = #{isValid}</if>
+            <if test="isHolidayOpen != null  and isHolidayOpen != ''"> and c.weekends_working = #{isHolidayOpen}</if>
+            <if test="departmentName != null  and departmentName != '' "> and (e.first_dept like concat('%', #{departmentName}, '%') or e.second_dept like concat('%', #{departmentName}, '%'))</if>
+        </where>
+    </select>
+
+
+    <resultMap type="com.paic.ehis.base.domain.hospitalInfo" id="HSVOResult">
+        <result property="partnerId"    column="provider_code"    />
+        <result property="hospitalNameCn"    column="chname1"    />
+        <result property="address"    column="chaddreess"    />
+        <result property="countryName"    column="country"    />
+        <result property="directPatientFlag"    column="directPatient_flag"    />
+        <result property="directHospitalFlag"    column="directHospital_flag"    />
+        <result property="hospitalType"    column="hospital_Type"    />
+        <result property="email"    column="mail"    />
+        <result property="fax"    column="fax"    />
+    </resultMap>
+    <sql id="selectHSVO">
+SELECT
+	a.chname1,
+	a.chaddreess,
+	c.mail,
+	c.fax,
+CASE
+
+	WHEN locate( '02', b.networkHospital_type_str ) >= 1 THEN
+	'Y' ELSE 'N'
+	END directPatient_flag,
+CASE
+
+		WHEN locate( '01', b.networkHospital_type_str ) >= 1 THEN
+		'Y' ELSE 'N'
+	END directHospital_flag,
+	a.country,
+	CONCAT_WS( '|', a.flag, b.cooperation_status, a.first_attribute, a.second_attribute ) hospital_Type
+FROM
+	base_provider_info a,
+	base_provider_service b,
+	base_provider_apply c
+WHERE
+	a.provider_code = b.provider_code
+	AND a.provider_code = c.provider_code
+	AND a.STATUS = 'Y'
+	AND b.STATUS = 'Y'
+AND c.STATUS = 'Y'
+    </sql>
+    <select id="selectHSVOList" parameterType="com.paic.ehis.base.domain.vo.HSDTO" resultMap="HSVOResult">
+    <include refid="selectHSVO"/>
+        <if test="countryCode != null  and countryCode != ''"> and a.country = #{countryCode}</if>
+        <if test="cityCode != null  and cityCode != ''"> and a.city = #{cityCode}</if>
+        <if test="hospitalName != null  and hospitalName != ''"> and a.chname1 like concat('%', #{hospitalName}, '%')</if>
+    </select>
+
+
+</mapper>

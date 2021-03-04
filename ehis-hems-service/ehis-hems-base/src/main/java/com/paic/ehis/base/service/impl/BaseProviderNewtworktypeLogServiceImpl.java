@@ -1,13 +1,14 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
-import com.paic.ehis.base.service.IBaseProviderNewtworktypeLogService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
+import com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper;
+import com.paic.ehis.base.service.IBaseProviderNewtworktypeLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper;
-import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktype_log(医疗网络类型记录)Service业务层处理
@@ -16,7 +17,8 @@ import com.paic.ehis.base.domain.BaseProviderNewtworktypeLog;
  * @date 2021-01-04
  */
 @Service
-public class BaseProviderNewtworktypeLogServiceImpl implements IBaseProviderNewtworktypeLogService
+@Transactional
+public class BaseProviderNewtworktypeLogServiceImpl implements IBaseProviderNewtworktypeLogService 
 {
     @Autowired
     private BaseProviderNewtworktypeLogMapper baseProviderNewtworktypeLogMapper;
@@ -42,6 +44,7 @@ public class BaseProviderNewtworktypeLogServiceImpl implements IBaseProviderNewt
     @Override
     public List<BaseProviderNewtworktypeLog> selectBaseProviderNewtworktypeLogList(BaseProviderNewtworktypeLog baseProviderNewtworktypeLog)
     {
+        baseProviderNewtworktypeLog.setSupplierCode(baseProviderNewtworktypeLog.getProviderCode());
         return baseProviderNewtworktypeLogMapper.selectBaseProviderNewtworktypeLogList(baseProviderNewtworktypeLog);
     }
 

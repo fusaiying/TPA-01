@@ -126,28 +126,28 @@
           callback()
         }
       }
-      const checkName = (rules, value, callback) => {
-        if (value) {
-          if (this.form.copyName !== value) {
-            let query = {
-              docName: this.form.docName
-            }
-            //调用查询的接口
-            listDoc(query).then(res => {
-              if (res != null && res.code == '200' && res.rows.length > 0) {
-                callback(new Error('医生姓名已存在'))
-              } else {
-                callback()
-              }
-            })
-          } else {
-            callback()
-          }
-        }
-        else {
-          callback()
-        }
-      }
+      // const checkName = (rules, value, callback) => {
+      //   if (value) {
+      //     if (this.form.copyName !== value) {
+      //       let query = {
+      //         docName: this.form.docName
+      //       }
+      //       //调用查询的接口
+      //       listDoc(query).then(res => {
+      //         if (res != null && res.code == '200' && res.rows.length > 0) {
+      //           callback(new Error('医生姓名已存在'))
+      //         } else {
+      //           callback()
+      //         }
+      //       })
+      //     } else {
+      //       callback()
+      //     }
+      //   }
+      //   else {
+      //     callback()
+      //   }
+      // }
       const checkSupplierList = (rules, value, callback) => {
         if (this.form.supplierList.length == 0){
           callback(new Error("至少选择一家服务机构"))
@@ -172,19 +172,19 @@
         // 校验
         rules: {
           docName: [{required:true, message:"请输入医生姓名",trigger:'blur'},
-                    { max:20, message: "长度不超过20字符", trigger: 'blur'},
-                    {validator: checkName,trigger:'blur'}],
+            { max:20, message: "长度不超过20字符", trigger: 'blur'}],
+          // {validator: checkName,trigger:'blur'},
           docPhone: [{required:true, message:'请输入联系电话', trigger:'blur'},
-                      {pattern:/^[0-9]*$/,message:"请输入正确的联系方式",trigger: 'blur'},
-                      {max: 20,message: "最大支持20位",trigger: 'blur'},
-                      {validator: checkPhone,trigger:'blur'}],
+            {pattern:/^[0-9]*$/,message:"请输入正确的联系方式",trigger: 'blur'},
+            {max: 20,message: "最大支持20位",trigger: 'blur'},
+            {validator: checkPhone,trigger:'blur'}],
           supplierList: [{validator: checkSupplierList,trigger:'change'}],
           fiestDept: [{required:true, message:"请输入一级科室信息",trigger:'blur'},
-                      { max:50, message: "长度不超过50", trigger: 'blur'}],
+            { max:50, message: "长度不超过50", trigger: 'blur'}],
           secondDept: [{required:true, message:"请输入二级科室信息",trigger:'blur'},
-                        { max:50, message: "长度不超过50", trigger: 'blur'}],
+            { max:50, message: "长度不超过50", trigger: 'blur'}],
           startTime: [{required:true, message:"请输入就诊时间",trigger:'blur'},
-                      { max:100, message: "长度不超过100字符", trigger: 'blur'}],
+            { max:100, message: "长度不超过100字符", trigger: 'blur'}],
           remark: [{ max:2000, message: "长度不超过2000", trigger: 'blur'}]
         }
       }
@@ -201,8 +201,10 @@
       }
       // 获取所属服务机构下拉框
       getSupplierOptions().then(res =>{
-        this.supplierOptions = res.data;
-        console.log("data:",this.supplierOptions)
+        if (res.code == 200) {
+          this.supplierOptions = res.data;
+          console.log("data:", this.supplierOptions)
+        }
       })
     },
     methods: {
@@ -216,6 +218,8 @@
                 this.form.copyName = response.data.docName;
                 this.form.copyPhone = response.data.docPhone;
                 this.msgSuccess("保存成功");
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1);
               }else{
                 this.msgError(response.msg);
               }

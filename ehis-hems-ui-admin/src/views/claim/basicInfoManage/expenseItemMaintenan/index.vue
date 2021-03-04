@@ -33,8 +33,7 @@
           <span>费用项列表（{{ totalCount }}）</span>
           <span style="float: right;">
             <el-button icon="el-icon-plus" type="primary" size="mini" @click="addFeeitem">新增</el-button>
-            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
-            <!--            <el-button icon="el-icon-download" type="warning" size="mini">导出</el-button>-->
+            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-table
@@ -46,14 +45,14 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column label="费用项编码" prop="feeitemcode" align="center"/>
-          <el-table-column label="费用项中文名称" prop="feeitemname" align="center"/>
-          <el-table-column label="创建日期" prop="createTime" align="center">
+          <el-table-column label="费用项编码" prop="feeitemcode" align="center" show-overflow-tooltip/>
+          <el-table-column label="费用项中文名称" prop="feeitemname" align="center" show-overflow-tooltip/>
+          <el-table-column label="创建日期" prop="createTime" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.createTime, '{y}-{m}-{d}')}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="创建人" prop="createBy" align="center"/>
+          <el-table-column label="创建人" prop="createBy" align="center" show-overflow-tooltip/>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateEditHandle(scope.row)">编辑
@@ -76,11 +75,12 @@
 </template>
 
 <script>
-  import {listFeeitem} from '@/api/baseInfo/expenseitemMaintenan.js'
+  import {listFeeitem} from '@/api/baseInfo/expenseitemMaintenan'
 
   export default {
     data() {
       return {
+        isListExport:false,
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -89,9 +89,7 @@
           feeitemname: '',
           status: undefined
         },
-        tableData: [{
-          name: 'xxx'
-        }],
+        tableData: [],
         totalCount: 0,
         pageInfo: {
           page: 1,
@@ -105,19 +103,30 @@
       }
     },
     mounted() {
-      this.searchHandle()
+      listFeeitem(this.queryParams).then(res => {
+        this.tableData = res.rows
+        this.totalCount = res.total
+        this.loading = false
+      }).catch(res => {
+        this.loading = false
+      })
     },
     methods: {
       // 查询
       searchHandle() {
         this.queryParams.pageNum = 1
         this.queryParams.pageSize = 10
-        this.getData()
+        if ((this.queryParams.feeitemcode===null || this.queryParams.feeitemcode==='') && (this.queryParams.feeitemname===null || this.queryParams.feeitemname==='')){
+          return this.$message.warning(
+            "至少输入一个查询条件！"
+          )
+        }else {
+          this.getData()
+        }
+
       },
       // 获取数据
       getData() {
-        console.log(this.queryParams);
-
         this.loading = true
         listFeeitem(this.queryParams).then(res => {
           this.tableData = res.rows
@@ -165,28 +174,41 @@
           feeitemcode: this.queryParams.feeitemcode,
           feeitemname:  this.queryParams.feeitemname,
         }
-        this.download('system/feeitem/export'+'?feeitemcode='+this.queryParams.feeitemcode+'&feeitemname='+this.queryParams.feeitemname, {
-          ...query
-        }, `FYX_${new Date().getTime()}.xlsx`).catch(res=>{
-          this.$message({
-            message: res,
-            type: 'error',
-            center: true,
-            showClose: true
-          })
+        let data={
+          pageNum: 1,
+          pageSize: 10,
+        }
+        listFeeitem(data).then(res => {
+          if (res.rows.length>0){
+            this.isListExport=true
+            this.download('provider/feeitem/export', {
+              ...query }, `feeitem_${new Date().getTime()}.xlsx`).catch(res=>{
+              this.$message({
+                message: res,
+                type: 'error',
+                center: true,
+                showClose: true
+              })
+            })
+          }else {
+            return this.$message.warning(
+              "没有查询到能导出的数据！"
+            )
+          }
+        }).catch(res => {
+          this.loading = true
         })
       }
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 200px;
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 </style>

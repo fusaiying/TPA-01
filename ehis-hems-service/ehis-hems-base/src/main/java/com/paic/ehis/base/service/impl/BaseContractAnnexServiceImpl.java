@@ -1,9 +1,9 @@
 package com.paic.ehis.base.service.impl;
 
-import com.paic.ehis.base.service.IBaseContractAnnexService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.base.domain.BaseContractAnnex;
 import com.paic.ehis.base.mapper.BaseContractAnnexMapper;
+import com.paic.ehis.base.service.IBaseContractAnnexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2020-12-31
  */
 @Service
-public class BaseContractAnnexServiceImpl implements IBaseContractAnnexService
+public class BaseContractAnnexServiceImpl implements IBaseContractAnnexService 
 {
     @Autowired
     private BaseContractAnnexMapper baseContractAnnexMapper;

@@ -1,11 +1,14 @@
 package com.paic.ehis.base.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.AddressVO;
 import com.paic.ehis.base.domain.vo.Adress;
+import com.paic.ehis.base.domain.vo.ProviderInfoVo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * base_provider_info(服务商基本信息)Service接口
@@ -32,12 +35,19 @@ public interface IBaseProviderInfoService
     public BaseProviderInfo selectBaseProviderInfo(BaseProviderInfo baseProviderInfo);
 
     /**
-     * 查询base_provider_info(服务商基本信息)列表
+     * 查询base_provider_info_bak(服务商基本信息)列表
      * 
-     * @param baseProviderInfo base_provider_info(服务商基本信息)
+     * @param baseProviderInfo base_provider_info_bak(服务商基本信息)
      * @return base_provider_info(服务商基本信息)集合
      */
     public List<BaseProviderInfo> selectBaseProviderInfoList(BaseProviderInfo baseProviderInfo);
+
+    /**
+     * 查询base_provider_info(服务商基本信息)列表
+
+     */
+    public List<BaseProviderInfo> selectBaseProviderInfoListNew(BaseProviderInfo baseProviderInfo);
+
 
 
     /**
@@ -46,6 +56,8 @@ public interface IBaseProviderInfoService
      * @return base_provider_info(服务商基本信息)集合
      */
     public List<AddressInfo> getprovince();
+
+    public List<BaseProviderInfo> selectProvideInfoList(BaseProviderInfo baseProviderInfo);
 
     /**
      * 查询base_provider_info中省市区的信息
@@ -100,4 +112,50 @@ public interface IBaseProviderInfoService
      * @return 结果
      */
     public int deleteBaseProviderInfoById(String providercode);
+
+
+    /**
+     * 新增base_provider_info(提交待审核状态)
+     *
+     * @param providerInfoVo base_provider_info(服务商基本信息)
+     * @return 结果
+     */
+    public int insertCheckInfo(ProviderInfoVo providerInfoVo);
+
+    /**
+     * 查询审核信息列表
+     *
+     * @param baseProviderInfo base_provider_info(服务商基本信息)
+     * @return base_provider_info(服务商基本信息)集合
+     */
+    public List<BaseProviderInfo> selectBaseProviderInfoCheckList(BaseProviderInfo baseProviderInfo);
+
+
+    /**
+     * 新增base_provider_info(审核数据)
+     *
+     * @param providerInfoVo base_provider_info(服务商基本信息)
+     * @return 结果
+     */
+    public int insertChecDatak(ProviderInfoVo providerInfoVo);
+
+
+    /**
+     * 新增base_provider_info(审核数据)
+     *
+     * @param providerCode base_provider_info(服务商基本信息)
+     * @return 结果
+     */
+    public  List<BaseCheckInfo> selectBaseProviderCheckList(String providerCode);
+
+    public  List<BaseProviderInfo> selectBaseProviderInfoByNames(BaseProviderInfo baseProviderInfo);
+
+    public  List<BaseProviderInfo> selectBaseProviderInfoByNamesNew(BaseProviderInfo baseProviderInfo);
+
+    public  List<BaseProviderInfo> selectBaseProviderInfos(BaseProviderInfo baseProviderInfo);
+
+    public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo);
+
+    public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo);
+
 }

@@ -3,15 +3,12 @@ package com.paic.ehis.system.domain;
 /**
  * 当前在线会话
  * 
- * @author admin
+ *
  */
 public class SysUserOnline
 {
     /** 会话编号 */
     private String tokenId;
-
-    /** 部门名称 */
-    private String deptName;
 
     /** 用户名称 */
     private String userName;
@@ -39,16 +36,6 @@ public class SysUserOnline
     public void setTokenId(String tokenId)
     {
         this.tokenId = tokenId;
-    }
-
-    public String getDeptName()
-    {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName)
-    {
-        this.deptName = deptName;
     }
 
     public String getUserName()

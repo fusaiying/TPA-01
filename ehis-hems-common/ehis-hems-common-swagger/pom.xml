@@ -12,7 +12,7 @@
     <artifactId>ehis-hems-common-swagger</artifactId>
 	
     <description>
-        ehis-hems-common-swagger系统接口
+        系统接口
     </description>
 
 	<dependencies>

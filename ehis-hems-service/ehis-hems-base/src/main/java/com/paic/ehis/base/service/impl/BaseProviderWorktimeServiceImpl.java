@@ -1,13 +1,14 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.base.domain.BaseProviderWorktime;
 import com.paic.ehis.base.mapper.BaseProviderWorktimeMapper;
 import com.paic.ehis.base.service.IBaseProviderWorktimeService;
-import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.domain.BaseProviderWorktime;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * base_provider_worktime(服务商服务时间信息)Service业务层处理
@@ -16,7 +17,8 @@ import com.paic.ehis.base.domain.BaseProviderWorktime;
  * @date 2020-12-25
  */
 @Service
-public class BaseProviderWorktimeServiceImpl implements IBaseProviderWorktimeService
+@Transactional
+public class BaseProviderWorktimeServiceImpl implements IBaseProviderWorktimeService 
 {
     @Autowired
     private BaseProviderWorktimeMapper baseProviderWorktimeMapper;

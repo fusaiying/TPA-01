@@ -1,17 +1,17 @@
 package com.paic.ehis.gen.service;
 
-import java.util.List;
-
+import com.paic.ehis.common.core.text.Convert;
 import com.paic.ehis.gen.domain.GenTableColumn;
 import com.paic.ehis.gen.mapper.GenTableColumnMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.common.core.text.Convert;
+
+import java.util.List;
 
 /**
  * 业务字段 服务层实现
  * 
- * @author admin
+ *
  */
 @Service
 public class GenTableColumnServiceImpl implements IGenTableColumnService 

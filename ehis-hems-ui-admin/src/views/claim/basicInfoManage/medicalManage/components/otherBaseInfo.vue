@@ -91,7 +91,6 @@
           <el-form-item label="州：" prop="continent">
             <el-select v-model="otherBaseForm.continent" class="item-width" placeholder="请选择" clearable>
               <el-option label="亚洲" value="01"/>
-              <el-option label="欧洲" value="02"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -99,7 +98,6 @@
           <el-form-item label="国家：" prop="country">
             <el-select v-model="otherBaseForm.country" class="item-width" placeholder="请选择" clearable>
               <el-option label="中国" value="01"/>
-              <el-option label="日本" value="02"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -180,7 +178,7 @@ import {
   updateapplyInfo,
   updateInfo,
   addInfo,
-  getAddress
+  getAddress, checkfield,checkfieldNew
 } from "@/api/baseInfo/medicalManage";
 
 export default {
@@ -194,6 +192,16 @@ export default {
     providerCode: String,
     status: String,
     isAdd: Boolean,
+    otherChname1: String,
+    otherEnname1: String,
+  },
+  watch: {
+    otherChname1: function (newValue){
+      this.copyChname1=newValue
+    },
+    otherEnname1: function (newValue){
+      this.copyEnname1=newValue
+    }
   },
 
   data() {
@@ -234,7 +242,55 @@ export default {
         callback(new Error('省市区不能为空！'))
       }
     }
+    const checkChname1 = (rules, value, callback) => {
+      if (value) {
+        let query = {
+          chname1: this.otherBaseForm.chname1
+        }
+        if (this.copyChname1 !== value) {
+          //调用查询的接口
+          checkfieldNew(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('中文展示名称已存在'))
+            } else {
+              callback()
+            }
+          })
+        } else {
+          callback()
+        }
+      } else {
+        callback(new Error('中文展示名称不能为空'))
+
+      }
+
+    }
+    const checkEnname1 = (rules, value, callback) => {
+      if (value) {
+        let query = {
+          enname1: this.otherBaseForm.enname1
+        }
+        if (this.copyEnname1 !== value) {
+          //调用查询的接口
+          checkfieldNew(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('英文展示名称已存在'))
+            } else {
+              callback()
+            }
+          })
+        } else {
+          callback()
+        }
+      } else {
+        callback(new Error('英文展示名称不能为空'))
+
+      }
+
+    }
     return {
+      copyChname1: '',
+      copyEnname1: '',
       otherProviderCode: '',
       regions: [],
       bussiness_statusOptions: [],
@@ -243,8 +299,8 @@ export default {
         confirmDeliverytime: [{required: true, message: '不能为空！', trigger: 'blur'}],
         longitude: [{required: true,validator: checkLongitude, trigger: 'blur'}],
         latitude: [{required: true, validator: checkLatitude,  trigger: 'blur'}],
-        chname1: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        enname1: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        chname1: [{required: true,  validator: checkChname1,  trigger: 'blur'}],
+        enname1: [{required: true, validator: checkEnname1, trigger: 'blur'}],
         website: [{required: true, message: '不能为空！', trigger: 'blur'}],
         continent: [{required: true, message: '不能为空！', trigger: 'change'}],
         country: [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -289,6 +345,7 @@ export default {
               subFormSearch.city = this.otherBaseForm.address[1]
             }
           }
+          subFormSearch.orgFlag = this.status
           //存在调用基本信息保存的接口
           if (this.providerCode) {
             updateInfo(subFormSearch).then(res => {
@@ -299,6 +356,8 @@ export default {
                   center: true,
                   showClose: true
                 })
+                this.copyChname1=this.otherBaseForm.chname1
+                this.copyEnname1=this.otherBaseForm.enname1
               } else {
                 this.$message({
                   message: '保存失败!',
@@ -321,6 +380,8 @@ export default {
                 })
                 this.otherProviderCode = res.data.providerCode
                 this.otherBaseForm.providerCode = this.otherProviderCode
+                this.copyChname1=this.otherBaseForm.chname1
+                this.copyEnname1=this.otherBaseForm.enname1
                 //
                 this.$emit('baseSave')
 
@@ -335,7 +396,7 @@ export default {
             })
           }
         } else {
-          return false
+          this.$message.warning('基本信息必录项未必录')
         }
 
       })
@@ -350,16 +411,21 @@ export default {
     },
 
     // 校验数据
-    validateForm () {
-      let flag = null
-      this.$refs['otherBaseForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
+    async  validateForm () {
+      let flag
+      await new Promise((resolve, reject)=> {
+        this.$refs['otherBaseForm'].validate(valid => {
+          if (valid) {
+            flag = true
+            resolve(flag)
+          } else {
+            flag = false
+            resolve(flag)
+          }
+        })
       })
       return flag
+
     }
 
   }
@@ -371,17 +437,12 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

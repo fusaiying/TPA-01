@@ -1,11 +1,13 @@
 package com.paic.ehis.base.domain;
 
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
+
+import java.util.List;
 
 /**
  * base_provider_info(服务商基本信息)对象 base_provider_info
@@ -17,6 +19,9 @@ import com.paic.ehis.common.core.annotation.Excel;
 public class BaseProviderInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    /** 流水号 */
+    private String serialNo;
 
     /** 服务商编码 */
     private String providerCode;
@@ -216,6 +221,55 @@ public class BaseProviderInfo extends BaseEntity
 
     @Excel(name = "理赔医院名称")
     private String claimHospitalName;
+
+    @Excel(name = "修改标志")
+    private String updateFlag;
+
+    @Excel(name = "服务机构类型")
+    private String orgFlag;
+
+    @Excel(name = "业务状态")
+    private String bussinessStatus;
+
+    private String websitecName;
+
+    private String websitecCode;
+
+    @Excel(name = "区号")
+    private String areacode;
+
+
+    @Excel(name = "专科子类型")
+    private List<String> type2;
+
+
+    private String type2Str;
+
+    @Excel(name = "开户行名称")
+    private String bankName;
+
+    /** 开户银行编码 */
+    @Excel(name = "开户银行编码")
+    private String bankCode;
+
+    /** 银行信息描述 */
+    @Excel(name = "银行信息描述")
+    private String bankDetail;
+
+    /** 银行账户名称 */
+    @Excel(name = "银行账户名称")
+    private String accountName;
+
+    /** 银行账户名称 */
+    @Excel(name = "银行账户账号")
+    private String accountNo;
+
+    private String currency;
+
+    /** 是否直结 */
+    private String isNetworkHospital;
+
+    private String supplierCode;
 
     public void setProviderCode(String providerCode) 
     {

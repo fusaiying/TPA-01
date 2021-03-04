@@ -4,7 +4,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane :label="label.label01" name="01">
           <el-form ref="reviewForm" :model="reviewForm" style="padding-bottom: 30px;" label-width="150px" :rules="reviewFormRule"
-                    size="mini" class="baseInfo_class">
+                   size="mini" class="baseInfo_class">
             <el-row>
               <el-row :span="8">
                 <el-form-item label="审核结果：" prop="checkResult">
@@ -17,19 +17,19 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-              <el-form-item style="margin-right: 20px;" label="审核意见：" prop="checkAdvice">
-                <el-input
-                  type="textarea"
-                  placeholder="请输入内容"
-                  v-model="reviewForm.checkAdvice" maxlength="200">
-                </el-input>
-              </el-form-item>
+                <el-form-item style="margin-right: 20px;" label="审核意见：" prop="checkAdvice">
+                  <el-input
+                    type="textarea"
+                    placeholder="请输入内容"
+                    v-model="reviewForm.checkAdvice" maxlength="200">
+                  </el-input>
+                </el-form-item>
               </el-col>
             </el-row>
             <div style="text-align: right; margin-right: 10px;">
               <el-button
                 size="mini"
-                type="success"
+                type="primary"
                 @click="submitHandle"
               >提交
               </el-button>
@@ -60,23 +60,23 @@
 <script>
 import {selectCheckInfo, insertCheckInfo} from "@/api/baseInfo/medicalManage";
 export default {
-props:{
-  providerCode: String
-},
+  props:{
+    providerCode: String
+  },
 
   data() {
-  const checkReviewOpinion=(rules, value, callback) => {
-    if (this.reviewForm.checkResult=='02') {
-      if(!value) {
-        callback(new Error('审核意见不能为空！'))
+    const checkReviewOpinion=(rules, value, callback) => {
+      if (this.reviewForm.checkResult=='02') {
+        if(!value) {
+          callback(new Error('审核意见不能为空！'))
+        } else {
+          callback()
+        }
+
       } else {
         callback()
       }
-
-    } else {
-      callback()
     }
-  }
     return {
       reviewForm: {},
       activeName: '01',
@@ -105,7 +105,7 @@ props:{
       if(this.activeName=='02'){
         //历史合约的接口
         selectCheckInfo(this.providerCode).then(res => {
-          this.reviewLogTableData = res.rows
+          this.reviewLogTableData = res.data
         }).catch(res => {
         })
       }
@@ -114,7 +114,7 @@ props:{
 
     goBack(){
       this.$router.push({
-        path: '/basic-info/medicalManage/medicalManage'
+        path: '/basic-info/medicalManage'
 
       })
     },
@@ -134,6 +134,11 @@ props:{
                 center: true,
                 showClose: true
               })
+              this.$store.dispatch("tagsView/delView", this.$route);
+              this.$router.push({
+                path: '/basic-info/hospitalReview/index',
+              })
+
             } else {
               this.$message({
                 message: '审核失败!',

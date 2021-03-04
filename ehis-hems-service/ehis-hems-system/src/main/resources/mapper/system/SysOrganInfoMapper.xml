@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.system.mapper.SysOrganInfoMapper">
+    
+    <resultMap type="SysOrganInfo" id="SysOrganInfoResult">
+        <result property="organId"    column="organ_id"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="organName"    column="organ_name"    />
+        <result property="organNameEn"    column="organ_name_en"    />
+        <result property="parentOrganCode"    column="parent_organ_code"    />
+        <result property="organLev"    column="organ_lev"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysOrganInfoVo">
+        select organ_id, organ_code, organ_name, organ_name_en, parent_organ_code, organ_lev, status, create_by, create_time, update_by, update_time from sys_organ_info
+    </sql>
+
+    <select id="selectSysOrganInfoList" parameterType="SysOrganInfo" resultMap="SysOrganInfoResult">
+        <include refid="selectSysOrganInfoVo"/>
+        <where>  
+            <if test="organCode != null  and organCode != ''"> and organ_code = #{organCode}</if>
+            <if test="organName != null  and organName != ''"> and organ_name like concat('%', #{organName}, '%')</if>
+            <if test="organNameEn != null  and organNameEn != ''"> and organ_name_en = #{organNameEn}</if>
+            <if test="parentOrganCode != null  and parentOrganCode != ''"> and parent_organ_code = #{parentOrganCode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysOrganInfoById" parameterType="Long" resultMap="SysOrganInfoResult">
+        <include refid="selectSysOrganInfoVo"/>
+        where organ_id = #{organId}
+    </select>
+
+    <select id="selectSysOrganInfoByOrganCode" parameterType="String" resultMap="SysOrganInfoResult">
+        <include refid="selectSysOrganInfoVo"/>
+        where organ_code = #{organCode} and status = 'Y'
+    </select>
+        
+    <insert id="insertSysOrganInfo" parameterType="SysOrganInfo" useGeneratedKeys="true" keyProperty="organId">
+        insert into sys_organ_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="organCode != null and organCode != ''">organ_code,</if>
+            <if test="organName != null and organName != ''">organ_name,</if>
+            <if test="organNameEn != null and organNameEn != ''">organ_name_en,</if>
+            <if test="parentOrganCode != null and parentOrganCode != ''">parent_organ_code,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="organCode != null and organCode != ''">#{organCode},</if>
+            <if test="organName != null and organName != ''">#{organName},</if>
+            <if test="organNameEn != null and organNameEn != ''">#{organNameEn},</if>
+            <if test="parentOrganCode != null and parentOrganCode != ''">#{parentOrganCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysOrganInfo" parameterType="SysOrganInfo">
+        update sys_organ_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="organCode != null and organCode != ''">organ_code = #{organCode},</if>
+            <if test="organName != null and organName != ''">organ_name = #{organName},</if>
+            <if test="organNameEn != null and organNameEn != ''">organ_name_en = #{organNameEn},</if>
+            <if test="parentOrganCode != null and parentOrganCode != ''">parent_organ_code = #{parentOrganCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where organ_id = #{organId}
+    </update>
+
+    <delete id="deleteSysOrganInfoById" parameterType="Long">
+        delete from sys_organ_info where organ_id = #{organId}
+    </delete>
+
+    <delete id="deleteSysOrganInfoByIds" parameterType="String">
+        delete from sys_organ_info where organ_id in 
+        <foreach item="organId" collection="array" open="(" separator="," close=")">
+            #{organId}
+        </foreach>
+    </delete>
+
+    <select id="selectOrganInfoByOrganCodes" parameterType="arraylist" resultMap="SysOrganInfoResult">
+        <include refid="selectSysOrganInfoVo"/>
+        where status = 'Y' and organ_code in
+        <foreach item="organCode" collection="list" open="(" separator="," close=")">
+            #{organCode}
+        </foreach>
+    </select>
+
+    <select id="selectOrganListByUpOrganCode" parameterType="String" resultMap="SysOrganInfoResult">
+        <include refid="selectSysOrganInfoVo"/>
+        where status = 'Y' and parent_organ_code = #{parentOrganCode}
+    </select>
+</mapper>

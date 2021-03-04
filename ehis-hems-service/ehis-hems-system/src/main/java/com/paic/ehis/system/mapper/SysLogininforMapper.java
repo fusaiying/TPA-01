@@ -1,12 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
 import com.paic.ehis.system.domain.SysLogininfor;
+
+import java.util.List;
 
 /**
  * 系统访问日志情况信息 数据层
  * 
- * @author admin
+ *
  */
 public interface SysLogininforMapper
 {

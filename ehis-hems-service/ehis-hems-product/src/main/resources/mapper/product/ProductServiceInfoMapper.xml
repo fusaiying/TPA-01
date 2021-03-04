@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.product.mapper.ProductServiceInfoMapper">
+    
+    <resultMap type="ProductServiceInfo" id="ProductServiceInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="typeCode"    column="type_code"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="deductWay"    column="deduct_way"    />
+        <result property="costPrice"    column="cost_price"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="serviceCodeName"    column="serviceCodeName"    />
+        <result property="categoryCodeName"    column="categoryCodeName"    />
+        <result property="typeCodeName"    column="typeCodeName"    />
+        <result property="number"    column="number"    />
+    </resultMap>
+
+    <sql id="selectProductServiceInfoVo">
+        select serial_no, product_code, service_code, service_name, category_code, category_name, type_code, type_name, deduct_way, cost_price, status, create_by, create_time, update_by, update_time,
+         (select count(0) from product_supplier_info where product_supplier_info.service_code = product_service_info.service_code and product_supplier_info.product_code = product_service_info.product_code and product_supplier_info.status = 'Y') number,
+         concat_ws('-',service_code,service_name) serviceCodeName,
+         concat_ws('-',category_code,category_name) categoryCodeName,
+         concat_ws('-',type_code,type_name) typeCodeName
+         from product_service_info
+    </sql>
+
+    <select id="selectProductServiceInfoList" parameterType="ProductServiceInfo" resultMap="ProductServiceInfoResult">
+        <include refid="selectProductServiceInfoVo"/>
+        <where>  
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and service_code = #{serviceCode}</if>
+            <if test="serviceName != null  and serviceName != ''"> and service_name like concat('%', #{serviceName}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="typeCode != null  and typeCode != ''"> and type_code = #{typeCode}</if>
+            <if test="typeName != null  and typeName != ''"> and type_name like concat('%', #{typeName}, '%')</if>
+            <if test="deductWay != null  and deductWay != ''"> and deduct_way = #{deductWay}</if>
+            <if test="costPrice != null "> and cost_price = #{costPrice}</if>
+            and status = 'Y'
+        </where>
+    </select>
+    
+    <select id="selectProductServiceInfoById" parameterType="String" resultMap="ProductServiceInfoResult">
+        <include refid="selectProductServiceInfoVo"/>
+        where serial_no = #{serialNo}
+    </select>
+        
+    <insert id="insertProductServiceInfo" parameterType="ProductServiceInfo">
+        insert into product_service_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="productCode != null and productCode != ''">product_code,</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code,</if>
+            <if test="serviceName != null and serviceName != ''">service_name,</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code,</if>
+            <if test="categoryName != null and categoryName != ''">category_name,</if>
+            <if test="typeCode != null and typeCode != ''">type_code,</if>
+            <if test="typeName != null and typeName != ''">type_name,</if>
+            <if test="deductWay != null and deductWay != ''">deduct_way,</if>
+            <if test="costPrice != null">cost_price,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="productCode != null and productCode != ''">#{productCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">#{serviceCode},</if>
+            <if test="serviceName != null and serviceName != ''">#{serviceName},</if>
+            <if test="categoryCode != null and categoryCode != ''">#{categoryCode},</if>
+            <if test="categoryName != null and categoryName != ''">#{categoryName},</if>
+            <if test="typeCode != null and typeCode != ''">#{typeCode},</if>
+            <if test="typeName != null and typeName != ''">#{typeName},</if>
+            <if test="deductWay != null and deductWay != ''">#{deductWay},</if>
+            <if test="costPrice != null">#{costPrice},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProductServiceInfo" parameterType="ProductServiceInfo">
+        update product_service_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
+            <if test="serviceName != null and serviceName != ''">service_name = #{serviceName},</if>
+            <if test="categoryCode != null and categoryCode != ''">category_code = #{categoryCode},</if>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="typeCode != null and typeCode != ''">type_code = #{typeCode},</if>
+            <if test="typeName != null and typeName != ''">type_name = #{typeName},</if>
+            <if test="deductWay != null and deductWay != ''">deduct_way = #{deductWay},</if>
+            <if test="costPrice != null">cost_price = #{costPrice},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteProductServiceInfoById" parameterType="String">
+        delete from product_service_info where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteProductServiceInfoByIds" parameterType="String">
+        delete from product_service_info where serial_no in 
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <insert id="insertProductServiceInfoNew" parameterType="ProductServiceInfo">
+        insert into product_service_info
+        (serial_no,product_code,service_code,service_name, category_code, category_name, type_code, type_name
+        ,deduct_way,cost_price, status, create_by, create_time, update_by, update_time)
+        values
+        <foreach collection="list" item="listDO" index="index" separator=",">
+            (#{listDO.serialNo},#{listDO.productCode},#{listDO.serviceCode}, #{listDO.serviceName},#{listDO.categoryCode},
+            #{listDO.categoryName}, #{listDO.typeCode}, #{listDO.typeName}, #{listDO.deductWay},#{listDO.costPrice},
+            #{listDO.status}, #{listDO.createBy}, #{listDO.createTime}, #{listDO.updateBy}, #{listDO.updateTime})
+        </foreach>
+    </insert>
+
+
+    <update id="updateStaus" parameterType="String">
+         update product_service_info set status = 'N' where status = 'Y' and product_code = #{productCode}
+    </update>
+</mapper>

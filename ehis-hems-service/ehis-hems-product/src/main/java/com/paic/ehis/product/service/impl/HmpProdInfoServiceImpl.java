@@ -230,8 +230,8 @@ public class HmpProdInfoServiceImpl implements IHmpProdInfoService {
         return hmpProdInfoMapper.queryServiceCity(productNo);
     }
 
-    @Override
+/*    @Override
     public List<HmpProdInfo> selectProductDict() {
         return hmpProdInfoMapper.selectProductDict();
-    }
+    }*/
 }

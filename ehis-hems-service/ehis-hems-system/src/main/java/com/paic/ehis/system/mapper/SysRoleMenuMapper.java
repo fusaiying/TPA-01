@@ -1,13 +1,13 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.SysRoleMenu;
+
+import java.util.List;
 
 /**
  * 角色与菜单关联表 数据层
  * 
- * @author admin
+ *
  */
 public interface SysRoleMenuMapper
 {
@@ -26,6 +26,14 @@ public interface SysRoleMenuMapper
      * @return 结果
      */
     public int deleteRoleMenuByRoleId(Long roleId);
+
+    /**
+     * 批量删除角色菜单关联信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteRoleMenu(Long[] ids);
 
     /**
      * 批量新增角色菜单信息

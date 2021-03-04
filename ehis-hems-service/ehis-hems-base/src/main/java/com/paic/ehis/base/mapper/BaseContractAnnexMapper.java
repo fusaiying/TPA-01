@@ -4,6 +4,7 @@ import com.paic.ehis.base.domain.BaseContractAnnex;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
 /**
  * base_contract_annex（合约附件）Mapper接口

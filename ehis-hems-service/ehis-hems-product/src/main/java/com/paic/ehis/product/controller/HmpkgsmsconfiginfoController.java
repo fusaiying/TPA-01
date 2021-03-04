@@ -3,7 +3,7 @@ package com.paic.ehis.product.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +38,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 查询产品包短信配置表列表
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:list')")
     @GetMapping("/list")
     public TableDataInfo list(Hmpkgsmsconfiginfo hmpkgsmsconfiginfo)
     {
@@ -50,7 +49,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 导出产品包短信配置表列表
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:export')")
     @Log(title = "产品包短信配置表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Hmpkgsmsconfiginfo hmpkgsmsconfiginfo) throws IOException
@@ -63,7 +61,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 获取产品包短信配置表详细信息
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:query')")
     @GetMapping(value = "/{serialno}")
     public AjaxResult getInfo(@PathVariable("serialno") Long serialno)
     {
@@ -73,7 +70,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 新增产品包短信配置表
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:add')")
     @Log(title = "产品包短信配置表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Hmpkgsmsconfiginfo hmpkgsmsconfiginfo)
@@ -84,7 +80,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 修改产品包短信配置表
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:edit')")
     @Log(title = "产品包短信配置表", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Hmpkgsmsconfiginfo hmpkgsmsconfiginfo)
@@ -95,7 +90,6 @@ public class HmpkgsmsconfiginfoController extends BaseController
     /**
      * 删除产品包短信配置表
      */
-    @PreAuthorize("@ss.hasPermi('product:hmpkgsmsconfiginfo:remove')")
     @Log(title = "产品包短信配置表", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{serialnos}")
     public AjaxResult remove(@PathVariable Long[] serialnos)

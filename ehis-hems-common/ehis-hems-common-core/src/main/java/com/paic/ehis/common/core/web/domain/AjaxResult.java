@@ -1,13 +1,14 @@
 package com.paic.ehis.common.core.web.domain;
 
-import java.util.HashMap;
 import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.utils.StringUtils;
+
+import java.util.HashMap;
 
 /**
  * 操作消息提醒
  * 
- * @author admin
+ *
  */
 public class AjaxResult extends HashMap<String, Object>
 {
@@ -56,6 +57,20 @@ public class AjaxResult extends HashMap<String, Object>
         {
             super.put(DATA_TAG, data);
         }
+    }
+    
+    /**
+     * 方便链式调用
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    @Override
+    public AjaxResult put(String key, Object value)
+    {
+        super.put(key, value);
+        return this;
     }
 
     /**

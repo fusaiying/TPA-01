@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseContractServiceMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseContractService" id="BaseContractServiceResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="settleType"    column="settle_type"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="maxPrice"    column="max_price"    />
+        <result property="settleCurrency"    column="settle_currency"    />
+        <result property="limitnum"    column="limitnum"    />
+        <result property="remak"    column="remak"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="supplierServiceName"    column="supplier_service_name"    />
+    </resultMap>
+
+    <sql id="selectBaseContractServiceVo">
+        select serial_no,supplier_service_name, contract_no, supplier_code, service_code, settle_type, min_price, max_price, settle_currency, limitnum, remak, status, create_by, create_time, update_by, update_time from base_contract_service
+    </sql>
+
+    <select id="selectBaseContractServiceList" parameterType="BaseContractService" resultMap="BaseContractServiceResult">
+        <include refid="selectBaseContractServiceVo"/>
+        <where>
+            <if test="serialNo !=null and serialNo != ''"> and serial_no = #{serialNo}</if>
+            <if test="supplierServiceName !=null and supplierServiceName != ''"> and supplier_service_name = #{supplierServiceName}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="serviceCode != null  and serviceCode != ''"> and service_code like concat('%',#{serviceCode},'%')</if>
+            <if test="settleType != null  and settleType != ''"> and settle_type = #{settleType}</if>
+            <if test="minPrice != null "> and min_price = #{minPrice}</if>
+            <if test="maxPrice != null "> and max_price = #{maxPrice}</if>
+            <if test="settleCurrency != null  and settleCurrency != ''"> and settle_currency = #{settleCurrency}</if>
+            <if test="limitnum != null  and limitnum != ''"> and limitnum = #{limitnum}</if>
+            <if test="remak != null  and remak != ''"> and remak = #{remak}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseContractServiceById" parameterType="String" resultMap="BaseContractServiceResult">
+        <include refid="selectBaseContractServiceVo"/>
+        where contract_no = #{contractNo}
+    </select>
+
+
+    <insert id="insertBaseContractService" parameterType="BaseContractService">
+        insert into base_contract_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="supplierServiceName != null and supplierServiceName != ''">supplier_service_name,</if>
+            <if test="contractNo != null and contractNo != ''">contract_no,</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code,</if>
+            <if test="settleType != null">settle_type,</if>
+            <if test="minPrice != null">min_price,</if>
+            <if test="maxPrice != null">max_price,</if>
+            <if test="settleCurrency != null">settle_currency,</if>
+            <if test="limitnum != null">limitnum,</if>
+            <if test="remak != null">remak,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="supplierServiceName != null and supplierServiceName != ''">#{supplierServiceName},</if>
+            <if test="contractNo != null and contractNo != ''">#{contractNo},</if>
+            <if test="supplierCode != null and supplierCode != ''">#{supplierCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">#{serviceCode},</if>
+            <if test="settleType != null">#{settleType},</if>
+            <if test="minPrice != null">#{minPrice},</if>
+            <if test="maxPrice != null">#{maxPrice},</if>
+            <if test="settleCurrency != null">#{settleCurrency},</if>
+            <if test="limitnum != null">#{limitnum},</if>
+            <if test="remak != null">#{remak},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+    <!--批量新增服务项目数据-->
+    <insert id="insertForeach" parameterType="BaseContractService" >
+    insert into  base_contract_service(serial_no, supplier_service_name, supplier_code, service_code, settle_type, min_price, max_price, settle_currency, limitnum, remak, status, create_by, create_time, update_by, update_time )
+    values
+    <foreach item="item" index="index" collection="baseContractServiceList" separator=",">
+        (
+         #{serialNo},
+         #{supplierServiceName},
+         #{supplierCode},
+         #{serviceCode},
+         #{settleType},
+         #{minPrice},
+         #{maxPrice},
+         #{settleCurrency},
+         #{limitnum},
+         #{remak},
+         #{status},
+         #{createBy},
+         #{createTime},
+         #{updateBy},
+         #{updateTime}
+        )
+    </foreach>
+    </insert>
+
+    <update id="updateBaseContractService" parameterType="BaseContractService">
+        update base_contract_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
+            <if test="supplierServiceName != null and supplierServiceName != ''">supplier_service_name = #{supplierServiceName},</if>
+            <if test="settleType != null">settle_type = #{settleType},</if>
+            <if test="minPrice != null">min_price = #{minPrice},</if>
+            <if test="maxPrice != null">max_price = #{maxPrice},</if>
+            <if test="settleCurrency != null">settle_currency = #{settleCurrency},</if>
+            <if test="limitnum != null">limitnum = #{limitnum},</if>
+            <if test="remak != null">remak = #{remak},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where contract_no = #{contractNo}
+        <if test="serialNo !=null and serialNo != ''"> and serial_no = #{serialNo} </if>
+    </update>
+
+    <delete id="deleteBaseContractServiceById" parameterType="String">
+        update  base_contract_service set status="N" where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteBaseContractServiceByIds" parameterType="String">
+        update base_contract_service  set status="N" where contract_no in
+        <foreach item="contractNo" collection="array" open="(" separator="," close=")">
+            #{contractNo}
+        </foreach>
+    </delete>
+
+
+    <update id="updateBaseContractServiceByContractNo" parameterType="map">
+        update base_contract_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractNo != null and contractNo != ''">contract_no = #{contractNo},</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+        </trim>
+        where contract_no = #{preContractNo}
+    </update>
+
+</mapper>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseCal" id="ClaimCaseCalResult">
+        <result property="calId"    column="cal_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="billCurrency"    column="bill_currency"    />
+        <result property="calAmount"    column="cal_amount"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="refusedAmount"    column="refused_amount"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="exchangeRate"    column="exchange_rate"    />
+        <result property="payAmountForeign"    column="pay_amount_foreign"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="refusedReason"    column="refused_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="claimCheck"    column="claim_check"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CalConclusionVo" id="CalConclusionResult">
+        <result property="calId"    column="cal_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="billCurrency"    column="bill_currency"    />
+        <result property="calAmount"    column="cal_amount"    />
+        <result property="isAppeal"    column="is_appeal"    />
+        <result property="refusedAmount"    column="refused_amount"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="refusedReason"    column="refused_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="claimCheck"    column="claim_check"    />
+        <result property="exchangeRate"    column="exchange_rate"    />
+        <result property="payAmountForeign"    column="pay_amount_foreign"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="sumBillAmount"    column="sumBillAmount"    />
+        <result property="sumHosDiscountAmount"    column="sumHosDiscountAmount"    />
+        <result property="hospitalCode"    column="hospital_code"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo" id="CalBillSummaryResult">
+        <result property="sumBillAmount"    column="billAmount"    />
+        <result property="sumHosDiscountAmount"    column="hosDiscountAmount"    />
+        <result property="sumDeduUsed"    column="deduUsed"    />
+        <result property="sumPayAmount"    column="payAmount"    />
+        <result property="sumRefusedAmount"    column="refusedAmount"    />
+        <result property="sumUnableAmount"    column="unableAmount"    />
+        <result property="calAmount"    column="calAmount"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCalVo">
+        select cal_id, rpt_no, bill_currency, cal_amount, pay_amount, refused_amount, debt_amount, exchange_rate, pay_amount_foreign, pay_conclusion, refused_reason, remark, claim_check, status, create_by, create_time, update_by, update_time from claim_case_cal
+    </sql>
+
+    <select id="selectClaimCaseCalList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal" resultMap="ClaimCaseCalResult">
+        <include refid="selectClaimCaseCalVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="billCurrency != null  and billCurrency != ''"> and bill_currency = #{billCurrency}</if>
+            <if test="calAmount != null "> and cal_amount = #{calAmount}</if>
+            <if test="payAmount != null "> and pay_amount = #{payAmount}</if>
+            <if test="refusedAmount != null "> and refused_amount = #{refusedAmount}</if>
+            <if test="debtAmount != null "> and debt_amount = #{debtAmount}</if>
+            <if test="exchangeRate != null "> and exchange_rate = #{exchangeRate}</if>
+            <if test="payAmountForeign != null "> and pay_amount_foreign = #{payAmountForeign}</if>
+            <if test="payConclusion != null  and payConclusion != ''"> and pay_conclusion = #{payConclusion}</if>
+            <if test="refusedReason != null  and refusedReason != ''"> and refused_reason = #{refusedReason}</if>
+            <if test="claimCheck != null  and claimCheck != ''"> and claim_check = #{claimCheck}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseCalByRptNo" parameterType="String" resultMap="ClaimCaseCalResult">
+        <include refid="selectClaimCaseCalVo"/>
+        where
+            status = 'Y'
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+    </select>
+
+    <select id="selectClaimCaseCalInformation" parameterType="String" resultMap="CalConclusionResult">
+        SELECT DISTINCT
+        ccc.cal_id,
+        ccc.rpt_no,
+        ccc.cal_amount,
+        ccc.refused_amount,
+        ccc.debt_amount,
+        ccc.pay_amount,
+        ccc.exchange_rate,
+        ccc.pay_amount_foreign,
+        ccc.refused_reason,
+        ccc.remark,
+        ccc.claim_check,
+        cc.is_appeal,
+        insured.insured_no,
+        bill.sumBillAmount,
+        bill.sumHosDiscountAmount,
+        cc.hospital_code,
+        ifnull(ccc.bill_currency,cc.currency) bill_currency,
+        ifnull(ccc.pay_conclusion,(
+        case when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '03'
+        ) > 0 then '03'
+        when (select count(1) from claim_case_cal_bill where rpt_no =  #{rptNo} and status = 'Y' and  pay_conclusion = '04') > 0
+        then '04'
+        when (select count(1) from (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' GROUP BY pay_conclusion) t
+        ) = 1 then  (select pay_conclusion from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' limit 1)
+        when (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y') = (select count(1) from claim_case_cal_bill where rpt_no = #{rptNo} and status = 'Y' and pay_conclusion in ('05','10'))
+        then '05'
+        else '02'
+        end
+        )) pay_conclusion
+        FROM
+        claim_case_cal ccc
+        left join (select c.rpt_no,c.is_appeal,b.hospital_code,b.currency from claim_case c left join claim_batch b on c.batch_no=b.batch_no) cc on cc.rpt_no=ccc.rpt_no
+        LEFT JOIN
+        ( SELECT DISTINCT
+        sum( bill_amount ) AS sumBillAmount,
+        sum( hos_discount_amount ) AS sumHosDiscountAmount,
+        rpt_no
+        FROM claim_case_bill ccb where ccb.status='Y'
+        GROUP BY rpt_no ) bill
+        ON ccc.rpt_no = bill.rpt_no
+        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no and insured.status='Y'
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
+        </where>
+        and ccc.status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
+        SELECT
+        DISTINCT
+        ccc.rpt_no,
+        billAmount,
+        hosDiscountAmount,
+        unableAmount,
+        deduUsed,
+        calAmount,
+        payAmount,
+        refusedAmount
+    FROM
+        claim_case_cal ccc
+        LEFT JOIN (
+    SELECT
+        sum( ifnull( bill_amount, 0 ) ) AS billAmount,
+        sum( ifnull( hos_discount_amount, 0 ) ) AS hosDiscountAmount,
+        sum( ifnull( unable_amount, 0 ) ) AS unableAmount,
+        rpt_no
+    FROM
+        claim_case_bill
+	WHERE status='Y'
+    GROUP BY
+        rpt_no
+        ) sumbill ON sumbill.rpt_no = ccc.rpt_no
+        LEFT JOIN (
+    SELECT
+        sum( ifnull( dedu_used, 0 ) ) AS deduUsed,
+        sum( ifnull( cal_amount, 0 ) ) AS calAmount,
+        sum( ifnull( pay_amount, 0 ) ) AS payAmount,
+        sum( ifnull( refused_amount, 0 ) ) AS refusedAmount,
+        rpt_no
+    FROM
+        claim_case_cal_bill
+	WHERE status='Y'
+    GROUP BY
+        rpt_no
+        ) sumCalBill ON sumCalBill.rpt_no = ccc.rpt_no
+    WHERE
+        ccc.rpt_no = #{rptNo} and ccc.status='Y'
+    </select>
+
+    <insert id="insertClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">
+        insert into claim_case_cal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="billCurrency != null and billCurrency != ''">bill_currency,</if>
+            <if test="calAmount != null">cal_amount,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="refusedAmount != null">refused_amount,</if>
+            <if test="debtAmount != null">debt_amount,</if>
+            <if test="exchangeRate != null">exchange_rate,</if>
+            <if test="payAmountForeign != null">pay_amount_foreign,</if>
+            <if test="payConclusion != null">pay_conclusion,</if>
+            <if test="refusedReason != null">refused_reason,</if>
+            <if test="remark != null">remark,</if>
+            <if test="claimCheck != null">claim_check,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="billCurrency != null and billCurrency != ''">#{billCurrency},</if>
+            <if test="calAmount != null">#{calAmount},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="refusedAmount != null">#{refusedAmount},</if>
+            <if test="debtAmount != null">#{debtAmount},</if>
+            <if test="exchangeRate != null">#{exchangeRate},</if>
+            <if test="payAmountForeign != null">#{payAmountForeign},</if>
+            <if test="payConclusion != null">#{payConclusion},</if>
+            <if test="refusedReason != null">#{refusedReason},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="claimCheck != null">#{claimCheck},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
+        update claim_case_cal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="billCurrency != null and billCurrency != ''">bill_currency = #{billCurrency},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="debtAmount != null">debt_amount = #{debtAmount},</if>
+            <if test="exchangeRate != null">exchange_rate = #{exchangeRate},</if>
+            <if test="payAmountForeign != null">pay_amount_foreign = #{payAmountForeign},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="refusedReason != null">refused_reason = #{refusedReason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="claimCheck != null">claim_check = #{claimCheck},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where cal_id = #{calId}
+    </update>
+
+    <update id="updateClaimCaseCalByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
+        update claim_case_cal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="billCurrency != null and billCurrency != ''">bill_currency = #{billCurrency},</if>
+            <if test="calAmount != null">cal_amount = #{calAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="refusedAmount != null">refused_amount = #{refusedAmount},</if>
+            <if test="debtAmount != null">debt_amount = #{debtAmount},</if>
+            <if test="exchangeRate != null">exchange_rate = #{exchangeRate},</if>
+            <if test="payAmountForeign != null">pay_amount_foreign = #{payAmountForeign},</if>
+            <if test="payConclusion != null">pay_conclusion = #{payConclusion},</if>
+            <if test="refusedReason != null">refused_reason = #{refusedReason},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="claimCheck != null">claim_check = #{claimCheck},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo}
+    </update>
+
+    <delete id="deleteClaimCaseCalById" parameterType="Long">
+        delete from claim_case_cal where cal_id = #{calId}
+    </delete>
+
+    <delete id="deleteClaimCaseCalByIds" parameterType="String">
+        delete from claim_case_cal where cal_id in 
+        <foreach item="calId" collection="array" open="(" separator="," close=")">
+            #{calId}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimCaseCalByIdOne" parameterType="String" resultMap="ClaimCaseCalResult">
+        <include refid="selectClaimCaseCalVo"/>
+        where rpt_no = #{rptNo}  and status='Y'
+    </select>
+
+    <select id="selectClaimCaseCalByBatchNo" parameterType="String" resultMap="ClaimCaseCalResult">
+        SELECT
+            b.bill_currency,
+            b.rpt_no,
+            b.cal_amount,
+            b.pay_amount,
+            b.pay_amount_foreign
+        FROM
+            claim_case a,
+            claim_case_cal b
+        WHERE
+            a.rpt_no = b.rpt_no
+            AND a.batch_no = #{batchNo}
+            AND a.`status` = 'Y'
+            AND b.`status` = 'Y'
+    </select>
+
+    <update id="updateClaimConclusionNull" parameterType="ClaimCaseCal">
+        update claim_case_cal set  pay_conclusion = null
+        where rpt_no = #{rptNo}
+    </update>
+
+</mapper>

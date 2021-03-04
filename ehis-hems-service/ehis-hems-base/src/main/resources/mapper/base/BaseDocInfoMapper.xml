@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseDocInfoMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseDocInfo" id="BaseDocInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="docCode"    column="doc_code"    />
+        <result property="docName"    column="doc_name"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="fiestDept"    column="fiest_dept"    />
+        <result property="secondDept"    column="second_dept"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="docPhone"    column="doc_phone"    />
+        <result property="docDept"    column="doc_dept"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="comment"    column="comment"    />
+    </resultMap>
+    <sql id="selectBaseDocInfoVo">
+        select serial_no, doc_code, doc_name, supplier_code, fiest_dept, second_dept, start_time, end_time, doc_phone, doc_dept, province, city, district, status, create_by, create_time, update_by, update_time, remark,comment from base_doc_info
+    </sql>
+
+    <select id="selectBaseDocInfoList" parameterType="BaseDocInfo" resultMap="BaseDocInfoResult">
+        select  doc_code, doc_name,  start_time, end_time, doc_phone, status, remark,
+        group_concat(comment,fiest_dept, second_dept) as doc_dept from base_doc_info
+        <where>
+            1 = 1
+            <if test="docName != null  and docName != ''"> and doc_name like concat('%', #{docName}, '%')</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="fiestDept != null  and fiestDept != ''"> and( fiest_dept like concat('%', #{fiestDept},'%') or second_dept like concat('%',#{secondDept},'%') or comment like concat('%',#{comment},'%')) </if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
+            <if test="docPhone != null  and docPhone != ''"> and doc_phone = #{docPhone}</if>
+            <if test="docDept != null  and docDept != ''"> and doc_dept = #{docDept}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            and status="Y"
+            <if test="remark != null and remark != ''">and remark = #{remark}</if>
+        </where>
+        group by  doc_code, doc_name, start_time, end_time, doc_phone, status, remark
+    </select>
+
+    <select id="selectBaseDocInfoById" parameterType="String" resultMap="BaseDocInfoResult">
+        <include refid="selectBaseDocInfoVo"/>
+        where doc_code = #{docCode} and status="Y"
+    </select>
+
+    <!--主查询页面需默认显示截止当前时间合约签约时间在一个月内且合约状态为“有效”的数据-->
+    <select id="selectBaseMonth" parameterType="BaseDocInfo" resultMap="BaseDocInfoResult">
+        select  distinct doc_code, doc_name,  start_time, end_time, doc_phone, status, remark, max(serial_no),
+            group_concat(comment, fiest_dept, second_dept) as doc_dept from base_doc_info
+        where (create_time between  #{dBefore2} and  #{dNow2}) and status="Y"
+        group by doc_code, doc_name,  start_time, end_time, doc_phone, status, remark
+        order by max(serial_no) desc
+    </select>
+
+<!--查询服务机构编码和中文名称-->
+    <select id="selectSupplierList" resultMap="BaseDocInfoResult">
+        select distinct provider_code as supplier_code,chname1 as comment from base_provider_info where update_flag='0'
+    </select>
+
+    <select id="selectproviderinfo" resultType="String">
+        select provider_code from base_provider_info,base_doc_info where base_provider_info.provider_code=base_doc_info.supplier_code and base_provider_info.update_flag='0' and base_doc_info.status="Y"
+        and base_doc_info.doc_code=#{docCode}
+    </select>
+
+
+
+
+    <insert id="insertBaseDocInfo" parameterType="BaseDocInfo">
+        insert into base_doc_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="docCode != null">doc_code,</if>
+            <if test="docName != null and docName != ''">doc_name,</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code,</if>
+            <if test="fiestDept != null">fiest_dept,</if>
+            <if test="secondDept != null">second_dept,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="docPhone != null">doc_phone,</if>
+            <if test="docDept != null">doc_dept,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="district != null">district,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="comment != null">comment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="docCode != null">#{docCode},</if>
+            <if test="docName != null and docName != ''">#{docName},</if>
+            <if test="supplierCode != null and supplierCode != ''">#{supplierCode},</if>
+            <if test="fiestDept != null">#{fiestDept},</if>
+            <if test="secondDept != null">#{secondDept},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="docPhone != null">#{docPhone},</if>
+            <if test="docDept != null">#{docDept},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="comment != null">#{comment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseDocInfo" parameterType="BaseDocInfo">
+        update base_doc_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="docName != null and docName != ''">doc_name = #{docName},</if>
+            <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="fiestDept != null">fiest_dept = #{fiestDept},</if>
+            <if test="secondDept != null">second_dept = #{secondDept},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="docPhone != null">doc_phone = #{docPhone},</if>
+            <if test="docDept != null">doc_dept = #{docDept},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="comment != null">comment = #{comment},</if>
+        </trim>
+        where doc_code = #{docCode}
+    </update>
+
+    <delete id="deleteBaseDocInfoById" parameterType="String">
+       update base_doc_info set status="N" where doc_code = #{docCode} and status="Y"
+    </delete>
+
+    <delete id="deleteBaseDocInfoByIds" parameterType="String">
+        update base_doc_info set status="N" where status="Y" and doc_code in
+        <foreach item="docCode" collection="array" open="(" separator="," close=")">
+            #{docCode}
+        </foreach>
+    </delete>
+
+    <select id="selectproviderchname1" resultType="String">
+        select chname1 from base_provider_info where provider_code=#{providerCode} and update_flag='0'
+    </select>
+    
+</mapper>

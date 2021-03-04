@@ -1,0 +1,226 @@
+<template>
+  <div class="app-container">
+    <el-card class="box-card">
+      <el-form ref="searchForm" :model="formSearch" style="padding-bottom: 30px;" label-width="110px"
+               label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="产品编码：" prop="productCode">
+              <el-input v-model="formSearch.productCode" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="产品名称：" prop="productChname">
+              <el-input v-model="formSearch.productChname" class="item-width" clearable size="mini"
+                        placeholder="请输入"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="产品类别：" prop="productType">
+              <el-select v-model="formSearch.productType" class="item-width" placeholder="请选择" clearable>
+                <el-option v-for="item in productTypeOptions" :label="item.dictLabel" :value="item.dictValue"
+                           :key="item.dictValue"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <!--          <el-col :span="8">
+                      <el-form-item label="状态：" prop="bussinessStatus">
+                        <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
+                          <el-option v-for="item in product_bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
+                                     :key="item.dictValue"/>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>-->
+
+
+        </el-row>
+        <div style="text-align: right; margin-right: 10px;">
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-search"
+
+            @click="searchHandle"
+          >查询
+          </el-button>
+          <el-button size="mini"  type="primary" icon="el-icon-refresh-left"  @click="resetForm">重置</el-button>
+        </div>
+      </el-form>
+      <el-divider/>
+      <div>
+        <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+          <span>产品审核列表</span>
+        </div>
+        <el-table
+          v-loading="loading"
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
+          :data="tableData"
+          element-loading-text="拼命加载中"
+          size="small"
+          highlight-current-row
+          tooltip-effect="dark"
+          style="width: 100%;">
+          <el-table-column label="产品编码" prop="productCode" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center" show-overflow-tooltip/>
+          <el-table-column label="状态" prop="bussinessStatus" :formatter="getBussinessStatus" align="center" show-overflow-tooltip>
+            <!--            <template slot-scope="scope">
+                          {{ scope.row.bussinessStatus  }}
+                        </template>-->
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">产品审核</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!--分页组件-->
+        <pagination
+          v-show="totalCount>0"
+          :total="totalCount"
+          :page.sync="params.pageNum"
+          :limit.sync="params.pageSize"
+          @pagination="getData"
+        />
+      </div>
+    </el-card>
+
+  </div>
+
+</template>
+
+<script>
+import {checkList} from '@/api/productManage/serviceProductManagement'
+
+
+export default {
+  data() {
+    return {
+
+      formSearch: {},
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+        productCode: '',
+        productChname: '',
+        productType: '',
+        bussinessStatus: ''
+      },
+
+
+      tableData: [],
+      totalCount: 0,
+      loading: false,
+
+
+
+
+      productTypeOptions:[],
+
+      product_review_statusOptions: [],
+      productTimeTimeOptions:[]
+    }
+  },
+  created() {
+
+    this.init()
+
+    this.getDicts("product_review_status").then(response => {
+      this.product_review_statusOptions = response.data;
+    });
+    this.getDicts("productType").then(response => {
+      this.productTypeOptions = response.data;
+    });
+    this.getDicts("productTimeTime").then(response => {
+      this.productTimeTimeOptions = response.data;
+    });
+
+  },
+  methods: {
+    init(){
+      this.loading = true
+      //调用查询接口
+      checkList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+
+    getProductType(row){
+      return this.selectDictLabel(this.productTypeOptions, row.productType)
+    },
+    getProductInfo(row){
+      return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
+    },
+    getBussinessStatus(row){
+      return this.selectDictLabel(this.product_review_statusOptions, row.bussinessStatus)
+    },
+
+    //查询
+    searchHandle() {
+      this.params.pageSize=10
+      this.params.pageNum=1
+      this.getData()
+    },
+    getData() {
+      this.params.productCode= this.formSearch.productCode
+      this.params.productChname= this.formSearch.productChname
+      this.params.productType= this.formSearch.productType
+      this.params.bussinessStatus= this.formSearch.bussinessStatus
+      this.loading = true
+      //调用查询接口
+      checkList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        if(this.totalCount===0){
+          this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+        }
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+
+    },
+    // 重置
+    resetForm() {
+      this.$refs.searchForm.resetFields()
+      this.formSearch={}
+    },
+
+
+    updateHandle(row) {
+      this.$router.push({
+        path: '/service-product/productReview/edit',
+        query: {productCode: row.productCode,
+          status: 'review'
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+.item-width {
+  width: 200px;
+}
+
+/*element原有样式修改*/
+.el-form-item ::v-deep label {
+  font-weight: normal;
+}
+
+::v-deep .el-table__header-wrapper .el-checkbox__input::after {
+  content: '全选';
+  position: absolute;
+  font-weight: bolder;
+  margin-left: 5px;
+}
+</style>
+

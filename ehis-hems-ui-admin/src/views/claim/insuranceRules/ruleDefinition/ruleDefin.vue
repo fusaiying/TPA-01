@@ -327,7 +327,6 @@
 </template>
 <script>
   import Cookies from "js-cookie";//  npm install js-cookie --save
-
   let that
   import moment from 'moment'
   import claimsTable from './components/claimsTable'
@@ -809,7 +808,6 @@
             num++
           }
         })
-        const areaTreeList =this.$refs.areaTree.getCheckedNodes()
         if (this.ruleForm.isShare === 'Y' && num >= 2) {//需要判断福利对象是否有多个 不同计划是不能共享的  *先判断是否为共享
           return this.$message.warning(
             "不同计划规则是不能共享的！"
@@ -817,10 +815,6 @@
         } else if (welfareList2.length <= 0) {
           return this.$message.warning(
             "最少选择一个计划！"
-          )
-        }else if (areaTreeList.length <= 0){
-          return this.$message.warning(
-            "请选择涵盖区域！"
           )
         }else {
           this.$refs.ruleForm.validate((valid) => {
@@ -901,9 +895,9 @@
 
               //特殊医院30   item.code待定
               this.specialHosList.forEach(item=>{
-                 let constraint = this.pushConstraint('30', item.value, item.label, undefined)
-                 constraintList.push(constraint)
-               })
+                let constraint = this.pushConstraint('30', item.value, item.label, undefined)
+                constraintList.push(constraint)
+              })
               //关联对象列表
               let relationList = [] //pushRelation
               let relations = this.getSimpleCheckedNodes(this.$refs.welfareTree.store)
@@ -1091,6 +1085,8 @@
                   center: true,
                   showClose: true
                 })
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
               }
             }).catch(() => {
               this.$message({
@@ -1127,6 +1123,7 @@
       }
       ,
       goBack() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       getMinData(row, expandedRows) {
@@ -1191,7 +1188,7 @@
               plan= plan+ data.planName + '>' + data.dutyName + ':' + data.dutyDetailName + '>' + data.feeitemName
             }
           })
-        return plan
+          return plan
 
         }
       }
@@ -1381,7 +1378,7 @@
     width: 160px;
   }
 
-  .el-tree /deep/ .el-tree-node__content {
+  .el-tree ::v-deep .el-tree-node__content {
     height: 30px;
   }
 
@@ -1389,16 +1386,16 @@
     margin-top: 16px;
   }
 
-  .collapse-card.el-card /deep/ .el-card__body {
+  .collapse-card.el-card ::v-deep .el-card__body {
     padding: 0;
   }
 
-  .el-collapse /deep/ .el-collapse-item__header {
+  .el-collapse ::v-deep .el-collapse-item__header {
     background-color: #f8f8f8;
     padding: 0 10px;
   }
 
-  .el-collapse /deep/ .el-collapse-item__wrap {
+  .el-collapse ::v-deep .el-collapse-item__wrap {
     padding: 0 10px;
   }
 
@@ -1410,7 +1407,7 @@
     margin-left: 20px;
   }
 
-  .el-checkbox-group /deep/ .el-checkbox {
+  .el-checkbox-group ::v-deep .el-checkbox {
     display: block;
   }
 
@@ -1419,14 +1416,14 @@
     text-align: right;
   }
 
-  /deep/ .custom-tree-node {
+  ::v-deep .custom-tree-node {
     display: flex;
     width: 100%;
     height: 100%;
     flex-direction: column;
   }
 
-  /deep/ .custom-tree-node span {
+  ::v-deep .custom-tree-node span {
     flex: 1;
     display: inline-block;
     width: 80%;
@@ -1440,7 +1437,7 @@
     max-width: 400px;
   }
 
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
 </style>

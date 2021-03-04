@@ -1,7 +1,9 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderNewtworktype;
+import com.paic.ehis.base.domain.vo.BaseProviderNetworktypeVO;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet(医疗网络类型)Service接口
@@ -38,10 +40,10 @@ public interface IBaseProviderNewtworktypeService
     /**
      * 修改base_provider_newtworktypet(医疗网络类型)
      * 
-     * @param baseProviderNewtworktype base_provider_newtworktypet(医疗网络类型)
+     * @param baseProviderNetworktypeVO base_provider_newtworktypet(医疗网络类型)
      * @return 结果
      */
-    public int updateBaseProviderNewtworktype(List<BaseProviderNewtworktype> baseProviderNewtworktype);
+    public int updateBaseProviderNewtworktype(BaseProviderNetworktypeVO baseProviderNetworktypeVO);
 
     /**
      * 批量删除base_provider_newtworktypet(医疗网络类型)

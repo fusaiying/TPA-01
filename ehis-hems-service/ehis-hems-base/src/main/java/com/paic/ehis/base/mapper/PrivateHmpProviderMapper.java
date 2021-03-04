@@ -12,4 +12,6 @@ public interface PrivateHmpProviderMapper {
     int insertContactsAll(List<BaseContacts> list);
     int insertReceiptAll(List<BaseSupplierReceip> list);
     int insertOutletsAll(List<BaseSupplierOutlets> list);
+
+
 }

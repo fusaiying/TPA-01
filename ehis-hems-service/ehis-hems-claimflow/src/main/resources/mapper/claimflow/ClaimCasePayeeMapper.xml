@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCasePayeeMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCasePayee" id="ClaimCasePayeeResult">
+        <result property="payeeId"    column="payee_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="payMode"    column="pay_mode"    />
+        <result property="relationIns"    column="relation_ins"    />
+        <result property="payeeName"    column="payee_name"    />
+        <result property="payeeSex"    column="payee_sex"    />
+        <result property="payeeIdType"    column="payee_id_type"    />
+        <result property="payeeIdNo"    column="payee_id_no"    />
+        <result property="payeeOccupation"    column="payee_occupation"    />
+        <result property="payeeNationality"    column="payee_nationality"    />
+        <result property="idEndDate"    column="id_end_date"    />
+        <result property="payeeMobile"    column="payee_mobile"    />
+        <result property="payeeBank"    column="payee_bank"    />
+        <result property="accAttribute"    column="acc_attribute"    />
+        <result property="accNo"    column="acc_no"    />
+        <result property="payeeRatio"    column="payee_ratio"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="address"    column="address"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCasePayeeVo">
+        select payee_id, rpt_no, pay_mode, relation_ins, payee_name, payee_sex, payee_id_type, payee_id_no, payee_occupation, payee_nationality, id_end_date, payee_mobile, payee_bank, acc_attribute, acc_no, payee_ratio, province, city, district, address, status, create_by, create_time, update_by, update_time from claim_case_payee
+    </sql>
+
+    <select id="selectClaimCasePayeeList" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePayee" resultMap="ClaimCasePayeeResult">
+        <include refid="selectClaimCasePayeeVo"/>
+        <where>  
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="payMode != null  and payMode != ''"> and pay_mode = #{payMode}</if>
+            <if test="relationIns != null  and relationIns != ''"> and relation_ins = #{relationIns}</if>
+            <if test="payeeName != null  and payeeName != ''"> and payee_name like concat('%', #{payeeName}, '%')</if>
+            <if test="payeeSex != null  and payeeSex != ''"> and payee_sex = #{payeeSex}</if>
+            <if test="payeeIdType != null  and payeeIdType != ''"> and payee_id_type = #{payeeIdType}</if>
+            <if test="payeeIdNo != null  and payeeIdNo != ''"> and payee_id_no = #{payeeIdNo}</if>
+            <if test="payeeOccupation != null  and payeeOccupation != ''"> and payee_occupation = #{payeeOccupation}</if>
+            <if test="payeeNationality != null  and payeeNationality != ''"> and payee_nationality = #{payeeNationality}</if>
+            <if test="idEndDate != null "> and id_end_date = #{idEndDate}</if>
+            <if test="payeeMobile != null  and payeeMobile != ''"> and payee_mobile = #{payeeMobile}</if>
+            <if test="payeeBank != null  and payeeBank != ''"> and payee_bank = #{payeeBank}</if>
+            <if test="accAttribute != null  and accAttribute != ''"> and acc_attribute = #{accAttribute}</if>
+            <if test="accNo != null  and accNo != ''"> and acc_no = #{accNo}</if>
+            <if test="payeeRatio != null "> and payee_ratio = #{payeeRatio}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCasePayeeById" parameterType="Long" resultMap="ClaimCasePayeeResult">
+        <include refid="selectClaimCasePayeeVo"/>
+        where payee_id = #{payeeId}
+    </select>
+        
+    <insert id="insertClaimCasePayee" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePayee" useGeneratedKeys="true" keyProperty="payeeId">
+        insert into claim_case_payee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="payMode != null and payMode != ''">pay_mode,</if>
+            <if test="relationIns != null and relationIns != ''">relation_ins,</if>
+            <if test="payeeName != null and payeeName != ''">payee_name,</if>
+            <if test="payeeSex != null and payeeSex != ''">payee_sex,</if>
+            <if test="payeeIdType != null and payeeIdType != ''">payee_id_type,</if>
+            <if test="payeeIdNo != null and payeeIdNo != ''">payee_id_no,</if>
+            <if test="payeeOccupation != null and payeeOccupation != ''">payee_occupation,</if>
+            <if test="payeeNationality != null and payeeNationality != ''">payee_nationality,</if>
+            <if test="idEndDate != null">id_end_date,</if>
+            <if test="payeeMobile != null">payee_mobile,</if>
+            <if test="payeeBank != null and payeeBank != ''">payee_bank,</if>
+            <if test="accAttribute != null and accAttribute != ''">acc_attribute,</if>
+            <if test="accNo != null and accNo != ''">acc_no,</if>
+            <if test="payeeRatio != null">payee_ratio,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="district != null and district != ''">district,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="payMode != null and payMode != ''">#{payMode},</if>
+            <if test="relationIns != null and relationIns != ''">#{relationIns},</if>
+            <if test="payeeName != null and payeeName != ''">#{payeeName},</if>
+            <if test="payeeSex != null and payeeSex != ''">#{payeeSex},</if>
+            <if test="payeeIdType != null and payeeIdType != ''">#{payeeIdType},</if>
+            <if test="payeeIdNo != null and payeeIdNo != ''">#{payeeIdNo},</if>
+            <if test="payeeOccupation != null and payeeOccupation != ''">#{payeeOccupation},</if>
+            <if test="payeeNationality != null and payeeNationality != ''">#{payeeNationality},</if>
+            <if test="idEndDate != null">#{idEndDate},</if>
+            <if test="payeeMobile != null">#{payeeMobile},</if>
+            <if test="payeeBank != null and payeeBank != ''">#{payeeBank},</if>
+            <if test="accAttribute != null and accAttribute != ''">#{accAttribute},</if>
+            <if test="accNo != null and accNo != ''">#{accNo},</if>
+            <if test="payeeRatio != null">#{payeeRatio},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCasePayee" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePayee">
+        update claim_case_payee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payMode != null and payMode != ''">pay_mode = #{payMode},</if>
+            <if test="relationIns != null and relationIns != ''">relation_ins = #{relationIns},</if>
+            <if test="payeeName != null and payeeName != ''">payee_name = #{payeeName},</if>
+            <if test="payeeSex != null and payeeSex != ''">payee_sex = #{payeeSex},</if>
+            <if test="payeeIdType != null and payeeIdType != ''">payee_id_type = #{payeeIdType},</if>
+            <if test="payeeIdNo != null and payeeIdNo != ''">payee_id_no = #{payeeIdNo},</if>
+            <if test="payeeOccupation != null and payeeOccupation != ''">payee_occupation = #{payeeOccupation},</if>
+            <if test="payeeNationality != null and payeeNationality != ''">payee_nationality = #{payeeNationality},</if>
+            <if test="idEndDate != null">id_end_date = #{idEndDate},</if>
+            <if test="payeeMobile != null">payee_mobile = #{payeeMobile},</if>
+            <if test="payeeBank != null and payeeBank != ''">payee_bank = #{payeeBank},</if>
+            <if test="accAttribute != null and accAttribute != ''">acc_attribute = #{accAttribute},</if>
+            <if test="accNo != null and accNo != ''">acc_no = #{accNo},</if>
+            <if test="payeeRatio != null">payee_ratio = #{payeeRatio},</if>
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where payee_id = #{payeeId}
+    </update>
+
+    <delete id="deleteClaimCasePayeeById" parameterType="Long">
+        delete from claim_case_payee where payee_id = #{payeeId}
+    </delete>
+
+    <delete id="deleteClaimCasePayeeByIds" parameterType="String">
+        delete from claim_case_payee where payee_id in 
+        <foreach item="payeeId" collection="array" open="(" separator="," close=")">
+            #{payeeId}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimCasePayeeselectOne" parameterType="String" resultMap="ClaimCasePayeeResult">
+        select payee_id, rpt_no, pay_mode, relation_ins, payee_name, payee_sex, payee_id_type, payee_id_no, payee_occupation, payee_nationality, id_end_date, payee_mobile, payee_bank, acc_attribute, acc_no, payee_ratio*100, province, city, district, address, status, create_by, create_time, update_by, update_time from claim_case_payee
+        where rpt_no = #{rptNo} and status = 'Y' order by update_time desc limit 1
+    </select>
+
+    <select id="selectClaimCasePayeeByRptNo" parameterType="String" resultMap="ClaimCasePayeeResult">
+        <include refid="selectClaimCasePayeeVo"/>
+        where rpt_no = #{rptNo} and status = 'Y' order by update_time desc
+    </select>
+
+    <select id="CheckClaimCasePayeeByRptNo" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(sum( ifnull( payee_ratio, 0 ) ),0)
+        FROM
+            claim_case_payee
+        where rpt_no = #{rptNo} and status = 'Y'
+    </select>
+</mapper>

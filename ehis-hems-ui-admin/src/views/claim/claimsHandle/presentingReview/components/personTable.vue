@@ -6,16 +6,25 @@
       size="small"
       highlight-current-row
       tooltip-effect="dark"
+      @sort-change="onSortChange"
       style="width: 100%;">
-      <el-table-column sortable align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
+      <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center" prop="batchno" min-width="160" label="批次号" show-overflow-tooltip/>
       <el-table-column  align="center" min-width="100" prop="source" label="交单来源"
-                       show-overflow-tooltip/>
+                        show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{selectDictLabel( delivery_sourceOptions, scope.row.source)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="hospitalcode" min-width="120" label="就诊医院" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.chname1}} | {{scope.row.enname1}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="claimtype" min-width="160" label="理赔类型" show-overflow-tooltip/>
+      <el-table-column align="center" prop="claimtype" min-width="160" label="理赔类型" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{selectDictLabel( claimtypeOptions, scope.row.claimtype)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column sortable align="center" prop="submitdate" min-width="120" label="交单日期" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{parseTime(scope.row.submitdate, '{y}-{m}-{d}')}}</span>
@@ -28,11 +37,19 @@
       </el-table-column>
       <el-table-column align="center" prop="casenum" label="案件数" min-width="90" show-overflow-tooltip/>
       <el-table-column align="center"  min-width="110" prop="batchtotal" label="批次总金额"
-                       show-overflow-tooltip/>
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.batchtotal}} {{scope.row.currency}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="updateBy" label="操作人" min-width="90" show-overflow-tooltip/>
-      <el-table-column align="center" prop="organcode" min-width="120" label="机构" show-overflow-tooltip/>
+      <el-table-column align="center" prop="organName" min-width="120" label="机构" show-overflow-tooltip/>
       <el-table-column v-if="status === '02'" align="center" min-width="100" prop="batchstatus" label="批次状态"
-                       show-overflow-tooltip/>
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{selectDictLabel( batchs_statusOptions, scope.row.batchstatus)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" min-width="94" fixed="right">
         <template slot-scope="scope">
           <el-button v-if="status==='02'" size="small" type="text" @click="editPresenting(scope.row,'show')">查看
@@ -47,7 +64,9 @@
 </template>
 
 <script>
-  import {invalid} from '@/api/claim/presentingReview'
+  import {invalid,getThisDept} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
+  let dictss = [{dictType: 'delivery_source'}, {dictType: 'claimtype'}, {dictType: 'batchs_status'}]
   export default {
 
     props: {
@@ -61,10 +80,46 @@
     },
     data() {
       return {
-
+        prop:'',
+        order:'',
+        dictList:[],
+        delivery_sourceOptions:[],
+        claimtypeOptions:[],
+        batchs_statusOptions:[],
+        deptOptions:[],
       }
     },
-    mounted() {
+    async created() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.delivery_sourceOptions = this.dictList.find(item => {
+        return item.dictType === 'delivery_source'
+      }).dictDate
+      this.claimtypeOptions = this.dictList.find(item => {
+        return item.dictType === 'claimtype'
+      }).dictDate
+      this.batchs_statusOptions = this.dictList.find(item => {
+        return item.dictType === 'batchs_status'
+      }).dictDate
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(res => {
+            if (res != null && res.code === 200) {
+              this.deptOptions = res.rows
+            }
+          }).catch(res => {
+          })
+        }
+      })
 
     },
     methods: {
@@ -72,7 +127,9 @@
       editPresenting(row, status) {
         let data = encodeURI(
           JSON.stringify({
+            node:'review',
             batchno: row.batchno, //批次号
+            batchstatus: row.batchstatus, //批次状态
             status,//新增or查看
             claimtype: row.claimtype//理赔类型
           })
@@ -83,11 +140,6 @@
             data
           }
         })
-
-      },
-      recovery(row) {
-      },
-      getCNReasonType(row, col) {
 
       },
       invalid(row) {
@@ -104,14 +156,35 @@
                 center: true,
                 showClose: true
               })
-              this.searchHandle()
+              this.$parent.$parent.$parent.$parent.searchTable()
             }else {
               this.$message.error('无效处理失败！')
             }
           })
         })
       },
-
+      getDeptName(datas, value) {
+        var actions = [];
+        Object.keys(datas).some((key) => {
+          if (datas[key].organCode == value) {
+            actions.push(datas[key].organName);
+            return true;
+          }
+        })
+        return actions.join('');
+      },
+      onSortChange({ prop, order }) {
+        this.prop=prop
+        if (order==='ascending'){
+          this.order='asc'
+        }else if (order==='descending'){
+          this.order='desc'
+        }else if (order==null){
+          this.prop=''
+          this.order=''
+        }
+        this.$parent.$parent.$parent.$parent.searchHandle()
+      }
     }
   }
 </script>

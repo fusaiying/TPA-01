@@ -1,6 +1,7 @@
 package com.paic.ehis.base.service;
 
 import com.paic.ehis.base.domain.BaseContractService;
+import feign.Param;
 
 import java.util.List;
 
@@ -34,7 +35,12 @@ public interface IBaseContractServiceService
      * @param baseContractService base_contract_service（合约服务项目）
      * @return 结果
      */
-    public int insertBaseContractService(BaseContractService baseContractService);
+    public BaseContractService insertBaseContractService(BaseContractService baseContractService);
+
+    /**
+     * 批量新增
+     */
+    public int insertForeach(@Param("baseContractServiceList")List<BaseContractService> baseContractServiceList);
 
     /**
      * 修改base_contract_service（合约服务项目）
@@ -55,8 +61,8 @@ public interface IBaseContractServiceService
     /**
      * 删除base_contract_service（合约服务项目）信息
      * 
-     * @param contractNo base_contract_service（合约服务项目）ID
      * @return 结果
      */
-    public int deleteBaseContractServiceById(String contractNo);
+    public int deleteBaseContractServiceById(String serialNo);
+
 }

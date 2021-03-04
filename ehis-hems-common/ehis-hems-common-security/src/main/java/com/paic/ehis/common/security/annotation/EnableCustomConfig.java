@@ -1,14 +1,13 @@
 package com.paic.ehis.common.security.annotation;
 
-import java.lang.annotation.*;
-
-import com.paic.ehis.common.security.feign.OAuth2FeignConfig;
+import com.paic.ehis.common.security.config.ApplicationConfig;
+import com.paic.ehis.common.security.feign.FeignAutoConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
-import com.paic.ehis.common.security.config.ApplicationConfig;
-import com.paic.ehis.common.security.config.SecurityImportBeanDefinitionRegistrar;
+
+import java.lang.annotation.*;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,7 +20,7 @@ import com.paic.ehis.common.security.config.SecurityImportBeanDefinitionRegistra
 // 开启线程异步执行
 @EnableAsync
 // 自动加载类
-@Import({ SecurityImportBeanDefinitionRegistrar.class, OAuth2FeignConfig.class, ApplicationConfig.class })
+@Import({ ApplicationConfig.class, FeignAutoConfiguration.class })
 public @interface EnableCustomConfig
 {
 

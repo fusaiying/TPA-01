@@ -1,34 +1,31 @@
 package com.paic.ehis.base.controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.*;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.domain.ContractVO;
-import com.paic.ehis.base.domain.HmpContract;
-import com.paic.ehis.base.domain.HmpFileInfo;
-import com.paic.ehis.base.domain.HmpServConpro;
-import com.paic.ehis.base.service.IHmpContractService;
-import com.paic.ehis.base.service.IHmpFileInfoService;
-import com.paic.ehis.base.service.IHmpServConproService;
-import com.paic.ehis.base.service.IHmpServProjectService;
 import com.paic.ehis.common.core.utils.PathUtil;
+import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.file.FileUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
-import com.paic.ehis.common.core.utils.PubFun;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.base.domain.*;
+import com.paic.ehis.base.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 供应商合约Controller
@@ -55,7 +52,7 @@ public class HmpContractController extends BaseController {
     /**
      * 查询供应商合约列表
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:list')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpContract hmpContract) throws ParseException {
         startPage();
@@ -66,7 +63,7 @@ public class HmpContractController extends BaseController {
     /**
      * 导出供应商合约列表
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:export')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:export')")
     @Log(title = "供应商合约", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpContract hmpContract) throws IOException {
@@ -78,7 +75,7 @@ public class HmpContractController extends BaseController {
     /**
      * 获取供应商合约详细信息
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:query')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:query')")
     @GetMapping(value = "/{contractno}")
     public AjaxResult getInfo(@PathVariable("contractno") String contractno) {
         return AjaxResult.success(hmpContractService.selectHmpContractById(contractno));
@@ -87,7 +84,7 @@ public class HmpContractController extends BaseController {
     /**
      * 新增供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:add')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:add')")
     @Log(title = "供应商合约 - 新增", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ContractVO contractVO) {
@@ -164,7 +161,7 @@ public class HmpContractController extends BaseController {
     /**
      * 修改供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:edit')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:edit')")
     @Log(title = "供应商合约", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ContractVO contractVO) {
@@ -222,7 +219,7 @@ public class HmpContractController extends BaseController {
     /**
      * 删除供应商合约
      */
-    @PreAuthorize("@ss.hasPermi('provider:contract:remove')")
+    //@PreAuthorize("@ss.hasPermi('provider:contract:remove')")
     @Log(title = "供应商合约", businessType = BusinessType.DELETE)
     @DeleteMapping("/{contractnos}")
     public AjaxResult remove(@PathVariable String[] contractnos) {

@@ -1,7 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypetData;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet_data(医疗网络类型信息)Mapper接口

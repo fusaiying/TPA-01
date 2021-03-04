@@ -3,16 +3,16 @@ import request from '@/utils/request'
 // 查询费用项信息列表
 export function listFeeitem(query) {
   return request({
-    url: '/system/feeitem/list',
-    method: 'get',
-    params: query
+    url: '/provider/feeitem/list',
+    method: 'post',
+    data: query
   })
 }
 
 // 查询费用项信息详细
 export function getFeeitem(feeitemcode) {
   return request({
-    url: '/system/feeitem/' + feeitemcode,
+    url: '/provider/feeitem/' + feeitemcode,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getFeeitem(feeitemcode) {
 // 新增费用项信息
 export function addFeeitem(data) {
   return request({
-    url: '/system/feeitem',
+    url: '/provider/feeitem',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addFeeitem(data) {
 // 修改费用项信息
 export function updateFeeitem(data) {
   return request({
-    url: '/system/feeitem',
+    url: '/provider/feeitem',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateFeeitem(data) {
 // 删除费用项信息
 export function delFeeitem(feeitemcode) {
   return request({
-    url: '/system/feeitem/' + feeitemcode,
+    url: '/provider/feeitem/' + feeitemcode,
     method: 'delete'
   })
 }

@@ -17,7 +17,7 @@ public class ContractVO extends BaseEntity {
     /**
      * 合约服务项目关联
      */
-    private List<HmpServConpro> hmpServConpro;
+    private List<com.paic.ehis.base.domain.HmpServConpro> hmpServConpro;
 
 
     public HmpContract getHmpContract() {
@@ -28,11 +28,11 @@ public class ContractVO extends BaseEntity {
         this.hmpContract = hmpContract;
     }
 
-    public List<HmpServConpro> getHmpServConpro() {
+    public List<com.paic.ehis.base.domain.HmpServConpro> getHmpServConpro() {
         return hmpServConpro;
     }
 
-    public void setHmpServConpro(List<HmpServConpro> hmpServConpro) {
+    public void setHmpServConpro(List<com.paic.ehis.base.domain.HmpServConpro> hmpServConpro) {
         this.hmpServConpro = hmpServConpro;
     }
 

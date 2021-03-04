@@ -20,7 +20,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否互联网医院：" prop="interHosp">
-                    <el-select v-model="baseForm.interHosp" class="item-width" placeholder="请选择(默认否)" clearable>
+                    <el-select v-model="baseForm.interHosp" class="item-width" placeholder="请选择" clearable>
                       <el-option v-for="item in inter_hospOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
 
@@ -153,6 +153,7 @@
                                  :key="item.dictValue"/>
                       <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
+                      <i class="el-icon-warning-outline" v-if="typeShow" v-bind:title="type2Info"></i>
 
                   </el-form-item>
                 </el-col>
@@ -346,22 +347,22 @@
         </div>
         <!--结算信息-->
         <div >
-          <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList"
-                             :closingTableShow="closingTableShow" :annexupload="annexupload"
-                             :closingFrom="closingFrom"></hosp-closing-info>
+          <hosp-closing-info  :providerCode="providerCode" ref="closingInfo" :isAdd="isAdd" :dictList="dictList" :status="activeName"
+                              :closingTableShow="closingTableShow" :annexupload="annexupload"
+                              :closingFrom="closingFrom"></hosp-closing-info>
         </div>
         <!--附件信息-->
-                <div >
-                  <annex-info :disabledFlag="annexFlag" :suppliercode="providerCode" :specialAnnexFlag="specialAnnexFlag"></annex-info>
-                </div>
+        <div >
+          <annex-info :disabledFlag="annexFlag" :suppliercode="providerCode" :specialAnnexFlag="specialAnnexFlag"></annex-info>
+        </div>
 
-      <!--历史合约-->
-<!--        <div class="app-container">
-        <history-contract :contractLogTableData="contractLogTableData"></history-contract>
-  </div>-->
+        <!--历史合约-->
+        <!--        <div class="app-container">
+                <history-contract :contractLogTableData="contractLogTableData"></history-contract>
+          </div>-->
         <!--审核-->
         <div >
-         <audit  :providerCode="providerCode"></audit>
+          <audit  :providerCode="providerCode"></audit>
         </div>
 
 
@@ -405,12 +406,11 @@ let dictss = [{dictType: 'inter_hosp'},{dictType: 'virtual_org'},{dictType: 'fir
   {dictType: 'second_attribute_b'},{dictType: 'comprehensive_type'},{dictType: 'yes_or_no'},{dictType: 'visiting_type'},
   {dictType: 'spprocurement_flag'},{dictType: 'classification'},{dictType: 'cooperationStatus_flag'},{dictType: 'servicelocator_flag'},
   {dictType: 'speciallanguage'},{dictType: 'networkHospitalType'},{dictType: 'type'},{dictType: 'payment'},
-  {dictType: 'classification_type'},{dictType: 'leadFlag'},{dictType: 'place_type'},{dictType: 'currency'},{dictType: 'bussiness_status'},{dictType: 'comprehensive_subtype'},
-  {dictType: 'account_type_new'}]
+  {dictType: 'classification_type'},{dictType: 'leadFlag'},{dictType: 'place_type'},{dictType: 'currency'},{dictType: 'accountacc_status'},
+  {dictType: 'account_type_new'},{dictType: 'comprehensive_subtype'},{dictType: 'bussiness_status'},{dictType: 'bussiness_status_review'}]
 
 export default {
   components: {
-
     annexInfo,
     historyContract,
     audit,
@@ -425,7 +425,7 @@ export default {
 
 
     return {
-
+      type2Info:'',
       specialAnnexFlag:true,
       annexFlag: false,
       contractLogTableData: [],
@@ -448,10 +448,6 @@ export default {
       closingTableShow: undefined,
       departmentTableShow: undefined,
       contactInfoTableShow: undefined,
-
-
-
-
       closingFrom: {
         baseProviderSettle: {
           currency: undefined,
@@ -525,6 +521,7 @@ export default {
       },
 
       serviceForm: {
+        weekendsWorking:undefined,
         excludingFee: undefined,
         topten: undefined,
         specializedHospital: undefined,
@@ -649,7 +646,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status'
+      return item.dictType == 'bussiness_status_review'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'
@@ -691,9 +688,15 @@ export default {
       getInfo(queryData).then(res => {
         this.baseForm = res.data
         this.baseForm.address=[]
-        this.baseForm.address[0]=res.data.province
-        this.baseForm.address[1]=res.data.city
-        this.baseForm.address[2]=res.data.district
+        if(res.data.province) {
+          this.baseForm.address[0] = res.data.province
+        }
+        if(res.data.city) {
+          this.baseForm.address[1] = res.data.city
+        }
+        if(res.data.district) {
+          this.baseForm.address[2] = res.data.district
+        }
         this.copyChregister=this.baseForm.chregister
         this.copyUsedname=this.baseForm.usedname
         this.copyEnregister=this.baseForm.enregister
@@ -708,6 +711,14 @@ export default {
 
         if(this.baseForm.type=='03'){
           this.typeShow=true
+          //给type2Info赋值
+          this.baseForm.type2.forEach(item =>{
+            let data = this.comprehensive_subtypeOptions.find(obj =>{
+              return obj.dictValue==item;
+            })
+            this.type2Info=this.type2Info+','+data.dictLabel
+          })
+          this.type2Info=this.type2Info.substring(1,this.type2Info.length)
 
         }
 
@@ -766,15 +777,15 @@ export default {
       }).catch(res => {
       })
 
-/*      //历史合约的接口
-      getHistoryConlist(this.providerCode).then(res => {
-        this.contractLogTableData = res.data
-      }).catch(res => {
-      })*/
-   /*   //审核日志的接口
-      selectCheckInfo(this.providerCode).then(res=> {
-        this.reviewLogTableData=res.data
-      })*/
+      /*      //历史合约的接口
+            getHistoryConlist(this.providerCode).then(res => {
+              this.contractLogTableData = res.data
+            }).catch(res => {
+            })*/
+      /*   //审核日志的接口
+         selectCheckInfo(this.providerCode).then(res=> {
+           this.reviewLogTableData=res.data
+         })*/
 
 
     }
@@ -808,13 +819,7 @@ export default {
 
 
     },
-    changeInhosptial(){
-      if(this.baseForm.inhosptial=='01'){
-        if(!this.baseForm.beds){
-          this.$message.warning('床位数不能位空！')
-        }
-      }
-    },
+
 
 
     baseSaveChange(){
@@ -832,9 +837,6 @@ export default {
     claimHospitalName(){
       this.baseForm.claimHospitalName=this.baseForm.chname1
     },
-
-
-
 
 
 
@@ -860,23 +862,6 @@ export default {
     },
 
 
-    // 校验数据
-    validateForm() {
-      let flag = null
-      this.$refs['baseForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
-      })
-      return flag
-    },
-
-
-
-
-
 
 
     goBack() {
@@ -897,13 +882,13 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
 
 /*修改标签页的字体*/
-/deep/ .el-tabs__item {
+::v-deep .el-tabs__item {
   font-size: 20px;
   font-weight: 400;
   color: #000000;
@@ -919,6 +904,13 @@ export default {
 
 .el-radio {
   padding: 3px;
+}
+::v-deep .el-select__tags {
+  width: 100%;
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 

@@ -1,10 +1,10 @@
 package com.paic.ehis.system.mapper;
 
 import com.alibaba.fastjson.JSONObject;
-import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.domain.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -23,6 +23,12 @@ public interface SysUserMapper
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserList(SysUser sysUser);
+
+    public List<SysUser> selectUserListByOrganCode(List<String> organCodeList);
+
+    public int selectDept(String username);
+
+    public List<String> selectuserName(int deptId);
 
     /**
      * 通过用户名查询用户

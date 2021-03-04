@@ -1035,7 +1035,7 @@
   .supplier{
     margin-bottom: 33px;
   }
-  .long-input /deep/ .el-form-item__content{
+  .long-input ::v-deep .el-form-item__content{
     width: calc(100% - 150px);
   }
 
@@ -1048,10 +1048,10 @@
   .long-select{
     width: 100%;
   }
-  .short-select /deep/ .el-form-item__content{
+  .short-select ::v-deep .el-form-item__content{
     width: calc(100% - 150px);
   }
-  .short-input /deep/ .el-form-item__content{
+  .short-input ::v-deep .el-form-item__content{
     width: calc(100% - 150px);
   }
 
@@ -1065,7 +1065,7 @@
   .el-tb-edit .current-row .el-form-item+span{
     display: none;
   }
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 

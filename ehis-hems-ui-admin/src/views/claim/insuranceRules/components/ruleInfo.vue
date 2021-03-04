@@ -124,7 +124,7 @@
         :total="ruleTotalCount"
         :page.sync="rulPageInfo.pageNum"
         :limit.sync="rulPageInfo.pageSize"
-        @pagination=""
+        @pagination="listRule"
       />
     </el-card>
     <el-card v-if="node === 'ruleReview'" class="box-card" style="margin-top: 10px;">
@@ -172,11 +172,11 @@
     data() {
       const checkExplanation = (rule, value, callback) => {
         if (this.reviewForm.conclusion==='02' && (this.reviewForm.explanation==null || this.reviewForm.explanation==='')){
-            if (!value){
-              callback(new Error("复核结论退回，结论说明必录！"));
-            }else {
-              callback()
-            }
+          if (!value){
+            callback(new Error("复核结论退回，结论说明必录！"));
+          }else {
+            callback()
+          }
         }else {
           callback()
         }
@@ -292,7 +292,7 @@
         listRule(querys).then(res => {
           if (res != null && res.code === 200) {
             this.ruleTableData = res.rows
-            this.resTotalCount = res.total
+            this.ruleTotalCount = res.total
           }
         }).catch(res => {
         })
@@ -312,22 +312,24 @@
               data.riskStatus='02'
             }
 
-              submitReview(data).then(res => {
-                if (res!=null && res.code===200){
-                  this.$message({
-                    message: '审核完毕！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                }
-              }).catch(() => {
+            submitReview(data).then(res => {
+              if (res!=null && res.code===200){
                 this.$message({
-                  type: 'info',
-                  message: '审核失败！'
+                  message: '审核完毕！',
+                  type: 'success',
+                  center: true,
+                  showClose: true
                 })
+                this.$store.dispatch("tagsView/delView", this.$route);
+                this.$router.go(-1)
+              }
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '审核失败！'
               })
-            }
+            })
+          }
         })
 
         if (this.reviewForm.conclusion==null || this.reviewForm.conclusion===''){
@@ -342,6 +344,7 @@
         }
       },
       goBack() {
+        this.$store.dispatch("tagsView/delView", this.$route);
         this.$router.go(-1)
       },
       getMinData(row, expandedRows) {
@@ -555,7 +558,7 @@
     width: 100px;
     text-align: right;
   }
-  .el-table /deep/ .el-table__expanded-cell {
+  .el-table ::v-deep .el-table__expanded-cell {
     padding: 10px;
   }
 </style>

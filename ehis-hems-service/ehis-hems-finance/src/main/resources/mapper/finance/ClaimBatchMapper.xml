@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.ClaimBatchMapper">
+
+    <resultMap type="com.paic.ehis.finance.domain.ClaimBatch" id="ClaimBatchResult">
+        <result property="batchno"    column="batch_no"    />
+        <result property="source"    column="source"    />
+        <result property="hospitalcode"    column="hospital_code"    />
+        <result property="claimtype"    column="claim_type"    />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="casenum"    column="caseload"    />
+        <result property="batchtotal"    column="batch_total"    />
+        <result property="organcode"    column="organ_code"    />
+        <result property="currency"    column="currency"    />
+        <result property="conttype"    column="cont_type"    />
+        <result property="billrecevieflag"    column="bill_recevie_flag"    />
+        <result property="prireason"    column="pri_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="batchstatus"    column="batch_status"    />
+        <result property="expressnumber"    column="express_number"    />
+        <result property="receivedate"    column="receive_date"    />
+        <result property="sendby"    column="send_by"    />
+        <result property="speccasetype"    column="speccase_type"    />
+        <result property="issuingunit"    column="issuing_unit"    />
+        <result property="contno"    column="cont_no"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimBatchVo">
+        select batch_no, source, hospital_code, claim_type, submit_date, caseload, batch_total, organ_code, currency, cont_type, bill_recevie_flag, pri_reason, remark, batch_status, express_number, receive_date, send_by, speccase_type, issuing_unit, cont_no, status, create_by, create_time, update_by, update_time from claim_batch
+    </sql>
+
+    <select id="selectClaimBatchById" parameterType="String" resultMap="ClaimBatchResult">
+        <include refid="selectClaimBatchVo"/>
+        where batch_no = #{batchno} and status='Y'
+    </select>
+
+    <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND c.rpt_no = b.rpt_no
+            AND a.organ_code = #{deptId}
+            AND b.pay_status != '03'
+            AND a.currency = 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+        GROUP BY
+            a.batch_no
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND b.rpt_no = c.rpt_no
+            AND a.currency = 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
+            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y')  </if>
+            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
+        GROUP BY
+            a.batch_no
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND c.rpt_no = b.rpt_no
+            AND a.organ_code = #{deptId}
+            AND b.pay_status != '03'
+            AND a.currency != 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+        GROUP BY
+            a.batch_no
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+    <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
+        SELECT
+            a.batch_no "batchNo",
+            a.hospital_code "hospitalCode",
+            a.caseload "caseload",
+            a.batch_total "batchTotal",
+            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+            a.organ_code "organCode",
+            a.submit_date "submitDate",
+            SUM( c.cal_amount ) "calAmount"
+        FROM
+            claim_batch a,
+            claim_case b,
+            claim_case_cal c
+        WHERE
+            b.batch_no = a.batch_no
+            AND b.rpt_no = c.rpt_no
+            AND a.currency != 'CNY'
+            AND a.STATUS = 'Y'
+            AND b.STATUS = 'Y'
+            AND c.STATUS = 'Y'
+            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
+            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
+            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
+            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
+        GROUP BY
+            a.batch_no
+        ORDER BY
+            a.submit_date desc
+    </select>
+
+</mapper>

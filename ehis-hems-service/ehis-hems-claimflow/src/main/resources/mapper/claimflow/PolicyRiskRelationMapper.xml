@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.PolicyRiskRelation" id="PolicyRiskRelationResult">
+        <result property="relationId"    column="relation_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="riskName"    column="risk_name"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.CompanyRiskPolicyInfo" id="CompanyRiskPolicyResult">
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="name"    column="name"    />
+        <result property="appName"    column="app_name"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="prem"    column="prem"    />
+        <result property="sumPerm"    column="sumPerm"    />
+        <result property="totalPeople"    column="totalPeople"    />
+        <result property="bestStartDate"    column="bestStartDate"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimHistory" id="ClaimHistoryResult">
+        <result property="mainPlanCode"    column="risk_code"    />
+        <result property="mainPlanName"    column="risk_name"    />
+    </resultMap>
+
+    <sql id="selectPolicyRiskRelationVo">
+        select relation_id, policy_no, risk_code, risk_name, status, create_by, create_time, update_by, update_time from policy_risk_relation
+    </sql>
+
+    <select id="selectRisk" parameterType="String" resultMap="ClaimHistoryResult">
+    SELECT risk_code,risk_name FROM policy_risk_relation WHERE policy_no=#{policyNo}
+   </select>
+
+    <select id="selectPolicyRiskRelationList" parameterType="PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
+        <include refid="selectPolicyRiskRelationVo"/>
+        <where>  
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="riskName != null  and riskName != ''"> and risk_name like concat('%', #{riskName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPolicyAndRiskRelation" parameterType="PolicyAndRiskRelation" resultMap="PolicyRiskRelationResult">
+        <include refid="selectPolicyRiskRelationVo"/>
+        <where>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+           and status = 'Y'
+        </where>
+    </select>
+
+    <select id="selectPolicyByCompanyRisk" parameterType="PolicyAndRiskRelation" resultMap="CompanyRiskPolicyResult">
+        SELECT DISTINCT
+        prr.policy_no,
+        pi.policy_item_no,
+        prr.risk_code,
+        pi.NAME,
+        pi.app_name,
+        pi.valid_start_date,
+        pi.company_code,
+        pi.company_name,
+        pi.prem,
+        totalPeople,
+        sumPerm,
+        bestStartDate
+        FROM
+        policy_risk_relation prr
+        LEFT JOIN policy_info pi ON prr.policy_no = pi.policy_no
+        AND pi.STATUS = 'Y'
+        LEFT JOIN (
+        SELECT
+        SUM( prem ) AS sumPerm,
+        count( * ) AS totalPeople,
+        risk_code,
+        a.STATUS
+        FROM
+        policy_info a
+        LEFT JOIN policy_risk_relation b ON b.policy_no = a.policy_no
+        AND a.STATUS = 'Y'
+        GROUP BY
+        risk_code,
+        STATUS
+        ) sp ON sp.risk_code = prr.risk_code
+        AND sp.STATUS = 'Y'
+        LEFT JOIN (
+        SELECT
+        valid_start_date AS bestStartDate,
+        policy_no,
+        STATUS
+        FROM
+        policy_info info
+        WHERE
+        info.policy_id = ( SELECT aa.policy_id FROM policy_info aa WHERE info.policy_no = aa.policy_no ORDER BY aa.valid_start_date DESC LIMIT 1 )
+        ) time ON time.policy_no = prr.policy_no
+        AND time.STATUS = 'Y'
+        <where>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            <if test="startTime != null  and endTime != null"> and valid_start_date between #{startTime} and #{endTime} </if>
+            and status = 'Y'
+            and settle_flag != 'Y' or settle_flag is null
+        </where>
+    </select>
+
+    <select id="selectValidStartDateList" parameterType="PolicyAndRiskRelation" resultMap="PolicyRiskRelationResult">
+        SELECT DISTINCT
+        prr.policy_no,
+        prr.risk_code,
+        time.company_code,
+        time.bestStartDate
+        FROM
+        policy_risk_relation prr
+        LEFT JOIN (
+        SELECT
+        valid_start_date AS bestStartDate,
+        company_code,
+        policy_no,
+        STATUS
+        FROM
+        policy_info info
+        WHERE
+        info.policy_id = ( SELECT aa.policy_id FROM policy_info aa WHERE info.policy_no = aa.policy_no ORDER BY aa.valid_start_date DESC LIMIT 1 )
+        ) time ON time.policy_no = prr.policy_no
+        AND time.STATUS = 'Y'
+        <where>
+            <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="companyCode != null  and companyCode != ''"> and company_code = #{companyCode}</if>
+            status = 'Y'
+        </where>
+    </select>
+
+    <select id="selectPolicyRiskRelationById" parameterType="Long" resultMap="PolicyRiskRelationResult">
+        <include refid="selectPolicyRiskRelationVo"/>
+        where relation_id = #{relationId}
+    </select>
+        
+    <insert id="insertPolicyRiskRelation" parameterType="PolicyRiskRelation" useGeneratedKeys="true" keyProperty="relationId">
+        insert into policy_risk_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="policyNo != null and policyNo != ''">policy_no,</if>
+            <if test="riskCode != null and riskCode != ''">risk_code,</if>
+            <if test="riskName != null and riskName != ''">risk_name,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="policyNo != null and policyNo != ''">#{policyNo},</if>
+            <if test="riskCode != null and riskCode != ''">#{riskCode},</if>
+            <if test="riskName != null and riskName != ''">#{riskName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePolicyRiskRelation" parameterType="PolicyRiskRelation">
+        update policy_risk_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="policyNo != null and policyNo != ''">policy_no = #{policyNo},</if>
+            <if test="riskCode != null and riskCode != ''">risk_code = #{riskCode},</if>
+            <if test="riskName != null and riskName != ''">risk_name = #{riskName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where relation_id = #{relationId}
+    </update>
+
+    <delete id="deletePolicyRiskRelationById" parameterType="Long">
+        delete from policy_risk_relation where relation_id = #{relationId}
+    </delete>
+
+    <delete id="deletePolicyRiskRelationByIds" parameterType="String">
+        delete from policy_risk_relation where relation_id in 
+        <foreach item="relationId" collection="array" open="(" separator="," close=")">
+            #{relationId}
+        </foreach>
+    </delete>
+    <select id="selectRiskNameInsuredList" parameterType="com.paic.ehis.claimflow.domain.PolicyRiskRelation" resultMap="PolicyRiskRelationResult">
+        select  risk_name,risk_code
+        from policy_risk_relation
+        where policy_no = #{policyNo} and status='Y'
+    </select>
+
+</mapper>

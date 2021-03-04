@@ -3,7 +3,7 @@ package com.paic.ehis.common.log.enums;
 /**
  * 业务操作类型
  * 
- * @author admin
+ *
  */
 public enum BusinessType
 {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.ClaimCaseCalMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCaseCal" id="ClaimCaseCalResult">
+        <result property="calId"    column="cal_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="billCurrency"    column="bill_currency"    />
+        <result property="calAmount"    column="cal_amount"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="refusedAmount"    column="refused_amount"    />
+        <result property="debtAmount"    column="debt_amount"    />
+        <result property="exchangeRate"    column="exchange_rate"    />
+        <result property="payAmountForeign"    column="pay_amount_foreign"    />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="refusedReason"    column="refused_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="claimCheck"    column="claim_check"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseCalVo">
+        select cal_id, rpt_no, bill_currency, cal_amount, pay_amount, refused_amount, debt_amount, exchange_rate, pay_amount_foreign, pay_conclusion, refused_reason, remark, claim_check, status, create_by, create_time, update_by, update_time from claim_case_cal
+    </sql>
+
+
+    <select id="selectClaimCaseCalByRptNo" parameterType="String" resultMap="ClaimCaseCalResult">
+        <include refid="selectClaimCaseCalVo"/>
+        where
+            status = 'Y'
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+    </select>
+
+</mapper>

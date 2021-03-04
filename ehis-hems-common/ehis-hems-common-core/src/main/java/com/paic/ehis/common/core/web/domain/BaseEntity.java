@@ -1,11 +1,12 @@
 package com.paic.ehis.common.core.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Entity基类
@@ -46,6 +47,50 @@ public class BaseEntity implements Serializable
 
     /** 请求参数 */
     private Map<String, Object> params;
+
+    /** 当前记录起始索引 */
+    private int pageNum;
+
+    /** 每页显示记录数 */
+    private int pageSize;
+
+    /** 排序列 */
+    private String orderByColumn;
+
+    /** 排序的方向 "desc" 或者 "asc" */
+    private String isAsc;
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getOrderByColumn() {
+        return orderByColumn;
+    }
+
+    public void setOrderByColumn(String orderByColumn) {
+        this.orderByColumn = orderByColumn;
+    }
+
+    public String getIsAsc() {
+        return isAsc;
+    }
+
+    public void setIsAsc(String isAsc) {
+        this.isAsc = isAsc;
+    }
 
     public String getSearchValue()
     {

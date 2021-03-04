@@ -1,7 +1,8 @@
 package com.paic.ehis.base.mapper;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderSettle;
+
+import java.util.List;
 
 /**
  * base_provider_settle(服务商结算信息)Mapper接口
@@ -17,7 +18,15 @@ public interface BaseProviderSettleMapper
      * @param providercode base_provider_settle(服务商结算信息)ID
      * @return base_provider_settle(服务商结算信息)
      */
-    public List<BaseProviderSettle> selectBaseProviderSettleById(String providercode);
+    public BaseProviderSettle selectBaseProviderSettleById(String providercode);
+
+    /**
+     * 查询base_provider_settle(服务商结算信息)
+     *
+     * @param providercode base_provider_settle(服务商结算信息)ID
+     * @return base_provider_settle(服务商结算信息)
+     */
+    public BaseProviderSettle selectBaseProviderSettleByIdNew(String providercode);
 
     /**
      * 查询base_provider_settle(服务商结算信息)列表
@@ -27,6 +36,8 @@ public interface BaseProviderSettleMapper
      */
     public List<BaseProviderSettle> selectBaseProviderSettleList(BaseProviderSettle baseProviderSettle);
 
+    public List<BaseProviderSettle> selectBaseProviderSettleListNew(BaseProviderSettle baseProviderSettle);
+
     /**
      * 新增base_provider_settle(服务商结算信息)
      * 
@@ -35,6 +46,15 @@ public interface BaseProviderSettleMapper
      */
     public int insertBaseProviderSettle(BaseProviderSettle baseProviderSettle);
 
+
+    /**
+     * 新增base_provider_settle(服务商结算信息)
+     *
+     * @param baseProviderSettle base_provider_settle(服务商结算信息)
+     * @return 结果
+     */
+    public int insertBaseProviderSettleNew(BaseProviderSettle baseProviderSettle);
+
     /**
      * 修改base_provider_settle(服务商结算信息)
      * 
@@ -42,6 +62,24 @@ public interface BaseProviderSettleMapper
      * @return 结果
      */
     public int updateBaseProviderSettle(BaseProviderSettle baseProviderSettle);
+
+
+    /**
+     * 通过serialNo修改base_provider_settle(服务商结算信息)
+     *
+     * @param providerCode base_provider_settle(服务商结算信息)
+     * @return 结果
+     */
+    public int updateBaseProviderSettleByCode(String providerCode);
+
+
+    /**
+     * 通过serialNo修改base_provider_settle(服务商结算信息)
+     *
+     * @param providerCode base_provider_settle(服务商结算信息)
+     * @return 结果
+     */
+    public int updateBaseProviderSettleByCodeNew(String providerCode);
 
     /**
      * 删除base_provider_settle(服务商结算信息)

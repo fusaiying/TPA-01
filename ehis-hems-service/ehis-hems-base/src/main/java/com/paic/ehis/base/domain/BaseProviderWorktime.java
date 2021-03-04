@@ -1,11 +1,11 @@
 package com.paic.ehis.base.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 /**
  * base_provider_worktime(服务商服务时间信息)对象 base_provider_worktime
@@ -13,12 +13,13 @@ import com.paic.ehis.common.core.annotation.Excel;
  * @author sino
  * @date 2020-12-31
  */
+@Data
 public class BaseProviderWorktime extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 主键id */
-    private String id;
+    /** 流水号 */
+    private String SerialNo;
 
     /** 服务商编码 */
     @Excel(name = "服务商编码")
@@ -42,15 +43,12 @@ public class BaseProviderWorktime extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
-    public void setId(String id) 
-    {
-        this.id = id;
-    }
+    /** 状态 */
+    @Excel(name = "变更标志")
+    private String updateFlag;
 
-    public String getId() 
-    {
-        return id;
-    }
+
+
     public void setProviderCode(String providerCode) 
     {
         this.providerCode = providerCode;
@@ -100,7 +98,6 @@ public class BaseProviderWorktime extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
             .append("providerCode", getProviderCode())
             .append("timeNode", getTimeNode())
             .append("startTime", getStartTime())

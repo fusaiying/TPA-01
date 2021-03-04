@@ -1,10 +1,11 @@
 package com.paic.ehis.system.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.paic.ehis.system.domain.vo.UserVo;
 import com.paic.ehis.system.api.domain.SysDept;
 import com.paic.ehis.system.api.domain.SysUser;
+import com.paic.ehis.system.domain.dto.SysUserByOrganCodeDTO;
 import com.paic.ehis.system.domain.dto.SysUserDTO;
+import com.paic.ehis.system.domain.vo.UserVo;
 
 import java.util.List;
 
@@ -188,4 +189,17 @@ public interface ISysUserService
 
     /** 查询任务改派修改后的操作人 */
     List<UserVo> selectSysUser(SysUserDTO sysUserDTO);
+
+
+    public List<String> selectuserName(int deptId);
+
+
+    public int selectDept(String username);
+
+    /**
+     * 根据机构编码获取操作人
+     * @param sysUserByOrganCodeDTO
+     * @return
+     */
+    public List<SysUser> getUsersByOrganCode(SysUserByOrganCodeDTO sysUserByOrganCodeDTO);
 }

@@ -1,14 +1,5 @@
 package com.paic.ehis.common.core.web.controller;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.paic.ehis.common.core.constant.HttpStatus;
@@ -16,9 +7,18 @@ import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.sql.SqlUtil;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 import com.paic.ehis.common.core.web.page.PageDomain;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.core.web.page.TableSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
+import java.util.List;
 
 /**
  * web层通用数据处理
@@ -52,6 +52,21 @@ public class BaseController
     protected void startPage()
     {
         PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 设置请求分页数据
+     */
+    protected void startPage(BaseEntity baseEntity)
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest(baseEntity);
         Integer pageNum = pageDomain.getPageNum();
         Integer pageSize = pageDomain.getPageSize();
         if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))

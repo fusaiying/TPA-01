@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function listInfo(query) {
   return request({
     url: '/provider/info/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 /*// 查询
@@ -21,8 +21,8 @@ export function getSupplierInfo(query) {
 export function getListInfo(query) {
   return request({
     url: '/provider/info/list1',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -108,8 +108,8 @@ export function saveBank(data) {
 export function getService(data) {
   return request({
     url: '/provider/org/getlist1',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -127,6 +127,23 @@ export function deleteService(data) {
   return request({
     url: '/provider/outlets/updatestatus',
     method: 'put',
+    data: data
+  })
+}
+// 服务机构删除
+export function addInfo(data) {
+  return request({
+    url: '/provider/info/add',
+    method: 'post',
+    data: data
+  })
+}
+
+// 联系人删除
+export function deleteContacts(data) {
+  return request({
+    url: '/provider/contacts/delete',
+    method: 'post',
     data: data
   })
 }

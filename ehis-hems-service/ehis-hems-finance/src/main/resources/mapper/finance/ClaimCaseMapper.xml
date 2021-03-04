@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.ClaimCaseMapper">
+
+    <resultMap type="com.paic.ehis.finance.domain.ClaimCase" id="ClaimCaseResult">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="filingNo"    column="filing_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="pulloutType"    column="pullout_type"    />
+        <result property="pulloutReason"    column="pullout_reason"    />
+        <result property="pulloutDescribe"    column="pullout_describe"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="submitdate"    column="submit_date"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="name"    column="name"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="isAppeal"    column="is_appeal"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="isFinanceBack"    column="is_finance_back"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseVo">
+        select rpt_no, batch_no, filing_no, case_status, pullout_type, pullout_reason, pullout_describe, end_case_time, is_appeal, pay_status, is_finance_back, status, create_by, create_time, update_by, update_time from claim_case
+    </sql>
+
+    <select id="selectClaimCaseList" parameterType="com.paic.ehis.finance.domain.ClaimCase" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="filingNo != null  and filingNo != ''"> and filing_no = #{filingNo}</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and case_status = #{caseStatus}</if>
+            <if test="pulloutType != null  and pulloutType != ''"> and pullout_type = #{pulloutType}</if>
+            <if test="pulloutReason != null  and pulloutReason != ''"> and pullout_reason = #{pulloutReason}</if>
+            <if test="pulloutDescribe != null  and pulloutDescribe != ''"> and pullout_describe = #{pulloutDescribe}</if>
+            <if test="endCaseTime != null "> and end_case_time = #{endCaseTime}</if>
+            <if test="isAppeal != null  and isAppeal != ''"> and is_appeal = #{isAppeal}</if>
+            <if test="payStatus != null  and payStatus != ''"> and pay_status = #{payStatus}</if>
+            <if test="isFinanceBack != null  and isFinanceBack != ''"> and is_finance_back = #{isFinanceBack}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectClaimCaseById" parameterType="String" resultMap="ClaimCaseResult">
+        <include refid="selectClaimCaseVo"/>
+        where rpt_no = #{rptNo} and status='Y'
+    </select>
+
+    <update id="updateClaimCase" parameterType="com.paic.ehis.finance.domain.ClaimCase">
+        update claim_case
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="filingNo != null and filingNo != ''">filing_no = #{filingNo},</if>
+            <if test="caseStatus != null and caseStatus != ''">case_status = #{caseStatus},</if>
+            <if test="pulloutType != null">pullout_type = #{pulloutType},</if>
+            <if test="pulloutReason != null">pullout_reason = #{pulloutReason},</if>
+            <if test="pulloutDescribe != null">pullout_describe = #{pulloutDescribe},</if>
+            <if test="endCaseTime != null">end_case_time = #{endCaseTime},</if>
+            <if test="isAppeal != null">is_appeal = #{isAppeal},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="isFinanceBack != null">is_finance_back = #{isFinanceBack},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
+</mapper>

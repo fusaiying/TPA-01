@@ -198,7 +198,7 @@
       }).catch(res => {
         this.personListLading = false
       })
-      listAndPublicPool(this.pubParams).then(res => {
+      listAndPublicPool(params).then(res => {
         this.pubTableData = res.rows
         this.pubTotalCount = res.total
         this.ruleLoading = false
@@ -374,5 +374,9 @@
 <style scoped>
   .item-width {
     width: 200px;
+  }
+  /*element原有样式修改*/
+  .el-form-item ::v-deep label {
+    font-weight: normal;
   }
 </style>

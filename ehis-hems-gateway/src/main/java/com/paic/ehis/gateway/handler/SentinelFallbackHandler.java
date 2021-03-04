@@ -1,6 +1,5 @@
 package com.paic.ehis.gateway.handler;
 
-import java.nio.charset.StandardCharsets;
 import com.alibaba.csp.sentinel.adapter.gateway.sc.callback.GatewayCallbackManager;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -10,10 +9,12 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * 自定义限流异常处理
- * 
- * @author admin
+ *
+ *
  */
 public class SentinelFallbackHandler implements WebExceptionHandler
 {
@@ -21,7 +22,7 @@ public class SentinelFallbackHandler implements WebExceptionHandler
     {
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         serverHttpResponse.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-        byte[] datas = "{\"status\":429,\"message\":\"请求超过最大数，请稍后再试\"}".getBytes(StandardCharsets.UTF_8);
+        byte[] datas = "{\"code\":429,\"msg\":\"请求超过最大数，请稍后再试\"}".getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = serverHttpResponse.bufferFactory().wrap(datas);
         return serverHttpResponse.writeWith(Mono.just(buffer));
     }

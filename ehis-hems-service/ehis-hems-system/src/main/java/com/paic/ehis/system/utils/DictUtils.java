@@ -1,13 +1,13 @@
 package com.paic.ehis.system.utils;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.paic.ehis.system.domain.SysDictData;
 import com.paic.ehis.common.core.constant.Constants;
 import com.paic.ehis.common.core.utils.SpringUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.redis.service.RedisService;
+import com.paic.ehis.system.domain.SysDictData;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 字典工具类

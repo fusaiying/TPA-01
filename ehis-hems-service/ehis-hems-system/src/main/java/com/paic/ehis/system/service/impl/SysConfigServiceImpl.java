@@ -1,23 +1,25 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.Collection;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.paic.ehis.common.core.constant.Constants;
 import com.paic.ehis.common.core.constant.UserConstants;
+import com.paic.ehis.common.core.exception.CustomException;
 import com.paic.ehis.common.core.text.Convert;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.redis.service.RedisService;
 import com.paic.ehis.system.domain.SysConfig;
 import com.paic.ehis.system.mapper.SysConfigMapper;
 import com.paic.ehis.system.service.ISysConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 参数配置 服务层实现
  * 
- * @author admin
+ *
  */
 @Service
 public class SysConfigServiceImpl implements ISysConfigService
@@ -135,6 +137,14 @@ public class SysConfigServiceImpl implements ISysConfigService
     @Override
     public int deleteConfigByIds(Long[] configIds)
     {
+        for (Long configId : configIds)
+        {
+            SysConfig config = selectConfigById(configId);
+            if (StringUtils.equals(UserConstants.YES, config.getConfigType()))
+            {
+                throw new CustomException(String.format("内置参数【%1$s】不能删除 ", config.getConfigKey()));
+            }
+        }
         int count = configMapper.deleteConfigByIds(configIds);
         if (count > 0)
         {

@@ -82,7 +82,6 @@ export function isArray(arg) {
   return Array.isArray(arg)
 }
 
-
 /**
  * 手机号及座机号校验
  * @param str
@@ -93,14 +92,14 @@ export function validPhone(str) {
   // const regPhone = /^[0][1-9]{2,3}-[0-9]{5,10}$/   // 座机号
   return regMobie.test(str)
 }
+
 /**
  * 手机号及座机号校验
  * @param str
  * @returns {boolean}
  */
 export function validatPhone(str) {
-  const regMobie = /^1[3456789]\d{9}$/  // 手机号
-  // const regPhone = /^[0][1-9]{2,3}-[0-9]{5,10}$/   // 座机号
+  // const regMobie = /^1[3456789]\d{9}$/  // 手机号
+  const regPhone = /^[0][1-9]{2,3}-[0-9]{5,10}$/   // 座机号
   return regMobie.test(str)
 }
-

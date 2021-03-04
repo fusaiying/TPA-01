@@ -3,7 +3,7 @@ package com.paic.ehis.product.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +38,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 查询产品包审核列表
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:list')")
     @GetMapping("/list")
     public TableDataInfo list(productPackageExamine productPackageExamine)
     {
@@ -50,7 +49,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 导出产品包审核列表
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:export')")
     @Log(title = "产品包审核", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, productPackageExamine productPackageExamine) throws IOException
@@ -63,7 +61,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 获取产品包审核详细信息
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:query')")
     @GetMapping(value = "/{productpackageno}")
     public AjaxResult getInfo(@PathVariable("productpackageno") String productpackageno)
     {
@@ -73,7 +70,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 新增产品包审核
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:add')")
     @Log(title = "产品包审核", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody productPackageExamine productPackageExamine)
@@ -84,7 +80,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 修改产品包审核
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:edit')")
     @Log(title = "产品包审核", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody productPackageExamine productPackageExamine)
@@ -95,7 +90,6 @@ public class productPackageExamineController extends BaseController
     /**
      * 删除产品包审核
      */
-    @PreAuthorize("@ss.hasPermi('examine:examine:remove')")
     @Log(title = "产品包审核", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{productpackagenos}")
     public AjaxResult remove(@PathVariable String[] productpackagenos)

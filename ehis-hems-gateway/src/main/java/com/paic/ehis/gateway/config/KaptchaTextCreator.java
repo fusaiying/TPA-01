@@ -1,12 +1,13 @@
 package com.paic.ehis.gateway.config;
 
-import java.util.Random;
 import com.google.code.kaptcha.text.impl.DefaultTextCreator;
+
+import java.util.Random;
 
 /**
  * 验证码文本生成器
  * 
- * @author admin
+ *
  */
 public class KaptchaTextCreator extends DefaultTextCreator
 {

@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.order.service.IHmpOrdOwnInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +39,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 查询个人订单列表
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpOrdOwnInfo hmpordowninfo)
     {
@@ -51,7 +50,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 导出个人订单列表
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:export')")
     @Log(title = "个人订单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpOrdOwnInfo hmpordowninfo) throws IOException
@@ -64,7 +62,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 获取个人订单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:query')")
     @GetMapping(value = "/{personalorderno}")
     public AjaxResult getInfo(@PathVariable("personalorderno") String personalorderno)
     {
@@ -74,7 +71,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 新增个人订单
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:add')")
     @Log(title = "个人订单", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody HmpOrdOwnInfo hmpordowninfo)
@@ -85,7 +81,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 修改个人订单
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:edit')")
     @Log(title = "个人订单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody HmpOrdOwnInfo hmpordowninfo)
@@ -96,7 +91,6 @@ public class HmpOrdOwnInfoController extends BaseController
     /**
      * 删除个人订单
      */
-    @PreAuthorize("@ss.hasPermi('order:personal:remove')")
     @Log(title = "个人订单", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{appnos}")
     public AjaxResult remove(@PathVariable String[] appnos)

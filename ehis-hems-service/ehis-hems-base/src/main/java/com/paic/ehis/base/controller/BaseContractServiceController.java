@@ -1,5 +1,6 @@
 package com.paic.ehis.base.controller;
 
+import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -9,7 +10,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.BaseContractService;
 import com.paic.ehis.base.service.IBaseContractServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,7 @@ public class BaseContractServiceController extends BaseController
     /**
      * 查询base_contract_service（合约服务项目）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:service:list')")
+    //@PreAuthorize("@ss.hasPermi('system:service:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseContractService baseContractService)
     {
@@ -44,7 +45,7 @@ public class BaseContractServiceController extends BaseController
     /**
      * 导出base_contract_service（合约服务项目）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:service:export')")
+    //@PreAuthorize("@ss.hasPermi('system:service:export')")
     @Log(title = "base_contract_service（合约服务项目）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseContractService baseContractService) throws IOException
@@ -57,7 +58,7 @@ public class BaseContractServiceController extends BaseController
     /**
      * 获取base_contract_service（合约服务项目）详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:service:query')")
+    //@PreAuthorize("@ss.hasPermi('system:service:query')")
     @GetMapping(value = "/{contractNo}")
     public AjaxResult getInfo(@PathVariable("contractNo") String contractNo)
     {
@@ -67,18 +68,29 @@ public class BaseContractServiceController extends BaseController
     /**
      * 新增base_contract_service（合约服务项目）
      */
-    @PreAuthorize("@ss.hasPermi('system:service:add')")
+    //@PreAuthorize("@ss.hasPermi('system:service:add')")
     @Log(title = "base_contract_service（合约服务项目）", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("add")
     public AjaxResult add(@RequestBody BaseContractService baseContractService)
     {
-        return toAjax(baseContractServiceService.insertBaseContractService(baseContractService));
+        return AjaxResult.success(baseContractServiceService.insertBaseContractService(baseContractService));
+    }
+
+    //@PreAuthorize("@ss.hasPermi('system:service:addlist')")
+
+    /**
+     * 批量新增
+     */
+    @PostMapping("/addList")
+    public AjaxResult addlist(@RequestBody List<BaseContractService> baseContractServiceList)
+    {
+        return toAjax(baseContractServiceService.insertForeach(baseContractServiceList));
     }
 
     /**
      * 修改base_contract_service（合约服务项目）
      */
-    @PreAuthorize("@ss.hasPermi('system:service:edit')")
+    //@PreAuthorize("@ss.hasPermi('system:service:edit')")
     @Log(title = "base_contract_service（合约服务项目）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseContractService baseContractService)
@@ -89,11 +101,32 @@ public class BaseContractServiceController extends BaseController
     /**
      * 删除base_contract_service（合约服务项目）
      */
-    @PreAuthorize("@ss.hasPermi('system:service:remove')")
+    //@PreAuthorize("@ss.hasPermi('system:service:remove')")
     @Log(title = "base_contract_service（合约服务项目）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{contractNos}")
     public AjaxResult remove(@PathVariable String[] contractNos)
     {
         return toAjax(baseContractServiceService.deleteBaseContractServiceByIds(contractNos));
+    }
+
+    /**
+     * 根据合约编码删除base_contract_service
+     */
+    //@PreAuthorize("@ss.hasPermi('system:service:serialNo')")
+    @DeleteMapping("/once/{serialNo}")
+    public AjaxResult removeById(@PathVariable String serialNo)
+    {
+        return toAjax(baseContractServiceService.deleteBaseContractServiceById(serialNo));
+    }
+
+    /**
+     * 查询base_contract_service（合约服务项目）列表
+     * @param baseContractService
+     * @return
+     */
+    @PostMapping("/selectBaseContractServiceInfo")
+    public List<BaseContractService> selectBaseContractServiceInfo(@RequestBody BaseContractService baseContractService)
+    {
+        return baseContractServiceService.selectBaseContractServiceList(baseContractService);
     }
 }

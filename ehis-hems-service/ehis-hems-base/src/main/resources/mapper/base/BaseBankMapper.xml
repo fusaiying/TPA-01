@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseBankMapper">
+
+    <resultMap type="BaseBank" id="BaseBankResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="businessCode"    column="business_code"    />
+        <result property="bussinessStatus"    column="bussiness_status"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="accountNo"    column="account_no"    />
+        <result property="accountName"    column="account_name"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="accountTypeName"    column="accountTypeName"    />
+        <result property="bankDetail"    column="bank_detail"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseBankVo1">
+        select serial_no,update_flag, bussiness_status,provider_code, bank_code, bank_name, account_no, account_name, account_type,
+        (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'account_type_new' and dict_value = base_bank_bak.account_type)  accountTypeName,
+        bank_detail, remark, status, create_by, create_time, update_by, update_time from base_bank_bak
+    </sql>
+
+
+    <sql id="selectBaseBankVoNew">
+        select serial_no,business_code,bussiness_status,update_flag, provider_code, bank_code, bank_name, account_no, account_name, account_type,
+        (SELECT DISTINCT
+				dict_label from sys_dict_data
+			WHERE
+				dict_type = 'account_type_new' and dict_value = base_bank.account_type)  accountTypeName,
+        bank_detail, remark, status, create_by, create_time, update_by, update_time from base_bank
+    </sql>
+
+
+    <sql id="selectBaseBankVo">
+        select serial_no,business_code,bussiness_status,update_flag, provider_code, bank_code, bank_name, account_no, account_name, account_type, bank_detail, remark, status, create_by, create_time, update_by, update_time from base_bank
+    </sql>
+
+    <select id="selectBaseBankList" parameterType="BaseBank" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="businessCode != null  and businessCode != ''"> and business_code = #{businessCode}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="accountNo != null  and accountNo != ''"> and account_no = #{accountNo}</if>
+            <if test="accountName != null  and accountName != ''"> and account_name like concat('%', #{accountName}, '%')</if>
+            <if test="accountType != null  and accountType != ''"> and account_type = #{accountType}</if>
+            <if test="bankDetail != null  and bankDetail != ''"> and bank_detail = #{bankDetail}</if>
+            <!--<if test="status != null  and status != ''"> and status = #{status}</if>-->
+            and status = 'Y' and update_flag = '0'
+        </where>
+    </select>
+
+    <select id="selectBaseBankList1" parameterType="BaseBank" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        <where>
+            <if test="providerCode != null  and providerCode != ''"> and provider_code = #{providerCode}</if>
+            <if test="businessCode != null  and businessCode != ''"> and business_code = #{businessCode}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
+            <if test="bankCode != null  and bankCode != ''"> and bank_code = #{bankCode}</if>
+            <if test="bankName != null  and bankName != ''"> and bank_name like concat('%', #{bankName}, '%')</if>
+            <if test="accountNo != null  and accountNo != ''"> and account_no = #{accountNo}</if>
+            <if test="accountName != null  and accountName != ''"> and account_name like concat('%', #{accountName}, '%')</if>
+            <if test="accountType != null  and accountType != ''"> and account_type = #{accountType}</if>
+            <if test="bankDetail != null  and bankDetail != ''"> and bank_detail = #{bankDetail}</if>
+            <!--<if test="status != null  and status != ''"> and status = #{status}</if>-->
+            and status = 'Y'
+        </where>
+    </select>
+
+    <select id="selectBaseBankById" parameterType="String" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo"/>
+        where provider_code= #{providerCode} and status='Y'
+    </select>
+
+    <insert id="insertBaseBank" parameterType="BaseBank">
+        insert into base_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null and serialNo !=''">serial_no,</if>
+            <if test="businessCode != null  and businessCode != ''">  business_code,</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''">  bussiness_status,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="bankCode != null and bankCode != ''">bank_code,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="accountNo != null">account_no,</if>
+            <if test="accountName != null">account_name,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="bankDetail != null">bank_detail,</if>
+            <if test="remark != null">remark,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null and serialNo !=''">#{serialNo},</if>
+            <if test="businessCode != null  and businessCode != ''">  #{businessCode},</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''">  #{bussinessStatus},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">#{bankCode},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="accountNo != null">#{accountNo},</if>
+            <if test="accountName != null">#{accountName},</if>
+            <if test="accountType != null">#{accountType},</if>
+            <if test="bankDetail != null">#{bankDetail},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseBank1" parameterType="BaseBank">
+        insert into base_bank_bak
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null and serialNo !=''">serial_no,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="bankCode != null and bankCode != ''">bank_code,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="accountNo != null">account_no,</if>
+            <if test="accountName != null">account_name,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="bankDetail != null">bank_detail,</if>
+            <if test="remark != null">remark,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="bussinessStatus != null">bussiness_status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null and serialNo !=''">#{serialNo},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">#{bankCode},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="accountNo != null">#{accountNo},</if>
+            <if test="accountName != null">#{accountName},</if>
+            <if test="accountType != null">#{accountType},</if>
+            <if test="bankDetail != null">#{bankDetail},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="bussinessStatus != null">#{bussinessStatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertBaseBankNew" parameterType="BaseBank">
+        insert into  base_bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="businessCode != null  and businessCode != ''">  business_code,</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''">  bussiness_status,</if>
+            <if test="providerCode != null and providerCode != ''">provider_code,</if>
+            <if test="bankCode != null and bankCode != ''">bank_code,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="accountNo != null">account_no,</if>
+            <if test="accountName != null">account_name,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="bankDetail != null">bank_detail,</if>
+            <if test="remark != null">remark,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="businessCode != null  and businessCode != ''">  #{businessCode},</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''">  #{bussinessStatus},</if>
+            <if test="providerCode != null and providerCode != ''">#{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">#{bankCode},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="accountNo != null">#{accountNo},</if>
+            <if test="accountName != null">#{accountName},</if>
+            <if test="accountType != null">#{accountType},</if>
+            <if test="bankDetail != null">#{bankDetail},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseBank" parameterType="BaseBank">
+        update base_bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNo != null and serialNo !=''" >serial_no= #{serialNo},</if>
+            <if test="businessCode != null  and businessCode != ''">  business_code = #{businessCode}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''">  bussiness_status = #{bussinessStatus}</if>
+            <if test="providerCode != null and providerCode != ''">provider_code = #{providerCode},</if>
+            <if test="bankCode != null and bankCode != ''">bank_code = #{bankCode},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="accountNo != null">account_no = #{accountNo},</if>
+            <if test="accountName != null">account_name = #{accountName},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="bankDetail != null">bank_detail = #{bankDetail},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+    <update id="updatebaseBankStatus" parameterType="String">
+         update base_bank set status = 'N'
+        where status='Y'and provider_code = #{providerCode}
+    </update>
+
+    <delete id="deleteBaseBankById" parameterType="String">
+        delete from base_bank where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteBaseBankByIds" parameterType="String">
+        delete from base_bank where serial_no in
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <select id="selectBaseBankByCode" parameterType="String" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVo1"/>
+        where provider_code = #{providerCode} and status ='Y' and update_flag = '0'
+    </select>
+
+    <select id="selectBaseBankByCodeNew" parameterType="String" resultMap="BaseBankResult">
+        <include refid="selectBaseBankVoNew"/>
+        where provider_code = #{providerCode} and status ='Y' and update_flag = '0'
+    </select>
+
+    <delete id="deleteBaseBankByCode" parameterType="String">
+        delete from base_bank where provider_code = #{providerCode}
+    </delete>
+
+    <update id="updateBaseBankByCode" parameterType="String">
+        update base_bank_bak set update_flag = '1'
+        where provider_code = #{providerCode} and update_flag = '0'
+    </update>
+
+    <update id="updateBaseBankByCodeNew" parameterType="String">
+        update base_bank set update_flag = '1',status = 'N'
+        where provider_code = #{providerCode} and status = 'Y'
+    </update>
+    
+</mapper>

@@ -21,13 +21,22 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="机构：" prop="organcode">
-              <el-select v-model="searchForm.organcode" class="item-width" placeholder="请选择">
-                <el-option key="01" label="上海分公司"
-                           value="01"/>
-                <el-option key="02" label="北京分公司"
-                           value="02"/>
-                <el-option key="03" label="长沙分公司"
-                           value="03"/>
+              <el-select
+                v-model="searchForm.organcode"
+                filterable
+                clearable
+                remote
+                reserve-keyword
+                placeholder="请选择机构"
+                :remote-method="remoteMethod"
+                class="item-width"
+                size="mini">
+                <el-option
+                  v-for="(item, ind) in sysDeptOptions"
+                  :key="ind"
+                  :label="item.organName"
+                  :value="item.organCode">
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -84,7 +93,7 @@
         </span>
       </div>
       <div v-show="divShow">
-        <publicTable ref="publicTable" :searchHandle="searchHandle" :table-data="publicData" :status="activeName"/>
+        <publicTable ref="publicTables" :searchHandle="searchHandleData" :table-data="publicData" :status="activeName"/>
         <!--分页组件-->
         <pagination
           v-show="publicTotal>0"
@@ -105,10 +114,10 @@
       <div style="position: relative">
         <el-tabs v-model="activeName" v-loading="loading">
           <el-tab-pane :label="`待处理(${backTotal})`" name="01">
-            <person-table :table-data="backData" :status="activeName"/>
+            <person-table ref="personTable1" :table-data="backData" :status="activeName"/>
           </el-tab-pane>
           <el-tab-pane :label="`已处理(${dealTotal})`" name="02">
-            <person-table @init-data="searchHandle" :table-data="dealData" :status="activeName"/>
+            <person-table ref="personTable2" @init-data="searchHandle" :table-data="dealData" :status="activeName"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -137,6 +146,7 @@
   import personTable from './components/personTable'
   import publicTable from './components/publicTable'
   import {getPublicList, getUntreatedList, getProcessedList} from '@/api/claim/presentingReview'
+  import {getUserInfo, getOrganList} from '@/api/claim/standingBookSearch'
 
   export default {
     components: {
@@ -144,6 +154,8 @@
     },
     data() {
       return {
+        isListExport: false,
+        organCode: '',
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -171,6 +183,7 @@
           batchno: undefined,
         },
         changeSerchData: {},
+        sysDeptOptions: [],
       }
     },
     created() {
@@ -184,18 +197,43 @@
         this.loading = false
       })
       //获取直结复核理赔批次待处理个人池
-      getUntreatedList(this.queryParams).then(res => {
+      getUntreatedList(this.searchForm).then(res => {
         this.backData = res.rows
         this.backTotal = res.total
       }).finally(() => {
         this.loading = false
       })
       //获取直结复核公共池获取到未处理个人池
-      getProcessedList(this.queryParams).then(res => {
+      getProcessedList(this.searchForm).then(res => {
         this.dealData = res.rows
         this.dealTotal = res.total
       }).finally(() => {
         this.loading = false
+      })
+      let item = {
+        pageNum: 1,
+        pageSize: 200,
+      }
+
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200) {
+              this.sysDeptOptions = response.rows
+              this.searchForm.organcode = res.data.organCode
+            }
+          }).catch(res => {
+          })
+        }
       })
     },
     methods: {
@@ -204,7 +242,10 @@
       },
       searchPublic() {
         //获取公共池
-        getPublicList(this.searchForm).then(res => {
+        let query = this.searchForm
+        query.orderByColumn = this.$refs.publicTables.prop
+        query.isAsc = this.$refs.publicTables.order
+        getPublicList(query).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total
         }).finally(() => {
@@ -212,12 +253,37 @@
         })
 
       },
+      searchHandleData() {
+        const params = {
+          pageNum: 1,
+          pageSize: 10
+        }
+        getUntreatedList(params).then(res => {
+          this.backData = res.rows
+          this.backTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+        getProcessedList(params).then(res => {
+          this.dealData = res.rows
+          this.dealTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+        getPublicList(this.searchForm).then(res => {
+          this.publicData = res.rows
+          this.publicTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+      },
       searchHandle() {
         const params = {
           pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
           pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
+          orderByColumn: this.activeName === '01' ? this.$refs.personTable1.prop : this.$refs.personTable2.prop,
+          isAsc: this.activeName === '01' ? this.$refs.personTable1.order : this.$refs.personTable2.order,
         }
-        console.log(params);
         if (this.activeName === '01') {
           //获取直结复核理赔批次待处理个人池
           getUntreatedList(params).then(res => {
@@ -235,7 +301,9 @@
             this.loading = false
           })
         }
-        //获取公共池
+        if (this.searchForm.organcode==null || this.searchForm.organcode=='' || this.searchForm.organcode==undefined){
+          this.searchForm.organcode=this.organCode
+        }
         getPublicList(this.searchForm).then(res => {
           this.publicData = res.rows
           this.publicTotal = res.total
@@ -243,12 +311,42 @@
           this.loading = false
         })
       },
+      searchTable() {
+        const params1 = {
+          pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
+          pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
+          orderByColumn: this.$refs.personTable1.prop,
+          isAsc: this.$refs.personTable1.order,
+        }
+        const params2 = {
+          pageNum: this.activeName === '01' ? this.backNum : this.dealNum,
+          pageSize: this.activeName === '01' ? this.backSize : this.dealSize,
+          orderByColumn: this.$refs.personTable2.prop,
+          isAsc: this.$refs.personTable2.order,
+        }
+        //获取直结复核理赔批次待处理个人池
+        getUntreatedList(params1).then(res => {
+          this.backData = res.rows
+          this.backTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+        //获取直结复核公共池获取到未处理个人池
+        getProcessedList(params2).then(res => {
+          this.dealData = res.rows
+          this.dealTotal = res.total
+        }).finally(() => {
+          this.loading = false
+        })
+      },
       batchGet() {
         //调用子组件的方法
-        this.$refs.publicTable.handle()
+        this.$refs.publicTables.handle()
       },
       search() {
         const query = {
+          pageNum: 1,
+          pageSize: 10,
           submitstartdate: undefined,
           submitenddate: undefined,
           updatestartTime: undefined,
@@ -268,7 +366,8 @@
         //获取公共池
         getPublicList(query).then(res => {
           this.publicData = res.rows
-          if (res.rows.length<=0){
+          this.publicTotal = res.total
+          if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
             )
@@ -280,15 +379,52 @@
       //清单导出
       listExport() {
         if (this.activeName === '02') {//已处理
-          this.download('system/batch/exportPersonalUntreated', {}, `FYX_${new Date().getTime()}.xlsx`)
+          getUntreatedList().then(res => {
+            if (res.rows.length > 0) {
+              this.isListExport = true
+              this.download('claimapt/batch/exportPersonalUntreated', {}, `organizationReview_${new Date().getTime()}.xlsx`)
+            } else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+          })
         } else {//待处理
-          this.download('system/batch/exportPersonalProcessed', {}, `FYX_${new Date().getTime()}.xlsx`)
+          getProcessedList().then(res => {
+            if (res.rows.length > 0) {
+              this.isListExport = true
+              this.download('claimapt/batch/exportPersonalProcessed', {}, `organizationReview_${new Date().getTime()}.xlsx`)
+            } else {
+              return this.$message.warning(
+                "没有查询到能导出的数据！"
+              )
+            }
+          }).finally(() => {
+            this.loading = false
+          })
         }
       },
       open() {
         this.collapsed = !this.collapsed
         this.divShow = !this.divShow
-      }
+      },
+      remoteMethod(query) {
+        if (query != null && query != '' && query != undefined) {
+          let data = {
+            organCode: this.organCode,
+            organName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (query !== '' && query != null) {
+            getOrganList(data).then(res => {
+              this.sysDeptOptions = res.rows
+            }).catch(res => {
+            })
+          }
+        }
+      },
     }
   }
 </script>

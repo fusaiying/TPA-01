@@ -3,8 +3,8 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ehis-hems-service</artifactId>
         <groupId>com.paic.ehis</groupId>
+        <artifactId>ehis-hems-service</artifactId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,7 @@
     <artifactId>ehis-hems-system</artifactId>
 
     <description>
-        ehis-hems-system 系统模块
+        系统模块
     </description>
 	
     <dependencies>
@@ -35,10 +35,10 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
         
-    	<!-- SpringBoot Web -->
+    	<!-- SpringBoot Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 		
         <!-- Swagger -->
@@ -53,44 +53,49 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        
-        <!-- Ehis-Hems Common Security -->
+
+        <!-- Quartz -->
         <dependency>
-            <groupId>com.paic.ehis</groupId>
-            <artifactId>ehis-hems-common-security</artifactId>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mchange</groupId>
+                    <artifactId>c3p0</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
-        <!-- Ehis-Hems Common Datascope -->
+
+        <!-- Druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-datascope</artifactId>
         </dependency>
         
-        <!-- Ehis-Hems Common Log -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-log</artifactId>
         </dependency>
         
-        <!-- Ehis-Hems Common Swagger -->
         <dependency>
             <groupId>com.paic.ehis</groupId>
             <artifactId>ehis-hems-common-swagger</artifactId>
-        </dependency>
-        
-        <!-- Ehis-Hems Common Redis-->
-        <dependency>
-            <groupId>com.paic.ehis</groupId>
-            <artifactId>ehis-hems-common-redis</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

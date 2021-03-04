@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseProviderNewtworktypeMapper">
+    
+    <resultMap type="BaseProviderNewtworktype" id="BaseProviderNewtworktypeResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="networktypeCode"    column="networktype_code"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="productName"    column="product_name"    />
+        <result property="oldChoose"    column="oldChoose"    />
+        <result property="newChoose"    column="newChoose"    />
+        <result property="newDate"    column="new_date"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="networktypeName"    column="networktype_name"    />
+    </resultMap>
+
+    <sql id="selectBaseProviderNewtworktypeVo">
+        select serial_no, supplier_code, networktype_code, product_code, product_name, old_choose, new_choose, new_date, status, create_by, create_time, update_by, update_time from base_provider_newtworktype
+    </sql>
+
+    <select id="selectBaseProviderNewtworktypeList" parameterType="BaseProviderNewtworktype" resultMap="BaseProviderNewtworktypeResult">
+       <!-- <include refid="selectBaseProviderNewtworktypeVo"/>
+        <where>  
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="networktypeCode != null  and networktypeCode != ''"> and networktype_code = #{networktypeCode}</if>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="oldChoose != null  and oldChoose != ''"> and old_choose = #{oldChoose}</if>
+            <if test="newChoose != null  and newChoose != ''"> and new_choose = #{newChoose}</if>
+            <if test="newDate != null "> and new_date = #{newDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>-->
+        SELECT
+        t.networktype_name,
+        n.serial_no,
+        n.supplier_code,
+        t.networktype_code,
+        n.product_code,
+        n.product_name,
+        IFNULL(n.old_choose,'01') as oldChoose,
+        IFNULL(n.new_choose,'02') as newChoose,
+        n.new_date,
+        n. STATUS,
+        n.create_by,
+        n.create_time,
+        n.update_by,
+        n.update_time
+        FROM
+        base_provider_newtworktypet_data t
+        LEFT JOIN base_provider_newtworktype n on t.networktype_code = n.networktype_code
+        and n.supplier_code = #{supplierCode}
+    </select>
+    
+    <select id="selectBaseProviderNewtworktypeById" parameterType="String" resultMap="BaseProviderNewtworktypeResult">
+        <include refid="selectBaseProviderNewtworktypeVo"/>
+        where serial_no = #{serialNo}
+    </select>
+        
+    <insert id="insertBaseProviderNewtworktype" parameterType="BaseProviderNewtworktype">
+        insert into base_provider_newtworktype
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="supplierCode != null">supplier_code,</if>
+            <if test="networktypeCode != null">networktype_code,</if>
+            <if test="productCode != null">product_code,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="oldChoose != null and oldChoose != ''">old_choose,</if>
+            <if test="newChoose != null">new_choose,</if>
+            <if test="newDate != null">new_date,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="supplierCode != null">#{supplierCode},</if>
+            <if test="networktypeCode != null">#{networktypeCode},</if>
+            <if test="productCode != null">#{productCode},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="oldChoose != null and oldChoose != ''">#{oldChoose},</if>
+            <if test="newChoose != null">#{newChoose},</if>
+            <if test="newDate != null">#{newDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseProviderNewtworktype" parameterType="BaseProviderNewtworktype">
+        update base_provider_newtworktype
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
+            <if test="networktypeCode != null">networktype_code = #{networktypeCode},</if>
+            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="oldChoose != null and oldChoose != ''">old_choose = #{oldChoose},</if>
+            <if test="newChoose != null">new_choose = #{newChoose},</if>
+            <if test="newDate != null">new_date = #{newDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteBaseProviderNewtworktypeById" parameterType="String">
+        delete from base_provider_newtworktype where ser_no = #{serNo}
+    </delete>
+
+    <delete id="deleteBaseProviderNewtworktypeByIds" parameterType="String">
+        delete from base_provider_newtworktype where serial_no in
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+
+    <select id="getCodes" parameterType="String" resultType="String">
+        select networktype_code from base_provider_newtworktype where supplier_code = #{supplierCode}
+
+    </select>
+    
+</mapper>

@@ -3,7 +3,6 @@ package com.paic.ehis.base.domain;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 
-
 import java.util.Arrays;
 import java.util.Date;
 

@@ -39,10 +39,10 @@
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">合约有效期：</span>
-            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.expiryDate }} </span>
+            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.endDate }} </span>
           </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">备注：</span><span class="info_span">{{ serverContractInfo.remark }}</span>
+          <el-col :span="24">
+            <span class="info_span to_right el-col-24">备注：</span><span class="info_span el-col-18">{{ serverContractInfo.remark }}</span>
           </el-col>
        </el-row>
       </form>
@@ -82,7 +82,7 @@
             <span class="info_span to_right">押金金额：</span><span class="info_span">{{ providerContractInfo.deposit }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}{{ providerContractInfo.expiryDate }}</span>
+            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}  {{ providerContractInfo.endDate != "" ? " / " : "" }}  {{ providerContractInfo.endDate }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -95,7 +95,7 @@
             <span class="info_span to_right">床位费折扣：</span><span class="info_span">{{ providerContractInfo.bedDiscount }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">次均控费类型：</span><span class="info_span">{{ providerContractInfo.type }}</span>
+            <span class="info_span to_right">次均控费类型：</span><span class="info_span">{{ getTypeNameByValue(providerContractInfo.type) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">护理费折扣：</span><span class="info_span">{{ providerContractInfo.allowance }}</span>
@@ -133,7 +133,7 @@
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
+            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.liaison }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -181,6 +181,14 @@
           <el-table-column prop="cvaliDate" label="合约有效期" :formatter="getValiDate" align="center" show-overflow-tooltip />
           <el-table-column prop="bussinessStatus" label="状态" :formatter="getStatuTypeName"  align="center" show-overflow-tooltip />
         </el-table>
+        <!--分页组件-->
+        <pagination
+          v-show="hisContractTotalNum>0"
+          :total="hisContractTotalNum"
+          :page.sync="hisContractPageInfo.currentPage"
+          :limit.sync="hisContractPageInfo.pageSize"
+          @pagination="initData"
+        />
       </div>
       <!-- 历史合约信息 END-->
 
@@ -204,9 +212,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="supplierCode" label="供应商名称" align="center">
+          <el-table-column prop="supplierServiceName" label="供应商项目名称" align="center">
             <template slot-scope="scope">
-              <span>{{getSuppName(scope.$index, scope.row)}}</span>
+              <span>{{scope.row.supplierServiceName}}</span>
             </template>
           </el-table-column>
 
@@ -258,7 +266,6 @@
           <el-table-column label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="downloadFile(scope.row)">下载</el-button>
-              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -278,12 +285,19 @@
     getAllBaseServiceInfo,
     getSupplierContractBakDetail,
     getFileList ,
+    getSupplierContractBakList,
 
   } from '@/api/contractManage/contractManagement'
 
   export default {
     data() {
       return {
+        hisContractTotalNum:0,
+        hisContractPageInfo: {
+          currentPage: 1,
+          pageSize: 10,
+          pageSizes:[5,10,20,30,50,100]
+        },
         fileTableData:[],
         serverContractData: [],
         pendingTableData: [],
@@ -358,6 +372,7 @@
         supplierInfoSelects:[],
         cooperativeUnitSelects:[],
         serviceInfoSelects:[],
+        onceTypes:[]
       }
     },
 
@@ -368,6 +383,10 @@
       this.flag =  this.$route.query.flag;
       this.servcomNo = this.$route.query.servcomNo;
       this.providerCode = this.$route.query.providerCode;
+
+       this.getDicts("type").then(response => {
+         this.onceTypes = response.data;
+       });
 
       this.getDicts("cooperator").then(response => {
         this.cooperativeUnitSelects = response.data;
@@ -407,11 +426,15 @@
       }
     },
       methods: {
+        initData(){
+          let type = this.formTab ? 1 :2;
+          this.getSupplierContractListByChangeType(type);
+        },
       getInfo(type){
         this.getDetail();
         this.allBaseSupplierInfo();
         this.allAllBaseServiceInfo();
-        this.getSupplierContractListByChangeType(type);
+        this.initData();
         if(this.formTab) {
           this.getServerContractData();
         }
@@ -446,6 +469,9 @@
       },
       getStatuTypeNameByValue(value){
         return this.selectDictLabel(this.statusSlects, value)
+      },
+      getTypeNameByValue(value){
+        return this.selectDictLabel(this.onceTypes, value)
       },
       getSuppName(index,row) {
         return this.selectDictLabel(this.supplierInfoSelects, row.supplierCode);
@@ -538,7 +564,7 @@
         //  bussinessStatus:'01', todo:
           providerCode:this.providerCode,
           flag :'02',
-          status:'Y',
+          //status:'Y',
           orderByColumn:'create_time',
           isAsc:'desc'
         };
@@ -547,39 +573,55 @@
         getSupplierContractBakDetail(query).then(response => {
           if(response.rows != null) {
             let data = response.rows[0];
-            // this.contractNo = data.contractNo;
-            // this.flag =  data.flag;
-            // this.servcomNo = data.servcomNo;
-            // this.providerCode = data.providerCode;
             this.providerContractInfo = data;
             this.allBaseSupplierInfo();
             this.allAllBaseServiceInfo();
-            this.getSupplierContractListByChangeType(2);
-            //this.getInfo(2);
           }
         }).catch(error => {
           console.log(error)
-        })
-        },
+        });
+        this.getSupplierBakList();
+      },
       //历史合约信息 信息
       getSupplierContractListByChangeType(type) {
         let query = {};
         if(type == 1) {
           query = {
-            nowPage:1,
-            pageSize:10000,
+            pageNum:this.hisContractPageInfo.currentPage,
+            pageSize:this.hisContractPageInfo.pageSize,
             servcomNo:this.servcomNo
           }
         } else {
           query ={
-            nowPage:1,
-            pageSize:10000,
-            providerCode:this.providerCode
+            pageNum:this.hisContractPageInfo.currentPage,
+            pageSize:this.hisContractPageInfo.pageSize,
+            providerCode:this.providerCode,
+            orderByColumn:'create_time',
+            isAsc:'desc'
           };
         }
         //查询数据
         getSupplierContractList(query).then(response => {
-          this.pendingTableData = response.rows
+          this.pendingTableData = response.rows;
+          this.hisContractTotalNum = response.total;
+        }).catch(error => {
+
+        })
+      },
+
+      //历史合约信息 信息
+      getSupplierBakList() {
+        let  query ={
+            pageNum:this.hisContractPageInfo.currentPage,
+            pageSize:this.hisContractPageInfo.pageSize,
+            providerCode:this.providerCode,
+            orderByColumn:'create_time',
+            isAsc:'desc'
+          };
+        //查询数据
+        getSupplierContractBakList(query).then(response => {
+          this.pendingTableData = response.rows;
+          this.hisContractTotalNum = response.total;
         }).catch(error => {
 
         })

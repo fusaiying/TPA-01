@@ -22,7 +22,7 @@
           <el-col :span="8">
             <el-form-item label="出单公司编码：" prop="companycode">
               <el-input disabled v-model="baseForm.companycode" class="item-width" clearable size="mini"
-                        placeholder="P00001"/>
+                        placeholder=""/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -40,9 +40,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="关联产品：" prop="leval">
-              <el-input v-model="this.riskrela" class="item-width" disabled clearable size="mini"
-                        placeholder="产品A,产品B,产品C"/>
+            <el-form-item label="关联产品：" prop="riskName">
+              <el-input v-model="baseForm.riskName" class="item-width" disabled clearable size="mini"
+                        placeholder=""/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -147,272 +147,278 @@
 </template>
 
 <script>
-  // 导入组件
-  import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
-  import {
-    listIssuingcompany,
-    addissuingAndCompanyDTO,
-    updateIssuingcompany,
-    getInvoice,
-    updateInvoice,
-    getRiskrela,
-    addInvoice
-  } from '@/api/baseInfo/issuingCompany'
-  import moment from 'moment'
+// 导入组件
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+import {
+  getIssuingcompany,
+  listIssuingcompany,
+  addissuingAndCompanyDTO,
+  updateIssuingcompany,
+  getInvoice,
+  updateInvoice,
+  addInvoice
+} from '@/api/baseInfo/issuingCompany'
+import moment from 'moment'
 
-  export default {
+export default {
 
-    props: {
-      caseRemark: {
-        type: Object,
-        default: () => {
-          return {
-            data: []
-          }
+  props: {
+    caseRemark: {
+      type: Object,
+      default: () => {
+        return {
+          data: []
         }
       }
-    },
-    //注册组件
-    components: {ElImageViewer},
-    data() {
-      return {
-        isCancel: true,
-        canUpload: true,
-        show: true,
-        editFlag: false,
-        rules: {
-          companyname: [{required: true, message: '出单公司名称不能为空', trigger: 'blur'}],
-        },
-        hasBlock: false,
-        isCompanyShow: false,
-        //关联产品
-        riskrelaList:[],
-        riskrela:'',
-        rowData: [{
-          invoicename: '',
-          ratepayernumber: '',
-          account: '',
-          address: '',
-          telephone: '',
-        }],
-        uploadData: [],
-        myUpload: {
-          index: 0,
-          url: '',
-          name: ''
-        },
-        fileList: [],
-        //基本信息
-        baseForm: {},
-        //关联产品
-        //totalCount: 0,
-        loading: false,
-        //定义需要使用的属性
-        imgUrl: '',//图片
-        showViewer: false, // 显示查看器
-        file: [],
-        //开票信息
-        tableData: [{
-          companycode:'',
-          invoicename: '',
-          ratepayernumber: '',
-          account: '',
-          address: '',
-          telephone: '',
-        }]
+    }
+  },
+  //注册组件
+  components: {ElImageViewer},
+  data() {
+    return {
+      isCancel: true,
+      canUpload: true,
+      show: true,
+      editFlag: false,
+      rules: {
+        companyname: [{required: true, message: '出单公司名称不能为空', trigger: 'blur'}],
+        simplename: [{required: true, message: '出单公司简称不能为空', trigger: 'blur'}],
+      },
+      hasBlock: false,
+      isCompanyShow: false,
+      rowData: [{
+        invoicename: '',
+        ratepayernumber: '',
+        account: '',
+        address: '',
+        telephone: '',
+      }],
+      uploadData: [],
+      myUpload: {
+        index: 0,
+        url: '',
+        name: ''
+      },
+      fileList: [],
+      //基本信息
+      baseForm: {
+        companycode: ''
+      },
+      //关联产品
+      //totalCount: 0,
+      loading: false,
+      //定义需要使用的属性
+      imgUrl: '',//图片
+      showViewer: false, // 显示查看器
+      file: [],
+      //开票信息
+      tableData: [{
+        companycode: '',
+        invoicename: '',
+        ratepayernumber: '',
+        account: '',
+        address: '',
+        telephone: '',
+      }]
+    }
+  },
+  mounted() {
+    if (this.$route.query.companycode) {
+      this.show = false
+      this.editFlag = true
+      this.loading = true
+      this.baseForm = {
+        companycode: this.$route.query.companycode,
+        companyname: this.$route.query.companyname,
+        pageNum: 1,
+        pageSize: 5,
       }
-    },
-    mounted() {
-      if (this.$route.query.companycode) {
-        this.show = false
-        this.editFlag = true
-        this.loading = true
-        this.baseForm = {
-          companycode: this.$route.query.companycode,
-          companyname: this.$route.query.companyname,
-          pageNum: 1,
-          pageSize: 5,
+      getIssuingcompany(this.baseForm.companycode).then(res => {
+        this.baseForm = res.data
+      })
+      getInvoice(this.$route.query.companycode).then(res => {
+        if (res.data != null) {
+          let data = [];
+          data.push(res.data)
+          this.tableData = data;
+        } else {
+          this.show = true
+          this.editFlag = false
+          this.isCancel = false
         }
-        listIssuingcompany(this.baseForm).then(res => {
-          this.baseForm = res.rows[0]
-        })
-        getInvoice(this.$route.query.companycode).then(res => {
-          if (res.data!=null){
-            let data = [];
-            data.push(res.data)
-            this.tableData = data;
-          }else {
-            this.show = true
-            this.editFlag = false
-            this.isCancel = false
-          }
-          this.loading = false
-        })
-        this.getRiskrela();
-      } else {
-        this.editFlag = false
-        this.canUpload = false
-        this.isCancel = false
-      }
-    },
-    methods: {
-      getRiskrela(){
-        getRiskrela(this.$route.query.companycode).then(res => {
-          let riskrelaList=[];
-          for (let i = 0; i <res.data.length ; i++) {
-            riskrelaList.push(res.data[i].riskcode)
-          }
-          this.riskrela=riskrelaList.join(',')
-        })
-     },
-      ifBlock() {
-        //el-table中绑定的数组对象
-        this.tableData.forEach((v, i) => {
-          for (const val in v) {
-            if (v[val] === "" || v[val] === null) {
-              for (const childrenVal in v) {
-                if (v[childrenVal] === "" || v[childrenVal] === null) {
-                  //el-table中列绑定的字段
-                  if (`${childrenVal}` === "invoicename") {
-                    this.hasBlock = true;
-                    // el-table中列表头内容
-                    return this.$message.warning(
-                      "开票名称不能为空"
-                    );
-                  } else if (`${childrenVal}` === "ratepayernumber") {
-                    this.hasBlock = true;
-                    return this.$message.warning(
-                      "纳税人识别号不能为空"
-                    );
-                  } else if (`${childrenVal}` === "account") {
-                    this.hasBlock = true;
-                    return this.$message.warning(
-                      "账号不能为空"
-                    );
-                  } else if (`${childrenVal}` === "address") {
-                    this.hasBlock = true;
-                    return this.$message.warning(
-                      "地址不能为空"
-                    );
-                  } else if (`${childrenVal}` === "telephone") {
-                    this.hasBlock = true;
-                    return this.$message.warning(
-                      "电话不能为空"
-                    );
-                  }
+        this.loading = false
+      })
+    } else {
+      this.editFlag = false
+      this.canUpload = false
+      this.isCancel = false
+    }
+  },
+  methods: {
+    ifBlock() {
+      //el-table中绑定的数组对象
+      this.tableData.forEach((v, i) => {
+        for (const val in v) {
+          if (v[val] === "" || v[val] === null) {
+            for (const childrenVal in v) {
+              if (v[childrenVal] === "" || v[childrenVal] === null) {
+                //el-table中列绑定的字段
+                if (`${childrenVal}` === "invoicename") {
+                  this.hasBlock = true;
+                  // el-table中列表头内容
+                  return this.$message.warning(
+                    "开票名称不能为空"
+                  );
+                } else if (`${childrenVal}` === "ratepayernumber") {
+                  this.hasBlock = true;
+                  return this.$message.warning(
+                    "纳税人识别号不能为空"
+                  );
+                } else if (`${childrenVal}` === "account") {
+                  this.hasBlock = true;
+                  return this.$message.warning(
+                    "账号不能为空"
+                  );
+                } else if (`${childrenVal}` === "address") {
+                  this.hasBlock = true;
+                  return this.$message.warning(
+                    "地址不能为空"
+                  );
+                } else if (`${childrenVal}` === "telephone") {
+                  this.hasBlock = true;
+                  return this.$message.warning(
+                    "电话不能为空"
+                  );
                 }
               }
             }
           }
-        });
-      },
-      saveHandle() {
-        this.$refs.baseForm.validate((valid) => {
-          if (valid) {
+        }
+      });
+    },
+    async saveHandle() {//invoicename ratepayernumber account address telephone
+      this.$refs.baseForm.validate((valid) => {
+        if (valid) {
+          let data = this.tableData[0]
+          this.hasBlock = false;
+          if ((data.invoicename !== null && data.invoicename !== '') ||
+            (data.ratepayernumber !== null && data.ratepayernumber !== '') ||
+            (data.account !== null && data.account !== '') ||
+            (data.address !== null && data.address !== '') ||
+            (data.telephone !== null && data.telephone !== '')) {
+            this.ifBlock()
+          }
+          if (!this.hasBlock) {
             let params = {
-              baseIssuingcompany:this.baseForm,
-              baseIssuingcompanyInvoice:this.tableData[0]
-              }
-            if (this.baseForm.companycode) {
-              updateIssuingcompany(params).then(res => {
-                if (res!= null && res.code === 200) {
+              baseIssuingcompany: this.baseForm,
+              baseIssuingcompanyInvoice: this.tableData[0]
+            }
+            addissuingAndCompanyDTO(params).then(res => {
+              if (res != null && res.code === 200) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
                     center: true,
                     showClose: true
                   })
-                } else {
-                  this.$message.error('保存失败！')
-                }
-              }).catch(error => {
-                this.$message({
-                  message: error,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              })
-            } else {
-              addissuingAndCompanyDTO(params).then(res => {
-                if (res != null && res.code === 200) {
-                  this.$message({
-                    message: '保存成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.baseForm=res.data
-                  if (this.baseForm.companycode){
-                    this.tableData[0].companycode=this.baseForm.companycode
+                  this.baseForm = res.data
+                  if (this.baseForm.companycode) {
+                    this.tableData[0].companycode = this.baseForm.companycode
                   }
                   this.canUpload = true
-                } else {
-                  this.$message.error('保存失败！')
-                }
-              }).catch(error => {
-                this.$message({
-                  message: '保存异常',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+              } else {
+                this.$message.error('保存失败！')
+              }
+            }).catch(error => {
+              this.$message({
+                message: '保存异常',
+                type: 'error',
+                center: true,
+                showClose: true
               })
-            }
-          } else {
-            return false
-          }
-        })
-
-      },
-      goBack() {
-        this.$router.go(-1)
-      },
-      success(response, file, fileList) {
-        console.log('b');
-        for (let i = 0; i < this.uploadData.length; i++) {
-          this.fileList[fileList.length - (this.uploadData.length - i)] = {
-            name: file.name,
-            url: this.uploadData[i]
-          }
-        }
-        this.uploadData = []
-      },
-      beforeUpload(file) {
-        console.log('a');
-        let url = URL.createObjectURL(file)
-        this.uploadData.push(url);
-      },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${file.name}？`);
-      },
-      //定义需要的事件
-      // 关闭查看器
-      closeViewer() {
-        this.showViewer = false
-      },
-
-      cleanImg: function () {
-
-        this.fileList = []
-      },
-
-      //定义预览按钮中绑定的事件handlePreview
-      handlePreview1: function () {
-        {
-          this.file = [],
-            this.fileList.filter(item => {
-              this.file.push(item.url)
             })
-          this.showViewer = true
+
+          }
+        } else {
+          return false
         }
-      },
-      saveCaseRemark(i, row) {
-        this.hasBlock = false;
-        this.ifBlock()
-        if (!this.hasBlock) {
-          if (this.$route.query.companycode) {
-            updateInvoice(this.tableData[0]).then(res => {
+      })
+
+
+    },
+    goBack() {
+      this.$router.go(-1)
+    },
+    success(response, file, fileList) {
+      console.log('b');
+      for (let i = 0; i < this.uploadData.length; i++) {
+        this.fileList[fileList.length - (this.uploadData.length - i)] = {
+          name: file.name,
+          url: this.uploadData[i]
+        }
+      }
+      this.uploadData = []
+    },
+    beforeUpload(file) {
+      console.log('a');
+      let url = URL.createObjectURL(file)
+      this.uploadData.push(url);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    //定义需要的事件
+    // 关闭查看器
+    closeViewer() {
+      this.showViewer = false
+    },
+
+    cleanImg: function () {
+
+      this.fileList = []
+    },
+
+    //定义预览按钮中绑定的事件handlePreview
+    handlePreview1: function () {
+      {
+        this.file = [],
+          this.fileList.filter(item => {
+            this.file.push(item.url)
+          })
+        this.showViewer = true
+      }
+    },
+    saveCaseRemark(i, row) {
+      this.hasBlock = false;
+      this.ifBlock()
+      if (!this.hasBlock) {
+        if (this.$route.query.companycode) {
+          this.tableData[0].companycode=this.baseForm.companycode
+          updateInvoice(this.tableData[0]).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message({
+                message: '保存成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              })
+              this.show = false;
+              this.editFlag = true;
+            } else {
+              this.$message.error('保存失败！')
+            }
+          }).catch(error => {
+            this.$message({
+              message: '保存异常',
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          })
+        } else {
+          if (this.canUpload) {
+            this.tableData[0].companycode=this.baseForm.companycode
+            addInvoice(this.tableData[0]).then(res => {
               if (res != null && res.code === 200) {
                 this.$message({
                   message: '保存成功！',
@@ -433,95 +439,72 @@
                 showClose: true
               })
             })
-          }else {
-            if (this.canUpload) {
-              addInvoice(this.tableData[0]).then(res => {
-                if (res != null && res.code === 200) {
-                  this.$message({
-                    message: '保存成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                  this.show = false;
-                  this.editFlag = true;
-                } else {
-                  this.$message.error('保存失败！')
-                }
-              }).catch(error => {
-                this.$message({
-                  message: '保存异常',
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              })
 
-            } else {
-              return this.$message.warning(
-                "请先保存出单公司基本信息！"
-              );
-            }
+          } else {
+            return this.$message.warning(
+              "请先保存出单公司基本信息！"
+            );
           }
         }
-      },
-      editCompany(index, row) {
-        this.rowData[0].invoicename = row.invoicename
-        this.rowData[0].ratepayernumber = row.ratepayernumber
-        this.rowData[0].account = row.account
-        this.rowData[0].address = row.address
-        this.rowData[0].telephone = row.telephone
+      }
+    },
+    editCompany(index, row) {
+      this.rowData[0].invoicename = row.invoicename
+      this.rowData[0].ratepayernumber = row.ratepayernumber
+      this.rowData[0].account = row.account
+      this.rowData[0].address = row.address
+      this.rowData[0].telephone = row.telephone
 
-        this.show = true
-        this.editFlag = false
+      this.show = true
+      this.editFlag = false
 
-      },
-      cancel(index, row) {
-        this.$confirm(`是否确定取消?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          row.invoicename = this.rowData[0].invoicename
-          row.ratepayernumber = this.rowData[0].ratepayernumber
-          row.account = this.rowData[0].account
-          row.address = this.rowData[0].address
-          row.telephone = this.rowData[0].telephone
+    },
+    cancel(index, row) {
+      this.$confirm(`是否确定取消?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        row.invoicename = this.rowData[0].invoicename
+        row.ratepayernumber = this.rowData[0].ratepayernumber
+        row.account = this.rowData[0].account
+        row.address = this.rowData[0].address
+        row.telephone = this.rowData[0].telephone
 
-          this.show = false
-          this.editFlag = true
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消！'
-          })
+        this.show = false
+        this.editFlag = true
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消！'
         })
+      })
 
-      },
-    }
+    },
   }
+}
 </script>
 
 <style scoped>
-  .item-width {
-    width: 200px;
-  }
+.item-width {
+  width: 200px;
+}
 
-  /*element原有样式修改*/
-  .el-form-item /deep/ label {
-    font-weight: normal;
-  }
+/*element原有样式修改*/
+.el-form-item ::v-deep label {
+  font-weight: normal;
+}
 
-  .mySpan {
-    margin-left: 50px;
-    margin-right: 10px;
-  }
+.mySpan {
+  margin-left: 50px;
+  margin-right: 10px;
+}
 
-  .form-span {
-    font-size: 12px;
-  }
+.form-span {
+  font-size: 12px;
+}
 
-  .uploadButton {
-    background-color: #534d4d
-  }
+.uploadButton {
+  background-color: #534d4d
+}
 </style>

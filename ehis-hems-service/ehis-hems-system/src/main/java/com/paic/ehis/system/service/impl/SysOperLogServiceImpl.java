@@ -1,16 +1,17 @@
 package com.paic.ehis.system.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.paic.ehis.system.api.domain.SysOperLog;
 import com.paic.ehis.system.mapper.SysOperLogMapper;
 import com.paic.ehis.system.service.ISysOperLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 操作日志 服务层处理
  * 
- * @author admin
+ *
  */
 @Service
 public class SysOperLogServiceImpl implements ISysOperLogService

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseSupplierReceipMapper">
+    
+    <resultMap type="com.paic.ehis.base.domain.BaseSupplierReceip" id="BaseSupplierReceipResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="companyTitle"    column="company_title"    />
+        <result property="dutynum"    column="dutynum"    />
+        <result property="billInfo"    column="bill_info"    />
+        <result property="accNum"    column="acc_num"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBaseSupplierReceipVo">
+        select serial_no,supplier_code, company_title, dutynum, bill_info, acc_num, phone, address, status, create_by, create_time, update_by, update_time from base_supplier_receip
+    </sql>
+
+    <select id="selectBaseSupplierReceipList" parameterType="com.paic.ehis.base.domain.BaseSupplierReceip" resultMap="BaseSupplierReceipResult">
+        <include refid="selectBaseSupplierReceipVo"/>
+        <where>  
+            <if test="companyTitle != null  and companyTitle != ''"> and company_title = #{companyTitle}</if>
+            <if test="dutynum != null  and dutynum != ''"> and dutynum = #{dutynum}</if>
+            <if test="billInfo != null  and billInfo != ''"> and bill_info = #{billInfo}</if>
+            <if test="accNum != null  and accNum != ''"> and acc_num = #{accNum}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseSupplierReceipById" parameterType="String" resultMap="BaseSupplierReceipResult">
+        <include refid="selectBaseSupplierReceipVo"/>
+        where supplier_code = #{supplierCode} and status = 'Y'
+    </select>
+        
+    <insert id="insertBaseSupplierReceip" parameterType="com.paic.ehis.base.domain.BaseSupplierReceip">
+        insert into base_supplier_receip
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="supplierCode != null">supplier_code,</if>
+            <if test="companyTitle != null">company_title,</if>
+            <if test="dutynum != null and dutynum != ''">dutynum,</if>
+            <if test="billInfo != null">bill_info,</if>
+            <if test="accNum != null and accNum != ''">acc_num,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="supplierCode != null">#{supplierCode},</if>
+            <if test="companyTitle != null">#{companyTitle},</if>
+            <if test="dutynum != null and dutynum != ''">#{dutynum},</if>
+            <if test="billInfo != null">#{billInfo},</if>
+            <if test="accNum != null and accNum != ''">#{accNum},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseSupplierReceip" parameterType="com.paic.ehis.base.domain.BaseSupplierReceip">
+        update base_supplier_receip
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyTitle != null">company_title = #{companyTitle},</if>
+            <if test="dutynum != null and dutynum != ''">dutynum = #{dutynum},</if>
+            <if test="billInfo != null">bill_info = #{billInfo},</if>
+            <if test="accNum != null and accNum != ''">acc_num = #{accNum},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where supplier_code = #{supplierCode}
+    </update>
+    <update id="updatebaseSupplierReceipStatus" parameterType="String">
+        update base_supplier_receip set status = 'N'
+        where status='Y'and supplier_code = #{supplierCode}
+    </update>
+
+    <delete id="deleteBaseSupplierReceipById" parameterType="String">
+        delete from base_supplier_receip where supplier_code = #{supplierCode}
+    </delete>
+
+    <delete id="deleteBaseSupplierReceipByIds" parameterType="String">
+        delete from base_supplier_receip where supplier_code in 
+        <foreach item="supplierCode" collection="array" open="(" separator="," close=")">
+            #{supplierCode}
+        </foreach>
+    </delete>
+    
+</mapper>

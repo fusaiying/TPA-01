@@ -20,14 +20,14 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="费用项编码：" prop="feeitemcode">
-              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" class="item-width" clearable
+              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" maxlength="20" clearable class="item-width"
                         size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="费用项中文名称：" prop="feeitemname">
-              <el-input v-model="baseForm.feeitemname" class="item-width" clearable size="mini" placeholder="请输入"
-                        @change="nameChange"/>
+              <el-input v-model="baseForm.feeitemname" class="item-width" clearable maxlength="50" size="mini" placeholder="请输入"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import {listFeeitem, addFeeitem, updateFeeitem} from '@/api/baseInfo/expenseitemMaintenan.js'
+  import {listFeeitem, addFeeitem, updateFeeitem} from '@/api/baseInfo/expenseitemMaintenan'
 
   export default {
     data() {
@@ -95,7 +95,9 @@
           pageSize: 5,
         }
         listFeeitem(this.baseForm).then(res => {
-          this.baseForm = res.rows[0]
+          if (res!=null && res.code===200 && res.rows.length>0){
+            this.baseForm = res.rows[0]
+          }
           this.loading = false
         })
       } else {
@@ -103,10 +105,7 @@
       }
     },
     methods: {
-      nameChange() {
-        this.$refs.baseForm.validateField(['feeitemname'])
-      }
-      ,
+
       resetForm() {
         if (this.$route.query.feeitemcode) {
           this.baseForm.feeitemname = ''
@@ -121,47 +120,49 @@
             const params = this.baseForm
             if (this.$route.query.feeitemcode) {
               updateFeeitem(params).then(res => {
-                if (res != null && res.code === 200) {
+                if (res != null && res.code === 200 && res.data===1) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
                     center: true,
                     showClose: true
                   })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }else if (res != null && res.code === 200 && res.data===0){
+                  return this.$message.warning(
+                    "费用项已存在，请核实！"
+                  )
                 }
+
               }).catch(error => {
-                this.$message({
-                  message: error,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+
               })
             } else {
               addFeeitem(params).then(res => {
-                if (res != null && res.code === 200) {
+                if (res != null && res.code === 200 && res.data===1) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success',
                     center: true,
                     showClose: true
                   })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                }else if (res != null && res.code === 200 && res.data===0){
+                  return this.$message.warning(
+                    "费用项已存在，请核实！"
+                  )
                 }
               }).catch(error => {
-                this.$message({
-                  message: error,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
+
               })
             }
           } else {
             return false
           }
         })
-      }
-      ,
+      },
       goBack() {
         this.$router.go(-1)
       }
@@ -175,7 +176,7 @@
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 

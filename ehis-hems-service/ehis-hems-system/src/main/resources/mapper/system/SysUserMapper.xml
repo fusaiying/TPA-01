@@ -18,6 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="delFlag"      column="del_flag"     />
 		<result property="loginIp"      column="login_ip"     />
 		<result property="loginDate"    column="login_date"   />
+		<result property="organCode"      column="organ_code"     />
+		<result property="organName"    column="organ_name"   />
 		<result property="createBy"     column="create_by"    />
 		<result property="createTime"   column="create_time"  />
 		<result property="updateBy"     column="update_by"    />
@@ -44,11 +46,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="dataScope"     column="data_scope"    />
 		<result property="status"       column="role_status"    />
 	</resultMap>
+
+	<resultMap type="UserVo" id="UserVoResult">
+		<id     property="id"       column="user_id"      />
+		<result property="userName"     column="user_name"    />
+	</resultMap>
 	
 	<sql id="selectUserVo">
         select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.avatar, u.phonenumber, u.password, u.sex, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, 
         d.dept_id, d.parent_id, d.dept_name, d.order_num, d.leader, d.status as dept_status,
-        r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status, u.organ_code ,u.organ_name
         from sys_user u
 		    left join sys_dept d on u.dept_id = d.dept_id
 		    left join sys_user_role ur on u.user_id = ur.user_id
@@ -80,7 +87,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
 	</select>
-	
+
+	<select id="selectUserListByOrganCode" parameterType="String" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+        where organ_code in
+		<foreach collection="list" item="organCode" open="(" separator="," close=")">
+			#{organCode}
+		</foreach>
+	</select>
+
+	<select id="selectDept" parameterType="String" resultType="int">
+    SELECT dept_id FROM sys_user WHERE user_name=#{username}
+	</select>
+
+	<select id="selectuserName" parameterType="int" resultType="String">
+    SELECT user_name FROM sys_user WHERE dept_id=#{deptId}
+	</select>
+
+
 	<select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
 	    <include refid="selectUserVo"/>
 		where u.user_name = #{userName}
@@ -191,11 +215,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.user_id id,a.user_name username from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and role_sort = (select (case (c.role_sort-1) when 0 then 1 else (c.role_sort-1) end) from sys_user a,sys_user_role b,sys_role c where a.user_id = b.user_id and b.role_id = c.role_id and a.user_name = #{username})
 	</select>
 
-	<select id="selectSysUser" parameterType="com.paic.ehis.system.domain.dto.SysUserDTO" resultMap="SysUserResult">
+	<select id="selectSysUser" parameterType="com.paic.ehis.system.domain.dto.SysUserDTO" resultMap="UserVoResult">
 		select user_id,user_name from sys_user
 		<where>
 			<if test="status != null and status != ''"> and status = #{status}</if>
 			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag}</if>
+			<if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
 		</where>
 	</select>
 </mapper> 

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.finance.mapper.FinancePayInfoMapper">
+    
+    <resultMap type="com.paic.ehis.finance.domain.FinancePayInfo" id="FinancePayInfoResult">
+        <result property="payId"    column="pay_id"    />
+        <result property="payBatchNo"    column="pay_batch_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="payCurrency"    column="pay_currency"    />
+        <result property="sumPayAmount"    column="sum_pay_amount"    />
+        <result property="sumPayAmountForeign"    column="sum_pay_amount_foreign"    />
+        <result property="sumClaimAmount"    column="sum_claim_amount"    />
+        <result property="payeeBank"    column="payee_bank"    />
+        <result property="accNo"    column="acc_no"    />
+        <result property="accName"    column="acc_name"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="payFailDate"    column="pay_fail_date"    />
+        <result property="payFailReason"    column="pay_fail_reason"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+
+    <sql id="selectFinancePayInfoVo">
+        select pay_id, pay_batch_no, batch_no, pay_currency, sum_pay_amount, sum_pay_amount_foreign, sum_claim_amount, payee_bank, acc_no, acc_name, pay_status, pay_date, pay_fail_date, pay_fail_reason, status, create_by, create_time, update_by, update_time, dept_code from finance_pay_info
+    </sql>
+
+    <select id="selectFinancePayInfoList" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" resultMap="FinancePayInfoResult">
+        <include refid="selectFinancePayInfoVo"/>
+        <where>  
+            <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
+            <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
+            <if test="payCurrency != null  and payCurrency != ''"> and pay_currency = #{payCurrency}</if>
+            <if test="sumPayAmount != null "> and sum_pay_amount = #{sumPayAmount}</if>
+            <if test="sumPayAmountForeign != null "> and sum_pay_amount_foreign = #{sumPayAmountForeign}</if>
+            <if test="sumClaimAmount != null "> and sum_claim_amount = #{sumClaimAmount}</if>
+            <if test="payeeBank != null  and payeeBank != ''"> and payee_bank = #{payeeBank}</if>
+            <if test="accNo != null  and accNo != ''"> and acc_no = #{accNo}</if>
+            <if test="accName != null  and accName != ''"> and acc_name like concat('%', #{accName}, '%')</if>
+            <if test="payStatus != null  and payStatus != ''"> and pay_status = #{payStatus}</if>
+            <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="payFailDate != null "> and pay_fail_date = #{payFailDate}</if>
+            <if test="payFailReason != null  and payFailReason != ''"> and pay_fail_reason = #{payFailReason}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+
+    <select id="selectFinancePayInfoById" parameterType="Long" resultMap="FinancePayInfoResult">
+        <include refid="selectFinancePayInfoVo"/>
+        where pay_id = #{payId}
+    </select>
+        
+    <insert id="insertFinancePayInfo" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" useGeneratedKeys="true" keyProperty="payId">
+        insert into finance_pay_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no,</if>
+            <if test="batchNo != null and batchNo != ''">batch_no,</if>
+            <if test="payCurrency != null and payCurrency != ''">pay_currency,</if>
+            <if test="sumPayAmount != null">sum_pay_amount,</if>
+            <if test="sumPayAmountForeign != null">sum_pay_amount_foreign,</if>
+            <if test="sumClaimAmount != null">sum_claim_amount,</if>
+            <if test="payeeBank != null and payeeBank != ''">payee_bank,</if>
+            <if test="accNo != null and accNo != ''">acc_no,</if>
+            <if test="accName != null and accName != ''">acc_name,</if>
+            <if test="payStatus != null and payStatus != ''">pay_status,</if>
+            <if test="payDate != null">pay_date,</if>
+            <if test="payFailDate != null">pay_fail_date,</if>
+            <if test="payFailReason != null">pay_fail_reason,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">#{payBatchNo},</if>
+            <if test="batchNo != null and batchNo != ''">#{batchNo},</if>
+            <if test="payCurrency != null and payCurrency != ''">#{payCurrency},</if>
+            <if test="sumPayAmount != null">#{sumPayAmount},</if>
+            <if test="sumPayAmountForeign != null">#{sumPayAmountForeign},</if>
+            <if test="sumClaimAmount != null">#{sumClaimAmount},</if>
+            <if test="payeeBank != null and payeeBank != ''">#{payeeBank},</if>
+            <if test="accNo != null and accNo != ''">#{accNo},</if>
+            <if test="accName != null and accName != ''">#{accName},</if>
+            <if test="payStatus != null and payStatus != ''">#{payStatus},</if>
+            <if test="payDate != null">#{payDate},</if>
+            <if test="payFailDate != null">#{payFailDate},</if>
+            <if test="payFailReason != null">#{payFailReason},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinancePayInfo" parameterType="com.paic.ehis.finance.domain.FinancePayInfo">
+        update finance_pay_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payBatchNo != null and payBatchNo != ''">pay_batch_no = #{payBatchNo},</if>
+            <if test="batchNo != null and batchNo != ''">batch_no = #{batchNo},</if>
+            <if test="payCurrency != null and payCurrency != ''">pay_currency = #{payCurrency},</if>
+            <if test="sumPayAmount != null">sum_pay_amount = #{sumPayAmount},</if>
+            <if test="sumPayAmountForeign != null">sum_pay_amount_foreign = #{sumPayAmountForeign},</if>
+            <if test="sumClaimAmount != null">sum_claim_amount = #{sumClaimAmount},</if>
+            <if test="payeeBank != null and payeeBank != ''">payee_bank = #{payeeBank},</if>
+            <if test="accNo != null and accNo != ''">acc_no = #{accNo},</if>
+            <if test="accName != null and accName != ''">acc_name = #{accName},</if>
+            <if test="payStatus != null and payStatus != ''">pay_status = #{payStatus},</if>
+            <if test="payDate != null">pay_date = #{payDate},</if>
+            <if test="payFailDate != null">pay_fail_date = #{payFailDate},</if>
+            <if test="payFailReason != null">pay_fail_reason = #{payFailReason},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+        </trim>
+        where pay_id = #{payId}
+    </update>
+
+    <delete id="deleteFinancePayInfoById" parameterType="Long">
+        delete from finance_pay_info where pay_id = #{payId}
+    </delete>
+
+    <delete id="deleteFinancePayInfoByIds" parameterType="String">
+        delete from finance_pay_info where pay_id in 
+        <foreach item="payId" collection="array" open="(" separator="," close=")">
+            #{payId}
+        </foreach>
+    </delete>
+    <resultMap type="com.paic.ehis.finance.domain.vo.TransferfailedVo" id="TransferfailedVoResult">
+        <result property="batchNo"    column="batch_no"    />
+        <result property="payeeBank"    column="payee_bank"    />
+        <result property="accNo"    column="acc_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="sumPayAmount"    column="sum_pay_amount"    />
+        <result property="accName"    column="acc_name"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="payFailDate"    column="pay_fail_date"    />
+        <result property="receiptNo"    column="receipt_no"    />
+        <result property="payFailReason"    column="pay_fail_reason"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+    <!--查询转账失败处理工作池-->
+    <select id="selectTransferfailedList" parameterType="com.paic.ehis.finance.domain.dto.TransferfailedDTO" resultMap="TransferfailedVoResult">
+        SELECT
+        finance_pay_info.batch_no,
+        claim_case.rpt_no,
+        finance_pay_info.sum_pay_amount,
+        finance_pay_info.payee_bank,
+        finance_pay_info.acc_no,
+        finance_pay_info.acc_name,
+        finance_pay_info.pay_status,
+        finance_pay_info.pay_date,
+        finance_pay_info.pay_fail_date,
+        finance_receipt_col.receipt_no,
+        finance_pay_info.pay_fail_reason,
+        finance_pay_info.STATUS,
+        finance_pay_info.dept_code
+        FROM
+        finance_pay_info,
+        finance_receipt_col,
+        claim_case
+       <where>
+            <if test="batchNo != null  and batchNo != ''"> and finance_pay_info.batch_no = #{batchNo}</if>
+            <if test="payStartDate != null and payEndDate != null"> and finance_pay_info.pay_date between #{payStartDate} and DATE_ADD(#{payEndDate},INTERVAL 1 DAY)</if>
+            AND finance_pay_info.dept_code = finance_receipt_col.dept_code
+            AND (finance_pay_info.pay_status = "04" OR finance_pay_info.pay_status = "05")
+            AND finance_pay_info.STATUS = 'Y'
+            AND finance_receipt_col.STATUS = 'Y'
+            AND claim_case.STATUS = 'Y'
+            AND finance_pay_info.batch_no=claim_case.batch_no
+       </where>
+    </select>
+
+</mapper>

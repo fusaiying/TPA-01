@@ -6,7 +6,7 @@ import com.paic.ehis.query.domain.CustomerInfo;
 import com.paic.ehis.query.domain.vo.CustomerInfoQryWorkpoolPSchema;
 import com.paic.ehis.query.service.CustomerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +27,6 @@ public class CustomerInfoController  extends BaseController {
     @Autowired
     private CustomerInfoService customerInfoService;
 
-    @PreAuthorize("@ss.hasPermi('query:customerInfo:list')")
     @GetMapping("/list")
     public TableDataInfo customerInfoQuery(CustomerInfoQryWorkpoolPSchema customerInfoQryWorkpoolPSchema){
         startPage();

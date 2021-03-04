@@ -1,27 +1,20 @@
 package com.paic.ehis.base.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.service.IBaseContactsService;
-import com.paic.ehis.base.domain.BaseContacts;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
-
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.base.domain.BaseContacts;
+import com.paic.ehis.base.service.IBaseContactsService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * base_contacts（联系人信息）Controller
@@ -39,7 +32,7 @@ public class BaseContactsController extends BaseController
     /**
      * 查询base_contacts（联系人信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:list')")
+    //@PreAuthorize("@ss.hasPermi('system:contacts:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseContacts baseContacts)
     {
@@ -51,7 +44,7 @@ public class BaseContactsController extends BaseController
     /**
      * 导出base_contacts（联系人信息）列表
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:export')")
+    //@PreAuthorize("@ss.hasPermi('system:contacts:export')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseContacts baseContacts) throws IOException
@@ -64,7 +57,7 @@ public class BaseContactsController extends BaseController
     /**
      * 获取base_contacts（联系人信息）详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:query')")
+    //@PreAuthorize("@ss.hasPermi('system:contacts:query')")
     @GetMapping(value = "/{serialno}")
     public AjaxResult getInfo(@PathVariable("serialno") String serialno)
     {
@@ -74,7 +67,7 @@ public class BaseContactsController extends BaseController
     /**
      * 新增base_contacts（联系人信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:add')")
+    //@PreAuthorize("@ss.hasPermi('system:contacts:add')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseContacts baseContacts)
@@ -82,10 +75,27 @@ public class BaseContactsController extends BaseController
         return toAjax(baseContactsService.insertBaseContacts(baseContacts));
     }
 
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody List<BaseContacts> baseContactsVo)
+    {
+        return toAjax(baseContactsService.addBaseContacts(baseContactsVo));
+    }
+
+    @PostMapping("/delete")
+    public AjaxResult delete(@RequestBody BaseContacts baseContacts)
+    {
+        return toAjax(baseContactsService.deleteBaseContact(baseContacts));
+    }
+
+    @PutMapping
+    public AjaxResult delete(@PathVariable String supplierCode){
+        return toAjax(baseContactsService.updateBaseContactsStatus(supplierCode));
+    }
+
     /**
      * 修改base_contacts（联系人信息）
      */
-   /* @PreAuthorize("@ss.hasPermi('system:contacts:edit')")
+   /* //@PreAuthorize("@ss.hasPermi('system:contacts:edit')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseContacts baseContacts)
@@ -96,7 +106,7 @@ public class BaseContactsController extends BaseController
     /**
      * 删除base_contacts（联系人信息）
      */
-    @PreAuthorize("@ss.hasPermi('system:contacts:remove')")
+    //@PreAuthorize("@ss.hasPermi('system:contacts:remove')")
     @Log(title = "base_contacts（联系人信息）", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{serialnos}")
     public AjaxResult remove(@PathVariable String[] serialnos)

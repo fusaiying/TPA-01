@@ -1,10 +1,10 @@
 package com.paic.ehis.base.domain;
 
 
+import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.paic.ehis.common.core.annotation.Excel;
 
 /**
  * base_provider_newtworktypet_risk(医疗网络险种信息)对象 base_provider_newtworktypet_risk

@@ -1,7 +1,9 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderDep;
+import com.paic.ehis.base.domain.vo.BaseProviderDepVo;
+
+import java.util.List;
 
 /**
  * base_provider_dept(服务商科室)Service接口
@@ -33,7 +35,15 @@ public interface IBaseProviderDepService
      * @param baseProviderDepVo base_provider_dept(服务商科室)
      * @return 结果
      */
-    public int insertBaseProviderDep(List<BaseProviderDep> baseProviderDepVo);
+    public int insertBaseProviderDep(BaseProviderDepVo baseProviderDepVo);
+
+    /**
+     * 新增base_provider_dept(服务商科室)
+     *
+     * @param providerCode base_provider_dept(服务商科室)
+     * @return 结果
+     */
+    public int insertBaseProviderDepNew(String providerCode);
 
     /**
      * 修改base_provider_dept(服务商科室)
@@ -65,5 +75,5 @@ public interface IBaseProviderDepService
      * @param providercode base_provider_dept(服务商科室)
      * @return base_provider_dept(服务商科室)
      */
-    public List<BaseProviderDep> selectBaseProviderDepByCode(String providercode);
+    public List<BaseProviderDep> selectBaseProviderDepByCode(BaseProviderDep baseProviderDep);
 }

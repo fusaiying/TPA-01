@@ -1,14 +1,14 @@
 package com.paic.ehis.common.core.text;
 
+import com.paic.ehis.common.core.utils.StringUtils;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import com.paic.ehis.common.core.utils.StringUtils;
 
 /**
  * 字符集工具类
  * 
- * @author admin
+ *
  */
 public class CharsetKit
 {
@@ -67,7 +67,7 @@ public class CharsetKit
 
         if (null == destCharset)
         {
-            srcCharset = StandardCharsets.UTF_8;
+            destCharset = StandardCharsets.UTF_8;
         }
 
         if (StringUtils.isEmpty(source) || srcCharset.equals(destCharset))

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseProviderServiceMapper">
+
+    <resultMap type="BaseProviderService" id="BaseProviderServiceResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="providerCode"    column="provider_code"    />
+        <result property="networkType"    column="network_type"    />
+        <result property="category"    column="category"    />
+        <result property="classification"    column="classification"    />
+        <result property="grade"    column="grade"    />
+        <result property="displaynetwork"    column="displaynetwork"    />
+        <result property="officialwebsite"    column="officialwebsite"    />
+        <result property="prehospital"    column="prehospital"    />
+        <result property="allcontopen"    column="allcontopen"    />
+        <result property="cooperationStatus"    column="cooperation_status"    />
+        <result property="sellingpoint"    column="sellingpoint"    />
+        <result property="treatmentDiscount"    column="treatment_discount"    />
+        <result property="examineDiscount"    column="examine_discount"    />
+        <result property="bedDiscount"    column="bed_discount"    />
+        <result property="allowance"    column="allowance"    />
+        <result property="specialDiscount"    column="special_discount"    />
+        <result property="costs"    column="costs"    />
+        <result property="project"    column="project"    />
+        <result property="code"    column="code"    />
+        <result property="type"    column="type"    />
+        <result property="continentFlag"    column="continent_flag"    />
+        <result property="continent"    column="continent"    />
+        <result property="preauthsendway"    column="preauthsendway"    />
+        <result property="adviceNum"    column="advice_num"    />
+        <result property="foreignnote"    column="foreignnote"    />
+        <result property="discountinfo"    column="discountinfo"    />
+        <result property="internalnote"    column="internalnote"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="servicelocatorStr"    column="servicelocator_str"    />
+        <result property="speciallanguageStr"    column="speciallanguage_str"    />
+        <result property="networkHospitalTypeStr"    column="networkHospital_type_str"    />
+        <result property="topten"    column="topten"    />
+        <result property="specializedHospital"    column="specialized_hospital"    />
+        <result property="topthird"    column="topthird"    />
+        <result property="topfive"    column="topfive"    />
+        <result property="virtualOrg"    column="virtual_org"    />
+        <result property="leadFlag"    column="lead_flag"    />
+        <result property="weekendsWorking"    column="weekends_working"    />
+    </resultMap>
+
+    <sql id="selectBaseProviderServiceVo">
+        select serial_no,weekends_working,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service_bak
+    </sql>
+
+    <sql id="selectBaseProviderServiceVoNew">
+        select serial_no,weekends_working,lead_flag,continent_flag,continent,preauthsendway,update_flag,virtual_org,topfive,topthird,specialized_hospital,topten,provider_code, network_type, servicelocator_str, speciallanguage_str, networkHospital_type_str, category, classification, grade, displaynetwork, officialwebsite, prehospital, allcontopen, cooperation_status, sellingpoint, treatment_discount, examine_discount, bed_discount, allowance, special_discount, costs, project, code, type, advice_num, foreignnote, discountinfo, internalnote, status, create_by, create_time, update_by, update_time from base_provider_service
+    </sql>
+
+    <select id="selectBaseProviderServiceList" parameterType="BaseProviderService" resultMap="BaseProviderServiceResult">
+        <include refid="selectBaseProviderServiceVo"/>
+        <where>
+            <if test="networkType != null  and networkType != ''"> and network_type = #{networkType}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="classification != null  and classification != ''"> and classification = #{classification}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="displaynetwork != null  and displaynetwork != ''"> and displaynetwork = #{displaynetwork}</if>
+            <if test="officialwebsite != null  and officialwebsite != ''"> and officialwebsite = #{officialwebsite}</if>
+            <if test="prehospital != null  and prehospital != ''"> and prehospital = #{prehospital}</if>
+            <if test="allcontopen != null  and allcontopen != ''"> and allcontopen = #{allcontopen}</if>
+            <if test="cooperationStatus != null  and cooperationStatus != ''"> and cooperation_status = #{cooperationStatus}</if>
+            <if test="sellingpoint != null  and sellingpoint != ''"> and sellingpoint = #{sellingpoint}</if>
+            <if test="treatmentDiscount != null  and treatmentDiscount != ''"> and treatment_discount = #{treatmentDiscount}</if>
+            <if test="examineDiscount != null  and examineDiscount != ''"> and examine_discount = #{examineDiscount}</if>
+            <if test="bedDiscount != null  and bedDiscount != ''"> and bed_discount = #{bedDiscount}</if>
+            <if test="allowance != null  and allowance != ''"> and allowance = #{allowance}</if>
+            <if test="specialDiscount != null  and specialDiscount != ''"> and special_discount = #{specialDiscount}</if>
+            <if test="costs != null  and costs != ''"> and costs = #{costs}</if>
+            <if test="project != null  and project != ''"> and project = #{project}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="adviceNum != null  and adviceNum != ''"> and advice_num = #{adviceNum}</if>
+            <if test="foreignnote != null  and foreignnote != ''"> and foreignnote = #{foreignnote}</if>
+            <if test="discountinfo != null  and discountinfo != ''"> and discountinfo = #{discountinfo}</if>
+            <if test="internalnote != null  and internalnote != ''"> and internalnote = #{internalnote}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseProviderServiceById" parameterType="String" resultMap="BaseProviderServiceResult">
+        <include refid="selectBaseProviderServiceVo"/>
+        where provider_code = #{providerCode} and status = 'Y' and update_flag = '0'
+    </select>
+
+
+    <select id="selectBaseProviderServiceByIdNew" parameterType="String" resultMap="BaseProviderServiceResult">
+        <include refid="selectBaseProviderServiceVoNew"/>
+        where provider_code = #{providerCode} and status = 'Y' and update_flag = '0'
+    </select>
+
+    <insert id="insertBaseProviderService" parameterType="BaseProviderService">
+        insert into base_provider_service_bak
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="weekendsWorking != null">weekends_working,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="networkType != null and networkType != ''">network_type,</if>
+            <if test="category != null">category,</if>
+            <if test="classification != null">classification,</if>
+            <if test="grade != null">grade,</if>
+            <if test="displaynetwork != null and displaynetwork != ''">displaynetwork,</if>
+            <if test="officialwebsite != null and officialwebsite != ''">officialwebsite,</if>
+            <if test="prehospital != null and prehospital != ''">prehospital,</if>
+            <if test="allcontopen != null and allcontopen != ''">allcontopen,</if>
+            <if test="cooperationStatus != null">cooperation_status,</if>
+            <if test="servicelocatorStr != null">servicelocator_str,</if>
+            <if test="speciallanguageStr != null">speciallanguage_str,</if>
+            <if test="networkHospitalTypeStr != null">networkHospital_type_str,</if>
+            <if test="sellingpoint != null and sellingpoint != ''">sellingpoint,</if>
+            <if test="treatmentDiscount != null">treatment_discount,</if>
+            <if test="examineDiscount != null">examine_discount,</if>
+            <if test="bedDiscount != null">bed_discount,</if>
+            <if test="allowance != null">allowance,</if>
+            <if test="specialDiscount != null">special_discount,</if>
+            <if test="costs != null">costs,</if>
+            <if test="project != null and project != ''">project,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="type != null">type,</if>
+            <if test="continentFlag != null">continent_flag,</if>
+            <if test="continent != null and continent != ''">continent,</if>
+            <if test="preauthsendway != null">preauthsendway,</if>
+            <if test="adviceNum != null">advice_num,</if>
+            <if test="foreignnote != null and foreignnote != ''">foreignnote,</if>
+            <if test="discountinfo != null">discountinfo,</if>
+            <if test="internalnote != null">internalnote,</if>
+            <if test="virtualOrg != null">virtual_org,</if>
+            <if test="topfive != null">topfive,</if>
+            <if test="topthird != null">topthird,</if>
+            <if test="specializedHospital != null">specialized_hospital,</if>
+            <if test="topten != null">topten,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="leadFlag != null">lead_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="weekendsWorking != null">#{weekendsWorking},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="networkType != null and networkType != ''">#{networkType},</if>
+            <if test="category != null">#{category},</if>
+            <if test="classification != null">#{classification},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="displaynetwork != null and displaynetwork != ''">#{displaynetwork},</if>
+            <if test="officialwebsite != null and officialwebsite != ''">#{officialwebsite},</if>
+            <if test="prehospital != null and prehospital != ''">#{prehospital},</if>
+            <if test="allcontopen != null and allcontopen != ''">#{allcontopen},</if>
+            <if test="cooperationStatus != null">#{cooperationStatus},</if>
+            <if test="servicelocatorStr != null">#{servicelocatorStr},</if>
+            <if test="speciallanguageStr != null">#{speciallanguageStr},</if>
+            <if test="networkHospitalTypeStr != null">#{networkHospitalTypeStr},</if>
+            <if test="sellingpoint != null and sellingpoint != ''">#{sellingpoint},</if>
+            <if test="treatmentDiscount != null">#{treatmentDiscount},</if>
+            <if test="examineDiscount != null">#{examineDiscount},</if>
+            <if test="bedDiscount != null">#{bedDiscount},</if>
+            <if test="allowance != null">#{allowance},</if>
+            <if test="specialDiscount != null">#{specialDiscount},</if>
+            <if test="costs != null">#{costs},</if>
+            <if test="project != null and project != ''">#{project},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="type != null">#{type},</if>
+            <if test="continentFlag != null">#{continentFlag},</if>
+            <if test="continent != null">#{continent},</if>
+            <if test="preauthsendway != null and preauthsendway != ''">#{preauthsendway},</if>
+            <if test="adviceNum != null">#{adviceNum},</if>
+            <if test="foreignnote != null and foreignnote != ''">#{foreignnote},</if>
+            <if test="discountinfo != null">#{discountinfo},</if>
+            <if test="internalnote != null">#{internalnote},</if>
+            <if test="virtualOrg != null">#{virtualOrg},</if>
+            <if test="topfive != null">#{topfive},</if>
+            <if test="topthird != null">#{topthird},</if>
+            <if test="specializedHospital != null">#{topthird},</if>
+            <if test="topten != null">#{topten},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="leadFlag != null">#{leadFlag},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertBaseProviderServiceNew" parameterType="BaseProviderService">
+        insert into base_provider_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="weekendsWorking != null">weekends_working,</if>
+            <if test="providerCode != null">provider_code,</if>
+            <if test="networkType != null and networkType != ''">network_type,</if>
+            <if test="category != null">category,</if>
+            <if test="classification != null">classification,</if>
+            <if test="grade != null">grade,</if>
+            <if test="displaynetwork != null and displaynetwork != ''">displaynetwork,</if>
+            <if test="officialwebsite != null and officialwebsite != ''">officialwebsite,</if>
+            <if test="prehospital != null and prehospital != ''">prehospital,</if>
+            <if test="allcontopen != null and allcontopen != ''">allcontopen,</if>
+            <if test="cooperationStatus != null">cooperation_status,</if>
+            <if test="servicelocatorStr != null">servicelocator_str,</if>
+            <if test="speciallanguageStr != null">speciallanguage_str,</if>
+            <if test="networkHospitalTypeStr != null">networkHospital_type_str,</if>
+            <if test="sellingpoint != null and sellingpoint != ''">sellingpoint,</if>
+            <if test="treatmentDiscount != null">treatment_discount,</if>
+            <if test="examineDiscount != null">examine_discount,</if>
+            <if test="bedDiscount != null">bed_discount,</if>
+            <if test="allowance != null">allowance,</if>
+            <if test="specialDiscount != null">special_discount,</if>
+            <if test="costs != null">costs,</if>
+            <if test="project != null and project != ''">project,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="type != null">type,</if>
+            <if test="continentFlag != null">continent_flag,</if>
+            <if test="continent != null and continent != ''">continent,</if>
+            <if test="preauthsendway != null">preauthsendway,</if>
+            <if test="adviceNum != null">advice_num,</if>
+            <if test="foreignnote != null and foreignnote != ''">foreignnote,</if>
+            <if test="discountinfo != null">discountinfo,</if>
+            <if test="internalnote != null">internalnote,</if>
+            <if test="virtualOrg != null">virtual_org,</if>
+            <if test="topfive != null">topfive,</if>
+            <if test="topthird != null">topthird,</if>
+            <if test="specializedHospital != null">specialized_hospital,</if>
+            <if test="topten != null">topten,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="leadFlag != null">lead_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="weekendsWorking != null">#{weekendsWorking},</if>
+            <if test="providerCode != null">#{providerCode},</if>
+            <if test="networkType != null and networkType != ''">#{networkType},</if>
+            <if test="category != null">#{category},</if>
+            <if test="classification != null">#{classification},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="displaynetwork != null and displaynetwork != ''">#{displaynetwork},</if>
+            <if test="officialwebsite != null and officialwebsite != ''">#{officialwebsite},</if>
+            <if test="prehospital != null and prehospital != ''">#{prehospital},</if>
+            <if test="allcontopen != null and allcontopen != ''">#{allcontopen},</if>
+            <if test="cooperationStatus != null">#{cooperationStatus},</if>
+            <if test="servicelocatorStr != null">#{servicelocatorStr},</if>
+            <if test="speciallanguageStr != null">#{speciallanguageStr},</if>
+            <if test="networkHospitalTypeStr != null">#{networkHospitalTypeStr},</if>
+            <if test="sellingpoint != null and sellingpoint != ''">#{sellingpoint},</if>
+            <if test="treatmentDiscount != null">#{treatmentDiscount},</if>
+            <if test="examineDiscount != null">#{examineDiscount},</if>
+            <if test="bedDiscount != null">#{bedDiscount},</if>
+            <if test="allowance != null">#{allowance},</if>
+            <if test="specialDiscount != null">#{specialDiscount},</if>
+            <if test="costs != null">#{costs},</if>
+            <if test="project != null and project != ''">#{project},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="type != null">#{type},</if>
+            <if test="continentFlag != null">#{continentFlag},</if>
+            <if test="continent != null">#{continent},</if>
+            <if test="preauthsendway != null and preauthsendway != ''">#{preauthsendway},</if>
+            <if test="adviceNum != null">#{adviceNum},</if>
+            <if test="foreignnote != null and foreignnote != ''">#{foreignnote},</if>
+            <if test="discountinfo != null">#{discountinfo},</if>
+            <if test="internalnote != null">#{internalnote},</if>
+            <if test="virtualOrg != null">#{virtualOrg},</if>
+            <if test="topfive != null">#{topfive},</if>
+            <if test="topthird != null">#{topthird},</if>
+            <if test="specializedHospital != null">#{topthird},</if>
+            <if test="topten != null">#{topten},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="leadFlag != null">#{leadFlag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseProviderService" parameterType="BaseProviderService">
+        update base_provider_service_bak
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="networkType != null and networkType != ''">network_type = #{networkType},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="classification != null">classification = #{classification},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="displaynetwork != null and displaynetwork != ''">displaynetwork = #{displaynetwork},</if>
+            <if test="officialwebsite != null and officialwebsite != ''">officialwebsite = #{officialwebsite},</if>
+            <if test="prehospital != null and prehospital != ''">prehospital = #{prehospital},</if>
+            <if test="allcontopen != null and allcontopen != ''">allcontopen = #{allcontopen},</if>
+            <if test="cooperationStatus != null">cooperation_status = #{cooperationStatus},</if>
+            <if test="sellingpoint != null and sellingpoint != ''">sellingpoint = #{sellingpoint},</if>
+            <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>
+            <if test="examineDiscount != null">examine_discount = #{examineDiscount},</if>
+            <if test="bedDiscount != null">bed_discount = #{bedDiscount},</if>
+            <if test="allowance != null">allowance = #{allowance},</if>
+            <if test="specialDiscount != null">special_discount = #{specialDiscount},</if>
+            <if test="costs != null">costs = #{costs},</if>
+            <if test="project != null and project != ''">project = #{project},</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="adviceNum != null">advice_num = #{adviceNum},</if>
+            <if test="foreignnote != null and foreignnote != ''">foreignnote = #{foreignnote},</if>
+            <if test="discountinfo != null">discountinfo = #{discountinfo},</if>
+            <if test="internalnote != null">internalnote = #{internalnote},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where provider_code = #{providerCode}
+    </update>
+
+
+    <update id="updateBaseProviderServiceByCode" parameterType="String">
+        update base_provider_service_bak set update_flag ='1'
+        where provider_code = #{providerCode} and update_flag ='0'
+    </update>
+
+    <update id="updateBaseProviderServiceByCodeNew" parameterType="String">
+        update base_provider_service set update_flag ='1' , status = 'N'
+        where provider_code = #{providerCode}  and status = 'Y'
+    </update>
+
+    <delete id="deleteBaseProviderServiceById" parameterType="String">
+       delete from base_provider_service_bak where provider_code = #{providerCode}
+    </delete>
+
+    <delete id="deleteBaseProviderServiceByIds" parameterType="String">
+        delete from base_provider_service_bak where provider_code in
+        <foreach item="providerCode" collection="array" open="(" separator="," close=")">
+            #{providerCode}
+        </foreach>
+    </delete>
+    
+</mapper>

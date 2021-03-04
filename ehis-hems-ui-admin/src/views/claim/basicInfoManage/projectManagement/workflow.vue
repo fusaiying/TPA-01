@@ -115,9 +115,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.businessName'" :rules="applyfieldListRule.businessName">
                 <el-select v-model="scope.row.businessName" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in fieldNameOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue+' - '+dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue+' - '+dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -129,9 +129,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.recondType'" :rules="applyfieldListRule.recondType">
                 <el-select v-model="scope.row.recondType" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in recondTypeOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue + ' - ' +dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue + ' - ' +dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -143,9 +143,9 @@
               <el-form-item :prop="'form.' + scope.$index + '.isrecond'" :rules="applyfieldListRule.isrecond">
                 <el-select v-model="scope.row.isrecond" v-show="scope.row.show" class="item-width" placeholder="请选择" clearable>
                   <el-option v-for="dict in booleanOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictValue + ' - ' +dict.dictLabel"
-                    :value="dict.dictLabel"
+                             :key="dict.dictValue"
+                             :label="dict.dictValue + ' - ' +dict.dictLabel"
+                             :value="dict.dictLabel"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -424,7 +424,7 @@
                         class="item-width"
                         clearable
                         size="mini"
-                        placeholder="请输入"/>
+                        placeholder="请输入，单位：分钟"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -585,34 +585,35 @@
 <script>
   import {selectDictLabel} from "@/utils/sinoutils";
   import {getServiceProcess, saveServiceProcess,} from "@/api/provider/project"
-  import breakOff from "../../claimsHandle/common/modul/breakOff";
+
 
   export default {
     name: "workFlow",
     data() {
       const checkServiceApply = (rules, value, callback) => {
-        if (this.serviceapply.cancelFlag == undefined && this.serviceapply.sendmessageFlag == undefined && this.serviceapply.updateFlag == undefined && this.serviceapply.selfused == undefined){
+        if ((this.serviceapply.cancelFlag == undefined || this.serviceapply.cancelFlag == "") && (this.serviceapply.sendmessageFlag == undefined || this.serviceapply.sendmessageFlag == "")
+          && (this.serviceapply.updateFlag == undefined || this.serviceapply.updateFlag == "") && (this.serviceapply.selfused == undefined || this.serviceapply.selfused == "")){
           callback(new Error('至少填一项'))
         } else {
           callback()
         }
       }
       const checkUpdateNum = (rules, value, callback) => {
-        if (this.serviceapply.updateFlag == '01' && this.serviceapply.updateNum == undefined){
+        if (this.serviceapply.updateFlag == '01' && (this.serviceapply.updateNum == undefined || this.serviceapply.updateNum == "")){
           callback(new Error('请输入变更次数'))
         } else {
           callback()
         }
       }
       const chaeckAllocation = (rules, value, callback) => {
-        if (this.allocationForm.cancelFlag == undefined && this.allocationForm.sendmessageFlag == undefined && this.allocationForm.distribute == undefined){
+        if ((this.allocationForm.cancelFlag == undefined || this.allocationForm.cancelFlag == "") && (this.allocationForm.sendmessageFlag == undefined || this.allocationForm.sendmessageFlag == "") && (this.allocationForm.distribute == undefined || this.allocationForm.distribute =="")){
           callback(new Error('至少填一项'))
         } else {
           callback()
         }
       }
       const checkOrder = (rules, value, callback) => {
-        if (this.orderForm.cancelFlag == undefined && this.orderForm.sendmessageFlag == undefined && this.orderForm.aging == undefined){
+        if ((this.orderForm.cancelFlag == undefined || this.orderForm.cancelFlag == "") && (this.orderForm.sendmessageFlag == undefined || this.orderForm.sendmessageFlag == "") && (this.orderForm.aging == undefined || this.orderForm.aging == "")){
           callback(new Error('至少填一项'))
         } else {
           callback()
@@ -626,7 +627,7 @@
         }
       }
       const checkFrequency = (rules,value, callback) => {
-        if (this.implement.recordFlag == '01' && this.implement.frequency == undefined){
+        if (this.implement.recordFlag == '01' && (this.implement.frequency == undefined || this.implement.frequency == "")){
           callback(new Error("请输入记录次数限制次数"))
         } else {
           callback()
@@ -638,15 +639,15 @@
           sendmessageFlag: [{validator: checkServiceApply, trigger: 'change'}],
           updateFlag: [{validator: checkServiceApply, trigger: 'change'}],
           selfused: [{validator: checkServiceApply, trigger: 'change'}],
-          updateNum: [{validator: checkUpdateNum, trigger: 'change'},
-                      {pattern: /^\d{1,}$/, message: '请输入数字', trigger: 'blur' },
-                      {max: 2,message: '请输入数字(大于0，小于100)', trigger:'blur'}]
+          updateNum: [{validator: checkUpdateNum, trigger: 'blur'},
+            {pattern: /^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
+          ]
         },
         applyfieldListRule: {
           businessName:  [{required: true, message: '不能为空！', trigger: 'change'}],
           recondType:  [{required: true, message: '不能为空！', trigger: 'change'}],
           isrecond: [{required: true, message: '不能为空！', trigger: 'change'}],
-          remark: [{max: 30,message: '长度不超过30', trigger:'blur'}],
+          remark: [{max: 30,message: '长度不超过30', trigger:'change'}],
         },
         allocationFormRule: {
           cancelFlag: [{validator: chaeckAllocation, trigger: 'change'}],
@@ -656,20 +657,20 @@
         orderFormRule: {
           cancelFlag: [{validator: checkOrder, trigger: 'change'}],
           sendmessageFlag: [{validator: checkOrder, trigger: 'change'}],
-          aging: [{validator: checkOrder, trigger: 'change'},
-                  {pattern:/^\d{1,}$/, message: '请输入数字', trigger: 'blur' },
-                  {max: 3,message: '请输入数字(大于0，小于1000)', trigger:'blur'}],
+          aging: [{validator: checkOrder, trigger: 'blur'},
+            {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur' },
+          ],
         },
         implementRule: {
           cancelFlag: [{validator: checkImplement, trigger: 'change'}],
           sendmessageFlag: [{validator: checkImplement, trigger: 'change'}],
           recordFlag: [{validator: checkImplement, trigger: 'change'}],
-          frequency: [{validator: checkFrequency, trigger: 'change'},
-                      {pattern:/^\d{1,}$/, message: '请输入数字', trigger: 'blur' },
-                      {max: 2,message: '请输入数字(大于0，小于100)', trigger:'blur'}],
+          frequency: [{validator: checkFrequency, trigger: 'blur'},
+            {pattern:/^((?!0)\d{1,2})$/, message: '请输入数字(大于0，小于100)', trigger: 'blur' },
+          ],
           aging: [{validator: checkImplement, trigger: 'blur'},
-                  {pattern:/^\d{1,}$/, message: '请输入数字', trigger: 'blur'},
-                  {max: 3,message: '请输入数字(大于0，小于1000)', trigger:'blur'}],
+            {pattern:/^((?!0)\d{1,3})$/, message: '请输入数字(大于0，小于1000)', trigger: 'blur'},
+          ],
         },
         imfieldListRule: {
           businessName:  [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -686,24 +687,24 @@
         // 基础数据
         serviceapply: {
           processNode: '01',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
-          updateFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
+          updateFlag: '02',
           updateNum: undefined,
           distribute: undefined,
           aging: undefined,
-          selfused: undefined,
-          recordFlag: undefined,
+          selfused: '02',
+          recordFlag: '02',
           frequency: undefined,
           status: 'Y'
         },
         allocationForm: {
           processNode: '02',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
-          updateFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
+          updateFlag: '02',
           updateNum: undefined,
-          distribute: undefined,
+          distribute: '02',
           aging: undefined,
           selfused: undefined,
           recordFlag: undefined,
@@ -712,8 +713,8 @@
         },
         orderForm: {
           processNode: '03',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
           updateFlag: undefined,
           updateNum: undefined,
           distribute: undefined,
@@ -725,14 +726,14 @@
         },
         implement: {
           processNode: '04',
-          cancelFlag: undefined,
-          sendmessageFlag: undefined,
+          cancelFlag: '02',
+          sendmessageFlag: '02',
           updateFlag: undefined,
           updateNum: undefined,
           distribute: undefined,
           aging: undefined,
           selfused: undefined,
-          recordFlag: undefined,
+          recordFlag: '02',
           frequency: undefined,
           status: 'Y'
         },
@@ -774,9 +775,21 @@
       };
     },
     created() {
-      const servicecode = this.$route.params && this.$route.params.projectno;
-      this.servicecode = servicecode;
-      this.getProjectProcess(this.servicecode);
+      if (this.$route.query.flag){
+        const servicecode = this.$route.query.code;
+        this.servicecode = servicecode;
+        this.getProjectProcess(this.servicecode);
+      } else {
+        const paramsData = this.$route.query.paramsData;
+        this.servicecode = paramsData.code;
+        this.serviceapply = paramsData.card1;
+        this.applyfieldList = paramsData.card2;
+        this.allocationForm = paramsData.card3;
+        this.orderForm = paramsData.card4;
+        this.implement = paramsData.card5;
+        this.imfieldList = paramsData.card6;
+        this.userForm = paramsData.card7;
+      }
       this.getDicts("sys_yes_no").then(response => {
         this.booleanOptions = response.data;
       });
@@ -799,33 +812,53 @@
             if (response.data.processList != null) {
               response.data.processList.forEach(item => {
                 if (item.processNode == "01") {
-                  this.serviceapply.cancelFlag = item.cancelFlag;
-                  this.serviceapply.sendmessageFlag = item.sendmessageFlag;
-                  this.serviceapply.updateFlag = item.updateFlag;
+                  if (item.cancelFlag != "" && item.cancelFlag != null){
+                    this.serviceapply.cancelFlag = item.cancelFlag;
+                  }
+                  if (item.sendmessageFlag != "" && item.sendmessageFlag != null){
+                    this.serviceapply.sendmessageFlag = item.sendmessageFlag;
+                  }
+                  if (item.updateFlag != "" && item.updateFlag != null){
+                    this.serviceapply.updateFlag = item.updateFlag;
+                  }
                   if (this.serviceapply.updateFlag == '02'){
                     this.showUpdateNum = false
                   }
-                  this.serviceapply.updateNum = item.updateNum;
-                  this.serviceapply.selfused = item.selfused;
+                  if (item.updateNum != "" && item.updateNum != null){
+                    this.serviceapply.updateNum = item.updateNum;
+                  }
+                  if (item.selfused != "" && item.selfused != null){
+                    this.serviceapply.selfused = item.selfused;
+                  }
                   this.serviceapply.distribute = item.distribute;
                   this.serviceapply.aging = item.aging;
                   this.serviceapply.recordFlag = item.recordFlag;
                   this.serviceapply.frequency = item.frequency;
                 }
                 if (item.processNode == "02") {
-                  this.allocationForm.cancelFlag = item.cancelFlag;
-                  this.allocationForm.sendmessageFlag = item.sendmessageFlag;
+                  if (item.cancelFlag != "" && item.cancelFlag != null) {
+                    this.allocationForm.cancelFlag = item.cancelFlag;
+                  }
+                  if (item.sendmessageFlag != "" && item.sendmessageFlag != null) {
+                    this.allocationForm.sendmessageFlag = item.sendmessageFlag;
+                  }
                   this.allocationForm.updateFlag = item.updateFlag;
                   this.allocationForm.updateNum = item.updateNum;
                   this.allocationForm.selfused = item.selfused;
-                  this.allocationForm.distribute = item.distribute;
+                  if (item.distribute != "" && item.distribute != null){
+                    this.allocationForm.distribute = item.distribute;
+                  }
                   this.allocationForm.aging = item.aging;
                   this.allocationForm.recordFlag = item.recordFlag;
                   this.allocationForm.frequency = item.frequency;
                 }
                 if (item.processNode == "03") {
-                  this.orderForm.cancelFlag = item.cancelFlag;
-                  this.orderForm.sendmessageFlag = item.sendmessageFlag;
+                  if (item.cancelFlag != "" && item.cancelFlag != null) {
+                    this.orderForm.cancelFlag = item.cancelFlag;
+                  }
+                  if (item.sendmessageFlag != "" && item.sendmessageFlag != null) {
+                    this.orderForm.sendmessageFlag = item.sendmessageFlag;
+                  }
                   this.orderForm.updateFlag = item.updateFlag;
                   this.orderForm.updateNum = item.updateNum;
                   this.orderForm.selfused = item.selfused;
@@ -835,22 +868,30 @@
                   this.orderForm.frequency = item.frequency;
                 }
                 if (item.processNode == "04") {
-                  this.implement.cancelFlag = item.cancelFlag;
-                  this.implement.sendmessageFlag = item.sendmessageFlag;
+                  if (item.cancelFlag != "" && item.cancelFlag != null) {
+                    this.implement.cancelFlag = item.cancelFlag;
+                  }
+                  if (item.sendmessageFlag != "" && item.sendmessageFlag != null) {
+                    this.implement.sendmessageFlag = item.sendmessageFlag;
+                  }
                   this.implement.updateFlag = item.updateFlag;
                   this.implement.updateNum = item.updateNum;
                   this.implement.selfused = item.selfused;
                   this.implement.distribute = item.distribute;
                   this.implement.aging = item.aging;
-                  this.implement.recordFlag = item.recordFlag;
+                  if (item.recordFlag != "" && item.recordFlag != null) {
+                    this.implement.recordFlag = item.recordFlag;
+                  }
                   if (this.implement.recordFlag == '02'){
                     this.showFrequency = false
                   }
                   this.implement.frequency = item.frequency;
                 }
                 if (item.processNode == "05") {
+                  if (item.sendmessageFlag != "" && item.sendmessageFlag != null ){
+                    this.userForm.sendmessageFlag = item.sendmessageFlag;
+                  }
                   this.userForm.cancelFlag = item.cancelFlag;
-                  this.userForm.sendmessageFlag = item.sendmessageFlag;
                   this.userForm.updateFlag = item.updateFlag;
                   this.userForm.updateNum = item.updateNum;
                   this.userForm.selfused = item.selfused;
@@ -930,7 +971,30 @@
       },
       // 消息模板
       MessageTemplate() {
-        this.$router.push({path: '/basicInfo/projectManagement/messageTemp'});
+        const paramsData = {
+          code:this.servicecode,
+          card1:this.serviceapply,
+          card2:this.applyfieldList,
+          card3:this.allocationForm,
+          card4:this.orderForm,
+          card5:this.implement,
+          card6:this.imfieldList,
+          card7:this.userForm
+        }
+        console.log("paramsData:",paramsData)
+        this.$router.push({
+          path: '/basic-info/projectManagement/messageTemplate',
+          query: {
+            code:this.servicecode,
+            card1:this.serviceapply,
+            card2:this.applyfieldList,
+            card3:this.allocationForm,
+            card4:this.orderForm,
+            card5:this.implement,
+            card6:this.imfieldList,
+            card7:this.userForm
+          }
+        });
       },
       // 服务申请-业务字段 添加
       addApplyFieldOneRow() {
@@ -1036,6 +1100,38 @@
       },
       // 暂存
       tempStorage() {
+        if (this.serviceapply.updateNum != undefined && this.serviceapply.updateNum != ""){
+          const reg1 = /^((?!0)\d{1,2})$/;
+          if (!reg1.test(this.serviceapply.updateNum)){
+            return this.$message.warning(
+              "数字格式输入不正确，请重新输入！"
+            )
+          }
+        }
+        if(this.orderForm.aging != undefined && this.orderForm.aging != ""){
+          const reg2 = /^((?!0)\d{1,3})$/;
+          if (!reg2.test(this.orderForm.aging)){
+            return this.$message.warning(
+              "数字格式输入不正确，请重新输入！"
+            )
+          }
+        }
+        if (this.implement.frequency != undefined && this.implement.frequency != ""){
+          const reg1 = /^((?!0)\d{1,2})$/;
+          if (!reg1.test(this.implement.frequency)){
+            return this.$message.warning(
+              "数字格式输入不正确，请重新输入！"
+            )
+          }
+        }
+        if(this.implement.aging != undefined && this.implement.aging !=""){
+          const reg2 = /^((?!0)\d{1,3})$/;
+          if (!reg2.test(this.implement.aging)) {
+            return this.$message.warning(
+              "数字格式输入不正确，请重新输入！"
+            )
+          }
+        }
         // 设置状态为暂存 01
         const status = "01";
         const processList = [this.serviceapply, this.allocationForm, this.orderForm, this.implement, this.userForm];
@@ -1067,7 +1163,9 @@
             if (valid){
               if (this.applyfieldList.form.length == 0){
                 msg = "流程节点-服务申请-业务字段 请填写信息！";
-                this.msgError("流程节点-服务申请-业务字段 请填写信息！");
+                return this.$message.warning(
+                  "流程节点-服务申请-业务字段 至少输入一条！"
+                )
                 flag = false
                 return flag
               }
@@ -1105,7 +1203,9 @@
             if (valid) {
               if (this.imfieldList.form.length == 0){
                 msg = "流程节点-服务实施-业务字段 请填写字段！";
-                this.msgError("流程节点-服务实施-业务字段 请填写字段！")
+                return this.$message.warning(
+                  "流程节点-服务实施-业务字段 至少输入一条！"
+                )
                 flag = false
                 return flag
               }
@@ -1123,7 +1223,7 @@
         }
         if (!flag && msg == ""){
           return this.$message.warning(
-              "请先录入必录项！"
+            "请先录入必录项！"
           )
         }
         if (flag) {

@@ -6,12 +6,12 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.product.service.IHmpServProjectService;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.product.domain.HmpServOpera;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,10 +41,10 @@ public class HmpServProjectController extends BaseController {
     @Autowired
     private IHmpServProjectService hmpServProjectService;
 
+
     /**
      * 查询服务项目列表
      */
-    @PreAuthorize("@ss.hasPermi('project:project:list')")
     @GetMapping("/list")
     public TableDataInfo list(HmpServProject hmpServProject) {
         startPage();
@@ -55,7 +55,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 导出服务项目列表
      */
-    @PreAuthorize("@ss.hasPermi('project:project:export')")
     @Log(title = "服务项目", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HmpServProject hmpServProject) throws IOException {
@@ -67,7 +66,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 获取服务项目详细信息
      */
-    @PreAuthorize("@ss.hasPermi('project:project:query')")
     @GetMapping(value = "/{projectcode}")
     public AjaxResult getInfo(@PathVariable("projectcode") String projectcode) {
         return AjaxResult.success(hmpServProjectService.selectHmpServProjectById(projectcode));
@@ -76,7 +74,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 新增服务项目
      */
-    @PreAuthorize("@ss.hasPermi('project:project:add')")
     @Log(title = "服务项目", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody HmpServProject hmpServProject) {
@@ -86,7 +83,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 新增服务项目
      */
-    @PreAuthorize("@ss.hasPermi('project:project:saveProject')")
     @Log(title = "服务项目", businessType = BusinessType.INSERT)
     @PostMapping("/saveProject")
     public AjaxResult saveProject(@RequestBody List<HmpServProject> servProjects) {
@@ -130,7 +126,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 修改服务项目
      */
-    @PreAuthorize("@ss.hasPermi('project:project:edit')")
     @Log(title = "服务项目", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody HmpServProject hmpServProject) {
@@ -140,7 +135,6 @@ public class HmpServProjectController extends BaseController {
     /**
      * 删除服务项目
      */
-    @PreAuthorize("@ss.hasPermi('project:project:remove')")
     @Log(title = "服务项目", businessType = BusinessType.DELETE)
     @DeleteMapping("/{projectcodes}")
     public AjaxResult remove(@PathVariable String[] projectcodes) {

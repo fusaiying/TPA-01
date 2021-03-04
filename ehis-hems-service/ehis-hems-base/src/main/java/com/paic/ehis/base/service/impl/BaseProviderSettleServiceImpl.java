@@ -1,13 +1,15 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.base.domain.BaseProviderSettle;
 import com.paic.ehis.base.mapper.BaseProviderSettleMapper;
 import com.paic.ehis.base.service.IBaseProviderSettleService;
-import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.domain.BaseProviderSettle;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * base_provider_settle(服务商结算信息)Service业务层处理
@@ -16,7 +18,8 @@ import com.paic.ehis.base.domain.BaseProviderSettle;
  * @date 2020-12-25
  */
 @Service
-public class BaseProviderSettleServiceImpl implements IBaseProviderSettleService
+@Transactional
+public class BaseProviderSettleServiceImpl implements IBaseProviderSettleService 
 {
     @Autowired
     private BaseProviderSettleMapper baseProviderSettleMapper;
@@ -28,7 +31,7 @@ public class BaseProviderSettleServiceImpl implements IBaseProviderSettleService
      * @return base_provider_settle(服务商结算信息)
      */
     @Override
-    public List<BaseProviderSettle> selectBaseProviderSettleById(String providercode)
+    public BaseProviderSettle selectBaseProviderSettleById(String providercode)
     {
         return baseProviderSettleMapper.selectBaseProviderSettleById(providercode);
     }
@@ -42,7 +45,13 @@ public class BaseProviderSettleServiceImpl implements IBaseProviderSettleService
     @Override
     public List<BaseProviderSettle> selectBaseProviderSettleList(BaseProviderSettle baseProviderSettle)
     {
-        return baseProviderSettleMapper.selectBaseProviderSettleList(baseProviderSettle);
+        List<BaseProviderSettle> BaseProviderSettles = new ArrayList();
+        if("01".equals(baseProviderSettle.getOrgFlag())){
+            BaseProviderSettles = baseProviderSettleMapper.selectBaseProviderSettleList(baseProviderSettle);
+        }else if("02".equals(baseProviderSettle.getOrgFlag())){
+            BaseProviderSettles = baseProviderSettleMapper.selectBaseProviderSettleListNew(baseProviderSettle);
+        }
+        return BaseProviderSettles;
     }
 
     /**

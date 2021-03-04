@@ -147,7 +147,7 @@ public interface IHmpProdInfoService {
      * 客户权益管理-分配规则配置-分配产品字典下拉
      * @return
      */
-    List<HmpProdInfo> selectProductDict();
+   // List<HmpProdInfo> selectProductDict();
 
 
 }

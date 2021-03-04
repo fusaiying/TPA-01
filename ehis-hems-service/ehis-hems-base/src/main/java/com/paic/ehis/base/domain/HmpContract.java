@@ -1,8 +1,9 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 供应商合约对象 hpcontract

@@ -6,23 +6,24 @@
     highlight-current-row
     tooltip-effect="dark"
     style="width: 100%;">
-    <el-table-column width="200" align="center" prop="orderno" label="客服/工单号" show-overflow-tooltip/>
-    <el-table-column :formatter="getMode" align="center" prop="negotiationtype" label="协谈类型" show-overflow-tooltip/>
-    <el-table-column width="160" align="center" prop="claimno" label="赔案号" show-overflow-tooltip>
+    <el-table-column align="center" prop="discType" :formatter="getNegotiationName" label="协谈类型" show-overflow-tooltip/>
+    <el-table-column width="200" align="center" prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" show-overflow-tooltip/>
+
+    <el-table-column width="160" align="center" prop="rptNo" label="报案号" show-overflow-tooltip>
       <template slot-scope="scope">
-        <el-button width="160" size="small" type="text" @click="detailHandle(scope.row,'show')">{{ scope.row.claimno }}</el-button>
+        <el-button width="160" size="small" type="text" @click="editHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
       </template>
     </el-table-column>
-    <el-table-column align="center" prop="insuredname" label="被保人姓名" show-overflow-tooltip/>
-    <el-table-column align="center" prop="insuredidno" label="证件号码" show-overflow-tooltip/>
-    <el-table-column align="center" prop="startdate" label="发起日期" show-overflow-tooltip/>
-    <el-table-column align="center" prop="claimcreatedate" label="受理日期" show-overflow-tooltip/>
-    <el-table-column v-if="status === '03'" align="center" prop="dualdays" label="处理时效" show-overflow-tooltip/>
-    <el-table-column :formatter="getSourceType" align="center" prop="applicationsource" label="申请来源" show-overflow-tooltip/>
-    <el-table-column :formatter="getStatus" align="center" prop="status" label="赔案状态" show-overflow-tooltip/>
+    <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
+    <el-table-column align="center" prop="organCode" label="承保机构" show-overflow-tooltip/>
+    <el-table-column align="center" prop="name" label="被保人姓名" show-overflow-tooltip/>
+    <el-table-column align="center"  v-if="status === '01'" prop="stopTime" label="停留时长" show-overflow-tooltip/>
+    <el-table-column align="center"  v-if="status === '01'" prop="monitoringTime" label="监控时效" show-overflow-tooltip/>
+    <el-table-column align="center" prop="source" :formatter="getDeliverySourceName" label="交单来源" show-overflow-tooltip/>
+    <el-table-column align="center" prop="createBy" label="提交用户" show-overflow-tooltip/>
     <el-table-column align="center" label="操作">
       <template slot-scope="scope">
-        <el-button v-if="status === '01' && scope.row.negotiationmode == '02'" size="small" type="text" @click="editHandle(scope.row,'handle')">协谈</el-button>
+        <el-button v-if="status === '01'" size="small" type="text" @click="editHandle(scope.row,'handle')">处理</el-button>
         <el-button v-else size="small" type="text" @click="editHandle(scope.row,'show')">查看</el-button>
       </template>
     </el-table-column>
@@ -30,10 +31,7 @@
 </template>
 
 <script>
-import { changeDate } from '@/utils/commenMethods.js'
-import {encrypt} from "@/utils/rsaEncrypt"
 export default {
-  dicts: ['negotiation_mode', 'queue_claim_status', 'apply_sourcetype', 'negotiation_type'],
   props: {
     tableData: {
       type: Array,
@@ -41,51 +39,63 @@ export default {
         return []
       }
     },
-    status: String
+    status: String,
+
+    claimStatusSelect: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    negotiationTypes: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    deliverySource: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
   },
   data() {
     return {
     }
   },
   methods: {
-    changeDate: changeDate,
-    getMode(row) {
-      return this.dict.label.negotiation_type[row.negotiationtype]
+    getNegotiationName(row,col) {
+      return this.selectDictLabel(this.negotiationTypes, row.discType)
     },
-    getStatus(row) {
-      return this.dict.label.queue_claim_status[row.status]
+    getDeliverySourceName(row,col) {
+      return this.selectDictLabel(this.deliverySource, row.source)
     },
-    getSourceType(row) {
-      return this.dict.label.apply_sourcetype[row.applicationsource]
+    getClaimStatusName(row,col) {
+      return this.selectDictLabel(this.claimStatusSelect, row.caseStatus)
     },
     // 处理跳转
-    editHandle(row, status) {
-      this.$emit('editHandle', { orderno: row.orderno, claimno: row.claimno, node: status, negotiationno: row.negotiationno })
-    },
-    detailHandle(row, status) {
-      let data = encodeURI(
-        JSON.stringify({
-          claimno: encrypt(row.claimno),
-          status,
-          node: 'review'
-        })
-      )
-      const newpage = this.$router.resolve({
-        name: 'casedetail',
-        params:{},
-        query:{ data }
+    editHandle(row, type) {
+      this.$router.push({
+        path: '/claims-handle/nagotDetail',
+        query: {type:type,rptNo: row.rptNo,discId:row.discId}
+
       })
-      window.open(newpage.href, '_blank');
-      // this.$router.push({
-      //   path: '/claims-handle/com-handle',
-      //   query: {
-      //     data
-      //     // claimno: row.claimno,
-      //     // status,
-      //     // node: 'review'
-      //   }
-      // })
-    }
+    },
+    // detailHandle(row, status) {
+    //   let data = encodeURI(
+    //     JSON.stringify({
+    //       claimno: 'xxx',
+    //       node: 'review'
+    //     })
+    //   )
+    //   const newpage = this.$router.resolve({
+    //     name: 'casedetail',
+    //     params:{},
+    //     query:{ data }
+    //   })
+    //   window.open(newpage.href, '_blank');
+    // }
   }
 }
 </script>

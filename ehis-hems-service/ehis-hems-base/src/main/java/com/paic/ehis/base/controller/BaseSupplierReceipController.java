@@ -1,28 +1,20 @@
 package com.paic.ehis.base.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.paic.ehis.base.domain.BaseSupplierReceip;
-import com.paic.ehis.base.service.IBaseSupplierReceipService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.paic.ehis.common.log.annotation.Log;
-import com.paic.ehis.common.log.enums.BusinessType;
-
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
-import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.common.log.annotation.Log;
+import com.paic.ehis.common.log.enums.BusinessType;
+import com.paic.ehis.base.domain.BaseSupplierReceip;
+import com.paic.ehis.base.service.IBaseSupplierReceipService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * base_supplier_receipt(供应商开票信息)Controller
@@ -40,7 +32,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 查询base_supplier_receipt(供应商开票信息)列表
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:list')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:list')")
     @GetMapping("/list")
     public TableDataInfo list(BaseSupplierReceip baseSupplierReceip)
     {
@@ -52,7 +44,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 导出base_supplier_receipt(供应商开票信息)列表
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:export')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:export')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, BaseSupplierReceip baseSupplierReceip) throws IOException
@@ -65,7 +57,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 获取base_supplier_receipt(供应商开票信息)详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:query')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:query')")
     @GetMapping(value = "/{suppliercode}")
     public AjaxResult getInfo(@PathVariable("suppliercode") String suppliercode)
     {
@@ -75,7 +67,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 新增base_supplier_receipt(供应商开票信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:add')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:add')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BaseSupplierReceip baseSupplierReceip)
@@ -86,7 +78,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 修改base_supplier_receipt(供应商开票信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:edit')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:edit')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody BaseSupplierReceip baseSupplierReceip)
@@ -97,7 +89,7 @@ public class BaseSupplierReceipController extends BaseController
     /**
      * 删除base_supplier_receipt(供应商开票信息)
      */
-    @PreAuthorize("@ss.hasPermi('system:receip:remove')")
+    //@PreAuthorize("@ss.hasPermi('system:receip:remove')")
     @Log(title = "base_supplier_receipt(供应商开票信息)", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{suppliercodes}")
     public AjaxResult remove(@PathVariable String[] suppliercodes)

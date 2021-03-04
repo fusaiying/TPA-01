@@ -22,17 +22,17 @@
           <el-col :span="8">
             <el-form-item label="所属地区：" prop="address">
               <el-cascader clearable
-                v-model="formSearch.address"
-                :props="{ checkStrictly: true }"
-                :options="regions"
-                class="item-width"
-                @change="handleChange"/>
+                           v-model="formSearch.address"
+                           :props="{ checkStrictly: true }"
+                           :options="regions"
+                           class="item-width"
+                           @change="handleChange"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="状态：" prop="bussinessStatus">
-              <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择(有效/无效)" clearable>
+              <el-select v-model="formSearch.bussinessStatus" class="item-width" placeholder="请选择" clearable>
                 <el-option v-for="item in bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                            :key="item.dictValue"/>
               </el-select>
@@ -70,11 +70,11 @@
           tooltip-effect="dark"
           style="width: 100%;">
           <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>
-          <el-table-column label="服务机构编码" prop="providerCode" align="center"/>
-          <el-table-column label="服务机构名称" prop="chname1" align="center"/>
-          <el-table-column label="服务机构类型" prop="orgFlag" :formatter="getOrgFlag" align="center"/>
-          <el-table-column label="所属地区" prop="addressdetail" align="center"/>
-          <el-table-column label="状态" prop="statusName" align="center">
+          <el-table-column label="服务机构编码" prop="providerCode" align="center" show-overflow-tooltip/>
+          <el-table-column label="服务机构名称" prop="chname1" align="center" show-overflow-tooltip/>
+          <el-table-column label="服务机构类型" prop="orgFlag" :formatter="getOrgFlag" align="center" show-overflow-tooltip/>
+          <el-table-column label="所属地区" prop="addressdetail" align="center" show-overflow-tooltip/>
+          <el-table-column label="状态" prop="statusName" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               {{ scope.row.statusName  }}
             </template>
@@ -82,7 +82,7 @@
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">编辑</el-button>
-              <!--              <el-button type="text" size="mini" style="color: #f00;" @click="delHandle(scope.row, scope.$index)">删除</el-button>-->
+              <el-button type="text" size="mini" style="color: #1890ff;" @click="viewHandle(scope.row, scope.$index)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -131,10 +131,10 @@ export default {
     }
   },
   created() {
-   /* this.getProvinceList()*/
+    /* this.getProvinceList()*/
     // 所属地
     this.getAddressData()
-    this.getData()
+    this.init()
     this.getDicts("org_flag").then(response => {
       this.org_flagOptions = response.data;
     });
@@ -144,6 +144,16 @@ export default {
 
   },
   methods: {
+    init(){
+      this.loading = true
+      getList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+    },
     getOrgFlag(row){
       return this.selectDictLabel(this.org_flagOptions, row.orgFlag)
     },
@@ -156,17 +166,13 @@ export default {
     handleChange(value) {
     },
     searchHandle() {
-
-      if(this.formSearch.chname1 ||this.formSearch.address ||this.formSearch.bussinessStatus ||this.formSearch.orgFlag){
-        this.getData()
-      }
-      else{
-        this.$message({message: '请至少录入一项查询条件', type: 'warning', showClose: true, center: true})
-      }
-     /* const values = Object.values(this.formSearch)
-      values.some(item => {
-        return item != ''
-      }) ? this.getData() : this.$message({message: '请至少录入一项查询条件', type: 'warning', showClose: true, center: true})*/
+      this.params.pageNum=1
+      this.params.pageSize=10
+      this.getData()
+      /* const values = Object.values(this.formSearch)
+       values.some(item => {
+         return item != ''
+       }) ? this.getData() : this.$message({message: '请至少录入一项查询条件', type: 'warning', showClose: true, center: true})*/
     },
     getData() {
       /*for (const i in this.formSearch) {
@@ -207,8 +213,6 @@ export default {
       this.$router.push({
         path: '/basic-info/medical/edit',
         query: {
-
-
         }
 
       })
@@ -218,11 +222,34 @@ export default {
         path: '/basic-info/medical/edit',
         query: {providerCode: row.providerCode,
           orgflag: row.orgFlag,
-          status: 'edit'
-
+          status: 'edit',
         }
       })
+
+    },
+    //查看
+    viewHandle(row,index){
+      if(row.orgFlag=='01') {
+        this.$router.push({
+          path: '/basic-info/hospView',
+          query: {
+            providerCode: row.providerCode
+
+          }
+        })
+      }
+      else if(row.orgFlag=='02') {
+        this.$router.push({
+          path: '/basic-info/otherView',
+          query: {
+            providerCode: row.providerCode
+          }
+        })
+      }
+
     }
+
+
   }
 }
 </script>
@@ -233,11 +260,11 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
-/deep/ .el-table__header-wrapper .el-checkbox__input::after {
+::v-deep .el-table__header-wrapper .el-checkbox__input::after {
   content: '全选';
   position: absolute;
   font-weight: bolder;

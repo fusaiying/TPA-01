@@ -1,15 +1,16 @@
 package com.paic.ehis.base.service.impl;
 
-import java.util.List;
-
-import com.paic.ehis.base.service.IBaseProviderNewtworktypetRiskService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.base.domain.BaseProviderNewtworktypeRisklog;
+import com.paic.ehis.base.domain.BaseProviderNewtworktypetRisk;
 import com.paic.ehis.base.mapper.BaseProviderNewtworktypeRisklogMapper;
+import com.paic.ehis.base.mapper.BaseProviderNewtworktypetRiskMapper;
+import com.paic.ehis.base.service.IBaseProviderNewtworktypetRiskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.base.mapper.BaseProviderNewtworktypetRiskMapper;
-import com.paic.ehis.base.domain.BaseProviderNewtworktypetRisk;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * base_provider_newtworktypet_risk(医疗网络险种信息)Service业务层处理
@@ -18,7 +19,8 @@ import com.paic.ehis.base.domain.BaseProviderNewtworktypetRisk;
  * @date 2021-01-04
  */
 @Service
-public class BaseProviderNewtworktypetRiskServiceImpl implements IBaseProviderNewtworktypetRiskService
+@Transactional
+public class BaseProviderNewtworktypetRiskServiceImpl implements IBaseProviderNewtworktypetRiskService 
 {
     @Autowired
     private BaseProviderNewtworktypetRiskMapper baseProviderNewtworktypetRiskMapper;

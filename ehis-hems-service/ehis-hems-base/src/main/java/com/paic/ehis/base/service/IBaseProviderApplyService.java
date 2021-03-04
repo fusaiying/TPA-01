@@ -1,7 +1,8 @@
 package com.paic.ehis.base.service;
 
-import java.util.List;
 import com.paic.ehis.base.domain.BaseProviderApply;
+
+import java.util.List;
 
 /**
  * base_provider_apply(服务商预约信息)Service接口
@@ -14,10 +15,10 @@ public interface IBaseProviderApplyService
     /**
      * 查询base_provider_apply(服务商预约信息)
      * 
-     * @param providercode base_provider_apply(服务商预约信息)ID
+     * @param baseProviderApply base_provider_apply(服务商预约信息)ID
      * @return base_provider_apply(服务商预约信息)
      */
-    public BaseProviderApply selectBaseProviderApplyById(String providercode);
+    public BaseProviderApply selectBaseProviderApplyById(BaseProviderApply baseProviderApply);
 
     /**
      * 查询base_provider_apply(服务商预约信息)列表
@@ -28,12 +29,21 @@ public interface IBaseProviderApplyService
     public List<BaseProviderApply> selectBaseProviderApplyList(BaseProviderApply baseProviderApply);
 
     /**
-     * 新增base_provider_apply(服务商预约信息)
+     * 新增base_provider_apply_bak(服务商预约信息)
      * 
      * @param baseProviderApply base_provider_apply(服务商预约信息)
      * @return 结果
      */
     public int insertBaseProviderApply(BaseProviderApply baseProviderApply);
+
+
+    /**
+     * 新增base_provider_apply(服务商预约信息)
+     *
+     * @return 结果
+     */
+    public int insertBaseProviderApplyNew(String providerCode);
+
 
     /**
      * 修改base_provider_apply(服务商预约信息)

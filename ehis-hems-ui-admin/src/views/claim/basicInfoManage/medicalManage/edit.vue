@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName">
-      <el-tab-pane :label="label.label01" name="01">
+      <el-tab-pane :label="label.label01" name="01" v-if="hospShow">
         <!--基本信息-->
         <div >
           <el-card class="box-card">
@@ -20,7 +20,7 @@
                               placeholder="系统自动生成"/>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="10">
                   <el-form-item label="是否互联网医院：" prop="interHosp">
                     <el-select v-model="baseForm.interHosp" class="item-width" placeholder="请选择(默认否)" clearable>
                       <el-option v-for="item in inter_hospOptions" :label="item.dictLabel" :value="item.dictValue"
@@ -77,7 +77,6 @@
                   <el-form-item label="州：" prop="continent">
                     <el-select v-model="baseForm.continent" class="item-width" placeholder="请选择" clearable>
                       <el-option label="亚洲" value="01"/>
-                      <el-option label="欧洲" value="02"/>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -85,18 +84,17 @@
                   <el-form-item label="国家：" prop="country">
                     <el-select v-model="baseForm.country" class="item-width" placeholder="请选择" clearable>
                       <el-option label="中国" value="01"/>
-                      <el-option label="日本" value="02"/>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="省市区：" prop="address" >
                     <el-cascader clearable
-                      v-model="baseForm.address"
-                      :props="{ checkStrictly: true }"
-                      :options="regions"
-                      class="item-width"
-                      @change="handleChange"/>
+                                 v-model="baseForm.address"
+                                 :props="{ checkStrictly: true }"
+                                 :options="regions"
+                                 class="item-width"
+                                 @change="handleChange"/>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -139,6 +137,7 @@
 
                 <el-col :span="8">
                   <el-form-item label="综专科类型：" prop="type">
+
                     <el-select v-model="baseForm.type" class="item-width" placeholder="请选择" clearable
                                @change="inputTypeShow" style="width: 120px">
 
@@ -148,14 +147,14 @@
                     </el-select>
                     <!--选择专科时  显示出来-->
 
-                    <el-select v-if="typeShow" v-model="baseForm.type2" class="item-width" placeholder="请选择" clearable
-                               style="width: 120px"
+                    <el-select v-show="typeShow" v-model="baseForm.type2" class="item-width" placeholder="请选择" clearable
+                               style="width: 120px"   @change="resetType2Info"
                                multiple>
                       <el-option v-for="item in comprehensive_subtypeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
                       <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
-
+                      <i class="el-icon-warning-outline" v-show="typeShow" v-bind:title="type2Info"></i>
                   </el-form-item>
                 </el-col>
 
@@ -243,21 +242,21 @@
                             </el-radio-group>
                           </el-form-item>
                         </el-col>
-                      <el-col :span="8">
-                        <el-form-item label="是否社保定点医院：" prop="flag">
-                          <el-radio-group v-model="baseForm.flag">
-                            <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions " >{{item.dictLabel}}</el-radio>
-                          </el-radio-group>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="8">
-                        <el-form-item label="是否康复医院：" prop="rehabilitationHospital">
-                          <el-radio-group v-model="baseForm.rehabilitationHospital">
-                            <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions " >{{item.dictLabel}}</el-radio>
-                          </el-radio-group>
-                        </el-form-item>
-                      </el-col>
-                    </div>
+                        <el-col :span="8">
+                          <el-form-item label="是否社保定点医院：" prop="flag">
+                            <el-radio-group v-model="baseForm.flag">
+                              <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions " >{{item.dictLabel}}</el-radio>
+                            </el-radio-group>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="是否康复医院：" prop="rehabilitationHospital">
+                            <el-radio-group v-model="baseForm.rehabilitationHospital">
+                              <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions " >{{item.dictLabel}}</el-radio>
+                            </el-radio-group>
+                          </el-form-item>
+                        </el-col>
+                      </div>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -361,7 +360,7 @@
                 </div>-->
 
         <div
-          style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  border-bottom: 1px solid #e6ebf5;color: #303133;float: right; ">
+          style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  color: #303133;float: right; ">
           <el-button size="mini" type="primary" @click="submitHandle">提交审核</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
           <el-button size="mini" type="primary" @click="goBack">关闭</el-button>
@@ -369,11 +368,11 @@
 
 
       </el-tab-pane>
-      <el-tab-pane :label="label.label02" name="02">
+      <el-tab-pane :label="label.label02" name="02" v-if="otherShow">
 
         <!--基本信息-->
         <div >
-          <other-base-info :providerCode="otherProviderCode" ref="otherBaseInfo" :status="activeName" :otherBaseForm="otherBaseForm" @baseSave="baseSaveChange" ></other-base-info>
+          <other-base-info :otherChname1="otherChname1" :otherEnname1="otherEnname1"    :providerCode="otherProviderCode" ref="otherBaseInfo" :status="activeName" :otherBaseForm="otherBaseForm" @baseSave="baseSaveChange" ></other-base-info>
         </div>
         <!--服务信息-->
         <div >
@@ -406,7 +405,7 @@
 
 
         <div
-          style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  border-bottom: 1px solid #e6ebf5;color: #303133;float: right; ">
+          style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  color: #303133;float: right; ">
 
           <el-button size="mini" type="primary" @click="otherResetForm">重置</el-button>
           <el-button size="mini" type="primary" @click="otherSaveHandle">保存</el-button>
@@ -427,6 +426,7 @@ import {
 } from '@/api/baseInfo/medicalManage.js'
 
 
+
 import departmentInfo from './components/departmentInfo'
 import serviceInfo from './components/serviceInfo'
 
@@ -438,6 +438,7 @@ import annexInfo from './components/annexInfo'
 import otherBaseInfo from './components/otherBaseInfo'
 import otherServiceInfo from './components/otherServiceInfo'
 import otherReserveInfo from './components/otherReserveInfo'
+
 
 
 let dictss = [{dictType: 'inter_hosp'},{dictType: 'virtual_org'},{dictType: 'first_attribute'},{dictType: 'second_attribute_a'},
@@ -505,17 +506,17 @@ export default {
     const checkChregister = (rules, value, callback) => {
       if (value) {
         if (this.copyChregister !== value) {
-        let query = {
-          chregister: this.baseForm.chregister
-        }
-        //调用查询的接口
-        checkfield(query).then(res => {
-          if (res != null && res.code == '200' && res.data.length>0) {
-            callback(new Error('中文工商注册名称已存在'))
-          } else {
-            callback()
+          let query = {
+            chregister: this.baseForm.chregister
           }
-        })
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('中文工商注册名称已存在'))
+            } else {
+              callback()
+            }
+          })
         } else {
           callback()
         }
@@ -531,14 +532,14 @@ export default {
           enregister: this.baseForm.enregister
         }
         if (this.copyEnregister !== value) {
-        //调用查询的接口
-        checkfield(query).then(res => {
-          if (res != null && res.code == '200' && res.data.length>0) {
-            callback(new Error('英文工商注册名称已存在'))
-          } else {
-            callback()
-          }
-        })
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('英文工商注册名称已存在'))
+            } else {
+              callback()
+            }
+          })
         } else {
           callback()
         }
@@ -554,14 +555,35 @@ export default {
           usedname: this.baseForm.usedname
         }
         if (this.copyUsedname !== value) {
-        //调用查询的接口
-        checkfield(query).then(res => {
-          if (res != null && res.code == '200' && res.data.length>0) {
-            callback(new Error('曾用名已存在'))
-          } else {
-            callback()
-          }
-        })} else {
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('曾用名已存在'))
+            } else {
+              callback()
+            }
+          })} else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+
+    }
+    const checkEnname1 = (rules, value, callback) => {
+      if (value) {
+        let query = {
+          enname1: this.baseForm.enname1
+        }
+        if (this.copyEnname1 !== value) {
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('英文展示名称已存在'))
+            } else {
+              callback()
+            }
+          })} else {
           callback()
         }
       } else {
@@ -577,20 +599,43 @@ export default {
           claimHospitalName: this.baseForm.claimHospitalName
         }
         if (this.copyClaimHospitalName !== value) {
-        //调用查询的接口
-        checkfield(query).then(res => {
-          if (res != null && res.code == '200' && res.data.length>0) {
-            callback(new Error('理赔医院已存在'))
-          } else {
-            callback()
-          }
-        })
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('理赔医院已存在'))
+            } else {
+              callback()
+            }
+          })
         } else {
           callback()
         }
       } else {
         callback(new Error('理赔医院不能为空'))
 
+
+      }
+
+    }
+    const checkChname1 = (rules, value, callback) => {
+      if (value) {
+        let query = {
+          chname1: this.baseForm.chname1
+        }
+        if (this.copyChname1 !== value) {
+          //调用查询的接口
+          checkfield(query).then(res => {
+            if (res != null && res.code == '200' && res.data.length>0) {
+              callback(new Error('中文展示名称已存在'))
+            } else {
+              callback()
+            }
+          })
+        } else {
+          callback()
+        }
+      } else {
+        callback(new Error('中文展示名称不能为空'))
 
       }
 
@@ -670,6 +715,11 @@ export default {
     }
 
     return {
+      type2Info:'',
+      otherChname1: '',
+      otherEnname1: '',
+      copyChname1: '',
+      copyEnname1: '',
       copyChregister:'',
       copyEnregister:'',
       copyUsedname:'',
@@ -840,6 +890,7 @@ export default {
       },
 
       serviceForm: {
+        weekendsWorking:undefined,
         excludingFee: undefined,
         topten: undefined,
         specializedHospital: undefined,
@@ -936,23 +987,24 @@ export default {
       baseFormRules: {
         latitude:[{validator: checkLatitude, trigger: 'blur'}],
         longitude:[{validator: checkLongitude, trigger: 'blur'}],
-        claimHospitalName: [{validator: checkClaimHospitalName, trigger: 'blur'}],
+        claimHospitalName: [{required:true,validator: checkClaimHospitalName, trigger: ['blur','change']}],
         beds: [{validator: checkBeds, trigger: 'blur'}],
         flag: [{required: true, message: '不能为空！', trigger: 'change'}],
         otherName: [{validator: checkOtherName, trigger: 'blur'}],
         chregister:[{validator: checkChregister, trigger: 'blur'}],
         enregister:[{validator: checkEnregister, trigger: 'blur'}],
         usedname:[{validator: checkUsedname, trigger: 'blur'}],
+        enname1:[{validator: checkEnname1, trigger: 'blur'}],
         virtualOrg: [{required: true, message: '不能为空！', trigger: 'change'}],
-        chname1: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        chname1: [{required: true, validator: checkChname1, trigger: 'blur'}],
         continent: [{required: true, message: '不能为空！', trigger: 'change'}],
         country: [{required: true, message: '不能为空！', trigger: 'change'}],
         address: [{validator: checkAddreess,required: true, trigger: 'change'}],
         chaddreess: [{validator: checkChaddreess, trigger: 'blur'}],
         firstAttribute: [{required: true, message: '不能为空！', trigger: 'change'}],
         secondAttribute: [{required: true, message: '不能为空！', trigger: 'change'}],
-        type: [{required: true, message: '不能为空！', trigger: 'change'}],
-        phone: [{validator: checkPhone, required: true, trigger: 'blur'}],
+        /* type: [{required: true, message: '不能为空！', trigger: 'change'}],
+         phone: [{validator: checkPhone, required: true, trigger: 'blur'}],*/
         international: [{required: true, message: '不能为空！', trigger: 'change'}],
         consultphone: [{required: true, message: '不能为空！', trigger: 'blur'}],
         special: [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -961,6 +1013,7 @@ export default {
       },
       medicalTypeData: [],
       bussiness_statusOptions: [],
+
 
       regions: [],
       dictList: [],
@@ -973,29 +1026,31 @@ export default {
       secondAttributeOptions: [],
       yes_or_noOptions: [],
       comprehensive_subtypeOptions: [],
-      hospContractSaveFlag: false
+      hospContractSaveFlag: false,
+      hospShow: true,
+      otherShow:true
 
 
 
     }
   },
   async  created() {
-     await this.getDictsList(dictss).then(response => {
-       this.dictList = response.data
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
 
-     })
+    })
     //调用查询维护的方法
-/*    await  this.getNewtworktype()*/
-   /* await getNewtworktypeList().then(res =>{
-      this.medicalTypeData=res.rows
-      if(this.medicalTypeData.filter(item => {
-        return item.networktypeName= '网络医院'
-      })[0].oldChoose=='02'){
-        this.isNetHospital=true
-      }
-    }).catch(res=>{
-      }
-    )*/
+    /*    await  this.getNewtworktype()*/
+    /* await getNewtworktypeList().then(res =>{
+       this.medicalTypeData=res.rows
+       if(this.medicalTypeData.filter(item => {
+         return item.networktypeName= '网络医院'
+       })[0].oldChoose=='02'){
+         this.isNetHospital=true
+       }
+     }).catch(res=>{
+       }
+     )*/
 
     this.inter_hospOptions = this.dictList.find(item => {
       return item.dictType == 'inter_hosp'
@@ -1029,216 +1084,231 @@ export default {
 
 
 
-     this.getAddressData()
+    this.getAddressData()
 
-  if(this.$route.query.status!=null && this.$route.query.status==='edit'){
-    this.isAdd=false
+    if(this.$route.query.status!=null && this.$route.query.status==='edit'){
+      this.isAdd=false
+      if(this.$route.query.orgflag=='01'){
+        this.otherShow=false
+      }
+      if(this.$route.query.orgflag=='02'){
+        this.hospShow=false
+      }
 
-  }
-  else {
-    this.isAdd=true
+    }
+    else {
+      this.isAdd=true
 
 
-  }
+    }
 
     if (this.$route.query.providerCode) {
-
-
       this.disabledFlag = false
       this.otherDisabledFlag=false
-       if( this.$route.query.orgflag=='01') {
-
-         this.otherReserveInfoShow=true
-         this.providerCode = this.$route.query.providerCode
-         let queryData={
-           providerCode: this.providerCode,
-           orgFlag: '01'
-         }
-         if(this.$route.query.hospContractSave!=null && this.$route.query.hospContractSave=='01'){
-           this.hospContractSaveFlag=true
-         }
-
-
-
-      //调用服务机构基本信息查询
-      getInfo(queryData).then(res => {
-        this.baseForm = res.data
-        this.baseForm.address=[]
-        if(res.data.province) {
-          this.baseForm.address[0] = res.data.province
+      if( this.$route.query.orgflag=='01') {
+        this.activeName=this.$route.query.orgflag
+        this.otherReserveInfoShow=true
+        this.providerCode = this.$route.query.providerCode
+        let queryData={
+          providerCode: this.providerCode,
+          orgFlag: '01'
         }
-        if(res.data.city) {
-          this.baseForm.address[1] = res.data.city
-        }
-        if(res.data.district) {
-          this.baseForm.address[2] = res.data.district
-        }
-        this.copyChregister=this.baseForm.chregister
-        this.copyUsedname=this.baseForm.usedname
-        this.copyEnregister=this.baseForm.enregister
-        this.copyClaimHospitalName=this.baseForm.claimHospitalName
-        this.copyOtherName=this.baseForm.otherName
-        if(this.baseForm.firstAttribute=='01'){
-          this.secondAttributeOptions=this.second_attribute_aOptions
-        }
-        else {
-          this.secondAttributeOptions=this.second_attribute_bOptions
+        if(this.$route.query.hospContractSave!=null && this.$route.query.hospContractSave=='01'){
+          this.hospContractSaveFlag=true
         }
 
-        if(this.baseForm.type=='03'){
+
+
+        //调用服务机构基本信息查询
+        getInfo(queryData).then(res => {
+          this.baseForm = res.data
+          this.baseForm.address=[]
+          if(res.data.province) {
+            this.baseForm.address[0] = res.data.province
+          }
+          if(res.data.city) {
+            this.baseForm.address[1] = res.data.city
+          }
+          if(res.data.district) {
+            this.baseForm.address[2] = res.data.district
+          }
+          this.copyChregister=this.baseForm.chregister
+          this.copyUsedname=this.baseForm.usedname
+          this.copyEnregister=this.baseForm.enregister
+          this.copyClaimHospitalName=this.baseForm.claimHospitalName
+          this.copyOtherName=this.baseForm.otherName
+          this.copyChname1=this.baseForm.chname1
+          this.copyEnname1=this.baseForm.enname1
+          if(this.baseForm.firstAttribute=='01'){
+            this.secondAttributeOptions=this.second_attribute_aOptions
+          }
+          else {
+            this.secondAttributeOptions=this.second_attribute_bOptions
+          }
+
+          if(this.baseForm.type=='03'){
             this.typeShow=true
+            //给type2Info赋值
+            this.baseForm.type2.forEach(item =>{
+              let data = this.comprehensive_subtypeOptions.find(obj =>{
+                return obj.dictValue==item;
+              })
+              this.type2Info=this.type2Info+','+data.dictLabel
+            })
+            this.type2Info=this.type2Info.substring(1,this.type2Info.length)
+          }
 
+
+
+
+        }).catch(res => {
+        })
+        //调用科室信息查询
+        getdepInfo(queryData).then(res => {
+          if(res.data!=null && res.data.length>0) {
+            this.departmentForm.form = res.data
+            this.departmentForm.form.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+
+        getserviceInfo(queryData).then(res => {
+          if(res.data !=null && res.data!='') {
+            this.serviceForm = res.data
+          }
+          if(this.$route.query.formData!=null && this.$route.query.formData!=''){
+            this.hospContactFormData=this.$route.query.formData
+            /* this.serviceForm.treatmentDiscount=this.hospContactFormData.treatmentDiscount
+             this.serviceForm.code=this.hospContactFormData.averageCost
+             this.serviceForm.bedDiscount=this.hospContactFormData.bedDiscount
+             this.serviceForm.type=this.hospContactFormData.type
+             this.serviceForm.allowance=this.hospContactFormData.allowance
+             this.serviceForm.advicenum=this.hospContactFormData.advicenum
+             this.serviceForm.costs=this.hospContactFormData.costs
+             this.serviceForm.excludingFee=this.hospContactFormData.averageCostExcept
+             this.serviceForm.discountinfo=this.hospContactFormData.discountinfo
+             this.serviceForm.specialDiscount=this.hospContactFormData.specialDiscount
+             this.serviceForm.project=this.hospContactFormData.project*/
+
+
+          }
+        }).catch(res => {
+        })
+
+        getapplyInfo(queryData).then(res => {
+          if(res.data!=null&& res.data!='')
+          {
+            this.reserveInfoForm = res.data
+          }
+          this.flag=true
+        }).catch(res => {
+        })
+
+        getcontactsInfo(queryData).then(res => {
+          if(res.data!=null && res.data.length>0) {
+            this.contactInfoForm.contacts = res.data
+            this.contactInfoForm.contacts.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+        getbankInfo(queryData).then(res => {
+          if(res.data.baseProviderSettle!=null && res.data.baseProviderSettle!='') {
+            this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
+          }
+          if(res.data.baseBankVo!=null && res.data.baseBankVo.length>0) {
+            this.closingFrom.baseBankVo = res.data.baseBankVo
+            this.closingFrom.baseBankVo.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+
+
+
+
+      }
+      else if(this.$route.query.orgflag=='02'){
+        this.activeName=this.$route.query.orgflag
+        this.otherProviderCode = this.$route.query.providerCode
+        let queryData={
+          providerCode:this.otherProviderCode,
+          orgFlag: '02'
         }
-
-
-
-      }).catch(res => {
-      })
-      //调用科室信息查询
-      getdepInfo(queryData).then(res => {
-        if(res.data!=null && res.data.length>0) {
-          this.departmentForm.form = res.data
-          this.departmentForm.form.map((data, index) => {
-            data.id = index + 1
-            data.isSet = false
-          })
-        }
-      }).catch(res => {
-      })
-
-      getserviceInfo(queryData).then(res => {
-        if(res.data !=null && res.data!='') {
-          this.serviceForm = res.data
-        }
-        if(this.$route.query.formData!=null && this.$route.query.formData!=''){
-          this.hospContactFormData=this.$route.query.formData
-         /* this.serviceForm.treatmentDiscount=this.hospContactFormData.treatmentDiscount
-          this.serviceForm.code=this.hospContactFormData.averageCost
-          this.serviceForm.bedDiscount=this.hospContactFormData.bedDiscount
-          this.serviceForm.type=this.hospContactFormData.type
-          this.serviceForm.allowance=this.hospContactFormData.allowance
-          this.serviceForm.advicenum=this.hospContactFormData.advicenum
-          this.serviceForm.costs=this.hospContactFormData.costs
-          this.serviceForm.excludingFee=this.hospContactFormData.averageCostExcept
-          this.serviceForm.discountinfo=this.hospContactFormData.discountinfo
-          this.serviceForm.specialDiscount=this.hospContactFormData.specialDiscount
-          this.serviceForm.project=this.hospContactFormData.project*/
-
-
-        }
-      }).catch(res => {
-      })
-
-       getapplyInfo(queryData).then(res => {
-         if(res.data!=null&& res.data!='')
-         {
-           this.reserveInfoForm = res.data
-         }
         this.flag=true
-      }).catch(res => {
-      })
-
-      getcontactsInfo(queryData).then(res => {
-        if(res.data!=null && res.data.length>0) {
-          this.contactInfoForm.contacts = res.data
-          this.contactInfoForm.contacts.map((data, index) => {
-            data.id = index + 1
-            data.isSet = false
-          })
-        }
-      }).catch(res => {
-      })
-      getbankInfo(queryData).then(res => {
-        if(res.data.baseProviderSettle!=null && res.data.baseProviderSettle!='') {
-          this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
-        }
-        if(res.data.baseBankVo!=null && res.data.baseBankVo.length>0) {
-          this.closingFrom.baseBankVo = res.data.baseBankVo
-          this.closingFrom.baseBankVo.map((data, index) => {
-            data.id = index + 1
-            data.isSet = false
-          })
-        }
-      }).catch(res => {
-      })
+        //调用基本信息查询的方法
+        getInfo(queryData).then(res => {
+          this.otherBaseForm = res.data
+          this.otherBaseForm.address=[]
+          if(res.data.province) {
+            this.otherBaseForm.address[0] = res.data.province
+          }
+          if(res.data.city) {
+            this.otherBaseForm.address[1] = res.data.city
+          }
+          if(res.data.district) {
+            this.otherBaseForm.address[2] = res.data.district
+          }
+          this.otherChname1=this.otherBaseForm.chname1
+          this.otherEnname1=this.otherBaseForm.enname1
 
 
+        }).catch(res => {
+        })
+        //调用服务信息的方法
 
+        getserviceInfo(queryData).then(res => {
+          if(res.data!=null && res.data!='') {
+            this.otherServiceForm = res.data
+          }
 
-       }
-       else if(this.$route.query.orgflag=='02'){
+        }).catch(res => {
+        })
+        //预约信息
+        getapplyInfo(queryData).then(res => {
+          if(res.data!=null && res.data!='') {
+            this.otherReserveInfoForm = res.data
+          }
+          this.otherReserveInfoShow=true
+        }).catch(res => {
+        })
 
+        //联系信息
+        getcontactsInfo(queryData).then(res => {
+          if(res.data!=null && res.data.length>0) {
+            this.otherContactInfoForm.contacts = res.data
+            this.otherContactInfoForm.contacts.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
 
-         this.otherProviderCode = this.$route.query.providerCode
-         let queryData={
-           providerCode:this.otherProviderCode,
-           orgFlag: '02'
-         }
-         this.flag=true
-         //调用基本信息查询的方法
-         getInfo(queryData).then(res => {
-           this.otherBaseForm = res.data
-           this.otherBaseForm.address=[]
-           if(res.data.province) {
-             this.otherBaseForm.address[0] = res.data.province
-           }
-           if(res.data.city) {
-             this.otherBaseForm.address[1] = res.data.city
-           }
-           if(res.data.district) {
-             this.otherBaseForm.address[2] = res.data.district
-           }
+        //调用结算信息查询的方法
+        getbankInfo(queryData).then(res => {
+          if(res.data.baseProviderSettle!=null && res.data.baseProviderSettle!='') {
+            this.otherClosingFrom.baseProviderSettle = res.data.baseProviderSettle
+          }
+          if(res.data.baseBankVo!=null && res.data.baseBankVo.length>0) {
+            this.otherClosingFrom.baseBankVo = res.data.baseBankVo
+            this.otherClosingFrom.baseBankVo.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
 
+        }).catch(res => {
+        })
 
-         }).catch(res => {
-         })
-         //调用服务信息的方法
-
-         getserviceInfo(queryData).then(res => {
-         if(res.data!=null && res.data!='') {
-           this.otherServiceForm = res.data
-         }
-
-         }).catch(res => {
-         })
-          //预约信息
-         getapplyInfo(queryData).then(res => {
-           if(res.data!=null && res.data!='') {
-             this.otherReserveInfoForm = res.data
-           }
-           this.otherReserveInfoShow=true
-         }).catch(res => {
-         })
-
-         //联系信息
-         getcontactsInfo(queryData).then(res => {
-           if(res.data!=null && res.data.length>0) {
-             this.otherContactInfoForm.contacts = res.data
-             this.otherContactInfoForm.contacts.map((data, index) => {
-               data.id = index + 1
-               data.isSet = false
-             })
-           }
-         }).catch(res => {
-         })
-
-         //调用结算信息查询的方法
-         getbankInfo(queryData).then(res => {
-           if(res.data.baseProviderSettle!=null && res.data.baseProviderSettle!='') {
-             this.otherClosingFrom.baseProviderSettle = res.data.baseProviderSettle
-           }
-           if(res.data.baseBankVo!=null && res.data.baseBankVo.length>0) {
-             this.otherClosingFrom.baseBankVo = res.data.baseBankVo
-             this.otherClosingFrom.baseBankVo.map((data, index) => {
-               data.id = index + 1
-               data.isSet = false
-             })
-           }
-
-         }).catch(res => {
-         })
-
-       }
+      }
       this.departmentTableShow = true
       this.contactInfoTableShow = true
       this.closingTableShow = true
@@ -1264,8 +1334,31 @@ export default {
 
   },
   methods: {
+
+    resetType2Info(){
+      if(this.baseForm.type2.length>0){
+        this.type2Info=''
+        this.baseForm.type2.forEach(item =>{
+          let data = this.comprehensive_subtypeOptions.find(obj =>{
+            return obj.dictValue==item;
+          })
+          this.type2Info=this.type2Info+','+data.dictLabel
+        })
+        this.type2Info=this.type2Info.substring(1,this.type2Info.length)
+      }
+      else {
+        this.type2Info=''
+      }
+     //this.type2Info=this.baseForm.type2.join(',')
+    },
+    getServiceInfoData(){
+      return this.$refs.serviceInfo.serviceForm
+    },
+    getOtherReservelInfoData(){
+      return this.$refs.otherReserveInfo.otherReserveInfoForm
+    },
+
     handleClick(){
-      alert('22')
       this.baseForm.beds = this.baseForm.beds.replace(/[^\w]/g, '');
     },
     /*getNewtworktype(){
@@ -1295,16 +1388,22 @@ export default {
 
 
     changeSecondAttribute(){
-      this.baseForm.secondAttribute=''
-      if(this.baseForm.firstAttribute=='01'){
-        this.secondAttributeOptions=this.second_attribute_aOptions
+      if(this.baseForm.firstAttribute) {
+        this.baseForm.secondAttribute = ''
+        if (this.baseForm.firstAttribute == '01') {
+          this.secondAttributeOptions = this.second_attribute_aOptions
+        } else {
+          this.secondAttributeOptions = this.second_attribute_bOptions
+        }
       }
       else {
-        this.secondAttributeOptions=this.second_attribute_bOptions
+        this.baseForm.secondAttribute = ''
+        this.secondAttributeOptions = []
       }
 
 
     },
+
 
 
 
@@ -1355,6 +1454,7 @@ export default {
             subFormSearch.district = this.baseForm.address[2]
             subFormSearch.city = this.baseForm.address[1]
           }
+          subFormSearch.orgFlag = this.activeName
           //存在调用基本信息保存的接口
           if (this.providerCode) {
             updateInfo(subFormSearch).then(res => {
@@ -1370,6 +1470,8 @@ export default {
                 this.copyEnregister=this.baseForm.enregister
                 this.copyClaimHospitalName=this.baseForm.claimHospitalName
                 this.copyOtherName=this.baseForm.otherName
+                this.copyChname1=this.baseForm.chname1
+                this.copyEnname1=this.baseForm.enname1
               } else {
                 this.$message({
                   message: '保存失败!',
@@ -1391,6 +1493,13 @@ export default {
                   center: true,
                   showClose: true
                 })
+                this.copyChregister=this.baseForm.chregister
+                this.copyUsedname=this.baseForm.usedname
+                this.copyEnregister=this.baseForm.enregister
+                this.copyClaimHospitalName=this.baseForm.claimHospitalName
+                this.copyOtherName=this.baseForm.otherName
+                this.copyChname1=this.baseForm.chname1
+                this.copyEnname1=this.baseForm.enname1
 
                 this.providerCode = res.data.providerCode
                 this.baseForm.providerCode = this.providerCode
@@ -1407,8 +1516,12 @@ export default {
             })
           }
         }
+        else {
+          this.$message.warning('基本信息必录项未必录')
+        }
 
       })
+
     },
     //级联改变
     handleChange(value) {
@@ -1419,99 +1532,99 @@ export default {
       this.$refs.baseForm.resetFields()
       this.baseForm.areacode=''
 //  重置以后  调用查询方法
-        this.$refs['departmentInfo'].resetForm();
-        this.$refs['serviceInfo'].resetForm();
-        this.$refs['reserveInfo'].resetForm();
-        this.$refs['contactInfo'].resetForm();
-        this.$refs['closingInfo'].resetForm();
-        if(this.providerCode) {
-          let queryData ={
-            providerCode: this.providerCode,
-            orgFlag:'01'
-          }
-          //调用服务机构基本信息查询
-          getInfo(queryData).then(res => {
-            this.baseForm = res.data
-            this.baseForm.address = []
-            if(res.data.province) {
-              this.baseForm.address[0] = res.data.province
-            }
-            if(res.data.city) {
-              this.baseForm.address[1] = res.data.city
-            }
-            if(res.data.district) {
-              this.baseForm.address[2] = res.data.district
-            }
-            if (this.baseForm.firstAttribute == '01') {
-              this.secondAttributeOptions = this.second_attribute_aOptions
-            } else {
-              this.secondAttributeOptions = this.second_attribute_bOptions
-            }
-
-            if (this.baseForm.type == '03') {
-              this.typeShow = true
-
-            }
-
-
-          }).catch(res => {
-          })
-          //调用科室信息查询
-          getdepInfo(queryData).then(res => {
-            if (res.data != null && res.data.length > 0) {
-              this.departmentForm.form = res.data
-              this.departmentForm.form.map((data, index) => {
-                data.id = index + 1
-                data.isSet = false
-              })
-            }
-          }).catch(res => {
-          })
-
-          getserviceInfo(queryData).then(res => {
-            if (res.data != null && res.data != '') {
-              this.serviceForm = res.data
-            }
-          }).catch(res => {
-          })
-
-          getapplyInfo(queryData).then(res => {
-            if (res.data != null && res.data != '') {
-              this.reserveInfoForm = res.data
-            }
-            this.flag = true
-          }).catch(res => {
-          })
-
-          getcontactsInfo(queryData).then(res => {
-            if (res.data != null && res.data.length > 0) {
-              this.contactInfoForm.contacts = res.data
-              this.contactInfoForm.contacts.map((data, index) => {
-                data.id = index + 1
-                data.isSet = false
-              })
-            }
-          }).catch(res => {
-          })
-          getbankInfo(queryData).then(res => {
-            if (res.data.baseProviderSettle != null && res.data.baseProviderSettle != '') {
-              this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
-            }
-            if (res.data.baseBankVo != null && res.data.baseBankVo.length > 0) {
-              this.closingFrom.baseBankVo = res.data.baseBankVo
-              this.closingFrom.baseBankVo.map((data, index) => {
-                data.id = index + 1
-                data.isSet = false
-              })
-            }
-          }).catch(res => {
-          })
+      this.$refs['departmentInfo'].resetForm();
+      this.$refs['serviceInfo'].resetForm();
+      this.$refs['reserveInfo'].resetForm();
+      this.$refs['contactInfo'].resetForm();
+      this.$refs['closingInfo'].resetForm();
+      if(this.providerCode) {
+        let queryData ={
+          providerCode: this.providerCode,
+          orgFlag:'01'
         }
+        //调用服务机构基本信息查询
+        getInfo(queryData).then(res => {
+          this.baseForm = res.data
+          this.baseForm.address = []
+          if(res.data.province) {
+            this.baseForm.address[0] = res.data.province
+          }
+          if(res.data.city) {
+            this.baseForm.address[1] = res.data.city
+          }
+          if(res.data.district) {
+            this.baseForm.address[2] = res.data.district
+          }
+          if (this.baseForm.firstAttribute == '01') {
+            this.secondAttributeOptions = this.second_attribute_aOptions
+          } else {
+            this.secondAttributeOptions = this.second_attribute_bOptions
+          }
 
-          /*this.show = false //清空结点
-          this.$nextTick(() => {
-            this.show = true  //还原结点
-          })*/
+          if (this.baseForm.type == '03') {
+            this.typeShow = true
+
+          }
+
+
+        }).catch(res => {
+        })
+        //调用科室信息查询
+        getdepInfo(queryData).then(res => {
+          if (res.data != null && res.data.length > 0) {
+            this.departmentForm.form = res.data
+            this.departmentForm.form.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+
+        getserviceInfo(queryData).then(res => {
+          if (res.data != null && res.data != '') {
+            this.serviceForm = res.data
+          }
+        }).catch(res => {
+        })
+
+        getapplyInfo(queryData).then(res => {
+          if (res.data != null && res.data != '') {
+            this.reserveInfoForm = res.data
+          }
+          this.flag = true
+        }).catch(res => {
+        })
+
+        getcontactsInfo(queryData).then(res => {
+          if (res.data != null && res.data.length > 0) {
+            this.contactInfoForm.contacts = res.data
+            this.contactInfoForm.contacts.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+        getbankInfo(queryData).then(res => {
+          if (res.data.baseProviderSettle != null && res.data.baseProviderSettle != '') {
+            this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
+          }
+          if (res.data.baseBankVo != null && res.data.baseBankVo.length > 0) {
+            this.closingFrom.baseBankVo = res.data.baseBankVo
+            this.closingFrom.baseBankVo.map((data, index) => {
+              data.id = index + 1
+              data.isSet = false
+            })
+          }
+        }).catch(res => {
+        })
+      }
+
+      /*this.show = false //清空结点
+      this.$nextTick(() => {
+        this.show = true  //还原结点
+      })*/
       //
     },
     changeAnnexFlag() {
@@ -1534,77 +1647,199 @@ export default {
 
 
     //提交审核
-    submitHandle() {
-      let flag = this.$refs['departmentInfo'].validateForm() && this.$refs['serviceInfo'].validateForm() && this.$refs['reserveInfo'].validateForm()
-        && this.$refs['contactInfo'].validateForm() && this.$refs['closingInfo'].validateForm();
+    async submitHandle() {
 
-      let flag2=this.validateForm()
-      let flag3=this.$refs['closingInfo'].validateForm()
-
-      if (this.validateForm() && flag) {
-        //
-        let allData = new Object();
-        let departmentFormData = this.$refs.departmentInfo.departmentForm
-        departmentFormData.providerCode=this.providerCode
-        departmentFormData.orgFlag=this.activeName
-
-        let serviceFormData = this.$refs.serviceInfo.serviceForm
-        serviceFormData.providerCode=this.providerCode
-        serviceFormData.orgFlag=this.activeName
-
-        let reserveInfoFormData = this.$refs.reserveInfo.reserveInfoForm
-        reserveInfoFormData.providerCode=this.providerCode
-        reserveInfoFormData.orgFlag=this.activeName
-
-        let contactInfoFormData = this.$refs.contactInfo.contactInfoForm
-        contactInfoFormData.providerCode=this.providerCode
-        contactInfoFormData.orgFlag=this.activeName
-
-        let closingFromData = this.$refs.closingInfo.closingFrom
-        closingFromData.providerCode=this.providerCode
-        closingFromData.orgFlag=this.activeName
-        const baseFormData = JSON.parse(JSON.stringify(this.baseForm))
-        if (this.baseForm.address) {
-          baseFormData.province = this.baseForm.address[0]
-          baseFormData.district = this.baseForm.address[2]
-          baseFormData.city = this.baseForm.address[1]
-        }
-        baseFormData.orgFlag = this.activeName
+      /* let flag = this.$refs['departmentInfo'].validateForm() && this.$refs['serviceInfo'].validateForm() && this.$refs['reserveInfo'].validateForm()
+         && this.$refs['contactInfo'].validateForm() && this.$refs['closingInfo'].validateForm();*/
 
 
+      let baseInfoFlag=this.validateForm()
+      let departmentInfoFlag=this.$refs['departmentInfo'].validateForm()
+      let serviceInfoFlag=await this.$refs['serviceInfo'].validateForm()
+      let reserveInfoFlag=await this.$refs['reserveInfo'].validateForm()
+
+      let contactInfoFlag= await this.$refs['contactInfo'].validateForm()
+      let closingInfoFlag=this.$refs['closingInfo'].validateForm()
+      this.$refs['baseForm'].validate(valid => {
+        if (valid) {
+          if(departmentInfoFlag=='01'){
+            if(serviceInfoFlag=='01'){
+              if(reserveInfoFlag){
+                if(contactInfoFlag=='01'){
+                  if(closingInfoFlag=='01'){
+                    let allData = new Object();
+                    let departmentFormData = this.$refs.departmentInfo.departmentForm
+                    departmentFormData.providerCode=this.providerCode
+                    departmentFormData.orgFlag=this.activeName
+
+                    let serviceFormData = this.$refs.serviceInfo.serviceForm
+                    serviceFormData.providerCode=this.providerCode
+                    serviceFormData.orgFlag=this.activeName
+
+                    let reserveInfoFormData = this.$refs.reserveInfo.reserveInfoForm
+                    reserveInfoFormData.providerCode=this.providerCode
+                    reserveInfoFormData.orgFlag=this.activeName
+
+                    let contactInfoFormData = this.$refs.contactInfo.contactInfoForm
+                    contactInfoFormData.providerCode=this.providerCode
+                    contactInfoFormData.orgFlag=this.activeName
+
+                    let closingFromData = this.$refs.closingInfo.closingFrom
+                    closingFromData.providerCode=this.providerCode
+                    closingFromData.orgFlag=this.activeName
+                    const baseFormData = JSON.parse(JSON.stringify(this.baseForm))
+                    if (this.baseForm.address) {
+                      baseFormData.province = this.baseForm.address[0]
+                      baseFormData.district = this.baseForm.address[2]
+                      baseFormData.city = this.baseForm.address[1]
+                    }
+                    baseFormData.orgFlag = this.activeName
 
 
-        allData.baseInfo = baseFormData
 
-        allData.departmentInfo = departmentFormData
-        allData.serviceInfo = serviceFormData
-        allData.reserveInfo = reserveInfoFormData
-        allData.contactInfo = contactInfoFormData
-        allData.closingInfo = closingFromData
 
-        //调用提交审核的接口
-        updateStatus(allData).then(res => {
-          if (res.code == '200') {
-            this.$message({
-              message: '提交成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-          } else {
-            this.$message({
-              message: '提交失败!',
-              type: 'error',
-              center: true,
-              showClose: true
-            })
+                    allData.baseInfo = baseFormData
+
+                    allData.departmentInfo = departmentFormData
+                    allData.serviceInfo = serviceFormData
+                    allData.reserveInfo = reserveInfoFormData
+                    allData.contactInfo = contactInfoFormData
+                    allData.closingInfo = closingFromData
+
+                    //调用提交审核的接口
+                    updateStatus(allData).then(res => {
+                      if (res.code == '200') {
+                        this.$message({
+                          message: '提交成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        })
+                        this.$store.dispatch("tagsView/delView", this.$route);
+                        this.$router.push({
+                          path: '/basic-info/medicalManage',
+                        })
+                      } else {
+                        this.$message({
+                          message: '提交失败!',
+                          type: 'error',
+                          center: true,
+                          showClose: true
+                        })
+                      }
+                    })
+
+                  }
+                  else if(closingInfoFlag=='02'){
+                    this.$message.warning('至少添加一条结算账户信息！')
+                  }
+                  else {
+                    this.$message.warning('结算信息必录项未必录！')
+                  }
+
+                }
+                else if(contactInfoFlag=='02'){
+                  this.$message.warning('至少添加一条联系人信息！')
+                }
+                else if(contactInfoFlag=='04'){
+                  this.$message.warning('网络医院为是，联系信息中联系人至少有一位平安服务人员！')
+                }
+                else if(contactInfoFlag=='05'){
+                  this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息！')
+                }
+                else {
+                  this.$message.warning('联系信息必录项未必录！')
+                }
+              }
+              else{
+                this.$message.warning('预约信息必录项未必录！')
+              }
+            }
+            else if(serviceInfoFlag=='02'){
+              this.$message.warning('服务信息中合约信息未必录！')
+            }
+            else{
+              this.$message.warning('服务信息必录项未必录！')
+            }
           }
-        })
+          else if(departmentInfoFlag=='02') {
+            this.$message.warning('至少添加一条科室信息！')
+          }
+          else {
+            this.$message.warning('科室信息必录项未必录')
+          }
 
-      }
-      else {
-        this.$message.warning('必录项未必录！')
-      }
+        }else{
+          this.$message.warning('基本信息必录项未必录')
+        }
+      })
+
+
+
+      /*     if (this.validateForm() && flag) {
+             //
+             let allData = new Object();
+             let departmentFormData = this.$refs.departmentInfo.departmentForm
+             departmentFormData.providerCode=this.providerCode
+             departmentFormData.orgFlag=this.activeName
+
+             let serviceFormData = this.$refs.serviceInfo.serviceForm
+             serviceFormData.providerCode=this.providerCode
+             serviceFormData.orgFlag=this.activeName
+
+             let reserveInfoFormData = this.$refs.reserveInfo.reserveInfoForm
+             reserveInfoFormData.providerCode=this.providerCode
+             reserveInfoFormData.orgFlag=this.activeName
+
+             let contactInfoFormData = this.$refs.contactInfo.contactInfoForm
+             contactInfoFormData.providerCode=this.providerCode
+             contactInfoFormData.orgFlag=this.activeName
+
+             let closingFromData = this.$refs.closingInfo.closingFrom
+             closingFromData.providerCode=this.providerCode
+             closingFromData.orgFlag=this.activeName
+             const baseFormData = JSON.parse(JSON.stringify(this.baseForm))
+             if (this.baseForm.address) {
+               baseFormData.province = this.baseForm.address[0]
+               baseFormData.district = this.baseForm.address[2]
+               baseFormData.city = this.baseForm.address[1]
+             }
+             baseFormData.orgFlag = this.activeName
+
+
+
+
+             allData.baseInfo = baseFormData
+
+             allData.departmentInfo = departmentFormData
+             allData.serviceInfo = serviceFormData
+             allData.reserveInfo = reserveInfoFormData
+             allData.contactInfo = contactInfoFormData
+             allData.closingInfo = closingFromData
+
+             //调用提交审核的接口
+             updateStatus(allData).then(res => {
+               if (res.code == '200') {
+                 this.$message({
+                   message: '提交成功！',
+                   type: 'success',
+                   center: true,
+                   showClose: true
+                 })
+               } else {
+                 this.$message({
+                   message: '提交失败!',
+                   type: 'error',
+                   center: true,
+                   showClose: true
+                 })
+               }
+             })
+
+           }
+           else {
+             this.$message.warning('必录项未必录！')
+           }*/
 
     },
     //其他机构重置
@@ -1685,71 +1920,181 @@ export default {
 
       }
     },
-    otherSaveHandle() {
-
+    async otherSaveHandle() {
       //调用保存的接口 基本信息
-      let flag = this.$refs['otherBaseInfo'].validateForm() && this.$refs['otherServiceInfo'].validateForm() && this.$refs['otherReserveInfo'].validateForm()
-        && this.$refs['otherClosingInfo'].validateForm() && this.$refs['otherContactInfo'].validateForm()
-      if(flag){
-        let otherAllData = new Object();
-        let baseInfoData = this.$refs.otherBaseInfo.otherBaseForm
-        const otherBaseInfoData = JSON.parse(JSON.stringify(baseInfoData))
-        if (baseInfoData.address) {
-          otherBaseInfoData.province = baseInfoData.address[0]
-          otherBaseInfoData.district = baseInfoData.address[2]
-          otherBaseInfoData.city = baseInfoData.address[1]
-        }
-        otherBaseInfoData.orgFlag = this.activeName
+      /*let flag = this.$refs['otherBaseInfo'].validateForm() && this.$refs['otherServiceInfo'].validateForm() && this.$refs['otherReserveInfo'].validateForm()
+        && this.$refs['otherClosingInfo'].validateForm() && this.$refs['otherContactInfo'].validateForm()*/
 
-        let otherServiceFormData = this.$refs.otherServiceInfo.otherServiceForm
-        otherServiceFormData.orgFlag=this.activeName
-        otherServiceFormData.providerCode=this.otherProviderCode
+      let otherBaseInfoFlag=await this.$refs['otherBaseInfo'].validateForm()
+      /*
+       this.$refs['otherBaseInfo'].validateForm().then(res=>{
+         console.log(res)
+       })*/
+      let otherServiceInfoFlag=this.$refs['otherServiceInfo'].validateForm()
+      let otherReserveInfoFlag=this.$refs['otherReserveInfo'].validateForm()
+      let otherClosingInfoFlag=this.$refs['otherClosingInfo'].validateForm()
+      let otherContactInfoFlag= await this.$refs['otherContactInfo'].otherValidataForm()
 
 
-        let otherReserveInfoFormData = this.$refs.otherReserveInfo.otherReserveInfoForm
+      if(otherBaseInfoFlag){
+        if(otherServiceInfoFlag){
+          if(otherReserveInfoFlag){
+            if(otherContactInfoFlag=='01'){
+              if(otherClosingInfoFlag=='01'){
+                let otherAllData = new Object();
+                let baseInfoData = this.$refs.otherBaseInfo.otherBaseForm
+                const otherBaseInfoData = JSON.parse(JSON.stringify(baseInfoData))
+                if (baseInfoData.address) {
+                  otherBaseInfoData.province = baseInfoData.address[0]
+                  otherBaseInfoData.district = baseInfoData.address[2]
+                  otherBaseInfoData.city = baseInfoData.address[1]
+                }
+                otherBaseInfoData.orgFlag = this.activeName
 
-        otherReserveInfoFormData.orgFlag=this.activeName
-        otherReserveInfoFormData.providerCode=this.otherProviderCode
-
-
-
-        let otherClosingInfoData = this.$refs.otherClosingInfo.closingFrom
-        otherClosingInfoData.orgFlag=this.activeName
-        otherClosingInfoData.providerCode=this.otherProviderCode
-
-        let otherContactInfoData = this.$refs.otherContactInfo.contactInfoForm
-        otherContactInfoData.orgFlag=this.activeName
-        otherContactInfoData.providerCode=this.otherProviderCode
-
-        otherAllData.baseInfo=otherBaseInfoData
-        otherAllData.serviceInfo = otherServiceFormData
-        otherAllData.reserveInfo = otherReserveInfoFormData
-        otherAllData.contactInfo = otherContactInfoData
-        otherAllData.closingInfo = otherClosingInfoData
+                let otherServiceFormData = this.$refs.otherServiceInfo.otherServiceForm
+                otherServiceFormData.orgFlag=this.activeName
+                otherServiceFormData.providerCode=this.otherProviderCode
 
 
-        //调用提交审核的接口
-        updateStatus(otherAllData).then(res => {
-          if (res.code == '200') {
-            this.$message({
-              message: '保存成功！',
-              type: 'success',
-              center: true,
-              showClose: true
-            })
-          } else {
-            this.$message({
-              message: '保存失败!',
-              type: 'error',
-              center: true,
-              showClose: true
-            })
+                let otherReserveInfoFormData = this.$refs.otherReserveInfo.otherReserveInfoForm
+
+                otherReserveInfoFormData.orgFlag=this.activeName
+                otherReserveInfoFormData.providerCode=this.otherProviderCode
+
+
+
+                let otherClosingInfoData = this.$refs.otherClosingInfo.closingFrom
+                otherClosingInfoData.orgFlag=this.activeName
+                otherClosingInfoData.providerCode=this.otherProviderCode
+
+                let otherContactInfoData = this.$refs.otherContactInfo.contactInfoForm
+                otherContactInfoData.orgFlag=this.activeName
+                otherContactInfoData.providerCode=this.otherProviderCode
+
+                otherAllData.baseInfo=otherBaseInfoData
+                otherAllData.serviceInfo = otherServiceFormData
+                otherAllData.reserveInfo = otherReserveInfoFormData
+                otherAllData.contactInfo = otherContactInfoData
+                otherAllData.closingInfo = otherClosingInfoData
+
+
+                //调用提交审核的接口
+                updateStatus(otherAllData).then(res => {
+                  if (res.code == '200') {
+                    this.$message({
+                      message: '保存成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    this.$store.dispatch("tagsView/delView", this.$route);
+                    this.$router.push({
+                      path: '/basic-info/medicalManage',
+                    })
+                  } else {
+                    this.$message({
+                      message: '保存失败!',
+                      type: 'error',
+                      center: true,
+                      showClose: true
+                    })
+                  }
+                })
+              }
+              else if(otherClosingInfoFlag=='02'){
+                this.$message.warning('至少添加一条结算账户信息')
+              }
+              else {
+                this.$message.warning('结算信息必录项未必录')
+              }
+            }
+            else if(otherContactInfoFlag=='02'){
+              this.$message.warning('至少添加一条联系人信息')
+            }
+            else if(otherContactInfoFlag=='04'){
+              this.$message.warning('网络医院为是，联系信息中联系人至少有一位平安服务人员！')
+            }
+            else if(otherContactInfoFlag=='05'){
+              this.$message.warning('导检/陪检/驻点为驻点时，至少有一位驻点人员联系人信息！')
+            }
+            else {
+              this.$message.warning('联系信息必录项未必录')
+            }
           }
-        })
+          else{
+            this.$message.warning('预约信息必录项未必录')
+          }
+        }
+        else {
+          this.$message.warning('服务信息必录项未必录')
+        }
       }
       else {
-        this.$message.warning('必录项未必录！')
+        this.$message.warning('基本信息必录项未必录')
       }
+
+
+
+      /*     if(flag){
+             let otherAllData = new Object();
+             let baseInfoData = this.$refs.otherBaseInfo.otherBaseForm
+             const otherBaseInfoData = JSON.parse(JSON.stringify(baseInfoData))
+             if (baseInfoData.address) {
+               otherBaseInfoData.province = baseInfoData.address[0]
+               otherBaseInfoData.district = baseInfoData.address[2]
+               otherBaseInfoData.city = baseInfoData.address[1]
+             }
+             otherBaseInfoData.orgFlag = this.activeName
+
+             let otherServiceFormData = this.$refs.otherServiceInfo.otherServiceForm
+             otherServiceFormData.orgFlag=this.activeName
+             otherServiceFormData.providerCode=this.otherProviderCode
+
+
+             let otherReserveInfoFormData = this.$refs.otherReserveInfo.otherReserveInfoForm
+
+             otherReserveInfoFormData.orgFlag=this.activeName
+             otherReserveInfoFormData.providerCode=this.otherProviderCode
+
+
+
+             let otherClosingInfoData = this.$refs.otherClosingInfo.closingFrom
+             otherClosingInfoData.orgFlag=this.activeName
+             otherClosingInfoData.providerCode=this.otherProviderCode
+
+             let otherContactInfoData = this.$refs.otherContactInfo.contactInfoForm
+             otherContactInfoData.orgFlag=this.activeName
+             otherContactInfoData.providerCode=this.otherProviderCode
+
+             otherAllData.baseInfo=otherBaseInfoData
+             otherAllData.serviceInfo = otherServiceFormData
+             otherAllData.reserveInfo = otherReserveInfoFormData
+             otherAllData.contactInfo = otherContactInfoData
+             otherAllData.closingInfo = otherClosingInfoData
+
+
+             //调用提交审核的接口
+             updateStatus(otherAllData).then(res => {
+               if (res.code == '200') {
+                 this.$message({
+                   message: '保存成功！',
+                   type: 'success',
+                   center: true,
+                   showClose: true
+                 })
+               } else {
+                 this.$message({
+                   message: '保存失败!',
+                   type: 'error',
+                   center: true,
+                   showClose: true
+                 })
+               }
+             })
+           }
+           else {
+             this.$message.warning('必录项未必录！')
+           }*/
     },
 
 
@@ -1766,13 +2111,13 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
 
 /*修改标签页的字体*/
-/deep/ .el-tabs__item {
+::v-deep .el-tabs__item {
   font-size: 20px;
   font-weight: 400;
   color: #000000;
@@ -1788,6 +2133,13 @@ export default {
 
 .el-radio {
   padding: 3px;
+}
+::v-deep .el-select__tags {
+  width: 100%;
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 

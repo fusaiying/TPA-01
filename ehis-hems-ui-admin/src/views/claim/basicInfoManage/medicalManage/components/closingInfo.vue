@@ -70,7 +70,7 @@
         <el-table ref="closingTable" :data="closingFrom.baseBankVo"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
                   size="mini" highlight-current-row style="width: 100%;">
-          <el-table-column prop="accountType" align="center" label="账号类型" header-align="center">
+          <el-table-column prop="accountType" align="center" label="账号类型" header-align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountType'"
                             :rules="closingFromRules.accountType">
@@ -82,7 +82,7 @@
               <span v-else>{{ scope.row.accountTypeName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountName" align="center" header-align="center" label="银行账号名称">
+          <el-table-column prop="accountName" align="center" header-align="center" label="银行账号名称" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountName'"
                             :rules="closingFromRules.accountName">
@@ -91,7 +91,7 @@
               <span v-else>{{ scope.row.accountName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号">
+          <el-table-column prop="accountNo" align="center" header-align="center" label="银行账号" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.accountNo'"
                             :rules="closingFromRules.accountNo">
@@ -100,7 +100,7 @@
               <span v-else>{{ scope.row.accountNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankCode" align="center" header-align="center" label="开户银行代码">
+          <el-table-column prop="bankCode" align="center" header-align="center" label="开户银行代码" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankCode'"
                             :rules="closingFromRules.bankCode">
@@ -109,7 +109,7 @@
               <span v-else>{{ scope.row.bankCode }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankName" align="center" header-align="center" label="开户银行名称">
+          <el-table-column prop="bankName" align="center" header-align="center" label="开户银行名称" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankName'"
                             :rules="closingFromRules.bankName">
@@ -118,7 +118,7 @@
               <span v-else>{{ scope.row.bankName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bankDetail" align="center" header-align="center" label="银行信息描述">
+          <el-table-column prop="bankDetail" align="center" header-align="center" label="银行信息描述" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bankDetail'"
                             :rules="closingFromRules.bankDetail">
@@ -127,7 +127,7 @@
               <span v-else>{{ scope.row.bankDetail }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="bussinessStatus" align="center" header-align="center" label="账号状态">
+          <el-table-column prop="bussinessStatus" align="center" header-align="center" label="账号状态" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-form-item v-if="!scope.row.id" :prop="'baseBankVo.' + scope.$index + '.bussinessStatus'"
                             :rules="closingFromRules.bussinessStatus">
@@ -136,7 +136,7 @@
                              :key="item.dictValue"/>
                 </el-select>
               </el-form-item>
-              <span v-else>{{ scope.row.bussinessStatus }}</span>
+              <span v-else>{{  getAccountacc_statusOptions(scope.row.bussinessStatus) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" min-width="94" fixed="right">
@@ -163,47 +163,47 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-card class="box-card department-style" style="margin-top: 10px;">
-        <div slot="header" class="clearfix">
-          <span>结算信息维护记录</span>
-        </div>
-        <el-table ref="medicalRecordTable"
-                  v-loading="loading"
-                  :data="closingLogData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
 
-          <el-table-column key="1" align="center" prop="currencyName" min-width="150" label="结算币种"/>
-          <el-table-column key="2" align="center" min-width="100" prop="claimFlagName" label="是否仅结算理赔责任"/>
-          <el-table-column key="3" align="center" prop="effectTime" min-width="150" label="生效日期"/>
-          <el-table-column key="4" align="center" min-width="100" prop="noticeDay" label="支付通知时间"/>
-          <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
-          <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
-        </el-table>
-<!--        <div>
-          <el-pagination
-            :total="totalCount"
-            :current-page="formSearch.pageNum"
-            :page-size="formSearch.pageSize"
-            :page-sizes="[10, 20, 30, 40]"
-            style="margin-top: 8px; text-align: right;"
-            layout="sizes, prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"/>
-        </div>-->
-        <!--分页组件-->
-        <pagination
-          v-show="totalCount>0"
-          :total="totalCount"
-          :page.sync="formSearch.pageNum"
-          :limit.sync="formSearch.pageSize"
-          @pagination="getData"
-        />
+      <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">结算信息维护记录</span>
+      </div>
+      <el-table ref="medicalRecordTable"
+                v-loading="loading"
+                :data="closingLogData"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
 
-      </el-card>
+        <el-table-column key="1" align="center" prop="currencyName" min-width="150" label="结算币种"/>
+        <el-table-column key="2" align="center" min-width="100" prop="claimFlagName" label="是否仅结算理赔责任"/>
+        <el-table-column key="3" align="center" prop="effectTime" min-width="150" label="生效日期"/>
+        <el-table-column key="4" align="center" min-width="100" prop="noticeDay" label="支付通知时间"/>
+        <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
+        <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
+      </el-table>
+      <!--        <div>
+                <el-pagination
+                  :total="totalCount"
+                  :current-page="formSearch.pageNum"
+                  :page-size="formSearch.pageSize"
+                  :page-sizes="[10, 20, 30, 40]"
+                  style="margin-top: 8px; text-align: right;"
+                  layout="sizes, prev, pager, next"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"/>
+              </div>-->
+      <!--分页组件-->
+      <pagination
+        v-show="totalCount>0"
+        :total="totalCount"
+        :page.sync="formSearch.pageNum"
+        :limit.sync="formSearch.pageSize"
+        @pagination="getData"
+      />
+
+
 
 
     </el-dialog>
@@ -237,7 +237,7 @@ export default {
     const checkEffectTime = (rules, value, callback) => {
       if (this.closingFrom.baseProviderSettle.claimFlag == '01') {
         if (!this.closingFrom.baseProviderSettle.effectTime) {
-          callback(new Error('生效日期不能位空！'))
+          callback(new Error('生效日期不能为空！'))
         } else {
           callback()
         }
@@ -245,13 +245,31 @@ export default {
         callback()
       }
     }
+
+    const checkNoticeDay = (rules, value, callback) => {
+      let reg= /^(\d+|\d+)$/
+      if(value) {
+        if (value < 0) {
+          callback(new Error("请输入正整数"));
+        } else if (!reg.test(value)) {
+          callback(new Error("请输入正整数"));
+        } else {
+          callback();
+        }
+      }
+      else {
+        callback(new Error("支付通知时间不能为空"));
+      }
+
+    }
     return {
       totalCount: 0,
       // 查询参数
       formSearch: {
         pageNum: 1,
         pageSize: 10,
-        providerCode: undefined
+        providerCode: undefined,
+        orgFlag: undefined,
       },
       closingLogData: [],
       dialogVisible: false,
@@ -263,9 +281,10 @@ export default {
       ],
       closingFromRules: {
         effectTime: [{validator: checkEffectTime, trigger: 'blur'}],
+
         currency: [{required: true, message: '不能为空！', trigger: 'change'}],
         claimFlag: [{required: true, message: '不能为空！', trigger: 'change'}],
-        noticeDay: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        noticeDay: [{required: true, validator: checkNoticeDay, trigger: 'blur'}],
         accountType: [{required: true, message: '不能为空！', trigger: 'change'}],
         accountName: [{required: true, message: '不能为空！', trigger: 'blur'}],
         accountNo: [{required: true, message: '不能为空！', trigger: 'blur'}],
@@ -290,6 +309,9 @@ export default {
 
   },
   methods: {
+    getAccountacc_statusOptions(data) {
+      return this.selectDictLabel(this.accountacc_statusOptions, data)
+    },
     init() {
       if (this.dictList != null && this.dictList.length != 0) {
         this.currencyOptions = this.dictList.find(item => {
@@ -314,6 +336,7 @@ export default {
       /* if(!this.annexupload) {*/
 
       this.$refs.closingFrom.validate((valid1) => {
+
         if (this.closingFrom.baseBankVo != null && this.closingFrom.baseBankVo.length > 0) {
           this.$refs.closingTableForm.validate((valid2) => {
             if (valid1 && valid2) {
@@ -368,13 +391,14 @@ export default {
             }*/
 
             } else {
-              return false
+              this.$message.warning('结算信息必录项未必录')
             }
 
           })
-        } else {
+        }
+        else {
           this.$message({
-            message: '结算账户不能为空',
+            message: '至少添加一条结算账户信息！',
             center: true,
             type: "warning"
           });
@@ -388,10 +412,12 @@ export default {
     checkRecord() {
       this.dialogVisible = true
       //调用查询方法
+
       this.getData()
     },
 
     getData() {
+      this.formSearch.orgFlag=this.status
       this.formSearch.providerCode = this.providerCode
       selectsettleInfo(this.formSearch).then(res => {
         this.closingLogData = res.rows
@@ -400,15 +426,15 @@ export default {
 
       })
     },
-/*
-    handleSizeChange(val) {
-      this.formSearch.pageSize = val
-      this.getData()
-    },
-    handleCurrentChange(val) {
-      this.formSearch.pageNum = val
-      this.getData()
-    },*/
+    /*
+        handleSizeChange(val) {
+          this.formSearch.pageSize = val
+          this.getData()
+        },
+        handleCurrentChange(val) {
+          this.formSearch.pageNum = val
+          this.getData()
+        },*/
 
     //增加一行结算信息
     addClosingHandle() {
@@ -448,7 +474,18 @@ export default {
 
     },
     delHandle(index, row) {
-      this.closingFrom.baseBankVo.splice(index, 1)
+      this.$confirm('是否删除当前行账户信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.closingFrom.baseBankVo.splice(index, 1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
 
     // 校验数据
@@ -458,16 +495,16 @@ export default {
         if (this.closingFrom.baseBankVo != null && this.closingFrom.baseBankVo.length > 0) {
           this.$refs.closingTableForm.validate((valid2) => {
             if (valid1 && valid2) {
-              flag = true
+              flag = '01'
             } else {
-              flag = false
+              flag = '03'
             }
           })
         }
         else {
-          flag=false
+          flag='02'
         }
-        })
+      })
       return flag
     }
 
@@ -481,7 +518,7 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 

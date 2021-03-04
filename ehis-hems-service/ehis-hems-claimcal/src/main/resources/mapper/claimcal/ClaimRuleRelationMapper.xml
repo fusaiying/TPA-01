@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimcal.mapper.ClaimRuleRelationMapper">
+
+    <resultMap type="com.paic.ehis.claimcal.domain.ClaimRuleRelationInfo" id="ClaimRuleRelationInfoResult">
+        <result property="relationNo"    column="relation_no"    />
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="planName"    column="plan_Name"    />
+        <result property="dutyCode"    column="duty_code"    />
+        <result property="dutyName"    column="duty_Name"    />
+        <result property="dutyDetailCode"    column="duty_detail_code"    />
+        <result property="dutyDetailName"    column="duty_detail_Name"    />
+        <result property="feeitemCode"    column="feeitem_code"    />
+        <result property="feeitemName"    column="feeitem_Name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimRuleRelationInfoVo">
+        select relation_no, rule_no, plan_code, plan_Name, duty_code, duty_Name, duty_detail_code, duty_detail_Name, feeitem_code, feeitem_Name,status, create_by, create_time, update_by, update_time from claim_rule_relation
+    </sql>
+
+    <select id="selectClaimRuleRelationInfoList" parameterType="com.paic.ehis.claimcal.domain.ClaimRuleRelation" resultMap="ClaimRuleRelationInfoResult">
+        select relation.relation_no, relation.rule_no, relation.plan_code, plan.plan_Name,
+        relation.duty_code, duty.duty_Name, relation.duty_detail_code, detail.duty_detail_Name,
+        relation.feeitem_code, feeitem.feeitem_Name,
+        relation.status, relation.create_by, relation.create_time, relation.update_by, relation.update_time
+        from claim_rule_relation relation
+        left join claim_product_plan plan on relation.plan_code = plan.plan_code
+        left join claim_product_duty duty on relation.duty_code = duty.duty_code and relation.plan_code = duty.plan_code
+        left join claim_product_duty_detail detail on relation.duty_detail_code = detail.duty_detail_code and relation.duty_code = detail.duty_code
+        left join claim_product_feeitem feeitem on relation.feeitem_code = feeitem.feeitem_code and relation.duty_detail_code = feeitem.duty_detail_code
+        <where>
+            <if test="ruleNo != null  and ruleNo != ''"> and relation.rule_no = #{ruleNo}</if>
+            <if test="planCode != null  and planCode != ''"> and relation.plan_code = #{planCode}</if>
+            <if test="dutyCode != null  and dutyCode != ''"> and relation.duty_code = #{dutyCode}</if>
+            <if test="dutyDetailCode != null  and dutyDetailCode != ''"> and relation.duty_detail_code = #{dutyDetailCode}</if>
+            <if test="feeitemCode != null  and feeitemCode != ''"> and relation.feeitem_code = #{feeitemCode}</if>
+            <if test="status != null  and status != ''"> and relation.status = #{status}</if>
+        </where>
+    </select>
+
+
+    <resultMap type="com.paic.ehis.claimcal.domain.ClaimRuleRelation" id="ClaimRuleRelationResult">
+        <result property="relationNo"    column="relation_no"    />
+        <result property="ruleNo"    column="rule_no"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="dutyCode"    column="duty_code"    />
+        <result property="dutyDetailCode"    column="duty_detail_code"    />
+        <result property="feeitemCode"    column="feeitem_code"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimRuleRelationVo">
+        select relation_no, rule_no, plan_code, duty_code, duty_detail_code, feeitem_code, status, create_by, create_time, update_by, update_time from claim_rule_relation
+    </sql>
+
+    <select id="selectClaimRuleRelationList" parameterType="com.paic.ehis.claimcal.domain.ClaimRuleRelation" resultMap="ClaimRuleRelationResult">
+        <include refid="selectClaimRuleRelationVo"/>
+        <where>  
+            <if test="ruleNo != null  and ruleNo != ''"> and rule_no = #{ruleNo}</if>
+            <if test="planCode != null  and planCode != ''"> and plan_code = #{planCode}</if>
+            <if test="dutyCode != null  and dutyCode != ''"> and duty_code = #{dutyCode}</if>
+            <if test="dutyDetailCode != null  and dutyDetailCode != ''"> and duty_detail_code = #{dutyDetailCode}</if>
+            <if test="feeitemCode != null  and feeitemCode != ''"> and feeitem_code = #{feeitemCode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimRuleRelationById" parameterType="String" resultMap="ClaimRuleRelationResult">
+        <include refid="selectClaimRuleRelationVo"/>
+        where relation_no = #{relationNo}
+    </select>
+        
+    <insert id="insertClaimRuleRelation" parameterType="com.paic.ehis.claimcal.domain.ClaimRuleRelation">
+        insert into claim_rule_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relationNo != null">relation_no,</if>
+            <if test="ruleNo != null and ruleNo != ''">rule_no,</if>
+            <if test="planCode != null and planCode != ''">plan_code,</if>
+            <if test="dutyCode != null">duty_code,</if>
+            <if test="dutyDetailCode != null">duty_detail_code,</if>
+            <if test="feeitemCode != null">feeitem_code,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relationNo != null">#{relationNo},</if>
+            <if test="ruleNo != null and ruleNo != ''">#{ruleNo},</if>
+            <if test="planCode != null and planCode != ''">#{planCode},</if>
+            <if test="dutyCode != null">#{dutyCode},</if>
+            <if test="dutyDetailCode != null">#{dutyDetailCode},</if>
+            <if test="feeitemCode != null">#{feeitemCode},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimRuleRelation" parameterType="com.paic.ehis.claimcal.domain.ClaimRuleRelation">
+        update claim_rule_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleNo != null and ruleNo != ''">rule_no = #{ruleNo},</if>
+            <if test="planCode != null and planCode != ''">plan_code = #{planCode},</if>
+            <if test="dutyCode != null">duty_code = #{dutyCode},</if>
+            <if test="dutyDetailCode != null">duty_detail_code = #{dutyDetailCode},</if>
+            <if test="feeitemCode != null">feeitem_code = #{feeitemCode},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where relation_no = #{relationNo}
+    </update>
+
+    <delete id="deleteClaimRuleRelationById" parameterType="String">
+        delete from claim_rule_relation where relation_no = #{relationNo}
+    </delete>
+
+    <delete id="deleteClaimRuleRelationByIds" parameterType="String">
+        delete from claim_rule_relation where relation_no in 
+        <foreach item="relationNo" collection="array" open="(" separator="," close=")">
+            #{relationNo}
+        </foreach>
+    </delete>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into claim_rule_relation (relation_no, rule_no, plan_code,
+        duty_code, duty_detail_code, feeitem_code,
+        status, create_by, create_time,
+        update_by, update_time) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.relationNo}, #{item.ruleNo}, #{item.planCode},
+            #{item.dutyCode}, #{item.dutyDetailCode}, #{item.feeitemCode},
+            #{item.status}, #{item.createBy}, #{item.createTime},
+            #{item.updateBy}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="deleteByUpdateN" parameterType="String">
+        update claim_rule_relation
+        SET status = 'N'
+        where relation_no in
+        <foreach item="relationNo" collection="array" open="(" separator="," close=")">
+            #{relationNo}
+        </foreach>
+    </update>
+
+</mapper>

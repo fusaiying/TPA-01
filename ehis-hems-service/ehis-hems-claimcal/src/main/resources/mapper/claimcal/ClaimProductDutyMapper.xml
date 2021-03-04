@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimcal.mapper.ClaimProductDutyMapper">
+    
+    <resultMap type="com.paic.ehis.claimcal.domain.ClaimProductDuty" id="ClaimProductDutyResult">
+        <result property="dutyCode"    column="duty_code"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="riskCode"    column="risk_code"    />
+        <result property="dutyName"    column="duty_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimProductDutyVo">
+        select duty_code, plan_code, risk_code, duty_name, status, create_by, create_time, update_by, update_time from claim_product_duty
+    </sql>
+
+    <select id="selectClaimProductDutyList" parameterType="com.paic.ehis.claimcal.domain.ClaimProductDuty" resultMap="ClaimProductDutyResult">
+        <include refid="selectClaimProductDutyVo"/>
+        <where>  
+            <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
+            <if test="dutyName != null  and dutyName != ''"> and duty_name like concat('%', #{dutyName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimProductDutyById" parameterType="String" resultMap="ClaimProductDutyResult">
+        <include refid="selectClaimProductDutyVo"/>
+        where duty_code = #{dutyCode} and plan_code = #{planCode}
+    </select>
+        
+    <insert id="insertClaimProductDuty" parameterType="com.paic.ehis.claimcal.domain.ClaimProductDuty">
+        insert into claim_product_duty
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dutyCode != null">duty_code,</if>
+            <if test="planCode != null">plan_code,</if>
+            <if test="riskCode != null and riskCode != ''">risk_code,</if>
+            <if test="dutyName != null">duty_name,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dutyCode != null">#{dutyCode},</if>
+            <if test="planCode != null">#{planCode},</if>
+            <if test="riskCode != null and riskCode != ''">#{riskCode},</if>
+            <if test="dutyName != null">#{dutyName},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimProductDuty" parameterType="com.paic.ehis.claimcal.domain.ClaimProductDuty">
+        update claim_product_duty
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planCode != null">plan_code = #{planCode},</if>
+            <if test="riskCode != null and riskCode != ''">risk_code = #{riskCode},</if>
+            <if test="dutyName != null">duty_name = #{dutyName},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where duty_code = #{dutyCode}
+    </update>
+
+    <delete id="deleteClaimProductDutyById" parameterType="String">
+        delete from claim_product_duty where duty_code = #{dutyCode}
+    </delete>
+
+    <delete id="deleteClaimProductDutyByIds" parameterType="String">
+        delete from claim_product_duty where duty_code in 
+        <foreach item="dutyCode" collection="array" open="(" separator="," close=")">
+            #{dutyCode}
+        </foreach>
+    </delete>
+    
+</mapper>

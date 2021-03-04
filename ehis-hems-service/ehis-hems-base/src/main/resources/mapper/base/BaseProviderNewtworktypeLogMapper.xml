@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.base.mapper.BaseProviderNewtworktypeLogMapper">
+    
+    <resultMap type="BaseProviderNewtworktypeLog" id="BaseProviderNewtworktypeLogResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="networktypeCode"    column="networktype_code"    />
+        <result property="oldChoose"    column="old_choose"    />
+        <result property="newChoose"    column="new_choose"    />
+        <result property="newChooseName"    column="newChooseName"    />
+        <result property="newDate"    column="new_date"    />
+        <result property="status"    column="status"    />
+        <result property="failureTime"    column="failure_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="networktypeName"    column="networktypeName"    />
+    </resultMap>
+
+    <sql id="selectBaseProviderNewtworktypeLogVo">
+        SELECT
+        serial_no,
+        supplier_code,
+        networktype_code,
+        (select networktype_name from base_provider_newtworktypet_data data where data.networktype_code = base_provider_newtworktype_log.networktype_code) networktypeName,
+        old_choose,
+        new_choose,
+        CASE when new_choose = '01' then '否'  when new_choose = '02' then '是' end newChooseName ,
+        new_date,
+        STATUS,
+        failure_time,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+        FROM
+        base_provider_newtworktype_log
+	    </sql>
+
+    <select id="selectBaseProviderNewtworktypeLogList" parameterType="BaseProviderNewtworktypeLog" resultMap="BaseProviderNewtworktypeLogResult">
+        <include refid="selectBaseProviderNewtworktypeLogVo"/>
+        <where>  
+            <if test="supplierCode != null  and supplierCode != ''"> and supplier_code = #{supplierCode}</if>
+            <if test="networktypeCode != null  and networktypeCode != ''"> and networktype_code = #{networktypeCode}</if>
+            <if test="oldChoose != null  and oldChoose != ''"> and old_choose = #{oldChoose}</if>
+            <if test="newChoose != null  and newChoose != ''"> and new_choose = #{newChoose}</if>
+            <if test="newDate != null "> and new_date = #{newDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="failureTime != null "> and failure_time = #{failureTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBaseProviderNewtworktypeLogById" parameterType="String" resultMap="BaseProviderNewtworktypeLogResult">
+        <include refid="selectBaseProviderNewtworktypeLogVo"/>
+        where serial_no = #{serialNo}
+    </select>
+        
+    <insert id="insertBaseProviderNewtworktypeLog" parameterType="BaseProviderNewtworktypeLog">
+        insert into base_provider_newtworktype_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">serial_no,</if>
+            <if test="supplierCode != null">supplier_code,</if>
+            <if test="networktypeCode != null">networktype_code,</if>
+            <if test="oldChoose != null and oldChoose != ''">old_choose,</if>
+            <if test="newChoose != null">new_choose,</if>
+            <if test="newDate != null">new_date,</if>
+            <if test="status != null">status,</if>
+            <if test="failureTime != null">failure_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNo != null">#{serialNo},</if>
+            <if test="supplierCode != null">#{supplierCode},</if>
+            <if test="networktypeCode != null">#{networktypeCode},</if>
+            <if test="oldChoose != null and oldChoose != ''">#{oldChoose},</if>
+            <if test="newChoose != null">#{newChoose},</if>
+            <if test="newDate != null">#{newDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="failureTime != null">#{failureTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBaseProviderNewtworktypeLog" parameterType="BaseProviderNewtworktypeLog">
+        update base_provider_newtworktype_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierCode != null">supplier_code = #{supplierCode},</if>
+            <if test="networktypeCode != null">networktype_code = #{networktypeCode},</if>
+            <if test="oldChoose != null and oldChoose != ''">old_choose = #{oldChoose},</if>
+            <if test="newChoose != null">new_choose = #{newChoose},</if>
+            <if test="newDate != null">new_date = #{newDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="failureTime != null">failure_time = #{failureTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where serial_no = #{serialNo}
+    </update>
+
+    <delete id="deleteBaseProviderNewtworktypeLogById" parameterType="String">
+        delete from base_provider_newtworktype_log where serial_no = #{serialNo}
+    </delete>
+
+    <delete id="deleteBaseProviderNewtworktypeLogByIds" parameterType="String">
+        delete from base_provider_newtworktype_log where serial_no in
+        <foreach item="serialNo" collection="array" open="(" separator="," close=")">
+            #{serialNo}
+        </foreach>
+    </delete>
+    
+</mapper>

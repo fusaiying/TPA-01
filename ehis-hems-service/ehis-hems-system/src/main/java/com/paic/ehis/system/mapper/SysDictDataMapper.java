@@ -1,11 +1,10 @@
 package com.paic.ehis.system.mapper;
 
-import java.util.List;
-
 import com.paic.ehis.system.domain.HmpAddress;
+import com.paic.ehis.system.domain.SysDictData;
 import org.apache.ibatis.annotations.Param;
 
-import com.paic.ehis.system.domain.SysDictData;
+import java.util.List;
 
 /**
  * 字典表 数据层

@@ -57,6 +57,15 @@
             </el-checkbox-group>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="是否周末营业：" prop="weekendsWorking">
+            <el-radio-group v-model="serviceForm.weekendsWorking">
+              <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in yes_or_noOptions ">
+                {{ item.dictLabel }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
@@ -133,7 +142,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="导检/陪检/驻点：">
+          <el-form-item label="导检/陪检/驻点：" prop="leadFlag">
             <el-radio-group v-model="serviceForm.leadFlag">
               <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in leadFlagOptions ">
                 {{ item.dictLabel }}
@@ -162,7 +171,7 @@
 
 
         <el-col :span="24">
-          <el-form-item label="特殊语种服务：" prop="speciallanguage">
+          <el-form-item label="特殊服务语种：" prop="speciallanguage">
             <el-checkbox-group v-model="serviceForm.speciallanguage">
               <el-checkbox :label="item.dictValue" :key="item.dictValue" v-for="item in  speciallanguageOptions"
                            @click.native="changeDisabled(item,$event)" :disabled="item.isShow">
@@ -308,52 +317,53 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-card class="box-card department-style" style="margin-top: 10px;">
-        <div slot="header" class="clearfix">
-          <span>医疗网络类型维护</span>
-        </div>
-        <el-table ref="medicalTable"
-                  :data="medicalTypeData"
-                  v-loading="loading"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
 
-          <el-table-column key="1" align="center" prop="networktypeName" min-width="150" label="医疗网络类型"/>
-          <el-table-column key="2" align="center" min-width="100" prop="productCode" label="产品代码"/>
-          <el-table-column key="3" align="center" prop="oldChoose" label="当前选项" min-width="120">
-            <template slot-scope="scope">
-              <span>{{ scope.row.oldChoose == '01' ? '否' : '是' }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column key="11" align="center" min-width="120px" label="新选项">
-            <template slot-scope="scope">
-              <input type="checkBox" v-model="scope.row.isCheck" @click="changeOption(scope.$index,scope.row)">
-              {{ scope.row.newChoose == '02' ? '是' : '否' }}
-            </template>
+      <div  style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">医疗网络类型维护</span>
+      </div>
 
-          </el-table-column>
-          <!--            <el-table-column key="4"  align="left" width="120"  >
+      <el-table ref="medicalTable"
+                :data="medicalTypeData"
+                v-loading="loading"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
 
-                      </el-table-column>-->
-          <el-table-column key="5" align="center" min-width="150" prop="newDate" label="新选项生效日" style="width: 180px">
-            <template slot-scope="scope">
-              <el-date-picker v-if="scope.row.newInputShow " v-model="scope.row.newDate"
-                              type="datetime"
-                              placeholder="选择日期时间">
-              </el-date-picker>
-              <span v-else="scope.row.newDate">{{ scope.row.newDate }}</span>
+        <el-table-column key="1" align="center" prop="networktypeName" min-width="150" label="医疗网络类型"/>
+        <el-table-column key="2" align="center" min-width="100" prop="productCode" label="产品代码"/>
+        <el-table-column key="3" align="center" prop="oldChoose" label="当前选项" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.oldChoose == '01' ? '否' : '是' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column key="11" align="center" min-width="120px" label="新选项">
+          <template slot-scope="scope">
+            <input type="checkBox" v-model="scope.row.isCheck" @click="changeOption(scope.$index,scope.row)">
+            {{ scope.row.newChoose == '02' ? '是' : '否' }}
+          </template>
 
+        </el-table-column>
+        <!--            <el-table-column key="4"  align="left" width="120"  >
 
-            </template>
-          </el-table-column>
-          <el-table-column key="6" align="center" prop="updateBy" label="操作人" min-width="120"/>
-        </el-table>
+                    </el-table-column>-->
+        <el-table-column key="5" align="center" min-width="150" prop="newDate" label="新选项生效日" style="width: 180px">
+          <template slot-scope="scope">
+            <el-date-picker v-if="scope.row.newInputShow " v-model="scope.row.newDate"
+                            type="datetime"
+                            placeholder="选择日期时间">
+            </el-date-picker>
+            <span v-else="scope.row.newDate">{{ scope.row.newDate }}</span>
 
 
-      </el-card>
+          </template>
+        </el-table-column>
+        <el-table-column key="6" align="center" prop="updateBy" label="操作人" min-width="120"/>
+      </el-table>
+
+
+
 
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="delConfirm">确 定</el-button>
@@ -368,38 +378,38 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-card class="box-card department-style" style="margin-top: 10px;">
-        <div slot="header" class="clearfix">
-          <span>所属医疗网络类型维护记录</span>
-        </div>
-        <el-table ref="medicalRecordTable"
-                  :data="medicalRecordData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
 
-          <el-table-column key="1" align="center" prop="networktypeName" min-width="150" label="医疗网络类型"/>
-          <el-table-column key="2" align="center" min-width="100" prop="newChooseName" label="选项"/>
-          <el-table-column key="3" align="center" prop="newDate" min-width="150" label="选项生效日"/>
-          <el-table-column key="4" align="center" min-width="100" prop="failureTime" label="选项失效日"/>
-          <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
-          <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
-        </el-table>
+      <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">所属医疗网络类型维护记录</span>
+      </div>
+      <el-table ref="medicalRecordTable"
+                :data="medicalRecordData"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
 
-          <!--分页组件-->
-          <pagination
-            v-show="totalCount>0"
-            :total="totalCount"
-            :page.sync="formSearch.pageNum"
-            :limit.sync="formSearch.pageSize"
-            @pagination="getData"
-          />
+        <el-table-column key="1" align="center" prop="networktypeName" min-width="150" label="医疗网络类型"/>
+        <el-table-column key="2" align="center" min-width="100" prop="newChooseName" label="选项"/>
+        <el-table-column key="3" align="center" prop="newDate" min-width="150" label="选项生效日"/>
+        <el-table-column key="4" align="center" min-width="100" prop="failureTime" label="选项失效日"/>
+        <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
+        <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
+      </el-table>
+
+      <!--分页组件-->
+      <pagination
+        v-show="totalCount>0"
+        :total="totalCount"
+        :page.sync="formSearch.pageNum"
+        :limit.sync="formSearch.pageSize"
+        @pagination="getData"
+      />
 
 
 
-      </el-card>
+
 
 
     </el-dialog>
@@ -412,65 +422,65 @@
       :close-on-click-modal="false"
       title=""
       width="50%">
-      <el-card class="box-card department-style" style="margin-top: 10px;">
-        <div slot="header" class="clearfix">
-          <span>险种维护列表</span>
-          <span style="float: right;">
+
+      <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">险种维护列表</span>
+        <span style="float: right;">
           <el-button size="mini" type="primary" @click="insuranceSaveHandle">保存</el-button>
               <el-button size="mini" type="primary" @click="insuranceCloingHandle">关闭</el-button>
         </span>
-        </div>
-        <el-table ref="insuranceRecordTable"
-                  :data="insuranceRecordData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
+      </div>
+      <el-table ref="insuranceRecordTable"
+                :data="insuranceRecordData"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
 
-          <el-table-column label="险种代码" prop="insurancecode" align="center">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.insurancecode" class="item-width" placeholder="请选择" clearable
-                         v-if="!scope.row.id"
-                         size="mini"
-              >
-                <!--                <el-option value="01" label="是"></el-option>
-                                <el-option value="02" label="否"></el-option>-->
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
-              </el-select>
+        <el-table-column label="险种代码" prop="insurancecode" align="center">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.insurancecode" class="item-width" placeholder="请选择" clearable
+                       v-if="!scope.row.id"
+                       size="mini"
+            >
+              <!--                <el-option value="01" label="是"></el-option>
+                              <el-option value="02" label="否"></el-option>-->
+              <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
+            </el-select>
 
-              <span v-else>{{ scope.row.insurancecode }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="所属网络类型" prop="netType" align="center">
+            <span v-else>{{ scope.row.insurancecode }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属网络类型" prop="netType" align="center">
 
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.netType" class="item-width" v-if="!scope.row.id" placeholder="请选择" clearable
-                         size="mini"
-              >
-                <!--                <el-option value="01" label="是"></el-option>
-                                <el-option value="02" label="否"></el-option>-->
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
-              </el-select>
-              <span v-else>{{ scope.row.netType }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" fixed="right">
-            <template slot-scope="scope">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.netType" class="item-width" v-if="!scope.row.id" placeholder="请选择" clearable
+                       size="mini"
+            >
+              <!--                <el-option value="01" label="是"></el-option>
+                              <el-option value="02" label="否"></el-option>-->
+              <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
+            </el-select>
+            <span v-else>{{ scope.row.netType }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" fixed="right">
+          <template slot-scope="scope">
                     <span>
                        <el-button type="text" size="mini"
                                   @click="delHandle(scope.$index, scope.row)">移除</el-button>
                     </span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-button type="text" size="mini"
-                   style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
-                   @click="addInsuranceRecordHandle()"> + 添加
-        </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button type="text" size="mini"
+                 style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
+                 @click="addInsuranceRecordHandle()"> + 添加
+      </el-button>
 
 
-      </el-card>
+
 
     </el-dialog>
 
@@ -482,37 +492,37 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-card class="box-card department-style" style="margin-top: 10px;">
-        <div slot="header" class="clearfix">
-          <span>险种维护记录</span>
-        </div>
-        <el-table ref="medicalRecordTable"
-                  v-loading="loading"
-                  :data="insuranceLogData"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                  size="small"
-                  highlight-current-row
-                  tooltip-effect="dark"
-                  style="width: 100%;">
 
-          <el-table-column key="1" align="center" prop="networktypeCode" min-width="150" label="险种"/>
-          <el-table-column key="2" align="center" min-width="100" prop="oldChoose" label="选项"/>
-          <el-table-column key="3" align="center" prop="newDate" min-width="150" label="选项生效日"/>
-          <el-table-column key="4" align="center" min-width="100" prop="failureTime" label="选项失效日"/>
-          <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
-          <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
-        </el-table>
-        <!--分页组件-->
-        <pagination
-          v-show="insuranceLogTotalCount>0"
-          :total="insuranceLogTotalCount"
-          :page.sync="insuranceLogFormSearch.pageNum"
-          :limit.sync="insuranceLogFormSearch.pageSize"
-          @pagination="getInsuranceLogData"
-        />
+      <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
+        <span style="font-size: 20px">险种维护记录</span>
+      </div>
+      <el-table ref="medicalRecordTable"
+                v-loading="loading"
+                :data="insuranceLogData"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                size="small"
+                highlight-current-row
+                tooltip-effect="dark"
+                style="width: 100%;">
+
+        <el-table-column key="1" align="center" prop="networktypeCode" min-width="150" label="险种"/>
+        <el-table-column key="2" align="center" min-width="100" prop="oldChoose" label="选项"/>
+        <el-table-column key="3" align="center" prop="newDate" min-width="150" label="选项生效日"/>
+        <el-table-column key="4" align="center" min-width="100" prop="failureTime" label="选项失效日"/>
+        <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
+        <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
+      </el-table>
+      <!--分页组件-->
+      <pagination
+        v-show="insuranceLogTotalCount>0"
+        :total="insuranceLogTotalCount"
+        :page.sync="insuranceLogFormSearch.pageNum"
+        :limit.sync="insuranceLogFormSearch.pageSize"
+        @pagination="getInsuranceLogData"
+      />
 
 
-      </el-card>
+
 
 
     </el-dialog>
@@ -525,6 +535,7 @@
 </template>
 <script>
 import {
+
   getserviceInfo,
   addserviceInfo,
   updateserviceInfo,
@@ -534,6 +545,7 @@ import {
   getNewtworktypeRisklog
 } from "@/api/baseInfo/medicalManage";
 import {formatDate} from "@/utils";
+import {getSupplierContractBakDetail} from "@/api/contractManage/contractManagement";
 
 
 export default {
@@ -562,63 +574,73 @@ export default {
   data() {
     const checkGrade = (rules, value, callback) => {
       const regx = /^\+?(?:\d(?:\.\d)?|10(?:\.0)?)$/
-      if (!regx.test(value)) {
-        callback(new Error('评分在0-10，最多保留一位小数！'))
-      } else {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.grade) {
+          callback(new Error('不能为空！'))
+        }
+        else{
+          if (!regx.test(value)) {
+            callback(new Error('评分在0-10，最多保留一位小数！'))
+          } else {
+            callback()
+          }
+        }
+      }
+      else{
         callback()
       }
     }
 
-    const checkExamineDiscount = (rules, value, callback) => {
-      if (value) {
-        const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-        if (!regx.test(value)) {
-          callback(new Error('评分在0-1，最多保留二位小数！'))
-        } else {
-          callback()
+    /*    const checkExamineDiscount = (rules, value, callback) => {
+          if (value) {
+            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
+            if (!regx.test(value)) {
+              callback(new Error('评分在0-1，最多保留二位小数！'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
         }
-      } else {
-        callback()
-      }
-    }
 
-    const checkDiscount = (rules, value, callback) => {
-      if (value) {
-        const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-        if (!regx.test(value)) {
-          callback(new Error('评分在0-1，最多保留二位小数！'))
-        } else {
-          callback()
+        const checkDiscount = (rules, value, callback) => {
+          if (value) {
+            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
+            if (!regx.test(value)) {
+              callback(new Error('评分在0-1，最多保留二位小数！'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
         }
-      } else {
-        callback()
-      }
-    }
-    const checkAllowance = (rules, value, callback) => {
-      if (value) {
-        const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-        if (!regx.test(value)) {
-          callback(new Error('评分在0-1，最多保留二位小数！'))
-        } else {
-          callback()
+        const checkAllowance = (rules, value, callback) => {
+          if (value) {
+            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
+            if (!regx.test(value)) {
+              callback(new Error('评分在0-1，最多保留二位小数！'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
         }
-      } else {
-        callback()
-      }
-    }
 
-    const checkCosts = (rules, value, callback) => {
-      if (value) {
-        const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-        if (!regx.test(value)) {
-          callback(new Error('评分在0-1，最多保留二位小数！'))
-        } else {
-          callback()
-        }
-      } else {
-        callback()
-      }
-    }
+        const checkCosts = (rules, value, callback) => {
+          if (value) {
+            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
+            if (!regx.test(value)) {
+              callback(new Error('评分在0-1，最多保留二位小数！'))
+            } else {
+              callback()
+            }
+          } else {
+            callback()
+          }
+        }*/
     const checkDisplaynetwork = (rules, value, callback) => {
 
       if (this.historyContractBtnShow) {
@@ -636,6 +658,17 @@ export default {
       if (this.historyContractBtnShow) {
         if (!this.serviceForm.officialwebsite) {
           callback(new Error('网站显示不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkSellingpoint = (rules, value, callback) => {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.sellingpoint) {
+          callback(new Error('不能为空！'))
         } else {
           callback()
         }
@@ -706,7 +739,7 @@ export default {
 
     const checkLeadFlag = (rules, value, callback) => {
       if (this.historyContractBtnShow) {
-        if (!this.serviceForm.leadFlag) {
+        if (!this.serviceForm.leadFlag){
           callback(new Error('不能为空！'))
         } else {
           callback()
@@ -728,23 +761,23 @@ export default {
       }
     }
 
-    /*  const checkVirtualOrg=(rules, value, callback) => {
-        if(this.historyContractBtnShow){
-          if(!this.serviceForm.virtualOrg){
-            callback(new Error('不能为空！'))
-          }
-          else {
-            callback()
-          }
+    const checkVirtualOrg=(rules, value, callback) => {
+      if(this.historyContractBtnShow){
+        if(!this.serviceForm.virtualOrg){
+          callback(new Error('不能为空！'))
         }
         else {
           callback()
         }
-      }*/
+      }
+      else {
+        callback()
+      }
+    }
 
     const checkSpeciallanguage = (rules, value, callback) => {
       if (this.historyContractBtnShow) {
-        if (!this.serviceForm.speciallanguage) {
+        if (this.serviceForm.speciallanguage.length<=0) {
           callback(new Error('不能为空！'))
         } else {
           callback()
@@ -756,6 +789,50 @@ export default {
     const checkNetworkHospitalType = (rules, value, callback) => {
       if (this.historyContractBtnShow) {
         if (this.serviceForm.networkHospitalType.length<=0) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkCooperationStatus = (rules, value, callback) => {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.cooperationStatus) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkWeekendsWorking = (rules, value, callback) => {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.weekendsWorking) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkForeignnote = (rules, value, callback) => {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.foreignnote) {
+          callback(new Error('不能为空！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkInternalnote = (rules, value, callback) => {
+      if (this.historyContractBtnShow) {
+        if (!this.serviceForm.internalnote) {
           callback(new Error('不能为空！'))
         } else {
           callback()
@@ -794,27 +871,30 @@ export default {
       modalValue: false,
       serivceFormRules: {
         grade: [{validator: checkGrade, trigger: 'blur'}],
-        cooperationStatus: [{required: true, message: '不能为空！', trigger: 'change'}],
-        foreignnote: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        internalnote: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        examineDiscount: [{validator: checkExamineDiscount, trigger: 'blur'}],
-        bedDiscount: [{validator: checkDiscount, trigger: 'blur'}],
-        adviceNum: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        allowance: [{validator: checkAllowance, trigger: 'blur'}],
-        costs: [{validator: checkCosts, trigger: 'blur'}],
+        cooperationStatus: [{validator: checkCooperationStatus, trigger: 'change'}],
+        foreignnote: [{validator: checkForeignnote, trigger: 'blur'}],
+        internalnote: [{validator:checkInternalnote, trigger: 'blur'}],
+        //examineDiscount: [{validator: checkExamineDiscount, trigger: 'blur'}],
+        // bedDiscount: [{validator: checkDiscount, trigger: 'blur'}],
+        // adviceNum: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        // allowance: [{validator: checkAllowance, trigger: 'blur'}],
+        // costs: [{validator: checkCosts, trigger: 'blur'}],
 
-        displaynetwork: [{validator: checkDisplaynetwork, trigger: 'blur'}],
+        displaynetwork: [{validator: checkDisplaynetwork, trigger: 'change'}],
         officialwebsite: [{validator: checkOfficialwebsite, trigger: 'blur'}],
-        allcontopen: [{validator: checkAllcontopen, trigger: 'blur'}],
-        prehospital: [{validator: checkPrehospital, trigger: 'blur'}],
-        topten: [{validator: checkTopten, trigger: 'blur'}],
-        specializedHospital: [{validator: checkSpecializedHospital, trigger: 'blur'}],
-        topthird: [{validator: checkTopthird, trigger: 'blur'}],
-        leadFlag: [{validator: checkLeadFlag, trigger: 'blur'}],
-        topfive: [{validator: checkTopfive, trigger: 'blur'}],
-        virtualOrg: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        speciallanguage: [{validator: checkSpeciallanguage, trigger: 'blur'}],
+        allcontopen: [{validator: checkAllcontopen, trigger: 'change'}],
+        prehospital: [{validator: checkPrehospital, trigger: 'change'}],
+        topten: [{validator: checkTopten, trigger: 'change'}],
+        specializedHospital: [{validator: checkSpecializedHospital, trigger: 'change'}],
+        topthird: [{validator: checkTopthird, trigger: 'change'}],
+        leadFlag: [{validator: checkLeadFlag, trigger: 'change'}],
+        topfive: [{validator: checkTopfive, trigger: 'change'}],
+        virtualOrg: [{validator: checkVirtualOrg, trigger: 'change'}],
+        speciallanguage: [{validator: checkSpeciallanguage, trigger: 'change'}],
         networkHospitalType: [{validator: checkNetworkHospitalType, trigger: 'change'}],
+        weekendsWorking: [{validator: checkWeekendsWorking, trigger: 'change'}],
+        sellingpoint: [{validator: checkSellingpoint, trigger: 'blur'}],
+
 
       },
       saveFlag: true,
@@ -829,7 +909,8 @@ export default {
       typeOptions: [],
       leadFlagOptions: [],
       virtual_orgOptions: [],
-
+      //历史合约的数据
+      pendingTableData: [],
       serviceForm: {
         excludingFee: undefined,
         topten: undefined,
@@ -860,6 +941,7 @@ export default {
         foreignnote: undefined,
         internalnote: undefined,
         officialwebsite: '02',
+        weekendsWorking: undefined,
         servicelocator: [],
         speciallanguage: [],
         networkHospitalType: []
@@ -891,8 +973,6 @@ export default {
   ,
   methods: {
     changeDisabled(val, event) {
-      console.log(val)
-      console.log(event.target.checked)
       /*      if(val.dictValue=='10'){
               this.speciallanguageOptions.forEach(item=>{
                 if (item.index < 10){
@@ -963,7 +1043,6 @@ export default {
       )
     },
     setServiceForm() {
-      console.log('+++++++++++++++++++++++')
       if (localStorage.getItem('portFlaws')) {
         this.serviceForm = JSON.parse(localStorage.getItem('portFlaws'))
         localStorage.removeItem('portFlaws')
@@ -1049,7 +1128,7 @@ export default {
             }
 
           } else {
-            return false
+            this.$message.warning('服务信息必录项未必录')
           }
 
         })
@@ -1182,7 +1261,6 @@ export default {
         } else {
           this.historyContractBtnShow = false,
             this.saveFlag = true
-
         }
       }
       /*  getNewtworktypeList().then(res =>{
@@ -1229,7 +1307,8 @@ export default {
           query: {
             status: 'add',
             flag: 'add',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })
@@ -1240,7 +1319,8 @@ export default {
           query: {
             status: 'add',
             flag: 'update',
-            providerCode: this.providerCode
+            providerCode: this.providerCode,
+            orgflag: '01'
           }
 
         })
@@ -1276,22 +1356,67 @@ export default {
     },
 
     // 校验数据
-    validateForm() {
-      let flag = null
+    async validateForm() {
+      /*    let flag = null
       if (this.saveFlag) {
         this.$refs['serviceForm'].validate(valid => {
           if (valid) {
-            flag = true
+            flag = '01'
           } else {
-            flag = false
+            flag = '03'
           }
         })
-        return flag
-      } else {
-        flag = false;
-      }
-      return flag
 
+      } else {
+        flag = '02';
+      }
+      return flag*/
+
+      //合约是否录入
+
+      this.pendingTableData = []
+      let query = {
+        pageNum: 1,
+        pageSize: 10,
+        providerCode: this.providerCode,
+        orderByColumn: 'create_time',
+        isAsc: 'desc'
+      };
+      let flag
+      await new Promise((resolve, reject) => {
+        //查询数据
+        getSupplierContractBakDetail(query).then(response => {
+          this.pendingTableData = response.rows;
+          resolve(this.pendingTableData)
+        })
+      }).then(res => {
+        if(this.historyContractBtnShow) {
+          if (this.pendingTableData.length > 0) {
+            this.$refs['serviceForm'].validate(valid => {
+              if (valid) {
+                flag = '01'
+              } else {
+                flag = '03'
+              }
+            })
+          } else {
+            flag = '02';
+          }
+        }
+        else {
+          this.$refs['serviceForm'].validate(valid => {
+            if (valid) {
+              flag = '01'
+            } else {
+              flag = '03'
+            }
+          })
+        }
+
+
+
+      })
+      return flag
     }
   }
 
@@ -1304,7 +1429,7 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 

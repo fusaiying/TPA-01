@@ -1,14 +1,14 @@
 <template>
-  <el-form ref="contactInfoForm" :rules="contactInfoFormRules" :model="contactInfoForm" size="small" :disabled="disabledFlag">
+  <el-form ref="contactInfoForm"  :model="contactInfoForm" size="small" :disabled="disabledFlag">
     <el-card class="box-card" style="margin-top: 10px;" >
       <div slot="header" class="clearfix">
-        <span>联系信息</span>
+        <span>联系人信息</span>
       </div>
 
       <el-table ref="contactTable" :data="contactInfoForm.contacts"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
-        <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型">
+        <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-form-item v-if="!scope.row.id" :prop="'contacts.'+scope.$index +'.placeType'"
                           :rules="contactInfoFormRules.placeType" style="display: inline-flex !important;">
@@ -27,14 +27,14 @@
             <span v-else>{{scope.row.placeTypeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" align="center" header-align="center" label="姓名">
+        <el-table-column prop="name" align="center" header-align="center" label="姓名" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input v-if="!scope.row.id" v-model="scope.row.name" placeholder="请输入" size="mini"/>
 
             <span v-else>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="phone" align="center" header-align="center" label="手机">
+        <el-table-column prop="phone" align="center" header-align="center" label="手机" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.phone" placeholder="请输入" size="mini"/>
@@ -42,14 +42,14 @@
             <span v-else>{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="mobile" align="center" header-align="center" label="电话">
+        <el-table-column prop="mobile" align="center" header-align="center" label="电话" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.mobile" placeholder="请输入" size="mini"/>
             <span v-else>{{ scope.row.mobile }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="email" align="center" header-align="center" label="邮箱">
+        <el-table-column prop="email" align="center" header-align="center" label="邮箱" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.email" placeholder="请输入" size="mini"/>
@@ -57,7 +57,7 @@
             <span v-else>{{ scope.row.email }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="workingTime" align="center" header-align="center" label="工作时间" width="400px">
+        <el-table-column prop="workingTime" align="center" header-align="center" label="工作时间" width="400px" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-input v-if="!scope.row.id" v-model="scope.row.workingStart" placeholder="请输入" size="mini"
                       style="width: 150px"/>
@@ -67,7 +67,7 @@
           </template>
 
         </el-table-column>
-        <el-table-column prop="role" align="center" header-align="center" label="登录名">
+        <el-table-column prop="role" align="center" header-align="center" label="登录名" show-overflow-tooltip>
           <template slot-scope="scope">
 
             <el-input v-if="!scope.row.id" v-model="scope.row.role" placeholder="请输入" size="mini"/>
@@ -134,9 +134,7 @@ export default {
       modalValue: false,
       index: '',
       place_typeOptions: [],
-      contactInfoFormRules: {
-        placeType: [{required: true, message: '不能为空！', trigger: 'change'}],
-      },
+
     }
   },
 
@@ -161,58 +159,7 @@ export default {
 
       }
     },
-//联系信息保存
-    saveHandle() {
-      this.$refs.contactInfoForm.validate((valid) => {
-        if (valid) {
-          if (this.supplierCode) {
-            this.contactInfoForm.contacts.supplierCode=this.supplierCode
-            /*  if(this.isAdd){*/
-            addcontactsInfo(this.contactInfoForm.contacts).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '保存成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else  {
-                this.$message({
-                  message: '保存失败!' ,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          }
-          /*else{
-            updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
-              if (res.code == '200') {
-                this.$message({
-                  message: '修改成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
-                })
-              } else  {
-                this.$message({
-                  message: '修改失败!' ,
-                  type: 'error',
-                  center: true,
-                  showClose: true
-                })
-              }
-            })
-          }
 
-        }*/
-        } else {
-          return false
-        }
-
-      })
-    },
 
     delHandle(index, row) {
       this.dialogVisible = true
@@ -244,26 +191,8 @@ export default {
       this.departmentTableShow=true
     },
 
-    //重置
-    resetForm()
-    {
-      this.$refs.contactInfoForm.resetFields();
-      this.contactInfoForm.contacts=[]
 
 
-    },
-    // 校验数据
-    validateForm () {
-      let flag = null
-      this.$refs['contactInfoForm'].validate(valid => {
-        if (valid) {
-          flag = true
-        } else {
-          flag = false
-        }
-      })
-      return flag
-    }
 
   }
 }
@@ -274,17 +203,12 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

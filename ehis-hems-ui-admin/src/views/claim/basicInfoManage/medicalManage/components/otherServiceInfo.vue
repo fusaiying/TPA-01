@@ -56,40 +56,32 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-
-          <el-col :span="5">
-            <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-              <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择是/否" clearable>
-                <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
-                           :key="item.dictValue"/>
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item prop="continent">
-              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                        style="padding-left: 15px;width: 450px" maxlength="500"
-                        placeholder="请输入"/>
-
-            </el-form-item>
-          </el-col>
-
-
-          <!--          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
-                      <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择是/否" clearable>
-                        <el-option label="是" value="01"></el-option>
-                        <el-option label="否" value="02"></el-option>
-                        &lt;!&ndash;                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>&ndash;&gt;
-                      </el-select>
-
+          <el-form-item label="二证齐全是否发预授权书：" prop="continentFlag">
+            <el-select v-model="otherServiceForm.continentFlag" class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="item in yes_or_noOptions" :label="item.dictLabel" :value="item.dictValue"
+                         :key="item.dictValue"/>
+              <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
+            </el-select>
+            <el-input v-model="otherServiceForm.continent" class="item-width" clearable
+                      style="width: 450px" maxlength="500"
+                      placeholder="请输入"/>
+          </el-form-item>
+        </el-col>
+        <!--
+                  <el-col :span="10">
+                    <el-form-item prop="continent">
                       <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                                style="padding-left: 15px;width: 450px"
+                                style="width: 450px" maxlength="500"
                                 placeholder="请输入"/>
 
-                    </el-form-item>-->
+                    </el-form-item>
+                  </el-col>
+        -->
 
-        </el-col>
+
+
+
+
       </el-row>
 
 
@@ -144,9 +136,9 @@
 
       </el-row>
       <el-col :span="24">
-        <el-form-item label="特殊语种服务：" prop="speciallanguage">
+        <el-form-item label="特殊服务语种：" prop="speciallanguage">
           <el-checkbox-group v-model="otherServiceForm.speciallanguage">
-            <el-checkbox :label="item.dictValue" :key="item.dictValue" v-for="item in  speciallanguageOptions" >{{item.dictLabel}}</el-checkbox>
+            <el-checkbox :label="item.dictValue" :key="item.dictValue" v-for="item in  speciallanguageOptions" @click.native="changeDisabled(item,$event)" :disabled="item.isShow" >{{item.dictLabel}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -212,15 +204,37 @@ export default {
 
 
   data() {
+    const checkGrade = (rules, value, callback) => {
+      const regx = /^\+?(?:\d(?:\.\d)?|10(?:\.0)?)$/
+      if (!regx.test(value)) {
+        callback(new Error('评分在0-10，最多保留一位小数！'))
+      } else {
+        callback()
+      }
+    }
+    const checkContinentFlag = (rules, value, callback) => {
+      if(value){
+        if(this.otherServiceForm.continent!=null && this.otherServiceForm.continent!=''){
+          callback()
+        }
+        else {
+          callback(new Error('二证齐全是否发预授权书不能为空'))
+        }
+      }
+      else {
+        callback(new Error('二证齐全是否发预授权书不能为空'))
+      }
 
+
+    }
     return {
 
       otherSerivceFormRules: {
         displaynetwork: [{required: true, message: '不能为空！', trigger: 'change'}],
-        grade: [{required: true, message: '不能为空！', trigger: 'blur'}],
-        category: [{required: true, message: '不能为空！', trigger: 'blur'}],
+        grade: [{required: true,validator: checkGrade, trigger: 'blur'}],
+        category: [{required: true, message: '不能为空！', trigger: 'change'}],
         cooperationStatus: [{required: true, message: '不能为空！', trigger: 'change'}],
-        continentFlag: [{required: true, message: '不能为空！', trigger: 'change'}],
+        continentFlag: [{required: true,validator: checkContinentFlag, trigger: 'change'}],
         speciallanguage: [{required: true, message: '不能为空！', trigger: 'change'}],
         preauthsendway: [{required: true, message: '不能为空！', trigger: 'blur'}]
       },
@@ -244,6 +258,22 @@ export default {
   }
   ,
   methods: {
+    changeDisabled(val, event) {
+
+      if (val.dictValue == '10' && event.target.checked) {
+        this.speciallanguageOptions.forEach(item => {
+          if (item.index < 10) {
+            item.isShow = true
+          }
+        })
+        this.otherServiceForm.speciallanguage = []
+      } else {
+        this.speciallanguageOptions.map(item => {
+          item.isShow = false
+        })
+
+      }
+    },
     init(){
       if (this.dictList != null && this.dictList.length != 0) {
         this.yes_or_noOptions = this.dictList.find(item => {
@@ -267,7 +297,7 @@ export default {
         }).dictDate
 
       }
-      },
+    },
 
     saveHandle() {
       this.$refs.otherServiceForm.validate((valid) => {
@@ -297,7 +327,7 @@ export default {
             })
           }
         } else {
-          return false
+          this.$message.warning('服务信息必录项未必录')
         }
 
       })
@@ -331,6 +361,7 @@ export default {
       /*this.otherServiceForm.servicelocator=[]
       this.otherServiceForm.speciallanguage=[]*/
       this.$refs.otherServiceForm.resetFields()
+      this.otherServiceForm.continent=''
 
     },
     // 校验数据
@@ -354,7 +385,7 @@ export default {
 }
 
 /*element原有样式修改*/
-.el-form-item /deep/ label {
+.el-form-item ::v-deep label {
   font-weight: normal;
 }
 

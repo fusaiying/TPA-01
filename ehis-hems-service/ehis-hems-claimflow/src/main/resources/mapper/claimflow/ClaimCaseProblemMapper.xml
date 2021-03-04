@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseProblemMapper">
+
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseProblem" id="ClaimCaseProblemResult">
+        <result property="problemId"    column="problem_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="problemType"    column="problem_type"    />
+        <result property="problemView"    column="problem_view"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="conclusionView"    column="conclusion_view"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="source"    column="source"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="name"    column="name"    />
+        <result property="stopTime"    column="stop_time"    />
+        <result property="isHistory"    column="is_history"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="claimType"    column="claim_type"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseProblemVo">
+        select problem_id, rpt_no, is_history, problem_type, problem_view, conclusion, conclusion_view, status, create_by, create_time, update_by, update_time from claim_case_problem
+    </sql>
+
+
+    <select id="selectClaimCaseProblemList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+        <include refid="selectClaimCaseProblemVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="problemType != null  and problemType != ''"> and problem_type = #{problemType}</if>
+            <if test="problemView != null  and problemView != ''"> and problem_view = #{problemView}</if>
+            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
+            <if test="conclusionView != null  and conclusionView != ''"> and conclusion_view = #{conclusionView}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+
+    <!--查询已处理的问题件-->
+    <select id="selectClaimCaseProblemList1" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+        SELECT distinct
+        claim_case_problem.problem_id,
+        claim_case_problem.rpt_no,
+        claim_case_problem.problem_type,
+        claim_case_problem.create_by,
+        claim_case_insured.NAME,
+        claim_case_problem.problem_view,
+        claim_case_problem.conclusion_view,
+        claim_batch.source,
+        claim_case.case_status,
+        claim_batch.claim_type,
+        claim_batch.batch_no
+        FROM
+        claim_case_problem,
+        claim_case_insured,
+        claim_batch,
+        claim_case
+        /*claim_case_record*/
+        WHERE
+        claim_case_problem.rpt_no = claim_case_insured.rpt_no
+        AND claim_case_problem.rpt_no = claim_case.rpt_no
+        /*AND claim_case_problem.rpt_no = claim_case_record.rpt_no*/
+        AND claim_batch.batch_no = claim_case.batch_no
+        /*AND claim_case_record.history_flag = 'Y'*/
+        AND claim_case_problem.is_history='Y'
+        and claim_case_problem.status = 'Y'
+        AND claim_batch.STATUS = 'Y'
+        AND claim_case_insured.STATUS = 'Y'
+       /* AND claim_case_record.STATUS = 'Y'*/
+        AND claim_case.STATUS = 'Y'
+        <if test="dBefore1 != null   and dNow1 != null ">
+            and(claim_case_problem.update_time between  #{dBefore1} and  #{dNow1})</if>
+        <if test="rptNo != null  and rptNo != ''"> and claim_case_problem.rpt_no = #{rptNo}</if>
+        <if test="problemType != null  and problemType != ''"> and claim_case_problem.problem_type = #{problemType}</if>
+        <if test="name != null  and name != ''"> and claim_case_insured.name like concat('%', #{name}, '%')</if>
+        <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
+        <if test="createBy != null  and createBy != ''"> and claim_case_problem.create_by like concat('%', #{createBy}, '%')</if>
+    </select>
+
+    <!--查询待处理的问题件-->
+    <select id="selectClaimCaseProblemList2" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+        SELECT distinct
+        claim_case_problem.problem_id,
+        claim_case_problem.rpt_no,
+        claim_case_problem.problem_type,
+        claim_case_problem.create_by,
+        claim_case_insured.NAME,
+        claim_case_problem.problem_view,
+        claim_case_problem.conclusion_view,
+        claim_batch.source,
+        CONCAT(
+        FLOOR( TIMESTAMPDIFF( SECOND, claim_case_problem.create_time, now( ) ) / 86400 ),
+        '天',
+        TIMESTAMPDIFF( HOUR, claim_case_problem.create_time, now( ) ) % 24,
+        '时',
+        TIMESTAMPDIFF( MINUTE, claim_case_problem.create_time, now( ) ) % 60,
+        '分'
+        ) stop_time,
+        claim_case.case_status,
+        claim_batch.claim_type,
+        claim_batch.batch_no
+        FROM
+        claim_case_problem,
+        claim_case_insured,
+        claim_batch,
+        claim_case
+        /*claim_case_record*/
+        WHERE
+        claim_case_problem.rpt_no = claim_case_insured.rpt_no
+        AND claim_case_problem.rpt_no = claim_case.rpt_no
+        /*AND claim_case_problem.rpt_no = claim_case_record.rpt_no*/
+        AND claim_batch.batch_no = claim_case.batch_no
+       /* AND claim_case_record.history_flag = 'N'*/
+        AND claim_case_problem.is_history='N'
+        AND claim_case.case_status = '30'
+        and claim_case_problem.status = 'Y'
+        AND claim_batch.STATUS = 'Y'
+        AND claim_case_insured.STATUS = 'Y'
+        /*AND claim_case_record.STATUS = 'Y'*/
+        AND claim_case.STATUS = 'Y'
+        <if test="rptNo != null  and rptNo != ''"> and claim_case_problem.rpt_no = #{rptNo}</if>
+        <if test="problemType != null  and problemType != ''"> and claim_case_problem.problem_type = #{problemType}</if>
+        <if test="name != null  and name != ''"> and claim_case_insured.name like concat('%', #{name}, '%')</if>
+        <if test="source != null  and source != ''"> and claim_batch.source = #{source}</if>
+        <if test="createBy != null  and createBy != ''"> and claim_case_problem.create_by like concat('%', #{createBy}, '%')</if>
+    </select>
+
+
+    <select id="selectClaimCaseProblemById" parameterType="Long" resultMap="ClaimCaseProblemResult">
+        <include refid="selectClaimCaseProblemVo"/>
+        where problem_id = #{problemId}
+    </select>
+
+    <insert id="insertClaimCaseProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" useGeneratedKeys="true" keyProperty="problemId">
+        insert into claim_case_problem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="problemType != null and problemType != ''">problem_type,</if>
+            <if test="problemView != null and problemView != ''">problem_view,</if>
+            <if test="conclusion != null">conclusion,</if>
+            <if test="conclusionView != null and conclusionView != ''">conclusion_view,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isHistory != null">is_history,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="problemType != null and problemType != ''">#{problemType},</if>
+            <if test="problemView != null and problemView != ''">#{problemView},</if>
+            <if test="conclusion != null">#{conclusion},</if>
+            <if test="conclusionView != null and conclusionView != ''">#{conclusionView},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isHistory != null">#{isHistory},</if>
+        </trim>
+    </insert>
+
+    <update id="updateClaimCaseProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem">
+        update claim_case_problem
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="problemType != null and problemType != ''">problem_type = #{problemType},</if>
+            <if test="problemView != null and problemView != ''">problem_view = #{problemView},</if>
+            <if test="conclusion != null">conclusion = #{conclusion},</if>
+            <if test="conclusionView != null and conclusionView != ''">conclusion_view = #{conclusionView},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
+        </trim>
+        where problem_id = #{problemId}
+    </update>
+
+    <delete id="deleteClaimCaseProblemById" parameterType="Long">
+        delete from claim_case_problem where problem_id = #{problemId}
+    </delete>
+
+    <delete id="deleteClaimCaseProblemByIds" parameterType="String">
+        delete from claim_case_problem where problem_id in
+        <foreach item="problemId" collection="array" open="(" separator="," close=")">
+            #{problemId}
+        </foreach>
+    </delete>
+
+    <!--查询历史问题件信息-->
+    <select id="selectHistoricalProblem" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseProblem" resultMap="ClaimCaseProblemResult">
+        <include refid="selectClaimCaseProblemVo"/>
+        where rpt_no=#{rptNo} and status = 'Y'
+    </select>
+
+    <select id="selectClaimCaseProblemByRptNo" parameterType="String" resultMap="ClaimCaseProblemResult">
+        <include refid="selectClaimCaseProblemVo"/>
+        where rpt_no = #{rptNo} and status = 'Y' and is_history = 'N' order by update_time desc
+    </select>
+
+</mapper>

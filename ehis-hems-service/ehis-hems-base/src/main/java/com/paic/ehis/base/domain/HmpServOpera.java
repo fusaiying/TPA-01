@@ -1,10 +1,11 @@
 package com.paic.ehis.base.domain;
 
-import java.util.Arrays;
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * 供应商基础信息 hpservcooperation

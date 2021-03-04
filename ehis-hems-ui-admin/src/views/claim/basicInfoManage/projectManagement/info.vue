@@ -173,6 +173,10 @@
           serviceName: [
             {required: true, message: "服务项目名称不能为空", trigger: "blur"},
             { validator: validateInput, trigger: 'blur' }
+          ],
+          originalCode: [
+            {pattern: /^[A-Za-z0-9]+$/, message: "支持录入字母、数字", trigger: "blur"},
+            {len: 8, message: "请输入8位", trigger: "blur"}
           ]
         },
       }
@@ -270,7 +274,7 @@
   }
 
   /*element原有样式修改*/
-  .el-form-item /deep/ label {
+  .el-form-item ::v-deep label {
     font-weight: normal;
   }
 

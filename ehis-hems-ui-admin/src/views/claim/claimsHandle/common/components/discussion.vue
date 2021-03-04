@@ -37,7 +37,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount != '' || conclusionInfo.refusedAmount == 0 ? 'CNY' :'' }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == ''  ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8">
               <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount != '' ? 'CNY' :'' }}</span>

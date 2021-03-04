@@ -26,7 +26,11 @@
               tooltip-effect="dark"
               style=" width: 100%;"
             >
-              <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip/>
+              <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip>
+                <template slot-scope="scope" v-if="scope.row.itemKey">
+                  <span>{{selectDictLabel(cs_eidt_reason, scope.row.itemKey)}}</span>
+                </template>
+              </el-table-column>
               <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
               <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip/>
 
@@ -56,6 +60,7 @@
     name:'modify',
     data() {
       return {
+        cs_eidt_reason:[],//修改原因
         totalCount:0,
         workPoolData:[],
         ss:{
@@ -74,6 +79,9 @@
       }
     },
     created() {
+      this.getDicts("cs_eidt_reason").then(response => {
+        this.cs_eidt_reason = response.data;
+      });
 
     },
 

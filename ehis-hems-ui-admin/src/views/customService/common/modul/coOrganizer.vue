@@ -19,7 +19,7 @@
                                :key="umCode.key"
                                :prop="'umCode.' + index + '.value'"
                                :rules="{
-                               required: true, message: '域名不能为空', trigger: 'blur'
+                               required: true, message: 'UM账号不能为空', trigger: 'blur'
                                }"
                                >
                 <el-col :span="12">

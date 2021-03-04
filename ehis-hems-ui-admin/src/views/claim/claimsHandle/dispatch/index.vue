@@ -633,6 +633,9 @@
         // });
       },
       updateOperator() {
+        if(this.checkArra.length === 0) {
+          return false;
+        }
         const params = {
           rptNo: this.checkArra,
           operator: this.operatorForm.operator

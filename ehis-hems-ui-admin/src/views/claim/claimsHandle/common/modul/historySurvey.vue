@@ -20,7 +20,7 @@
               <span class="info_span to_right">调查序号：</span><span class="info_span">{{ (index +1)}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span to_right">调查类型 ：</span><span class="info_span">{{ (item.invDetailType) }}</span>
+              <span class="info_span to_right">调查类型 ：</span><span class="info_span">{{ getdispatchTypeName(item.invDetailType) }}</span>
             </el-col>
             <el-col :span="8">
               <span class="info_span to_right">调查状态：</span><span class="info_span">{{ item.invDetailStatus }}</span>
@@ -29,7 +29,7 @@
 
           <el-row style="margin: 0px 10px;">
             <el-col :span="8">
-              <span class="info_span to_right">调查原因：</span><span class="info_span">{{ (item.invDetailCause) }}</span>
+              <span class="info_span to_right">调查原因：</span><span class="info_span">{{ getInitiateReasonName(item.invDetailCause) }}</span>
             </el-col>
           </el-row>
 
@@ -98,10 +98,10 @@
               <span class="info_span to_right">查讫时间：</span><span class="info_span">{{ (item.invDetailAfterTime) }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span to_right">调查机构：</span><span class="info_span">{{ item.invDetailOrgan }}</span>
+              <span class="info_span to_right">调查机构：</span><span class="info_span">{{ getInquiryOrgName(item.invDetailOrgan) }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span to_right">调查人：</span><span class="info_span">{{ item.invDetailAfterPeople }}</span>
+              <span class="info_span to_right">调查人：</span><span class="info_span">{{ getInitiateOrgName(item.invDetailAfterPeople) }}</span>
             </el-col>
           </el-row>
 
@@ -179,14 +179,22 @@ let dictss = [{dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'}, {dict
         return item.dictType === 'initiate_org'
       }).dictDate
 
-      this.getHistoryData();
     },
     methods: {
       goBack() {
         this.$router.go(-1);
       },
-      getHistoryData(){
-
+      getdispatchTypeName(value) {
+        return this.selectDictLabel(this.dispatchTypes,value)
+      },
+      getInitiateReasonName(value) {
+        return this.selectDictLabel(this.initiateReasons,value)
+      },
+      getInquiryOrgName(value) {
+        return this.selectDictLabel(this.inquiryOrg,value)
+      },
+      getInitiateOrgName(value) {
+        return this.selectDictLabel(this.initiateOrg,value)
       },
       //关闭对话框
       changeDialogVisable() {

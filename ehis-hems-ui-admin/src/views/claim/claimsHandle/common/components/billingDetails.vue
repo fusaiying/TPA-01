@@ -1669,8 +1669,7 @@
         if (query != null && query != '' && query != undefined) {//icdCode
           getICDList({icdmname: query}).then(res => {
             if (res != null && res.code == 200) {
-              this.ICDListOptions = res.data
-              this.getICDListOptions()
+              this.getICDListOption(res.data)
             }
           })
         }
@@ -1693,15 +1692,42 @@
                 let option = this.ICDListOptions.find(tem => {
                   return item.icdcode == tem.icdcode
                 })
-                if (option != null) {
-                  this.ICDListOptions.push(option)
+                if (option == null) {
+                  this.ICDListOptions.push(item)
                 }
               })
             }
           })
         }
-        console.log(this.ICDListOptions);
-
+      },
+      getICDListOption(value){
+        let IDCCodes = []
+        this.baseForm.icdCodes.forEach(item => {
+          if (item.icdCode != '' && item.icdCode != null) {
+            IDCCodes.push({icdcode: item.icdCode})
+          }
+        })
+        if (this.baseForm.icdCode != '' && this.baseForm.icdCode != null) {
+          IDCCodes.push({icdcode: this.baseForm.icdCode})
+        }
+        //请求接口
+        if (IDCCodes.length > 0) {
+          getICDListByICDCode(IDCCodes).then(res => {
+            if (res != null && res.code == 200) {
+              this.ICDListOptions=res.data
+              value.forEach(item => {
+                let option = this.ICDListOptions.find(tem => {
+                  return item.icdcode == tem.icdcode
+                })
+                if (option == null) {
+                  this.ICDListOptions.push(item)
+                }
+              })
+            }
+          })
+        }else {
+          this.ICDListOptions=value
+        }
       }
     }
 

@@ -32,7 +32,7 @@
               <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmount }} {{ conclusionInfo.payAmount != '' ? 'CNY' :'' }}</span>
+              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
           </el-row>
           <el-row>

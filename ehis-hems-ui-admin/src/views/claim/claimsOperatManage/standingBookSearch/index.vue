@@ -106,12 +106,12 @@
             style=" width: 100%;">
             <el-table-column align="center" prop="rptno" width="90" label="报案号" show-overflow-tooltip>
               <template slot-scope="scope">
-                <el-form-item v-if="!scope.row.isEdit && (scope.row.rptno===''||scope.row.rptno==null)"
+                <el-form-item v-if="!scope.row.isEdit"
                               :prop="'tableData.' + scope.$index + '.rptno'"
                               :rules="standingRules.rptno" style="display: inline-flex !important;">
                   <el-input v-model="scope.row.rptno" placeholder="请输入" size="mini"/>
                 </el-form-item>
-                <span v-else>{{ scope.row.rptno}}</span>
+                <span v-if="scope.row.isEdit">{{ scope.row.rptno}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="idno" width="90" label="证件号码" show-overflow-tooltip>

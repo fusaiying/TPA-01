@@ -149,7 +149,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
+    public TableDataInfo selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
 
     /**条件理算审核
      * 已处理
@@ -163,7 +163,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
+    public TableDataInfo selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
 
     /** 抽检完毕，修改案件状态 */
     int editCaseCheck(ClaimCase claimCase);

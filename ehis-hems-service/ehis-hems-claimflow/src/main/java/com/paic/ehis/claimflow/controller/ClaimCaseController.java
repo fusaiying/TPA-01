@@ -362,7 +362,9 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentUnder")
     public void exportConditionsForTheAdjustmentUnder(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
+
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "处理中理算案件");
     }
@@ -375,8 +377,8 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        return tableDataInfo;
     }
 
     //审核工作池接口-导出已处理清单
@@ -412,7 +414,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentHang")
     public void exportConditionsForTheAdjustmentHang(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
         ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "悬挂中理算案件");
     }
@@ -425,8 +428,8 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        return tableDataInfo;
     }
 /********************************************/
 

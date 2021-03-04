@@ -578,7 +578,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
 
@@ -679,7 +679,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//待处理
 
     /**
@@ -853,7 +860,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentTwoVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
@@ -916,7 +923,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentTwoVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
+
+       // return ConditionsForTheAdjustmentVOLList;
     }//悬挂
 
     /**

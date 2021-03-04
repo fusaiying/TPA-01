@@ -778,28 +778,24 @@
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         SELECT
-        cb.batch_no,
-        cc.rpt_no,
-        cc.case_status,
-        cc.update_by,
-        cb.claim_type,
-        ccp.NAME,
-        cci.id_no,
-        ccp.policy_item_no,
-        case when (select count(1) from claim_case_investigation where rpt_no =  cc.rpt_no ) > 0 then '01' else '02' end  investigation ,
-        accept.acc_date,
-        CONCAT(cal.bill_currency,' ',cal.pay_amount) pay_amount ,
-        cal.pay_conclusion
-        FROM
-        claim_batch cb
-        LEFT JOIN claim_case cc ON cb.batch_no = cc.batch_no
-        AND cc.STATUS = 'Y'
-        LEFT JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
-        AND cci.STATUS = 'Y'
-        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no  AND ccp.STATUS = 'Y'
-        LEFT JOIN claim_case_accept accept on cc.rpt_no = accept.rpt_no and accept.status = 'Y'
-        left join claim_case_cal cal  on cal.rpt_no = accept.rpt_no and cal.status = 'Y'
-
+                cb.batch_no,
+                cc.rpt_no,
+                cc.case_status,
+                cc.update_by,
+                cb.claim_type,
+                ccp.NAME,
+                cci.id_no,
+                ccp.policy_item_no,
+                CASE WHEN (SELECT count(1) FROM claim_case_investigation WHERE rpt_no =  cc.rpt_no ) > 0 THEN '01' ELSE '02' END  investigation ,
+                accept.acc_date,
+                CONCAT(cal.bill_currency,' ',cal.pay_amount) pay_amount ,
+                cal.pay_conclusion
+         FROM claim_batch cb
+    LEFT JOIN claim_case cc            ON cb.batch_no = cc.batch_no  AND cc.STATUS = 'Y'
+    LEFT JOIN claim_case_insured cci   ON cc.rpt_no = cci.rpt_no     AND cci.STATUS = 'Y'
+    LEFT JOIN claim_case_policy ccp    ON cc.rpt_no = ccp.rpt_no     AND ccp.STATUS = 'Y'
+    LEFT JOIN claim_case_accept accept on cc.rpt_no = accept.rpt_no  AND accept.status = 'Y'
+    LEFT JOIN claim_case_cal cal       ON cal.rpt_no = accept.rpt_no AND cal.status = 'Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>

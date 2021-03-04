@@ -109,7 +109,6 @@ public class ClaimCaseInvestigateDetailController extends BaseController
     @GetMapping("/listByRptNo")
     public TableDataInfo listByRptNo(String rptNo)
     {
-        startPage();
         List<ClaimCaseInvestigateDetail> list = claimCaseInvestigateDetailService.selectClaimCaseInvestigateDetailListByRptNo(rptNo);
         return getDataTable(list);
     }

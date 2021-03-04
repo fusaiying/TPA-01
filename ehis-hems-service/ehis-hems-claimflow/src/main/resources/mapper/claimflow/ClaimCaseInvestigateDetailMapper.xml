@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="invDetailFace"    column="inv_detail_face"    />
         <result property="conclusion"    column="conclusion"    />
         <result property="invDetailNum"    column="inv_detail_num"    />
-        <result property="remark"    column="remark"    />
         <result property="invDetailReplenish"    column="inv_detail_replenish"    />
         <result property="invDetailSurvey"    column="inv_detail_survey"    />
         <result property="invDetailScan"    column="inv_detail_scan"    />
@@ -36,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseInvestigateDetailVo">
-        select investigate_detail_no,rpt_no,inv_detail_type, inv_detail_status,  inv_detail_cause, inv_detail_people, inv_detail_time, inv_detail_item, inv_detail_nature, inv_detail_gist, inv_detail_face, conclusion, inv_detail_num, remark, inv_detail_replenish, inv_detail_survey, inv_detail_scan, inv_detail_proof, inv_detail_after_time, inv_detail_organ, inv_detail_after_people, inv_detail_argument, inv_detail_result_argument, status,create_by, create_time, update_by, update_time from claim_case_investigate_detail
+        select investigate_detail_no,rpt_no,inv_detail_type, inv_detail_status,  inv_detail_cause, inv_detail_people, inv_detail_time, inv_detail_item, inv_detail_nature, inv_detail_gist, inv_detail_face, conclusion, inv_detail_num, inv_detail_replenish, inv_detail_survey, inv_detail_scan, inv_detail_proof, inv_detail_after_time, inv_detail_organ, inv_detail_after_people, inv_detail_argument, inv_detail_result_argument, status,create_by, create_time, update_by, update_time from claim_case_investigate_detail
     </sql>
 
     <select id="selectClaimCaseInvestigateDetailList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseInvestigateDetail" resultMap="ClaimCaseInvestigateDetailResult">
@@ -91,7 +90,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invDetailFace != null and invDetailFace != ''">inv_detail_face,</if>
             <if test="conclusion != null">conclusion,</if>
             <if test="invDetailNum != null">inv_detail_num,</if>
-            <if test="remark != null">remark,</if>
             <if test="invDetailReplenish != null">inv_detail_replenish,</if>
             <if test="invDetailSurvey != null">inv_detail_survey,</if>
             <if test="invDetailScan != null">inv_detail_scan,</if>
@@ -120,7 +118,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invDetailFace != null and invDetailFace != ''">#{invDetailFace},</if>
             <if test="conclusion != null">#{conclusion},</if>
             <if test="invDetailNum != null">#{invDetailNum},</if>
-            <if test="remark != null">#{remark},</if>
             <if test="invDetailReplenish != null">#{invDetailReplenish},</if>
             <if test="invDetailSurvey != null">#{invDetailSurvey},</if>
             <if test="invDetailScan != null">#{invDetailScan},</if>
@@ -153,7 +150,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invDetailFace != null and invDetailFace != ''">inv_detail_face = #{invDetailFace},</if>
             <if test="conclusion != null">conclusion = #{conclusion},</if>
             <if test="invDetailNum != null">inv_detail_num = #{invDetailNum},</if>
-            <if test="remark != null">remark = #{remark},</if>
             <if test="invDetailReplenish != null">inv_detail_replenish = #{invDetailReplenish},</if>
             <if test="invDetailSurvey != null">inv_detail_survey = #{invDetailSurvey},</if>
             <if test="invDetailScan != null">inv_detail_scan = #{invDetailScan},</if>

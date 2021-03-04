@@ -173,7 +173,11 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingDestroy(ClaimCaseFilingListVO claimCaseFilingListVO) {
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
         claimCaseFilingListVO.setStatus("N");
+        claimCaseFilingListVO.setUpdateBy(username);
+        claimCaseFilingListVO.setUpdateTime(nowDate);
         return claimCaseFilingMapper.updateClaimCaseFilingEdit(claimCaseFilingListVO);
     }
 
@@ -241,11 +245,23 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingInfo(List<ClaimCaseFilingInformationVO> claimCaseFilingInformationVO) {
-
         int result = 0;
+
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
+        ClaimCaseFilingListVO updateBean = new ClaimCaseFilingListVO();
+        updateBean.setUpdateBy(username);
+        updateBean.setUpdateTime(nowDate);
+
         for(ClaimCaseFilingInformationVO bean : claimCaseFilingInformationVO) {
-            result =  claimBatchInvoiceFilingMapper.updateClaimCaseFilingInfo(bean);
+            bean.setUpdateBy(username);
+            bean.setUpdateTime(nowDate);
+            updateBean.setCaseBoxNo(bean.getCaseBoxNo());
+            claimCaseFilingMapper.updateClaimCaseFilingEdit(updateBean);
+            result +=  claimBatchInvoiceFilingMapper.updateClaimCaseFilingInfo(bean);
         }
+
+
         return result;
     }
 

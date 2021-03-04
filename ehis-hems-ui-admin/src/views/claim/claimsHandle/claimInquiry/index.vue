@@ -218,7 +218,7 @@
               claimType: row.claimType,
               rptNo: row.rptNo,
               status,
-              node: 'accept',
+              node: 'calculateReview',
               styleFlag: 'list',
             })
           )

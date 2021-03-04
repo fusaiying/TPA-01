@@ -459,7 +459,7 @@
         let param = {};
         param.rptNo = this.querys.rptNo;
         historySurInfo(param).then(res => {
-          if (res.code == '200') {
+          if (res.code == '200' && res.rows) {
             this.historySurCount = res.total;
             this.preSurveyHistoryData = res.rows;
           }

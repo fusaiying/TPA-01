@@ -180,15 +180,16 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setCalAmount(pay);
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
-            if (size==billDetailDTO.getBillDetailList().size()){//存在拒赔结论时，赔付金额为0，
-                claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
-            }
+
         }
         if ("02".equals(claimFlag)){//全赔医院
             claimCaseCal.setCalAmount(pay);
             //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
+        }
+        if (size==billDetailDTO.getBillDetailList().size()){//存在拒赔结论时，赔付金额为0，
+            claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
         }
         claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);

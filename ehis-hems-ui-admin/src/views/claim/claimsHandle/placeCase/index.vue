@@ -325,8 +325,8 @@
             createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
           }
           const params = {
-            pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
-            pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
+            pageNum : this.pageInfo.currentPage,
+            pageSize : this.pageInfo.pageSize,
             deptCode:this.form.deptCode ,
             claimType:this.form.claimType ,
             batchNo: this.form.batchNo ,
@@ -347,7 +347,6 @@
                   this.totalNum = response.total;
                   this.tableData = response.rows;
                   this.loading = false;
-                  this.searchBtn = false;
                 }).catch(error => {
                   this.loading = true;
                   console.log(error);
@@ -360,7 +359,6 @@
               this.totalNum = response.total;
               this.tableData = response.rows;
               this.loading = false;
-              this.searchBtn = false;
             }).catch(error => {
               this.loading = true;
               console.log(error);
@@ -369,6 +367,8 @@
         },
         searchByFormParms(){
           this.searchBtn = true;
+          this.pageInfo.currentPage = 1;
+          this.pageInfo.pageSize = 10;
           this.gettableData();
         },
         addRecovery(row,type) {

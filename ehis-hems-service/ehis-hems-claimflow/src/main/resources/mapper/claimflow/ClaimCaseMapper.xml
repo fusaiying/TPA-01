@@ -369,7 +369,7 @@
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
-        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+      /*  SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
         '天',
@@ -381,7 +381,51 @@
         from claim_case  cc left join  claim_batch cb on cc.batch_no=cb.batch_no  and cc.status='Y'
         inner join claim_case_policy ccp on cc.rpt_no=ccp.rpt_no  and ccp.status='Y'
         inner  join claim_case_insured cci   on cc.rpt_no = cci.rpt_no  and cci.status='Y'
-        inner  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'
+        inner  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'*/
+        SELECT
+        cc.rpt_no,
+        cc.case_status,
+        ccr.create_by,
+        -- cci.id_no,
+        (select cci.id_no from claim_case_insured cci where  cc.rpt_no = cci.rpt_no AND cci. STATUS = 'Y') id_no,
+        cc.update_by operator,
+        cb.claim_type,
+        cb.source,
+        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y') company_name ,
+        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y') company_code ,
+        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y') name ,
+        -- 	ccp.company_name,
+        -- 	ccp.company_code,
+        -- 	ccp. NAME,
+        cb.submit_date,
+        CONCAT(
+        FLOOR(
+        TIMESTAMPDIFF(
+        SECOND,
+        ccr.update_time,
+        now()
+        ) / 86400
+        ),
+        '天',
+        TIMESTAMPDIFF(HOUR, ccr.update_time, now()) % 24,
+        '时',
+        TIMESTAMPDIFF(
+        MINUTE,
+        ccr.update_time,
+        now()
+        ) % 60,
+        '分'
+        ) monitoring_time
+        FROM
+        claim_case cc
+        LEFT JOIN claim_batch cb ON cc.batch_no = cb.batch_no
+        AND cc. STATUS = 'Y'
+        -- INNER JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
+        -- AND ccp. STATUS = 'Y'
+        -- INNER JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
+        -- AND cci. STATUS = 'Y'
+        INNER JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no
+        AND ccr.history_flag = 'N'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>

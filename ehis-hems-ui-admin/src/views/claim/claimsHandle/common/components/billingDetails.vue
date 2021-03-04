@@ -70,7 +70,7 @@
                  style="text-align: center;width: 100%;border: 1px dashed #dfe6ec;margin: 10px 0 20px;"
                  @click="addBill"> + 添加
       </el-button>
-     <!-- <div style="background-color: #bedbf1;width: 400px;height: 55px;text-align: center;line-height: 55px">汇总信息</div>-->
+      <!-- <div style="background-color: #bedbf1;width: 400px;height: 55px;text-align: center;line-height: 55px">汇总信息</div>-->
       <pagination
         v-show="total>0"
         :total="total"
@@ -282,13 +282,14 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="主要诊断(ICD)：" prop="icdCode">
-            <el-select v-model="baseForm.icdCode" class="item-width" placeholder="请选择" clearable>
-              <!--<el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>-->
-              <el-option key="01" label="垂直斜视"
-                         value="01"/>
-              <el-option key="02" label="缺血性心肌病"
-                         value="02"/>
+            <el-select v-model="baseForm.icdCode"
+                       filterable
+                       remote
+                       reserve-keyword
+                       :remote-method="remoteMethod"
+                       class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="(option,index) in ICDListOptions" :key="index" :label="option.icdmname"
+                         :value="option.icdcode"/>
             </el-select>
           </el-form-item>
         </el-col>
@@ -299,13 +300,14 @@
           <el-form-item label="次要诊断(ICD)：" prop="icdCodes"
                         :label="index===0?'次要诊断(ICD)':'次要诊断(ICD)' + index"
                         :prop="'icdCodes.' + index + '.icdCode'">
-            <el-select v-model="icd.icdCode" class="item-width" placeholder="请选择" clearable>
-              <!--<el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>-->
-              <el-option key="01" label="垂直斜视"
-                         value="01"/>
-              <el-option key="02" label="缺血性心肌病"
-                         value="02"/>
+            <el-select v-model="icd.icdCode"
+                       filterable
+                       remote
+                       reserve-keyword
+                       :remote-method="remoteMethod"
+                       class="item-width" placeholder="请选择" clearable>
+              <el-option v-for="(option,ind) in ICDListOptions" :key="ind" :label="option.icdmname"
+                         :value="option.icdcode"/>
             </el-select>
             <el-button v-if="index===0" type="primary" icon="el-icon-plus"
                        style="position: absolute; top: 0; right: 8px;"
@@ -468,7 +470,8 @@
 <script>
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
   import {getInfoBaseCodeMappingNew,} from '@/api/claim/presentingReview'
-  import {getBillSum} from '@/api/claim/handleCom'
+  import {getBillSum, getICDList, getICDListByICDCode} from '@/api/claim/handleCom'
+
   let dictss = [{dictType: 'department'}, {dictType: 'incidenttype'}, {dictType: 'treat_type'}, {dictType: 'bill_type'}, {dictType: 'sys_yes_no'},
     {dictType: 'input_status'}, {dictType: 'first_attribute'}, {dictType: 'second_attribute_a'}, {dictType: 'second_attribute_b'}, {dictType: 'claim_currency'},]
   import {getBillList, saveBill, editBill, getFee, getHospitalInfo, deleteBill} from '@/api/claim/handleCom'
@@ -510,6 +513,12 @@
           } else {
             this.isBillInfoSave = false
           }
+          getICDList({icdmname: ''}).then(res => {
+            if (res != null && res.code == 200) {
+              this.ICDListOptions = res.data
+              this.getICDListOptions()
+            }
+          })
         }
       },
       acceptData: function (newVal) {
@@ -529,7 +538,7 @@
       },
       batchData: function (newVal) {
         if (newVal !== null && newVal !== undefined) {
-          if (newVal.hospitalcode!=null && newVal.hospitalcode!='') {
+          if (newVal.hospitalcode != null && newVal.hospitalcode != '') {
             getHospitalInfo({providerCode: newVal.hospitalcode}).then(res => {
               if (res != null && res !== '') {
                 this.hospitalOptions = res.rows
@@ -1015,6 +1024,7 @@
         sys_yes_noOptions: [],
         hospitalOptions: [],
         claim_currencyOptions: [],
+        ICDListOptions: [],
       };
     },
     async mounted() {
@@ -1578,16 +1588,16 @@
       },
       getSums(param) {
         const sums = []
-        if (this.billSumData!==null && this.billSumData!==undefined && this.billSumData.billAmount){
+        if (this.billSumData !== null && this.billSumData !== undefined && this.billSumData.billAmount) {
           this.isSum = true
           const {columns, data} = param;
           columns.forEach((column, index) => {
-            if (this.node==='calculateReview' || this.node==='sport' || this.status==='show'){
+            if (this.node === 'calculateReview' || this.node === 'sport' || this.status === 'show') {
               if (index === 2) {
                 sums[index] = '汇总信息';
                 return;
               }
-            }else {
+            } else {
               if (index === 1) {
                 sums[index] = '汇总信息';
                 return;
@@ -1635,19 +1645,19 @@
         })
       },
       cellStyles({row, column, rowIndex, columnIndex}) {
-        if (rowIndex===0 && this.isSum){
+        if (rowIndex === 0 && this.isSum) {
           // 改变合计行样式
           const s_table = document.getElementsByClassName('el-table__footer-wrapper')[0]
           const child_tr = s_table.getElementsByTagName('tr')[0]
-          if (this.node==='calculateReview' || this.node==='sport' || this.status==='show'){
+          if (this.node === 'calculateReview' || this.node === 'sport' || this.status === 'show') {
             child_tr.childNodes.forEach(item => {
-              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3|| item.cellIndex === 4) {
+              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2 || item.cellIndex === 3 || item.cellIndex === 4) {
                 item.setAttribute('style', 'background: #bedbf1')
               }
             })
-          }else {
+          } else {
             child_tr.childNodes.forEach(item => {
-              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2|| item.cellIndex === 3) {
+              if (item.cellIndex === 0 || item.cellIndex === 1 || item.cellIndex === 2 || item.cellIndex === 3) {
                 item.setAttribute('style', 'background: #bedbf1')
               }
             })
@@ -1655,6 +1665,44 @@
 
         }
       },
+      remoteMethod(query) {
+        if (query != null && query != '' && query != undefined) {//icdCode
+          getICDList({icdmname: query}).then(res => {
+            if (res != null && res.code == 200) {
+              this.ICDListOptions = res.data
+              this.getICDListOptions()
+            }
+          })
+        }
+      },
+      getICDListOptions() {
+        let IDCCodes = []
+        this.baseForm.icdCodes.forEach(item => {
+          if (item.icdCode != '' && item.icdCode != null) {
+            IDCCodes.push({icdcode: item.icdCode})
+          }
+        })
+        if (this.baseForm.icdCode != '' && this.baseForm.icdCode != null) {
+          IDCCodes.push({icdcode: this.baseForm.icdCode})
+        }
+        //请求接口
+        if (IDCCodes.length > 0) {
+          getICDListByICDCode(IDCCodes).then(res => {
+            if (res != null && res.code == 200) {
+              res.data.forEach(item => {
+                let option = this.ICDListOptions.find(tem => {
+                  return item.icdcode == tem.icdcode
+                })
+                if (option != null) {
+                  this.ICDListOptions.push(option)
+                }
+              })
+            }
+          })
+        }
+        console.log(this.ICDListOptions);
+
+      }
     }
 
   }

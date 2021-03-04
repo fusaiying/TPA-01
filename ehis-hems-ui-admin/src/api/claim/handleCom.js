@@ -516,3 +516,19 @@ export function getCustomerAccount(data) {
     data: data
   })
 }
+// 获取主要诊断、次要诊断
+export function getICDList(data) {
+  return request({
+    url: '/claimflow/bill/ICD',
+    method: 'post',
+    data: data
+  })
+}
+// 获取主要诊断、次要诊断
+export function getICDListByICDCode(data) {
+  return request({
+    url: '/provider/icd10/ICDList',
+    method: 'post',
+    data: data
+  })
+}

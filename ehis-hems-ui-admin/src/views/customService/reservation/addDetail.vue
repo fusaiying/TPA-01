@@ -463,7 +463,7 @@
 
       return {
         cs_channel:[],//受理渠道
-        cs_service_item:[],//服务项目
+        cs_reservation_item:[],//服务项目
         cs_sex:[],//性别
         cs_priority:[],//优先级
         cs_communication_language:[],//语言
@@ -614,8 +614,8 @@
       this.getDicts("cs_channel").then(response => {
         this.cs_channel= response.data;
       });
-      this.getDicts("cs_service_item").then(response => {
-        this.cs_service_item = response.data;
+      this.getDicts("cs_reservation_item").then(response => {
+        this.cs_reservation_item = response.data;
       });
       this.getDicts("cs_priority").then(response => {
         this.cs_priority = response.data;

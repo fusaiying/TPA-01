@@ -51,7 +51,7 @@
         t1.STATUS,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
-        1 ELSE hm.nnn
+        1 ELSE 0
         END AS isRedWord
         FROM
         work_order_accept t1
@@ -82,7 +82,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -110,7 +110,7 @@
         END,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
-        1 ELSE hm.nnn
+        1 ELSE 0
         END AS isRedWord
         FROM
         work_order_accept t1
@@ -142,7 +142,7 @@
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">

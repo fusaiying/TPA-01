@@ -78,7 +78,7 @@
         b.update_time update_time2,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
-        1 ELSE hm.nnn
+        1 ELSE 0
         END AS isRedWord
         FROM
         accept_detail_info b
@@ -108,16 +108,13 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
 	</select>
 
 
     <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
         SELECT
         a.work_order_no,
-        /*(select distinct 1 from call_again ca
-            where ca.work_order_no=a.work_order_no and ca.status='Y'
-        ) as isRedWord,*/
         a.business_type,
         concat(a.business_type,'-', b.item_code) as business_service,
         a.policy_no,
@@ -163,7 +160,7 @@
         END,
         CASE
         WHEN hm.nnn IS NOT NULL THEN
-        1 ELSE hm.nnn
+        1 ELSE 0
         END AS isRedWord
         FROM
         accept_detail_info b
@@ -194,7 +191,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
        <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
 </select>
 
     <select id="selectDemandAcceptVoById" resultMap="DemandAcceptVoResult">

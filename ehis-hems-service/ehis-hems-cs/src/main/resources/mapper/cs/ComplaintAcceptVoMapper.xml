@@ -82,7 +82,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,t2.priority_level ASC,a.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -142,7 +142,7 @@
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,t2.priority_level ASC,a.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">

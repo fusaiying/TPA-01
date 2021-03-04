@@ -175,12 +175,13 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimFlag=settle.getClaimFlag();
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
+            claimCaseCal.setCalAmount(pay);
             if (flag){//存在拒赔结论时，赔付金额为0，
                 claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
                 claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
             }
             claimCaseCal.setPayAmount(pay);
-            claimCaseCal.setCalAmount(pay);
+            claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
         }
         if ("02".equals(claimFlag)){//全赔医院
             claimCaseCal.setCalAmount(pay);

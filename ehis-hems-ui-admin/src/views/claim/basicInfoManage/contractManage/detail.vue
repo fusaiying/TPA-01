@@ -82,7 +82,7 @@
             <span class="info_span to_right">押金金额：</span><span class="info_span">{{ providerContractInfo.deposit }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}{{ providerContractInfo.expiryDate }}</span>
+            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}  {{ providerContractInfo.endDate != "" ? " / " : "" }}  {{ providerContractInfo.endDate }}</span>
           </el-col>
 
           <el-col :span="8">

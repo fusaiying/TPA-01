@@ -138,6 +138,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBill.setPayAmount(caseCalBillVo.getPayAmount());
                 claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
+                claimCaseCalBill.setRefusedAmount(caseCalBillVo.getRefusedAmount());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
                 claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
                 if ("05".equals(caseCalBillVo.getPayConclusion())){//存在拒赔结论时

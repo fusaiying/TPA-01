@@ -72,7 +72,7 @@ FROM
         <include refid="selectBaseSupplierInfoVo"/>
         <where>
             <if test="serialNo != null  and serialNo != ''"> and serial_no = #{serialNo}</if>
-            <!-- <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>-->
+             <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
             <if test="chname != null  and chname != '' "> and (chname like concat('%', #{chname}, '%') or enname like concat('%', #{chname}, '%'))</if>
             <if test="servcomType != null  and servcomType != ''"> and servcom_type = #{servcomType}</if>
             <if test="continent != null  and continent != ''"> and continent = #{continent}</if>
@@ -81,15 +81,15 @@ FROM
             <if test="city != null  and city != ''"> and city = #{city}</if>
             <if test="district != null  and district != ''"> and district = #{district}</if>
             <if test="detailedAddress != null  and detailedAddress != ''"> and detailed_address = #{detailedAddress}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <choose>
+            <!--<if test="status != null  and status != ''"> and status = #{status}</if>-->
+            <!--<choose>
                 <when test="bussinessStatus != null  and bussinessStatus != ''">
                     and bussiness_status = #{bussinessStatus}
                 </when>
                 <otherwise>
                     and bussiness_status='01'
                 </otherwise>
-            </choose>
+            </choose>-->
            and status='Y'
         </where>
     </select>

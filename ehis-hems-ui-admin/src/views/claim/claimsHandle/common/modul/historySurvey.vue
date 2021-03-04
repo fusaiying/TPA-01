@@ -122,6 +122,7 @@
 </template>
 <script>
 
+let dictss = [{dictType: 'dispatch_type'}, {dictType: 'initiate_reasons'}, {dictType: 'inquiry_org'}, {dictType: 'initiate_org'}]
   export default {
     props: {
       value: {
@@ -136,6 +137,14 @@
     },
     data() {
       return {
+        //提调类型
+        dispatchTypes:[],
+        //提调原因
+        initiateReasons:[],
+        //调查机构
+        inquiryOrg:[],
+        //提调机构
+        initiateOrg:[],
         dialogVisable: false,
         surveyInfo: {
 
@@ -143,15 +152,30 @@
 
       }
     },
+    async  mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      this.dispatchTypes = this.dictList.find(item => {
+        return item.dictType === 'dispatch_type'
+      }).dictDate
+      this.initiateReasons = this.dictList.find(item => {
+        return item.dictType === 'initiate_reasons'
+      }).dictDate
+      this.inquiryOrg = this.dictList.find(item => {
+        return item.dictType === 'inquiry_org'
+      }).dictDate
+      this.initiateOrg = this.dictList.find(item => {
+        return item.dictType === 'initiate_org'
+      }).dictDate
 
-    mounted() {
-      this.getDetail();
+      this.getHistoryData();
     },
     methods: {
       goBack() {
         this.$router.go(-1);
       },
-      getDetail(){
+      getHistoryData(){
 
       },
       //关闭对话框

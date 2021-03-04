@@ -7,6 +7,7 @@ import com.paic.ehis.claimcal.mapper.ClaimProductDutyDetailMapper;
 import com.paic.ehis.claimcal.mapper.PolicyRiskRelationMapper;
 import com.paic.ehis.claimcal.service.IClaimCalService;
 import com.paic.ehis.common.core.constant.HttpStatus;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.system.api.RemoteClaimCalService;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
@@ -119,7 +120,7 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 sumBillCalAmount = sumBillCalAmount.add(cccID.getCalAmount());
                 sumFeeAmount = sumFeeAmount.add(ccbD.getBillDetailAmount());
 
-                sumSelfAmount = sumSelfAmount.add(ccbD.getSelfAmount()==null?BigDecimal.ZERO:ccbD.getSelfAmount());
+                sumSelfAmount = sumSelfAmount.add(StringUtils.isNull(ccbD.getSelfAmount())?BigDecimal.ZERO:ccbD.getSelfAmount());
 
                 cccIDList.add(cccID);
             }

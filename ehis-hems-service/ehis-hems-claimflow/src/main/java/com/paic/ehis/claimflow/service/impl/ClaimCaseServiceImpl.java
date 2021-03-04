@@ -578,7 +578,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
 
@@ -679,7 +679,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//待处理
 
     /**
@@ -701,7 +708,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
         //检查字符，防止注入绕过
           orderBy = SqlUtil.escapeOrderBySql(orderBy);
-        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
+          if(!auditWorkPoolDTO.getFlag()) {
+              PageHelper.startPage(auditWorkPoolDTO.getPageNum(), auditWorkPoolDTO.getPageSize(), orderBy);
+          }
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
@@ -851,7 +860,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentTwoVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
@@ -914,7 +923,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentTwoVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
+
+       // return ConditionsForTheAdjustmentVOLList;
     }//悬挂
 
     /**
@@ -1212,7 +1230,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 抽检工作池-处理中
      */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
@@ -1413,6 +1430,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setUpdateBy(SecurityUtils.getUsername());
             claimCase.setUpdateTime(DateUtils.getNowDate());
             claimCase.setEndCaseTime(DateUtils.getNowDate());
+            claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
@@ -1421,7 +1439,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     }
 
     //案件抽检已处理
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();

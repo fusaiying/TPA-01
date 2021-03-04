@@ -84,8 +84,17 @@ public interface BaseIcd10Mapper
 
     /**
      * 模糊查询ICD，默认展示200条
+     *
      * @param baseIcd10
      * @return
      */
     public List<BaseIcd10> selectIcdFuzzy(BaseIcd10 baseIcd10);
+
+    /**
+     * 批量查询ICD信息
+     *
+     * @param icd10List
+     * @return
+     */
+    public List<BaseIcd10> selectICDList(List<BaseIcd10> icd10List);
 }

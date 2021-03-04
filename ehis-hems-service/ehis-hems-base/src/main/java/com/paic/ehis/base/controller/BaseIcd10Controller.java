@@ -138,4 +138,14 @@ public class BaseIcd10Controller extends BaseController
     public List<BaseIcd10> selectIcdFuzzy(@RequestBody BaseIcd10 baseIcd){
         return baseIcd10Service.selectIcdFuzzy(baseIcd);
     }
+
+    /**
+     * 查询ICD集合
+     *
+     * @return
+     */
+    @PostMapping("/ICDList")
+    public AjaxResult selectICDList(@RequestBody List<BaseIcd10> icdList){
+        return AjaxResult.success(baseIcd10Service.selectICDList(icdList));
+    }
 }

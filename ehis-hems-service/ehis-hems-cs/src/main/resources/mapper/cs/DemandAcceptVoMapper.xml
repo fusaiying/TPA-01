@@ -108,7 +108,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn  DESC,b.priority_level ASC,a.accept_time DESC
+        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
 	</select>
 
 
@@ -194,8 +194,8 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
        <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        hm.nnn,b.priority_level,a.accept_time DESC
-	</select>
+        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
+</select>
 
     <select id="selectDemandAcceptVoById" resultMap="DemandAcceptVoResult">
          SELECT

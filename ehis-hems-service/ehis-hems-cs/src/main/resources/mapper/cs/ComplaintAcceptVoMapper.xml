@@ -62,8 +62,6 @@
         t1.work_order_no = t2.work_order_no
         AND t1.business_type = '03'
         AND t1.STATUS = '01'
-        ORDER BY
-        hm.nnn  DESC,t2.priority_level ASC,t1.accept_time DESC
         <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
@@ -83,6 +81,8 @@
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -121,10 +121,7 @@
         t1.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND t1.business_type = '03'
         AND t1.STATUS = '02'
-        ORDER BY
-        hm.nnn DESC,
-        t2.priority_level ASC,
-        t1.accept_time DESC
+
             <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
             <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
             <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
@@ -144,6 +141,8 @@
             <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        hm.nnn  DESC,b.priority_level DESC,a.accept_time ASC
     </select>
 
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">

@@ -170,6 +170,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(claimCase.getBatchNo());
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimFlag=settle.getClaimFlag();
@@ -188,9 +189,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
         //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
-        }//核心推送的数据，我方给财务数据只能多不能少
-        //从险种维度推送，如何进行
-        //分单下还有多人？？
+        }
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

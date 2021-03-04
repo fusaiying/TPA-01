@@ -70,8 +70,8 @@ public class BaseIcd10ServiceImpl implements IBaseIcd10Service {
         baseIcd10.setSource("2");//来源 否 基础库
         baseIcd10.setCreateBy(SecurityUtils.getUsername());
         baseIcd10.setCreateTime(DateUtils.getNowDate());
-        baseIcd10.setUpdateBy(SecurityUtils.getUsername());
-        baseIcd10.setUpdateTime(DateUtils.getNowDate());
+       /* baseIcd10.setUpdateBy(SecurityUtils.getUsername());
+        baseIcd10.setUpdateTime(DateUtils.getNowDate());*/
         baseIcd10.setStatus("Y");//状态
         return baseIcd10Mapper.insertBaseIcd10(baseIcd10);
     }

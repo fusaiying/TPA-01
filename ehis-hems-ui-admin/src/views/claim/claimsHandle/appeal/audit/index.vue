@@ -63,38 +63,22 @@
       </el-form>
     </el-card>
 
-    <!--案件工作池 start-->
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span>案件工作池</span>
-      </div>
-      <claimTable :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
-      <pagination
-        v-show="claimTotal>0"
-        :total="claimTotal"
-        :page.sync="claimPageInfo.page"
-        :limit.sync="claimPageInfo.pageSize"
-        @pagination="initClaimData"
-      />
-    </el-card>
-    <!--案件工作池 end -->
-
     <!-- 申诉工作池  start  -->
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>申诉工作池</span>
       </div>
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
+        <el-tab-pane :label="`待处理(${pendingTotal})`" name="03">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
-        <el-tab-pane  :label="`已处理(${completedTotal})`" name="02">
+        <el-tab-pane  :label="`已处理(${completedTotal})`" name="04">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
       <pagination
-        v-if="activeName==='01'"
+        v-if="activeName==='03'"
         v-show="pendingTotal>0"
         :total="pendingTotal"
         :page.sync="pendPageInfo.pageNum"
@@ -102,7 +86,7 @@
         @pagination="handleClick"
       />
       <pagination
-        v-if="activeName==='02'"
+        v-if="activeName==='04'"
         v-show="completedTotal>0"
         :total="completedTotal"
         :page.sync="completePageInfo.pageNum"
@@ -116,7 +100,6 @@
 
 <script>
 import appealTable from '../components/appealTable'
-import claimTable from '../components/claimTable'
 
 import { PendingData,processedData } from '@/api/negotiation/api'
 import { claimInfoList } from '@/api/appeal/api'
@@ -129,16 +112,9 @@ export default {
   dicts: ['delivery_source'],
   components: {
     appealTable,
-    claimTable,
   },
   data() {
     return {
-      claimTableData: [],
-      claimTotal: 0,
-      claimPageInfo: {
-        page: 1,
-        pageSize: 10
-      },
       formSearch: {
         rptNo: '',
         source: '',
@@ -147,7 +123,7 @@ export default {
         operateDate: '',
         updateBy: '',
       },
-      activeName: '01',
+      activeName: '03',
       pendingTableData: [],
       completedTableData: [],
       pendingTotal: 0,
@@ -165,7 +141,6 @@ export default {
       claimStatus:[],
       dictList:[],
       claimTypes:[],
-      payStatus:[],
       searchBtn:false,
     }
   },
@@ -189,22 +164,17 @@ export default {
       return item.dictType === 'claim_status'
     }).dictDate
 
-    // 支付状态
-    this.payStatus = this.dictList.find(item => {
-      return item.dictType === 'case_pay_status'
-    }).dictDate
   },
   created() {
-    this.initClaimData();
     this.getPendingData();
     this.getProcessedData();
   },
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '02'
+        this.activeName = '04'
       } else {
-        this.activeName = '01'
+        this.activeName = '03'
       }
     }
   },
@@ -219,9 +189,6 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.claimPageInfo.page  = 1;
-      this.claimPageInfo.pageSize = 10;
-      this.initClaimData();
       // this.searchBtn = true;
       // this.pendPageInfo.pageNum = 1;
       // this.pendPageInfo.pageSize = 10;
@@ -288,32 +255,7 @@ export default {
         }
       })
     },
-    initClaimData(){
-      let startTime = "";
-      let endTime = "";
-      let operateDate = this.formSearch.operateDate;
-      if('' != operateDate) {
-        startTime = operateDate[0];
-        endTime = operateDate[1];
-      }
-      const params = {};
-      params.pageNum = this.claimPageInfo.page;
-      params.pageSize = this.claimPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
-      params.source = this.formSearch.source;
-      params.idNo = this.formSearch.idNo;
-      params.name = this.formSearch.name;
-      params.createStartTime = startTime;
-      params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
-      params.pageType = '01';
-      claimInfoList(params).then(res => {
-        if (res.code == '200') {
-          this.claimTotal = res.total;
-          this.claimTableData = res.rows;
-        }
-      });
-    },
+
     handleClick() {
       if (this.activeName === '01') {
         this.getPendingData()

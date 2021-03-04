@@ -39,10 +39,10 @@
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">合约有效期：</span>
-            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.expiryDate }} </span>
+            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.endDate }} </span>
           </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">备注：</span><span class="info_span">{{ serverContractInfo.remark }}</span>
+          <el-col :span="24">
+            <span class="info_span to_right el-col-24">备注：</span><span class="info_span el-col-18">{{ serverContractInfo.remark }}</span>
           </el-col>
        </el-row>
       </form>
@@ -82,7 +82,7 @@
             <span class="info_span to_right">押金金额：</span><span class="info_span">{{ providerContractInfo.deposit }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}{{ providerContractInfo.expiryDate }}</span>
+            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}  {{ providerContractInfo.endDate != "" ? " / " : "" }}  {{ providerContractInfo.endDate }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -133,7 +133,7 @@
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
+            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.liaison }}</span>
           </el-col>
 
           <el-col :span="8">

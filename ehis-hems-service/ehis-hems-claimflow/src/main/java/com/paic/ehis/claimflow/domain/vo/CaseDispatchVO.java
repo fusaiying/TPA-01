@@ -46,13 +46,14 @@ public class CaseDispatchVO extends BaseEntity {
     @Excel(name = "证件号码")
     private String idNo;
 
-    @Excel(name = "理赔类型")
+    @Excel(name = "理赔类型",readConverterExp = "01=直结,02=事后")
     private String claimType;
 
     /**
      * 出单公司编码
      */
     private String companyCode;
+
     @Excel(name = "出单公司名称")
     private String companyName;
 
@@ -67,7 +68,7 @@ public class CaseDispatchVO extends BaseEntity {
     @Excel(name = "监控时效", width = 30, dateFormat = "dd-HH-mm")
     private String monitoringTime;//监控时效=监控时效=当前系统时间-案件受理完成时间，格式为：a天b时c分,仅在处理中工作池显示/** 案件状态 */
 
-   @Excel(name = "案件状态")
+   @Excel(name = "案件状态",readConverterExp = "00=挂起,01=交单复核,02=交单退回,03=交单失败,04=交单完成,05=受理,30=问题件,97=撤件可申诉,98=撤件,06=录入,07=审核,31=协谈,32=调查,08=抽检,99=结案")
     private String caseStatus;
 
     /**

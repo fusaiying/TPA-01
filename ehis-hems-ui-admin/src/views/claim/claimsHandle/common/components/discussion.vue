@@ -26,24 +26,24 @@
                  label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }}</span>
+              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }}</span>
+              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmount }}</span>
+              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.payAmount }} {{ conclusionInfo.payAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}}</span>
+              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount != '' ? 'CNY' :'' }}</span>
             </el-col>
             <el-col :span="8" v-if="appealCase">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference != '' ? 'CNY' :'' }}</span>
             </el-col>
           </el-row>
 

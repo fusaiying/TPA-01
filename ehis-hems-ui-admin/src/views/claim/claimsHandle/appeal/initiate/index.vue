@@ -243,8 +243,8 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.claimPageInfo.page;
-      params.pageSize = this.claimPageInfo.pageSize;
+      params.pageNum = this.pendPageInfo.page;
+      params.pageSize = this.pendPageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
@@ -272,8 +272,8 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.claimPageInfo.page;
-      params.pageSize = this.claimPageInfo.pageSize;
+      params.pageNum = this.completePageInfo.page;
+      params.pageSize = this.completePageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;

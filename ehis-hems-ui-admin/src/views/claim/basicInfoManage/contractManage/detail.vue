@@ -133,7 +133,7 @@
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
+            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.liaison }}</span>
           </el-col>
 
           <el-col :span="8">

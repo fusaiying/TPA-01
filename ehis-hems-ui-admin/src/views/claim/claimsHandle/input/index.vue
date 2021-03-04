@@ -156,6 +156,7 @@
 
           })
         } else if (this.activeName === '02') {//已处理
+          this.searchForm.flag='1'
           this.searchForm.pageNum=this.dealNum
           this.searchForm.pageSize=this.dealSize
           this.searchForm.orderByColumn=this.$refs.claimsTable2.prop

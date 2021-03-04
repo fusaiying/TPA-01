@@ -211,8 +211,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         workOrderAccept.setHolderName(demandAcceptVo.getHolderName());
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
-        workOrderAccept.setAcceptTime(demandAcceptVo.getAcceptTime());
-        workOrderAccept.setModifyTime(demandAcceptVo.getModifyTime());
+        workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));

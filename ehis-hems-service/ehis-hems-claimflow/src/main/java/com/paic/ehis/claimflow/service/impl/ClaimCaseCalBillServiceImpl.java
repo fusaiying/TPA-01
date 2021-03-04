@@ -138,6 +138,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBill.setPayAmount(caseCalBillVo.getPayAmount());
                 claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
+                claimCaseCalBill.setRefusedAmount(caseCalBillVo.getRefusedAmount());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
                 claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
                 if ("05".equals(caseCalBillVo.getPayConclusion())){//存在拒赔结论时
@@ -148,7 +149,7 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBills.add(claimCaseCalBill);
                 billTotalAmount=billTotalAmount.add(caseCalBillVo.getBillAmount());//因账单总金额暂未实现，只能求和
                 totalDiscountAmount=totalDiscountAmount.add(caseCalBillVo.getHosDiscountAmount());//折扣总金额
-                totalSelfAmount=totalSelfAmount.add(caseCalBillVo.getCopay()!=null?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getCopay());
+                totalSelfAmount=totalSelfAmount.add(StringUtils.isNull(caseCalBillVo.getCopay())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getCopay());
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
                         ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
@@ -170,27 +171,26 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(claimCase.getBatchNo());
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimFlag=settle.getClaimFlag();
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
             claimCaseCal.setCalAmount(pay);
-            if (flag){//存在拒赔结论时，赔付金额为0，
-                claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
-                claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
-            }
             claimCaseCal.setPayAmount(pay);
             claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
+            if (flag){//存在拒赔结论时，赔付金额为0，
+                claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
+            }
         }
         if ("02".equals(claimFlag)){//全赔医院
             claimCaseCal.setCalAmount(pay);
             claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
-        //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
+        //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
             claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
-        }//核心推送的数据，我方给财务数据只能多不能少
-        //从险种维度推送，如何进行
-        //分单下还有多人？？
+        }
+        claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
         claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }

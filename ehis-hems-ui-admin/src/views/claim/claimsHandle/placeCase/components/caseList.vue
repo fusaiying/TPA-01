@@ -227,7 +227,9 @@
               message: '保存成功!'
             });
             this.baseFomrmSub = true;
-            this.getData();
+            this.initData();
+            this.$emit('goInitData');
+
           } else {
             this.$message({
               type: 'info',

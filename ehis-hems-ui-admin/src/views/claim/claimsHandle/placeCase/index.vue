@@ -165,7 +165,7 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
+    <case-list @goInitData="initData" :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>

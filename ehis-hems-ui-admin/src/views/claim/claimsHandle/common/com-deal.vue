@@ -36,7 +36,7 @@
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="">保障查看</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
-                       @click="openHistorySurvey">调查(?)</el-button>
+                       @click="openHistorySurvey">调查({{historySurCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistoryDiscussion">协谈({{historyDisCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='accept'" size="mini"
@@ -135,7 +135,7 @@
     <history-discussion :preHistoryData="preHistoryData" :value="historyDiscussionDialog" :fixInfo="fixInfo"
                         @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
     <!-- 历史调查 -->
-    <history-survey :value="historySurveyDialog" :fixInfo="fixInfo"
+    <history-survey :preSurveyHistoryData="preSurveyHistoryData" :value="historySurveyDialog" :fixInfo="fixInfo"
                     @closeHistorySurveyDialog="closeHistorySurveyDialog"/>
   </div>
 </template>
@@ -183,7 +183,7 @@
   } from '@/api/claim/handleCom'
 
 
-  import {historyDisInfo} from '@/api/negotiation/api'
+  import {historyDisInfo,historySurInfo} from '@/api/negotiation/api'
   import elementIcons from "../../../components/icons/element-icons"; // 历史协谈数据
 
 
@@ -219,6 +219,7 @@
     },
     data() {
       return {
+        historySurCount: 0,// 历史调查个数
         historyDisCount: 0,// 历史协谈个数
         caseInsuredData: {},
         sonInsuredData: {
@@ -293,7 +294,8 @@
         delivery_sourceOption: [],
         applicantData: {},
         insuredFormData: {},
-        preHistoryData: [],
+        preHistoryData: [], // 协谈
+        preSurveyHistoryData: [], // 调查
       }
 
     },
@@ -433,6 +435,7 @@
         this.btnArr = this.calculateArr
       }
       this.getHistoryDisInfo();
+      this.getHistorySurInfo();
     },
 
     methods: {
@@ -445,6 +448,20 @@
           if (res.code == '200') {
             this.historyDisCount = res.total;
             this.preHistoryData = res.rows;
+          }
+        });
+      },
+      // 历史调查数据
+      getHistorySurInfo() {
+        if (this.querys.rptNo == '') {
+          return;
+        }
+        let param = {};
+        param.rptNo = this.querys.rptNo;
+        historySurInfo(param).then(res => {
+          if (res.code == '200') {
+            this.historySurCount = res.total;
+            this.preSurveyHistoryData = res.rows;
           }
         });
       },

@@ -88,7 +88,7 @@
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
-        <el-tab-pane  :label="`已处理(${completedTotal})`" name="03">
+        <el-tab-pane  :label="`已处理(${completedTotal})`" name="02">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
@@ -102,7 +102,7 @@
         @pagination="handleClick"
       />
       <pagination
-        v-if="activeName==='03'"
+        v-if="activeName==='02'"
         v-show="completedTotal>0"
         :total="completedTotal"
         :page.sync="completePageInfo.pageNum"
@@ -202,7 +202,7 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '03'
+        this.activeName = '02'
       } else {
         this.activeName = '01'
       }

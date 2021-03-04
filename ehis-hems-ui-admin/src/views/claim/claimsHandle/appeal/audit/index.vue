@@ -69,16 +69,16 @@
         <span>申诉工作池</span>
       </div>
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
+        <el-tab-pane :label="`待处理(${pendingTotal})`" name="03">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
-        <el-tab-pane  :label="`已处理(${completedTotal})`" name="03">
+        <el-tab-pane  :label="`已处理(${completedTotal})`" name="04">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
         </el-tab-pane>
       </el-tabs>
       <!--分页组件-->
       <pagination
-        v-if="activeName==='01'"
+        v-if="activeName==='03'"
         v-show="pendingTotal>0"
         :total="pendingTotal"
         :page.sync="pendPageInfo.pageNum"
@@ -86,7 +86,7 @@
         @pagination="handleClick"
       />
       <pagination
-        v-if="activeName==='03'"
+        v-if="activeName==='04'"
         v-show="completedTotal>0"
         :total="completedTotal"
         :page.sync="completePageInfo.pageNum"
@@ -123,7 +123,7 @@ export default {
         operateDate: '',
         updateBy: '',
       },
-      activeName: '01',
+      activeName: '03',
       pendingTableData: [],
       completedTableData: [],
       pendingTotal: 0,
@@ -172,9 +172,9 @@ export default {
   watch: {
     totalChange: function(newVal, oldVal) {
       if (newVal.pendingTotal === 0 && newVal.completedTotal > 0) {
-        this.activeName = '03'
+        this.activeName = '04'
       } else {
-        this.activeName = '01'
+        this.activeName = '03'
       }
     }
   },

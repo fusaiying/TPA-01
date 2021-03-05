@@ -290,13 +290,6 @@
           rgtMobile: {validator: checkPhone, trigger: 'blur'},
           rgtEmail: {validator: validateEmail, trigger: 'blur'},
 
-          /*  applyWay: [{ required: true, message: '不能为空!', trigger: 'change' }],
-            cardType: [{ required: true, message: '不能为空!', trigger: 'change' }],
-            gender: [{ required: true, message: '不能为空!', trigger: 'change' }],
-            insuredName: [{ required: true, message: '不能为空!', trigger: 'blur' }],
-            reportName: [{ required: true, message: '不能为空!', trigger: 'blur' }],
-            idCard: [{ required: true, message: '不能为空!', trigger: 'blur' }],*/
-
         },
         regions: [],
         region: [],

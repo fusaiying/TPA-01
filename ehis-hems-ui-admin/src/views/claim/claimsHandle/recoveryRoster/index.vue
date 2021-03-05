@@ -569,7 +569,7 @@
             orderByColumn:'create_time',
             isAsc:'desc'
           };
-          this.download('claimflow/whitelist/export', params, `追讨白名单_${new Date().getTime()}.xlsx`);
+          this.download('claimflow/whitelist/export', params, `recoveryRoster_${new Date().getTime()}.xlsx`);
         },
 
         handleClose() {

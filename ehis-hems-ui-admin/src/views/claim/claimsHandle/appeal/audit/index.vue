@@ -70,7 +70,7 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="03">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="04">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
@@ -95,12 +95,17 @@
       />
     </el-card>
     <!-- 申诉工作池  end  -->
+
+    <!-- 发起/处理  start  -->
+    <deal :value="dialogVisible" @closeDialog="closeDialog" />
+    <!-- 发起/处理  end  -->
   </div>
 </template>
 
 <script>
-import appealTable from '../components/appealTable'
 
+import appealTable from '../components/appealTable'
+import deal from '../components/deal'
 import { PendingData,processedData } from '@/api/negotiation/api'
 import { claimInfoList } from '@/api/appeal/api'
 
@@ -112,6 +117,7 @@ export default {
   dicts: ['delivery_source'],
   components: {
     appealTable,
+    deal
   },
   data() {
     return {
@@ -185,6 +191,15 @@ export default {
     }
   },
   methods: {
+    openDialog(data){
+      console.log("*******************")
+      console.log(data)
+      console.log("*******************")
+      this.dialogVisible = true
+    },
+    closeDialog() {
+      this.dialogVisible = false
+    },
     resetForm() {
       this.$refs.searchForm.resetFields()
     },
@@ -262,15 +277,6 @@ export default {
       } else {
         this.getProcessedData()
       }
-    },
-    handleClose() {
-      this.dialogVisible = false
-    },
-    refreshTable() {
-      this.searchHandle()
-    },
-    goBack() {
-      this.$router.go(-1)
     },
   }
 }

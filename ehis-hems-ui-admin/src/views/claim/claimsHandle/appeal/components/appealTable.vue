@@ -22,8 +22,8 @@
     <el-table-column align="center"  v-if="status === '02'" prop="monitoringTime" label="修正理赔号" show-overflow-tooltip/>-->
     <el-table-column align="center" label="操作">
       <template slot-scope="scope">
-        <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'1')">发起 </el-button>
-        <el-button  v-if="status === '03'" size="mini"  type="text" @click="handleFun(scope.row,'1')">处理 </el-button>
+        <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'initiate')">发起 </el-button>
+        <el-button  v-if="status === '03'" size="mini"  type="text" @click="handleFun(scope.row,'audit')">处理 </el-button>
       </template>
     </el-table-column>
   </el-table>

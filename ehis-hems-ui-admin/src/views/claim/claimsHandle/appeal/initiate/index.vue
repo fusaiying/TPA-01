@@ -119,7 +119,6 @@
 <script>
 import appealTable from '../components/appealTable'
 import claimTable from '../components/claimTable'
-
 import deal from '../components/deal'
 
 import { PendingData,processedData } from '@/api/negotiation/api'

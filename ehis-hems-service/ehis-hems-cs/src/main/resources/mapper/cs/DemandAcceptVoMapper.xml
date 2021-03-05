@@ -91,7 +91,7 @@
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
-        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+        <!--<if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>-->
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>

@@ -150,6 +150,7 @@
     data() {
       return {
         isListExport: false,
+        queryOrganCode: '',
         organCode: '',
         queryParams: {
           pageNum: 1,
@@ -189,6 +190,7 @@
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
           this.organCode=res.data.organCode
+          this.queryOrganCode=res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -229,7 +231,9 @@
     },
     methods: {
       resetForm() {
+        this.queryOrganCode = this.searchForm.organCode
         this.$refs.searchForm.resetFields()
+        this.searchForm.organCode = this.queryOrganCode
         this.searchForm.caseDate=[]
       },
       search(status) {

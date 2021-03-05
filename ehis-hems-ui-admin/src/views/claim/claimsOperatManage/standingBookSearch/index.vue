@@ -209,6 +209,8 @@
         standingRules: {
           idno: [{required: true, message: '请输入', trigger: 'blur'}],
         },
+        queryOrganCode: '',
+        queryUser: '',
         searchForm: {
           pageNum: 1,
           pageSize: 10,
@@ -251,6 +253,8 @@
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
           this.organCode=res.data.organCode
+          this.queryOrganCode = res.data.organCode
+          this.queryUser = res.data.userName
           let item = {
             organCode: '',
             pageNum: 1,
@@ -290,9 +294,7 @@
           this.searchForm.sendby = '',
           this.searchForm.receiveDate = [],
           this.searchForm.receiveStartDate = '',
-          this.searchForm.receiveEndDate = '',
-          this.searchForm.organcode = undefined,
-          this.searchForm.createBy = ''//操作人
+          this.searchForm.receiveEndDate = ''
       },
       search(val) {
         let data = {

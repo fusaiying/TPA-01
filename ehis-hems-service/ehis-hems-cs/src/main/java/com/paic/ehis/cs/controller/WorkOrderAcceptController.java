@@ -3,7 +3,7 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import com.paic.ehis.common.security.annotation.PreAuthorize;
+
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 查询工单申请信息 列表
      */
-//    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:accept:list')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkOrderAccept workOrderAccept)
     {

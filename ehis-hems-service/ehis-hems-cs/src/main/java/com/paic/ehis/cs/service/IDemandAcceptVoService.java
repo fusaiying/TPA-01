@@ -11,6 +11,8 @@ public interface IDemandAcceptVoService {
 
     public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO);
 
+    public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);
+
     public int updateStatus(String workOrderNo);
 
     public int updateStatusM(String[] workOrderNos);
@@ -18,4 +20,11 @@ public interface IDemandAcceptVoService {
     public int insertServiceInfo(DemandAcceptVo demandAcceptVo);
 
     public int updateServiceInfo(DemandAcceptVo demandAcceptVo);
+
+    /**
+     * 协办工作池
+     * @param acceptDTO
+     * @return
+     */
+    List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO);
 }

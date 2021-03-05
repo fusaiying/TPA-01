@@ -3,6 +3,8 @@ package com.paic.ehis.cs.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.UserInfo;
 import lombok.Data;
@@ -104,6 +106,22 @@ public class ReservationAcceptVo extends BaseEntity {
     @Excel(name = "联系人编号 person_info中的编号")
     private String contactsPersonId;
 
+    /** 联系人国家*/
+    private String contactsCountry;
+    /** 联系人区号*/
+    private String contactsQuhao;
+    /** 联系人号码*/
+    private String contactsNumber;
+    /** 联系人分机号*/
+    private String contactsSecondNumber;
+    /** 联系人性别*/
+    private long contactsSex;
+    /** 联系人姓名*/
+    private String contactsName;
+    /** 联系人语言*/
+    private String contactsLanguage;
+    /** 联系人电话*/
+    private String contactsMobilePhone;
 
     /** 来电人*/
     private PersonInfo callPerson;
@@ -166,6 +184,56 @@ public class ReservationAcceptVo extends BaseEntity {
     private String compensationRatio;
 
 
+    /**预约日期*/
+    private String appointmentDate;
 
+    /**医院工作来电*/
+    private String hospitalWorkCall;
+
+    /**类似疾病症状最早发生时间*/
+    private String earliestTime;
+
+    /**是否首次就诊*/
+    private String firstFlag;
+
+    /**就诊日期*/
+    private String clinicDate;
+
+    /**就诊时间*/
+    private String clinicTime;
+
+    /**就诊医院省*/
+    private String province;
+
+    /**就诊医院市*/
+    private String city;
+
+    /**是否申请直结*/
+    private String settlementFlag;
+
+    private String complaintPersonId;
+
+    private PersonInfo complaintPerson;
+
+    /** 业务内容 */
+    @Excel(name = "业务内容")
+    private String content;
+
+    private EditInfo editInfo;
+
+    private EditDetail editDetail;
+
+
+
+    /**
+     * 修改原因
+     */
+    private String  editReason;
+    /**
+     * 修改说明
+     */
+    private String editRemark;
+
+    private String[] alterId;
 
 }

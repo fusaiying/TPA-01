@@ -12,14 +12,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 修改信息 对象 edit_info
  * 
  * @author sino
- * @date 2021-02-05
+ * @date 2021-02-20
  */
 public class EditInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 编辑流水号 */
-    private Long editId;
+    private String editId;
 
     /** 工单号 */
     @Excel(name = "工单号")
@@ -63,12 +63,12 @@ public class EditInfo extends BaseEntity
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    public void setEditId(Long editId) 
+    public void setEditId(String editId) 
     {
         this.editId = editId;
     }
 
-    public Long getEditId() 
+    public String getEditId() 
     {
         return editId;
     }

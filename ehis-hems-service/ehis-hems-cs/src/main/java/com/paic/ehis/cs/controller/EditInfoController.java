@@ -3,7 +3,6 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.service.IEditInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-02-05
  */
 @RestController
-@RequestMapping("/info")
+@RequestMapping("/editInfo")
 public class EditInfoController extends BaseController
 {
     @Autowired

@@ -5,13 +5,12 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.service.IEditDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,10 +46,13 @@ public class EditDetailController extends BaseController
         return getDataTable(list);
     }
 
-
-    @GetMapping(value = "/{workOrderNo}")
-    public AjaxResult getEdit(@PathVariable("workOrderNo") String workOrderNo){
-        return AjaxResult.success(editDetailService.selectEdit(workOrderNo));
+    /**
+     * 查询修改说明
+     */
+    @GetMapping("/edit")
+    public TableDataInfo getEdit(FlowLog flowLog){
+         List<EditDetail> list =editDetailService.selectEdit(flowLog);
+        return getDataTable(list);
     }
 
     /**
@@ -66,15 +68,6 @@ public class EditDetailController extends BaseController
         util.exportExcel(response, list, "detail");
     }
 
-    /**
-     * 获取修改明细 详细信息
-     */
-//    @PreAuthorize("@ss.hasPermi('system:detail:query')")
-    @GetMapping(value = "/{detailId}")
-    public AjaxResult getInfo(@PathVariable("detailId") String detailId)
-    {
-        return AjaxResult.success(editDetailService.selectEditDetailById(detailId));
-    }
 
     /**
      * 新增修改明细 
@@ -96,16 +89,5 @@ public class EditDetailController extends BaseController
     public AjaxResult edit(@RequestBody EditDetail editDetail)
     {
         return toAjax(editDetailService.updateEditDetail(editDetail));
-    }
-
-    /**
-     * 删除修改明细 
-     */
-//    @PreAuthorize("@ss.hasPermi('system:detail:remove')")
-    @Log(title = "修改明细 ", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{detailIds}")
-    public AjaxResult remove(@PathVariable String[] detailIds)
-    {
-        return toAjax(editDetailService.deleteEditDetailByIds(detailIds));
     }
 }

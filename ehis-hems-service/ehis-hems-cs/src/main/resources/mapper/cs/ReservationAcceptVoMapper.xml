@@ -31,9 +31,13 @@
         <result property="contactsRelationBy" column="contacts_relation_by"/>
         <result property="email" column="email"/>
         <result property="organCode" column="organ_code"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
     </resultMap>
-    <select id="selectReservationAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
-        SELECT
+
+
+    <select id="selectReservationAcceptVo" parameterType="String" resultMap="ReservationAcceptVoResult">
+SELECT
         a.work_order_no,
         a.business_type,
         a.policy_no,
@@ -54,6 +58,7 @@
         a.create_time create_time1,
         a.update_by update_by1,
         a.update_time update_time1,
+        b.complaint_person_id,
         b.channel_code,
         b.item_code,
         b.call_person_id,
@@ -85,15 +90,96 @@
         b.prop12,
         b.prop16,
         b.prop17,
-        b.prop18
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25
         FROM
-        work_order_accept a,
-        accept_detail_info b,
-        person_info c
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
         WHERE
-        a.work_order_no = b.work_order_no
-        AND a.insured_no = c.person_id
-        AND a.business_type = '预约'
+          a.work_order_no=#{workOrderNo}
+    </select>
+
+
+    <select id="selectReservationAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.complaint_person_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        b.prop0,
+        b.prop1,
+        b.prop2,
+        b.prop3,
+        b.prop4,
+        b.prop5,
+        b.prop6,
+        b.prop7,
+        b.prop8,
+        b.prop9,
+        b.prop10,
+        b.prop11,
+        b.prop12,
+        b.prop16,
+        b.prop17,
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
+        WHERE
+         a.business_type = '02'
         AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -114,6 +200,8 @@
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
     </select>
 
     <select id="selectReservationAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ReservationAcceptVoResult">
@@ -138,6 +226,7 @@
         a.create_time create_time1,
         a.update_by update_by1,
         a.update_time update_time1,
+        b.complaint_person_id,
         b.channel_code,
         b.item_code,
         b.call_person_id,
@@ -169,15 +258,25 @@
         b.prop12,
         b.prop16,
         b.prop17,
-        b.prop18
+        b.prop18,
+        b.prop19,
+        b.prop20,
+        b.prop21,
+        b.prop22,
+        b.prop23,
+        b.prop24,
+        b.prop25,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
         FROM
-        work_order_accept a,
-        accept_detail_info b,
-        person_info c
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
         WHERE
-        a.work_order_no = b.work_order_no
-        AND a.insured_no = c.person_id
-        AND a.business_type = '预约'
+        a.business_type = '02'
         AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
@@ -198,15 +297,20 @@
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
     </select>
 
     <update id="updateStatusM" parameterType="String" >
         update work_order_accept set status = '02'
-        where status='01'and business_type='预约' and work_order_no in
+        where status='01'and business_type='02' and work_order_no in
         <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
             #{workOrderNo}
         </foreach>
     </update>
 
-
+    <update id="updateOrderCancelStatus" parameterType="String" >
+        update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
 </mapper>

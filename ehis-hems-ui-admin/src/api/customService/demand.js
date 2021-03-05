@@ -18,10 +18,11 @@ export function demandListAndPersonalPool(query) {
   })
 }
 //#二次来电查询
-export function selectCallAgain() {
+export function selectCallAgain(query) {
   return request({
     url: '/cs/again/selectCallAgain',
     method: 'get',
+    params: query
   })
 }
 

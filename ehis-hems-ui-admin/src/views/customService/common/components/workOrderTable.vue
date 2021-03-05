@@ -8,15 +8,15 @@
     @expand-change="getMinData"
     style="width: 100%;">
     <el-table-column type="selection" align="center" content="全选"/>
-    <el-table-column prop="rptno" label="工单号" align="center"/>
-    <el-table-column prop="rptno" label="受理渠道" align="center"/>
-    <el-table-column prop="rptno" label="服务项目" align="center"/>
-    <el-table-column prop="rptno" label="保单号" align="center"/>
-    <el-table-column prop="rptno" label="分单号" align="center"/>
-    <el-table-column prop="rptno" label="险种代码" align="center"/>
-    <el-table-column prop="rptno" label="被保人" align="center"/>
-    <el-table-column prop="rptno" label="投保人" align="center"/>
-    <el-table-column align="center" prop="updateTime" min-width="120" label="受理时间" show-overflow-tooltip>
+    <el-table-column prop="workOrderNo" label="工单号" align="center"/>
+    <el-table-column prop="channelCode" label="受理渠道" align="center"/>
+    <el-table-column prop="itemCode" label="服务项目" align="center"/>
+    <el-table-column prop="policyNo" label="保单号" align="center"/>
+    <el-table-column prop="policyItemNo" label="分单号" align="center"/>
+    <el-table-column prop="riskCode" label="险种代码" align="center"/>
+    <el-table-column prop="insuredName" label="被保人" align="center"/>
+    <el-table-column prop="holderName" label="投保人" align="center"/>
+    <el-table-column align="acceptTime" prop="updateTime" min-width="120" label="受理时间" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
       </template>
@@ -26,11 +26,11 @@
         <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="rptno" label="受理人" align="center"/>
-    <el-table-column prop="rptno" label="处理人" align="center"/>
-    <el-table-column prop="status" label="VIP标识" align="center"/><!--status待确认-->
-    <el-table-column prop="updateTime" label="优先级" align="center"/>
-    <el-table-column prop="updateBy" label="出单机构" align="center"/>
+    <el-table-column prop="acceptBy" label="受理人" align="center"/>
+    <el-table-column prop="modifyBy" label="处理人" align="center"/>
+    <el-table-column prop="vipFlag" label="VIP标识" align="center"/><!--status待确认-->
+    <el-table-column prop="priorityLevel" label="优先级" align="center"/>
+    <el-table-column prop="organCode" label="出单机构" align="center"/>
     <el-table-column align="center" label="操作" min-width="94" fixed="right">
       <template slot-scope="scope">
         <el-button v-if="status==='01'" size="small" type="text" @click="editPresenting(scope.row,'get')">获取

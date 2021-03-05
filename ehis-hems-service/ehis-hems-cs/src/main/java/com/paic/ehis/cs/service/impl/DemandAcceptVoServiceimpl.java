@@ -10,6 +10,7 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
@@ -486,6 +487,17 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Override
     public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO) {
         return demandAcceptVoMapper.selectAssist(acceptDTO);
+    }
+
+
+    /**
+     * 工单查询
+     * @param acceptDTO
+     * @return
+     */
+    @Override
+    public List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO) {
+        return demandAcceptVoMapper.selectWorkOrder(acceptDTO);
     }
 
 

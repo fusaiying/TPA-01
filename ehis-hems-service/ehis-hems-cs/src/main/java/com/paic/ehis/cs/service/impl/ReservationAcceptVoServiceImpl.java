@@ -11,6 +11,7 @@ import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IReservationAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -283,15 +284,18 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     public int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
         String workOrderNo=reservationAcceptVo.getWorkOrderNo();
         ReservationAcceptVo reservationAcceptVo1=reservationAcceptVoMapper.selectReservationAcceptVo(workOrderNo);
-        PersonInfo callPerson= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
-        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
-        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
-//        PersonInfo personInfo1=new PersonInfo();
-//        PersonInfo personInfo2=new PersonInfo();
-//        PersonInfo personInfo3=new PersonInfo();
+//        PersonInfo callPerson= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
+//        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
+//        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
         PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
         PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
         PersonInfo complaintPerson1=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
+        PersonInfo callPerson=new PersonInfo();
+        PersonInfo contactsPerson=new PersonInfo();
+        PersonInfo complaintPerson=new PersonInfo();
+        BeanUtils.copyProperties(callPerson1, callPerson);
+        BeanUtils.copyProperties(contactsPerson1, contactsPerson);
+        BeanUtils.copyProperties(complaintPerson1, complaintPerson);
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
@@ -348,8 +352,6 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         callPerson.setFax(reservationAcceptVo.getCallPerson().getFax());
         callPerson.setName(reservationAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
-        callPerson.setCreatedBy(SecurityUtils.getUsername());
-        callPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         callPerson.setUpdatedBy(SecurityUtils.getUsername());
         callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
@@ -361,13 +363,13 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         contactsPerson.setLinePhone(reservationAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson.setCreatedBy(SecurityUtils.getUsername());
-        contactsPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
        //插入申请人
         complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
+        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
+        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(complaintPerson);
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);

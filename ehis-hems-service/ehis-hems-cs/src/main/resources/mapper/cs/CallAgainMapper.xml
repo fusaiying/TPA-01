@@ -44,14 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         call_again t1
         LEFT JOIN work_order_accept t2 ON t1.work_order_no = t2.work_order_no
         LEFT JOIN hcs_modification t3 ON t1.call_serial_num = t3.call_serial_num
-        <where>
-            <if test="workOrderNo != null  and workOrderNo != ''"> and work_order_no = #{workOrderNo}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
-            <if test="createdTime != null "> and created_time = #{createdTime}</if>
-            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
-            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
-        </where>
+        where t2.business_type=#{businessType}
         and t1.status='Y' AND t3.STATUS = 'Y'
         ORDER BY t1.call_serial_num  asc
     </select>

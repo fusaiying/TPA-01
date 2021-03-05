@@ -8,3 +8,13 @@ export function selectAcceptQuery(query) {
     params: query
   })
 }
+
+//# 工单查询
+export function selectWorkOrder(params) {
+  return request({
+    url: '/cs/spotCheck/internal/selectWorkOrder',
+    method: 'get',
+    params: params
+  })
+}
+

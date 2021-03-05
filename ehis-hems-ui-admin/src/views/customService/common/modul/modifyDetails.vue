@@ -5,7 +5,10 @@
 <!--        label-width设置了lanbl的宽度-->
        <el-row justify="center" align="center" >
          <el-form-item label="修改原因：" prop="insuredName">
-           <el-input v-model="ss.editReason" class="item-width"  size="mini" readonly/>
+           <el-select v-model="ss.editReason" class="item-width" disabled size="mini">
+             <el-option v-for="item in cs_eidt_reason" :key="item.dictValue" :label="item.dictLabel"
+                        :value="item.dictValue"/>
+           </el-select>
          </el-form-item>
        </el-row>
         <el-row>
@@ -27,9 +30,6 @@
               style=" width: 100%;"
             >
               <el-table-column align="center" width="140" prop="itemKey" label="修改项" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.itemKey">
-                  <span>{{selectDictLabel(cs_eidt_reason, scope.row.itemKey)}}</span>
-                </template>
               </el-table-column>
               <el-table-column align="center" prop="nowValue" label="新值" show-overflow-tooltip/>
               <el-table-column align="center" prop="oldValue" label="旧值" show-overflow-tooltip/>

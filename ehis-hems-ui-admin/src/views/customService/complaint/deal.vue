@@ -288,15 +288,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="客户电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width"  size="mini" readonly/>
+            <el-form-item label="家庭电话：" prop="phone">
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.workPhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -574,7 +574,7 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload" disabled>上传附件</el-button></span>
        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -788,7 +788,7 @@
       this.hangUpSearch()
       this.searchHandle()
       this.searchFlowLog()
-      this.searchHCS()
+      //this.searchHCS()
       this.getDicts("cs_link_circ").then(response => {
         this.cs_link_circ = response.data;
       });
@@ -1025,23 +1025,23 @@
         })
       },
       //查询HCS
-      searchHCS() {
-        let workOrderNo=this.queryParams
-        workOrderNo.status=""
-        HMSSearch(workOrderNo).then(res => {
-          if (res != null && res.code === 200) {
-            this.HCSPoolData = res.rows
-            this.HCSTotal = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      },
+      // searchHCS() {
+      //   let workOrderNo=this.queryParams
+      //   workOrderNo.status=""
+      //   HMSSearch(workOrderNo).then(res => {
+      //     if (res != null && res.code === 200) {
+      //       this.HCSPoolData = res.rows
+      //       this.HCSTotal = res.total
+      //       if (res.rows.length <= 0) {
+      //         return this.$message.warning(
+      //           "未查询到数据！"
+      //         )
+      //       }
+      //     }
+      //   }).catch(res => {
+      //
+      //   })
+      // },
       //修改按钮
       modify() {
         if (this.ids.length==0){

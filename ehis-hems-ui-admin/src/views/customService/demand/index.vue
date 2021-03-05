@@ -383,6 +383,9 @@
           handlerTime:[],//处理时间数组
         },
         sendForm: {//传值给后台
+          acceptorTime:[],//受理时间数组
+          appointmentTime:[],//预约时间数组
+          handlerTime:[],//处理时间数组
           pageNum: 1,
           pageSize: 10,
           itemCode: "",//服务信息
@@ -576,12 +579,15 @@
       },
       resetForm() {
         this.$refs.sendForm.resetFields()
+        this.timeArray.acceptorTime=""
+        this.timeArray.appointmentTime=""
+        this.timeArray.handlerTime=""
         this.searchHandle()
       },
       //待处理查询
       searchHandle() {
         let queryParams;
-        if (this.timeArray.length > 0) {
+        if (this.timeArray.acceptorTime !==null&&this.timeArray.acceptorTime!=="") {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
           queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
           queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
@@ -608,21 +614,22 @@
       //处理中查询
       searchHandle1() {
         let queryParams;
-        if (this.timeArray.acceptorTime.length > 0) {
+        if (this.timeArray.acceptorTime !==null&&this.timeArray.acceptorTime!=="") {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
           queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
           queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
+          console.log(queryParams,"dsd")
         } else {
           queryParams = this.sendForm;
         }
+
         queryParams.pageNum = this.pageNumPerson;
         queryParams.pageSize = this.pageSizePerson;
-        demandListAndPersonalPool(this.sendForm).then(res => {
+        demandListAndPersonalPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
             this.totalPersonCount = res.rows.length
-            console.log("gonggongchi",this.workPersonPoolData)
-
+            console.log("geren",this.workPersonPoolData)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -641,7 +648,10 @@
       },
       //二次来电查询
       searchSecondHandle() {
-        selectCallAgain().then(res => {
+        const query ={
+          businessType:"01"
+        }
+        selectCallAgain(query).then(res => {
           if (res != null && res.code === 200) {
             if (res.rows.length>=1){
               this.$refs.secondPhone.workPoolData=res.rows

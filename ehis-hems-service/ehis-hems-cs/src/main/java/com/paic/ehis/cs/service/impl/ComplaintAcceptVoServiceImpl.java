@@ -147,6 +147,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
 
         acceptDetailInfo.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+        acceptDetailInfo.setOrganCode(complaintAcceptVo.getOrganCode());
         acceptDetailInfo.setChannelCode(complaintAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(complaintAcceptVo.getItemCode());
         acceptDetailInfo.setCallPersonId(complaintAcceptVo.getCallPersonId());

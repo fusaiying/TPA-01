@@ -117,7 +117,7 @@
             <span class="info_span to_right">特殊费折扣信息：</span><span class="info_span">{{ providerContractInfo.specialDiscount }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">折扣除外项目：</span><span class="info_span">{{ providerContractInfo.distcoteItem }}</span>
+            <span class="info_span to_right">折扣除外项目：</span><span class="info_span">{{ providerContractInfo.project }}</span>
           </el-col>
           <el-col :span="8">
           <span class="info_span to_right">合作单位：</span><span class="info_span">{{ getCooperativeUnitNameByValue(providerContractInfo.cooperativeUnit) }}</span>
@@ -152,11 +152,11 @@
             <span class="info_span to_right">电子邮件：</span><span class="info_span">{{ providerContractInfo.email }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">最后维护人：</span><span class="info_span">{{ providerContractInfo.exPer }}</span>
+            <span class="info_span to_right">最后维护人：</span><span class="info_span">{{ providerContractInfo.updateBy }}</span>
           </el-col>
 
           <el-col :span="8">
-            <span class="info_span to_right">最后维护时间：</span><span class="info_span"></span>
+            <span class="info_span to_right">最后维护时间：</span><span class="info_span">{{ providerContractInfo.updateTime | changeDate}}</span>
           </el-col>
 
         </el-row>
@@ -276,6 +276,8 @@
   </div>
 </template>
 <script>
+  import moment from "moment";
+
   let that
   import {
     getSupplierContractList ,
@@ -290,6 +292,13 @@
   } from '@/api/contractManage/contractManagement'
 
   export default {
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      },
+    },
     data() {
       return {
         hisContractTotalNum:0,

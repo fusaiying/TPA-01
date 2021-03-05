@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 
 
 import java.util.List;
@@ -27,4 +28,11 @@ public interface IDemandAcceptVoService {
      * @return
      */
     List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO);
+
+    /**
+     * 工单查询
+     * @param acceptDTO
+     * @return
+     */
+    List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO);
 }

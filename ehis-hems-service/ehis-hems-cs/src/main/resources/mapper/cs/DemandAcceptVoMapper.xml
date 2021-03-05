@@ -24,7 +24,6 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="workOrderNo" column="work_order_no"/>
         <result property="channelCode" column="channel_code"/>
         <result property="itemCode" column="item_code"/>
         <result property="callPersonId" column="call_person_id"/>
@@ -551,6 +550,77 @@ FROM
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
     </select>
-
+    <resultMap type="com.paic.ehis.cs.domain.vo.WorkOrderVo" id="WorkOrderVoResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="insuredName" column="insured_name"/>
+        <result property="holderName" column="holder_name"/>
+        <result property="acceptBy" column="accept_by"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="priorityLevel" column="priority_level"/>
+    </resultMap>
+    <select id="selectWorkOrder" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="WorkOrderVoResult">
+        SELECT
+        t1.work_order_no,
+        t2.channel_code,
+        t2.item_code,
+        t1.policy_no,
+        t1.policy_item_no,
+        t1.risk_code,
+        t1.insured_name,
+        t1.holder_name,
+        t1.accept_time,
+        t1.accept_by,
+        t1.modify_time,
+        t1.vip_flag,
+        t2.priority_level,
+        t2.organ_code,
+        t1.status,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
+        FROM
+        work_order_accept t1
+        LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no
+        LEFT JOIN person_info c ON t1.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON t2.work_order_no = hm.nnn
+        <where>
+        <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+       </where>
+        ORDER BY
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
+    </select>
 
 </mapper>

@@ -454,4 +454,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where created_by=#{createdBy}    and work_order_no=#{workOrderNo}
     </update>
+    <select id="selectWorkHandleInfo" parameterType="String" resultMap="WorkHandleInfoResult">
+        <include refid="selectWorkHandleInfoVo"/>
+        where work_order_no = #{workOrderNo}   and  status='Y'
+    </select>
 </mapper>

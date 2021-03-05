@@ -365,7 +365,7 @@
               +'&endDate='+this.searchForm.endDate+'&policyItemNo='+this.searchForm.policyItemNo
               +'&whiteStatus='+this.searchForm.whiteStatus, {
               ...this.searchForm
-            }, `FYX_${new Date().getTime()}.xlsx`)
+            }, `recoverMessage_${new Date().getTime()}.xlsx`)
           }else {
             return this.$message.warning(
               "没有查询到能导出的数据！"

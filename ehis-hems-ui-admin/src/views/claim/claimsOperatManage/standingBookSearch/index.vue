@@ -106,12 +106,12 @@
             style=" width: 100%;">
             <el-table-column align="center" prop="rptno" width="90" label="报案号" show-overflow-tooltip>
               <template slot-scope="scope">
-                <el-form-item v-if="!scope.row.isEdit && (scope.row.rptno===''||scope.row.rptno==null)"
+                <el-form-item v-if="!scope.row.isEdit"
                               :prop="'tableData.' + scope.$index + '.rptno'"
                               :rules="standingRules.rptno" style="display: inline-flex !important;">
                   <el-input v-model="scope.row.rptno" placeholder="请输入" size="mini"/>
                 </el-form-item>
-                <span v-else>{{ scope.row.rptno}}</span>
+                <span v-if="scope.row.isEdit">{{ scope.row.rptno}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="idno" width="90" label="证件号码" show-overflow-tooltip>
@@ -166,11 +166,7 @@
             <el-table-column align="center" prop="receivedate" label="接单日期" show-overflow-tooltip/>
             <el-table-column align="center" prop="sendby" label="交件人" width="100" show-overflow-tooltip/>
             <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
-            <el-table-column align="center" prop="organcode" label="机构" width="100" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{selectDeptName(sysDeptOptions,scope.row.organcode)}}</span>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="organname" label="机构" width="100" show-overflow-tooltip/>
             <el-table-column align="center" prop="createBy" label="操作人" show-overflow-tooltip/>
             <el-table-column align="center" label="操作" fixed="right">
               <template slot-scope="scope">
@@ -315,22 +311,56 @@
 
         data.pageNum = this.queryParams.pageNum
         data.pageSize = this.queryParams.pageSize
-
-        listNew(data).then(res => {
-          if (res != null && res.code === 200) {
-            this.standingForm.tableData = res.rows
-            this.standingForm.tableData.forEach(item => {
-              item.isEdit = true
+        let day=0
+        const getDaysDiffBetweenDates = (dateInitial, dateFinal) =>
+          (dateFinal - dateInitial) / (1000 * 3600 * 24);
+        if (data.receiveStartDate!=null && data.receiveStartDate!='' && data.receiveEndDate!=null && data.receiveEndDate!=''){
+          day=getDaysDiffBetweenDates(new Date(data.receiveStartDate), new Date(data.receiveEndDate));
+        }
+        if (day>90){
+          this.$confirm(`时间跨度过长，是否确认查询?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            listNew(data).then(res => {
+              if (res != null && res.code === 200) {
+                this.standingForm.tableData = res.rows
+                this.standingForm.tableData.forEach(item => {
+                  item.isEdit = true
+                })
+                this.totalCount = res.total
+                if (res.rows.length <= 0) {
+                  return this.$message.warning(
+                    "未查询到数据！"
+                  )
+                }
+              }
+            }).catch(res => {
             })
-            this.totalCount = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消！'
+            })
+          })
+        }else {
+          listNew(data).then(res => {
+            if (res != null && res.code === 200) {
+              this.standingForm.tableData = res.rows
+              this.standingForm.tableData.forEach(item => {
+                item.isEdit = true
+              })
+              this.totalCount = res.total
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
             }
-          }
-        }).catch(res => {
-        })
+          }).catch(res => {
+          })
+        }
       },
       listExport() {
         this.searchForm.pageNum = 1

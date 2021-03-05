@@ -117,4 +117,14 @@ public class ClaimCaseDebtReceiptServiceImpl implements IClaimCaseDebtReceiptSer
     public List<ClaimCaseDebtReceipt> selectClaimCaseDebtReceiptListByInsuredOrDate(DebtInfoDTO debtInfoDTO) {
         return claimCaseDebtReceiptMapper.selectClaimCaseDebtReceiptListByInsuredOrDate(debtInfoDTO);
     }
+
+    /**
+     * 查询全部收款明细 关联追讨核销表
+     *
+     * @return
+     */
+    @Override
+    public List<ClaimCaseDebtReceipt> selectReceiptList() {
+        return claimCaseDebtReceiptMapper.selectReceiptList();
+    }
 }

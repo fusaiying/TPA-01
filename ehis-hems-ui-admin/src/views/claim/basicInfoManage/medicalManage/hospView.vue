@@ -142,7 +142,6 @@
 
                       <el-option v-for="item in comprehensive_typeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
                     <!--选择专科时  显示出来-->
 
@@ -151,7 +150,6 @@
                                multiple>
                       <el-option v-for="item in comprehensive_subtypeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
                     <i class="el-icon-warning-outline" v-if="typeShow" v-bind:title="type2Info"></i>
 
@@ -634,7 +632,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status_review'
+      return item.dictType == 'bussiness_status'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'

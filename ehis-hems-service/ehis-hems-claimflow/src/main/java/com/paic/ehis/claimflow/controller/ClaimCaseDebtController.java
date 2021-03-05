@@ -1,8 +1,8 @@
 package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
-import com.paic.ehis.claimflow.domain.dto.DebtInfo;
 import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
+import com.paic.ehis.claimflow.domain.vo.BillProcessingVo;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 //import com.paic.ehis.claimflow.service.IClaimCaseDebtReceiptService;
 import com.paic.ehis.claimflow.service.IClaimCaseDebtService;
@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * 案件追讨信息Controller
- * 
+ *
  * @author sino
  * @date 2021-01-20
  */
@@ -54,22 +54,15 @@ public class ClaimCaseDebtController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, DebtInfoDTO debtInfoDTO) throws IOException
     {
-        if (null == debtInfoDTO){
+        if ("0".equals(debtInfoDTO.getFlag())){
             List<DebtInfoVO> list = claimCaseDebtService.selectDebtInitList();
             ExcelUtil<DebtInfoVO> util = new ExcelUtil<DebtInfoVO>(DebtInfoVO.class);
             util.exportExcel(response, list, "debt");
         } else {
-            DebtInfo debtInfo = new DebtInfo();
-            debtInfo.setRptNo(debtInfoDTO.getRptNo());
-            debtInfo.setPolicyNo(debtInfoDTO.getPolicyNo());
-            debtInfo.setHospitalCode(debtInfoDTO.getHospitalCode());
-            debtInfo.setInsuredName(debtInfoDTO.getInsuredName());
-            debtInfo.setIdNo(debtInfoDTO.getIdNo());
-            debtInfo.setStartDate(debtInfoDTO.getStartDate());
-            debtInfo.setEndDate(debtInfoDTO.getEndDate());
-            debtInfo.setWhiteStatus(debtInfoDTO.getWhiteStatus());
-            debtInfo.setPolicyItemNo(debtInfoDTO.getPolicyItemNo());
-            List<DebtInfoVO> list = claimCaseDebtService.selectDebtList(debtInfo);
+            if (null != debtInfoDTO.getInsuredName() && !"".equals(debtInfoDTO.getInsuredName())) {
+                debtInfoDTO.setInsuredName(new String(debtInfoDTO.getInsuredName().getBytes(),"UTF-8"));
+            }
+            List<DebtInfoVO> list = claimCaseDebtService.selectDebtList(debtInfoDTO);
             ExcelUtil<DebtInfoVO> util = new ExcelUtil<DebtInfoVO>(DebtInfoVO.class);
             util.exportExcel(response, list, "debt");
         }
@@ -112,7 +105,7 @@ public class ClaimCaseDebtController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:debt:remove')")
     @Log(title = "案件追讨信息", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{debtIds}")
+    @DeleteMapping("/{debtIds}")
     public AjaxResult remove(@PathVariable Long[] debtIds)
     {
         return toAjax(claimCaseDebtService.deleteClaimCaseDebtByIds(debtIds));
@@ -124,25 +117,13 @@ public class ClaimCaseDebtController extends BaseController
      */
     @PostMapping("/initDebt")
     public TableDataInfo initDebtList(@RequestBody DebtInfoDTO debtInfoDTO){
-        startPage(debtInfoDTO);
+        startPage();
         List<DebtInfoVO> list = new ArrayList<>();
-        DebtInfo debtInfo = new DebtInfo();
-        debtInfo.setRptNo(debtInfoDTO.getRptNo());
-        debtInfo.setPolicyNo(debtInfoDTO.getPolicyNo());
-        debtInfo.setHospitalCode(debtInfoDTO.getHospitalCode());
-        debtInfo.setInsuredName(debtInfoDTO.getInsuredName());
-        debtInfo.setIdNo(debtInfoDTO.getIdNo());
-        debtInfo.setStartDate(debtInfoDTO.getStartDate());
-        debtInfo.setEndDate(debtInfoDTO.getEndDate());
-        debtInfo.setWhiteStatus(debtInfoDTO.getWhiteStatus());
-        debtInfo.setPolicyItemNo(debtInfoDTO.getPolicyItemNo());
         // 初始化或者查询条件为空
-//        if (ObjectNullUtil.objectIsNull(debtInfo)){
-        if (null==debtInfo.getRptNo() && null==debtInfo.getPolicyNo() && null==debtInfo.getHospitalCode() && null==debtInfo.getInsuredName()
-                && null==debtInfo.getIdNo() && null==debtInfo.getStartDate() && null==debtInfo.getWhiteStatus() && null==debtInfo.getPolicyItemNo()){
+        if ("0".equals(debtInfoDTO.getFlag())){
             list = claimCaseDebtService.selectDebtInitList();
         } else {
-            list = claimCaseDebtService.selectDebtList(debtInfo);
+            list = claimCaseDebtService.selectDebtList(debtInfoDTO);
         }
         return getDataTable(list);
     }

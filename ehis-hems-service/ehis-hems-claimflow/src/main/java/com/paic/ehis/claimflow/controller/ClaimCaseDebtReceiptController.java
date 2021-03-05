@@ -109,8 +109,11 @@ public class ClaimCaseDebtReceiptController extends BaseController
     public TableDataInfo initReceipt(@RequestBody DebtInfoDTO debtInfoDTO){
         startPage();
         List<ClaimCaseDebtReceipt> receiptList = new ArrayList<>();
-        if ((!"".equals(debtInfoDTO.getInsuredName()) && debtInfoDTO.getInsuredName() != null) || debtInfoDTO.getStartDate() != null){
-            receiptList = claimCaseDebtReceiptService.selectClaimCaseDebtReceiptListByInsuredOrDate(debtInfoDTO);
+        if ("1".equals(debtInfoDTO.getFlag())){
+            if ((!"".equals(debtInfoDTO.getInsuredName()) && debtInfoDTO.getInsuredName() != null) || debtInfoDTO.getStartDate() != null) {
+                receiptList = claimCaseDebtReceiptService.selectClaimCaseDebtReceiptListByInsuredOrDate(debtInfoDTO);
+            }
+            receiptList = claimCaseDebtReceiptService.selectReceiptList();
         } else {
             receiptList = claimCaseDebtReceiptService.selectClaimCaseDebtReceiptListNear();
         }

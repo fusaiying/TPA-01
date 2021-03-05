@@ -24,8 +24,6 @@
         <div >
           <hosp-contact-info :disabledFlag="otherDisabledFlag" :supplierCode="otherProviderCode" ref="otherContactInfo" :isAdd="isAdd" :dictList="dictList"
                              :contactInfoForm="otherContactInfoForm" :contactInfoTableShow="contactInfoTableShow"></hosp-contact-info>
-<!--          <contact-info :disabledFlag="otherDisabledFlag" :supplierCode="otherProviderCode" ref="otherContactInfo" :isAdd="isAdd" :dictList="dictList" :status="activeName"
-                        :contactInfoForm="otherContactInfoForm" :contactInfoTableShow="contactInfoTableShow"></contact-info>-->
         </div>
         <!--结算信息-->
         <div >
@@ -33,8 +31,6 @@
                              :closingTableShow="closingTableShow" :annexupload="annexupload"
                              :closingFrom="otherClosingFrom"></hosp-closing-info>
 
-<!--          <closing-info :closingFrom="otherClosingFrom" :closingTableShow="closingTableShow" :status="activeName" :providerCode="otherProviderCode" :disabledFlag="otherDisabledFlag" :dictList="dictList"
-                        ref="otherClosingInfo"></closing-info>-->
         </div>
         <div
           style="line-height: 50px; margin-bottom: 20px; padding-right: 20px;  color: #303133;float: right; ">

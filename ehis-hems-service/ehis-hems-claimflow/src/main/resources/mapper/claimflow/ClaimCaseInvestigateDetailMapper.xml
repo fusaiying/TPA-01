@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimflow.mapper.ClaimCaseInvestigateDetailMapper">
+    
+    <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseInvestigateDetail" id="ClaimCaseInvestigateDetailResult">
+        <result property="investigateDetailNo"    column="investigate_detail_no"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="invDetailType"    column="inv_detail_type"    />
+        <result property="invDetailStatus"    column="inv_detail_status"    />
+        <result property="invDetailCause"    column="inv_detail_cause"    />
+        <result property="invDetailPeople"    column="inv_detail_people"    />
+        <result property="invDetailTime"    column="inv_detail_time"    />
+        <result property="invDetailItem"    column="inv_detail_item"    />
+        <result property="invDetailNature"    column="inv_detail_nature"    />
+        <result property="invDetailGist"    column="inv_detail_gist"    />
+        <result property="invDetailFace"    column="inv_detail_face"    />
+        <result property="conclusion"    column="conclusion"    />
+        <result property="invDetailNum"    column="inv_detail_num"    />
+        <result property="invDetailReplenish"    column="inv_detail_replenish"    />
+        <result property="invDetailSurvey"    column="inv_detail_survey"    />
+        <result property="invDetailScan"    column="inv_detail_scan"    />
+        <result property="invDetailProof"    column="inv_detail_proof"    />
+        <result property="invDetailAfterTime"    column="inv_detail_after_time"    />
+        <result property="invDetailOrgan"    column="inv_detail_organ"    />
+        <result property="invDetailAfterPeople"    column="inv_detail_after_people"    />
+        <result property="invDetailArgument"    column="inv_detail_argument"    />
+        <result property="invDetailResultArgument"    column="inv_detail_result_argument"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseInvestigateDetailVo">
+        select investigate_detail_no,rpt_no,inv_detail_type, inv_detail_status,  inv_detail_cause, inv_detail_people, inv_detail_time, inv_detail_item, inv_detail_nature, inv_detail_gist, inv_detail_face, conclusion, inv_detail_num, inv_detail_replenish, inv_detail_survey, inv_detail_scan, inv_detail_proof, inv_detail_after_time, inv_detail_organ, inv_detail_after_people, inv_detail_argument, inv_detail_result_argument, status,create_by, create_time, update_by, update_time from claim_case_investigate_detail
+    </sql>
+
+    <select id="selectClaimCaseInvestigateDetailList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseInvestigateDetail" resultMap="ClaimCaseInvestigateDetailResult">
+        <include refid="selectClaimCaseInvestigateDetailVo"/>
+        <where>
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
+            <if test="invDetailType != null  and invDetailType != ''"> and inv_detail_type = #{invDetailType}</if>
+            <if test="invDetailStatus != null  and invDetailStatus != ''"> and inv_detail_status = #{invDetailStatus}</if>
+            <if test="invDetailCause != null  and invDetailCause != ''"> and inv_detail_cause = #{invDetailCause}</if>
+            <if test="invDetailPeople != null  and invDetailPeople != ''"> and inv_detail_people = #{invDetailPeople}</if>
+            <if test="invDetailTime != null "> and inv_detail_time = #{invDetailTime}</if>
+            <if test="invDetailItem != null  and invDetailItem != ''"> and inv_detail_item = #{invDetailItem}</if>
+            <if test="invDetailNature != null  and invDetailNature != ''"> and inv_detail_nature = #{invDetailNature}</if>
+            <if test="invDetailGist != null  and invDetailGist != ''"> and inv_detail_gist = #{invDetailGist}</if>
+            <if test="invDetailFace != null  and invDetailFace != ''"> and inv_detail_face = #{invDetailFace}</if>
+            <if test="conclusion != null  and conclusion != ''"> and conclusion = #{conclusion}</if>
+            <if test="invDetailNum != null  and invDetailNum != ''"> and inv_detail_num = #{invDetailNum}</if>
+            <if test="invDetailReplenish != null  and invDetailReplenish != ''"> and inv_detail_replenish = #{invDetailReplenish}</if>
+            <if test="invDetailSurvey != null  and invDetailSurvey != ''"> and inv_detail_survey = #{invDetailSurvey}</if>
+            <if test="invDetailScan != null  and invDetailScan != ''"> and inv_detail_scan = #{invDetailScan}</if>
+            <if test="invDetailProof != null  and invDetailProof != ''"> and inv_detail_proof = #{invDetailProof}</if>
+            <if test="invDetailAfterTime != null "> and inv_detail_after_time = #{invDetailAfterTime}</if>
+            <if test="invDetailOrgan != null  and invDetailOrgan != ''"> and inv_detail_organ = #{invDetailOrgan}</if>
+            <if test="invDetailAfterPeople != null  and invDetailAfterPeople != ''"> and inv_detail_after_people = #{invDetailAfterPeople}</if>
+            <if test="invDetailArgument != null  and invDetailArgument != ''"> and inv_detail_argument = #{invDetailArgument}</if>
+            <if test="invDetailResultArgument != null  and invDetailResultArgument != ''"> and inv_detail_result_argument = #{invDetailResultArgument}</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseInvestigateDetailById" parameterType="Long" resultMap="ClaimCaseInvestigateDetailResult">
+        <include refid="selectClaimCaseInvestigateDetailVo"/>
+        where investigate_detail_no = #{investigateDetailNo}
+    </select>
+        
+    <insert id="insertClaimCaseInvestigateDetail" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseInvestigateDetail" useGeneratedKeys="true" keyProperty="investigateDetailNo">
+        insert into claim_case_investigate_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no,</if>
+            <if test="invDetailType != null and invDetailType != ''">inv_detail_type,</if>
+            <if test="invDetailStatus != null and invDetailStatus != ''">inv_detail_status,</if>
+            <if test="invDetailCause != null and invDetailCause != ''">inv_detail_cause,</if>
+            <if test="invDetailPeople != null and invDetailPeople != ''">inv_detail_people,</if>
+            <if test="invDetailTime != null">inv_detail_time,</if>
+            <if test="invDetailItem != null and invDetailItem != ''">inv_detail_item,</if>
+            <if test="invDetailNature != null and invDetailNature != ''">inv_detail_nature,</if>
+            <if test="invDetailGist != null and invDetailGist != ''">inv_detail_gist,</if>
+            <if test="invDetailFace != null and invDetailFace != ''">inv_detail_face,</if>
+            <if test="conclusion != null">conclusion,</if>
+            <if test="invDetailNum != null">inv_detail_num,</if>
+            <if test="invDetailReplenish != null">inv_detail_replenish,</if>
+            <if test="invDetailSurvey != null">inv_detail_survey,</if>
+            <if test="invDetailScan != null">inv_detail_scan,</if>
+            <if test="invDetailProof != null">inv_detail_proof,</if>
+            <if test="invDetailAfterTime != null">inv_detail_after_time,</if>
+            <if test="invDetailOrgan != null">inv_detail_organ,</if>
+            <if test="invDetailAfterPeople != null">inv_detail_after_people,</if>
+            <if test="invDetailArgument != null">inv_detail_argument,</if>
+            <if test="invDetailResultArgument != null">inv_detail_result_argument,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">#{rptNo},</if>
+            <if test="invDetailType != null and invDetailType != ''">#{invDetailType},</if>
+            <if test="invDetailStatus != null and invDetailStatus != ''">#{invDetailStatus},</if>
+            <if test="invDetailCause != null and invDetailCause != ''">#{invDetailCause},</if>
+            <if test="invDetailPeople != null and invDetailPeople != ''">#{invDetailPeople},</if>
+            <if test="invDetailTime != null">#{invDetailTime},</if>
+            <if test="invDetailItem != null and invDetailItem != ''">#{invDetailItem},</if>
+            <if test="invDetailNature != null and invDetailNature != ''">#{invDetailNature},</if>
+            <if test="invDetailGist != null and invDetailGist != ''">#{invDetailGist},</if>
+            <if test="invDetailFace != null and invDetailFace != ''">#{invDetailFace},</if>
+            <if test="conclusion != null">#{conclusion},</if>
+            <if test="invDetailNum != null">#{invDetailNum},</if>
+            <if test="invDetailReplenish != null">#{invDetailReplenish},</if>
+            <if test="invDetailSurvey != null">#{invDetailSurvey},</if>
+            <if test="invDetailScan != null">#{invDetailScan},</if>
+            <if test="invDetailProof != null">#{invDetailProof},</if>
+            <if test="invDetailAfterTime != null">#{invDetailAfterTime},</if>
+            <if test="invDetailOrgan != null">#{invDetailOrgan},</if>
+            <if test="invDetailAfterPeople != null">#{invDetailAfterPeople},</if>
+            <if test="invDetailArgument != null">#{invDetailArgument},</if>
+            <if test="invDetailResultArgument != null">#{invDetailResultArgument},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseInvestigateDetail" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseInvestigateDetail">
+        update claim_case_investigate_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
+            <if test="invDetailType != null and invDetailType != ''">inv_detail_type = #{invDetailType},</if>
+            <if test="invDetailStatus != null and invDetailStatus != ''">inv_detail_status = #{invDetailStatus},</if>
+            <if test="invDetailCause != null and invDetailCause != ''">inv_detail_cause = #{invDetailCause},</if>
+            <if test="invDetailPeople != null and invDetailPeople != ''">inv_detail_people = #{invDetailPeople},</if>
+            <if test="invDetailTime != null">inv_detail_time = #{invDetailTime},</if>
+            <if test="invDetailItem != null and invDetailItem != ''">inv_detail_item = #{invDetailItem},</if>
+            <if test="invDetailNature != null and invDetailNature != ''">inv_detail_nature = #{invDetailNature},</if>
+            <if test="invDetailGist != null and invDetailGist != ''">inv_detail_gist = #{invDetailGist},</if>
+            <if test="invDetailFace != null and invDetailFace != ''">inv_detail_face = #{invDetailFace},</if>
+            <if test="conclusion != null">conclusion = #{conclusion},</if>
+            <if test="invDetailNum != null">inv_detail_num = #{invDetailNum},</if>
+            <if test="invDetailReplenish != null">inv_detail_replenish = #{invDetailReplenish},</if>
+            <if test="invDetailSurvey != null">inv_detail_survey = #{invDetailSurvey},</if>
+            <if test="invDetailScan != null">inv_detail_scan = #{invDetailScan},</if>
+            <if test="invDetailProof != null">inv_detail_proof = #{invDetailProof},</if>
+            <if test="invDetailAfterTime != null">inv_detail_after_time = #{invDetailAfterTime},</if>
+            <if test="invDetailOrgan != null">inv_detail_organ = #{invDetailOrgan},</if>
+            <if test="invDetailAfterPeople != null">inv_detail_after_people = #{invDetailAfterPeople},</if>
+            <if test="invDetailArgument != null">inv_detail_argument = #{invDetailArgument},</if>
+            <if test="invDetailResultArgument != null">inv_detail_result_argument = #{invDetailResultArgument},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where investigate_detail_no = #{investigateDetailNo}
+    </update>
+
+    <delete id="deleteClaimCaseInvestigateDetailById" parameterType="Long">
+        delete from claim_case_investigate_detail where investigate_detail_no = #{investigateDetailNo}
+    </delete>
+
+    <delete id="deleteClaimCaseInvestigateDetailByIds" parameterType="String">
+        delete from claim_case_investigate_detail where investigate_detail_no in 
+        <foreach item="investigateDetailNo" collection="array" open="(" separator="," close=")">
+            #{investigateDetailNo}
+        </foreach>
+    </delete>
+
+    <select id="selectClaimCaseInvestigateDetailByRptNo" parameterType="String" resultMap="ClaimCaseInvestigateDetailResult">
+        <include refid="selectClaimCaseInvestigateDetailVo"/>
+        where rpt_no = #{rptNo} and status='Y'
+    </select>
+</mapper>

@@ -86,7 +86,7 @@
       </div>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`待处理(${pendingTotal})`" name="01">
-          <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
+          <appealTable :value="dialogVisible"  @openDialog="openDialog" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="pendingTableData" :status="activeName"/>
         </el-tab-pane>
         <el-tab-pane  :label="`已处理(${completedTotal})`" name="02">
           <appealTable :claimTypes="claimTypes" :deliverySource="deliverySource" :table-data="completedTableData" :status="activeName"/>
@@ -99,24 +99,27 @@
         :total="pendingTotal"
         :page.sync="pendPageInfo.pageNum"
         :limit.sync="pendPageInfo.pageSize"
-        @pagination="handleClick"
-      />
+        @pagination="handleClick"/>
       <pagination
         v-if="activeName==='02'"
         v-show="completedTotal>0"
         :total="completedTotal"
         :page.sync="completePageInfo.pageNum"
         :limit.sync="completePageInfo.pageSize"
-        @pagination="handleClick"
-      />
+        @pagination="handleClick" />
     </el-card>
     <!-- 申诉工作池  end  -->
+
+    <!-- 发起/处理  start  -->
+    <deal :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
+    <!-- 发起/处理  end  -->
   </div>
 </template>
 
 <script>
 import appealTable from '../components/appealTable'
 import claimTable from '../components/claimTable'
+import deal from '../components/deal'
 
 import { PendingData,processedData } from '@/api/negotiation/api'
 import { claimInfoList } from '@/api/appeal/api'
@@ -130,6 +133,7 @@ export default {
   components: {
     appealTable,
     claimTable,
+    deal
   },
   data() {
     return {
@@ -167,6 +171,7 @@ export default {
       claimTypes:[],
       payStatus:[],
       searchBtn:false,
+      fixInfo:{},
     }
   },
   async mounted(){
@@ -215,6 +220,14 @@ export default {
     }
   },
   methods: {
+    openDialog(data){
+      this.fixInfo = data;
+      this.dialogVisible = true
+    },
+    closeDialog() {
+      this.fixInfo = {};
+      this.dialogVisible = false
+    },
     resetForm() {
       this.$refs.searchForm.resetFields()
     },
@@ -320,15 +333,6 @@ export default {
       } else {
         this.getProcessedData()
       }
-    },
-    handleClose() {
-      this.dialogVisible = false
-    },
-    refreshTable() {
-      this.searchHandle()
-    },
-    goBack() {
-      this.$router.go(-1)
     },
   }
 }

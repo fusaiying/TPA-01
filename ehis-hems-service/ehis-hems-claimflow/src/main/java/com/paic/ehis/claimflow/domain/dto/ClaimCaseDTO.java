@@ -55,4 +55,7 @@ public class ClaimCaseDTO extends BaseEntity {
 
     /** 操作日期 */
     private String updateDate;
+
+    /** 0:查询当天 1:查询全部   */
+    private String flag;
 }

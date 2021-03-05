@@ -19,7 +19,6 @@
                          placeholder="请选择" clearable>
                 <el-option v-for="item in currencyOptions" :label="item.dictLabel" :value="item.dictValue"
                            :key="item.dictValue"/>
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
               </el-select>
 
             </el-form-item>
@@ -183,17 +182,6 @@
         <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
         <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
       </el-table>
-      <!--        <div>
-                <el-pagination
-                  :total="totalCount"
-                  :current-page="formSearch.pageNum"
-                  :page-size="formSearch.pageSize"
-                  :page-sizes="[10, 20, 30, 40]"
-                  style="margin-top: 8px; text-align: right;"
-                  layout="sizes, prev, pager, next"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"/>
-              </div>-->
       <!--分页组件-->
       <pagination
         v-show="totalCount>0"
@@ -426,15 +414,7 @@ export default {
 
       })
     },
-    /*
-        handleSizeChange(val) {
-          this.formSearch.pageSize = val
-          this.getData()
-        },
-        handleCurrentChange(val) {
-          this.formSearch.pageNum = val
-          this.getData()
-        },*/
+
 
     //增加一行结算信息
     addClosingHandle() {
@@ -453,9 +433,6 @@ export default {
       this.closingFrom.baseBankVo.push(field)
 
 
-      /* setTimeout(() => {
-         this.$refs.closingTable.setCurrentRow(field)
-       }, 10)*/
     },
     editHandle(index, row) {
       this.closingFrom.baseBankVo[index].id = ''

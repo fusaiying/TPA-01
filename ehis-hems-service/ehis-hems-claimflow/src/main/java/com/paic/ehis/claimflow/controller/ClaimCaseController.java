@@ -362,7 +362,9 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentUnder")
     public void exportConditionsForTheAdjustmentUnder(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
+
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "处理中理算案件");
     }
@@ -375,8 +377,8 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentUnder(auditWorkPoolDTO);
+        return tableDataInfo;
     }
 
     //审核工作池接口-导出已处理清单
@@ -386,7 +388,7 @@ public class ClaimCaseController extends BaseController {
     public void exportConditionsForTheAdjustmentOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
         auditWorkPoolDTO.setFlag(true);
         TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray( JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
         ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理理算案件");
     }
@@ -397,13 +399,12 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo listConditionsForTheAdjustmentOver(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
-        }
-        else {
+        } else {
             auditWorkPoolDTO.setOrderByColumn("updateTime");
             auditWorkPoolDTO.setIsAsc("desc");
         }
         auditWorkPoolDTO.setFlag(false);
-       // startPage(auditWorkPoolDTO);
+        // startPage(auditWorkPoolDTO);
         return claimCaseService.selectConditionsForTheAdjustmentOver(auditWorkPoolDTO);
     }
 
@@ -412,7 +413,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportConditionsForTheAdjustmentHang")
     public void exportConditionsForTheAdjustmentHang(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
-        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
         ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
         util.exportExcel(response, conditionsForTheAdjustmentVoS, "悬挂中理算案件");
     }
@@ -425,8 +427,8 @@ public class ClaimCaseController extends BaseController {
             auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         }
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVoS);
+        TableDataInfo tableDataInfo = claimCaseService.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);
+        return tableDataInfo;
     }
 /********************************************/
 
@@ -613,15 +615,20 @@ public class ClaimCaseController extends BaseController {
         //报案号-取三四位
         String substring1 = branchRegion.substring(2, 4);
 
+        //报案号取值
         String caseFlag = batchNoRptNoDTO.getCaseFlag();
+        if (caseFlag == null || caseFlag=="") {
+            caseFlag = "0";
+        }
 
+        //判断输入案件数目
         if (i1 > 0) {
             BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
             List<String> rptNoList = new ArrayList<>();
 
             for (int i = 0; i < i1; i++) {
                 //报案号
-                String bahtime = "96" + substring1 + caseFlag +"X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+                String bahtime = "96" + substring1 + caseFlag + "X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
                 rptNoList.add(bahtime);
             }
 
@@ -635,9 +642,9 @@ public class ClaimCaseController extends BaseController {
 
             ClaimBatch claimBatch = new ClaimBatch();
             claimBatch.setBatchno(str1);//批次号
-            if("D".equals(batchNoRptNoDTO.getCaseFlag())){
+            if ("D".equals(batchNoRptNoDTO.getCaseFlag())) {
                 claimBatch.setSource("01");//交单来源（01-在线交单，02-E结算）
-            }else {
+            } else {
                 claimBatch.setSource("02");//交单来源（01-在线交单，02-E结算）
             }
             claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
@@ -660,7 +667,7 @@ public class ClaimCaseController extends BaseController {
 
             return AjaxResult.success(batchNoRptNoVO);
         } else {
-            return AjaxResult.success("案件数不能小于等于0！");
+            return AjaxResult.error("案件数不能小于等于0！");
         }
     }
 
@@ -678,7 +685,7 @@ public class ClaimCaseController extends BaseController {
         claimCase.setStatus(ClaimStatus.DATAYES.getCode());//Y
         claimCase.setBatchNo(batchNo);
         List<ProcessingCaseVo> processingCaseVos = claimCaseService.selectClaimCaseByBatchNo(claimCase);
-        if (processingCaseVos.size()!=0) {//已经进行影像件扫描
+        if (processingCaseVos.size() != 0) {//已经进行影像件扫描
             return AjaxResult.error("该批次已经完成影像件扫描，不能撤件！");
         } else {//未进行影像件扫描-完成撤件
             return toAjax(claimBatchService.updateClaimBatchBybatchNo(batchNo));
@@ -694,6 +701,7 @@ public class ClaimCaseController extends BaseController {
         List<ClaimInformationVo> list = claimCaseService.claimInfoList(dto);
         return getDataTable(list);
     }
+
     //校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
     //    @PreAuthorize("@ss.hasPermi('system:case:list')")
     @PostMapping("/checkBillAndPolicyDate")

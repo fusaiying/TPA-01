@@ -85,8 +85,8 @@
 
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
-                <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
-                <el-button   size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
+                <el-button :disabled="scope.row.status==='N'"  size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
+                <el-button :disabled="scope.row.status==='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
                 </el-button>
               </template>
             </el-table-column>
@@ -374,18 +374,32 @@
         //查询
         gettableData () {
 
+          let name = this.form.name;
+          let idNo = this.form.idNo;
+          let level = this.form.level;
+          let debtAmountUp = this.form.debtAmountUp;
+
           const params = {
             pageNum:this.pageInfo.currentPage,
             pageSize:this.pageInfo.pageSize,
-            name:this.form.name,
-            idNo:this.form.idNo,
-            level:this.form.level,
-            debtAmountUp:this.form.debtAmountUp,
+            name:name,
+            idNo:idNo,
+            level:level,
+            debtAmountUp:debtAmountUp,
             // orderByColumn:'create_time',
             // isAsc:'desc'
           };
           if(!this.searchBtn) {
             params.recMessageFlag = '01';
+            params.status = 'Y';
+          } else {
+            if(name == '' && idNo == '' && level == '' && debtAmountUp == '') {
+              params.recMessageFlag = '01';
+              params.status = 'Y';
+            } else {
+              params.recMessageFlag = '';
+              params.status = '';
+            }
           }
 
           this.loading = true;

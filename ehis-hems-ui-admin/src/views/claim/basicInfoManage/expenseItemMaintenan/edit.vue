@@ -48,18 +48,10 @@
   export default {
     data() {
       const checkChineseName = (rules, value, callback) => {
-        let reg1 = /[`~!@#$%^&*()_\-+=<>?:"{}|,./;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
-        let reg2 = /.*[A-Za-z0-9]{1,}.*/;
         if (!value) {
           callback(new Error("费用项中文名称不能为空"));
         } else {
-          if (reg1.test(value)) {
-            callback(new Error("请录入中文名称"));
-          } else if (reg2.test(value)) {
-            callback(new Error("请录入中文名称"));
-          } else {
-            callback();
-          }
+          callback();
         }
       }
       const checkFeeitemCode = (rules, value, callback) => {

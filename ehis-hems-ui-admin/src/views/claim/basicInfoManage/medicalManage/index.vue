@@ -169,15 +169,8 @@ export default {
       this.params.pageNum=1
       this.params.pageSize=10
       this.getData()
-      /* const values = Object.values(this.formSearch)
-       values.some(item => {
-         return item != ''
-       }) ? this.getData() : this.$message({message: '请至少录入一项查询条件', type: 'warning', showClose: true, center: true})*/
     },
     getData() {
-      /*for (const i in this.formSearch) {
-        this.params[i] = this.formSearch[i]
-      }*/
       if (this.formSearch.address) {
         this.params.province = this.formSearch.address[0]
         this.params.city = this.formSearch.address[1]

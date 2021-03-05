@@ -1,60 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseStandingMapper">
-    
+
     <resultMap type="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" id="ClaimCaseStandingResult">
-        <result property="rptno"    column="rpt_no"    />
-        <result property="idno"    column="id_no"    />
-        <result property="name"    column="name"    />
-        <result property="claimmaterials"    column="claim_materials"    />
-        <result property="remark"    column="remark"    />
-        <result property="otherinfo"    column="other_info"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="organcode"    column="organ_code"    />
-        <result property="expressnumber"    column="express_number"    />
-        <result property="receivedate"    column="receive_date"    />
-        <result property="sendby"    column="send_by"    />
-        <result property="policyNo"    column="policy_no"    />
+        <result property="rptno" column="rpt_no"/>
+        <result property="idno" column="id_no"/>
+        <result property="name" column="name"/>
+        <result property="claimmaterials" column="claim_materials"/>
+        <result property="remark" column="remark"/>
+        <result property="otherinfo" column="other_info"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="organcode" column="organ_code"/>
+        <result property="expressnumber" column="express_number"/>
+        <result property="receivedate" column="receive_date"/>
+        <result property="sendby" column="send_by"/>
+        <result property="policyNo" column="policy_no"/>
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimmgt.domain.vo.ClaimCaseStandingVo1" id="ClaimCaseStandingVo1Result">
-        <result property="rptno"    column="rpt_no"    />
-        <result property="idno"    column="id_no"    />
-        <result property="name"    column="name"    />
-        <result property="claimmaterials"    column="claim_materials"    />
-        <result property="remark"    column="remark"    />
-        <result property="otherinfo"    column="other_info"    />
-        <result property="expressnumber"    column="express_number"    />
-        <result property="receivedate"    column="receive_date"    />
-        <result property="sendby"    column="send_by"    />
-        <result property="companyName"    column="company_name"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="organcode"    column="organ_code"    />
+        <result property="standingId" column="standing_id"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="rptno" column="rpt_no"/>
+        <result property="idno" column="id_no"/>
+        <result property="name" column="name"/>
+        <result property="claimmaterials" column="claim_materials"/>
+        <result property="remark" column="remark"/>
+        <result property="otherinfo" column="other_info"/>
+        <result property="expressnumber" column="express_number"/>
+        <result property="receivedate" column="receive_date"/>
+        <result property="sendby" column="send_by"/>
+        <result property="companyName" column="company_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="organcode" column="organ_code"/>
+        <result property="organname" column="organ_name"/>
+
     </resultMap>
 
     <sql id="selectClaimCaseStandingVo">
-        select rpt_no, id_no, name, claim_materials, remark, other_info, status, create_by, create_time, update_by, update_time from claim_case_standing
+        select rpt_no,
+               id_no,
+               name,
+               claim_materials,
+               remark,
+               other_info,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from claim_case_standing
     </sql>
 
-    <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding" resultMap="ClaimCaseStandingResult">
+    <select id="selectClaimCaseStandingList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding"
+            resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
-        <where>  
-            <if test="idno != null  and idno != ''"> and id_no = #{idno}</if>
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="claimmaterials != null  and claimmaterials != ''"> and claim_materials = #{claimmaterials}</if>
-            <if test="otherinfo != null  and otherinfo != ''"> and other_info = #{otherinfo}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+        <where>
+            <if test="idno != null  and idno != ''">and id_no = #{idno}</if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="claimmaterials != null  and claimmaterials != ''">and claim_materials = #{claimmaterials}</if>
+            <if test="otherinfo != null  and otherinfo != ''">and other_info = #{otherinfo}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
     </select>
 
-    <select id="selectClaimCaseStandingListNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseStandingDTO" resultMap="ClaimCaseStandingVo1Result">
+    <select id="selectClaimCaseStandingListNew" parameterType="com.paic.ehis.claimmgt.domain.dto.ClaimCaseStandingDTO"
+            resultMap="ClaimCaseStandingVo1Result">
         SELECT
+        a.standing_id,
         a.rpt_no,
         a.id_no,
         a.NAME,
@@ -65,45 +83,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.express_number,
         b.send_by,
         b.receive_date,
-        b.organ_code
-       /* d.company_name*/
+        b.organ_code,
+        soi.organ_name
         FROM
-        claim_case_standing a,
-        claim_batch b,
-        claim_case c
-       /* claim_case_policy d*/
+        claim_case_standing a
+        LEFT JOIN claim_batch b ON b.batch_no = a.batch_no
+        LEFT JOIN sys_organ_info soi ON b.organ_code = soi.organ_code
+        AND soi.STATUS = 'y'
         WHERE
-        a.rpt_no = c.rpt_no
-        AND b.batch_no = c.batch_no
-       /* AND a.rpt_no = d.rpt_no*/
-        AND a.STATUS = 'Y'
+        a.STATUS = 'Y'
         AND b.STATUS = 'Y'
-        AND c.STATUS = 'Y'
-       /* AND d.STATUS = 'Y'*/
-        <if test="rptno != null  and rptno != ''"> and a.rpt_no = #{rptno}</if>
-	    <if test="idno != null  and idno != ''"> and a.id_no = #{idno}</if>
-        <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
-        <if test="expressnumber != null  and expressnumber != ''"> and b.express_number = #{expressnumber}</if>
-        <if test="receivedate != null "> and b.receive_date = #{receivedate}</if>
-        <if test="sendby != null  and sendby != ''"> and b.send_by = #{sendby}</if>
-        <if test="organcode != null  and organcode != ''"> and b.organ_code = #{organcode}</if>
-        <if test="createBy != null  and createBy != ''"> and a.create_by = #{createBy}</if>
+        <if test="rptno != null  and rptno != ''">and a.rpt_no = #{rptno}</if>
+        <if test="idno != null  and idno != ''">and a.id_no = #{idno}</if>
+        <if test="name != null  and name != ''">and a.name like concat('%', #{name}, '%')</if>
+        <if test="expressnumber != null  and expressnumber != ''">and b.express_number = #{expressnumber}</if>
+        <if test="receivedate != null ">and b.receive_date = #{receivedate}</if>
+        <if test="sendby != null  and sendby != ''">and b.send_by = #{sendby}</if>
+        <if test="organcode != null  and organcode != ''">and b.organ_code = #{organcode}</if>
+        <if test="createBy != null  and createBy != ''">and a.create_by = #{createBy}</if>
         <if test="dBefore != null   and dNow != null ">
-            and(b.receive_date between  #{dBefore} and  #{dNow})</if>
+            and(b.receive_date between #{dBefore} and #{dNow})
+        </if>
         <if test="receiveStartDate != null   and receiveEndDate != null ">
-            and(b.receive_date between  #{receiveStartDate} and  #{receiveEndDate})</if>
+            and(b.receive_date between #{receiveStartDate} and #{receiveEndDate})
+        </if>
     </select>
 
     <select id="selectCompanyName" parameterType="String" resultType="string">
-SELECT
-	claim_case_policy.company_name
-FROM
-	claim_case_policy,
-	claim_case_standing
-WHERE
-	claim_case_policy.rpt_no = claim_case_standing.rpt_no and claim_case_policy.rpt_no = #{rptno} and claim_case_policy.status='Y' and claim_case_standing.status='Y'
+        SELECT claim_case_policy.company_name
+        FROM claim_case_policy,
+             claim_case_standing
+        WHERE claim_case_policy.rpt_no = claim_case_standing.rpt_no
+          and claim_case_policy.rpt_no = #{rptno}
+          and claim_case_policy.status = 'Y'
+          and claim_case_standing.status = 'Y'
     </select>
-    
+
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">
         <include refid="selectClaimCaseStandingVo"/>
         where rpt_no = #{rptno} and status="Y"
@@ -126,11 +141,11 @@ WHERE
         LEFT JOIN claim_case cases ON stand.rpt_no = cases.rpt_no
         AND cases.STATUS = 'Y'
         <where>
-            <if test="batchNo != null  and batchNo != ''"> and cases.batch_no = #{batchNo}</if>
+            <if test="batchNo != null  and batchNo != ''">and cases.batch_no = #{batchNo}</if>
             and stand.status = 'Y'
         </where>
     </select>
-        
+
     <insert id="insertClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
         insert into claim_case_standing
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -145,7 +160,7 @@ WHERE
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="rptno != null">#{rptno},</if>
             <if test="idno != null and idno != ''">#{idno},</if>
@@ -158,7 +173,7 @@ WHERE
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateClaimCaseStanding" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseStanding">
@@ -176,23 +191,25 @@ WHERE
     <update id="updateClaimCaseStandingVo1" parameterType="com.paic.ehis.claimmgt.domain.vo.ClaimCaseStandingVo1">
         update claim_case_standing
         <trim prefix="SET" suffixOverrides=",">
+            <if test="rptno != null and rptno != ''">rpt_no = #{rptno},</if>
             <if test="idno != null and idno != ''">id_no = #{idno},</if>
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="claimmaterials != null and claimmaterials != ''">claim_materials = #{claimmaterials},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="otherinfo != null and otherinfo != ''">other_info = #{otherinfo},</if>
         </trim>
-        where rpt_no = #{rptno} and status="Y"
+        where standing_id = #{standingId} and status="Y"
     </update>
 
 
-
     <delete id="deleteClaimCaseStandingById" parameterType="String">
-        delete from claim_case_standing where rpt_no = #{rptno}
+        delete
+        from claim_case_standing
+        where rpt_no = #{rptno}
     </delete>
 
     <delete id="deleteClaimCaseStandingByIds" parameterType="String">
-        delete from claim_case_standing where rpt_no in 
+        delete from claim_case_standing where rpt_no in
         <foreach item="rptno" collection="array" open="(" separator="," close=")">
             #{rptno}
         </foreach>

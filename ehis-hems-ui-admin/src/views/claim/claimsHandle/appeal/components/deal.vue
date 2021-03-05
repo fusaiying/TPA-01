@@ -95,11 +95,17 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
         type: Boolean,
         default: false
       },
-      fixInfo: Object,//可以获取报案号 this.fixInfo.rptNo
+      fixInfo: Object,
     },
     watch: {
       value: function (newValue) {
         this.dialogVisable = newValue
+      },
+      fixInfo:function(newValue) {
+        console.log("fixInfo")
+        console.log(newValue)
+        console.log("fixInfo")
+
       },
     },
     data() {

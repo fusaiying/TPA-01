@@ -17,7 +17,11 @@ public class ClaimCalController {
 
         claimCalService.Clear(rptNo);
 
-        claimCalService.Calculate(rptNo);
+        try{
+            claimCalService.Calculate(rptNo);
+        }catch (Exception e){
+            return AjaxResult.error("理算失败，原因："+e.getMessage());
+        }
 
         return AjaxResult.success("计算成功！");
     }

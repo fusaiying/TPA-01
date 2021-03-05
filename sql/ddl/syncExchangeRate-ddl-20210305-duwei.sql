@@ -1,0 +1,1 @@
+alter table sync_exchange_rate modify parities decimal(16,10) not null comment '汇率';

@@ -438,7 +438,7 @@
           caseStatus: this.form.caseStatus,
           operator: this.form.operator,
 
-          orderByColumn: 'cc.create_time',
+          orderByColumn: 't.create_time',
           isAsc: 'desc'
         };
         if (this.prop!=null && this.prop!==''){
@@ -501,7 +501,7 @@
           submitstartdate: startTime,
           submitenddate: endTime,
           caseStatus: this.form.caseStatus,
-          updateBy: this.form.operator,
+          operator: this.form.operator,
         };
         this.download('claimflow/case/exportDispatchList', params, `案件调度_${new Date().getTime()}.xlsx`);
       },

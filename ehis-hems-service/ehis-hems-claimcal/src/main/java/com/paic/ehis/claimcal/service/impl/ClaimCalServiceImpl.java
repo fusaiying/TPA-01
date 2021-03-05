@@ -3,13 +3,17 @@ package com.paic.ehis.claimcal.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.paic.ehis.claimcal.domain.ClaimProductDutyDetail;
 import com.paic.ehis.claimcal.domain.PolicyRiskRelation;
+import com.paic.ehis.claimcal.domain.SyncExchangeRate;
 import com.paic.ehis.claimcal.mapper.ClaimProductDutyDetailMapper;
 import com.paic.ehis.claimcal.mapper.PolicyRiskRelationMapper;
 import com.paic.ehis.claimcal.service.IClaimCalService;
+import com.paic.ehis.claimcal.service.IExchangeRateService;
 import com.paic.ehis.common.core.constant.HttpStatus;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.system.api.GetProviderInfoService;
 import com.paic.ehis.system.api.RemoteClaimCalService;
+import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import com.paic.ehis.system.api.domain.ClaimCaseBillInfo;
 import com.paic.ehis.system.api.domain.ClaimCaseCalInfo;
 import com.paic.ehis.system.api.domain.dto.*;
@@ -31,6 +35,12 @@ public class ClaimCalServiceImpl implements IClaimCalService {
 
     @Autowired
     private ClaimProductDutyDetailMapper claimProductDutyDetailMapper;
+
+    @Autowired
+    private IExchangeRateService exchangeRateService;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 本案件理算历史数据清理
@@ -93,12 +103,24 @@ public class ClaimCalServiceImpl implements IClaimCalService {
         BigDecimal sumFeeAmount = new BigDecimal(0);
 
         //自付额
-        BigDecimal sumSelfAmount = new BigDecimal(0);
+        BigDecimal sumHosDiscountAmount = new BigDecimal(0);
 
+        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+        BigDecimal sumCalAmountCNY = new BigDecimal(0);
         for (ClaimCaseBillInfo ccbI : claimCaseBillInfoList) {
             ClaimCaseBillDTO claimCaseBillDTO = ccbI.getClaimCaseBill();
             List<ClaimCaseBillDetailDTO> ccbDList = ccbI.getClaimCaseBillDetailList();
             billCurrency = claimCaseBillDTO.getBillCurrency();
+
+            //获取汇率
+            exchangeRate.setBeforeMoney(billCurrency);
+            exchangeRate.setAfterMoney("CNY");
+            exchangeRate.setDateConvert(claimCaseBillDTO.getTreatmentStartDate());
+            exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+            if(StringUtils.isNull(exchangeRate)){
+                throw new RuntimeException("获取汇率失败！");
+            }
+
             BigDecimal sumBillCalAmount = new BigDecimal(0);
             for (ClaimCaseBillDetailDTO ccbD : ccbDList) {
                 ClaimCaseCalItemDTO cccID = new ClaimCaseCalItemDTO();
@@ -112,15 +134,17 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 cccID.setDutyCode(dutyCode);
                 cccID.setDutyDetailCode(dutyDetailCode);
                 cccID.setFeeItemCode(ccbD.getFeeItemCode());
-                cccID.setCalAmount(ccbD.getBillDetailAmount().subtract(ccbD.getBillDetailCopay()).
-                        subtract(ccbD.getAdvancePayment()).subtract(ccbD.getHosDiscountAmount()).subtract(ccbD.getUnableAmount() == null ? new BigDecimal(0) : ccbD.getUnableAmount()));
+                BigDecimal calAmount = ccbD.getBillDetailAmount().subtract(ccbD.getBillDetailCopay()).
+                        subtract(ccbD.getAdvancePayment()).subtract(ccbD.getSelfAmount()).subtract(ccbD.getHosDiscountAmount()).subtract(ccbD.getUnableAmount() == null ? new BigDecimal(0) : ccbD.getUnableAmount());
+                BigDecimal calAmountCNY = calAmount.multiply(exchangeRate.getParities());
+                cccID.setCalAmount(calAmountCNY.setScale(2,BigDecimal.ROUND_HALF_UP));
                 cccID.setRefusedAmount(new BigDecimal(0));
                 cccID.setDeduUsed(new BigDecimal(0));
                 cccID.setPayRate(new BigDecimal(100));
                 sumBillCalAmount = sumBillCalAmount.add(cccID.getCalAmount());
+                sumCalAmountCNY = sumCalAmountCNY.add(calAmountCNY);
                 sumFeeAmount = sumFeeAmount.add(ccbD.getBillDetailAmount());
-
-                sumSelfAmount = sumSelfAmount.add(StringUtils.isNull(ccbD.getSelfAmount())?BigDecimal.ZERO:ccbD.getSelfAmount());
+                sumHosDiscountAmount = sumHosDiscountAmount.add(ccbD.getHosDiscountAmount());
 
                 cccIDList.add(cccID);
             }
@@ -145,9 +169,9 @@ public class ClaimCalServiceImpl implements IClaimCalService {
         cccD.setRefusedAmount(new BigDecimal(0));
 
         //追讨金额 =  账单金额 - 折扣金额 -  赔付金额 -  自付额
-        cccD.setDebtAmount(sumFeeAmount.subtract(sumCalAmount).subtract(sumSelfAmount));
-        cccD.setExchangeRate(new BigDecimal(1));
-        cccD.setPayAmountForeign(sumCalAmount);
+        cccD.setDebtAmount(sumFeeAmount.subtract(sumCalAmount).subtract(sumHosDiscountAmount));
+        cccD.setExchangeRate(exchangeRate.getParities());
+        cccD.setPayAmountForeign(sumCalAmountCNY.divide(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_UP));
 
         cccI.setClaimCaseCalInfo(cccD);
         cccI.setClaimCaseCalBillList(cccBDList);
@@ -162,4 +186,5 @@ public class ClaimCalServiceImpl implements IClaimCalService {
 
         return false;
     }
+
 }

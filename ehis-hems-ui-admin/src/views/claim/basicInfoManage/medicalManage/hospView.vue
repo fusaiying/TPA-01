@@ -632,7 +632,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status_review'
+      return item.dictType == 'bussiness_status'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'

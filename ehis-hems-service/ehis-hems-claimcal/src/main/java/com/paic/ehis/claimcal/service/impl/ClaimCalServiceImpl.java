@@ -118,7 +118,7 @@ public class ClaimCalServiceImpl implements IClaimCalService {
             exchangeRate.setDateConvert(claimCaseBillDTO.getTreatmentStartDate());
             exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
             if(StringUtils.isNull(exchangeRate)){
-                return false;
+                throw new RuntimeException("获取汇率失败！");
             }
 
             BigDecimal sumBillCalAmount = new BigDecimal(0);

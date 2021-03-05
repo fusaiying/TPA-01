@@ -247,6 +247,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         billInfo.setSelfAmount(selfAmount);
         billInfo.setPartSelfAmount(partSelf);
         billInfo.setUnableAmount(unableAmount);
+        billInfo.setUpdateTime(DateUtils.getNowDate());
+        billInfo.setUpdateBy(username);
         return claimCaseBillMapper.updateClaimCaseBill(billInfo);
     }
 

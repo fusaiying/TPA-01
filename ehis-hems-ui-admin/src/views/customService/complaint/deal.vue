@@ -390,9 +390,9 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="priority"  >
-              <el-select v-model="sendForm.level1" class="item-width" >
+              <el-select v-model="sendForm.level1" class="item-width" @change="classTwo()">
                 <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue" @change="classTwo(this.sendForm.level1)"/>
+                           :value="item.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -452,17 +452,17 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="一级投诉原因：" prop="reason1"  >
-              <el-select v-model="sendForm.reason1" class="item-width" >
+              <el-select v-model="sendForm.reason1" class="item-width" @change="reasonTwo()">
                 <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue" @change="reasonTwo(this.sendForm.reason1)"/>
+                           :value="item.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉原因：" prop="reason2"  >
-              <el-select v-model="sendForm.reason2" class="item-width" >
+              <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree()">
                 <el-option v-for="item in cs_reason_level2" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue" @change="reasonThree(this.sendForm.reason2)"/>
+                           :value="item.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -833,9 +833,9 @@
     methods: {
 
 
-      reasonTwo(s){
+      reasonTwo(){
         const query={}
-        query.parentCode=s
+        query.parentCode=this.sendForm.reason1
         reasonTwo(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("cs_reason_level2",res.data)
@@ -849,13 +849,13 @@
         })
 
       },
-      reasonThree(s){
+      reasonThree(){
         const query={}
-        query.parentCode=s
+        query.parentCode=this.sendForm.reason2
         reasonThree(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("cs_reason_level2",res.data)
-            this.cs_reason_level2 = res.data
+            this.cs_reason_level3 = res.data
             if (res.rows.length <= 0) {
               return false
             }
@@ -865,9 +865,9 @@
         })
 
       },
-      classTwo(s){
+      classTwo(){
         const query={}
-        query.parentCode=s
+        query.parentCode=this.sendForm.level1
         classTwo(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("二级分类",res.data)

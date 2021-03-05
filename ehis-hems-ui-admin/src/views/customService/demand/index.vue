@@ -581,8 +581,8 @@
         let queryParams;
         if (this.sendForm.acceptorTime.length > 0) {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
+          queryParams.acceptTimeStart=this.sendForm.acceptorTime[0]
+          queryParams.acceptTimeEnd=this.sendForm.acceptorTime[1]
         } else {
           queryParams = this.sendForm;
         }
@@ -607,8 +607,8 @@
         let queryParams;
         if (this.sendForm.acceptorTime.length > 0) {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
+          queryParams.acceptTimeStart=this.sendForm.acceptorTime[0]
+          queryParams.acceptTimeEnd=this.sendForm.acceptorTime[1]
         } else {
           queryParams = this.sendForm;
         }

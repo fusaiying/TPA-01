@@ -97,7 +97,7 @@
     <!-- 申诉工作池  end  -->
 
     <!-- 发起/处理  start  -->
-    <deal :value="dialogVisible" @closeDialog="closeDialog" />
+    <deal :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
     <!-- 发起/处理  end  -->
   </div>
 </template>
@@ -148,6 +148,7 @@ export default {
       dictList:[],
       claimTypes:[],
       searchBtn:false,
+      fixInfo:{},
     }
   },
   async mounted(){
@@ -192,12 +193,11 @@ export default {
   },
   methods: {
     openDialog(data){
-      console.log("*******************")
-      console.log(data)
-      console.log("*******************")
+      this.fixInfo = data;
       this.dialogVisible = true
     },
     closeDialog() {
+      this.fixInfo = {};
       this.dialogVisible = false
     },
     resetForm() {

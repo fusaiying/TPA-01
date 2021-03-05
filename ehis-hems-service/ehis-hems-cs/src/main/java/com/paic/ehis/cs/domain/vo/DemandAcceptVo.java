@@ -19,12 +19,13 @@ public class DemandAcceptVo extends BaseEntity {
     //电话中心业务流水号
     private String callCenterId;
     /** 工单编号 */
+    @Excel(name="工单号")
     private String workOrderNo;
 
     /** 业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义； */
-    @Excel(name = "业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义；")
     private String businessType;
     /** 拼接显示 业务-服务项目 */
+
     private String businessService;
     @Excel(name = "受理渠道 信息需求受理渠道")
     private String channelCode;

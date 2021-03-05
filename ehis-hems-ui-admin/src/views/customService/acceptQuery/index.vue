@@ -149,12 +149,7 @@
             size="mini"
             type="success"
             icon="el-icon-search"
-            @click="
-              isinit='N',
-              page=1,
-              finishPage=1,
-              searchHandle()
-            "
+            @click="selectWorkOrder"
           >查询
           </el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
@@ -183,7 +178,7 @@
 
 <script>
 import workOrderTable from '../common/components/workOrderTable'
-import {selectAcceptQuery} from '@/api/customService/acceptQuery'
+import {selectAcceptQuery,selectWorkOrder} from '@/api/customService/acceptQuery'
 
 let dictss = [{dictType: 'cs_service_item'}
   ,{dictType: 'cs_channel'}
@@ -243,6 +238,7 @@ export default {
     }
   },
   created() {
+    this.selectWorkOrder()
   },
   async mounted() {
     // 字典数据赋值
@@ -268,7 +264,7 @@ export default {
     this.statusOptions = this.dictList.find(item => {
       return item.dictType === 'cs_handle_state'
     }).dictDate
-    this.searchHandle()
+    // this.searchHandle()
   },
   methods: {
     resetForm() {
@@ -313,7 +309,7 @@ export default {
         query.complaintEndTime = this.acceptQueryForm.complaintTime[1]
       }
 
-      selectAcceptQuery(query).then(res => {
+      selectWorkOrder(query).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total
@@ -326,6 +322,28 @@ export default {
       }).catch(res => {
 
       })
+    },
+    selectWorkOrder(){
+      selectWorkOrder(this.queryParams).then(res=>{
+        if (res!=null && res.code===200){
+          this.sendLoading = false
+          //数据重新加载r
+          this.workPoolData=res.rows
+          this.totalCount = res.total
+          this.$message({
+            message: '查询成功！',
+            type: 'success',
+            center: true,
+            showClose: true
+          })
+        }
+      }).catch(res => {
+        this.$message.error('查询失败！')
+        this.sendLoading = false
+      })
+    },
+    sendMany(){
+
     },
     send() {
 

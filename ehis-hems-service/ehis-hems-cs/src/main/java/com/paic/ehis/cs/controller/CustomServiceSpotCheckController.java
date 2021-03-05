@@ -9,13 +9,13 @@ import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
+import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.AttachmentInfoMapper;
-import com.paic.ehis.cs.service.IAttachmentInfoService;
-import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
-import com.paic.ehis.cs.service.IQualityInspectionHandleService;
-import com.paic.ehis.cs.service.IQualityInspectionItemService;
+import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +44,8 @@ public class CustomServiceSpotCheckController extends BaseController {
     private IQualityInspectionItemService qualityInspectionItemService;
     @Autowired
     private IAttachmentInfoService attachmentInfoService;
+    @Autowired
+    private IDemandAcceptVoService iDemandAcceptVoService;
 
     /**
      * 发送质检工作池：数据来源
@@ -254,4 +256,15 @@ public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
     List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
     return getDataTable(list);
 }
+    /**
+     *工单查询
+     */
+@GetMapping("/internal/selectWorkOrder")
+public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
+{
+    startPage();
+    List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
+    return getDataTable(list);
+}
+
 }

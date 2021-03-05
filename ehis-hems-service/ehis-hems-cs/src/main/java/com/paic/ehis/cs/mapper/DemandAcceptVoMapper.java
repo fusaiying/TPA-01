@@ -7,6 +7,7 @@ import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface DemandAcceptVoMapper {
     public List<DemandAcceptVo> selectDemandAcceptVoList(AcceptDTO acceptDTO);
 
     public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
+
+    public List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO);
 
     public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);
 

@@ -284,7 +284,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         contactsPerson.setLanguage(complaintAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(complaintAcceptVo.getContactsPerson().getMobilePhone());
         contactsPerson.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
-        contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
+    //    contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
         contactsPerson.setCreatedBy(SecurityUtils.getUsername());
@@ -294,6 +294,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfoMapper.updatePersonInfo(contactsPerson);
         //插入投诉人
         complainantPerson.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        complainantPerson.setSex(complaintAcceptVo.getComplainantPerson().getSex());
         complainantPerson.setIdentity(complaintAcceptVo.getComplainantPerson().getIdentity());
         complainantPerson.setName(complaintAcceptVo.getComplainantPerson().getName());
         complainantPerson.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());

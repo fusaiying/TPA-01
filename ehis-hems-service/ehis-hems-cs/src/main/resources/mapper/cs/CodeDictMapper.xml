@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectNext" parameterType="com.paic.ehis.cs.domain.CodeDict" resultMap="CodeDictResult">
-    SELECT code,code_name FROM `code_Dict` where p_code_id= #{pCodeId} and code_type=#{codeType}
+    SELECT code,code_name FROM `code_Dict` where parent_code= #{parentCode} and code_type=#{codeType}
     </select>
 
     

@@ -399,8 +399,8 @@
           <el-col :span="8">
             <el-form-item label="二级投诉分类：" prop="priority"  >
               <el-select v-model="sendForm.level2" class="item-width" >
-                <el-option v-for="item in cs_classify_level2" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -461,18 +461,18 @@
           <el-col :span="8">
             <el-form-item label="二级投诉原因：" prop="reason2"  >
               <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree()">
-                <el-option v-for="item in cs_reason_level2" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue" />
+                <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="三级投诉原因：" prop="reason1"  >
+            <el-form-item label="三级投诉原因：" prop="reason3"  >
               <el-select v-model="sendForm.reason3" class="item-width" >
-                <el-option v-for="item in cs_reason_level3" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                <el-option v-for="item in cs_reason_level3" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>

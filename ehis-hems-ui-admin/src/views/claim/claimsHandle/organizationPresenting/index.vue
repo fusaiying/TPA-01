@@ -124,14 +124,14 @@
         <el-tabs v-model="activeName" v-loading="loading" @tab-click="handleClick">
           <el-tab-pane :label="`处理中(${processedTotal})`" name="03">
             <claimsTable ref="claimsTable3" :table-data="processedData" :status="activeName"
-                        />
+            />
           </el-tab-pane>
           <el-tab-pane :label="`已退回(${backTotal})`" name="01">
-            <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName" />
+            <claimsTable ref="claimsTable1" :table-data="backData" :status="activeName"/>
           </el-tab-pane>
           <el-tab-pane :label="`已处理(${dealTotal})`" name="02">
             <claimsTable ref="claimsTable2" @init-data="searchHandle" :table-data="dealData" :status="activeName"
-                         />
+            />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -178,6 +178,9 @@
       return {
         isListExport: false,
         organCode: '',
+        thisUser: '',
+        queryOrganCode: '',
+        queryUser: '',
         caseNumber: false,//查询条件（报案号）是否显示
         backNum: 1,
         backSize: 10,
@@ -233,7 +236,10 @@
       //this.searchHandle();
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.organCode=res.data.organCode
+          this.organCode = res.data.organCode
+          this.queryOrganCode = res.data.organCode
+          this.thisUser = res.data.userName
+          this.queryUser = res.data.userName
           let query = {
             pageNum: 1,
             pageSize: 10,
@@ -293,13 +299,13 @@
               this.sysDeptOptions = response.rows
               this.queryParams.organcode = res.data.organCode
               let option = {
-                organCode:  this.queryParams.organcode ,
+                organCode: this.queryParams.organcode,
                 pageNum: 1,
                 pageSize: 200,
               }
               getUsersByOrganCode(option).then(res => {
-                if (res!=null && res.code===200){
-                  this.sysUserOptions=res.rows
+                if (res != null && res.code === 200) {
+                  this.sysUserOptions = res.rows
                 }
               })
             }
@@ -312,7 +318,11 @@
     },
     methods: {
       resetForm() {
+        this.queryOrganCode = this.queryParams.organcode
+        this.queryUser = this.queryParams.updateBy
         this.$refs.queryParams.resetFields()
+        this.queryParams.organcode = this.queryOrganCode
+        this.queryParams.updateBy = this.queryUser
       },
       searchProcessed() {//处理中查询
         const query = {
@@ -380,8 +390,8 @@
           rptno: this.queryParams.rptno,
           updateBy: this.queryParams.updateBy,
         }
-        if (params.organcode==null || params.organcode=='' || params.organcode==undefined){
-          params.organcode=this.organCode
+        if (params.organcode == null || params.organcode == '' || params.organcode == undefined) {
+          params.organcode = this.organCode
         }
         if (this.isinit === 'N') {
           params.pageNum = 1
@@ -560,16 +570,6 @@
           getPendingList(query).then(res => {
             if (res.rows.length > 0) {
               this.isListExport = true
-              /*  let subDate = ''
-                if (this.queryParams.submitdate.length > 0) {
-                  subDate = '&submitstartdate=' + this.queryParams.submitdate[0] + '&submitenddate=' + this.queryParams.submitdate[1]
-                    + '&updatestartTime=' + this.queryParams.updateTime[0]
-                }
-                let upDate = ''
-                if (this.queryParams.updateTime.length > 0) {
-                  upDate = '&updatestartTime=' + this.queryParams.updateTime[0] + '&updateendTime=' + this.queryParams.updateTime[1]
-                }
-  */
               this.download('claimapt/batch/exportPendingList'/* + '?hospitalname=' + this.queryParams.hospitalname + '&organcode=' + this.queryParams.organcode +
                 '&batchno=' + this.queryParams.batchno + '&claimtype=' + this.queryParams.claimtype + '&updateBy=' + this.queryParams.updateBy + subDate
                 + upDate*/, {
@@ -617,7 +617,7 @@
             pageNum: 1,
             pageSize: 200,
           }
-          if (data.organCode != null && data.organCode != '' && data.organCode != undefined){
+          if (data.organCode != null && data.organCode != '' && data.organCode != undefined) {
             if (query !== '' && query != null) {
               getUsersByOrganCode(data).then(res => {
                 if (res != null && res.code === 200) {

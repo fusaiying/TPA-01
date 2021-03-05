@@ -156,6 +156,7 @@
       return {
         isListExport: false,
         organCode: '',
+        queryOrganCode: '',
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -217,7 +218,8 @@
 
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.organCode=res.data.organCode
+          this.organCode = res.data.organCode
+          this.queryOrganCode = res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -238,7 +240,9 @@
     },
     methods: {
       resetForm() {
+        this.queryOrganCode = this.searchForm.organcode
         this.$refs.searchForm.resetFields()
+        this.searchForm.organcode = this.queryOrganCode
       },
       searchPublic() {
         //获取公共池
@@ -301,8 +305,8 @@
             this.loading = false
           })
         }
-        if (this.searchForm.organcode==null || this.searchForm.organcode=='' || this.searchForm.organcode==undefined){
-          this.searchForm.organcode=this.organCode
+        if (this.searchForm.organcode == null || this.searchForm.organcode == '' || this.searchForm.organcode == undefined) {
+          this.searchForm.organcode = this.organCode
         }
         getPublicList(this.searchForm).then(res => {
           this.publicData = res.rows

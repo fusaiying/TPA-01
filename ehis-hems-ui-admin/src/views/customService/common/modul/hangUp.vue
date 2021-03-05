@@ -21,7 +21,7 @@
           </el-row>
           <span style="float: right;">
           <el-button size="mini" @click="cancelHangUp" :disabled="hangUpForm.hangFlag=='02'" type="primary">案件解挂</el-button>
-          <el-button size="mini" @click="HangUp" :disabled="hangUpForm.hangFlag=='01'" type="primary">提交</el-button>
+          <el-button size="mini" @click="HangUp" :disabled="hangUpForm.hangFlag=='01'" type="primary">挂起</el-button>
           <el-button size="mini" @click="changeDialogVisable" type="primary">取消</el-button>
         </span>
         </div>

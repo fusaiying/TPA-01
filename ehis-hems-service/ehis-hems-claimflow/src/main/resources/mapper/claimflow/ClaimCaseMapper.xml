@@ -382,59 +382,59 @@
         inner join claim_case_policy ccp on cc.rpt_no=ccp.rpt_no  and ccp.status='Y'
         inner  join claim_case_insured cci   on cc.rpt_no = cci.rpt_no  and cci.status='Y'
         inner  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'*/
-        SELECT
-        cc.rpt_no,
-        cc.case_status,
-        ccr.create_by,
-        -- cci.id_no,
-        (select cci.id_no from claim_case_insured cci where  cc.rpt_no = cci.rpt_no AND cci. STATUS = 'Y' limit 1) id_no,
-        cc.update_by operator,
-        cb.claim_type,
-        cb.source,
-        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_name ,
-        (select ccp.company_code from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_code ,
-        (select ccp.name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) name ,
-        -- 	ccp.company_name,
-        -- 	ccp.company_code,
-        -- 	ccp. NAME,
-        cb.submit_date,
-        CONCAT(
-        FLOOR(
-        TIMESTAMPDIFF(
-        SECOND,
-        ccr.update_time,
-        now()
-        ) / 86400
-        ),
-        '天',
-        TIMESTAMPDIFF(HOUR, ccr.update_time, now()) % 24,
-        '时',
-        TIMESTAMPDIFF(
-        MINUTE,
-        ccr.update_time,
-        now()
-        ) % 60,
-        '分'
-        ) monitoring_time
-        FROM
-        claim_case cc
-        LEFT JOIN claim_batch cb ON cc.batch_no = cb.batch_no
-        AND cc. STATUS = 'Y'
-        -- INNER JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
-        -- AND ccp. STATUS = 'Y'
-        -- INNER JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
-        -- AND cci. STATUS = 'Y'
-        INNER JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no
-        AND ccr.history_flag = 'N'
+        select * from (
+                        SELECT
+                        cc.rpt_no,
+                        cc.case_status,
+                        ccr.create_by,
+                        -- cci.id_no,
+                        (select cci.id_no from claim_case_insured cci where  cc.rpt_no = cci.rpt_no AND cci. STATUS = 'Y' limit 1) id_no,
+                        cc.update_by operator,
+                        cb.claim_type,
+                        cb.source,
+                        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_name ,
+                        (select ccp.company_code from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_code ,
+                        (select ccp.name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) name ,
+                        -- 	ccp.company_name,
+                        -- 	ccp.company_code,
+                        -- 	ccp. NAME,
+                        cb.submit_date,
+                        CONCAT(
+                        FLOOR(
+                        TIMESTAMPDIFF(
+                        SECOND,
+                        ccr.update_time,
+                        now()
+                        ) / 86400
+                        ),
+                        '天',
+                        TIMESTAMPDIFF(HOUR, ccr.update_time, now()) % 24,
+                        '时',
+                        TIMESTAMPDIFF(
+                        MINUTE,
+                        ccr.update_time,
+                        now()
+                        ) % 60,
+                        '分'
+                        ) monitoring_time,
+                        cc.create_time
+                  FROM claim_case cc
+             LEFT JOIN claim_batch cb ON cc.batch_no = cb.batch_no AND cc. STATUS = 'Y'
+                        -- INNER JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
+                        -- AND ccp. STATUS = 'Y'
+                        -- INNER JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
+                        -- AND cci. STATUS = 'Y'
+            INNER JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no  AND ccr.history_flag = 'N'
+                     ) t
         <where>
-            <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>
-            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and (#{submitenddate})</if>
-            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
-            <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
-            <if test="companyCode != null  and companyCode != ''"> and ccp.company_code = #{companyCode}</if>
-            <if test="name != null  and name != ''"> and cci.name like concat('%', #{name}, '%')</if>
-            <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
+            <if test="rptNo != null and rptNo != ''"> and t.rpt_no = #{rptNo}</if>
+            <if test="claimType != null  and claimType != ''"> and t.claim_type = #{claimType}</if>
+            <if test="submitstartdate != null and submitenddate != null"> and t.submit_date between #{submitstartdate} and (#{submitenddate})</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and t.case_status = #{caseStatus}</if>
+            <if test="operator != null  and operator != ''"> and t.operator = #{operator}</if>
+            <if test="companyCode != null  and companyCode != ''"> and t.company_code = #{companyCode}</if>
+            <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
+            <if test="idNo != null  and idNo != ''"> and t.id_no = #{idNo}</if>
         </where>
     </select>
     <update id="updateCaseDispatchList" parameterType="ClaimCase">

@@ -31,23 +31,7 @@
           </el-form-item>
         </el-col>
 
-        <!--        <el-col :span="8">
-                  <el-form-item label="合作部门信息：" prop="coopDepInfo">
-                    <el-input v-model="otherServiceForm.coopDepInfo" class="item-width" clearable size="mini"
-                              placeholder="请输入"/>
-                  </el-form-item>
-                </el-col>
 
-
-                <el-col :span="8">
-                  <el-form-item label="集团统一编码：" prop="code">
-                    <el-select v-model="otherServiceForm.code" class="item-width" placeholder="请选择" clearable>
-                      <el-option value="01" label="一类"></el-option>
-                      <el-option value="02" label="二类"></el-option>
-                      &lt;!&ndash;                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>&ndash;&gt;
-                    </el-select>
-                  </el-form-item>
-                </el-col>-->
       </el-row>
       <el-row>
         <el-col :span="16">
@@ -62,16 +46,7 @@
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
-<!--
-          <el-col :span="10">
-            <el-form-item prop="continent">
-              <el-input v-model="otherServiceForm.continent" class="item-width" clearable
-                        style="width: 450px" maxlength="500"
-                        placeholder="请输入"/>
 
-            </el-form-item>
-          </el-col>
--->
 
 
 
@@ -120,14 +95,7 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-        <!--        <el-col :span="8">
-                  <el-form-item label="是否流程通畅：" prop="processFlow">
-                    <el-radio-group v-model="otherServiceForm.processFlow">
-                      <el-radio label="01">是</el-radio>
-                      <el-radio label="02">否</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                </el-col>-->
+
 
       </el-row>
       <el-col :span="24">
@@ -276,12 +244,7 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

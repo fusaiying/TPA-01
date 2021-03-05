@@ -137,16 +137,6 @@
                       placeholder="请输入"/>
           </el-form-item>
         </el-col>
-        <!--          <el-col :span="10">
-                    <el-form-item prop="continent">
-                      <el-input v-model="reserveInfoForm.continent" class="item-width" clearable
-                                style="padding-left: 15px;width: 450px" maxlength="500"
-                                placeholder="请输入"/>
-
-                    </el-form-item>
-                  </el-col>
-
-                </el-col>-->
         <el-col :span="8">
           <el-form-item label="是否连锁机构(结算)：" prop="interlocking">
             <el-select v-model="reserveInfoForm.interlocking" class="item-width" placeholder="请选择是/否" clearable>
@@ -661,27 +651,7 @@ export default {
                   })
                 }
               })
-            }/* else {
-              updateapplyInfo(this.reserveInfoForm).then(res => {
-                if (res.code == '200') {
-                  this.$message({
-                    message: '保存成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  })
-                } else {
-                  this.$message({
-                    message: '保存失败!',
-                    type: 'error',
-                    center: true,
-                    showClose: true
-                  })
-                }
-              })
             }
-
-          }*/
 
           } else {
             this.$message.warning('预约信息必录项未必录')
@@ -849,12 +819,6 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

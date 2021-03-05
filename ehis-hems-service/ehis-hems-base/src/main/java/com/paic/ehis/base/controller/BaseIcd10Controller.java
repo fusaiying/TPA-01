@@ -77,10 +77,8 @@ public class BaseIcd10Controller extends BaseController
         //查询code值
         List<BaseIcd10> baseIcd10s = baseIcd10Service.selectBaseIcd10ById(icdcode);
         //查询机构名
-        List<BaseIcd10> baseIcd10s1 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
+       // List<BaseIcd10> baseIcd10s1 = baseIcd10Service.selectBaseIcd10ByName(icdmname);
         if (baseIcd10s.size() != 0) {
-            return AjaxResult.success(121);
-        }else if (baseIcd10s1.size() != 0){
             return AjaxResult.success(121);
         }else {
             return toAjax(baseIcd10Service.insertBaseIcd10(baseIcd10));
@@ -95,13 +93,13 @@ public class BaseIcd10Controller extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody BaseIcd10 baseIcd10)
     {
-        List<BaseIcd10> baseIcd10sByCode = baseIcd10Service.selectBaseIcd10ById(baseIcd10.getIcdcode());
+       /* List<BaseIcd10> baseIcd10sByCode = baseIcd10Service.selectBaseIcd10ById(baseIcd10.getIcdcode());
         if (!baseIcd10sByCode.get(0).getIcdmname().equals(baseIcd10.getIcdmname())){
             List<BaseIcd10> baseIcd10s = baseIcd10Service.selectBaseIcd10ByName(baseIcd10.getIcdmname());
             if (baseIcd10s.size() != 0) {
                 return AjaxResult.success(121);
             }
-        }
+        }*/
         return toAjax(baseIcd10Service.updateBaseIcd10(baseIcd10));
     }
 

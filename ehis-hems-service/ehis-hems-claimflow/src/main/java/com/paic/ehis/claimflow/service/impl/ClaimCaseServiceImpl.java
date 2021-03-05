@@ -932,7 +932,6 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         rspData.setTotal(pageInfo.getTotal());
         return rspData;
 
-       // return ConditionsForTheAdjustmentVOLList;
     }//悬挂
 
     /**

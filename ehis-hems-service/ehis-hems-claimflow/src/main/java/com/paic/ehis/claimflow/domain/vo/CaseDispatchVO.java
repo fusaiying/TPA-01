@@ -31,7 +31,7 @@ public class CaseDispatchVO extends BaseEntity {
     /**
      * 交单来源
      */
-    @Excel(name = "交单来源")
+    @Excel(name = "交单来源",readConverterExp = "01=PBW-在线理赔,02=PBW-E结算,03=机构交单,04=寿险app")
     private String source;
 
     /**

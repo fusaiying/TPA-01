@@ -22,7 +22,7 @@ public class CallAgain extends BaseEntity
     /** 来电流水号 */
     private String callSerialNum;
 
-    private String bussinessType;
+    private String businessType;
 
     /** 工单号 */
     @Excel(name = "工单号")

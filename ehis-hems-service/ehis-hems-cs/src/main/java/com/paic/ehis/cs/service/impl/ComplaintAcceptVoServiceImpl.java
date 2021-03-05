@@ -233,12 +233,18 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         String workOrderNo=complaintAcceptVo.getWorkOrderNo();
         ComplaintAcceptVo complaintAcceptVo1=complaintAcceptVoMapper.selectComplaintAcceptVo(workOrderNo);
 
-        PersonInfo callPerson= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
-        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
-        PersonInfo complainantPerson=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
         PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
         PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
-        PersonInfo complaintPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
+        PersonInfo complainantPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
+//        PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
+//        PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
+//        PersonInfo complaintPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
+        PersonInfo callPerson=new PersonInfo();
+        PersonInfo contactsPerson=new PersonInfo();
+        PersonInfo complainantPerson=new PersonInfo();
+        BeanUtils.copyProperties(callPerson1, callPerson);
+        BeanUtils.copyProperties(contactsPerson1, contactsPerson);
+        BeanUtils.copyProperties(complainantPerson1, complainantPerson);
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
@@ -273,8 +279,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         callPerson.setPersonId(complaintAcceptVo.getCallPersonId());
         callPerson.setName(complaintAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
-        callPerson.setCreatedBy(SecurityUtils.getUsername());
-        callPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         callPerson.setUpdatedBy(SecurityUtils.getUsername());
         callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
@@ -288,8 +292,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     //    contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson.setCreatedBy(SecurityUtils.getUsername());
-        contactsPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
         contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
@@ -299,8 +301,6 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complainantPerson.setIdentity(complaintAcceptVo.getComplainantPerson().getIdentity());
         complainantPerson.setName(complaintAcceptVo.getComplainantPerson().getName());
         complainantPerson.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
-        complainantPerson.setCreatedBy(SecurityUtils.getUsername());
-        complainantPerson.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complainantPerson.setUpdatedBy(SecurityUtils.getUsername());
         complainantPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(complainantPerson);
@@ -405,7 +405,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         }
 
-        Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complaintPerson1), Map.class);
+        Map map7 = JSONObject.parseObject(JSONObject.toJSONString(complainantPerson1), Map.class);
         Map map8 = JSONObject.parseObject(JSONObject.toJSONString(complainantPerson), Map.class);
 
         Iterator<String> iter4 = map7.keySet().iterator();

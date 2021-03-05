@@ -574,6 +574,7 @@
       },
       resetForm() {
         this.$refs.sendForm.resetFields()
+        this.searchHandle()
       },
       //待处理查询
       searchHandle() {

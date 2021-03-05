@@ -127,7 +127,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"  />
             </el-form-item>
           </el-col>
         </el-row>
@@ -301,7 +301,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="workPoolData.organCode" class="item-width" disabled>
+              <el-select v-model="workPoolData.organCode" class="item-width" disabled placeholder="">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>

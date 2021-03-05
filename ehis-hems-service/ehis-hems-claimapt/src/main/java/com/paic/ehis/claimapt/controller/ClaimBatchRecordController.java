@@ -211,6 +211,12 @@ public class ClaimBatchRecordController extends BaseController {
 
                 //点击提交时，应该生成相对应得案件批次信息表-案件信息表和案件信息轨迹表一一对应
 
+
+            }
+            //新增对应的案件数----案件信息
+            ClaimCaseStandingVo claimCaseStandingVo = new ClaimCaseStandingVo();
+            claimCaseStandingVo.setBatchno(standingAndBatck.getClaimBatch().getBatchno());
+            for (int i = 0; i < standingAndBatck.getClaimBatch().getCasenum(); i++) {
                 iClaimCaseRecordService.insertClaimCaseRecordAndBatchRecord(claimCaseStandingVo);
             }
 

@@ -285,7 +285,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="contactsPerson.language">
               <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>

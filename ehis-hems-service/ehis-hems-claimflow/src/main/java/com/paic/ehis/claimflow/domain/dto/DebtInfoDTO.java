@@ -38,4 +38,7 @@ public class DebtInfoDTO extends BaseEntity {
     /** 白名单标记 */
     private String whiteStatus;
 
+    /** 0:初始化 1:点击查询按钮 */
+    private String flag;
+
 }

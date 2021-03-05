@@ -74,4 +74,11 @@ public interface IClaimCaseDebtReceiptService
      * @return
      */
     public List<ClaimCaseDebtReceipt> selectClaimCaseDebtReceiptListByInsuredOrDate(DebtInfoDTO debtInfoDTO);
+
+    /**
+     * 查询全部收款明细 关联收款核销表
+     *
+     * @return
+     */
+    public List<ClaimCaseDebtReceipt> selectReceiptList();
 }

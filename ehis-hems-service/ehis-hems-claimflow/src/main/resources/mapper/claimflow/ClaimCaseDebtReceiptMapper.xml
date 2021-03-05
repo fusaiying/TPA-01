@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt" id="ClaimCaseDebtReceiptResult">
         <result property="receiptNo"    column="receipt_no"    />
         <result property="insuredNo"    column="insured_no"    />
+        <result property="insuredName" column="insured_name"/>
         <result property="receiptAmount"    column="receipt_amount"    />
         <result property="receiptCurrency"    column="receipt_currency"    />
         <result property="receiptDate"    column="receipt_date"    />
@@ -20,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseDebtReceiptVo">
-        select receipt_no, insured_no, receipt_amount, receipt_currency, receipt_date, remark, status, create_by, create_time, update_by, update_time from claim_case_debt_receipt
+        select receipt_no, insured_no, insured_name, receipt_amount, receipt_currency, receipt_date, remark, status, create_by, create_time, update_by, update_time from claim_case_debt_receipt
     </sql>
 
     <select id="selectClaimCaseDebtReceiptList" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseDebtReceipt" resultMap="ClaimCaseDebtReceiptResult">
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="receiptNo != null">receipt_no,</if>
             <if test="insuredNo != null and insuredNo != ''">insured_no,</if>
+            <if test="insuredName != null and insuredName != ''">insured_name,</if>
             <if test="receiptAmount != null">receipt_amount,</if>
             <if test="receiptCurrency != null and receiptCurrency != ''">receipt_currency,</if>
             <if test="receiptDate != null">receipt_date,</if>
@@ -57,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="receiptNo != null">#{receiptNo},</if>
             <if test="insuredNo != null and insuredNo != ''">#{insuredNo},</if>
+            <if test="insuredName != null and insuredName != ''">#{insuredName},</if>
             <if test="receiptAmount != null">#{receiptAmount},</if>
             <if test="receiptCurrency != null and receiptCurrency != ''">#{receiptCurrency},</if>
             <if test="receiptDate != null">#{receiptDate},</if>
@@ -73,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update claim_case_debt_receipt
         <trim prefix="SET" suffixOverrides=",">
             <if test="insuredNo != null and insuredNo != ''">insured_no = #{insuredNo},</if>
+            <if test="insuredName != null and insuredName != ''">insured_name = #{insuredName},</if>
             <if test="receiptAmount != null">receipt_amount = #{receiptAmount},</if>
             <if test="receiptCurrency != null and receiptCurrency != ''">receipt_currency = #{receiptCurrency},</if>
             <if test="receiptDate != null">receipt_date = #{receiptDate},</if>
@@ -100,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClaimCaseDebtReceiptListNear" resultMap="ClaimCaseDebtReceiptResult">
         SELECT
             a.receipt_no,
-            ( SELECT DISTINCT name FROM claim_case_insured b WHERE a.insured_no = b.insured_no and b.status='Y' ) insured_no,
+            a.insured_name insured_no,
             a.receipt_amount,
             a.receipt_currency,
             a.receipt_date,
@@ -133,6 +137,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="insuredName != null  and insuredName != ''"> and a.insured_name like concat('%', #{insuredName}, '%') </if>
             <if test="startDate != null "> and a.receipt_date between #{startDate} and #{endDate}</if>
         </where>
+        GROUP BY
+            a.receipt_no
+    </select>
+
+    <select id="selectReceiptList" resultMap="ClaimCaseDebtReceiptResult">
+        SELECT
+            a.receipt_no,
+            a.insured_name insured_no,
+            a.receipt_amount,
+            a.receipt_currency,
+            a.receipt_date,
+            a.remark,
+            a.create_by,
+            (a.receipt_amount - IFNULL(SUM( c.col_amount ),0)) residual
+        FROM
+            claim_case_debt_receipt a
+            LEFT JOIN claim_case_debt_col c ON a.receipt_no = c.receipt_no AND a.status = 'Y' AND c.status = 'Y'
         GROUP BY
             a.receipt_no
     </select>

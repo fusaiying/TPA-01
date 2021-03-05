@@ -146,7 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         having (a.debt_amount - IFNULL(SUM( b.col_amount ),0))&gt;0
     </select>
 
-    <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfo" resultMap="DebtInfoResult">
+    <select id="selectDebtList" parameterType="com.paic.ehis.claimflow.domain.dto.DebtInfoDTO" resultMap="DebtInfoResult">
         SELECT
             a.rpt_no,
             a.debt_amount,

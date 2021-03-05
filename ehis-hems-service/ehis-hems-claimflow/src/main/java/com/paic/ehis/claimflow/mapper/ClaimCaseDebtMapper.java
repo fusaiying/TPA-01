@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.mapper;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
 import com.paic.ehis.claimflow.domain.dto.DebtInfo;
+import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 
 import java.util.List;
@@ -75,5 +76,5 @@ public interface ClaimCaseDebtMapper
      * @param debtInfoDTO
      * @return
      */
-    public List<DebtInfoVO> selectDebtList(DebtInfo debtInfoDTO);
+    public List<DebtInfoVO> selectDebtList(DebtInfoDTO debtInfoDTO);
 }

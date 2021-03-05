@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
 import com.paic.ehis.claimflow.domain.dto.DebtInfo;
+import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper;
@@ -173,7 +174,7 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
      * @return
      */
     @Override
-    public List<DebtInfoVO> selectDebtList(DebtInfo debtInfoDTO) {
+    public List<DebtInfoVO> selectDebtList(DebtInfoDTO debtInfoDTO) {
         List<DebtInfoVO> debtInfoVOList = claimCaseDebtMapper.selectDebtList(debtInfoDTO);
         for (DebtInfoVO debtInfo : debtInfoVOList){
             ClaimCasePolicy policy = new ClaimCasePolicy();

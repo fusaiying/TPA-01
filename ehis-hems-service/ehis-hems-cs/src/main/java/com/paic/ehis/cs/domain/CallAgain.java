@@ -22,6 +22,8 @@ public class CallAgain extends BaseEntity
     /** 来电流水号 */
     private String callSerialNum;
 
+    private String bussinessType;
+
     /** 工单号 */
     @Excel(name = "工单号")
     private String workOrderNo;

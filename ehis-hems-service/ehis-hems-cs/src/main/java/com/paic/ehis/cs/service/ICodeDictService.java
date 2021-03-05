@@ -23,6 +23,12 @@ public interface ICodeDictService
      */
     public CodeDict selectCodeDictById(String codeType);
 
+    public List<CodeDict> selectClassifyLevel2(CodeDict codeDict);
+
+    public List<CodeDict> selectReasonLevel2(CodeDict codeDict);
+
+    public List<CodeDict> selectReasonLevel3(CodeDict codeDict);
+
     public List<CodeDictVo> updateCodeDictVo(List<CodeDictVo> list);
 
     public List<CodeDictVo> selectCodeEnumVo(CodeDictDTO codeEnumDTO);

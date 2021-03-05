@@ -40,6 +40,27 @@ public class CodeDictServiceImpl implements ICodeDictService
     }
 
     @Override
+    public List<CodeDict> selectClassifyLevel2(CodeDict codeDict) {
+        codeDict.setCodeType("cs_classify_level2");
+        List<CodeDict> codeDicts=codeDictMapper.selectNext(codeDict);
+        return codeDicts;
+    }
+
+    @Override
+    public List<CodeDict> selectReasonLevel2(CodeDict codeDict) {
+        codeDict.setCodeType("cs_reason_level2");
+        List<CodeDict> codeDicts=codeDictMapper.selectNext(codeDict);
+        return codeDicts;
+    }
+
+    @Override
+    public List<CodeDict> selectReasonLevel3(CodeDict codeDict) {
+        codeDict.setCodeType("cs_reason_level3");
+        List<CodeDict> codeDicts=codeDictMapper.selectNext(codeDict);
+        return codeDicts;
+    }
+
+    @Override
     public List<CodeDictVo> updateCodeDictVo(List<CodeDictVo> list) {
         //一级
         List<CodeDict> parList = new ArrayList<>();

@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recMessageFlag != null  and recMessageFlag != ''"> and rec_message_flag = #{recMessageFlag}</if>
             <if test="debtAmountUp != null "> and debt_amount_up like concat('%', #{debtAmountUp}, '%')</if>
             <if test="insuredNo != null  and insuredNo != ''"> and insured_no = #{insuredNo}</if>
-            AND STATUS = 'Y'
+            <if test="status != null  and status != ''"> and   STATUS = #{status}</if>
         </where>
       order by create_time desc
     </select>

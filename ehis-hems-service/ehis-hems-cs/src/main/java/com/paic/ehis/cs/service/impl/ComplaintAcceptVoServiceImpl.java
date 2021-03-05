@@ -3,7 +3,7 @@ package com.paic.ehis.cs.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.*;
@@ -12,7 +12,6 @@ import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -539,7 +538,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -616,7 +615,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -629,7 +628,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLog2.setStatus("02");
             flowLog2.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
-            flowLog2.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog2.setUmNum(SecurityUtils.getUsername());
             flowLog2.setCreatedBy(SecurityUtils.getUsername());
             flowLog2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog2.setUpdatedBy(SecurityUtils.getUsername());

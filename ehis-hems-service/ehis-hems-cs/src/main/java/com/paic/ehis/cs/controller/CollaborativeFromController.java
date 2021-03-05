@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +43,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 查询协办信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:from:list')")
+//    @PreAuthorize("@ss.hasPermi('system:from:list')")
     @GetMapping("/list")
     public TableDataInfo list(CollaborativeFrom collaborativeFrom)
     {
@@ -65,7 +64,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 导出协办信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:from:export')")
+//    @PreAuthorize("@ss.hasPermi('system:from:export')")
     @Log(title = "协办信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CollaborativeFrom collaborativeFrom) throws IOException
@@ -78,7 +77,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 获取协办信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:from:query')")
+//    @PreAuthorize("@ss.hasPermi('system:from:query')")
     @GetMapping(value = "/{collaborativeId}")
     public AjaxResult getInfo(@PathVariable("collaborativeId") Long collaborativeId)
     {
@@ -88,7 +87,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 新增协办信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:from:add')")
+//    @PreAuthorize("@ss.hasPermi('system:from:add')")
     @Log(title = "协办信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CollaborativeFrom collaborativeFrom)
@@ -99,7 +98,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 修改协办信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:from:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:from:edit')")
     @Log(title = "协办信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CollaborativeFrom collaborativeFrom)
@@ -110,7 +109,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 删除协办信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:from:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:from:remove')")
     @Log(title = "协办信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{collaborativeIds}")
     public AjaxResult remove(@PathVariable Long[] collaborativeIds)
@@ -123,7 +122,7 @@ public class CollaborativeFromController extends BaseController
      * @param complaintDealVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:from:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:from:edit')")
     @Log(title = "协办信息 ", businessType = BusinessType.UPDATE)
     @PutMapping("/assistInComplaint")
     public AjaxResult assistInComplaint(@RequestBody ComplaintDealVo complaintDealVo)
@@ -134,7 +133,7 @@ public class CollaborativeFromController extends BaseController
     /**
      * 修改协办信息
      */
-    @PreAuthorize("@ss.hasPermi('system:from:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:from:edit')")
     @Log(title = "协办信息 ", businessType = BusinessType.UPDATE)
     @PutMapping("/updateCollaborativeStatus")
     public AjaxResult updateCollaborativeStatus(@RequestBody CollaborativeFrom collaborativeFrom)

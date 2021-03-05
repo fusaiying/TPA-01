@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
@@ -137,7 +137,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+        flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -172,7 +172,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+        flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setLinkCode("05");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -215,7 +215,7 @@ public class EditInfoServiceImpl implements IEditInfoService
         flowLog.setLinkCode("05");//05 取消状态
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+        flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

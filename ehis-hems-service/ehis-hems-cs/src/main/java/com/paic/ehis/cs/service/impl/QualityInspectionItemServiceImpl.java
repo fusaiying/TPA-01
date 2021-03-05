@@ -1,16 +1,13 @@
 package com.paic.ehis.cs.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.FlowLog;
-import com.paic.ehis.cs.domain.QualityInspectionAccept;
-import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -123,9 +120,9 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             //流转记录添加
             String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",32,20);
             flowLog.setFlowId(flow_id);
-            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setCreatedTime(DateUtils.getNowDate());
-            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setUpdatedTime(DateUtils.getNowDate());
             flowLog.setWorkOrderNo(ids[i]);
 //            flowLog.setSubId(ids[i]);
@@ -137,9 +134,9 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             qualityInspectionItem=new QualityInspectionItem();
             qualityInspectionItem.setItemId(ids[i]);
             qualityInspectionItem.setStatus("01");
-            qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
             qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());
-            qualityInspectionItem.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
             qualityInspectionItem.setCreatedTime(DateUtils.getNowDate());
 
             list.add(qualityInspectionItem);

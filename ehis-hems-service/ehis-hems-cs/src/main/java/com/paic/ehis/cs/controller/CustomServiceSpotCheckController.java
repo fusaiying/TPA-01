@@ -1,24 +1,22 @@
 package com.paic.ehis.cs.controller;
 
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.mapper.AttachmentInfoMapper;
 import com.paic.ehis.cs.service.IAttachmentInfoService;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.service.IQualityInspectionHandleService;
 import com.paic.ehis.cs.service.IQualityInspectionItemService;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,7 +105,7 @@ public class CustomServiceSpotCheckController extends BaseController {
         //2.工单状态设置； 02-质检中
         workOrderQueryDTO.setAcceptStatus(CodeEnum.INSPECTION_STATE_02.getCode());
         //3.当前操作人设置；
-        workOrderQueryDTO.setUpdateBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+        workOrderQueryDTO.setUpdateBy(String.valueOf(SecurityUtils.getUserId()));
         logger.debug("待质检个人池查询入参：{}",workOrderQueryDTO);
         List<AcceptVo> list = qualityInspectionAcceptService.selectAcceptPoolData(workOrderQueryDTO);
         logger.debug("待质检个人池查询结果：{}",list);
@@ -188,7 +186,7 @@ public class CustomServiceSpotCheckController extends BaseController {
      * @param qualityInspectionHandle
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:handle:add')")
+//    @PreAuthorize("@ss.hasPermi('system:handle:add')")
     @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
     @PostMapping("/insertHandle")
     public AjaxResult insertHandle(@RequestBody QualityInspectionHandle qualityInspectionHandle)
@@ -203,7 +201,7 @@ public class CustomServiceSpotCheckController extends BaseController {
      * @param sendIds
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:handle:add')")
+//    @PreAuthorize("@ss.hasPermi('system:handle:add')")
     @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
     @PostMapping("/insertItem")
     public AjaxResult insertItem(@RequestBody String[] sendIds)
@@ -218,7 +216,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     /**
      * 质检差错查询反显数据
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(QualityInspectionItem qualityInspectionItem)
     {

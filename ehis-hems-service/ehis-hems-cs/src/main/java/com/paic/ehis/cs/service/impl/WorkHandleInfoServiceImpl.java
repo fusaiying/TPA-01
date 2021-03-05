@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.*;
@@ -182,14 +182,14 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
 
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setMakeBy(SecurityUtils.getUsername());
             flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setMakeBy(SecurityUtils.getUsername());
             flowLog.setOpinion(serviceProcessingVo.getRemark());
            //没有um帐号
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -514,7 +514,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -560,7 +560,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             flowLog.setStatus("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
-            flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());

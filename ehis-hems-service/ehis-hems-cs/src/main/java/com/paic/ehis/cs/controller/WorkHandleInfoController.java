@@ -4,12 +4,8 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
-import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
-import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.paic.ehis.common.log.annotation.Log;
@@ -37,7 +33,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 查询工单处理信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkHandleInfo workHandleInfo)
     {
@@ -49,7 +45,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 导出工单处理信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
+//    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "工单处理信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, WorkHandleInfo workHandleInfo) throws IOException
@@ -62,7 +58,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 获取工单处理信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
+//    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{handleId}")
     public AjaxResult getInfo(@PathVariable("handleId") Long handleId)
     {
@@ -72,7 +68,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 新增工单处理信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
+//    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "工单处理信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody WorkHandleInfo workHandleInfo)
@@ -83,7 +79,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 修改工单处理信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "工单处理信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody WorkHandleInfo workHandleInfo)
@@ -94,7 +90,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 删除工单处理信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "工单处理信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{handleIds}")
     public AjaxResult remove(@PathVariable Long[] handleIds)
@@ -105,7 +101,7 @@ public class WorkHandleInfoController extends BaseController
     /**
      * 查询工单业处理信息 信息需求
      */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/selectWorkOrder")
     public TableDataInfo selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
         List<WorkHandleInfo> list = workHandleInfoService.selectWorkOrder(serviceProcessingVo);

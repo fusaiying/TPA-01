@@ -1,25 +1,19 @@
 package com.paic.ehis.cs.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.paic.ehis.cs.domain.FieldMap;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.FlowLog;
-import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
-import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.CollaborativeFromMapper;
@@ -162,7 +156,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setLinkCode("06");//状态置为已协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+        flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -199,7 +193,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setLinkCode("06");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
-        flowLog.setUmNum(SecurityUtils.getLoginUser().getUserId().toString());
+        flowLog.setUmNum(SecurityUtils.getUsername());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());

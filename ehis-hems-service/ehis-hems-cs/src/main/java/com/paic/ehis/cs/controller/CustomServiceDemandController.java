@@ -18,7 +18,6 @@ import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -46,7 +45,7 @@ public class CustomServiceDemandController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/internal/listAndPersonalPool")
     public TableDataInfo listAndPersonalPool(AcceptDTO acceptDTO) {
         startPage();
@@ -65,7 +64,7 @@ public class CustomServiceDemandController extends BaseController {
         return AjaxResult.success(demandAcceptVo);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::huoqu')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
     @PutMapping("/obtain")
     public AjaxResult edit(@RequestBody String workOrderNo)
@@ -73,7 +72,7 @@ public class CustomServiceDemandController extends BaseController {
         return toAjax(iDemandAcceptVoService.updateStatus(workOrderNo));
     }
 
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.UPDATE)
     @PutMapping("/many")
     public AjaxResult edit( @RequestBody String[] workOrderNos)
@@ -82,7 +81,7 @@ public class CustomServiceDemandController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
     public AjaxResult serviceAdd(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
@@ -95,7 +94,7 @@ public class CustomServiceDemandController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "修改受理 ", businessType = BusinessType.UPDATE)
     @PutMapping("/serviceUpdate")
     public AjaxResult serviceUpdate(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
@@ -108,7 +107,7 @@ public class CustomServiceDemandController extends BaseController {
      * @param serviceProcessingVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertServiceProcessing")
     public AjaxResult insertServiceProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
@@ -126,7 +125,7 @@ public class CustomServiceDemandController extends BaseController {
      * @param demandAcceptVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertTeamwork")
     public AjaxResult insertTeamwork (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
@@ -138,7 +137,7 @@ public class CustomServiceDemandController extends BaseController {
 /**
  * 信息需求取消页面提交按钮
  */
-        @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//        @PreAuthorize("@ss.hasPermi('system:customService::edit')")
         @Log(title = "提交 ", businessType = BusinessType.INSERT)
         @PutMapping("/cancelSubmit")
         public AjaxResult cancelSubmit (@Validated @RequestBody DemandAcceptVo demandAcceptVo)
@@ -148,7 +147,7 @@ public class CustomServiceDemandController extends BaseController {
         /**
          * 查询协办工作池
          */
-        @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//        @PreAuthorize("@ss.hasPermi('system:customService:list')")
         @GetMapping("/selectAssist")
         public TableDataInfo selectAssist(AcceptDTO acceptDTO) {
             startPage();
@@ -160,7 +159,7 @@ public class CustomServiceDemandController extends BaseController {
      * @param serviceProcessingVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/teamworkProcessing")
     public AjaxResult teamworkProcessing(@Validated @RequestBody ServiceProcessingVo serviceProcessingVo)
@@ -173,7 +172,7 @@ public class CustomServiceDemandController extends BaseController {
      * @param demandAcceptVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemand")
     public AjaxResult insertConsultationDemand(@Validated @RequestBody DemandAcceptVo demandAcceptVo)
@@ -185,7 +184,7 @@ public class CustomServiceDemandController extends BaseController {
      * @param complaintDealVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/insertConsultationDemandOne")
     public AjaxResult insertConsultationDemandOne(@Validated @RequestBody ComplaintDealVo complaintDealVo)

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.HcsModification;
 import com.paic.ehis.cs.service.IHcsModificationService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +39,7 @@ public class HcsModificationController extends BaseController
     /**
      * 查询HCS预约修改 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:list')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:list')")
     @GetMapping("/HmsSearch")
     public TableDataInfo list(HcsModification hcsModification)
     {
@@ -52,7 +51,7 @@ public class HcsModificationController extends BaseController
     /**
      * 导出HCS预约修改 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:export')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:export')")
     @Log(title = "HCS预约修改 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, HcsModification hcsModification) throws IOException
@@ -65,7 +64,7 @@ public class HcsModificationController extends BaseController
     /**
      * 获取HCS预约修改 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:query')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:query')")
     @GetMapping(value = "/{workOrderNo}")
     public AjaxResult getInfo(@PathVariable("workOrderNo") String workOrderNo)
     {
@@ -75,7 +74,7 @@ public class HcsModificationController extends BaseController
     /**
      * 新增HCS预约修改 
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:add')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:add')")
     @Log(title = "HCS预约修改 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody HcsModification hcsModification)
@@ -86,7 +85,7 @@ public class HcsModificationController extends BaseController
     /**
      * 修改HCS预约修改 
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:edit')")
     @Log(title = "HCS预约修改 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody HcsModification hcsModification)
@@ -97,7 +96,7 @@ public class HcsModificationController extends BaseController
     /**
      * 删除HCS预约修改 
      */
-    @PreAuthorize("@ss.hasPermi('system:modification:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:modification:remove')")
     @Log(title = "HCS预约修改 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{workOrderNos}")
     public AjaxResult remove(@PathVariable String[] workOrderNos)

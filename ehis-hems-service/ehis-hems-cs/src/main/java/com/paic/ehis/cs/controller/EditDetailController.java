@@ -7,13 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.paic.ehis.cs.domain.EditDetail;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.service.IEditDetailService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +37,7 @@ public class EditDetailController extends BaseController
     /**
      * 查询修改明细 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:list')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:list')")
     @GetMapping("/list")
     public TableDataInfo list(EditDetail editDetail)
     {
@@ -61,7 +58,7 @@ public class EditDetailController extends BaseController
     /**
      * 导出修改明细 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:export')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:export')")
     @Log(title = "修改明细 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, EditDetail editDetail) throws IOException
@@ -75,7 +72,7 @@ public class EditDetailController extends BaseController
     /**
      * 新增修改明细 
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:add')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:add')")
     @Log(title = "修改明细 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EditDetail editDetail)
@@ -86,7 +83,7 @@ public class EditDetailController extends BaseController
     /**
      * 修改修改明细 
      */
-    @PreAuthorize("@ss.hasPermi('system:detail:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:detail:edit')")
     @Log(title = "修改明细 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody EditDetail editDetail)

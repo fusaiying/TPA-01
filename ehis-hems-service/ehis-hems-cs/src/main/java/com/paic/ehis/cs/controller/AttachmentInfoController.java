@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.service.IAttachmentInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +38,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 查询附件信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(AttachmentInfo attachmentInfo)
     {
@@ -51,7 +50,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 导出附件信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
+//    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "附件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, AttachmentInfo attachmentInfo) throws IOException
@@ -64,7 +63,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 获取附件信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
+//    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{attachmentId}")
     public AjaxResult getInfo(@PathVariable("attachmentId") String attachmentId)
     {
@@ -74,7 +73,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 新增附件信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
+//    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "附件信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AttachmentInfo attachmentInfo)
@@ -85,7 +84,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 修改附件信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "附件信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AttachmentInfo attachmentInfo)
@@ -96,7 +95,7 @@ public class AttachmentInfoController extends BaseController
     /**
      * 删除附件信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "附件信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{attachmentIds}")
     public AjaxResult remove(@PathVariable String[] attachmentIds)

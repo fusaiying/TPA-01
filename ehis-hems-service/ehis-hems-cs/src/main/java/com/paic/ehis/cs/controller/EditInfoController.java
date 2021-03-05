@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.paic.ehis.cs.domain.EditInfo;
 import com.paic.ehis.cs.service.IEditInfoService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +37,7 @@ public class EditInfoController extends BaseController
     /**
      * 查询修改信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:list')")
+//    @PreAuthorize("@ss.hasPermi('system:info:list')")
     @GetMapping("/list")
     public TableDataInfo list(EditInfo editInfo)
     {
@@ -50,7 +49,7 @@ public class EditInfoController extends BaseController
     /**
      * 导出修改信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:info:export')")
+//    @PreAuthorize("@ss.hasPermi('system:info:export')")
     @Log(title = "修改信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, EditInfo editInfo) throws IOException
@@ -63,7 +62,7 @@ public class EditInfoController extends BaseController
     /**
      * 获取修改信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:info:query')")
+//    @PreAuthorize("@ss.hasPermi('system:info:query')")
     @GetMapping(value = "/{editId}")
     public AjaxResult getInfo(@PathVariable("editId") Long editId)
     {
@@ -73,7 +72,7 @@ public class EditInfoController extends BaseController
     /**
      * 新增修改信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:add')")
+//    @PreAuthorize("@ss.hasPermi('system:info:add')")
     @Log(title = "修改信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EditInfo editInfo)
@@ -84,7 +83,7 @@ public class EditInfoController extends BaseController
     /**
      * 修改修改信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:info:edit')")
     @Log(title = "修改信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody EditInfo editInfo)
@@ -95,7 +94,7 @@ public class EditInfoController extends BaseController
     /**
      * 删除修改信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:info:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:info:remove')")
     @Log(title = "修改信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{editIds}")
     public AjaxResult remove(@PathVariable Long[] editIds)

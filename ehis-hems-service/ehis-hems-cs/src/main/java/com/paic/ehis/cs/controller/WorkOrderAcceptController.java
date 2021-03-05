@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +38,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 查询工单申请信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:list')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkOrderAccept workOrderAccept)
     {
@@ -51,7 +50,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 导出工单申请信息 列表
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:export')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:export')")
     @Log(title = "工单申请信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, WorkOrderAccept workOrderAccept) throws IOException
@@ -64,7 +63,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 获取工单申请信息 详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:query')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:query')")
     @GetMapping(value = "/{workOrderNo}")
     public AjaxResult getInfo(@PathVariable("workOrderNo") String workOrderNo)
     {
@@ -74,7 +73,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 新增工单申请信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:add')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:add')")
     @Log(title = "工单申请信息 ", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody WorkOrderAccept workOrderAccept)
@@ -85,7 +84,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 修改工单申请信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:edit')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:edit')")
     @Log(title = "工单申请信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrderAccept workOrderAccept)
@@ -96,7 +95,7 @@ public class WorkOrderAcceptController extends BaseController
     /**
      * 删除工单申请信息 
      */
-    @PreAuthorize("@ss.hasPermi('system:accept:remove')")
+//    @PreAuthorize("@ss.hasPermi('system:accept:remove')")
     @Log(title = "工单申请信息 ", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{workOrderNos}")
     public AjaxResult remove(@PathVariable String[] workOrderNos)

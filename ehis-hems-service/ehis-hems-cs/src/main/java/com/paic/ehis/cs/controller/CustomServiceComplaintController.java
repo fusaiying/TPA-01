@@ -6,7 +6,6 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.cs.domain.CallAgain;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
@@ -17,7 +16,6 @@ import com.paic.ehis.cs.service.IComplaintAcceptVoService;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IWorkOrderAcceptService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +40,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param acceptDTO
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/complaint/selectComplaintAcceptVoList")
     public TableDataInfo selectComplaintAcceptVoList(AcceptDTO acceptDTO) {
         startPage();
@@ -61,7 +59,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param acceptDTO
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
     @GetMapping("/complaint/selectComplaintAcceptVoListOne")
     public TableDataInfo selectComplaintAcceptVoListOne(AcceptDTO acceptDTO) {
         startPage();
@@ -74,7 +72,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param complaintAcceptVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
     public AjaxResult serviceAdd(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
@@ -92,7 +90,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param complaintAcceptVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "修改 ", businessType = BusinessType.UPDATE)
     @PutMapping("/updateComplaintAcceptVo")
     public AjaxResult updateComplaintAcceptVo(@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
@@ -103,7 +101,7 @@ public class CustomServiceComplaintController extends BaseController {
     /**
      * 取消投诉
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "修改 ", businessType = BusinessType.INSERT)
     @PutMapping("/reservedCancelSubmit")
     public AjaxResult reservedCancelSubmit (@Validated @RequestBody ComplaintAcceptVo complaintAcceptVo)
@@ -117,7 +115,7 @@ public class CustomServiceComplaintController extends BaseController {
      * @param complaintDealVo
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
+//    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "获取 ", businessType = BusinessType.INSERT)
     @PutMapping("/complaintHandling")
     public AjaxResult complaintHandling(@Validated @RequestBody ComplaintDealVo complaintDealVo)
@@ -141,7 +139,7 @@ public class CustomServiceComplaintController extends BaseController {
     /**
      * 查询工单是否挂起
      */
-    @PreAuthorize("@ss.hasPermi('system:again:list')")
+//    @PreAuthorize("@ss.hasPermi('system:again:list')")
     @GetMapping("/selectHangFlag")
     public AjaxResult selectHangFlag(WorkOrderAccept workOrderAccept)
     {

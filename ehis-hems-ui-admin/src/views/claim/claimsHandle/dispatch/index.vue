@@ -438,7 +438,7 @@
           caseStatus: this.form.caseStatus,
           operator: this.form.operator,
 
-          orderByColumn: 'cc.create_time',
+          orderByColumn: 't.create_time',
           isAsc: 'desc'
         };
         if (this.prop!=null && this.prop!==''){

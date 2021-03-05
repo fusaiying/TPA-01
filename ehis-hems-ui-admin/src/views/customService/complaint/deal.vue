@@ -194,12 +194,15 @@
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
-        <span style="color: blue">基因改善-服务受理信息</span>
+        <span style="color: blue">根因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -216,7 +219,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="sex" >
-              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -233,7 +239,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -255,8 +264,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -279,26 +288,33 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="客户电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.mobilePhone" class="item-width"  size="mini" readonly/>
+            <el-form-item label="家庭电话：" prop="phone">
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.insurer.workPhone" class="item-width"  size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width"  size="mini" readonly/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.organCode" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
-        <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
-          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini" readonly/>
+        <el-row>
+          <el-form-item label="是否已劝解：" prop="persuasionFlag">
+          <el-select v-model="workPoolData.persuasionFlag" class="item-width" disabled placeholder="">
+            <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                       :value="item.dictValue"/>
+          </el-select>
         </el-form-item>
         </el-row>
 
@@ -329,8 +345,16 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{selectDictLabel(cs_order_state, scope.row.status)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{selectDictLabel(cs_action_type, scope.row.operateCode)}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
@@ -366,17 +390,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="priority"  >
-              <el-select v-model="sendForm.level1" class="item-width" >
+              <el-select v-model="sendForm.level1" class="item-width" @change="classTwo()">
                 <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                           :value="item.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉分类：" prop="priority"  >
               <el-select v-model="sendForm.level2" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -428,27 +452,27 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="一级投诉原因：" prop="reason1"  >
-              <el-select v-model="sendForm.reason1" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+              <el-select v-model="sendForm.reason1" class="item-width" @change="reasonTwo()">
+                <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉原因：" prop="reason2"  >
-              <el-select v-model="sendForm.reason2" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+              <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree()">
+                <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
+                           :value="item.code" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="三级投诉原因：" prop="reason1"  >
+            <el-form-item label="三级投诉原因：" prop="reason3"  >
               <el-select v-model="sendForm.reason3" class="item-width" >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
+                <el-option v-for="item in cs_reason_level3" :key="item.code" :label="item.codeName"
+                           :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -535,7 +559,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="跟因改善：" prop="rootImprovement">
+          <el-form-item label="根因改善：" prop="rootImprovement">
             <el-input v-model="sendForm.rootImprovement" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
@@ -550,7 +574,7 @@
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload">上传附件</el-button></span>
+        <span style="color: blue">附件信息<el-button  type="primary" style="float: right" size="mini" @click="upload" disabled>上传附件</el-button></span>
        <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
@@ -594,7 +618,7 @@
 <script>
   import moment from 'moment'
   import {FlowLogSearch,HMSSearch,dealADD} from '@/api/customService/demand'
-  import {complaintDealSubmit,selectHangFlag} from '@/api/customService/complaint'
+  import {complaintDealSubmit,selectHangFlag,reasonThree,reasonTwo,classTwo} from '@/api/customService/complaint'
   import {complainSearch,comSearch}  from  '@/api/customService/consultation'
   import hangUp from "../common/modul/hangUp";
 
@@ -615,13 +639,23 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
     data() {
 
       return {
+
+        cs_order_state:[],//状态
+        cs_action_type:[],//操作类型
+        cs_priority:[],//优先级
+        cs_service_item:[],//服务项目
+        cs_channel:[],//渠道
+        cs_organization:[],//出单机构
+        cs_sex:[],//性别
+        cs_communication_language:[],//语言
+        cs_whether_flag:[],
         hangUps:{
           hangUpFlag:"",
         },
@@ -738,8 +772,11 @@
         }],
         cs_link_circ: [],
         cs_classify_level1: [],
+        cs_classify_level2:[],
         cs_drop_status: [],
         cs_reason_level1: [],
+        cs_reason_level2: [],
+        cs_reason_level3: [],
       }
     },
     created() {
@@ -751,7 +788,7 @@
       this.hangUpSearch()
       this.searchHandle()
       this.searchFlowLog()
-      this.searchHCS()
+      //this.searchHCS()
       this.getDicts("cs_link_circ").then(response => {
         this.cs_link_circ = response.data;
       });
@@ -764,9 +801,86 @@
       this.getDicts("cs_reason_level1").then(response => {
         this.cs_reason_level1 = response.data;
       });
+      this.getDicts("cs_action_type").then(response => {
+        this.cs_action_type = response.data;
+      });
+      this.getDicts("cs_order_state").then(response => {
+        this.cs_order_state = response.data;
+      });
+      this.getDicts("cs_sex").then(response => {
+        this.cs_sex = response.data;
+      });
+      this.getDicts("cs_communication_language").then(response => {
+        this.cs_communication_language = response.data;
+      });
+      this.getDicts("cs_service_item").then(response => {
+        this.cs_service_item = response.data;
+      });
+      this.getDicts("cs_organization").then(response => {
+        this.cs_organization = response.data;
+      });
+      this.getDicts("cs_priority").then(response => {
+        this.cs_priority = response.data;
+      });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
+      });
+      this.getDicts("cs_whether_flag").then(response => {
+        this.cs_whether_flag = response.data;
+      });
     },
 
     methods: {
+
+
+      reasonTwo(){
+        const query={}
+        query.parentCode=this.sendForm.reason1
+        reasonTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2",res.data)
+            this.cs_reason_level2 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      reasonThree(){
+        const query={}
+        query.parentCode=this.sendForm.reason2
+        reasonThree(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2",res.data)
+            this.cs_reason_level3 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      classTwo(){
+        const query={}
+        query.parentCode=this.sendForm.level1
+        classTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("二级分类",res.data)
+            this.cs_classify_level2 = res.data
+            if (res.rows.length <= 0) {
+             return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
 
       //取消
       deal(){},
@@ -911,23 +1025,23 @@
         })
       },
       //查询HCS
-      searchHCS() {
-        let workOrderNo=this.queryParams
-        workOrderNo.status=""
-        HMSSearch(workOrderNo).then(res => {
-          if (res != null && res.code === 200) {
-            this.HCSPoolData = res.rows
-            this.HCSTotal = res.total
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "未查询到数据！"
-              )
-            }
-          }
-        }).catch(res => {
-
-        })
-      },
+      // searchHCS() {
+      //   let workOrderNo=this.queryParams
+      //   workOrderNo.status=""
+      //   HMSSearch(workOrderNo).then(res => {
+      //     if (res != null && res.code === 200) {
+      //       this.HCSPoolData = res.rows
+      //       this.HCSTotal = res.total
+      //       if (res.rows.length <= 0) {
+      //         return this.$message.warning(
+      //           "未查询到数据！"
+      //         )
+      //       }
+      //     }
+      //   }).catch(res => {
+      //
+      //   })
+      // },
       //修改按钮
       modify() {
         if (this.ids.length==0){

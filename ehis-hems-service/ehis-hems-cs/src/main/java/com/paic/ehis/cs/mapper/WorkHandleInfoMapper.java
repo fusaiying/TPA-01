@@ -1,6 +1,8 @@
 package com.paic.ehis.cs.mapper;
 
 import java.util.List;
+
+import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.domain.vo.ReservationDealVo;
@@ -107,5 +109,7 @@ public interface WorkHandleInfoMapper
     public ComplaintDealVo selectComplaintDealVoByNo(String workOrderNo);
     public ServiceProcessingVo selectDemandDealVoByNo(String workOrderNo);
     public ReservationDealVo selectReservationDealVoByNo(String workOrderNo);
+
+    public WorkHandleInfo selectWorkHandleInfo(String workOrderNo,String status);
 
 }

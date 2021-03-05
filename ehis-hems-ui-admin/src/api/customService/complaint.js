@@ -104,6 +104,33 @@ export function selectHangFlag(query) {
 }
 
 
+//--------------------------------------------------------级联关系
 
+export function reasonTwo(query) {
+  return request({
+    url: '/cs/dict/internal/selectReasonLevel2',
+    method: 'get',
+    params: query
+  })
+}
+
+
+export function reasonThree(query) {
+  return request({
+    url: '/cs/dict/internal/selectReasonLevel3',
+    method: 'get',
+    params: query
+  })
+}
+
+
+
+export function classTwo(query) {
+  return request({
+    url: '/cs/dict/internal/selectClassifyLevel2',
+    method: 'get',
+    params: query
+  })
+}
 
 

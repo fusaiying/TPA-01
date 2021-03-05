@@ -40,6 +40,8 @@ public interface CodeDictMapper
 
     public List<CodeDict> selectInsuranceSource(CodeDict codeDict);
 
+    public List<CodeDict> selectNext(CodeDict codeDict);
+
     /**
      * 新增业务码 
      * 

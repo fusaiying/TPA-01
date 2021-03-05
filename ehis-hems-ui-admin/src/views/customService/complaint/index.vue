@@ -8,7 +8,7 @@
           <el-col :span="8">
             <el-form-item label="服务项目：" prop="itemCode">
               <el-select v-model="sendForm.itemCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_complaint_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -189,7 +189,7 @@
           </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.itemCode">
-              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+              <span>{{selectDictLabel(cs_complaint_item, scope.row.itemCode)}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
@@ -273,7 +273,7 @@
           </el-table-column>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.itemCode">
-              <span>{{selectDictLabel(cs_service_item, scope.row.itemCode)}}</span>
+              <span>{{selectDictLabel(cs_complaint_item, scope.row.itemCode)}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
@@ -348,7 +348,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD HH:MM:SS')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -359,7 +359,7 @@
         ids:[],//多选框
         open:"",//是否弹出
         title:"",//弹出框名称
-        cs_service_item:[],//服务项目
+        cs_complaint_item:[],//服务项目
         cs_channel:[],//渠道
         cs_organization:[],//出单机构
         cs_priority:[],//优先级
@@ -428,8 +428,8 @@
     },
     created() {
       this.searchHandles()
-      this.getDicts("cs_service_item").then(response => {
-        this.cs_service_item = response.data;
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
       });
       this.getDicts("cs_organization").then(response => {
         this.cs_organization = response.data;
@@ -443,8 +443,8 @@
       this.getDicts("cs_order_state").then(response => {
         this.cs_order_state = response.data;
       });
-      this.getDicts("cs_channel").then(response => {
-        this.cs_channel = response.data;
+      this.getDicts("cs_complaint_item").then(response => {
+        this.cs_complaint_item = response.data;
       });
 
 

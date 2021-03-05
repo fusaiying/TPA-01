@@ -196,24 +196,23 @@
         <el-divider/>
         <el-row>
       <el-form-item label="受理渠道" prop="channelCode">
-        <el-radio-group v-model="ruleForm.channelCode">
-          <el-radio   :label="1">电话中心</el-radio>
-          <el-radio   :label="2">在线客服</el-radio>
-          <el-radio   :label="3">邮箱</el-radio>
-          <el-radio   :label="4">网站</el-radio>
-          <el-radio   :label="5">柜面</el-radio>
-          <el-radio   :label="6">寿险</el-radio>
-          <el-radio   :label="7">微信</el-radio>
-          <el-radio   :label="8">监管</el-radio>
-          <el-radio   :label="9">媒体</el-radio>
-        </el-radio-group>
+        <el-row>
+            <el-radio-group v-model="ruleForm.channelCode">
+              <el-radio
+                v-for="dict in cs_channel"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
+              </el-radio>
+            </el-radio-group>
+        </el-row>
       </el-form-item>
         </el-row>
         <el-row>
         <el-col :span="8">
         <el-form-item label="服务项目：" prop="itemCode">
           <el-select v-model="ruleForm.itemCode" class="item-width" placeholder="请选择" controls-position="right" :min="0">
-            <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+            <el-option v-for="item in cs_complaint_item" :key="item.dictValue" :label="item.dictLabel"
                        :value="item.dictValue"/>
           </el-select>
         </el-form-item>
@@ -286,7 +285,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="contactsPerson.language">
               <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -420,7 +419,8 @@
     data() {
 
       return {
-        cs_service_item:[],//服务项目
+        cs_channel: [],//
+        cs_complaint_item:[],//服务项目
         cs_sex:[],//性别
         cs_priority:[],//优先级
         cs_communication_language:[],//语言
@@ -497,7 +497,11 @@
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           'callPerson.mobilePhone': [
-            {required: true, message: "来电号码不能为空", trigger: "blur"}
+            {required: true, message: "来电号码不能为空", trigger: "blur"},
+            {required: true,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+              trigger: "blur"},
           ],
           organCode:  [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
@@ -566,8 +570,8 @@
       debugger;
       window.aaa = this;
       this.searchHandle()
-      this.getDicts("cs_service_item").then(response => {
-        this.cs_service_item = response.data;
+      this.getDicts("cs_complaint_item").then(response => {
+        this.cs_complaint_item = response.data;
       });
       this.getDicts("cs_priority").then(response => {
         this.cs_priority = response.data;
@@ -581,6 +585,10 @@
       this.getDicts("cs_organization").then(response => {
         this.cs_organization = response.data;
       });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
+      });
+
 
     },
 

@@ -1,12 +1,11 @@
 package com.paic.ehis.cs.mapper;
 
-import com.paic.ehis.cs.domain.AcceptDetailInfo;
-import com.paic.ehis.cs.domain.FlowLog;
-import com.paic.ehis.cs.domain.PersonInfo;
-import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.Level3;
+import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
 
@@ -34,6 +33,16 @@ public interface ComplaintAcceptVoMapper {
      */
     public int updateReservedCancelStatus(String workOrderNo);
 
+    /**
+     * 查询一级投诉分类
+     * @return
+     */
+    public List<Level3> selectLevel1();
+    /**
+     * 查询2级投诉分类
+     * @return
+     */
+    public List<Level3> selectLevel2(@Param("parentCode") String parentCode);
 
-
+    public List<CodeDict> selectAllByLevelType(@Param("codeType") String codeType);
 }

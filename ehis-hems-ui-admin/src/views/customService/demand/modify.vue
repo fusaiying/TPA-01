@@ -175,7 +175,7 @@
           </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
-          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
@@ -241,9 +241,9 @@
         <el-row>
             <el-form-item label="修改原因："  prop="editInfo.editReason">
               <el-radio-group v-model="workPoolData.editInfo.editReason">
-                <el-radio label="1">客户申请变动</el-radio>
-                <el-radio label="2">操作失误</el-radio>
-                <el-radio label="3">其他原因</el-radio>
+                <el-radio label="01">客户申请变动</el-radio>
+                <el-radio label="02">操作失误</el-radio>
+                <el-radio label="03">其他原因</el-radio>
               </el-radio-group>
             </el-form-item>
         </el-row>
@@ -284,7 +284,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -339,7 +339,11 @@
           {required: true, message: "修改说明不能为空", trigger: "blur"}
         ],
           'contactsPerson.mobilePhone':[
-          {required: true, message: "联系人手机不能为空", trigger: "blur"}
+          {required: true, message: "联系人手机不能为空", trigger: "blur"},
+            {required: true,
+              message: "目前只支持中国大陆的手机号码",
+              pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+              trigger: "blur"},
         ],
           channelCode: [
           {required: true, message: "受理渠道不能为空", trigger: "blur"}

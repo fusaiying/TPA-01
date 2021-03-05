@@ -212,7 +212,7 @@
             <el-form-item label="服务项目：" prop="itemCode">
               <el-select v-model="ruleForm.itemCode" class="item-width" placeholder="请选择" controls-position="right"
                          :min="0">
-                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_demand_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -515,7 +515,7 @@ export default {
 
     return {
       cs_relation: [],//关系
-      cs_service_item: [],//服务项目
+      cs_demand_item: [],//服务项目
       cs_sex: [],//性别
       cs_priority: [],//优先级
       cs_communication_language: [],//语言
@@ -591,8 +591,8 @@ export default {
   created() {
     //window.aaa = this;
     this.searchHandle()
-    this.getDicts("cs_service_item").then(response => {
-      this.cs_service_item = response.data;
+    this.getDicts("cs_demand_item").then(response => {
+      this.cs_demand_item = response.data;
     });
     this.getDicts("cs_priority").then(response => {
       this.cs_priority = response.data;

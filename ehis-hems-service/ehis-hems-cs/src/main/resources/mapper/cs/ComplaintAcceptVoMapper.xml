@@ -30,6 +30,7 @@
         <result property="channelCode" column="channel_code"/>
         <result property="priorityLevel" column="priority_level"/>
         <result property="content" column="content"/>
+        <result property="itemCode" column="item_code"/>
     </resultMap>
 
     <select id="selectComplaintAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -82,7 +83,7 @@
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,b.priority_level ASC,a.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVoListOne" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="ComplaintAcceptVoResult">
@@ -142,7 +143,7 @@
             <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
             <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
         ORDER BY
-        isRedWord DESC,b.priority_level ASC,a.accept_time asc
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
     </select>
 
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
@@ -403,4 +404,16 @@ WHERE
         update work_order_accept set status = '05'
         where  work_order_no = #{workOrderNo}
     </update>
+    <select id="selectLevel1" resultType="com.paic.ehis.cs.domain.vo.Level3">
+        select code,code_name from code_dict where code_type = "cs_reason_level1"
+    </select>
+
+    <select id="selectLevel2" parameterType="string" resultType="com.paic.ehis.cs.domain.vo.Level3">
+        select code,code_name from code_dict where parent_code = #{parentCode}
+    </select>
+
+    <select id="selectAllByLevelType" parameterType="string" resultType="com.paic.ehis.cs.domain.CodeDict">
+        select code, code_name, parent_code, code_type from code_dict
+        where code_type = #{code_type,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -13,6 +13,7 @@ import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.utils.VoUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -89,6 +90,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
     @Override
     public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO) {
+        acceptDTO.setUpdateBy(SecurityUtils.getUsername());
         List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";
@@ -210,8 +212,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         workOrderAccept.setHolderName(demandAcceptVo.getHolderName());
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
-        workOrderAccept.setAcceptTime(demandAcceptVo.getAcceptTime());
-        workOrderAccept.setModifyTime(demandAcceptVo.getModifyTime());
+        workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -297,8 +299,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         AcceptDetailInfo acceptDetailInfo = acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
      //   PersonInfo callPerson = personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
         PersonInfo callPerson1 = personInfoMapper.selectPersonInfoById(demandAcceptVo.getCallPersonId());
+        PersonInfo callPerson=new PersonInfo();
+        BeanUtils.copyProperties(callPerson1, callPerson);
      //   PersonInfo contactsPerson = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo contactsPerson1 = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
+        PersonInfo contactsPerson=new PersonInfo();
+        BeanUtils.copyProperties(contactsPerson1, contactsPerson);
         FlowLog flowLog = new FlowLog();
         WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
 
@@ -334,28 +340,24 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         acceptDetailInfoMapper.updateAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        callPerson1.setName(demandAcceptVo.getCallPerson().getName());
-        callPerson1.setMobilePhone(demandAcceptVo.getCallPerson().getMobilePhone());
-        callPerson1.setCreatedBy(SecurityUtils.getUsername());
-        callPerson1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        callPerson1.setUpdatedBy(SecurityUtils.getUsername());
-        callPerson1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(callPerson1);
-        PersonInfo callPerson = personInfoMapper.selectPersonInfoById(callPerson1.getPersonId());
+        callPerson.setName(demandAcceptVo.getCallPerson().getName());
+        callPerson.setMobilePhone(demandAcceptVo.getCallPerson().getMobilePhone());
+        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(callPerson);
+
         //插入联系人
-        contactsPerson1.setSex(demandAcceptVo.getContactsPerson().getSex());
-        contactsPerson1.setName(demandAcceptVo.getContactsPerson().getName());
-        contactsPerson1.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
-        contactsPerson1.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
-        contactsPerson1.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
-        contactsPerson1.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        contactsPerson1.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson1.setCreatedBy(SecurityUtils.getUsername());
-        contactsPerson1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        contactsPerson1.setUpdatedBy(SecurityUtils.getUsername());
-        contactsPerson1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(contactsPerson1);
-        PersonInfo contactsPerson = personInfoMapper.selectPersonInfoById(contactsPerson1.getPersonId());
+        contactsPerson.setSex(demandAcceptVo.getContactsPerson().getSex());
+        contactsPerson.setName(demandAcceptVo.getContactsPerson().getName());
+        contactsPerson.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
+        contactsPerson.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
+        contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
+        contactsPerson.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
+        contactsPerson.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(contactsPerson);
+
 
 
         String editId = PubFun.createMySqlMaxNoUseCache("cs_edit_id", 10, 8);

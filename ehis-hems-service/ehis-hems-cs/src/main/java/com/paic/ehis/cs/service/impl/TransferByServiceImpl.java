@@ -5,10 +5,14 @@ import java.util.List;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.security.utils.SecurityUtils;
+import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
+import com.paic.ehis.cs.mapper.FlowLogMapper;
 import com.paic.ehis.cs.mapper.TransferByMapper;
+import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
 import com.paic.ehis.cs.service.ITransferByService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,12 @@ public class TransferByServiceImpl implements ITransferByService
 {
     @Autowired
     private TransferByMapper transferByMapper;
+
+    @Autowired
+    private WorkOrderAcceptMapper workOrderAcceptMapper;
+
+    @Autowired
+    private FlowLogMapper flowLogMapper;
 
     /**
      * 查询转办信息 
@@ -61,22 +71,49 @@ public class TransferByServiceImpl implements ITransferByService
     {
         List<UmCode> list=demandAcceptVo.getUmCode();
         TransferBy transferBy=new TransferBy();
-      // int count=0;
-        for (UmCode umCode:list){
+        //获得工单号
+        transferBy.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        //随机生成流水号
+        transferBy.setTransferId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("transfer_id",10,6)));
+        transferBy.setUmCode(list.get(0).getValue());
+        transferBy.setReason(demandAcceptVo.getReason());
+        transferBy.setStatus("Y");
+        transferBy.setCreatedBy(SecurityUtils.getUsername());
+        transferBy.setCreatedTime(DateUtils.getNowDate());
+        transferBy.setUpdatedBy(SecurityUtils.getUsername());
+        transferBy.setUpdatedTime(DateUtils.getNowDate());
+        transferByMapper.insertTransferBy(transferBy);
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(demandAcceptVo.getWorkOrderNo());
+        workOrderAccept.setUpdateBy(list.get(0).getValue());
+        workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+        workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
+        for (int i=1;i< list.size();i++){
             //获得工单号
             transferBy.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
             //随机生成流水号
             transferBy.setTransferId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("transfer_id",10,6)));
-
-            transferBy.setUmCode(umCode.getValue());
+            transferBy.setUmCode(list.get(i).getValue());
+            transferBy.setStatus("T");
             transferBy.setReason(demandAcceptVo.getReason());
             transferBy.setCreatedBy(SecurityUtils.getUsername());
             transferBy.setCreatedTime(DateUtils.getNowDate());
             transferBy.setUpdatedBy(SecurityUtils.getUsername());
             transferBy.setUpdatedTime(DateUtils.getNowDate());
             transferByMapper.insertTransferBy(transferBy);
-        }/*count++*/;
-       // return count;
+        }
+
+        FlowLog flowLog=new FlowLog();
+        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setToReason(demandAcceptVo.getReason());
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLog.setStatus("Y");
+        flowLog.setOperateCode("10");
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLogMapper.insertFlowLog(flowLog);
     }
 
     /**

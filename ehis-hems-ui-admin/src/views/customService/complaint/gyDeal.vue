@@ -194,7 +194,7 @@
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
-        <span style="color: blue">基因改善-服务受理信息</span>
+        <span style="color: blue">根因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
@@ -636,7 +636,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -832,7 +832,7 @@
       //反显信息需求
       searchHandle() {
         let query=this.queryParams
-        complainSearch(query).then(res => {
+        complainSearchServer(query).then(res => {
           if (res != null && res.code === 200) {
             console.log("投诉页面反显数据",res.data)
             this.workPoolData = res.data

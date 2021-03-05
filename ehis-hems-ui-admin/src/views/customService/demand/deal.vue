@@ -432,7 +432,7 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column prop="alterTime" label="修改时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="alterTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.alterTime | changeDate}}</span>
             </template>
@@ -590,7 +590,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -885,33 +885,62 @@
 
       //提交
       submit(){
-        this.$refs.ruleForm.validate((valid) => {
-          if (valid){
-            let insert = this.ruleForm
-            insert.sign = "02"
-            insert.workOrderNo = this.$route.query.workOrderNo
-            dealADD(insert).then(res => {
-              if (res != null && res.code === 200) {
-                this.$message.success("提交成功")
-                if (res.rows.length <= 0) {
-                  return this.$message.warning(
-                    "失败！"
-                  )
-                }
-              }
-            }).catch(res => {
-            })
-          }else {
-            return false
-          }
 
-        })
+        if(this.ruleForm.businessProcess=="01") {
+          if (this.HCSTotal == 0) {
+            this.$refs.ruleForm.validate((valid) => {
+              if (valid) {
+                let insert = this.ruleForm
+                insert.sign = "02"
+                insert.workOrderNo = this.$route.query.workOrderNo
+                dealADD(insert).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message.success("提交成功")
+                    if (res.rows.length <= 0) {
+                      return this.$message.warning(
+                        "失败！"
+                      )
+                    }
+                  }
+                }).catch(res => {
+                })
+              } else {
+                return false
+              }
+
+            })
+          } else {
+            this.$message.warning("请先处理完成 HCS记录在进行提交")
+          }
+        }else {
+            this.$refs.ruleForm.validate((valid) => {
+              if (valid) {
+                let insert = this.ruleForm
+                insert.sign = "02"
+                insert.workOrderNo = this.$route.query.workOrderNo
+                dealADD(insert).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.$message.success("提交成功")
+                    if (res.rows.length <= 0) {
+                      return this.$message.warning(
+                        "失败！"
+                      )
+                    }
+                  }
+                }).catch(res => {
+                })
+              } else {
+                return false
+              }
+
+            })
+
+
+        }
 
       },
-      //暂存
+      //暂存（说不用校验）
       temporary(){
-        this.$refs.ruleForm.validate((valid) => {
-          if (valid){
             let insert=this.ruleForm
             insert.sign="01"
             insert.workOrderNo=this.$route.query.workOrderNo
@@ -927,10 +956,6 @@
             }).catch(res => {
 
             })
-          }
-        })
-
-
       },
 
       //查询轨迹表

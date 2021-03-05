@@ -209,7 +209,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled >
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -217,7 +220,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
               <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -230,7 +233,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.callRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -246,7 +249,7 @@
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority" >
               <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -254,7 +257,7 @@
           <el-col :span="8">
             <el-form-item label="联系人与被保人关系：" prop="priority" >
               <el-select v-model="workPoolData.contactsRelationBy" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -265,7 +268,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -302,7 +305,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
               <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -390,7 +393,7 @@
           </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
-          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
+          <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.makeTime | changeDate}}</span>
             </template>
@@ -452,10 +455,18 @@
         <el-row>
           <el-form-item label="取消原因：" prop="editReason" >
             <el-radio-group v-model="submitForm.editReason">
-              <el-radio   label="1">客户申请变动</el-radio>
-              <el-radio   label="2">操作失误</el-radio>
-              <el-radio   label="3">其他原因</el-radio>
-            </el-radio-group>
+              <el-radio
+                v-for="dict in cs_cancle_reason"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
+              </el-radio>
+<!--            </el-radio-group>-->
+<!--            <el-radio-group v-model="submitForm.editReason">-->
+<!--              <el-radio   label="1">客户申请变动</el-radio>-->
+<!--              <el-radio   label="2">操作失误</el-radio>-->
+<!--              <el-radio   label="3">其他原因</el-radio>-->
+          </el-radio-group>
           </el-form-item>
 
         </el-row>
@@ -492,7 +503,19 @@
   import {demandListAndPublicPool,demandListAndPersonalPool,FlowLogSearch,cancelSubmit} from '@/api/customService/demand'
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_end_case'},
+    {dictType: 'cs_cancle_reason'},
+  ]
   export default {
     components: {
       modifyDetails,
@@ -500,7 +523,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -530,6 +553,18 @@
         readonly: true,
         dialogFormVisible: false,
         updateBy: undefined,
+        cs_cancle_reason:[],
+        dictList: [],
+        cs_channel: [],
+        cs_priority: [],
+        cs_sex: [],
+        cs_communication_language: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_organization: [],
+        cs_relation: [],
+        cs_feedback_type: [],
+        cs_end_case: [],
         sendForm: {
           channle:"",
           textarea:"",
@@ -604,6 +639,51 @@
       this.getDicts("cs_order_state").then(response => {
         this.cs_order_state = response.data;
       });
+
+    },
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_end_case = this.dictList.find(item => {
+        return item.dictType === 'cs_end_case'
+      }).dictDate
+      this.cs_cancle_reason = this.dictList.find(item => {
+        return item.dictType === 'cs_cancle_reason'
+      }).dictDate
+
 
     },
 

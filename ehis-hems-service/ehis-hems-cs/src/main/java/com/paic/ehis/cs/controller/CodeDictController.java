@@ -32,6 +32,35 @@ public class CodeDictController extends BaseController
     @Autowired
     private ICodeDictService codeDictService;
 
+
+    /**
+     * 查询二级投诉 列表
+     */
+    @GetMapping("/selectClassifyLevel2")
+    public AjaxResult selectClassifyLevel2(CodeDict codeDict){
+        return AjaxResult.success(codeDictService.selectClassifyLevel2(codeDict));
+    }
+
+    /**
+     * 查询二级投诉原因 列表
+     */
+    @GetMapping("/selectReasonLevel2")
+    public AjaxResult selectReasonLevel2(CodeDict codeDict){
+        return AjaxResult.success(codeDictService.selectReasonLevel2(codeDict));
+    }
+
+
+    /**
+     * 查询三级投诉原因 列表
+     */
+    @GetMapping("/selectReasonLevel3")
+    public AjaxResult selectReasonLevel3(CodeDict codeDict){
+        return AjaxResult.success(codeDictService.selectReasonLevel3(codeDict));
+    }
+
+
+
+
     /**
      * 查询业务码 列表
      */

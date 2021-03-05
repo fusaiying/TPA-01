@@ -127,7 +127,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"  />
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,12 +194,15 @@
       <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="160px"
                label-position="right" size="mini">
 
-        <span style="color: blue">基因改善-服务受理信息</span>
+        <span style="color: blue">根因改善-服务受理信息</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" disabled >
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -216,7 +219,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="sex" >
-              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -233,7 +239,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -256,7 +265,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -292,13 +301,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini" readonly/>
+              <el-select v-model="workPoolData.organCode" class="item-width" disabled placeholder="">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
-          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini" readonly/>
+          <el-select v-model="workPoolData.persuasionFlag" class="item-width" disabled >
+            <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                       :value="item.dictValue"/>
+          </el-select>
         </el-form-item>
         </el-row>
 
@@ -571,7 +586,7 @@
     filters: {
       changeDate: function (value) {
         if (value !== null) {
-          return moment(value).format('YYYY-MM-DD')
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
         }
       }
     },
@@ -583,6 +598,13 @@
         flowLogCount: 0,
         //传过来的工单号
         workOrderNo:"",
+        cs_priority:[],//优先级
+        cs_service_item:[],//服务项目
+        cs_channel:[],//渠道
+        cs_organization:[],//出单机构
+        cs_sex:[],//性别
+        cs_communication_language:[],//语言
+        cs_whether_flag:[],
         //需要填入数据的部分
         ruleForm:{
           editReason:"",
@@ -672,10 +694,30 @@
       this.queryParams.status=this.$route.query.status;
       this.searchHandle()
       this.searchFlowLog()
-      this.getDicts("sys_oper_type").then(response => {
-        this.states = response.data;
+      // this.getDicts("sys_oper_type").then(response => {
+      //   this.states = response.data;
+      // });
+      this.getDicts("cs_sex").then(response => {
+        this.cs_sex = response.data;
       });
-
+      this.getDicts("cs_communication_language").then(response => {
+        this.cs_communication_language = response.data;
+      });
+      this.getDicts("cs_service_item").then(response => {
+        this.cs_service_item = response.data;
+      });
+      this.getDicts("cs_organization").then(response => {
+        this.cs_organization = response.data;
+      });
+      this.getDicts("cs_priority").then(response => {
+        this.cs_priority = response.data;
+      });
+      this.getDicts("cs_channel").then(response => {
+        this.cs_channel = response.data;
+      });
+      this.getDicts("cs_whether_flag").then(response => {
+        this.cs_whether_flag = response.data;
+      });
     },
 
     methods: {

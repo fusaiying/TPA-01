@@ -15,11 +15,11 @@
           <el-row>
 
               <el-form-item    v-for="(umCode, index) in dynamicValidateForm.umCode"
-                               :label="'协办方UM账号' + index+':'"
+                               :label="'协办方UM账号:'"
                                :key="umCode.key"
                                :prop="'umCode.' + index + '.value'"
                                :rules="{
-                               required: true, message: '域名不能为空', trigger: 'blur'
+                               required: true, message: 'UM账号不能为空', trigger: 'blur'
                                }"
                                >
                 <el-col :span="12">

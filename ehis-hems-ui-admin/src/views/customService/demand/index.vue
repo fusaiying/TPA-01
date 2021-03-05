@@ -32,7 +32,7 @@
           <el-col :span="8">
             <el-form-item label="受理日期：" prop="acceptorTime">
               <el-date-picker
-                v-model="sendForm.acceptorTime"
+                v-model="timeArray.acceptorTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -49,7 +49,7 @@
           <el-col :span="8">
             <el-form-item label="处理日期：" prop="HandlerTime">
               <el-date-picker
-                v-model="sendForm.handlerTime"
+                v-model="timeArray.handlerTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -111,7 +111,7 @@
             <el-form-item label="预约日期：" prop="appointmentTime">
               <el-date-picker
                 disabled=""
-                v-model="sendForm.appointmentTime"
+                v-model="timeArray.appointmentTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -377,6 +377,11 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
+        timeArray:{
+          acceptorTime:[],//受理时间数组
+          appointmentTime:[],//预约时间数组
+          handlerTime:[],//处理时间数组
+        },
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -384,9 +389,6 @@
           channelCode: "",//受理渠道
           acceptBy: "",//受理人
           modifyBy: "",//处理人
-          acceptorTime:[],//受理时间数组
-          appointmentTime:[],//预约时间数组
-          handlerTime:[],//处理时间数组
           workOrderNo: "",//工单编号
           policyNo: "",//保单号
           policyItemNo: "",//分单号
@@ -574,17 +576,19 @@
       },
       resetForm() {
         this.$refs.sendForm.resetFields()
+        this.searchHandle()
       },
       //待处理查询
       searchHandle() {
         let queryParams;
-        if (this.sendForm.acceptorTime.length > 0) {
+        if (this.timeArray.length > 0) {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
+          queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
+          queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
         } else {
           queryParams = this.sendForm;
         }
+
         queryParams.pageNum = this.pageNum;
         queryParams.pageSize = this.pageSize;
         demandListAndPublicPool(queryParams).then(res => {
@@ -604,10 +608,10 @@
       //处理中查询
       searchHandle1() {
         let queryParams;
-        if (this.sendForm.acceptorTime.length > 0) {
+        if (this.timeArray.acceptorTime.length > 0) {
           queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=acceptorTime[0]
-          queryParams.acceptTimeEnd=acceptorTime[1]
+          queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
+          queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
         } else {
           queryParams = this.sendForm;
         }

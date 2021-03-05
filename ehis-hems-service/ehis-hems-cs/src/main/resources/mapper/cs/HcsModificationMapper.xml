@@ -35,7 +35,7 @@
             <if test="alterContent != null  and alterContent != ''"> and alter_content = #{alterContent}</if>
             <if test="relaEditId != null  and relaEditId != ''"> and rela_edit_id = #{relaEditId}</if>
             <if test="callSerialNum != null  and callSerialNum != ''"> and call_serial_num = #{callSerialNum}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            and status ="Y"
             <if test="createdBy != null  and createdBy != ''"> and created_by = #{createdBy}</if>
             <if test="createdTime != null "> and created_time = #{createdTime}</if>
             <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>

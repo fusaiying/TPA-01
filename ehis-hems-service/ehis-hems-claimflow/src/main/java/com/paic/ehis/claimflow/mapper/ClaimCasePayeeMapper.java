@@ -46,6 +46,13 @@ public interface ClaimCasePayeeMapper
      * @return 结果
      */
     public int updateClaimCasePayee(ClaimCasePayee claimCasePayee);
+    /**
+     * 修改案件领款人信息
+     *
+     * @param claimCasePayee 案件领款人信息
+     * @return 结果
+     */
+    public int updateClaimCasePayeeByRptNo(ClaimCasePayee claimCasePayee);
 
     /**
      * 删除案件领款人信息

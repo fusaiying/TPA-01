@@ -200,7 +200,7 @@
     </el-form>
     <!-- 保单信息查询模态框 -->
     <insured-modal :value="dialogPolicy" :dictList="dictList" :node="node" @infoShow="insuredInfoShow"
-                   @getPropData="getPropData" :fixInfo="fixInfo"
+                   @getPropData="getPropData" :fixInfo="fixInfo" :batchInfo="batchInfo"  @getPayeeData="getPayeeData"
                    @lightShow="lightListDeal" @closeDialogVisable="closeDialogVisable"/>
   </el-card>
 </template>
@@ -220,6 +220,7 @@
     },
     mixins: [],
     props: {
+      batchInfo:Object,
       fixInfo: {
         type: Object,
         default: function () {
@@ -747,6 +748,9 @@
       },
       getLabel_type(value) {
         return this.selectDictLabel(this.label_typeOptions, value)
+      },
+      getPayeeData() {
+        this.$emit('getPayeeDatas')
       },
       //校验
       validataForm(){

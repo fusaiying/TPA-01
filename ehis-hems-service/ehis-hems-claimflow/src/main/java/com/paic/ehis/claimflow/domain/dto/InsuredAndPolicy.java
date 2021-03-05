@@ -9,9 +9,19 @@ import java.util.List;
 
 public class InsuredAndPolicy implements Serializable {
 
+    private String claimType;//理赔类型
+
     private List<PolicyVo> policyNos;//保单号集合
 
     private ClaimCaseInsured claimCaseInsured;//案件被保人信息表
+
+    public String getClaimType() {
+        return claimType;
+    }
+
+    public void setClaimType(String claimType) {
+        this.claimType = claimType;
+    }
 
     public List<PolicyVo> getPolicyNos() {
         return policyNos;
@@ -32,7 +42,8 @@ public class InsuredAndPolicy implements Serializable {
     @Override
     public String toString() {
         return "InsuredAndPolicy{" +
-                "policyNos=" + policyNos +
+                "claimType='" + claimType + '\'' +
+                ", policyNos=" + policyNos +
                 ", claimCaseInsured=" + claimCaseInsured +
                 '}';
     }

@@ -1,5 +1,7 @@
 package com.paic.ehis.claimflow.mapper;
 
+import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
+import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
 import com.paic.ehis.system.api.domain.ClaimCasePolicy;
@@ -72,5 +74,7 @@ public interface ClaimCasePolicyMapper
     List<ClaimCasePolicy> selectClaimCasePolicyByRptNoOne(String rptNo);
 
     List<PolicyVo> selectInsuredListByNumber(PolicyDTO policyDTO);
+
+    List<ClaimCasePayee> selectPayeeListByInsured(ClaimCaseInsured claimCaseInsured);
 
 }

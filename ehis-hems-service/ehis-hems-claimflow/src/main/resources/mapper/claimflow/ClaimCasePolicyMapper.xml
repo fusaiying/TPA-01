@@ -191,4 +191,17 @@
         from claim_case_policy
         where insured_no = #{insuredNo} and status='Y' and rpt_no = #{rptNo}
     </select>
+
+    <select id="selectPayeeListByInsured" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseInsured" resultType="com.paic.ehis.claimflow.domain.ClaimCasePayee">
+      select ccp.payee_id payeeId, ccp.rpt_no rptNo, ccp.pay_mode payMode, ccp.relation_ins relationIns,
+      ccp.payee_name payeeName, ccp.payee_sex payeeSex, ccp.payee_id_type payeeIdType, ccp.payee_id_no payeeIdNo,
+       ccp.payee_occupation payeeOccupation, ccp.payee_nationality payeeNationality, ccp.id_end_date idEndDate,
+       ccp.payee_mobile payeeMobile, ccp.payee_bank payeeBank, ccp.acc_attribute accAttribute, ccp.acc_no accNo,
+       ccp.payee_ratio payeeRatio, ccp.province province, ccp.city city, ccp.district district, ccp.address address,
+       ccp.status status, ccp.create_by createBy, ccp.create_time createTime, ccp.update_by updateBy, ccp.update_time updateTime
+       from claim_case cc JOIN claim_case_insured cci on cc.rpt_no=cci.rpt_no
+      and cci.insured_no=#{insuredNo} and cci.name=#{name} and cci.id_type=#{idType} and cci.id_no=#{idNo}
+      and cci.status='Y' join claim_case_payee ccp on cc.rpt_no=ccp.rpt_no and ccp.status='Y'
+      where cc.case_status='99' and cc.status='Y' ORDER BY cc.update_time desc limit 1
+    </select>
 </mapper>

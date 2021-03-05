@@ -85,8 +85,8 @@
 
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
-                <el-button   size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
-                <el-button   size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
+                <el-button :disabled="scope.row.status==='N'"  size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
+                <el-button :disabled="scope.row.status==='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
                 </el-button>
               </template>
             </el-table-column>
@@ -386,6 +386,7 @@
           };
           if(!this.searchBtn) {
             params.recMessageFlag = '01';
+            params.status = 'Y';
           }
 
           this.loading = true;

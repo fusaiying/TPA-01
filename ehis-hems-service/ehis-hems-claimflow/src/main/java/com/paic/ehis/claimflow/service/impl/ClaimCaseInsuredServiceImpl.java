@@ -2,16 +2,14 @@ package com.paic.ehis.claimflow.service.impl;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
+import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 import com.paic.ehis.claimflow.domain.PolicyRiskRelation;
 import com.paic.ehis.claimflow.domain.dto.InsuredAndPolicy;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseInsureAndPoliyVo;
 import com.paic.ehis.claimflow.domain.vo.DutyVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
-import com.paic.ehis.claimflow.mapper.ClaimCaseInsuredMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper;
-import com.paic.ehis.claimflow.mapper.PolicyInfoMapper;
-import com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper;
+import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseInsuredService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -38,6 +36,9 @@ import static com.paic.ehis.claimflow.utils.AgeUtils.getAge;
 public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
     @Autowired
     private ClaimCaseInsuredMapper claimCaseInsuredMapper;
+
+    @Autowired
+    private ClaimCasePayeeMapper claimCasePayeeMapper;
 
     @Autowired
     private ClaimCasePolicyMapper claimCasePolicyMapper;
@@ -95,12 +96,13 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
                     policyVo1.setOrgPolicyItemNo(policyVo.getPolicyItemNo());
                     policyVo1.setSsFlag(policyVo.getSsFlag());
                     policyVo1.setPolicyManageCom(policyVo.getPolicyManageCom());
-                    List<PolicyRiskRelation> policyRiskRelations=policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
-                    for (PolicyRiskRelation policyRiskRelation:policyRiskRelations
-                    ) {policyVo1.setRiskName(policyRiskRelation.getRiskName());
+                    List<PolicyRiskRelation> policyRiskRelations = policyRiskRelationMapper.selectRiskNameInsuredList(policyVo.getPolicyNo());
+                    for (PolicyRiskRelation policyRiskRelation : policyRiskRelations
+                    ) {
+                        policyVo1.setRiskName(policyRiskRelation.getRiskName());
                         policyVo1.setRiskCode(policyRiskRelation.getRiskCode());
                     }
-                    List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(),policyVo1.getInsuredNo());//小集合
+                    List<DutyVo> dutyVos = policyInfoMapper.selectDutyList(policyVo1.getRiskName(), policyVo1.getInsuredNo());//小集合
                     policyVo.setMinData(dutyVos);
                     l.add(policyVo);
                 }
@@ -205,7 +207,7 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
             i = claimCaseInsuredMapper.insertClaimCaseInsured(claimCaseInsured);
         }
         List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(claimCaseInsured.getRptNo());//案件保单关联表
-        if (claimCasePolicies != null && claimCasePolicies.size() > 0){
+        if (claimCasePolicies != null && claimCasePolicies.size() > 0) {
             for (ClaimCasePolicy claimCasePoliciesTwo : claimCasePolicies) {//全部置为无效
                 ClaimCasePolicy claimCasePolicy1 = new ClaimCasePolicy();
                 relationId = claimCasePoliciesTwo.getRelationId();
@@ -246,4 +248,34 @@ public class ClaimCaseInsuredServiceImpl implements IClaimCaseInsuredService {
         }
         return i;
     }
+
+    /**
+     * 查询上次被保人的领款人信息
+     *
+     * @param claimCaseInsured
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public int selectPayeeListByInsured(ClaimCaseInsured claimCaseInsured) {
+        int i=0;
+        List<ClaimCasePayee> claimCasePayees = claimCasePolicyMapper.selectPayeeListByInsured(claimCaseInsured);
+        if (claimCasePayees.size()>0){
+            ClaimCasePayee claimCasePayee = new ClaimCasePayee();
+            claimCasePayee.setStatus("N");
+            claimCasePayee.setRptNo(claimCaseInsured.getRptNo());
+            claimCasePayeeMapper.updateClaimCasePayeeByRptNo(claimCasePayee);
+            for (ClaimCasePayee claimCasePayee1 : claimCasePayees) {
+                claimCasePayee1.setRptNo(claimCaseInsured.getRptNo());
+                claimCasePayee1.setPayeeId(null);
+                claimCasePayee1.setCreateTime(DateUtils.getNowDate());
+                claimCasePayee1.setCreateBy(SecurityUtils.getUsername());
+                claimCasePayee1.setUpdateTime(DateUtils.getNowDate());
+                claimCasePayee1.setUpdateBy(SecurityUtils.getUsername());
+                i = claimCasePayeeMapper.insertClaimCasePayee(claimCasePayee1);
+            }
+        }
+        return i;
+    }
+
 }

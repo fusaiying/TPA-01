@@ -153,6 +153,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where payee_id = #{payeeId}
     </update>
 
+    <update id="updateClaimCasePayeeByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCasePayee">
+        update claim_case_payee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null and status != ''">status = #{status}</if>
+        </trim>
+        where rpt_no=#{rptNo} and status='Y'
+    </update>
+
     <delete id="deleteClaimCasePayeeById" parameterType="Long">
         delete from claim_case_payee where payee_id = #{payeeId}
     </delete>

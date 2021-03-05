@@ -51,33 +51,6 @@
               value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-col>
-      <!--  <el-col :span="8">
-          <el-form-item v-if="firstSerIllnessDateShow" label="首次重疾确诊日期：" prop="firstSerIllnessDate">
-            <el-date-picker
-              v-model="baseForm.firstSerIllnessDate"
-              class="item-width"
-              type="date"
-              clearable
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"/>
-          </el-form-item>
-        </el-col>-->
-        <!--<el-col :span="8">
-          <el-form-item label="出险类型：" prop="accType">
-            <el-select v-model="baseForm.accType" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in incidenttypeOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="事故者现状：" prop="currSituation">
-            <el-select v-model="baseForm.currSituation" class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="option in current_stateOptions" :key="option.dictValue" :label="option.dictLabel"
-                         :value="option.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>-->
         <el-col :span="8">
           <el-form-item label="死亡时间：" prop="deathDate">
             <el-date-picker
@@ -90,7 +63,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="是否预售权：" prop="preAuthFlag">
+          <el-form-item label="是否预授权：" prop="preAuthFlag">
             <el-select v-model="baseForm.preAuthFlag" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="option in preAuthFlagOptions" :key="option.dictValue" :label="option.dictLabel"
                          :value="option.dictValue"/>
@@ -227,26 +200,7 @@
     components: {},
     filters: {},
     data() {
-     /* const checkClaimAmount = (rule, value, callback) => {
-        const regx = /^(\d+|\d+\.\d{1,2})$/
-        if (value) {
-          if (value < 0) {
-            callback(new Error("索赔金额录入不合法，请检查"))
-            return this.$message.warning(
-              "索赔金额录入不合法，请检查！"
-            )
-          } else if (!regx.test(value)) {
-            callback(new Error("索赔金额录入不合法，请检查"));
-            return this.$message.warning(
-              "索赔金额录入不合法，请检查！"
-            )
-          } else {
-            callback();
-          }
-        } else {
-          callback();
-        }
-      }*/
+
       const checkDate = (rule, value, callback) => {
         let date = new Date();
         let month = date.getMonth() + 1

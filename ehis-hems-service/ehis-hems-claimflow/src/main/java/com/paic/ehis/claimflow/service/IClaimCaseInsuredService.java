@@ -3,6 +3,7 @@ package com.paic.ehis.claimflow.service;
 
 
 import com.paic.ehis.claimflow.domain.ClaimCaseInsured;
+import com.paic.ehis.claimflow.domain.ClaimCasePayee;
 import com.paic.ehis.claimflow.domain.dto.InsuredAndPolicy;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseInsureAndPoliyVo;
 
@@ -70,6 +71,13 @@ public interface IClaimCaseInsuredService
      * @return
      */
     public int insertClaimCaseInsuredAndPolicy(InsuredAndPolicy insuredAndPolicy);
+
+    /**
+     *  查询上次被保人的领款人信息
+     * @param claimCaseInsured
+     * @return
+     */
+    public int selectPayeeListByInsured(ClaimCaseInsured claimCaseInsured);
 
 
 }

@@ -107,13 +107,13 @@
 
           <el-row style="margin: 0px 10px;">
             <el-col :span="8">
-              <span class="info_span to_right">任务退回理由：</span><span class="info_span">{{ item.contractadvance }}</span>
+              <span class="info_span to_right">任务退回理由：</span><span class="info_span">{{ item.invDetailArgument }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
             <el-col :span="8">
-              <span class="info_span to_right">结果退回理由：</span><span class="info_span">{{ item.invDetailArgument }}</span>
+              <span class="info_span to_right">结果退回理由：</span><span class="info_span">{{ item.invDetailResultArgument }}</span>
             </el-col>
           </el-row>
         </div>

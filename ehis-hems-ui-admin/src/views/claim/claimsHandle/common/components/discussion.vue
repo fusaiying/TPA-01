@@ -26,24 +26,24 @@
                  label-position="right" size="mini"  :disabled="status === 'show' && (node==='sport' || node==='calculateReview')">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">账单金额：</span><span class="info_span">{{ conclusionInfo.sumBillAmount }} {{ conclusionInfo.sumBillAmount == ''  ? '' : conclusionForm.billCurrency }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : 'CNY'}}</span>
+              <span class="info_span_col to_right">折扣金额：</span><span class="info_span money_class">{{ conclusionInfo.sumHosDiscountAmount }} {{ conclusionInfo.sumHosDiscountAmount == ''  ? '' : conclusionForm.billCurrency}}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == ''  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">赔付金额：</span><span class="info_span money_class">{{ conclusionInfo.calAmount }} {{ conclusionInfo.calAmount == '' || conclusionInfo.calAmount == null  ? '' : 'CNY' }}</span>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == ''  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">拒赔金额 ：</span><span class="info_span money_class">{{ conclusionInfo.refusedAmount }} {{ conclusionInfo.refusedAmount == '' || conclusionInfo.refusedAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == ''  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">追讨金额：</span><span class="info_span money_class">{{ conclusionInfo.debtAmount}} {{ conclusionInfo.debtAmount == '' || conclusionInfo.debtAmount == null ? '' : 'CNY' }}</span>
             </el-col>
             <el-col :span="8" v-if="appealCase">
-              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == ''  ? '' : 'CNY' }}</span>
+              <span class="info_span_col to_right">本次支付差额：</span><span class="info_span money_class">{{ conclusionInfo.paymentDifference }} {{ conclusionInfo.paymentDifference == '' || conclusionInfo.paymentDifference == null  ? '' : 'CNY' }}</span>
             </el-col>
           </el-row>
 

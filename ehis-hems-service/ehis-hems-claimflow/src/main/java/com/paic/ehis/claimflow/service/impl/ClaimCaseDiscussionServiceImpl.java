@@ -166,7 +166,7 @@ public class ClaimCaseDiscussionServiceImpl implements IClaimCaseDiscussionServi
         claimCaseRecord.setHistoryFlag("N");
         claimCaseRecord.setOperation("07");
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+       // claimCaseRecord.setOperator(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         claimCaseMapper.updateClaimCase(claimCase);

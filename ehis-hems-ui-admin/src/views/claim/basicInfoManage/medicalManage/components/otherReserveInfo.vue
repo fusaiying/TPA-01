@@ -31,19 +31,6 @@
         </el-col>
 
 
-        <!--        <el-col :span="8">
-                  <el-form-item label="平安服务联系人及联系方式：" prop="contactInfo">
-                    <el-input v-model="otherReserveInfoForm.contactInfo" class="item-width" clearable maxlength="50"
-                              placeholder="请输入"/>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="8">
-                  <el-form-item label="医疗机构服务联系人及联系方式：" prop="medicalContactInfo">
-                    <el-input v-model="otherReserveInfoForm.medicalContactInfo" class="item-width" clearable maxlength="50"
-                              placeholder="请输入"/>
-                  </el-form-item>
-                </el-col>-->
 
       </el-row>
       <el-row>
@@ -161,26 +148,7 @@
         </el-col>
 
       </el-row>
-      <!--      <el-row>
-              <el-col :span="8">
-                <el-form-item label="驻点人员姓名：" prop="stationaryPointName">
-                  <el-input v-model="otherReserveInfoForm.stationaryPointName" class="item-width" clearable
-                            placeholder="请输入"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="驻点人员联系电话：" prop="stationaryPointPhone">
-                  <el-input v-model="otherReserveInfoForm.stationaryPointPhone" class="item-width" clearable
-                            placeholder="请输入"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="驻点人员工作时间：" prop="stationaryPointWorkTime">
-                  <el-input v-model="otherReserveInfoForm.stationaryPointWorkTime" class="item-width" clearable
-                            placeholder="请输入"/>
-                </el-form-item>
-              </el-col>
-            </el-row>-->
+
       <el-row>
         <el-form-item style="margin-right: 20px;" label="地址：" prop="outpatientaddress">
           <el-input v-model="otherReserveInfoForm.outpatientaddress" clearable size="mini" placeholder="请输入"

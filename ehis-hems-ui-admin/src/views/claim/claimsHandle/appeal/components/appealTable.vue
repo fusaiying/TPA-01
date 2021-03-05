@@ -5,6 +5,7 @@
     size="small"
     highlight-current-row
     tooltip-effect="dark"
+    v-loading="loading"
     style="width: 100%;">
     <el-table-column align="center" prop="discType" label="报案号" show-overflow-tooltip/>
     <el-table-column :formatter="getDeliverySourceName" align="center" prop="caseStatus"  label="交单来源" show-overflow-tooltip/>
@@ -51,13 +52,25 @@ export default {
     },
     status: String,
   },
+  watch: {
+    tableData:function(newValue) {
+      this.loading = false;
+    },
+  },
   data() {
     return {
+      loading:true,
+      detailInfo:{
+        row:'',
+        type:'',
+      },
     }
   },
   methods: {
     handleFun(row,type) {
-
+      this.detailInfo.row = row;
+      this.detailInfo.type = type;
+      this.$emit('openDialog',this.detailInfo);
     },
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)

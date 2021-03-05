@@ -210,12 +210,14 @@
           endCaseDate: [],
           policyItemNo: undefined,
           whiteStatus: undefined,
+          flag:'0',
         },
         caseNumber: false,//查询条件（报案号）是否显示
         // 查询参数
         queryParams: {
           pageNum: 1,
           pageSize: 10,
+          flag:'0',
         },
         loading: true,
         workPoolData: [],
@@ -292,6 +294,7 @@
           endDate:'',
           policyItemNo: this.searchForm.policyItemNo,
           whiteStatus: this.searchForm.whiteStatus,
+          flag:this.searchForm.flag,
         }
         if ( this.searchForm.endCaseDate!=null && this.searchForm.endCaseDate.loading>0){
           query.startDate=this.searchForm.endCaseDate[0]
@@ -316,13 +319,15 @@
             }
           }).catch(res => {})
         }else{
+          this.searchForm.flag='1'
+          query.flag='1'
           initDebt(query).then(res => {
             if (res != null && res.code === 200) {
               this.workPoolData = res.rows
               this.totalCount = res.total
               if (res.rows.length <= 0) {
                 return this.$message.warning(
-                  "未查询到工作池数据！"
+                  "未查询到数据！"
                 )
               }
             }
@@ -331,11 +336,6 @@
             if (res != null && res.code === 200) {
               this.detailData = res.rows
               this.detailTotal = res.total
-              if (res.rows.length <= 0) {
-                return this.$message.warning(
-                  "未查询到收款明细数据！"
-                )
-              }
             }
           }).catch(res => {})
         }
@@ -359,11 +359,7 @@
         initDebt(query).then(res => {
           if (res.rows.length>0){
             this.isListExport=true
-            this.download('claimflow/debt/export'+'?idNo='+this.searchForm.idNo+'&rptNo='+this.searchForm.rptNo
-              +'&policyNo='+this.searchForm.policyNo +'&hospitalCode='+this.searchForm.hospitalCode
-              +'&insuredName='+this.searchForm.insuredName+'&startDate='+this.searchForm.startDate
-              +'&endDate='+this.searchForm.endDate+'&policyItemNo='+this.searchForm.policyItemNo
-              +'&whiteStatus='+this.searchForm.whiteStatus, {
+            this.download('claimflow/debt/export', {
               ...this.searchForm
             }, `recoverMessage_${new Date().getTime()}.xlsx`)
           }else {

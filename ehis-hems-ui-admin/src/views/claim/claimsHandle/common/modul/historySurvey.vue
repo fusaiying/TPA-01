@@ -28,7 +28,7 @@
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">调查原因：</span><span class="info_span">{{ getInitiateReasonName(item.invDetailCause) }}</span>
             </el-col>
           </el-row>
@@ -43,43 +43,43 @@
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">调查项目：</span><span class="info_span">{{ item.invDetailItem }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">调查定性：：</span><span class="info_span">{{ item.invDetailNature }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">调查定性依据：</span><span class="info_span">{{ item.invDetailGist }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">事实与依据：</span><span class="info_span">{{ item.invDetailFace }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">结论：</span><span class="info_span">{{ item.conclusion }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">证明材料及件数：</span><span class="info_span">{{ item.invDetailNum }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">主管补充：</span><span class="info_span">{{ item.invDetailReplenish }}</span>
             </el-col>
           </el-row>
@@ -106,13 +106,13 @@
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">任务退回理由：</span><span class="info_span">{{ item.invDetailArgument }}</span>
             </el-col>
           </el-row>
 
           <el-row style="margin: 0px 10px;">
-            <el-col :span="8">
+            <el-col :span="24">
               <span class="info_span to_right">结果退回理由：</span><span class="info_span">{{ item.invDetailResultArgument }}</span>
             </el-col>
           </el-row>

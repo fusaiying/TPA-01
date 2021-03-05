@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
             <if test="companyname != null  and companyname != ''"> and company_name like concat('%', #{companyname}, '%')</if>
             <if test="simplename != null  and simplename != ''"> and simple_name = #{simplename}</if>
-            status = 'Y'
+           and status = 'Y'
         </where>
         order by update_time desc
     </select>

@@ -150,6 +150,7 @@
 SELECT
 	a.work_order_no,
 	a.channel_code,
+    a.item_code,
 	a.call_center_id,
 	a.contacts_person_id,
 	a.call_person_id,

@@ -8,11 +8,20 @@
     @expand-change="getMinData"
     style="width: 100%;">
     <el-table-column type="selection" align="center" content="全选"/>
-    <el-table-column prop="workOrderNo" label="工单号" align="center"/>
-    <el-table-column prop="channelCode" label="受理渠道" align="center"/>
-    <el-table-column prop="itemCode" label="服务项目" align="center"/>
-    <el-table-column prop="policyNo" label="保单号" align="center"/>
-    <el-table-column prop="policyItemNo" label="分单号" align="center"/>
+    <el-table-column prop="workOrderNo" width="140" label="工单号" align="center"/>
+    <el-table-column prop="channelCode" width="100" label="受理渠道" align="center">
+      <template slot-scope="scope" v-if="scope.row.channelCode">
+        <span>{{ selectDictLabel(cs_channel, scope.row.channelCode) }}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column prop="itemCode" width="100" label="服务项目" align="center">
+      <template slot-scope="scope" v-if="scope.row.itemCode">
+        <span>{{ selectDictLabel(cs_service_item, scope.row.itemCode) }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="policyNo" width="140" label="保单号" align="center"/>
+    <el-table-column prop="policyItemNo" width="140" label="分单号" align="center"/>
     <el-table-column prop="riskCode" label="险种代码" align="center"/>
     <el-table-column prop="insuredName" label="被保人" align="center"/>
     <el-table-column prop="holderName" label="投保人" align="center"/>
@@ -28,16 +37,28 @@
     </el-table-column>
     <el-table-column prop="acceptBy" label="受理人" align="center"/>
     <el-table-column prop="modifyBy" label="处理人" align="center"/>
-    <el-table-column prop="vipFlag" label="VIP标识" align="center"/><!--status待确认-->
-    <el-table-column prop="priorityLevel" label="优先级" align="center"/>
-    <el-table-column prop="organCode" label="出单机构" align="center"/>
-    <el-table-column align="center" label="操作" min-width="94" fixed="right">
+    <el-table-column prop="vipFlag" label="VIP标识" align="center">
+      <template slot-scope="scope" v-if="scope.row.priorityLevel">
+        <span>{{ selectDictLabel(cs_vip_flag, scope.row.priorityLevel) }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="priorityLevel" label="优先级" align="center">
+      <template slot-scope="scope" v-if="scope.row.priorityLevel">
+        <span>{{ selectDictLabel(cs_priority, scope.row.priorityLevel) }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="organCode" width="140" label="出单机构" align="center">
+      <template slot-scope="scope" v-if="scope.row.organCode">
+        <span>{{ selectDictLabel(cs_organization, scope.row.organCode) }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button v-if="status==='01'" size="small" type="text" @click="editPresenting(scope.row,'get')">获取
+        <el-button size="small" type="text" @click="editPresenting(scope.row,'get')">获取
         </el-button>
-        <el-button v-if="status==='01'" size="small" type="text" @click="editPresenting(scope.row,'edit')">修改
+        <el-button size="small" type="text" @click="editPresenting(scope.row,'edit')">修改
         </el-button>
-        <el-button v-if="status==='01'" size="small" type="text" @click="editPresenting(scope.row,'cancel')">取消
+        <el-button size="small" type="text" @click="editPresenting(scope.row,'cancel')">取消
         </el-button>
       </template>
     </el-table-column>
@@ -47,7 +68,21 @@
 <script>
 import {getMinData} from '@/api/claim/presentingReview'
 import {encrypt} from "@/utils/rsaEncrypt"
-
+let dictss = [
+  {dictType: 'cs_channel'},
+  {dictType: 'cs_priority'},
+  {dictType: 'cs_sex'},
+  {dictType: 'cs_communication_language'},
+  {dictType: 'cs_identity'},
+  {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_organization'},
+  {dictType: 'cs_relation'},
+  {dictType: 'cs_feedback_type'},
+  {dictType: 'cs_vip_flag'},
+  {dictType: 'cs_direct_settlement'},
+  {dictType: 'cs_consultation_type'},
+  {dictType: 'cs_service_item'},
+]
 
 export default {
   props: {
@@ -61,11 +96,73 @@ export default {
   },
   data() {
     return {
-      loading: true
+      loading: true,
+      cs_channel:[],//受理渠道
+      cs_reservation_item:[],//服务项目
+      cs_sex:[],//性别
+      cs_priority:[],//优先级
+      cs_communication_language:[],//语言
+      cs_organization:[],//机构
+      cs_handle_state:[],// 状态：
+      dictList: [],
+      cs_identity: [],
+      cs_whether_flag: [],
+      cs_relation: [],
+      cs_feedback_type: [],
+      cs_vip_flag: [],
+      cs_direct_settlement: [],
+      cs_consultation_type: [],
+      cs_service_item: [],
     }
   },
-  mounted() {
-
+  async mounted() {
+    // 字典数据统一获取
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
+    // 下拉项赋值
+    this.cs_channel = this.dictList.find(item => {
+      return item.dictType === 'cs_channel'
+    }).dictDate
+    this.cs_priority = this.dictList.find(item => {
+      return item.dictType === 'cs_priority'
+    }).dictDate
+    this.cs_sex = this.dictList.find(item => {
+      return item.dictType === 'cs_sex'
+    }).dictDate
+    this.cs_priority = this.dictList.find(item => {
+      return item.dictType === 'cs_priority'
+    }).dictDate
+    this.cs_communication_language = this.dictList.find(item => {
+      return item.dictType === 'cs_communication_language'
+    }).dictDate
+    this.cs_identity = this.dictList.find(item => {
+      return item.dictType === 'cs_identity'
+    }).dictDate
+    this.cs_whether_flag = this.dictList.find(item => {
+      return item.dictType === 'cs_whether_flag'
+    }).dictDate
+    this.cs_organization = this.dictList.find(item => {
+      return item.dictType === 'cs_organization'
+    }).dictDate
+    this.cs_relation = this.dictList.find(item => {
+      return item.dictType === 'cs_relation'
+    }).dictDate
+    this.cs_feedback_type = this.dictList.find(item => {
+      return item.dictType === 'cs_feedback_type'
+    }).dictDate
+    this.cs_vip_flag = this.dictList.find(item => {
+      return item.dictType === 'cs_vip_flag'
+    }).dictDate
+    this.cs_direct_settlement = this.dictList.find(item => {
+      return item.dictType === 'cs_direct_settlement'
+    }).dictDate
+    this.cs_consultation_type = this.dictList.find(item => {
+      return item.dictType === 'cs_consultation_type'
+    }).dictDate
+    this.cs_service_item = this.dictList.find(item => {
+      return item.dictType === 'cs_service_item'
+    }).dictDate
   },
   methods: {
     // 处理跳转

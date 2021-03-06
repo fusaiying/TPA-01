@@ -195,7 +195,7 @@
       <span style="color: blue">服务受理信息</span>
         <el-divider/>
         <el-row>
-      <el-form-item label="受理渠道" prop="channelCode" >
+      <el-form-item label="受理渠道：" prop="channelCode" >
         <el-radio-group v-model="ruleForm.channelCode" >
           <el-radio :label="item.dictValue" :key="item.dictValue" v-for="item in cs_channel" ma>
             {{ item.dictLabel }}
@@ -232,7 +232,7 @@
           <el-col :span="8">
             <el-form-item label="来电人与申请人关系：" prop="callRelationBy">
               <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -240,7 +240,7 @@
           <el-col :span="8">
             <el-form-item label="门诊直接结算服务项目：" prop="outpatientSettlement">
               <el-select v-model="ruleForm.outpatientSettlement" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_direct_settlement" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -258,7 +258,7 @@
           <el-col :span="8">
             <el-form-item label="就诊类型：" prop="visitType">
               <el-select v-model="ruleForm.visitType" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_consultation_type" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -281,7 +281,7 @@
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
               <el-select v-model="ruleForm.symptomTimes" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -289,7 +289,7 @@
           <el-col :span="8">
             <el-form-item label="是否意外：" prop="accidentFlag">
               <el-select v-model="ruleForm.accidentFlag" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -330,7 +330,7 @@
           <el-col :span="8">
             <el-form-item label="是否持有效证件：" prop="validCertificate">
               <el-select v-model="ruleForm.validCertificate" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -341,7 +341,7 @@
           <el-col :span="8">
             <el-form-item label="是否持有直结卡：" prop="settlementCard">
               <el-select v-model="ruleForm.settlementCard" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -400,8 +400,8 @@
           </el-form-item>
         </el-col>
           <el-col :span="8">
-          <el-form-item label="医院赔付比例：" prop="compensationRatio">
-            <el-input v-model="ruleForm.compensationRatio" class="item-width" clearable size="mini" placeholder="请输入"/>%
+          <el-form-item label="医院赔付比例%：" prop="compensationRatio">
+            <el-input v-model="ruleForm.compensationRatio" class="item-width" clearable size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-col>
 
@@ -415,7 +415,7 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
               <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -449,7 +449,21 @@
   import {addReservationInsert} from '@/api/customService/reservation'
 
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_end_case'},
+    {dictType: 'cs_direct_settlement'},
+    {dictType: 'cs_consultation_type'},
+    {dictType: 'cs_time_unit'},
+  ]
   export default {
     components: { upLoad },
     filters: {
@@ -469,6 +483,15 @@
         cs_communication_language:[],//语言
         cs_organization:[],//机构
         cs_handle_state:[],// 状态：
+        dictList: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_relation: [],
+        cs_feedback_type: [],
+        cs_end_case: [],
+        cs_direct_settlement: [],
+        cs_consultation_type: [],
+        cs_time_unit: [],
         //需要填入数据的部分
         ruleForm:{
           appointmentDate:"",
@@ -609,29 +632,57 @@
       }
     },
     created() {
-     // window.aaa = this;
-     // this.searchHandle()
-      this.getDicts("cs_channel").then(response => {
-        this.cs_channel= response.data;
-      });
-      this.getDicts("cs_reservation_item").then(response => {
-        this.cs_reservation_item = response.data;
-      });
-      this.getDicts("cs_priority").then(response => {
-        this.cs_priority = response.data;
-      });
-      this.getDicts("cs_sex").then(response => {
-        this.cs_sex = response.data;
-      });
-      this.getDicts("cs_communication_language").then(response => {
-        this.cs_communication_language = response.data;
-      });
-      this.getDicts("cs_organization").then(response => {
-        this.cs_organization = response.data;
-      });
 
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_end_case = this.dictList.find(item => {
+        return item.dictType === 'cs_end_case'
+      }).dictDate
+      this.cs_direct_settlement = this.dictList.find(item => {
+        return item.dictType === 'cs_direct_settlement'
+      }).dictDate
+      this.cs_consultation_type = this.dictList.find(item => {
+        return item.dictType === 'cs_consultation_type'
+      }).dictDate
+      this.cs_time_unit = this.dictList.find(item => {
+        return item.dictType === 'cs_time_unit'
+      }).dictDate
+    },
     methods: {
       //关闭按钮
       hiddenShow:function () {
@@ -728,6 +779,12 @@
     margin-right: 10px !important;
   }
   .item-width {
-    width: 220px;
+    width: 180px;
+  }
+  /deep/ .el-radio{
+    /*display: block;*/
+    line-height: 30px;
+    /*white-space: normal;*/
+    /*margin-right: 0;*/
   }
 </style>

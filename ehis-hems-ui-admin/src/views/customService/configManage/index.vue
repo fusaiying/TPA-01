@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="codeQueryForm" :model="codeQueryForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="codeQueryForm" :model="codeQueryForm" style="padding-bottom: 30px;" label-width="150px"
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">

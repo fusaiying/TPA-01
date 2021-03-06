@@ -191,10 +191,10 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
                label-position="right" size="mini">
 
-        <span style="color: blue">信息需求-理赔类</span>
+        <span style="color: blue">{{selectDictLabel(cs_business_type, workPoolData.businessService.split('-')[0])+'-'+selectDictLabel(cs_service_item, workPoolData.businessService.split('-')[1])}}</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
@@ -209,7 +209,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-select v-model="workPoolData.channelCode" class="item-width" disabled >
+              <el-select v-model="workPoolData.channelCode" class="item-width"  >
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -219,7 +219,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="workPoolData.priorityLevel" class="item-width" disabled >
+              <el-select v-model="workPoolData.priorityLevel" class="item-width"  >
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -232,7 +232,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority" >
-              <el-select v-model="workPoolData.callRelationBy" class="item-width" disabled>
+              <el-select v-model="workPoolData.callRelationBy" class="item-width" >
                 <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -248,7 +248,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority" >
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" disabled>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" >
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -256,7 +256,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人与被保人关系：" prop="priority" >
-              <el-select v-model="workPoolData.contactsRelationBy" class="item-width" disabled>
+              <el-select v-model="workPoolData.contactsRelationBy" class="item-width" >
                 <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -267,7 +267,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" disabled>
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
                 <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -304,7 +304,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
-              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>
+              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" >
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -580,6 +580,8 @@
     {dictType: 'cs_relation'},
     {dictType: 'cs_feedback_type'},
     {dictType: 'cs_end_case'},
+    {dictType: 'cs_service_item'},
+    {dictType: 'cs_business_type'},
   ]
   export default {
     components: { transfer ,
@@ -643,8 +645,7 @@
 
 
       return {
-        cs_order_state:[],//状态
-        cs_action_type:[],//操作类型
+        isDisabled:true,
         rules1: isRule,
         rules2: noRules,
         rules3:isCloseType,
@@ -725,6 +726,8 @@
           label: '服务4'
         }],
         dictList: [],
+        cs_order_state:[],//状态
+        cs_action_type:[],//操作类型
         cs_channel: [],
         cs_priority: [],
         cs_sex: [],
@@ -735,6 +738,8 @@
         cs_relation: [],
         cs_feedback_type: [],
         cs_end_case: [],
+        cs_service_item:[],
+        cs_business_type:[],
       }
     },
     created() {
@@ -770,9 +775,6 @@
       this.cs_sex = this.dictList.find(item => {
         return item.dictType === 'cs_sex'
       }).dictDate
-      this.cs_priority = this.dictList.find(item => {
-        return item.dictType === 'cs_priority'
-      }).dictDate
       this.cs_communication_language = this.dictList.find(item => {
         return item.dictType === 'cs_communication_language'
       }).dictDate
@@ -794,9 +796,12 @@
       this.cs_end_case = this.dictList.find(item => {
         return item.dictType === 'cs_end_case'
       }).dictDate
-
-
-
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+      this.cs_business_type = this.dictList.find(item => {
+        return item.dictType === 'cs_business_type'
+      }).dictDate
     },
     methods: {
       //是否响应
@@ -1044,6 +1049,6 @@
 
 <style scoped>
   .item-width {
-    width: 220px;
+    width: 180px;
   }
 </style>

@@ -148,7 +148,10 @@
 
         </el-row>
         <div style="text-align: right; margin-right: 1px;">
-          <el-button size="mini" type="primary" @click="searchHandles">查询</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            icon="el-icon-search" @click="searchHandles">查询</el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>

@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
-               label-position="right" size="mini">
+      <el-form ref="workPoolData" :model="workPoolData" :rules="rules" label-position="right" label-width="160px"
+               size="mini" style="padding-bottom: 30px;">
 
-        <span style="color: blue">服务项目-信息需求受理【修改】</span>
+        <span style="color: blue">服务项目：{{selectDictLabel(cs_service_item, workPoolData.itemCode)}}受理【修改】</span>
         <el-divider></el-divider>
 
         <el-row>
@@ -75,8 +75,9 @@
             <el-form-item label="预约时间："  style="white-space: nowrap">
               <el-date-picker
                 v-model="workPoolData.complaintTime"
-                type="datetime"
-                placeholder="选择日期时间">
+                class="item-width"
+                placeholder="选择日期时间"
+                type="datetime">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -99,7 +100,7 @@
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="complainantPerson.identity">
               <el-select v-model="workPoolData.complainantPerson.identity" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.identity" :label="item.dictLabel"
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -108,21 +109,21 @@
         </el-row>
           <el-row >
             <el-col :span="16">
-              <el-form-item label="家庭电话:"  style="white-space: nowrap" >
-                国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
-                区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-                号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-                分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              <el-form-item label="家庭电话："  style="white-space: nowrap" >
+                国家区号+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+                区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
+                号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
+                分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
               </el-form-item>
             </el-col>
           </el-row>
         <el-row>
           <el-col :span="16">
-            <el-form-item label="办公电话:"  style="white-space: nowrap">
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+            <el-form-item label="办公电话："  style="white-space: nowrap">
+              国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
+              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
+              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  maxlength="50" size="mini" style="width: 145px"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -155,9 +156,9 @@
         </el-row>
         <el-form-item label="投诉内容：" prop="content">
           <el-input
-            type="textarea"
+            v-model="workPoolData.content"
             :rows="2"
-            v-model="workPoolData.content">
+            type="textarea">
           </el-input>
         </el-form-item>
       </el-form>
@@ -168,41 +169,41 @@
         <span style="color:blue;">附件信息</span>
         <el-divider></el-divider>
         <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="flowLogData"
-          size="small"
+          :header-cell-style="{color:'black',background:'#f8f8ff'}"
           highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="附件名称" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="附件类型" show-overflow-tooltip/>
-          <el-table-column align="center" prop="makeBy" label="上传人" show-overflow-tooltip/>
-          <el-table-column prop="makeTime" label="上传时间" align="center" show-overflow-tooltip>
+          size="small"
+          style=" width: 100%;"
+          tooltip-effect="dark">
+          <el-table-column align="center" label="附件名称" prop="status" show-overflow-tooltip width="140"/>
+          <el-table-column align="center" label="附件类型" prop="operateCode" show-overflow-tooltip/>
+          <el-table-column align="center" label="上传人" prop="makeBy" show-overflow-tooltip/>
+          <el-table-column align="center" label="上传时间" prop="makeTime" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.makeTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remarks" align="center" label="备注" show-overflow-tooltip/>
+          <el-table-column align="center" label="备注" prop="remarks" show-overflow-tooltip/>
           <el-table-column align="center" fixed="right" label="操作" width="140">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="download(scope.row)" disabled>下载</el-button>
+              <el-button disabled size="mini" type="text" @click="download(scope.row)">下载</el-button>
             </template>
           </el-table-column>
         </el-table>
 
         <pagination
           v-show="flowLogCount>0"
-          :total="flowLogCount"
-          :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
+          :page.sync="queryParams.pageNum"
+          :total="flowLogCount"
           @pagination="searchFlowLog"
         />
       </div>
     </el-card>
 
     <el-card>
-      <el-form   style="padding-bottom: 30px;" label-width="145px"
-               label-position="right" size="mini" v-if="this.queryParams.businessType=='05'">
+      <el-form   v-if="this.queryParams.businessType=='05'" label-position="right"
+               label-width="145px" size="mini" style="padding-bottom: 30px;">
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
@@ -310,9 +311,8 @@
               </el-select>
             </el-form-item>
           </el-col>
-
-
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="行协调解或外部鉴定状态：" prop="priority"  >
@@ -338,13 +338,12 @@
               </el-select>
             </el-form-item>
           </el-col>
-
-
         </el-row>
+
         <el-row>
           <el-col :span="8">
           <el-form-item label="投诉业务类别：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="item-width"/>
+            <el-input v-model="workPoolData.policyNo"  class="item-width" clearable size="mini"/>
           </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -357,40 +356,38 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="跟因改善：" prop="policyNo">
-              <el-input v-model="workPoolData.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="workPoolData.policyNo" class="item-width" clearable placeholder="请输入" size="mini"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉损失：" prop="policyNo">
-              <el-input v-model="workPoolData.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="workPoolData.policyNo" class="item-width" clearable placeholder="请输入" size="mini"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-form-item label="投诉根因部门：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" />
+            <el-input v-model="workPoolData.policyNo"  class="width-full" clearable size="mini" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="质诉根因：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full" />
+            <el-input v-model="workPoolData.policyNo"  class="width-full" clearable size="mini" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="处理结果：" prop="policyNo" >
-            <el-input v-model="workPoolData.policyNo"  clearable size="mini" class="width-full"/>
+            <el-input v-model="workPoolData.policyNo"  class="width-full" clearable size="mini"/>
           </el-form-item>
         </el-row>
       </el-form>
-
-
     </el-card>
 
-    <el-card>
-      <el-form  :model="workPoolData"  style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini" :rules="rules" ref="workPoolData3">
+    <el-card class="box-card" style="margin-top: 10px;">
+      <el-form  ref="workPoolData3"  :model="workPoolData" :rules="rules"
+               label-position="right" label-width="100px" size="mini" style="padding-bottom: 30px;">
         <span style="color: blue">修改原因</span>
         <el-divider></el-divider>
         <el-row>
@@ -405,23 +402,19 @@
         <el-row>
           <el-form-item label="修改说明：" prop="editInfo.editRemark">
             <el-input
-              type="textarea"
+              v-model="workPoolData.editInfo.editRemark"
               :rows="2"
               placeholder="请输入内容"
-              v-model="workPoolData.editInfo.editRemark">
+              type="textarea">
             </el-input>
           </el-form-item>
         </el-row>
       </el-form>
       <div style="text-align: right; margin-right: 1px;">
-      <el-button  type="primary" size="mini" @click="submit">保存</el-button>
-      <el-button  type="primary"size="mini" @click="hiddenShow">关闭</el-button>
+      <el-button  size="mini" type="primary" @click="submit">保存</el-button>
+      <el-button  size="mini"type="primary" @click="hiddenShow">关闭</el-button>
       </div>
     </el-card>
-
-
-
-
 
   </div>
 </template>
@@ -435,7 +428,16 @@
 
 
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_service_item'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_whether_flag'},
+  ]
   export default {
     components: { upLoad },
     filters: {
@@ -458,6 +460,7 @@
         cs_sex:[],//性别
         cs_communication_language:[],//语言
         cs_whether_flag:[],
+        cs_identity:[],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -560,32 +563,40 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       this.queryParams.businessType=this.$route.query.businessType;
-      this.getDicts("cs_sex").then(response => {
-        this.cs_sex = response.data;
-      });
-      this.getDicts("cs_communication_language").then(response => {
-        this.cs_communication_language = response.data;
-      });
-      this.getDicts("cs_service_item").then(response => {
-        this.cs_service_item = response.data;
-      });
-      this.getDicts("cs_organization").then(response => {
-        this.cs_organization = response.data;
-      });
-      this.getDicts("cs_priority").then(response => {
-        this.cs_priority = response.data;
-      });
-      this.getDicts("cs_channel").then(response => {
-        this.cs_channel = response.data;
-      });
-      this.getDicts("cs_whether_flag").then(response => {
-        this.cs_whether_flag = response.data;
-      });
-
       this.searchHandle()
       this.searchFlowLog()
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+    },
     methods: {
       //提交页面数据
       submit(){
@@ -686,9 +697,15 @@
 
 <style scoped>
   .item-width {
-    width: 220px;
+    width: 190px;
   }
   .item-width1 {
     width: 50px;
+  }
+  /deep/ .el-radio{
+    /*display: block;*/
+    line-height: 30px;
+    /*white-space: normal;*/
+    /*margin-right: 0;*/
   }
 </style>

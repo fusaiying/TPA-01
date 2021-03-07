@@ -428,13 +428,21 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.makeTime | changeDate }}</span>
+              <span>{{ scope.row.createdTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
@@ -629,6 +637,8 @@ let dictss = [
   {dictType: 'cs_time_unit'},
   {dictType: 'cs_feedback_type'},
   {dictType: 'cs_service_item'},
+  {dictType: 'cs_action_type'},
+  {dictType: 'cs_order_state'},
 ]
 export default {
   components: {
@@ -771,6 +781,8 @@ export default {
       cs_consultation_type: [],
       cs_time_unit: [],
       cs_service_item: [],
+      cs_order_state: [],
+      cs_action_type: [],
     }
   },
   created() {
@@ -838,6 +850,12 @@ export default {
     }).dictDate
     this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
+    }).dictDate
+    this.cs_order_state = this.dictList.find(item => {
+      return item.dictType === 'cs_order_state'
+    }).dictDate
+    this.cs_action_type = this.dictList.find(item => {
+      return item.dictType === 'cs_action_type'
     }).dictDate
   },
   methods: {

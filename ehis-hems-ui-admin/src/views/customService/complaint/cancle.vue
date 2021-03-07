@@ -588,6 +588,8 @@ let dictss = [
   {dictType: 'cs_priority'},
   {dictType: 'cs_channel'},
   {dictType: 'cs_whether_flag'},
+  {dictType: 'cs_action_type'},
+  {dictType: 'cs_order_state'},
 ]
 export default {
   filters: {
@@ -614,6 +616,8 @@ export default {
       cs_communication_language: [],//语言
       cs_whether_flag: [],
       cs_identity: [],
+      cs_order_state: [],//状态
+      cs_action_type: [],//操作类型
       //需要填入数据的部分
       ruleForm: {
         editReason: "",
@@ -733,6 +737,12 @@ export default {
     }).dictDate
     this.cs_identity = this.dictList.find(item => {
       return item.dictType === 'cs_identity'
+    }).dictDate
+    this.cs_action_type = this.dictList.find(item => {
+      return item.dictType === 'cs_action_type'
+    }).dictDate
+    this.cs_order_state = this.dictList.find(item => {
+      return item.dictType === 'cs_order_state'
     }).dictDate
   },
   methods: {

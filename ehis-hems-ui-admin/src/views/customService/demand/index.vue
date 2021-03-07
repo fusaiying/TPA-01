@@ -194,13 +194,13 @@
               <span>{{selectDictLabel(cs_channel, scope.row.channelCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="businessService" label="服务项目" show-overflow-tooltip>
+          <el-table-column align="center" width="140" prop="businessService" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
               <span>{{selectDictLabel(cs_business_type, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(cs_service_item, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
@@ -227,7 +227,7 @@
               <span>{{selectDictLabel(cs_priority, scope.row.priorityLevel)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+          <el-table-column width="140" prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
               <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
@@ -278,13 +278,13 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="businessService" label="服务项目" show-overflow-tooltip>
+          <el-table-column align="center" width="140" prop="businessService" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
               <span>{{selectDictLabel(cs_business_type, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(cs_service_item, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="policyNo" label="保单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
@@ -312,7 +312,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+          <el-table-column prop="organCode" width="140" align="center" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
               <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>

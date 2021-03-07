@@ -191,7 +191,8 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="160px"
+               :disabled="isDisabled"
                label-position="right" size="mini">
 
         <span style="color: blue">{{ selectDictLabel(cs_service_item, workPoolData.itemCode) }}-服务受理信息</span>
@@ -232,7 +233,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" prop="priority">
-              <el-select v-model="workPoolData.callRelationBy" class="item-width" >
+              <el-select v-model="workPoolData.callRelationBy" class="item-width">
                 <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -248,7 +249,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="priority">
-              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" >
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -256,7 +257,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人与被保人关系：" prop="priority">
-              <el-select v-model="workPoolData.contactsRelationBy" class="item-width" >
+              <el-select v-model="workPoolData.contactsRelationBy" class="item-width">
                 <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -267,7 +268,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority">
-              <el-select v-model="workPoolData.contactsPerson.language" class="item-width" >
+              <el-select v-model="workPoolData.contactsPerson.language" class="item-width">
                 <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -312,7 +313,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="priority">
-              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" >
+              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -542,7 +543,7 @@ export default {
   data() {
 
     return {
-      isDisabled:true,
+      isDisabled: true,
       cs_order_state: [],//状态
       cs_action_type: [],//操作类型
       //流转用

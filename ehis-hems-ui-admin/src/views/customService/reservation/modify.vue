@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="160px"
+      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="170px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -198,16 +198,12 @@
         <el-row>
           <el-form-item label="受理渠道：" prop="channelCode" >
             <el-radio-group v-model="workPoolData.channelCode">
-              <el-radio   label="01">电话</el-radio>
-              <el-radio   label="02">邮箱</el-radio>
-              <el-radio   label="03">网站</el-radio>
-              <el-radio   label="04">电话中心</el-radio>
-              <el-radio   label="05">柜面</el-radio>
-              <el-radio   label="06">医网</el-radio>
-              <el-radio   label="07">平安内网</el-radio>
-              <el-radio   label="08">APP</el-radio>
-              <el-radio   label="09">寿险</el-radio>
-              <el-radio   label="10">微信</el-radio>
+              <el-radio
+                v-for="dict in cs_channel"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
         </el-row>
@@ -225,7 +221,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
               <el-select v-model="workPoolData.priorityLevel" class="item-width"  >
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -245,7 +241,7 @@
           <el-col :span="8">
             <el-form-item label="与申请人关系：" prop="callRelationBy">
               <el-select v-model="workPoolData.callRelationBy" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -260,18 +256,16 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊类型：" prop="visitType">
+
               <el-select v-model="workPoolData.visitType" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_consultation_type" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
-              <el-select v-model="workPoolData.hospitalWorkCall" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+              <el-input v-model="workPoolData.hospitalWorkCall" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -283,7 +277,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="contactsPerson.sex">
-              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini" />
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -292,7 +289,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
 
         <el-row>
           <el-col :span="8">
@@ -321,27 +317,26 @@
         <el-row >
           <el-col :span="16">
             <el-form-item label="家庭电话:"  style="white-space: nowrap" >
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width2"  />
+              区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width2"  size="mini" />
+              号码<el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width2"  size="mini" />
+              分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width2"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="5">
             <el-form-item label="办公室电话:"  style="white-space: nowrap">
-              国家区号:+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+              国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width2"/>
+              区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width2"  size="mini" />
+              号码<el-input v-model="workPoolData.contactsPerson.workPhone1[2]" class="item-width2"  size="mini" />
+              分机号<el-input v-model="workPoolData.contactsPerson.workPhone1[3]" class="item-width2"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-
             <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
               <el-date-picker
                 v-model="workPoolData.complaintTime"
@@ -351,9 +346,7 @@
             </el-form-item>
           </el-col>
 
-
         </el-row>
-
 
         <el-row>
           <el-col :span="8">
@@ -361,15 +354,12 @@
                 省份：<el-input v-model="workPoolData.province" style="width: 60px"  />
                 城市：<el-input v-model="workPoolData.city" style="width: 60px" />
               </el-form-item>
-
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="医疗机构：" prop="medicalInstitution">
-              <el-col :span="15">
-                <el-input v-model="workPoolData.medicalInstitution"  readonly size="mini" />
-              </el-col>
-              <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
+                <el-input v-model="workPoolData.medicalInstitution" size="mini" class="item-width2"/>
+                <el-button type="primary" @click="searchHandle" disabled>详细信息</el-button>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -380,17 +370,21 @@
 
         </el-row>
 
-
-
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否持有效证件：" prop="validCertificate">
-              <el-input v-model="workPoolData.validCertificate" class="item-width"  size="mini" />
+              <el-select v-model="workPoolData.validCertificate" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否持保险卡：" prop="settlementCard">
-              <el-input v-model="workPoolData.settlementCard" class="item-width"  size="mini" />
+              <el-select v-model="workPoolData.settlementCard" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -428,7 +422,10 @@
 
           <el-col :span="8">
             <el-form-item label="是否意外：" prop="accidentFlag">
-              <el-input v-model="workPoolData.accidentFlag" class="item-width"  size="mini" />
+              <el-select v-model="workPoolData.accidentFlag" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -458,13 +455,21 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate}}</span>
+              <span>{{ scope.row.createdTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
@@ -563,8 +568,20 @@
   import modifyDetails from "../common/modul/modifyDetails";
   import {demandListAndPublicPool,demandListAndPersonalPool,modifyReservationSubmit} from '@/api/customService/reservation'
 
-
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_service_item'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_action_type'},
+    {dictType: 'cs_consultation_type'},
+    {dictType: 'cs_relation'},
+  ]
   export default {
     components: {
       modifyDetails,
@@ -577,7 +594,6 @@
       }
     },
     data() {
-
       return {
         cs_relation:[],//关系
         cs_service_item:[],//服务项目
@@ -587,6 +603,11 @@
         cs_organization:[],//机构
         cs_handle_state:[],// 状态：
         cs_channel:[],
+        cs_order_state:[],
+        cs_action_type:[],
+        cs_consultation_type:[],
+        cs_whether_flag:[],
+        dictList: [],
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -675,10 +696,6 @@
           state:""
         },
         caseNumber: false,//查询条件（报案号）是否显示
-        //提交数据
-        sendForm:{
-
-        },
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -689,24 +706,8 @@
           status:""
 
         },
-
-
         changeSerchData: {},
         states: [],
-        serves: [{
-          value: '1',
-          label: '服务1'
-        }, {
-          value: '2',
-          label: '服务2'
-        }, {
-          value: '3',
-          label: '服务3'
-        }, {
-          value: '4',
-          label: '服务4'
-        }],
-        sysUserOptions: [],
       }
     },
     created() {
@@ -714,29 +715,50 @@
       this.queryParams.policyNo=this.$route.query.policyNo;
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
-      this.searchHandle()
-      this.searchFlowLog()
-      this.getDicts("cs_service_item").then(response => {
-        this.cs_service_item = response.data;
-      });
-      this.getDicts("cs_priority").then(response => {
-        this.cs_priority = response.data;
-      });
-      this.getDicts("cs_sex").then(response => {
-        this.cs_sex = response.data;
-      });
-      this.getDicts("cs_communication_language").then(response => {
-        this.cs_communication_language = response.data;
-      });
-      this.getDicts("cs_organization").then(response => {
-        this.cs_organization = response.data;
-      });
-      this.getDicts("cs_relation").then(response => {
-        this.cs_relation = response.data;
-      });
-
+      this.searchHandle();
+      this.searchFlowLog();
     },
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
 
+      // 下拉项赋值
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_consultation_type = this.dictList.find(item => {
+        return item.dictType === 'cs_consultation_type'
+      }).dictDate
+    },
     methods: {
       //超链接用
       modifyDetails(s){
@@ -844,6 +866,15 @@
 
 <style scoped>
   .item-width {
-    width: 220px;
+    width: 180px;
+  }
+  .item-width2 {
+    width: 100px;
+  }
+  /deep/ .el-radio {
+    /*display: block;*/
+    line-height: 30px;
+    /*white-space: normal;*/
+    /*margin-right: 0;*/
   }
 </style>

@@ -191,27 +191,30 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="200px"
+      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
                label-position="right" size="mini">
 
-        <span style="color: blue">口腔责任直接结算-服务受理信息</span>
+        <span style="color: blue">{{selectDictLabel(cs_service_item, ruleForm.itemCode)}}-服务受理信息</span>
         <el-divider/>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="受理渠道：">
-              <el-input v-model="ruleForm.channelCode" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="受理渠道：" prop="channelCode">
+              <el-select v-model="ruleForm.channelCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电人姓名：" >
-              <el-input v-model="ruleForm.callPerson.name" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callPerson.name" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="ruleForm.priorityLevel" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="ruleForm.priorityLevel" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -221,20 +224,20 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="来电人与被保人关系：" >
-              <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="ruleForm.callRelationBy" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_relation" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="ruleForm.callCenterId" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callCenterId" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：">
-              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -242,35 +245,39 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人姓名：" >
-              <el-input v-model="ruleForm.contactsPerson.name" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.name" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="传真：" >
-              <el-input v-model="ruleForm.contactsPerson.fax" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.fax" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：">
-              <el-input v-model="ruleForm.contactsPerson.sex" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.contactsPerson.sex" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
+
           </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人家庭电话：">
-              <el-input v-model="ruleForm.contactsPerson.homePhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.homePhone" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人办公电话：">
-              <el-input v-model="ruleForm.contactsPerson.workPhone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.workPhone" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="联系人手机：" >
-              <el-input v-model="ruleForm.contactsPerson.mobilephone" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.contactsPerson.mobilephone" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
 
@@ -278,8 +285,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人语言：">
-              <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择" disabled>
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="ruleForm.contactsPerson.language" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -287,120 +294,133 @@
 
           <el-col :span="8">
             <el-form-item label="联系邮箱：" >
-              <el-input v-model="ruleForm.email" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.email" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" >
               <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
 
-
         <el-row>
           <el-col :span="8">
             <el-form-item label="就诊日期：">
-              <el-input v-model="ruleForm.clinicDate" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.clinicDate" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊时间：" prop="email">
-              <el-input v-model="ruleForm.clinicTime" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.clinicTime" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医疗机构：" >
-              <el-col :span="16">
-                <el-input v-model="ruleForm.medicalInstitution" input-w readonly size="mini" placeholder="请输入"/>
-              </el-col>
-              <el-button type="primary" @click="searchHandle" disabled>查询</el-button>
+            <el-form-item label="医疗机构：" prop="medicalInstitution">
+              <el-input v-model="ruleForm.medicalInstitution" input-w  class="item-width2" size="mini"
+                        placeholder="请输入"/>
+              <el-button type="primary" @click="searchHandle" size="mini">详细信息</el-button>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="医院工作来电：" prop="email">
-              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="医院工作来电：" prop="hospitalWorkCall">
+              <el-input v-model="ruleForm.hospitalWorkCall" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="就诊科室：" >
-              <el-input v-model="ruleForm.department" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.department" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="医院赔付比例：" >
-              <el-input v-model="ruleForm.compensationRatio" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.compensationRatio" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="是否持有效证件：" >
-              <el-input v-model="ruleForm.validCertificate" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.validCertificate" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否持保险卡：" >
-              <el-input v-model="ruleForm.settlementCard" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.settlementCard" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" >
-              <el-input v-model="ruleForm.symptomTimes" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.symptomTimes" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="类似疾病症状最早发生时间：" prop="email">
-              <el-input v-model="ruleForm.symptomTimes" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.symptomTimes" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="疾病名称：">
-              <el-input v-model="ruleForm.disease" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.disease" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="疾病或体征：" >
-              <el-input v-model="ruleForm.symptomsSigns" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.symptomsSigns" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否意外：" >
-              <el-input v-model="ruleForm.accidentFlag" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-form-item label="是否意外：" prop="accidentFlag">
+              <el-select v-model="ruleForm.accidentFlag" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="意外原因：" >
-              <el-input v-model="ruleForm.accidentReason" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.accidentReason" class="item-width" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否申请直结：" >
-              <el-input v-model="ruleForm.settlementFlag" class="item-width" readonly  size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.settlementFlag" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="就诊类型：" >
-              <el-input v-model="ruleForm.visitType" class="item-width" readonly  size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.visitType" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_consultation_type" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>
           <el-form-item label="业务内容：">
-            <el-input v-model="sendForm.content" class="width-full" readonly size="mini" placeholder="请输入"/>
+            <el-input v-model="sendForm.content" class="width-full" size="mini" placeholder="请输入"/>
           </el-form-item>
         </el-row>
 
@@ -419,8 +439,16 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
@@ -448,8 +476,6 @@
         />
       </div>
     </el-card>
-
-
 
 <!--    <el-card>-->
 <!--      <el-form ref="ruleForm" :model="ruleForm"  style="padding-bottom: 30px;" label-width="100px"-->
@@ -531,7 +557,25 @@
   import {demandListAndPublicPool,demandListAndPersonalPool,cancelReservationSubmit} from '@/api/customService/reservation'
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_sex'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_identity'},
+    {dictType: 'cs_whether_flag'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_relation'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_end_case'},
+    {dictType: 'cs_direct_settlement'},
+    {dictType: 'cs_consultation_type'},
+    {dictType: 'cs_time_unit'},
+    {dictType: 'cs_feedback_type'},
+    {dictType: 'cs_service_item'},
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_action_type'},
+  ]
   export default {
     components: {
       modifyDetails,
@@ -546,6 +590,7 @@
     data() {
 
       return {
+        isDisabled: true,
         //流转用
         flowLogData:[],
         flowLogCount: 0,
@@ -608,20 +653,25 @@
         totalCount: 0,
         changeSerchData: {},
         states: [],
-        serves: [{
-          value: '1',
-          label: '服务1'
-        }, {
-          value: '2',
-          label: '服务2'
-        }, {
-          value: '3',
-          label: '服务3'
-        }, {
-          value: '4',
-          label: '服务4'
-        }],
-        sysUserOptions: [],
+        cs_channel: [],//受理渠道
+        cs_reservation_item: [],//服务项目
+        cs_sex: [],//性别
+        cs_priority: [],//优先级
+        cs_communication_language: [],//语言
+        cs_organization: [],//机构
+        cs_handle_state: [],// 状态：
+        dictList: [],
+        cs_identity: [],
+        cs_whether_flag: [],
+        cs_relation: [],
+        cs_feedback_type: [],
+        cs_end_case: [],
+        cs_direct_settlement: [],
+        cs_consultation_type: [],
+        cs_time_unit: [],
+        cs_service_item: [],
+        cs_order_state: [],
+        cs_action_type: [],
       }
     },
     created() {
@@ -631,13 +681,65 @@
       this.queryParams.status=this.$route.query.status;
       this.searchHandle()
       this.searchFlowLog()
-      this.getDicts("sys_oper_type").then(response => {
-        this.states = response.data;
-        console.log("response:",response)
-      });
-
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_sex = this.dictList.find(item => {
+        return item.dictType === 'cs_sex'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_communication_language = this.dictList.find(item => {
+        return item.dictType === 'cs_communication_language'
+      }).dictDate
+      this.cs_identity = this.dictList.find(item => {
+        return item.dictType === 'cs_identity'
+      }).dictDate
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_relation = this.dictList.find(item => {
+        return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+      this.cs_end_case = this.dictList.find(item => {
+        return item.dictType === 'cs_end_case'
+      }).dictDate
+      this.cs_direct_settlement = this.dictList.find(item => {
+        return item.dictType === 'cs_direct_settlement'
+      }).dictDate
+      this.cs_consultation_type = this.dictList.find(item => {
+        return item.dictType === 'cs_consultation_type'
+      }).dictDate
+      this.cs_time_unit = this.dictList.find(item => {
+        return item.dictType === 'cs_time_unit'
+      }).dictDate
+      this.cs_service_item = this.dictList.find(item => {
+        return item.dictType === 'cs_service_item'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
+      }).dictDate
+    },
     methods: {
       //超链接用
       modifyDetails(s){
@@ -746,6 +848,9 @@
 
 <style scoped>
   .item-width {
-    width: 220px;
+    width: 160px;
+  }
+  .item-width2 {
+    width: 100px;
   }
 </style>

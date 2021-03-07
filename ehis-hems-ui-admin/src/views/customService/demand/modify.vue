@@ -174,7 +174,7 @@
             highlight-current-row
             tooltip-effect="dark"
             style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
+          <el-table-column align="center" prop="status" label="状态" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.status">
               <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
             </template>
@@ -188,7 +188,7 @@
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <span>{{ scope.row.createdTime | changeDate }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
@@ -486,7 +486,7 @@ export default {
         value: '4',
         label: '服务4'
       }],
-      sysUserOptions: [],
+      dictList: [],
     }
   },
   created() {

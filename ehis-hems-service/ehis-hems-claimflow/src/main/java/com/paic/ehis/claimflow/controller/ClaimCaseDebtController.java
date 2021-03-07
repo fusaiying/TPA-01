@@ -117,7 +117,7 @@ public class ClaimCaseDebtController extends BaseController
      */
     @PostMapping("/initDebt")
     public TableDataInfo initDebtList(@RequestBody DebtInfoDTO debtInfoDTO){
-        startPage();
+        startPage(debtInfoDTO);
         List<DebtInfoVO> list = new ArrayList<>();
         // 初始化或者查询条件为空
         if ("0".equals(debtInfoDTO.getFlag())){

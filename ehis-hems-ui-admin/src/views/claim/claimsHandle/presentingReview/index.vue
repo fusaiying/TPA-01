@@ -190,13 +190,6 @@
     created() {
     },
     mounted() {
-      //获取公共池
-      getPublicList(this.searchForm).then(res => {
-        this.publicData = res.rows
-        this.publicTotal = res.total
-      }).finally(() => {
-        this.loading = false
-      })
       //获取直结复核理赔批次待处理个人池
       getUntreatedList(this.searchForm).then(res => {
         this.backData = res.rows
@@ -227,7 +220,15 @@
           }
           if (res.data != null) {
             item.organCode = res.data.organCode
+            this.searchForm.organcode=res.data.organCode
           }
+          //获取公共池
+          getPublicList(this.searchForm).then(res => {
+            this.publicData = res.rows
+            this.publicTotal = res.total
+          }).finally(() => {
+            this.loading = false
+          })
           getOrganList(item).then(response => {
             if (response != null && response.code === 200) {
               this.sysDeptOptions = response.rows
@@ -359,6 +360,9 @@
           hospitalname: this.searchForm.hospitalname,
           batchno: this.searchForm.batchno,
         }
+        if (query.organcode == null || query.organcode == '' || query.organcode == undefined) {
+          query.organcode = this.organCode
+        }
         if (this.searchForm.submitdate) {
           query.submitstartdate = this.searchForm.submitdate[0]
           query.submitenddate = this.searchForm.submitdate[1]
@@ -382,6 +386,7 @@
       },
       //清单导出
       listExport() {
+
         if (this.activeName === '02') {//已处理
           getUntreatedList().then(res => {
             if (res.rows.length > 0) {

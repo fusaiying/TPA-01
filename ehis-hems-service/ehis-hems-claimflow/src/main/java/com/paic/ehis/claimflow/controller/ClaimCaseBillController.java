@@ -95,7 +95,7 @@ public class ClaimCaseBillController extends BaseController
     }
 
     /**
-     * 新增案件账单明细
+     * 新增案件账单明细 - 保存
      */
     @Log(title = "案件账单明细", businessType = BusinessType.INSERT)
     @PostMapping
@@ -218,7 +218,7 @@ public class ClaimCaseBillController extends BaseController
     /**
      *  主要诊断、次要诊断接口
      */
-    @PostMapping("ICD")
+    @PostMapping("/ICD")
     public AjaxResult getICD(@RequestBody BaseIcd10 baseIcd10){
         return AjaxResult.success(claimCaseBillService.selectICD(baseIcd10));
     }

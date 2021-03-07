@@ -8,7 +8,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="机构：" prop="deptCode">
-                <el-select v-model="form.deptCode" class="item-width" size="mini" placeholder="请选择">
+                <el-select v-model="form.deptCode" class="item-width" clearable size="mini" placeholder="请选择">
                   <el-option v-for="option in sysDepts" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -220,6 +220,7 @@
             return {
                read:false,
                readbatchNo:false,
+               queryOrganCode:'',
                disRead:false,
                 form: {
                   deptCode: '',
@@ -311,7 +312,9 @@
         },
         //重置
         reset(form) {
+          this.queryOrganCode=this.form.deptCode
             this.$refs[form].resetFields()
+          this.form.deptCode= this.queryOrganCode
         },
         //查询
         gettableData () {
@@ -477,7 +480,7 @@
         getDepts() {
           getUserInfo().then(res => {
             if (res != null && res.code === 200) {
-              this.form.deptCode = res.data.organCode;
+              this.queryOrganCode = res.data.organCode
               this.pbaceCaseForm.deptCode = res.data.organCode;
               let item = {
                 organCode: '',
@@ -496,6 +499,7 @@
                         obj.dictValue = response.rows[i].organCode.toString();
                         this.sysDepts.push(obj);
                       }
+                    this.form.deptCode = res.data.organCode;
                     }
                 }
               }).catch(res => {

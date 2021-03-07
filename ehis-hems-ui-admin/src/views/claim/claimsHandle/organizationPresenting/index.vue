@@ -243,7 +243,8 @@
           let query = {
             pageNum: 1,
             pageSize: 10,
-            updateBy: ''
+            updateBy: '',
+            organCode: '',
           }
           let item = {
             organCode: '',
@@ -252,6 +253,7 @@
           }
           if (res.data != null) {
             item.organCode = res.data.organCode
+            query.organCode = res.data.organCode
             this.queryParams.updateBy = res.data.userName
             query.updateBy = res.data.userName
           }
@@ -465,6 +467,9 @@
             rptno: this.queryParams.rptno,
             updateBy: this.queryParams.updateBy,
           }
+          if (query.organcode == null || query.organcode == '' || query.organcode == undefined) {
+            query.organcode = this.organCode
+          }
           if (this.queryParams.submitdate) {
             query.submitstartdate = this.queryParams.submitdate[0]
             query.submitenddate = this.queryParams.submitdate[1]
@@ -514,6 +519,9 @@
           updateBy: this.queryParams.updateBy,
           caseNumber: this.queryParams.caseNumber,
           rptno: this.queryParams.rptno,
+        }
+        if (query.organcode=='' || query.organcode==null || query.organcode==null){
+          query.organcode=this.organCode
         }
         if (this.activeName === '01') {
           getBackToList(query).then(res => {

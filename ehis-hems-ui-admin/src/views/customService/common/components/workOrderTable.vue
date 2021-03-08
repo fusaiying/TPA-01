@@ -25,14 +25,14 @@
     <el-table-column prop="riskCode" label="险种代码" align="center"/>
     <el-table-column prop="insuredName" label="被保人" align="center"/>
     <el-table-column prop="holderName" label="投保人" align="center"/>
-    <el-table-column align="acceptTime" prop="updateTime" min-width="120" label="受理时间" show-overflow-tooltip>
+    <el-table-column align="acceptTime" prop="acceptTime" min-width="120" label="受理时间" show-overflow-tooltip>
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+        <span>{{ scope.row.acceptTime | changeDate}}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" prop="updateTime" min-width="120" label="修改时间" show-overflow-tooltip>
       <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
+        <span>{{ scope.row.updateTime | changeDate}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="acceptBy" label="受理人" align="center"/>
@@ -68,6 +68,8 @@
 <script>
 import {getMinData} from '@/api/claim/presentingReview'
 import {encrypt} from "@/utils/rsaEncrypt"
+import moment from "moment";
+
 let dictss = [
   {dictType: 'cs_channel'},
   {dictType: 'cs_priority'},
@@ -85,6 +87,13 @@ let dictss = [
 ]
 
 export default {
+  filters: {
+    changeDate: function (value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      }
+    }
+  },
   props: {
     tableData: {
       type: Array,

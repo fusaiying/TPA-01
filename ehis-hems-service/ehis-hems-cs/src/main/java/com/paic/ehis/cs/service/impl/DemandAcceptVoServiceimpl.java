@@ -304,6 +304,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         BeanUtils.copyProperties(callPerson1, callPerson);
      //   PersonInfo contactsPerson = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo contactsPerson1 = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
+        contactsPerson1.setLinePhone("");
         PersonInfo contactsPerson=new PersonInfo();
         BeanUtils.copyProperties(contactsPerson1, contactsPerson);
         FlowLog flowLog = new FlowLog();
@@ -311,13 +312,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         //工单表修改
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
 
-        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
-        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+//        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
         acceptDetailInfo.setPriorityLevel(demandAcceptVo.getPriorityLevel());
@@ -343,8 +344,8 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         //插入来电人
         callPerson.setName(demandAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(demandAcceptVo.getCallPerson().getMobilePhone());
-        callPerson.setUpdatedBy(SecurityUtils.getUsername());
-        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
 
         //插入联系人
@@ -353,10 +354,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         contactsPerson.setLanguage(demandAcceptVo.getContactsPerson().getLanguage());
         contactsPerson.setMobilePhone(demandAcceptVo.getContactsPerson().getMobilePhone());
         contactsPerson.setLinePhone(demandAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getLinePhone1()[3]);
-        contactsPerson.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
-        contactsPerson.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
-        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+      //  contactsPerson.setHomePhone(demandAcceptVo.getContactsPerson().getHomePhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getHomePhone1()[3]);
+      //  contactsPerson.setWorkPhone(demandAcceptVo.getContactsPerson().getWorkPhone1()[0] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[1] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[2] + "-" + demandAcceptVo.getContactsPerson().getWorkPhone1()[3]);
+//        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
 
 
@@ -425,7 +426,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
 
-        Iterator<String> iter3 = map5.keySet().iterator();
+        Iterator<String> iter3 = map6.keySet().iterator();
         while (iter3.hasNext()) {
             EditDetail editDetail = new EditDetail();
             String map5key = iter3.next();
@@ -470,6 +471,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
 
         //Hcs
         if (demandAcceptVo.getAlterId() != null) {

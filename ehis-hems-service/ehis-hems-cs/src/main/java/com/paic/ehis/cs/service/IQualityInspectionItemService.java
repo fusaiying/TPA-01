@@ -65,7 +65,7 @@ public interface IQualityInspectionItemService
      * @param ids
      * @return
      */
-    int insertHandle(String[] ids, Map<String,String> param);
+    int insertItem(String[] ids, Map<String,String> param);
 
     /**
      * 质检差错查询反显数据
@@ -77,5 +77,5 @@ public interface IQualityInspectionItemService
     /**
      * 质检差错修改item表字段是否时效内响应客户等
      */
-    int updateQualityItem(QualityInspectionItem qualityInspectionItem);
+    int updateQualityItem(String[] ids, Map<String,String> param);
 }

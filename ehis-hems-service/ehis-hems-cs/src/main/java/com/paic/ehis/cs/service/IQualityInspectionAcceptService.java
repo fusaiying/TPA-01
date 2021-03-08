@@ -2,8 +2,10 @@ package com.paic.ehis.cs.service;
 
 
 import com.paic.ehis.cs.domain.AttachmentInfo;
+import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +60,13 @@ public interface IQualityInspectionAcceptService
      * @return
      */
     public AcceptVo getOneAcceptInfo(WorkOrderQueryDTO workOrderQueryDTO);
+
+    /**
+     * 质检查询
+     * @param qualityDTO
+     * @return
+     */
+    List<QualityVo> selectQualityVo(QualityDTO qualityDTO);
 
 //    /**
 //     * 根据条件查询工单附件列表

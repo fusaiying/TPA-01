@@ -41,18 +41,18 @@ export function editCaseFiling(data) {
 }
 
 //查询案件归档详细信息
-export function getInfoCaseFilingList(data) {
+export function getInfoCaseFilingList(query) {
   return request({
-    url: '/claimflow/casefiling/getInfoCaseFilingList',
-    method: 'post',
-    data: data
+    url: '/claimflow/FilingDetail/list',
+    method: 'get',
+    params: query
   })
 }
 
 //保存案件归档详细信息
 export function updateCaseFilingInfo(data) {
   return request({
-    url: '/claimflow/casefiling/updateCaseFilingInfo',
+    url: '/claimflow/FilingDetail/updateCaseFilingDetail',
     method: 'post',
     data
   })

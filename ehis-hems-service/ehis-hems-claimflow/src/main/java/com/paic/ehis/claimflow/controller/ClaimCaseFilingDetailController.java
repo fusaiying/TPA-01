@@ -1,13 +1,13 @@
 package com.paic.ehis.claimflow.controller;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseFilingDetail;
+import com.paic.ehis.claimflow.service.IClaimCaseFilingDetailService;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
-import com.paic.ehis.claimflow.service.IClaimCaseFilingDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +94,14 @@ public class ClaimCaseFilingDetailController extends BaseController
     public AjaxResult remove(@PathVariable Long[] filingDetailIds)
     {
         return toAjax(claimCaseFilingDetailService.deleteClaimCaseFilingDetailByIds(filingDetailIds));
+    }
+
+    /**
+     * 保存案件归档详细信息 modify by: hjw  time: 2021-03-08
+     */
+    @Log(title = "案件归档", businessType = BusinessType.INSERT)
+    @PostMapping("/updateCaseFilingDetail")
+    public AjaxResult updateCaseFilingDetailInfo(@RequestBody List<ClaimCaseFilingDetail> listDto) {
+        return AjaxResult.success(claimCaseFilingDetailService.updateCaseFilingDetailInfo(listDto));
     }
 }

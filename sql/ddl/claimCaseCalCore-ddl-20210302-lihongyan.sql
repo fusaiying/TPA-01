@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS claim_case_cal_core;
 CREATE TABLE claim_case_cal_core
 (
+    core_id BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT '核心案件ID' ,
     rpt_no               VARCHAR(20)    NOT NULL COMMENT '报案号',
     case_status          VARCHAR(2)     NOT NULL COMMENT '案件状态',
     is_appeal            VARCHAR(2) COMMENT '是否申诉案件',
@@ -14,7 +15,7 @@ CREATE TABLE claim_case_cal_core
     treatment_start_date DATE           NOT NULL COMMENT '汇率转换日期',
     organ_code           VARCHAR(20)    NOT NULL COMMENT '受理机构',
     appeal_serial        int(2) NOT NULL COMMENT '申诉序号',
-    trans_serial_no      varchar(30) VARCHAR COMMENT '自付额流水号',
+    trans_serial_no      varchar(30) COMMENT '自付额流水号',
     cal_amount           DECIMAL(16, 2) COMMENT '理算金额',
     pay_amount           DECIMAL(16, 2) COMMENT '支付金额',
     exchange_rate        DECIMAL(16, 10) COMMENT '汇率',
@@ -27,5 +28,5 @@ CREATE TABLE claim_case_cal_core
     create_time          DATETIME       NOT NULL COMMENT '创建时间',
     update_by            VARCHAR(20) COMMENT '更新人',
     update_time          DATETIME COMMENT '更新时间',
-    PRIMARY KEY (rpt_no)
+    PRIMARY KEY (core_id)
 ) engine=innodb auto_increment=100 COMMENT = '核心案件同步信息表';

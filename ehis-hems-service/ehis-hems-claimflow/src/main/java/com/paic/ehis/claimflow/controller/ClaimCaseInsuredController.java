@@ -102,7 +102,7 @@ public class ClaimCaseInsuredController extends BaseController {
     public AjaxResult addInsuredAndPolicy(@RequestBody InsuredAndPolicy insuredAndPolicy) {
         claimCaseInsuredService.insertClaimCaseInsuredAndPolicy(insuredAndPolicy);
         int i=0;
-        if (insuredAndPolicy.getClaimType().equals("02")){
+        if (insuredAndPolicy.getClaimType()!=null && !insuredAndPolicy.getClaimType().equals("") && insuredAndPolicy.getClaimType().equals("02")){
             ClaimCaseInsured claimCaseInsured = new ClaimCaseInsured();
             claimCaseInsured.setRptNo(insuredAndPolicy.getClaimCaseInsured().getRptNo());
             claimCaseInsured.setInsuredNo(insuredAndPolicy.getClaimCaseInsured().getInsuredNo());

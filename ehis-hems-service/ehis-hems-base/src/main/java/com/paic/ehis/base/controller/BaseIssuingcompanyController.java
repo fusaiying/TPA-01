@@ -20,14 +20,13 @@ import java.util.List;
 
 /**
  * 出单公司信息 Controller
- * 
+ *
  * @author sino
  * @date 2021-01-05
  */
 @RestController
 @RequestMapping("/issuingcompany")
-public class BaseIssuingcompanyController extends BaseController
-{
+public class BaseIssuingcompanyController extends BaseController {
     @Autowired
     private IBaseIssuingcompanyService baseIssuingcompanyService;
 
@@ -37,8 +36,7 @@ public class BaseIssuingcompanyController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:issuingcompany:list')")
     @PostMapping("/list")
-    public TableDataInfo list(@RequestBody BaseIssuingcompany baseIssuingcompany)
-    {
+    public TableDataInfo list(@RequestBody BaseIssuingcompany baseIssuingcompany) {
         startPage(baseIssuingcompany);
         List<BaseIssuingcompany> list = baseIssuingcompanyService.selectBaseIssuingcompanyList(baseIssuingcompany);
         return getDataTable(list);
@@ -50,16 +48,15 @@ public class BaseIssuingcompanyController extends BaseController
     //@PreAuthorize("@ss.hasPermi('system:issuingcompany:export')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(@RequestBody HttpServletResponse response, BaseIssuingcompany baseIssuingcompany) throws IOException
-    {
+    public void export(@RequestBody HttpServletResponse response, BaseIssuingcompany baseIssuingcompany) throws IOException {
         BaseIssuingcompany baseIssuingcompany1 = new BaseIssuingcompany();
         String companycode = baseIssuingcompany.getCompanycode();
         String companyname = baseIssuingcompany.getCompanyname();
         String simplename = baseIssuingcompany.getSimplename();
 
-        String utf8Code = new String(companycode.getBytes( "UTF-8"));
-        String utf8Name = new String(companyname.getBytes( "UTF-8"));
-        String utf8SimpleName = new String(simplename.getBytes( "UTF-8"));
+        String utf8Code = new String(companycode.getBytes("UTF-8"));
+        String utf8Name = new String(companyname.getBytes("UTF-8"));
+        String utf8SimpleName = new String(simplename.getBytes("UTF-8"));
 
         baseIssuingcompany1.setCompanycode(utf8Code);
         baseIssuingcompany1.setCompanyname(utf8Name);
@@ -75,12 +72,12 @@ public class BaseIssuingcompanyController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:issuingcompany:query')")
     @GetMapping(value = "/{companycode}")
-    public AjaxResult getInfo(@PathVariable("companycode") String companyCode)
-    {
+    public AjaxResult getInfo(@PathVariable("companycode") String companyCode) {
         return AjaxResult.success(baseIssuingcompanyService.selectBaseIssuingcompanyById(companyCode));
     }
 
-    /**使用
+    /**
+     * 使用
      * 新增出单公司信息+修改
      * 传入数据：出单公司名称companyname、出单公司简写名称simplename
      * 传出数据：出单公司名称companyname、出单公司简写名称simplename、出单公司编码companycode
@@ -89,30 +86,40 @@ public class BaseIssuingcompanyController extends BaseController
     @Log(title = "出单公司信息 ", businessType = BusinessType.INSERT)
     @PostMapping("/addissuingAndCompanyDTO")
     public AjaxResult add(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
-        IssuingCompanyVo issuingCompanyVo = baseIssuingcompanyService.insertBaseIssuingcompanyRest(issuingAndCompanyDTO);
-        return AjaxResult.success(issuingCompanyVo);
+//        //出单公司简称-重复校验
+//        List<BaseIssuingcompany> baseIssuingcompanies = baseIssuingcompanyService.selectBaseIssuingcompanyBySimplename(issuingAndCompanyDTO.getBaseIssuingcompany().getSimplename());
+//        //出单公司名称-重复校验
+//        List<BaseIssuingcompany> baseIssuingcompanies1 = baseIssuingcompanyService.selectBaseIssuingcompanyByCompanyname(issuingAndCompanyDTO.getBaseIssuingcompany().getCompanyname());
+//        if (baseIssuingcompanies.size() != 0 && baseIssuingcompanies1.size()==0) {
+//            return AjaxResult.success(1);//简称重复
+//        } else if(baseIssuingcompanies.size() != 0 && baseIssuingcompanies1.size()==0){
+//            return AjaxResult.success(2);//名称重复
+//        }else if(baseIssuingcompanies.size() == 0 && baseIssuingcompanies1.size()==0){
+//            return AjaxResult.success(3);//都重复
+//        } else {
+            IssuingCompanyVo issuingCompanyVo = baseIssuingcompanyService.insertBaseIssuingcompanyRest(issuingAndCompanyDTO);
+            return AjaxResult.success(issuingCompanyVo);
+//        }
     }
 
     /**
-     * 修改出单公司信息 
+     * 修改出单公司信息
      */
     //@PreAuthorize("@ss.hasPermi('system:issuingcompany:edit')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO)
-    {
+    public AjaxResult edit(@RequestBody IssuingAndCompanyDTO issuingAndCompanyDTO) {
         BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();
         return toAjax(baseIssuingcompanyService.updateBaseIssuingcompany(baseIssuingcompany));
     }
 
     /**
-     * 删除出单公司信息 
+     * 删除出单公司信息
      */
     //@PreAuthorize("@ss.hasPermi('system:issuingcompany:remove')")
     @Log(title = "出单公司信息 ", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{companyCodes}")
-    public AjaxResult remove(@PathVariable String[] companyCodes)
-    {
+    @DeleteMapping("/{companyCodes}")
+    public AjaxResult remove(@PathVariable String[] companyCodes) {
         return toAjax(baseIssuingcompanyService.deleteBaseIssuingcompanyByIds(companyCodes));
     }
 }

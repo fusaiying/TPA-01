@@ -93,6 +93,13 @@ public interface ClaimBatchMapper
      */
     List<ClaimBatch> selectClaimBatchByIdOne(String rptNo);
 
+    /**
+     * 新增理赔批次
+     *
+     * @param claimBatch 理赔批次
+     * @return 结果
+     */
+    public int insertClaimBatchPbw(ClaimBatch claimBatch);
 
 
 }

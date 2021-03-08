@@ -4,8 +4,10 @@ package com.paic.ehis.claimflow.service;
 import com.paic.ehis.claimflow.domain.ClaimBatch;
 import com.paic.ehis.claimflow.domain.StandingAndBatck;
 import com.paic.ehis.claimflow.domain.dto.BatchDTO;
+import com.paic.ehis.claimflow.domain.dto.BatchNoRptNoDTO;
 import com.paic.ehis.claimflow.domain.dto.BatchRecordDTO;
 import com.paic.ehis.claimflow.domain.dto.ClaimBatchDTO;
+import com.paic.ehis.claimflow.domain.vo.BatchNoAndCaseNo;
 import com.paic.ehis.claimflow.domain.vo.BatchVo;
 
 import java.util.List;
@@ -78,6 +80,12 @@ public interface IClaimBatchService
      */
     public int insertClaimBatch(ClaimBatch claimBatch);
 
+    /**PBW-在线理赔交单接口
+     *
+     * @param batchNoRptNoDTO 理赔批次
+     * @return 结果
+     */
+    public BatchNoAndCaseNo insertClaimBatchPbw(BatchNoRptNoDTO batchNoRptNoDTO);
 
     /**
      * 修改理赔批次

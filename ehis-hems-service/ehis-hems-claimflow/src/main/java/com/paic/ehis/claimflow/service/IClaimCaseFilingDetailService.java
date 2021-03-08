@@ -59,4 +59,7 @@ public interface IClaimCaseFilingDetailService
      * @return 结果
      */
     public int deleteClaimCaseFilingDetailById(Long filingDetailId);
+
+
+    public int updateCaseFilingDetailInfo(List<ClaimCaseFilingDetail> listDto);
 }

@@ -59,4 +59,18 @@ public interface BaseIssuingcompanyMapper
      * @return 结果
      */
     public int deleteBaseIssuingcompanyByIds(String[] companyCodes);
+
+    /**
+     * 出单公司简称校验
+     * @param simplename
+     * @return
+     */
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyBySimplename(String simplename);
+
+    /**
+     * 出单公司名称校验
+     * @param simplename
+     * @return
+     */
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyByCompanyname(String simplename);
 }

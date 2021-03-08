@@ -908,7 +908,6 @@ export default {
     deal() {
     },
     //反显信息需求
-    //反显信息需求
     searchHandle() {
       let workOrderNo = this.queryParams.workOrderNo
       complainSearch(workOrderNo).then(res => {

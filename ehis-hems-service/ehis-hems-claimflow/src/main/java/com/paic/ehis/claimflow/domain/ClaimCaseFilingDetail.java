@@ -55,6 +55,8 @@ public class ClaimCaseFilingDetail extends BaseEntity
      */
     private String remark;
 
+    private String claimType;
+
     public void setFilingDetailId(Long filingDetailId) 
     {
         this.filingDetailId = filingDetailId;
@@ -144,6 +146,14 @@ public class ClaimCaseFilingDetail extends BaseEntity
     @Override
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getClaimType() {
+        return claimType;
+    }
+
+    public void setClaimType(String claimType) {
+        this.claimType = claimType;
     }
 
     @Override

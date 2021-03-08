@@ -102,8 +102,8 @@ public class PolicyInsuredController extends BaseController
      * modify: hjw
      * time:2021-3-8
      */
-    @GetMapping(value = "/getInfoByElement")
-    public AjaxResult getInfoByElement(PolicyInsured bean)
+    @PostMapping(value = "/getInfoByElement")
+    public AjaxResult getInfoByElement(@RequestBody PolicyInsured bean)
     {
         return AjaxResult.success(policyInsuredService.getInfoByElement(bean));
     }

@@ -82,12 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             case_box_no,rpt_start_no,rpt_end_no,batch_no,
             dept_code,create_time,update_time,claim_type,
             update_by,status,
-               (select count(1)
-                 from claim_case t
-                where substr(t.rpt_no,1,7) = substr(rpt_start_no,1,7)
-                  <![CDATA[ and  substr(t.rpt_no,8) >= substr(rpt_start_no,8) ]]>
-                  <![CDATA[ and substr(t.rpt_no,8) <= substr(rpt_end_no,8) ]]>
-                ) case_num
+               (select count(1) from claim_case_filing_detail t where t.case_box_no = case_box_no and status = 'Y') case_num
         from claim_case_filing
         <where>
             <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>

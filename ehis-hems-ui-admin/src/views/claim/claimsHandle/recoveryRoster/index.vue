@@ -158,7 +158,7 @@
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="证件号码：" prop="idNo">
+                <el-form-item label="证件号码：" prop="idNo" >
                   <span v-if="addFlag"  class="font_grey">{{recoveryInfo.idNo}}</span>
                   <el-input v-if="!addFlag" maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
@@ -233,7 +233,7 @@
   import moment from 'moment'
   import insuredModal from '../common/modul/insured'
 
-  import { listInfo , editData,debtWhiteInfo,checkMoney} from '@/api/recoveryRoster/api'
+  import { listInfo , editData,debtWhiteInfo,checkMoney , checkInsuredData} from '@/api/recoveryRoster/api'
 
     export default {
       filters: {
@@ -247,68 +247,83 @@
         insuredModal
       },
         data() {
-          const checkName = (rule, value, callback) => {
-            if(!this.addFlag) {
-              if (!value) {
-                callback(new Error("名称必填"));
-              } else {
-                if(this.recoveryForm.name !=  this.preName) {
-                  this.updateInsuredFlag = true;
+            const checkName = (rule, value, callback) => {
+              if(!this.addFlag) {
+                if (!value) {
+                  callback(new Error("名称必填"));
+                } else {
+                  if(this.recoveryForm.name !=  this.preName) {
+                    this.updateInsuredFlag = true;
+                  }
+                  callback();
                 }
+              } else {
                 callback();
               }
-            } else {
-              callback();
-            }
-          };
-          const checkBirthDay = (rule, value, callback) => {
-            if(!this.addFlag) {
-              if (!value) {
-                callback(new Error("生日必填"));
-              } else {
-                if(this.recoveryForm.birthday !=  this.preBirthday) {
-                  this.updateInsuredFlag = true;
+            };
+            const checkBirthDay = (rule, value, callback) => {
+              if(!this.addFlag) {
+                if (!value) {
+                  callback(new Error("生日必填"));
+                } else {
+                  if(this.recoveryForm.birthday !=  this.preBirthday) {
+                    this.updateInsuredFlag = true;
+                  }
+                  callback();
                 }
+              } else {
                 callback();
               }
-            } else {
-              callback();
-            }
-          };
-          const checkSex = (rule, value, callback) => {
-            if(!this.addFlag) {
-              if (!value) {
-                callback(new Error("性别必填"));
-              } else {
-                if(this.recoveryForm.sex !=  this.preSex) {
-                  this.updateInsuredFlag = true;
+            };
+            const checkSex = (rule, value, callback) => {
+              if(!this.addFlag) {
+                if (!value) {
+                  callback(new Error("性别必填"));
+                } else {
+                  if(this.recoveryForm.sex !=  this.preSex) {
+                    this.updateInsuredFlag = true;
+                  }
+                  callback();
                 }
+              } else {
                 callback();
               }
-            } else {
-              callback();
-            }
-          };
-          const checkIdNo = (rule, value, callback) => {
-            if(!this.addFlag) {
-              if (!value) {
-                callback(new Error("证件号码必填"));
-              } else {
-                if(this.recoveryForm.preIdNo !=  this.preIdNo) {
-                  this.updateInsuredFlag = true;
+            };
+            const checkIdNo = (rule, value, callback) => {
+              if(!this.addFlag) {
+                if (!value) {
+                  callback(new Error("证件号码必填"));
+                } else {
+                  if(this.recoveryForm.idNo !=  this.preIdNo) {
+                    this.updateInsuredFlag = true;
+                  }
+                  callback();
                 }
+              } else {
                 callback();
               }
-            } else {
-              callback();
-            }
-          };
+            };
+            const checkIdType = (rule, value, callback) => {
+              if(!this.addFlag) {
+                if (!value) {
+                  callback(new Error("证件类型必填"));
+                } else {
+                  if(this.recoveryForm.idType !=  this.preIdType) {
+                    this.updateInsuredFlag = true;
+                  }
+                  callback();
+                }
+              } else {
+                callback();
+              }
+            };
             return {
               updateInsuredFlag : false,
               preName:'',
               preBirthday:'',
               preSex:'',
               preIdNo:'',
+              preIdType:'',
               searchBtn:false,
               saveVFlag:true,
               dialogPolicy:false,
@@ -353,20 +368,18 @@
                 name: {trigger: ['change'], required: true, validator: checkName},
                 birthday: {trigger: ['change'], required: true, validator: checkBirthDay},
                 sex: {trigger: ['change'], required: true,  validator: checkSex},
-                idNo: {trigger: ['change'], required: true, validate:checkIdNo},
+                idNo: {trigger: ['change'], required: true, validator:checkIdNo},
                 level: {trigger: ['change'], required: true, message: '等级必填'},
-                idType: {trigger: ['change'], required: true, message: '证件类型必填'},
+                idType: {trigger: ['change'], required: true,validate:checkIdType},
                 recMessageFlag: {trigger: ['change'], required: true, message: '缴费通知必填'},
                 debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
               },
-                recoveryInfo:{
-                  name:'',
-                  sex:'',
-                  idNo:'',
-                  age:''
-
-
-                },
+              recoveryInfo:{
+                name:'',
+                sex:'',
+                idNo:'',
+                age:''
+              },
               dialogVisable: false,
               rptNos : '',
               addFlag:false,
@@ -646,29 +659,63 @@
             if (valid) {
               const params = this.recoveryForm;
               params.updateInsuredFlag = this.updateInsuredFlag;
-              editData(params).then(response => {
-                this.dialogVisible = false;
-                this.gettableData();
-                if (response.code == '200') {
-                  this.$message({
-                    message: '保存成功！',
-                    type: 'success',
-                    center: true,
-                    showClose: true
-                  });
-                } else {
-                  this.$message({
-                    message: '保存失败！',
-                    type: 'error',
-                    center: true,
-                    showClose: true
-                  });
-                }
-              }).catch(error => {
-                console.log(error);
-              });
+              if(this.updateInsuredFlag) {
+                checkInsuredData(params).then(res => {
+                  if (res.code == '200') {
+                    params.insuredNo = res.data.insuredNo;
+                    const param = {
+                      pageNum:1,
+                      pageSize:3,
+                      insuredNo:this.recoveryForm.insuredNo
+                    };
+                    listInfo(param).then(response => {
+                      let count = response.total;
+                      if(count == 0) {
+                        this.dealData(params);
+                      } else {
+                        this.$message({
+                          message: '该被保人已在名单中',
+                          type: 'info',
+                          center: true,
+                          showClose: true
+                        });
+                      }
+                    }).catch(error => {
+                      this.loading = false
+                      console.log(error);
+                    });
+                  }
+                }).catch(error => {
+                  console.log(error);
+                });
+              } else {
+                this.dealData(params);
+              }
             }
           })
+        },
+        dealData(params){
+          editData(params).then(response => {
+            this.dialogVisible = false;
+            this.gettableData();
+            if (response.code == '200') {
+              this.$message({
+                message: '保存成功！',
+                type: 'success',
+                center: true,
+                showClose: true
+              });
+            } else {
+              this.$message({
+                message: '保存失败！',
+                type: 'error',
+                center: true,
+                showClose: true
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          });
         },
         exportData() {
 
@@ -684,6 +731,7 @@
         },
 
         handleClose() {
+          this.updateInsuredFlag = false,
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
           this.recoveryForm.level  = '';

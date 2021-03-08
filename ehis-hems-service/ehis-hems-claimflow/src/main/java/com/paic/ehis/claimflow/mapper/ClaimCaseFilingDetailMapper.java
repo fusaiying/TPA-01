@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.mapper;
 
+import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
 import com.paic.ehis.claimflow.domain.ClaimCaseFilingDetail;
 
 import java.util.List;
@@ -59,4 +60,14 @@ public interface ClaimCaseFilingDetailMapper
      * @return 结果
      */
     public int deleteClaimCaseFilingDetailByIds(Long[] filingDetailIds);
+
+
+
+    /**
+     * 新增案件归档明细（添加归档信息时根据 报案号起 止 插入明显记录）
+     *
+     * modify by : hjw
+     * time: 2021-3-8
+     */
+    public int insertClaimCaseFilingDetailByRpt(ClaimCaseFiling claimCaseFiling);
 }

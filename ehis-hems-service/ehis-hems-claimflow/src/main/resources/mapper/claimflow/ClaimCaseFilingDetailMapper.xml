@@ -17,10 +17,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectClaimCaseFilingDetailVo">
-        select filing_detail_id, case_box_no, batch_no, rpt_no, is_filing, is_invoice_back, is_single, status, create_by, create_time, update_by, update_time from claim_case_filing_detail
+        select filing_detail_id, case_box_no, batch_no, rpt_no, is_filing, is_invoice_back, is_single, status, create_by, create_time, update_by, update_time , dept_code, remark from claim_case_filing_detail
     </sql>
 
     <select id="selectClaimCaseFilingDetailList" parameterType="ClaimCaseFilingDetail" resultMap="ClaimCaseFilingDetailResult">
@@ -40,7 +42,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseFilingDetailVo"/>
         where filing_detail_id = #{filingDetailId}
     </select>
-        
+
+    <insert id="insertClaimCaseFilingDetailByRpt" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseFiling">
+
+        INSERT INTO
+            claim_case_filing_detail (
+                                        case_box_no,
+                                        batch_no,
+                                        rpt_no,
+                                        status,
+                                        create_by,
+                                        create_time,
+                                        update_by,
+                                        update_time,
+                                        dept_code
+                                    ) (
+                                        select
+                                           #{caseBoxNo},
+                                           #{batchNo},
+                                           rpt_no,
+                                           'Y' ,
+                                           #{createBy},
+                                           now(),
+                                           #{createBy},
+                                           now(),
+                                           #{deptCode}
+                                        from claim_case t
+                                        where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
+                                <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
+                                <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
+                                    )
+    </insert>
+
     <insert id="insertClaimCaseFilingDetail" parameterType="ClaimCaseFilingDetail" useGeneratedKeys="true" keyProperty="filingDetailId">
         insert into claim_case_filing_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -85,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
         </trim>
         where filing_detail_id = #{filingDetailId}
     </update>

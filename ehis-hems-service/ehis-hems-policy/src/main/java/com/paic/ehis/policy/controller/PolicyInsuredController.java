@@ -32,10 +32,10 @@ public class PolicyInsuredController extends BaseController
      * 查询被保人信息列表
      */
     //@PreAuthorize("@ss.hasPermi('system:insured:list')")
-    @GetMapping("/list")
+    @PostMapping("/policy/list")
     public TableDataInfo list(PolicyInsured policyInsured)
     {
-        startPage();
+        startPage(policyInsured);
         List<PolicyInsured> list = policyInsuredService.selectPolicyInsuredList(policyInsured);
         return getDataTable(list);
     }

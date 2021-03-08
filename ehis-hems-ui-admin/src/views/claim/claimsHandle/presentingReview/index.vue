@@ -218,12 +218,17 @@
             pageNum: 1,
             pageSize: 200,
           }
+          let query={
+            pageNum: 1,
+            pageSize: 10,
+            organcode: '',
+          }
           if (res.data != null) {
             item.organCode = res.data.organCode
-            this.searchForm.organcode=res.data.organCode
+            query.organcode=res.data.organCode
           }
           //获取公共池
-          getPublicList(this.searchForm).then(res => {
+          getPublicList(query).then(res => {
             this.publicData = res.rows
             this.publicTotal = res.total
           }).finally(() => {

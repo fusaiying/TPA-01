@@ -168,7 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="generatorInsuredNo"  resultType="String">
-        select lpad((select max(insured_no) + 1 from policy_insured ), 9, 0);
+        select lpad((select max(CAST(insured_no AS SIGNED)) + 1 from policy_insured ), 9, 0);
     </select>
 
 

@@ -33,16 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status" column="status"/>
     </resultMap>
 
-    <resultMap type="com.paic.ehis.cs.domain.vo.QualityVo" id="QualityResult">
-        <result property="workOrderNo" column="work_order_no"/>
-        <result property="organCode" column="organ_code"/>
-        <result property="itemCode" column="item_code"/>
-        <result property="endDate" column="end_date"/>
-        <result property="itemType" column="item_type"/>
-        <result property="updatedBy" column="updated_by"/>
-        <result property="updatedTime" column="updated_time"/>
-        <result property="result" column="result"/>
-    </resultMap>
+
 <!--可质检工单查询-->
     <sql id="selectAcceptVo">
         select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
@@ -85,7 +76,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="serviceItem != null  and serviceItem != ''"> and adi.item_code = #{serviceItem}</if>
 
     </select>
-
+    <resultMap type="com.paic.ehis.cs.domain.vo.QualityVo" id="QualityResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="endDate" column="end_date"/>
+        <result property="itemType" column="item_type"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="result" column="result"/>
+    </resultMap>
     <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
     SELECT DISTINCT
 	qia.work_order_no,

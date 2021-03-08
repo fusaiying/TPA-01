@@ -10,9 +10,11 @@ import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.AttachmentInfoMapper;
 import com.paic.ehis.cs.service.*;
@@ -284,5 +286,15 @@ public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
     List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
     return getDataTable(list);
 }
-
+//************************************************
+    /*
+    质检查询
+     */
+@GetMapping("/internal/selectQualityVo")
+public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
+{
+    startPage();
+    List<QualityVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+    return getDataTable(list);
+}
 }

@@ -169,7 +169,7 @@
                }else {
                  if (this.baseForm.pulloutType==null || this.baseForm.pulloutType===''){
                    return this.$message.warning(
-                     "请选择撤案类型！"
+                     "请选择撤件类型！"
                    )
                  }else {
                    return this.$message.warning(

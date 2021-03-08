@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (item_id,inspection_id,item_type,item_key,value,item_remark,status,created_by,created_time,updated_by,updated_time)
         VALUES
         <foreach collection="list" item="qualityInspectionHandle" index="index" separator=","> <!--  list 为传来的集合数据 -->
-            (#{qualityInspectionHandle.itemCode},#{qualityInspectionHandle.inspectionId},#{qualityInspectionHandle.itemType},#{qualityInspectionHandle.itemKey},#{qualityInspectionHandle.value},#{qualityInspectionHandle.status},#{qualityInspectionHandle.createdBy},now(),#{qualityInspectionHandle.updatedBy},#{qualityInspectionHandle.updatedTime})
+            (#{qualityInspectionHandle.itemId},#{qualityInspectionHandle.inspectionId},#{qualityInspectionHandle.itemType},#{qualityInspectionHandle.itemKey},#{qualityInspectionHandle.value},#{qualityInspectionHandle.status},#{qualityInspectionHandle.createdBy},now(),#{qualityInspectionHandle.updatedBy},#{qualityInspectionHandle.updatedTime})
         </foreach>
     </insert>
 

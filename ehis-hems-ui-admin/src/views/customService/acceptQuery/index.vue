@@ -5,24 +5,24 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="serviceItem">
-              <el-select v-model="acceptQueryForm.serviceItem" class="item-width" placeholder="请选择">
+            <el-form-item label="服务项目：" prop="itemCode">
+              <el-select v-model="acceptQueryForm.itemCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in service_itemOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="channel">
-              <el-select v-model="acceptQueryForm.channel" class="item-width" placeholder="请选择">
+            <el-form-item label="受理渠道：" prop="channelCode">
+              <el-select v-model="acceptQueryForm.channelCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in channelOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理人：" prop="acceptorName">
-              <el-input v-model="acceptQueryForm.acceptorName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="受理人：" prop="acceptBy">
+              <el-input v-model="acceptQueryForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,12 +40,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理人：" prop="handlerName">
-              <el-input v-model="acceptQueryForm.handlerName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="处理人：" prop="modifyBy">
+              <el-input v-model="acceptQueryForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理日期：" prop="handlerTime">
+            <el-form-item label="处理日期：" prop="HandlerTime">
               <el-date-picker
                 v-model="acceptQueryForm.handlerTime"
                 class="item-width"
@@ -86,27 +86,27 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="insuredIdNumber">
+            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
               <el-input v-model="acceptQueryForm.insuredIdNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人电话：" prop="phone">
+            <el-form-item label="联系人电话：" prop="mobilePhone">
               <el-input v-model="acceptQueryForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="acceptQueryForm.organization" class="item-width" placeholder="请选择">
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="acceptQueryForm.organCode" class="item-width" placeholder="请选择">
                 <el-option v-for="item in organizationOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="complaintTime">
+            <el-form-item label="预约日期：" prop="appointmentTime">
               <el-date-picker
                 v-model="acceptQueryForm.complaintTime"
                 class="item-width"
@@ -120,8 +120,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="优先级：" prop="priority">
-              <el-select v-model="acceptQueryForm.priority" class="item-width" placeholder="请选择">
+            <el-form-item label="优先级：" prop="priorityLevel">
+              <el-select v-model="acceptQueryForm.priorityLevel" class="item-width" placeholder="请选择">
                 <el-option v-for="item in priorityOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -136,7 +136,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="状态：" prop="status">
+            <el-form-item label="状态：" prop="status" placeholder="请选择">
               <el-select v-model="acceptQueryForm.status" class="item-width" placeholder="请选择">
                 <el-option v-for="item in statusOptions" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -149,7 +149,7 @@
             size="mini"
             type="success"
             icon="el-icon-search"
-            @click="selectWorkOrder"
+            @click="searchHandle"
           >查询
           </el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
@@ -163,6 +163,7 @@
             <el-button type="primary" size="mini" @click="sendMany">清单导出</el-button>
         </span>
         <el-divider/>
+
         <workOrderTable :table-data="workPoolData" />
         <pagination
           v-show="totalCount>0"
@@ -196,24 +197,24 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       acceptQueryForm: {
-        serviceItem: undefined,
-        channel: undefined,
-        acceptorName: undefined,
-        acceptorTime: undefined,
-        handlerName: undefined,
-        handlerTime: undefined,
-        workOrderNo: undefined,
-        policyNo: undefined,
-        policyItemNo: undefined,
-        holderName: undefined,
-        insuredName: undefined,
-        insuredIdNumber: undefined,
-        phone: undefined,
-        organization: undefined,
-        complaintTime: undefined,
-        priority: undefined,
-        vipFlag: undefined,
-        status: undefined
+        itemCode: "",//服务信息
+        channelCode: "",//受理渠道
+        acceptBy: "",//受理人
+        modifyBy: "",//处理人
+        acceptorTime:[],//受理时间数组
+        appointmentTime:[],//预约时间数组
+        handlerTime:[],//处理时间数组
+        workOrderNo: "",//工单编号
+        policyNo: "",//保单号
+        policyItemNo: "",//分单号
+        holderName: "",//投保人
+        insuredName: "",//被保人
+        idNumber: "",//证件号
+        organCode: "",//出单机构
+        priorityLevel:"",//优先级
+        vipFlag:"",//VIP标识
+        mobilePhone:"",//移动电话
+        status:"",//状态
       },
       queryParams: {
         pageNum: 1,
@@ -224,7 +225,7 @@ export default {
       isinit: 'Y',
       page: 1,
       totalCount: 0,
-      finishPageSize: 10,
+      finishPageSize: 0,
       changeSerchData: {},
       //字典数据对象
       dictList:[],
@@ -238,7 +239,7 @@ export default {
     }
   },
   created() {
-    this.selectWorkOrder()
+    this.searchHandle()
   },
   async mounted() {
     // 字典数据赋值
@@ -274,12 +275,12 @@ export default {
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
-        serviceItemCode: this.acceptQueryForm.serviceItem,
-        channelCode: this.acceptQueryForm.channel,
-        acceptorName: this.acceptQueryForm.acceptorName,
+        itemCode: this.acceptQueryForm.itemCode,
+        channelCode: this.acceptQueryForm.channelCode,
+        acceptBy: this.acceptQueryForm.acceptBy,
         acceptorStartTime: undefined,
         acceptorEndTime: undefined,
-        handlerName: this.acceptQueryForm.handlerName,
+        modifyBy: this.acceptQueryForm.modifyBy,
         handlerStartTime: undefined,
         handlerEndTime: undefined,
         workOrderNo: this.acceptQueryForm.workOrderNo,
@@ -289,10 +290,10 @@ export default {
         insuredName: this.acceptQueryForm.insuredName,
         insuredIdNumber: this.acceptQueryForm.insuredIdNumber,
         phone: this.acceptQueryForm.phone,
-        organizationCode: this.acceptQueryForm.organization,
+        organCode: this.acceptQueryForm.organCode,
         complaintStartTime: undefined,
         complaintEndTime: undefined,
-        priorityCode: this.acceptQueryForm.priority,
+        priorityLevel: this.acceptQueryForm.priorityLevel,
         vipFlag: this.acceptQueryForm.vipFlag,
         status: this.acceptQueryForm.status
       }
@@ -321,25 +322,6 @@ export default {
         }
       }).catch(res => {
 
-      })
-    },
-    selectWorkOrder(){
-      selectWorkOrder(this.queryParams).then(res=>{
-        if (res!=null && res.code===200){
-          this.sendLoading = false
-          //数据重新加载r
-          this.workPoolData=res.rows
-          this.totalCount = res.total
-          this.$message({
-            message: '查询成功！',
-            type: 'success',
-            center: true,
-            showClose: true
-          })
-        }
-      }).catch(res => {
-        this.$message.error('查询失败！')
-        this.sendLoading = false
       })
     },
     sendMany(){

@@ -111,9 +111,9 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
      */
     @Transactional
     @Override
-    public int insertHandle(String[] ids, Map<String, String> param) {
+    public int insertItem(String[] ids, Map<String, String> param) {
         List<QualityInspectionItem> list=new ArrayList<>();
-        QualityInspectionItem qualityInspectionItem=null;
+        QualityInspectionItem qualityInspectionItem=new QualityInspectionItem();
         //从前端获取质检编号
 
         List<FlowLog> flowLogList=new ArrayList<>();
@@ -133,9 +133,10 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             flowLog.setLinkCode(param.get("linkCode"));
             flowLog.setOperateCode(param.get("operateCode"));
             flowLogList.add(flowLog);
+            //记录操作轨迹
+            flowLogMapper.insertBatch(flowLogList);
 
-            qualityInspectionItem=new QualityInspectionItem();
-            qualityInspectionItem.setItemId(ids[i]);
+            qualityInspectionItem.setItemId(PubFun.createMySqlMaxNoUseCache("item_id",32,20));
             qualityInspectionItem.setStatus("01");
             qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
             qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());
@@ -144,8 +145,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
 
             list.add(qualityInspectionItem);
         }
-        //记录操作轨迹
-        flowLogMapper.insertBatch(flowLogList);
+
         return qualityInspectionItemMapper.insertExtDocList(list);
     }
 
@@ -175,7 +175,41 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
      * 质检差错修改item表字段是否时效内响应客户等
      */
     @Override
-    public int updateQualityItem(QualityInspectionItem qualityInspectionItem) {
-        return 0;
+    public int updateQualityItem(String[] ids, Map<String,String> param) {
+        List<QualityInspectionItem> list=new ArrayList<>();
+        QualityInspectionItem qualityInspectionItem=new QualityInspectionItem();
+
+        List<FlowLog> flowLogList=new ArrayList<>();
+        FlowLog flowLog=null;
+        for (int i = 0; i < ids.length; i++) {
+            flowLog=new FlowLog();
+            //流转记录添加
+            String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",32,20);
+            flowLog.setFlowId(flow_id);
+            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            flowLog.setCreatedTime(DateUtils.getNowDate());
+            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            flowLog.setUpdatedTime(DateUtils.getNowDate());
+            flowLog.setWorkOrderNo(ids[i]);
+//            flowLog.setSubId(ids[i]);
+
+            flowLog.setLinkCode(param.get("linkCode"));
+            flowLog.setOperateCode(param.get("operateCode"));
+            flowLogList.add(flowLog);
+            //记录操作轨迹
+            flowLogMapper.insertBatch(flowLogList);
+
+            //随机生成主键流水编号
+            qualityInspectionItem.setItemId(PubFun.createMySqlMaxNoUseCache("item_id",32,20));
+            qualityInspectionItem.setStatus("02");
+            qualityInspectionItem.setUpdatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setUpdatedTime(DateUtils.getNowDate());
+            qualityInspectionItem.setCreatedBy(String.valueOf(SecurityUtils.getLoginUser().getUserId()));
+            qualityInspectionItem.setCreatedTime(DateUtils.getNowDate());
+
+            list.add(qualityInspectionItem);
+        }
+
+        return qualityInspectionItemMapper.updateExtDocList(list);
     }
 }

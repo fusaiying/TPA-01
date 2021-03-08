@@ -203,4 +203,23 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         return issuingCompanyVo;
     }
 
+    /**
+     * 出单公司简称校验
+     * @param simplename
+     * @return
+     */
+    @Override
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyBySimplename(String simplename){
+        return baseIssuingcompanyMapper.selectBaseIssuingcompanyBySimplename(simplename);
+    }
+
+    /**
+     * 出单公司名称校验
+     * @param companyname
+     * @return
+     */
+    @Override
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyByCompanyname(String companyname){
+        return baseIssuingcompanyMapper.selectBaseIssuingcompanyByCompanyname(companyname);
+    }
 }

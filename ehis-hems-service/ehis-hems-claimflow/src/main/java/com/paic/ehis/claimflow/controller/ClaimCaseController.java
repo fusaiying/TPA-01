@@ -595,81 +595,81 @@ public class ClaimCaseController extends BaseController {
     public AjaxResult getInfoBaseCodeMappingNew(BaseCodeMappingNew baseCodeMappingNew) {
         return AjaxResult.success(claimCaseService.selectBaseCodeMappingNew(baseCodeMappingNew));
     }
-
-    /**
-     * PBW在线理赔请求接口-完成机构交单动作
-     *
-     * @param batchNoRptNoDTO
-     * @return batchNoRptNoVO
-     */
-    @PostMapping("/getBatchAndNoRptNo")
-    public AjaxResult getBatchNoRptNo(BatchNoRptNoDTO batchNoRptNoDTO) {
-        String batchCount = batchNoRptNoDTO.getBatchCount();
-        int i1 = Integer.parseInt(batchCount);
-
-        String branchRegion = batchNoRptNoDTO.getBranchRegion();//机构交单编码
-
-        //批次号-取前三位
-        String substring = branchRegion.substring(0, 3);
-
-        //报案号-取三四位
-        String substring1 = branchRegion.substring(2, 4);
-
-        //报案号取值
-        String caseFlag = batchNoRptNoDTO.getCaseFlag();
-        if (caseFlag == null || caseFlag=="") {
-            caseFlag = "0";
-        }
-
-        //判断输入案件数目
-        if (i1 > 0) {
-            BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
-            List<String> rptNoList = new ArrayList<>();
-
-            for (int i = 0; i < i1; i++) {
-                //报案号
-                String bahtime = "96" + substring1 + caseFlag + "X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
-                rptNoList.add(bahtime);
-            }
-
-            //批次号
-            String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
-
-            batchNoRptNoVO.setBatchNo(str1);//批次号
-            batchNoRptNoVO.setDocunoList(rptNoList);//报案号集合
-            Date nowDate = DateUtils.getNowDate();
-            batchNoRptNoVO.setCreateBatchTime(nowDate);//批次生成日期
-
-            ClaimBatch claimBatch = new ClaimBatch();
-            claimBatch.setBatchno(str1);//批次号
-            if ("D".equals(batchNoRptNoDTO.getCaseFlag())) {
-                claimBatch.setSource("01");//交单来源（01-在线交单，02-E结算）
-            } else {
-                claimBatch.setSource("02");//交单来源（01-在线交单，02-E结算）
-            }
-            claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
-            claimBatch.setClaimtype("01");//理赔类型(01-直结，02-事后)
-            claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
-            claimBatch.setCasenum(i1);//案件数量
-            BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
-            claimBatch.setBatchtotal(bd);//批次总金额
-            claimBatch.setOrgancode(batchNoRptNoDTO.getBranchRegion());//交单机构编码
-            claimBatch.setBatchstatus(ClaimStatus.BATCHFINISH.getCode());//03
-            claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());//接单日期
-            claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
-            claimBatch.setDirectReceiptSign(batchNoRptNoDTO.getDirectReceiptSign());//批次是否单张发票
-            claimBatch.setCaseFlag(batchNoRptNoDTO.getCaseFlag());//案件第五位标识码
-            claimBatch.setCreateBy(SecurityUtils.getUsername());
-            claimBatch.setCreateTime(nowDate);
-            //claimBatch.setUpdateBy(SecurityUtils.getUsername());
-            //claimBatch.setUpdateTime(nowDate);
-            claimBatchService.insertClaimBatch(claimBatch);
-
-            return AjaxResult.success(batchNoRptNoVO);
-        } else {
-            return AjaxResult.error("案件数不能小于等于0！");
-        }
-    }
+//
+//    /**
+//     * PBW在线理赔请求接口-完成机构交单动作
+//     *
+//     * @param batchNoRptNoDTO
+//     * @return batchNoRptNoVO
+//     */
+//    @PostMapping("/getBatchAndNoRptNo")
+//    public AjaxResult getBatchNoRptNo(BatchNoRptNoDTO batchNoRptNoDTO) {
+//        String batchCount = batchNoRptNoDTO.getBatchCount();
+//        int i1 = Integer.parseInt(batchCount);
+//
+//        String branchRegion = batchNoRptNoDTO.getBranchRegion();//机构交单编码
+//
+//        //批次号-取前三位
+//        String substring = branchRegion.substring(0, 3);
+//
+//        //报案号-取三四位
+//        String substring1 = branchRegion.substring(2, 4);
+//
+//        //报案号取值
+//        String caseFlag = batchNoRptNoDTO.getCaseFlag();
+//        if (caseFlag == null || caseFlag=="") {
+//            caseFlag = "0";
+//        }
+//
+//        //判断输入案件数目
+//        if (i1 > 0) {
+//            BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
+//            List<String> rptNoList = new ArrayList<>();
+//
+//            for (int i = 0; i < i1; i++) {
+//                //报案号
+//                String bahtime = "96" + substring1 + caseFlag + "X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+//                rptNoList.add(bahtime);
+//            }
+//
+//            //批次号
+//            String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+//
+//            batchNoRptNoVO.setBatchNo(str1);//批次号
+//            batchNoRptNoVO.setDocunoList(rptNoList);//报案号集合
+//            Date nowDate = DateUtils.getNowDate();
+//            batchNoRptNoVO.setCreateBatchTime(nowDate);//批次生成日期
+//
+//            ClaimBatch claimBatch = new ClaimBatch();
+//            claimBatch.setBatchno(str1);//批次号
+//            if ("D".equals(batchNoRptNoDTO.getCaseFlag())) {
+//                claimBatch.setSource("01");//交单来源（01-在线交单，02-E结算）
+//            } else {
+//                claimBatch.setSource("02");//交单来源（01-在线交单，02-E结算）
+//            }
+//            claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
+//            claimBatch.setClaimtype("01");//理赔类型(01-直结，02-事后)
+//            claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
+//            claimBatch.setCasenum(i1);//案件数量
+//            BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
+//            claimBatch.setBatchtotal(bd);//批次总金额
+//            claimBatch.setOrgancode(batchNoRptNoDTO.getBranchRegion());//交单机构编码
+//            claimBatch.setBatchstatus(ClaimStatus.BATCHFINISH.getCode());//03
+//            claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());//接单日期
+//            claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
+//            claimBatch.setDirectReceiptSign(batchNoRptNoDTO.getDirectReceiptSign());//批次是否单张发票
+//            claimBatch.setCaseFlag(batchNoRptNoDTO.getCaseFlag());//案件第五位标识码
+//            claimBatch.setCreateBy(SecurityUtils.getUsername());
+//            claimBatch.setCreateTime(nowDate);
+//            //claimBatch.setUpdateBy(SecurityUtils.getUsername());
+//            //claimBatch.setUpdateTime(nowDate);
+//            claimBatchService.insertClaimBatch(claimBatch);
+//
+//            return AjaxResult.success(batchNoRptNoVO);
+//        } else {
+//            return AjaxResult.error("案件数不能小于等于0！");
+//        }
+//    }
 
     /**
      * PBW在校交单撤件接口

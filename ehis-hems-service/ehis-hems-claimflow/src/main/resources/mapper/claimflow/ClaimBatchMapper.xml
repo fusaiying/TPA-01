@@ -346,6 +346,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <insert id="insertClaimBatchPbw" parameterType="com.paic.ehis.claimflow.domain.ClaimBatch">
+        insert into claim_batch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">batch_no,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="hospitalcode != null and hospitalcode != ''">hospital_code,</if>
+            <if test="claimtype != null and claimtype != ''">claim_type,</if>
+            <if test="submitdate != null">submit_date,</if>
+            <if test="casenum != null">caseload,</if>
+            <if test="batchtotal != null">batch_total,</if>
+            <if test="organcode != null and organcode != ''">organ_code,</if>
+            <if test="currency != null and currency != ''">currency,</if>
+            <if test="conttype != null and conttype != ''">cont_type,</if>
+            <if test="billrecevieflag != null">bill_recevie_flag,</if>
+            <if test="prireason != null">pri_reason,</if>
+            <if test="remark != null">remark,</if>
+            <if test="batchstatus != null and batchstatus != ''">batch_status,</if>
+            <if test="expressnumber != null">express_number,</if>
+            <if test="receivedate != null">receive_date,</if>
+            <if test="sendby != null">send_by,</if>
+            <if test="speccasetype != null">speccase_type,</if>
+            <if test="issuingunit != null">issuing_unit,</if>
+            <if test="contno != null">cont_no,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="directReceiptSign != null">direct_receipt_sign,</if>
+            <if test="caseFlag != null">case_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="batchno != null">#{batchno},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="hospitalcode != null and hospitalcode != ''">#{hospitalcode},</if>
+            <if test="claimtype != null and claimtype != ''">#{claimtype},</if>
+            <if test="submitdate != null">#{submitdate},</if>
+            <if test="casenum != null">#{casenum},</if>
+            <if test="batchtotal != null">#{batchtotal},</if>
+            <if test="organcode != null and organcode != ''">#{organcode},</if>
+            <if test="currency != null and currency != ''">#{currency},</if>
+            <if test="conttype != null and conttype != ''">#{conttype},</if>
+            <if test="billrecevieflag != null">#{billrecevieflag},</if>
+            <if test="prireason != null">#{prireason},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="batchstatus != null and batchstatus != ''">#{batchstatus},</if>
+            <if test="expressnumber != null">#{expressnumber},</if>
+            <if test="receivedate != null">#{receivedate},</if>
+            <if test="sendby != null">#{sendby},</if>
+            <if test="speccasetype != null">#{speccasetype},</if>
+            <if test="issuingunit != null">#{issuingunit},</if>
+            <if test="contno != null">#{contno},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="directReceiptSign != null">#{directReceiptSign},</if>
+            <if test="caseFlag != null">#{caseFlag},</if>
+        </trim>
+    </insert>
+
 <!--    <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">-->
 <!--        SELECT-->
 <!--            a.batch_no "batchNo",-->

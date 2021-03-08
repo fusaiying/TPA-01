@@ -23,6 +23,7 @@ public enum ClaimStatus {
     CASEHANGUP("00", "挂起"),
 
     CASEFINISH("03", "交单完成"),
+
     CASETHREE("04", "扫描"),
 
     CASEACCEPTED("05", "受理"),

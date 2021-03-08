@@ -6,8 +6,10 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.security.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
+import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
 import com.paic.ehis.cs.utils.CodeEnum;
@@ -245,6 +247,11 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         //转换
         acceptVo= (AcceptVo) voUtils.fromVoToVo(acceptVo,fieldMap,acceptDetailInfo);
         return acceptVo;
+    }
+
+    @Override
+    public List<QualityVo> selectQualityVo(QualityDTO qualityDTO) {
+        return qualityInspectionAcceptMapper.selectQualityVo(qualityDTO);
     }
 
 }

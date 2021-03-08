@@ -10,9 +10,11 @@ import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.AttachmentInfoMapper;
 import com.paic.ehis.cs.service.*;
@@ -200,6 +202,9 @@ public class CustomServiceSpotCheckController extends BaseController {
         param.put("status",CodeEnum.CONFIRM_STATE_01.getCode());
         return toAjax(qualityInspectionHandleService.insertHandle(qualityInspectionHandle));
     }
+
+    //************************************************************************************
+
     /**
      * 新增质检项目
      * @param sendIds
@@ -215,8 +220,12 @@ public class CustomServiceSpotCheckController extends BaseController {
         //操作前主流程状态
         param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
         //param.put("inspectionId",);
-        return toAjax(qualityInspectionItemService.insertHandle(sendIds,param));
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
+        return toAjax(qualityInspectionItemService.insertItem(sendIds,param));
     }
+
+    //************************************************************************************
     /**
      * 质检差错查询反显数据
      */
@@ -229,6 +238,9 @@ public class CustomServiceSpotCheckController extends BaseController {
         return getDataTable(list);
     }
 
+
+    //************************************************************************************
+    //质检差错提交接口
     /**
      * 质检差错   修改是否申述等字段
      */
@@ -241,12 +253,19 @@ public class CustomServiceSpotCheckController extends BaseController {
      * 质检差错修改item表字段是否时效内响应客户等
      */
     @PutMapping("/updateQualityItem")
-    public AjaxResult updateQualityItem(@RequestBody QualityInspectionItem qualityInspectionItem)
+    public AjaxResult updateQualityItem( @RequestBody String[] sendIds)
     {
-        return toAjax(qualityInspectionItemService.updateQualityItem(qualityInspectionItem));
+        Map<String,String> param=new HashMap<>();
+
+        //操作前主流程状态
+        param.put("linkCode",CodeEnum.LINK_CODE_10.getCode());
+        //param.put("inspectionId",);
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.OPERATE_CODE_20.getCode());
+        return toAjax(qualityInspectionItemService.updateQualityItem(sendIds,param));
     }
 
-
+//************************************************************************************
     /**
      *质检差错确认工作池查询
      */
@@ -256,6 +275,7 @@ public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
     List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
     return getDataTable(list);
 }
+//************************************************************************************
     /**
      *工单查询
      */
@@ -266,5 +286,15 @@ public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
     List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
     return getDataTable(list);
 }
-
+//************************************************
+    /*
+    质检查询
+     */
+@GetMapping("/internal/selectQualityVo")
+public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
+{
+    startPage();
+    List<QualityVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+    return getDataTable(list);
+}
 }

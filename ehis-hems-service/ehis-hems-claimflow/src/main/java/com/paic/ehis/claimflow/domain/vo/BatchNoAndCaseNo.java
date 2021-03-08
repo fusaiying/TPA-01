@@ -13,7 +13,6 @@ public class BatchNoAndCaseNo {
     private List<String> docunoList;
 
     /**批次号*/
-
     private String batchNo;
 
     /**生成批次时间*/

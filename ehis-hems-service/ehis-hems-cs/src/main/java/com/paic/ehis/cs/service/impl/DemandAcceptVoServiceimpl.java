@@ -312,13 +312,13 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
         //工单表修改
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
 
-        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
-        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+//        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
         acceptDetailInfo.setPriorityLevel(demandAcceptVo.getPriorityLevel());

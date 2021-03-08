@@ -88,4 +88,13 @@ public interface IClaimCaseCalService
      * auth: hjw
      */
     public int updateClaimConclusionNull(String rptNo);
+
+    /***
+     * 案件理算  币种选择后 更新 页面展示汇率及外币给付金额
+     * @param claimCaseCal
+     * @return
+     * auth: flint
+     */
+    public ClaimCaseCal selectExchangeRateForeign(ClaimCaseCal claimCaseCal);
+
 }

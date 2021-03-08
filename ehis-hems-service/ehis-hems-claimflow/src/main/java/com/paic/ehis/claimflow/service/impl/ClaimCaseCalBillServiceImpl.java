@@ -7,6 +7,7 @@ import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
+import com.paic.ehis.claimflow.service.IExchangeRateService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -48,6 +49,12 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Autowired
     private GetProviderInfoService getProviderInfoService;
 
+    @Autowired
+    private ClaimCaseBillMapper claimCaseBillMapper;
+
+    @Autowired
+    private IExchangeRateService exchangeRateService;
+
     /**
      * 查询案件赔付账单明细
      * 
@@ -81,8 +88,28 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Override
     public List<CaseCalBillVo> selectCaseCalInformationList(ClaimCaseCalBill claimCaseCalBill)
     {
+
         claimCaseCalBill.setStatus("Y");
-        return claimCaseCalBillMapper.selectCaseCalInformationList(claimCaseCalBill);
+        List<CaseCalBillVo> caseCalBillVos = claimCaseCalBillMapper.selectCaseCalInformationList(claimCaseCalBill);
+        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+        ClaimCaseBill claimCaseBill = claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCalBill.getRptNo());
+        for (CaseCalBillVo caseCalBillVo : caseCalBillVos) {
+            if (!"CNY".equals(caseCalBillVo.getBillCurrency())){
+                //获取汇率
+                exchangeRate.setBeforeMoney(caseCalBillVo.getBillCurrency());
+                exchangeRate.setAfterMoney("CNY");
+                exchangeRate.setDateConvert(claimCaseBill.getTreatmentStartDate());
+                exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+                if(StringUtils.isNull(exchangeRate)){
+                    return null;
+                }
+                caseCalBillVo.setCopay(caseCalBillVo.getCopay().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setBillAmount(caseCalBillVo.getBillAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setHosDiscountAmount(caseCalBillVo.getHosDiscountAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setUnableAmount(caseCalBillVo.getUnableAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+            }
+        }
+        return caseCalBillVos;
     }
 
     /**

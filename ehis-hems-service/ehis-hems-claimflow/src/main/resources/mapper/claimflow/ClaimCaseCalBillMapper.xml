@@ -37,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="invoiceNo"    column="invoice_no"    />
         <result property="billNo"    column="bill_no"    />
         <result property="copay"    column="copay"    />
+        <result property="billCurrency"    column="bill_currency"    />
         <result property="hosDiscountAmount"    column="hos_discount_amount"    />
         <result property="unableAmount"    column="unable_amount"    />
     </resultMap>
@@ -72,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccb.bill_amount,
         ccb.hos_discount_amount,
         ccb.unable_amount,
+        ccb.bill_currency,
         cccb.dedu_used,
         cccb.pay_amount,
         cccb.cal_amount,

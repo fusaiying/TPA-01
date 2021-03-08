@@ -2,16 +2,23 @@ package com.paic.ehis.claimflow.service.impl;
 
 
 import com.paic.ehis.claimflow.domain.ClaimBatch;
+import com.paic.ehis.claimflow.domain.dto.BatchNoRptNoDTO;
+import com.paic.ehis.claimflow.domain.vo.BatchNoAndCaseNo;
 import com.paic.ehis.claimflow.mapper.ClaimBatchMapper;
 import com.paic.ehis.claimflow.service.IClaimBatchService;
 import com.paic.ehis.common.core.enums.ClaimStatus;
+import com.paic.ehis.common.core.enums.PbwOnlineP;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.PubFun;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -164,7 +171,77 @@ public class ClaimBatchServiceImpl implements IClaimBatchService {
         return claimBatchMapper.updateClaimBatch(claimBatch);
     }
 
+    /**
+     * 新增理赔批次
+     *
+     * @param batchNoRptNoDTO 理赔批次
+     * @return 结果
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public BatchNoAndCaseNo insertClaimBatchPbw(BatchNoRptNoDTO batchNoRptNoDTO) {
 
+        String batchCount = batchNoRptNoDTO.getBatchCount();
+        int i1 = Integer.parseInt(batchCount);
+
+        String branchRegion = batchNoRptNoDTO.getBranchRegion();//机构交单编码
+
+        //批次号-取前三位
+        String substring = branchRegion.substring(0, 3);
+
+        //报案号-取三四位
+        String substring1 = branchRegion.substring(2, 4);
+
+        //报案号取值
+        String caseFlag = batchNoRptNoDTO.getCaseFlag();
+        if (caseFlag == null || caseFlag == "") {
+            caseFlag = PbwOnlineP.BatchSources0.getStatus();
+        }
+
+        BatchNoAndCaseNo batchNoRptNoVO = new BatchNoAndCaseNo();
+        List<String> rptNoList = new ArrayList<>();
+
+        for (int i = 0; i < i1; i++) {
+            //报案号
+            String bahtime = "96" + substring1 + caseFlag + "X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);
+            rptNoList.add(bahtime);
+        }
+
+        //批次号
+        String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
+
+        batchNoRptNoVO.setBatchNo(str1);//批次号
+        batchNoRptNoVO.setDocunoList(rptNoList);//报案号集合
+        Date nowDate = DateUtils.getNowDate();
+        batchNoRptNoVO.setCreateBatchTime(nowDate);//批次生成日期
+
+        ClaimBatch claimBatch = new ClaimBatch();
+        claimBatch.setBatchno(str1);//批次号
+        if (PbwOnlineP.BatchSourcesD.getStatus().equals(batchNoRptNoDTO.getCaseFlag())) {
+            claimBatch.setSource(PbwOnlineP.P_sourcesOne.getStatus());//交单来源（01-在线交单，02-E结算）01
+        } else {
+            claimBatch.setSource(PbwOnlineP.P_sourcesTwo.getStatus());//交单来源（01-在线交单，02-E结算）02
+        }
+        claimBatch.setHospitalcode(batchNoRptNoDTO.getProvider());//医院编码
+        claimBatch.setClaimtype(PbwOnlineP.Claim_typeOne.getStatus());//理赔类型(01-直结，02-事后)01
+        claimBatch.setSubmitdate(batchNoRptNoDTO.getReceiveDate());//收单日期
+        claimBatch.setCasenum(i1);//案件数量
+        BigDecimal bd = new BigDecimal(batchNoRptNoDTO.getBatchAmount());
+        claimBatch.setBatchtotal(bd);//批次总金额
+        claimBatch.setOrgancode(batchNoRptNoDTO.getBranchRegion());//交单机构编码
+        claimBatch.setBatchstatus(ClaimStatus.BATCHFINISH.getCode());//03
+        claimBatch.setReceivedate(batchNoRptNoDTO.getReceiveDate());//接单日期
+        claimBatch.setStatus(ClaimStatus.DATAYES.getCode());//Y
+        claimBatch.setDirectReceiptSign(batchNoRptNoDTO.getDirectReceiptSign());//批次是否单张发票
+        claimBatch.setCaseFlag(batchNoRptNoDTO.getCaseFlag());//案件第五位标识码
+        claimBatch.setCreateBy(SecurityUtils.getUsername());
+        claimBatch.setCreateTime(nowDate);
+        //claimBatch.setUpdateBy(SecurityUtils.getUsername());
+        //claimBatch.setUpdateTime(nowDate);
+        claimBatchMapper.insertClaimBatchPbw(claimBatch);
+
+        return batchNoRptNoVO;
+    }
 //
 //    /**
 //     * 交单复核无效化处理理赔批次

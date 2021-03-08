@@ -27,6 +27,7 @@
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
         >
           <el-table-column type="selection" width="50" align="center"/>
+           <el-table-column v-if="1==2" prop="filingDetailId" label="filingDetailId"  align="center" show-overflow-tooltip />
           <el-table-column prop="rptNo" label="报案号"  align="center" show-overflow-tooltip >
             <template slot-scope="scope" >
               <template v-if="1==2" >
@@ -245,9 +246,9 @@
           pageNum:this.pageInfo.currentPage,
           pageSize:this.pageInfo.pageSize,
           caseBoxNo:this.paramFixInfo.caseBoxNo,
-          rptStartNo:this.paramFixInfo.rptStartNo,
-          rptEndNo:this.paramFixInfo.rptEndNo,
-          orderByColumn:'ccf.create_time',
+          // rptStartNo:this.paramFixInfo.rptStartNo,
+          // rptEndNo:this.paramFixInfo.rptEndNo,
+          orderByColumn:'create_time',
           isAsc:'desc'
         };
 

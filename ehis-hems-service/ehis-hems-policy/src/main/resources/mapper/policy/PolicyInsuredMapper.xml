@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.paic.ehis.claimflow.mapper.PolicyInsuredMapper">
+<mapper namespace="com.paic.ehis.policy.mapper.PolicyInsuredMapper">
     
-    <resultMap type="PolicyInsured" id="PolicyInsuredResult">
+    <resultMap type="com.paic.ehis.policy.domain.PolicyInsured" id="PolicyInsuredResult">
         <result property="insuredNo"    column="insured_no"    />
         <result property="name"    column="name"    />
         <result property="sex"    column="sex"    />
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select insured_no, name, sex, id_type, id_no, birthday, occupation, nationality, id_start_date, id_end_date, mobile, email, phone, province, city, district, address, org_insured_no, status, create_by, create_time, update_by, update_time from policy_insured
     </sql>
 
-    <select id="selectPolicyInsuredList" parameterType="PolicyInsured" resultMap="PolicyInsuredResult">
+    <select id="selectPolicyInsuredList" parameterType="com.paic.ehis.policy.domain.PolicyInsured" resultMap="PolicyInsuredResult">
         <include refid="selectPolicyInsuredVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where insured_no = #{insuredNo}
     </select>
         
-    <insert id="insertPolicyInsured" parameterType="PolicyInsured">
+    <insert id="insertPolicyInsured" parameterType="com.paic.ehis.policy.domain.PolicyInsured">
         insert into policy_insured
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="insuredNo != null">insured_no,</if>
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updatePolicyInsured" parameterType="PolicyInsured">
+    <update id="updatePolicyInsured" parameterType="com.paic.ehis.policy.domain.PolicyInsured">
         update policy_insured
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
@@ -156,67 +156,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{insuredNo}
         </foreach>
     </delete>
-    <resultMap type="com.paic.ehis.claimflow.domain.vo.InsuredVo" id="InsuredVo">
-        <result property="insuredNo"    column="insured_no"    />
-        <result property="name"    column="name"    />
-        <result property="sex"    column="sex"    />
-        <result property="idType"    column="id_type"    />
-        <result property="idNo"    column="id_no"    />
-        <result property="birthday"    column="birthday"    />
-        <result property="occupation"    column="occupation"    />
-        <result property="nationality"    column="nationality"    />
-        <result property="idStartDate"    column="id_start_date"    />
-        <result property="idEndDate"    column="id_end_date"    />
-        <result property="mobile"    column="mobile"    />
-        <result property="email"    column="email"    />
-        <result property="phone"    column="phone"    />
-        <result property="province"    column="province"    />
-        <result property="city"    column="city"    />
-        <result property="district"    column="district"    />
-        <result property="address"    column="address"    />
-        <result property="orgInsuredNo"    column="org_insured_no"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="policyNo"    column="policy_no"    />
-        <result property="policyItemNo"    column="policy_item_no"    />
-    </resultMap>
-
-    <select id="selectRecognizee" parameterType="com.paic.ehis.claimflow.domain.vo.InsuredVo" resultMap="PolicyInsuredResult">
-        select DISTINCT pis.insured_no, pis.name, pis.sex, pis.id_type, pis.id_no, pis.birthday,pis.mobile,pis.email,pis.id_start_date,pis.id_end_date,
-        pis.occupation,pis.nationality,pis.phone,pis.province,pis.city,pis.district,pis.address
-        from policy_insured pis
-        left join policy_info  pi  on pis.insured_no=pi.insured_no  and pi.status='y'
-        <where>
-            <if test="insuredNo != null  and insuredNo != ''"> and pis.insured_no = #{insuredNo}</if>
-            <if test="name != null  and name != ''"> and pis.name like concat('%', #{name}, '%')</if>
-            <if test="sex != null  and sex != ''"> and pis.sex = #{sex}</if>
-            <if test="idType != null  and idType != ''"> and pis.id_type = #{idType}</if>
-            <if test="idNo != null  and idNo != ''"> and pis.id_no = #{idNo}</if>
-            <if test="birthday != null "> and pis.birthday = #{birthday}</if>
-            <if test="policyNo !=null and policyNo != ''"> and pi.policy_no = #{policyNo}</if>
-            <if test="policyItemNo !=null and policyItemNo != ''"> and pi.policy_item_no = #{policyItemNo}</if>
-        </where>
-            and pis.status='y'
-
-    </select>
-
-
-    <select id="selectPolicyInsuredByElement" parameterType="PolicyInsured" resultMap="PolicyInsuredResult">
-        <include refid="selectPolicyInsuredVo"/>
-        where  status = 'Y'
-                and name = #{name}
-                and sex = #{sex}
-                and id_type = #{idType}
-                and id_no = #{idNo}
-                and birthday = #{birthday}
-    </select>
-
-    <select id="generatorInsuredNo"  resultMap="String">
-        select lpad((select max(insured_no) + 1 from policy_insured ), 9, 0);
-    </select>
-
-
+    
 </mapper>

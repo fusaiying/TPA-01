@@ -91,6 +91,9 @@ public class CaseCalBillVo implements Serializable {
     @Excel(name = "不合理金额",combo = "")
     private BigDecimal unableAmount;    //         ccb.unable_amount,
 
+        /** 账单币种 */
+    private String billCurrency;
+
     /**  账单费用详情列表 */
     @Excel(targetAttr="")
     List<CaseCalBillItemVo> minData;

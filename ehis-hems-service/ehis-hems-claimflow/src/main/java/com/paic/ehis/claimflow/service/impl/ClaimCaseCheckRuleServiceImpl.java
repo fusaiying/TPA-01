@@ -14,6 +14,7 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -216,7 +217,8 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
         for (ClaimCaseCheckDTO cc : claimCaseCheckRules) {
             double caseCheck = 0D;
             //判断是否在此抽检比例中
-            boolean random = PubFun.random(cc.getRate().doubleValue());
+            double v = cc.getRate().multiply(new BigDecimal(10)).doubleValue();
+            boolean random = PubFun.random(v);
             //将查询到的金额类型与接收的金额类型进行比较
             if ("赔付金额".equals(cc.getAmountType())) {
                 caseCheck = claimCaseCheckDTO.getPayAmount().doubleValue();

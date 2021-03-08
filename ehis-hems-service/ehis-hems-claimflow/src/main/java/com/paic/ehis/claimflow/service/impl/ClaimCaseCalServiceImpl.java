@@ -3,10 +3,13 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseBill;
 import com.paic.ehis.claimflow.domain.ClaimCaseCal;
+import com.paic.ehis.claimflow.domain.SyncExchangeRate;
 import com.paic.ehis.claimflow.domain.vo.CalBillSummaryVo;
 import com.paic.ehis.claimflow.domain.vo.CalConclusionVo;
+import com.paic.ehis.claimflow.mapper.ClaimCaseBillMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCalMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseCalService;
+import com.paic.ehis.claimflow.service.IExchangeRateService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -34,6 +37,13 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
 
     @Autowired
     private GetProviderInfoService getProviderInfoService;
+
+    @Autowired
+    private ClaimCaseBillMapper claimCaseBillMapper;
+
+    @Autowired
+    private IExchangeRateService exchangeRateService;
+
     /**
      * 查询案件赔付信息
      * 
@@ -99,7 +109,15 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                          * Eg：账单币种HKD，汇率：0.9，赔付金额900CNY
                          * 外币给付金额：900CNY/0.9=1000HKD
                          */
-                        BigDecimal exchangeRate = calConclusionVo.getExchangeRate();
+                        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+                        exchangeRate.setBeforeMoney("CNY");
+                        exchangeRate.setAfterMoney(calConclusionVo.getBillCurrency());
+                        exchangeRate.setDateConvert(claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(rptNo).getTreatmentStartDate());
+                        exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+                        if(StringUtils.isNull(exchangeRate)){
+                            return null;
+                        }
+                        calConclusionVo.setExchangeRate(exchangeRate.getParities());
                         BigDecimal payAmount = calConclusionVo.getPayAmount();
 
                         BigDecimal billAmount = calConclusionVo.getSumBillAmount();
@@ -109,7 +127,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                             //01-非全赔
                             if("01".equals(claimFlag)) {
                                 if(payAmount != null) {
-                                    BigDecimal payAmountForeign = payAmount.divide(exchangeRate,20,BigDecimal.ROUND_HALF_UP);
+                                    BigDecimal payAmountForeign = payAmount.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
                                     calConclusionVo.setPayAmountForeign(payAmountForeign);
 
                                 }
@@ -118,7 +136,7 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
                             if("02".equals(claimFlag)) {
                                 if(billAmount != null && discountAmount != null) {
                                     BigDecimal subtractVal = billAmount.subtract(discountAmount);
-                                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate,20,BigDecimal.ROUND_HALF_UP);
+                                    BigDecimal payAmountForeign = subtractVal.divide(exchangeRate.getParities(),20,BigDecimal.ROUND_HALF_UP);
                                     calConclusionVo.setPayAmountForeign(payAmountForeign);
                                 }
                             }
@@ -186,13 +204,36 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
          * modify by  :  hjw   更新数据可能多于一条， 还有无效数据也更新了
          */
         CalConclusionVo reult = null;
-        try {
-            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
-            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
-            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
-            if (i > 0){
-                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
-            }
+//        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+//        ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCaseCal.getRptNo());
+//        String currency="CNY";
+//        try {
+//            //获取汇率
+//            if (currency.equals(claimCaseCal.getBillCurrency())) {
+//                exchangeRate.setBeforeMoney(caseCal.getBillCurrency());
+//                exchangeRate.setAfterMoney(claimCaseCal.getBillCurrency());
+//                ClaimCaseBill claimCaseBill = claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCal.getRptNo());
+//                exchangeRate.setDateConvert(claimCaseBill.getTreatmentStartDate());
+//                exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+//                if(StringUtils.isNull(exchangeRate)){
+//                    return null;
+//                }
+//            }
+//
+//            claimCaseCal.setPayAmountForeign(exchangeRate.getParities().multiply(claimCaseCal.));
+//            claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+//            claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+//            int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+//            if (i > 0){
+//                reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
+//            }
+            try {
+                claimCaseCal.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseCal.setUpdateTime(DateUtils.getNowDate());
+                int i = claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+                if (i > 0){
+                    reult = claimCaseCalMapper.selectClaimCaseCalInformation(claimCaseCal.getRptNo());
+                }
         } catch (Exception e){
 
         }
@@ -232,6 +273,37 @@ public class ClaimCaseCalServiceImpl implements IClaimCaseCalService
     @Override
     public int updateClaimConclusionNull(String rptNo) {
         return claimCaseCalMapper.updateClaimConclusionNull(rptNo);
+    }
+
+    /***
+     * 案件理算  币种选择后 更新 页面展示汇率及外币给付金额
+     * @param claimCaseCal
+     * @return
+     * auth: flint
+     */
+    @Override
+    public ClaimCaseCal selectExchangeRateForeign(ClaimCaseCal claimCaseCal) {
+        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+        ClaimCaseCal caseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(claimCaseCal.getRptNo());
+        try {
+            //获取汇率
+            if (!caseCal.getBillCurrency().equals(claimCaseCal.getBillCurrency())) {
+                exchangeRate.setBeforeMoney(caseCal.getBillCurrency());
+                exchangeRate.setAfterMoney(claimCaseCal.getBillCurrency());
+                ClaimCaseBill claimCaseBill = claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCal.getRptNo());
+                exchangeRate.setDateConvert(claimCaseBill.getTreatmentStartDate());
+                exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+                if (StringUtils.isNull(exchangeRate)) {
+                    return null;
+                }
+            }
+            claimCaseCal.setExchangeRate(exchangeRate.getParities().setScale(2, BigDecimal.ROUND_HALF_DOWN));
+            claimCaseCal.setPayAmountForeign(exchangeRate.getParities().multiply(claimCaseCal.getCalAmount()).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+
+        } catch (Exception e) {
+
+        }
+        return claimCaseCal;
     }
 
 }

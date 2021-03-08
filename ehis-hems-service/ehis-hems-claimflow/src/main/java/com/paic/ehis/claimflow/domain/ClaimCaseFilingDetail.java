@@ -46,6 +46,17 @@ public class ClaimCaseFilingDetail extends BaseEntity
     @Excel(name = "数据状态", readConverterExp = "Y=-有效，N-无效")
     private String status;
 
+    /**
+     * 登录机构编码
+     */
+    private String deptCode;
+    /**
+     * 备注
+     */
+    private String remark;
+
+    private String claimType;
+
     public void setFilingDetailId(Long filingDetailId) 
     {
         this.filingDetailId = filingDetailId;
@@ -117,6 +128,32 @@ public class ClaimCaseFilingDetail extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getClaimType() {
+        return claimType;
+    }
+
+    public void setClaimType(String claimType) {
+        this.claimType = claimType;
     }
 
     @Override

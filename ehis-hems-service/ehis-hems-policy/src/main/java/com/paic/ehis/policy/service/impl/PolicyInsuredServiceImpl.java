@@ -2,6 +2,7 @@ package com.paic.ehis.policy.service.impl;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.policy.domain.PolicyInsured;
 import com.paic.ehis.policy.mapper.PolicyInsuredMapper;
 import com.paic.ehis.policy.service.IPolicyInsuredService;
@@ -18,8 +19,7 @@ import java.util.List;
  * @date 2021-01-09
  */
 @Service
-public class PolicyInsuredServiceImpl implements IPolicyInsuredService
-{
+public class PolicyInsuredServiceImpl implements IPolicyInsuredService {
     @Autowired
     private PolicyInsuredMapper policyInsuredMapper;
 
@@ -30,8 +30,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 被保人信息
      */
     @Override
-    public PolicyInsured selectPolicyInsuredById(String insuredNo)
-    {
+    public PolicyInsured selectPolicyInsuredById(String insuredNo) {
         return policyInsuredMapper.selectPolicyInsuredById(insuredNo);
     }
 
@@ -42,9 +41,19 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 被保人信息
      */
     @Override
-    public List<PolicyInsured> selectPolicyInsuredList(PolicyInsured policyInsured)
-    {
-        return policyInsuredMapper.selectPolicyInsuredList(policyInsured);
+    public List<PolicyInsured> selectPolicyInsuredList(PolicyInsured policyInsured) {
+        List<PolicyInsured> policyInsuredList = policyInsuredMapper.selectPolicyInsuredList(policyInsured);
+        if (!policyInsuredList.isEmpty()) {
+            policyInsuredMapper.selectPolicyInsuredList(policyInsured);
+        }
+        else {
+            for (PolicyInsured policyInsured1 : policyInsuredList) {
+            policyInsured1.setCreateTime(DateUtils.getNowDate());
+            policyInsured1.setUpdateTime(DateUtils.getNowDate());
+            policyInsuredMapper.insertPolicyInsured(policyInsured1);
+        }
+        }
+        return policyInsuredList;
     }
 
     /**
@@ -54,8 +63,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 结果
      */
     @Override
-    public int insertPolicyInsured(PolicyInsured policyInsured)
-    {
+    public int insertPolicyInsured(PolicyInsured policyInsured) {
         policyInsured.setCreateTime(DateUtils.getNowDate());
         return policyInsuredMapper.insertPolicyInsured(policyInsured);
     }
@@ -67,8 +75,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 结果
      */
     @Override
-    public int updatePolicyInsured(PolicyInsured policyInsured)
-    {
+    public int updatePolicyInsured(PolicyInsured policyInsured) {
         policyInsured.setUpdateTime(DateUtils.getNowDate());
         return policyInsuredMapper.updatePolicyInsured(policyInsured);
     }
@@ -80,8 +87,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 结果
      */
     @Override
-    public int deletePolicyInsuredByIds(String[] insuredNos)
-    {
+    public int deletePolicyInsuredByIds(String[] insuredNos) {
         return policyInsuredMapper.deletePolicyInsuredByIds(insuredNos);
     }
 
@@ -92,8 +98,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
      * @return 结果
      */
     @Override
-    public int deletePolicyInsuredById(String insuredNo)
-    {
+    public int deletePolicyInsuredById(String insuredNo) {
         return policyInsuredMapper.deletePolicyInsuredById(insuredNo);
     }
 

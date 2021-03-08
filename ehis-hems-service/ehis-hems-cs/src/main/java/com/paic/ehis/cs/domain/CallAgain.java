@@ -22,6 +22,8 @@ public class CallAgain extends BaseEntity
     /** 来电流水号 */
     private String callSerialNum;
 
+    private String businessType;
+
     /** 工单号 */
     @Excel(name = "工单号")
     private String workOrderNo;
@@ -35,8 +37,8 @@ public class CallAgain extends BaseEntity
     private String createdBy;
 
     /** 创建时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
     /** 更新人 */
@@ -44,12 +46,12 @@ public class CallAgain extends BaseEntity
     private String updatedBy;
 
     /** 更新时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
     /** 受理时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date acceptTime;
     /** 被保人 */
     @Excel(name = "被保人")

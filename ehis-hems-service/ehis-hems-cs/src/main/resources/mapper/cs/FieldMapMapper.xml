@@ -38,14 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectKVMap" parameterType="String" resultMap="FieldMapResult">
-    SELECT
-	source_filed_name,
-	target_column_name
-FROM
-	field_map
-WHERE
-	target_table_name =  #{targetTableName}
-	AND source_name = #{sourceName}
+        SELECT
+            source_filed_name,
+            target_column_name
+        FROM
+            field_map
+        WHERE
+            target_table_name =  #{targetTableName}
+            AND source_name = #{sourceName}
     </select>
     
     <select id="selectFieldMapById" parameterType="String" resultMap="FieldMapResult">

@@ -12,7 +12,7 @@
     <artifactId>ehis-hems-cs</artifactId>
 
     <description>
-        ehis-hems-cs 理赔交单
+        ehis-hems-cs 客服模块
     </description>
 
     <dependencies>
@@ -78,6 +78,16 @@
             <artifactId>ehis-hems-common-swagger</artifactId>
         </dependency>
 
+        <!-- Ehis-Hems Common Redis-->
+        <dependency>
+            <groupId>com.paic.ehis</groupId>
+            <artifactId>ehis-hems-common-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -85,6 +95,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                指定程序入口，防止其他类中存在main方法-->
+                <configuration>
+                    <mainClass>com.paic.ehis.cs.CustomServiceApplication</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -93,6 +107,19 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- mybatis generator 自动生成代码插件 -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <configuration>
+                    <!--配置文件的位置-->
+                    <configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
    

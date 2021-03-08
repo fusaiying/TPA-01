@@ -3,15 +3,11 @@ package com.paic.ehis.cs.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
@@ -101,4 +97,27 @@ public class WorkHandleInfoController extends BaseController
     {
         return toAjax(workHandleInfoService.deleteWorkHandleInfoByIds(handleIds));
     }
+    //----------------------------------------------------------------------------------------------------
+    /**
+     * 查询工单业处理信息 信息需求
+     */
+//    @PreAuthorize("@ss.hasPermi('system:customService:list')")
+    @GetMapping("/selectWorkOrder")
+    public TableDataInfo selectWorkOrder(ServiceProcessingVo serviceProcessingVo) {
+        List<WorkHandleInfo> list = workHandleInfoService.selectWorkOrder(serviceProcessingVo);
+        return getDataTable(list);
+    }
+    @GetMapping("/selectDealVo")
+    public AjaxResult selectDealVo(WorkOrderAccept workOrderAccept) {
+        String workOrderNo=workOrderAccept.getWorkOrderNo();
+        String businessType=workOrderAccept.getBusinessType();
+        if (businessType=="01"){
+            return AjaxResult.success(workHandleInfoService.selectServiceProcessingVo(workOrderNo));
+        }else if (businessType=="02"){
+            return AjaxResult.success(workHandleInfoService.selectReservationDealVoByNo(workOrderNo));
+        }else{
+            return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));
+        }
+    }
+
 }

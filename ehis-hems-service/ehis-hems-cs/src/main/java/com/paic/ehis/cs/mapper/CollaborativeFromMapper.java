@@ -1,8 +1,9 @@
 package com.paic.ehis.cs.mapper;
 
-import java.util.List;
 import com.paic.ehis.cs.domain.CollaborativeFrom;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
+
+import java.util.List;
 
 /**
  * 协办信息 Mapper接口
@@ -45,6 +46,17 @@ public interface CollaborativeFromMapper
      * @return 结果
      */
     public int updateCollaborativeFrom(CollaborativeFrom collaborativeFrom);
+
+    public int updateConsultationDemand(CollaborativeFrom collaborativeFrom);
+
+    public int updateConsultationDemandOne(CollaborativeFrom collaborativeFrom);
+
+    /**
+     * 撤销协办修改状态
+     * @param collaborativeFrom
+     * @return
+     */
+    public int updateCollaborativeStatus(CollaborativeFrom collaborativeFrom);
 
     /**
      * 删除协办信息 

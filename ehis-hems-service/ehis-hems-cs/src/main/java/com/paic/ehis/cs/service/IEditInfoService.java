@@ -1,6 +1,10 @@
 package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.EditInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
+import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 import java.util.List;
 
@@ -13,6 +17,8 @@ import java.util.List;
  */
 public interface IEditInfoService 
 {
+
+
     /**
      * 查询修改信息 
      * 
@@ -60,4 +66,23 @@ public interface IEditInfoService
      * @return 结果
      */
     public int deleteEditInfoById(Long editId);
+
+    /**
+     * 取消页面提交按钮
+     * @param demandAcceptVo
+     * @return
+     */
+   public int cancelSubmit(DemandAcceptVo demandAcceptVo);
+
+    /**
+     * 取消页面提交按钮
+     */
+    int orderCancelSubmit(ReservationAcceptVo reservationAcceptVo);
+
+    /**
+     * 取消提交
+     * @param complaintAcceptVo
+     * @return
+     */
+    int reservedCancelSubmit(ComplaintAcceptVo complaintAcceptVo);
 }

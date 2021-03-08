@@ -3,16 +3,19 @@ package com.paic.ehis.cs.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
-import com.paic.ehis.cs.domain.PersonInfo;
-import com.paic.ehis.cs.domain.UserInfo;
-import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.*;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
+
 public class ComplaintAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    private String callCenterId;
+
 
     /** 工单编号 */
     private String workOrderNo;
@@ -69,7 +72,13 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 出单机构 */
     @Excel(name = "出单机构")
     private String organCode;
+    /** 有无挂起 */
+    @Excel(name = "有无挂起")
+    private String hangFlag;
 
+    /** 挂起原因 */
+    @Excel(name = "挂起原因")
+    private String hangReason;
     /** 状态 每个业务流程中的状态；如：待处理、处理中（&协办表=协办中）、处理完成、质检中、质检完成；
      信息需求公共查询中状态：01-待处理；02-处理中；03-已处理；04-已完成；05-已取消； */
     @Excel(name = "状态 每个业务流程中的状态；如：待处理、处理中", readConverterExp = "&=协办表=协办中")
@@ -86,6 +95,11 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 优先级 */
     @Excel(name = "优先级")
     private String priorityLevel;
+
+    /** 被保人客户号 */
+    @Excel(name = "被保人客户号")
+    private String insuredNo;
+
 
     /** 来电人与被保人关系 */
     @Excel(name = "来电人与被保人关系")
@@ -112,10 +126,30 @@ public class ComplaintAcceptVo extends BaseEntity {
     private String content;
     /** 联系人*/
     private PersonInfo contactsPerson;
+    /** 联系人国家*/
+    private String contactsCountry;
+    /** 联系人区号*/
+    private String contactsQuhao;
+    /** 联系人号码*/
+    private String contactsNumber;
+    /** 联系人分机号*/
+    private String contactsSecondNumber;
+    /** 联系人性别*/
+    private String contactsSex;
+    /** 联系人姓名*/
+    private String contactsName;
+    /** 联系人语言*/
+    private String contactsLanguage;
+    /** 联系人电话*/
+    private String contactsMobilePhone;
     /**投诉人*/
     private PersonInfo complainantPerson;
+    /*被保人*/
+    private PersonInfo insurer;
     /** 原操作人*/
     private UserInfo OperatorLast;
+
+
 
     /** 修改人 */
     private UserInfo Reviser;
@@ -125,8 +159,21 @@ public class ComplaintAcceptVo extends BaseEntity {
 
     /** 有无附件*/
     private String attachmentFlag;
-    /** 一级投诉分类  */
-    private  String level1;
-    /** 二级投诉分类  */
-    private  String level2;
+
+    /*是否已劝解*/
+    private  String persuasionFlag;
+
+    private EditInfo editInfo;
+
+    private EditDetail editDetail;
+
+    /**
+     * 修改原因
+     */
+    private String  editReason;
+    /**
+     * 修改说明
+     */
+    private String editRemark;
+
 }

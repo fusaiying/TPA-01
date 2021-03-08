@@ -60,4 +60,11 @@ public interface FlowLogMapper
      * @return 结果
      */
     public int deleteFlowLogByIds(String[] flowIds);
+
+    /**
+     * 批量插入记录
+     * @param flowLogList
+     * @return
+     */
+    public int insertBatch(List<FlowLog> flowLogList);
 }

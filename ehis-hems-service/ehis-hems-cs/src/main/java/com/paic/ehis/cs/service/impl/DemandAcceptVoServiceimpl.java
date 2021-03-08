@@ -304,6 +304,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         BeanUtils.copyProperties(callPerson1, callPerson);
      //   PersonInfo contactsPerson = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
         PersonInfo contactsPerson1 = personInfoMapper.selectPersonInfoById(demandAcceptVo.getContactsPersonId());
+        contactsPerson1.setLinePhone("");
         PersonInfo contactsPerson=new PersonInfo();
         BeanUtils.copyProperties(contactsPerson1, contactsPerson);
         FlowLog flowLog = new FlowLog();

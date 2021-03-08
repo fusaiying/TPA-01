@@ -1,12 +1,14 @@
 package com.paic.ehis.policy.service.impl;
 
+import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.policy.domain.PolicyInsured;
 import com.paic.ehis.policy.mapper.PolicyInsuredMapper;
 import com.paic.ehis.policy.service.IPolicyInsuredService;
-import com.paic.ehis.common.core.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,4 +96,32 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
     {
         return policyInsuredMapper.deletePolicyInsuredById(insuredNo);
     }
+
+    /**
+     * 根据5要素查询被保人信息 ，如果没查询到则新增一条数据
+     * modify: hjw
+     * time:2021-3-8
+     */
+    @Override
+    public PolicyInsured getInfoByElement(PolicyInsured bean)  {
+        PolicyInsured result = policyInsuredMapper.selectPolicyInsuredByElement(bean);
+        if(null == result) {
+            Date nowDate = new Date();
+            String username = SecurityUtils.getUsername();
+            bean.setCreateBy(username);
+            bean.setUpdateBy(username);
+            bean.setCreateTime(nowDate);
+            bean.setUpdateTime(nowDate);
+            // 根据5要素没有查询到被保险人， 则需要新增一条记录
+            String insuredNo = policyInsuredMapper.generatorInsuredNo();
+            bean.setInsuredNo(insuredNo);
+            bean.setStatus("Y");
+            int insertResult = policyInsuredMapper.insertPolicyInsured(bean);
+            if(insertResult  == 1) {
+               return bean;
+            }
+        }
+        return result;
+    }
+
 }

@@ -202,5 +202,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and pis.status='y'
 
     </select>
-    
+
+
+    <select id="selectPolicyInsuredByElement" parameterType="PolicyInsured" resultMap="PolicyInsuredResult">
+        <include refid="selectPolicyInsuredVo"/>
+        where  status = 'Y'
+                and name = #{name}
+                and sex = #{sex}
+                and id_type = #{idType}
+                and id_no = #{idNo}
+                and birthday = #{birthday}
+    </select>
+
+    <select id="generatorInsuredNo"  resultMap="String">
+        select lpad((select max(insured_no) + 1 from policy_insured ), 9, 0);
+    </select>
+
+
 </mapper>

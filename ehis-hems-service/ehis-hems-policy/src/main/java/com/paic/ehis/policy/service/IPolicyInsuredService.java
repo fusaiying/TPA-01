@@ -59,4 +59,5 @@ public interface IPolicyInsuredService
      */
     public int deletePolicyInsuredById(String insuredNo);
 
+    public PolicyInsured getInfoByElement(PolicyInsured bean);
 }

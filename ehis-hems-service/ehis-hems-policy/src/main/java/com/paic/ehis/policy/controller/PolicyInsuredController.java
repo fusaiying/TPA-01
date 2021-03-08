@@ -97,4 +97,15 @@ public class PolicyInsuredController extends BaseController
     }
 
 
+    /**
+     * 根据5要素查询被保人信息 ，如果没查询到则新增一条数据
+     * modify: hjw
+     * time:2021-3-8
+     */
+    @GetMapping(value = "/getInfoByElement")
+    public AjaxResult getInfoByElement(PolicyInsured bean)
+    {
+        return AjaxResult.success(policyInsuredService.getInfoByElement(bean));
+    }
+
 }

@@ -60,4 +60,8 @@ public interface PolicyInsuredMapper
      */
     public int deletePolicyInsuredByIds(String[] insuredNos);
 
+    public PolicyInsured selectPolicyInsuredByElement(PolicyInsured policyInsured);
+
+    public String generatorInsuredNo();
+
 }

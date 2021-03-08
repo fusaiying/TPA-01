@@ -203,7 +203,15 @@ export default {
                 center: true,
                 showClose: true
               })
-              this.getData()
+             // this.tableData.splice(this.index, 1)
+             // this.getData()
+              getICDList(this.formSearch).then(response => {
+                this.tableData = response.rows;
+                this.totalCount = response.total;
+                this.loading = false;
+              }).catch(res => {
+                this.loading = false
+              })
             }
           })
           /*  this.$message({

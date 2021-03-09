@@ -56,13 +56,13 @@ public class ComplaintAcceptVo extends BaseEntity {
     private String acceptBy;
 
     /** 受理时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "受理时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date acceptTime;
 
     /** 修改时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
 
     /** VIP标识 */

@@ -142,6 +142,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         workOrderAccept.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setBusinessType(complaintAcceptVo.getBusinessType());
+        workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertWorkOrderAccept(workOrderAccept);
 
 

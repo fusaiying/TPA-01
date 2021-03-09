@@ -6,10 +6,7 @@ import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingVO;
 import com.paic.ehis.claimflow.domain.vo.RptNoVo;
-import com.paic.ehis.claimflow.mapper.ClaimBatchInvoiceFilingMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseFilingMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
-import com.paic.ehis.claimflow.mapper.SysUserMapper;
+import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseFilingService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -44,6 +41,9 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private ClaimCaseFilingDetailMapper claimCaseFilingDetailMapper;
 
 
     /**
@@ -87,6 +87,8 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         claimCaseFiling.setCreateTime(nowDate);
         claimCaseFiling.setUpdateTime(nowDate);
         claimCaseFiling.setUpdateBy(username);
+
+               claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
         return claimCaseFilingMapper.insertClaimCaseFiling(claimCaseFiling);
     }
 
@@ -151,16 +153,16 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         List<ClaimCaseFilingListVO> list = new ArrayList<>();
         //遍历集合
         for (ClaimCaseFilingVO claimCaseFilingVo1 :claimCaseFilingVoS) {
-
+//
             ClaimCaseFilingListVO claimCaseFilingListVO = new ClaimCaseFilingListVO();
-
-            claimCaseFilingListVO.setRptStartNo(claimCaseFilingVo1.getRptStartNo());
-            claimCaseFilingListVO.setRptEndNo(claimCaseFilingVo1.getRptEndNo());
-
-            if(StringUtils.isNotBlank(claimCaseFilingVo1.getRptStartNo()) && StringUtils.isNotBlank(claimCaseFilingVo1.getRptEndNo())) {
-                String caseNum = claimCaseMapper.selectCaseClaimCaseFilingList(claimCaseFilingListVO);
-                claimCaseFilingListVO.setCasenum(caseNum);
-            }
+//
+//            claimCaseFilingListVO.setRptStartNo(claimCaseFilingVo1.getRptStartNo());
+//            claimCaseFilingListVO.setRptEndNo(claimCaseFilingVo1.getRptEndNo());
+//
+//            if(StringUtils.isNotBlank(claimCaseFilingVo1.getRptStartNo()) && StringUtils.isNotBlank(claimCaseFilingVo1.getRptEndNo())) {
+//                String caseNum = claimCaseMapper.selectCaseClaimCaseFilingList(claimCaseFilingListVO);
+//                claimCaseFilingListVO.setCasenum(caseNum);
+//            }
             // cocy
             BeanUtils.copyProperties(claimCaseFilingVo1,claimCaseFilingListVO);
 
@@ -184,13 +186,26 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     /** 编辑按钮 */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO claimCaseFilingListVO) {
+    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO dto) {
 
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-        claimCaseFilingListVO.setUpdateBy(username);
-        claimCaseFilingListVO.setUpdateTime(nowDate);
-        claimCaseFilingMapper.updateClaimCaseFilingEdit(claimCaseFilingListVO);
+        dto.setUpdateBy(username);
+        dto.setUpdateTime(nowDate);
+        /**
+         * 如果批次号修改或者报案号起止修改，则根据盒号删除明细，重新生成明细记录
+         * modify by : hjw
+         * time : 2021-03-09
+         */
+        if(dto.isUpdateDetail()) {
+            claimCaseFilingDetailMapper.deleteClaimCaseFilingDetailByCaseBoxNo(dto.getCaseBoxNo());
+            ClaimCaseFiling claimCaseFiling = new ClaimCaseFiling();
+            BeanUtils.copyProperties(dto,claimCaseFiling);
+            claimCaseFiling.setCreateBy(username);
+            claimCaseFiling.setCreateTime(nowDate);
+            claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
+        }
+        claimCaseFilingMapper.updateClaimCaseFilingEdit(dto);
 
     }
 

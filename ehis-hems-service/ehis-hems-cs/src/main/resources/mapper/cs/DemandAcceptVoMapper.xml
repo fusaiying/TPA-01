@@ -5,7 +5,9 @@
 <mapper namespace="com.paic.ehis.cs.mapper.DemandAcceptVoMapper">
     <resultMap type="com.paic.ehis.cs.domain.vo.DemandAcceptVo" id="DemandAcceptVoResult">
         <result property="workOrderNo" column="work_order_no"/>
+        <result property="isRedWord" column="isRedWord"/>
         <result property="businessType" column="business_type"/>
+        <result property="businessService" column="business_service"/>
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
         <result property="riskCode" column="risk_code"/>
@@ -22,7 +24,6 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
-        <result property="workOrderNo" column="work_order_no"/>
         <result property="channelCode" column="channel_code"/>
         <result property="itemCode" column="item_code"/>
         <result property="callPersonId" column="call_person_id"/>
@@ -33,59 +34,63 @@
         <result property="email" column="email"/>
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
     </resultMap>
 
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.status,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
-FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-  and a.insured_no=c.person_id
-and a.business_type='信息需求'
-and a.status='01'
+        SELECT  DISTINCT
+        a.work_order_no,
+        a.business_type,
+        concat( a.business_type, '-', b.item_code ) AS business_service,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.call_center_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.email,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
+        WHERE
+        a.business_type = '01'
+        AND a.STATUS = '01'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
-        <if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>
+        <!--<if test="acceptTime != null "> and a.accept_time = #{acceptTime}</if>-->
         <if test="acceptTimeStart != null and acceptTimeEnd != null"> and a.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
         <if test="modifyBy != null  and modifyBy != ''"> and a.modify_by = #{modifyBy}</if>
         <if test="modifyTimeStart != null and modifyTimeEnd != null"> and a.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
@@ -101,56 +106,70 @@ and a.status='01'
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
         <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+        ORDER BY
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
 	</select>
 
 
     <select id="selectDemandAcceptVoList2" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.STATUS,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
-FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-and a.insured_no=c.person_id
-  and a.business_type='信息需求'
-and a.status='02'
+        SELECT
+        a.work_order_no,
+        a.business_type,
+        concat(a.business_type,'-', b.item_code) as business_service,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2,
+        CASE
+        WHEN (
+        a.STATUS = '02'
+        AND ( SELECT 1 FROM collaborative_from cf WHERE cf.STATUS = '02' AND cf.work_order_no = a.work_order_no ) = 1
+        ) THEN
+        '06' ELSE a.STATUS
+        END,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
+        WHERE
+        a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
+        AND a.business_type = '01'
+        AND a.STATUS = '02'
         <if test="channelCode != null  and channelCode != ''"> and b.channel_code = #{channelCode}</if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="acceptBy != null  and acceptBy != ''"> and a.accept_by = #{acceptBy}</if>
@@ -169,56 +188,78 @@ and a.status='02'
         <if test="status != null  and status != ''"> and a.status = #{status}</if>
         <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <if test="updateBy != null  and updateBy != ''"> and a.update_by = #{updateBy}</if>
        <!-- <if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
-	</select>
+        ORDER BY
+        isRedWord DESC,b.priority_level ASC,a.accept_time asc
+</select>
 
-    <select id="selectDemandAcceptVoById" resultType="com.paic.ehis.cs.domain.vo.DemandAcceptVo">
-        SELECT
-a.work_order_no,
-a.business_type,
-a.policy_no,
-a.policy_item_no,
-a.risk_code,
-a.insured_no,
-a.insured_name,
-a.holder_no,
-a.holder_name,
-a.accept_by,
-a.accept_time,
-a.modify_by,
-a.modify_time,
-a.vip_flag,
-a.organ_code,
-a.STATUS,
-a.create_by create_by1,
-a.create_time create_time1,
-a.update_by update_by1,
-a.update_time update_time1,
-b.channel_code,
-b.item_code,
-b.call_person_id,
-b.call_relation_by,
-b.priority_level,
-b.contacts_person_id,
-b.contacts_relation_by,
-b.call_center_id,
-b.email,
-b.organ_code,
-b.content,
-b.complaint_person_id,
-b.create_by create_by2,
-b.create_time create_time2,
-b.update_by update_by2,
-b.update_time update_time2
+    <select id="selectDemandAcceptVoById" resultMap="DemandAcceptVoResult">
+         SELECT
+        a.work_order_no,
+        (select distinct 1 from call_again ca
+        where ca.work_order_no=a.work_order_no and ca.status='Y'
+        ) as isRedWord,
+        a.business_type,
+        concat(a.business_type,'-', b.item_code) as business_service,
+        a.policy_no,
+        a.policy_item_no,
+        a.risk_code,
+        a.insured_no,
+        a.insured_name,
+        a.holder_no,
+        a.holder_name,
+        a.accept_by,
+        a.accept_time,
+        a.modify_by,
+        a.modify_time,
+        a.vip_flag,
+        a.organ_code,
+        a.STATUS,
+        a.create_by create_by1,
+        a.create_time create_time1,
+        a.update_by update_by1,
+        a.update_time update_time1,
+        b.call_center_id,
+        b.channel_code,
+        b.item_code,
+        b.call_person_id,
+        b.call_relation_by,
+        b.priority_level,
+        b.contacts_person_id,
+        b.contacts_relation_by,
+        b.call_center_id,
+        b.email,
+        b.organ_code,
+        b.content,
+        b.complaint_person_id,
+        b.create_by create_by2,
+        b.create_time create_time2,
+        b.update_by update_by2,
+        b.update_time update_time2
+        FROM
+        accept_detail_info b
+        LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
+        LEFT JOIN person_info c ON a.insured_no = c.person_id
+        where a.work_order_no=#{workOrderNo}
+    </select>
+
+    <select id="selectDemandAcceptVo" parameterType="String" resultMap="DemandAcceptVoResult">
+SELECT
+	a.work_order_no,
+	a.call_center_id,
+	a.call_person_id,
+	a.call_relation_by,
+	a.contacts_person_id,
+	a.contacts_relation_by,
+	a.email,
+	a.organ_code,
+	a.content,
+	a.channel_code,
+	a.priority_level
 FROM
-work_order_accept a,
-accept_detail_info b,
-person_info c
-WHERE
-a.work_order_no = b.work_order_no
-and a.insured_no=c.person_id
-  and a.business_type='信息需求'
-  and a.work_order_no=#{workOrderNo}
+	accept_detail_info a
+	where a.work_order_no=#{workOrderNo}
     </select>
 
     <update id="updateStatus" parameterType="String" >
@@ -226,9 +267,19 @@ and a.insured_no=c.person_id
         where status='01'and work_order_no = #{workOrderNo}
     </update>
 
+
+    <update id="updateCancelStatus" parameterType="String" >
+         update work_order_accept set status = '05'
+        where  work_order_no = #{workOrderNo}
+    </update>
+    <update id="updateTeamwork" parameterType="String" >
+         update work_order_accept set status = '06'
+        where  work_order_no = #{workOrderNo}
+    </update>
+
     <update id="updateStatusM" parameterType="String" >
          update work_order_accept set status = '02'
-        where status='01'and business_type='信息需求' and work_order_no in
+        where status='01' and work_order_no in
         <foreach item="workOrderNo" collection="array" open="(" separator="," close=")">
             #{workOrderNo}
         </foreach>
@@ -470,7 +521,107 @@ and a.insured_no=c.person_id
     </insert>
 
 
-
-
+    <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type
+        from collaborative_from t3
+        left join  accept_detail_info t2  on t3.work_order_no=t2.work_order_no
+        left join  work_order_accept t1 on t1.work_order_no=t3.work_order_no
+        left join person_info c on t1.insured_no=c.person_id
+        where  t1.business_type in("01","03")
+        and t1.status='02'
+        and t3.status='01'
+        <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+    </select>
+    <resultMap type="com.paic.ehis.cs.domain.vo.WorkOrderVo" id="WorkOrderVoResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="insuredName" column="insured_name"/>
+        <result property="holderName" column="holder_name"/>
+        <result property="acceptBy" column="accept_by"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyBy" column="modify_by"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="priorityLevel" column="priority_level"/>
+    </resultMap>
+    <select id="selectWorkOrder" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="WorkOrderVoResult">
+        SELECT
+        t1.work_order_no,
+        t2.channel_code,
+        t2.item_code,
+        t1.policy_no,
+        t1.policy_item_no,
+        t1.risk_code,
+        t1.insured_name,
+        t1.holder_name,
+        t1.accept_time,
+        t1.accept_by,
+        t1.modify_time,
+        t1.modify_by,
+        t1.vip_flag,
+        t2.priority_level,
+        t2.organ_code,
+        t1.status,
+        CASE
+        WHEN hm.nnn IS NOT NULL THEN
+        1 ELSE 0
+        END AS isRedWord
+        FROM
+        work_order_accept t1
+        LEFT JOIN accept_detail_info t2 ON t1.work_order_no = t2.work_order_no
+        LEFT JOIN person_info c ON t1.insured_no = c.person_id
+        LEFT JOIN ( SELECT DISTINCT  work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND STATUS = 'Y' ) hm ON t2.work_order_no = hm.nnn
+        <where>
+        <if test="channelCode != null  and channelCode != ''"> and t2.channel_code = #{channelCode}</if>
+        <if test="itemCode != null  and itemCode != ''"> and t2.item_code = #{itemCode}</if>
+        <if test="acceptBy != null  and acceptBy != ''"> and t1.accept_by = #{acceptBy}</if>
+        <if test="acceptTime != null "> and t1.accept_time = #{acceptTime}</if>
+        <if test="acceptTimeStart != null and acceptTimeEnd != null"> and t1.accept_time between #{acceptTimeStart} and DATE_ADD(#{acceptTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="modifyBy != null  and modifyBy != ''"> and t1.modify_by = #{modifyBy}</if>
+        <if test="modifyTimeStart != null and modifyTimeEnd != null"> and t1.modify_time between #{modifyTimeStart} and DATE_ADD(#{modifyTimeEnd},INTERVAL 1 DAY)</if>
+        <if test="workOrderNo != null and workOrderNo != ''" > and t1.work_order_no= #{workOrderNo}</if>
+        <if test="policyNo != null  and policyNo != ''"> and t1.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and t1.policy_item_no = #{policyItemNo}</if>
+        <if test="insuredName != null  and insuredName != ''"> and t1.insured_name like concat('%', #{insuredName}, '%')</if>
+        <if test="holderName != null  and holderName != ''"> and t1.holder_name like concat('%', #{holderName}, '%')</if>
+        <if test="vipFlag != null  and vipFlag != ''"> and t1.vip_flag = #{vipFlag}</if>
+        <if test="organCode != null  and organCode != ''"> and t1.organ_code = #{organCode}</if>
+        <if test="priorityLevel != null  and priorityLevel != ''"> and t2.priority_level = #{priorityLevel}</if>
+        <if test="status != null  and status != ''"> and t2.status = #{status}</if>
+        <if test="idNumber != null  and idNumber != ''"> and c.id_number = #{idNumber}</if>
+        <if test="mobilePhone != null  and mobilePhone != ''"> and c.mobile_phone = #{mobilePhone}</if>
+        <!--<if test="complaintTime != null  and complaintTime != ''"> and complaintTime = #{complaintTime}</if>-->
+       </where>
+        ORDER BY
+        isRedWord DESC,t2.priority_level ASC,t1.accept_time asc
+    </select>
 
 </mapper>

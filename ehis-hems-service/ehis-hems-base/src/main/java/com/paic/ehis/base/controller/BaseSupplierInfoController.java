@@ -120,4 +120,7 @@ public class BaseSupplierInfoController extends BaseController
 
         return AjaxResult.success(list);
     }
+
+
+
 }

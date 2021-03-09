@@ -1,7 +1,11 @@
 package com.paic.ehis.cs.mapper;
 
 import java.util.List;
+
+import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.domain.vo.ReservationDealVo;
 import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 
 /**
@@ -45,6 +49,13 @@ public interface WorkHandleInfoMapper
     public int updateWorkHandleInfo(WorkHandleInfo workHandleInfo);
 
     /**
+     * 协办投诉处理
+     * @param workHandleInfo
+     * @return
+     */
+    public int assistInComplaint(WorkHandleInfo workHandleInfo);
+
+    /**
      * 删除工单处理信息 
      * 
      * @param handleId 工单处理信息 ID
@@ -67,4 +78,38 @@ public interface WorkHandleInfoMapper
      * @return
      */
     public int insertServiceProcessing(WorkHandleInfo workHandleInfo);
+
+    /**
+     * 服务处理已有数据时修改表中数据并将其余数据状态改为N
+     * @param workHandleInfo
+     * @return
+     */
+    public int updateServiceProcessing(WorkHandleInfo workHandleInfo);
+
+    /**
+     * 将所有数据置为N
+     * @param workHandleInfo
+     * @return
+     */
+    public int updateStatus(WorkHandleInfo workHandleInfo);
+
+
+
+    /**
+     * 根据工单号查询当前创建人
+     * @param workHandleInfo
+     * @return
+     */
+    public WorkHandleInfo selectCreatedBy(WorkHandleInfo workHandleInfo);
+
+    public WorkHandleInfo selectWorkHandleInfoByNo(String workOrderNo);
+    public WorkHandleInfo selectWorkComplaintByNo(String workOrderNo);
+
+    public ComplaintDealVo selectDealVoByNo(String workOrderNo);
+    public ComplaintDealVo selectComplaintDealVoByNo(String workOrderNo);
+    public ServiceProcessingVo selectDemandDealVoByNo(String workOrderNo);
+    public ReservationDealVo selectReservationDealVoByNo(String workOrderNo);
+
+    public WorkHandleInfo selectWorkHandleInfo(String workOrderNo,String status);
+
 }

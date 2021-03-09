@@ -70,4 +70,18 @@ public interface IBaseIssuingcompanyService
      * @return
      */
     public IssuingCompanyVo insertBaseIssuingcompanyRest(IssuingAndCompanyDTO issuingAndCompanyDTO);
+
+    /**
+     * 出单公司简称校验
+     * @param simplename
+     * @return
+     */
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyBySimplename(String simplename);
+
+    /**
+     * 出单公司校验
+     * @param companyname
+     * @return
+     */
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyByCompanyname(String companyname);
 }

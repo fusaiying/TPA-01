@@ -21,7 +21,7 @@ public class BatchNoRptNoDTO{
     /**
      * 交单日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull
     private Date billDate;
 
@@ -52,7 +52,7 @@ public class BatchNoRptNoDTO{
     /**
      * 收单日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull
     private Date receiveDate;
 

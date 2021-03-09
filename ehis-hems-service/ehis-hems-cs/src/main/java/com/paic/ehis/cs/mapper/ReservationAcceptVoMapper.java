@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ReservationAcceptVoMapper {
 
+    public ReservationAcceptVo selectReservationAcceptVo(String workOrderNo);
+
     /*公共池*/
     public List<ReservationAcceptVo> selectReservationAcceptVoList(AcceptDTO acceptDTO);
 
@@ -15,4 +17,5 @@ public interface ReservationAcceptVoMapper {
 
     /*获取*/
     public int updateStatusM(String[] workOrderNos);
+    public int updateOrderCancelStatus(String workOrderNo);
 }

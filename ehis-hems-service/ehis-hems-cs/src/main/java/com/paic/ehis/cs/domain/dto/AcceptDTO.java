@@ -103,4 +103,6 @@ public class AcceptDTO implements Serializable {
     /** 预约时间*/
     private Date complaintTime;
 
+    private String updateBy;
+
 }

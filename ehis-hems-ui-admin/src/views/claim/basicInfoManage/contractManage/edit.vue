@@ -164,7 +164,7 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="服务机构名称：" prop="providerCode">
+            <el-form-item label="服务机构名称：" prop="providerCode" key="providerCode22">
               <el-select  filterable  :disabled="onlyAddPro" v-model="providerForm.providerCode" class="item-width" placeholder="请选择" @change="typeServerChange">
                 <el-option v-for="option in providerInfoSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
@@ -181,7 +181,7 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="合约乙方：" prop="contractPartyB">
+            <el-form-item label="合约乙方：" prop="contractPartyB" key="contractPartyB111">
               <el-input maxlength="100" :disabled="isShow" v-model="providerForm.contractPartyB" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>

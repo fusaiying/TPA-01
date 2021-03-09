@@ -227,13 +227,11 @@
     </select>
 
     <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultType="String">
-        select count(1) from claim_case
-        <where>
-            <if test="rptStartNo != null and rptStartNo != '' and rptEndNo != null and rptEndNo != ''">
-                <![CDATA[and rpt_no >=  #{rptStartNo} and rpt_no <= #{rptEndNo} ]]>
-            </if>
-
-        </where>
+        select count(1) from claim_case t
+            where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
+            <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
+            <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
+            )
     </select>
 
     <insert id="insertClaimCase" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
@@ -710,7 +708,7 @@
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
         AND record.operation = '07'
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'y'
+        AND record.history_flag = 'Y'
         AND record.operator = #{operator}
         and cases.case_status in ('00','30','31','32')
         and cases.status='Y'

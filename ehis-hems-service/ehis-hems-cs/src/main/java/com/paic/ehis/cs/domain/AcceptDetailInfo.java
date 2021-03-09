@@ -69,6 +69,100 @@ public class AcceptDetailInfo extends BaseEntity
     @Excel(name = "投诉人编号 person_info中的编号")
     private String complaintPersonId;
 
+    /** 是否涉及银行转账*/
+    private String bankTransfer;
+
+    /** 开户行*/
+    private String bankName;
+
+    /** 开户地*/
+    private String bankLocation;
+
+    /** 账号*/
+    private String accountNumber;
+
+    /** 户名*/
+    private String bankHolder;
+
+    /*是否已劝解*/
+    private  String persuasionFlag;
+
+    /*门诊直接结算服务项目*/
+    private String outpatientSettlement;
+
+    /*就诊类型*/
+    private String visitType;
+
+    /*疾病名称*/
+    private String disease;
+
+    /*症状或体征*/
+    private String symptomsSigns;
+
+    /*本次疾病/症状起病时间*/
+    private String symptomTimes;
+
+    /*时间单位*/
+    private String timeUnit;
+
+    /*是否意外*/
+    private String accidentFlag;
+
+    /*意外原因*/
+    private String accidentReason;
+
+    /*是否持有效证件*/
+    private String validCertificate;
+
+    /*是否持有直结卡*/
+    private String settlementCard;
+
+    /*预约时间*/
+    private String complaintTime;
+
+    /*预计住院天数*/
+    private String hospitalDays;
+
+    /*医疗机构*/
+    private String medicalInstitution;
+
+    /*科室*/
+    private String department;
+
+    /*床位*/
+    private String bunk;
+
+    /*医院赔付比例*/
+    private String compensationRatio;
+
+    /**预约日期*/
+    private String appointmentDate;
+
+    /**医院工作来电*/
+    private String hospitalWorkCall;
+
+    /**类似疾病症状最早发生时间*/
+    private String earliestTime;
+
+    /**是否首次就诊*/
+    private String firstFlag;
+
+    /**就诊日期*/
+    private String clinicDate;
+
+    /**就诊时间*/
+    private String clinicTime;
+
+    /**就诊医院省*/
+    private String province;
+
+    /**就诊医院市*/
+    private String city;
+
+    /**是否申请直结*/
+    private String settlementFlag;
+
+
     /** 状态 */
     @Excel(name = "状态")
     private String status;
@@ -177,7 +271,255 @@ public class AcceptDetailInfo extends BaseEntity
     @Excel(name = "见转意表")
     private String prop25;
 
-    public void setWorkOrderNo(String workOrderNo) 
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getHospitalWorkCall() {
+        return hospitalWorkCall;
+    }
+
+    public void setHospitalWorkCall(String hospitalWorkCall) {
+        this.hospitalWorkCall = hospitalWorkCall;
+    }
+
+    public String getEarliestTime() {
+        return earliestTime;
+    }
+
+    public void setEarliestTime(String earliestTime) {
+        this.earliestTime = earliestTime;
+    }
+
+    public String getFirstFlag() {
+        return firstFlag;
+    }
+
+    public void setFirstFlag(String firstFlag) {
+        this.firstFlag = firstFlag;
+    }
+
+    public String getClinicDate() {
+        return clinicDate;
+    }
+
+    public void setClinicDate(String clinicDate) {
+        this.clinicDate = clinicDate;
+    }
+
+    public String getClinicTime() {
+        return clinicTime;
+    }
+
+    public void setClinicTime(String clinicTime) {
+        this.clinicTime = clinicTime;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getSettlementFlag() {
+        return settlementFlag;
+    }
+
+    public void setSettlementFlag(String settlementFlag) {
+        this.settlementFlag = settlementFlag;
+    }
+
+    public String getOutpatientSettlement() {
+        return outpatientSettlement;
+    }
+
+    public void setOutpatientSettlement(String outpatientSettlement) {
+        this.outpatientSettlement = outpatientSettlement;
+    }
+
+    public String getVisitType() {
+        return visitType;
+    }
+
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
+    }
+
+    public String getDisease() {
+        return disease;
+    }
+
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
+
+    public String getSymptomsSigns() {
+        return symptomsSigns;
+    }
+
+    public void setSymptomsSigns(String symptomsSigns) {
+        this.symptomsSigns = symptomsSigns;
+    }
+
+    public String getSymptomTimes() {
+        return symptomTimes;
+    }
+
+    public void setSymptomTimes(String symptomTimes) {
+        this.symptomTimes = symptomTimes;
+    }
+
+    public String getTimeUnit() {
+        return timeUnit;
+    }
+
+    public void setTimeUnit(String timeUnit) {
+        this.timeUnit = timeUnit;
+    }
+
+    public String getValidCertificate() {
+        return validCertificate;
+    }
+
+    public void setValidCertificate(String validCertificate) {
+        this.validCertificate = validCertificate;
+    }
+
+    public String getSettlementCard() {
+        return settlementCard;
+    }
+
+    public void setSettlementCard(String settlementCard) {
+        this.settlementCard = settlementCard;
+    }
+
+    public String getHospitalDays() {
+        return hospitalDays;
+    }
+
+    public void setHospitalDays(String hospitalDays) {
+        this.hospitalDays = hospitalDays;
+    }
+
+    public String getMedicalInstitution() {
+        return medicalInstitution;
+    }
+
+    public void setMedicalInstitution(String medicalInstitution) {
+        this.medicalInstitution = medicalInstitution;
+    }
+
+    public String getAccidentFlag() {
+        return accidentFlag;
+    }
+
+    public void setAccidentFlag(String accidentFlag) {
+        this.accidentFlag = accidentFlag;
+    }
+
+    public String getAccidentReason() {
+        return accidentReason;
+    }
+
+    public void setAccidentReason(String accidentReason) {
+        this.accidentReason = accidentReason;
+    }
+
+    public String getComplaintTime() {
+        return complaintTime;
+    }
+
+    public void setComplaintTime(String complaintTime) {
+        this.complaintTime = complaintTime;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getBunk() {
+        return bunk;
+    }
+
+    public void setBunk(String bunk) {
+        this.bunk = bunk;
+    }
+
+    public String getCompensationRatio() {
+        return compensationRatio;
+    }
+
+    public void setCompensationRatio(String compensationRatio) {
+        this.compensationRatio = compensationRatio;
+    }
+
+    public String getPersuasionFlag() {
+        return persuasionFlag;
+    }
+
+    public void setPersuasionFlag(String persuasionFlag) {
+        this.persuasionFlag = persuasionFlag;
+    }
+
+    public String getBankTransfer() {
+        return bankTransfer;
+    }
+
+    public void setBankTransfer(String bankTransfer) {
+        this.bankTransfer = bankTransfer;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankLocation() {
+        return bankLocation;
+    }
+
+    public void setBankLocation(String bankLocation) {
+        this.bankLocation = bankLocation;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getBankHolder() {
+        return bankHolder;
+    }
+
+    public void setBankHolder(String bankHolder) {
+        this.bankHolder = bankHolder;
+    }
+
+    public void setWorkOrderNo(String workOrderNo)
     {
         this.workOrderNo = workOrderNo;
     }

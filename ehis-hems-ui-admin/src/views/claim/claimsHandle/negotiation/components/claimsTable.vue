@@ -11,7 +11,7 @@
 
     <el-table-column width="160" align="center" prop="rptNo" label="报案号" show-overflow-tooltip>
       <template slot-scope="scope">
-        <el-button width="160" size="small" type="text" @click="editHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+        <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
       </template>
     </el-table-column>
     <el-table-column align="center" prop="companyName" label="出单公司" show-overflow-tooltip/>
@@ -80,6 +80,26 @@ export default {
         path: '/claims-handle/nagotDetail',
         query: {type:type,rptNo: row.rptNo,discId:row.discId}
 
+      })
+    },
+
+    // 处理跳转
+    viewHandle(row, status) {
+      let data = encodeURI(
+        JSON.stringify({
+          batchNo: row.batchNo,
+          claimType: row.claimType,
+          rptNo: row.rptNo,
+          status,
+          node: 'calculateReview',
+          styleFlag: 'list',
+        })
+      )
+      this.$router.push({
+        path: '/claims-handle/accept-process',
+        query: {
+          data
+        }
       })
     },
     // detailHandle(row, status) {

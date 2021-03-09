@@ -58,7 +58,8 @@
     </appender>
 
     <!-- 系统模块日志级别控制  -->
-	<logger name="com.paic.ehis" level="info" />
+    <!-- 调整打印级别便于mybatis sql 打印 -->
+	<logger name="com.paic.ehis" level="DEBUG" />
 	<!-- Spring日志级别控制  -->
 	<logger name="org.springframework" level="warn" />
 

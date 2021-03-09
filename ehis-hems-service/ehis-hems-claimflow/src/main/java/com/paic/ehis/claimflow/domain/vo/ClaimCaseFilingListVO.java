@@ -68,6 +68,17 @@ public class ClaimCaseFilingListVO extends BaseEntity {
     /** 报案号 */
     private String rptNo;
 
+    /** 报案号 */
+    private boolean updateDetail;
+
+    public boolean isUpdateDetail() {
+        return updateDetail;
+    }
+
+    public void setUpdateDetail(boolean updateDetail) {
+        this.updateDetail = updateDetail;
+    }
+
     public String getCaseBoxNo() {
         return caseBoxNo;
     }

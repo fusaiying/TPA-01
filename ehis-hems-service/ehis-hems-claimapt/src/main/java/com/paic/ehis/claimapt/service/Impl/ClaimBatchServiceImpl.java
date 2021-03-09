@@ -595,10 +595,10 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchInvoiceFiling.setIsFiling(billrecevieflag);
         }
         claimBatchInvoiceFiling.setStatus("Y");
-        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
-        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
-        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        claimBatchInvoiceFiling.setCreateBy(SecurityUtils.getUsername());
+//        claimBatchInvoiceFiling.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        claimBatchInvoiceFiling.setUpdateBy(SecurityUtils.getUsername());
+//        claimBatchInvoiceFiling.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         claimBatchInvoiceFilingMapper.insertClaimBatchInvoiceFiling(claimBatchInvoiceFiling);
     }
 

@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedTime"    column="updated_time"    />
         <result property="editRemark"    column="edit_remark"    />
         <result property="editReason"    column="edit_reason"    />
+        <result property="subId"    column="sub_id"    />
     </resultMap>
 
     <sql id="selectEditDetailVo">
@@ -51,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where detail_id = #{detailId}
     </select>
 
-    <select id="selectEdit" parameterType="String" resultMap="EditDetailResult">
+    <select id="selectEdit" parameterType="com.paic.ehis.cs.domain.FlowLog" resultMap="EditDetailResult">
         SELECT
 	i.edit_remark,
 	i.edit_reason,
@@ -60,10 +61,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	d.item_key
 FROM
 	edit_info i,
-	edit_detail d
+	edit_detail d,
+	flow_log f
 WHERE
 	i.edit_id = d.edit_id
-	AND i.work_order_id=#{workOrderNo}
+	and i.edit_id=f.sub_id
+	AND i.work_order_id=#{workOrderNo} and f.sub_id=#{subId}
     </select>
         
     <insert id="insertEditDetail" parameterType="EditDetail">

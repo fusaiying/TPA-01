@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.AttachmentInfoMapper">
+    
+    <resultMap type="com.paic.ehis.cs.domain.AttachmentInfo" id="AttachmentInfoResult">
+        <result property="attachmentId" column="attachment_id"/>
+        <result property="businessNo" column="business_no"/>
+        <result property="subBusinessNo" column="sub_business_no"/>
+        <result property="businessType" column="business_type"/>
+        <result property="filenetid" column="fileNetId"/>
+        <result property="attachmentName" column="attachment_name"/>
+        <result property="attachmentUrl" column="attachment_url"/>
+        <result property="attachmentType" column="attachment_type"/>
+        <result property="state" column="state"/>
+        <result property="remark" column="remark"/>
+        <result property="orderId" column="order_id"/>
+        <result property="status" column="status"/>
+        <result property="uplodBy" column="uplod_by"/>
+        <result property="uploadTime" column="upload_time"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+
+    <sql id="selectAttachmentInfoVo">
+        select attachment_id, business_no, sub_business_no, business_type, fileNetId, attachment_name, attachment_url, attachment_type, state, remark, order_id, status, uplod_by, upload_time, updated_by, updated_time from attachment_info
+    </sql>
+
+    <select id="selectAttachmentInfoList" parameterType="com.paic.ehis.cs.domain.AttachmentInfo" resultMap="AttachmentInfoResult">
+        <include refid="selectAttachmentInfoVo"/>
+        <where>  
+            <if test="businessNo != null  and businessNo != ''"> and business_no = #{businessNo}</if>
+            <if test="subBusinessNo != null  and subBusinessNo != ''"> and sub_business_no = #{subBusinessNo}</if>
+            <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
+            <if test="filenetid != null  and filenetid != ''"> and fileNetId = #{filenetid}</if>
+            <if test="attachmentName != null  and attachmentName != ''"> and attachment_name like concat('%', #{attachmentName}, '%')</if>
+            <if test="attachmentUrl != null  and attachmentUrl != ''"> and attachment_url = #{attachmentUrl}</if>
+            <if test="attachmentType != null  and attachmentType != ''"> and attachment_type = #{attachmentType}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="uplodBy != null  and uplodBy != ''"> and uplod_by = #{uplodBy}</if>
+            <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
+            <if test="updatedBy != null  and updatedBy != ''"> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectAttachmentInfoById" parameterType="String" resultMap="AttachmentInfoResult">
+        <include refid="selectAttachmentInfoVo"/>
+        where attachment_id = #{attachmentId}
+    </select>
+        
+    <insert id="insertAttachmentInfo" parameterType="com.paic.ehis.cs.domain.AttachmentInfo">
+        insert into attachment_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attachmentId != null">attachment_id,</if>
+            <if test="businessNo != null and businessNo != ''">business_no,</if>
+            <if test="subBusinessNo != null">sub_business_no,</if>
+            <if test="businessType != null">business_type,</if>
+            <if test="filenetid != null">fileNetId,</if>
+            <if test="attachmentName != null">attachment_name,</if>
+            <if test="attachmentUrl != null">attachment_url,</if>
+            <if test="attachmentType != null">attachment_type,</if>
+            <if test="state != null">state,</if>
+            <if test="remark != null">remark,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="status != null">status,</if>
+            <if test="uplodBy != null and uplodBy != ''">uplod_by,</if>
+            <if test="uploadTime != null">upload_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attachmentId != null">#{attachmentId},</if>
+            <if test="businessNo != null and businessNo != ''">#{businessNo},</if>
+            <if test="subBusinessNo != null">#{subBusinessNo},</if>
+            <if test="businessType != null">#{businessType},</if>
+            <if test="filenetid != null">#{filenetid},</if>
+            <if test="attachmentName != null">#{attachmentName},</if>
+            <if test="attachmentUrl != null">#{attachmentUrl},</if>
+            <if test="attachmentType != null">#{attachmentType},</if>
+            <if test="state != null">#{state},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="uplodBy != null and uplodBy != ''">#{uplodBy},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAttachmentInfo" parameterType="com.paic.ehis.cs.domain.AttachmentInfo">
+        update attachment_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessNo != null and businessNo != ''">business_no = #{businessNo},</if>
+            <if test="subBusinessNo != null">sub_business_no = #{subBusinessNo},</if>
+            <if test="businessType != null">business_type = #{businessType},</if>
+            <if test="filenetid != null">fileNetId = #{filenetid},</if>
+            <if test="attachmentName != null">attachment_name = #{attachmentName},</if>
+            <if test="attachmentUrl != null">attachment_url = #{attachmentUrl},</if>
+            <if test="attachmentType != null">attachment_type = #{attachmentType},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="uplodBy != null and uplodBy != ''">uplod_by = #{uplodBy},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where attachment_id = #{attachmentId}
+    </update>
+
+    <delete id="deleteAttachmentInfoById" parameterType="String">
+        delete from attachment_info where attachment_id = #{attachmentId}
+    </delete>
+
+    <delete id="deleteAttachmentInfoByIds" parameterType="String">
+        delete from attachment_info where attachment_id in 
+        <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
+            #{attachmentId}
+        </foreach>
+    </delete>
+    
+</mapper>

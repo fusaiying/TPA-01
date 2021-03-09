@@ -299,6 +299,7 @@
                 preBatchNo:'',
                 preRptStartNo:'',
                 preRptEndNo:'',
+                preClaimType:'',
             }
         },
       mounted(){
@@ -415,6 +416,7 @@
             this.preBatchNo = row.batchNo;
             this.preRptStartNo = row.rptStartNo;
             this.preRptEndNo = row.rptEndNo;
+            this.preClaimType = row.claimType;
             if(row.batchNo != ''  && row.batchNo != null) {
               this.readbatchNo = true;
             } else {
@@ -437,7 +439,10 @@
           this.$refs.pbaceCaseForm.validate((valid) => {
             if (valid) {
               if(this.read) {  // 更新
-                if(this.preBatchNo != this.pbaceCaseForm.batchNo || this.preRptStartNo != this.pbaceCaseForm.rptStartNo || this.preRptEndNo != this.pbaceCaseForm.rptEndNo) {
+                if(this.preBatchNo != this.pbaceCaseForm.batchNo
+                  || this.preRptStartNo != this.pbaceCaseForm.rptStartNo
+                  || this.preRptEndNo != this.pbaceCaseForm.rptEndNo
+                || this.preClaimType != this.pbaceCaseForm.claimType) {
                   params.updateDetail = true;
                 } else {
                   params.updateDetail = false;

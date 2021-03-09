@@ -216,9 +216,12 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo3.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo3);
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+ PubFun.createMySqlMaxNoUseCache("flow_id",10,3));
-        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
+        flowLog.setStatus("01");
+        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -251,8 +254,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(complaintAcceptVo.getOrganCode());
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -263,8 +266,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag());
-        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
-        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
+//        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -280,8 +283,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         callPerson.setPersonId(complaintAcceptVo.getCallPersonId());
         callPerson.setName(complaintAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
-        callPerson.setUpdatedBy(SecurityUtils.getUsername());
-        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
         //插入联系人
         contactsPerson.setPersonId(complaintAcceptVo.getContactsPersonId());
@@ -293,8 +296,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     //    contactsPerson.setLinePhone(complaintAcceptVo.getContactsPerson().getLinePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(complaintAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(complaintAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+complaintAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
-        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
         //插入投诉人
         complainantPerson.setPersonId(complaintAcceptVo.getComplaintPersonId());
@@ -302,19 +305,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complainantPerson.setIdentity(complaintAcceptVo.getComplainantPerson().getIdentity());
         complainantPerson.setName(complaintAcceptVo.getComplainantPerson().getName());
         complainantPerson.setMobilePhone(complaintAcceptVo.getComplainantPerson().getMobilePhone());
-        complainantPerson.setUpdatedBy(SecurityUtils.getUsername());
-        complainantPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        complainantPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        complainantPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(complainantPerson);
-
-        //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
-        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
-        flowLog.setOperateCode("01");
-        flowLog.setCreatedBy(SecurityUtils.getUsername());
-        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setUpdatedBy(SecurityUtils.getUsername());
-        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo1), Map.class);
@@ -442,6 +435,20 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
         editInfo.setEditReason(complaintAcceptVo.getEditReason());
         editInfoMapper.insertEditInfo(editInfo);
+
+        //轨迹表插入
+        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setOperateCode("03");
+        flowLog.setStatus(workOrderAccept.getStatus());
+        flowLog.setSubId(editId);
+        flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
+        flowLog.setCreatedBy(SecurityUtils.getUsername());
+        flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setUpdatedBy(SecurityUtils.getUsername());
+        flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
 
         return  complaintAcceptVoMapper.insertFlowLog(flowLog);
     }

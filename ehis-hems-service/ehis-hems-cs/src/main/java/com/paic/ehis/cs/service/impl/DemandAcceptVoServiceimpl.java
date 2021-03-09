@@ -278,8 +278,11 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
         //轨迹表插入
         flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
-        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
+        flowLog.setStatus("01");
+        flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
@@ -471,7 +474,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setUpdatedBy(SecurityUtils.getUsername());
         flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+
 
         //Hcs
         if (demandAcceptVo.getAlterId() != null) {

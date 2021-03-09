@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
+import com.paic.ehis.claimflow.domain.ClaimCaseFilingDetail;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;
@@ -204,6 +205,13 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
             claimCaseFiling.setCreateBy(username);
             claimCaseFiling.setCreateTime(nowDate);
             claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
+        } else {
+            if(StringUtils.isNotBlank(dto.getClaimType())) {
+                ClaimCaseFilingDetail detail = new ClaimCaseFilingDetail();
+                detail.setCaseBoxNo(dto.getCaseBoxNo());
+                detail.setClaimType(dto.getClaimType());
+                claimCaseFilingDetailMapper.updateClaimCaseFilingDetail(detail);
+            }
         }
         claimCaseFilingMapper.updateClaimCaseFilingEdit(dto);
 

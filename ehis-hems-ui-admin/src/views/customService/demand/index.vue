@@ -337,9 +337,9 @@
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
-          :page.sync="pageNumPerson"
-          :limit.sync="pageSizePerson"
-          @pagination="searchHandle1"
+          :page.sync="param.pageNum"
+          :limit.sync="param.pageSize"
+          @pagination="searchProcessHandle"
         />
       </div>
     </el-card>
@@ -415,14 +415,39 @@
           // complaintTimeEnd:""//结束预约时间
 
         },
+        //传值给后端
+        param:{
+          pageNum:1,
+          pageSize:10,
+          acceptorTime:[],//受理时间数组
+          appointmentTime:[],//预约时间数组
+          handlerTime:[],//处理时间数组
+          itemCode: "",//服务信息
+          channelCode: "",//受理渠道
+          acceptBy: "",//受理人
+          modifyBy: "",//处理人
+          workOrderNo: "",//工单编号
+          policyNo: "",//保单号
+          policyItemNo: "",//分单号
+          holderName: "",//投保人
+          insuredName: "",//被保人
+          idNumber: "",//证件号
+          organCode: "",//出单机构
+          priorityLevel:"",//优先级
+          vipFlag:"",//VIP标识
+          mobilePhone:"",//移动电话
+          status:"",//状态
+          acceptTimeStart:"",//开始受理时间
+          acceptTimeEnd:"",//结束受理时间
+          modifyTimeStart:"",//开始修改时间
+          modifyTimeEnd:"",//结束修改时间
+          complaintTimeStart:"",//开始预约时间
+          complaintTimeEnd:""//结束预约时间
+        },
         caseNumber: false,//查询条件（报案号）是否显示
         loading: true,
         workPoolData: [],//公共池
-        pageNum: 1,
-        pageSize: 10,
         workPersonPoolData:[],
-        pageNumPerson: 1,
-        pageSizePerson: 10,
         isinit: 'Y',
         totalCount: 0,
         totalPersonCount: 0,
@@ -604,7 +629,7 @@
         demandListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.rows.length
+            this.totalCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -616,23 +641,11 @@
         })
       },
       //处理中查询
-      searchHandle1() {
-        let queryParams;
-        if (this.timeArray.acceptorTime !==null&&this.timeArray.acceptorTime!=="") {
-          queryParams = JSON.parse(JSON.stringify(this.sendForm));
-          queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
-          queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
-          console.log(queryParams,"dsd")
-        } else {
-          queryParams = this.sendForm;
-        }
-
-        queryParams.pageNum = this.pageNumPerson;
-        queryParams.pageSize = this.pageSizePerson;
-        demandListAndPersonalPool(queryParams).then(res => {
+      searchProcessHandle() {
+        demandListAndPersonalPool(this.param).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.rows.length
+            this.totalPersonCount = res.total
             console.log("geren",this.workPersonPoolData)
             if (res.rows.length <= 0) {
               return this.$message.warning(
@@ -647,8 +660,10 @@
 
       //查询按钮
       searchHandles() {
+        this.param.pageNum=1;
+        this.param.pageSize=10;
         this.searchHandle()
-        this.searchHandle1()
+        this.searchProcessHandle()
       },
       //二次来电查询
       searchSecondHandle() {

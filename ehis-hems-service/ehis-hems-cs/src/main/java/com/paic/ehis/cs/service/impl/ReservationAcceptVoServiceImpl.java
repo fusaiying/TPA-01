@@ -494,8 +494,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         editInfo.setUpdatedBy(SecurityUtils.getUsername());
         editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
-        editInfo.setEditReason(reservationAcceptVo.getEditReason());
+        editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
+        editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入

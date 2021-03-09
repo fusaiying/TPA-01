@@ -432,8 +432,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         editInfo.setUpdatedBy(SecurityUtils.getUsername());
         editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditRemark(complaintAcceptVo.getEditRemark());
-        editInfo.setEditReason(complaintAcceptVo.getEditReason());
+        editInfo.setEditRemark(complaintAcceptVo.getEditInfo().getEditRemark());
+        editInfo.setEditReason(complaintAcceptVo.getEditInfo().getEditReason());
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入

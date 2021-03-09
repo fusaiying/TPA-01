@@ -128,7 +128,7 @@
             <el-row>
               <el-col :span="24">  <!-- :disabled="readbatchNo ? 'disabled' : false" -->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="readbatchNo ? 'disabled' : false"  v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -273,7 +273,6 @@
                   batchNo:'',
                   rptStartNo:'',
                   rptEndNo:'',
-                  rpttNo:'',
                   caseBoxNo:'',
                 },
                 rules: {
@@ -297,6 +296,9 @@
                 yssOrNo:[],
                 editPower:true,
                 sysDepts:[],
+                preBatchNo:'',
+                preRptStartNo:'',
+                preRptEndNo:'',
             }
         },
       mounted(){
@@ -410,6 +412,9 @@
             this.pbaceCaseForm.rptStartNo = row.rptStartNo;
             this.pbaceCaseForm.rptEndNo = row.rptEndNo;
             this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+            this.preBatchNo = row.batchNo;
+            this.preRptStartNo = row.rptStartNo;
+            this.preRptEndNo = row.rptEndNo;
             if(row.batchNo != ''  && row.batchNo != null) {
               this.readbatchNo = true;
             } else {
@@ -432,6 +437,11 @@
           this.$refs.pbaceCaseForm.validate((valid) => {
             if (valid) {
               if(this.read) {  // 更新
+                if(this.preBatchNo != this.pbaceCaseForm.batchNo || this.preRptStartNo != this.pbaceCaseForm.rptStartNo || this.preRptEndNo != this.pbaceCaseForm.rptEndNo) {
+                  params.updateDetail = true;
+                } else {
+                  params.updateDetail = false;
+                }
                 editCaseFiling(params).then(response => {
                   if(response.code == 200) {
                     this.dialogVisible = false;

@@ -388,7 +388,7 @@
           </el-col>
 
           <el-col :span="16">
-            <el-form-item label="合约终止原因：" prop="reason">
+            <el-form-item label="合约终止原因：" prop="reason" key = "reason1">
               <el-input maxlength="2000" :disabled="isShow" v-model="providerForm.reason"  clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
@@ -1251,7 +1251,7 @@
           phone: {trigger: ['change','blur'], validator: checkPhone,required: false},
           boxRidgeCode: {trigger: ['change','blur'], validator: checkboxRidgeCode,required: false},
           email: {trigger: ['change','blur'], validator: checkEmail,required: false},
-          reason : {trigger: ['change','blur'], required: false,  validator: checkExpiryReason, message: '合约终止原因必填'},
+          reason : {trigger: ['change','blur'],  validator: checkExpiryReason, required: true},
           treatmentDiscount: [{validator: checkTreatmentDiscount, required: true, trigger: ['change','blur']}],
           examineDiscount: [{validator: checkExamineDiscount, required: true, trigger: ['change','blur']}],
           bedDiscount: [{validator: checkBedDiscount, required: true, trigger: ['change','blur']}],

@@ -88,7 +88,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         claimCaseFiling.setUpdateTime(nowDate);
         claimCaseFiling.setUpdateBy(username);
 
-        int i = claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
+               claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
         return claimCaseFilingMapper.insertClaimCaseFiling(claimCaseFiling);
     }
 
@@ -186,13 +186,26 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     /** 编辑按钮 */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO claimCaseFilingListVO) {
+    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO dto) {
 
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-        claimCaseFilingListVO.setUpdateBy(username);
-        claimCaseFilingListVO.setUpdateTime(nowDate);
-        claimCaseFilingMapper.updateClaimCaseFilingEdit(claimCaseFilingListVO);
+        dto.setUpdateBy(username);
+        dto.setUpdateTime(nowDate);
+        /**
+         * 如果批次号修改或者报案号起止修改，则根据盒号删除明细，重新生成明细记录
+         * modify by : hjw
+         * time : 2021-03-09
+         */
+        if(dto.isUpdateDetail()) {
+            claimCaseFilingDetailMapper.deleteClaimCaseFilingDetailByCaseBoxNo(dto.getCaseBoxNo());
+            ClaimCaseFiling claimCaseFiling = new ClaimCaseFiling();
+            BeanUtils.copyProperties(dto,claimCaseFiling);
+            claimCaseFiling.setCreateBy(username);
+            claimCaseFiling.setCreateTime(nowDate);
+            claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
+        }
+        claimCaseFilingMapper.updateClaimCaseFilingEdit(dto);
 
     }
 

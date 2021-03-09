@@ -70,4 +70,13 @@ public interface ClaimCaseFilingDetailMapper
      * time: 2021-3-8
      */
     public int insertClaimCaseFilingDetailByRpt(ClaimCaseFiling claimCaseFiling);
+
+
+
+    /**
+     * 根据盒号 逻辑删除明细
+     * modify by : hjw
+     * time: 2021-03-09
+     */
+    public int deleteClaimCaseFilingDetailByCaseBoxNo(String caseBoxNo);
 }

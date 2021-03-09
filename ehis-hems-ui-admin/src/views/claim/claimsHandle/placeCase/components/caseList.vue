@@ -248,6 +248,7 @@
           caseBoxNo:this.paramFixInfo.caseBoxNo,
           // rptStartNo:this.paramFixInfo.rptStartNo,
           // rptEndNo:this.paramFixInfo.rptEndNo,
+          status:'Y',
           orderByColumn:'create_time',
           isAsc:'desc'
         };

@@ -209,7 +209,7 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
     @Override
     public ClaimCaseCheckDTO judgeClaimCaseCheckRule(ClaimCaseCheckDTO claimCaseCheckDTO) {
 
-        claimCaseCheckDTO.setStatus("Y");
+        claimCaseCheckDTO.setStatus("01");
         //查询出符合要求的所有抽检规则
         List<ClaimCaseCheckDTO> claimCaseCheckRules = claimCaseCheckRuleMapper.selectClaimCaseCheckRuleMatch(claimCaseCheckDTO);
 
@@ -220,9 +220,9 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
             double v = cc.getRate().multiply(new BigDecimal(10)).doubleValue();
             boolean random = PubFun.random(v);
             //将查询到的金额类型与接收的金额类型进行比较
-            if ("赔付金额".equals(cc.getAmountType())) {
+            if ("01".equals(cc.getAmountType())) {
                 caseCheck = claimCaseCheckDTO.getPayAmount().doubleValue();
-            } else if ("拒付金额".equals(cc.getAmountType())) {
+            } else if ("02".equals(cc.getAmountType())) {
                 caseCheck = claimCaseCheckDTO.getAmount().doubleValue();
             }
             //若此时的抽检比例和金额符合要求

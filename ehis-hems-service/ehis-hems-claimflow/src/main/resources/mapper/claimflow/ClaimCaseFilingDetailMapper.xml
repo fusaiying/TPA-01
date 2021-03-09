@@ -74,7 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                         where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
                                 <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
                                 <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
-                                    )
+                                <if test="batchNo != null  and batchNo != ''"> and t.batch_no = #{batchNo}</if>
+        )
     </insert>
 
     <insert id="insertClaimCaseFilingDetail" parameterType="ClaimCaseFilingDetail" useGeneratedKeys="true" keyProperty="filingDetailId">
@@ -135,5 +136,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="filingDetailId" collection="array" open="(" separator="," close=")">
             #{filingDetailId}
         </foreach>
+    </delete>
+
+    <delete id="deleteClaimCaseFilingDetailByCaseBoxNo" parameterType="String">
+        UPDATE claim_case_filing_detail set status = 'N' WHERE case_box_no = #{caseBoxNo}
     </delete>
 </mapper>

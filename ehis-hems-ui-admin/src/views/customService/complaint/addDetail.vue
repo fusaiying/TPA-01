@@ -265,7 +265,7 @@
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="complainantPerson.identity">
               <el-select v-model="ruleForm.complainantPerson.identity" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -422,6 +422,7 @@
         cs_channel: [],//
         cs_complaint_item:[],//服务项目
         cs_sex:[],//性别
+        cs_identity:[],//身份
         cs_priority:[],//优先级
         cs_communication_language:[],//语言
         cs_organization:[],//机构
@@ -578,6 +579,9 @@
       });
       this.getDicts("cs_sex").then(response => {
         this.cs_sex = response.data;
+      });
+      this.getDicts("cs_identity").then(response => {
+        this.cs_identity = response.data;
       });
       this.getDicts("cs_communication_language").then(response => {
         this.cs_communication_language = response.data;

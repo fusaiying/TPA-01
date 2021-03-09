@@ -120,12 +120,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectInvoiceFile" parameterType="com.paic.ehis.claimflow.domain.vo.InvoiceFileVo" resultMap="InvoiceFileVo">
-        SELECT cbii.batch_no,cbii.invoice_box_no,cbii.is_filing,cbii.is_invoice_back,cbii.is_single,cbii.remark,
-               cbii.create_time,cbii.create_by ,cb.organ_code,cb.hospital_code,cb.claim_type,cbii.update_by,cbii.update_time,dept_name organ_name
-        from claim_batch_invoice_filing  cbii
-        left join  claim_batch  cb on  cb.batch_no=cbii.batch_no
-        left join sys_dept dept  on cb.organ_code = dept.dept_id
-        where 1 = 1
+        SELECT
+                cbii.batch_no,
+                cbii.invoice_box_no,
+                cbii.is_filing,
+                cbii.is_invoice_back,
+                cbii.is_single,
+                cbii.remark,
+                cbii.create_time,
+                cbii.create_by,
+                cb.organ_code,
+                cb.hospital_code,
+                cb.claim_type,
+                cbii.update_by,
+                cbii.update_time
+        FROM claim_batch_invoice_filing cbii
+   LEFT JOIN claim_batch cb ON cb.batch_no = cbii.batch_no
+        WHERE 1 = 1
             <if test="invoiceBoxNo != null  and invoiceBoxNo != ''"> and cbii.invoice_box_no = #{invoiceBoxNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cbii.batch_no = #{batchNo}</if>
             <if test="hospitalCode != null  and hospitalCode != ''"> and cb.hospital_code = #{hospitalCode}</if>

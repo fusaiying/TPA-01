@@ -203,6 +203,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         //工单表插入
         workOrderAccept.setStatus("01");
         //workOrderAccept.setBusinessType("02");
+        workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
+        workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());

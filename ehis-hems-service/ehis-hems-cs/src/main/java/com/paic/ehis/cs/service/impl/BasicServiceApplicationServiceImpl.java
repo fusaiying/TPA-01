@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service.impl;
 
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.mapper.BasicServiceApplicationMapper;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
@@ -10,7 +11,6 @@ import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,53 +35,46 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
         WorkOrderAccept workOrderAccept=new WorkOrderAccept();
         String username = SecurityUtils.getUsername();
         Date time =new Date() ;
+        String personid1= PubFun.createMySqlMaxNoUseCache("person_id", 6, 6);
+        String personid2= PubFun.createMySqlMaxNoUseCache("person_id", 6, 6);
+        String personid3= PubFun.createMySqlMaxNoUseCache("person_id", 6, 6);
 
 
-        String homephone = null;
         //判断传来的家庭电话是否为空
-        if(basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneCountryCode().isEmpty()||
-                basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneAreaCode().isEmpty()||
-                basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneNo().isEmpty()||
-                basicServiceAppilcation.getBusinessData().getContaHomePhone().getExtensionNo().isEmpty()) {
-            System.out.println("家庭电话为空");
-        }else {
-            homephone = basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneCountryCode() +
-                    "-" + basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneAreaCode() +
-                    "-" + basicServiceAppilcation.getBusinessData().getContaHomePhone().getPhoneNo() +
-                    "-" + basicServiceAppilcation.getBusinessData().getContaHomePhone().getExtensionNo();
-        }
+        ContaHomePhone contaHomePhone = basicServiceAppilcation.getBusinessData().getContaHomePhone();
+        String homephone = (contaHomePhone != null && !StringUtils.isEmpty(contaHomePhone.getPhoneCountryCode())?contaHomePhone.getPhoneCountryCode():"")
+                + "-" + (contaHomePhone != null && !StringUtils.isEmpty(contaHomePhone.getPhoneAreaCode())?contaHomePhone.getPhoneAreaCode():"")
+                + "-" + (contaHomePhone != null && !StringUtils.isEmpty(contaHomePhone.getPhoneNo())?contaHomePhone.getPhoneNo():"")
+                + "-" + (contaHomePhone != null && !StringUtils.isEmpty(contaHomePhone.getExtensionNo())?contaHomePhone.getExtensionNo():"");
         //判断得到的businessType是informationApplication还是complainApplication
         if ("informationApplication".equals(basicServiceAppilcation.getBusinessData().getType())) {
             //personInfo表新增数据
-            personInfo1.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo1.setPersonId(personid1);
             personInfo1.setSex(basicServiceAppilcation.getBusinessData().getContaGenderCode());
             personInfo1.setName(basicServiceAppilcation.getBusinessData().getContaName());
             personInfo1.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo1.setMobilePhone(basicServiceAppilcation.getBusinessData().getContaMobileNo());
             personInfo1.setHomePhone(homephone);
-            personInfo1.setIdentity("contacts");
             personInfo1.setCreatedBy(username);
             personInfo1.setCreatedTime(time);
             personInfo1.setUpdatedBy(username);
             personInfo1.setUpdatedTime(time);
             basicServiceApplicationMapper.insertPersonInfoTable(personInfo1);
 
-            personInfo2.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo2.setPersonId(personid2);
             personInfo2.setName(basicServiceAppilcation.getBusinessData().getCaller());
             personInfo2.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo2.setMobilePhone(basicServiceAppilcation.getBusinessData().getPhoneNo());
             personInfo2.setHomePhone(homephone);
-            personInfo2.setIdentity("caller");
             personInfo2.setCreatedBy(username);
             personInfo2.setCreatedTime(time);
             personInfo2.setUpdatedBy(username);
             personInfo2.setUpdatedTime(time);
             basicServiceApplicationMapper.insertPersonInfoTable(personInfo2);
 
-            personInfo3.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo3.setPersonId(personid3);
             personInfo3.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo3.setMobilePhone(basicServiceAppilcation.getBusinessData().getEnrolPhone());
-            personInfo3.setIdentity("enrol");
             personInfo3.setHomePhone(homephone);
             personInfo3.setCreatedBy(username);
             personInfo3.setCreatedTime(time);
@@ -115,6 +108,9 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
             acceptDetailInfo.setPriorityLevel(basicServiceAppilcation.getBusinessData().getPriorityCode());
             acceptDetailInfo.setEmail(basicServiceAppilcation.getBusinessData().getEmail());
             acceptDetailInfo.setContent(basicServiceAppilcation.getBusinessData().getApplicationContent());
+            acceptDetailInfo.setContactsPersonId(personid1);
+            acceptDetailInfo.setCallPersonId(personid2);
+            acceptDetailInfo.setComplaintPersonId(personid3);
             acceptDetailInfo.setCreateBy(username);
             acceptDetailInfo.setCreateTime(time);
             acceptDetailInfo.setUpdateBy(username);
@@ -133,35 +129,32 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
             }
             basicServiceApplicationMapper.insertAcceptDetialInfoTable(acceptDetailInfo);
         } else if("complainApplication".equals(basicServiceAppilcation.getBusinessData().getType())){
-            personInfo1.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo1.setPersonId(personid1);
             personInfo1.setSex(basicServiceAppilcation.getBusinessData().getComplainGenderCode());
             personInfo1.setName(basicServiceAppilcation.getBusinessData().getContaName());
             personInfo1.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo1.setMobilePhone(basicServiceAppilcation.getBusinessData().getContaMobileNo());
             personInfo1.setHomePhone(homephone);
-            personInfo1.setIdentity("contacts");
             personInfo1.setCreatedBy(username);
             personInfo1.setCreatedTime(time);
             personInfo1.setUpdatedBy(username);
             personInfo1.setUpdatedTime(time);
             basicServiceApplicationMapper.insertPersonInfoTable(personInfo1);
 
-            personInfo2.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo2.setPersonId(personid2);
             personInfo2.setName(basicServiceAppilcation.getBusinessData().getCaller());
             personInfo2.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo2.setMobilePhone(basicServiceAppilcation.getBusinessData().getPhoneNo());
             personInfo2.setHomePhone(homephone);
-            personInfo2.setIdentity("caller");
             personInfo2.setCreatedBy(username);
             personInfo2.setCreatedTime(time);
             personInfo2.setUpdatedBy(username);
             personInfo2.setUpdatedTime(time);
             basicServiceApplicationMapper.insertPersonInfoTable(personInfo2);
 
-            personInfo3.setPersonId(PubFun.createMySqlMaxNoUseCache("person_id", 6, 6));
+            personInfo3.setPersonId(personid3);
             personInfo3.setLanguage(basicServiceAppilcation.getBusinessData().getPerferLan());
             personInfo3.setName(basicServiceAppilcation.getBusinessData().getComplainName());
-            personInfo3.setIdentity("complain");
             personInfo3.setHomePhone(homephone);
             personInfo3.setCreatedBy(username);
             personInfo3.setCreatedTime(time);
@@ -195,6 +188,9 @@ public class BasicServiceApplicationServiceImpl implements IBasicServiceApplicat
             acceptDetailInfo.setPriorityLevel(basicServiceAppilcation.getBusinessData().getPriorityCode());
             acceptDetailInfo.setEmail(basicServiceAppilcation.getBusinessData().getEmail());
             acceptDetailInfo.setContent(basicServiceAppilcation.getBusinessData().getComplainContent());
+            acceptDetailInfo.setContactsPersonId(personid1);
+            acceptDetailInfo.setCallPersonId(personid2);
+            acceptDetailInfo.setComplaintPersonId(personid3);
             acceptDetailInfo.setCreateBy(username);
             acceptDetailInfo.setCreateTime(time);
             acceptDetailInfo.setUpdateBy(username);

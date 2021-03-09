@@ -54,7 +54,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="被保人证件号:" prop="Acceptor">
+            <el-form-item label="被保人证件号:" prop="item-widthAcceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>

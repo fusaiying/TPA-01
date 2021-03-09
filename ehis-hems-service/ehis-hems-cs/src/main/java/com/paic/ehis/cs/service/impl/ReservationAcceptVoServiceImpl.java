@@ -291,20 +291,19 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 //        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
         PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
         PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
-        PersonInfo complaintPerson1=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
+        PersonInfo complaintPerson1=new PersonInfo();
         PersonInfo callPerson=new PersonInfo();
         PersonInfo contactsPerson=new PersonInfo();
         PersonInfo complaintPerson=new PersonInfo();
         BeanUtils.copyProperties(callPerson1, callPerson);
         BeanUtils.copyProperties(contactsPerson1, contactsPerson);
-        BeanUtils.copyProperties(complaintPerson1, complaintPerson);
         FlowLog flowLog=new FlowLog();
 
         //工单表修改
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
         workOrderAccept.setOrganCode(reservationAcceptVo.getOrganCode());
-        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
-        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
+//        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+//        workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
         AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(workOrderNo);
@@ -354,25 +353,25 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         callPerson.setFax(reservationAcceptVo.getCallPerson().getFax());
         callPerson.setName(reservationAcceptVo.getCallPerson().getName());
         callPerson.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
-        callPerson.setUpdatedBy(SecurityUtils.getUsername());
-        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        callPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        callPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(callPerson);
         //插入联系人
         contactsPerson.setSex(reservationAcceptVo.getContactsPerson().getSex());
         contactsPerson.setName(reservationAcceptVo.getContactsName());
         contactsPerson.setLanguage(reservationAcceptVo.getContactsLanguage());
         contactsPerson.setMobilePhone(reservationAcceptVo.getContactsMobilePhone());
-        contactsPerson.setLinePhone(reservationAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[3]);
+//        contactsPerson.setLinePhone(reservationAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
-        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
-        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        contactsPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
        //插入申请人
-        complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
-        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
-        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        personInfoMapper.updatePersonInfo(complaintPerson);
+//        complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
+//        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
+//        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        personInfoMapper.updatePersonInfo(complaintPerson);
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo1), Map.class);
@@ -439,7 +438,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         Map map5 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson1), Map.class);
         Map map6 = JSONObject.parseObject(JSONObject.toJSONString(contactsPerson), Map.class);
 
-        Iterator<String> iter3 = map5.keySet().iterator();
+        Iterator<String> iter3 = map6.keySet().iterator();
         while(iter3.hasNext()){
             EditDetail editDetail=new EditDetail();
          //   EditInfo editInfo=new EditInfo();
@@ -496,8 +495,8 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         editInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         editInfo.setUpdatedBy(SecurityUtils.getUsername());
         editInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        editInfo.setEditRemark(reservationAcceptVo.getEditInfo().getEditRemark());
-        editInfo.setEditReason(reservationAcceptVo.getEditInfo().getEditReason());
+        editInfo.setEditRemark(reservationAcceptVo.getEditRemark());
+        editInfo.setEditReason(reservationAcceptVo.getEditReason());
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入

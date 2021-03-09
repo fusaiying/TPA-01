@@ -118,7 +118,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="理赔类型：" prop="claimType">
-                  <el-select  :disabled="read ? 'disabled' : false"  v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -277,7 +277,7 @@
                 },
                 rules: {
                   deptCode: {trigger: ['change'], required: false, message: '机构必填'},
-                  claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
+                  claimType: {trigger: ['change'], required: false, message: '理赔类型必填'},
                   batchNo: {trigger: ['change'], required: false, message: '批次号必填'},
                   rptStartNo: {trigger: ['change'], required: true,  validator: checkStartRpt},
                   rptEndNo: {trigger: ['change'], required: true, validator: checkEndRpt},

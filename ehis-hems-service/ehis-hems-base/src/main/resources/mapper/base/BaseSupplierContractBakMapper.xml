@@ -247,7 +247,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractType != null">contract_type = #{contractType},</if>
             <if test="servcomNo != null">servcom_no = #{servcomNo},</if>
             <if test="providerCode != null">provider_code = #{providerCode},</if>
-            <if test="providerCode != null">provider_name = (select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code =#{providerCode}),</if>
+            <if test="providerCode != null">provider_name = (select DISTINCT concat(t.chname1, IFNULL(CONCAT(' - ',t.enname1),'')) from base_provider_info t where t.provider_code =#{providerCode} and status = 'Y'),</if>
             <if test="contracttermType != null">contractterm_type = #{contracttermType},</if>
             <if test="signDate != null">sign_date = #{signDate},</if>
             <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>

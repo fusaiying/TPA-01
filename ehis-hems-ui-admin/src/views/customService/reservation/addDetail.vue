@@ -285,7 +285,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-select v-model="ruleForm.symptomTimes" class="item-width" placeholder="请选择">
+              <el-input v-model="ruleForm.symptomsSigns" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
+              <el-select v-model="ruleForm.symptomTimes" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -354,7 +355,7 @@
           <el-col :span="8">
 
             <el-form-item label="预约时间："  style="white-space: nowrap" prop="appointmentDate">
-              <el-date-picker
+              <el-date-picker class="item-width"
                 v-model="ruleForm.appointmentDate"
                 type="datetime"
                 placeholder="选择日期时间">

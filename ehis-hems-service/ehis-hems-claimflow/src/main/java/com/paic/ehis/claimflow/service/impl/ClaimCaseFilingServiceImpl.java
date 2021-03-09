@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
+import com.paic.ehis.claimflow.domain.ClaimCaseFilingDetail;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;

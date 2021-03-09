@@ -138,8 +138,11 @@ public class ClaimCalServiceImpl implements IClaimCalService {
                 cccID.setDutyCode(dutyCode);
                 cccID.setDutyDetailCode(dutyDetailCode);
                 cccID.setFeeItemCode(ccbD.getFeeItemCode());
-                BigDecimal calAmount = ccbD.getBillDetailAmount().subtract(ccbD.getBillDetailCopay()).
-                        subtract(ccbD.getAdvancePayment()).subtract(ccbD.getSelfAmount()).subtract(ccbD.getHosDiscountAmount()).subtract(ccbD.getUnableAmount() == null ? new BigDecimal(0) : ccbD.getUnableAmount());
+                BigDecimal calAmount = ccbD.getBillDetailAmount().subtract(StringUtils.isNull(ccbD.getBillDetailCopay()) ? BigDecimal.ZERO : ccbD.getBillDetailCopay()).
+                        subtract(StringUtils.isNull(ccbD.getAdvancePayment()) ? BigDecimal.ZERO : ccbD.getAdvancePayment()).
+                        subtract(StringUtils.isNull(ccbD.getSelfAmount()) ? BigDecimal.ZERO : ccbD.getSelfAmount()).
+                        subtract(StringUtils.isNull(ccbD.getHosDiscountAmount()) ? BigDecimal.ZERO : ccbD.getHosDiscountAmount()).
+                        subtract(StringUtils.isNull(ccbD.getUnableAmount()) ? BigDecimal.ZERO : ccbD.getUnableAmount());
                 BigDecimal calAmountCNY = calAmount.multiply(exchangeRate.getParities());
                 cccID.setCalAmount(calAmountCNY.setScale(2,BigDecimal.ROUND_HALF_UP));
                 cccID.setRefusedAmount(new BigDecimal(0));

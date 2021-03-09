@@ -191,7 +191,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="ruleForm" :model="ruleForm" style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" style="padding-bottom: 30px;" label-width="170px" :disabled="isDisabled"
                label-position="right" size="mini">
 
         <span style="color: blue">{{selectDictLabel(cs_service_item, sendForm.itemCode)}}-服务受理信息</span>
@@ -222,12 +222,12 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="来电人姓名：" prop="phone">
+            <el-form-item label="来电人姓名：" prop="callPerson.name">
               <el-input v-model="sendForm.callPerson.name" class="item-width"  size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
+            <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
               <el-input v-model="sendForm.callPerson.mobilePhone" class="item-width"  size="mini"
                         placeholder="请输入"/>
             </el-form-item>
@@ -248,13 +248,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人姓名：" prop="beInsuredName">
+            <el-form-item label="联系人姓名：" prop="contactsPerson.name">
               <el-input v-model="sendForm.contactsPerson.name" class="item-width"  size="mini"
                         placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人性别：" prop="beInsuredName">
+            <el-form-item label="联系人性别：" prop="contactsPerson.sex">
               <el-select v-model="sendForm.contactsPerson.sex" class="item-width" placeholder="请选择">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -273,7 +273,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="联系人电话：" prop="beInsuredNo">
+            <el-form-item style="white-space: nowrap" label="联系人电话：" prop="contactsPerson.mobilePhone">
               <el-input v-model="sendForm.contactsPerson.mobilePhone" class="item-width"  size="mini"
                         placeholder="请输入"/>
             </el-form-item>
@@ -310,17 +310,17 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约日期：" prop="email">
+            <el-form-item label="预约日期：" prop="appointmentDate">
               <el-input v-model="sendForm.appointmentDate" class="item-width"  size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预约时间：" prop="email">
+            <el-form-item label="预约时间：" prop="complaintTime">
               <el-input v-model="sendForm.complaintTime" class="item-width"  size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="医疗机构：" prop="email">
+            <el-form-item label="医疗机构：" prop="medicalInstitution">
               <el-input v-model="sendForm.medicalInstitution" input-w  class="item-width2" size="mini"
                         placeholder="请输入"/>
               <el-button type="primary" @click="searchHandle">详细信息</el-button>
@@ -691,9 +691,7 @@ export default {
         orderNum: [
           {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
         ],
-       /* orderNum: [
-          {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-        ],*/
+
 
       },
       readonly: true,

@@ -423,7 +423,7 @@ export default {
   data() {
     const checkSendWay = (rules, value, callback) => {
       if (!this.reserveInfoForm.inviteflag && !this.reserveInfoForm.fastmailflag) {
-        callback(new Error('体检报告寄送方式不能空'))
+        callback(new Error('体检报告寄送方式不能为空'))
       } else {
         callback()
       }
@@ -432,7 +432,7 @@ export default {
       if (!(this.reserveInfoForm.workstarttime && this.reserveInfoForm.workendtime && this.reserveInfoForm.workremark &&
         this.reserveInfoForm.saturdaystarttime && this.reserveInfoForm.workendtime && this.reserveInfoForm.saturdayremark &&
         this.reserveInfoForm.sundaystarttime && this.reserveInfoForm.sundayendtime && this.reserveInfoForm.sundayremark)) {
-        callback(new Error('门诊时间不能空'))
+        callback(new Error('门诊时间不能为空'))
       } else {
         callback()
       }
@@ -441,7 +441,7 @@ export default {
     const checkEmergencyTime = (rules, value, callback) => {
       if (!(this.reserveInfoForm.emergencycallstarttime && this.reserveInfoForm.emergencycallendtime && this.reserveInfoForm.emergencycallremark &&
         this.reserveInfoForm.nightemergencystarttime && this.reserveInfoForm.nightemergencyendtime && this.reserveInfoForm.nightemergencyremark)) {
-        callback(new Error('急诊时间不能空'))
+        callback(new Error('急诊时间不能为空'))
       } else {
         callback()
       }
@@ -450,7 +450,7 @@ export default {
     const checkReceptionFlag = (rules, value, callback) => {
       if (this.isNetHospFlag) {
         if (value == undefined || value == null || value == '') {
-          callback(new Error('直接结算手续接待处不能空'))
+          callback(new Error('直接结算手续接待处不能为空'))
         } else {
           callback()
         }

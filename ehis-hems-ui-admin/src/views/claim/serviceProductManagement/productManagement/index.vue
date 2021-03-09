@@ -64,7 +64,7 @@
           style="width: 100%;">
           <el-table-column label="产品编码" prop="productCode" align="center" show-overflow-tooltip/>
           <el-table-column label="产品名称" prop="productChname" align="center" show-overflow-tooltip/>
-          <el-table-column label="产品类型" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
+          <el-table-column label="产品类别" prop="productType" :formatter="getProductType" align="center" show-overflow-tooltip/>
           <el-table-column label="产品限期" prop="productTimeInfo" :formatter="getProductInfo" align="center" show-overflow-tooltip/>
           <el-table-column label="状态" prop="bussinessStatus"  align="center">
             <template slot-scope="scope">

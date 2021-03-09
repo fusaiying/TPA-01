@@ -586,7 +586,7 @@ export default {
       this.timeArray.acceptorTime=""
       this.timeArray.appointmentTime=""
       this.timeArray.handlerTime=""
-      this.searchHandle()
+      /*this.searchHandle()*/
     },
     //待处理查询
     searchHandle() {

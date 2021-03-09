@@ -320,7 +320,7 @@
     </el-card>
 
     <el-card>
-      <el-form style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="sendForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -554,7 +554,7 @@
 <script>
 import moment from 'moment'
 import {FlowLogSearch, HMSSearch, dealADD} from '@/api/customService/demand'
-import {complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo} from '@/api/customService/complaint'
+import {complaintDealSubmit, selectHangFlag, reasonThree, reasonTwo, classTwo, complainSearchServer} from '@/api/customService/complaint'
 import {complainSearch, comSearch} from '@/api/customService/consultation'
 import hangUp from "../common/modul/hangUp";
 
@@ -775,10 +775,12 @@ export default {
     this.queryParams.policyItemNo = this.$route.query.policyItemNo;
     this.queryParams.status = this.$route.query.status;
     //window.aaa = this;
-    this.hangUpSearch()
-    this.searchHandle()
-    this.searchFlowLog()
-    //this.searchHCS()
+    this.hangUpSearch();
+    this.searchHandle();
+    this.searchHandle1();
+    this.searchFlowLog();
+    this.searchHandleServer();
+    //this.searchHCS();
 
   },
   async mounted() {
@@ -924,6 +926,23 @@ export default {
 
       })
     },
+    //反显信息需求
+    searchHandleServer() {
+      let query=this.queryParams
+      complainSearchServer(query).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("投诉页面server反显数据",res.data)
+          this.sendForm = res.data
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
+    },
     //客户信息匹配
     matching() {
       this.$router.push({
@@ -1040,6 +1059,27 @@ export default {
           this.flowLogData = res.rows
           this.flowLogCount = res.total
           this.flowLogCount = res.total
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
+    },
+    searchHandle1() {
+      let workOrderNo=this.queryParams.workOrderNo
+      complainSearch(workOrderNo).then(res => {
+        if (res != null && res.code === 200) {
+          const workPoolData=res.data
+          let editInfo = {
+            editReason: "",
+            editRemark: ""
+          }
+          workPoolData.editInfo=editInfo
+          this.workPoolData=workPoolData
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"

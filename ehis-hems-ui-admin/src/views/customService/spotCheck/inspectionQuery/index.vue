@@ -96,13 +96,14 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
-        <span style="float: right;">
-            <el-button type="primary" size="mini" @click="sendMany">清单导出</el-button>
-        </span>
+        <el-row gutter="20" style="float: right">
+          <el-button type="primary" size="mini" @click="sendMany">质检详情清单导出</el-button>
+          <el-button type="primary" size="mini" @click="sendMany1">质检差错清单导出</el-button>
+        </el-row>
         <el-divider/>
         <el-table
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="inspectionPublicPoolData"
+          :data="workPoolData"
           size="small"
           highlight-current-row
           tooltip-effect="dark"
@@ -111,8 +112,8 @@
           <el-table-column type="selection" align="center" content="全选"/>
           <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
           <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip/>
-          <el-table-column align="center" prop="serviceItem" label="服务项目" show-overflow-tooltip/>
-          <el-table-column align="center" prop="endCaseTime" label="结案日期" show-overflow-tooltip>
+          <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
+          <el-table-column align="center" prop="endDate" label="结案日期" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.updateTime | changeDate }}</span>
             </template>
@@ -137,6 +138,7 @@
 <script>
 import moment from 'moment'
 // import {selectProductQuery} from '@/api/insuranceRules/ruleDefin'
+import {selectQualityVo} from '@/api/customService/spotCheck'
 
 let dictss = [{dictType: 'cs_organization'}
   ,{dictType: 'cs_service_item'}
@@ -177,6 +179,7 @@ export default {
     }
   },
   created() {
+    this.searchHandle()
   },
   async mounted() {
     await this.getDictsList(dictss).then(response => {
@@ -194,7 +197,7 @@ export default {
     this.inspection_resultOptions = this.dictList.find(item => {
       return item.dictType === 'cs_inspection_result'
     }).dictDate
-    this.searchHandle()
+   // this.searchHandle()
   },
   methods: {
     resetForm() {
@@ -224,7 +227,7 @@ export default {
         query.inspectionStartTime = this.inspectionQueryForm.inspectionTime[0]
         query.inspectionEndTime = this.inspectionQueryForm.inspectionTime[1]
       }
-      selectProductQuery(query).then(res => {
+      selectQualityVo(query).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total
@@ -237,6 +240,15 @@ export default {
       }).catch(res => {
 
       })
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.workOrderNo);
+
+    }, sendMany(){
+
+    }, sendMany1(){
+
     },
     send() {
 

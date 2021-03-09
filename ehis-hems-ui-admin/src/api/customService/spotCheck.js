@@ -91,4 +91,11 @@ export function getAttachmentListById(params) {
     params: params
   })
 }
-
+//质检查询
+export function selectQualityVo(params){
+  return request({
+    url: '/cs/spotCheck/internal/selectQualityVo',
+    method: 'get',
+    params: params
+  })
+}

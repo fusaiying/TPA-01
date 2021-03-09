@@ -365,7 +365,7 @@
     </el-card>
 
     <el-card>
-      <el-form   style="padding-bottom: 30px;" label-width="145px"
+      <el-form  ref="serverForm" :model="serverForm" style="padding-bottom: 30px;" label-width="145px"
                  label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -837,11 +837,11 @@
       this.queryParams.policyItemNo=this.$route.query.policyItemNo;
       this.queryParams.status=this.$route.query.status;
       //window.aaa = this;
-      this.searchHandle()
-      this.searchFlowLog()
-      this.searchHCS()
-      this.searchHandleServer()
-
+      this.searchHandle();
+      this.searchFlowLog();
+      this.searchHCS();
+      this.searchHandleServer();
+      this.searchHandle1();
     },
     async mounted() {
       // 字典数据统一获取
@@ -970,8 +970,8 @@
         let query=this.queryParams
         complainSearchServer(query).then(res => {
           if (res != null && res.code === 200) {
-            console.log("投诉页面server反显数据",res.rows)
-            this.serverForm = res.rows[0]
+            console.log("投诉页面server反显数据",res.data)
+            this.serverForm = res.data
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -994,6 +994,26 @@
             if (res.rows.length <= 0) {
               return false
 
+            }
+          }
+        }).catch(res => {
+
+        })
+      },searchHandle1() {
+        let workOrderNo=this.queryParams.workOrderNo
+        complainSearch(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            const workPoolData=res.data
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            }
+            workPoolData.editInfo=editInfo
+            this.workPoolData=workPoolData
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
             }
           }
         }).catch(res => {

@@ -1,23 +1,27 @@
 package com.paic.ehis.cs.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.cs.domain.*;
-import com.paic.ehis.cs.domain.dto.AcceptDTO;
-import com.paic.ehis.cs.domain.vo.*;
+import com.paic.ehis.cs.domain.FieldMap;
+import com.paic.ehis.cs.domain.FlowLog;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
+import com.paic.ehis.cs.domain.WorkOrderAccept;
+import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
+import com.paic.ehis.cs.domain.vo.ReservationDealVo;
+import com.paic.ehis.cs.domain.vo.ServiceProcessingVo;
 import com.paic.ehis.cs.mapper.FieldMapMapper;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
+import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
 import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
+import com.paic.ehis.cs.service.IWorkHandleInfoService;
 import com.paic.ehis.cs.utils.VoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
-import com.paic.ehis.cs.service.IWorkHandleInfoService;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 工单处理信息 Service业务层处理
@@ -635,7 +639,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             }
             return complaintDealVo;
         }else{
-            return null;
+            return new ComplaintDealVo();
         }
 
     }
@@ -661,8 +665,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
             serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
         }
-        return serviceProcessingVo;}else{
-            return  null;
+        return serviceProcessingVo;}
+        else{
+            return new ServiceProcessingVo();
         }
     }
 
@@ -682,8 +687,9 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
             reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
         }
-        return reservationDealVo;}else {
-            return null;
+        return reservationDealVo;
+        }else {
+            return new ReservationDealVo();
         }
     }
 

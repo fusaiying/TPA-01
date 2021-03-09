@@ -86,7 +86,7 @@
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button :disabled="scope.row.status==='N'"  size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
-                <el-button :disabled="scope.row.status==='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
+                <el-button v-if="scope.row.status !=='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >失效
                 </el-button>
               </template>
             </el-table-column>

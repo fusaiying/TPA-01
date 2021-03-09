@@ -172,3 +172,13 @@ export function checkBillAndPolicyDate(rptNo) {
     data:rptNo
   })
 }
+
+
+// 账单币种改变后，变更汇率和外币给付金额
+export function exchangeRate(query) {
+  return request({
+    url: '/claimflow/cal/exchangeRate',
+    method: 'get',
+    params: query
+  })
+}

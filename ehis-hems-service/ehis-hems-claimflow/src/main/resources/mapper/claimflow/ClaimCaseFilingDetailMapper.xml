@@ -23,8 +23,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectClaimCaseFilingDetailVo">
-        select filing_detail_id, case_box_no, batch_no, rpt_no, is_filing, is_invoice_back, is_single, status, create_by, create_time, update_by, update_time , dept_code, remark,claim_type from claim_case_filing_detail
-    </sql>
+        SELECT
+            filing_detail_id,
+            case_box_no,
+            batch_no,
+            rpt_no,
+            is_filing,
+            is_invoice_back,
+            is_single,
+            STATUS,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            dept_code,
+            remark,
+            ifnull(claim_type,(select claim_type from claim_batch WHERE STATUS = 'Y' and batch_no = (select t.batch_no  from claim_case t where t.status = 'Y' and t.rpt_no = t1.rpt_no))) claim_type
+        FROM
+            claim_case_filing_detail t1
+</sql>
 
     <select id="selectClaimCaseFilingDetailList" parameterType="ClaimCaseFilingDetail" resultMap="ClaimCaseFilingDetailResult">
         <include refid="selectClaimCaseFilingDetailVo"/>
@@ -71,10 +88,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                            #{deptCode},
                                            #{claimType}
                                         from claim_case t
+                                   LEFT JOIN claim_batch t1 on t.batch_no  = t1.batch_no
                                         where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
                                 <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
                                 <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
                                 <if test="batchNo != null  and batchNo != ''"> and t.batch_no = #{batchNo}</if>
+                                <if test="claimType != null  and claimType != ''"> and t1.claim_type = #{claimType}</if>
         )
     </insert>
 
@@ -123,8 +142,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="claimType != null and claimType != ''"> claim_type = #{claimType},</if>
         </trim>
-        where filing_detail_id = #{filingDetailId}
+        where 1 = 1  and status = 'Y'
+        <if test="filingDetailId != null"> and filing_detail_id = #{filingDetailId}</if>
+        <if test="caseBoxNo != null and caseBoxNo != ''"> and case_box_no = #{caseBoxNo}</if>
     </update>
 
     <delete id="deleteClaimCaseFilingDetailById" parameterType="Long">

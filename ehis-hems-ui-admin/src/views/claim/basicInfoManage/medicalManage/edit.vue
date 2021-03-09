@@ -458,7 +458,7 @@ export default {
 
     const checkPhone = (rules, value, callback) => {
       if (!(this.baseForm.phone && this.baseForm.areacode)) {
-        callback(new Error('电话和区号不能位空！'))
+        callback(new Error('电话和区号不能为空！'))
       } else {
         callback()
       }
@@ -670,7 +670,7 @@ export default {
       let reg= /^(\d+|\d+\.)$/
       if (this.baseForm.inhosptial == '01') {
         if (!this.baseForm.beds) {
-          callback(new Error('床位数不能位空！'))
+          callback(new Error('床位数不能为空！'))
         }
         else {
           if (value < 0) {
@@ -699,7 +699,7 @@ export default {
     const checkChaddreess= (rules, value, callback) => {
       if (this.baseForm.interHosp == '02') {
         if (!this.baseForm.chaddreess) {
-          callback(new Error('中文地址不能位空！'))
+          callback(new Error('中文地址不能为空！'))
         }
         else{
           callback()

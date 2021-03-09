@@ -118,7 +118,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="理赔类型：" prop="claimType">
-                  <el-select  :disabled="read ? 'disabled' : false"  v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -277,7 +277,7 @@
                 },
                 rules: {
                   deptCode: {trigger: ['change'], required: false, message: '机构必填'},
-                  claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
+                  claimType: {trigger: ['change'], required: false, message: '理赔类型必填'},
                   batchNo: {trigger: ['change'], required: false, message: '批次号必填'},
                   rptStartNo: {trigger: ['change'], required: true,  validator: checkStartRpt},
                   rptEndNo: {trigger: ['change'], required: true, validator: checkEndRpt},
@@ -299,6 +299,7 @@
                 preBatchNo:'',
                 preRptStartNo:'',
                 preRptEndNo:'',
+                preClaimType:'',
             }
         },
       mounted(){
@@ -415,6 +416,7 @@
             this.preBatchNo = row.batchNo;
             this.preRptStartNo = row.rptStartNo;
             this.preRptEndNo = row.rptEndNo;
+            this.preClaimType = row.claimType;
             if(row.batchNo != ''  && row.batchNo != null) {
               this.readbatchNo = true;
             } else {
@@ -437,7 +439,10 @@
           this.$refs.pbaceCaseForm.validate((valid) => {
             if (valid) {
               if(this.read) {  // 更新
-                if(this.preBatchNo != this.pbaceCaseForm.batchNo || this.preRptStartNo != this.pbaceCaseForm.rptStartNo || this.preRptEndNo != this.pbaceCaseForm.rptEndNo) {
+                if(this.preBatchNo != this.pbaceCaseForm.batchNo
+                  || this.preRptStartNo != this.pbaceCaseForm.rptStartNo
+                  || this.preRptEndNo != this.pbaceCaseForm.rptEndNo
+                || this.preClaimType != this.pbaceCaseForm.claimType) {
                   params.updateDetail = true;
                 } else {
                   params.updateDetail = false;

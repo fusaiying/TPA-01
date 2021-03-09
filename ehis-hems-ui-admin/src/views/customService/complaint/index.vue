@@ -588,7 +588,7 @@
         complaintListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.rows.length
+            this.totalCount = res.total
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "未查询到数据！"
@@ -614,7 +614,7 @@
         complaintListAndPersonalPool(this.sendForm).then(res => {
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.rows.length
+            this.totalPersonCount = res.total
             console.log("dasd",res.rows)
             if (res.rows.length <= 0) {
               return this.$message.warning(

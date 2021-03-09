@@ -89,7 +89,7 @@
         claim_case_standing a
         LEFT JOIN claim_batch b ON b.batch_no = a.batch_no
         LEFT JOIN sys_organ_info soi ON b.organ_code = soi.organ_code
-        AND soi.STATUS = 'y'
+        AND soi.STATUS = 'Y'
         WHERE
         a.STATUS = 'Y'
         AND b.STATUS = 'Y'

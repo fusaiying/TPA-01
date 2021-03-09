@@ -361,7 +361,7 @@ public class BaseProviderInfo extends BaseEntity {
     @Excel(name = "银行账户名称")
     private String accountName;
 
-    @Excel(name = "银行账户名称")
+    @Excel(name = "银行账号")
     private String accountNo;
 
     public void setProviderCode(String providerCode) {

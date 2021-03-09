@@ -88,8 +88,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                update_time,
                claim_type,
                update_by,status,
-              (select count(1) from claim_case_filing_detail t where t.case_box_no = case_box_no and status = 'Y') case_num
-         from claim_case_filing
+              (select count(1) from claim_case_filing_detail t where t.case_box_no = t1.case_box_no and status = 'Y') case_num
+         from claim_case_filing t1
         <where>
             <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
             <if test="claimType != null  and claimType != ''"> and claim_type = #{claimType}</if>
@@ -179,7 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="batchNo != null  and batchNo != ''">batch_no = #{batchNo},</if>
+            batch_no = #{batchNo}
         </trim>
         where case_box_no = #{caseBoxNo}
     </update>

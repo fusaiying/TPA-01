@@ -38,7 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             update_time,
             dept_code,
             remark,
-            ifnull(claim_type,(select claim_type from claim_batch WHERE STATUS = 'Y' and batch_no = (select t.batch_no  from claim_case t where t.status = 'Y' and t.rpt_no = t1.rpt_no))) claim_type
+            CASE when LENGTH(ifnull(claim_type,'')) = 0
+                then  (select claim_type from claim_batch WHERE STATUS = 'Y' and batch_no = (select t.batch_no  from claim_case t where t.status = 'Y' and t.rpt_no = t1.rpt_no))
+            else  claim_type  end  claim_type
         FROM
             claim_case_filing_detail t1
 </sql>

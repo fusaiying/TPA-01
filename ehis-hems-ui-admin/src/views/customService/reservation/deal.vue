@@ -447,7 +447,7 @@
           </el-table-column>
           <el-table-column prop="remarks" align="center" label="说明" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-link v-if="scope.row.operateCode=='01'" style="font-size:12px" type="primary"
+              <el-link v-if="scope.row.operateCode=='03'" style="font-size:12px" type="primary"
                        @click="modifyDetails(scope.row)">修改说明
               </el-link>
             </template>
@@ -691,9 +691,9 @@ export default {
         orderNum: [
           {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
         ],
-        orderNum: [
+       /* orderNum: [
           {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-        ],
+        ],*/
 
       },
       readonly: true,

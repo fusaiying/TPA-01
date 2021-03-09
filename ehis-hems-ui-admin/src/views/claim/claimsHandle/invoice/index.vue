@@ -131,7 +131,7 @@
             <span  v-else>{{getYesOrNoName(scope.row.isSingle)}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="orgName" min-width="120" label="机构" show-overflow-tooltip/>
+        <el-table-column align="center" prop="organcode" :formatter="getOrgName" min-width="120" label="机构" show-overflow-tooltip/>
         <el-table-column align="center" prop="remark" min-width="110" label="备注" show-overflow-tooltip>
           <template slot-scope="scope" >
             <template v-if="scope.row.editing" >
@@ -194,6 +194,7 @@
   import { getAllBaseProviderInfo } from '@/api/contractManage/contractManagement'
   import moment from 'moment'
   import {invoiceData, updateInvoice, childData} from '@/api/invoice/api'
+  import {getOrganList, getUserInfo} from "@/api/claim/standingBookSearch";
 
   export default {
   filters: {
@@ -227,10 +228,11 @@
       ysOrNo:[],
       claimTypes:[],
       providerInfoSelects:[],
-
+      sysOrgs:[],
     }
   },
   mounted(){
+    this.getOrgs();
     // sys_yes_no
     this.getDicts("sys_yes_no").then(response => {
       this.ysOrNo = response.data;
@@ -250,11 +252,39 @@
 
   },
   methods: {
+    getOrgs(){
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          let item = {
+            organCode: '',
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (res.data != null) {
+            item.organCode = res.data.organCode
+          }
+          getOrganList(item).then(response => {
+            if (response != null && response.code === 200 && response.rows) {
+                for(let i=0; i<response.rows.length; i++) {
+                  let obj= new Object();
+                  obj.dictLabel = response.rows[i].organName;
+                  obj.dictValue = response.rows[i].organCode.toString();
+                  this.sysOrgs.push(obj);
+              }
+            }
+          }).catch(res => {
+          })
+        }
+      })
+    },
     getYesOrNoName(value){
       return this.selectDictLabel(this.ysOrNo, value)
     },
     getClaimTypeName(row,col){
       return this.selectDictLabel(this.claimTypes, row.claimType)
+    },
+    getOrgName(row,col){
+      return this.selectDictLabel(this.sysOrgs, row.organcode)
     },
     handleSave(index,row){ //保存
       delete row.minData;

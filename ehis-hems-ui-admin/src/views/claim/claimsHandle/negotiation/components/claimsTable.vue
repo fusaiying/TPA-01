@@ -91,8 +91,8 @@ export default {
           claimType: row.claimType,
           rptNo: row.rptNo,
           status,
-          node: 'accept',
-          styleFlag: 'calculateReview',
+          node: 'calculateReview',
+          styleFlag: 'list',
         })
       )
       this.$router.push({

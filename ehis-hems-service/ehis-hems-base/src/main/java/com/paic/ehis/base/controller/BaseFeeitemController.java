@@ -81,10 +81,6 @@ public class BaseFeeitemController extends BaseController
         if (StringUtils.isNotNull(baseFeeitemByCode)){
             return AjaxResult.success(0);
         }
-        BaseFeeitem baseFeeitemByName = baseFeeitemService.selectBaseFeeitemByName(baseFeeitem.getFeeitemname());
-        if (StringUtils.isNotNull(baseFeeitemByName)){
-            return AjaxResult.success(0);
-        }
         return AjaxResult.success(baseFeeitemService.insertBaseFeeitem(baseFeeitem));
     }
 

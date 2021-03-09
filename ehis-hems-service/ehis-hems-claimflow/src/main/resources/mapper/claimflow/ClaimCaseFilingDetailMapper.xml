@@ -88,10 +88,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                            #{deptCode},
                                            #{claimType}
                                         from claim_case t
+                                   LEFT JOIN claim_batch t1 on t.batch_no  = t1.batch_no
                                         where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
                                 <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
                                 <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
                                 <if test="batchNo != null  and batchNo != ''"> and t.batch_no = #{batchNo}</if>
+                                <if test="claimType != null  and claimType != ''"> and t1.claim_type = #{claimType}</if>
         )
     </insert>
 

@@ -205,13 +205,6 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
             claimCaseFiling.setCreateBy(username);
             claimCaseFiling.setCreateTime(nowDate);
             claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
-        } else {
-            if(StringUtils.isNotBlank(dto.getClaimType())) {
-                ClaimCaseFilingDetail detail = new ClaimCaseFilingDetail();
-                detail.setCaseBoxNo(dto.getCaseBoxNo());
-                detail.setClaimType(dto.getClaimType());
-                claimCaseFilingDetailMapper.updateClaimCaseFilingDetail(detail);
-            }
         }
         claimCaseFilingMapper.updateClaimCaseFilingEdit(dto);
 

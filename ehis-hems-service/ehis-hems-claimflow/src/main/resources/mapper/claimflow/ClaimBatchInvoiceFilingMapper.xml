@@ -162,7 +162,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">create_by = ifnull(create_by,#{updateBy}) , CREATE_TIME = IFNULL(CREATE_TIME,NOW()),</if>
+
         </trim>
+
         where batch_no = #{batchNo}
     </update>
 

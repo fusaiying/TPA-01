@@ -298,7 +298,7 @@
         }
         if ( this.searchForm.endCaseDate!=null && this.searchForm.endCaseDate.length>0){
           query.startDate=this.searchForm.endCaseDate[0]
-          query.endDate=this.searchForm.endCaseDate[1]
+          query.endDate=this.searchForm.endCaseDate[1]  +" 23:59:59";
         }
         if (flag==='workPool'){
           query.pageNum=this.queryParams.pageNum

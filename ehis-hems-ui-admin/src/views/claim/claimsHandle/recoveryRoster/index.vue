@@ -135,7 +135,7 @@
                 </el-form-item>
 -->
 
-                <el-form-item  label="生日：" prop="birthday">
+                <el-form-item  label="出生日期：" prop="birthday">
                   <el-date-picker
                     v-model="recoveryForm.birthday"
                     style="width:220px;"
@@ -258,7 +258,7 @@
             };
             const checkBirthDay = (rule, value, callback) => {
               if (!value) {
-                callback(new Error("生日必填"));
+                callback(new Error("出生日期必填"));
               } else {
                 if(this.recoveryForm.birthday !=  this.preBirthday) {
                   this.updateInsuredFlag = true;

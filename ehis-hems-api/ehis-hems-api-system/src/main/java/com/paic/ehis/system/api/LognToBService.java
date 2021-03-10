@@ -32,4 +32,6 @@ public interface LognToBService
 
     @PostMapping(value = "/info/getAutoMode")
     public void getAutoMode();
+
+
 }

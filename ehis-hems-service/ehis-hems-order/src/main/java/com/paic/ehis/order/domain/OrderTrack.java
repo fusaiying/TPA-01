@@ -37,7 +37,7 @@ public class OrderTrack extends BaseEntity
 
     /** B端备注 */
     @Excel(name = "B端备注")
-    private String remark_B;
+    private String remarkB;
 
     /** 原因 */
     @Excel(name = "原因")

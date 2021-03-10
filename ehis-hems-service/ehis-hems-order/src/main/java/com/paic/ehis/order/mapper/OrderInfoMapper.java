@@ -1,6 +1,9 @@
 package com.paic.ehis.order.mapper;
 
 import com.paic.ehis.order.domain.*;
+import com.paic.ehis.system.api.domain.HospitalInfoVo;
+import com.paic.ehis.system.api.domain.FirstDeptInfoVo;
+import com.paic.ehis.system.api.domain.SecondDeptInfoVo;
 
 import java.util.List;
 

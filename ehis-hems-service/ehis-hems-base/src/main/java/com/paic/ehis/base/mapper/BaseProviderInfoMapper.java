@@ -4,6 +4,7 @@ import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.Sn_base_addressDO;
+import com.paic.ehis.system.api.domain.*;
 import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
@@ -176,4 +177,17 @@ public interface BaseProviderInfoMapper
 
     public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo);
 
+    public List<BaseServiceInfo> getServiceInfo();
+
+    //获取供应商信息
+    public List<SupplierInfoVo> getSupplierInfo();
+
+    //获取医院信息
+    public List<HospitalInfoVo> getHospitalInfo();
+
+    //获取一级科室
+    public List<FirstDeptInfoVo> getFirstDeptInfo();
+
+    //获取二级科室
+    public List<SecondDeptInfoVo> getSecondDeptInfo();
 }

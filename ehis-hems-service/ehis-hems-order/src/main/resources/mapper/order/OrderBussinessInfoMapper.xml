@@ -171,8 +171,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.supplier_code,
             oi.product_code,
             oi.create_time,
+             oi.update_time,
             oi.detail_status,
-            ci.NAME,
+            oi.receiving_time,
+            oi.apply_result_time,
+            oi.order_complete_time,
+           ci.NAME,
             ci.sex,
             sdd.dict_label sexName,
             ci.birthday,
@@ -195,7 +199,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="role != null  and role != ''"> and oi.role = #{role}</if>
             <if test="nodeStatus != null  and nodeStatus != ''"> and oi.node_status = #{nodeStatus}</if>
             <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
-            and oi.status = 'Y' and  (aging * 60  - TIMESTAMPDIFF(SECOND,oi.create_time,now())) &gt;0
+            and oi.status = 'Y'
+            <if test="nodeStatus == '01'">and  (aging * 60  - TIMESTAMPDIFF(SECOND,oi.create_time,now())) &gt;0</if>
             <if test="nodeStatus == '02'">  order by receiving_time desc </if>
             <if test="nodeStatus == '03'">  order by order_complete_time desc </if>
         </where>
@@ -226,6 +231,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.director,
             oi.symptom_description,
             oi.cancel_time,
+            oi.settle_price,
             oi.create_time,
             oi.receiving_time,
             oi.apply_result_time,
@@ -272,6 +278,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update order_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="detailStatus != null and detailStatus != ''">detail_status = #{detailStatus},</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''">bussiness_status = #{bussinessStatus},</if>
             <if test="inpatientArea != null ">Inpatient_area = #{inpatientArea},</if>
             <if test="inpatientHospital != null and inpatientHospital != ''">inpatient_hospital = #{inpatientHospital},</if>
             <if test="director != null and director != ''">director = #{director},</if>
@@ -291,6 +298,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nodeStatus != null and nodeStatus != ''">node_status = #{nodeStatus},</if>
             <if test="applyResultTime != null ">apply_result_time = #{applyResultTime},</if>
             <if test="orderCompleteTime != null ">order_complete_time = #{orderCompleteTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where order_code = #{orderCode}
     </update>
@@ -344,7 +352,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">serial_no,</if>
             <if test="orderCode != null and orderCode != ''">order_code,</if>
-            <if test="remark != null">remark_B,</if>
+            <if test="remarkB != null">remark_B,</if>
             <if test="reason != null">reason,</if>
             <if test="nodeStatus != null">node_status,</if>
             <if test="detailStatus != null and detailStatus != ''">detail_status,</if>
@@ -357,7 +365,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
             <if test="orderCode != null and orderCode != ''">#{orderCode},</if>
-            <if test="remark != null">#{remark},</if>
+            <if test="remarkB != null">#{remarkB},</if>
             <if test="reason != null">#{reason},</if>
             <if test="nodeStatus != null">#{nodeStatus},</if>
             <if test="detailStatus != null and detailStatus != ''">#{detailStatus},</if>

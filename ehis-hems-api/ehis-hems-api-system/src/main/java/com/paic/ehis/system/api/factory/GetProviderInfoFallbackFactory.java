@@ -1,13 +1,16 @@
 package com.paic.ehis.system.api.factory;
 import com.paic.ehis.common.core.domain.R;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
+import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.system.api.GetProviderInfoService;
-import com.paic.ehis.system.api.domain.BaseContractService;
-import com.paic.ehis.system.api.domain.BaseProviderInfo;
-import com.paic.ehis.system.api.domain.BaseProviderSettle;
+import com.paic.ehis.system.api.domain.*;
+import com.paic.ehis.system.api.domain.dto.BaseManualInfo;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -43,7 +46,29 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
                 return null;
             }
 
+            @Override
+            public TableDataInfo getlist(BaseManualInfo baseManualInfo){return null;}
 
+            @Override
+            public List<BaseServiceInfo> getServiceInfo(){return null;}
+
+            @Override
+            public AjaxResult getSupplierInfo(){return null;}
+
+            //获取医院信息
+            @Override
+            public List<HospitalInfoVo> getHospitalInfo(){return null;}
+
+            ////获取一级科室
+            @Override
+            public List<FirstDeptInfoVo> getFirstDeptInfo(){return null;}
+
+            //获取二级科室
+            @Override
+            public List<SecondDeptInfoVo> getSecondDeptInfo(){return null;}
+
+            @Override
+            public List<HospitalInfoVo> getHospitalInfo1(@RequestBody AddressInfo addressInfo){return null;}
         };
     }
 }

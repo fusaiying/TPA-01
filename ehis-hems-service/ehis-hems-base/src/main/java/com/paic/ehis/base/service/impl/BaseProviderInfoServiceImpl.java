@@ -1,5 +1,6 @@
 package com.paic.ehis.base.service.impl;
 
+import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -10,6 +11,8 @@ import com.paic.ehis.base.domain.vo.*;
 import com.paic.ehis.base.mapper.BaseProviderInfoMapper;
 import com.paic.ehis.base.service.*;
 import com.paic.ehis.base.service.IBaseProviderInfoService;
+import com.paic.ehis.system.api.domain.*;
+import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ import java.util.List;
  * @date 2020-12-25
  */
 @Service
+@Slf4j
 @Transactional
 public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
 {
@@ -547,5 +551,40 @@ public  String getPinYinHeadChar(String str) {
     return convert.toString().toUpperCase();
 }
 
+
+    /**
+     *查询服务项目列表
+     */
+    @Override
+    public List<BaseServiceInfo> getServiceInfo(){
+        return baseProviderInfoMapper.getServiceInfo();
+    }
+
+    /* 获取供应商的以及联系人信息*/
+    @Override
+    public List<SupplierInfoVo> getSupplierInfo(){
+
+        log.info("********获取工单中服务chanchan供应商的人信息********");
+        List<SupplierInfoVo> supplierInfos= baseProviderInfoMapper.getSupplierInfo();
+        return supplierInfos;
+    }
+
+    //获取医院信息
+    @Override
+    public List<HospitalInfoVo> getHospitalInfo(){
+        return baseProviderInfoMapper.getHospitalInfo();
+    }
+
+    //获取一级科室
+    @Override
+    public List<FirstDeptInfoVo> getFirstDeptInfo(){
+        return baseProviderInfoMapper.getFirstDeptInfo();
+    }
+
+    //获取二级科室
+    @Override
+    public List<SecondDeptInfoVo> getSecondDeptInfo(){
+        return baseProviderInfoMapper.getSecondDeptInfo();
+    }
 
 }

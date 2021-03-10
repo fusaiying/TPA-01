@@ -6,6 +6,11 @@ import com.paic.ehis.order.domain.*;
 import com.paic.ehis.order.mapper.OrderBussinessInfoMapper;
 import com.paic.ehis.order.mapper.OrderInfoMapper;
 import com.paic.ehis.order.service.IOrderBussinessInfoService;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.HospitalInfoVo;
+import com.paic.ehis.system.api.domain.FirstDeptInfoVo;
+import com.paic.ehis.system.api.domain.SecondDeptInfoVo;
+import com.paic.ehis.system.api.domain.AddressInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,9 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
 
     @Autowired
     private OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询order_info(工单信息)
@@ -170,25 +178,32 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
      */
     @Override
     public int implementtOrder(OrderInfo orderInfo){
+        OrderTrack orderTrack =new OrderTrack();
         if("01".equals(orderInfo.getDetailStatus()) || "02".equals(orderInfo.getDetailStatus())){
             orderInfo.setApplyResultTime(DateUtils.getNowDate());
         }
         if("02".equals(orderInfo.getDetailStatus())){
             orderInfo.setOrderCompleteTime(DateUtils.getNowDate());
+            orderTrack.setReason(orderInfo.getFailureReason());
         }
         if(orderInfo.getSettlePrice() !=null && orderInfo.getSettlePrice() !=""){
             orderInfo.setOrderCompleteTime(DateUtils.getNowDate());
         }
         //数据落入轨迹表
-        OrderTrack orderTrack =new OrderTrack();
         orderTrack.setDetailStatus(orderInfo.getDetailStatus());
         if(orderInfo.getNodeStatus() =="" || orderInfo.getNodeStatus() ==null){
             orderTrack.setNodeStatus("02");
         }else{
             orderTrack.setNodeStatus(orderInfo.getNodeStatus());
+            orderInfo.setBussinessStatus("02");
         }
-        orderTrack.setReason(orderInfo.getReason());
-        orderTrack.setRemark_B(orderInfo.getRemark());
+        if("04".equals(orderInfo.getDetailStatus())){
+            orderTrack.setReason(orderInfo.getNoVisitReason());
+        }else if("06".equals(orderInfo.getDetailStatus())){
+            orderTrack.setReason(orderInfo.getRefuseReason());
+        }
+        orderInfo.setUpdateTime(DateUtils.getNowDate());
+        orderTrack.setRemarkB(orderInfo.getRemark());
         orderTrack.setCreateTime(DateUtils.getNowDate());
         orderTrack.setUpdateTime(DateUtils.getNowDate());
         orderTrack.setCreateBy(SecurityUtils.getUsername());
@@ -206,11 +221,11 @@ public class OrderBussinessInfoServiceImpl implements IOrderBussinessInfoService
     public List<HospitalInfoVo> getHosptialInfo(AddressInfo addressInfo){
         log.info("********获取工单中医院以及科室信息********");
         //获取医院信息
-        List<HospitalInfoVo> hospitalInfos= orderInfoMapper.getHospitalInfo1(addressInfo);
+        List<HospitalInfoVo> hospitalInfos= getProviderInfoService.getHospitalInfo1(addressInfo);
         //获取一级科室
-        List<FirstDeptInfoVo> firstDeptInfos= orderInfoMapper.getFirstDeptInfo();
+        List<FirstDeptInfoVo> firstDeptInfos= getProviderInfoService.getFirstDeptInfo();
         //获取二级科室
-        List<SecondDeptInfoVo> secondDeptInfos= orderInfoMapper.getSecondDeptInfo();
+        List<SecondDeptInfoVo> secondDeptInfos= getProviderInfoService.getSecondDeptInfo();
         List<HospitalInfoVo> hospitalInfoList = new ArrayList();
         if(!hospitalInfos.isEmpty()){
             for(HospitalInfoVo hospitalInfo : hospitalInfos){

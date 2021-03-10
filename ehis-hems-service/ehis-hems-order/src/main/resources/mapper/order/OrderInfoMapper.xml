@@ -135,8 +135,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order_code,
         policy_no,
         pi.product_chname,
-        bsi.chname,
-        bso.service_name,
+        oi.supplier_name chname,
+        oi.service_name,
         oi.supplier_code,
         policy_certificate_no,
         oi.product_code,
@@ -157,8 +157,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND psi.product_code = oi.product_code AND psi.status ='Y'
         LEFT JOIN product_info pi ON pi.product_code = oi.product_code
         AND pi.STATUS = 'Y'
-        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code and bsi.status ='Y'
-        LEFT JOIN base_service_info bso ON bso.service_code =oi.service_code
+        <!--LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code and bsi.status ='Y'
+        LEFT JOIN base_service_info bso ON bso.service_code =oi.service_code -->
         <where>
             <if test="orderCode != null  and orderCode != ''"> and oi.order_code = #{orderCode}</if>
             <if test="policyNo != null  and policyNo != ''"> and oi.policy_no = #{policyNo}</if>

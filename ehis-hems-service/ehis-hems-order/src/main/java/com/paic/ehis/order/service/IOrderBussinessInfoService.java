@@ -2,7 +2,8 @@ package com.paic.ehis.order.service;
 
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.order.domain.*;
-
+import com.paic.ehis.system.api.domain.HospitalInfoVo;
+import com.paic.ehis.system.api.domain.AddressInfo;
 import java.util.ArrayList;
 import java.util.List;
 

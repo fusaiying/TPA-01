@@ -2,10 +2,12 @@ package com.paic.ehis.base.service;
 
 import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
-import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.AddressVO;
 import com.paic.ehis.base.domain.vo.Adress;
+import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.ProviderInfoVo;
+import com.paic.ehis.system.api.domain.*;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,5 +159,23 @@ public interface IBaseProviderInfoService
     public  List<BaseProviderInfo> selectHospitalInfo(BaseProviderInfo baseProviderInfo);
 
     public  List<BaseProviderInfo> selectBaseProviderBackInfos(BaseProviderInfo baseProviderInfo);
+
+    /**
+     *查询服务项目列表
+     */
+    public List<BaseServiceInfo> getServiceInfo();
+
+
+    /* 获取供应商的以及联系人信息*/
+    public List<SupplierInfoVo> getSupplierInfo();
+
+    //获取医院信息
+    public List<HospitalInfoVo> getHospitalInfo();
+
+    //获取一级科室
+    public List<FirstDeptInfoVo> getFirstDeptInfo();
+
+    //获取二级科室
+    public List<SecondDeptInfoVo> getSecondDeptInfo();
 
 }

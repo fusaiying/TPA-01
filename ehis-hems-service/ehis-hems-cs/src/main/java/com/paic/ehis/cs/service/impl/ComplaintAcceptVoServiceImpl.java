@@ -216,7 +216,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo3.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo3);
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId( PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
@@ -437,7 +437,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");
@@ -543,7 +543,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
@@ -620,7 +620,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
@@ -633,7 +633,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             flowLogMapper.updateFlowLog(flowLog);
 
             FlowLog flowLog2 = new FlowLog();
-            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id", 10, 6));
+            flowLog2.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
             flowLog2.setStatus("02");
             flowLog2.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号

@@ -181,7 +181,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
            // WorkOrderAccept workOrderAccept = workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNos[count]);
             FlowLog flowLog=new FlowLog();
             flowLog.setWorkOrderNo(workOrderNos[count]);
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,10));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             flowLog.setCreatedTime(DateUtils.getNowDate());
             flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setMakeBy(SecurityUtils.getUsername());
@@ -268,7 +268,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfoMapper.insertPersonInfo(personInfo2);
 
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000"+PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
         flowLog.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         flowLog.setOperateCode("06");
         flowLog.setLinkCode("01");
@@ -500,7 +500,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");

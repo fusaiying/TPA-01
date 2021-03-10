@@ -121,7 +121,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public int insertServiceInfo(ServiceProcessingVo serviceProcessingVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-        workHandleInfo.setCreatedBy("admin");
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
 
@@ -152,9 +152,10 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfoMapper.updateStatus(workHandleInfo);
 
             //workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
-            workHandleInfo.setCreatedBy("admin");
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -174,16 +175,21 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
 
     }
 
+    /**
+     * 提交
+     * @param serviceProcessingVo
+     * @return
+     */
     @Override
     public int insertSaveServiceInfo(ServiceProcessingVo serviceProcessingVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-        workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
 
             flowLog.setUmNum(SecurityUtils.getUsername());
@@ -245,29 +251,50 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         }else {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
-            flowLog.setLinkCode("03");
+
+            flowLog.setUmNum(SecurityUtils.getUsername());
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setCreatedBy(SecurityUtils.getUsername());
+            flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setOpinion(serviceProcessingVo.getRemark());
+            //没有um帐号
+            flowLog.setUmNum(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
+            if(serviceProcessingVo.getBusinessProcess().equals("01")){
+                flowLog.setOperateCode("05");
+                flowLog.setStatus("03");
+            }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
+                flowLog.setOperateCode("14");
+                flowLog.setStatus("02");
+            }
             flowLogMapper.insertFlowLog(flowLog);
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            if(serviceProcessingVo.getBusinessProcess().equals("01")){
+                workOrderAccept.setStatus("03");
+            }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
+                workOrderAccept.setStatus("02");
+            }
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
-            //主表生成数据
-           // WorkHandleInfo workHandleInfo=new WorkHandleInfo();
+
+
             //将所有状态置为N
             workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
-           // workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+
+
+            // workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setHandleType("处理");
+            workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             workHandleInfo.setStatus("Y");
-            workHandleInfo.setCreatedBy(serviceProcessingVo.getCreatedBy());
+            workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -324,7 +351,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         else{
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -433,7 +460,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public int insertResevationDeal(ReservationDealVo reservationDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-        workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
             //将所有状态置为N
@@ -514,7 +541,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
@@ -560,7 +587,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
             flowLog.setStatus("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号

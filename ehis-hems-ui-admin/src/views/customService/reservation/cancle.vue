@@ -4,22 +4,22 @@
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
       <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="150px"
-               label-position="right" size="mini">
+               label-position="right" size="mini"disabled>
         <el-row>
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
             <el-form-item label="保单号：" prop="Service"  >
-              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" placeholder="请输入"/>
+              <el-input readonly v-model="sendForm.acceptor" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,17 +27,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件类型:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人姓名:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
         </el-row>

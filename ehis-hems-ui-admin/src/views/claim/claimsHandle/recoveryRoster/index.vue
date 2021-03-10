@@ -124,17 +124,18 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="被保人姓名：" prop="name">
-                  <span v-if="addFlag" class="font_grey">{{recoveryInfo.name}}</span>
-                  <el-input v-if="!addFlag" maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
+<!--
                 <el-form-item  v-if="addFlag"  label="年龄：" prop="birthday">
                   <span  class="font_grey">{{recoveryInfo.age}}</span>
                 </el-form-item>
+-->
 
-                <el-form-item  v-if="!addFlag"  label="生日：" prop="birthday">
+                <el-form-item  label="生日：" prop="birthday">
                   <el-date-picker
                     v-model="recoveryForm.birthday"
                     style="width:220px;"
@@ -148,8 +149,7 @@
 
               <el-col :span="8">
                 <el-form-item label="性别：" prop="sex">
-                  <span  v-if="addFlag" class="font_grey">{{selectDictLabel(rgtSexs,recoveryInfo.sex)}}</span>
-                  <el-select  v-if="!addFlag" v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in rgtSexs" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -159,8 +159,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="证件号码：" prop="idNo" >
-                  <span v-if="addFlag"  class="font_grey">{{recoveryInfo.idNo}}</span>
-                  <el-input v-if="!addFlag" maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input  maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
 
@@ -182,7 +181,7 @@
             </el-row>
 
             <el-row>
-              <el-col :span="8"  v-if="!addFlag">
+              <el-col :span="8" >
                 <el-form-item label="证件类型：" prop="idType">
                   <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable>
                     <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
@@ -231,9 +230,7 @@
 <script>
 
   import moment from 'moment'
- // import insuredModal from '../common/modul/insured'
   import insuredModal from './components/insured'
-
 
   import { listInfo , editData,debtWhiteInfo,checkMoney , checkInsuredData} from '@/api/recoveryRoster/api'
 
@@ -250,72 +247,52 @@
       },
         data() {
             const checkName = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("名称必填"));
-                } else {
-                  if(this.recoveryForm.name !=  this.preName) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("名称必填"));
               } else {
+                if(this.recoveryForm.name !=  this.preName) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkBirthDay = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("生日必填"));
-                } else {
-                  if(this.recoveryForm.birthday !=  this.preBirthday) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("生日必填"));
               } else {
+                if(this.recoveryForm.birthday !=  this.preBirthday) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkSex = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("性别必填"));
-                } else {
-                  if(this.recoveryForm.sex !=  this.preSex) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("性别必填"));
               } else {
+                if(this.recoveryForm.sex !=  this.preSex) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkIdNo = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("证件号码必填"));
-                } else {
-                  if(this.recoveryForm.idNo !=  this.preIdNo) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("证件号码必填"));
               } else {
+                if(this.recoveryForm.idNo !=  this.preIdNo) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkIdType = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("证件类型必填"));
-                } else {
-                  if(this.recoveryForm.idType !=  this.preIdType) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("证件类型必填"));
               } else {
+                if(this.recoveryForm.idType !=  this.preIdType) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
@@ -456,13 +433,14 @@
           const backData = JSON.parse(JSON.stringify(backValue));
           let baseData = backData.caseInsuredData;
           // name  sex idNo  birthday insuredNo\
-          if(baseData.birthday != '') {
-            baseData.age = this.getAge(baseData.birthday)
-          }
+          // if(baseData.birthday != '') {
+          //   baseData.age = this.getAge(baseData.birthday)
+          // }
           // baseData.birthday = '118';
           // baseData.age = '118';
           this.recoveryInfo = baseData;
           this.recoveryForm.insuredNo = baseData.insuredNo
+          this.recoveryForm = baseData;
         },
 
 
@@ -619,15 +597,15 @@
 
         },
         saveDataFun(){
-          if(this.recoveryForm.insuredNo == '') {
-            this.$message({
-              message: '请先查询基本信息！',
-              type: 'info',
-              center: true,
-              showClose: true
-            });
-            return false;
-          }
+          // if(this.recoveryForm.insuredNo == '') {
+          //   this.$message({
+          //     message: '请先查询基本信息！',
+          //     type: 'info',
+          //     center: true,
+          //     showClose: true
+          //   });
+          //   return false;
+          // }
 
           const param = {
             pageNum:1,
@@ -661,7 +639,7 @@
             if (valid) {
               const params = this.recoveryForm;
               params.updateInsuredFlag = this.updateInsuredFlag;
-              if(this.updateInsuredFlag) {
+              if(this.updateInsuredFlag || this.addFlag) {
                 checkInsuredData(params).then(res => {
                   if (res.code == '200') {
                     params.insuredNo = res.data.insuredNo;

@@ -21,23 +21,27 @@
       <attachmentList :attachmentInfoData="attachmentInfoData"/>
     </div>
 <!--    处理信息-->
-<!--    信息需求-->
-    <div id="#anchor-51">
-
+  <!--    信息需求-->
+    <div id="#anchor-51" >
+<!--      <infohandle : :isDisabled="isDisabled" />-->
     </div>
-<!--    投诉-->
+  <!--    投诉-->
     <div id="#anchor-52">
-
+      <complaintHandle :form="form" :isDisabled="isDisabled" />
     </div>
 <!--    质检处理-->
-<!--    信息需求-->
+  <!--    信息需求-->
     <div id="#anchor-61">
 
     </div>
-<!--    投诉-->
+  <!--    投诉-->
     <div id="#anchor-62">
 
     </div>
+<!--    <el-row gutter="20" style="float: right" >-->
+<!--      <el-button @click="">结案</el-button>-->
+<!--      <el-button @click="">案件复核</el-button>-->
+<!--    </el-row>-->
   </div>
 </template>
 <script>
@@ -45,7 +49,11 @@ import personInfo from '@/views/customService/common/moduel/personInfo'; //客�
 import demandAcceptInfo from "@/views/customService/common/moduel/demandAcceptInfo";//信息需求
 import complaintAcceptInfo from "@/views/customService/common/moduel/complaintAcceptInfo";//投诉
 import flowLogList from "@/views/customService/common/moduel/attachmentList";//流转记录列表
-import attachmentList from "@/views/customService/common/moduel/attachmentList";//附件列表
+import attachmentList from "@/views/customService/common/moduel/attachmentList"; //附件列表
+import complaintHandle from "@/views/customService/common/moduel/complaintHandle";
+import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";
+import infohandle from "@/views/customService/common/moduel/infohandle";
+import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";
 import {
   getAcceptInfoByTypeOrId,
   getAttachmentListById
@@ -61,6 +69,10 @@ export default {
     demandAcceptInfo,
     complaintAcceptInfo,
     attachmentList,
+    complaintProcessInfo,
+    complaintHandle,
+    inspectionProcessInfo,
+    infohandle,
   },
   computed: {
     disabled() {
@@ -79,6 +91,29 @@ export default {
       btnArr: [],
       //定义子页面对象
       acceptInfo: {},
+      form: {
+        level1: '',
+        level2: '',
+        pieceworkFlag: '',
+        complaintStatus: '',
+        faseReason: '',
+        repeatedComplaint: '',
+        reason1: '',
+        reason2: '',
+        reason3: '',
+        complaintLink: '',
+        complaintQuestion: '',
+        outsideState: '',
+        riskType: '',
+        marketChannel: '',
+        complaintCategory: '',
+        customerFeedback: '',
+        rootImprovement: '',
+        actPromptly: '',
+        rootDepartment: '',
+        actionCause: '',
+        treatmentResult: '',
+      },
       attachmentInfoData: [],
       //接收的参数对象
       params: {},
@@ -115,7 +150,9 @@ export default {
         }
       }).catch(res => {
       })
+
     }
+    this.getInfo(query);
   },
   async mounted() {
     await this.getDictsList(dictss).then(response => {
@@ -154,6 +191,15 @@ export default {
   },
 
   methods: {
+    getInfo(){
+      getComplaintHandleInfo().then(res => {
+        if (res !== null && res.code === 200) {
+          this.form = res.data;
+        }
+      }).catch( res => {
+      })
+    },
+
     changeSaveFlag() {
       this.isSave = true
     },

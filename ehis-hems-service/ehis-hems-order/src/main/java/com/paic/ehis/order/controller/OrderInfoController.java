@@ -11,6 +11,8 @@ import com.paic.ehis.order.domain.OrderInfo;
 import com.paic.ehis.order.service.ICustomerInfoService;
 import com.paic.ehis.order.service.IOrderEvaluateInfoService;
 import com.paic.ehis.order.service.IOrderInfoService;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.LognToBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +38,9 @@ public class OrderInfoController extends BaseController
 
     @Autowired
     private IOrderEvaluateInfoService orderEvaluateInfoService;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询order_info(工单信息)列表
@@ -112,7 +117,7 @@ public class OrderInfoController extends BaseController
     @PostMapping("/getSupplierInfo")
     public AjaxResult getSupplierInfo()
     {
-        return AjaxResult.success(orderInfoService.getSupplierInfo());
+        return getProviderInfoService.getSupplierInfo();
     }
 
 

@@ -3,12 +3,9 @@ import com.paic.ehis.common.core.domain.R;
 import com.paic.ehis.common.core.constant.ServiceNameConstants;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
-import com.paic.ehis.system.api.domain.BaseContractService;
-import com.paic.ehis.system.api.domain.BaseProviderInfo;
-import com.paic.ehis.system.api.domain.BaseProviderSettle;
-import com.paic.ehis.system.api.factory.GetProviderInfoFallbackFactory;
+import com.paic.ehis.system.api.domain.*;
+import com.paic.ehis.system.api.domain.dto.BaseManualInfo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,4 +45,43 @@ public interface GetProviderInfoService
      */
     @PostMapping(value = "/org/selectsettleInfoNew")
     public List<BaseProviderSettle> selectsettleInfoNew(@RequestBody BaseProviderSettle baseProviderSettle);
+
+    /**
+     * 获取服务手册信息
+     *
+     * @param baseManualInfo
+     * @return
+     */
+    @PostMapping(value = "/manual/getlist")
+    public TableDataInfo getlist(@RequestBody BaseManualInfo baseManualInfo);
+
+
+    /**
+     * 获取产品服务信息
+     *
+     * @return
+     */
+    @PostMapping(value = "/org/getServiceInfo")
+    public List<BaseServiceInfo> getServiceInfo();
+
+
+    @PostMapping(value = "/org/getSupplierInfo")
+    public AjaxResult getSupplierInfo();
+
+    //获取医院信息
+    @PostMapping(value = "/org/getHospitalInfo")
+    public List<HospitalInfoVo> getHospitalInfo();
+
+    ////获取一级科室
+    @PostMapping(value = "/org/getFirstDeptInfo")
+    public List<FirstDeptInfoVo> getFirstDeptInfo();
+
+    //获取二级科室
+    @PostMapping(value = "/org/getSecondDeptInfo")
+    public List<SecondDeptInfoVo> getSecondDeptInfo();
+
+    //获取医院信息
+    @PostMapping(value = "/org/getHospitalInfo1")
+    public List<HospitalInfoVo> getHospitalInfo1(@RequestBody AddressInfo addressInfo);
+
 }

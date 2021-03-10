@@ -283,7 +283,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setStatus("Y");
             productManagerLogMapper.insertProductManagerLog(productManagerLog);

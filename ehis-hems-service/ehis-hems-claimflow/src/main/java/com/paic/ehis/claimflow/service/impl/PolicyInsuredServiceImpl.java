@@ -121,7 +121,7 @@ public class PolicyInsuredServiceImpl implements IPolicyInsuredService
 
             if(policyInsured.getName().isEmpty()) {
 
-                if (policyVos.getPolicyRiskType().equals("G")) {
+                if (policyVos!=null && "G".equals(policyVos.getPolicyRiskType())) {
                     policyFlagVo.setFlag("2");
                 } else {
                     policyFlagVo.setFlag("3");

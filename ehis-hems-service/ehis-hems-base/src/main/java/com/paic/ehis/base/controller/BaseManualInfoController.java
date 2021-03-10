@@ -43,6 +43,20 @@ public class BaseManualInfoController extends BaseController
         return getDataTable(list);
     }
 
+
+    /**
+     * 查询服务手册列表
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/getlist")
+    public TableDataInfo getlist(@RequestBody BaseManualInfo baseManualInfo)
+    {
+        startPage(baseManualInfo);
+        List<BaseManualInfo> list = baseManualInfoService.selectBaseManualInfoList(baseManualInfo);
+        return getDataTable(list);
+    }
+
+
     /**
      * 导出服务手册列表
      */

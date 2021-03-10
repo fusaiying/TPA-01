@@ -9,17 +9,17 @@
           <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
             <el-form-item label="保单号：" prop="Service">
-              <el-input readonly v-model="sendForm.acceptor" class="item-width" size="mini" placeholder="请输入"/>
+              <el-input readonly v-model="sendForm.acceptor" class="item-width" size="mini" disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="channel" readonly>
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件号:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,17 +27,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="投保人证件类型:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人姓名:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -45,17 +45,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="被保人性别:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="被保人出生日期:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人证件号:" prop="item-widthAcceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -63,17 +63,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="被保人证件类型:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人电话:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保日期:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -81,17 +81,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="承保日期:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="保溢生效日:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="保溢满期日:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -99,17 +99,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="主招揽业务员:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="主招揽业务员电话:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="VIP标识:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -117,17 +117,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="是否UHCG会员:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="与主保险人关系:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -135,17 +135,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="险种代码:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="计划名称:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="保单生效日:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -153,17 +153,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="首次生效日:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="AM(服务经理):" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="BD(销售经理):" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -171,17 +171,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="特定医院赔付比例:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人性质:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投保来源:" prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
         </el-row>

@@ -75,6 +75,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isNetworkHospital"    column="isNetworkHospital"    />
     </resultMap>
 
+    <resultMap type="com.paic.ehis.system.api.domain.SupplierInfoVo" id="SupplierInfoResult">
+        <result property="supplierCode"    column="supplierCode"    />
+        <result property="supplierName"    column="supplierName"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.system.api.domain.HospitalInfoVo" id="HospitalInfoVoResult">
+        <result property="hospitalCode"    column="hospitalCode"    />
+        <result property="hospitalName"    column="hospitalName"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.system.api.domain.FirstDeptInfoVo" id="FirstDeptInfoVoResult">
+        <result property="hospitalCode"    column="hospitalCode"    />
+        <result property="deptName"    column="deptName"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.system.api.domain.SecondDeptInfoVo" id="SecondDeptInfoVoResult">
+        <result property="secondDeptName"    column="secondDeptName"    />
+        <result property="firstDeptName"    column="firstDeptName"    />
+        <result property="deptName"    column="deptName"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.system.api.domain.BaseServiceInfo" id="BaseServiceInfoResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="serviceName"    column="service_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="servertypeCode"    column="servertype_code"    />
+        <result property="servertypeName"    column="servertype_name"    />
+        <result property="serviceCodeName"    column="serviceCodeName"    />
+        <result property="typeCodeName"    column="typeCodeName"    />
+        <result property="categoryCodeName"    column="categoryCodeName"    />
+        <result property="orgin"    column="orgin"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
 
     <resultMap type="BaseCheckInfo" id="BaseCheckInfoResult">
         <result property="serialNo"    column="serial_no"    />
@@ -1000,6 +1039,52 @@ WHERE
             <if test="providerCode != null  and providerCode != ''"> and bpi.provider_code = #{providerCode}</if>
             <if test="isNetworkHospital == '01'"> and (bpr.networkHospital_type_str is not null and bpr.networkHospital_type_str != '')</if>
             and bb.status ='Y' and bb.bussiness_status = '01' order by create_time desc
+        </where>
+    </select>
+
+    <select id="getServiceInfo" resultMap="BaseServiceInfoResult">
+        SELECT
+        serial_no,
+        service_code,
+        service_name,
+        category_code,
+        category_name,
+        servertype_code,
+        servertype_name,
+        concat_ws('-',service_code,service_name) serviceCodeName,
+        concat_ws('-',category_code,category_name) categoryCodeName,
+        concat_ws('-',servertype_code,servertype_name) typeCodeName
+        FROM base_service_info
+    </select>
+
+    <select id="getSupplierInfo"  resultMap="SupplierInfoResult">
+        select serial_no as supplierCode, chname as supplierName from base_supplier_info where status ='Y' and bussiness_status = '01'
+    </select>
+
+    <select id="getHospitalInfo"  resultMap="HospitalInfoVoResult">
+        select provider_code hospitalCode,chname1 hospitalName from base_provider_info where org_flag = '01' and status ='Y'
+    </select>
+
+    <select id="getFirstDeptInfo"  resultMap="FirstDeptInfoVoResult">
+        select DISTINCT provider_code hospitalCode,first_dept deptName from base_provider_dep where  status = 'Y'
+    </select>
+
+    <select id="getSecondDeptInfo"  resultMap="SecondDeptInfoVoResult">
+        select DISTINCT first_dept firstDeptName,second_dept deptName from base_provider_dep where  status = 'Y'
+    </select>
+
+    <select id="getHospitalInfo1" parameterType="com.paic.ehis.system.api.domain.AddressInfo" resultMap="HospitalInfoVoResult">
+        SELECT
+        so.website_code hospitalCode,
+        so.websitec_name hospitalName
+        FROM base_supplier_outlets so
+        JOIN base_provider_info pi ON pi.provider_code = so.website_code
+        <where>
+            <if test="supplierCode != null  and supplierCode != ''"> and so.supplier_code = #{supplierCode}</if>
+            <if test="province != null  and province != ''"> and pi.province = #{province}</if>
+            <if test="city != null  and city != ''"> and pi.city = #{city}</if>
+            <if test="district != null  and district != ''"> and pi.district = #{district}</if>
+            and so.status = 'Y' and pi.update_flag ='0'
         </where>
     </select>
 </mapper>

@@ -9,7 +9,11 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.domain.vo.*;
 import com.paic.ehis.base.service.*;
+import com.paic.ehis.system.api.domain.BaseServiceInfo;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
+import com.paic.ehis.system.api.domain.FirstDeptInfoVo;
+import com.paic.ehis.system.api.domain.HospitalInfoVo;
+import com.paic.ehis.system.api.domain.SecondDeptInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -545,4 +549,48 @@ public class BaseProviderInfoController extends BaseController {
         return list;
     }
 
+
+    @PostMapping("/getServiceInfo")
+    public List<BaseServiceInfo> getServiceInfo()
+    {
+        return baseProviderInfoService.getServiceInfo();
+    }
+
+
+    /**
+     * 查询供应商信息
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:query')")
+    @PostMapping("/getSupplierInfo")
+    public AjaxResult getSupplierInfo()
+    {
+        return AjaxResult.success(baseProviderInfoService.getSupplierInfo());
+    }
+
+
+    //获取医院信息
+    @PostMapping("/getHospitalInfo")
+    public List<HospitalInfoVo> getHospitalInfo()
+    {
+        return baseProviderInfoService.getHospitalInfo();
+    }
+
+    ////获取一级科室
+    @PostMapping("/getFirstDeptInfo")
+    public List<FirstDeptInfoVo> getFirstDeptInfo()
+    {
+        return baseProviderInfoService.getFirstDeptInfo();
+    }
+
+    //获取二级科室
+    @PostMapping("/getSecondDeptInfo")
+    public List<SecondDeptInfoVo> getSecondDeptInfo()
+    {
+        return baseProviderInfoService.getSecondDeptInfo();
+    }
+
+    @PostMapping("/getHospitalInfo1")
+    public List<HospitalInfoVo> getHospitalInfo1(@RequestBody com.paic.ehis.system.api.domain.AddressInfo addressInfo){
+        return baseProviderInfoService.getHospitalInfo1(addressInfo);
+    }
 }

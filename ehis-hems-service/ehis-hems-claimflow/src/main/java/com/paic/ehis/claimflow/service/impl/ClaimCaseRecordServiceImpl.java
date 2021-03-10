@@ -141,4 +141,10 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         return claimCaseRecordMapper.selectClaimCaseRecordByRptNo(rptNo);
     }
 
+    @Override
+    public List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord) {
+        claimCaseRecord.getRptNo();
+        return claimCaseRecordMapper.selectWorkflow(claimCaseRecord);
+    }
+
 }

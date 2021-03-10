@@ -102,5 +102,16 @@ public class ClaimCaseRecordController extends BaseController
         return toAjax(claimCaseRecordService.deleteClaimCaseRecordByIds(recordIds));
     }
 
-
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    @PostMapping("/selectWorkflow")
+    public TableDataInfo selectWorkflow(@RequestBody ClaimCaseRecord claimCaseRecord)
+    {
+        startPage();
+        List<ClaimCaseRecord> list = claimCaseRecordService.selectWorkflow(claimCaseRecord);
+        return getDataTable(list);
+    }
 }

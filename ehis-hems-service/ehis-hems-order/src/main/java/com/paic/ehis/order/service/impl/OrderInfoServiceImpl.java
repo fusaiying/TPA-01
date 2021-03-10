@@ -5,8 +5,12 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.order.domain.*;
+import com.paic.ehis.system.api.domain.HospitalInfoVo;
+import com.paic.ehis.system.api.domain.FirstDeptInfoVo;
+import com.paic.ehis.system.api.domain.SecondDeptInfoVo;
 import com.paic.ehis.order.mapper.OrderInfoMapper;
 import com.paic.ehis.order.service.IOrderInfoService;
+import com.paic.ehis.system.api.GetProviderInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,9 @@ public class OrderInfoServiceImpl implements IOrderInfoService
 {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询order_info(工单信息)
@@ -164,11 +171,11 @@ public class OrderInfoServiceImpl implements IOrderInfoService
     public List<HospitalInfoVo> getHospitalInfoVo(){
         log.info("********获取工单中医院以及科室信息********");
         //获取医院信息
-        List<HospitalInfoVo> hospitalInfos= orderInfoMapper.getHospitalInfo();
+        List<HospitalInfoVo> hospitalInfos= getProviderInfoService.getHospitalInfo();
         //获取一级科室
-        List<FirstDeptInfoVo> firstDeptInfos= orderInfoMapper.getFirstDeptInfo();
+        List<FirstDeptInfoVo> firstDeptInfos= getProviderInfoService.getFirstDeptInfo();
         //获取二级科室
-        List<SecondDeptInfoVo> secondDeptInfos= orderInfoMapper.getSecondDeptInfo();
+        List<SecondDeptInfoVo> secondDeptInfos= getProviderInfoService.getSecondDeptInfo();
         List<HospitalInfoVo> hospitalInfoList = new ArrayList();
         if(!hospitalInfos.isEmpty()){
             for(HospitalInfoVo hospitalInfo : hospitalInfos){

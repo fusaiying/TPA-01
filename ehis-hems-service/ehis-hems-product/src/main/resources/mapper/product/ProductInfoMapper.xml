@@ -297,7 +297,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             base_contract_service bcs
         LEFT JOIN base_supplier_info bsi ON bsi.serial_no = bcs.supplier_code
         LEFT JOIN base_supplier_contract bsc ON bsc.contract_no = bcs.contract_no
-        LEFT JOIN product_supplier_info psi ON psi.service_code = bcs.service_code and psi.supplier_code = bcs.supplier_code AND psi.product_code = #{productCode} and psi.status ='Y'
+        LEFT JOIN product_supplier_info psi ON psi.service_code = bcs.service_code and
+        psi.supplier_code = bcs.supplier_code
+        <!--AND psi.product_code = #{productCode} -->
+        and psi.status ='Y'
         WHERE
             bcs.serial_no IN (
                 SELECT DISTINCT
@@ -380,7 +383,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
         update product_supplier_info set status = 'N'
-        where product_code = #{productCode} and status = 'Y' and service_code =#{serviceCode}
+        where status = 'Y' and service_code =#{serviceCode}
+        <!--and product_code = #{productCode}  -->
     </update>
 
 

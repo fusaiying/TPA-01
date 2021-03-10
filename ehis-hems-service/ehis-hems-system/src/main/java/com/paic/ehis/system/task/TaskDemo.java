@@ -27,6 +27,7 @@ public class TaskDemo {
     }
 
     public void distributeOrder() {
+        System.out.println("************");
         lognToBService.getAutoMode();
     }
 }

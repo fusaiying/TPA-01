@@ -1,6 +1,7 @@
 package com.paic.ehis.order.mapper;
 
 import com.paic.ehis.order.domain.*;
+import com.paic.ehis.system.api.domain.AddressInfo;
 
 import java.util.List;
 

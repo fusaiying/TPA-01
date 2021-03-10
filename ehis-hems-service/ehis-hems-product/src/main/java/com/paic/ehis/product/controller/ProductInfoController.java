@@ -4,12 +4,12 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.paic.ehis.common.security.annotation.PreAuthorize;
 import com.paic.ehis.product.domain.*;
 import com.paic.ehis.product.service.IBaseManualInfoService;
 import com.paic.ehis.product.service.IProductCheckInfoService;
 import com.paic.ehis.product.service.IProductServiceInfoService;
-import com.paic.ehis.product.service.impl.ProductCheckInfoServiceImpl;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.dto.BaseManualInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +26,8 @@ import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
+import com.paic.ehis.system.api.domain.BaseServiceInfo;
+
 
 /**
  * base_product_info(服务产品)Controller
@@ -48,6 +50,9 @@ public class ProductInfoController extends BaseController
 
     @Autowired
     private IProductCheckInfoService productCheckInfoService;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
     /**
      * 查询base_product_info(服务产品)列表
      */
@@ -135,7 +140,7 @@ public class ProductInfoController extends BaseController
     @PostMapping("/getServiceInfo")
     public List<BaseServiceInfo> getServiceInfo()
     {
-        return productInfoService.getServiceInfo();
+        return getProviderInfoService.getServiceInfo();
     }
 
 
@@ -204,9 +209,7 @@ public class ProductInfoController extends BaseController
     @GetMapping("/getManualInfoList")
     public TableDataInfo getManualInfoList(BaseManualInfo baseManualInfo)
     {
-        startPage();
-        List<BaseManualInfo> list = baseManualInfoService.selectBaseManualInfoList(baseManualInfo);
-        return getDataTable(list);
+        return getProviderInfoService.getlist(baseManualInfo);
     }
 
     /**

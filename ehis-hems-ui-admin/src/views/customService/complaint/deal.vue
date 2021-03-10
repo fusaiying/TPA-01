@@ -370,7 +370,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉不成立理由：" prop="faseReason">
-              <el-input v-model="sendForm.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.faseReason" class="item-width" clearable size="mini" v-if="sendForm.complaintTenable!='01'"placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -781,6 +781,9 @@ export default {
     this.searchFlowLog();
     this.searchHandleServer();
     //this.searchHCS();
+    this.reasonTwo();
+    this.reasonThree();
+    this.classTwo();
 
   },
   async mounted() {
@@ -849,15 +852,17 @@ export default {
     this.cs_question_circ = this.dictList.find(item => {
       return item.dictType === 'cs_question_circ'
     }).dictDate
+
+
+
   },
   methods: {
 
     reasonTwo() {
-      const vm = this;
       const query = {}
       query.parentCode = this.sendForm.reason1;
-      vm.sendForm.reason2 = '';
-      vm.sendForm.reason3 = '';
+      this.sendForm.reason2 = '';
+      this.sendForm.reason3 = '';
       reasonTwo(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("cs_reason_level2", res.data)
@@ -888,10 +893,9 @@ export default {
 
     },
     classTwo() {
-      const vm = this;
       const query = {}
       query.parentCode = this.sendForm.level1;
-      vm.sendForm.level2 = '';
+      this.sendForm.level2 = '';
       classTwo(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("二级分类", res.data)

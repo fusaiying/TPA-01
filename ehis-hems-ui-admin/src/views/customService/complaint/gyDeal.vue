@@ -372,7 +372,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="level1"  >
-              <el-select v-model="serverForm.level1" class="item-width" @change="classTwo()">
+              <el-select v-model="serverForm.level1" class="item-width" @change="classTwo()" disabled="submissionFlag">
                 <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -380,7 +380,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉分类：" prop="level2"  >
-              <el-select v-model="serverForm.level2" class="item-width">
+              <el-select v-model="serverForm.level2" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
               </el-select>
@@ -388,7 +388,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="是否计件：" prop="pieceworkFlag"  >
-              <el-select v-model="serverForm.pieceworkFlag" class="item-width">
+              <el-select v-model="serverForm.pieceworkFlag" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -398,47 +398,47 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="撤诉状态：" prop="priority"  >
-              <el-select v-model="serverForm.complaintStatus" class="item-width">
+              <el-select v-model="serverForm.complaintStatus" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉是否成立：" prop="complaintTenable"  placeholder="">
-              <el-select v-model="serverForm.complaintTenable" class="item-width">
+            <el-form-item label="投诉是否成立：" prop="complaintTenable"  >
+              <el-select v-model="serverForm.complaintTenable" class="item-width" disabled="submissionFlag">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉不成立理由：" prop="faseReason"  placeholder="">
-              <el-input v-model="serverForm.faseReason" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="投诉不成立理由：" prop="faseReason" >
+              <el-input v-model="serverForm.faseReason" class="item-width" clearable size="mini" disabled="submissionFlag" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="重复投诉：" prop="repeatedComplaint"  placeholder="">
-              <el-select v-model="serverForm.repeatedComplaint" class="item-width">
+            <el-form-item label="重复投诉：" prop="repeatedComplaint"  >
+              <el-select v-model="serverForm.repeatedComplaint" class="item-width"disabled=“submissionFlag”>
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="一级投诉原因：" prop="reason1"  placeholder="">
-              <el-select v-model="serverForm.reason1" class="item-width" @change="reasonTwo()">
+            <el-form-item label="一级投诉原因：" prop="reason1"  >
+              <el-select v-model="serverForm.reason1" class="item-width" @change="reasonTwo()" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="二级投诉原因：" prop="reason2"  placeholder="">
-              <el-select v-model="serverForm.reason2" class="item-width" @change="reasonThree()">
+            <el-form-item label="二级投诉原因：" prop="reason2"  >
+              <el-select v-model="serverForm.reason2" class="item-width" @change="reasonThree()" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
               </el-select>
@@ -447,24 +447,24 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="三级投诉原因：" prop="reason1"  placeholder="">
-              <el-select v-model="serverForm.reason3" class="item-width" >
+            <el-form-item label="三级投诉原因：" prop="reason1"  >
+              <el-select v-model="serverForm.reason3" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_reason_level3" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉环节(报保监)：" prop="complaintLink" placeholder="" >
-              <el-select v-model="serverForm.complaintLink" class="item-width" >
+            <el-form-item label="投诉环节(报保监)：" prop="complaintLink"  >
+              <el-select v-model="serverForm.complaintLink" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion" placeholder="" >
-              <el-select v-model="serverForm.complaintQuestion" class="item-width" >
+            <el-form-item label="投诉问题(报保监)：" prop="complaintQuestion"  >
+              <el-select v-model="serverForm.complaintQuestion" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_question_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -474,62 +474,60 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState" placeholder="" >
-              <el-select v-model="serverForm.outsideState" class="item-width" >
+            <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState"  >
+              <el-select v-model="serverForm.outsideState" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_mediation_appraisal" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="险种类型：" prop="riskType" placeholder="" >
-              <el-select v-model="serverForm.riskType" class="item-width" >
+            <el-form-item label="险种类型：" prop="riskType"  >
+              <el-select v-model="serverForm.riskType" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in cs_risk_type" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="营销渠道：" prop="marketChannel" placeholder="" >
-              <el-select v-model="serverForm.marketChannel" class="item-width" >
+            <el-form-item label="营销渠道：" prop="marketChannel"  >
+              <el-select v-model="serverForm.marketChannel" class="item-width" disabled=“submissionFlag”>
                 <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
-
-
         </el-row>
         <el-row>
-          <el-form-item label="投诉业务类别：" prop="complaintCategory"placeholder="" >
-            <el-input v-model="serverForm.complaintCategory"  readonly size="mini" class="width-full" />
+          <el-form-item label="投诉业务类别：" prop="complaintCategory" >
+            <el-input v-model="serverForm.complaintCategory"  readonly size="mini" class="width-full" disabled=“submissionFlag” />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="投诉根因部门：" prop="rootDepartment" placeholder="">
-            <el-input v-model="serverForm.rootDepartment"  readonly size="mini" class="width-full" />
+          <el-form-item label="投诉根因部门：" prop="rootDepartment" >
+            <el-input v-model="serverForm.rootDepartment"  readonly size="mini" class="width-full" disabled=“submissionFlag” />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="质诉根因：" prop="actionCause" placeholder="">
-            <el-input v-model="serverForm.actionCause"  readonly size="mini" class="width-full" />
+          <el-form-item label="质诉根因：" prop="actionCause" >
+            <el-input v-model="serverForm.actionCause"  readonly size="mini" class="width-full" disabled=“submissionFlag” />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="处理进展：" prop="treatmentProgress"placeholder="">
-            <el-input v-model="serverForm.treatmentProgress"  readonly size="mini" class="width-full"/>
+          <el-form-item label="处理进展：" prop="treatmentProgress">
+            <el-input v-model="serverForm.treatmentProgress"  readonly size="mini" class="width-full" disabled=“submissionFlag” />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="处理结果：" prop="treatmentResult" placeholder="">
-            <el-input v-model="serverForm.treatmentResult"  readonly size="mini" class="width-full"/>
+          <el-form-item label="处理结果：" prop="treatmentResult" >
+            <el-input v-model="serverForm.treatmentResult"  readonly size="mini" class="width-full" disabled=“submissionFlag” />
           </el-form-item>
         </el-row>
         <el-row>
         </el-row>
         <el-col :span="8">
-          <el-form-item label="客户反馈：" prop="customerFeedback"  placeholder="">
-            <el-select v-model="serverForm.customerFeedback" class="item-width" >
+          <el-form-item label="客户反馈：" prop="customerFeedback"  >
+            <el-select v-model="serverForm.customerFeedback" class="item-width" disabled=“submissionFlag”>
               <el-option v-for="item in cs_feedback_type" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
@@ -537,20 +535,21 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="跟因改善：" prop="rootImprovement" placeholder="">
-            <el-input v-model="serverForm.rootImprovement" class="item-width" readonly size="mini" placeholder="请输入"/>
+            <el-input v-model="serverForm.rootImprovement" class="item-width" readonly size="mini" disabled=“submissionFlag” />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="投诉损失：" prop="actPromptly"placeholder="">
-            <el-input v-model="serverForm.actPromptly" class="item-width" readonly size="mini" placeholder="请输入"/>
+          <el-form-item label="投诉损失：" prop="actPromptly">
+            <el-input v-model="serverForm.actPromptly" class="item-width" readonly="readonly" size="mini" disabled=“submissionFlag” />
           </el-form-item>
         </el-col>
         <el-col>
-          <el-form-item label="改善措施：" prop="phone" placeholder="">
+          <el-form-item label="改善措施：" prop="phone">
             <el-input
               type="textarea"
               :rows="2"
-              v-model="serverForm.content">
+              v-model="serverForm.content"
+              placeholder="请输入">
             </el-input>
           </el-form-item>
         </el-col>

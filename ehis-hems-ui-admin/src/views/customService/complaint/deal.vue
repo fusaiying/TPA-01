@@ -3,129 +3,189 @@
     <el-card class="box-card" style="margin-top: 10px;">
       <span style="color: blue">客户基本信息</span>
       <el-divider/>
-      <el-form ref="sendForm" :model="personInfo" style="padding-bottom: 30px;" label-width="150px"
-               label-position="right" size="mini">
+      <el-form ref="sendForm" :model="sendForm" style="padding-bottom: 30px;" label-width="130px"
+               label-position="right" size="mini"disabled>
         <el-row>
+          <!--clearable是清楚输入框内容 readly、只读不可以编辑 ；不可以共存-->
           <el-col :span="8">
-            <span class="info_span to_right">保单号：</span><span class="info_span">{{ personInfo.policyNo }}</span>
+            <el-form-item label="保单号：" prop="Service">
+              <el-input readonly v-model="sendForm.acceptor" class="item-width" size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">投保人姓名：</span><span class="info_span">{{ personInfo.policyHolder.name }}</span>
+            <el-form-item label="投保人姓名：" prop="channel" readonly>
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">投保人证件号：</span><span class="info_span">{{ personInfo.policyHolder.idNumber }}</span>
+            <el-form-item style="white-space: nowrap" label="投保人证件号:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <span class="info_span to_right">投保人证件类型：</span><span class="info_span">{{ personInfo.policyHolder.idType }}</span>
+            <el-form-item style="white-space: nowrap" label="投保人证件类型:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">分单号：</span><span class="info_span">{{ personInfo.policyItemNo }}</span>
+            <el-form-item label="分单号:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">被保人姓名：</span><span class="info_span">{{ personInfo.insured.name }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <span class="info_span to_right">被保人性别：</span><span class="info_span">{{ personInfo.insured.sex }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">被保人出生日期：</span><span class="info_span">{{ personInfo.insured.birthDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">被保人证件号：</span><span class="info_span">{{ personInfo.insured.idNumber }}</span>
+            <el-form-item label="被保人姓名:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" placeholder="请输入"/>
+            </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <span class="info_span to_right">被保人证件类型：</span><span class="info_span">{{ personInfo.insured.idType }}</span>
+            <el-form-item label="被保人性别:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">被保人电话：</span><span class="info_span">{{ personInfo.insured.phone }}</span>
+            <el-form-item style="white-space: nowrap" label="被保人出生日期:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">投保日期：</span><span class="info_span">{{ personInfo.insuranceDate }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <span class="info_span to_right">承保日期：</span><span class="info_span">{{ personInfo.effectiveDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">保溢生效日：</span><span class="info_span">{{ personInfo.effectiveStartDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">保溢满期日：</span><span class="info_span">{{ personInfo.effectiveEndDate }}</span>
+            <el-form-item label="被保人证件号:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <span class="info_span to_right">主招揽业务员：</span><span class="info_span">{{ personInfo.mainSolicit }}</span>
+            <el-form-item style="white-space: nowrap" label="被保人证件类型:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">主招揽业务员电话：</span><span class="info_span">{{ personInfo.solicitPhone }}</span>
+            <el-form-item label="被保人电话:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">VIP标识：</span><span class="info_span">{{ personInfo.vipFlag }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <span class="info_span to_right">是否UHCG会员：</span><span class="info_span">{{ personInfo.uhcgFlag }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">与主保险人关系：</span><span class="info_span">{{ personInfo.relationBy }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">出单机构：</span><span class="info_span">{{ personInfo.companyCode }}</span>
+            <el-form-item label="投保日期:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <span class="info_span to_right">险种代码：</span><span class="info_span">{{ personInfo.risckCode }}</span>
+            <el-form-item label="承保日期:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">计划名称：</span><span class="info_span">{{ personInfo.planCode }}</span>
+            <el-form-item label="保溢生效日:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">保单生效日：</span><span class="info_span">{{ personInfo.validDate }}</span>
-          </el-col>
-        </el-row>
-
-        <el-row>
-          <el-col :span="8">
-            <span class="info_span to_right">首次生效日：</span><span class="info_span">{{ personInfo.firstValidDate }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">AM(服务经理)：</span><span class="info_span">{{ personInfo.acceptor }}</span>
-          </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">BD(销售经理)：</span><span class="info_span">{{ personInfo.acceptor }}</span>
+            <el-form-item label="保溢满期日:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
         </el-row>
 
         <el-row>
           <el-col :span="8">
-            <span class="info_span to_right">特定医院赔付比例：</span><span class="info_span">{{ personInfo.specialRatio }}</span>
+            <el-form-item label="主招揽业务员:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">被保人性质：</span><span class="info_span">{{ personInfo.insuredType }}</span>
+            <el-form-item style="white-space: nowrap" label="主招揽业务员电话:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">投保来源：</span><span class="info_span">{{ personInfo.policyFrom }}</span>
+            <el-form-item label="VIP标识:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="是否UHCG会员:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="与主保险人关系:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="出单机构:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="险种代码:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="计划名称:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="保单生效日:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="首次生效日:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="AM(服务经理):" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="BD(销售经理):" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="white-space: nowrap" label="特定医院赔付比例:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="被保人性质:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="投保来源:" prop="Acceptor">
+              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-
     </el-card>
 
 

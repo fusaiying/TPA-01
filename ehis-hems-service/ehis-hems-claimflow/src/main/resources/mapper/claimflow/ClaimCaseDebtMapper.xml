@@ -186,7 +186,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hospitalCode != null and hospitalCode != ''"> and e.hospital_code = #{hospitalCode}</if>
             <if test="insuredName != null  and insuredName != ''"> and c.name like concat('%', #{insuredName}, '%')</if>
             <if test="idNo != null  and idNo != ''"> and c.id_no = #{idNo}</if>
-            <if test="startDate != null  and startDate != ''"> and f.end_case_time BETWEEN #{startDate} AND #{endDate} </if>
+            <if test="startDate != null"> and f.end_case_time BETWEEN #{startDate} AND #{endDate} </if>
             <if test="whiteStatus == '01'"> and g.debt_whitelist_id is not null </if>
             <if test="whiteStatus == '02'"> and g.debt_whitelist_id is null </if>
             <if test="policyItemNo != null  and policyItemNo != ''"> and EXISTS (select 1 from claim_case_policy h where h.rpt_no=a.rpt_no and h.policy_item_no = #{policyItemNo} and h.`status`='Y') </if>

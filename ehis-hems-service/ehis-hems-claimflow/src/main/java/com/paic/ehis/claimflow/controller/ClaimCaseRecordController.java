@@ -108,10 +108,8 @@ public class ClaimCaseRecordController extends BaseController
      * @return
      */
     @PostMapping("/selectWorkflow")
-    public TableDataInfo selectWorkflow(@RequestBody ClaimCaseRecord claimCaseRecord)
+    public AjaxResult selectWorkflow(@RequestBody ClaimCaseRecord claimCaseRecord)
     {
-        startPage();
-        List<ClaimCaseRecord> list = claimCaseRecordService.selectWorkflow(claimCaseRecord);
-        return getDataTable(list);
+        return AjaxResult.success(claimCaseRecordService.selectWorkflow(claimCaseRecord));
     }
 }

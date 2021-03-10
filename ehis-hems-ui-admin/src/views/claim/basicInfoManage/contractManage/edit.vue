@@ -950,6 +950,9 @@
             }
           }
         }
+         else {
+          callback();
+        }
       };
       const checkExamineDiscount = (rule, value, callback) => {
         if(this.distcoteItem) {
@@ -968,6 +971,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkBedDiscount = (rule, value, callback) => {
@@ -981,6 +986,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkAllowance = (rule, value, callback) => {
@@ -994,6 +1001,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkCosts = (rule, value, callback) => {
@@ -1007,6 +1016,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const cheDiscountinfo = (rule, value, callback) => {
@@ -1022,6 +1033,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const chesecialDiscount = (rule, value, callback) => {
@@ -1037,6 +1050,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const cheProject = (rule, value, callback) => {
@@ -1052,6 +1067,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const cheAverageCostExcept = (rule, value, callback) => {
@@ -1067,6 +1084,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkAverageCost = (rule, value, callback) => {
@@ -1076,6 +1095,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkaDvicenum = (rule, value, callback) => {
@@ -1085,6 +1106,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const chectype = (rule, value, callback) => {
@@ -1094,6 +1117,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkboxRidgeCode = (rule, value, callback) => {

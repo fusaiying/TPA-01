@@ -209,5 +209,12 @@ public interface ClaimCaseRecordMapper
 
     public ClaimCaseRecord selectClaimCaseRecordInfoByParam(Map<String,Object> map);
 
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    public List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord);
+
 
 }

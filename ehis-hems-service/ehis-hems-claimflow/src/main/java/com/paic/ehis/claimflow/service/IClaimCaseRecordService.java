@@ -86,4 +86,11 @@ public interface IClaimCaseRecordService
      * @return
      */
     public long selectClaimCaseRecordByRptNo(String rptNo);
+
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord);
 }

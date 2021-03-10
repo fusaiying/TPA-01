@@ -138,7 +138,7 @@
       </div>
       <el-form ref="contactForm" :rules="constactRules" :model="contactForm" size="small">
         <el-table ref="contacttable" :data="contactForm.contacts"
-                  :header-cell-style="{color:'black',background:'#f8f8ff'}" highlight-current-row
+                  :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row :key="keyValue"
                   size="small" style="width: 100%;">
           <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型" min-width="2"
                            show-overflow-tooltip>
@@ -208,7 +208,7 @@
             <template slot-scope="scope">
               <el-form-item>
                 <el-button v-if="!scope.row.isShow" type="text" size="small"
-                           @click="scope.row.isShow=true">编辑
+                           @click="changeContact(scope.row,scope.$index)">编辑
                 </el-button>
                 <el-button type="text" size="small" style="color: red"
                            @click="delContactRow(scope.$index,scope.row)">删除
@@ -234,7 +234,7 @@
       </div>
       <el-form ref="accountForm" :rules="accountRules" :model="accountForm" size="small">
         <el-table ref="accounttable" :data="accountForm.account"
-                  :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row
+                  :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row :key="keyValue2"
                   size="small" style="width: 100%;">
           <el-table-column prop="accountType" align="center" header-align="center" label="账户类型" min-width="2"
                            show-overflow-tooltip>
@@ -327,7 +327,7 @@
             <template slot-scope="scope">
               <el-form-item>
                 <el-button v-if="!scope.row.isShow" type="text" size="small"
-                           @click="scope.row.isShow=true">编辑
+                           @click="changeAccount(scope.row,scope.$index)">编辑
                 </el-button>
                 <el-button type="text" size="small" style="color: red"
                            @click="delAccountRow(scope.$index,scope.row)">删除
@@ -586,6 +586,8 @@
         }
       }
       return {
+        keyValue:1,
+        keyValue2:1,
         chnameFlag: undefined,
         ennameFlag: undefined,
         isShow: false,
@@ -919,7 +921,9 @@
             this.$refs['receiptForm'].resetFields()
             this.contactForm.contacts = []
             this.accountForm.account = []
+            this.supplier = {}
             this.region = []
+
           }
         }).catch(() => {
           this.$message({
@@ -1027,7 +1031,7 @@
           item.supplierCode = this.supplier.serialNo
         })
         if (this.hasBlock) {
-          if (this.supplier.serialNo !== null && this.supplier.serialNo !== '') {
+          if (this.supplier.serialNo !== null && this.supplier.serialNo !== ''&& this.supplier.serialNo !== undefined) {
             if (this.contactForm.contacts.length > 0) {
               saveContacts(this.contactForm.contacts).then(res => {
                 if (res != null && res.code === 200) {
@@ -1108,7 +1112,7 @@
       }
       ,
       saveService() {
-        if (this.supplier.serialNo !== null && this.supplier.serialNo !== '') {
+        if (this.supplier.serialNo !== null && this.supplier.serialNo !== '' && this.supplier.serialNo !== undefined) {
           let data = {
             serialNo: this.supplier.serialNo,
             baseProviderInfoList: this.dataOnLineListSelections
@@ -1324,9 +1328,18 @@
             return this.$message.warning("请填写完必要信息！");
           }
         })
+      },
+      changeContact(row,index){
+        row.isShow=true
+        this.keyValue++
+        //row.isShow=true
+      },
+      changeAccount(row,index){
+        row.isShow=true
+        this.keyValue2++
+        //row.isShow=true
       }
     }
-    ,
   }
 </script>
 

@@ -335,7 +335,7 @@
                :disabled="isCostShow"
                :model="costForm" size="small">
         <el-table ref="costFormTable" :data="costForm.costData"
-                  :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row
+                  :header-cell-style="{color:'black',background:'#f8f8f8'}" highlight-current-row :key="keyValue"
                   size="small" style="width: 100%;">
           <el-table-column prop="feeItemCode" align="center" header-align="center" label="费用项名称" min-width="2"
                            show-overflow-tooltip>
@@ -451,7 +451,7 @@
           <el-table-column align="center" label="操作" width="140"
                            v-if="!(node === 'input' && status === 'show') && node !== 'sport'">
             <template slot-scope="scope">
-              <el-button v-if="!scope.row.isShow" size="mini" type="text" @click="scope.row.isShow=true">编辑</el-button>
+              <el-button v-if="!scope.row.isShow" size="mini" type="text" @click="changeRow(scope.$index,scope.row)">编辑</el-button>
               <el-button size="mini" style="color: red" type="text" @click="deleteRow(scope.$index,scope.row)">删除
               </el-button>
             </template>
@@ -923,6 +923,7 @@
       }
 
       return {
+        keyValue:1,
         isBillInfoSave: false,
         feeOptions: [],
         hospitalDialog: false,
@@ -1728,6 +1729,10 @@
         }else {
           this.ICDListOptions=value
         }
+      },
+      changeRow(index,row){
+        row.isShow=true
+        this.keyValue++
       }
     }
 

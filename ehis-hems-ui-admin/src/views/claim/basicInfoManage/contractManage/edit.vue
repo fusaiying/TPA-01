@@ -2221,7 +2221,7 @@
               effectiveArr.push(detailData.cvaliDate);
               effectiveArr.push(detailData.endDate);
               //this.searchForm.effectiveSDate = effectiveArr;
-              this.$seet(this.searchForm, `effectiveSDate`, effectiveArr);
+              this.$set(this.searchForm, `effectiveSDate`, effectiveArr);
               if(detailData.servcomNo != '') {
                 this.getSupplierContractListByChangeType(1);
               }

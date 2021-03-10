@@ -680,7 +680,6 @@
 
         selectWorkflow(params).then(response => {
           if(response.code === 200 && response.data) {
-            console.log(response.data)
             for(let i=0; i<response.data.length; i++) {
               let result = response.data[i];
               let caseStatus= result.operation;

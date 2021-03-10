@@ -231,7 +231,9 @@
 <script>
 
   import moment from 'moment'
-  import insuredModal from '../common/modul/insured'
+ // import insuredModal from '../common/modul/insured'
+  import insuredModal from './components/insured'
+
 
   import { listInfo , editData,debtWhiteInfo,checkMoney , checkInsuredData} from '@/api/recoveryRoster/api'
 

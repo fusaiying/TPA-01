@@ -7,6 +7,7 @@ import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.mapper.BaseDocInfoMapper;
 import com.paic.ehis.base.service.IBaseDocInfoService;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +88,12 @@ public class BaseDocInfoServiceImpl implements IBaseDocInfoService {
 
         List<String> supplierList =baseDocInfo.getSupplierList();
         int n = 0;
-        baseDocInfoMapper.deleteBaseDocInfoById(baseDocInfo.getDocCode());
+        boolean flag=false;
+        //修改
+        if(StringUtils.isNotEmpty(baseDocInfo.getDocCode())) {
+            baseDocInfoMapper.deleteBaseDocInfoById(baseDocInfo.getDocCode());
+            flag=true;
+        }
         String doccode=null;
         if (supplierList.size() > 0) {
             if (baseDocInfo.getDocCode()!=null && baseDocInfo.getDocCode()!=""){
@@ -115,8 +121,15 @@ public class BaseDocInfoServiceImpl implements IBaseDocInfoService {
                 baseDocInfo1.setDocCode(doccode);
                 baseDocInfo1.setCreateTime(nowDate);
                 baseDocInfo1.setCreateBy(username);
-                baseDocInfo1.setUpdateTime(nowDate);
-                baseDocInfo1.setUpdateBy(username);
+
+                if(flag){
+                    baseDocInfo1.setCreateTime(baseDocInfo.getCreateTime());
+                    baseDocInfo1.setCreateBy(baseDocInfo.getCreateBy());
+                    baseDocInfo1.setUpdateTime(nowDate);
+                    baseDocInfo1.setUpdateBy(username);
+                }
+              /*  baseDocInfo1.setUpdateTime(nowDate);
+                baseDocInfo1.setUpdateBy(username);*/
                 int i1 = baseDocInfoMapper.insertBaseDocInfo(baseDocInfo1);
                 n = n + i1;
             }
@@ -161,7 +174,13 @@ public class BaseDocInfoServiceImpl implements IBaseDocInfoService {
     @Override
     public int deleteBaseDocInfoById(String docCode)
     {
-
-        return baseDocInfoMapper.deleteBaseDocInfoById(docCode);
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
+        BaseDocInfo baseDocInfo = new BaseDocInfo();
+        baseDocInfo.setDocCode(docCode);
+        baseDocInfo.setUpdateTime(nowDate);
+        baseDocInfo.setUpdateBy(username);
+        baseDocInfo.setStatus("N");
+        return baseDocInfoMapper.updateBaseDocInfo(baseDocInfo);
     }
 }

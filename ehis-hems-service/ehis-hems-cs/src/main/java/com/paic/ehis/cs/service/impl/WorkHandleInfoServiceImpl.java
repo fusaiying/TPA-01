@@ -189,7 +189,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         if (workHandleInfo1==null) {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             //flowLog.setWorkOrderNo();从前端获得
 
             flowLog.setUmNum(SecurityUtils.getUsername());
@@ -251,7 +251,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         }else {
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             //flowLog.setWorkOrderNo();从前端获得
 
             flowLog.setUmNum(SecurityUtils.getUsername());
@@ -351,7 +351,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
         else{
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             //flowLog.setWorkOrderNo();从前端获得
             flowLog.setLinkCode("03");
             flowLog.setCreatedBy(SecurityUtils.getUsername());
@@ -541,7 +541,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号
@@ -587,7 +587,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setStatus("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
             //没有um帐号

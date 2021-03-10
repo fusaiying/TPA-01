@@ -104,7 +104,7 @@ public class TransferByServiceImpl implements ITransferByService
         }
 
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20,20));
         flowLog.setToReason(demandAcceptVo.getReason());
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setStatus("Y");

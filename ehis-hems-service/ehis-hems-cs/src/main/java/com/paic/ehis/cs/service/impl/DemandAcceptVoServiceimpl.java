@@ -277,7 +277,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         demandAcceptVoMapper.insertPersonInfo(personInfo2);
 
         //轨迹表插入
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
@@ -463,7 +463,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");

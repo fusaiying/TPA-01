@@ -152,7 +152,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     @Override
     public int insertConsultationDemand(DemandAcceptVo demandAcceptVo) {
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode("06");//状态置为已协办
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
@@ -189,7 +189,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
     public int insertConsultationDemandOne(ComplaintDealVo complaintDealVo) {
         //轨迹表插入数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setLinkCode("06");
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号

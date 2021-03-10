@@ -29,7 +29,7 @@
             <span class="info_span to_right">合约期限类型：</span><span class="info_span">{{ getContractLimitTypeNameByValue(serverContractInfo.contracttermType) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合同分类：</span><span class="info_span">{{ getContractCategorysByValue(serverContractInfo.contractsort) }}</span>
+            <span class="info_span to_right">合约分类：</span><span class="info_span">{{ getContractCategorysByValue(serverContractInfo.contractsort) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">提前协商天数：</span><span class="info_span">{{ serverContractInfo.contractadvance }}</span>

@@ -746,7 +746,7 @@
           rptNo : this.rptNo,
           payConclusion: this.conclusionInfo.payConclusion,
           isAppeal: this.conclusionInfo.isAppeal,
-          payAmount:this.conclusionInfo.payAmount,
+          payAmount:this.conclusionInfo.calAmount,
           refusedAmount:this.conclusionInfo.refusedAmount,
         };
         checkBillAndPolicyDate(this.rptNo).then(res=>{

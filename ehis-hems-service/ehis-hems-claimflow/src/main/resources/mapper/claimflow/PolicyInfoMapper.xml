@@ -229,9 +229,9 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
     </select>
     
     <select id="selectPolicyRiskType"   parameterType="String" resultMap="PolicyVo">
-        select  policy_risk_type
+        select   policy_risk_type
         from policy_info
-        where policy_no = #{policyNo}  and status='Y'
+        where policy_no = #{policyNo}  and status='Y' limit 1
     </select>
 
     <select id="selectPolicyInfoByInsuredNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseShuntClass" resultMap="PolicyInfoResult">

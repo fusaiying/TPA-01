@@ -190,4 +190,6 @@ public interface BaseProviderInfoMapper
 
     //获取二级科室
     public List<SecondDeptInfoVo> getSecondDeptInfo();
+
+    public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo);
 }

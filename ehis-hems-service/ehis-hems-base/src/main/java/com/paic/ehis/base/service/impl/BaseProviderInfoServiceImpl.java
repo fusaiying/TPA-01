@@ -587,4 +587,8 @@ public  String getPinYinHeadChar(String str) {
         return baseProviderInfoMapper.getSecondDeptInfo();
     }
 
+    @Override
+    public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo){
+        return baseProviderInfoMapper.getHospitalInfo1(addressInfo);
+    }
 }

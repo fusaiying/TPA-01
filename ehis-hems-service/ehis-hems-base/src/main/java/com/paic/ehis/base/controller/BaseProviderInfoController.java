@@ -588,4 +588,9 @@ public class BaseProviderInfoController extends BaseController {
     {
         return baseProviderInfoService.getSecondDeptInfo();
     }
+
+    @PostMapping("/getHospitalInfo1")
+    public List<HospitalInfoVo> getHospitalInfo1(@RequestBody com.paic.ehis.system.api.domain.AddressInfo addressInfo){
+        return baseProviderInfoService.getHospitalInfo1(addressInfo);
+    }
 }

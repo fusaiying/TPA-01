@@ -1,5 +1,6 @@
 package com.paic.ehis.claimflow.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
@@ -27,9 +28,11 @@ public class DebtInfoDTO extends BaseEntity {
     private String idNo;
 
     /** 开始时间 **/
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
 
     /** 结束时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
     /** 分单号 */

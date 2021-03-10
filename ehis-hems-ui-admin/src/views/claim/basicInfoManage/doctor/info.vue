@@ -82,7 +82,7 @@
                 type="textarea"
                 :rows="3"
                 placeholder="请输入内容"
-                v-model="form.remark">
+                v-model="form.remark" maxlength="2000">
               </el-input>
             </el-form-item>
           </el-col>

@@ -98,6 +98,10 @@ public class ClaimCasePayee extends BaseEntity
     @Excel(name = "详细地址")
     private String address;
 
+    /** 币种 */
+    @Excel(name = "币种")
+    private String currency;
+
     /** 数据状态（Y-有效，N-无效） */
     @Excel(name = "数据状态", readConverterExp = "Y=有效,N=无效")
     private String status;
@@ -291,7 +295,13 @@ public class ClaimCasePayee extends BaseEntity
     {
         return status;
     }
+    public String getCurrency() {
+        return currency;
+    }
 
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -320,6 +330,8 @@ public class ClaimCasePayee extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("currency", getCurrency())
             .toString();
     }
+
 }

@@ -47,7 +47,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="就诊医院：" prop="chname1">
+            <el-form-item v-if="isDirect" label="就诊医院：" prop="chname1">
               <el-input disabled v-model="searchForm.chname1" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
               <el-button :disabled="isShow" type="success" size="mini" @click="openHospitalDialog"
@@ -55,13 +55,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="批次总金额：" prop="batchtotal">
+            <el-form-item v-if="isDirect" label="批次总金额：" prop="batchtotal">
               <el-input :disabled="isShow" v-model="searchForm.batchtotal" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="账户币种：" prop="currency">
+            <el-form-item v-if="isDirect" label="账户币种：" prop="currency">
               <el-select :disabled="isShow" v-model="searchForm.currency" class="item-width" placeholder="请选择">
                 <el-option v-for="option in claim_currencyOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -73,7 +73,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="个险/团险：" prop="conttype">
+            <el-form-item v-if="isAfter" label="个险/团险：" prop="conttype">
               <el-select :disabled="isShow" v-model="searchForm.conttype" class="item-width" placeholder="请选择">
                 <el-option v-for="option in insurance_typeOptions" :key="option.dictValue"
                            :label="option.dictLabel"
@@ -396,7 +396,6 @@
           conttype: {trigger: ['blur', 'change'], required: true, message: '个险/团险必填'}, // 个险/团险
           casenum: [{validator: checkCasenum, required: true, trigger: 'blur'}], // 案件数
           organcode: {trigger: ['blur', 'change'], required: true, message: '机构必填'}, // 机构
-          expressnumber: {trigger: 'blur', required: true, message: '快递号必填'}, // 快递号
           receivedate: {trigger: 'blur', required: true, message: '接单日期必填'}, // 接单日期
           sendby: {trigger: ['blur', 'change'], required: true, message: '交件人必填'}, // 交件人
           contno: {trigger: ['blur', 'change'], required: true, message: '特殊案件为健康委托件时，保单号必录'}, //
@@ -708,6 +707,7 @@
           this.searchForm.sendby = undefined
           this.searchForm.chname1 = undefined
           this.searchForm.currency = undefined
+          this.searchForm.speccasetype = undefined
 
         } else if (this.searchForm.claimtype === '02') {//事后 特殊案件码表待定 基金物流
           if (this.$route.query.status || this.querys.status !== 'editReview') {
@@ -717,8 +717,13 @@
           this.isAfter = true
           this.isDirect = false
           this.searchForm.chname1 = undefined
+          this.searchForm.chname1 = undefined
+          this.searchForm.chname1 = undefined
+          this.searchForm.chname1 = undefined
+          this.searchForm.chname1 = undefined
           this.searchForm.currency = undefined
-
+          this.searchForm.speccasetype = undefined
+          this.tableData=[]
         }
       },
       save() {

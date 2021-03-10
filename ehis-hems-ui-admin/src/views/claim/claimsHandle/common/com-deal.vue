@@ -60,7 +60,8 @@
       <!-- 被保人信息 -->
       <div id="#anchor-2" class="batchInfo_class" style="margin-top: 10px;">
         <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status"
-                     ref="insuredForm" @getInsuredData="getInsuredData" @getPropData="getPropData" :batchInfo="batchInfo"
+                     ref="insuredForm" @getInsuredData="getInsuredData" @getPropData="getPropData"
+                     :batchInfo="batchInfo"
                      :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag" @getPayeeDatas="getPayeeDatas"/>
       </div>
       <!-- 申请人信息 -->
@@ -183,7 +184,7 @@
   } from '@/api/claim/handleCom'
 
 
-  import {historyDisInfo,historySurInfo} from '@/api/negotiation/api'
+  import {historyDisInfo, historySurInfo} from '@/api/negotiation/api'
   import elementIcons from "../../../components/icons/element-icons"; // 历史协谈数据
 
 
@@ -555,12 +556,8 @@
         //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
         let isInsuredSave = this.$refs.insuredForm.isInsuredSave
         let hasInsuredId = this.$refs.insuredForm.hasInsuredId
-        let isApplicantSave = true
-        let hasApplicantId = true
-        if (this.batchInfo.claimtype === '02') {
-          isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
-          hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
-        }
+        let isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
+        let hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
         let flag = this.$refs.insuredForm.validataForm()
@@ -739,7 +736,7 @@
                                 message: '已取消！'
                               })
                             })
-                          }else if (res.data.caseStypeFind === '03') {
+                          } else if (res.data.caseStypeFind === '03') {
                             return this.$message.warning(
                               "该被保人不存在保单信息，请撤件！"
                             )
@@ -841,7 +838,7 @@
         this.caseInsuredData = val
         this.caseInsuredData.claimType = this.batchInfo.claimtype
       },
-      getPayeeDatas(){
+      getPayeeDatas() {
         if (this.querys.claimType === '02') {
           listRemarkRptNo(this.querys.rptNo).then(res => {
             if (res != null && res.code === 200) {

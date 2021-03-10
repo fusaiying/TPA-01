@@ -265,6 +265,7 @@
 
         saveHandleLoading: false,
         baseForm: {
+          rptNo:'',
           relationIns: undefined,
           rgtName: '',
           rgtBirthday: undefined,

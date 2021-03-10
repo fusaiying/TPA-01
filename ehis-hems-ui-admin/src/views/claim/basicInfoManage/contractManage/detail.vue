@@ -412,6 +412,9 @@
       this.getDicts("contract_type").then(response => {
         this.contractTypes = response.data;
       });
+       this.getDicts("supplier_contract_type").then(response => {
+         this.supplierContractTypes = response.data;
+     });
       this.getDicts("contract_category").then(response => {
         this.contractCategorys = response.data;
       });
@@ -452,10 +455,16 @@
         return this.selectDictLabel(this.cooperativeUnitSelects, value)
       },
       getContractTypeName(row,col){
-        return this.selectDictLabel(this.contractTypes, row.contractType)
+        if(row.flag == '02') {
+          return this.selectDictLabel(this.contractTypes, row.contractType);
+        }
+        return this.selectDictLabel(this.supplierContractTypes, row.contractType);
       },
       getContractTypeNameByValue(value){
-        return this.selectDictLabel(this.contractTypes, value)
+          if(this.serverContractInfo.flag == '01'){
+            return this.selectDictLabel(this.supplierContractTypes, value);
+          }
+        return this.selectDictLabel(this.contractTypes, value);
       },
       getContractLimitTypeName(row,col){
         return this.selectDictLabel(this.contractLimitTypes, row.contracttermType)

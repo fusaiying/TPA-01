@@ -124,7 +124,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="被保人姓名：" prop="name">
-                  <el-input maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入" @change="clearInsuNo"/>
                 </el-form-item>
               </el-col>
 
@@ -143,13 +143,13 @@
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="选择日期"
-                  />
+                    @change="clearInsuNo"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="性别：" prop="sex">
-                  <el-select   v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择"  @change="clearInsuNo">
                     <el-option v-for="option in rgtSexs" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -159,7 +159,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="证件号码：" prop="idNo" >
-                  <el-input  maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input  maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"  @change="clearInsuNo"/>
                 </el-form-item>
               </el-col>
 
@@ -183,7 +183,7 @@
             <el-row>
               <el-col :span="8" >
                 <el-form-item label="证件类型：" prop="idType">
-                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable>
+                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable  @change="clearInsuNo">
                     <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
                                :value="option.dictValue"/>
                   </el-select>
@@ -394,6 +394,9 @@
         this.initData();
       },
       methods: {
+        clearInsuNo(){
+          this.recoveryForm.insuredNo = '';
+        },
         changePrice(formName){
           let name  = formName == 'recoveryForm' ? 'debtAmountUp' : 'debtAmountUp';
           if(formName == 'recoveryForm') {
@@ -527,7 +530,7 @@
           this.preIdNo = row.idNo;
           this.preIdType = row.idType;
           if(row.birthday != '') {
-            this.recoveryInfo.age = this.getAge(row.birthday)
+         //   this.recoveryInfo.age = this.getAge(row.birthday)
           }
         },
         delFun(row) {
@@ -610,9 +613,10 @@
           const param = {
             pageNum:1,
             pageSize:3,
-            insuredNo:this.recoveryForm.insuredNo
+            insuredNo:this.recoveryForm.insuredNo,
+            status : "Y",
           };
-          if(this.addFlag) {
+          if(this.addFlag && '' != this.recoveryForm.insuredNo) {
             listInfo(param).then(response => {
               let count = response.total;
               if(count == 0) {
@@ -648,6 +652,7 @@
                       pageSize:3,
                       insuredNo:this.recoveryForm.insuredNo
                     };
+                    param.status = "Y";
                     listInfo(param).then(response => {
                       let count = response.total;
                       if(count == 0) {

@@ -719,14 +719,32 @@
         },
         exportData() {
 
+          let name = this.form.name;
+          let idNo = this.form.idNo;
+          let level = this.form.level;
+          let debtAmountUp = this.form.debtAmountUp;
+
           const params = {
-            name:this.form.name,
-            idNo:this.form.idNo,
-            level:this.form.level,
-            debtAmountUp:this.form.debtAmountUp,
+            name:name,
+            idNo:idNo,
+            level:level,
+            debtAmountUp:debtAmountUp,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
+
+          if(!this.searchBtn) {
+            params.recMessageFlag = '01';
+            params.status = 'Y';
+          } else {
+            if(name == '' && idNo == '' && level == '' && debtAmountUp == '') {
+              params.recMessageFlag = '01';
+              params.status = 'Y';
+            } else {
+              params.recMessageFlag = '';
+              params.status = '';
+            }
+          }
           this.download('claimflow/whitelist/export', params, `recoveryRoster_${new Date().getTime()}.xlsx`);
         },
 

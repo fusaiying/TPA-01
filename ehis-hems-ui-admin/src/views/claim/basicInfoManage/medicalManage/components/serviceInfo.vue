@@ -578,7 +578,16 @@ export default {
         }
       }
       else{
-        callback()
+        if(value) {
+          if (!regx.test(value)) {
+            callback(new Error('评分在0-10，最多保留一位小数！'))
+          } else {
+            callback()
+          }
+        }
+        else {
+          callback()
+        }
       }
     }
 

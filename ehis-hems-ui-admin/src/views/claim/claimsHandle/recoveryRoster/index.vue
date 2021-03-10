@@ -114,7 +114,7 @@
             <div slot="header" class="clearfix">
               <span>追讨白名单维护</span>
               <span style="float: right;">
-                <el-button v-if="addFlag" type="primary" size="mini" @click="searchFun">查询</el-button>
+                <el-button type="primary" size="mini" @click="searchFun">查询</el-button>
                 <el-button type="primary" size="mini" @click="saveDataFun">保存</el-button>
                 <el-button size="mini" @click="handleClose">返回</el-button>
               </span>
@@ -517,18 +517,18 @@
           this.recoveryForm.level = row.level;
           this.recoveryForm.debtAmountUp = row.debtAmountUp;
           this.recoveryForm.recMessageFlag = row.recMessageFlag;
-          this.recoveryForm.insuredNo =  row.insuredNo;
           this.recoveryForm.name = row.name;
           this.recoveryForm.birthday = row.birthday;
           this.recoveryForm.sex = row.sex;
           this.recoveryForm.idNo = row.idNo;
           this.recoveryForm.idType = row.idType;
-
           this.preName  = row.name;
           this.preBirthday = row.birthday;
           this.preSex = row.sex;
           this.preIdNo = row.idNo;
           this.preIdType = row.idType;
+
+          this.recoveryForm.insuredNo =  row.insuredNo;
           if(row.birthday != '') {
          //   this.recoveryInfo.age = this.getAge(row.birthday)
           }
@@ -588,12 +588,12 @@
           })
         },
         addRecovery() {
-          this.recoveryInfo = '';
-          this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = '';
-          this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = '';
-          this.recoveryForm.insuredNo =  '';
+          // this.recoveryInfo = '';
+          // this.recoveryForm.debtWhitelistId  = '';
+          // this.recoveryForm.level  = '';
+          // this.recoveryForm.debtAmountUp  = '';
+          // this.recoveryForm.recMessageFlag  = '';
+          // this.recoveryForm.insuredNo =  '';
           this.addFlag = true;
           this.dialogVisible = true;
           this.$refs['recoveryForm'].clearValidate();
@@ -734,13 +734,19 @@
         },
 
         handleClose() {
-          this.updateInsuredFlag = false,
+          this.updateInsuredFlag = false;
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
           this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
           this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
+
+          this.recoveryForm.name = '';
+          this.recoveryForm.birthday = '';
+          this.recoveryForm.sex = '';
+          this.recoveryForm.idNo = '';
+          this.recoveryForm.idType = '';
           this.$refs['recoveryForm'].clearValidate();
           this.dialogVisible = false;
         },

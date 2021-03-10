@@ -1032,7 +1032,7 @@ export default {
     },
     //暂存
     temporary() {
-      let insert = this.ruleForm
+      let insert = this.sendForm
       insert.sign = "01"
       insert.workOrderNo = this.$route.query.workOrderNo
       complaintDealSubmit(insert).then(res => {

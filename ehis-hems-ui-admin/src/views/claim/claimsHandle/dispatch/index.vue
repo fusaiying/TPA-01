@@ -143,8 +143,7 @@
           <el-table-column prop="operator" label="操作人" align="center" show-overflow-tooltip/>
           <el-table-column label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;"
-                         v-if="scope.row.caseStatus=='01'" @click="viewStream(scope.row)">
+              <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;" @click="viewStream(scope.row)">
                 工作流查看
               </el-button>
             </template>
@@ -192,6 +191,163 @@
           </span>
       </el-dialog>
       <!-- 案件调度弹框 end -->
+
+
+
+      <!-- 工作流查看 start -->
+      <el-dialog
+        :visible.sync="dialogVisibleStream"
+        :dialog-visible="dialogVisibleStream"
+        :append-to-body="true"
+        :before-close="handleCloseStream"
+        :close-on-click-modal="false"
+        title="工作流监控"
+        width="50%">
+        <div class="el-steps el-steps--vertical" style="margin-left: 100px">
+          <div  class="el-step is-vertical" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+              2019-10-25  09 : 10 : 30
+            </div>
+            <div class="el-step__head is-finish">
+              <div class="el-step__line" style="margin-right: 0px;">
+                <i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; height: 100%;"></i>
+              </div>
+              <div class="el-step__icon is-text">
+                <div class="el-step__icon-inner">
+                  交单
+                </div>
+              </div>
+            </div>
+            <div class="el-step__main">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+              </div>
+              <div class="el-step__title is-finish"  style="height: 30px">
+              </div>
+            </div>
+          </div>
+
+          <div  class="el-step is-vertical" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+              2019-10-25  09 : 10 : 30
+            </div>
+            <div class="el-step__head is-finish">
+              <div class="el-step__line" style="margin-right: 0px;">
+                <i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 1px; height: 100%;"></i>
+              </div>
+              <div class="el-step__icon is-text">
+                <div class="el-step__icon-inner">
+                  受理
+                </div>
+              </div>
+            </div>
+
+            <div class="el-step__main">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+              </div>
+              <div class="el-step__title is-finish">
+              </div>
+              <div class="el-step__description is-finish" style="height: 30px">
+              </div>
+            </div>
+          </div>
+
+          <div  class="el-step is-vertical" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+              2019-10-25  09 : 10 : 30
+            </div>
+            <div class="el-step__head is-finish">
+              <div class="el-step__line" style="margin-right: 0px;">
+                <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
+              </div>
+              <div class="el-step__icon is-text">
+                <div class="el-step__icon-inner">
+                  录入
+                </div>
+              </div>
+            </div>
+            <div class="el-step__main">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+              </div>
+              <div class="el-step__description is-finish"  style="height: 30px">
+              </div>
+            </div>
+          </div>
+
+
+          <div  class="el-step is-vertical" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+              2019-10-25  09 : 10 : 30
+            </div>
+            <div class="el-step__head is-finish">
+              <div class="el-step__line" style="margin-right: 0px;">
+                <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
+              </div>
+              <div class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">
+                  理算审核
+                </div>
+              </div>
+            </div>
+            <div class="el-step__main">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                处理中
+              </div>
+              <div class="el-step__description is-finish"  style="height: 30px">
+              </div>
+            </div>
+          </div>
+
+          <div  class="el-step is-vertical is-flex" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+
+            </div>
+            <div class="el-step__head is-process">
+              <div class="el-step__line">
+                <i class="el-step__line-inner"></i>
+              </div>
+              <div class="el-step__icon is-text">
+                <div class="el-step__icon-inner">
+                  抽检
+                </div>
+              </div>
+            </div>
+            <div class="el-step__main">
+              <div class=""  style="width: 100%; margin-left: 30px">
+                待处理
+              </div>
+              <div class="el-step__description is-process"  style="height: 30px">
+              </div>
+            </div>
+          </div>
+
+          <div  class="el-step is-vertical is-flex" style="height: 70px">
+            <div class="" style="width: 200px; margin-right: 20px">
+
+            </div>
+            <div class="el-step__head is-process">
+              <div class="el-step__line">
+                <i class="el-step__line-inner"></i>
+              </div>
+              <div class="el-step__icon is-text">
+                <div class="el-step__icon-inner">
+                  结束
+                </div>
+              </div>
+            </div>
+            <div class="el-step__main">
+              <div class=""  style="width: 200px; margin-left: 20px">
+
+              </div>
+              <div class="el-step__description is-process"  style="height: 30px">
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+      <!-- 工作流查看 end -->
     </el-card>
 
   </div>
@@ -242,6 +398,7 @@
         loading: false,
         defaultData: true,
         dialogVisible: false,
+        dialogVisibleStream: false,
         operatorForm: {
           operator: '',
         },
@@ -470,11 +627,7 @@
         this.gettableData();
       },
       viewStream(row) {
-        // this.$router.push({
-        //   path: '/basic-info/contractManage-edit',
-        //   query: {status:'update',rptNo: row.rptNo,flag : row.flag ,providerCode :row.providerCode}
-        //
-        // })
+        this.dialogVisibleStream = true;
       },
       claimDispatch() {
         if (this.checkSelection.length === 0) {
@@ -529,6 +682,9 @@
       handleClose() {
         this.operatorForm.operator = '';
         this.dialogVisible = false;
+      },
+      handleCloseStream() {
+        this.dialogVisibleStream = false;
       },
       checkPermit() {
 
@@ -681,23 +837,51 @@
     background: oldlace;
   }
 
-  /deep/ .el-dialog {
-    display: flex;
-    flex-direction: column;
-    margin: 0 !important;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /*height:600px;*/
-    max-height: calc(100% - 30px);
-    max-width: calc(100% - 30px);
+  /*/deep/ .el-dialog {*/
+  /*  display: flex;*/
+  /*  flex-direction: column;*/
+  /*  margin: 0 !important;*/
+  /*  position: absolute;*/
+  /*  top: 50%;*/
+  /*  left: 50%;*/
+  /*  transform: translate(-50%, -50%);*/
+  /*  !*height:600px;*!*/
+  /*  max-height: calc(100% - 30px);*/
+  /*  max-width: calc(100% - 30px);*/
+  /*}*/
+
+  /*/deep/ .el-dialog .el-dialog__body {*/
+  /*  flex: 1;*/
+  /*  overflow: auto;*/
+  /*}*/
+
+  /deep/ .el-step__icon {
+    position: relative;
+    z-index: 1;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    -webkit-transition: 0.15s ease-out;
+    transition: 0.15s ease-out;
   }
 
-  /deep/ .el-dialog .el-dialog__body {
-    flex: 1;
-    overflow: auto;
+  /deep/ .el-step.is-vertical .el-step__line {
+    width: 2px;
+    top: 0;
+    bottom: 0;
+    left: 17px;
   }
-
 </style>
 

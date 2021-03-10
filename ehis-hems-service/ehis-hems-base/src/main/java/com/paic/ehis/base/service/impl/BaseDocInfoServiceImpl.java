@@ -6,10 +6,12 @@ import com.paic.ehis.base.base.utility.Dateutils;
 import com.paic.ehis.base.domain.*;
 import com.paic.ehis.base.mapper.BaseDocInfoMapper;
 import com.paic.ehis.base.service.IBaseDocInfoService;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +81,10 @@ public class BaseDocInfoServiceImpl implements IBaseDocInfoService {
      */
     @Override
     public BaseDocInfo insertBaseDocInfo(BaseDocInfo baseDocInfo) {
+
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
+
         List<String> supplierList =baseDocInfo.getSupplierList();
         int n = 0;
         baseDocInfoMapper.deleteBaseDocInfoById(baseDocInfo.getDocCode());
@@ -107,7 +113,10 @@ public class BaseDocInfoServiceImpl implements IBaseDocInfoService {
                 baseDocInfo1.setStatus("Y");
                 baseDocInfo1.setSerialNo(PubFun.createMySqlMaxNoUseCache("doctorSer", 0, 20));
                 baseDocInfo1.setDocCode(doccode);
-                baseDocInfo1.setCreateTime(DateUtils.getNowDate());
+                baseDocInfo1.setCreateTime(nowDate);
+                baseDocInfo1.setCreateBy(username);
+                baseDocInfo1.setUpdateTime(nowDate);
+                baseDocInfo1.setUpdateBy(username);
                 int i1 = baseDocInfoMapper.insertBaseDocInfo(baseDocInfo1);
                 n = n + i1;
             }

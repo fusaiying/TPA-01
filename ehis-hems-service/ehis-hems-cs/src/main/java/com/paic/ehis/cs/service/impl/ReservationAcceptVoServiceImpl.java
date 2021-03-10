@@ -218,10 +218,10 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setWorkOrderNo(reservationAcceptVo.getWorkOrderNo());
         acceptDetailInfo.setChannelCode(reservationAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(reservationAcceptVo.getItemCode());
-        acceptDetailInfo.setCallPersonId(reservationAcceptVo.getCallPersonId());
+        acceptDetailInfo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setCallRelationBy(reservationAcceptVo.getCallRelationBy());
         acceptDetailInfo.setPriorityLevel(reservationAcceptVo.getPriorityLevel());
-        acceptDetailInfo.setContactsPersonId(reservationAcceptVo.getContactsPersonId());
+        acceptDetailInfo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setContactsRelationBy(reservationAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(reservationAcceptVo.getEmail());
         acceptDetailInfo.setContent(reservationAcceptVo.getContent());
@@ -245,7 +245,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfoMapper.insertAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        personInfo1.setPersonId(reservationAcceptVo.getCallPersonId());
+        personInfo1.setPersonId(acceptDetailInfo.getCallPersonId());
         personInfo1.setName(reservationAcceptVo.getCallPerson().getName());
         personInfo1.setMobilePhone(reservationAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
@@ -254,7 +254,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.insertPersonInfo(personInfo1);
         //插入联系人
-        personInfo2.setPersonId(reservationAcceptVo.getContactsPersonId());
+        personInfo2.setPersonId(acceptDetailInfo.getContactsPersonId());
         personInfo2.setSex(reservationAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(reservationAcceptVo.getContactsPerson().getName());
         personInfo2.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());

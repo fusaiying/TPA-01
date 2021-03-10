@@ -6,6 +6,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.vo.ComplaintAcceptVo;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.ReservationAcceptVo;
 import com.paic.ehis.cs.mapper.*;
@@ -286,6 +287,18 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
     public int updateReservationAcceptVo(ReservationAcceptVo reservationAcceptVo) {
         String workOrderNo=reservationAcceptVo.getWorkOrderNo();
         ReservationAcceptVo reservationAcceptVo1=reservationAcceptVoMapper.selectReservationAcceptVo(workOrderNo);
+        String sourceName="ReservationAcceptVo";
+        String targetTableName="accept_detail_info";
+        List<FieldMap> KVMap1=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        AcceptDetailInfo acceptDetailInfo1=acceptDetailInfoMapper.selectAcceptDetailInfoById(reservationAcceptVo1.getWorkOrderNo());
+        for (FieldMap fieldMap:KVMap1){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+            reservationAcceptVo1= (ReservationAcceptVo) voUtils.fromVoToVo(reservationAcceptVo1,map,acceptDetailInfo1);
+        }
 //        PersonInfo callPerson= personInfoMapper.selectPersonInfoById(reservationAcceptVo.getCallPersonId());
 //        PersonInfo contactsPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getContactsPersonId());
 //        PersonInfo complaintPerson=personInfoMapper.selectPersonInfoById(reservationAcceptVo.getComplaintPersonId());
@@ -338,6 +351,7 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         acceptDetailInfo.setProvince(reservationAcceptVo.getProvince());
         acceptDetailInfo.setCity(reservationAcceptVo.getCity());
         acceptDetailInfo.setSettlementFlag(reservationAcceptVo.getSettlementFlag());
+        acceptDetailInfo.setContent(reservationAcceptVo.getContent());
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ReservationAcceptVo");
         for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
@@ -358,9 +372,9 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
         personInfoMapper.updatePersonInfo(callPerson);
         //插入联系人
         contactsPerson.setSex(reservationAcceptVo.getContactsPerson().getSex());
-        contactsPerson.setName(reservationAcceptVo.getContactsName());
-        contactsPerson.setLanguage(reservationAcceptVo.getContactsLanguage());
-        contactsPerson.setMobilePhone(reservationAcceptVo.getContactsMobilePhone());
+        contactsPerson.setName(reservationAcceptVo.getContactsPerson().getName());
+        contactsPerson.setLanguage(reservationAcceptVo.getContactsPerson().getLanguage());
+        contactsPerson.setMobilePhone(reservationAcceptVo.getContactsPerson().getMobilePhone());
 //        contactsPerson.setLinePhone(reservationAcceptVo.getContactsPerson().getLinePhone1()[0] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[1] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[2] + "-" + reservationAcceptVo.getContactsPerson().getLinePhone1()[3]);
         contactsPerson.setHomePhone(reservationAcceptVo.getContactsPerson().getHomePhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getHomePhone1()[3]);
         contactsPerson.setWorkPhone(reservationAcceptVo.getContactsPerson().getWorkPhone1()[0]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[1]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[2]+"-"+reservationAcceptVo.getContactsPerson().getWorkPhone1()[3]);
@@ -368,10 +382,10 @@ public class ReservationAcceptVoServiceImpl implements IReservationAcceptVoServi
 //        contactsPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfoMapper.updatePersonInfo(contactsPerson);
        //插入申请人
-//        complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
-//        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
-//        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-//        personInfoMapper.updatePersonInfo(complaintPerson);
+        complaintPerson.setName(reservationAcceptVo.getComplaintPerson().getName());
+        complaintPerson.setUpdatedBy(SecurityUtils.getUsername());
+        complaintPerson.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        personInfoMapper.updatePersonInfo(complaintPerson);
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(reservationAcceptVo1), Map.class);

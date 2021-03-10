@@ -236,6 +236,18 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
     public int updateComplaintAcceptVo(ComplaintAcceptVo complaintAcceptVo) {
         String workOrderNo=complaintAcceptVo.getWorkOrderNo();
         ComplaintAcceptVo complaintAcceptVo1=complaintAcceptVoMapper.selectComplaintAcceptVo(workOrderNo);
+        String sourceName="ComplaintAcceptVo";
+        String targetTableName="accept_detail_info";
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        AcceptDetailInfo acceptDetailInfo1=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo1.getWorkOrderNo());
+        for (FieldMap fieldMap:KVMap){
+            fieldMap.getTargetColumnName();
+            fieldMap.getSourceFiledName();
+            Map map=new HashMap<String,String>();
+            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+            complaintAcceptVo1= (ComplaintAcceptVo) voUtils.fromVoToVo(complaintAcceptVo1,map,acceptDetailInfo1);
+        }
 
         PersonInfo callPerson1= personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
         PersonInfo contactsPerson1=personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
@@ -268,8 +280,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag());
 //        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
 //        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
-        for (FieldMap fieldMap:KVMap){
+        List<FieldMap> KVMap1=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
+        for (FieldMap fieldMap:KVMap1){
             fieldMap.getTargetColumnName();
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();

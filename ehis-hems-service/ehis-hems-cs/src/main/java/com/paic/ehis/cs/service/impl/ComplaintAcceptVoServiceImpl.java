@@ -151,10 +151,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setOrganCode(complaintAcceptVo.getOrganCode());
         acceptDetailInfo.setChannelCode(complaintAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(complaintAcceptVo.getItemCode());
-        acceptDetailInfo.setCallPersonId(complaintAcceptVo.getCallPersonId());
+        acceptDetailInfo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setPriorityLevel(complaintAcceptVo.getPriorityLevel());
-        acceptDetailInfo.setContactsPersonId(complaintAcceptVo.getContactsPersonId());
-        acceptDetailInfo.setComplaintPersonId(complaintAcceptVo.getComplaintPersonId());
+        acceptDetailInfo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
+        acceptDetailInfo.setComplaintPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setEmail(complaintAcceptVo.getEmail());
         acceptDetailInfo.setContent(complaintAcceptVo.getContent());
         acceptDetailInfo.setStatus(complaintAcceptVo.getStatus());
@@ -176,7 +176,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         complaintAcceptVoMapper.insertAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        personInfo1.setPersonId(complaintAcceptVo.getCallPersonId());
+        personInfo1.setPersonId(acceptDetailInfo.getCallPersonId());
         personInfo1.setName(complaintAcceptVo.getCallPerson().getName());
         personInfo1.setMobilePhone(complaintAcceptVo.getCallPerson().getMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
@@ -185,7 +185,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo1);
         //插入联系人
-        personInfo2.setPersonId(complaintAcceptVo.getContactsPersonId());
+        personInfo2.setPersonId(acceptDetailInfo.getContactsPersonId());
         personInfo2.setSex(complaintAcceptVo.getContactsPerson().getSex());
         personInfo2.setName(complaintAcceptVo.getContactsPerson().getName());
         personInfo2.setAddress(complaintAcceptVo.getContactsPerson().getAddress());
@@ -204,7 +204,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         complaintAcceptVoMapper.insertPersonInfo(personInfo2);
         //插入投诉人
-        personInfo3.setPersonId(complaintAcceptVo.getComplaintPersonId());
+        personInfo3.setPersonId(acceptDetailInfo.getComplaintPersonId());
         personInfo3.setIdentity(complaintAcceptVo.getComplainantPerson().getIdentity());
         personInfo3.setSex(complaintAcceptVo.getComplainantPerson().getSex());
         personInfo3.setName(complaintAcceptVo.getComplainantPerson().getName());

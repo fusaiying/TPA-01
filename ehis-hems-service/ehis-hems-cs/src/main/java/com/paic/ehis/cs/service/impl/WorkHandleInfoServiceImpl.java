@@ -151,7 +151,6 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
 
-            //workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
             workHandleInfo.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
@@ -495,8 +494,8 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
 
-            //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            //修改处理表
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             workHandleInfo.setHandleType("处理");
             workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
@@ -528,7 +527,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public int insertResevationSaveDeal(ReservationDealVo reservationDealVo) {
         WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-        workHandleInfo.setCreatedBy(reservationDealVo.getCreatedBy());
+        workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         WorkHandleInfo workHandleInfo1=workHandleInfoMapper.selectCreatedBy(workHandleInfo);
         if (workHandleInfo1==null) {
             //将所有状态置为N
@@ -537,26 +536,37 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            if(reservationDealVo.getBusinessProcess().equals("01")){
+                workOrderAccept.setStatus("03");
+            }else  if (reservationDealVo.getBusinessProcess().equals("02")){
+                workOrderAccept.setStatus("02");
+            }
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setLinkCode("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());
-            flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            flowLogMapper.updateFlowLog(flowLog);
+            if(reservationDealVo.getBusinessProcess().equals("01")){
+                flowLog.setOperateCode("05");
+                flowLog.setStatus("03");
+            }else  if (reservationDealVo.getBusinessProcess().equals("02")){
+                flowLog.setOperateCode("14");
+                flowLog.setStatus("02");
+            }
+            flowLogMapper.insertFlowLog(flowLog);
 
         //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
         workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
         workHandleInfo.setHandleType("处理");
-        workHandleInfo.setStatus("02");
+        workHandleInfo.setStatus("Y");
         workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
         workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
@@ -583,27 +593,37 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //修改主表状态为已处理
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            if(reservationDealVo.getBusinessProcess().equals("01")){
+                workOrderAccept.setStatus("03");
+            }else  if (reservationDealVo.getBusinessProcess().equals("02")){
+                workOrderAccept.setStatus("02");
+            }
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
             //生成轨迹表
             FlowLog flowLog=new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
             flowLog.setStatus("03");
             flowLog.setMakeBy(SecurityUtils.getUsername());
+            flowLog.setOpinion(reservationDealVo.getRemark());
             //没有um帐号
             flowLog.setUmNum(SecurityUtils.getUsername());
-            flowLog.setCreatedBy(SecurityUtils.getUsername());
             flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setUpdatedBy(SecurityUtils.getUsername());
             flowLog.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
             flowLog.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
-            flowLogMapper.updateFlowLog(flowLog);
+            if(reservationDealVo.getBusinessProcess().equals("01")){
+                flowLog.setOperateCode("05");
+                flowLog.setStatus("03");
+            }else  if (reservationDealVo.getBusinessProcess().equals("02")){
+                flowLog.setOperateCode("14");
+                flowLog.setStatus("02");
+            }
+            flowLogMapper.insertFlowLog(flowLog);
 
 
-            //WorkHandleInfo workHandleInfo=new WorkHandleInfo();
-            workHandleInfo.setHandleId(Long.parseLong(PubFun.createMySqlMaxNoUseCache("handle_id",10,6)));
+            workHandleInfo.setWorkOrderNo(reservationDealVo.getWorkOrderNo());
             workHandleInfo.setHandleType("处理");
-            workHandleInfo.setStatus("03");
+            workHandleInfo.setStatus("Y");
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());

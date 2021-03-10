@@ -1365,7 +1365,7 @@
           specialDiscount:'',
           project:'',
           cooperativeUnit:'',
-          endDate:'',
+          endDate:'9999-12-31',
           reason:'',
           liaison:'',
           phone:'',

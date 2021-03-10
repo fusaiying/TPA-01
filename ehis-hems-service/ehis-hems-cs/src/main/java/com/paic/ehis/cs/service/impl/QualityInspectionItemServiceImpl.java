@@ -118,7 +118,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         for (int i = 0; i < ids.length; i++) {
             flowLog=new FlowLog();
             //流转记录添加
-            String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",32,20);
+            String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20);
             flowLog.setFlowId(flow_id);
             flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setCreatedTime(DateUtils.getNowDate());
@@ -181,7 +181,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         for (int i = 0; i < ids.length; i++) {
             flowLog=new FlowLog();
             //流转记录添加
-            String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",32,20);
+            String flow_id= PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20);
             flowLog.setFlowId(flow_id);
             flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
             flowLog.setCreatedTime(DateUtils.getNowDate());

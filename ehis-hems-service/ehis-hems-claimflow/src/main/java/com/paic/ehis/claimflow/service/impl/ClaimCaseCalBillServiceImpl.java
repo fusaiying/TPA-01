@@ -174,8 +174,8 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 pay=pay.add(claimCaseCalBill.getPayAmount());
 
                 claimCaseCalBills.add(claimCaseCalBill);
-                billTotalAmount=billTotalAmount.add(caseCalBillVo.getBillAmount());//因账单总金额暂未实现，只能求和
-                totalDiscountAmount=totalDiscountAmount.add(caseCalBillVo.getHosDiscountAmount());//折扣总金额
+                billTotalAmount=billTotalAmount.add(StringUtils.isNull(caseCalBillVo.getBillAmount())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getBillAmount());//因账单总金额暂未实现，只能求和
+                totalDiscountAmount=totalDiscountAmount.add(StringUtils.isNull(caseCalBillVo.getHosDiscountAmount())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getHosDiscountAmount());//折扣总金额
                 totalSelfAmount=totalSelfAmount.add(StringUtils.isNull(caseCalBillVo.getCopay())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getCopay());
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {

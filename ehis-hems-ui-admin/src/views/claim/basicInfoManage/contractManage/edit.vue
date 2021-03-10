@@ -410,7 +410,7 @@
 
         <el-col :span="8">
           <el-form-item label="盒脊编号：" prop="boxRidgeCode">
-            <el-input :disabled="isShow" v-model="providerForm.boxRidgeCode" class="item-width" clearable size="mini"
+            <el-input maxlength="100" :disabled="isShow" v-model="providerForm.boxRidgeCode" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>

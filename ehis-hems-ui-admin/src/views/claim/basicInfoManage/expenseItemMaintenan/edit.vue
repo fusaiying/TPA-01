@@ -123,7 +123,7 @@
                   this.$router.go(-1)
                 }else if (res != null && res.code === 200 && res.data===0){
                   return this.$message.warning(
-                    "费用项已存在，请核实！"
+                    "费用项编码已存在，请核实！"
                   )
                 }
 

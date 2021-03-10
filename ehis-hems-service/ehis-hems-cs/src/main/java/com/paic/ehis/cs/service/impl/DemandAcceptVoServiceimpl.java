@@ -228,10 +228,10 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
         acceptDetailInfo.setChannelCode(demandAcceptVo.getChannelCode());
         acceptDetailInfo.setItemCode(demandAcceptVo.getItemCode());
-        acceptDetailInfo.setCallPersonId(demandAcceptVo.getCallPersonId());
+        acceptDetailInfo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setCallRelationBy(demandAcceptVo.getCallRelationBy());
         acceptDetailInfo.setPriorityLevel(demandAcceptVo.getPriorityLevel());
-        acceptDetailInfo.setContactsPersonId(demandAcceptVo.getContactsPersonId());
+        acceptDetailInfo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 10));
         acceptDetailInfo.setContactsRelationBy(demandAcceptVo.getContactsRelationBy());
         acceptDetailInfo.setEmail(demandAcceptVo.getEmail());
         acceptDetailInfo.setContent(demandAcceptVo.getContent());
@@ -253,7 +253,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         demandAcceptVoMapper.insertAcceptDetailInfo(acceptDetailInfo);
 
         //插入来电人
-        personInfo1.setPersonId(demandAcceptVo.getCallPersonId());
+        personInfo1.setPersonId(acceptDetailInfo.getCallPersonId());
         personInfo1.setName(demandAcceptVo.getCallName());
         personInfo1.setMobilePhone(demandAcceptVo.getCallMobilePhone());
         personInfo1.setCreatedBy(SecurityUtils.getUsername());
@@ -262,7 +262,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         demandAcceptVoMapper.insertPersonInfo(personInfo1);
         //插入联系人
-        personInfo2.setPersonId(demandAcceptVo.getContactsPersonId());
+        personInfo2.setPersonId(acceptDetailInfo.getContactsPersonId());
         personInfo2.setSex(demandAcceptVo.getContactsSex());
         personInfo2.setName(demandAcceptVo.getContactsName());
         personInfo2.setLanguage(demandAcceptVo.getContactsLanguage());
@@ -277,7 +277,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         demandAcceptVoMapper.insertPersonInfo(personInfo2);
 
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("01");
@@ -463,7 +463,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         editInfoMapper.insertEditInfo(editInfo);
 
         //轨迹表插入
-        flowLog.setFlowId("00000000000000000" + PubFun.createMySqlMaxNoUseCache("cs_flow_id", 10, 3));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
         flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         flowLog.setOperateCode("03");

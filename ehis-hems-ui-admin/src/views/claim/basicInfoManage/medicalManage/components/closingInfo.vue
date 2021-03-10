@@ -66,7 +66,7 @@
     <el-card class="box-card department-style" style="margin-top: 1px;">
       <el-form ref="closingTableForm" :rules="closingFromRules" size="small" :model="closingFrom"
                :disabled="disabledFlag">
-        <el-table ref="closingTable" :data="closingFrom.baseBankVo"
+        <el-table ref="closingTable" :data="closingFrom.baseBankVo" :key="keyValue"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
                   size="mini" highlight-current-row style="width: 100%;">
           <el-table-column prop="accountType" align="center" label="账号类型" header-align="center" show-overflow-tooltip>
@@ -251,6 +251,7 @@ export default {
 
     }
     return {
+      keyValue:1,
       totalCount: 0,
       // 查询参数
       formSearch: {
@@ -438,6 +439,7 @@ export default {
       this.closingFrom.baseBankVo[index].id = ''
       this.closingFrom.baseBankVo[index].isSet = true
       this.closingTableShow = true
+      this.keyValue++
 
     },
     //重置

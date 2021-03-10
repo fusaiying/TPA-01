@@ -133,8 +133,8 @@ public class ClaimCaseCalController extends BaseController
     }
 
     /**
-     * 根据rptNo获查询案件赔付结论信息及理算总值
-     *   非系统生成，已改变：关联了账单数据
+     * 根据币种、报案号 查询     及外币给付
+     *
      */
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:cal:query')")
     @GetMapping("exchangeRate")

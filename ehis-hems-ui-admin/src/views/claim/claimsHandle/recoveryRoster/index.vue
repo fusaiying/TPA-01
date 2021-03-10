@@ -86,7 +86,7 @@
             <el-table-column label="操作" align="center" style="padding-top: 0px;">
               <template slot-scope="scope">
                 <el-button :disabled="scope.row.status==='N'"  size="mini" type="text" icon="el-icon-edit" @click="editFun(scope.row)">编辑</el-button>
-                <el-button :disabled="scope.row.status==='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >删除
+                <el-button v-if="scope.row.status !=='N'"  size="mini"  type="text" icon="el-icon-delete" @click="delFun(scope.row)" >失效
                 </el-button>
               </template>
             </el-table-column>
@@ -114,7 +114,7 @@
             <div slot="header" class="clearfix">
               <span>追讨白名单维护</span>
               <span style="float: right;">
-                <el-button v-if="addFlag" type="primary" size="mini" @click="searchFun">查询</el-button>
+                <el-button type="primary" size="mini" @click="searchFun">查询</el-button>
                 <el-button type="primary" size="mini" @click="saveDataFun">保存</el-button>
                 <el-button size="mini" @click="handleClose">返回</el-button>
               </span>
@@ -124,17 +124,18 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="被保人姓名：" prop="name">
-                  <span v-if="addFlag" class="font_grey">{{recoveryInfo.name}}</span>
-                  <el-input v-if="!addFlag" maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input maxlength="100" v-model="recoveryForm.name" class="item-width" size="mini" placeholder="请输入" @change="clearInsuNo"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
+<!--
                 <el-form-item  v-if="addFlag"  label="年龄：" prop="birthday">
                   <span  class="font_grey">{{recoveryInfo.age}}</span>
                 </el-form-item>
+-->
 
-                <el-form-item  v-if="!addFlag"  label="生日：" prop="birthday">
+                <el-form-item  label="出生日期：" prop="birthday">
                   <el-date-picker
                     v-model="recoveryForm.birthday"
                     style="width:220px;"
@@ -142,14 +143,13 @@
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="选择日期"
-                  />
+                    @change="clearInsuNo"/>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
                 <el-form-item label="性别：" prop="sex">
-                  <span  v-if="addFlag" class="font_grey">{{selectDictLabel(rgtSexs,recoveryInfo.sex)}}</span>
-                  <el-select  v-if="!addFlag" v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="recoveryForm.sex" class="item-width" size="mini" placeholder="请选择"  @change="clearInsuNo">
                     <el-option v-for="option in rgtSexs" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -159,8 +159,16 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="证件号码：" prop="idNo" >
-                  <span v-if="addFlag"  class="font_grey">{{recoveryInfo.idNo}}</span>
-                  <el-input v-if="!addFlag" maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input  maxlength="100" v-model="recoveryForm.idNo" class="item-width" size="mini" placeholder="请输入"  @change="clearInsuNo"/>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="8" >
+                <el-form-item label="证件类型：" prop="idType">
+                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable  @change="clearInsuNo">
+                    <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
+                               :value="option.dictValue"/>
+                  </el-select>
                 </el-form-item>
               </el-col>
 
@@ -172,21 +180,13 @@
                 </el-form-item>
               </el-col>
 
+            </el-row>
+
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="追缴通知：" prop="recMessageFlag">
                   <el-select v-model="recoveryForm.recMessageFlag" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in ysOrNo" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8"  v-if="!addFlag">
-                <el-form-item label="证件类型：" prop="idType">
-                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable>
-                    <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
-                               :value="option.dictValue"/>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -231,7 +231,7 @@
 <script>
 
   import moment from 'moment'
-  import insuredModal from '../common/modul/insured'
+  import insuredModal from './components/insured'
 
   import { listInfo , editData,debtWhiteInfo,checkMoney , checkInsuredData} from '@/api/recoveryRoster/api'
 
@@ -248,72 +248,52 @@
       },
         data() {
             const checkName = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("名称必填"));
-                } else {
-                  if(this.recoveryForm.name !=  this.preName) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("名称必填"));
               } else {
+                if(this.recoveryForm.name !=  this.preName) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkBirthDay = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("生日必填"));
-                } else {
-                  if(this.recoveryForm.birthday !=  this.preBirthday) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("出生日期必填"));
               } else {
+                if(this.recoveryForm.birthday !=  this.preBirthday) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkSex = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("性别必填"));
-                } else {
-                  if(this.recoveryForm.sex !=  this.preSex) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("性别必填"));
               } else {
+                if(this.recoveryForm.sex !=  this.preSex) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkIdNo = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("证件号码必填"));
-                } else {
-                  if(this.recoveryForm.idNo !=  this.preIdNo) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("证件号码必填"));
               } else {
+                if(this.recoveryForm.idNo !=  this.preIdNo) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
             const checkIdType = (rule, value, callback) => {
-              if(!this.addFlag) {
-                if (!value) {
-                  callback(new Error("证件类型必填"));
-                } else {
-                  if(this.recoveryForm.idType !=  this.preIdType) {
-                    this.updateInsuredFlag = true;
-                  }
-                  callback();
-                }
+              if (!value) {
+                callback(new Error("证件类型必填"));
               } else {
+                if(this.recoveryForm.idType !=  this.preIdType) {
+                  this.updateInsuredFlag = true;
+                }
                 callback();
               }
             };
@@ -415,6 +395,9 @@
         this.initData();
       },
       methods: {
+        clearInsuNo(){
+          this.recoveryForm.insuredNo = '';
+        },
         changePrice(formName){
           let name  = formName == 'recoveryForm' ? 'debtAmountUp' : 'debtAmountUp';
           if(formName == 'recoveryForm') {
@@ -454,13 +437,19 @@
           const backData = JSON.parse(JSON.stringify(backValue));
           let baseData = backData.caseInsuredData;
           // name  sex idNo  birthday insuredNo\
-          if(baseData.birthday != '') {
-            baseData.age = this.getAge(baseData.birthday)
-          }
+          // if(baseData.birthday != '') {
+          //   baseData.age = this.getAge(baseData.birthday)
+          // }
           // baseData.birthday = '118';
           // baseData.age = '118';
           this.recoveryInfo = baseData;
           this.recoveryForm.insuredNo = baseData.insuredNo
+          // this.recoveryForm = baseData;
+          this.recoveryForm.name = baseData.name;
+          this.recoveryForm.birthday = baseData.birthday;
+          this.recoveryForm.sex = baseData.sex;
+          this.recoveryForm.idNo = baseData.idNo;
+          this.recoveryForm.idType = baseData.idType;
         },
 
 
@@ -534,20 +523,20 @@
           this.recoveryForm.level = row.level;
           this.recoveryForm.debtAmountUp = row.debtAmountUp;
           this.recoveryForm.recMessageFlag = row.recMessageFlag;
-          this.recoveryForm.insuredNo =  row.insuredNo;
           this.recoveryForm.name = row.name;
           this.recoveryForm.birthday = row.birthday;
           this.recoveryForm.sex = row.sex;
           this.recoveryForm.idNo = row.idNo;
           this.recoveryForm.idType = row.idType;
-
           this.preName  = row.name;
           this.preBirthday = row.birthday;
           this.preSex = row.sex;
           this.preIdNo = row.idNo;
           this.preIdType = row.idType;
+
+          this.recoveryForm.insuredNo =  row.insuredNo;
           if(row.birthday != '') {
-            this.recoveryInfo.age = this.getAge(row.birthday)
+         //   this.recoveryInfo.age = this.getAge(row.birthday)
           }
         },
         delFun(row) {
@@ -605,34 +594,35 @@
           })
         },
         addRecovery() {
-          this.recoveryInfo = '';
-          this.recoveryForm.debtWhitelistId  = '';
-          this.recoveryForm.level  = '';
-          this.recoveryForm.debtAmountUp  = '';
-          this.recoveryForm.recMessageFlag  = '';
-          this.recoveryForm.insuredNo =  '';
+          // this.recoveryInfo = '';
+          // this.recoveryForm.debtWhitelistId  = '';
+          // this.recoveryForm.level  = '';
+          // this.recoveryForm.debtAmountUp  = '';
+          // this.recoveryForm.recMessageFlag  = '';
+          // this.recoveryForm.insuredNo =  '';
           this.addFlag = true;
           this.dialogVisible = true;
           this.$refs['recoveryForm'].clearValidate();
 
         },
         saveDataFun(){
-          if(this.recoveryForm.insuredNo == '') {
-            this.$message({
-              message: '请先查询基本信息！',
-              type: 'info',
-              center: true,
-              showClose: true
-            });
-            return false;
-          }
+          // if(this.recoveryForm.insuredNo == '') {
+          //   this.$message({
+          //     message: '请先查询基本信息！',
+          //     type: 'info',
+          //     center: true,
+          //     showClose: true
+          //   });
+          //   return false;
+          // }
 
           const param = {
             pageNum:1,
             pageSize:3,
-            insuredNo:this.recoveryForm.insuredNo
+            insuredNo:this.recoveryForm.insuredNo,
+            status : "Y",
           };
-          if(this.addFlag) {
+          if(this.addFlag && '' != this.recoveryForm.insuredNo) {
             listInfo(param).then(response => {
               let count = response.total;
               if(count == 0) {
@@ -659,7 +649,7 @@
             if (valid) {
               const params = this.recoveryForm;
               params.updateInsuredFlag = this.updateInsuredFlag;
-              if(this.updateInsuredFlag) {
+              if(this.updateInsuredFlag || this.addFlag) {
                 checkInsuredData(params).then(res => {
                   if (res.code == '200') {
                     params.insuredNo = res.data.insuredNo;
@@ -668,6 +658,7 @@
                       pageSize:3,
                       insuredNo:this.recoveryForm.insuredNo
                     };
+                    param.status = "Y";
                     listInfo(param).then(response => {
                       let count = response.total;
                       if(count == 0) {
@@ -719,25 +710,49 @@
         },
         exportData() {
 
+          let name = this.form.name;
+          let idNo = this.form.idNo;
+          let level = this.form.level;
+          let debtAmountUp = this.form.debtAmountUp;
+
           const params = {
-            name:this.form.name,
-            idNo:this.form.idNo,
-            level:this.form.level,
-            debtAmountUp:this.form.debtAmountUp,
+            name:name,
+            idNo:idNo,
+            level:level,
+            debtAmountUp:debtAmountUp,
             orderByColumn:'create_time',
             isAsc:'desc'
           };
+
+          if(!this.searchBtn) {
+            params.recMessageFlag = '01';
+            params.status = 'Y';
+          } else {
+            if(name == '' && idNo == '' && level == '' && debtAmountUp == '') {
+              params.recMessageFlag = '01';
+              params.status = 'Y';
+            } else {
+              params.recMessageFlag = '';
+              params.status = '';
+            }
+          }
           this.download('claimflow/whitelist/export', params, `recoveryRoster_${new Date().getTime()}.xlsx`);
         },
 
         handleClose() {
-          this.updateInsuredFlag = false,
+          this.updateInsuredFlag = false;
           this.recoveryInfo = '';
           this.recoveryForm.debtWhitelistId  = '';
           this.recoveryForm.level  = '';
           this.recoveryForm.debtAmountUp  = '';
           this.recoveryForm.recMessageFlag  = '';
           this.recoveryForm.insuredNo =  '';
+
+          this.recoveryForm.name = '';
+          this.recoveryForm.birthday = '';
+          this.recoveryForm.sex = '';
+          this.recoveryForm.idNo = '';
+          this.recoveryForm.idType = '';
           this.$refs['recoveryForm'].clearValidate();
           this.dialogVisible = false;
         },

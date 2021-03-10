@@ -8,7 +8,7 @@
         </span>
       </div>
 
-      <el-table ref="contactTable" :data="contactInfoForm.contacts"
+      <el-table ref="contactTable" :data="contactInfoForm.contacts" :key="keyValue"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
         <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型" show-overflow-tooltip>
@@ -166,6 +166,7 @@ export default {
       }
     }
     return {
+      keyValue: 1,
       isNetHospFlag: false,
       medicalTypeData: [],
       dialogVisible: false,
@@ -480,6 +481,7 @@ export default {
       this.contactInfoForm.contacts[index].id = ''
       this.contactInfoForm.contacts[index].isSet = true
       this.departmentTableShow=true
+      this.keyValue++;
     },
 
     //重置

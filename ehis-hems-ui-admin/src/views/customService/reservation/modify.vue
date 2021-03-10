@@ -189,7 +189,7 @@
 
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="170px"
+      <el-form ref="workPoolData" :model="workPoolData"  style="padding-bottom: 30px;" label-width="200px"
                label-position="right" size="mini">
 
         <span style="color: blue">口腔责任直接结算-服务受理信息</span>
@@ -314,8 +314,20 @@
           </el-col>
 
         </el-row>
+<!--        <el-row>
+          <el-col :span="8">
+            <el-form-item label="就诊日期："  style="white-space: nowrap" prop="complaintTime">
+              <el-date-picker
+                v-model="workPoolData.complaintTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+
+        </el-row>-->
         <el-row >
-          <el-col :span="16">
+          <el-col :span="10">
             <el-form-item label="家庭电话:"  style="white-space: nowrap" >
               国家区号+<el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width2"  />
               区号<el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width2"  size="mini" />
@@ -323,9 +335,7 @@
               分机号<el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width2"  size="mini" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="5">
+          <el-col :span="8">
             <el-form-item label="办公室电话:"  style="white-space: nowrap">
               国家区号+<el-input v-model="workPoolData.contactsPerson.workPhone1[0]" class="item-width2"/>
               区号<el-input v-model="workPoolData.contactsPerson.workPhone1[1]" class="item-width2"  size="mini" />
@@ -334,11 +344,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
-              <el-date-picker
+              <el-date-picker class="item-width"
                 v-model="workPoolData.complaintTime"
                 type="datetime"
                 placeholder="选择日期时间">
@@ -401,7 +410,11 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="workPoolData.symptomTimes" class="item-width"  size="mini" />
+              <el-input v-model="ruleForm.symptomsSigns" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
+              <el-select v-model="ruleForm.symptomTimes" style="width: 90px" placeholder="请选择"  >
+                <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -420,17 +433,17 @@
         </el-row>
         <el-row>
 
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="是否意外：" prop="accidentFlag">
-              <el-select v-model="workPoolData.accidentFlag" class="item-width" placeholder="请选择">
+              <el-select v-model="workPoolData.accidentFlag" class="width-full" placeholder="请选择">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="18">
             <el-form-item label="意外原因：" prop="accidentReason">
-              <el-input v-model="workPoolData.accidentReason" class="item-width"  size="mini" />
+              <el-input v-model="workPoolData.accidentReason" class="width-full"  size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -869,7 +882,7 @@
     width: 180px;
   }
   .item-width2 {
-    width: 100px;
+    width: 70px;
   }
   /deep/ .el-radio {
     /*display: block;*/

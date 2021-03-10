@@ -8,7 +8,7 @@
           <el-button size="mini" type="primary" @click="saveHandle" >保存</el-button>
         </span>
       </div>
-      <el-table ref="departmentTable" :data="departmentForm.form"
+      <el-table ref="departmentTable" :data="departmentForm.form" :key="keyValue"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
         <el-table-column label="就诊类型" prop="visitingType" align="center" show-overflow-tooltip>
@@ -212,6 +212,7 @@ export default {
     }
 
     return {
+      keyValue:1,
       index: '',
       dialogVisible: false,
       modalValue: false,
@@ -334,6 +335,7 @@ export default {
       this.departmentForm.form[index].isSet = true
 
       this.departmentTableShow = true
+      this.keyValue++
     },
     //增加一行科室信息
     addDepartmentHandle() {

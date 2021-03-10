@@ -133,7 +133,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
@@ -169,7 +169,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setMakeBy(SecurityUtils.getUsername());
         //没有um帐号
         flowLog.setUmNum(SecurityUtils.getUsername());
@@ -210,7 +210,7 @@ public class EditInfoServiceImpl implements IEditInfoService
 
         //轨迹表生成数据
         FlowLog flowLog=new FlowLog();
-        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("flow_id",10,6));
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
         flowLog.setWorkOrderNo(complaintAcceptVo.getWorkOrderNo());
         flowLog.setLinkCode("05");//05 取消状态
         flowLog.setMakeBy(SecurityUtils.getUsername());

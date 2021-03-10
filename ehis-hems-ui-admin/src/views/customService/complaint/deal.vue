@@ -362,15 +362,18 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉是否成立：" prop="complaintTenable">
-              <el-select v-model="sendForm.complaintTenable" class="item-width">
+              <el-select v-model="sendForm.complaintTenable" class="item-width" @change="changeReasonShow">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉不成立理由：" prop="faseReason">
-              <el-input v-model="sendForm.faseReason" class="item-width" clearable size="mini" v-if="sendForm.complaintTenable!='01'"placeholder="请输入"/>
+            <el-form-item label="投诉不成立理由：" prop="faseReason" v-if="this.showFlag">
+              <el-input v-model="sendForm.faseReason"
+                        class="item-width"
+                        clearable size="mini"
+                         />
             </el-form-item>
           </el-col>
         </el-row>
@@ -604,6 +607,7 @@ export default {
   data() {
 
     return {
+      showFlag: false,
       personInfo:{
         policyNo:undefined,
         policyHolder: {},
@@ -857,7 +861,15 @@ export default {
 
   },
   methods: {
-
+    //
+    changeReasonShow(){
+      if(this.sendForm.complaintTenable==='02'){
+        this.showFlag=true
+      }
+      else{
+        this.showFlag=false
+      }
+    },
     reasonTwo() {
       const query = {}
       query.parentCode = this.sendForm.reason1;

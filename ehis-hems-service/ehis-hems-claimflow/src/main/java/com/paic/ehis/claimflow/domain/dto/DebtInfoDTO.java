@@ -32,7 +32,7 @@ public class DebtInfoDTO extends BaseEntity {
     private Date startDate;
 
     /** 结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     /** 分单号 */

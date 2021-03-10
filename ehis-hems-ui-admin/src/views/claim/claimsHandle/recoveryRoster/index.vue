@@ -443,7 +443,12 @@
           // baseData.age = '118';
           this.recoveryInfo = baseData;
           this.recoveryForm.insuredNo = baseData.insuredNo
-          this.recoveryForm = baseData;
+          // this.recoveryForm = baseData;
+          this.recoveryForm.name = baseData.name;
+          this.recoveryForm.birthday = baseData.birthday;
+          this.recoveryForm.sex = baseData.sex;
+          this.recoveryForm.idNo = baseData.idNo;
+          this.recoveryForm.idType = baseData.idType;
         },
 
 

@@ -212,16 +212,16 @@
                           placeholder="请输入"/>
               </el-form-item>
             </el-col>
-            <!--<el-col :span="8">
-              <el-form-item label="账户属性：" prop="accAttribute">
-                <el-select v-model="baseForm.accAttribute" filterable class="item-width"
+            <el-col :span="8">
+              <el-form-item label="币种：" prop="currency">
+                <el-select v-model="baseForm.currency" filterable class="item-width"
                            placeholder="请选择" clearable>
-                  <el-option v-for="option in account_attributeOptions" :key="option.dictValue"
+                  <el-option v-for="option in claim_currencyOptions" :key="option.dictValue"
                              :label="option.dictLabel"
                              :value="option.dictValue"/>
                 </el-select>
               </el-form-item>
-            </el-col>-->
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
@@ -258,7 +258,7 @@
   import {listRemark, addPayee, editPayee, delPayee, listRemarkRptNo,getCustomerAccount} from '@/api/claim/handleCom'
 
   let dictss = [{dictType: 'relation_ship_apply'}, {dictType: 'card_type'}, {dictType: 'rgtSex'},
-    {dictType: 'collectedmode'}, {dictType: 'account_attribute'},]
+    {dictType: 'collectedmode'}, {dictType: 'account_attribute'},{dictType: 'claim_currency'},]
   export default {
     props: {
       baseInfo: Object,
@@ -390,6 +390,7 @@
           city: undefined,
           district: undefined,
           address: undefined,
+          currency:'',
         },
         regions: [],
         region: [],
@@ -402,6 +403,7 @@
         dictList: [],
         relation_ship_applyOptions: [],
         account_attributeOptions: [],
+        claim_currencyOptions: [],
         collectedmodeOptions: [],
         card_typeOptions: [],
         rgtSexOptions: [],
@@ -417,6 +419,7 @@
           idEndDate: [{required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}],
           payeeBank: [{required: true, message: '开户行不能为空!', trigger: ['blur', 'change']}],
           payeeRatio: [{required: true, message: '分配比例不能为空!', trigger: ['blur', 'change']}],
+          currency: [{required: true, message: '币种不能为空!', trigger: ['blur', 'change']}],
           payeeOccupation: {validator: checkPayeeOccupation, trigger: ['blur', 'change']},
           accNo: {validator: checkAccNo, required: true, trigger: ['blur', 'change']},//允许录入数字和字母
           accNoCheck: {validator: checkAccNoCheck, required: true, trigger: ['blur']},//与账户录入信息不一致时阻断谈框提示  1、不允许复制
@@ -442,6 +445,9 @@
       }).dictDate
       this.account_attributeOptions = this.dictList.find(item => {
         return item.dictType === 'account_attribute'
+      }).dictDate
+      this.claim_currencyOptions = this.dictList.find(item => {
+        return item.dictType === 'claim_currency'
       }).dictDate
 
       getAddress().then(response => {
@@ -551,6 +557,7 @@
           city: undefined,
           district: undefined,
           address: undefined,
+          currency: '',
         }
         this.region = []
         if (this.insuredData.idEndDate != null && this.insuredData.idEndDate !== '') {

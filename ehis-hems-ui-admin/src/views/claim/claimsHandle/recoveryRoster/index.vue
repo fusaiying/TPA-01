@@ -163,6 +163,15 @@
                 </el-form-item>
               </el-col>
 
+              <el-col :span="8" >
+                <el-form-item label="证件类型：" prop="idType">
+                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable  @change="clearInsuNo">
+                    <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
+                               :value="option.dictValue"/>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
               <el-col :span="8">
                 <el-form-item label="等级：" prop="level">
                   <el-select v-model="recoveryForm.level" class="item-width" size="mini" placeholder="请选择">
@@ -171,21 +180,13 @@
                 </el-form-item>
               </el-col>
 
+            </el-row>
+
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="追缴通知：" prop="recMessageFlag">
                   <el-select v-model="recoveryForm.recMessageFlag" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in ysOrNo" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8" >
-                <el-form-item label="证件类型：" prop="idType">
-                  <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable  @change="clearInsuNo">
-                    <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
-                               :value="option.dictValue"/>
                   </el-select>
                 </el-form-item>
               </el-col>

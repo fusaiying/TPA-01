@@ -164,7 +164,7 @@
               </el-col>
 
               <el-col :span="8" >
-                <el-form-item label="证件类型：" prop="idType">
+                <el-form-item label="证件类型：" prop="idType" key="idType">
                   <el-select v-model="recoveryForm.idType" class="item-width" placeholder="请选择" clearable  @change="clearInsuNo">
                     <el-option v-for="option in card_types" :key="option.dictValue" :label="option.dictLabel"
                                :value="option.dictValue"/>
@@ -350,7 +350,7 @@
                 sex: {trigger: ['change'], required: true,  validator: checkSex},
                 idNo: {trigger: ['change'], required: true, validator:checkIdNo},
                 level: {trigger: ['change'], required: true, message: '等级必填'},
-                idType: {trigger: ['change'], required: true,validate:checkIdType},
+                idType: {trigger: ['change'], required: true,validator:checkIdType},
                 recMessageFlag: {trigger: ['change'], required: true, message: '缴费通知必填'},
                 debtAmountUp: {trigger: ['change'], required: true, message: '金额上限必填'},
               },

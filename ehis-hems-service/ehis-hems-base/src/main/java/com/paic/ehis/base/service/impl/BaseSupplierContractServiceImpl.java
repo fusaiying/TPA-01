@@ -171,6 +171,24 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
         baseSupplierContract.setUpdateBy(SecurityUtils.getUsername());
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
+
+        if(!baseSupplierContract.getContractControlFlag().contains("01")){
+            baseSupplierContract.setTreatmentDiscount("");
+            baseSupplierContract.setExamineDiscount("");
+            baseSupplierContract.setBedDiscount("");
+            baseSupplierContract.setAllowance("");
+            baseSupplierContract.setCosts("");
+            baseSupplierContract.setDiscountinfo("");
+            baseSupplierContract.setSpecialDiscount("");
+            baseSupplierContract.setProject("");
+        }
+        if(!baseSupplierContract.getContractControlFlag().contains("02")){
+            baseSupplierContract.setAverageCost("");
+            baseSupplierContract.setType("");
+            baseSupplierContract.setAdvicenum("");
+            baseSupplierContract.setAverageCostExcept("");
+        }
+
         int result = baseSupplierContractMapper.updateBaseSupplierContract(baseSupplierContract);
         return baseSupplierContract;
     }

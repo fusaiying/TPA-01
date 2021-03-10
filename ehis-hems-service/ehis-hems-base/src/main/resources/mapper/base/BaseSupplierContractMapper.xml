@@ -287,19 +287,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit = #{cooperativeUnit},</if>
             <if test="straight != null and straight != ''">straight = #{straight},</if>
             <if test="flag != null">flag = #{flag},</if>
-            <if test="contractControlFlag != null and contractControlFlag != ''">contract_control_flag = #{contractControlFlag},</if>
+            <if test="contractControlFlag != null">contract_control_flag = #{contractControlFlag},</if>
             <if test="treatmentDiscount != null">treatment_discount = #{treatmentDiscount},</if>
             <if test="examineDiscount != null">examine_discount = #{examineDiscount},</if>
             <if test="bedDiscount != null">bed_discount = #{bedDiscount},</if>
             <if test="allowance != null">allowance = #{allowance},</if>
             <if test="specialDiscount != null">special_discount = #{specialDiscount},</if>
             <if test="costs != null">costs = #{costs},</if>
-            <if test="project != null and project != ''">project = #{project},</if>
+            <if test="project != null">project = #{project},</if>
             <if test="discountinfo != null">discountinfo = #{discountinfo},</if>
-            <if test="averageCost != null and averageCost != ''">average_cost = #{averageCost},</if>
+            <if test="averageCost != null">average_cost = #{averageCost},</if>
             <if test="type != null">type = #{type},</if>
             <if test="advicenum != null">advicenum = #{advicenum},</if>
-            <if test="averageCostExcept != null and averageCostExcept != ''">average_cost_except = #{averageCostExcept},</if>
+            <if test="averageCostExcept != null">average_cost_except = #{averageCostExcept},</if>
             <if test="contractsort != null">contractsort = #{contractsort},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="reason != null and reason != ''">reason = #{reason},</if>

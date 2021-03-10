@@ -227,13 +227,11 @@
     </select>
 
     <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO" resultType="String">
-        select count(1) from claim_case
-        <where>
-            <if test="rptStartNo != null and rptStartNo != '' and rptEndNo != null and rptEndNo != ''">
-                <![CDATA[and rpt_no >=  #{rptStartNo} and rpt_no <= #{rptEndNo} ]]>
-            </if>
-
-        </where>
+        select count(1) from claim_case t
+            where substr(t.rpt_no,1,7) = substr(#{rptStartNo},1,7)
+            <![CDATA[ and  substr(t.rpt_no,8) >= substr(#{rptStartNo},8) ]]>
+            <![CDATA[ and substr(t.rpt_no,8) <= substr(#{rptEndNo},8) ]]>
+            )
     </select>
 
     <insert id="insertClaimCase" parameterType="com.paic.ehis.claimflow.domain.ClaimCase">
@@ -369,7 +367,7 @@
         <result property="monitoringTime"    column="monitoring_time"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
-        SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
+      /*  SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
         CONCAT(
         FLOOR( TIMESTAMPDIFF( SECOND, ccr.update_time, now( ) ) / 86400 ),
         '天',
@@ -381,16 +379,60 @@
         from claim_case  cc left join  claim_batch cb on cc.batch_no=cb.batch_no  and cc.status='Y'
         inner join claim_case_policy ccp on cc.rpt_no=ccp.rpt_no  and ccp.status='Y'
         inner  join claim_case_insured cci   on cc.rpt_no = cci.rpt_no  and cci.status='Y'
-        inner  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'
+        inner  join  claim_case_record  ccr  on ccr.rpt_no = cc.rpt_no  and  ccr.history_flag = 'N'*/
+        select * from (
+                        SELECT
+                        cc.rpt_no,
+                        cc.case_status,
+                        ccr.create_by,
+                        -- cci.id_no,
+                        (select cci.id_no from claim_case_insured cci where  cc.rpt_no = cci.rpt_no AND cci. STATUS = 'Y' limit 1) id_no,
+                        cc.update_by operator,
+                        cb.claim_type,
+                        cb.source,
+                        (select ccp.company_name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_name ,
+                        (select ccp.company_code from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) company_code ,
+                        (select ccp.name from claim_case_policy  ccp where cc.rpt_no = ccp.rpt_no AND ccp. STATUS = 'Y' limit 1) name ,
+                        -- 	ccp.company_name,
+                        -- 	ccp.company_code,
+                        -- 	ccp. NAME,
+                        cb.submit_date,
+                        CONCAT(
+                        FLOOR(
+                        TIMESTAMPDIFF(
+                        SECOND,
+                        ccr.update_time,
+                        now()
+                        ) / 86400
+                        ),
+                        '天',
+                        TIMESTAMPDIFF(HOUR, ccr.update_time, now()) % 24,
+                        '时',
+                        TIMESTAMPDIFF(
+                        MINUTE,
+                        ccr.update_time,
+                        now()
+                        ) % 60,
+                        '分'
+                        ) monitoring_time,
+                        cc.create_time
+                  FROM claim_case cc
+             LEFT JOIN claim_batch cb ON cc.batch_no = cb.batch_no AND cc. STATUS = 'Y'
+                        -- INNER JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
+                        -- AND ccp. STATUS = 'Y'
+                        -- INNER JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
+                        -- AND cci. STATUS = 'Y'
+            INNER JOIN claim_case_record ccr ON ccr.rpt_no = cc.rpt_no  AND ccr.history_flag = 'N'
+                     ) t
         <where>
-            <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
-            <if test="claimType != null  and claimType != ''"> and cb.claim_type = #{claimType}</if>
-            <if test="submitstartdate != null and submitenddate != null"> and cb.submit_date between #{submitstartdate} and (#{submitenddate})</if>
-            <if test="caseStatus != null  and caseStatus != ''"> and cc.case_status = #{caseStatus}</if>
-            <if test="operator != null  and operator != ''"> and ccr.operator = #{operator}</if>
-            <if test="companyCode != null  and companyCode != ''"> and ccp.company_code = #{companyCode}</if>
-            <if test="name != null  and name != ''"> and cci.name like concat('%', #{name}, '%')</if>
-            <if test="idNo != null  and idNo != ''"> and cci.id_no = #{idNo}</if>
+            <if test="rptNo != null and rptNo != ''"> and t.rpt_no = #{rptNo}</if>
+            <if test="claimType != null  and claimType != ''"> and t.claim_type = #{claimType}</if>
+            <if test="submitstartdate != null and submitenddate != null"> and t.submit_date between #{submitstartdate} and (#{submitenddate})</if>
+            <if test="caseStatus != null  and caseStatus != ''"> and t.case_status = #{caseStatus}</if>
+            <if test="operator != null  and operator != ''"> and t.operator = #{operator}</if>
+            <if test="companyCode != null  and companyCode != ''"> and t.company_code = #{companyCode}</if>
+            <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
+            <if test="idNo != null  and idNo != ''"> and t.id_no = #{idNo}</if>
         </where>
     </select>
     <update id="updateCaseDispatchList" parameterType="ClaimCase">
@@ -406,6 +448,16 @@
         where rpt_no = #{rptNo}
     </update>
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentVO" id="ConditionsForTheAdjustmentVO">
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="batchNo"    column="batch_no"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="organCode"    column="organ_code"    />
+        <result property="surveyCode"    column="survey_code"    />
+        <result property="operator"    column="operator"    />
+        <result property="name"    column="name"    />
+    </resultMap>
+    <resultMap type="com.paic.ehis.claimflow.domain.vo.ConditionsForTheAdjustmentTwoVO" id="ConditionsForTheAdjustmentTwoVO">
         <result property="rptNo"    column="rpt_no"    />
         <result property="batchNo"    column="batch_no"    />
         <result property="caseStatus"    column="case_status"    />
@@ -628,7 +680,7 @@
     </select>
 
     <!--fu  理算审核 悬挂-->
-    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentVO">
+    <select id="selectConditionsForTheAdjustmentHang" parameterType="com.paic.ehis.claimflow.domain.dto.AuditWorkPoolDTO" resultMap="ConditionsForTheAdjustmentTwoVO">
         SELECT
         DISTINCT
         acto.rpt_no,
@@ -656,7 +708,7 @@
         INNER JOIN claim_case_record record ON cases.rpt_no = record.rpt_no
         AND record.operation = '07'
         AND record.STATUS = 'Y'
-        AND record.history_flag = 'y'
+        AND record.history_flag = 'Y'
         AND record.operator = #{operator}
         and cases.case_status in ('00','30','31','32')
         and cases.status='Y'
@@ -704,33 +756,46 @@
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimInformationVo" id="ClaimInformationVo">
         <result property="batchNo"    column="batch_no"    />
         <result property="rptNo"    column="rpt_no"    />
-        <result property="caseStatus"    column="case_status"    />
+        <result property="source"    column="source"    />
         <result property="name"    column="name"    />
         <result property="idNo"    column="id_no"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="caseStatus"    column="case_status"    />
+        <result property="payStatus"    column="pay_status"    />
+        <result property="endCaseTime" column="end_case_time"/>
+        <result property="updateTime"    column="update_time"    />
         <result property="accDate"    column="acc_date"    />
         <result property="investigation"    column="investigation"    />
         <result property="policyItemNo"    column="policy_item_no"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="claimType" column="claim_type"  />
+        <result property="payConclusion"    column="pay_conclusion"    />
+        <result property="paymentAmount"    column="payment_amount"    />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         SELECT
-        cb.batch_no,
-        cc.rpt_no,
-        cc.case_status,
-        cc.update_by,
-        cb.claim_type,
-        ccp.NAME,
-        cci.id_no,
-        ccp.policy_item_no
-        FROM
-        claim_batch cb
-        LEFT JOIN claim_case cc ON cb.batch_no = cc.batch_no
-        AND cc.STATUS = 'Y'
-        LEFT JOIN claim_case_insured cci ON cc.rpt_no = cci.rpt_no
-        AND cci.STATUS = 'Y'
-        LEFT JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
-        AND ccp.STATUS = 'Y'
+                cb.batch_no,
+                cc.rpt_no,
+                cc.case_status,
+                cc.update_by,
+                cb.claim_type,
+                ccp.NAME,
+                cci.id_no,
+                ccp.policy_item_no,
+                CASE WHEN (SELECT count(1) FROM claim_case_investigation WHERE rpt_no =  cc.rpt_no ) > 0 THEN '01' ELSE '02' END  investigation ,
+                accept.acc_date,
+                CONCAT(cal.bill_currency,' ',cal.pay_amount) payment_amount ,
+                cal.pay_amount ,
+                cal.pay_conclusion
+         FROM claim_batch cb
+    LEFT JOIN claim_case cc            ON cb.batch_no = cc.batch_no  AND cc.STATUS = 'Y'
+    LEFT JOIN claim_case_insured cci   ON cc.rpt_no = cci.rpt_no     AND cci.STATUS = 'Y'
+    LEFT JOIN claim_case_policy ccp    ON cc.rpt_no = ccp.rpt_no     AND ccp.STATUS = 'Y'
+    LEFT JOIN claim_case_accept accept on cc.rpt_no = accept.rpt_no  AND accept.status = 'Y'
+    LEFT JOIN claim_case_cal cal       ON cal.rpt_no = accept.rpt_no AND cal.status = 'Y'
         <where>
             <if test="rptNo != null and rptNo != ''"> and cc.rpt_no = #{rptNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and cc.batch_no = #{batchNo}</if>
@@ -756,7 +821,8 @@
         LEFT JOIN claim_case_insured c ON b.rpt_no = c.rpt_no
         WHERE
         a.history_flag = 'Y'  AND a.STATUS = 'Y'  AND b.STATUS = 'Y' AND c.STATUS = 'Y'
-        and a.operation = #{caseStatus} and a.operator = #{updateBy} and left(a.update_time,10) = #{updateDate}
+        and a.operation = #{caseStatus} and a.operator = #{updateBy}
+        <if test="updateDate != null"> and left(a.update_time,10) = #{updateDate}</if>
         <if test="rptNo != null  and rptNo != ''"> and b.rpt_no = #{rptNo}</if>
         <if test="batchNo != null  and batchNo != ''"> and b.batch_no = #{batchNo}</if>
         <if test="name != null  and name != ''"> and c.name like concat('%', #{name}, '%')</if>
@@ -811,9 +877,56 @@
         <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
 
     </select>
-    <!-- <update id="updateCaseUpdateBy" parameterType="String">
-         update claim_case
-         set case_status ='31'
-         where rpt_no = #{rptNo}
-     </update>-->
+    <select id="selectBillAndPolicyDateByRptNo" parameterType="String" resultType="com.paic.ehis.claimflow.domain.BillAndPolicyDate">
+        SELECT ccb.treatment_start_date billStartDate,ccb.treatment_end_date billEndDate,ccp.valid_start_date policyStartDate,ccp.valid_end_date policyEndDate
+        FROM `claim_case_cal_item` cci  JOIN claim_case_bill ccb on cci.bill_id=ccb.bill_id AND ccb.rpt_no=#{rptNo} AND ccb.status='Y'  join
+        claim_case_policy ccp on cci.policy_no=ccp.policy_no AND ccp.rpt_no= #{rptNo} and ccp.status='Y'
+        where cci.rpt_no= #{rptNo} and cci.status='Y'
+
+    </select>
+
+    <select id="claimInfoList"  parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
+        SELECT
+                DISTINCT
+                t1.rpt_no,
+                t2.source,
+                t3.name,
+                t3.id_no,
+                t2.claim_type,
+                t4.company_code,
+                t4.company_name,
+                t4.policy_manage_com,
+                t5.pay_amount,
+                t6.update_by,
+                t1.case_status,
+                t1.pay_status,
+                t1.end_case_time,
+                t1.update_time
+          FROM claim_case t1
+     LEFT JOIN claim_batch t2        ON t1.batch_no = t2.batch_no
+     LEFT JOIN claim_case_insured t3 ON t1.rpt_no = t3.rpt_no
+     LEFT JOIN claim_case_policy t4  ON  t3.rpt_no = t4.rpt_no
+     LEFT JOIN claim_case_cal t5     ON t4.rpt_no = t5.rpt_no
+     LEFT JOIN (SELECT rpt_no,operation,update_by FROM claim_case_record WHERE operation = '07' AND status = 'Y' AND history_flag = 'Y'  GROUP BY rpt_no) t6 ON t5.rpt_no = t6.rpt_no
+         WHERE 1 = 1
+           AND t1.status = 'Y'
+           AND t2.status = 'Y'
+           AND t2.status = 'Y'
+           AND  t4.status = 'Y'
+           AND  t5.status = 'Y'
+        <if test="rptNo != null  and rptNo != ''"> and t1.rpt_no = #{rptNo}</if>
+        <if test="source != null  and source != ''"> and t2.source = #{source}</if>
+        <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
+        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
+        <if test="updateBy != null  and updateBy != ''"> and t6.update_by = #{updateBy}</if>
+        <if test="pageType != null  and pageType != '' and pageType = '01'"> and t1.case_status in ('09','97') </if>
+
+        <if test="createStartTime != null and createStartTime != ''">
+            <![CDATA[AND t1.update_time >= #{createStartTime} ]]>
+        </if>
+        <if test="createEndTime != null and createEndTime != ''">
+            <![CDATA[AND t1.update_time <= #{createEndTime}]]>
+        </if>
+
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseDebt;
 import com.paic.ehis.claimflow.domain.dto.DebtInfo;
+import com.paic.ehis.claimflow.domain.dto.DebtInfoDTO;
 import com.paic.ehis.claimflow.domain.vo.DebtInfoVO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseDebtMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCasePolicyMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,43 +133,37 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
     public List<DebtInfoVO> selectDebtInitList() {
         List<DebtInfoVO> debtInfoList = claimCaseDebtMapper.selectDebtInitList();
         for (DebtInfoVO debtInfo : debtInfoList){
-            BigDecimal a = new BigDecimal("0");
-            // 剩余欠款大于0
-            if (null != debtInfo.getResidualAmount() && a.compareTo(debtInfo.getResidualAmount()) == -1){
-                ClaimCasePolicy policy = new ClaimCasePolicy();
-                policy.setRptNo(debtInfo.getRptNo());
-                policy.setStatus("Y");
-                List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyList(policy);
-                // 投保人姓名去重
-                List<String> appntList = policyList.stream().map(ClaimCasePolicy::getAppName).collect(Collectors.toList());
-                LinkedHashSet<String> hashSetAppnt = new LinkedHashSet<>(appntList);
-                ArrayList<String> appntWithoutDup = new ArrayList<>(hashSetAppnt);
-                // 投保人姓名拼接
-                String appntName = StringUtils.join(appntWithoutDup, "|");
-                debtInfo.setAppntName(appntName);
-                // 保单号拼接
-                List<String> policyNoList = policyList.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
-                LinkedHashSet<String> hashSetPolicyNo = new LinkedHashSet<>(policyNoList);
-                ArrayList<String> policyNoWithoutDup = new ArrayList<>(hashSetPolicyNo);
-                String contNo = StringUtils.join(policyNoWithoutDup, "|");
-                debtInfo.setContNo(contNo);
-                // 通过微服务获取医院名称
-                BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
-                baseProviderInfo.setProviderCode(debtInfo.getHospitalCode());
-                R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-                if (R.FAIL == result.getCode())
-                {
-                    throw new BaseException(result.getMsg());
-                }
-                if (result.getData().size() > 0) {
-                    BaseProviderInfo hospital = result.getData().get(0);
-                    debtInfo.setHospitalCode(hospital.getChname1());
-                }
-            } else {
-                // 剩余欠款小于0 移除
-                debtInfoList.remove(debtInfo);
+            ClaimCasePolicy policy = new ClaimCasePolicy();
+            policy.setRptNo(debtInfo.getRptNo());
+            policy.setStatus("Y");
+            List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyList(policy);
+            // 投保人姓名去重
+            List<String> appntList = policyList.stream().map(ClaimCasePolicy::getAppName).collect(Collectors.toList());
+            LinkedHashSet<String> hashSetAppnt = new LinkedHashSet<>(appntList);
+            ArrayList<String> appntWithoutDup = new ArrayList<>(hashSetAppnt);
+            // 投保人姓名拼接
+            String appntName = StringUtils.join(appntWithoutDup, "|");
+            debtInfo.setAppntName(appntName);
+            // 保单号拼接
+            List<String> policyNoList = policyList.stream().map(ClaimCasePolicy::getPolicyNo).collect(Collectors.toList());
+            LinkedHashSet<String> hashSetPolicyNo = new LinkedHashSet<>(policyNoList);
+            ArrayList<String> policyNoWithoutDup = new ArrayList<>(hashSetPolicyNo);
+            String contNo = StringUtils.join(policyNoWithoutDup, "|");
+            debtInfo.setContNo(contNo);
+            // 通过微服务获取医院名称
+            BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
+            baseProviderInfo.setProviderCode(debtInfo.getHospitalCode());
+            R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
+            if (R.FAIL == result.getCode())
+            {
+                throw new BaseException(result.getMsg());
+            }
+            if (result.getData().size() > 0) {
+                BaseProviderInfo hospital = result.getData().get(0);
+                debtInfo.setHospitalCode(hospital.getChname1());
             }
         }
+
         return debtInfoList;
     }
 
@@ -178,7 +174,7 @@ public class ClaimCaseDebtServiceImpl implements IClaimCaseDebtService
      * @return
      */
     @Override
-    public List<DebtInfoVO> selectDebtList(DebtInfo debtInfoDTO) {
+    public List<DebtInfoVO> selectDebtList(DebtInfoDTO debtInfoDTO) {
         List<DebtInfoVO> debtInfoVOList = claimCaseDebtMapper.selectDebtList(debtInfoDTO);
         for (DebtInfoVO debtInfo : debtInfoVOList){
             ClaimCasePolicy policy = new ClaimCasePolicy();

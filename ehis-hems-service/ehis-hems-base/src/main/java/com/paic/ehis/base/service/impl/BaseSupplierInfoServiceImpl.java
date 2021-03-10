@@ -67,16 +67,15 @@ public class BaseSupplierInfoServiceImpl implements IBaseSupplierInfoService
      */
     @Override
     public List<BaseSupplierInfo> selectBaseSupplierInfoList(BaseSupplierInfo baseSupplierInfo) throws Exception
-    {   /*if (StringUtils.isNull(baseSupplierInfo.getChname())&&
+    {   if (StringUtils.isNull(baseSupplierInfo.getChname())&&
             StringUtils.isNull(baseSupplierInfo.getEnname())&&
             StringUtils.isNull(baseSupplierInfo.getServcomType())&&
             StringUtils.isNull(baseSupplierInfo.getBussinessStatus())&&
             StringUtils.isNull(baseSupplierInfo.getSerialNo())&&
             StringUtils.isNull(baseSupplierInfo.getProvince())&&
             StringUtils.isNull(baseSupplierInfo.getCity())&&
-            StringUtils.isNull(baseSupplierInfo.getDetail())
-    ) */
-        if(baseSupplierInfo==null){
+            StringUtils.isNull(baseSupplierInfo.getDetail()))
+        {
         Map map = Dateutils.getCurrontTime1();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baseSupplierInfo.setdBefore1(sdf.parse(String.valueOf(map.get("defaultStartDate"))));

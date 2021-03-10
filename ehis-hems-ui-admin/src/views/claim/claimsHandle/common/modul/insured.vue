@@ -282,6 +282,7 @@
 
   export default {
     props: {
+      batchInfo:Object,
       dictList: Array,
       value: {
         type: Boolean,
@@ -629,11 +630,14 @@
               const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
               subFormSearch.rptNo = this.copyFixInfo.rptNo
               let insuredInfoData = {
+                claimType:this.batchInfo.claimtype,
                 policyNos: this.multipleSelection,
                 claimCaseInsured: subFormSearch
               }
               if(this.saveFlag) {
-                addInsuredAndPolicy(insuredInfoData)
+                addInsuredAndPolicy(insuredInfoData).then(res=>{
+                  this.$emit('getPayeeData')
+                })
               }
               //关闭清空
               this.changeDialogVisable()
@@ -653,11 +657,14 @@
                 const subFormSearch = JSON.parse(JSON.stringify(this.tableData[this.radio]))
                 subFormSearch.rptNo = this.copyFixInfo.rptNo
                 let insuredInfoData = {
+                  claimType:this.batchInfo.claimtype,
                   policyNos: this.multipleSelection,
                   claimCaseInsured: subFormSearch
                 }
                 if(this.saveFlag) {
-                  addInsuredAndPolicy(insuredInfoData)
+                  addInsuredAndPolicy(insuredInfoData).then(res=>{
+                    this.$emit('getPayeeData')
+                  })
                 }
                 //关闭清空
                 this.changeDialogVisable()

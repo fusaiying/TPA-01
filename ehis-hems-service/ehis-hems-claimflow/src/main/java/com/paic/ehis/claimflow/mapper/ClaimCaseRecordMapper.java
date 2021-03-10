@@ -6,6 +6,7 @@ import com.paic.ehis.claimflow.domain.dto.CaseDispatchDTO;
 import com.paic.ehis.claimflow.domain.dto.DispatchDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 案件操作记录 Mapper接口
@@ -205,5 +206,8 @@ public interface ClaimCaseRecordMapper
      * @return
      */
     public List<ClaimCaseRecord> selectClaimCaseRecordByrptNo(String rptNo);
+
+    public ClaimCaseRecord selectClaimCaseRecordInfoByParam(Map<String,Object> map);
+
 
 }

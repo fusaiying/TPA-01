@@ -52,14 +52,7 @@
     },
     data() {
       return {
-        /*    baseInfo:{
-              submitdate:undefined,
-              claimtype:undefined,
-              conttype:undefined,
-              hospitalcode:undefined,
-              casenum:undefined,
-              batchtotal:undefined,
-            },*/
+
         dictList: [],
         claimTypeOptions: [],
         insurance_typeOptions: [],
@@ -80,12 +73,7 @@
       this.special_caseOptions = this.dictList.find(item => {
         return item.dictType === 'special_case'
       }).dictDate
-     /* getHospitalInfo({}).then(res => {
-        if (res != null && res !== '') {
-          this.hospitalOptions = res.rows
 
-        }
-      })*/
     },
     methods: {
       selectHospitalName(datas, value) {

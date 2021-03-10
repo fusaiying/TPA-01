@@ -8,7 +8,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="机构：" prop="deptCode">
-                <el-select v-model="form.deptCode" class="item-width" size="mini" placeholder="请选择">
+                <el-select v-model="form.deptCode" class="item-width" clearable size="mini" placeholder="请选择">
                   <el-option v-for="option in sysDepts" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                 </el-select>
               </el-form-item>
@@ -118,7 +118,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="理赔类型：" prop="claimType">
-                  <el-select  :disabled="read ? 'disabled' : false"  v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
+                  <el-select   v-model="pbaceCaseForm.claimType" class="item-width" size="mini" placeholder="请选择">
                     <el-option v-for="option in claimTypes" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
                   </el-select>
                 </el-form-item>
@@ -128,7 +128,7 @@
             <el-row>
               <el-col :span="24">  <!-- :disabled="readbatchNo ? 'disabled' : false" -->
                 <el-form-item label="批次号：" prop="batchNo">
-                  <el-input :disabled="readbatchNo ? 'disabled' : false"  v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
+                  <el-input v-model="pbaceCaseForm.batchNo" class="item-width" size="mini" placeholder="请输入"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -165,14 +165,14 @@
 
         <!-- 案件归档 end -->
       </el-card>
-    <case-list :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
+    <case-list @goInitData="initData" :value="listDialog" :editPower="editPower" :fixInfo="fixInfo" :sysDepts="sysDepts" @closeListDialog="closeListDialog"/>
 
   </div>
 </template>
 
 <script>
 
-   import {getUserInfo, getOrganList,getUsersByOrganCode,} from '@/api/claim/standingBookSearch'
+   import {getUserInfo, getOrganList,} from '@/api/claim/standingBookSearch'
    import caseList from './components/caseList'
    import moment from 'moment'
    import {getDepts, caseFilingList,editCaseFiling,editDestroy,addInfo } from '@/api/placeCase/api'
@@ -217,9 +217,36 @@
             }
 
           };
+
+          const checkStartRpt = (rule, value, callback) => {
+            if (!value) {
+              callback(new Error("报案号起必填"));
+            } else {
+              if(value.trim().length != 17) {
+                callback(new Error("请输入正确的报案号"));
+              } else {
+                callback();
+              }
+            }
+
+          };
+
+          const checkEndRpt = (rule, value, callback) => {
+            if (!value) {
+              callback(new Error("报案号止必填"));
+            } else {
+              if(value.trim().length  != 17) {
+                callback(new Error("请输入正确的报案号"));
+              } else {
+                callback();
+              }
+            }
+
+          };
             return {
                read:false,
                readbatchNo:false,
+               queryOrganCode:'',
                disRead:false,
                 form: {
                   deptCode: '',
@@ -246,15 +273,14 @@
                   batchNo:'',
                   rptStartNo:'',
                   rptEndNo:'',
-                  rpttNo:'',
                   caseBoxNo:'',
                 },
                 rules: {
                   deptCode: {trigger: ['change'], required: false, message: '机构必填'},
-                  claimType: {trigger: ['change'], required: true, message: '理赔类型必填'},
+                  claimType: {trigger: ['change'], required: false, message: '理赔类型必填'},
                   batchNo: {trigger: ['change'], required: false, message: '批次号必填'},
-                  rptStartNo: {trigger: ['change'], required: true, message: '报案号起必填'},
-                  rptEndNo: {trigger: ['change'], required: true, message: '报案号止必填'},
+                  rptStartNo: {trigger: ['change'], required: true,  validator: checkStartRpt},
+                  rptEndNo: {trigger: ['change'], required: true, validator: checkEndRpt},
                   caseBoxNo: {trigger: ['change'],validator: checkExistInfo, required: true},
 
                 },
@@ -270,6 +296,10 @@
                 yssOrNo:[],
                 editPower:true,
                 sysDepts:[],
+                preBatchNo:'',
+                preRptStartNo:'',
+                preRptEndNo:'',
+                preClaimType:'',
             }
         },
       mounted(){
@@ -311,7 +341,9 @@
         },
         //重置
         reset(form) {
+          this.queryOrganCode=this.form.deptCode
             this.$refs[form].resetFields()
+          this.form.deptCode= this.queryOrganCode
         },
         //查询
         gettableData () {
@@ -325,8 +357,8 @@
             createStartStr = this.dateFormat('yyyy-MM-dd',currentDate);
           }
           const params = {
-            pageNum : this.searchBtn ? 1 : this.pageInfo.currentPage,
-            pageSize : this.searchBtn ? 10 : this.pageInfo.pageSize,
+            pageNum : this.pageInfo.currentPage,
+            pageSize : this.pageInfo.pageSize,
             deptCode:this.form.deptCode ,
             claimType:this.form.claimType ,
             batchNo: this.form.batchNo ,
@@ -342,12 +374,11 @@
             getUserInfo().then(response => {
               if(response.data.deptId) {
                 this.loading = true;
-                params.deptCode = response.data.deptId.toString();
+                params.deptCode = response.data.organCode.toString();
                 caseFilingList(params).then(response => {
                   this.totalNum = response.total;
                   this.tableData = response.rows;
                   this.loading = false;
-                  this.searchBtn = false;
                 }).catch(error => {
                   this.loading = true;
                   console.log(error);
@@ -360,7 +391,6 @@
               this.totalNum = response.total;
               this.tableData = response.rows;
               this.loading = false;
-              this.searchBtn = false;
             }).catch(error => {
               this.loading = true;
               console.log(error);
@@ -369,6 +399,8 @@
         },
         searchByFormParms(){
           this.searchBtn = true;
+          this.pageInfo.currentPage = 1;
+          this.pageInfo.pageSize = 10;
           this.gettableData();
         },
         addRecovery(row,type) {
@@ -381,6 +413,10 @@
             this.pbaceCaseForm.rptStartNo = row.rptStartNo;
             this.pbaceCaseForm.rptEndNo = row.rptEndNo;
             this.pbaceCaseForm.caseBoxNo = row.caseBoxNo;
+            this.preBatchNo = row.batchNo;
+            this.preRptStartNo = row.rptStartNo;
+            this.preRptEndNo = row.rptEndNo;
+            this.preClaimType = row.claimType;
             if(row.batchNo != ''  && row.batchNo != null) {
               this.readbatchNo = true;
             } else {
@@ -400,11 +436,17 @@
         },
         saveInfo(){
          let params = this.pbaceCaseForm;
-
-
           this.$refs.pbaceCaseForm.validate((valid) => {
             if (valid) {
               if(this.read) {  // 更新
+                if(this.preBatchNo != this.pbaceCaseForm.batchNo
+                  || this.preRptStartNo != this.pbaceCaseForm.rptStartNo
+                  || this.preRptEndNo != this.pbaceCaseForm.rptEndNo
+                || this.preClaimType != this.pbaceCaseForm.claimType) {
+                  params.updateDetail = true;
+                } else {
+                  params.updateDetail = false;
+                }
                 editCaseFiling(params).then(response => {
                   if(response.code == 200) {
                     this.dialogVisible = false;
@@ -477,26 +519,33 @@
 
         },
         getDepts() {
-          let query = {
-            deptName: ''
-          };
-          getDepts(query).then(response => {
-
-            if(response.data) {
-              for(let i=0; i<response.data.length; i++) {
-                let obj= new Object();
-                obj.dictLabel = response.data[i].deptName;
-                obj.dictValue = response.data[i].deptId.toString();
-                this.sysDepts.push(obj);
+          getUserInfo().then(res => {
+            if (res != null && res.code === 200) {
+              this.queryOrganCode = res.data.organCode
+              this.pbaceCaseForm.deptCode = res.data.organCode;
+              let item = {
+                organCode: '',
+                pageNum: 1,
+                pageSize: 200,
               }
+              if (res.data != null) {
+                item.organCode = res.data.organCode
+              }
+              getOrganList(item).then(response => {
+                if (response != null && response.code === 200) {
+                  if(response.rows) {
+                      for(let i=0; i<response.rows.length; i++) {
+                        let obj= new Object();
+                        obj.dictLabel = response.rows[i].organName;
+                        obj.dictValue = response.rows[i].organCode.toString();
+                        this.sysDepts.push(obj);
+                      }
+                    this.form.deptCode = res.data.organCode;
+                    }
+                }
+              }).catch(res => {
+              })
             }
-            //当前登陆人部门 getUserInfo
-            getUserInfo().then(response => {
-              if(response.code == '200' && response.data) {
-                this.form.deptCode = response.data.deptId.toString();
-                this.pbaceCaseForm.deptCode  = response.data.deptId.toString();
-              }
-            })
           })
         },
         closeDialog(){

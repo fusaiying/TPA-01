@@ -45,6 +45,8 @@ public interface HcsModificationMapper
      */
     public int updateHcsModification(HcsModification hcsModification);
 
+    public int updateHcsStauts(String[] alterId);
+
     /**
      * 删除HCS预约修改 
      * 

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.IncrementServiceApplicationMapper">
+
+
+    <insert id="insertAcceptDetialInfoTable" >
+        insert into accept_detail_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="channelCode != null">channel_code,</if>
+            <if test="itemCode != null">item_code,</if>
+            <if test="callPersonId != null">call_person_id,</if>
+            <if test="callRelationBy != null">call_relation_by,</if>
+            <if test="priorityLevel != null">priority_level,</if>
+            <if test="contactsPersonId != null">contacts_person_id,</if>
+            <if test="contactsRelationBy != null">contacts_relation_by,</if>
+            <if test="callCenterId != null">call_center_id,</if>
+            <if test="email != null">email,</if>
+            <if test="organCode != null">organ_code,</if>
+            <if test="content != null">content,</if>
+            <if test="complaintPersonId != null">complaint_person_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="prop0 != null">prop0,</if>
+            <if test="prop1 != null">prop1,</if>
+            <if test="prop2 != null">prop2,</if>
+            <if test="prop3 != null">prop3,</if>
+            <if test="prop4 != null">prop4,</if>
+            <if test="prop5 != null">prop5,</if>
+            <if test="prop6 != null">prop6,</if>
+            <if test="prop7 != null">prop7,</if>
+            <if test="prop8 != null">prop8,</if>
+            <if test="prop9 != null">prop9,</if>
+            <if test="prop10 != null">prop10,</if>
+            <if test="prop11 != null">prop11,</if>
+            <if test="prop12 != null">prop12,</if>
+            <if test="prop13 != null">prop13,</if>
+            <if test="prop14 != null">prop14,</if>
+            <if test="prop15 != null">prop15,</if>
+            <if test="prop16 != null">prop16,</if>
+            <if test="prop17 != null">prop17,</if>
+            <if test="prop18 != null">prop18,</if>
+            <if test="prop19 != null">prop19,</if>
+            <if test="prop20 != null">prop20,</if>
+            <if test="prop21 != null">prop21,</if>
+            <if test="prop22 != null">prop22,</if>
+            <if test="prop23 != null">prop23,</if>
+            <if test="prop24 != null">prop24,</if>
+            <if test="prop25 != null">prop25,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="channelCode != null">#{channelCode},</if>
+            <if test="itemCode != null">#{itemCode},</if>
+            <if test="callPersonId != null">#{callPersonId},</if>
+            <if test="callRelationBy != null">#{callRelationBy},</if>
+            <if test="priorityLevel != null">#{priorityLevel},</if>
+            <if test="contactsPersonId != null">#{contactsPersonId},</if>
+            <if test="contactsRelationBy != null">#{contactsRelationBy},</if>
+            <if test="callCenterId != null">#{callCenterId},</if>
+            <if test="email != null">#{email},</if>
+            <if test="organCode != null">#{organCode},</if>
+            <if test="content != null">#{content},</if>
+            <if test="complaintPersonId != null">#{complaintPersonId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="prop0 != null">#{prop0},</if>
+            <if test="prop1 != null">#{prop1},</if>
+            <if test="prop2 != null">#{prop2},</if>
+            <if test="prop3 != null">#{prop3},</if>
+            <if test="prop4 != null">#{prop4},</if>
+            <if test="prop5 != null">#{prop5},</if>
+            <if test="prop6 != null">#{prop6},</if>
+            <if test="prop7 != null">#{prop7},</if>
+            <if test="prop8 != null">#{prop8},</if>
+            <if test="prop9 != null">#{prop9},</if>
+            <if test="prop10 != null">#{prop10},</if>
+            <if test="prop11 != null">#{prop11},</if>
+            <if test="prop12 != null">#{prop12},</if>
+            <if test="prop13 != null">#{prop13},</if>
+            <if test="prop14 != null">#{prop14},</if>
+            <if test="prop15 != null">#{prop15},</if>
+            <if test="prop16 != null">#{prop16},</if>
+            <if test="prop17 != null">#{prop17},</if>
+            <if test="prop18 != null">#{prop18},</if>
+            <if test="prop19 != null">#{prop19},</if>
+            <if test="prop20 != null">#{prop20},</if>
+            <if test="prop21 != null">#{prop21},</if>
+            <if test="prop22 != null">#{prop22},</if>
+            <if test="prop23 != null">#{prop23},</if>
+            <if test="prop24 != null">#{prop24},</if>
+            <if test="prop25 != null">#{prop25},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertPersonInfoTable">
+        insert into person_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personId != null">person_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null">sex,</if>
+            <if test="identity != null">identity,</if>
+            <if test="mobilePhone != null">mobile_phone,</if>
+            <if test="linePhone != null">line_phone,</if>
+            <if test="homePhone != null">home_phone,</if>
+            <if test="workPhone != null">work_phone,</if>
+            <if test="language != null">language,</if>
+            <if test="email != null">email,</if>
+            <if test="idNumber != null">id_number,</if>
+            <if test="idType != null">id_type,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="address != null">address,</if>
+            <if test="otherCustomerNo != null">other_customer_no,</if>
+            <if test="createdBy != null and createdBy != ''">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedBy != null and updatedBy != ''">updated_by,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">#{personId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="identity != null">#{identity},</if>
+            <if test="mobilePhone != null">#{mobilePhone},</if>
+            <if test="linePhone != null">#{linePhone},</if>
+            <if test="homePhone != null">#{homePhone},</if>
+            <if test="workPhone != null">#{workPhone},</if>
+            <if test="language != null">#{language},</if>
+            <if test="email != null">#{email},</if>
+            <if test="idNumber != null">#{idNumber},</if>
+            <if test="idType != null">#{idType},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="address != null">#{address},</if>
+            <if test="otherCustomerNo != null">#{otherCustomerNo},</if>
+            <if test="createdBy != null and createdBy != ''">#{createdBy},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedBy != null and updatedBy != ''">#{updatedBy},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertWorkOrderAcceptTable" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept">
+        insert into work_order_accept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">work_order_no,</if>
+            <if test="businessType != null and businessType != ''">business_type,</if>
+            <if test="policyNo != null">policy_no,</if>
+            <if test="policyItemNo != null">policy_item_no,</if>
+            <if test="riskCode != null">risk_code,</if>
+            <if test="insuredNo != null">insured_no,</if>
+            <if test="insuredName != null">insured_name,</if>
+            <if test="holderNo != null">holder_no,</if>
+            <if test="holderName != null">holder_name,</if>
+            <if test="acceptBy != null">accept_by,</if>
+            <if test="acceptTime != null">accept_time,</if>
+            <if test="modifyBy != null">modify_by,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="vipFlag != null">vip_flag,</if>
+            <if test="organCode != null">organ_code,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="clickTime != null">click_time,</if>
+            <if test="hangFlag != null">hang_flag,</if>
+            <if test="hangReason != null">hang_reason,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderNo != null">#{workOrderNo},</if>
+            <if test="businessType != null and businessType != ''">#{businessType},</if>
+            <if test="policyNo != null">#{policyNo},</if>
+            <if test="policyItemNo != null">#{policyItemNo},</if>
+            <if test="riskCode != null">#{riskCode},</if>
+            <if test="insuredNo != null">#{insuredNo},</if>
+            <if test="insuredName != null">#{insuredName},</if>
+            <if test="holderNo != null">#{holderNo},</if>
+            <if test="holderName != null">#{holderName},</if>
+            <if test="acceptBy != null">#{acceptBy},</if>
+            <if test="acceptTime != null">#{acceptTime},</if>
+            <if test="modifyBy != null">#{modifyBy},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+            <if test="vipFlag != null">#{vipFlag},</if>
+            <if test="organCode != null">#{organCode},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="clickTime != null">#{clickTime},</if>
+            <if test="hangFlag != null">#{hangFlag},</if>
+            <if test="hangReason != null">#{hangReason},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+</mapper>

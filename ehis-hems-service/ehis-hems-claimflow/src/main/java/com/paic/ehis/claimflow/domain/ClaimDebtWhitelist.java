@@ -19,6 +19,8 @@ public class ClaimDebtWhitelist extends BaseEntity
 
     private static final long serialVersionUID = 1L;
 
+    private boolean updateInsuredFlag;
+
     /** 追讨白名单ID */
     private Long debtWhitelistId;
 

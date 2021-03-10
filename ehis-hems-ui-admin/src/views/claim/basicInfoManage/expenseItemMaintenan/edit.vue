@@ -20,13 +20,13 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="费用项编码：" prop="feeitemcode">
-              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" maxlength="20" show-word-limit class="item-width" clearable
+              <el-input :disabled="isFeeitemcodeShow" v-model="baseForm.feeitemcode" maxlength="20" clearable class="item-width"
                         size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="费用项中文名称：" prop="feeitemname">
-              <el-input v-model="baseForm.feeitemname" class="item-width" clearable maxlength="50" show-word-limit size="mini" placeholder="请输入"
+              <el-input v-model="baseForm.feeitemname" class="item-width" clearable maxlength="50" size="mini" placeholder="请输入"
               />
             </el-form-item>
           </el-col>
@@ -48,18 +48,10 @@
   export default {
     data() {
       const checkChineseName = (rules, value, callback) => {
-        let reg1 = /[`~!@#$%^&*()_\-+=<>?:"{}|,./;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g;
-        let reg2 = /.*[A-Za-z0-9]{1,}.*/;
         if (!value) {
           callback(new Error("费用项中文名称不能为空"));
         } else {
-          if (reg1.test(value)) {
-            callback(new Error("请录入中文名称"));
-          } else if (reg2.test(value)) {
-            callback(new Error("请录入中文名称"));
-          } else {
-            callback();
-          }
+          callback();
         }
       }
       const checkFeeitemCode = (rules, value, callback) => {
@@ -131,7 +123,7 @@
                   this.$router.go(-1)
                 }else if (res != null && res.code === 200 && res.data===0){
                   return this.$message.warning(
-                    "费用项已存在，请核实！"
+                    "费用项编码已存在，请核实！"
                   )
                 }
 

@@ -94,4 +94,12 @@ public interface ClaimCaseBillMapper
 
 
     List<ClaimCaseBill> selectClaimCaseBillByIdOne(String rptNo);
+
+    /**
+     * 根据报案号查询治疗起期最早的账单数据
+     *
+     * @param rptNo
+     * @return
+     */
+    public ClaimCaseBill selectEarliestTreatmentBillByRptNo(String rptNo);
 }

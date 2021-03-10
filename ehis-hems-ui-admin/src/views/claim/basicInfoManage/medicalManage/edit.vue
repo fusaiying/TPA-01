@@ -137,23 +137,22 @@
 
                 <el-col :span="8">
                   <el-form-item label="综专科类型：" prop="type">
+
                     <el-select v-model="baseForm.type" class="item-width" placeholder="请选择" clearable
                                @change="inputTypeShow" style="width: 120px">
 
                       <el-option v-for="item in comprehensive_typeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
                     <!--选择专科时  显示出来-->
 
-                    <el-select v-if="typeShow" v-model="baseForm.type2" class="item-width" placeholder="请选择" clearable
-                               style="width: 120px"
+                    <el-select v-show="typeShow" v-model="baseForm.type2" class="item-width" placeholder="请选择" clearable
+                               style="width: 120px"   @change="resetType2Info"
                                multiple>
                       <el-option v-for="item in comprehensive_subtypeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
-
+                      <i class="el-icon-warning-outline" v-show="typeShow" v-bind:title="type2Info"></i>
                   </el-form-item>
                 </el-col>
 
@@ -332,10 +331,7 @@
         </div>
 
 
-        <!--风控信息-->
-        <!--                  <div class="app-container">
-                            <risk-control-info :disabledFlag="disabledFlag" :hospitalcode="providercode" > </risk-control-info>
-                          </div>-->
+
         <!--预约信息-->
         <div >
           <reserve-info :disabledFlag="disabledFlag" :providerCode="providerCode" ref="reserveInfo" :isAdd="isAdd" :status="activeName"
@@ -462,7 +458,7 @@ export default {
 
     const checkPhone = (rules, value, callback) => {
       if (!(this.baseForm.phone && this.baseForm.areacode)) {
-        callback(new Error('电话和区号不能位空！'))
+        callback(new Error('电话和区号不能为空！'))
       } else {
         callback()
       }
@@ -674,7 +670,7 @@ export default {
       let reg= /^(\d+|\d+\.)$/
       if (this.baseForm.inhosptial == '01') {
         if (!this.baseForm.beds) {
-          callback(new Error('床位数不能位空！'))
+          callback(new Error('床位数不能为空！'))
         }
         else {
           if (value < 0) {
@@ -703,7 +699,7 @@ export default {
     const checkChaddreess= (rules, value, callback) => {
       if (this.baseForm.interHosp == '02') {
         if (!this.baseForm.chaddreess) {
-          callback(new Error('中文地址不能位空！'))
+          callback(new Error('中文地址不能为空！'))
         }
         else{
           callback()
@@ -714,6 +710,7 @@ export default {
     }
 
     return {
+      type2Info:'',
       otherChname1: '',
       otherEnname1: '',
       copyChname1: '',
@@ -1001,8 +998,6 @@ export default {
         chaddreess: [{validator: checkChaddreess, trigger: 'blur'}],
         firstAttribute: [{required: true, message: '不能为空！', trigger: 'change'}],
         secondAttribute: [{required: true, message: '不能为空！', trigger: 'change'}],
-        /* type: [{required: true, message: '不能为空！', trigger: 'change'}],
-         phone: [{validator: checkPhone, required: true, trigger: 'blur'}],*/
         international: [{required: true, message: '不能为空！', trigger: 'change'}],
         consultphone: [{required: true, message: '不能为空！', trigger: 'blur'}],
         special: [{required: true, message: '不能为空！', trigger: 'change'}],
@@ -1037,18 +1032,6 @@ export default {
       this.dictList = response.data
 
     })
-    //调用查询维护的方法
-    /*    await  this.getNewtworktype()*/
-    /* await getNewtworktypeList().then(res =>{
-       this.medicalTypeData=res.rows
-       if(this.medicalTypeData.filter(item => {
-         return item.networktypeName= '网络医院'
-       })[0].oldChoose=='02'){
-         this.isNetHospital=true
-       }
-     }).catch(res=>{
-       }
-     )*/
 
     this.inter_hospOptions = this.dictList.find(item => {
       return item.dictType == 'inter_hosp'
@@ -1146,8 +1129,16 @@ export default {
 
           if(this.baseForm.type=='03'){
             this.typeShow=true
-
+            //给type2Info赋值
+            this.baseForm.type2.forEach(item =>{
+              let data = this.comprehensive_subtypeOptions.find(obj =>{
+                return obj.dictValue==item;
+              })
+              this.type2Info=this.type2Info+','+data.dictLabel
+            })
+            this.type2Info=this.type2Info.substring(1,this.type2Info.length)
           }
+
 
 
 
@@ -1324,6 +1315,22 @@ export default {
 
   },
   methods: {
+
+    resetType2Info(){
+      if(this.baseForm.type2.length>0){
+        this.type2Info=''
+        this.baseForm.type2.forEach(item =>{
+          let data = this.comprehensive_subtypeOptions.find(obj =>{
+            return obj.dictValue==item;
+          })
+          this.type2Info=this.type2Info+','+data.dictLabel
+        })
+        this.type2Info=this.type2Info.substring(1,this.type2Info.length)
+      }
+      else {
+        this.type2Info=''
+      }
+    },
     getServiceInfoData(){
       return this.$refs.serviceInfo.serviceForm
     },
@@ -1334,29 +1341,7 @@ export default {
     handleClick(){
       this.baseForm.beds = this.baseForm.beds.replace(/[^\w]/g, '');
     },
-    /*getNewtworktype(){
-      let query={
-        providerCode: this.providerCode
-      }
-      console.log('---------------------')
-      getNewtworktypeList(query).then(res =>{
-        this.medicalTypeData=res.rows
-        let flag=this.medicalTypeData.filter(item => {
-          return item.networktypeName == '网络医院'
-        })[0].oldChoose
-        console.log(flag)
-        if(flag=='02'){}
-        if(this.medicalTypeData.filter(item => {
-          return item.networktypeName == '网络医院'
-        })[0].oldChoose=='02'){
-          this.isNetHospital=true
-        }
-      }).catch(res=>{
-        }
-      )
-      console.log(this.isNetHospital)
 
-    },*/
 
 
 
@@ -1594,11 +1579,6 @@ export default {
         })
       }
 
-      /*this.show = false //清空结点
-      this.$nextTick(() => {
-        this.show = true  //还原结点
-      })*/
-      //
     },
     changeAnnexFlag() {
       this.annexupload = false
@@ -1622,8 +1602,7 @@ export default {
     //提交审核
     async submitHandle() {
 
-      /* let flag = this.$refs['departmentInfo'].validateForm() && this.$refs['serviceInfo'].validateForm() && this.$refs['reserveInfo'].validateForm()
-         && this.$refs['contactInfo'].validateForm() && this.$refs['closingInfo'].validateForm();*/
+
 
 
       let baseInfoFlag=this.validateForm()
@@ -1895,14 +1874,10 @@ export default {
     },
     async otherSaveHandle() {
       //调用保存的接口 基本信息
-      /*let flag = this.$refs['otherBaseInfo'].validateForm() && this.$refs['otherServiceInfo'].validateForm() && this.$refs['otherReserveInfo'].validateForm()
-        && this.$refs['otherClosingInfo'].validateForm() && this.$refs['otherContactInfo'].validateForm()*/
+
 
       let otherBaseInfoFlag=await this.$refs['otherBaseInfo'].validateForm()
-      /*
-       this.$refs['otherBaseInfo'].validateForm().then(res=>{
-         console.log(res)
-       })*/
+
       let otherServiceInfoFlag=this.$refs['otherServiceInfo'].validateForm()
       let otherReserveInfoFlag=this.$refs['otherReserveInfo'].validateForm()
       let otherClosingInfoFlag=this.$refs['otherClosingInfo'].validateForm()
@@ -2008,66 +1983,7 @@ export default {
 
 
 
-      /*     if(flag){
-             let otherAllData = new Object();
-             let baseInfoData = this.$refs.otherBaseInfo.otherBaseForm
-             const otherBaseInfoData = JSON.parse(JSON.stringify(baseInfoData))
-             if (baseInfoData.address) {
-               otherBaseInfoData.province = baseInfoData.address[0]
-               otherBaseInfoData.district = baseInfoData.address[2]
-               otherBaseInfoData.city = baseInfoData.address[1]
-             }
-             otherBaseInfoData.orgFlag = this.activeName
 
-             let otherServiceFormData = this.$refs.otherServiceInfo.otherServiceForm
-             otherServiceFormData.orgFlag=this.activeName
-             otherServiceFormData.providerCode=this.otherProviderCode
-
-
-             let otherReserveInfoFormData = this.$refs.otherReserveInfo.otherReserveInfoForm
-
-             otherReserveInfoFormData.orgFlag=this.activeName
-             otherReserveInfoFormData.providerCode=this.otherProviderCode
-
-
-
-             let otherClosingInfoData = this.$refs.otherClosingInfo.closingFrom
-             otherClosingInfoData.orgFlag=this.activeName
-             otherClosingInfoData.providerCode=this.otherProviderCode
-
-             let otherContactInfoData = this.$refs.otherContactInfo.contactInfoForm
-             otherContactInfoData.orgFlag=this.activeName
-             otherContactInfoData.providerCode=this.otherProviderCode
-
-             otherAllData.baseInfo=otherBaseInfoData
-             otherAllData.serviceInfo = otherServiceFormData
-             otherAllData.reserveInfo = otherReserveInfoFormData
-             otherAllData.contactInfo = otherContactInfoData
-             otherAllData.closingInfo = otherClosingInfoData
-
-
-             //调用提交审核的接口
-             updateStatus(otherAllData).then(res => {
-               if (res.code == '200') {
-                 this.$message({
-                   message: '保存成功！',
-                   type: 'success',
-                   center: true,
-                   showClose: true
-                 })
-               } else {
-                 this.$message({
-                   message: '保存失败!',
-                   type: 'error',
-                   center: true,
-                   showClose: true
-                 })
-               }
-             })
-           }
-           else {
-             this.$message.warning('必录项未必录！')
-           }*/
     },
 
 

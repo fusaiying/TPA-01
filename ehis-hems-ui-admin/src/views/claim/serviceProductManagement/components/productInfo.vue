@@ -40,7 +40,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="产品类型：" prop="productType">
+          <el-form-item label="产品类别：" prop="productType">
             <el-select v-model="baseForm.productType" class="item-width" placeholder="请选择" clearable>
               <el-option v-for="item in productTypeOptions" :label="item.dictLabel" :value="item.dictValue"
                          :key="item.dictValue"/>
@@ -271,7 +271,7 @@ export default {
         productEnname: [{required: true, validator: checkProductEnname, trigger: 'blur'}],
         outProductChname: [{required: true, validator: checkOutProductChname, trigger: 'blur'}],
         outProductEnname: [{required: true, validator: checkOutProductEnname, trigger: 'blur'}],
-        productType: [{required: true, message: '产品类型不能为空', trigger: 'change'}],
+        productType: [{required: true, message: '产品类别不能为空', trigger: 'change'}],
         steward: [{required: true, message: '医院管家不能为空', trigger: 'change'}],
         productDeadline: [{required: true, validator: checkProductDeadline, trigger: ['blur', 'change']}],
       },

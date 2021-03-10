@@ -13,6 +13,7 @@ public class ServiceProcessingVo  extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     /** 处理流水号 */
+    @Excel(name="流水号")
     private Long handleId;
 
     /** 处理类型 处理；取消；转办；协办；质检 */
@@ -61,6 +62,5 @@ public class ServiceProcessingVo  extends BaseEntity {
     private String costsIncurred;
     /**判断暂存保存标记*/
     private String sign;
-
 
 }

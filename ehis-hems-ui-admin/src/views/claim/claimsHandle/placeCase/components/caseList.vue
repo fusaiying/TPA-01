@@ -27,6 +27,7 @@
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
         >
           <el-table-column type="selection" width="50" align="center"/>
+           <el-table-column v-if="1==2" prop="filingDetailId" label="filingDetailId"  align="center" show-overflow-tooltip />
           <el-table-column prop="rptNo" label="报案号"  align="center" show-overflow-tooltip >
             <template slot-scope="scope" >
               <template v-if="1==2" >
@@ -166,15 +167,33 @@
 
     },
     data() {
+      const checkNotNull = (rule, value, callback) => {
+        let index = rule.field.split(".")[1]
+        let rptNo = this.dataForm.tableData[index].rptNo;
+        let listDta = this.selectData;
+        let obj = {};
+        obj = listDta.find((item)=>{
+          return item.rptNo == rptNo;
+        });
+        if(obj != undefined) {
+          if (!value) {
+              callback(new Error("不可为空"));
+          } else {
+            callback();
+          }
+        } else {
+          callback();
+        }
+      };
       return {
         proSysDepts:[],
         dataForm:{
           tableData:[]
         },
         dataRules:{
-          isFiling: [{required: true, message: '不可为空', trigger: ['change','blur']}],
-          isInvoiceBack: [{required: true, message: '不可为空', trigger: ['change','blur']}],
-          isSingle: [{required: true, message: '不可为空', trigger: ['change','blur']}],
+          isFiling: [{required: true, validator: checkNotNull,trigger: ['change','blur']}],
+          isInvoiceBack: [{required: true,validator:checkNotNull, trigger: ['change','blur']}],
+          isSingle: [{required: true,validator:checkNotNull, trigger: ['change','blur']}],
         },
         dialogListVisable:false,
         yesOrNo:[],
@@ -220,32 +239,40 @@
           });
           return false;
         }
-        updateCaseFilingInfo(listDta).then(response => {
-          if(response.code == '200') {
-            this.$message({
-              type: 'success',
-              message: '保存成功!'
-            });
-            this.baseFomrmSub = true;
-            this.getData();
-          } else {
-            this.$message({
-              type: 'info',
-              message: '保存失败'
-            });
+        this.$refs.dataForm.validate((valid) => {
+          if (valid){
+            updateCaseFilingInfo(listDta).then(response => {
+              if(response.code == '200') {
+                this.$message({
+                  type: 'success',
+                  message: '保存成功!'
+                });
+                this.baseFomrmSub = true;
+                this.initData();
+                this.$emit('goInitData');
+
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '保存失败'
+                });
+              }
+            }).catch(error => {
+              console.log(error);
+            })
           }
-        }).catch(error => {
-          console.log(error);
-        })
+        });
+
       },
       initData(){
         const params = {
           pageNum:this.pageInfo.currentPage,
           pageSize:this.pageInfo.pageSize,
           caseBoxNo:this.paramFixInfo.caseBoxNo,
-          rptStartNo:this.paramFixInfo.rptStartNo,
-          rptEndNo:this.paramFixInfo.rptEndNo,
-          orderByColumn:'ccf.create_time',
+          // rptStartNo:this.paramFixInfo.rptStartNo,
+          // rptEndNo:this.paramFixInfo.rptEndNo,
+          status:'Y',
+          orderByColumn:'create_time',
           isAsc:'desc'
         };
 

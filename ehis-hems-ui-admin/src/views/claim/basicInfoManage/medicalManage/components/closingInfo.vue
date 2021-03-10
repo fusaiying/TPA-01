@@ -19,7 +19,6 @@
                          placeholder="请选择" clearable>
                 <el-option v-for="item in currencyOptions" :label="item.dictLabel" :value="item.dictValue"
                            :key="item.dictValue"/>
-                <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
               </el-select>
 
             </el-form-item>
@@ -67,7 +66,7 @@
     <el-card class="box-card department-style" style="margin-top: 1px;">
       <el-form ref="closingTableForm" :rules="closingFromRules" size="small" :model="closingFrom"
                :disabled="disabledFlag">
-        <el-table ref="closingTable" :data="closingFrom.baseBankVo"
+        <el-table ref="closingTable" :data="closingFrom.baseBankVo" :key="keyValue"
                   :header-cell-style="{color:'black',background:'#f8f8ff'}"
                   size="mini" highlight-current-row style="width: 100%;">
           <el-table-column prop="accountType" align="center" label="账号类型" header-align="center" show-overflow-tooltip>
@@ -183,17 +182,6 @@
         <el-table-column key="5" align="center" prop="createBy" min-width="150" label="维护人"/>
         <el-table-column key="6" align="center" prop="updateTime" label="维护时间" min-width="120"/>
       </el-table>
-      <!--        <div>
-                <el-pagination
-                  :total="totalCount"
-                  :current-page="formSearch.pageNum"
-                  :page-size="formSearch.pageSize"
-                  :page-sizes="[10, 20, 30, 40]"
-                  style="margin-top: 8px; text-align: right;"
-                  layout="sizes, prev, pager, next"
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"/>
-              </div>-->
       <!--分页组件-->
       <pagination
         v-show="totalCount>0"
@@ -263,6 +251,7 @@ export default {
 
     }
     return {
+      keyValue:1,
       totalCount: 0,
       // 查询参数
       formSearch: {
@@ -426,15 +415,7 @@ export default {
 
       })
     },
-    /*
-        handleSizeChange(val) {
-          this.formSearch.pageSize = val
-          this.getData()
-        },
-        handleCurrentChange(val) {
-          this.formSearch.pageNum = val
-          this.getData()
-        },*/
+
 
     //增加一行结算信息
     addClosingHandle() {
@@ -453,14 +434,12 @@ export default {
       this.closingFrom.baseBankVo.push(field)
 
 
-      /* setTimeout(() => {
-         this.$refs.closingTable.setCurrentRow(field)
-       }, 10)*/
     },
     editHandle(index, row) {
       this.closingFrom.baseBankVo[index].id = ''
       this.closingFrom.baseBankVo[index].isSet = true
       this.closingTableShow = true
+      this.keyValue++
 
     },
     //重置

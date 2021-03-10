@@ -26,6 +26,10 @@ public class ClaimCaseDebtReceipt extends BaseEntity
     @Excel(name = "被保人客户号")
     private String insuredNo;
 
+    /** 被保人姓名 */
+    @Excel(name = "被保人姓名")
+    private String insuredName;
+
     /** 收款金额 */
     @Excel(name = "收款金额")
     private BigDecimal receiptAmount;
@@ -99,6 +103,22 @@ public class ClaimCaseDebtReceipt extends BaseEntity
     public String getStatus() 
     {
         return status;
+    }
+
+    public BigDecimal getResidual() {
+        return residual;
+    }
+
+    public void setResidual(BigDecimal residual) {
+        this.residual = residual;
+    }
+
+    public String getInsuredName() {
+        return insuredName;
+    }
+
+    public void setInsuredName(String insuredName) {
+        this.insuredName = insuredName;
     }
 
     @Override

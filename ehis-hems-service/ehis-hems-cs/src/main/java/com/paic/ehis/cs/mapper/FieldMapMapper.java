@@ -3,7 +3,7 @@ package com.paic.ehis.cs.mapper;
 import com.paic.ehis.cs.domain.FieldMap;
 
 import java.util.List;
-import java.util.Map;
+
 
 
 /**
@@ -20,7 +20,7 @@ public interface FieldMapMapper
      * @param sourceName 受理信息映射 ID
      * @return 受理信息映射 
      */
-    public FieldMap selectFieldMapById(String sourceName);
+    public List<FieldMap> selectFieldMapById(String sourceName);
 
     /**
      * 查询受理信息映射 列表

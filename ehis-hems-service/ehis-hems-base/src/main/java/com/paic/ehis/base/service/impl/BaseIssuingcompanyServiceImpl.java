@@ -146,15 +146,12 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         BaseIssuingcompany baseIssuingcompany = issuingAndCompanyDTO.getBaseIssuingcompany();//出单公司
 
         baseIssuingcompany.setStatus("Y");
-        baseIssuingcompany.setCreateBy(SecurityUtils.getUsername());
-        baseIssuingcompany.setCreateTime(DateUtils.getNowDate());
         baseIssuingcompany.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompany.setUpdateTime(DateUtils.getNowDate());
 
         baseIssuingcompanyInvoice.setCompanycode(baseIssuingcompany.getCompanycode());
         baseIssuingcompanyInvoice.setStatus("Y");
-        baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
-        baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
+
         baseIssuingcompanyInvoice.setUpdateBy(SecurityUtils.getUsername());
         baseIssuingcompanyInvoice.setUpdateTime(DateUtils.getNowDate());
 
@@ -165,6 +162,8 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         if (baseIssuingcompany.getCompanycode() == null || baseIssuingcompany.getCompanycode() == "") {//第一次提交出单公司
             str = "C" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
             baseIssuingcompany.setCompanycode(str);
+            baseIssuingcompany.setCreateBy(SecurityUtils.getUsername());
+            baseIssuingcompany.setCreateTime(DateUtils.getNowDate());
             baseIssuingcompanyMapper.insertBaseIssuingcompany(baseIssuingcompany);
         } else {//不是第一次提交出单公司
             baseIssuingcompanyMapper.updateBaseIssuingcompany(baseIssuingcompany);
@@ -175,6 +174,8 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
             BaseIssuingcompanyInvoice baseIssuingcompanyInvoice1 = baseIssuingcompanyInvoiceMapper.selectBaseIssuingcompanyInvoiceById(baseIssuingcompanyInvoice.getCompanycode());
             //判断是否是第一次提交开票信息-不是第一次
             if (baseIssuingcompanyInvoice1 == null) {
+                baseIssuingcompanyInvoice.setCreateBy(SecurityUtils.getUsername());
+                baseIssuingcompanyInvoice.setCreateTime(DateUtils.getNowDate());
                 baseIssuingcompanyInvoiceMapper.insertBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
             } else {
                 baseIssuingcompanyInvoiceMapper.updateBaseIssuingcompanyInvoice(baseIssuingcompanyInvoice);
@@ -202,4 +203,23 @@ public class BaseIssuingcompanyServiceImpl implements IBaseIssuingcompanyService
         return issuingCompanyVo;
     }
 
+    /**
+     * 出单公司简称校验
+     * @param simplename
+     * @return
+     */
+    @Override
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyBySimplename(String simplename){
+        return baseIssuingcompanyMapper.selectBaseIssuingcompanyBySimplename(simplename);
+    }
+
+    /**
+     * 出单公司名称校验
+     * @param companyname
+     * @return
+     */
+    @Override
+    public List<BaseIssuingcompany> selectBaseIssuingcompanyByCompanyname(String companyname){
+        return baseIssuingcompanyMapper.selectBaseIssuingcompanyByCompanyname(companyname);
+    }
 }

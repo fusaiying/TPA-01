@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paic.ehis.finance.mapper.FinancePayInfoMapper">
-    
+
     <resultMap type="com.paic.ehis.finance.domain.FinancePayInfo" id="FinancePayInfoResult">
         <result property="payId"    column="pay_id"    />
         <result property="payBatchNo"    column="pay_batch_no"    />
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectFinancePayInfoList" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" resultMap="FinancePayInfoResult">
         <include refid="selectFinancePayInfoVo"/>
-        <where>  
+        <where>
             <if test="payBatchNo != null  and payBatchNo != ''"> and pay_batch_no = #{payBatchNo}</if>
             <if test="batchNo != null  and batchNo != ''"> and batch_no = #{batchNo}</if>
             <if test="payCurrency != null  and payCurrency != ''"> and pay_currency = #{payCurrency}</if>
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFinancePayInfoVo"/>
         where pay_id = #{payId}
     </select>
-        
+
     <insert id="insertFinancePayInfo" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" useGeneratedKeys="true" keyProperty="payId">
         insert into finance_pay_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -135,7 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteFinancePayInfoByIds" parameterType="String">
-        delete from finance_pay_info where pay_id in 
+        delete from finance_pay_info where pay_id in
         <foreach item="payId" collection="array" open="(" separator="," close=")">
             #{payId}
         </foreach>

@@ -5,6 +5,7 @@ import com.paic.ehis.claimcal.domain.ClaimRuleRelation;
 import com.paic.ehis.claimcal.mapper.ClaimRuleRelationMapper;
 import com.paic.ehis.claimcal.service.IClaimRuleRelationService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,7 @@ public class ClaimRuleRelationServiceImpl implements IClaimRuleRelationService
     @Override
     public int insertClaimRuleRelation(ClaimRuleRelation claimRuleRelation)
     {
+        claimRuleRelation.setCreateBy(SecurityUtils.getUsername());
         claimRuleRelation.setCreateTime(DateUtils.getNowDate());
         return claimRuleRelationMapper.insertClaimRuleRelation(claimRuleRelation);
     }

@@ -247,6 +247,8 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         billInfo.setSelfAmount(selfAmount);
         billInfo.setPartSelfAmount(partSelf);
         billInfo.setUnableAmount(unableAmount);
+        billInfo.setUpdateTime(DateUtils.getNowDate());
+        billInfo.setUpdateBy(username);
         return claimCaseBillMapper.updateClaimCaseBill(billInfo);
     }
 
@@ -335,7 +337,9 @@ public class ClaimCaseBillServiceImpl implements IClaimCaseBillService
         claimCaseDTO.setCaseStatus("06");
         claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
         claimCaseDTO.setStatus("Y");
-        claimCaseDTO.setUpdateDate(PubFun.getCurrentDate());
+        if ("0".equals(claimCaseDTO.getFlag())) {
+            claimCaseDTO.setUpdateDate(PubFun.getCurrentDate());
+        }
         // 获取批次号、报案号、案件状态、被保人姓名、提交用户
         List<BillAccomplishVo> accomplishList = claimCaseMapper.selectBillAccomplish(claimCaseDTO);
         // 获取是否调查、出单公司、承保机构

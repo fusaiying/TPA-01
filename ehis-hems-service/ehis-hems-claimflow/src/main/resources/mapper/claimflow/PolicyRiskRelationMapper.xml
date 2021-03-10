@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="policyNo != null  and policyNo != ''"> and policy_no = #{policyNo}</if>
             <if test="riskCode != null  and riskCode != ''"> and risk_code = #{riskCode}</if>
-            status = 'Y'
+           and status = 'Y'
         </where>
     </select>
 

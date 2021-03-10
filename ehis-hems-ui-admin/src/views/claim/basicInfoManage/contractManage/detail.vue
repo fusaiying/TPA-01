@@ -29,7 +29,7 @@
             <span class="info_span to_right">合约期限类型：</span><span class="info_span">{{ getContractLimitTypeNameByValue(serverContractInfo.contracttermType) }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合同分类：</span><span class="info_span">{{ getContractCategorysByValue(serverContractInfo.contractsort) }}</span>
+            <span class="info_span to_right">合约分类：</span><span class="info_span">{{ getContractCategorysByValue(serverContractInfo.contractsort) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">提前协商天数：</span><span class="info_span">{{ serverContractInfo.contractadvance }}</span>
@@ -39,10 +39,10 @@
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">合约有效期：</span>
-            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.expiryDate }} </span>
+            <span class="info_span">{{ serverContractInfo.cvaliDate }} /  {{ serverContractInfo.endDate }} </span>
           </el-col>
-          <el-col :span="8">
-            <span class="info_span to_right">备注：</span><span class="info_span">{{ serverContractInfo.remark }}</span>
+          <el-col :span="24">
+            <span class="info_span to_right el-col-24">备注：</span><span class="info_span el-col-18">{{ serverContractInfo.remark }}</span>
           </el-col>
        </el-row>
       </form>
@@ -82,7 +82,7 @@
             <span class="info_span to_right">押金金额：</span><span class="info_span">{{ providerContractInfo.deposit }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}{{ providerContractInfo.expiryDate }}</span>
+            <span class="info_span to_right">合约有效期：</span><span class="info_span">{{ providerContractInfo.cvaliDate }}  {{ providerContractInfo.endDate != "" ? " / " : "" }}  {{ providerContractInfo.endDate }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -117,7 +117,7 @@
             <span class="info_span to_right">特殊费折扣信息：</span><span class="info_span">{{ providerContractInfo.specialDiscount }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">折扣除外项目：</span><span class="info_span">{{ providerContractInfo.distcoteItem }}</span>
+            <span class="info_span to_right">折扣除外项目：</span><span class="info_span">{{ providerContractInfo.project }}</span>
           </el-col>
           <el-col :span="8">
           <span class="info_span to_right">合作单位：</span><span class="info_span">{{ getCooperativeUnitNameByValue(providerContractInfo.cooperativeUnit) }}</span>
@@ -133,7 +133,7 @@
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.reason }}</span>
+            <span class="info_span to_right">联系人：</span><span class="info_span">{{ providerContractInfo.liaison }}</span>
           </el-col>
 
           <el-col :span="8">
@@ -152,11 +152,11 @@
             <span class="info_span to_right">电子邮件：</span><span class="info_span">{{ providerContractInfo.email }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">最后维护人：</span><span class="info_span">{{ providerContractInfo.exPer }}</span>
+            <span class="info_span to_right">最后维护人：</span><span class="info_span">{{ providerContractInfo.updateBy }}</span>
           </el-col>
 
           <el-col :span="8">
-            <span class="info_span to_right">最后维护时间：</span><span class="info_span"></span>
+            <span class="info_span to_right">最后维护时间：</span><span class="info_span">{{ providerContractInfo.updateTime | changeDate}}</span>
           </el-col>
 
         </el-row>
@@ -276,6 +276,8 @@
   </div>
 </template>
 <script>
+  import moment from "moment";
+
   let that
   import {
     getSupplierContractList ,
@@ -290,6 +292,13 @@
   } from '@/api/contractManage/contractManagement'
 
   export default {
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD')
+        }
+      },
+    },
     data() {
       return {
         hisContractTotalNum:0,
@@ -403,6 +412,9 @@
       this.getDicts("contract_type").then(response => {
         this.contractTypes = response.data;
       });
+       this.getDicts("supplier_contract_type").then(response => {
+         this.supplierContractTypes = response.data;
+     });
       this.getDicts("contract_category").then(response => {
         this.contractCategorys = response.data;
       });
@@ -443,10 +455,16 @@
         return this.selectDictLabel(this.cooperativeUnitSelects, value)
       },
       getContractTypeName(row,col){
-        return this.selectDictLabel(this.contractTypes, row.contractType)
+        if(row.flag == '02') {
+          return this.selectDictLabel(this.contractTypes, row.contractType);
+        }
+        return this.selectDictLabel(this.supplierContractTypes, row.contractType);
       },
       getContractTypeNameByValue(value){
-        return this.selectDictLabel(this.contractTypes, value)
+          if(this.serverContractInfo.flag == '01'){
+            return this.selectDictLabel(this.supplierContractTypes, value);
+          }
+        return this.selectDictLabel(this.contractTypes, value);
       },
       getContractLimitTypeName(row,col){
         return this.selectDictLabel(this.contractLimitTypes, row.contracttermType)

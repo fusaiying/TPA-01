@@ -164,7 +164,7 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="服务机构名称：" prop="providerCode">
+            <el-form-item label="服务机构名称：" prop="providerCode" key="providerCode22">
               <el-select  filterable  :disabled="onlyAddPro" v-model="providerForm.providerCode" class="item-width" placeholder="请选择" @change="typeServerChange">
                 <el-option v-for="option in providerInfoSelects" :key="option.dictValue" :label="option.dictLabel" :value="option.dictValue" />
               </el-select>
@@ -181,7 +181,7 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="合约乙方：" prop="contractPartyB">
+            <el-form-item label="合约乙方：" prop="contractPartyB" key="contractPartyB111">
               <el-input maxlength="100" :disabled="isShow" v-model="providerForm.contractPartyB" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
@@ -388,7 +388,7 @@
           </el-col>
 
           <el-col :span="16">
-            <el-form-item label="合约终止原因：" prop="reason">
+            <el-form-item label="合约终止原因：" prop="reason" key = "reason1">
               <el-input maxlength="2000" :disabled="isShow" v-model="providerForm.reason"  clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
@@ -410,7 +410,7 @@
 
         <el-col :span="8">
           <el-form-item label="盒脊编号：" prop="boxRidgeCode">
-            <el-input :disabled="isShow" v-model="providerForm.boxRidgeCode" class="item-width" clearable size="mini"
+            <el-input maxlength="100" :disabled="isShow" v-model="providerForm.boxRidgeCode" class="item-width" clearable size="mini"
                       placeholder="请录入"/>
           </el-form-item>
         </el-col>
@@ -950,6 +950,9 @@
             }
           }
         }
+         else {
+          callback();
+        }
       };
       const checkExamineDiscount = (rule, value, callback) => {
         if(this.distcoteItem) {
@@ -968,6 +971,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkBedDiscount = (rule, value, callback) => {
@@ -981,6 +986,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkAllowance = (rule, value, callback) => {
@@ -994,6 +1001,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const checkCosts = (rule, value, callback) => {
@@ -1007,6 +1016,8 @@
               callback();
             }
           }
+        }else {
+          callback();
         }
       };
       const cheDiscountinfo = (rule, value, callback) => {
@@ -1022,6 +1033,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const chesecialDiscount = (rule, value, callback) => {
@@ -1037,6 +1050,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const cheProject = (rule, value, callback) => {
@@ -1052,6 +1067,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const cheAverageCostExcept = (rule, value, callback) => {
@@ -1067,6 +1084,8 @@
             // }
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkAverageCost = (rule, value, callback) => {
@@ -1076,6 +1095,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkaDvicenum = (rule, value, callback) => {
@@ -1085,6 +1106,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const chectype = (rule, value, callback) => {
@@ -1094,6 +1117,8 @@
           } else {
             callback();
           }
+        }else {
+          callback();
         }
       };
       const checkboxRidgeCode = (rule, value, callback) => {
@@ -1251,7 +1276,7 @@
           phone: {trigger: ['change','blur'], validator: checkPhone,required: false},
           boxRidgeCode: {trigger: ['change','blur'], validator: checkboxRidgeCode,required: false},
           email: {trigger: ['change','blur'], validator: checkEmail,required: false},
-          reason : {trigger: ['change','blur'], required: false,  validator: checkExpiryReason, message: '合约终止原因必填'},
+          reason : {trigger: ['change','blur'],  validator: checkExpiryReason, required: true},
           treatmentDiscount: [{validator: checkTreatmentDiscount, required: true, trigger: ['change','blur']}],
           examineDiscount: [{validator: checkExamineDiscount, required: true, trigger: ['change','blur']}],
           bedDiscount: [{validator: checkBedDiscount, required: true, trigger: ['change','blur']}],
@@ -2000,8 +2025,14 @@
               if(this.onlyAddPro) {
                 this.providerForm.hospContractCode = '02';
               }
+              let obj = {};
+              obj = this.providerInfoSelects.find((item)=>{
+                return item.dictValue == this.providerForm.providerCode;
+              });
+              let proObjName = obj.dictLabel;
               let baseSupplierContract = {
                 flag:'02',
+                providerName : proObjName,
                 providerType:this.providerForm.providerType,
                 providerCode : this.providerForm.providerCode,
                 contractNo : this.providerForm.contractNo,
@@ -2387,8 +2418,14 @@
       save() {
         this.$refs.serverForm.validate((valid) => {
           if (valid) {
-
             let listDta = this.serverForm.serverInfo;
+            if(listDta.length === 0) {
+              this.$message({
+                message: '请至少添加一条供应商服务项目！',
+                type: 'warning'
+              });
+              return false;
+            }
             addContractServer(listDta).then(response => {
               // console.log(response)
               if(response.code == '200') {

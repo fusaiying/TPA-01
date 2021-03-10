@@ -1,15 +1,13 @@
 package com.paic.ehis.claimflow.service.impl;
 
 import com.paic.ehis.claimflow.domain.ClaimCaseFiling;
+import com.paic.ehis.claimflow.domain.ClaimCaseFilingDetail;
 import com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingListVO;
 import com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingVO;
 import com.paic.ehis.claimflow.domain.vo.RptNoVo;
-import com.paic.ehis.claimflow.mapper.ClaimBatchInvoiceFilingMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseFilingMapper;
-import com.paic.ehis.claimflow.mapper.ClaimCaseMapper;
-import com.paic.ehis.claimflow.mapper.SysUserMapper;
+import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseFilingService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -17,6 +15,8 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +42,9 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private ClaimCaseFilingDetailMapper claimCaseFilingDetailMapper;
 
 
     /**
@@ -74,6 +77,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
      * @param claimCaseFiling 案件归档
      * @return 结果
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertClaimCaseFiling(ClaimCaseFiling claimCaseFiling)
     {
@@ -84,6 +88,8 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         claimCaseFiling.setCreateTime(nowDate);
         claimCaseFiling.setUpdateTime(nowDate);
         claimCaseFiling.setUpdateBy(username);
+
+               claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
         return claimCaseFilingMapper.insertClaimCaseFiling(claimCaseFiling);
     }
 
@@ -93,6 +99,7 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
      * @param claimCaseFiling 案件归档
      * @return 结果
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFiling(ClaimCaseFiling claimCaseFiling)
     {
@@ -147,16 +154,16 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
         List<ClaimCaseFilingListVO> list = new ArrayList<>();
         //遍历集合
         for (ClaimCaseFilingVO claimCaseFilingVo1 :claimCaseFilingVoS) {
-
+//
             ClaimCaseFilingListVO claimCaseFilingListVO = new ClaimCaseFilingListVO();
-
-            claimCaseFilingListVO.setRptStartNo(claimCaseFilingVo1.getRptStartNo());
-            claimCaseFilingListVO.setRptEndNo(claimCaseFilingVo1.getRptEndNo());
-
-            if(StringUtils.isNotBlank(claimCaseFilingVo1.getRptStartNo()) && StringUtils.isNotBlank(claimCaseFilingVo1.getRptEndNo())) {
-                String caseNum = claimCaseMapper.selectCaseClaimCaseFilingList(claimCaseFilingListVO);
-                claimCaseFilingListVO.setCasenum(caseNum);
-            }
+//
+//            claimCaseFilingListVO.setRptStartNo(claimCaseFilingVo1.getRptStartNo());
+//            claimCaseFilingListVO.setRptEndNo(claimCaseFilingVo1.getRptEndNo());
+//
+//            if(StringUtils.isNotBlank(claimCaseFilingVo1.getRptStartNo()) && StringUtils.isNotBlank(claimCaseFilingVo1.getRptEndNo())) {
+//                String caseNum = claimCaseMapper.selectCaseClaimCaseFilingList(claimCaseFilingListVO);
+//                claimCaseFilingListVO.setCasenum(caseNum);
+//            }
             // cocy
             BeanUtils.copyProperties(claimCaseFilingVo1,claimCaseFilingListVO);
 
@@ -166,21 +173,40 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     }
 
     /** 改变是否销毁状态 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingDestroy(ClaimCaseFilingListVO claimCaseFilingListVO) {
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
         claimCaseFilingListVO.setStatus("N");
+        claimCaseFilingListVO.setUpdateBy(username);
+        claimCaseFilingListVO.setUpdateTime(nowDate);
         return claimCaseFilingMapper.updateClaimCaseFilingEdit(claimCaseFilingListVO);
     }
 
     /** 编辑按钮 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
-    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO claimCaseFilingListVO) {
+    public void updateClaimCaseFilingEdit(ClaimCaseFilingListVO dto) {
 
         String username = SecurityUtils.getUsername();
         Date nowDate = new Date();
-        claimCaseFilingListVO.setUpdateBy(username);
-        claimCaseFilingListVO.setUpdateTime(nowDate);
-        claimCaseFilingMapper.updateClaimCaseFilingEdit(claimCaseFilingListVO);
+        dto.setUpdateBy(username);
+        dto.setUpdateTime(nowDate);
+        /**
+         * 如果批次号修改或者报案号起止修改，则根据盒号删除明细，重新生成明细记录
+         * modify by : hjw
+         * time : 2021-03-09
+         */
+        if(dto.isUpdateDetail()) {
+            claimCaseFilingDetailMapper.deleteClaimCaseFilingDetailByCaseBoxNo(dto.getCaseBoxNo());
+            ClaimCaseFiling claimCaseFiling = new ClaimCaseFiling();
+            BeanUtils.copyProperties(dto,claimCaseFiling);
+            claimCaseFiling.setCreateBy(username);
+            claimCaseFiling.setCreateTime(nowDate);
+            claimCaseFilingDetailMapper.insertClaimCaseFilingDetailByRpt(claimCaseFiling);
+        }
+        claimCaseFilingMapper.updateClaimCaseFilingEdit(dto);
 
     }
 
@@ -232,13 +258,26 @@ public class ClaimCaseFilingServiceImpl implements IClaimCaseFilingService
     }
 
     /** 保存案件归档详细信息 */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int updateClaimCaseFilingInfo(List<ClaimCaseFilingInformationVO> claimCaseFilingInformationVO) {
-
         int result = 0;
+
+        String username = SecurityUtils.getUsername();
+        Date nowDate = new Date();
+        ClaimCaseFilingListVO updateBean = new ClaimCaseFilingListVO();
+        updateBean.setUpdateBy(username);
+        updateBean.setUpdateTime(nowDate);
+
         for(ClaimCaseFilingInformationVO bean : claimCaseFilingInformationVO) {
-            result =  claimBatchInvoiceFilingMapper.updateClaimCaseFilingInfo(bean);
+            bean.setUpdateBy(username);
+            bean.setUpdateTime(nowDate);
+            updateBean.setCaseBoxNo(bean.getCaseBoxNo());
+            claimCaseFilingMapper.updateClaimCaseFilingEdit(updateBean);
+            result +=  claimBatchInvoiceFilingMapper.updateClaimCaseFilingInfo(bean);
         }
+
+
         return result;
     }
 

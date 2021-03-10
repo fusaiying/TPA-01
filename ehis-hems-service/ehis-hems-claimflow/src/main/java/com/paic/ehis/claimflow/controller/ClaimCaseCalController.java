@@ -131,4 +131,16 @@ public class ClaimCaseCalController extends BaseController
     {
         return AjaxResult.success(claimCaseCalService.updateClaimConclusionNull(rptNo));
     }
+
+    /**
+     * 根据币种、报案号 查询     及外币给付
+     *
+     */
+    @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:cal:query')")
+    @GetMapping("exchangeRate")
+    public AjaxResult getInfo(ClaimCaseCal claimCaseCal)
+    {
+        return AjaxResult.success(claimCaseCalService.selectExchangeRateForeign(claimCaseCal));
+    }
+
 }

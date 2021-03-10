@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -135,28 +136,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         claimCaseDTO.setStatus("Y");
         claimCaseDTO.setIsHistory("N");
         claimCaseDTO.setUpdateBy(SecurityUtils.getUsername());
-        /*          实现多少天多少小时多少分的计算实现
-        ArrayList<ProcessingCaseVo> processingCaseVos = new ArrayList<>();
-        for (ClaimCase claimCase : claimCases) {
-            ProcessingCaseVo processingCaseVo = new ProcessingCaseVo();
-            BeanUtils.copyProperties(claimCase,processingCaseVo);
-            long times = now.getTime()-claimCase.getUpdateTime().getTime();
-            long day = times / (24 * 60 * 60 * 1000);
-            long hour = (times / (60 * 60 * 1000) - day * 24);
-            long min = ((times / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            StringBuilder sbTime = new StringBuilder();
-            if (day>0){
-                sbTime.append(day).append("天");
-            }
-            if (hour > 0) {
-                sbTime.append(hour).append("小时");
-            }
-            if (min > 0) {
-                sbTime.append(min).append("分钟");
-            }
-            processingCaseVo.setStayTime(sbTime.toString());
-            processingCaseVos.add(processingCaseVo);
-        }*/
+
         return claimCaseMapper.selectProcessingClaimCaseList(claimCaseDTO);
     }
 
@@ -598,7 +578,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
 
@@ -699,7 +679,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }//待处理
 
     /**
@@ -721,7 +708,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
         //检查字符，防止注入绕过
           orderBy = SqlUtil.escapeOrderBySql(orderBy);
-        PageHelper.startPage(auditWorkPoolDTO.getPageNum(),auditWorkPoolDTO.getPageSize(),orderBy);
+          if(!auditWorkPoolDTO.getFlag()) {
+              PageHelper.startPage(auditWorkPoolDTO.getPageNum(), auditWorkPoolDTO.getPageSize(), orderBy);
+          }
         if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
                     //默认查询一个月的
                     Calendar calendar = Calendar.getInstance();
@@ -871,12 +860,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * @return
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
-        List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
+    public TableDataInfo selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO) {
+        List<ConditionsForTheAdjustmentTwoVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentHang(auditWorkPoolDTO);//查询出处理中的所有的数据
         if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
-            for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
+            for (ConditionsForTheAdjustmentTwoVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
                 //已经拥有：批次号、报案号、批次状态、被保人姓名
                 //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                 //查询案件保单关联表：claim_case_policy，rpt_no
@@ -934,7 +923,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentTwoVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
+
     }//悬挂
 
     /**
@@ -1159,11 +1156,13 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 抽检完毕，修改案件状态
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int editCaseCheck(ClaimCase claimCase) {
         claimCase.setCaseStatus("99");
         claimCase.setUpdateBy(SecurityUtils.getUsername());
         claimCase.setUpdateTime(DateUtils.getNowDate());
+        claimCase.setEndCaseTime(DateUtils.getNowDate());
 
         //查询原来操作记录并进行更新
         ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOneOld(claimCase.getRptNo());
@@ -1188,6 +1187,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 退回后流转至该案件理算审核环节操作人处理中工作池
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int editCaseCheckBack(ClaimCase claimCase) {
 //        claimCase.setCaseStatus("07");
@@ -1342,39 +1342,43 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 //获取批次号，报案号，按键状态，被保人，证件号  就诊日期  赔付结论
         //还差是否调查  分单号     给付金额  审核人
         List<ClaimInformationVo> caseList = claimCaseMapper.selectClaimInformation(claimInformationDTO);
-        for (ClaimInformationVo caseInfo : caseList
-        ) { // 是否调查
-            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
-            if ( claimCaseInvestigation.size() > 0) {
-                caseInfo.setInvestigation("01");
-            } else {
-                caseInfo.setInvestigation("02");
-            }
+        /***
+         * 以下实体类赋值  直接在sql 中查询
+         * modify by : HJW
+         * modifyDate : 2021-03-04
+         */
+//        for (ClaimInformationVo caseInfo : caseList ) { // 是否调查
+//            List<ClaimCaseInvestigation> claimCaseInvestigation = claimCaseInvestigationMapper.selectClaimCaseInvestigationByIdOne(caseInfo.getRptNo());
+//            if ( claimCaseInvestigation.size() > 0) {
+//                caseInfo.setInvestigation("01");
+//            } else {
+//                caseInfo.setInvestigation("02");
+//            }
             //获取就诊日期
-            List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseAccept c : claimCaseAccepts
-            ) {
-                caseInfo.setAccDate(c.getAccDate());
-            }
+//            List<ClaimCaseAccept> claimCaseAccepts = claimCaseAcceptMapper.selectClaimCaseAcceptByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseAccept c : claimCaseAccepts
+//            ) {
+//                caseInfo.setAccDate(c.getAccDate());
+//            }
             //获取给i付金额   即账单币种  账单金额
-            List<ClaimCaseBill> claimCaseBill = claimCaseBillMapper.selectClaimCaseBillByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseBill c : claimCaseBill
-            ) {
-                caseInfo.setPaymentAmount(c.getPaymentAmount());
-            }
-            //获取赔付结论
-            List<ClaimCaseCal> claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByIdOne(caseInfo.getRptNo());
-            for (ClaimCaseCal c : claimCaseCal
-            ) {
-                caseInfo.setPayConclusion(c.getPayConclusion());
-            }
+//            List<ClaimCaseBill> claimCaseBill = claimCaseBillMapper.selectClaimCaseBillByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseBill c : claimCaseBill
+//            ) {
+//                caseInfo.setPaymentAmount(c.getPaymentAmount());
+//            }
+//            //获取赔付结论
+//            List<ClaimCaseCal> claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByIdOne(caseInfo.getRptNo());
+//            for (ClaimCaseCal c : claimCaseCal
+//            ) {
+//                caseInfo.setPayConclusion(c.getPayConclusion());
+//            }
             //获取审核人
           /*  List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordSecondThree(caseInfo.getRptNo());
             for (ClaimCaseRecord c : claimCaseRecords
             ) {
                 caseInfo.setUpdateBy(c.getUpdateBy());
             }*/
-        }
+//        }
         return caseList;
     }
 
@@ -1396,6 +1400,7 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     /**
      * 判断案件是否符合流程抽检岗规则
      */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int judgeClaimCaseCheckRule(ClaimCaseCheckDTO claimCaseCheckDTO) {
 
@@ -1427,6 +1432,8 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setCaseStatus(claimCaseCheckDTO1.getCaseStatus());
             claimCase.setUpdateBy(SecurityUtils.getUsername());
             claimCase.setUpdateTime(DateUtils.getNowDate());
+            claimCase.setEndCaseTime(DateUtils.getNowDate());
+            claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());
@@ -1578,6 +1585,20 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         return claimCaseMapper.selectCaseBorrowByRptNo(rptNo);
     }
 
+    @Override
+    public int selectBillAndPolicyDateByRptNo(String rptNo) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int flag =0;
+
+        List<BillAndPolicyDate> billAndPolicyDates = claimCaseMapper.selectBillAndPolicyDateByRptNo(rptNo);
+        for (BillAndPolicyDate billAndPolicyDate : billAndPolicyDates) {
+            if ( billAndPolicyDate.getBillStartDate().compareTo(billAndPolicyDate.getPolicyStartDate())<0 || billAndPolicyDate.getBillEndDate().compareTo(billAndPolicyDate.getPolicyEndDate())>0 ){
+                flag=1;
+            }
+        }
+        return flag;
+    }
+
     /**
      * 案件交单完成进入受理阶段分配操作人
      */
@@ -1611,4 +1632,17 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         }
         return  claimCaseMapper.updateClaimCase(claimCase);
     }*/
+
+
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    @Override
+    public List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto) {
+        return claimCaseMapper.claimInfoList(dto);
+    }
 }

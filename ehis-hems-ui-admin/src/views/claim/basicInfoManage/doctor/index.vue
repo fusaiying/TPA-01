@@ -36,7 +36,7 @@
         </el-row>
         <el-row>
           <el-form-item class="queryForm_button">
-            <el-button size="mini" type="success" icon="el-icon-search" @click="initData">查 询</el-button>
+            <el-button size="mini" type="success" icon="el-icon-search" @click="searchHandel">查 询</el-button>
             <el-button size="mini" type="primary" icon="el-icon-refresh" @click="reset('resetData')">重 置</el-button>
           </el-form-item>
         </el-row>
@@ -90,7 +90,7 @@
           :page-sizes="pageSizes"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
-          @pagination="changePage"
+          @pagination="initData"
         />
 
       </el-card>
@@ -108,6 +108,7 @@
     name: "doctorList",
     data() {
       return {
+        searchBtn:false,
         loading: true,
         regions: [], // 省市区下拉选项
         region: [], // 当前选中的省市区  '110000','110100','110105'
@@ -128,10 +129,15 @@
       }
     },
     created() {
-      this.getListNear()
+       this.initData();
       // this.getAddressData()
     },
     methods: {
+      searchHandel(){
+        this.queryParams.pageNum = 1;
+        this.searchBtn = true;
+        this.initData();
+      },
       // 查询近30天医生信息
       getListNear(){
         this.loading = true;
@@ -151,13 +157,13 @@
         })
       },
       // 页码改变
-      changePage(){
-        if ((this.queryParams.docName == undefined || this.queryParams.docName == undefined) && (this.queryParams.comment == undefined || this.queryParams.comment == "")){
-          this.getListNear();
-        } else {
-          this.getList()
-        }
-      },
+      // initData(){
+      //   if ((this.queryParams.docName == undefined || this.queryParams.docName == undefined) && (this.queryParams.comment == undefined || this.queryParams.comment == "")){
+      //     this.getListNear();
+      //   } else {
+      //     this.getList()
+      //   }
+      // },
       // 地址下拉选
       getAddressData() {
         getAddress().then(response => {
@@ -174,17 +180,15 @@
       },
       // 查询按钮
       initData(){
-        if (this.queryParams.docName == undefined && this.queryParams.comment == undefined){
-          this.queryParams.pageNum = 1;
-          this.getListNear()
-        } else {
-          this.queryParams.pageNum = 1;
+        if(this.searchBtn) {
           // 所属服务机构输入框的值分别赋给第一科室/第二科室
           this.queryParams.fiestDept = this.queryParams.comment;
           this.queryParams.secondDept = this.queryParams.comment;
-          console.log("查询参数：",this.queryParams)
           this.getList();
+        } else {
+          this.getListNear()
         }
+
       },
       // 重置按钮
       reset(resetData) {
@@ -211,7 +215,7 @@
             if (this.doctorList.length == 1 && this.queryParams.pageNum != 1) {
               this.queryParams.pageNum = this.queryParams.pageNum - 1;
             }
-            this.changePage();
+            this.initData();
             this.msgSuccess("删除成功");
           }).catch(function () {
           });
@@ -240,7 +244,7 @@
           if(this.doctorList.length == 1 && this.queryParams.pageNum != 1){
             this.queryParams.pageNum = this.queryParams.pageNum - 1;
           }
-          this.changePage();
+          this.initData();
           this.msgSuccess("删除成功");
         }).catch(function() {});
       }

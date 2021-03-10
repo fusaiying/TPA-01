@@ -5,15 +5,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.paic.ehis.common.core.annotation.Excel;
 import com.paic.ehis.common.core.web.domain.BaseEntity;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 /**
  * 协办信息 对象 collaborative_from
  * 
  * @author sino
- * @date 2021-02-07
+ * @date 2021-02-05
  */
+@Data
 public class CollaborativeFrom extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -41,13 +42,22 @@ public class CollaborativeFrom extends BaseEntity
     @Excel(name = "有无附件")
     private String attachmentFlag;
 
-    /** 处理状态 意见处理等待 */
-    @Excel(name = "处理状态 意见处理等待")
+    @Excel(name = "处理状态")
     private String handleState;
 
     /** 状态 协办中；已经协办； */
     @Excel(name = "状态 协办中；已经协办；")
-    private Long status;
+    private String status;
+
+    @Excel(name="处理意见")
+    private String opinion;
+
+    @Excel(name="投诉是否成立")
+    private String validFlag;
+
+    @Excel(name="投诉不成立理由")
+    private String nonReason;
+
 
     /** 处理方案 */
     @Excel(name = "处理方案")
@@ -70,36 +80,16 @@ public class CollaborativeFrom extends BaseEntity
     @Excel(name = "更新人")
     private String updatedBy;
 
+    private String itemCode;
+    private String organCode;
+    private String businessType;
+
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedTime;
 
-    /** 服务项目 */
-    @Excel(name = "服务项目")
-    private String itemCode;
-
-    /** 出单机构 */
-    @Excel(name = "出单机构")
-    private String organCode;
-
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    public String getOrganCode() {
-        return organCode;
-    }
-
-    public void setOrganCode(String organCode) {
-        this.organCode = organCode;
-    }
-
-    public void setCollaborativeId(Long collaborativeId)
+    public void setCollaborativeId(Long collaborativeId) 
     {
         this.collaborativeId = collaborativeId;
     }
@@ -153,21 +143,12 @@ public class CollaborativeFrom extends BaseEntity
     {
         return attachmentFlag;
     }
-    public void setHandleState(String handleState) 
-    {
-        this.handleState = handleState;
-    }
-
-    public String getHandleState() 
-    {
-        return handleState;
-    }
-    public void setStatus(Long status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public String getStatus()
     {
         return status;
     }
@@ -228,14 +209,13 @@ public class CollaborativeFrom extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("collaborativeId", getCollaborativeId())
             .append("workOrderNo", getWorkOrderNo())
             .append("fromUserId", getFromUserId())
             .append("umCode", getUmCode())
             .append("solicitOpinion", getSolicitOpinion())
             .append("attachmentFlag", getAttachmentFlag())
-            .append("handleState", getHandleState())
             .append("status", getStatus())
             .append("treatmentPlan", getTreatmentPlan())
             .append("treatmentBasis", getTreatmentBasis())

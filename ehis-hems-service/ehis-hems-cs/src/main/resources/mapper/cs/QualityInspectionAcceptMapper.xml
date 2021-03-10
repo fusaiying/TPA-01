@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.cs.mapper.QualityInspectionAcceptMapper">
+    <!-- 工作池返回对象 -->
+    <resultMap type="com.paic.ehis.cs.domain.vo.AcceptVo" id="AcceptResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="businessType" column="business_type"/>
+        <result property="serviceItem" column="item_code"/>
+        <result property="businessService" column="business_service"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="policyNo" column="policy_no"/>
+        <result property="policyItemNo" column="policy_item_no"/>
+        <result property="riskCode" column="risk_code"/>
+        <result property="acceptTime" column="accept_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="priorityLevel" column="priority_level"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="insuredPersonId" column="insured_no"/>
+        <result property="holderPersonId" column="holder_no"/>
+        <result property="acceptUserId" column="accept_by"/>
+        <result property="modifyUserId" column="modify_by"/>
+        <result property="endDate" column="end_date"/>
+        <result property="callPersonId" column="call_person_id"/>
+        <result property="callRelationBy" column="call_relation_by"/>
+        <result property="contactsPersonId" column="contacts_person_id"/>
+        <result property="contactsRelationBy" column="contacts_relation_by"/>
+        <result property="content" column="content"/>
+        <result property="complaintPersonId" column="complaint_person_id"/>
+        <result property="callCenterId" column="call_center_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+<!--可质检工单查询-->
+    <sql id="selectAcceptVo">
+        select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
+            woa.policy_no,woa.policy_item_no,woa.end_date,qia.status,woa.organ_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time
+        from quality_inspection_accept qia
+            left join  work_order_accept woa on qia.work_order_no=woa.work_order_no
+            left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
+    </sql>
+
+    <sql id="selectSendVo">
+        select woa.work_order_no,woa.business_type,adi.channel_code,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.accept_by,woa.accept_time,woa.modify_by,woa.modify_time,woa.organ_code,woa.vip_flag,adi.priority_level,woa.status
+        from work_order_accept woa
+            left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
+    </sql>
+<!--质检信息列表查询-->
+    <select id="selectSendByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        <include refid="selectSendVo"/>
+        where 1=1 and not exists (SELECT 1 FROM quality_inspection_accept qia WHERE qia.work_order_no=woa.work_order_no)
+        <if test="businessTypeList != null ">
+            and woa.business_type IN (
+            <foreach collection="businessTypeList" item="businessType"
+                     separator=",">
+                #{businessType}
+            </foreach>
+            )
+        </if>
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+
+        <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
+
+        <if test="acceptStatus != null  and acceptStatus != ''"> and woa.status = #{acceptStatus}</if>
+
+        <if test="serviceItem != null  and serviceItem != ''"> and adi.item_code = #{serviceItem}</if>
+
+    </select>
+    <resultMap type="com.paic.ehis.cs.domain.vo.QualityVo" id="QualityResult">
+        <result property="workOrderNo" column="work_order_no"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="endDate" column="end_date"/>
+        <result property="itemType" column="item_type"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="result" column="result"/>
+    </resultMap>
+    <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
+    SELECT DISTINCT
+	qia.work_order_no,
+	qia.updated_by,
+	qia.updated_time,
+	qia.result,
+	woa.organ_code,
+	woa.end_date,
+	adi.item_code,
+	qii.item_type
+FROM
+	quality_inspection_accept qia,
+	work_order_accept woa,
+	accept_detail_info adi,
+	quality_inspection_item qii,
+	quality_inspection_handle qih
+WHERE
+	qia.work_order_no = qih.work_order_id
+	AND qih.inspection_id = qii.inspection_id
+	AND qia.work_order_no = woa.work_order_no
+	AND qia.work_order_no = adi.work_order_no
+	<where>
+        <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
+        <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>
+        <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+        <if test="updatedBy != null and updatedBy != ''"> and qia.updated_by = #{updatedBy}</if>
+        <if test="itemCode != null and itemCode != ''"> and adi.item_code = #{itemCode}</if>
+        <if test="status != null and status != ''"> and qia.status = #{status}</if>
+        <if test="result != null and result != ''"> and qia.result = #{result}</if>
+    </where>
+    </select>
+
+    <select id="selectAcceptByVo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        <include refid="selectAcceptVo"/>
+        where 1=1
+
+        <if test="endCaseStartTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[>=]]> #{endCaseStartTime}
+        </if>
+
+        <if test="endCaseEndTime != null ">
+            and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
+        </if>
+
+        <if test="organCode != null and organCode != ''"> and woa.organ_code = #{organCode}</if>
+
+        <if test="acceptStatus != null and acceptStatus != ''"> and qia.status = #{acceptStatus}</if>
+
+        <if test="serviceItem != null and serviceItem != ''"> and adi.item_code = #{serviceItem}</if>
+
+        <if test="updateBy !=null and updateBy !='' "> and qia.updated_by = #{updateBy}</if>
+
+    </select>
+<!--    提取详细信息值-->
+    <select id="getAcceptDetailInfo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultType="com.paic.ehis.cs.domain.AcceptDetailInfo">
+        select * from accept_detail_info adi where 1=1
+        <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
+    </select>
+<!--    提取共同属性值-->
+    <select id="getAcceptInfo" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="AcceptResult">
+        select woa.work_order_no,woa.business_type,adi.item_code,concat(woa.business_type,'-', adi.item_code) as business_service,adi.channel_code,
+            woa.policy_no,woa.policy_item_no,woa.risk_code,woa.accept_time,woa.modify_time,woa.vip_flag,adi.priority_level,woa.organ_code,
+            woa.insured_no,woa.holder_no,woa.accept_by,woa.modify_by,woa.end_date,adi.call_person_id,adi.call_relation_by,adi.contacts_person_id,
+            adi.contacts_relation_by,adi.content,adi.complaint_person_id,adi.call_center_id
+        from work_order_accept woa
+            left join accept_detail_info adi on woa.work_order_no = adi.work_order_no
+        where 1=1
+        <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
+    </select>
+<!--    批量发起质检数据-->
+    <insert id="insertAcceptBatch" parameterType="java.util.List">
+        INSERT INTO quality_inspection_accept
+        (work_order_no, `result`, status, created_by, created_time, updated_by, updated_time)
+        VALUES
+        <foreach collection="list" item="qualityInspectionAccept" index="index" separator=",">
+            (
+            #{qualityInspectionAccept.workOrderNo},
+            #{qualityInspectionAccept.result},
+            #{qualityInspectionAccept.status},
+            #{qualityInspectionAccept.createdBy},
+            #{qualityInspectionAccept.createdTime},
+            #{qualityInspectionAccept.updatedBy},
+            #{qualityInspectionAccept.updatedTime}
+            )
+        </foreach>
+    </insert>
+<!--获取质检操作-->
+    <update id="updateAcceptByVoDTO" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO">
+        UPDATE quality_inspection_accept
+        SET
+        status = #{acceptStatus},
+        updated_by = #{updateBy},
+        updated_time = #{updateTime}
+        WHERE
+        work_order_no IN (
+        <foreach collection="workOrderNoList" item="workOrderNo"
+                 separator=",">
+            #{workOrderNo}
+        </foreach>
+        )
+    </update>
+</mapper>

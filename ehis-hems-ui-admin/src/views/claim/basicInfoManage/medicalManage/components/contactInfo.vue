@@ -8,7 +8,7 @@
         </span>
       </div>
 
-      <el-table ref="contactTable" :data="contactInfoForm.contacts"
+      <el-table ref="contactTable" :data="contactInfoForm.contacts" :key="keyValue"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
         <el-table-column prop="placeType" align="center" header-align="center" label="联系人类型" show-overflow-tooltip>
@@ -16,9 +16,6 @@
             <el-form-item v-if="!scope.row.id" :prop="'contacts.'+scope.$index +'.placeType'"
                           :rules="contactInfoFormRules.placeType" style="display: inline-flex !important;">
               <el-select v-model="scope.row.placeType" placeholder="请选择" size="mini" clearable>
-                <!--                <el-option v-for="option in contacttype"  :label="option.label"
-                                           :value="option.value"/>
-                                <el-option/>-->
                 <el-option
                   v-for="item in place_typeOptions"
                   :key="item.dictValue"
@@ -112,18 +109,6 @@
                  @click="addContactHandle"> + 添加
       </el-button>
     </el-card>
-    <!--    <el-dialog
-          :visible.sync="dialogVisible"
-          :modal="modalValue"
-          :close-on-click-modal="false"
-          title="提示"
-          width="30%">
-          <span>{{ '删除当前行联系人信息？' }}</span>
-          <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="delConfirm">确 定</el-button>
-            </span>
-        </el-dialog>-->
   </el-form>
 
 
@@ -181,6 +166,7 @@ export default {
       }
     }
     return {
+      keyValue: 1,
       isNetHospFlag: false,
       medicalTypeData: [],
       dialogVisible: false,
@@ -416,27 +402,6 @@ export default {
                       }
                     })
                   }
-                  /*else{
-                updatecontactsInfo(this.contactInfoForm.contacts).then(res => {
-                  if (res.code == '200') {
-                    this.$message({
-                      message: '修改成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    })
-                  } else  {
-                    this.$message({
-                      message: '修改失败!' ,
-                      type: 'error',
-                      center: true,
-                      showClose: true
-                    })
-                  }
-                })
-              }
-
-            }*/
                 } else {
                   this.$message.warning('联系信息必录项未必录')
                 }
@@ -460,7 +425,7 @@ export default {
     },
 
     delHandle(index, row) {
-      //this.dialogVisible = true
+
       this.index = index
       this.$confirm('是否删除当前行联系人信息?', '提示', {
         confirmButtonText: '确定',
@@ -494,10 +459,7 @@ export default {
         });
       });
     },
-    /*    delConfirm() {
-          this.dialogVisible = false
-          this.contactInfoForm.contacts.splice(this.index,1)
-        },*/
+
     //联系信息添加
     addContactHandle() {
       const field = {
@@ -519,6 +481,7 @@ export default {
       this.contactInfoForm.contacts[index].id = ''
       this.contactInfoForm.contacts[index].isSet = true
       this.departmentTableShow=true
+      this.keyValue++;
     },
 
     //重置
@@ -665,12 +628,7 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

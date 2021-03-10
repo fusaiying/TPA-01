@@ -8,7 +8,7 @@
           <el-button size="mini" type="primary" @click="saveHandle" >保存</el-button>
         </span>
       </div>
-      <el-table ref="departmentTable" :data="departmentForm.form"
+      <el-table ref="departmentTable" :data="departmentForm.form" :key="keyValue"
                 :header-cell-style="{color:'black',background:'#f8f8ff'}"
                 size="small" highlight-current-row style="width: 100%;">
         <el-table-column label="就诊类型" prop="visitingType" align="center" show-overflow-tooltip>
@@ -141,18 +141,7 @@
       </el-button>
 
     </el-card>
-    <!--    <el-dialog
-          :visible.sync="dialogVisible"
-          :modal="modalValue"
-          :close-on-click-modal="false"
-          title="提示"
-          width="30%">
-          <span>{{ '删除当前行科室信息？' }}</span>
-          <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="delConfirm">确 定</el-button>
-            </span>
-        </el-dialog>-->
+
   </el-form>
 </template>
 <script>
@@ -223,6 +212,7 @@ export default {
     }
 
     return {
+      keyValue:1,
       index: '',
       dialogVisible: false,
       modalValue: false,
@@ -306,29 +296,7 @@ export default {
                 }
               })
             }
-            /* //修改的接口
-         else{
-           updatedepInfo(this.departmentFrom.form).then(res => {
-             if (res.code=='200') {
-               this.$message({
-                 message: '修改成功！',
-                 type: 'success',
-                 center: true,
-                 showClose: true
-               })
 
-             } else  {
-               this.$message({
-                 message: '修改失败!',
-                 type: 'error',
-                 center: true,
-                 showClose: true
-               })
-             }
-           })
-         }
-
-       }*/
           } else {
             this.$message.warning('科室信息必录项未必录')
           }
@@ -344,13 +312,10 @@ export default {
       })
     },
 
-    /*    delConfirm() {
-          this.dialogVisible = false
-          this.departmentForm.form.splice(this.index,1)
-        },*/
+
 
     delHandle(index, row) {
-      //this.dialogVisible = true
+
       this.index = index
       this.$confirm('是否删除当前行科室信息?', '提示', {
         confirmButtonText: '确定',
@@ -370,6 +335,7 @@ export default {
       this.departmentForm.form[index].isSet = true
 
       this.departmentTableShow = true
+      this.keyValue++
     },
     //增加一行科室信息
     addDepartmentHandle() {
@@ -434,12 +400,7 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
+
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

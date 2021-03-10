@@ -20,12 +20,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="ICD编码：" prop="icdcode">
-              <el-input :disabled="isShow" v-model="baseForm.icdcode" class="item-width" maxlength="20" show-word-limit clearable size="mini" placeholder="请输入"/>
+              <el-input :disabled="isShow" v-model="baseForm.icdcode" class="item-width" maxlength="20"  clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="ICD中文名称：" prop="icdmname">
-              <el-input v-model="baseForm.icdmname" class="item-width" clearable size="mini" maxlength="50" show-word-limit placeholder="请输入" @change="nameChange"/>
+              <el-input v-model="baseForm.icdmname" class="item-width" clearable size="mini" maxlength="50"  placeholder="请输入" @change="nameChange"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -63,7 +63,7 @@ export default {
       },
       totalCount: 0,
       baseFormRules: {
-        icdmname: [{ validator: checkChineseName, trigger: 'blur' }],
+        icdmname: [{ required: true, message: 'ICD中文名称不能为空', trigger: 'blur' }],
         /* englishName: [{ validator: checkEnglishName, trigger: 'blur' }],*/
         // name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         // englishName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],

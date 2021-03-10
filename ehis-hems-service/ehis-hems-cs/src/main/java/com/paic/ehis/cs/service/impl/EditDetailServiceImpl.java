@@ -3,6 +3,7 @@ package com.paic.ehis.cs.service.impl;
 import java.util.List;
 
 import com.paic.ehis.cs.domain.EditDetail;
+import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.mapper.EditDetailMapper;
 import com.paic.ehis.cs.service.IEditDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class EditDetailServiceImpl implements IEditDetailService
     }
 
     @Override
-    public EditDetail selectEdit(String workOrderNo) {
-        return editDetailMapper.selectEdit(workOrderNo);
+    public List<EditDetail> selectEdit(FlowLog flowLog) {
+        return editDetailMapper.selectEdit(flowLog);
     }
 
     /**

@@ -156,6 +156,7 @@
       return {
         isListExport: false,
         organCode: '',
+        queryOrganCode: '',
         backNum: 1,
         backSize: 10,
         dealNum: 1,
@@ -189,13 +190,6 @@
     created() {
     },
     mounted() {
-      //获取公共池
-      getPublicList(this.searchForm).then(res => {
-        this.publicData = res.rows
-        this.publicTotal = res.total
-      }).finally(() => {
-        this.loading = false
-      })
       //获取直结复核理赔批次待处理个人池
       getUntreatedList(this.searchForm).then(res => {
         this.backData = res.rows
@@ -217,15 +211,29 @@
 
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
-          this.organCode=res.data.organCode
+          this.organCode = res.data.organCode
+          this.queryOrganCode = res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
             pageSize: 200,
           }
+          let query={
+            pageNum: 1,
+            pageSize: 10,
+            organcode: '',
+          }
           if (res.data != null) {
             item.organCode = res.data.organCode
+            query.organcode=res.data.organCode
           }
+          //获取公共池
+          getPublicList(query).then(res => {
+            this.publicData = res.rows
+            this.publicTotal = res.total
+          }).finally(() => {
+            this.loading = false
+          })
           getOrganList(item).then(response => {
             if (response != null && response.code === 200) {
               this.sysDeptOptions = response.rows
@@ -238,7 +246,9 @@
     },
     methods: {
       resetForm() {
+        this.queryOrganCode = this.searchForm.organcode
         this.$refs.searchForm.resetFields()
+        this.searchForm.organcode = this.queryOrganCode
       },
       searchPublic() {
         //获取公共池
@@ -301,8 +311,8 @@
             this.loading = false
           })
         }
-        if (this.searchForm.organcode==null || this.searchForm.organcode=='' || this.searchForm.organcode==undefined){
-          this.searchForm.organcode=this.organCode
+        if (this.searchForm.organcode == null || this.searchForm.organcode == '' || this.searchForm.organcode == undefined) {
+          this.searchForm.organcode = this.organCode
         }
         getPublicList(this.searchForm).then(res => {
           this.publicData = res.rows
@@ -355,6 +365,9 @@
           hospitalname: this.searchForm.hospitalname,
           batchno: this.searchForm.batchno,
         }
+        if (query.organcode == null || query.organcode == '' || query.organcode == undefined) {
+          query.organcode = this.organCode
+        }
         if (this.searchForm.submitdate) {
           query.submitstartdate = this.searchForm.submitdate[0]
           query.submitenddate = this.searchForm.submitdate[1]
@@ -378,6 +391,7 @@
       },
       //清单导出
       listExport() {
+
         if (this.activeName === '02') {//已处理
           getUntreatedList().then(res => {
             if (res.rows.length > 0) {

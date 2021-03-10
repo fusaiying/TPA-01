@@ -19,14 +19,13 @@ import java.util.List;
 
 /**
  * 案件被保人信息Controller
- * 
+ *
  * @author sino
  * @date 2021-01-09
  */
 @RestController
 @RequestMapping("/insured")
-public class ClaimCaseInsuredController extends BaseController
-{
+public class ClaimCaseInsuredController extends BaseController {
     @Autowired
     private IClaimCaseInsuredService claimCaseInsuredService;
 
@@ -35,8 +34,7 @@ public class ClaimCaseInsuredController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:insured:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ClaimCaseInsured claimCaseInsured)
-    {
+    public TableDataInfo list(ClaimCaseInsured claimCaseInsured) {
         startPage();
         List<ClaimCaseInsured> list = claimCaseInsuredService.selectClaimCaseInsuredList(claimCaseInsured);
         return getDataTable(list);
@@ -48,20 +46,19 @@ public class ClaimCaseInsuredController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:insured:export')")
     @Log(title = "案件被保人信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, ClaimCaseInsured claimCaseInsured) throws IOException
-    {
+    public void export(HttpServletResponse response, ClaimCaseInsured claimCaseInsured) throws IOException {
         List<ClaimCaseInsured> list = claimCaseInsuredService.selectClaimCaseInsuredList(claimCaseInsured);
         ExcelUtil<ClaimCaseInsured> util = new ExcelUtil<ClaimCaseInsured>(ClaimCaseInsured.class);
         util.exportExcel(response, list, "insured");
     }
 
-    /**案件受理
+    /**
+     * 案件受理
      * 获取案件被保人信息详细信息+以及关联的保单信息
      */
 //    @PreAuthorize("@ss.hasPermi('system:insured:query')")
     @GetMapping(value = "/{rptNo}")
-    public AjaxResult getInfo(@PathVariable("rptNo") String rptNo)
-    {
+    public AjaxResult getInfo(@PathVariable("rptNo") String rptNo) {
         return AjaxResult.success(claimCaseInsuredService.selectClaimCaseInsuredById(rptNo));
     }
 
@@ -71,8 +68,7 @@ public class ClaimCaseInsuredController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:insured:add')")
     @Log(title = "案件被保人信息", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ClaimCaseInsured claimCaseInsured)
-    {
+    public AjaxResult add(@RequestBody ClaimCaseInsured claimCaseInsured) {
         return toAjax(claimCaseInsuredService.insertClaimCaseInsured(claimCaseInsured));
     }
 
@@ -82,8 +78,7 @@ public class ClaimCaseInsuredController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:insured:edit')")
     @Log(title = "案件被保人信息", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ClaimCaseInsured claimCaseInsured)
-    {
+    public AjaxResult edit(@RequestBody ClaimCaseInsured claimCaseInsured) {
         return toAjax(claimCaseInsuredService.updateClaimCaseInsured(claimCaseInsured));
     }
 
@@ -92,21 +87,31 @@ public class ClaimCaseInsuredController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:insured:remove')")
     @Log(title = "案件被保人信息", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{rptNos}")
-    public AjaxResult remove(@PathVariable String[] rptNos)
-    {
+    @DeleteMapping("/{rptNos}")
+    public AjaxResult remove(@PathVariable String[] rptNos) {
         return toAjax(claimCaseInsuredService.deleteClaimCaseInsuredByIds(rptNos));
     }
 
-    /**受理
+    /**
+     * 受理
      * 新增案件被保人信息
      */
 //    @PreAuthorize("@ss.hasPermi('system:insured:add')")
     @Log(title = "案件被保人信息", businessType = BusinessType.INSERT)
     @PostMapping("/addInsuredAndPolicy")
-    public AjaxResult addInsuredAndPolicy(@RequestBody InsuredAndPolicy insuredAndPolicy)
-    {
-        return toAjax(claimCaseInsuredService.insertClaimCaseInsuredAndPolicy(insuredAndPolicy));
+    public AjaxResult addInsuredAndPolicy(@RequestBody InsuredAndPolicy insuredAndPolicy) {
+        claimCaseInsuredService.insertClaimCaseInsuredAndPolicy(insuredAndPolicy);
+        int i=0;
+        if (insuredAndPolicy.getClaimType()!=null && !insuredAndPolicy.getClaimType().equals("") && insuredAndPolicy.getClaimType().equals("02")){
+            ClaimCaseInsured claimCaseInsured = new ClaimCaseInsured();
+            claimCaseInsured.setRptNo(insuredAndPolicy.getClaimCaseInsured().getRptNo());
+            claimCaseInsured.setInsuredNo(insuredAndPolicy.getClaimCaseInsured().getInsuredNo());
+            claimCaseInsured.setName(insuredAndPolicy.getClaimCaseInsured().getName());
+            claimCaseInsured.setIdType(insuredAndPolicy.getClaimCaseInsured().getIdType());
+            claimCaseInsured.setIdNo(insuredAndPolicy.getClaimCaseInsured().getIdNo());
+            i = claimCaseInsuredService.selectPayeeListByInsured(claimCaseInsured);
+        }
+        return AjaxResult.success(i);
     }
 
 }

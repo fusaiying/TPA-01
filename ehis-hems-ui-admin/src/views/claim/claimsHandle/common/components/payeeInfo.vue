@@ -42,7 +42,7 @@
        </el-table-column>-->
       <el-table-column prop="payeeBank" align="center" label="开户行" show-overflow-tooltip/><!--查码表-->
       <el-table-column prop="accNo" align="center" label="账号" show-overflow-tooltip/>
-      <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && node==='accept'"
+      <el-table-column align="center" v-if="baseInfo.claimtype==='02' && status==='edit' && (node==='accept' || node==='calculateReview')"
                        label="操作" width="140" key="9">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>

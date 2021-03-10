@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectClaimCaseCalVo"/>
         where
             status = 'Y'
-            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>n
+            <if test="rptNo != null  and rptNo != ''"> and rpt_no = #{rptNo}</if>
     </select>
 
     <select id="selectClaimCaseCalInformation" parameterType="String" resultMap="CalConclusionResult">
@@ -92,7 +92,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.cal_amount,
         ccc.refused_amount,
         ccc.debt_amount,
-        ccc.pay_amount,
         ccc.exchange_rate,
         ccc.pay_amount_foreign,
         ccc.refused_reason,
@@ -124,10 +123,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         sum( bill_amount ) AS sumBillAmount,
         sum( hos_discount_amount ) AS sumHosDiscountAmount,
         rpt_no
-        FROM claim_case_bill ccb
+        FROM claim_case_bill ccb where ccb.status='Y'
         GROUP BY rpt_no ) bill
         ON ccc.rpt_no = bill.rpt_no
-        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no
+        left join claim_case_insured insured on insured.rpt_no=ccc.rpt_no and insured.status='Y'
         <where>
             <if test="rptNo != null  and rptNo != ''"> and ccc.rpt_no = #{rptNo}</if>
         </where>
@@ -136,8 +135,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClaimCaseBillSummaryByRptNo" parameterType="string" resultMap="CalBillSummaryResult">
         SELECT
+        DISTINCT
         ccc.rpt_no,
-        cal_id,
         billAmount,
         hosDiscountAmount,
         unableAmount,
@@ -176,7 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ccc.rpt_no = #{rptNo} and ccc.status='Y'
     </select>
 
-    <insert id="insertClaimCaseCal" parameterType="ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">
+    <insert id="insertClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal" useGeneratedKeys="true" keyProperty="calId">
         insert into claim_case_cal
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no,</if>
@@ -218,7 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClaimCaseCal" parameterType="ClaimCaseCal">
+    <update id="updateClaimCaseCal" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
         update claim_case_cal
         <trim prefix="SET" suffixOverrides=",">
             <if test="rptNo != null and rptNo != ''">rpt_no = #{rptNo},</if>
@@ -242,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where cal_id = #{calId}
     </update>
 
-    <update id="updateClaimCaseCalByRptNo" parameterType="ClaimCaseCal">
+    <update id="updateClaimCaseCalByRptNo" parameterType="com.paic.ehis.claimflow.domain.ClaimCaseCal">
         update claim_case_cal
         <trim prefix="SET" suffixOverrides=",">
             <if test="billCurrency != null and billCurrency != ''">bill_currency = #{billCurrency},</if>

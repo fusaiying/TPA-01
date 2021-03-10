@@ -34,8 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBaseIssuingcompanyList" parameterType="com.paic.ehis.base.domain.BaseIssuingcompany" resultMap="BaseIssuingcompanyResultTwo">
         SELECT
         b.company_code, b.company_name, b.simple_name, b.status, b.create_by, b.create_time, b.update_by, b.update_time,
-        case when (( SELECT count( 1 ) FROM base_issuingcompany_riskrela a WHERE a.company_code = b.company_code AND a.STATUS = 'y' )
-        = ( SELECT count( 2 ) FROM base_issuingcompany_rule c WHERE c.company_code = b.company_code AND c.STATUS = 'y' )
+        case when (( SELECT count( 1 ) FROM base_issuingcompany_riskrela a WHERE a.company_code = b.company_code AND a.STATUS = 'Y' )
+        = ( SELECT count( 2 ) FROM base_issuingcompany_rule c WHERE c.company_code = b.company_code AND c.STATUS = 'Y' )
         ) then 'false' ELSE 'true' END as flag
         FROM
         base_issuingcompany b
@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companycode != null  and companycode != ''"> and company_code = #{companycode}</if>
             <if test="companyname != null  and companyname != ''"> and company_name like concat('%', #{companyname}, '%')</if>
             <if test="simplename != null  and simplename != ''"> and simple_name = #{simplename}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+           and status = 'Y'
         </where>
         order by update_time desc
     </select>
@@ -101,5 +101,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{companycode}
         </foreach>
     </delete>
-    
+
+    <select id="selectBaseIssuingcompanyBySimplename" parameterType="String" resultMap="BaseIssuingcompanyResult">
+        <include refid="selectBaseIssuingcompanyVo"/>
+        where simple_name = #{simplename} and status='Y'
+    </select>
+
+    <select id="selectBaseIssuingcompanyByCompanyname" parameterType="String" resultMap="BaseIssuingcompanyResult">
+        <include refid="selectBaseIssuingcompanyVo"/>
+        where company_name = #{companyname} and status='Y'
+    </select>
 </mapper>

@@ -54,7 +54,11 @@
           tooltip-effect="dark"
           style="width: 100%;">
           <el-table-column label="出单公司编码" prop="companycode" align="center" show-overflow-tooltip/>
-          <el-table-column label="出单公司名称" prop="companyname" align="center" show-overflow-tooltip/>
+          <el-table-column label="出单公司名称" prop="companyname" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{scope.row.companyname}} | {{scope.row.simplename}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作日期" prop="updateTime" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{parseTime(scope.row.updateTime, '{y}-{m}-{d}')}}</span>

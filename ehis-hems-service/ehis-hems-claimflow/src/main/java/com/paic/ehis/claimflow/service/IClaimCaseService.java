@@ -149,7 +149,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
+    public TableDataInfo selectConditionsForTheAdjustmentUnder(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
 
     /**条件理算审核
      * 已处理
@@ -163,7 +163,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
+    public TableDataInfo selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
 
     /** 抽检完毕，修改案件状态 */
     int editCaseCheck(ClaimCase claimCase);
@@ -258,6 +258,10 @@ public interface IClaimCaseService
 
     public int selectCaseBorrowByRptNo(String rptNo);
     /**
+     *校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+     */
+    public int selectBillAndPolicyDateByRptNo(String rptNo);
+    /**
      * 案件交单完成进入受理阶段分配操作人
      */
     //public  int updateCaseDist(ClaimBatchDTO claimBatchDTO);
@@ -265,4 +269,13 @@ public interface IClaimCaseService
      除受理阶段其余阶段分配操作人
      */
    // public int updateOtherCaseDist(String rptNo);
+
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto);
 }

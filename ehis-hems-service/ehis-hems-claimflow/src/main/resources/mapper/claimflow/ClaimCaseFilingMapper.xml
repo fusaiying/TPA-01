@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="deptCode"    column="dept_code"    />
         <result property="claimType"    column="claim_type"    />
+        <result property="casenum"    column="case_num"    />
     </resultMap>
 
     <resultMap type="com.paic.ehis.claimflow.domain.vo.ClaimCaseFilingInformationVO" id="ClaimCaseFilingInformationVOResult">
@@ -78,10 +79,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCaseClaimCaseFilingList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimCaseFilingDTO" resultMap="ClaimCaseFilingVOResult">
         select
-            case_box_no,rpt_start_no,rpt_end_no,batch_no,
-            dept_code,create_time,update_time,claim_type,
-            update_by,status
-        from claim_case_filing
+               case_box_no,
+               rpt_start_no,
+               rpt_end_no,
+               batch_no,
+               dept_code,
+               create_time,
+               update_time,
+               claim_type,
+               update_by,status,
+              (select count(1) from claim_case_filing_detail t where t.case_box_no = t1.case_box_no and status = 'Y') case_num
+         from claim_case_filing t1
         <where>
             <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
             <if test="claimType != null  and claimType != ''"> and claim_type = #{claimType}</if>
@@ -171,7 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="batchNo != null  and batchNo != ''">batch_no = #{batchNo},</if>
+            batch_no = #{batchNo}
         </trim>
         where case_box_no = #{caseBoxNo}
     </update>

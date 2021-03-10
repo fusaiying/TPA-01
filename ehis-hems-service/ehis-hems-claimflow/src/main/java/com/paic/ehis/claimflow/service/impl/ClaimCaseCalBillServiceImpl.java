@@ -7,6 +7,7 @@ import com.paic.ehis.claimflow.domain.vo.CaseCalBillItemVo;
 import com.paic.ehis.claimflow.domain.vo.CaseCalBillVo;
 import com.paic.ehis.claimflow.mapper.*;
 import com.paic.ehis.claimflow.service.IClaimCaseCalBillService;
+import com.paic.ehis.claimflow.service.IExchangeRateService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
@@ -48,6 +49,12 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Autowired
     private GetProviderInfoService getProviderInfoService;
 
+    @Autowired
+    private ClaimCaseBillMapper claimCaseBillMapper;
+
+    @Autowired
+    private IExchangeRateService exchangeRateService;
+
     /**
      * 查询案件赔付账单明细
      * 
@@ -81,8 +88,28 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Override
     public List<CaseCalBillVo> selectCaseCalInformationList(ClaimCaseCalBill claimCaseCalBill)
     {
+
         claimCaseCalBill.setStatus("Y");
-        return claimCaseCalBillMapper.selectCaseCalInformationList(claimCaseCalBill);
+        List<CaseCalBillVo> caseCalBillVos = claimCaseCalBillMapper.selectCaseCalInformationList(claimCaseCalBill);
+        SyncExchangeRate exchangeRate = new SyncExchangeRate();
+        ClaimCaseBill claimCaseBill = claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCalBill.getRptNo());
+        for (CaseCalBillVo caseCalBillVo : caseCalBillVos) {
+            if (!"CNY".equals(caseCalBillVo.getBillCurrency())){
+                //获取汇率
+                exchangeRate.setBeforeMoney(caseCalBillVo.getBillCurrency());
+                exchangeRate.setAfterMoney("CNY");
+                exchangeRate.setDateConvert(claimCaseBill.getTreatmentStartDate());
+                exchangeRate = exchangeRateService.getExchangeRate(exchangeRate);
+                if(StringUtils.isNull(exchangeRate)){
+                    return null;
+                }
+                caseCalBillVo.setCopay(caseCalBillVo.getCopay().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setBillAmount(caseCalBillVo.getBillAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setHosDiscountAmount(caseCalBillVo.getHosDiscountAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+                caseCalBillVo.setUnableAmount(caseCalBillVo.getUnableAmount().multiply(exchangeRate.getParities()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+            }
+        }
+        return caseCalBillVos;
     }
 
     /**
@@ -120,7 +147,11 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int billDetailsSave(BillDetailDTO billDetailDTO) {
+        int size=0;
         String claimFlag = "";
+        BigDecimal billTotalAmount=new BigDecimal(String.valueOf(0.00));
+        BigDecimal totalDiscountAmount=new BigDecimal(String.valueOf(0.00));
+        BigDecimal totalSelfAmount=new BigDecimal(String.valueOf(0.00));
         ArrayList<ClaimCaseCalBill> claimCaseCalBills = new ArrayList<>();
         ArrayList<ClaimCaseCalItem> claimCaseCalItems = new ArrayList<>();
         ClaimCaseCal claimCaseCal =claimCaseCalMapper.selectClaimCaseCalByRptNo(billDetailDTO.getBillDetailList().get(0).getRptNo());
@@ -134,10 +165,18 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
                 claimCaseCalBill.setPayAmount(caseCalBillVo.getPayAmount());
                 claimCaseCalBill.setRemark(caseCalBillVo.getRemark());
                 claimCaseCalBill.setPayConclusion(caseCalBillVo.getPayConclusion());
+                claimCaseCalBill.setRefusedAmount(caseCalBillVo.getRefusedAmount());
                 claimCaseCalBill.setCalBillId(caseCalBillVo.getCalBillId());
                 claimCaseCalBill.setUpdateBy(SecurityUtils.getUsername());
+                if ("05".equals(caseCalBillVo.getPayConclusion()) || "10".equals(caseCalBillVo.getPayConclusion())){//存在拒赔结论时
+                    size += 1;
+                }
                 pay=pay.add(claimCaseCalBill.getPayAmount());
+
                 claimCaseCalBills.add(claimCaseCalBill);
+                billTotalAmount=billTotalAmount.add(StringUtils.isNull(caseCalBillVo.getBillAmount())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getBillAmount());//因账单总金额暂未实现，只能求和
+                totalDiscountAmount=totalDiscountAmount.add(StringUtils.isNull(caseCalBillVo.getHosDiscountAmount())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getHosDiscountAmount());//折扣总金额
+                totalSelfAmount=totalSelfAmount.add(StringUtils.isNull(caseCalBillVo.getCopay())?new BigDecimal(String.valueOf(0.00)):caseCalBillVo.getCopay());
                 if (StringUtils.isNotEmpty(caseCalBillVo.getMinData())) {
                     for (CaseCalBillItemVo minDatum : caseCalBillVo.getMinData()) {
                         ClaimCaseCalItem claimCaseCalItem = new ClaimCaseCalItem();
@@ -159,20 +198,28 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(claimCase.getBatchNo());
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
         if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimFlag=settle.getClaimFlag();
         }
         if ("01".equals(claimFlag)){//非全赔,如果是全赔，默认是账单总金额不变，且cal表账单总金额字段未加
+            claimCaseCal.setCalAmount(pay);
             claimCaseCal.setPayAmount(pay);
+            claimCaseCal.setDebtAmount(new BigDecimal(String.valueOf(0.00)));
+
         }
         if ("02".equals(claimFlag)){//全赔医院
-            claimCaseCal.setDebtAmount(claimCaseCal.getPayAmount()/*此处应为账单总金额*/.subtract(claimCaseCal.getCalAmount().add(pay)));
-        //此处并未真正实现，偷换概念，追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
+            claimCaseCal.setCalAmount(pay);
+            //追讨金额=账单金额-折扣金额-赔付金额-流水号自付额；
+            claimCaseCal.setDebtAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(totalSelfAmount).subtract(claimCaseCal.getCalAmount()));
+            claimCaseCal.setPayAmount(billTotalAmount.subtract(totalDiscountAmount));
         }
-        claimCaseCal.setCalAmount(pay);
-
-        claimCaseCalMapper.updateClaimCaseCalByRptNo(claimCaseCal);
+        if (size==billDetailDTO.getBillDetailList().size()){//存在拒赔结论时，赔付金额为0，
+            claimCaseCal.setCalAmount(new BigDecimal(String.valueOf(0.00)));
+        }
+        claimCaseCal.setRefusedAmount(billTotalAmount.subtract(totalDiscountAmount).subtract(claimCaseCal.getCalAmount()));
+        claimCaseCalMapper.updateClaimCaseCal(claimCaseCal);
         return claimCaseCalBillMapper.bulkUpdateClaimCaseCalBill(claimCaseCalBills);
     }
 

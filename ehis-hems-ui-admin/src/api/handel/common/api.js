@@ -164,3 +164,21 @@ export function acceptInfo (rptNo) {
     method: 'get',
   })
 }
+//校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+export function checkBillAndPolicyDate(rptNo) {
+  return request({
+    url: '/claimflow/case/checkBillAndPolicyDate',
+    method: 'post',
+    data:rptNo
+  })
+}
+
+
+// 账单币种改变后，变更汇率和外币给付金额
+export function exchangeRate(query) {
+  return request({
+    url: '/claimflow/cal/exchangeRate',
+    method: 'get',
+    params: query
+  })
+}

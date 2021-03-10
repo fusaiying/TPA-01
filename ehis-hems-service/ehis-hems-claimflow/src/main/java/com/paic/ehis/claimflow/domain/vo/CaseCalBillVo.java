@@ -51,7 +51,7 @@ public class CaseCalBillVo implements Serializable {
     private BigDecimal deduUsed;    //         cccb.dedu_used,
 
     /** 赔付结论 */
-    @Excel(name = "本次使用免赔额",combo = "")
+    @Excel(name = "赔付结论",combo = "")
     private String payConclusion;   //         cccb.pay_conclusion
 
     /** 备注 */
@@ -90,6 +90,9 @@ public class CaseCalBillVo implements Serializable {
     /** 不合理金额 */
     @Excel(name = "不合理金额",combo = "")
     private BigDecimal unableAmount;    //         ccb.unable_amount,
+
+        /** 账单币种 */
+    private String billCurrency;
 
     /**  账单费用详情列表 */
     @Excel(targetAttr="")

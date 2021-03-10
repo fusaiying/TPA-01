@@ -195,19 +195,12 @@
                            show-overflow-tooltip/>
           <el-table-column align="center" prop="ssFlag" label="社保标记" :formatter="getSocialinsurance1"
                            show-overflow-tooltip/>
-          <!--          <el-table-column label="操作" width="120" align="center">
-                      <template slot-scope="scope">
-                        <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="preview(scope.row)">预览</el-button>
-                        <el-button style="margin-bottom: 10px;" type="text" size="mini" @click="download(scope.row)">下载
-                        </el-button>
-                      </template>
-                    </el-table-column>-->
         </el-table>
       </el-row>
     </el-form>
     <!-- 保单信息查询模态框 -->
     <insured-modal :value="dialogPolicy" :dictList="dictList" :node="node" @infoShow="insuredInfoShow"
-                   @getPropData="getPropData" :fixInfo="fixInfo"
+                   @getPropData="getPropData" :fixInfo="fixInfo" :batchInfo="batchInfo"  @getPayeeData="getPayeeData"
                    @lightShow="lightListDeal" @closeDialogVisable="closeDialogVisable"/>
   </el-card>
 </template>
@@ -227,6 +220,7 @@
     },
     mixins: [],
     props: {
+      batchInfo:Object,
       fixInfo: {
         type: Object,
         default: function () {
@@ -253,15 +247,7 @@
         deep: true,
 
       },
-      /*      sonInsuredData: function (newVal){
-              if (newVal!==null && newVal!==undefined){
-                this.baseForm=newVal.claimCaseInsured
-                this.tableData=newVal.policyInfominData
-                this.region.push(this.baseForm.province)
-                this.region.push(this.baseForm.city)
-                this.region.push(this.baseForm.district)
-              }
-            }*/
+
     },
 
     data() {
@@ -336,18 +322,7 @@
           }
         }
       }
-      let checkValid2 = (rule, value, callback) => {
-        /* if (value) {
-           let str = value.replace(/(^\s*)|(\s*$)/g, "")
-           if (str.indexOf(" ") !== -1) {
-             callback(new Error('输入格式不正确'))
-           } else {
-             callback()
-           }
-         } else {
-           callback(new Error('不能为空！'))
-         }*/
-      }
+
 
       return {
         hasInsuredId:false,
@@ -365,18 +340,10 @@
           idNo: {required: true, message: '证件号码不能为空!', trigger: 'blur'},
           sex: {required: true, message: '性别不能为空!', trigger: 'blur'},
           birthday: {required: true, message: '出生日期不能为空!', trigger: 'blur'},
-         // dateRange: {required: true,validator: checkDateRange,  trigger: ['blur','change']},
 
           email: {validator: validateEmail, trigger: 'blur'},
           phone: {validator: checkValid, trigger: 'blur'},
           mobile: {validator: checkPhone, trigger: 'blur'},
-
-          /* isReceipt: {required: true, message: '不能为空!', trigger: 'change'},
-           nationality: {required: true, message: '不能为空!', trigger: 'change'},
-           receivedDate: {required: true, message: '不能为空!', trigger: 'change'},
-           billCount: {required: false, message: '不能为空!', trigger: 'blur'},
-           billAmount: {validator: validateAmount, required: false, trigger: ['blur', 'change']},
-           trackingNumber: {required: true, validator: checkValid2, trigger: 'change'}*/
         },
         labelType: {
           '01': 'VIP',
@@ -465,12 +432,6 @@
         return item.dictType === 'socialinsurance1'
       }).dictDate
 
-
-      /*      if (this.node === 'report') {
-              this.tableFormRules.dateRange = {required: false, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
-            } else {
-              this.tableFormRules.dateRange = {required: true, message: '证件有效期不能为空!', trigger: ['blur', 'change']}
-            }*/
       this.getAddressData()
     },
     created() {
@@ -503,11 +464,6 @@
         this.baseForm.address = baseFormData.address
         this.baseForm.dateRange = []
 
-
-        /* this.baseForm.dateRange[0] =  this.baseForm.idStartDate
-      this.baseForm.dateRange[1] =  this.baseForm.idStartDate*/
-
-        //this.baseForm.idEndDate = '9999-12-31'
         if (this.baseForm.idEndDate == '9999-12-31') {
           this.$set(this.baseForm, 'checked', true)
           this.baseForm.dateRange = []
@@ -529,11 +485,7 @@
         this.region[2] = this.baseForm.district
         this.tableData = subFormSearch.policyInfominData
 
-        /*    this.$nextTick(() =>{
-
-            })*/
-
-        //别删  通过是否有id来判断是否保存过
+        //通过是否有id来判断是否保存过
         if (this.baseForm.rptNo!==null && this.baseForm.rptNo!=='' ){
           this.hasInsuredId=true
           this.$emit('emitSaveFlag')
@@ -589,10 +541,6 @@
         this.region[2] = this.baseForm.district
 
 
-        /* this.baseForm.region=this.region*/
-        /*  this.baseForm.region[1]=subFormSearch.caseInsuredData.city
-          this.baseForm.region[2]=subFormSearch.caseInsuredData.district*/
-
         this.tableData = subFormSearch.policyInfoData
         this.isInsuredSave = true
         this.$emit('emitSaveFlag')
@@ -620,11 +568,8 @@
 
         if (this.baseForm.checked) {
           this.baseForm.dateRange = []
-          /*this.baseForm.idEndDate = '9999-12-31'*/
           this.$set(this.baseForm,'idEndDate','9999-12-31')
           this.baseForm.idStartDate=''
-          /* this.baseForm.dateRange[0] = ''
-           this.baseForm.dateRange[1] = '9999-12-31'*/
         } else {
           this.baseForm.dateRange = []
           this.baseForm.idEndDate = ''
@@ -633,23 +578,6 @@
 
 
 
-        /* if (this.node === 'report') {
-           if (value === true) {
-             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-             this.baseForm.dateRange = null
-           } else {
-             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-           }
-         } else {
-           if (value === true) {
-             this.tableFormRules.dateRange = {required: false, message: '不能为空!', trigger: ['blur', 'change']}
-             this.baseForm.dateRange = null
-          /!*   this.$refs.baseForm.validate((valid) => {
-             })*!/
-           } else {
-             this.tableFormRules.dateRange = {required: true, message: '不能为空!', trigger: ['blur', 'change']}
-           }
-         }*/
       },
 
 
@@ -765,10 +693,6 @@
         return this.selectDictLabel(this.socialinsurance1Options, row.ssFlag)
       },
       // 地址下拉选
-      getAddressInfo() {
-
-        /*this.regions = this.getAddressByFront()*/
-      },
       getAddressData() {
         getAddress().then(response => {
           this.regions = response
@@ -824,6 +748,9 @@
       },
       getLabel_type(value) {
         return this.selectDictLabel(this.label_typeOptions, value)
+      },
+      getPayeeData() {
+        this.$emit('getPayeeDatas')
       },
       //校验
       validataForm(){

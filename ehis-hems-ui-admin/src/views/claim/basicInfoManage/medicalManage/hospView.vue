@@ -142,7 +142,6 @@
 
                       <el-option v-for="item in comprehensive_typeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
                     <!--选择专科时  显示出来-->
 
@@ -151,8 +150,8 @@
                                multiple>
                       <el-option v-for="item in comprehensive_subtypeOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
-                      <!--                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>-->
                     </el-select>
+                    <i class="el-icon-warning-outline" v-if="typeShow" v-bind:title="type2Info"></i>
 
                   </el-form-item>
                 </el-col>
@@ -413,7 +412,7 @@ export default {
 
 
     return {
-
+      type2Info: '',
       specialAnnexFlag:true,
       annexFlag: false,
       contractLogTableData: [],
@@ -633,7 +632,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status_review'
+      return item.dictType == 'bussiness_status'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'
@@ -698,6 +697,14 @@ export default {
 
         if(this.baseForm.type=='03'){
           this.typeShow=true
+          //给type2Info赋值
+          this.baseForm.type2.forEach(item =>{
+            let data = this.comprehensive_subtypeOptions.find(obj =>{
+              return obj.dictValue==item;
+            })
+            this.type2Info=this.type2Info+','+data.dictLabel
+          })
+          this.type2Info=this.type2Info.substring(1,this.type2Info.length)
 
         }
 

@@ -64,9 +64,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update base_feeitem
         <trim prefix="SET" suffixOverrides=",">
             <if test="feeitemname != null and feeitemname != ''">feeitem_name = #{feeitemname},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

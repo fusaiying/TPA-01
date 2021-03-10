@@ -334,5 +334,11 @@ FROM
     <update id="updateClaimCaseBillById" parameterType="long">
         update claim_case_bill set status='N' where bill_id = #{billId} and status='Y'
     </update>
-    
+
+    <select id="selectEarliestTreatmentBillByRptNo" parameterType="string" resultMap="ClaimCaseBillResult">
+        <include refid="selectClaimCaseBillVo"/>
+        where rpt_no=#{rptNo} and status='Y'
+        ORDER BY treatment_start_date limit 1
+    </select>
+
 </mapper>

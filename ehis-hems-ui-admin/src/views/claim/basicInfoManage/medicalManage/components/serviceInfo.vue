@@ -12,11 +12,6 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="所属医疗网络类型：" prop="networkType">
-            <!--            <el-select v-model="serviceForm.networkType" class="item-width" placeholder="请选择" clearable>
-                          <el-option label="类型一" value="01"></el-option>
-                          <el-option label="类型二" value="02"></el-option>
-                          &lt;!&ndash;                  <el-option v-for="item in dict.hospitallevel" :label="item.label" :value="item.value" :key="item.value"/>&ndash;&gt;
-                        </el-select>-->
             <el-button size="mini" type="primary" @click="maintainBtn">维护</el-button>
             <el-button size="mini" type="primary" @click="maintainRecordBtn">维护记录</el-button>
             <el-button size="mini" type="primary" @click="insuranceMainBtn">险种维护</el-button>
@@ -345,9 +340,6 @@
           </template>
 
         </el-table-column>
-        <!--            <el-table-column key="4"  align="left" width="120"  >
-
-                    </el-table-column>-->
         <el-table-column key="5" align="center" min-width="150" prop="newDate" label="新选项生效日" style="width: 180px">
           <template slot-scope="scope">
             <el-date-picker v-if="scope.row.newInputShow " v-model="scope.row.newDate"
@@ -527,9 +519,8 @@
 
     </el-dialog>
 
-    <!--合约信息-->
-    <!--    <service-agency-contract :dialogVisable="serviceDialogVisible" :providerCode="providerCode"
-                                 @saveSuccess="changeService"></service-agency-contract>-->
+
+
 
   </el-form>
 </template>
@@ -591,56 +582,7 @@ export default {
       }
     }
 
-    /*    const checkExamineDiscount = (rules, value, callback) => {
-          if (value) {
-            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-            if (!regx.test(value)) {
-              callback(new Error('评分在0-1，最多保留二位小数！'))
-            } else {
-              callback()
-            }
-          } else {
-            callback()
-          }
-        }
 
-        const checkDiscount = (rules, value, callback) => {
-          if (value) {
-            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-            if (!regx.test(value)) {
-              callback(new Error('评分在0-1，最多保留二位小数！'))
-            } else {
-              callback()
-            }
-          } else {
-            callback()
-          }
-        }
-        const checkAllowance = (rules, value, callback) => {
-          if (value) {
-            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-            if (!regx.test(value)) {
-              callback(new Error('评分在0-1，最多保留二位小数！'))
-            } else {
-              callback()
-            }
-          } else {
-            callback()
-          }
-        }
-
-        const checkCosts = (rules, value, callback) => {
-          if (value) {
-            const regx = /^(0(\.\d{1,2})?|1(\.0{1,2})?)$/
-            if (!regx.test(value)) {
-              callback(new Error('评分在0-1，最多保留二位小数！'))
-            } else {
-              callback()
-            }
-          } else {
-            callback()
-          }
-        }*/
     const checkDisplaynetwork = (rules, value, callback) => {
 
       if (this.historyContractBtnShow) {
@@ -973,19 +915,8 @@ export default {
   ,
   methods: {
     changeDisabled(val, event) {
-      /*      if(val.dictValue=='10'){
-              this.speciallanguageOptions.forEach(item=>{
-                if (item.index < 10){
-                  item.isShow = true
-                }
-              })
-            }
-            else {
-              console.log('----')
-              this.speciallanguageOptions.forEach(item => {
-                item.isShow=false
-              })
-            }*/
+
+
 
       if (val.dictValue == '10' && event.target.checked) {
         this.speciallanguageOptions.forEach(item => {
@@ -1033,11 +964,7 @@ export default {
         } else {
           this.historyContractBtnShow = false
         }
-        /*   if(this.medicalTypeData.filter(item => {
-             return item.networktypeName == '网络医院'
-           })[0].oldChoose=='02'){
-             this.historyContractBtnShow=true
-           }*/
+
       }).catch(res => {
         }
       )
@@ -1051,9 +978,7 @@ export default {
         this.serviceForm = this.propServiceForm
       }
     },
-    /*  setHistoryContractBtnShow(){
-        this.historyContractBtnShow=this.isNetHospital
-      },*/
+
     init() {
       if (this.dictList != null && this.dictList.length != 0) {
         this.spprocurement_flagOptions = this.dictList.find(item => {
@@ -1170,15 +1095,7 @@ export default {
     changeOption(index, data) {
 
 
-      /* if(data.isCheck==true){
-         data.isCheck=false
 
-
-       }
-       else {
-         data.isCheck=true
-
-       }*/
       if (data.isCheck == '01') {
         data.isCheck = '02'
         let defaultTime = new Date()
@@ -1357,20 +1274,7 @@ export default {
 
     // 校验数据
     async validateForm() {
-      /*    let flag = null
-      if (this.saveFlag) {
-        this.$refs['serviceForm'].validate(valid => {
-          if (valid) {
-            flag = '01'
-          } else {
-            flag = '03'
-          }
-        })
 
-      } else {
-        flag = '02';
-      }
-      return flag*/
 
       //合约是否录入
 
@@ -1434,12 +1338,6 @@ export default {
 }
 
 
-/*!*修改标签页的字体*!
-/deep/ .el-tabs__item{
-  font-size: 20px ;
-  font-weight: 400;
-  color: #000000;
-}*/
 .baseInfo_class .el-tag--small {
   margin-right: 10px !important;
 }

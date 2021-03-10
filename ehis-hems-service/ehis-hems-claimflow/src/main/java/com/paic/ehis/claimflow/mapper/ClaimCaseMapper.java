@@ -1,6 +1,7 @@
 package com.paic.ehis.claimflow.mapper;
 
 
+import com.paic.ehis.claimflow.domain.BillAndPolicyDate;
 import com.paic.ehis.claimflow.domain.ClaimCase;
 import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
@@ -145,7 +146,7 @@ public interface ClaimCaseMapper
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
+    public List<ConditionsForTheAdjustmentTwoVO> selectConditionsForTheAdjustmentHang(AuditWorkPoolDTO auditWorkPoolDTO);//悬挂
 
     /**
      * 查询录入工作池处理中的案件信息，包括批次号、报案号、案件状态、被保人姓名、停留时长、提交用户
@@ -209,4 +210,16 @@ public interface ClaimCaseMapper
      *根据报案号查看当前案件是否存在借款
      */
     public int selectCaseBorrowByRptNo(String rtpNo);
+
+    /**
+     * 申诉发起 - 案件工作池
+     * @param dto
+     * @author: hjw
+     * @time : 2021-3-3
+     */
+    List<ClaimInformationVo> claimInfoList(ClaimInformationDTO dto);
+    /**
+     *根据报案号校验就诊日期（账单治疗起止日期）是否在保单有效期范围内
+     */
+    public List<BillAndPolicyDate> selectBillAndPolicyDateByRptNo(String rtpNo);
 }

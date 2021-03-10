@@ -37,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="invoiceNo"    column="invoice_no"    />
         <result property="billNo"    column="bill_no"    />
         <result property="copay"    column="copay"    />
+        <result property="billCurrency"    column="bill_currency"    />
         <result property="hosDiscountAmount"    column="hos_discount_amount"    />
         <result property="unableAmount"    column="unable_amount"    />
     </resultMap>
@@ -66,16 +67,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         cccb.cal_bill_id,
         ccb.invoice_no,
         ccb.bill_no,
-        ccb.copay,
+        ifnull(ccb.copay,0)copay,
         ccb.treatment_start_date,
         ccb.treatment_end_date,
-        ccb.bill_amount,
-        ccb.hos_discount_amount,
-        ccb.unable_amount,
-        cccb.dedu_used,
+        ifnull(ccb.bill_amount,0)bill_amount,
+        ifnull(ccb.hos_discount_amount,0)hos_discount_amount,
+        ifnull(ccb.unable_amount,0)unable_amount,
+        ccb.bill_currency,
+        ifnull(cccb.dedu_used,0)dedu_used,
         cccb.pay_amount,
-        cccb.cal_amount,
-        cccb.refused_amount,
+        ifnull(cccb.cal_amount,0)cal_amount,
+        ifnull(cccb.refused_amount,0)refused_amount,
         cccb.remark,
         cccb.pay_conclusion
         FROM
@@ -178,7 +180,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 update_time = now(),
                 <if test="item.updateBy != null">update_by = #{item.updateBy},</if>
             </trim>
-            where cal_bill_id = #{item.calBillId}
+            where cal_bill_id = #{item.calBillId} and status='Y'
         </foreach>
     </update>
 

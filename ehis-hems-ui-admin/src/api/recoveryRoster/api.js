@@ -19,6 +19,15 @@ export function editData(data) {
   })
 }
 
+// 修改后，如果5要素变动 ，则更新被保险人号
+export function checkInsuredData(data) {
+  return request({
+    url: '/policy/policyInsured/getInfoByElement',
+    method: 'post',
+    data
+  })
+}
+
 
 // 删除
 export function debtWhiteInfo(debtWhitelistId) {

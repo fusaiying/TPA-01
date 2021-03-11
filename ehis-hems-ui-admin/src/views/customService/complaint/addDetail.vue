@@ -195,6 +195,13 @@
       <span style="color: blue">服务受理信息</span>
         <el-divider/>
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="ruleForm.workOrderNo" class="item-width" clearable size="mini" disabled placeholder="系统自动生成"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
       <el-form-item label="受理渠道" prop="channelCode">
         <el-row>
             <el-radio-group v-model="ruleForm.channelCode">
@@ -451,6 +458,7 @@
             identity:"",
 
           },
+          workOrderNo:"",
           complaintTime:"",
           priorityLevel:"",//优先级
           callName:"",//来电人
@@ -610,6 +618,7 @@
              complaintAddInsert(insert).then(res => {
                if (res != null && res.code === 200) {
                  this.$message.success("保存成功")
+                 this.ruleForm.workOrderNo=res.msg;
                  if (res.rows.length <= 0) {
                    return this.$message.warning(
                      "失败！"

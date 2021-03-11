@@ -34,7 +34,7 @@
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
-                       @click="">保障查看</el-button>
+                       @click="openGuaranteee">保障查看</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistorySurvey">调查({{historySurCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
@@ -132,6 +132,10 @@
     <!-- 历史理赔 -->
     <history-claim :value="historyClaimDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
                    @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
+
+    <!-- 保障查看 -->
+    <guarantee :value="guaranteeDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
+                   @closeGuaranteeDialog="closeGuaranteeDialog"/>
     <!-- 历史协谈 -->
     <history-discussion :preHistoryData="preHistoryData" :value="historyDiscussionDialog" :fixInfo="fixInfo"
                         @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
@@ -162,6 +166,7 @@
   import historyDiscussion from './modul/historyDiscussion' //历史协谈
   import historySurvey from './modul/historySurvey' //历史调查
 
+  import guarantee from './modul/guarantee' //保障查看
   import {
     getCase,
     getBatch,
@@ -207,7 +212,8 @@
       historyClaim,
       historySurvey,
       appealInfo,
-      discussion
+      discussion,
+      guarantee
     },
     mixins: [mixinAnchor],
     computed: {
@@ -241,6 +247,7 @@
         removeDialog: false,
         appealDialog: false,
         historyClaimDialog: false,
+        guaranteeDialog: false,
         historyDiscussionDialog: false,
         historySurveyDialog: false,
         isSave: false,
@@ -798,6 +805,9 @@
       openHistoryClaim() {
         this.historyClaimDialog = true
       },
+      openGuaranteee() {
+        this.guaranteeDialog = true
+      },
       openHistorySurvey() {
         this.historySurveyDialog = true
       },
@@ -821,6 +831,9 @@
       },
       closeHistoryClaimDialog() {
         this.historyClaimDialog = false
+      },
+      closeGuaranteeDialog() {
+        this.guaranteeDialog= false
       },
       closeHistoryDiscussionDialog() {
         this.historyDiscussionDialog = false

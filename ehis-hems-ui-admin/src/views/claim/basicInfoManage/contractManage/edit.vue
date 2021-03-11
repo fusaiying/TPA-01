@@ -1199,7 +1199,19 @@
             }
           }
         } else {
-          callback();
+          if (value) {
+            if(this.providerForm.cvaliDate != '') {
+              let startTime = Date.parse(this.providerForm.cvaliDate);
+              let endTime = Date.parse(value);
+              if(startTime > endTime) {
+                callback(new Error("合约有效期结束日期错误"));
+              } else {
+                callback();
+              }
+            }
+          } else {
+            callback();
+          }
         }
       };
       const checkExpiryReason = (rule, value, callback) => {

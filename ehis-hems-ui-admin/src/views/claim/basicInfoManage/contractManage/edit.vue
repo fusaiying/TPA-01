@@ -537,7 +537,7 @@
         <el-table-column prop="supplierCode" label="供应商项目名称" align="center">
           <template slot-scope="scope">
             <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.supplierServiceName" :prop="'serverInfo.' + scope.$index + '.supplierServiceName'">
-              <el-input size="mini"   v-model="scope.row.supplierServiceName" placeholder="请输入"  ></el-input>
+              <el-input size="mini" maxlength="50"  v-model="scope.row.supplierServiceName" placeholder="请输入"  ></el-input>
             </el-form-item>
 
             <template  v-else slot-scope="scope">

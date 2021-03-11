@@ -351,7 +351,7 @@
 
           <el-col :span="24" v-if="distcoteItem">
             <el-form-item label="折扣除外项目：" prop="project">
-              <el-input :disabled="isShow" v-model="providerForm.project" class="item-width" clearable size="mini"
+              <el-input :disabled="isShow" maxlength="50" v-model="providerForm.project" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -598,7 +598,7 @@
         <el-table-column prop="limitnum" label="日限次数" style="width: 280px" align="center">
           <template slot-scope="scope" >
             <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.limitnum" :prop="'serverInfo.' + scope.$index + '.limitnum'">
-              <el-input size="mini" oninput = "value=value.replace(/[^\d]/g,'')" v-model="scope.row.limitnum" placeholder="请输入" style="width: 90px" ></el-input>
+              <el-input maxlength="10" size="mini" oninput = "value=value.replace(/[^\d]/g,'')" v-model="scope.row.limitnum" placeholder="请输入" style="width: 90px" ></el-input>
             </el-form-item>
             <span v-else>{{ scope.row.limitnum }}</span>
           </template>

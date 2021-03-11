@@ -81,12 +81,11 @@
              <el-date-picker
                v-model="searchForm.effectiveSDate"
                class="item-width" size="mini"
-               value-format="yyyy-MM-dd"
                type="daterange"
                range-separator="-"
                start-placeholder="开始日期"
                end-placeholder="结束日期"
-             ></el-date-picker>
+               value-format="yyyy-MM-dd"/>
            </el-form-item>
          </el-col>
 
@@ -2220,7 +2219,7 @@
               let effectiveArr = [];
               effectiveArr.push(detailData.cvaliDate);
               effectiveArr.push(detailData.endDate);
-              this.searchForm.effectiveSDate = effectiveArr;
+              this.$set(this.searchForm, `effectiveSDate`, effectiveArr);
               if(detailData.servcomNo != '') {
                 this.getSupplierContractListByChangeType(1);
               }

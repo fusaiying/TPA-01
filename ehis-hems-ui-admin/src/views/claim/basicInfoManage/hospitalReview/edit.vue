@@ -261,8 +261,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="状态：" prop="bussinessStatus">
-                    <el-select v-model="baseForm.bussinessStatus" class="item-width" placeholder="请选择" clearable disabled>
+                  <el-form-item label="状态：" prop="bussinessStatusTwo">
+                    <el-select v-model="baseForm.bussinessStatusTwo" class="item-width" placeholder="请选择" clearable disabled>
                       <el-option v-for="item in bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
                     </el-select>
@@ -567,9 +567,11 @@ export default {
       },
 
       baseForm: {
+        checkStatus:undefined,
         claimHospitalCode: undefined,
         interHosp: '02',
-        bussinessStatus: '01',
+        bussinessStatus:'',
+        bussinessStatusTwo: '02',
         virtualOrg: undefined,
         chname1: undefined,
         enname1: undefined,

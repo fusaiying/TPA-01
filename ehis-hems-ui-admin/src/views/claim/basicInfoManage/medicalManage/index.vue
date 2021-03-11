@@ -139,8 +139,6 @@ export default {
       this.bussiness_statusOptions = response.data;
     });
 
-
-
   },
   methods: {
     init(){

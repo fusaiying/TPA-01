@@ -157,7 +157,7 @@
       </el-row>
       <el-row>
         <el-form-item style="margin-right: 20px;" label="预约提示：" prop="appointreminders">
-          <el-input v-model="otherReserveInfoForm.appointreminders" clearable size="mini" placeholder="请输入"
+          <el-input v-model="otherReserveInfoForm.appointreminders" clearable size="mini" placeholder="请输入" maxlength="500"
           />
         </el-form-item>
       </el-row>
@@ -165,6 +165,7 @@
       <el-row>
         <el-form-item style="margin-right: 20px;" label="门诊病历提供：" prop="clinicmedicalrecord">
           <el-input
+            maxlength="500"
             type="textarea"
             placeholder="请输入内容"
             v-model="otherReserveInfoForm.clinicmedicalrecord">
@@ -175,6 +176,7 @@
         <el-form-item style="margin-right: 20px;" label="住院病历提供：" prop="medicalrecords">
           <el-input
             type="textarea"
+            maxlength="500"
             placeholder="请输入内容"
             v-model="otherReserveInfoForm.medicalrecords">
           </el-input>

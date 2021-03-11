@@ -1,0 +1,1 @@
+alter table  base_supplier_contract  modify `deposit` DECIMAL(16,2) COMMENT '押金金额';

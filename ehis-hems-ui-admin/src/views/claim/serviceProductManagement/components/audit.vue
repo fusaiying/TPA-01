@@ -38,15 +38,135 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane :label="label.label02" name="02">
-          <!--          <el-table  :data="reviewLogTableData"
-                               :header-cell-style="{color:'black',background:'#f8f8ff'}"
-                               size="small" highlight-current-row style="width: 100%;">
-                      <el-table-column key="1"  align="center" prop="updateBy" min-width="150" label="操作人" show-overflow-tooltip/>
-                      <el-table-column  key="2"  align="center" min-width="100" prop="updateTime" label="时间" show-overflow-tooltip/>
-                      <el-table-column key="3"  align="center" prop="checkResultName" label="审核结论" min-width="120" show-overflow-tooltip/>
-                      <el-table-column key="4"  align="center" prop="checkAdvice" min-width="160" label="审核意见" show-overflow-tooltip/>
-                    </el-table>-->
-          <div style="text-align: right; margin-right: 10px;">
+          <el-table  :data="reviewLogTableData"
+                     :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                     size="small" highlight-current-row style="width: 100%;">
+            <el-table-column key="1"  align="center" prop="updateBy" min-width="150" label="操作人" show-overflow-tooltip/>
+            <el-table-column  key="2"  align="center" min-width="100" prop="updateTime" label="时间" show-overflow-tooltip/>
+            <el-table-column key="3"  align="center" prop="checkResult" label="审核结论" min-width="120" :formatter="getCheckResult" show-overflow-tooltip/>
+            <el-table-column key="4"  align="center" prop="checkAdvice" min-width="160" label="审核意见" show-overflow-tooltip/>
+          </el-table>
+<!--            <div class="el-steps el-steps&#45;&#45;vertical" style="margin-left: 100px">
+              <div  class="el-step is-vertical is-flex" style="height: 70px">
+                <div class="" style="width: 200px; margin-right: 20px">
+                  {{caseInfo04.updateTime}}
+                </div>
+
+                <div :class="[caseInfo04Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+                  <div class="el-step__line" style="margin-right: 0px;">
+                    <i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; height: 100%;"></i>
+                  </div>
+
+                  <div  v-if="!ca04Active"class="el-step__icon is-text">
+                    <div class="el-step__icon-inner">产品定义</div>
+                  </div>
+                  <div v-if="ca04Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                    <div class="el-step__icon-inner" style="color: whitesmoke">产品定义</div>
+                  </div>
+
+
+                </div>
+                <div class="el-step__main">
+                  <div class=""  style="width: 100%; margin-left: 30px">
+                    <span>{{caseInfo04.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo04.historyFlag === 'N' ? '处理中' :'' }} </span>
+                    <span style="margin-left: 70px">{{caseInfo04.historyFlag === 'Y' ?  "处理人："+caseInfo04.updateBy :'' }} </span>
+                  </div>
+                  <div class="el-step__title is-finish"  style="height: 30px">
+                  </div>
+                </div>
+              </div>
+
+              <div  class="el-step is-vertical" style="height: 70px">
+                <div class="" style="width: 200px; margin-right: 20px">
+                  {{caseInfo05.updateTime}}
+                </div>
+
+                <div :class="[caseInfo05Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+                  <div class="el-step__line" style="margin-right: 0px;">
+                    <i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 1px; height: 100%;"></i>
+                  </div>
+                  <div  v-if="!ca05Active" class="el-step__icon is-text">
+                    <div class="el-step__icon-inner"> 产品审核</div>
+                  </div>
+
+                  <div v-if="ca05Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                    <div class="el-step__icon-inner" style="color: whitesmoke">产品审核</div>
+                  </div>
+                </div>
+
+                <div class="el-step__main">
+                  <div class=""  style="width: 100%; margin-left: 30px">
+                    <span>{{caseInfo05.historyFlag === 'Y' ? '已接收' :'' }} {{caseInfo05.historyFlag === 'N' ? '处理中' :'' }} </span>
+                    <span style="margin-left: 70px">{{caseInfo05.historyFlag === 'Y' ?  "处理人："+caseInfo05.updateBy :'' }} </span>
+                  </div>
+                  <div class="el-step__title is-finish">
+                  </div>
+                  <div class="el-step__description is-finish" style="height: 30px">
+                  </div>
+                </div>
+              </div>
+
+              <div  class="el-step is-vertical" style="height: 70px">
+                <div class="" style="width: 200px; margin-right: 20px">
+                  {{caseInfo06.updateTime}}
+                </div>
+                <div :class="[caseInfo06Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+                  <div class="el-step__line" style="margin-right: 0px;">
+                    <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
+                  </div>
+
+                  <div v-if="!ca06Active" class="el-step__icon is-text">
+                    <div class="el-step__icon-inner">产品复核</div>
+                  </div>
+                  <div v-if="ca06Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                    <div class="el-step__icon-inner" style="color: whitesmoke">产品复核</div>
+                  </div>
+
+                </div>
+                <div class="el-step__main">
+                  <div class=""  style="width: 100%; margin-left: 30px">
+                    <span>{{caseInfo06.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo06.historyFlag === 'N' ? '处理中' :'' }} </span>
+                    <span style="margin-left: 70px">{{caseInfo06.historyFlag === 'Y' ?  "处理人："+caseInfo06.updateBy :'' }} </span>
+                  </div>
+                  <div class="el-step__description is-finish"  style="height: 30px">
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div  class="el-step is-vertical is-flex" style="height: 70px">
+                <div class="" style="width: 200px; margin-right: 20px">
+                  {{caseInfo99.updateTime}}
+                </div>
+                <div :class="[caseInfo99Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+                  <div class="el-step__line">
+                    <i class="el-step__line-inner"></i>
+                  </div>
+
+                  <div v-if="!ca99Active" class="el-step__icon is-text">
+                    <div class="el-step__icon-inner">结束</div>
+                  </div>
+
+                  <div v-if="ca99Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                    <div class="el-step__icon-inner" style="color: whitesmoke">结束</div>
+                  </div>
+
+                </div>
+                <div class="el-step__main">
+                  <div class=""  style="width: 200px; margin-left: 20px">
+
+                  </div>
+                  <div class="el-step__description is-process"  style="height: 30px">
+                  </div>
+                </div>
+              </div>
+            </div>-->
+
+
+
+
+          <div style="text-align: right; margin-right: 10px; clear: both">
             <el-button size="mini" type="primary"  @click="goBack">关闭</el-button>
           </div>
         </el-tab-pane>
@@ -58,7 +178,7 @@
 </template>
 
 <script>
-import {insertCheckInfo} from '@/api/productManage/serviceProductManagement'
+import {insertCheckInfo,selectCheckLog} from '@/api/productManage/serviceProductManagement'
 export default {
   props:{
     productCode: String,
@@ -82,6 +202,27 @@ export default {
       }
     }
     return {
+      caseInfo04:{},
+      caseInfo05:{},
+      caseInfo06:{},
+      caseInfo07:{},
+      caseInfo08:{},
+      caseInfo99:{},
+
+      caseInfo04Css:false,
+      caseInfo05Css:false,
+      caseInfo06Css:false,
+      caseInfo07Css:false,
+      caseInfo08Css:false,
+      caseInfo99Css:false,
+
+      ca04Active:false,
+      ca05Active:false,
+      ca06Active:false,
+      ca07Active:false,
+      ca08Active:false,
+      ca99Active:false,
+      pList: [{name: 1},{name: 2},{name: 3},{name: 4},],
       reviewForm: {
         checkResult: '',
         checkAdvice: ''
@@ -103,20 +244,27 @@ export default {
     this.getDicts("product_review_result").then(response => {
       this.product_review_resultOptions = response.data;
     });
+
   },
   watch: {},
 
   methods: {
 
+
+    getCheckResult(row,index){
+        return this.selectDictLabel(this.product_review_resultOptions, row.checkResult);
+    },
     handleClick(){
-      /*if(this.activeName=='02'){
-        //历史合约的接口
-        selectCheckInfo(this.providerCode).then(res => {
-          this.reviewLogTableData = res.rows
+      if(this.activeName=='02'){
+        let query = {
+          productCode: this.productCode,
+        }
+        //审核日志的接口
+        selectCheckLog(query).then(res => {
+          this.reviewLogTableData = res.data
         }).catch(res => {
         })
-      }*/
-
+      }
     },
 
     goBack(){
@@ -186,5 +334,46 @@ export default {
 .item-width {
   width: 220px;
 }
+.active {
+  padding-top: 49px
+}
+.a .el-step__icon-inner ::after{
+  content: '全选';
+}
+::v-deep .el-step__icon-inner ::after {
+  content: '全选';
+  position: absolute;
+  font-weight: bolder;
+  margin-left: 5px;
+}
+/deep/ .el-step__icon {
+  position: relative;
+  z-index: 1;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  -webkit-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+}
+
+/deep/ .el-step.is-vertical .el-step__line {
+  width: 2px;
+  top: 0;
+  bottom: 0;
+  left: 17px;
+}
+
 
 </style>

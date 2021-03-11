@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.paic.ehis.cs.domain.QualityInspectionItem;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 
 /**
  * 质检项目 Service接口
@@ -65,7 +66,7 @@ public interface IQualityInspectionItemService
      * @param ids
      * @return
      */
-    int insertItem(String[] ids, Map<String,String> param);
+    int insertItem(QualityVo qualityVo);
 
     /**
      * 质检差错查询反显数据

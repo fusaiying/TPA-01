@@ -22,6 +22,15 @@ public class CaseDispatchVO extends BaseEntity {
      */
     private String batchNo;
 
+    private String  batchStatus;
+
+    /*** 退回受理标识 */
+    private String  backAccept;
+
+    /*** 退回审核标识 */
+    private String  backReview;
+
+
     /**
      * 报案号
      */

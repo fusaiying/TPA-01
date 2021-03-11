@@ -18,13 +18,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="chname" label="供应商中文名称：">
-              <el-input v-model="supplier.chname" maxlength="200" :placeholder="placeType2" class="item-width"
+              <el-input v-model="supplier.chname" maxlength="30" :placeholder="placeType2" class="item-width"
                         clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="enname" label="供应商英文名称：">
-              <el-input v-model="supplier.enname" maxlength="200" class="item-width" :placeholder="placeType2"
+              <el-input v-model="supplier.enname" maxlength="30" class="item-width" :placeholder="placeType2"
                         clearable/>
             </el-form-item>
           </el-col>
@@ -158,7 +158,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.name'"
                             :rules="constactRules.name">
-                <el-input v-model="scope.row.name" placeholder="请输入" size="mini"/>
+                <el-input v-model="scope.row.name" placeholder="请输入" size="mini" maxlength="20"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{scope.row.name}}</span>
             </template>
@@ -1042,6 +1042,18 @@
                     showClose: true
                   })
                 }
+                //查询联系人信息
+                const query = {
+                  supplierCode: this.supplier.serialNo
+                }
+                listContacts(query).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.contactForm.contacts = res.rows
+                    this.contactForm.contacts.forEach(item => {
+                      item.isShow = false
+                    })
+                  }
+                })
               }).catch(res => {
                 this.$message.error('保存失败！')
               })
@@ -1093,6 +1105,17 @@
                         type: 'success',
                         center: true,
                         showClose: true
+                      })
+                      //查询账户信息
+                      const query2 = {
+                        providerCode: this.supplier.serialNo
+                      }
+                      listBank(query2).then(res => {
+                        this.accountForm.account = res.rows
+                        this.accountForm.account.forEach(item => {
+                          item.isShow = false
+                          item.accountFlag = item.accountNo
+                        })
                       })
                     }
                   }).catch(res => {
@@ -1239,6 +1262,7 @@
                                 this.ennameFlag = this.supplier.enname
                                 this.chnameFlag = this.supplier.chname
                                 this.supplier.serialNo = res.data.serialNo
+                                this.initSearch(this.supplier.serialNo)
                               } else {
                                 this.$message.error(
                                   "保存提交失败!"

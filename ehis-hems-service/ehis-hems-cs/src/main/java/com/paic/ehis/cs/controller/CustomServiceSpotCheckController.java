@@ -12,10 +12,7 @@ import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityVo;
-import com.paic.ehis.cs.domain.vo.WorkOrderVo;
+import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,22 +202,15 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     /**
      * 新增质检项目
-     * @param sendIds
+     * @param qualityVo
      * @return
      */
 //    @PreAuthorize("@ss.hasPermi('system:handle:add')")
     @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
     @PostMapping("/insertItem")
-    public AjaxResult insertItem(@RequestBody String[] sendIds)
+    public AjaxResult insertItem(@RequestBody QualityVo qualityVo)
     {
-        Map<String,String> param=new HashMap<>();
-
-        //操作前主流程状态
-        param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
-        //param.put("inspectionId",);
-        //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
-        return toAjax(qualityInspectionItemService.insertItem(sendIds,param));
+        return toAjax(qualityInspectionItemService.insertItem(qualityVo));
     }
 
     //************************************************************************************
@@ -292,7 +282,7 @@ public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
 public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
 {
     startPage();
-    List<QualityVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+    List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
     return getDataTable(list);
 }
 }

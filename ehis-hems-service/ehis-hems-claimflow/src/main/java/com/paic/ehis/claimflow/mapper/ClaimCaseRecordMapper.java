@@ -186,7 +186,6 @@ public interface ClaimCaseRecordMapper
     * @Parm [claimCaseRecord]
     * @return int
     **/
-    
     public int updateRecordHistoricalState(ClaimCaseRecord claimCaseRecord);
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);

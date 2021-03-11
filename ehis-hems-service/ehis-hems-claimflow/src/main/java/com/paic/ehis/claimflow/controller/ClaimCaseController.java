@@ -6,9 +6,6 @@ import com.paic.ehis.claimflow.domain.dto.*;
 import com.paic.ehis.claimflow.domain.vo.*;
 import com.paic.ehis.claimflow.service.*;
 import com.paic.ehis.common.core.enums.ClaimStatus;
-import com.paic.ehis.common.core.utils.DateUtils;
-import com.paic.ehis.common.core.utils.PubFun;
-import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -23,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -440,8 +435,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseCheck")
     public AjaxResult editCaseCheck(@RequestBody ClaimCase claimCase) {
-        claimCaseService.editCaseCheck(claimCase);
-        return AjaxResult.success();
+
+        return AjaxResult.success(claimCaseService.editCaseCheck(claimCase));
     }
 
     /**
@@ -452,8 +447,8 @@ public class ClaimCaseController extends BaseController {
     @Log(title = "案件信息 ", businessType = BusinessType.UPDATE)
     @PostMapping("/editCaseCheckBack")
     public AjaxResult editCaseCheckBack(@RequestBody ClaimCase claimCase) {
-        claimCaseService.editCaseCheckBack(claimCase);
-        return AjaxResult.success();
+
+        return AjaxResult.success(claimCaseService.editCaseCheckBack(claimCase));
     }
 
     /**
@@ -464,8 +459,8 @@ public class ClaimCaseController extends BaseController {
     public TableDataInfo caseCheck(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
         auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
         startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVOS);
+        TableDataInfo tableDataInfo = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
+        return tableDataInfo;
     }
 
 
@@ -476,19 +471,26 @@ public class ClaimCaseController extends BaseController {
     public void exportcaseCheck(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
         String utf8Name = new String(auditWorkPoolDTO.getName().getBytes("UTF-8"));
         auditWorkPoolDTO.setName(utf8Name);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
+        TableDataInfo tableDataInfo = claimCaseService.SelectConditionsForTheAdjustmentUnderCase(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentVO.class);
+
         ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
-        util.exportExcel(response, conditionsForTheAdjustmentVOS, "处理中审核案件");
+        util.exportExcel(response, conditionsForTheAdjustmentVoS, "处理中案件抽检");
     }
 
     //抽检工作池接口-个人池已处理
 //    @PreAuthorize("@ss.hasPermi('system:product:list')")
     @PostMapping("/listConditionsForTheAdjustmentOverNew")
     public TableDataInfo listConditionsForTheAdjustmentOverNew(@RequestBody AuditWorkPoolDTO auditWorkPoolDTO) {
-        auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
-        startPage(auditWorkPoolDTO);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
-        return getDataTable(conditionsForTheAdjustmentVOS);
+        if (StringUtils.isNotEmpty(auditWorkPoolDTO.getOrderByColumn())) {
+            auditWorkPoolDTO.setOrderByColumn(StringUtils.humpToLine(auditWorkPoolDTO.getOrderByColumn()));
+        } else {
+            auditWorkPoolDTO.setOrderByColumn("updateTime");
+            auditWorkPoolDTO.setIsAsc("desc");
+        }
+        auditWorkPoolDTO.setFlag(false);
+        // startPage(auditWorkPoolDTO);
+        return claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
     }
 
     //抽检工作池接口-导出已处理清单
@@ -498,9 +500,11 @@ public class ClaimCaseController extends BaseController {
     public void exportcaseCheckOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
         String utf8Name = new String(auditWorkPoolDTO.getName().getBytes("UTF-8"));
         auditWorkPoolDTO.setName(utf8Name);
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
-        ExcelUtil<ConditionsForTheAdjustmentVO> util = new ExcelUtil<ConditionsForTheAdjustmentVO>(ConditionsForTheAdjustmentVO.class);
-        util.exportExcel(response, conditionsForTheAdjustmentVOS, "已处理抽检案件");
+        auditWorkPoolDTO.setFlag(true);
+        TableDataInfo tableDataInfo = claimCaseService.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
+        List<ConditionsForTheAdjustmentTwoVO> conditionsForTheAdjustmentVoS = JSON.parseArray(JSON.toJSONString(tableDataInfo.getRows()), ConditionsForTheAdjustmentTwoVO.class);
+        ExcelUtil<ConditionsForTheAdjustmentTwoVO> util = new ExcelUtil<ConditionsForTheAdjustmentTwoVO>(ConditionsForTheAdjustmentTwoVO.class);
+        util.exportExcel(response, conditionsForTheAdjustmentVoS, "已处理案件抽检");
     }
 
 

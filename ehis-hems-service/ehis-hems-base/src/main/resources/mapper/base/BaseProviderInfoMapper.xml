@@ -463,7 +463,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bussinessStatus != null and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
           <!--  <if test="bussinessStatus == '05'"> and a.bussiness_status in ('06','07')</if>-->
             <if test="orgFlag != null  and orgFlag != ''"> and a.org_flag = #{orgFlag}</if>
-            and status ='Y' and bussiness_status in ('01','03','04','06','07') and update_flag = '0'order by create_time desc
+            and status ='Y' and bussiness_status in ('01','03','04','05') and update_flag = '0'order by create_time desc
         </where>
     </select>
 
@@ -872,8 +872,8 @@ WHERE
 
 
     <update id="updateBaseProviderInfoStatus" parameterType="String">
-        update base_provider_info_bak set bussiness_status = '01'
-        where provider_code = #{providerCode} and update_flag = '0' and bussiness_status = '02'
+        update base_provider_info_bak set bussiness_status = '05'
+        where provider_code = #{providerCode} and update_flag = '0'
     </update>
 
     <update id="updateBaseProviderInfoByCode" parameterType="BaseProviderInfo">

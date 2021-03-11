@@ -123,7 +123,7 @@ public interface BaseProviderInfoMapper
     /**
      * 医院状态修改成有效
      */
-   public int updateBaseProviderInfoByproviderCode(ProviderInfoVo providerInfoVo);
+   public int updateBaseProviderInfoByproviderCode(String providerCode);
 
     /**
      * 医院状态修改成无效

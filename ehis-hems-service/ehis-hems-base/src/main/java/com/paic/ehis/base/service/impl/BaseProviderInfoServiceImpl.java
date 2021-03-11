@@ -454,7 +454,7 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
         String providerCode = providerInfoVo.getProviderCode();
         if("01".equals(providerInfoVo.getCheckResult())){//审核通过
             //备份表中的数据修改状态
-            baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerInfoVo);
+            //baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerCode);
             //数据挪到正式表中
             this.insertBaseProviderInfoNew(providerCode);
             baseProviderServiceService.insertBaseProviderServiceNew(providerCode);
@@ -465,13 +465,13 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
             baseSupplierContractService.insertBaseSupplierContractNew(providerCode);
         }else if("02".equals(providerInfoVo.getCheckResult())){ //审核拒绝，审核状态改成新建状态
             //备份表中的数据修改状态
-            /*//baseProviderInfoMapper.updateBaseProviderInfoStatus(providerCode);
-            if("03".equals(providerInfoVo.getBussinessStatus())){//有效
+            baseProviderInfoMapper.updateBaseProviderInfoStatus(providerCode);
+            /*if("03".equals(providerInfoVo.getBussinessStatus())){//有效
                 providerInfoVo.setBussinessStatus("06");
             }else if("04".equals(providerInfoVo.getBussinessStatus())){
                 providerInfoVo.setBussinessStatus("07");
             }*/
-            baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerInfoVo);
+            //baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerCode);
         }
         //审核表里增加数据
         BaseCheckInfo baseCheckInfo = new BaseCheckInfo();

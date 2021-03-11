@@ -729,7 +729,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
             map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
-            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+            VoUtils voUtils=new VoUtils<ReservationDealVo>();
             reservationDealVo= (ReservationDealVo) voUtils.fromVoToVo(reservationDealVo,map,workHandleInfo);
         }
         return reservationDealVo;

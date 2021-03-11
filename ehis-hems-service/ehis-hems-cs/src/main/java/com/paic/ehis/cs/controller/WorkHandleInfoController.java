@@ -111,9 +111,9 @@ public class WorkHandleInfoController extends BaseController
     public AjaxResult selectDealVo(WorkOrderAccept workOrderAccept) {
         String workOrderNo=workOrderAccept.getWorkOrderNo();
         String businessType=workOrderAccept.getBusinessType();
-        if (businessType=="01"){
+        if (businessType.equals("01")){
             return AjaxResult.success(workHandleInfoService.selectServiceProcessingVo(workOrderNo));
-        }else if (businessType=="02"){
+        }else if (businessType.equals("02")){
             return AjaxResult.success(workHandleInfoService.selectReservationDealVoByNo(workOrderNo));
         }else{
             return AjaxResult.success(workHandleInfoService.selectWorkHandleInfoByNo(workOrderNo));

@@ -549,7 +549,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="是否需要担保函：" prop="closeType">
+            <el-form-item label="是否需要担保函：" prop="costsIncurred">
               <el-select v-model="submitForm.costIncurred" class="item-width" placeholder="请选择"
                          controls-position="right" :min="0">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
@@ -620,6 +620,8 @@ import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {complainSearchServer} from '@/api/customService/complaint';
+
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -732,6 +734,7 @@ export default {
         workOrderNo: "",
         policyNo: "",
         policyItemNo: "",
+        businessType:"02",
         status: "",
         pageNum: 1,
         pageSize: 10
@@ -792,6 +795,8 @@ export default {
     this.searchHandle()
     this.searchFlowLog()
     this.searchHCS()
+    this.searchHandleServer()
+
     // this.getDicts("sys_oper_type").then(response => {
     //   this.states = response.data;
     //   console.log("response:",response)
@@ -863,6 +868,26 @@ export default {
         this.$refs.modifyDetails.queryParams.workOrderNo = this.queryParams.workOrderNo;
       this.$refs.modifyDetails.open()
       ;
+    },
+    //反显暂存信息
+    searchHandleServer() {
+      let insert=this.queryParams
+      insert.businessType = "02"
+      complainSearchServer(insert).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("预约页面server反显数据",res.data)
+
+          this.submitForm = res.data;
+          console.log(this.submitForm,"85848541484848")
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
     },
     //新增按钮
     submit() {

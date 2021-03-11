@@ -205,22 +205,15 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     /**
      * 新增质检项目
-     * @param sendIds
+     * @param qualityVo
      * @return
      */
 //    @PreAuthorize("@ss.hasPermi('system:handle:add')")
     @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
     @PostMapping("/insertItem")
-    public AjaxResult insertItem(@RequestBody String[] sendIds)
+    public AjaxResult insertItem(@RequestBody QualityVo qualityVo)
     {
-        Map<String,String> param=new HashMap<>();
-
-        //操作前主流程状态
-        param.put("linkCode",CodeEnum.LINK_CODE_09.getCode());
-        //param.put("inspectionId",);
-        //操作按钮代码
-        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
-        return toAjax(qualityInspectionItemService.insertItem(sendIds,param));
+        return toAjax(qualityInspectionItemService.insertItem(qualityVo));
     }
 
     //************************************************************************************

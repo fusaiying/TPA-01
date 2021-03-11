@@ -18,13 +18,13 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="chname" label="供应商中文名称：">
-              <el-input v-model="supplier.chname" maxlength="200" :placeholder="placeType2" class="item-width"
+              <el-input v-model="supplier.chname" maxlength="30" :placeholder="placeType2" class="item-width"
                         clearable/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="enname" label="供应商英文名称：">
-              <el-input v-model="supplier.enname" maxlength="200" class="item-width" :placeholder="placeType2"
+              <el-input v-model="supplier.enname" maxlength="30" class="item-width" :placeholder="placeType2"
                         clearable/>
             </el-form-item>
           </el-col>
@@ -158,7 +158,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.name'"
                             :rules="constactRules.name">
-                <el-input v-model="scope.row.name" placeholder="请输入" size="mini"/>
+                <el-input v-model="scope.row.name" placeholder="请输入" size="mini" maxlength="20"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{scope.row.name}}</span>
             </template>

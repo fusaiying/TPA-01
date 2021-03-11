@@ -204,23 +204,29 @@
         title="工作流监控"
         width="50%">
         <div class="el-steps el-steps--vertical" style="margin-left: 100px">
-          <div  class="el-step is-vertical" style="height: 70px">
+          <div  class="el-step is-vertical is-flex" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-              2019-10-25  09 : 10 : 30
+              {{caseInfo04.updateTime}}
             </div>
-            <div class="el-step__head is-finish">
+
+            <div :class="[caseInfo04Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; height: 100%;"></i>
               </div>
-              <div class="el-step__icon is-text">
-                <div class="el-step__icon-inner">
-                  交单
-                </div>
+
+              <div  v-if="!ca04Active"class="el-step__icon is-text">
+                <div class="el-step__icon-inner">交单</div>
               </div>
+              <div v-if="ca04Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">交单</div>
+              </div>
+
+
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+                <span>{{caseInfo04.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo04.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{caseInfo04.historyFlag === 'Y' ?  "处理人："+caseInfo04.updateBy :'' }} </span>
               </div>
               <div class="el-step__title is-finish"  style="height: 30px">
               </div>
@@ -229,22 +235,26 @@
 
           <div  class="el-step is-vertical" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-              2019-10-25  09 : 10 : 30
+              {{caseInfo05.updateTime}}
             </div>
-            <div class="el-step__head is-finish">
+
+            <div :class="[caseInfo05Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 1px; height: 100%;"></i>
               </div>
-              <div class="el-step__icon is-text">
-                <div class="el-step__icon-inner">
-                  受理
-                </div>
+              <div  v-if="!ca05Active" class="el-step__icon is-text">
+                <div class="el-step__icon-inner"> 受理</div>
+              </div>
+
+              <div v-if="ca05Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">受理</div>
               </div>
             </div>
 
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+                <span>{{caseInfo05.historyFlag === 'Y' ? '已接收' :'' }} {{caseInfo05.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{caseInfo05.historyFlag === 'Y' ?  "处理人："+caseInfo05.updateBy :'' }} </span>
               </div>
               <div class="el-step__title is-finish">
               </div>
@@ -255,45 +265,52 @@
 
           <div  class="el-step is-vertical" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-              2019-10-25  09 : 10 : 30
+              {{caseInfo06.updateTime}}
             </div>
-            <div class="el-step__head is-finish">
+            <div :class="[caseInfo06Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
               </div>
-              <div class="el-step__icon is-text">
-                <div class="el-step__icon-inner">
-                  录入
-                </div>
+
+              <div v-if="!ca06Active" class="el-step__icon is-text">
+                <div class="el-step__icon-inner">录入</div>
               </div>
+              <div v-if="ca06Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">录入</div>
+              </div>
+
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>已完成</span>  <span style="margin-left: 70px">处理人：lixiaolong </span>
+                <span>{{caseInfo06.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo06.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{caseInfo06.historyFlag === 'Y' ?  "处理人："+caseInfo06.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-finish"  style="height: 30px">
               </div>
             </div>
           </div>
 
-
           <div  class="el-step is-vertical" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-              2019-10-25  09 : 10 : 30
+              {{caseInfo07.updateTime}}
             </div>
-            <div class="el-step__head is-finish">
+            <div :class="[caseInfo07Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
               </div>
-              <div class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">
-                  理算审核
-                </div>
+
+              <div v-if="!ca04Active" class="el-step__icon is-text">
+                <div class="el-step__icon-inner">理算审核</div>
               </div>
+              <div v-if="ca04Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">理算审核</div>
+              </div>
+
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                处理中
+                <span>{{caseInfo07.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo07.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{caseInfo07.historyFlag === 'Y' ?  "处理人："+caseInfo07.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-finish"  style="height: 30px">
               </div>
@@ -302,21 +319,24 @@
 
           <div  class="el-step is-vertical is-flex" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-
+              {{caseInfo08.updateTime}}
             </div>
-            <div class="el-step__head is-process">
+            <div :class="[caseInfo08Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line">
                 <i class="el-step__line-inner"></i>
               </div>
-              <div class="el-step__icon is-text">
-                <div class="el-step__icon-inner">
-                  抽检
-                </div>
+
+              <div v-if="!ca08Active" class="el-step__icon is-text">
+                <div class="el-step__icon-inner">抽检</div>
+              </div>
+              <div v-if="ca08Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">抽检</div>
               </div>
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                待处理
+                <span>{{caseInfo08.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo08.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{caseInfo08.historyFlag === 'Y' ?  "处理人："+caseInfo08.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-process"  style="height: 30px">
               </div>
@@ -325,17 +345,21 @@
 
           <div  class="el-step is-vertical is-flex" style="height: 70px">
             <div class="" style="width: 200px; margin-right: 20px">
-
+              {{caseInfo99.updateTime}}
             </div>
-            <div class="el-step__head is-process">
+            <div :class="[caseInfo99Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line">
                 <i class="el-step__line-inner"></i>
               </div>
-              <div class="el-step__icon is-text">
-                <div class="el-step__icon-inner">
-                  结束
-                </div>
+
+              <div v-if="!ca99Active" class="el-step__icon is-text">
+                <div class="el-step__icon-inner">结束</div>
               </div>
+
+              <div v-if="ca99Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+                <div class="el-step__icon-inner" style="color: whitesmoke">结束</div>
+              </div>
+
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 200px; margin-left: 20px">
@@ -361,13 +385,12 @@
     , dispatchUpdate
     , getIssuingcompanyList
     , roleInfo
-    , logInfo
+    , selectWorkflow
   } from '@/api/dispatch/api'
   import moment from "moment";
 
   export default {
     components: {
-      /*discussionSurvey*/
     },
     data() {
       return {
@@ -413,6 +436,27 @@
         uncheckArra: new Array(),
         checkSelection: [],
         userNameValue: '',
+        //'04','05','06','07','08','99'
+        caseInfo04:{},
+        caseInfo05:{},
+        caseInfo06:{},
+        caseInfo07:{},
+        caseInfo08:{},
+        caseInfo99:{},
+
+        caseInfo04Css:false,
+        caseInfo05Css:false,
+        caseInfo06Css:false,
+        caseInfo07Css:false,
+        caseInfo08Css:false,
+        caseInfo99Css:false,
+
+        ca04Active:false,
+        ca05Active:false,
+        ca06Active:false,
+        ca07Active:false,
+        ca08Active:false,
+        ca99Active:false,
       }
     },
     mounted() {
@@ -627,6 +671,83 @@
         this.gettableData();
       },
       viewStream(row) {
+   // '04','05','06','07','08','99'
+        const params = {
+          rptNo: row.rptNo,
+          orderByColumn: 'create_time',
+          isAsc: 'asc'
+        };
+
+        selectWorkflow(params).then(response => {
+          if(response.code === 200 && response.data) {
+            for(let i=0; i<response.data.length; i++) {
+              let result = response.data[i];
+              let caseStatus= result.operation;
+              let historyFlag= result.historyFlag;
+              if(caseStatus === '04') {
+                this.caseInfo04Css = true;
+                this.caseInfo04= result;
+                this.ca04Active = historyFlag ===  'N';
+              }
+              if(caseStatus === '05') {
+                this.caseInfo05Css = true;
+                this.caseInfo05= result;
+                this.ca05Active = historyFlag ===  'N';
+              }
+              if(caseStatus === '06') {
+                this.caseInfo06Css = true;
+                this.caseInfo06= result;
+                this.ca06Active = historyFlag ===  'N';
+              }
+              if(caseStatus === '07') {
+                this.caseInfo07Css = true;
+                this.caseInfo07= result;
+                this.ca07Active = historyFlag ===  'N';
+              }
+              if(caseStatus === '08') {
+                this.caseInfo08Css = true;
+                this.caseInfo08= result;
+                this.ca08Active = historyFlag ===  'N';
+              }
+              if(caseStatus === '99') {
+                this.caseInfo99Css = true;
+                this.caseInfo99= result;
+                this.ca99Active = historyFlag ===  'N';
+              }
+              // switch (caseStatus) {
+              //   case '04':
+              //     this.caseInfo04Css = true;
+              //     this.caseInfo04= result;
+              //     break;
+              //   case '05':
+              //     this.caseInfo05Css = true;
+              //     this.caseInfo05= result;
+              //     break;
+              //   case '06':
+              //     this.caseInfo06Css = true;
+              //     this.caseInfo06= result;
+              //     break;
+              //   case '07':
+              //     this.caseInfo07Css = true;
+              //     this.caseInfo07= result;
+              //     break;
+              //   case '08':
+              //     this.caseInfo08Css = true;
+              //     this.caseInfo08= result;
+              //     break;
+              //   case '99':
+              //     this.caseInfo99Css = true;
+              //     this.caseInfo99= result;
+              //     break;
+              //   default:
+              //     break;
+              // }
+            }
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+
         this.dialogVisibleStream = true;
       },
       claimDispatch() {
@@ -684,6 +805,27 @@
         this.dialogVisible = false;
       },
       handleCloseStream() {
+        this.caseInfo04 = {} ;
+        this.caseInfo05 = {} ;
+        this.caseInfo06 = {} ;
+        this.caseInfo07 = {} ;
+        this.caseInfo08 = {} ;
+        this.caseInfo99 = {} ;
+
+        this.caseInfo04Css = false ;
+        this.caseInfo05Css = false ;
+        this.caseInfo06Css = false ;
+        this.caseInfo07Css = false ;
+        this.caseInfo08Css = false ;
+        this.caseInfo99Css = false ;
+
+        this.ca04Active= false ;
+        this.ca05Active= false ;
+        this.ca06Active= false ;
+        this.ca07Active= false ;
+        this.ca08Active= false ;
+        this.ca99Active= false ;
+
         this.dialogVisibleStream = false;
       },
       checkPermit() {

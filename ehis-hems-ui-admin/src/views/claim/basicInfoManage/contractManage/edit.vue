@@ -17,7 +17,7 @@
         </el-form>
       </div>
 
-     <el-form ref="searchForm" :model="searchForm" v-if="formTab" style="padding-bottom: 30px;margin-top:20px" label-width="130px" :rules="rules"
+       <el-form ref="searchForm" :model="searchForm" v-if="formTab" style="padding-bottom: 30px;margin-top:20px" label-width="130px" :rules="rules"
                label-position="right" size="mini">
         <el-row>
           <el-form-item label="conSerId："  v-if="false" prop="conSerId" key="hospContractCode1">
@@ -1952,77 +1952,98 @@
           if(this.pageOpe == 'add') {
             this.fsSub = false;
           }
-          this.$refs.searchForm.validate((valid) => {
-            if (valid) {
 
-              if(this.baseFomrmSub == false) {
-                  this.$message({
-                    message: '请至少添加一条供应商服务项目！',
-                    type: 'warning'
-                  });
-                this.fsSub = true;
+          this.$refs.serverForm.validate((valid) => {
+            if (valid) {
+              let listDta = this.serverForm.serverInfo;
+              if(listDta.length === 0) {
+                this.$message({
+                  message: '请至少添加一条供应商服务项目！',
+                  type: 'warning'
+                });
                 return false;
               }
+              this.$refs.searchForm.validate((valid) => {
+                if (valid) {
 
-              let baseSupplierContract = {
-                contractNo : this.searchForm.contractNo,
-                servcomNo : this.searchForm.servcomNo,
-                contractName : this.searchForm.contractName ,
-                contractType : this.searchForm.contractType ,
-                contracttermType : this.searchForm.contracttermType ,
-                cvaliDate : this.searchForm.effectiveSDate[0] ,
-                endDate :this.searchForm.effectiveSDate[1] ,
-                expiryDate  : this.searchForm.expiryDate  ,
-                contractadvance : this.searchForm.contractadvance ,
-                remark : this.searchForm.remark ,
-                contractsort : this.searchForm.contractsort ,
-                bussinessStatus: this.searchForm.bussinessStatus,
-                flag:'01',
-                hospContractCode:'01',
-                conSerId : this.searchForm.conSerId
-              };
-              if(this.pageOpe == 'add' && !this.serverInfoSave) {
-                addSupplierContract(baseSupplierContract).then(res => {
-                  if (res != null && res.code === 200) {
-                    this.queryContractNo = res.data.contractNo;
-                    this.searchForm.contractNo = res.data.contractNo;
-                    this.searchForm.contractName = res.data.contractName;
-                    this.baseFomrmSub = true;
-                    this.serverInfoSave = true;
+                  if(this.baseFomrmSub == false) {
                     this.$message({
-                      message: '保存成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
+                      message: '请至少添加一条供应商服务项目！',
+                      type: 'warning'
                     });
-                    this.getSupplierContractListByChangeType(1);
-                  } else {
                     this.fsSub = true;
-                    this.$message.error('保存失败！')
+                    return false;
                   }
-                })
-              } else {
-                updateSupplierContract(baseSupplierContract).then(res => {
-                  if (res != null && res.code === 200) {
-                    this.searchForm.contractName = res.data.contractName;
-                    this.$message({
-                      message: '更新成功！',
-                      type: 'success',
-                      center: true,
-                      showClose: true
-                    });
-                    this.getSupplierContractListByChangeType(1)
+
+                  let baseSupplierContract = {
+                    contractNo : this.searchForm.contractNo,
+                    servcomNo : this.searchForm.servcomNo,
+                    contractName : this.searchForm.contractName ,
+                    contractType : this.searchForm.contractType ,
+                    contracttermType : this.searchForm.contracttermType ,
+                    cvaliDate : this.searchForm.effectiveSDate[0] ,
+                    endDate :this.searchForm.effectiveSDate[1] ,
+                    expiryDate  : this.searchForm.expiryDate  ,
+                    contractadvance : this.searchForm.contractadvance ,
+                    remark : this.searchForm.remark ,
+                    contractsort : this.searchForm.contractsort ,
+                    bussinessStatus: this.searchForm.bussinessStatus,
+                    flag:'01',
+                    hospContractCode:'01',
+                    conSerId : this.searchForm.conSerId
+                  };
+                  if(this.pageOpe == 'add' && !this.serverInfoSave) {
+                    addSupplierContract(baseSupplierContract).then(res => {
+                      if (res != null && res.code === 200) {
+                        this.queryContractNo = res.data.contractNo;
+                        this.searchForm.contractNo = res.data.contractNo;
+                        this.searchForm.contractName = res.data.contractName;
+                        this.baseFomrmSub = true;
+                        this.serverInfoSave = true;
+                        this.$message({
+                          message: '保存成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        });
+                        this.saveSupplier(listDta)
+                        this.getSupplierContractListByChangeType(1);
+                      } else {
+                        this.fsSub = true;
+                        this.$message.error('保存失败！')
+                      }
+                    })
                   } else {
-                    this.$message.error('更新失败！')
+                    updateSupplierContract(baseSupplierContract).then(res => {
+                      if (res != null && res.code === 200) {
+                        this.searchForm.contractName = res.data.contractName;
+                        this.$message({
+                          message: '更新成功！',
+                          type: 'success',
+                          center: true,
+                          showClose: true
+                        });
+                        this.saveSupplier(listDta)
+                        this.getSupplierContractListByChangeType(1)
+                      } else {
+                        this.$message.error('更新失败！')
+                      }
+                    })
                   }
-                })
-              }
+
+                } else {
+                  this.fsSub = true;
+                  return false
+                }
+              })
 
             } else {
-              this.fsSub = true;
+
               return false
             }
           })
+
+
         }
         // 服务机构表单提交
         else {
@@ -2471,6 +2492,18 @@
         row.editing = false;
         this.prevValue = JSON.parse(JSON.stringify(row));
       },
+      saveSupplier(listDta){
+        addContractServer(listDta).then(response => {
+          // console.log(response)
+          if(response.code == '200') {
+            this.baseFomrmSub = true;
+            this.getData();
+          } else {
+          }
+        }).catch(error => {
+          console.log(error);
+        })
+      }
     }
   }
 </script>

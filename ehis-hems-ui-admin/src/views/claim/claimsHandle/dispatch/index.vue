@@ -209,7 +209,7 @@
           <!--  C04        -->
           <div v-for="(item,index) in caseInfo04List"  class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
 
             <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
@@ -238,7 +238,7 @@
           <!--  C05        -->
           <div v-for="(item,index) in caseInfo05List" class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
 
             <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
@@ -269,7 +269,7 @@
           <!--  C06        -->
           <div v-for="(item,index) in caseInfo06List" class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
             <div :class="[item.historyFlag === 'Y'  ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
@@ -297,7 +297,7 @@
           <!--  C07         -->
           <div v-for="(item,index) in caseInfo07List"  class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
             <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
@@ -325,7 +325,7 @@
           <!--  C08        -->
           <div  v-for="(item,index) in caseInfo08List" class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
             <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line">
@@ -352,7 +352,7 @@
           <!--  C99        -->
           <div v-for="(item,index) in caseInfo99List" class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{item.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
 
             <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >

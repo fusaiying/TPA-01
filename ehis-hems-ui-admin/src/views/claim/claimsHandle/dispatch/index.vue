@@ -141,7 +141,7 @@
           <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center"
                            show-overflow-tooltip/>
           <el-table-column prop="operator" label="操作人" align="center" show-overflow-tooltip/>
-          <el-table-column label="操作" align="center" style="padding-top: 0px;">
+          <el-table-column fixed="right" label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;" @click="viewStream(scope.row)">
                 工作流查看

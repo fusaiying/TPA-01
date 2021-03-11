@@ -597,6 +597,8 @@ import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
+import {complainSearchServer} from '@/api/customService/complaint';
+
 
 let dictss = [
   {dictType: 'cs_channel'},
@@ -780,6 +782,7 @@ export default {
     //window.aaa = this;
     this.searchHandle()
     this.searchFlowLog()
+    this.searchHandleServer()
     this.searchHCS()
     this.getDicts("cs_action_type").then(response => {
       this.cs_action_type = response.data;
@@ -883,6 +886,24 @@ export default {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows[0]
           this.totalCount = res.total
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+              "未查询到数据！"
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
+    },
+    //反显暂存信息
+    searchHandleServer() {
+      let insert = this.queryParams
+      insert.businessType = "01"
+      complainSearchServer(insert).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("信息需求页面server反显数据",res.data)
+          this.ruleForm = res.data;
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"

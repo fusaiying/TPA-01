@@ -365,6 +365,9 @@
         <result property="source"    column="source"    />
         <result property="policyNo"    column="policy_no"    />
         <result property="monitoringTime"    column="monitoring_time"    />
+        <result property="batchStatus"    column="batch_status"    />
+        <result property="backAccept"    column="back_accept"    />
+        <result property="backReview"    column="back_review"    />
     </resultMap>
     <select id="selectCaseDispatchList" parameterType="com.paic.ehis.claimflow.domain.dto.DispatchDTO" resultMap="CaseDispatchVO">
       /*  SELECT cc.rpt_no,cc.case_status,ccr.create_by,cci.id_no,cc.update_by  operator,cb.claim_type,cb.source,ccp.company_name,ccp.company_code,ccp.name,cb.submit_date,
@@ -384,6 +387,7 @@
                         SELECT
                         cc.rpt_no,
                         cc.case_status,
+                        cb.batch_status ,
                         ccr.create_by,
                         -- cci.id_no,
                         (select cci.id_no from claim_case_insured cci where  cc.rpt_no = cci.rpt_no AND cci. STATUS = 'Y' limit 1) id_no,
@@ -415,8 +419,10 @@
                         ) % 60,
                         '分'
                         ) monitoring_time,
-                        cc.create_time
-                  FROM claim_case cc
+                        cc.create_time ,
+                        case  when  cc.case_status = '05' and (select count(1) from claim_case_record where rpt_no = cc.rpt_no and operation = '07' and history_flag = 'Y' )  then 'Y' else 'N' end back_accept ,
+                        case  when  cc.case_status = '07' and (select count(1) from claim_case_record where rpt_no = cc.rpt_no and operation = '08' and history_flag = 'Y' )  then 'Y' else 'N' end back_review
+        FROM claim_case cc
              LEFT JOIN claim_batch cb ON cc.batch_no = cb.batch_no AND cc. STATUS = 'Y'
                         -- INNER JOIN claim_case_policy ccp ON cc.rpt_no = ccp.rpt_no
                         -- AND ccp. STATUS = 'Y'

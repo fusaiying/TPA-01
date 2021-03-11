@@ -127,7 +127,7 @@
             <span class="info_span to_right">直结类型：</span><span class="info_span">{{ providerContractInfo.straight }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">合约终止日期：</span><span class="info_span">{{ providerContractInfo.endDate }}</span>
+            <span class="info_span to_right">合约终止日期：</span><span class="info_span">{{ providerContractInfo.expiryDate }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">合约终止原因：</span><span class="info_span">{{ providerContractInfo.reason }}</span>

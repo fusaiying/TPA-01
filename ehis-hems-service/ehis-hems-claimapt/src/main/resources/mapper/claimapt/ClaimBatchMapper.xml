@@ -463,7 +463,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where batch_no = #{batchno} and status='Y'
+        where batch_no = #{batchno} and update_by='' and status='Y'
     </update>
 
     <delete id="deleteClaimBatchById" parameterType="String">

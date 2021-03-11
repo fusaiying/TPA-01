@@ -69,6 +69,10 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
 
             @Override
             public List<HospitalInfoVo> getHospitalInfo1(@RequestBody AddressInfo addressInfo){return null;}
+
+            //合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
+            @Override
+            public AjaxResult batchTimeBaseSupplierContract(@RequestBody BaseSupplierContract baseSupplierContract){return null;};
         };
     }
 }

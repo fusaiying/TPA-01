@@ -460,8 +460,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enname1 != null  and enname1 != ''"> and a.enname1 = #{enname1}</if>
             <if test="province != null  and province != ''"> and a.province = #{province}</if>
             <if test="city != null  and city != ''"> and a.city = #{city}</if><if test="district != null  and district != ''"> and a.district = #{district}</if>
-            <if test="bussinessStatus != null and bussinessStatus != '' and bussinessStatus != '05'"> and a.bussiness_status = #{bussinessStatus}</if>
-            <if test="bussinessStatus == '05'"> and a.bussiness_status in ('06','07')</if>
+            <if test="bussinessStatus != null and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
+          <!--  <if test="bussinessStatus == '05'"> and a.bussiness_status in ('06','07')</if>-->
             <if test="orgFlag != null  and orgFlag != ''"> and a.org_flag = #{orgFlag}</if>
             and status ='Y' and bussiness_status in ('01','03','04','06','07') and update_flag = '0'order by create_time desc
         </where>

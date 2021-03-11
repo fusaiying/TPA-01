@@ -34,7 +34,7 @@
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
-                       @click="">保障查看</el-button>
+                       @click="openGuaranteee">保障查看</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openHistorySurvey">调查({{historySurCount}})</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
@@ -60,7 +60,8 @@
       <!-- 被保人信息 -->
       <div id="#anchor-2" class="batchInfo_class" style="margin-top: 10px;">
         <insured-com :sonInsuredData="sonInsuredData" :node="querys.node" :status="querys.status"
-                     ref="insuredForm" @getInsuredData="getInsuredData" @getPropData="getPropData" :batchInfo="batchInfo"
+                     ref="insuredForm" @getInsuredData="getInsuredData" @getPropData="getPropData"
+                     :batchInfo="batchInfo"
                      :fixInfo="fixInfo" @emitSaveFlag="changeSaveFlag" @getPayeeDatas="getPayeeDatas"/>
       </div>
       <!-- 申请人信息 -->
@@ -131,6 +132,10 @@
     <!-- 历史理赔 -->
     <history-claim :value="historyClaimDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
                    @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
+
+    <!-- 保障查看 -->
+    <guarantee :value="guaranteeDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
+                   @closeGuaranteeDialog="closeGuaranteeDialog"/>
     <!-- 历史协谈 -->
     <history-discussion :preHistoryData="preHistoryData" :value="historyDiscussionDialog" :fixInfo="fixInfo"
                         @closeHistoryDiscussionDialog="closeHistoryDiscussionDialog"/>
@@ -161,6 +166,7 @@
   import historyDiscussion from './modul/historyDiscussion' //历史协谈
   import historySurvey from './modul/historySurvey' //历史调查
 
+  import guarantee from './modul/guarantee' //保障查看
   import {
     getCase,
     getBatch,
@@ -183,7 +189,7 @@
   } from '@/api/claim/handleCom'
 
 
-  import {historyDisInfo,historySurInfo} from '@/api/negotiation/api'
+  import {historyDisInfo, historySurInfo} from '@/api/negotiation/api'
   import elementIcons from "../../../components/icons/element-icons"; // 历史协谈数据
 
 
@@ -206,7 +212,8 @@
       historyClaim,
       historySurvey,
       appealInfo,
-      discussion
+      discussion,
+      guarantee
     },
     mixins: [mixinAnchor],
     computed: {
@@ -240,6 +247,7 @@
         removeDialog: false,
         appealDialog: false,
         historyClaimDialog: false,
+        guaranteeDialog: false,
         historyDiscussionDialog: false,
         historySurveyDialog: false,
         isSave: false,
@@ -555,12 +563,8 @@
         //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
         let isInsuredSave = this.$refs.insuredForm.isInsuredSave
         let hasInsuredId = this.$refs.insuredForm.hasInsuredId
-        let isApplicantSave = true
-        let hasApplicantId = true
-        if (this.batchInfo.claimtype === '02') {
-          isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
-          hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
-        }
+        let isApplicantSave = this.$refs.applicantInfoForm.isApplicantSave
+        let hasApplicantId = this.$refs.applicantInfoForm.hasApplicantId
         let isAcceptInfoSave = this.$refs.acceptInfoForm.isAcceptInfoSave
         let hasAcceptId = this.$refs.acceptInfoForm.hasAcceptId
         let flag = this.$refs.insuredForm.validataForm()
@@ -739,7 +743,7 @@
                                 message: '已取消！'
                               })
                             })
-                          }else if (res.data.caseStypeFind === '03') {
+                          } else if (res.data.caseStypeFind === '03') {
                             return this.$message.warning(
                               "该被保人不存在保单信息，请撤件！"
                             )
@@ -801,6 +805,9 @@
       openHistoryClaim() {
         this.historyClaimDialog = true
       },
+      openGuaranteee() {
+        this.guaranteeDialog = true
+      },
       openHistorySurvey() {
         this.historySurveyDialog = true
       },
@@ -825,6 +832,9 @@
       closeHistoryClaimDialog() {
         this.historyClaimDialog = false
       },
+      closeGuaranteeDialog() {
+        this.guaranteeDialog= false
+      },
       closeHistoryDiscussionDialog() {
         this.historyDiscussionDialog = false
       },
@@ -841,7 +851,7 @@
         this.caseInsuredData = val
         this.caseInsuredData.claimType = this.batchInfo.claimtype
       },
-      getPayeeDatas(){
+      getPayeeDatas() {
         if (this.querys.claimType === '02') {
           listRemarkRptNo(this.querys.rptNo).then(res => {
             if (res != null && res.code === 200) {

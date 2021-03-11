@@ -502,6 +502,15 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
      */
     @Override
     public List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO) {
+        //默认显示30个自然日的工单任务
+        if(acceptDTO.getAcceptTimeStart()==null){
+            Calendar calendar=Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) -30);
+
+            acceptDTO.setAcceptTimeStart(calendar.getTime());
+            acceptDTO.setAcceptTimeEnd(DateUtils.parseDate(DateUtils.getTime()));
+
+        }
         return demandAcceptVoMapper.selectWorkOrder(acceptDTO);
     }
 

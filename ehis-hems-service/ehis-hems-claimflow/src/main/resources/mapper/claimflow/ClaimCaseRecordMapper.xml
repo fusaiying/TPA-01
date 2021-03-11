@@ -302,4 +302,18 @@
         <include refid="selectClaimCaseRecordVo"/>
         where rpt_no = #{rptNo} and operation = #{operation} and status =  #{status} and  history_flag =  #{historyFlag}
     </select>
+
+
+    <select id="selectWorkflow" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+    <!--
+    SELECT
+            *
+        FROM
+            claim_case_record
+        WHERE
+                record_id IN ( SELECT max( record_id ) FROM claim_case_record WHERE rpt_no = #{rptNo} and operation in ('04','05','06','07','08','99')
+                               GROUP BY rpt_no, operation )
+    -->
+       SELECT *  FROM claim_case_record WHERE rpt_no = #{rptNo} and operation in ('04','05','06','07','08','99') order by create_time asc
+    </select>
 </mapper>

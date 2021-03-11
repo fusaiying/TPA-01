@@ -80,4 +80,10 @@ public interface IBaseSupplierContractService
      * @return 结果
      */
     public int deleteBaseSupplierContractById(String contractNo);
+
+    /**
+     * 合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
+     */
+    public List<BaseSupplierContract> batchTimeBaseSupplierContract (BaseSupplierContract baseSupplierContract);
+
 }

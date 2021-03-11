@@ -81,12 +81,11 @@
              <el-date-picker
                v-model="searchForm.effectiveSDate"
                class="item-width" size="mini"
-               value-format="yyyy-MM-dd"
                type="daterange"
                range-separator="-"
                start-placeholder="开始日期"
                end-placeholder="结束日期"
-             ></el-date-picker>
+               value-format="yyyy-MM-dd"/>
            </el-form-item>
          </el-col>
 
@@ -352,7 +351,7 @@
 
           <el-col :span="24" v-if="distcoteItem">
             <el-form-item label="折扣除外项目：" prop="project">
-              <el-input :disabled="isShow" v-model="providerForm.project" class="item-width" clearable size="mini"
+              <el-input :disabled="isShow" maxlength="50" v-model="providerForm.project" class="item-width" clearable size="mini"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -538,7 +537,7 @@
         <el-table-column prop="supplierCode" label="供应商项目名称" align="center">
           <template slot-scope="scope">
             <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.supplierServiceName" :prop="'serverInfo.' + scope.$index + '.supplierServiceName'">
-              <el-input size="mini"   v-model="scope.row.supplierServiceName" placeholder="请输入"  ></el-input>
+              <el-input size="mini" maxlength="50"  v-model="scope.row.supplierServiceName" placeholder="请输入"  ></el-input>
             </el-form-item>
 
             <template  v-else slot-scope="scope">
@@ -599,7 +598,7 @@
         <el-table-column prop="limitnum" label="日限次数" style="width: 280px" align="center">
           <template slot-scope="scope" >
             <el-form-item style="display: inline-flex !important;" v-if="scope.row.editing" :rules="serverInfoRules.limitnum" :prop="'serverInfo.' + scope.$index + '.limitnum'">
-              <el-input size="mini" oninput = "value=value.replace(/[^\d]/g,'')" v-model="scope.row.limitnum" placeholder="请输入" style="width: 90px" ></el-input>
+              <el-input maxlength="10" size="mini" oninput = "value=value.replace(/[^\d]/g,'')" v-model="scope.row.limitnum" placeholder="请输入" style="width: 90px" ></el-input>
             </el-form-item>
             <span v-else>{{ scope.row.limitnum }}</span>
           </template>
@@ -1200,7 +1199,19 @@
             }
           }
         } else {
-          callback();
+          if (value) {
+            if(this.providerForm.cvaliDate != '') {
+              let startTime = Date.parse(this.providerForm.cvaliDate);
+              let endTime = Date.parse(value);
+              if(startTime > endTime) {
+                callback(new Error("合约有效期结束日期错误"));
+              } else {
+                callback();
+              }
+            }
+          } else {
+            callback();
+          }
         }
       };
       const checkExpiryReason = (rule, value, callback) => {
@@ -1276,7 +1287,7 @@
           phone: {trigger: ['change','blur'], validator: checkPhone,required: false},
           boxRidgeCode: {trigger: ['change','blur'], validator: checkboxRidgeCode,required: false},
           email: {trigger: ['change','blur'], validator: checkEmail,required: false},
-          reason : {trigger: ['change','blur'],  validator: checkExpiryReason, required: true},
+          reason : {trigger: ['change','blur'],  validator: checkExpiryReason},
           treatmentDiscount: [{validator: checkTreatmentDiscount, required: true, trigger: ['change','blur']}],
           examineDiscount: [{validator: checkExamineDiscount, required: true, trigger: ['change','blur']}],
           bedDiscount: [{validator: checkBedDiscount, required: true, trigger: ['change','blur']}],
@@ -1365,7 +1376,7 @@
           specialDiscount:'',
           project:'',
           cooperativeUnit:'',
-          endDate:'',
+          endDate:'9999-12-31',
           reason:'',
           liaison:'',
           phone:'',
@@ -2220,7 +2231,7 @@
               let effectiveArr = [];
               effectiveArr.push(detailData.cvaliDate);
               effectiveArr.push(detailData.endDate);
-              this.searchForm.effectiveSDate = effectiveArr;
+              this.$set(this.searchForm, `effectiveSDate`, effectiveArr);
               if(detailData.servcomNo != '') {
                 this.getSupplierContractListByChangeType(1);
               }

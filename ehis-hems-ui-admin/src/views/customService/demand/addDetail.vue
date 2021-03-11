@@ -193,7 +193,7 @@
         <span style="color: blue">服务受理信息</span>
       </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;"
-               label-width="120px"
+               label-width="180px"
                label-position="right" size="mini">
         <el-row>
           <el-form-item label="受理渠道：" prop="channelCode">
@@ -444,9 +444,6 @@ export default {
   data() {
     // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
     const rules_bank = {
-      callName: [
-        {required: true, message: "来电人不能为空", trigger: "blur"}
-      ],
       channelCode: [
         {required: true, message: "受理渠道不能为空", trigger: "blur"}
       ],
@@ -497,6 +494,9 @@ export default {
       contactsName: [
         {required: true, message: "联系人不能为空", trigger: "blur"}
       ],
+      contactsRelationBy: [
+        {required: true, message: "联系人与被保人关系不能为空", trigger: "blur"}
+      ],
       contactsMobilePhone: [
         {required: true, message: "联系电话不能为空", trigger: "blur"},
         {required: true,
@@ -509,7 +509,7 @@ export default {
       ],
       content: [
         {required: true, message: "业务内容不能为空", trigger: "blur"},
-        { min: 3, max: 100, message: '长度在 3 到 100 个字符' }
+        { min: 0, max: 2000, message: '长度不超过2000个字符' }
       ],
     };
 

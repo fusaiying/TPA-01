@@ -17,7 +17,7 @@
             <span class="info_span to_right">合约编码：</span><span class="info_span">{{ serverContractInfo.contractNo }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="info_span to_right">供应商：</span><span class="info_span">{{ getSuppNameByValue(serverContractInfo.servcomNo) }}</span>
+            <span class="info_span to_right el-col-8">供应商：</span><span class="info_span el-col-8">{{ getSuppNameByValue(serverContractInfo.servcomNo) }}</span>
           </el-col>
           <el-col :span="8">
             <span class="info_span to_right">合约名称：</span><span class="info_span">{{ serverContractInfo.contractName }}</span>
@@ -438,6 +438,9 @@
       }
     },
       methods: {
+        // getTdTitle(text,e) {
+        //   e.currentTarget.title = text;
+        // },
         initData(){
           let type = this.formTab ? 1 :2;
           this.getSupplierContractListByChangeType(type);
@@ -676,5 +679,9 @@
   }
   .el-table /deep/ .el-table__expanded-cell {
     padding: 10px;
+  }
+  /deep/ .info_span {
+  /*  overflow: hidden;*/
+    word-wrap:break-word
   }
 </style>

@@ -186,7 +186,6 @@ public interface ClaimCaseRecordMapper
     * @Parm [claimCaseRecord]
     * @return int
     **/
-    
     public int updateRecordHistoricalState(ClaimCaseRecord claimCaseRecord);
 
     public ClaimCaseRecord selectClaimCaseRecordByrptNoOneOld(String rptNo);
@@ -208,6 +207,13 @@ public interface ClaimCaseRecordMapper
     public List<ClaimCaseRecord> selectClaimCaseRecordByrptNo(String rptNo);
 
     public ClaimCaseRecord selectClaimCaseRecordInfoByParam(Map<String,Object> map);
+
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    public List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord);
 
 
 }

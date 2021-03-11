@@ -51,3 +51,12 @@ export function logInfo() {
   })
 }
 
+// 工作流查看
+export function selectWorkflow(data) {
+  return request({
+    url: '/claimflow/caseRecord/selectWorkflow',
+    method: 'post',
+    data
+  })
+}
+

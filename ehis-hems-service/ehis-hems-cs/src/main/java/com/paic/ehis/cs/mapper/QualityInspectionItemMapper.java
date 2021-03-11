@@ -50,7 +50,7 @@ public interface QualityInspectionItemMapper
      * @param qualityInspectionItemList
      * @return
      */
-    public int insertExtDocList(List<QualityInspectionItem> qualityInspectionItemList);
+    public int insertExtDocList(List<QualityInspectionItem> itemList);
 
     /**
      * 批量修改质检差错确认

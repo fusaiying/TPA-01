@@ -120,7 +120,8 @@ public class ClaimCaseDebtController extends BaseController
         startPage(debtInfoDTO);
         List<DebtInfoVO> list = new ArrayList<>();
         // 初始化或者查询条件为空
-        if ("0".equals(debtInfoDTO.getFlag())){
+        if ("0".equals(debtInfoDTO.getFlag()) || ("1".equals(debtInfoDTO.getFlag()) && null==debtInfoDTO.getRptNo() && null==debtInfoDTO.getPolicyNo() && null==debtInfoDTO.getHospitalCode() && null==debtInfoDTO.getInsuredName()
+                && null==debtInfoDTO.getIdNo() && null==debtInfoDTO.getStartDate() && null==debtInfoDTO.getWhiteStatus() && null==debtInfoDTO.getPolicyItemNo())){
             list = claimCaseDebtService.selectDebtInitList();
         } else {
             list = claimCaseDebtService.selectDebtList(debtInfoDTO);

@@ -197,6 +197,16 @@ export function selectProductSupplier(data) {
 
   })
 }
+/**
+ * 审核日志查询
+ */
+export function selectCheckLog(data) {
+  return request({
+    url: 'product/info/selectCheckLog',
+    method: 'post',
+    data
+  })
+}
 
 
 

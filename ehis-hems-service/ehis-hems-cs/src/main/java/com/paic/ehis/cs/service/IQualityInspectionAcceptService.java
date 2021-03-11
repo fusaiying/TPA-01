@@ -5,6 +5,7 @@ import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityVo;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public interface IQualityInspectionAcceptService
      * @param qualityDTO
      * @return
      */
-    List<QualityVo> selectQualityVo(QualityDTO qualityDTO);
+    List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
 
 //    /**
 //     * 根据条件查询工单附件列表

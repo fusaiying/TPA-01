@@ -172,7 +172,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
 
-        if(!baseSupplierContract.getContractControlFlag().contains("01")){
+        if(baseSupplierContract.getContractControlFlag() == null || !baseSupplierContract.getContractControlFlag().contains("01")){
             baseSupplierContract.setTreatmentDiscount("");
             baseSupplierContract.setExamineDiscount("");
             baseSupplierContract.setBedDiscount("");
@@ -182,7 +182,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
             baseSupplierContract.setSpecialDiscount("");
             baseSupplierContract.setProject("");
         }
-        if(!baseSupplierContract.getContractControlFlag().contains("02")){
+        if(baseSupplierContract.getContractControlFlag() == null || !baseSupplierContract.getContractControlFlag().contains("02")){
             baseSupplierContract.setAverageCost("");
             baseSupplierContract.setType("");
             baseSupplierContract.setAdvicenum("");
@@ -215,6 +215,26 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
     public int deleteBaseSupplierContractById(String contractNo)
     {
         return baseSupplierContractMapper.deleteBaseSupplierContractById(contractNo);
+    }
+
+
+    /**
+     * 合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
+     */
+    @Override
+    public List<BaseSupplierContract> batchTimeBaseSupplierContract(BaseSupplierContract baseSupplierContract) {
+        List<BaseSupplierContract> baseSupplierContracts=selectBaseSupplierContractList(baseSupplierContract);
+        for(BaseSupplierContract baseSupplierContract1 : baseSupplierContracts){
+            if (null!=baseSupplierContract1.getEndDate()){
+                Date endDate=baseSupplierContract1.getEndDate();
+                Date nowDate=DateUtils.getNowDate();
+                String contractNo=baseSupplierContract1.getContractNo();
+                if(endDate.after(nowDate)){
+                    baseSupplierContractMapper.deleteBaseSupplierContractById(contractNo);
+                }
+            }
+        }
+        return baseSupplierContracts;
     }
 
     private String generatorContractName(String id, String dictType, String dictValue){

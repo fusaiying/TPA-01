@@ -258,9 +258,11 @@
                     </div>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row>
                 <el-col :span="8">
                   <el-form-item label="状态：" prop="bussinessStatus">
-                    <el-select v-model="baseForm.bussinessStatus" class="item-width" placeholder="请选择" clearable disabled>
+                    <el-select v-model="baseForm.bussinessStatus" class="item-width" placeholder="请选择" clearable :disabled="statusChange">
                       <el-option v-for="item in bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
                     </el-select>
@@ -276,6 +278,8 @@
                     <el-input v-model="baseForm.latitude" class="item-width" clearable size="mini" placeholder="请输入" />
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row>
 
                 <el-col :span="8">
                   <el-form-item label="标志性建筑：" prop="landmarks">
@@ -710,6 +714,8 @@ export default {
     }
 
     return {
+      statusChange: true,
+
       type2Info:'',
       otherChname1: '',
       otherEnname1: '',
@@ -1096,6 +1102,21 @@ export default {
         }
         if(this.$route.query.hospContractSave!=null && this.$route.query.hospContractSave=='01'){
           this.hospContractSaveFlag=true
+        }
+        if(this.$route.query.node!=null && (this.$route.query.node=='03'||this.$route.query.node=='04' )){
+          this.statusChange=false
+          this.bussiness_statusOptions = this.bussiness_statusOptions.filter(item =>{
+            return item.dictValue=='03' || item.dictValue=='04'
+          })
+        }
+        else if(this.$route.query.node=='05'){
+          this.statusChange=false
+          this.bussiness_statusOptions = this.bussiness_statusOptions.filter(item =>{
+            return item.dictValue=='03' || item.dictValue=='04' || item.dictValue=='05'
+          })
+        }
+        else{
+          this.statusChange=true
         }
 
 

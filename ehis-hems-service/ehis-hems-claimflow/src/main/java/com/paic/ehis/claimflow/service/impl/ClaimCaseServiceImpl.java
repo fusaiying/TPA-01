@@ -1162,14 +1162,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(record);
         //增加一条新的、不是历史状态的抽检完毕的操作记录
-        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
-        claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setOperation("99");
-        claimCaseRecord.setOperator(claimCase.getCreateBy());
-        claimCaseRecord.setOrgRecordId(record.getRecordId());
-        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        record.setHistoryFlag("N");
+        record.setOperation("99");
+        record.setOrgRecordId(record.getRecordId());
+        record.setCreateBy(SecurityUtils.getUsername());
+        record.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.insertClaimCaseRecord(record);
 
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }

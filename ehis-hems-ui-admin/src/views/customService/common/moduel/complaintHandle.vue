@@ -1,10 +1,10 @@
 <template>
-  <el-card class="box-card" style="margin-top: 10px;">
-    <div slot="header" class="clearfix">
+  <el-card class="box-card" style="margin-top: 10px;" >
+    <div slot="header" class="clearfix" >
       <span>投诉处理</span>
     </div>
-    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="100px"
-             label-position="right" size="mini">
+    <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px"
+             label-position="right" size="mini" disabled="true">
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉分类：" prop="priority">
@@ -56,14 +56,6 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="重复投诉：" prop="repeatedComplaint">
-            <el-select v-model="form.repeatedComplaint" class="item-width">
-              <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
-                         :value="item.dictValue"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
           <el-form-item label="一级投诉原因：" prop="reason1">
             <el-select v-model="form.reason1" class="item-width" @change="reasonTwo()">
               <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
@@ -79,8 +71,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
         <el-col :span="8">
           <el-form-item label="三级投诉原因：" prop="reason3">
             <el-select v-model="form.reason3" class="item-width">
@@ -89,6 +79,8 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <el-form-item label="投诉环节(报保监)：" prop="complaintLink">
             <el-select v-model="form.complaintLink" class="item-width">
@@ -105,8 +97,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
         <el-col :span="8">
           <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState">
             <el-select v-model="form.outsideState" class="item-width">
@@ -115,6 +105,8 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <el-form-item label="险种类型：" prop="riskType">
             <el-select v-model="form.riskType" class="item-width">
@@ -131,11 +123,11 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-form-item label="投诉业务类别：" prop="complaintCategory">
-          <el-input v-model="form.complaintCategory" clearable size="mini" class="width-full"/>
-        </el-form-item>
+        <el-col :span="8">
+          <el-form-item label="投诉业务类别：" prop="complaintCategory">
+            <el-input v-model="form.complaintCategory" clearable size="mini" class="item-width"/>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
@@ -158,23 +150,23 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="16">
+        <el-col :span="22">
           <el-form-item label="投诉根因部门：" prop="rootDepartment">
-            <el-input type="text" v-model="form.rootDepartment"/>
+            <el-input type="text" v-model="form.rootDepartment" class="width-full"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="16">
+        <el-col :span="22">
           <el-form-item label="致诉根因：" prop="actionCause">
-            <el-input type="text" v-model="form.actionCause"/>
+            <el-input type="text" v-model="form.actionCause" class="width-full"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="16">
+        <el-col :span="22">
           <el-form-item label="处理结果：" prop="treatmentResult">
-            <el-input type="text" v-model="form.treatmentResult"/>
+            <el-input type="text" v-model="form.treatmentResult" class="width-full"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -197,7 +189,6 @@
     ,{dictType: 'serves'}
     ,{dictType: 'cs_feedback_type'}
   ]
-  import {getComplaintHandleInfo} from "@/api/customService/spotCheck";
 
   export default {
 

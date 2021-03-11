@@ -299,10 +299,10 @@
                 <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
               </div>
 
-              <div v-if="!ca04Active" class="el-step__icon is-text">
+              <div v-if="!ca07Active" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">理算审核</div>
               </div>
-              <div v-if="ca04Active" class="el-step__icon is-text" style="background-color: #1c84c6">
+              <div v-if="ca07Active" class="el-step__icon is-text" style="background-color: #1c84c6">
                 <div class="el-step__icon-inner" style="color: whitesmoke">理算审核</div>
               </div>
 

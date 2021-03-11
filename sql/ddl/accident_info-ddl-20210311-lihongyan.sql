@@ -11,5 +11,5 @@ CREATE TABLE accident_info
     create_time          DATETIME       NOT NULL COMMENT '创建时间',
     update_by            VARCHAR(20) COMMENT '更新人',
     update_time          DATETIME COMMENT '更新时间',
-    PRIMARY KEY (pbw_id)
+    PRIMARY KEY (pbw_accident_id)
 ) engine=innodb auto_increment=100 COMMENT = 'E结算案件事故信息表';

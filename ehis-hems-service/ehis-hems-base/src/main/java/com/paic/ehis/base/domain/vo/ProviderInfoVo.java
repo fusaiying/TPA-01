@@ -18,4 +18,5 @@ public class ProviderInfoVo {
     private String checkAdvice;
     private String providerCode;
     private String orgFlag;
+    private String bussinessStatus;
 }

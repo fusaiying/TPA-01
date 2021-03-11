@@ -172,7 +172,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
         baseSupplierContract.setUpdateTime(new Date());
         baseSupplierContract.setUpdateTime(DateUtils.getNowDate());
 
-        if(!baseSupplierContract.getContractControlFlag().contains("01")){
+        if(baseSupplierContract.getContractControlFlag() == null || !baseSupplierContract.getContractControlFlag().contains("01")){
             baseSupplierContract.setTreatmentDiscount("");
             baseSupplierContract.setExamineDiscount("");
             baseSupplierContract.setBedDiscount("");
@@ -182,7 +182,7 @@ public class BaseSupplierContractServiceImpl implements IBaseSupplierContractSer
             baseSupplierContract.setSpecialDiscount("");
             baseSupplierContract.setProject("");
         }
-        if(!baseSupplierContract.getContractControlFlag().contains("02")){
+        if(baseSupplierContract.getContractControlFlag() == null || !baseSupplierContract.getContractControlFlag().contains("02")){
             baseSupplierContract.setAverageCost("");
             baseSupplierContract.setType("");
             baseSupplierContract.setAdvicenum("");

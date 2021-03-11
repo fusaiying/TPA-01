@@ -945,41 +945,31 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
     public int backToClaimCase(ClaimCase claimCase) {
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCase.getRptNo());
-        claimCaseRecord.setHistoryFlag("N");
+        claimCaseRecord.setHistoryFlag(ClaimStatus.DATAYES.getCode());//Y
         claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());
-        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
-
-//查询当前轨迹的id
-
+        claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//05
+        //查询最近一次受理环节操作人 operater
         ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
-        /*List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
-        if (claimCaseRecords.size() > 0) {
-            claimCase.setUpdateBy(claimCaseRecords.get(0).getCreateBy());
-        }*/
-
-
 
         //修改当前轨迹状态
-      /*  claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());
-        ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);*/
-        record.setHistoryFlag("Y");
-        record.setOperator(SecurityUtils.getUsername());
-        record.setUpdateBy(SecurityUtils.getUsername());
-        record.setUpdateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.updateRecordHistoricalState(record);
+        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
+        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.updateRecordHistoricalState(claimCaseRecord);
 
 //新增一条05轨迹表
         claimCaseRecord.setHistoryFlag("N");
+        claimCaseRecord.setOperator(null);
         claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
         claimCaseRecord.setOperation(ClaimStatus.CASEACCEPTED.getCode());//05
-      /*  claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());*/
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
         //修改案件信息表
-        claimCase.setUpdateBy(SecurityUtils.getUsername());
+        claimCase.setUpdateBy(record.getOperator());
         claimCase.setUpdateTime(DateUtils.getNowDate());
         claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());
         return claimCaseMapper.updateClaimCase(claimCase);

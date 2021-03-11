@@ -1042,6 +1042,18 @@
                     showClose: true
                   })
                 }
+                //查询联系人信息
+                const query = {
+                  supplierCode: this.supplier.serialNo
+                }
+                listContacts(query).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.contactForm.contacts = res.rows
+                    this.contactForm.contacts.forEach(item => {
+                      item.isShow = false
+                    })
+                  }
+                })
               }).catch(res => {
                 this.$message.error('保存失败！')
               })
@@ -1093,6 +1105,17 @@
                         type: 'success',
                         center: true,
                         showClose: true
+                      })
+                      //查询账户信息
+                      const query2 = {
+                        providerCode: this.supplier.serialNo
+                      }
+                      listBank(query2).then(res => {
+                        this.accountForm.account = res.rows
+                        this.accountForm.account.forEach(item => {
+                          item.isShow = false
+                          item.accountFlag = item.accountNo
+                        })
                       })
                     }
                   }).catch(res => {
@@ -1239,6 +1262,7 @@
                                 this.ennameFlag = this.supplier.enname
                                 this.chnameFlag = this.supplier.chname
                                 this.supplier.serialNo = res.data.serialNo
+                                this.initSearch(this.supplier.serialNo)
                               } else {
                                 this.$message.error(
                                   "保存提交失败!"

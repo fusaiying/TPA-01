@@ -387,7 +387,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="一级投诉分类：" prop="priority">
-              <el-select v-model="sendForm.level1" class="item-width" @change="classTwo()">
+              <el-select v-model="sendForm.level1" class="item-width" @change="classTwo('1')">
                 <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -449,7 +449,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="一级投诉原因：" prop="reason1">
-              <el-select v-model="sendForm.reason1" class="item-width" @change="reasonTwo()">
+              <el-select v-model="sendForm.reason1" class="item-width" @change="reasonTwo('1')">
                 <el-option v-for="item in cs_reason_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -457,7 +457,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="二级投诉原因：" prop="reason2">
-              <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree()">
+              <el-select v-model="sendForm.reason2" class="item-width" @change="reasonThree('1')">
                 <el-option v-for="item in cs_reason_level2" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
               </el-select>
@@ -845,9 +845,6 @@ export default {
     this.searchFlowLog();
     this.searchHandleServer();
     //this.searchHCS();
-    this.reasonTwo();
-    this.reasonThree();
-    this.classTwo();
 
   },
   async mounted() {
@@ -930,11 +927,13 @@ export default {
         this.showFlag=false
       }
     },
-    reasonTwo() {
+    reasonTwo(flag) {
       const query = {}
       query.parentCode = this.sendForm.reason1;
-      this.sendForm.reason2 = '';
-      this.sendForm.reason3 = '';
+      if(flag=='1'){
+        this.sendForm.reason2 = '';
+        this.sendForm.reason3 = '';
+      }
       reasonTwo(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("cs_reason_level2", res.data)
@@ -948,9 +947,12 @@ export default {
       })
 
     },
-    reasonThree() {
+    reasonThree(flag) {
       const query = {}
       query.parentCode = this.sendForm.reason2
+      if(flag=='1'){
+        this.sendForm.reason3 = '';
+      }
       reasonThree(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("cs_reason_level2", res.data)
@@ -964,10 +966,12 @@ export default {
       })
 
     },
-    classTwo() {
+    classTwo(flag) {
       const query = {}
       query.parentCode = this.sendForm.level1;
-      this.sendForm.level2 = '';
+      if(flag=='1'){
+        this.sendForm.level2 = '';
+      }
       classTwo(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("二级分类", res.data)
@@ -1008,7 +1012,10 @@ export default {
       complainSearchServer(query).then(res => {
         if (res != null && res.code === 200) {
           console.log("投诉页面server反显数据",res.data)
-          this.sendForm = res.data
+          this.sendForm = res.data;
+          this.reasonTwo('0');
+          this.reasonThree('0');
+          this.classTwo('0');
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"

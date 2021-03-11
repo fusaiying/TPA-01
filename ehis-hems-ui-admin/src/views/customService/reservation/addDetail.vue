@@ -284,9 +284,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.symptomTimes" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
-              <el-select v-model="ruleForm.symptomTimes" style="width: 90px" placeholder="请选择"  >
+            <el-form-item label="本次疾病/症状起病时间：" prop="a">
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入" />
+              <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -540,7 +540,8 @@ export default {
         contactsMobilePhone: "",//联系人电话
         email:"",//邮件
         organCode:"",//出单机构
-
+        a:"",
+        b:""
       },
       // 表单校验根据Form 组件提供了表单验证的功能，只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
       rules: {
@@ -568,7 +569,7 @@ export default {
         symptomsSigns: [
           {required: true, message: "症状或体征不能为空", trigger: "blur"}
         ],
-        symptomTimes: [
+        a: [
           {required: true, message: "本次疾病/症状起病时间不能为空", trigger: "blur"}
         ],
         accidentFlag: [
@@ -724,6 +725,7 @@ export default {
     submit(){
       this.$refs.ruleForm.validate((valid) => {
       if (valid) {
+      this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
       let insert=this.ruleForm
       addReservationInsert(insert).then(res => {
         console.log("insert",insert)

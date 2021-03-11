@@ -410,8 +410,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="本次疾病/症状起病时间：" prop="symptomTimes">
-              <el-input v-model="ruleForm.symptomsSigns" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
-              <el-select v-model="ruleForm.symptomTimes" style="width: 90px" placeholder="请选择"  >
+              <el-input v-model="ruleForm.a" style="width: 90px" clearable size="mini" placeholder="请输入"maxlength="6"/>
+              <el-select v-model="ruleForm.b" style="width: 90px" placeholder="请选择"  >
                 <el-option v-for="item in cs_time_unit" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -594,6 +594,7 @@
     {dictType: 'cs_action_type'},
     {dictType: 'cs_consultation_type'},
     {dictType: 'cs_relation'},
+    {dictType: 'cs_time_unit'},
   ]
   export default {
     components: {
@@ -620,6 +621,7 @@
         cs_action_type:[],
         cs_consultation_type:[],
         cs_whether_flag:[],
+        cs_time_unit: [],
         dictList: [],
         //流转用
         flowLogData:[],
@@ -771,6 +773,9 @@
       this.cs_consultation_type = this.dictList.find(item => {
         return item.dictType === 'cs_consultation_type'
       }).dictDate
+      this.cs_time_unit = this.dictList.find(item => {
+        return item.dictType === 'cs_time_unit'
+      }).dictDate
     },
     methods: {
       //超链接用
@@ -782,6 +787,7 @@
       //提交页面数据
       submit(){
         this.workPoolData.workOrderNo=this.$route.query.workOrderNo;
+        this.ruleForm.symptomTimes=this.ruleForm.a+'-'+this.ruleForm.b;
         let send=this.workPoolData
         modifyReservationSubmit(send).then(res => {
           if (res != null && res.code === 200) {
@@ -801,14 +807,20 @@
 
       },
       //反显信息需求
-      searchHandle() {
-        if (this.queryParams.status=="01") {
+      searchHandle: function () {
+        if (this.queryParams.status == "01") {
           let query = this.queryParams
           demandListAndPublicPool(query).then(res => {
             if (res != null && res.code === 200) {
               this.workPoolData = res.rows[0]
               this.totalCount = res.total
-              console.log('公共', res.rows)
+              if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
+                let arr=this.workPoolData.symptomTimes.split('-')
+                console.log(arr)
+                this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]
+              }
+
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
@@ -818,13 +830,19 @@
           }).catch(res => {
 
           })
-        }else {
+        } else {
           let query = this.queryParams
           demandListAndPersonalPool(query).then(res => {
             if (res != null && res.code === 200) {
               this.workPoolData = res.rows[0]
               this.totalCount = res.total
               console.log('个人', res.total)
+              if (this.workPoolData.symptomTimes != null && this.workPoolData.symptomTimes != '') {
+                let arr=this.workPoolData.symptomTimes.split('-')
+                console.log(arr)
+                this.ruleForm.a=arr[0]
+                this.ruleForm.b=arr[1]
+              }
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"

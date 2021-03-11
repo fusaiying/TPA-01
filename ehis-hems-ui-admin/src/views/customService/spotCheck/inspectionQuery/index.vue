@@ -110,7 +110,11 @@
           style=" width: 100%;"
           @selection-change="handleSelectionChange">
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="organCode" label="出单机构" show-overflow-tooltip/>
           <el-table-column align="center" prop="itemCode" label="服务项目" show-overflow-tooltip/>
           <el-table-column align="center" prop="endDate" label="结案日期" show-overflow-tooltip>
@@ -240,6 +244,31 @@ export default {
       }).catch(res => {
 
       })
+    },
+    //处理按钮
+    dealButton(s){
+      if(s.businessType=="01") {
+        this.$router.push({
+          path: '/customService/collaborative/deal',
+          query: {
+            workOrderNo: s.workOrderNo,
+            policyNo: s.policyNo,
+            policyItemNo: s.policyItemNo,
+            status: s.status
+          }
+        })
+      }else {
+        this.$router.push({
+          path: '/customService/collaborative/complaint',
+          query:{
+            workOrderNo:s.workOrderNo,
+            policyNo:s.policyNo,
+            policyItemNo:s.policyItemNo,
+            status:s.status
+          }
+        })
+      }
+
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

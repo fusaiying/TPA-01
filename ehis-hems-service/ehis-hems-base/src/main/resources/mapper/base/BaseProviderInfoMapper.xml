@@ -463,7 +463,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bussinessStatus != null and bussinessStatus != ''"> and a.bussiness_status = #{bussinessStatus}</if>
           <!--  <if test="bussinessStatus == '05'"> and a.bussiness_status in ('06','07')</if>-->
             <if test="orgFlag != null  and orgFlag != ''"> and a.org_flag = #{orgFlag}</if>
-            and status ='Y' and bussiness_status in ('01','03','04','05') and update_flag = '0'order by create_time desc
+            and check_status = '0' and status ='Y' and bussiness_status in ('01','03','04','05') and update_flag = '0'order by create_time desc
         </where>
     </select>
 
@@ -627,6 +627,7 @@ WHERE
             <if test="createTime != null">create_time,</if>
             <if test="claimHospitalName != null">claim_hospital_name,</if>
             <if test="claimHospitalCode != null">claim_hospital_code,</if>
+            <if test="checekStatus != null">check_statsu,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -685,6 +686,7 @@ WHERE
             <if test="createTime != null">#{createTime},</if>
             <if test="claimHospitalName != null">#{claimHospitalName},</if>
             <if test="claimHospitalCode != null">#{claimHospitalCode},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
         </trim>
     </insert>
 
@@ -748,6 +750,7 @@ WHERE
             <if test="createTime != null">create_time,</if>
             <if test="claimHospitalName != null">claim_hospital_name,</if>
             <if test="claimHospitalCode != null">claim_hospital_code,</if>
+            <if test="checkStatus != null">check_status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNo != null">#{serialNo},</if>
@@ -806,6 +809,7 @@ WHERE
             <if test="createTime != null">#{createTime},</if>
             <if test="claimHospitalName != null">#{claimHospitalName},</if>
             <if test="claimHospitalCode != null">#{claimHospitalCode},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
         </trim>
     </insert>
 
@@ -866,7 +870,7 @@ WHERE
     </update>
 
     <update id="updateBaseProviderInfoByproviderCode" parameterType="ProviderInfoVo">
-        update base_provider_info_bak set bussiness_status =#{bussinessStatus}
+        update base_provider_info_bak set check_status ='0'
         where provider_code = #{providerCode} and update_flag = '0'
     </update>
 
@@ -946,7 +950,7 @@ WHERE
             <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
             <if test="chremarks != null  and chremarks != ''"> and chremarks = #{chremarks}</if>
             <if test="enremarks != null  and enremarks != ''"> and enremarks = #{enremarks}</if>
-            and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01' order by create_time desc
+            and check_status = '1' and status = 'Y' and update_flag = '0' and bussiness_status = '02' and org_flag = '01' order by create_time desc
         </where>
     </select>
 

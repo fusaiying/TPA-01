@@ -411,7 +411,7 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
                 }
 
             baseProviderInfo.setCreateTime(DateUtils.getNowDate());
-            baseProviderInfo.setBussinessStatus("02");
+            baseProviderInfo.setCheckStatus("1");
             baseProviderInfo.setUpdateFlag("0");
             i = baseProviderInfoMapper.insertBaseProviderInfo(baseProviderInfo);
         }else if("02".equals(baseProviderInfo.getOrgFlag())){
@@ -452,9 +452,10 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     {
 
         String providerCode = providerInfoVo.getProviderCode();
+
         if("01".equals(providerInfoVo.getCheckResult())){//审核通过
             //备份表中的数据修改状态
-            //baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerCode);
+            baseProviderInfoMapper.updateBaseProviderInfoByproviderCode(providerCode);
             //数据挪到正式表中
             this.insertBaseProviderInfoNew(providerCode);
             baseProviderServiceService.insertBaseProviderServiceNew(providerCode);
@@ -495,7 +496,7 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
     {
         BaseProviderInfo baseProviderInfo = baseProviderInfoMapper.selectBaseProviderInfoById(providerCode);
         BaseProviderInfo baseProviderInfoNew = baseProviderInfoMapper.selectBaseProviderInfoByIdNew(providerCode);
-
+        baseProviderInfo.setCheckStatus("0");
         if(baseProviderInfoNew != null){
             baseProviderInfoMapper.updateBaseProviderInfoByproviderCodeNew(providerCode);
         }

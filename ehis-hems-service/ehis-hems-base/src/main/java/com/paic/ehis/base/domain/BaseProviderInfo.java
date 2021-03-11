@@ -271,6 +271,8 @@ public class BaseProviderInfo extends BaseEntity
 
     private String supplierCode;
 
+    private String checkStatus;
+
     public void setProviderCode(String providerCode) 
     {
         this.providerCode = providerCode;

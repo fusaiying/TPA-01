@@ -22,26 +22,27 @@
     </div>
 <!--    处理信息-->
   <!--    信息需求-->
-    <div id="#anchor-51" >
-<!--      <infohandle : :isDisabled="isDisabled" />-->
+    <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;">
+      <infohandle :acceptInfo="acceptInfo"  />
     </div>
   <!--    投诉-->
-    <div id="#anchor-52">
-      <complaintHandle :form="form" :isDisabled="isDisabled" />
+    <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;">
+      <complaintHandle :form="form"  />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
-    <div id="#anchor-61">
-
+    <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;">
+      <inspectionProcessInfo :acceptInfo="acceptInfo"/>
     </div>
   <!--    投诉-->
     <div id="#anchor-62">
-
+<!--      <complaintProcessInfo :acceptInfo="acceptInfo"/>-->
     </div>
-<!--    <el-row gutter="20" style="float: right" >-->
-<!--      <el-button @click="">结案</el-button>-->
-<!--      <el-button @click="">案件复核</el-button>-->
-<!--    </el-row>-->
+
+      <el-row :gutter=20 style="float: right" >
+        <el-button @click="submit()" >结案</el-button>
+        <el-button @click="submit()">案件复核</el-button>
+      </el-row>
   </div>
 </template>
 <script>
@@ -50,16 +51,18 @@ import demandAcceptInfo from "@/views/customService/common/moduel/demandAcceptIn
 import complaintAcceptInfo from "@/views/customService/common/moduel/complaintAcceptInfo";//投诉
 import flowLogList from "@/views/customService/common/moduel/attachmentList";//流转记录列表
 import attachmentList from "@/views/customService/common/moduel/attachmentList"; //附件列表
-import complaintHandle from "@/views/customService/common/moduel/complaintHandle";
-import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";
-import infohandle from "@/views/customService/common/moduel/infohandle";
-import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";
+import complaintHandle from "@/views/customService/common/moduel/complaintHandle";//投诉处理
+import infohandle from "@/views/customService/common/moduel/infohandle";//服务处理
+import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";//投诉处理信息
+import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";//质检处理信息
 import {
   getAcceptInfoByTypeOrId,
-  getAttachmentListById
-} from '@/api/customService/spotCheck'
+  getAttachmentListById,
+  getComplaintHandleInfo,
+} from '@/api/customService/spotCheck';
 
 import {mapGetters} from 'vuex'
+
 
 let dictss = [{dictType: 'delivery_source'},]
 
@@ -114,6 +117,7 @@ export default {
         actionCause: '',
         treatmentResult: '',
       },
+      infoForm:{},
       attachmentInfoData: [],
       //接收的参数对象
       params: {},
@@ -122,7 +126,11 @@ export default {
       reportData: [],
       dictList: [],
       delivery_sourceOption: [],
-      applicantData: {}
+      applicantData: {},
+
+
+
+
     }
 
   },
@@ -150,9 +158,13 @@ export default {
         }
       }).catch(res => {
       })
-
+      getComplaintHandleInfo(query).then(res => {
+        if (res !== null && res.code === 200) {
+          this.form = res.data;
+        }
+      }).catch( res => {
+      });
     }
-    this.getInfo(query);
   },
   async mounted() {
     await this.getDictsList(dictss).then(response => {
@@ -191,15 +203,9 @@ export default {
   },
 
   methods: {
-    getInfo(){
-      getComplaintHandleInfo().then(res => {
-        if (res !== null && res.code === 200) {
-          this.form = res.data;
-        }
-      }).catch( res => {
-      })
+    submit(){
+      insertItem(this.inspection)
     },
-
     changeSaveFlag() {
       this.isSave = true
     },

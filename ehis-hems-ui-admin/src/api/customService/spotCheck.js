@@ -82,11 +82,19 @@ export function getAcceptInfoByTypeOrId(params){
     params: params
   })
 }
+//通过工单和类型去获取投诉处理信息
 export function getComplaintHandleInfo(params){
   return request({
-    url: '/cs/spotCheck/info3/selectDealVo',
+    url: '/cs/info3/selectDealVo',
     method: 'get',
     params: params
+  })
+}
+export function insertItem(form){
+  return request({
+    url: '/cs/spotCheck/insertItem',
+    method: 'post',
+    data: form
   })
 }
 

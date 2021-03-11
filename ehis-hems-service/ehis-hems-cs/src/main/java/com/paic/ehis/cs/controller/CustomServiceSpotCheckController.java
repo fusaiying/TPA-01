@@ -12,10 +12,7 @@ import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
-import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.QualityVo;
-import com.paic.ehis.cs.domain.vo.WorkOrderVo;
+import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,7 +282,7 @@ public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
 public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
 {
     startPage();
-    List<QualityVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+    List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
     return getDataTable(list);
 }
 }

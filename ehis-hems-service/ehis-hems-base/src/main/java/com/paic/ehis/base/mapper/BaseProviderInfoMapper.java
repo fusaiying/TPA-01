@@ -3,6 +3,7 @@ package com.paic.ehis.base.mapper;
 import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
+import com.paic.ehis.base.domain.vo.ProviderInfoVo;
 import com.paic.ehis.base.domain.vo.Sn_base_addressDO;
 import com.paic.ehis.system.api.domain.*;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -122,7 +123,7 @@ public interface BaseProviderInfoMapper
     /**
      * 医院状态修改成有效
      */
-    public int updateBaseProviderInfoByproviderCode(String providerCode);
+   public int updateBaseProviderInfoByproviderCode(ProviderInfoVo providerInfoVo);
 
     /**
      * 医院状态修改成无效

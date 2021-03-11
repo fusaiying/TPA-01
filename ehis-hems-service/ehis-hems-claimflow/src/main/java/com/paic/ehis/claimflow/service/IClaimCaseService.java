@@ -172,7 +172,7 @@ public interface IClaimCaseService
     int editCaseCheckBack(ClaimCase claimCase);
 
     /** 抽检工作池处理中 */
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
+    public TableDataInfo SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
     /**
      * 审核退回
      *
@@ -243,7 +243,7 @@ public interface IClaimCaseService
      * @param auditWorkPoolDTO
      * @return
      */
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
+    public TableDataInfo SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
 
     /**
      *用户调度更改操作人

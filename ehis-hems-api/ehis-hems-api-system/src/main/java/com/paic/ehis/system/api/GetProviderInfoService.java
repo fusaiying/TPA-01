@@ -7,6 +7,7 @@ import com.paic.ehis.system.api.domain.*;
 import com.paic.ehis.system.api.domain.dto.BaseManualInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -83,5 +84,9 @@ public interface GetProviderInfoService
     //获取医院信息
     @PostMapping(value = "/org/getHospitalInfo1")
     public List<HospitalInfoVo> getHospitalInfo1(@RequestBody AddressInfo addressInfo);
+
+    //合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
+    @PostMapping("/supplier/batchTimeBaseSupplierContract")
+    public AjaxResult batchTimeBaseSupplierContract(@RequestBody BaseSupplierContract baseSupplierContract);
 
 }

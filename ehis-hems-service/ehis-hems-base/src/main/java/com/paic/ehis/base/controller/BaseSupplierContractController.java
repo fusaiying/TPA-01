@@ -159,4 +159,14 @@ public class BaseSupplierContractController extends BaseController
     {
         return toAjax(baseSupplierContractService.deleteBaseSupplierContractByIds(contractNos));
     }
+
+
+    /**
+     * 合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
+     */
+     @PutMapping("/batchTimeBaseSupplierContract")
+    public AjaxResult batchTimeBaseSupplierContract(BaseSupplierContract baseSupplierContract)
+     {
+         return toAjax(baseSupplierContractService.deleteBaseSupplierContractById(baseSupplierContract.getContractNo()));
+     }
 }

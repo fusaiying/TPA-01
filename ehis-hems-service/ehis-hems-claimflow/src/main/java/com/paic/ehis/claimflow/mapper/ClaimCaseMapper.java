@@ -191,11 +191,11 @@ public interface ClaimCaseMapper
     public int updateClaimCaseNew(ClaimCase claimCase);
 
     //抽检待处理
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderNew(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
+    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnderNew(AuditWorkPoolDTO auditWorkPoolDTO);//待处理
     //抽检已处理
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderTwoNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
+    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentUnderTwoNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
     //抽检已处理
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
+    public List<ConditionsForTheAdjustmentVO> selectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO);//已处理
 
     /**
      * 计算案子数量+

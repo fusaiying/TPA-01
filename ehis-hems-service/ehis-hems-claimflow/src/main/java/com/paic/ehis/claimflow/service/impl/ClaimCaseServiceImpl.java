@@ -1162,14 +1162,12 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         record.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.updateClaimCaseRecord(record);
         //增加一条新的、不是历史状态的抽检完毕的操作记录
-        ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
-        claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setOperation("99");
-        claimCaseRecord.setOperator(claimCase.getCreateBy());
-        claimCaseRecord.setOrgRecordId(record.getRecordId());
-        claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
-        claimCaseRecord.setCreateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        record.setHistoryFlag("N");
+        record.setOperation("99");
+        record.setOrgRecordId(record.getRecordId());
+        record.setCreateBy(SecurityUtils.getUsername());
+        record.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.insertClaimCaseRecord(record);
 
         return claimCaseMapper.updateClaimCaseNew(claimCase);
     }
@@ -1184,34 +1182,33 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
         //查询理算审核的历史操作记录
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCase.getRptNo());
-        claimCaseRecord.setHistoryFlag("Y");
-        claimCaseRecord.setStatus("Y");
-        claimCaseRecord.setOperation("07");
-        List<ClaimCaseRecord> claimCaseRecords = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
-        //判断是否查出，如果查出为case表的操作人进行赋值
-        if (claimCaseRecords.size() > 0) {
-            claimCase.setUpdateBy(claimCaseRecords.get(0).getOperator());
-        }
-        //更改case表的更新人和案件状态
-        claimCase.setUpdateTime(DateUtils.getNowDate());
-        claimCase.setCaseStatus("07");
+        claimCaseRecord.setHistoryFlag(ClaimStatus.DATAYES.getCode());//Y
+        claimCaseRecord.setStatus(ClaimStatus.DATAYES.getCode());
+        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
+        //查询最近一次受理环节操作人 operater
+        ClaimCaseRecord record = claimCaseRecordMapper.selectRecentClaimCaseRecord(claimCaseRecord);
 
-        //根据报案号查询出案件抽检的操作记录并进行更新
-        ClaimCaseRecord record = claimCaseRecordMapper.selectClaimCaseRecordByrptNoOneNew(claimCase.getRptNo());
-        record.setOperator(SecurityUtils.getUsername());
-        record.setHistoryFlag("Y");
-        record.setUpdateBy(SecurityUtils.getUsername());
-        record.setUpdateTime(DateUtils.getNowDate());
-        claimCaseRecordMapper.updateClaimCaseRecord(record);
+        //修改当前轨迹状态
+        claimCaseRecord.setOperation(ClaimStatus.CASESPOTCHECK.getCode());//08
+        claimCaseRecord.setOperator(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+        claimCaseRecordMapper.updateRecordHistoricalState(claimCaseRecord);
 
-        //增加一条新的、不是历史状态的理算审核操作记录
+//新增一条07轨迹表
         claimCaseRecord.setHistoryFlag("N");
-        claimCaseRecord.setOperation("07");
-        claimCaseRecord.setOperator(claimCase.getCreateBy());
+        claimCaseRecord.setOperator(null);
         claimCaseRecord.setOrgRecordId(record.getRecordId());
         claimCaseRecord.setCreateBy(SecurityUtils.getUsername());
         claimCaseRecord.setCreateTime(DateUtils.getNowDate());
+        claimCaseRecord.setOperation(ClaimStatus.CASEAUDIT.getCode());//07
+        claimCaseRecord.setUpdateBy(SecurityUtils.getUsername());
+        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
         claimCaseRecordMapper.insertClaimCaseRecord(claimCaseRecord);
+        //修改案件信息表
+        claimCase.setUpdateBy(record.getOperator());
+        claimCase.setUpdateTime(DateUtils.getNowDate());
+        claimCase.setCaseStatus(ClaimStatus.CASEACCEPTED.getCode());
         return claimCaseMapper.updateClaimCase(claimCase);
 
     }
@@ -1220,15 +1217,15 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
      * 抽检工作池-处理中
      */
     @Override
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo SelectConditionsForTheAdjustmentUnderCase(AuditWorkPoolDTO auditWorkPoolDTO) {
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
 
-        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.SelectConditionsForTheAdjustmentUnderNew(auditWorkPoolDTO);//查询出处理中的所有的数据
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderNew(auditWorkPoolDTO);//查询出处理中的所有的数据
         if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
             for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                //已经拥有：批次号、报案号、批次状态、提交用户、被保人姓名
-                //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                //已经拥有：批次号、报案号、批次状态、、被保人姓名
+                //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                 //查询案件保单关联表：claim_case_policy，rpt_no
                 List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                 if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -1267,13 +1264,19 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 //是否调查
                 ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                 claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                claimCaseInvestigation.setIsHistory("N");
                 claimCaseInvestigation.setStatus("Y");
-                List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                // List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
+                if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                 } else {
                     conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
+                }
+
+                //提交用户
+                ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                if (claimCaseRecord2 != null) {
+                    conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
                 }
 
                 //停留时长
@@ -1318,7 +1321,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }
 
     /**
@@ -1433,84 +1443,32 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     //案件抽检已处理
     @Override
-    public List<ConditionsForTheAdjustmentVO> SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO) {
+    public TableDataInfo SelectConditionsForTheAdjustmentOverNew(AuditWorkPoolDTO auditWorkPoolDTO) {
+        auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
         List<ConditionsForTheAdjustmentVO> ConditionsForTheAdjustmentVOLList = new ArrayList<>();
         String batchNo = auditWorkPoolDTO.getBatchNo();
         String rptNo = auditWorkPoolDTO.getRptNo();
         String name = auditWorkPoolDTO.getName();
-        if (batchNo == null || "".equals(batchNo)) {
-            if (rptNo == null || "".equals(rptNo)) {
-                if (name == null || "".equals(name)) {
-                    //默认查询一个月的
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
-                    auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
-                    auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
-                    auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-                    List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.SelectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
-                    if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
-                        for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                            //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
-                            //还差：出单公司、承保机构、停留时长、监控时效、是否调查
-                            //查询案件保单关联表：claim_case_policy，rpt_no
-                            List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                            if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
-                                List<String> organCodeList = new ArrayList<>();//承保机构
-                                List<String> companyNameList = new ArrayList<>();//出单公司
-                                for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
-                                    //去重出单公司名称拼接
-                                    companyNameList.add(claimCasePoliciesOne.getCompanyName());
-                                    //去重承保机构名称拼接
-                                    organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
-                                }
+        List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS;
 
-                                StringBuilder stringBuilder = new StringBuilder();
-                                Set set = new HashSet<>(organCodeList);
-                                List newOrganCodeList = new ArrayList<>(set);
-                                if (!newOrganCodeList.isEmpty()) {
-                                    stringBuilder.append(newOrganCodeList.get(0));
-                                    for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
-                                        stringBuilder.append("|").append(newOrganCodeList.get(i));
-                                    }
-                                }
-                                conditionsForTheAdjustmentVOSLost.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
-
-                                StringBuilder stringBuilder2 = new StringBuilder();
-                                Set set1 = new HashSet<>(companyNameList);
-                                List newCompanyNameList = new ArrayList<>(set1);
-                                if (!newCompanyNameList.isEmpty()) {
-                                    stringBuilder2.append(newCompanyNameList.get(0));
-                                    for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
-                                        stringBuilder2.append("|").append(newCompanyNameList.get(i));
-                                    }
-                                }
-                                conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
-                            }
-
-                            //是否调查
-                            ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
-                            claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
-                            claimCaseInvestigation.setIsHistory("N");
-                            claimCaseInvestigation.setStatus("Y");
-                            List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                            if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
-                                conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
-                            } else {
-                                conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
-                            }
-                            ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
-                        }
-                    }
-                }
-            }
-        } else {
-            //按条件查询
-            auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
-            List<ConditionsForTheAdjustmentVO> conditionsForTheAdjustmentVOS = claimCaseMapper.SelectConditionsForTheAdjustmentUnderTwoNew(auditWorkPoolDTO);//查询出处理中的所有的数据
+        String orderBy= "act."+StringUtils.toUnderScoreCase(auditWorkPoolDTO.getOrderByColumn()) + " " + auditWorkPoolDTO.getIsAsc();
+        //检查字符，防止注入绕过
+        orderBy = SqlUtil.escapeOrderBySql(orderBy);
+        if(!auditWorkPoolDTO.getFlag()) {
+            PageHelper.startPage(auditWorkPoolDTO.getPageNum(), auditWorkPoolDTO.getPageSize(), orderBy);
+        }
+        if(StringUtils.isEmpty(batchNo)&&StringUtils.isEmpty(rptNo)&&StringUtils.isEmpty(name)){
+            //默认查询一个月的
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+            auditWorkPoolDTO.setUpdateStartTime(calendar.getTime());
+            auditWorkPoolDTO.setUpdateEndTime(DateUtils.parseDate(DateUtils.getTime()));
+            auditWorkPoolDTO.setUpdateBy(SecurityUtils.getUsername());
+            conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentOverNew(auditWorkPoolDTO);
             if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
                 for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
-                    //已经拥有：批次号、报案号、批次状态、被保人姓名、提交用户
-                    //还差：出单公司、承保机构、停留时长、监控时效、是否调查
+                    //已经拥有：批次号、报案号、批次状态、被保人姓名
+                    //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
                     //查询案件保单关联表：claim_case_policy，rpt_no
                     List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
@@ -1546,13 +1504,83 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                         conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
                     }
 
+                    //提交用户
+                    ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (claimCaseRecord2 != null) {
+                        conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                    }
+
                     //是否调查
                     ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
                     claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
                     claimCaseInvestigation.setIsHistory("N");
                     claimCaseInvestigation.setStatus("Y");
-                    List<ClaimCaseInvestigation> claimCaseInvestigations = claimCaseInvestigationMapper.selectClaimCaseInvestigationList(claimCaseInvestigation);
-                    if (claimCaseInvestigations != null && !claimCaseInvestigations.isEmpty()) {//不为空01-是 02-为否
+                    List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
+                        conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
+                    } else {
+                        conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
+                    }
+                    ConditionsForTheAdjustmentVOLList.add(conditionsForTheAdjustmentVOSLost);
+                }
+            }
+
+        } else {
+            //按条件查询
+            auditWorkPoolDTO.setOperator(SecurityUtils.getUsername());
+            conditionsForTheAdjustmentVOS = claimCaseMapper.selectConditionsForTheAdjustmentUnderTwoNew(auditWorkPoolDTO);//查询出处理中的所有的数据
+            if (conditionsForTheAdjustmentVOS != null || conditionsForTheAdjustmentVOS.size() != 0) {
+                for (ConditionsForTheAdjustmentVO conditionsForTheAdjustmentVOSLost : conditionsForTheAdjustmentVOS) {
+                    //已经拥有：批次号、报案号、批次状态、被保人姓名
+                    //还差：出单公司、承保机构、停留时长、监控时效、是否调查、提交用户
+                    //查询案件保单关联表：claim_case_policy，rpt_no
+                    List<ClaimCasePolicy> claimCasePolicies = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (claimCasePolicies != null || claimCasePolicies.size() != 0) {
+                        List<String> organCodeList = new ArrayList<>();//承保机构
+                        List<String> companyNameList = new ArrayList<>();//出单公司
+                        for (ClaimCasePolicy claimCasePoliciesOne : claimCasePolicies) {
+                            //去重出单公司名称拼接
+                            companyNameList.add(claimCasePoliciesOne.getCompanyName());
+                            //去重承保机构名称拼接
+                            organCodeList.add(claimCasePoliciesOne.getPolicyManageCom());
+                        }
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        Set set = new HashSet<>(organCodeList);
+                        List newOrganCodeList = new ArrayList<>(set);
+                        if (!newOrganCodeList.isEmpty()) {
+                            stringBuilder.append(newOrganCodeList.get(0));
+                            for (int i = 1, n = newOrganCodeList.size(); i < n; i++) {
+                                stringBuilder.append("|").append(newOrganCodeList.get(i));
+                            }
+                        }
+                        conditionsForTheAdjustmentVOSLost.setOrganCode(stringBuilder.toString());//承保机构-by批次号=organ_code-拼接形式：A｜B
+
+                        StringBuilder stringBuilder2 = new StringBuilder();
+                        Set set1 = new HashSet<>(companyNameList);
+                        List newCompanyNameList = new ArrayList<>(set1);
+                        if (!newCompanyNameList.isEmpty()) {
+                            stringBuilder2.append(newCompanyNameList.get(0));
+                            for (int i = 1, n = newCompanyNameList.size(); i < n; i++) {
+                                stringBuilder2.append("|").append(newCompanyNameList.get(i));
+                            }
+                        }
+                        conditionsForTheAdjustmentVOSLost.setCompanyName(stringBuilder2.toString());  //出单公司companyName-拼接形式：A｜B
+                    }
+
+                    //提交用户
+                    ClaimCaseRecord claimCaseRecord2 = claimCaseRecordMapper.selectClaimCaseRecordByrptNoTwo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (claimCaseRecord2 != null) {
+                        conditionsForTheAdjustmentVOSLost.setOperator(claimCaseRecord2.getOperator());
+                    }
+
+                    //是否调查
+                    ClaimCaseInvestigation claimCaseInvestigation = new ClaimCaseInvestigation();
+                    claimCaseInvestigation.setRptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    claimCaseInvestigation.setIsHistory("N");
+                    claimCaseInvestigation.setStatus("Y");
+                    List<ClaimCaseRecord> claimCaseRecordList = claimCaseRecordMapper.selectClaimCaseRecordByrptNo(conditionsForTheAdjustmentVOSLost.getRptNo());
+                    if (StringUtils.isNotEmpty(claimCaseRecordList)) {//不为空01-是 02-为否
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("01");
                     } else {
                         conditionsForTheAdjustmentVOSLost.setSurveyCode("02");
@@ -1561,7 +1589,14 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 }
             }
         }
-        return ConditionsForTheAdjustmentVOLList;
+
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setRows(ConditionsForTheAdjustmentVOLList);
+        rspData.setMsg("查询成功");
+        PageInfo<ConditionsForTheAdjustmentVO> pageInfo = new PageInfo<>(conditionsForTheAdjustmentVOS);
+        rspData.setTotal(pageInfo.getTotal());
+        return rspData;
     }
 
     @Override

@@ -141,7 +141,7 @@
           <el-table-column prop="caseStatus" :formatter="getCaseStatusName" label="案件状态" align="center"
                            show-overflow-tooltip/>
           <el-table-column prop="operator" label="操作人" align="center" show-overflow-tooltip/>
-          <el-table-column label="操作" align="center" style="padding-top: 0px;">
+          <el-table-column fixed="right" label="操作" align="center" style="padding-top: 0px;">
             <template slot-scope="scope">
               <el-button size="mini" type="text" style="z-index: 1;padding:0px;margin-top:0px;" @click="viewStream(scope.row)">
                 工作流查看
@@ -203,58 +203,61 @@
         :close-on-click-modal="false"
         title="工作流监控"
         width="50%">
-        <div class="el-steps el-steps--vertical" style="margin-left: 100px">
-          <div  class="el-step is-vertical is-flex" style="height: 70px">
+
+
+        <div  class="el-steps el-steps--vertical" style="margin-left: 100px">
+          <!--  C04        -->
+          <div v-for="(item,index) in caseInfo04List"  class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo04.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
 
-            <div :class="[caseInfo04Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+            <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; height: 100%;"></i>
               </div>
 
-              <div  v-if="!ca04Active"class="el-step__icon is-text">
+              <div  v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">交单</div>
               </div>
-              <div v-if="ca04Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">交单</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner">交单</div>
               </div>
-
 
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>{{caseInfo04.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo04.historyFlag === 'N' ? '处理中' :'' }} </span>
-                <span style="margin-left: 70px">{{caseInfo04.historyFlag === 'Y' ?  "处理人："+caseInfo04.updateBy :'' }} </span>
+                <span>{{item.historyFlag === 'Y' ? '已完成' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
               <div class="el-step__title is-finish"  style="height: 30px">
               </div>
             </div>
           </div>
 
-          <div  class="el-step is-vertical" style="height: 70px">
+          <!--  C05        -->
+          <div v-for="(item,index) in caseInfo05List" class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo05.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
 
-            <div :class="[caseInfo05Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+            <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 150ms; border-width: 1px; height: 100%;"></i>
               </div>
-              <div  v-if="!ca05Active" class="el-step__icon is-text">
+              <div v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner"> 受理</div>
               </div>
 
-              <div v-if="ca05Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">受理</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner">受理</div>
               </div>
             </div>
 
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>{{caseInfo05.historyFlag === 'Y' ? '已接收' :'' }} {{caseInfo05.historyFlag === 'N' ? '处理中' :'' }} </span>
-                <span style="margin-left: 70px">{{caseInfo05.historyFlag === 'Y' ?  "处理人："+caseInfo05.updateBy :'' }} </span>
+                <span>{{item.historyFlag === 'Y' ? '已接收' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
               <div class="el-step__title is-finish">
               </div>
@@ -263,107 +266,109 @@
             </div>
           </div>
 
-          <div  class="el-step is-vertical" style="height: 70px">
+          <!--  C06        -->
+          <div v-for="(item,index) in caseInfo06List" class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo06.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
-            <div :class="[caseInfo06Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+            <div :class="[item.historyFlag === 'Y'  ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
               </div>
 
-              <div v-if="!ca06Active" class="el-step__icon is-text">
+              <div v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">录入</div>
               </div>
-              <div v-if="ca06Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">录入</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner" >录入</div>
               </div>
 
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>{{caseInfo06.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo06.historyFlag === 'N' ? '处理中' :'' }} </span>
-                <span style="margin-left: 70px">{{caseInfo06.historyFlag === 'Y' ?  "处理人："+caseInfo06.updateBy :'' }} </span>
+                <span>{{item.historyFlag === 'Y' ? '已完成' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-finish"  style="height: 30px">
               </div>
             </div>
           </div>
 
-          <div  class="el-step is-vertical" style="height: 70px">
+          <!--  C07         -->
+          <div v-for="(item,index) in caseInfo07List"  class="el-step is-vertical caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo07.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
-            <div :class="[caseInfo07Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+            <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line" style="margin-right: 0px;">
                 <i class="el-step__line-inner" style="transition-delay: 300ms; border-width: 0px; height: 0%;"></i>
               </div>
 
-              <div v-if="!ca07Active" class="el-step__icon is-text">
+              <div v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">理算审核</div>
               </div>
-              <div v-if="ca07Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">理算审核</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner">理算审核</div>
               </div>
 
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>{{caseInfo07.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo07.historyFlag === 'N' ? '处理中' :'' }} </span>
-                <span style="margin-left: 70px">{{caseInfo07.historyFlag === 'Y' ?  "处理人："+caseInfo07.updateBy :'' }} </span>
+                <span>{{item.historyFlag === 'Y' ? '已完成' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-finish"  style="height: 30px">
               </div>
             </div>
           </div>
 
-          <div  class="el-step is-vertical is-flex" style="height: 70px">
+          <!--  C08        -->
+          <div  v-for="(item,index) in caseInfo08List" class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo08.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
-            <div :class="[caseInfo08Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+            <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line">
                 <i class="el-step__line-inner"></i>
               </div>
 
-              <div v-if="!ca08Active" class="el-step__icon is-text">
+              <div v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">抽检</div>
               </div>
-              <div v-if="ca08Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">抽检</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner">抽检</div>
               </div>
             </div>
             <div class="el-step__main">
               <div class=""  style="width: 100%; margin-left: 30px">
-                <span>{{caseInfo08.historyFlag === 'Y' ? '已完成' :'' }} {{caseInfo08.historyFlag === 'N' ? '处理中' :'' }} </span>
-                <span style="margin-left: 70px">{{caseInfo08.historyFlag === 'Y' ?  "处理人："+caseInfo08.updateBy :'' }} </span>
+                <span>{{item.historyFlag === 'Y' ? '已完成' :'' }} {{item.historyFlag === 'N' ? '处理中' :'' }} </span>
+                <span style="margin-left: 70px">{{item.historyFlag === 'Y' ?  "处理人："+item.updateBy :'' }} </span>
               </div>
               <div class="el-step__description is-process"  style="height: 30px">
               </div>
             </div>
           </div>
 
-          <div  class="el-step is-vertical is-flex" style="height: 70px">
+          <!--  C99        -->
+          <div v-for="(item,index) in caseInfo99List" class="el-step is-vertical is-flex caseInfoCss">
             <div class="" style="width: 200px; margin-right: 20px">
-              {{caseInfo99.updateTime}}
+              {{item.updateTime == null ? item.createTime : item.updateTime}}
             </div>
-            <div :class="[caseInfo99Css ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
+
+            <div :class="[item.historyFlag === 'Y' ? 'el-step__head is-finish is-flex':'el-step__head is-flex is-process']" >
               <div class="el-step__line">
                 <i class="el-step__line-inner"></i>
               </div>
-
-              <div v-if="!ca99Active" class="el-step__icon is-text">
+              <div v-if="item.historyFlag !== 'N'" class="el-step__icon is-text">
                 <div class="el-step__icon-inner">结束</div>
               </div>
-
-              <div v-if="ca99Active" class="el-step__icon is-text" style="background-color: #1c84c6">
-                <div class="el-step__icon-inner" style="color: whitesmoke">结束</div>
+              <div v-if="item.historyFlag === 'N'" class="el-step__icon is-text now-icon">
+                <div class="el-step__icon-inner now-icon-inner">结束</div>
               </div>
-
             </div>
+
             <div class="el-step__main">
               <div class=""  style="width: 200px; margin-left: 20px">
-
               </div>
               <div class="el-step__description is-process"  style="height: 30px">
               </div>
@@ -436,27 +441,15 @@
         uncheckArra: new Array(),
         checkSelection: [],
         userNameValue: '',
-        //'04','05','06','07','08','99'
-        caseInfo04:{},
-        caseInfo05:{},
-        caseInfo06:{},
-        caseInfo07:{},
-        caseInfo08:{},
-        caseInfo99:{},
 
-        caseInfo04Css:false,
-        caseInfo05Css:false,
-        caseInfo06Css:false,
-        caseInfo07Css:false,
-        caseInfo08Css:false,
-        caseInfo99Css:false,
+        defaultCaseInfo:{},
 
-        ca04Active:false,
-        ca05Active:false,
-        ca06Active:false,
-        ca07Active:false,
-        ca08Active:false,
-        ca99Active:false,
+        caseInfo04List:[],
+        caseInfo05List:[],
+        caseInfo06List:[],
+        caseInfo07List:[],
+        caseInfo08List:[],
+        caseInfo99List:[],
       }
     },
     mounted() {
@@ -596,17 +589,11 @@
         });
       },
       getCaseStatusName(row, col) {
-
-        console.log(row.backAccept)
-        console.log(row.backReview)
         return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
       },
       getClaimTypeName(row, col) {
         return this.selectDictLabel(this.claimTypeSelect, row.claimType)
       },
-      // getCompanyName(row,col){
-      //   return this.selectDictLabel(this.companySelect, row.companycode)
-      // },
       initData() {
         this.gettableData();
       },
@@ -686,65 +673,48 @@
             for(let i=0; i<response.data.length; i++) {
               let result = response.data[i];
               let caseStatus= result.operation;
-              let historyFlag= result.historyFlag;
-              if(caseStatus === '04') {
-                this.caseInfo04Css = true;
-                this.caseInfo04= result;
-                this.ca04Active = historyFlag ===  'N';
+
+              switch (caseStatus) {
+                case '04':
+                  this.caseInfo04List.push(result);
+                  break;
+                case '05':
+                  this.caseInfo05List.push(result);
+                  break;
+                case '06':
+                  this.caseInfo06List.push(result);
+                  break;
+                case '07':
+                  this.caseInfo07List.push(result);
+                  break;
+                case '08':
+                  this.caseInfo08List.push(result);
+                  break;
+                case '99':
+                  this.caseInfo99List.push(result);
+                  break;
+                default:
+                  break;
               }
-              if(caseStatus === '05') {
-                this.caseInfo05Css = true;
-                this.caseInfo05= result;
-                this.ca05Active = historyFlag ===  'N';
-              }
-              if(caseStatus === '06') {
-                this.caseInfo06Css = true;
-                this.caseInfo06= result;
-                this.ca06Active = historyFlag ===  'N';
-              }
-              if(caseStatus === '07') {
-                this.caseInfo07Css = true;
-                this.caseInfo07= result;
-                this.ca07Active = historyFlag ===  'N';
-              }
-              if(caseStatus === '08') {
-                this.caseInfo08Css = true;
-                this.caseInfo08= result;
-                this.ca08Active = historyFlag ===  'N';
-              }
-              if(caseStatus === '99') {
-                this.caseInfo99Css = true;
-                this.caseInfo99= result;
-                this.ca99Active = historyFlag ===  'N';
-              }
-              // switch (caseStatus) {
-              //   case '04':
-              //     this.caseInfo04Css = true;
-              //     this.caseInfo04= result;
-              //     break;
-              //   case '05':
-              //     this.caseInfo05Css = true;
-              //     this.caseInfo05= result;
-              //     break;
-              //   case '06':
-              //     this.caseInfo06Css = true;
-              //     this.caseInfo06= result;
-              //     break;
-              //   case '07':
-              //     this.caseInfo07Css = true;
-              //     this.caseInfo07= result;
-              //     break;
-              //   case '08':
-              //     this.caseInfo08Css = true;
-              //     this.caseInfo08= result;
-              //     break;
-              //   case '99':
-              //     this.caseInfo99Css = true;
-              //     this.caseInfo99= result;
-              //     break;
-              //   default:
-              //     break;
-              // }
+            }
+
+            if(this.caseInfo04List.length == 0 ) {
+              this.caseInfo04List.push(this.defaultCaseInfo);
+            }
+            if(this.caseInfo05List.length == 0 ) {
+              this.caseInfo05List.push(this.defaultCaseInfo);
+            }
+            if(this.caseInfo06List.length == 0 ) {
+              this.caseInfo06List.push(this.defaultCaseInfo);
+            }
+            if(this.caseInfo07List.length == 0 ) {
+              this.caseInfo07List.push(this.defaultCaseInfo);
+            }
+            if(this.caseInfo08List.length == 0 ) {
+              this.caseInfo08List.push(this.defaultCaseInfo);
+            }
+            if(this.caseInfo99List.length == 0 ) {
+              this.caseInfo99List.push(this.defaultCaseInfo);
             }
           }
         }).catch(error => {
@@ -808,27 +778,13 @@
         this.dialogVisible = false;
       },
       handleCloseStream() {
-        this.caseInfo04 = {} ;
-        this.caseInfo05 = {} ;
-        this.caseInfo06 = {} ;
-        this.caseInfo07 = {} ;
-        this.caseInfo08 = {} ;
-        this.caseInfo99 = {} ;
 
-        this.caseInfo04Css = false ;
-        this.caseInfo05Css = false ;
-        this.caseInfo06Css = false ;
-        this.caseInfo07Css = false ;
-        this.caseInfo08Css = false ;
-        this.caseInfo99Css = false ;
-
-        this.ca04Active= false ;
-        this.ca05Active= false ;
-        this.ca06Active= false ;
-        this.ca07Active= false ;
-        this.ca08Active= false ;
-        this.ca99Active= false ;
-
+        this.caseInfo04List = [];
+        this.caseInfo05List = [];
+        this.caseInfo06List = [];
+        this.caseInfo07List = [];
+        this.caseInfo08List = [];
+        this.caseInfo99List = [];
         this.dialogVisibleStream = false;
       },
       checkPermit() {
@@ -914,24 +870,6 @@
         }).catch(error => {
           console.log(error);
         });
-
-        // const params = {
-        //   rptNo: this.rptNos,
-        //   operator: this.operatorForm.operator
-        // };
-        // dispatchUpdate(params).then(response => {
-        //   if(response.code == 200) {
-        //     this.operatorForm.operator = '';
-        //     this.dialogVisible = false;
-        //     this.$message.success('调度成功！');
-        //     this.gettableData();
-        //   } else {
-        //     this.dialogVisible = false;
-        //     this.$message.error('调度失败！');
-        //   }
-        // }).catch(error => {
-        //   console.log(error);
-        // });
       },
       updateOperator() {
         if(this.checkArra.length === 0) {
@@ -1027,6 +965,17 @@
     top: 0;
     bottom: 0;
     left: 17px;
+  }
+
+
+  .caseInfoCss {
+    height:70px;
+  }
+  .now-icon {
+    background-color: #1c84c6
+  }
+  .now-icon-inner {
+    color: whitesmoke
   }
 </style>
 

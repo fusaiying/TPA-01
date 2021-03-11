@@ -5,8 +5,8 @@
         <div slot="header" class="clearfix">
           <div style="width: 100%;cursor: pointer;">
             <span id="span1" :class="[isActiveSpan1?'span-tab is-active':'span-tab']" @click="activeFun('span1')">赔付结论</span>
-            <span id="span2" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
-            <span id="span3" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
+            <span id="span2" v-if="node=='calculateReview'" :class="[isActiveSpan2?'span-tab is-active':'span-tab']" @click="activeFun('span2')">协谈</span>
+            <span id="span3" v-if="node=='calculateReview'" :class="[isActiveSpan3?'span-tab is-active':'span-tab']" @click="activeFun('span3')">调查</span>
             <div style="float: right;" v-if="status==='edit' && (node==='sport' || node==='calculateReview') ">
               <el-button v-if="isButtonShow" type="primary" @click="updateCalInfo" size="mini" >保存 </el-button>
               <el-button v-if="isButtonShow && node!=='sport'" type="primary" @click="examineSave" size="mini">审核完毕
@@ -528,16 +528,22 @@
           exchangeRate(params).then(res => {
             if(res.code == '200' && res.data) {
               let result = res.data;
-              if(result.payAmountForeign != null) {
-                this.conclusionInfo.payAmountForeign = result.payAmountForeign;
-              }
-              if(result.exchangeRate != null) {
-                this.conclusionInfo.exchangeRate = parseFloat(result.exchangeRate).toFixed(2);;
+              if (this.conclusionForm.billCurrency=='CNY'){
+                this.conclusionInfo.exchangeRate=''
+                this.conclusionInfo.payAmountForeign=''
+              }else {
+                if(result.payAmountForeign != null) {
+                  this.conclusionInfo.payAmountForeign = result.payAmountForeign;
+                }
+                if(result.exchangeRate != null) {
+                  this.conclusionInfo.exchangeRate = parseFloat(result.exchangeRate).toFixed(2);;
 
+                }
               }
               console.log("********")
               console.log(res)
               console.log("***************888")
+
             }
           });
         }
@@ -919,6 +925,10 @@
             if(this.conclusionInfo.billCurrency != '' && this.conclusionInfo.billCurrency != null) {
               this.conclusionForm.billCurrency = this.conclusionInfo.billCurrency; // 账单币种
               this.billCurency =  this.conclusionInfo.billCurrency; // 账单币种
+              if (this.conclusionForm.billCurrency=='CNY'){
+                this.conclusionInfo.exchangeRate=''
+                this.conclusionInfo.payAmountForeign=''
+              }
             }
             if(this.conclusionInfo.payConclusion != '' && this.conclusionInfo.payConclusion != null) {
               this.conclusionForm.payConclusion = this.conclusionInfo.payConclusion; // 赔付结论

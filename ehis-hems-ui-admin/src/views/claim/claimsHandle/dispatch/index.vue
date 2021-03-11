@@ -596,6 +596,9 @@
         });
       },
       getCaseStatusName(row, col) {
+
+        console.log(row.backAccept)
+        console.log(row.backReview)
         return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
       },
       getClaimTypeName(row, col) {

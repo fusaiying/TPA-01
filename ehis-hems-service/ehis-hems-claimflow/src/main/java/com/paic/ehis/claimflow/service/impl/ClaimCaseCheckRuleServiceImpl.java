@@ -226,7 +226,7 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
                 caseCheck = claimCaseCheckDTO.getAmount().doubleValue();
             }
             //若此时的抽检比例和金额符合要求
-            if (random && caseCheck <= cc.getCheckAmount().doubleValue()) {
+            if (random && caseCheck >= cc.getCheckAmount().doubleValue()) {
                 flag = true;
                 break;
             }

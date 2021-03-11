@@ -11,42 +11,50 @@
           <span>产品保障信息</span>
           <el-button style="float: right; margin-top: 10px;" type="primary" size="mini" @click="changeDialogVisable">返回
           </el-button>
-          <el-button style="float: right; margin-top: 10px;margin-right:15px" type="primary" size="mini" @click="exportData">清单导出
-          </el-button>
         </div>
-        <el-table
-          :data="tableData"
-          v-loading="loading"
-          size="mini"
-          tooltip-effect="dark"
-          class="receive_table"
-          :header-cell-style="{color:'black',background:'#f8f8ff'}">
-          <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-          <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
-          <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" align="center"  show-overflow-tooltip />
-          <el-table-column prop="name" label="被保险人"  align="center" show-overflow-tooltip />
-          <el-table-column prop="idNo" label="证件号码"  align="center" show-overflow-tooltip />
-          <el-table-column prop="policyItemNo" label="分单号"  align="center" show-overflow-tooltip />
-          <el-table-column prop="accDate" label="就诊日期"  align="center" show-overflow-tooltip />
-          <el-table-column prop="payConclusion" :formatter="getConclusionName" label="赔付结论"  align="center" show-overflow-tooltip />
-          <el-table-column prop="paymentAmount" label="给付金额"  align="center" show-overflow-tooltip />
-          <el-table-column prop="updateBy" label="审核人"  align="center" show-overflow-tooltip />
-          <el-table-column prop="investigation" :formatter="getInvestigationName" label="有无调查"  align="center" show-overflow-tooltip />
-        </el-table>
-        <!--分页组件-->
-        <pagination
-          v-show="totalNum>0"
-          :total="totalNum"
-          :page.sync="pageInfo.currentPage"
-          :limit.sync="pageInfo.pageSize"
-          @pagination="initData"
-        />
+      <el-table
+        :data="tableData"
+        :header-cell-style="{color:'black',background:'#f8f8ff'}"
+        size="small"
+        highlight-current-row
+        tooltip-effect="dark"
+        @expand-change="getMinData"
+        v-loading="loading"
+        style="width: 100%;">
+        <el-table-column  type="expand">
+          <template slot-scope="scope">
+            <el-table :data="scope.row.minData"
+                      :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                      highlight-current-row
+                      size="small"
+                      v-loading="minLoading"
+                      tooltip-effect="dark"
+                      style="width: 100%;">
+              <el-table-column prop="rptNo" label="保单号" align="center"/>
+              <el-table-column prop="name" label="保单号" align="center"/>
+            </el-table>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="batchNo" min-width="120" label="产品保障明细" show-overflow-tooltip/>
+        <el-table-column align="center" min-width="200" prop="invoiceBoxNo" label="规则信息" show-overflow-tooltip/>
+        <el-table-column align="center" prop="organcode"  min-width="120" label="有效期内至今花费" show-overflow-tooltip/>
+        <el-table-column align="center" prop="remark" min-width="110" label="保险年度余额" show-overflow-tooltip/>
+        <el-table-column align="center" prop="createTime" min-width="110" label="规则描述" show-overflow-tooltip/>
+      </el-table>
+      <!--分页组件-->
+      <pagination
+        v-show="totalNum>0"
+        :total="totalNum"
+        :page.sync="pageInfo.currentPage"
+        :limit.sync="pageInfo.pageSize"
+        @pagination="initData"
+      />
     </el-card>
   </el-dialog>
 </template>
 
 <script>
-  import { claimInformation } from '@/api/handel/common/api'
+import {childData, invoiceData} from "@/api/invoice/api";
   export default {
     props: {
       value: {
@@ -73,6 +81,7 @@
     },
     data() {
       return {
+        minLoading:false,
         fixInfoData : '',
         rptNo :'',
         paramInsuredNo:'',
@@ -107,26 +116,68 @@
 
     },
     methods: {
-
-      getClaimStatusName(row,col){
-        return this.selectDictLabel(this.claimStatusSelect, row.caseStatus)
-      },
-      getConclusionName(row,col){
-        return this.selectDictLabel(this.conclusionSelect, row.payConclusion)
-      },
-      exportData(){
+      initData(){
+        this.loading = true;
         const params = {};
-        params.insuredNo = this.paramInsuredNo;
-        params.unEqRptNo = this.rptNo;
-        params.caseStatus = '99';
-        this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
+        params.pageNum =  this.pageInfo.currentPage;
+        params.pageSize =  this.pageInfo.pageSize;
+        params.rptNo = this.formSearch.rptNo;
+        params.batchNo = this.formSearch.batchNo;
+        params.hospitalCode = this.formSearch.hospitalCode;
+        params.invoiceBoxNo = this.formSearch.invoiceBoxNo;
+
+        if(!this.searchBtn) {
+          params.billrecevieflag = "02";
+        }
+
+        invoiceData(params).then(res => {
+          if (res.code == '200') {
+            this.totalNum = res.total;
+            let _data = res.rows;
+            if (_data.length !== 0) {
+              _data.forEach(item => {
+               // item.editing = false;
+                // item.minData = [item]
+              })
+            }
+         //   this.tableData= _data;
+          }
+        }).finally(() => {
+          this.loading = false;
+        })
+      },
+
+      getMinData(row, expandedRows) {
+        //判断只有展开是做请求
+        let query = {
+          batchNo: row.batchNo
+        }
+        this.minLoading = true;
+        if (expandedRows.length > 0) {
+          childData(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData.forEach((temp, index) => {
+                if (temp.batchNo === row.batchNo) {
+                  if(res.rows.length > 0) {
+                    for (let i=0; i<res.rows.length; i++) {
+                      if(res.rows[i].caseStatus != '98') {
+                        res.rows[i].print = '01';
+                        break;
+                      }
+                    }
+                  }
+                  this.tableData[index].minData = res.rows
+                }
+              })
+            }
+          }).finally(() => {
+            this.minLoading = false
+          })
+        }
       },
       //关闭对话框
       changeDialogVisable() {
         this.$emit('closeGuaranteeDialog')
-      },
-      getInvestigationName(row, col){
-        return row.investigation == '01' ? '是' : '否'  ;
       },
     }
   }

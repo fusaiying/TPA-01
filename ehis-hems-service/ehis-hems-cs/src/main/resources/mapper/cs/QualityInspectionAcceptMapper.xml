@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="serviceItem != null  and serviceItem != ''"> and adi.item_code = #{serviceItem}</if>
 
     </select>
-    <resultMap type="com.paic.ehis.cs.domain.vo.QualityVo" id="QualityResult">
+    <resultMap type="com.paic.ehis.cs.domain.vo.QualityAcceptVo" id="QualityResult">
         <result property="workOrderNo" column="work_order_no"/>
         <result property="organCode" column="organ_code"/>
         <result property="itemCode" column="item_code"/>

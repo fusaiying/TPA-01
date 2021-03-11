@@ -9,6 +9,7 @@ import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
@@ -250,7 +251,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
     }
 
     @Override
-    public List<QualityVo> selectQualityVo(QualityDTO qualityDTO) {
+    public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO) {
         return qualityInspectionAcceptMapper.selectQualityVo(qualityDTO);
     }
 

@@ -276,13 +276,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="signDate != null">sign_date = #{signDate},</if>
             <if test="cvaliDate != null">cvali_date = #{cvaliDate},</if>
             <if test="endDate != null">end_date = #{endDate},</if>
-            <if test="expiryDate != null">expiry_date = #{expiryDate},</if>
+            expiry_date = #{expiryDate},
             <if test="contractadvance != null">contractadvance = #{contractadvance},</if>
-            <if test="email != null and email != ''">email = #{email},</if>
-            <if test="contractPartyA != null and contractPartyA != ''">contract_party_a = #{contractPartyA},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="contractPartyA != null ">contract_party_a = #{contractPartyA},</if>
             <if test="contractPartyB != null and contractPartyB != ''">contract_party_b = #{contractPartyB},</if>
             <if test="connectedContract != null and connectedContract != ''">connected_contract = #{connectedContract},</if>
-            <if test="contractPartyC != null and contractPartyC != ''">contract_party_c = #{contractPartyC},</if>
+            <if test="contractPartyC != null ">contract_party_c = #{contractPartyC},</if>
             <if test="deposit != null">deposit = #{deposit},</if>
             <if test="cooperativeUnit != null and cooperativeUnit != ''">cooperative_unit = #{cooperativeUnit},</if>
             <if test="straight != null and straight != ''">straight = #{straight},</if>
@@ -302,9 +302,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="averageCostExcept != null">average_cost_except = #{averageCostExcept},</if>
             <if test="contractsort != null">contractsort = #{contractsort},</if>
             <if test="remark != null">remark = #{remark},</if>
-            <if test="reason != null and reason != ''">reason = #{reason},</if>
-            <if test="phone != null and phone != ''">phone = #{phone},</if>
-            <if test="tel != null and tel != ''">tel = #{tel},</if>
+            <if test="reason != null ">reason = #{reason},</if>
+            <if test="phone != null ">phone = #{phone},</if>
+            <if test="tel != null ">tel = #{tel},</if>
             <if test="boxRidgeCode != null">box_ridge_code = #{boxRidgeCode},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
@@ -315,7 +315,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endDate == null">end_date = #{endDate},</if>
             <if test="renewFlag != null and renewFlag != ''">renew_flag = #{renewFlag},</if>
             <if test="renewFlag == null or renewFlag == ''">renew_flag = #{renewFlag},</if>
-            <if test="liaison != null  and liaison != ''">liaison = #{liaison},</if>
+            <if test="liaison != null  ">liaison = #{liaison},</if>
             <if test="providerType != null  and providerType != ''">provider_Type = #{providerType},</if>
         </trim>
         where contract_no = #{contractNo}

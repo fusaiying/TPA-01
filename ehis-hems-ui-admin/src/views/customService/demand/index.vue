@@ -607,7 +607,7 @@ export default {
           this.totalCount = res.total
           if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
+              "待处理未查询到数据！"
             )
           }
         }
@@ -636,7 +636,7 @@ export default {
           console.log("geren",this.workPersonPoolData)
           if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
+              "个人池未查询到数据！"
             )
           }
         }

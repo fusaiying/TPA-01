@@ -578,7 +578,7 @@ export default {
           console.log('response', res.total)
           if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
+              "公共池未查询到数据！"
             )
           }
         }
@@ -604,7 +604,7 @@ export default {
           console.log('response', res.total)
           if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
+              "个人池未查询到数据！"
             )
           }
         }

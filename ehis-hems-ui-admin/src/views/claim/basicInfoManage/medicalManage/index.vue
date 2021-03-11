@@ -124,7 +124,7 @@ export default {
       loading: false,
       org_flagOptions: [],
       bussiness_statusOptions: [],
-      hosp_statusOptions: []
+
     }
   },
   created() {
@@ -138,9 +138,7 @@ export default {
     this.getDicts("bussiness_status").then(response => {
       this.bussiness_statusOptions = response.data;
     });
-    this.getDicts("hosp_status").then(response => {
-      this.hosp_statusOptions = response.data;
-    });
+
 
 
   },
@@ -159,7 +157,7 @@ export default {
       return this.selectDictLabel(this.org_flagOptions, row.orgFlag)
     },
     getBussinessStatus(row){
-      return this.selectDictLabel(this.hosp_statusOptions, row.bussinessStatus)
+      return this.selectDictLabel(this.bussiness_statusOptions, row.bussinessStatus)
     },
     getAddressData() {
       getAddress().then(response => {

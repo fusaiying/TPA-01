@@ -1109,6 +1109,12 @@ export default {
             return item.dictValue=='03' || item.dictValue=='04'
           })
         }
+        else if(this.$route.query.node=='05'){
+          this.statusChange=false
+          this.bussiness_statusOptions = this.bussiness_statusOptions.filter(item =>{
+            return item.dictValue=='03' || item.dictValue=='04' || item.dictValue=='05'
+          })
+        }
         else{
           this.statusChange=true
         }
@@ -1135,9 +1141,6 @@ export default {
           this.copyOtherName=this.baseForm.otherName
           this.copyChname1=this.baseForm.chname1
           this.copyEnname1=this.baseForm.enname1
-          if(this.baseForm.bussinessStatus=='06' || this.baseForm.bussinessStatus=='07'){
-            this.baseForm.bussinessStatus='05'
-          }
           if(this.baseForm.firstAttribute=='01'){
             this.secondAttributeOptions=this.second_attribute_aOptions
           }

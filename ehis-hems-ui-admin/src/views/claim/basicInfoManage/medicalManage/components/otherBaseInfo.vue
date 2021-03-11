@@ -29,30 +29,30 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="中文展示名称：" prop="chname1">
-            <el-input v-model="otherBaseForm.chname1" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="otherBaseForm.chname1" class="item-width" clearable size="mini" placeholder="请输入" maxlength="50"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="英文展示名称：" prop="enname1">
-            <el-input v-model="otherBaseForm.enname1" class="item-width" clearable size="mini"
+            <el-input v-model="otherBaseForm.enname1" class="item-width" clearable size="mini" maxlength="50"
                       placeholder="请输入"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="官方网址：" prop="website">
-            <el-input v-model="otherBaseForm.website" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="otherBaseForm.website" class="item-width" clearable size="mini" placeholder="请输入" maxlength="300"/>
           </el-form-item>
         </el-col>
 
 
         <el-col :span="8">
           <el-form-item label="中文工商注册名称：" prop="chregister">
-            <el-input v-model="otherBaseForm.chregister" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="otherBaseForm.chregister" class="item-width" clearable size="mini" placeholder="请输入" maxlength="50"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="英文工商注册名称：" prop="enregister">
-            <el-input v-model="otherBaseForm.enregister" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="otherBaseForm.enregister" class="item-width" clearable size="mini" placeholder="请输入" maxlength="50"/>
           </el-form-item>
         </el-col>
         <el-col  :span="8">
@@ -73,7 +73,7 @@
 
         <el-col :span="8">
           <el-form-item label="公共邮箱：" prop="email">
-            <el-input v-model="otherBaseForm.email" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-input v-model="otherBaseForm.email" class="item-width" clearable size="mini" placeholder="请输入" maxlength="50"
             />
           </el-form-item>
         </el-col>
@@ -124,19 +124,19 @@
       </el-row>
       <el-row>
         <el-form-item style="margin-right: 20px;" label="中文地址：" prop="chaddreess">
-          <el-input v-model="otherBaseForm.chaddreess" clearable size="mini" placeholder="请输入"/>
+          <el-input v-model="otherBaseForm.chaddreess" clearable size="mini" placeholder="请输入" maxlength="300"/>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item style="margin-right: 20px;" label="英文地址：" prop="enaddress">
-          <el-input v-model="otherBaseForm.enaddress" clearable size="mini" placeholder="请输入"/>
+          <el-input v-model="otherBaseForm.enaddress" clearable size="mini" placeholder="请输入"  maxlength="300"/>
         </el-form-item>
       </el-row>
       <el-row>
 
         <el-col :span="8">
           <el-form-item label="标志性建筑：" prop="landmarks">
-            <el-input v-model="otherBaseForm.landmarks" class="item-width" clearable size="mini"
+            <el-input v-model="otherBaseForm.landmarks" class="item-width" clearable size="mini" maxlength="500"
                       placeholder="c端客户可看"/>
           </el-form-item>
         </el-col>

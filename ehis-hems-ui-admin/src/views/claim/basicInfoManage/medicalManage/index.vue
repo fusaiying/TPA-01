@@ -74,11 +74,7 @@
           <el-table-column label="服务机构名称" prop="chname1" align="center" show-overflow-tooltip/>
           <el-table-column label="服务机构类型" prop="orgFlag" :formatter="getOrgFlag" align="center" show-overflow-tooltip/>
           <el-table-column label="所属地区" prop="addressdetail" align="center" show-overflow-tooltip/>
-          <el-table-column label="状态" prop="statusName" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{ scope.row.statusName  }}
-            </template>
-          </el-table-column>
+          <el-table-column label="状态" prop="bussinessStatus" align="center" :formatter="getBussinessStatus" show-overflow-tooltip/>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">编辑</el-button>
@@ -127,7 +123,8 @@ export default {
       totalCount: 0,
       loading: false,
       org_flagOptions: [],
-      bussiness_statusOptions: []
+      bussiness_statusOptions: [],
+      hosp_statusOptions: []
     }
   },
   created() {
@@ -141,6 +138,10 @@ export default {
     this.getDicts("bussiness_status").then(response => {
       this.bussiness_statusOptions = response.data;
     });
+    this.getDicts("hosp_status").then(response => {
+      this.hosp_statusOptions = response.data;
+    });
+
 
   },
   methods: {
@@ -156,6 +157,9 @@ export default {
     },
     getOrgFlag(row){
       return this.selectDictLabel(this.org_flagOptions, row.orgFlag)
+    },
+    getBussinessStatus(row){
+      return this.selectDictLabel(this.hosp_statusOptions, row.bussinessStatus)
     },
     getAddressData() {
       getAddress().then(response => {
@@ -216,6 +220,7 @@ export default {
         query: {providerCode: row.providerCode,
           orgflag: row.orgFlag,
           status: 'edit',
+          node: row.bussinessStatus,
         }
       })
 

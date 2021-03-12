@@ -540,7 +540,12 @@
         return row.billId
       },
       rowClick(row, column, event) {
-        row.isEdit = false
+        if (this.status=='show' || this.node=='sport'){
+
+        }else {
+          row.isEdit = false
+        }
+
       },
       rowMinClick(row, column, event) {
         if (this.node === 'calculateReview') {

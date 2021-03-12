@@ -115,6 +115,7 @@
         <el-form-item label="预授权书发送及确认方式：" prop="preauthsendway">
           <el-input
             type="textarea"
+            maxlength="500"
             placeholder="请输入内容"
             v-model="otherServiceForm.preauthsendway">
           </el-input>

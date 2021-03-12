@@ -1047,6 +1047,8 @@
               center: true,
               showClose: true
             });
+            this.$store.dispatch("tagsView/delView", this.$route);
+            this.$router.go(-1)
           }
         }).catch(res => {
           this.$message({

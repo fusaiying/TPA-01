@@ -194,7 +194,7 @@ export default {
       console.info(getQuery);
       //查询外部接口获取保单和被保人信息
       getPersonInfoData(getQuery).then(res => {
-        console.log('------------: ', res)
+        console.log('++++++++------------: ', res)
         if (res !== undefined && res.code === 200) {
           if (res.total !== undefined && res.total >= 1) {
             this.personInfo = res.rows[0]

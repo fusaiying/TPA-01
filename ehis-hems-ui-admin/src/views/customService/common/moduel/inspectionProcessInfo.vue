@@ -5,51 +5,47 @@
     </div>
     <el-form ref="ruleForm" :model="inspection" style="padding-bottom: 30px;" label-width="100px">
       <el-table :data="inspection.items" >
-            <el-table-column  label="质检项目" show-overflow-tooltip align="center">
-              <template slot-scope="scope">
-                <el-form-item :prop="'item.' + scope.$index + '.itemKey'" >
-                  <el-input v-model.trim="scope.row.itemType" v-show="scope.row.show" clearable size="mini" />
-                  <span v-show="!scope.row.show">{{scope.row.itemKey}}</span>
-                </el-form-item>
-              </template>
-            </el-table-column>
-            <el-table-column  label="是否存在差错" show-overflow-tooltip align="center">
-               <template slot-scope="scope">
-                 <el-form-item :prop="'item.' + scope.$index + '.value'" >
-                   <el-select v-model="scope.row.value"  clearable size="mini" placeholder="请选择">
-                     <el-option v-for="item in status" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
-                       <span style="float: left">{{ item.dictValue }}</span>
-                       <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>
-                     </el-option>
-                   </el-select>
-                 </el-form-item>
-               </template>
-            </el-table-column>
-            <el-table-column  label="质检说明" show-overflow-tooltip align="center">
-              <template slot-scope="scope">
-                <el-form-item :prop="'item.' + scope.$index + '.itemRemark'">
-                  <el-input v-model="scope.row.itemRemark" v-show="!scope.row.show" clearable size="mini" />
-                  <span v-show="!scope.row.show">{{scope.row.itemRemark}}</span>
-                </el-form-item>
-              </template>
-            </el-table-column>
+        <el-table-column  label="质检项目" show-overflow-tooltip align="center" disabled="true">
+          <template slot-scope="scope">
+            <el-form-item :prop="'items.' + scope.$index + '.itemKey'" >
+              <el-input v-model.trim="scope.row.itemKey" v-show="scope.row.show" clearable size="mini" />
+              <span v-show="!scope.row.show">{{scope.row.itemKey}}</span>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column  label="是否存在差错" show-overflow-tooltip align="center">
+          <template slot-scope="scope">
+            <el-form-item :prop="'items.' + scope.$index + '.value'" >
+              <el-select v-model="scope.row.value"  clearable size="mini" placeholder="请选择">
+                <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column  label="质检说明" show-overflow-tooltip align="center">
+          <template slot-scope="scope">
+            <el-form-item :prop="'items.' + scope.$index + '.itemRemark'">
+              <el-input v-model="scope.row.itemRemark" v-show="!scope.row.show" clearable size="mini" />
+
+            </el-form-item>
+          </template>
+        </el-table-column>
       </el-table>
-      <el-table :data="inspection.name" >
+      <el-table :data="inspection.appeal" >
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'name.' + scope.$index + '.name'" >
-              <el-input v-model="scope.row.name" v-show="scope.row.show" clearable size="mini" />
-              <span v-show="!scope.row.show">{{scope.row.name}}</span>
+            <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
+              <el-input v-model="scope.row.appealName" v-show="scope.row.show"  size="mini" />
+              <span v-show="!scope.row.show">{{scope.row.appealName}}</span>
             </el-form-item>
           </template>
         </el-table-column>
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item :prop="'name.' + scope.$index + '.value'" >
-              <el-select v-model="scope.row.value"  clearable size="mini" placeholder="请选择">
-                <el-option v-for="item in status" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
-                  <span style="float: left">{{ item.dictValue }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>
+            <el-form-item :prop="'appeal.' + scope.$index + '.appealFlag'" >
+              <el-select v-model="scope.row.appealFlag"   size="mini" placeholder="请选择">
+                <el-option v-for="item in appealFlagOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -57,8 +53,8 @@
         </el-table-column>
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
-            <el-form-item label="申诉理由：" :prop="'name.' + scope.$index + '.appealReason'">
-              <el-input v-model="scope.row.appealReason"   clearable size="mini" />
+            <el-form-item label="申诉理由：" :prop="'appeal.' + scope.$index + '.appealReason'">
+              <el-input v-model="scope.row.appealReason"   size="mini" />
             </el-form-item>
           </template>
         </el-table-column>
@@ -69,15 +65,26 @@
 
 <script>
 import {insertItem} from '@/api/customService/spotCheck'
+
+let dictss = [
+  {dictType: 'cs_whether_flag' },
+]
 export default {
-    name: "inspectionProcessInfo",
+  name: "inspectionProcessInfo",
+  props: {
+
+  },
+
 data(){
       return {
+        dictList: [],
+        valueOptions: [],
+        appealFlagOptions: [],
         inspection:{
-          name :[
+          appeal:[
             {
-              name : '是否申诉',
-              value: '',
+              appealName: '是否申诉',
+              appealFlag : '',
               appealReason: '',
             }
           ],
@@ -123,9 +130,25 @@ data(){
 },
 
 created() {
-    },
 
+    },
+async mounted() {
+  // this.$nextTick(() => {
+  //   this.$refs[inspectionProcessInfo].resetFields();
+  // })
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
+    console.log(this.dictList,"85646568569");
+    this.valueOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_whether_flag'
+    }).dictDate
+    this.appealFlagOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_whether_flag'
+    }).dictDate
+},
 methods: {
+
     }
 }
 </script>

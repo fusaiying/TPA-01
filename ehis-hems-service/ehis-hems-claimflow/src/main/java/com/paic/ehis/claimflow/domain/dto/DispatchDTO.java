@@ -50,5 +50,6 @@ public class DispatchDTO implements Serializable {
     /** 更新者 */
     private String updateBy;
 
+    private String hangUp;
 
 }

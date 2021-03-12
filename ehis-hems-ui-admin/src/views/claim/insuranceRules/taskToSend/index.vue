@@ -170,6 +170,7 @@
 
 <script>
   import moment from 'moment'
+  import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
   import {selectClaimProductList, updateClaimProductList, selectSysUser} from '@/api/insuranceRules/ruleDefin'
 
   let dictss = [{dictType: 'product_status'}, {dictType: 'approvalconclusion'},]
@@ -183,6 +184,7 @@
     },
     data() {
       return {
+        organCode:'',
         userLoading: false,
         riskCodes: [],
         dialogFormVisible: false,
@@ -231,6 +233,23 @@
       }).catch(res => {
 
       })
+
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode = res.data.organCode
+          let option = {
+            organCode:  res.data.organCode,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          getUsersByOrganCode(option).then(res => {
+            if (res != null && res.code === 200) {
+              this.sysUserOptions = res.rows
+            }
+          })
+        }
+      })
+
     },
     methods: {
       resetForm() {
@@ -326,13 +345,24 @@
         return this.selectDictLabel(this.product_statusOptions, row.riskStatus)
       },
       remoteMethod(query) {
-        let data = {
-          userName: query
-        }
-        if (query !== '' && query != null) {
-          selectSysUser(data).then(res => {
-            this.sysUserOptions = res.data
-          })
+        if (query != null && query != '' && query != undefined) {
+
+          let data = {
+            organCode: this.queryParams.organcode,
+            userName: query,
+            pageNum: 1,
+            pageSize: 200,
+          }
+          if (data.organCode != null && data.organCode != '' && data.organCode != undefined) {
+            if (query !== '' && query != null) {
+              getUsersByOrganCode(data).then(res => {
+                if (res != null && res.code === 200) {
+                  this.sysUserOptions = res.rows
+                }
+              })
+            }
+          }
+
         }
       }
     }

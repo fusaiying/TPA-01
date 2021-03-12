@@ -218,7 +218,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
-                    workOrderAccept.setStatus("03");
+                    workOrderAccept.setStatus("04");/*已完成*/
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 workOrderAccept.setStatus("02");
             }
@@ -277,7 +277,7 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
-                workOrderAccept.setStatus("03");
+                workOrderAccept.setStatus("04");/*已完成*/
             }else  if (serviceProcessingVo.getBusinessProcess().equals("02")){
                 workOrderAccept.setStatus("02");
             }

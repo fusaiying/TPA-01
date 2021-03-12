@@ -661,10 +661,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             //将所有数据置为n
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
-            //修改主表状态为已处理
+            //修改主表状态为已完成
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            workOrderAccept.setStatus("04");
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
             if (workHandleInfos == null) {
@@ -704,11 +704,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
 
-            /*if(workHandleInfos==null){
-            return workHandleInfoMapper.assistInComplaint(workHandleInfo);
-            }else{
-                return workHandleInfoMapper.updateWorkHandleInfo(workHandleInfo);
-            }*/
+
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
@@ -724,11 +720,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             return  flowLogMapper.insertFlowLog(flowLog);
         } else {
 
-            //将主表状态置为已处理
+            //将主表状态置为已完成
             String workOrderNo=complaintDealVo.getWorkOrderNo();
             WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
             WorkOrderAccept workOrderAccept2=workOrderAccept1;
-            workOrderAccept1.setStatus("03");
+            workOrderAccept1.setStatus("04");
             workOrderAcceptMapper.updateWorkOrderStatus(workOrderAccept1);
             BeanUtils.copyProperties(workOrderAccept2,workOrderAccept1);
             String workOrderNo2="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);

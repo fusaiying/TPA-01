@@ -600,7 +600,7 @@ export default {
         appointmentDate: [
           {required: true, message: "预约时间不能为空", trigger: "blur"}
         ],
-        medicalInstitution: [
+        province: [
           {required: true, message: "预约医院不能为空", trigger: "blur"}
         ],
         department: [

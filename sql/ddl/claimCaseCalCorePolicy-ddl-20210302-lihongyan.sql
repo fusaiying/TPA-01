@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS claim_case_cal_core_policy;
 CREATE TABLE claim_case_cal_core_policy
 (
     core_policy_id BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT '核心案件保单ID' ,
+    core_id            BIGINT(20) NOT NULL   COMMENT '核心案件ID' ,
     rpt_no            VARCHAR(20)  NOT NULL COMMENT '报案号',
     policy_no         VARCHAR(20)  NOT NULL COMMENT '保单号',
     policy_item_no    VARCHAR(20)  NOT NULL COMMENT '分单号',

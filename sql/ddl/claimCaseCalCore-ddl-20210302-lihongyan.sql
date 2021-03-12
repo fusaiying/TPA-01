@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS claim_case_cal_core;
 CREATE TABLE claim_case_cal_core
 (
-    core_id BIGINT(20) NOT NULL AUTO_INCREMENT  COMMENT '核心案件ID' ,
+    core_id BIGINT(20) NOT NULL   COMMENT '核心案件ID' ,
     rpt_no               VARCHAR(20)    NOT NULL COMMENT '报案号',
     case_status          VARCHAR(2)     NOT NULL COMMENT '案件状态',
     is_appeal            VARCHAR(2) COMMENT '是否申诉案件',

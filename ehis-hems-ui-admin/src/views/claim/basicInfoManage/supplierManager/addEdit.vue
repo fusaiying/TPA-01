@@ -158,7 +158,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.name'"
                             :rules="constactRules.name">
-                <el-input v-model="scope.row.name" placeholder="请输入" size="mini" maxlength="60"/>
+                <el-input v-model="scope.row.name" placeholder="请输入" size="mini" maxlength="50"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{scope.row.name}}</span>
             </template>
@@ -168,7 +168,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.phone'"
                             :rules="constactRules.phone">
-                <el-input v-model="scope.row.phone" placeholder="请输入" size="mini" maxlength="10"/>
+                <el-input v-model="scope.row.phone" placeholder="请输入" size="mini" maxlength="11"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{scope.row.phone}}</span>
             </template>
@@ -178,7 +178,7 @@
             <template slot-scope="scope">
               <el-form-item v-if="scope.row.isShow" :prop="'contacts.' + scope.$index + '.mobile'"
                             :rules="constactRules.mobile">
-                <el-input v-model="scope.row.mobile" placeholder="请输入" size="mini" maxlength="10"/>
+                <el-input v-model="scope.row.mobile" placeholder="请输入" size="mini" maxlength="11"/>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{scope.row.mobile}}</span>
             </template>

@@ -137,7 +137,7 @@
         params.insuredNo = this.paramInsuredNo;
         params.unEqRptNo = this.rptNo;
         params.caseStatus = '99';
-        this.download('claimflow/case/exportClaimInformation', params, `理赔案件_${new Date().getTime()}.xlsx`);
+        this.download('claimflow/case/exportClaimInformation', params, `claimsCase_${new Date().getTime()}.xlsx`);
       },
       //关闭对话框
       changeDialogVisable() {

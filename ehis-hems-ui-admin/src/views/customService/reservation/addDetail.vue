@@ -361,9 +361,9 @@
           </el-col>
           <el-col :span="8">
 
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="appointmentDate">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
               <el-date-picker class="item-width"
-                v-model="ruleForm.appointmentDate"
+                v-model="ruleForm.complaintTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -378,11 +378,9 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约医院：" prop="medicalInstitution">
-              <el-select v-model="ruleForm.medicalInstitution" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+            <el-form-item label="预约医院：" prop="province">
+              省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
+              城市：<el-input v-model="ruleForm.city" style="width: 50px" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -508,7 +506,7 @@ export default {
       //需要填入数据的部分
       ruleForm:{
         workOrderNo:"",
-        appointmentDate:"",
+        complaintTime:"",
         hospitalWorkCall:"",
         channelCode:"",//受理渠道
         callCenterId:"",//中心
@@ -529,6 +527,8 @@ export default {
           mobilePhone:"",
           sex:"",
         },
+        province:"",
+        city:"",
         visitType:"",
         disease:"",
         symptomsSigns:"",
@@ -541,7 +541,6 @@ export default {
         medicalInstitution:"",
         department:"",
         bunk:"",
-        province:"",
         compensationRatio:"",
         contactsRelationBy: "",//联系人与别抱人关系
         contactsLanguage: "",//联系人语言
@@ -583,8 +582,8 @@ export default {
         accidentFlag: [
           {required: true, message: "是否意外不能为空", trigger: "blur"}
         ],
-        contactsName: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
+        'contactsPerson.name': [
+          {required: true, message: "联系人姓名不能为空", trigger: "blur"}
         ],
         'contactsPerson.mobilePhone': [
           {required: true, message: "联系人电话不能为空", trigger: "blur"}
@@ -601,11 +600,14 @@ export default {
         appointmentDate: [
           {required: true, message: "预约时间不能为空", trigger: "blur"}
         ],
-        medicalInstitution: [
+        province: [
           {required: true, message: "预约医院不能为空", trigger: "blur"}
         ],
         department: [
           {required: true, message: "科室不能为空", trigger: "blur"}
+        ],
+        organCode: [
+          {required: true, message: "出单机构不能为空", trigger: "blur"}
         ],
       },
       readonly: true,

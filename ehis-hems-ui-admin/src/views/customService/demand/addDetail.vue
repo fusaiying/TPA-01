@@ -519,6 +519,9 @@ export default {
         {required: true, message: "业务内容不能为空", trigger: "blur"},
         { min: 0, max: 2000, message: '长度不超过2000个字符' }
       ],
+      phone: [
+        {required: true,type: 'number', message: '号码必须为数字'}
+      ],
     };
 
     return {

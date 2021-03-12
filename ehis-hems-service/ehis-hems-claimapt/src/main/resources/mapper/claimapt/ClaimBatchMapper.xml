@@ -405,6 +405,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="claimFlag != null">claim_flag,</if>
+            <if test="noticeDay != null">notice_day,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="batchno != null">#{batchno},</if>
@@ -432,6 +434,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="claimFlag != null">#{claimFlag},</if>
+            <if test="noticeDay != null">#{noticeDay},</if>
          </trim>
     </insert>
 
@@ -462,8 +466,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="claimFlag != null">claim_flag = #{claimFlag},</if>
+            <if test="noticeDay != null">notice_day = #{noticeDay},</if>
         </trim>
-        where batch_no = #{batchno} and update_by='' and status='Y'
+        where batch_no = #{batchno} and status='Y'
     </update>
 
     <delete id="deleteClaimBatchById" parameterType="String">

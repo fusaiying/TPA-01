@@ -81,8 +81,9 @@ public class CustomServiceComplaintController extends BaseController {
         complaintAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         complaintAcceptVo.setComplaintPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         complaintAcceptVo.setBusinessType("03");
-        complaintAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
-        return toAjax(iComplaintAcceptVoService.insertComplaintInfo(complaintAcceptVo));
+        String workOrderNo="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
+        complaintAcceptVo.setWorkOrderNo(workOrderNo);
+        return iComplaintAcceptVoService.insertComplaintInfo(complaintAcceptVo) > 0 ? AjaxResult.success(workOrderNo) : AjaxResult.error();
     }
 
     /**

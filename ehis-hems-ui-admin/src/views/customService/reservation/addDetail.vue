@@ -195,6 +195,13 @@
         <span style="color: blue">服务受理信息</span>
         <el-divider/>
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="ruleForm.workOrderNo" class="item-width" clearable size="mini" disabled placeholder="系统自动生成"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-form-item label="受理渠道" prop="channelCode">
             <el-row>
               <el-radio-group v-model="ruleForm.channelCode">
@@ -500,6 +507,7 @@ export default {
       cs_time_unit: [],
       //需要填入数据的部分
       ruleForm:{
+        workOrderNo:"",
         appointmentDate:"",
         hospitalWorkCall:"",
         channelCode:"",//受理渠道
@@ -730,8 +738,8 @@ export default {
       addReservationInsert(insert).then(res => {
         console.log("insert",insert)
         if (res != null && res.code === 200) {
-          console.log("insert",insert)
           this.$message.success("插入成功")
+          this.ruleForm.workOrderNo=res.msg;
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "失败！"

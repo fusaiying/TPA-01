@@ -571,7 +571,7 @@ export default {
         claimHospitalCode: undefined,
         interHosp: '02',
         bussinessStatus:'',
-        bussinessStatusTwo: '02',
+        bussinessStatusTwo: undefined,
         virtualOrg: undefined,
         chname1: undefined,
         enname1: undefined,
@@ -642,8 +642,6 @@ export default {
       this.dictList = response.data
 
     })
-
-
     this.inter_hospOptions = this.dictList.find(item => {
       return item.dictType == 'inter_hosp'
     }).dictDate
@@ -710,6 +708,7 @@ export default {
         else {
           this.secondAttributeOptions=this.second_attribute_bOptions
         }
+        this.baseForm.bussinessStatusTwo='02'
 
         if(this.baseForm.type=='03'){
           this.typeShow=true

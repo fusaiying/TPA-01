@@ -192,9 +192,17 @@
       <div slot="header" class="clearfix">
         <span style="color: blue">服务受理信息</span>
       </div>
+
       <el-form ref="ruleForm" :model="ruleForm" :rules="changeForm.rules" style="padding-bottom: 30px;"
                label-width="180px"
                label-position="right" size="mini">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="ruleForm.workOrderNo" class="item-width" clearable size="mini" disabled placeholder="系统自动生成"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-form-item label="受理渠道：" prop="channelCode">
             <el-radio-group v-model="ruleForm.channelCode">
@@ -524,6 +532,7 @@ export default {
       cs_channel: [],//
       //需要填入数据的部分
       ruleForm: {
+        workOrderNo:"",
         channelCode: "",//受理渠道
         itemCode: "",//服务项目
         callMobilePhone: "",//来电人电话
@@ -640,6 +649,7 @@ export default {
           addInsert(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("插入成功")
+              this.ruleForm.workOrderNo=res.msg;
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"

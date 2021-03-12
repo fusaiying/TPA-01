@@ -238,9 +238,9 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         ComplaintAcceptVo complaintAcceptVo1=complaintAcceptVoMapper.selectComplaintAcceptVo(workOrderNo);
         String sourceName="ComplaintAcceptVo";
         String targetTableName="accept_detail_info";
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+        List<FieldMap> KVMap1=fieldMapMapper.selectKVMap(targetTableName,sourceName);
         AcceptDetailInfo acceptDetailInfo1=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo1.getWorkOrderNo());
-        for (FieldMap fieldMap:KVMap){
+        for (FieldMap fieldMap:KVMap1){
             fieldMap.getTargetColumnName();
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
@@ -280,8 +280,8 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         acceptDetailInfo.setPersuasionFlag(complaintAcceptVo.getPersuasionFlag());
 //        acceptDetailInfo.setUpdateBy(SecurityUtils.getUsername());
 //        acceptDetailInfo.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
-        List<FieldMap> KVMap1=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
-        for (FieldMap fieldMap:KVMap1){
+        List<FieldMap> KVMap=fieldMapMapper.selectKVMap("accept_detail_info","ComplaintAcceptVo");
+        for (FieldMap fieldMap:KVMap){
             fieldMap.getTargetColumnName();
             fieldMap.getSourceFiledName();
             Map map=new HashMap<String,String>();
@@ -322,35 +322,129 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         personInfoMapper.updatePersonInfo(complainantPerson);
 
         String editId=PubFun.createMySqlMaxNoUseCache("cs_edit_id",10,8);
+        EditDetail editDetail = new EditDetail();
         Map map1 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo1), Map.class);
         Map map2 = JSONObject.parseObject(JSONObject.toJSONString(complaintAcceptVo), Map.class);
 
         //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
-        List<String> keyList=new ArrayList<>();
-        Iterator<String> iter1 = map1.keySet().iterator();
-        while(iter1.hasNext()){
-            EditDetail editDetail=new EditDetail();
- //           EditInfo editInfo=new EditInfo();
-            String map1key=iter1.next();
-            String map1value = String.valueOf(map1.get(map1key));
-            String map2value = String.valueOf(map2.get(map1key));
-            if (!map1value.equals(map2value)) {
-                keyList.add(map1key);
-                editDetail.setKeyDictType("complaintAcceptVo");
-                editDetail.setItemKey(map1key);
-                editDetail.setOldValue(map1value);
-                editDetail.setNowValue(map2value);
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
-                editDetail.setEditId(editId);
-                editDetail.setCreatedBy(SecurityUtils.getUsername());
-                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetail.setUpdatedBy(SecurityUtils.getUsername());
-                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-                editDetailMapper.insertEditDetail(editDetail);
-            }
+        List outList = new ArrayList();
+        outList.add("hangFlag");
+        outList.add("hangReason");
+        outList.add("businessType");
+        outList.add("acceptTime");
+        outList.add("modifyTime");
+        outList.add("status");
+        outList.add("contactsSex");
+        outList.add("contactsName");
+        outList.add("contactsLanguage");
+        outList.add("contactsMobilePhone");
+        outList.add("contactsCountry");
+        outList.add("contactsQuhao");
+        outList.add("contactsNumber");
+        outList.add("contactsSecondNumber");
+        outList.add("editReason");
+        outList.add("editRemark");
+        outList.add("editInfo");
+        outList.add("callPerson");
+        outList.add("contactsPerson");
+        outList.add("contactsPerson");
+        outList.add("complainantPerson");
+        outList.add("insurer");
+        outList.add("OperatorLast");
+        outList.add("Reviser");
+        outList.add("editDetail");
 
+        List<String> keyList = new ArrayList<>();
+        Iterator<String> iter = map1.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            keyList.add(key);
         }
+        Iterator<String> iter2 = map2.keySet().iterator();
+        while (iter2.hasNext()) {
+            String key = iter2.next();
+            if (!keyList.contains(key)) {
+                keyList.add(key);
+            }
+        }
+
+        for (int i = 0; i < keyList.size(); i++) {
+            String mapkey = keyList.get(i);
+            if (outList.contains(mapkey)) {
+                continue;
+            } else {
+                Object map1value = map1.get(mapkey);
+                Object map2value = map2.get(mapkey);
+                if ((map1value == null || map1value.equals("")) &&
+                        (map2value != null && !map2value.equals(""))) {
+                    editDetail.setItemKey(mapkey);
+                    //  editDetail.setOldValue("");
+                    editDetail.setNowValue(String.valueOf(map2value));
+                    editDetail.setKeyDictType("demandAcceptVo");
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                    editDetail.setEditId(editId);
+                    editDetail.setCreatedBy(SecurityUtils.getUsername());
+                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetailMapper.insertEditDetail(editDetail);
+                } else if ((map2value == null || map2value.equals("")) &&
+                        (map1value != null && !map1value.equals(""))) {
+                    editDetail.setItemKey(mapkey);
+                    editDetail.setOldValue(String.valueOf(map1value));
+                    //   editDetail.setNowValue("");
+                    editDetail.setKeyDictType("demandAcceptVo");
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                    editDetail.setEditId(editId);
+                    editDetail.setCreatedBy(SecurityUtils.getUsername());
+                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetailMapper.insertEditDetail(editDetail);
+                } else if ((map1value != null && !map1value.equals("")) &&
+                        (map2value != null && !map2value.equals("")) &&
+                        !map1value.equals(map2value)) {
+                    editDetail.setItemKey(mapkey);
+                    editDetail.setOldValue(String.valueOf(map1value));
+                    editDetail.setNowValue(String.valueOf(map2value));
+                    editDetail.setKeyDictType("demandAcceptVo");
+                    editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                    editDetail.setEditId(editId);
+                    editDetail.setCreatedBy(SecurityUtils.getUsername());
+                    editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                    editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                    editDetailMapper.insertEditDetail(editDetail);
+                }
+
+            }
+        }
+
+//        List<String> keyList=new ArrayList<>();
+//        Iterator<String> iter1 = map1.keySet().iterator();
+//        while(iter1.hasNext()){
+//            EditDetail editDetail=new EditDetail();
+// //           EditInfo editInfo=new EditInfo();
+//            String map1key=iter1.next();
+//            String map1value = String.valueOf(map1.get(map1key));
+//            String map2value = String.valueOf(map2.get(map1key));
+//            if (!map1value.equals(map2value)) {
+//                keyList.add(map1key);
+//                editDetail.setKeyDictType("complaintAcceptVo");
+//                editDetail.setItemKey(map1key);
+//                editDetail.setOldValue(map1value);
+//                editDetail.setNowValue(map2value);
+//                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+//                editDetail.setEditId(editId);
+//                editDetail.setCreatedBy(SecurityUtils.getUsername());
+//                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+//                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//                editDetailMapper.insertEditDetail(editDetail);
+//            }
+//
+//        }
 
         Map map3 = JSONObject.parseObject(JSONObject.toJSONString(callPerson1), Map.class);
         Map map4 = JSONObject.parseObject(JSONObject.toJSONString(callPerson), Map.class);
@@ -358,15 +452,14 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         //     Map<String,Object> map = JSONObject.parseObject(JSON.toJSONString(acceptDetailInfo1));
 
 
-        Iterator<String> iter2 = map3.keySet().iterator();
-        while(iter2.hasNext()){
-            EditDetail editDetail=new EditDetail();
+        Iterator<String> iter5 = map3.keySet().iterator();
+        while(iter5.hasNext()){
+   //         EditDetail editDetail=new EditDetail();
  //           EditInfo editInfo=new EditInfo();
-            String map3key=iter2.next();
+            String map3key=iter5.next();
             String map3value = String.valueOf(map3.get(map3key));
             String map4value = String.valueOf(map4.get(map3key));
             if (!map3value.equals(map4value)) {
-                keyList.add("callPerson."+map3key);
                 editDetail.setKeyDictType("complaintAcceptVo");
                 editDetail.setItemKey(map3key);
                 editDetail.setOldValue(map3value);
@@ -388,25 +481,51 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         Iterator<String> iter3 = map6.keySet().iterator();
         while(iter3.hasNext()){
-            EditDetail editDetail=new EditDetail();
+ //           EditDetail editDetail=new EditDetail();
  //           EditInfo editInfo=new EditInfo();
             String map5key=iter3.next();
-            String map5value = String.valueOf(map5.get(map5key));
-            String map6value = String.valueOf(map6.get(map5key));
-            if (!map5value.equals(map6value)) {
-                keyList.add(map5key);
-                editDetail.setKeyDictType("complaintAcceptVo");
+            Object map5value = map5.get(map5key);
+            Object map6value = map6.get(map5key);
+            if ((map5value == null || map5value.equals("")) &&
+                    (map6value != null && !map6value.equals(""))) {
                 editDetail.setItemKey("contactsPerson."+map5key);
-                editDetail.setOldValue(map5value);
-                editDetail.setNowValue(map6value);
-                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id",10,8));
+                //   editDetail.setOldValue("");
+                editDetail.setNowValue(String.valueOf(map6value));
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
                 editDetail.setEditId(editId);
                 editDetail.setCreatedBy(SecurityUtils.getUsername());
                 editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetail.setUpdatedBy(SecurityUtils.getUsername());
                 editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
                 editDetailMapper.insertEditDetail(editDetail);
-
+            } else if ((map6value == null || map6value.equals("")) &&
+                    (map5value != null && !map5value.equals(""))) {
+                editDetail.setItemKey("contactsPerson."+map5key);
+                editDetail.setOldValue(String.valueOf(map5value));
+                //  editDetail.setNowValue("");
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setEditId(editId);
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
+            } else if ((map5value != null && !map5value.equals("")) &&
+                    (map6value != null && !map6value.equals("")) &&
+                    !map5value.equals(map6value)) {
+                editDetail.setItemKey("contactsPerson."+map5key);
+                editDetail.setOldValue(String.valueOf(map5value));
+                editDetail.setNowValue(String.valueOf(map6value));
+                editDetail.setKeyDictType("demandAcceptVo");
+                editDetail.setDetailId(PubFun.createMySqlMaxNoUseCache("cs_detail_id", 10, 8));
+                editDetail.setEditId(editId);
+                editDetail.setCreatedBy(SecurityUtils.getUsername());
+                editDetail.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetail.setUpdatedBy(SecurityUtils.getUsername());
+                editDetail.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                editDetailMapper.insertEditDetail(editDetail);
             }
 
         }
@@ -416,13 +535,12 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         Iterator<String> iter4 = map7.keySet().iterator();
         while(iter4.hasNext()){
-            EditDetail editDetail=new EditDetail();
+//            EditDetail editDetail=new EditDetail();
 //            EditInfo editInfo=new EditInfo();
             String map7key=iter4.next();
             String map7value = String.valueOf(map7.get(map7key));
             String map8value = String.valueOf(map8.get(map7key));
             if (!map7value.equals(map8value)) {
-                keyList.add(map7key);
                 editDetail.setKeyDictType("complaintAcceptVo");
                 editDetail.setItemKey("complainPerson."+map7key);
                 editDetail.setOldValue(map7value);
@@ -543,10 +661,10 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             //将所有数据置为n
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
-            //修改主表状态为已处理
+            //修改主表状态为已完成
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
             workOrderAccept.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
-            workOrderAccept.setStatus("03");
+            workOrderAccept.setStatus("04");
             workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
 
             if (workHandleInfos == null) {
@@ -586,11 +704,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
                 workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
             }
 
-            /*if(workHandleInfos==null){
-            return workHandleInfoMapper.assistInComplaint(workHandleInfo);
-            }else{
-                return workHandleInfoMapper.updateWorkHandleInfo(workHandleInfo);
-            }*/
+
             //插入轨迹表
             FlowLog flowLog = new FlowLog();
             flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
@@ -606,11 +720,11 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             return  flowLogMapper.insertFlowLog(flowLog);
         } else {
 
-            //将主表状态置为已处理
+            //将主表状态置为已完成
             String workOrderNo=complaintDealVo.getWorkOrderNo();
             WorkOrderAccept workOrderAccept1=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
             WorkOrderAccept workOrderAccept2=workOrderAccept1;
-            workOrderAccept1.setStatus("03");
+            workOrderAccept1.setStatus("04");
             workOrderAcceptMapper.updateWorkOrderStatus(workOrderAccept1);
             BeanUtils.copyProperties(workOrderAccept2,workOrderAccept1);
             String workOrderNo2="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);

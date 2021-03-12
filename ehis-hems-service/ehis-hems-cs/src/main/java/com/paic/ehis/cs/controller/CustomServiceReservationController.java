@@ -57,8 +57,10 @@ public class CustomServiceReservationController extends BaseController {
     {reservationAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         reservationAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         reservationAcceptVo.setBusinessType("02");
-        reservationAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
-        return toAjax(iReservationAcceptVoService.insertServiceInfo(reservationAcceptVo));
+        String workOrderNo="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
+        reservationAcceptVo.setWorkOrderNo(workOrderNo);
+        return iReservationAcceptVoService.insertServiceInfo(reservationAcceptVo) > 0 ? AjaxResult.success(workOrderNo) : AjaxResult.error();
+
     }
 
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")

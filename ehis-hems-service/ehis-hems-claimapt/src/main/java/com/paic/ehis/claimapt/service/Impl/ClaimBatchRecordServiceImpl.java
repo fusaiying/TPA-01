@@ -106,7 +106,7 @@ public class ClaimBatchRecordServiceImpl implements IClaimBatchRecordService
             claimBatchRecordMapper.insertClaimBatchRecord(claimBatchRecord);
             claimBatch.setBatchno(batchno);
             claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());
-            i = claimBatchMapper.updateClaimBatch(claimBatch);
+            i += claimBatchMapper.updateClaimBatch(claimBatch);
         }
         return i;
     }

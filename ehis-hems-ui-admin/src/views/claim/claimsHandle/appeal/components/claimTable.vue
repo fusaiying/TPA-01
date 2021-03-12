@@ -76,7 +76,18 @@ export default {
   methods: {
     // 获取案件
     appealClaimFun(row){
-
+      /**
+       可支付	01
+       支付中	02
+       已支付	03
+       转账失败	04
+       退票	05
+       该案件还未支付，请在支付环节进行回退操作，请核实
+       */
+      if(row.payStatus !== '03') {
+        this.$message({ type: 'info',  message: '该案件还未支付，请在支付环节进行回退操作，请核实。'});
+        return false;
+      }
     },
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)

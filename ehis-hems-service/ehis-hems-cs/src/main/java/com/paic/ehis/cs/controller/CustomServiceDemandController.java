@@ -89,8 +89,9 @@ public class CustomServiceDemandController extends BaseController {
         demandAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         demandAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id",10,6));
         demandAcceptVo.setBusinessType("01");
-        demandAcceptVo.setWorkOrderNo("9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6));
-        return toAjax(iDemandAcceptVoService.insertServiceInfo(demandAcceptVo));
+        String workOrderNo="9900000000"+PubFun.createMySqlMaxNoUseCache("cs_work_order_no",10,6);
+        demandAcceptVo.setWorkOrderNo(workOrderNo);
+        return iDemandAcceptVoService.insertServiceInfo(demandAcceptVo) > 0 ? AjaxResult.success(workOrderNo) : AjaxResult.error();
     }
 
 

@@ -40,7 +40,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="官方网址：" prop="website">
-            <el-input v-model="otherBaseForm.website" class="item-width" clearable size="mini" placeholder="请输入" maxlength="300"/>
+            <el-input v-model="otherBaseForm.website" class="item-width" clearable size="mini" placeholder="请输入" maxlength="50"/>
           </el-form-item>
         </el-col>
 
@@ -142,12 +142,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="停车场：" prop="carpark">
-            <el-input v-model="otherBaseForm.carpark" class="item-width" clearable size="mini" placeholder="c端客户可看"/>
+            <el-input v-model="otherBaseForm.carpark" class="item-width" clearable size="mini" placeholder="c端客户可看" maxlength="500"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="交通路线：" prop="transitroute">
-            <el-input v-model="otherBaseForm.transitroute" class="item-width" clearable size="mini"
+            <el-input v-model="otherBaseForm.transitroute" class="item-width" clearable size="mini" maxlength="500"
                       placeholder="c端客户可看"/>
           </el-form-item>
         </el-col>

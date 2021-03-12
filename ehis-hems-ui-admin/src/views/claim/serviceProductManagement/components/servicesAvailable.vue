@@ -6,7 +6,7 @@
         <span>服务项目</span>
       </div>
       <el-table ref="contactTable" :data="serviceProForm.form"
-                :header-cell-style="{color:'black',background:'#f8f8ff'}"
+                :header-cell-style="{color:'black',background:'#f8f8ff'}" :key="keyValue"
                 size="small" highlight-current-row style="width: 100%;">
         <el-table-column align="center" min-width="50" type="selection" width="120px"
                          v-if="disabledFlag && (status=='review'|| status == 'management')"></el-table-column>
@@ -278,6 +278,7 @@ export default {
     }
 
     return {
+      keyValue:1,
       loading: false,
       serviceProForm: {
         form: []
@@ -660,6 +661,7 @@ export default {
       this.serviceProForm.form[index].id = ''
       this.serviceProForm.form[index].showFlag = false
       this.serviceProForm.form[index].isSet = true
+      this.keyValue++
     },
 
     // 校验数据

@@ -139,7 +139,7 @@ import {
   getContractServerList
 } from '@/api/contractManage/contractManagement';
 
-let dictss = [{dictType: 'currency'}, {dictType: 'clearing_form'},]
+let dictss = [{dictType: 'currency'}, {dictType: 'clearing_form'},{dictType: 'closing_balance_status'}]
 export default {
   name: "examBalance",
   data() {
@@ -191,9 +191,7 @@ export default {
       //结算方式
       clearingFormOptions: [],
       //结算业务状态
-      balanceStatusOptions: [
-        {dictValue: "02", dictLabel: "已确认"}
-      ]
+      balanceStatusOptions: []
     };
   },
   created() {
@@ -212,6 +210,10 @@ export default {
     }).dictDate
     this.clearingFormOptions = this.dictList.find(item => {
       return item.dictType === 'clearing_form'
+    }).dictDate
+
+    this.balanceStatusOptions = this.dictList.find(item => {
+      return item.dictType === 'closing_balance_status'
     }).dictDate
   },
   methods: {

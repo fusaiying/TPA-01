@@ -343,8 +343,8 @@
               <el-form-item v-if="scope.row.isShow" :prop="'costData.' + scope.$index + '.feeItemCode'"
                             :rules="accountRules.feeItemCode" style="display: inline-flex !important;">
                 <el-select v-model="scope.row.feeItemCode" placeholder="请选择" size="mini">
-                  <el-option v-for="item in feeOptions" :key="item.feeitemCode" :label="item.feeitemName"
-                             :value="item.feeitemCode"/>
+                  <el-option v-for="item in feeOptions" :key="item.feeitemcode" :label="item.feeitemname"
+                             :value="item.feeitemcode"/>
                 </el-select>
               </el-form-item>
               <span v-if="!scope.row.isShow">{{ selectFee(feeOptions,scope.row.feeItemCode) }}</span>
@@ -468,6 +468,7 @@
 </template>
 
 <script>
+  import {listFeeitem} from '@/api/baseInfo/expenseitemMaintenan'
   import Hospital from "../../../basicInfoManage/publicVue/hospital";
   import {getInfoBaseCodeMappingNew,} from '@/api/claim/presentingReview'
   import {getBillSum, getICDList, getICDListByICDCode} from '@/api/claim/handleCom'
@@ -533,13 +534,6 @@
       },
       fixInfo: function (newVal) {
         this.getBillSum()
-        if (newVal !== null && newVal !== undefined) {
-          getFee(newVal.rptNo).then(res => {
-            if (res != null && res.code === 200) {
-              this.feeOptions = res.data
-            }
-          })
-        }
       },
       batchData: function (newVal) {
         if (newVal !== null && newVal !== undefined) {
@@ -1073,7 +1067,11 @@
       this.claim_currencyOptions = this.dictList.find(item => {
         return item.dictType === 'claim_currency'
       }).dictDate
-
+        listFeeitem({pageNum:1,pageSize:200}).then(res => {
+          if (res != null && res.code === 200) {
+            this.feeOptions = res.rows
+          }
+        })
     },
     methods: {
       openBeneficDia() {
@@ -1541,8 +1539,8 @@
         var actions = [];
         if (datas !== null && datas !== undefined) {
           Object.keys(datas).some((key) => {
-            if (datas[key].feeitemCode === ('' + value)) {
-              actions.push(datas[key].feeitemName);
+            if (datas[key].feeitemcode === ('' + value)) {
+              actions.push(datas[key].feeitemname);
               return true;
             }
           })

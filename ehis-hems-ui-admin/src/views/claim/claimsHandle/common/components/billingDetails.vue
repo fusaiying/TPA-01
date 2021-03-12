@@ -59,7 +59,7 @@
         <el-table-column align="center" prop="unableAmount" label="不合理金额" show-overflow-tooltip/>
         <el-table-column align="center" v-if="status==='edit' && node !== 'sport'" label="操作" width="140">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
+            <el-button  size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
             <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview')" size="mini"
                        style="color: red" type="text" @click="deleteInfo(scope.row)">删除
             </el-button>
@@ -304,14 +304,14 @@
                        filterable
                        remote
                        reserve-keyword
-                       :remote-method="remoteMethod"
+                       :remote-method="(query)=>{remoteMethod(query,index)}"
                        class="item-width" placeholder="请选择" clearable>
-              <el-option v-for="(option,ind) in ICDListOptions" :key="ind" :label="option.icdmname"
+              <el-option v-for="(option,ind) in getICD(index)" :key="ind" :label="option.icdmname"
                          :value="option.icdcode"/>
             </el-select>
             <el-button v-if="index===0" type="primary" icon="el-icon-plus"
                        style="position: absolute; top: 0; right: 8px;"
-                       size="mini" circle @click="addIcd"></el-button>
+                       size="mini" circle @click="addIcd()"></el-button>
             <el-button
               v-if="index!==0"
               style="position: absolute; top: 0; right: 8px;"
@@ -516,6 +516,11 @@
           getICDList({icdmname: ''}).then(res => {
             if (res != null && res.code == 200) {
               this.ICDListOptions = res.data
+              this.ICDListOptions0 = res.data
+              this.ICDListOptions1 = res.data
+              this.ICDListOptions2 = res.data
+              this.ICDListOptions3 = res.data
+              this.ICDListOptions4 = res.data
               this.getICDListOptions()
             }
           })
@@ -923,6 +928,7 @@
       }
 
       return {
+        icdNum:1,
         keyValue:1,
         isBillInfoSave: false,
         feeOptions: [],
@@ -1026,6 +1032,11 @@
         hospitalOptions: [],
         claim_currencyOptions: [],
         ICDListOptions: [],
+        ICDListOptions0: [],
+        ICDListOptions1: [],
+        ICDListOptions2: [],
+        ICDListOptions3: [],
+        ICDListOptions4: [],
       };
     },
     async mounted() {
@@ -1214,16 +1225,24 @@
         })
       },
       addIcd() {
-        this.baseForm.icdCodes.push({
-          icdCode: '',
-          key: Date.now()
-        })
+
+        if(this.icdNum>4){
+
+        }else {
+          this.baseForm.icdCodes.push({
+            icdCode: '',
+            key: Date.now()
+          })
+          this.icdNum++
+        }
+
       },
       removeIcd(icd) {
         var index = this.baseForm.icdCodes.indexOf(icd)
         if (index !== -1) {
           this.baseForm.icdCodes.splice(index, 1)
         }
+        this.icdNum--
       },
       DateDiff(Date_end, Date_start) {
         let aDate, oDate1, oDate2, iDays;
@@ -1666,11 +1685,23 @@
 
         }
       },
-      remoteMethod(query) {
+      remoteMethod(query,index) {
         if (query != null && query != '' && query != undefined) {//icdCode
           getICDList({icdmname: query}).then(res => {
             if (res != null && res.code == 200) {
-              this.getICDListOption(res.data)
+              if (index==0){
+                this.ICDListOptions0=res.data
+              }else if(index==1){
+                this.ICDListOptions1=res.data
+              }else if(index==2){
+                this.ICDListOptions2=res.data
+              }else if(index==3){
+                this.ICDListOptions3=res.data
+              }else if(index==4){
+                this.ICDListOptions4=res.data
+              }else {
+                this.ICDListOptions=res.data
+              }
             }
           })
         }
@@ -1695,6 +1726,11 @@
                 })
                 if (option == null) {
                   this.ICDListOptions.push(item)
+                  this.ICDListOptions0.push(item)
+                  this.ICDListOptions1.push(item)
+                  this.ICDListOptions2.push(item)
+                  this.ICDListOptions3.push(item)
+                  this.ICDListOptions4.push(item)
                 }
               })
             }
@@ -1733,7 +1769,22 @@
       changeRow(index,row){
         row.isShow=true
         this.keyValue++
-      }
+      },
+      getICD(index){
+        if (index==0){
+          return this.ICDListOptions0
+        }else if(index==1){
+          return this.ICDListOptions1
+        }else if(index==2){
+          return this.ICDListOptions2
+        }else if(index==3){
+          return this.ICDListOptions3
+        }else if(index==4){
+          return this.ICDListOptions4
+        }else {
+          return this.ICDListOptions
+        }
+      },
     }
 
   }

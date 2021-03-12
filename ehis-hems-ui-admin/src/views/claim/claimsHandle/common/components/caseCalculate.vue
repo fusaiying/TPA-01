@@ -121,7 +121,7 @@
             <el-link style="font-size: 11px" v-if="scope.row.remark" type="primary"
                      @click="changeRemark(scope.$index,scope.row.remark)">{{ scope.row.remark }}
               </el-link>
-            <el-link style="font-size: 11px" type="primary" v-else @click="changeRemark(scope.$index)">请点击输入备注</el-link>
+            <el-link style="font-size: 11px" type="primary" v-else @click="changeRemark(scope.$index)">{{remark}}</el-link>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="payConclusion" label="赔付结论" width="110" show-overflow-tooltip>
@@ -212,6 +212,24 @@
       fixInfo: function (newVal) {
         this.getCalSummary()
       },
+      status:{
+        immediate:true, //深度监听设置为 true
+        handler:function(newVal,oldV){
+          console.log(newVal);
+          if(newVal=='show'){
+            this.remark=''
+          }
+        }
+      },
+      node:{
+        immediate:true, //深度监听设置为 true
+        handler:function(newVal,oldV){
+          console.log(newVal);
+          if(newVal=='sport'){
+            this.remark=''
+          }
+        }
+      },
     },
     filters: {
       changeDate: function (value) {
@@ -256,6 +274,7 @@
         }
       }
       return {
+        remark:'请点击输入备注',
         isSum: false,
         calSummaryData: {},
         loading: true,
@@ -663,7 +682,7 @@
         } else {
           return str
         }
-      }
+      },
     }
   }
 </script>

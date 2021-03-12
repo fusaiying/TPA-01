@@ -378,7 +378,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="预约医院：" prop="medicalInstitution">
+            <el-form-item label="预约医院：" prop="province">
               省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
               城市：<el-input v-model="ruleForm.city" style="width: 50px" />
             </el-form-item>

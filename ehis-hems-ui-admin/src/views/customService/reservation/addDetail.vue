@@ -541,7 +541,6 @@ export default {
         medicalInstitution:"",
         department:"",
         bunk:"",
-        province:"",
         compensationRatio:"",
         contactsRelationBy: "",//联系人与别抱人关系
         contactsLanguage: "",//联系人语言

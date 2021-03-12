@@ -469,26 +469,11 @@ export default {
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
       ],
-      // bankName: [
-      //   {required: true, message: "开户行不能为空", trigger: "blur"}
-      // ],
-      // bankLocation: [
-      //   {required: true, message: "开户地不能为空", trigger: "blur"}
-      // ],
-      // accountNumber: [
-      //   {required: true, message: "账号不能为空", trigger: "blur"}
-      // ],
-      // bankHolder: [
-      //   {required: true, message: "户名不能为空", trigger: "blur"}
-      // ],
       content: [
         {required: true, message: "业务内容不能为空", trigger: "blur"}
       ],
     };
     const rules_noBank = {
-      callName: [
-        {required: true, message: "来电人不能为空", trigger: "blur"}
-      ],
       channelCode: [
         {required: true, message: "受理渠道不能为空", trigger: "blur"}
       ],
@@ -538,7 +523,7 @@ export default {
       //需要填入数据的部分
       ruleForm: {
         workOrderNo:"",
-        channelCode: "",//受理渠道
+        channelCode: "03",//受理渠道
         itemCode: "",//服务项目
         callMobilePhone: "",//来电人电话
         priorityLevel: "",//优先级

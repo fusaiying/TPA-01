@@ -439,6 +439,7 @@
             <if test="companyCode != null  and companyCode != ''"> and t.company_code = #{companyCode}</if>
             <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
             <if test="idNo != null  and idNo != ''"> and t.id_no = #{idNo}</if>
+            <if test="hangUp != null  and hangUp != '' and hangUp == 'Y'.toString()"> and t.case_status in ('00','30','31','32')</if>
         </where>
     </select>
     <update id="updateCaseDispatchList" parameterType="ClaimCase">
@@ -599,9 +600,9 @@
                     claim_case cases
                         INNER JOIN (SELECT r.operation, r.rpt_no ,r.operator,r.update_time  FROM claim_case_record r where r.RECORD_ID in   (SELECT   MAX(RECORD_ID) FROM claim_case_record
                                                                                                                                              WHERE history_flag = 'Y' and status = 'Y' and r.operator = #{operator} GROUP BY RPT_NO)) record ON cases.rpt_no = record.rpt_no
-                        AND record.operation in ('08','07')
+                        AND record.operation in ('08') and record.history_flag = 'Y'
                         AND record.update_time between #{updateStartTime} and DATE_ADD(#{updateEndTime},INTERVAL 1 DAY)
-                        and cases.case_status in ('99','07')
+                        and cases.case_status !='08'
                         and cases.status = 'Y'
             ) act
                 INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'
@@ -659,8 +660,8 @@
         claim_case cases
         INNER JOIN (SELECT r.operation, r.rpt_no ,r.operator,r.update_time  FROM claim_case_record r where r.RECORD_ID in   (SELECT   MAX(RECORD_ID) FROM claim_case_record
         WHERE history_flag = 'Y' and status = 'Y' and r.operator = #{operator} GROUP BY RPT_NO))  record ON cases.rpt_no = record.rpt_no
-        AND record.operation in ('08','07')
-        and cases.case_status in ('99','07')
+        AND record.operation in ('08') and record.history_flag = 'Y'
+        and cases.case_status !='08'
         and cases.status='Y'
         ) act
         INNER JOIN claim_case_insured insured ON act.rpt_no = insured.rpt_no and insured.status='Y'

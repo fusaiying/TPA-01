@@ -66,7 +66,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="传真：" prop="portraiture">
-            <el-input v-model="otherBaseForm.portraiture" class="item-width" clearable size="mini"
+            <el-input v-model="otherBaseForm.portraiture" class="item-width" clearable size="mini" maxlength="20"
                       placeholder="请输入"/>
           </el-form-item>
         </el-col>

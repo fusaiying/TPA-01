@@ -8,6 +8,7 @@ import com.paic.ehis.claimflow.domain.dto.ClaimCaseCheckRuleDTO;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCheckRuleAttrMapper;
 import com.paic.ehis.claimflow.mapper.ClaimCaseCheckRuleMapper;
 import com.paic.ehis.claimflow.service.IClaimCaseCheckRuleService;
+import com.paic.ehis.common.core.enums.ClaimStatus;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
@@ -233,9 +234,9 @@ public class ClaimCaseCheckRuleServiceImpl implements IClaimCaseCheckRuleService
         }
         //判断此案件应该进入什么案件状态
         if (flag) {
-            claimCaseCheckDTO.setCaseStatus("08");
+            claimCaseCheckDTO.setCaseStatus(ClaimStatus.CASESPOTCHECK.getCode());
         } else {
-            claimCaseCheckDTO.setCaseStatus("99");
+            claimCaseCheckDTO.setCaseStatus(ClaimStatus.CASECIOSE.getCode());
         }
         return claimCaseCheckDTO;
     }

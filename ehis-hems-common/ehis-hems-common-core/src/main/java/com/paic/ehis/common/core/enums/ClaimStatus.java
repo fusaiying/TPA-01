@@ -44,7 +44,7 @@ public enum ClaimStatus {
 
     CASESPOTCHECK("08", "抽检"),
 
-    CASECIOSE("09", "结案"),
+    CASECIOSE("99", "结案"),
 
     DATAYES("Y","有效"),
 

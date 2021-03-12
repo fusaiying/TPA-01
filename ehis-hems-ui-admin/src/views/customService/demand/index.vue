@@ -445,7 +445,8 @@ export default {
   },
   created() {
     this.searchSecondHandle();
-    this.searchHandles();
+    this.initSearchHandle()
+    //this.searchHandles();
     this.getDicts("cs_business_type").then(response => {
       this.cs_business_type = response.data;
     });
@@ -588,6 +589,44 @@ export default {
       this.timeArray.handlerTime=""
       /*this.searchHandle()*/
     },
+    //初始化查询
+    initSearchHandle(){
+      let queryParams= {
+        pageNum:1,
+        pageSize:10
+      }
+      demandListAndPublicPool(queryParams).then(res => {
+          if (res != null && res.code === 200) {
+            this.workPoolData = res.rows
+            this.totalCount = res.total
+
+          }
+        demandListAndPersonalPool(queryParams).then(res => {
+          if (res != null && res.code === 200) {
+            this.workPersonPoolData = res.rows
+            this.totalPersonCount = res.total
+            console.log("geren",this.workPersonPoolData)
+              if(this.totalPersonCount+this.totalPersonCount==0){
+                return this.$message.warning(
+                  "未查询到数据！"
+                )
+              }
+          }
+        }).catch(res => {
+
+        })
+        }
+
+      ).catch(res => {
+
+      })
+
+
+
+
+
+    },
+
     //待处理查询
     searchHandle() {
       let queryParams;
@@ -611,7 +650,9 @@ export default {
             )
           }
         }
-      }).catch(res => {
+      }
+
+      ).catch(res => {
 
       })
     },

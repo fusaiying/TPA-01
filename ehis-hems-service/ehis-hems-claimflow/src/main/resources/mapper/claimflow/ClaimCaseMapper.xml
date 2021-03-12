@@ -439,6 +439,7 @@
             <if test="companyCode != null  and companyCode != ''"> and t.company_code = #{companyCode}</if>
             <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
             <if test="idNo != null  and idNo != ''"> and t.id_no = #{idNo}</if>
+            <if test="hangUp != null  and hangUp != '' and hangUp == 'Y'"> and t.case_status in ('00','30','31','32')</if>
         </where>
     </select>
     <update id="updateCaseDispatchList" parameterType="ClaimCase">

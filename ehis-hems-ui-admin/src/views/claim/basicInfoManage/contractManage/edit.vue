@@ -122,7 +122,7 @@
         <!--保存 关闭 start-->
         <el-row>
           <el-col :span="6" :offset="20">
-            <el-button v-if="fsSub" type="primary" size="mini" @click="saveBaseInfo">保存</el-button>
+            <el-button type="primary" size="mini" @click="saveBaseInfo">保存</el-button>
             <el-button type="primary" size="mini" @click="goBack">关闭</el-button>
           </el-col>
         </el-row>
@@ -379,7 +379,7 @@
           <el-col :span="9" v-if="distcoteItem">
             <el-form-item label="特殊费折扣信息：" prop="specialDiscount">
               <el-input :disabled="isShow" v-model="providerForm.specialDiscount" class="item-width" clearable
-                        size="mini"
+                        size="mini" maxlength="10"
                         placeholder="请录入"/>
             </el-form-item>
           </el-col>
@@ -497,7 +497,7 @@
         <!--保存 关闭 start-->
         <el-row>
           <el-col :span="6" :offset="20">
-            <el-button v-if="fpSub" type="primary" size="mini" @click="saveBaseInfo">保存</el-button>
+            <el-button type="primary" size="mini" @click="saveBaseInfo">保存</el-button>
             <el-button v-if="!onlyAddPro" type="primary" size="mini" @click="goBack">关闭</el-button>
             <el-button v-if="onlyAddPro" type="primary" size="mini" @click="goBackPro">关闭</el-button>
           </el-col>
@@ -825,6 +825,7 @@
 
   } from '@/api/contractManage/contractManagement'
   import {itemList} from "../../../../api/claim/handleCom";
+  import {listData} from "../../../../api/system/dict/data";
 
   export default {
     data() {
@@ -1859,10 +1860,10 @@
         this.dialogVisible = false;
       },
       goBack() {
-        let flag =false
-        this.serverForm.serverInfo.forEach(item=>{
-          if(item.supplierCode==null || item.supplierCode=='' || item.supplierCode==undefined){
-            flag=true
+        let flag = false
+        this.serverForm.serverInfo.forEach(item => {
+          if (item.supplierCode == null || item.supplierCode == '' || item.supplierCode == undefined) {
+            flag = true
           }
         })
 
@@ -2057,29 +2058,18 @@
                 });
                 return false;
               }
-              let obj = {};
-              obj = listDta.find((item)=>{
-                return item.editing === true || item.editing === 'add';
-              });
-              if(obj !== undefined) {
-                this.$message({
-                  message: '请将供应商服务项目保存后再进行操作',
-                  type: 'warning'
-                });
-                return false;
-              }
               this.$refs.searchForm.validate((valid) => {
                 if (valid) {
 
-                  if (this.baseFomrmSub == false) {
-                    this.$message({
-                      message: '请至少添加一条供应商服务项目！',
-                      type: 'warning'
-                    });
-                    this.fsSub = true;
-                    return false;
-                  }
-
+                  /*          if (this.baseFomrmSub == false) {
+                              this.$message({
+                                message: '请至少添加一条供应商服务项目！',
+                                type: 'warning'
+                              });
+                              this.fsSub = true;
+                              return false;
+                            }
+          */
                   let baseSupplierContract = {
                     contractNo: this.searchForm.contractNo,
                     servcomNo: this.searchForm.servcomNo,
@@ -2286,6 +2276,8 @@
             }
           });
         }
+
+
       },
       getRandom(nums) {
         let rdmNum = "";
@@ -2553,40 +2545,45 @@
         this.serverForm.serverInfo.splice(index, 1)
       },
       save() {
-        this.$refs.serverForm.validate((valid) => {
-          if (valid) {
-            let listDta = this.serverForm.serverInfo;
-            if (listDta.length === 0) {
-              this.$message({
-                message: '请至少添加一条供应商服务项目！',
-                type: 'warning'
-              });
-              return false;
-            }
-            addContractServer(listDta).then(response => {
-              // console.log(response)
-              if (response.code == '200') {
+        if (this.searchForm.contractNo==null || this.searchForm.contractNo=='' || this.searchForm.contractNo==undefined){
+          return this.$message.warning("请先保存基本信息！");
+        }else  {
+          this.$refs.serverForm.validate((valid) => {
+            if (valid) {
+              let listDta = this.serverForm.serverInfo;
+              if (listDta.length === 0) {
                 this.$message({
-                  type: 'success',
-                  message: '保存成功!'
+                  message: '请至少添加一条供应商服务项目！',
+                  type: 'warning'
                 });
-                this.baseFomrmSub = true;
-                this.getData();
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: '保存失败'
-                });
+                return false;
               }
-            }).catch(error => {
-              console.log(error);
-            })
+              addContractServer(listDta).then(response => {
+                // console.log(response)
+                if (response.code == '200') {
+                  this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                  });
+                  this.baseFomrmSub = true;
+                  this.getData();
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: '保存失败'
+                  });
+                }
+              }).catch(error => {
+                console.log(error);
+              })
 
-          } else {
+            } else {
 
-            return false
-          }
-        })
+              return false
+            }
+          })
+        }
+
 
       },
       handleEdit(index, row) { //编辑
@@ -2597,8 +2594,13 @@
         row.editing = false;
         this.prevValue = JSON.parse(JSON.stringify(row));
       },
-      saveSupplier(listDta) {
-        addContractServer(listDta).then(response => {
+      saveSupplier(option) {
+        option.forEach(item => {
+          if (item.contractNo != null || item.contractNo != '' || item.contractNo != undefined) {
+            item.contractNo = this.searchForm.contractNo
+          }
+        })
+        addContractServer(option).then(response => {
           // console.log(response)
           if (response.code == '200') {
             this.baseFomrmSub = true;

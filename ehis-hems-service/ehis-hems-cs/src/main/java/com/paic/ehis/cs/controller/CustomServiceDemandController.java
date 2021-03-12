@@ -69,7 +69,7 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/obtain")
     public AjaxResult edit(@RequestBody String workOrderNo)
     {
-        return toAjax(iDemandAcceptVoService.updateStatus(workOrderNo));
+        return AjaxResult.success(iDemandAcceptVoService.updateStatus(workOrderNo));
     }
 
 //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
@@ -77,7 +77,7 @@ public class CustomServiceDemandController extends BaseController {
     @PutMapping("/many")
     public AjaxResult edit( @RequestBody String[] workOrderNos)
     {
-        return toAjax(iDemandAcceptVoService.updateStatusM(workOrderNos));
+        return AjaxResult.success(iDemandAcceptVoService.updateStatusM(workOrderNos));
     }
 
 

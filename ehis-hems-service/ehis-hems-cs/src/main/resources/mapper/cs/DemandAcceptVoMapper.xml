@@ -256,14 +256,16 @@ SELECT
 	a.organ_code,
 	a.content,
 	a.channel_code,
-	a.priority_level
+	a.priority_level,
+	a.update_by ,
+    a.update_time
 FROM
 	accept_detail_info a
 	where a.work_order_no=#{workOrderNo}
     </select>
 
     <update id="updateStatus" parameterType="String" >
-         update work_order_accept set status = '02'
+         update work_order_accept set status = '02',update_by = #{updateBy},update_time=#{updateTime}
         where status='01'and work_order_no = #{workOrderNo}
     </update>
 

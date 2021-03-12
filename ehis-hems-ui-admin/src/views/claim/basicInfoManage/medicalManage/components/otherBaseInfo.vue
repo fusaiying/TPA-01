@@ -17,12 +17,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="经度：" prop="longitude">
-            <el-input v-model="otherBaseForm.longitude" class="item-width" clearable size="mini" placeholder="请输入" />
+            <el-input v-model="otherBaseForm.longitude" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="纬度：" prop="latitude">
-            <el-input v-model="otherBaseForm.latitude" class="item-width" clearable size="mini" placeholder="请输入" />
+            <el-input v-model="otherBaseForm.latitude" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -79,7 +79,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="邮编：" prop="zipcode">
-            <el-input v-model="otherBaseForm.zipcode" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-input v-model="otherBaseForm.zipcode" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
           </el-form-item>
         </el-col>
       </el-row>

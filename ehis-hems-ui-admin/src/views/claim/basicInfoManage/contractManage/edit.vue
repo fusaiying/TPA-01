@@ -2057,6 +2057,17 @@
                 });
                 return false;
               }
+              let obj = {};
+              obj = listDta.find((item)=>{
+                return item.editing === true || item.editing === 'add';
+              });
+              if(obj !== undefined) {
+                this.$message({
+                  message: '请将供应商服务项目保存后再进行操作',
+                  type: 'warning'
+                });
+                return false;
+              }
               this.$refs.searchForm.validate((valid) => {
                 if (valid) {
 

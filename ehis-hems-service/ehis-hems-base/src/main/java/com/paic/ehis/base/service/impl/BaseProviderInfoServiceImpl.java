@@ -409,7 +409,9 @@ public class BaseProviderInfoServiceImpl implements IBaseProviderInfoService
                 }else{
                     baseProviderInfo.setClaimHospitalCode(provincesNameen+"00001");
                 }
-
+            if("01".equals(baseProviderInfo.getBussinessStatus())){
+                baseProviderInfo.setBussinessStatus("03");
+            }
             baseProviderInfo.setCreateTime(DateUtils.getNowDate());
             baseProviderInfo.setCheckStatus("1");
             baseProviderInfo.setUpdateFlag("0");

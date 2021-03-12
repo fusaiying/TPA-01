@@ -606,6 +606,9 @@ export default {
         department: [
           {required: true, message: "科室不能为空", trigger: "blur"}
         ],
+        organCode: [
+          {required: true, message: "出单机构不能为空", trigger: "blur"}
+        ],
       },
       readonly: true,
       dialogVisable: "",//上传附件用

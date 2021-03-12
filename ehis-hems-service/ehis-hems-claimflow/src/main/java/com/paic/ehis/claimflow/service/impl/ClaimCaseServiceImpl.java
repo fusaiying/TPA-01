@@ -545,6 +545,10 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
                 caseInfo.setName(policy.getName());
             }
         }*/
+        if(StringUtils.isNotBlank(dispatchDTO.getCaseStatus()) && dispatchDTO.getCaseStatus().equals(ClaimStatus.CASEHANGUP.getCode())) {
+            dispatchDTO.setCaseStatus("");
+            dispatchDTO.setHangUp("Y");
+        }
         return claimCaseMapper.selectCaseDispatchList(dispatchDTO);
     }
 

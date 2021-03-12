@@ -589,7 +589,11 @@
         });
       },
       getCaseStatusName(row, col) {
-        return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
+        let resultStatus = this.selectDictLabel(this.caseStatusSelect, row.caseStatus);
+        if(row.caseStatus === '30' || row.caseStatus === '31' || row.caseStatus === '32') {
+          return "挂起 | " + resultStatus;
+        }
+        return resultStatus;
       },
       getClaimTypeName(row, col) {
         return this.selectDictLabel(this.claimTypeSelect, row.claimType)

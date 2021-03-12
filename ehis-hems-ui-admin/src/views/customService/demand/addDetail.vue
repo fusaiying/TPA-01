@@ -226,7 +226,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="来电号码：" prop="phone">
+            <el-form-item label="来电号码：" prop="callMobilePhone">
               <el-input v-model="ruleForm.callMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
@@ -238,7 +238,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-row>
           <el-col :span="8">
@@ -312,7 +311,7 @@
         </el-row>
         <el-row>
           <el-col :span="5">
-            <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
+            <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="contactsCountry">
               国家区号:+
               <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 75px"/>
               区号
@@ -470,26 +469,11 @@ export default {
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
       ],
-      // bankName: [
-      //   {required: true, message: "开户行不能为空", trigger: "blur"}
-      // ],
-      // bankLocation: [
-      //   {required: true, message: "开户地不能为空", trigger: "blur"}
-      // ],
-      // accountNumber: [
-      //   {required: true, message: "账号不能为空", trigger: "blur"}
-      // ],
-      // bankHolder: [
-      //   {required: true, message: "户名不能为空", trigger: "blur"}
-      // ],
       content: [
         {required: true, message: "业务内容不能为空", trigger: "blur"}
       ],
     };
     const rules_noBank = {
-      callName: [
-        {required: true, message: "来电人不能为空", trigger: "blur"}
-      ],
       channelCode: [
         {required: true, message: "受理渠道不能为空", trigger: "blur"}
       ],
@@ -512,6 +496,13 @@ export default {
           pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
           trigger: "blur"},
       ],
+      callMobilePhone: [
+        {required: true, message: "联系电话不能为空", trigger: "blur"},
+        {required: true,
+          message: "目前只支持中国大陆的手机号码",
+          pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+          trigger: "blur"},
+      ],
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
       ],
@@ -519,11 +510,7 @@ export default {
         {required: true, message: "业务内容不能为空", trigger: "blur"},
         { min: 0, max: 2000, message: '长度不超过2000个字符' }
       ],
-      phone: [
-        {required: true,type: 'number', message: '号码必须为数字'}
-      ],
     };
-
     return {
       cs_relation: [],//关系
       cs_demand_item: [],//服务项目
@@ -536,7 +523,7 @@ export default {
       //需要填入数据的部分
       ruleForm: {
         workOrderNo:"",
-        channelCode: "",//受理渠道
+        channelCode: "03",//受理渠道
         itemCode: "",//服务项目
         callMobilePhone: "",//来电人电话
         priorityLevel: "",//优先级
@@ -588,8 +575,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10
-
-
       },
       loading: true,
       workPoolData: [],

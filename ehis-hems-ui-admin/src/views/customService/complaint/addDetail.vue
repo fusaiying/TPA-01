@@ -331,7 +331,7 @@
         <el-row>
           <el-col :span="8">
 
-          <el-form-item label="预约时间："  style="white-space: nowrap">
+          <el-form-item label="预约时间："  style="white-space: nowrap"  prop="complaintTime">
             <el-date-picker
               v-model="ruleForm.complaintTime"
               type="datetime"
@@ -504,6 +504,9 @@
           ],
           'complainantPerson.sex': [
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
+          ],
+          complaintTime: [
+            {required: true, message: "预约时间不能为空", trigger: "blur"}
           ],
           'callPerson.mobilePhone': [
             {required: true, message: "来电号码不能为空", trigger: "blur"},

@@ -714,6 +714,7 @@ export default {
     }
 
     return {
+      initBussinessStatus: '',
       statusChange: true,
 
       type2Info:'',
@@ -1147,6 +1148,7 @@ export default {
           else {
             this.secondAttributeOptions=this.second_attribute_bOptions
           }
+          this.initBussinessStatus=this.baseForm.bussinessStatus
 
           if(this.baseForm.type=='03'){
             this.typeShow=true
@@ -1436,6 +1438,8 @@ export default {
           subFormSearch.orgFlag = this.activeName
           //存在调用基本信息保存的接口
           if (this.providerCode) {
+            //
+            subFormSearch.bussinessStatus=this.initBussinessStatus
             updateInfo(subFormSearch).then(res => {
               if (res.code == '200') {
                 this.$message({

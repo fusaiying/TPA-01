@@ -261,8 +261,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="状态：" prop="bussinessStatusTwo">
-                    <el-select v-model="baseForm.bussinessStatusTwo" class="item-width" placeholder="请选择" clearable disabled>
+                  <el-form-item label="状态：" prop="bussinessStatus">
+                    <el-select v-model="baseForm.bussinessStatus" class="item-width" placeholder="请选择" clearable disabled>
                       <el-option v-for="item in bussiness_statusOptions" :label="item.dictLabel" :value="item.dictValue"
                                  :key="item.dictValue"/>
                     </el-select>
@@ -362,7 +362,7 @@
           </div>-->
         <!--审核-->
         <div >
-          <audit  :providerCode="providerCode"></audit>
+          <audit  :providerCode="providerCode" ></audit>
         </div>
 
 
@@ -425,6 +425,7 @@ export default {
 
 
     return {
+
       type2Info:'',
       specialAnnexFlag:true,
       annexFlag: false,
@@ -646,7 +647,7 @@ export default {
       return item.dictType == 'inter_hosp'
     }).dictDate
     this.bussiness_statusOptions = this.dictList.find(item => {
-      return item.dictType == 'bussiness_status_review'
+      return item.dictType == 'bussiness_status'
     }).dictDate
     this.comprehensive_subtypeOptions = this.dictList.find(item => {
       return item.dictType == 'comprehensive_subtype'
@@ -709,6 +710,10 @@ export default {
           this.secondAttributeOptions=this.second_attribute_bOptions
         }
         this.baseForm.bussinessStatusTwo='02'
+        if(this.baseForm.bussinessStatus=='01'){
+          this.baseForm.bussinessStatus=='03'
+        }
+        this.bussiness=this.baseForm.bussinessStatus
 
         if(this.baseForm.type=='03'){
           this.typeShow=true

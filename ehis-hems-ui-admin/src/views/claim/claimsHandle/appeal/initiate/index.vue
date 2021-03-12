@@ -72,7 +72,7 @@
       <pagination
         v-show="claimTotal>0"
         :total="claimTotal"
-        :page.sync="claimPageInfo.page"
+        :page.sync="claimPageInfo.pageNum"
         :limit.sync="claimPageInfo.pageSize"
         @pagination="initClaimData"
       />
@@ -140,7 +140,7 @@ export default {
       claimTableData: [],
       claimTotal: 0,
       claimPageInfo: {
-        page: 1,
+        pageNum: 1,
         pageSize: 10
       },
       formSearch: {
@@ -232,7 +232,7 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.claimPageInfo.page  = 1;
+      this.claimPageInfo.pageNum  = 1;
       this.claimPageInfo.pageSize = 10;
       this.initClaimData();
       // this.searchBtn = true;
@@ -256,7 +256,7 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.pendPageInfo.page;
+      params.pageNum = this.pendPageInfo.pageNum;
       params.pageSize = this.pendPageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
@@ -285,7 +285,7 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.completePageInfo.page;
+      params.pageNum = this.completePageInfo.pageNum;
       params.pageSize = this.completePageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
@@ -310,7 +310,7 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.claimPageInfo.page;
+      params.pageNum = this.claimPageInfo.pageNum;
       params.pageSize = this.claimPageInfo.pageSize;
       params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;

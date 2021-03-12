@@ -57,7 +57,7 @@
         <el-table-column align="center" prop="partSelfAmount" label="部分自费" show-overflow-tooltip/>
         <el-table-column align="center" prop="advancePayment" label="先期给付" show-overflow-tooltip/>
         <el-table-column align="center" prop="unableAmount" label="不合理金额" show-overflow-tooltip/>
-        <el-table-column align="center" v-if="status==='edit'" label="操作" width="140">
+        <el-table-column align="center" v-if="status==='edit' && node !== 'sport'" label="操作" width="140">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="addOrEdit('edit',scope.row)">编辑</el-button>
             <el-button v-if="status==='edit' && (node==='input' || node==='calculateReview')" size="mini"

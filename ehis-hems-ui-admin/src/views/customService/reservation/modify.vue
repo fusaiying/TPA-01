@@ -250,8 +250,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="传真：" prop="callPerson.fax">
-              <el-input v-model="workPoolData.callPerson.fax" class="item-width"  size="mini" />
+            <el-form-item label="传真：" prop="contactsPerson.fax">
+              <el-input v-model="workPoolData.contactsPerson.fax" class="item-width"  size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -661,6 +661,7 @@
             homePhone:"",
             workPhone:"",
             language:"",
+            fax:"",
           },//联系人
           symptomsSigns:"",
           accidentFlag:"",

@@ -392,6 +392,21 @@ export default {
                           center: true,
                           showClose: true
                         })
+                        let queryData={
+                          providerCode: this.supplierCode,
+                          orgFlag: '02'
+                        }
+                        //联系信息
+                        getcontactsInfo(queryData).then(res => {
+                          if(res.data!=null && res.data.length>0) {
+                            this.contactInfoForm.contacts = res.data
+                            this.contactInfoForm.contacts.map((data, index) => {
+                              data.id = index + 1
+                              data.isSet = false
+                            })
+                          }
+                        }).catch(res => {
+                        })
                       } else {
                         this.$message({
                           message: '保存失败!',

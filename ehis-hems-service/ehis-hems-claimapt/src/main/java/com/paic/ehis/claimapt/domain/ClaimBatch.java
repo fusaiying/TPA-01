@@ -135,6 +135,16 @@ public class ClaimBatch extends BaseEntity {
     private String contno;
 
     /**
+     * 是否仅结算理赔责任
+     */
+    private String claimFlag;
+
+    /**
+     * 支付通知时间
+     */
+    private String noticeDay;
+
+    /**
      * 状态（Y-有效，N-无效）
      */
     @Excel(name = "状态", readConverterExp = "Y=有效,N=无效")
@@ -143,6 +153,21 @@ public class ClaimBatch extends BaseEntity {
     private String directReceiptSign;
     private String caseFlag;
 
+    public String getClaimFlag() {
+        return claimFlag;
+    }
+
+    public void setClaimFlag(String claimFlag) {
+        this.claimFlag = claimFlag;
+    }
+
+    public String getNoticeDay() {
+        return noticeDay;
+    }
+
+    public void setNoticeDay(String noticeDay) {
+        this.noticeDay = noticeDay;
+    }
     public String getDirectReceiptSign() {
         return directReceiptSign;
     }

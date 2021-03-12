@@ -14,6 +14,8 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.claimapt.domain.SysUser;
+import com.paic.ehis.system.api.GetProviderInfoService;
+import com.paic.ehis.system.api.domain.BaseProviderSettle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.common.core.web.controller.BaseController;
@@ -48,6 +50,9 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
 
     @Autowired
     SysUserMapper sysUserMapper;
+
+    @Autowired
+    GetProviderInfoService getProviderInfoService;
 
     /**
      * 查询理赔批次
@@ -377,6 +382,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     public StandingAndBatck insertSysClaimBatch(StandingAndBatck standingAndBatck)//
     {
         ClaimBatch claimBatch = standingAndBatck.getClaimBatch();
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setOrgFlag("02");
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            claimBatch.setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            claimBatch.setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
         claimBatch.setBatchstatus(ClaimStatus.BATCHTENDER.getCode());//01
         //批次号
 
@@ -421,6 +434,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public ClaimBatch insertSysClaimBatchTwo(ClaimBatch claimBatch) {
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            claimBatch.setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            claimBatch.setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
         claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
         //批次号
 
@@ -469,6 +490,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public ClaimBatch updateClaimBatchTwo(ClaimBatch claimBatch) {//
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            claimBatch.setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            claimBatch.setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
         claimBatch.setBatchstatus(ClaimStatus.BATCHREVIEW.getCode());//02
 
         claimBatch.setUpdateBy(SecurityUtils.getUsername());
@@ -501,6 +530,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public StandingAndBatck updateSysClaimBatch(StandingAndBatck standingAndBatck) {
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(standingAndBatck.getClaimBatch().getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            standingAndBatck.getClaimBatch().setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            standingAndBatck.getClaimBatch().setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
         //批次号一样
         claimBatchRecord.setBatchno(standingAndBatck.getClaimBatch().getBatchno());
@@ -534,6 +571,15 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
      */
     @Override
     public StandingAndBatck updateSysClaimBatchTwo(StandingAndBatck standingAndBatck) {
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(standingAndBatck.getClaimBatch().getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            standingAndBatck.getClaimBatch().setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            standingAndBatck.getClaimBatch().setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
+
         //不增加轨迹表
         standingAndBatck.getClaimBatch().setUpdateBy(SecurityUtils.getUsername());
         standingAndBatck.getClaimBatch().setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
@@ -550,7 +596,14 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
     @Override
     public StandingAndBatck updateSysClaimBatchPresent(StandingAndBatck standingAndBatck) {
         ClaimBatch claimBatch = standingAndBatck.getClaimBatch();
-
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
+        baseProviderSettle.setOrgFlag("02");
+        List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+        if (baseProviderSettles.size()>0){
+            claimBatch.setClaimFlag(baseProviderSettles.get(0).getClaimFlag());
+            claimBatch.setNoticeDay(baseProviderSettles.get(0).getNoticeDay());
+        }
         ClaimBatchRecord claimBatchRecord = new ClaimBatchRecord();
         //批次号一样
         claimBatchRecord.setBatchno(claimBatch.getBatchno());

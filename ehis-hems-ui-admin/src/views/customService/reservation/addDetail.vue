@@ -361,9 +361,9 @@
           </el-col>
           <el-col :span="8">
 
-            <el-form-item label="预约时间："  style="white-space: nowrap" prop="appointmentDate">
+            <el-form-item label="预约时间："  style="white-space: nowrap" prop="complaintTime">
               <el-date-picker class="item-width"
-                v-model="ruleForm.appointmentDate"
+                v-model="ruleForm.complaintTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -506,7 +506,7 @@ export default {
       //需要填入数据的部分
       ruleForm:{
         workOrderNo:"",
-        appointmentDate:"",
+        complaintTime:"",
         hospitalWorkCall:"",
         channelCode:"",//受理渠道
         callCenterId:"",//中心

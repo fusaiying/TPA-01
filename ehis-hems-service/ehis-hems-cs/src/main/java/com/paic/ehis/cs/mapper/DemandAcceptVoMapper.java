@@ -40,7 +40,7 @@ public interface DemandAcceptVoMapper {
      */
     public int updateTeamwork(String workOrderNo);
 
-    public int updateStatusM(String[] workOrderNos);
+    public List<DemandAcceptVo> updateStatusM(String[] workOrderNos);
 
     //插入工单表
     public int insertWorkOrderAccept(WorkOrderAccept WorkOrderAccept);

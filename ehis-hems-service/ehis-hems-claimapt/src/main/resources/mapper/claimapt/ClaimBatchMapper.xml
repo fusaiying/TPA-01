@@ -469,7 +469,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="claimFlag != null">claim_flag = #{claimFlag},</if>
             <if test="noticeDay != null">notice_day = #{noticeDay},</if>
         </trim>
-        where batch_no = #{batchno} and update_by='' and status='Y'
+        where batch_no = #{batchno} and status='Y'
     </update>
 
     <delete id="deleteClaimBatchById" parameterType="String">

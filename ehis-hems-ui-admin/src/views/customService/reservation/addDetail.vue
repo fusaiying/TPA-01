@@ -379,10 +379,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约医院：" prop="medicalInstitution">
-              <el-select v-model="ruleForm.medicalInstitution" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
+              省份：<el-input v-model="ruleForm.province" style="width: 50px"  />
+              城市：<el-input v-model="ruleForm.city" style="width: 50px" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -529,6 +527,8 @@ export default {
           mobilePhone:"",
           sex:"",
         },
+        province:"",
+        city:"",
         visitType:"",
         disease:"",
         symptomsSigns:"",
@@ -583,8 +583,8 @@ export default {
         accidentFlag: [
           {required: true, message: "是否意外不能为空", trigger: "blur"}
         ],
-        contactsName: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
+        'contactsPerson.name': [
+          {required: true, message: "联系人姓名不能为空", trigger: "blur"}
         ],
         'contactsPerson.mobilePhone': [
           {required: true, message: "联系人电话不能为空", trigger: "blur"}

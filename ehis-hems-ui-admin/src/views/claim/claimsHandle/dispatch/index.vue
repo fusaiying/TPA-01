@@ -79,8 +79,8 @@
           <el-col :span="8">
             <el-form-item label="操作人：" prop="operator">
               <el-select v-model="form.operator" class="item-width" size="mini" placeholder="请选择">
-                <el-option v-for="option in operatorSelect" :key="option.dictValue" :label="option.dictLabel"
-                           :value="option.dictValue"/>
+                <el-option v-for="option in operatorSelect" :key="option.userName" :label="option.userName"
+                           :value="option.userName"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -177,8 +177,8 @@
               <el-form-item label="操作人：" prop="operator">
                 <el-select v-model="operatorForm.operator" class="item-width" size="mini" placeholder="请选择"
                            @change="getRole">
-                  <el-option v-for="option in operatorSelect" :key="option.dictValue" :label="option.dictLabel"
-                             :value="option.dictValue"/>
+                  <el-option v-for="option in operatorSelect" :key="option.userName" :label="option.userName"
+                             :value="option.userName"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -383,7 +383,6 @@
 </template>
 
 <script>
-  import {getUserInfo} from '@/api/claim/standingBookSearch'
   import {
     selectCaseDispatchList
     , getDspatchUser
@@ -393,7 +392,7 @@
     , selectWorkflow
   } from '@/api/dispatch/api'
   import moment from "moment";
-
+  import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
   export default {
     components: {
     },
@@ -566,14 +565,22 @@
         });
       },
       getDspatchUserData() {
-        const params = {
-          pageNum: 1,
-          pageSize: 1000,
-          status: '0',
-          delFlag: 0,
-          xtype: 'getDspatchUser'
-        };
-        getDspatchUser(params).then(response => {
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            let option = {
+              organCode: res.data.organCode,
+              pageNum: 1,
+              pageSize: 200,
+            }
+                getUsersByOrganCode(option).then(res => {
+                  if (res != null && res.code === 200) {
+                    this.operatorSelect = res.rows
+                  }
+                })
+          }
+        })
+
+        /*getDspatchUser(params).then(response => {
           if (response.rows != null) {
             for (let i = 0; i < response.rows.length; i++) {
               let obj = new Object();
@@ -586,7 +593,7 @@
           }
         }).catch(error => {
           console.log(error);
-        });
+        });*/
       },
       getCaseStatusName(row, col) {
         let resultStatus = this.selectDictLabel(this.caseStatusSelect, row.caseStatus);

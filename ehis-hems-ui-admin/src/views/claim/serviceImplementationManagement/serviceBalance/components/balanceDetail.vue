@@ -72,7 +72,7 @@
 
 import {listBalanceDetail_1, listBalanceDetail_2} from "@/api/claim/serviceBalance";
 import {getAllBaseSupplierInfo, getContractServerList} from "@/api/contractManage/contractManagement";
-import {getICDList} from "@/api/baseInfo/ICDcodeMaintenan";
+
 
 export default {
   name: "balanceDetailTable",

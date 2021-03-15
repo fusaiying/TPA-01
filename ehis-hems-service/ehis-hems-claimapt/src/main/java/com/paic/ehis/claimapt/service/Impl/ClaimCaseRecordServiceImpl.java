@@ -139,7 +139,14 @@ public class ClaimCaseRecordServiceImpl implements IClaimCaseRecordService
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchByBatchNo(claimCaseStandingVo.getBatchno());
         String organcode = claimBatch.getOrgancode();
         //报案号-取三四位
-        String substring1 = organcode.substring(2, 4);
+        String substring1="";
+        if (organcode.length()==2){
+            substring1 = "00";
+        }else if (organcode.length()==3){
+            substring1 = organcode.substring(2, 3)+"0";
+        }else if (organcode.length()>3){
+            substring1 = organcode.substring(2, 4);
+        }
         String bahtime="96"+ substring1 +"0X"+ PubFun.createMySqlMaxNoUseCache("RPTCODE",10,10);
         ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
         claimCaseRecord.setRptNo(claimCaseStandingVo.getRptno());

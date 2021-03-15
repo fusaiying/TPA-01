@@ -165,14 +165,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="policyCertificateNo != null  and policyCertificateNo != ''"> and oi.policy_certificate_no = #{policyCertificateNo}</if>
             <if test="productCode != null  and productCode != ''"> and oi.product_code = #{productCode}</if>
             <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
-            <if test="name != null  and name != ''"> and ci.name = #{name}</if>
+            <if test="name != null  and name != ''"> and ci.name like concat('%', #{name}, '%')</if>
             <if test="sex != null  and sex != ''"> and ci.sex = #{sex}</if>
             <if test="idType != null  and idType != ''"> and ci.id_type = #{idType}</if>
             <if test="idCode != null  and idCode != ''"> and ci.id_code = #{idCode}</if>
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
             <if test="bussinessStatus != null  and bussinessStatus != ''"> and oi.bussiness_status = #{bussinessStatus}</if>
             <if test="applyStartTime != null  and applyEndTime != null">  and (oi.apply_time between  #{applyStartTime} and  #{applyEndTime})</if>
-             and oi.status = 'Y'
+             and oi.status = 'Y' and oi.bussiness_status in ('01','03','04')
         </where>
     </select>
     

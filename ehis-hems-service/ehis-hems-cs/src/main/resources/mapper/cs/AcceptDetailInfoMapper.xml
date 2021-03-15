@@ -120,7 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where work_order_no = #{workOrderNo}
     </select>
         
-    <insert id="insertAcceptDetailInfo" parameterType="AcceptDetailInfo">
+    <insert id="insertAcceptDetailInfo" parameterType="com.paic.ehis.cs.domain.AcceptDetailInfo">
         insert into accept_detail_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="workOrderNo != null">work_order_no,</if>

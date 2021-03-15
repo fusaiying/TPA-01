@@ -323,7 +323,7 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @PostMapping("/insertSupplier")
-    public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo)
+    public AjaxResult insertSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
         return toAjax(productInfoService.insertSupplier(productSupplierInfoVo));
     }
@@ -334,7 +334,7 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @PostMapping("/updateSupplierStatus")
-    public AjaxResult updateSupplierStatus(@RequestBody ProductSupplierInfoVo productSupplierInfoVo)
+    public AjaxResult updateSupplierStatus(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
         return toAjax(productInfoService.updateSupplierStatus(productSupplierInfoVo));
     }

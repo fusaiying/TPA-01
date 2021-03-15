@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:"  prop="Acceptor">
+            <el-form-item label="保益生效日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:"  prop="Acceptor">
+            <el-form-item label="保益满期日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
@@ -127,7 +127,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -303,7 +306,7 @@
         <el-row>
           <el-col :span="5">
             <el-form-item label="家庭电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+              国家区号+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
               区号<el-input v-model="ruleForm.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               号码<el-input v-model="ruleForm.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               分机号<el-input v-model="ruleForm.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -312,9 +315,9 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="办公电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              国家区号+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
               区号<el-input v-model="ruleForm.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               号码<el-input v-model="ruleForm.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               分机号<el-input v-model="ruleForm.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -323,7 +326,7 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="联系地址："  style="white-space: nowrap" prop="contactsPerson.address">
+          <el-form-item label="联系地址：" maxlength="2000" style="white-space: nowrap" prop="contactsPerson.address">
            <el-input class="width-full"  v-model="ruleForm.contactsPerson.address"  clearable size="mini" placeholder="请输入"></el-input>
           </el-form-item>
 

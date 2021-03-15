@@ -74,9 +74,7 @@ public class ClaimCaseCalBillController extends BaseController
             claimCaseCalItem.setBillId(caseCalBillVo.getBillId());
             claimCaseCalItem.setRptNo(caseCalBillVo.getRptNo());
             List<CaseCalBillItemVo> caseCalBillItemVos = claimCaseCalItemService.selectClaimCaseCalFeeItemList(claimCaseCalItem);
-            if(StringUtils.isNotNull(caseCalBillItemVos)) {
                 caseCalBillVo.setMinData(caseCalBillItemVos);
-            }
         }
         return getDataTable(caseCalBillVos);
     }

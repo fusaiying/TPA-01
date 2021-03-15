@@ -177,9 +177,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         service_code,
         service_name,
         category_code,
-        category_name,
+        (select distinct category from base_service_category_kind where codeI = base_service_info.category_code) category_name,
         servertype_code,
-        servertype_name,
+        (select variety from base_service_category_kind where codeII = base_service_info.servertype_code) servertype_name,
         concat_ws('-',service_code,service_name) serviceCodeName,
         concat_ws('-',category_code,category_name) categoryCodeName,
         concat_ws('-',servertype_code,servertype_name) typeCodeName
@@ -391,11 +391,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         IF (isnull(psi.priority), 1,0)
     </select>
 
-    <update id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
-        update product_supplier_info set status = 'N'
-        where status = 'Y' and service_code =#{serviceCode}
+    <delete id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
+        delete from product_supplier_info
+        where service_code =#{serviceCode}
         <!--and product_code = #{productCode}  -->
-    </update>
+    </delete>
 
 
     <insert id="insertSupplier" parameterType="ProductSupplierInfo">

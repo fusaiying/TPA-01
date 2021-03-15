@@ -65,8 +65,8 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="联系人性别：" prop="priority">
-            <el-select v-model="acceptInfo.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+            <el-select v-model="acceptInfo.contactsPerson.sex" class="item-width">
+              <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -81,8 +81,8 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="联系人语言：" prop="priority">
-            <el-select v-model="acceptInfo.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+            <el-select v-model="acceptInfo.contactsLanguage" class="item-width" placeholder="请选择">
+              <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>
@@ -106,8 +106,8 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="出单机构：" prop="priority">
-            <el-select v-model="acceptInfo.acceptor" class="item-width" placeholder="请选择">
-              <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+            <el-select v-model="acceptInfo.organCode" class="item-width" placeholder="请选择">
+              <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                          :value="item.dictValue"/>
             </el-select>
           </el-form-item>

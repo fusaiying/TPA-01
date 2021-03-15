@@ -11,6 +11,7 @@ import com.paic.ehis.product.domain.*;
 import com.paic.ehis.product.mapper.ProductCheckInfoMapper;
 import com.paic.ehis.product.mapper.ProductManagerLogMapper;
 import com.paic.ehis.product.utils.Dateutils;
+import com.paic.ehis.system.api.GetProviderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.product.mapper.ProductInfoMapper;
@@ -36,6 +37,9 @@ public class ProductInfoServiceImpl implements IProductInfoService
 
     @Autowired
     private ProductCheckInfoMapper productCheckInfoMapper;
+
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
 
 
     /**
@@ -331,12 +335,13 @@ public class ProductInfoServiceImpl implements IProductInfoService
 
 
     @Override
-    public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo){
+    public int insertSupplier(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo){
         //将之前的数据置失效
         int count = 0;
+        getProviderInfoService.insertSupplier(productSupplierInfoVo);
         productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
         if(!productSupplierInfoVo.getProductSupplierInfos().isEmpty()){
-            for(ProductSupplierInfo productSupplierInfo:productSupplierInfoVo.getProductSupplierInfos()){
+            for(com.paic.ehis.system.api.domain.ProductSupplierInfo productSupplierInfo:productSupplierInfoVo.getProductSupplierInfos()){
                 productSupplierInfo.setCreateTime(DateUtils.getNowDate());
                 productSupplierInfo.setCreateBy(SecurityUtils.getUsername());
                 productSupplierInfo.setUpdateBy(SecurityUtils.getUsername());
@@ -353,7 +358,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
     }
 
     @Override
-    public int updateSupplierStatus(ProductSupplierInfoVo productSupplierInfoVo){
+    public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo){
         int count = productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
         if(count <= 0){
             count =1;

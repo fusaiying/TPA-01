@@ -93,6 +93,10 @@ export default {
        退票	05
        该案件还未支付，请在支付环节进行回退操作，请核实
        */
+      if(row.appealClaim !== '0') {
+        this.$message({ type: 'info',  message: '无法获取，该案件在修正中'});
+        return false;
+      }
       if(row.payStatus !== '03') {
         // this.$message({ type: 'info',  message: '该案件还未支付，请在支付环节进行回退操作，请核实。'});
         // return false;
@@ -104,16 +108,25 @@ export default {
 
       addAppeal(params).then(res => {
         if (res.code === 200) {
-          console.log(res)
+          this.$message({
+            message: '获取成功！',
+            type: 'success',
+            center: true,
+            showClose: true
+          });
+          this.$emit('initAppealData');
+        }else {
+          this.$message({
+            message: '获取失败！',
+            type: 'error',
+            center: true,
+            showClose: true
+          });
         }
+      }).catch(error => {
+        console.log(error);
       });
-      // this.addAppeal(row);
     },
-
-    // addAppealData(){
-    //
-    // },
-
     getLoginInfo(){
       getUserInfo().then(response => {
         if(response.data) {
@@ -121,7 +134,6 @@ export default {
         }
       })
     },
-
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)
     },

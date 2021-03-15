@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:"  prop="Acceptor">
+            <el-form-item label="保益生效日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:"  prop="Acceptor">
+            <el-form-item label="保益满期日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
             </el-form-item>
           </el-col>
@@ -127,7 +127,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" disabled="submissionFlag"/>
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -199,7 +202,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
-              <el-input v-model="workPoolData.channelCode" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.channelCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -216,7 +222,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="sex" >
-              <el-input v-model="workPoolData.contactsPerson.sex" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.contactsPerson.sex" class="item-width">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -233,7 +242,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-input v-model="workPoolData.priorityLevel" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.priorityLevel" class="item-width" placeholder="">
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -256,7 +268,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="priority"  >
               <el-select v-model="workPoolData.contactsPerson.language" class="item-width"disabled="submissionFlag">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -270,12 +282,18 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉人性别：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width" placeholder="">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width" disabled>
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -292,13 +310,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-input v-model="workPoolData.organCode" class="item-width"  size="mini"disabled="submissionFlag"/>
+              <el-select v-model="workPoolData.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
         </el-row>
         <el-row>  <el-form-item label="是否已劝解：" prop="persuasionFlag">
-          <el-input v-model="workPoolData.persuasionFlag" class="item-width"  size="mini"disabled="submissionFlag"/>
+          <el-select v-model="workPoolData.persuasionFlag" class="item-width" placeholder="">
+            <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
+                       :value="item.dictValue"/>
+          </el-select>
         </el-form-item>
         </el-row>
 
@@ -336,7 +360,6 @@
               <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
             </template>
           </el-table-column>
-
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>

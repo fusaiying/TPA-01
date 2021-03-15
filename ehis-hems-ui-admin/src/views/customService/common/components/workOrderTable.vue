@@ -16,8 +16,8 @@
     </el-table-column>
 
     <el-table-column prop="itemCode" width="100" label="服务项目" align="center">
-      <template slot-scope="scope" v-if="scope.row.itemCode">
-        <span>{{ selectDictLabel(cs_service_item, scope.row.itemCode) }}</span>
+      <template slot-scope="scope" v-if="scope.row.serviceItem">
+        <span>{{ selectDictLabel(cs_service_item, scope.row.serviceItem) }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="policyNo" width="140" label="保单号" align="center"/>
@@ -35,8 +35,8 @@
         <span>{{ scope.row.updateTime | changeDate}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="acceptBy" label="受理人" align="center"/>
-    <el-table-column prop="modifyBy" label="处理人" align="center"/>
+    <el-table-column prop="acceptUserId" label="受理人" align="center"/>
+    <el-table-column prop="updateBy" label="处理人" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center">
       <template slot-scope="scope" v-if="scope.row.priorityLevel">
         <span>{{ selectDictLabel(cs_vip_flag, scope.row.priorityLevel) }}</span>
@@ -54,11 +54,11 @@
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="140" fixed="right">
       <template slot-scope="scope">
-        <el-button size="small" type="text" @click="editPresenting(scope.row,'get')">获取
+        <el-button size="small" type="text" @click="obtainButton(scope.row)">获取
         </el-button>
-        <el-button size="small" type="text" @click="editPresenting(scope.row,'edit')">修改
+        <el-button size="small" type="text" @click="modifyButton(scope.row)">修改
         </el-button>
-        <el-button size="small" type="text" @click="editPresenting(scope.row,'cancel')">取消
+        <el-button size="small" type="text" @click="cancleBytton(scope.row)">取消
         </el-button>
       </template>
     </el-table-column>
@@ -174,26 +174,61 @@ export default {
     }).dictDate
   },
   methods: {
-    // 处理跳转
-    editPresenting(row, status) {
-      let data = encodeURI(
-        JSON.stringify({
-          batchno: row.batchno, //批次号
-          status,//新增or查看
-          claimtype: row.claimtype//理赔类型
-        })
-      )
+    //获取
+    obtainButton(row) {
+
+    },
+    //修改
+    modifyButton(row) {
+      let url='/customService/modify';
+      if(row.serviceItem==''){
+        url='/customService/complaint/modify';
+      }else if(row.serviceItem==''){
+        url='/customService/reservation/modify';
+      }
       this.$router.push({
-        path: '/claims-handle/presenting-edit',
-        query: {
-          data
+        path: url,
+        query:{
+          workOrderNo:row.workOrderNo,
+          policyNo:row.policyNo,
+          policyItemNo:row.policyItemNo,
+          status:row.status,
+          businessType:row.businessType
+        }
+      })
+      // let data = encodeURI(
+      //   JSON.stringify({
+      //     batchno: row.batchno, //批次号
+      //     status,//新增or查看
+      //     claimtype: row.claimtype//理赔类型
+      //   })
+      // )
+      // this.$router.push({
+      //   path: '/claims-handle/presenting-edit',
+      //   query: {
+      //     data
+      //   }
+      // })
+    },
+    cancleBytton(row) {
+      let url='/customService/cancle';
+      if(row.serviceItem==''){
+        url='/customService/complaint/cancle';
+      }else if(row.serviceItem==''){
+        url='/customService/reservation/cancle';
+      }
+      this.$router.push({
+        path: url,
+        query:{
+          workOrderNo:row.workOrderNo,
+          policyNo:row.policyNo,
+          policyItemNo:row.policyItemNo,
+          status:row.status
         }
       })
     },
-    //条码打印
-    codePrint() {
 
-    },
+
     getMinData(row, expandedRows) {
       this.loading = true
       //判断只有展开是做请求

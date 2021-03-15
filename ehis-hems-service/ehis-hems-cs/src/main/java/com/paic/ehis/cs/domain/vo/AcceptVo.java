@@ -21,6 +21,7 @@ public class AcceptVo extends BaseEntity
 
     /** 工单号 */
     private String workOrderNo;
+    private String workOrderNos;
     private String workOrderId;
     /** 业务类型 */
     private String businessType;
@@ -42,9 +43,11 @@ public class AcceptVo extends BaseEntity
     private PersonInfo holderPerson=new PersonInfo();
     /** 受理人信息 */
     private String acceptUserId;
+    /** 目前用不上,受理人信息以登录名称显示 */
     private UserInfo acceptUser=new UserInfo();
     /** 处理人信息 */
     private String modifyUserId;
+    /** 目前用不上,处理人信息以登录名称显示 */
     private UserInfo modifyUser=new UserInfo();
     /** 受理时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -62,6 +65,8 @@ public class AcceptVo extends BaseEntity
     private String channelCode;
     /** 流程状态 */
     private String status;
+    /** 工单个数 */
+    private Integer count;
 
     /** 响应时间 */
 

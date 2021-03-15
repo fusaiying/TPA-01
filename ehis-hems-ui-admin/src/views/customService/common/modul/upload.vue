@@ -9,21 +9,21 @@
       width="40%"
       style="color: blue"
     >
-      <el-form :model="baseForm"  label-width="170px" size="mini">
+      <el-form :model="baseForm" label-width="170px" size="mini">
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-<!--          <span style="font-size: 20px">上传附件</span>-->
+          <!--          <span style="font-size: 20px">上传附件</span>-->
           <el-row>
             <el-form-item label="附件类型" prop="fjKind">
               <el-select v-model="baseForm.fjKind" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_attachment_type" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
-          </el-form-item>
+            </el-form-item>
           </el-row>
           <el-row>
             <el-form-item label="附件文件" prop="fjFile">
 
-              <el-input v-model="baseForm.fjFile" class="item-width"  size="mini" placeholder="请选择上传文件">
+              <el-input v-model="baseForm.fjFile" class="item-width" size="mini" placeholder="请选择上传文件">
                 <el-link href="https://www.baidu,com" target="_blank">上传文件</el-link>
               </el-input>
             </el-form-item>
@@ -49,84 +49,73 @@
 </template>
 
 <script>
-  export default {
-    name:'upLoad',
-    props: {
-      historicalProblemData:Array,
-      value: {
-        type: Boolean,
-        default: false
-      },
+export default {
+  name: 'upLoad',
+  props: {
+    historicalProblemData: Array,
+    value: {
+      type: Boolean,
+      default: false
     },
+  },
 
-    data() {
-      return {
-        cs_service_item:[],
-        dialogVisable:false,
-        baseForm: {
-          fjKind:"",
-          fjFile:"",
-          textarea:"",
+  data() {
+    return {
+      cs_attachment_type: [],
+      dialogVisable: false,
+      baseForm: {
+        fjKind: "",
+        fjFile: "",
+        textarea: "",
 
 
-        }
+      }
     }
-      },
-
-    // watch: {
-    //   value: function (newValue) {
-    //     this.dialogVisable = newValue
-    //   },
-    //   historicalProblemData: function (newValue) {
-    //     this.baseForm = newValue
-    //   }
-    // },
-
-
-    mounted() {
-        this.getDicts("cs_service_item").then(response => {
-          this.cs_service_item = response.data;
-        });
+  },
+  mounted() {
+    this.getDicts("cs_attachment_type").then(response => {
+      this.cs_attachment_type = response.data;
+    });
+  },
+  methods: {
+    //打开窗口
+    open() {
+      console.log("调用到了子组件")
+      this.dialogVisable = true
     },
-    methods: {
-      //打开窗口
-      open(){
-        console.log("调用到了子组件")
-        this.dialogVisable=true
-      },
-      //确定保存数据
-      defineButton(){
+    //确定保存数据
+    defineButton() {
 
-      },
-      //关闭对话框
-      changeDialogVisable() {
-        //清空对话框中的数据
-        this.dialogVisable=false
-        /* console.log('-------')
-         this.radio = undefined
-         this.copyRadio = undefined
-         this.expands = []
-         this.$refs.searchForm.resetFields()
-         this.$emit('closeProblemShipment')*/
-      },
-    }
+    },
+    //关闭对话框
+    changeDialogVisable() {
+      //清空对话框中的数据
+      this.dialogVisable = false
+      /* console.log('-------')
+       this.radio = undefined
+       this.copyRadio = undefined
+       this.expands = []
+       this.$refs.searchForm.resetFields()
+       this.$emit('closeProblemShipment')*/
+    },
   }
+}
 </script>
 
 <style scoped>
-  /deep/ .row-expand-cover .el-table__expand-column .el-icon {
-    visibility: hidden;
-  }
+/deep/ .row-expand-cover .el-table__expand-column .el-icon {
+  visibility: hidden;
+}
 
-  .item-width {
-    width: 200px;
-  }
+.item-width {
+  width: 200px;
+}
 
-  .duty-p {
-    width: 170px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.duty-p {
+  width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 </style>

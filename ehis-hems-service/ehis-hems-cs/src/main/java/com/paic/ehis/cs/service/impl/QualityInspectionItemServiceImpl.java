@@ -1,9 +1,6 @@
 package com.paic.ehis.cs.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
@@ -113,28 +110,46 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
     @Transactional
     @Override
     public int insertItem(QualityVo qualityVo) {
-            //从前端获取质检编号
-            Map<String,String> param=new HashMap<>();
-            //操作前主流程状态
-            param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
-            //操作按钮代码
-            param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
-            FlowLog flowLog=new FlowLog();
-            //流转记录添加
-            flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
-            flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
-            flowLog.setCreatedTime(DateUtils.getNowDate());
-            flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
-            flowLog.setUpdatedTime(DateUtils.getNowDate());
-            flowLog.setLinkCode(param.get("linkCode"));
-            flowLog.setOperateCode(param.get("operateCode"));
-            //记录操作轨迹
-            flowLogMapper.insertFlowLog(flowLog);
-
-
+        //从前端获取质检编号
+        Map<String,String> param=new HashMap<>();
+        //操作前主流程状态
+        param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
+        FlowLog flowLog=new FlowLog();
+        //流转记录添加
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+        flowLog.setCreatedTime(DateUtils.getNowDate());
+        flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+        flowLog.setUpdatedTime(DateUtils.getNowDate());
+        flowLog.setLinkCode(param.get("linkCode"));
+        flowLog.setOperateCode(param.get("operateCode"));
+        //记录操作轨迹
+        flowLogMapper.insertFlowLog(flowLog);
+        String username = SecurityUtils.getUsername();
+        Date time = new Date();
+        String inspectionId = PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10);
         List<QualityInspectionItem> itemList =qualityVo.getItemList();
+        if (!itemList.isEmpty()) {
+            qualityVo.getItemList().forEach( item ->{
+                item.setInspectionId(inspectionId);
+                item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
+                item.setCreatedBy(username);
+                item.setUpdatedBy(username);
+                item.setUpdatedTime(time);
+                item.setCreatedTime(time);
+            });
+            qualityInspectionItemMapper.insertExtDocList(itemList);
+        }
+        qualityVo.setInspectionId(inspectionId);
+        qualityVo.setCreatedBy(username);
+        qualityVo.setCreatedTime(time);
+        qualityVo.setUpdatedBy(username);
+        qualityVo.setUpdatedTime(time);
+        qualityInspectionItemMapper.insertQualityVO(qualityVo);
 
-        return qualityInspectionItemMapper.insertExtDocList(itemList);
+        return 1 ;
     }
 
     /**

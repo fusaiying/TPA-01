@@ -11,10 +11,12 @@ import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
+import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -257,32 +259,38 @@ public class CustomServiceSpotCheckController extends BaseController {
     /**
      *质检差错确认工作池查询
      */
-@GetMapping("/internal/selectHandle")
-public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
-{
-    List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
-    return getDataTable(list);
-}
-//************************************************************************************
-    /**
-     *工单查询
-     */
-@GetMapping("/internal/selectWorkOrder")
-public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
-{
-    startPage();
-    List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
-    return getDataTable(list);
-}
-//************************************************
-    /*
-    质检查询
-     */
-@GetMapping("/internal/selectQualityVo")
-public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
-{
-    startPage();
-    List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
-    return getDataTable(list);
-}
+    @GetMapping("/internal/selectHandle")
+    public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
+    {
+        List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
+        return getDataTable(list);
+    }
+    //************************************************************************************
+        /**
+         *工单查询
+         */
+    @GetMapping("/internal/selectWorkOrder")
+    public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
+    {
+        startPage();
+        List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
+        return getDataTable(list);
+    }
+    //************************************************
+        /*
+        质检查询
+         */
+    @GetMapping("/internal/selectQualityVo")
+    public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
+    {
+        startPage();
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+        return getDataTable(list);
+    }
+    @GetMapping("/internal/selectQualityFlagVO")
+    public TableDataInfo selectQualityFlagVo(QualityFlagDTO qualityFlagDTO){
+        startPage();
+        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
+        return getDataTable(list);
+    }
 }

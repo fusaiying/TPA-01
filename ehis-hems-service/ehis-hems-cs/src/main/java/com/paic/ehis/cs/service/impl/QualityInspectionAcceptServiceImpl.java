@@ -7,9 +7,11 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
+import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityFlagVO;
 import com.paic.ehis.cs.domain.vo.QualityVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IQualityInspectionAcceptService;
@@ -255,5 +257,9 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
         return qualityInspectionAcceptMapper.selectQualityVo(qualityDTO);
     }
 
+    @Override
+    public List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO) {
+        return qualityInspectionAcceptMapper.selectQualityFlagVO(qualityFlagDTO);
+    }
 }
 

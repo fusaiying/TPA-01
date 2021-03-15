@@ -142,6 +142,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="endCaseEndTime != null ">
             and DATE_FORMAT(woa.end_date,'%Y-%m-%d') <![CDATA[<=]]> #{endCaseEndTime}
         </if>
-        <if test="workOrderId != null and workOrderId != ''">work_order_id,</if>
+        <if test="workOrderId != null and workOrderId != ''">
+             work_order_id,
+            </if>
     </select>
 </mapper>

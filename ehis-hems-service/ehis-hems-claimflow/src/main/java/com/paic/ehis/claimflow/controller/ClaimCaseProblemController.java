@@ -42,17 +42,17 @@ public class ClaimCaseProblemController extends BaseController
         return getDataTable(list);
     }
 
-    @GetMapping("/list1")
-    public TableDataInfo list1(ClaimCaseProblem claimCaseProblem)
+    @PostMapping("/list1")
+    public TableDataInfo list1(@RequestBody ClaimCaseProblem claimCaseProblem)
     {
-        startPage();
+        startPage(claimCaseProblem);
         List<ClaimCaseProblem> list = claimCaseProblemService.selectClaimCaseProblemList1(claimCaseProblem);
         return getDataTable(list);
     }
 
-    @GetMapping("/list2")
-    public TableDataInfo list2(ClaimCaseProblem claimCaseProblem) throws Exception {
-        startPage();
+    @PostMapping("/list2")
+    public TableDataInfo list2(@RequestBody ClaimCaseProblem claimCaseProblem) throws Exception {
+        startPage(claimCaseProblem);
         List<ClaimCaseProblem> list = claimCaseProblemService.selectClaimCaseProblemList2(claimCaseProblem);
         return getDataTable(list);
     }

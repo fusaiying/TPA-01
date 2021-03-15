@@ -263,7 +263,7 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
-      params.appealStatus = '04';
+      params.appealStatus = '03';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
+import com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealTaskMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -103,5 +104,16 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     public int deleteClaimCaseAppealTaskById(Long taskId)
     {
         return claimCaseAppealTaskMapper.deleteClaimCaseAppealTaskById(taskId);
+    }
+
+    /**
+     * 查询案件申诉任务列表
+     *
+     * @param vo 案件申诉任务
+     * @return 案件申诉任务集合
+     */
+    @Override
+    public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo) {
+        return claimCaseAppealTaskMapper.getAppealList(vo);
     }
 }

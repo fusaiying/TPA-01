@@ -267,7 +267,7 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.updateBy = this.formSearch.updateBy;
-
+      params.appealStatus = '01';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -289,13 +289,14 @@ export default {
       const params = {};
       params.pageNum = this.completePageInfo.pageNum;
       params.pageSize = this.completePageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '02';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
@@ -314,13 +315,13 @@ export default {
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;
       params.pageSize = this.claimPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
       params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {

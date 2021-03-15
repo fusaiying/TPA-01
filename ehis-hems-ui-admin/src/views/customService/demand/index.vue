@@ -8,7 +8,7 @@
           <!--v-model双向绑定 v-model的值为当前被选中的el-option的 value 属性值-->
           <el-col :span="8">
             <el-form-item label="服务项目：" prop="itemCode">
-              <el-select v-model="sendForm.itemCode" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.itemCode" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_demand_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -16,7 +16,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="channelCode">
-              <el-select v-model="sendForm.channelCode" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.channelCode" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -24,7 +24,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理人：" prop="acceptBy">
-              <el-input v-model="sendForm.acceptBy" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -44,7 +44,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理人：" prop="modifyBy">
-              <el-input v-model="sendForm.modifyBy" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -52,7 +52,7 @@
               <el-date-picker
                 v-model="sendForm.handlerTime"
                 class="item-width"
-                clearable="true"
+                clearable
                 type="daterange"
                 range-separator="~"
                 start-placeholder="开始日期"
@@ -65,17 +65,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="工单号：" prop="workOrderNo">
-              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="保单号：" prop="policyNo">
-              <el-input v-model="sendForm.policyNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号：" prop="policyItemNo">
-              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -83,17 +83,17 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="holderName">
-              <el-input v-model="sendForm.holderName" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.holderName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人姓名：" prop="insuredName">
-              <el-input v-model="sendForm.insuredName" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
-              <el-input v-model="sendForm.idNumber" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.idNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -101,12 +101,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人电话：" prop="mobilePhone">
-              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="sendForm.organCode" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -130,7 +130,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="sendForm.priorityLevel" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.priorityLevel" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -138,7 +138,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="VIP标识：" prop="vipFlag">
-              <el-select v-model="sendForm.vipFlag" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.vipFlag" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -146,7 +146,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="状态：" prop="status">
-              <el-select v-model="sendForm.status" class="item-width" clearable="true" placeholder="请选择">
+              <el-select v-model="sendForm.status" class="item-width" clearable placeholder="请选择">
                 <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>

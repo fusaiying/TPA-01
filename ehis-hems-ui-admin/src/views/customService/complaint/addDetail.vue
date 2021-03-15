@@ -323,7 +323,7 @@
 
         </el-row>
         <el-row>
-          <el-form-item label="联系地址："  style="white-space: nowrap" prop="contactsPerson.address">
+          <el-form-item label="联系地址：" maxlength="2000" style="white-space: nowrap" prop="contactsPerson.address">
            <el-input class="width-full"  v-model="ruleForm.contactsPerson.address"  clearable size="mini" placeholder="请输入"></el-input>
           </el-form-item>
 

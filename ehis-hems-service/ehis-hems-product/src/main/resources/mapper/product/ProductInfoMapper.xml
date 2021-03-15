@@ -383,7 +383,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <delete id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
         delete from product_supplier_info
-        where product_code =#{productCode}
+        where service_code =#{serviceCode}
         <!--and product_code = #{productCode}  -->
     </delete>
 

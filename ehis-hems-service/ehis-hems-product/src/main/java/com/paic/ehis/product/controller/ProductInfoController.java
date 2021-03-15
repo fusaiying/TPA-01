@@ -300,9 +300,9 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @PostMapping("/insertSupplier")
-    public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo)
+    public AjaxResult insertSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
-        return toAjax(productInfoService.insertSupplier(productSupplierInfoVo));
+        return getProviderInfoService.insertSupplier(productSupplierInfoVo);
     }
 
 

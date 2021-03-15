@@ -1086,17 +1086,58 @@ WHERE
 
     <select id="getServiceInfo" resultMap="BaseServiceInfoResult">
         SELECT
-        serial_no,
-        service_code,
-        service_name,
-        category_code,
-        category_name,
-        servertype_code,
-        servertype_name,
-        concat_ws('-',service_code,service_name) serviceCodeName,
-        concat_ws('-',category_code,category_name) categoryCodeName,
-        concat_ws('-',servertype_code,servertype_name) typeCodeName
-        FROM base_service_info
+            serial_no,
+            service_code,
+            service_name,
+            category_code,
+            (
+                SELECT DISTINCT
+                    category
+                FROM
+                    base_service_category_kind
+                WHERE
+                    codeI = base_service_info.category_code
+            ) category_name,
+            servertype_code,
+            (
+                SELECT
+                    variety
+                FROM
+                    base_service_category_kind
+                WHERE
+                    codeII = base_service_info.servertype_code
+            ) servertype_name,
+            concat_ws(
+                '-',
+                service_code,
+                service_name
+            ) serviceCodeName,
+            concat_ws(
+                '-',
+                category_code,
+                (
+                    SELECT DISTINCT
+                        category
+                    FROM
+                        base_service_category_kind
+                    WHERE
+                        codeI = base_service_info.category_code
+                )
+            ) categoryCodeName,
+            concat_ws(
+                '-',
+                servertype_code,
+                (
+                    SELECT
+                        variety
+                    FROM
+                        base_service_category_kind
+                    WHERE
+                        codeII = base_service_info.servertype_code
+                )
+            ) typeCodeName
+        FROM
+            base_service_info
     </select>
 
     <select id="getSupplierInfo"  resultMap="SupplierInfoResult">
@@ -1187,6 +1228,21 @@ WHERE
         GROUP BY
         supplier_code,
         service_code
-        ) order by if(isnull(bcs.priority),1,0) asc
+        ) order by -bcs.priority desc
     </select>
+
+    <update id ="updateSupplier" parameterType="ProductSupplierInfo" >
+        UPDATE base_contract_service
+        SET priority = #{priority}
+        WHERE
+            service_code = #{serviceCode}
+        AND supplier_code = #{supplierCode}
+    </update>
+
+    <update id ="updateSupplier1" parameterType="ProductSupplierInfoVo" >
+        UPDATE base_contract_service
+        SET priority = null
+        WHERE
+            service_code = #{serviceCode}
+    </update>
 </mapper>

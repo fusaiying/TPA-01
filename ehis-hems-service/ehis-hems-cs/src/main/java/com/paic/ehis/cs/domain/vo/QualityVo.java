@@ -19,7 +19,7 @@ public class QualityVo extends BaseEntity
 
     /** 工单编号 */
     @Excel(name = "工单编号")
-    private String workOrderId;
+    private String workOrderNo;
 
     /** 质检评分 */
     @Excel(name = "质检评分")
@@ -56,4 +56,6 @@ public class QualityVo extends BaseEntity
     private Date updatedTime;
 
     List<QualityInspectionItem> itemList;
+
+
 }

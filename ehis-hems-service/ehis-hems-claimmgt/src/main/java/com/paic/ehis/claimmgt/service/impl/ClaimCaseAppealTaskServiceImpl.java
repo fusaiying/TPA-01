@@ -72,14 +72,30 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     /**
      * 修改案件申诉任务
      * 
-     * @param claimCaseAppealTask 案件申诉任务
+     * @param bean 案件申诉任务
      * @return 结果
      */
     @Override
-    public int updateClaimCaseAppealTask(ClaimCaseAppealTask claimCaseAppealTask)
+    public int updateClaimCaseAppealTask(ClaimCaseAppealTask bean)
     {
-        claimCaseAppealTask.setUpdateTime(DateUtils.getNowDate());
-        return claimCaseAppealTaskMapper.updateClaimCaseAppealTask(claimCaseAppealTask);
+        Date nowDate = DateUtils.getNowDate();
+        String username = SecurityUtils.getUsername();
+        bean.setUpdateTime(nowDate);
+        bean.setUpdateBy(username);
+
+        // 进入申诉初审状态
+        if(bean.getDealType().equalsIgnoreCase("initiate")) {
+            bean.setAppealStatus("02");
+        }
+        //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
+        if(bean.getDealType().equalsIgnoreCase("audit")) {
+           if(bean.getIsAgree().equals("01")) {
+               bean.setAppealStatus("03");
+           } else {
+               bean.setAppealStatus("04");
+           }
+        }
+        return claimCaseAppealTaskMapper.updateClaimCaseAppealTask(bean);
     }
 
     /**

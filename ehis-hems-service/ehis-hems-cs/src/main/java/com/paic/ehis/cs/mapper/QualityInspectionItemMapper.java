@@ -5,6 +5,7 @@ import java.util.List;
 import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.QualityInspectionDTO;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 
 /**
  * 质检项目 Mapper接口
@@ -51,6 +52,8 @@ public interface QualityInspectionItemMapper
      * @return
      */
     public int insertExtDocList(List<QualityInspectionItem> itemList);
+
+    int insertQualityVO(QualityVo qualityVo);
 
     /**
      * 批量修改质检差错确认

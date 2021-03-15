@@ -2,6 +2,8 @@ package com.paic.ehis.base.service;
 
 import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
+import com.paic.ehis.base.domain.ProductInfo;
+import com.paic.ehis.base.domain.ProductSupplierInfo;
 import com.paic.ehis.base.domain.vo.AddressVO;
 import com.paic.ehis.base.domain.vo.Adress;
 import com.paic.ehis.base.domain.vo.AddressInfo;
@@ -180,4 +182,8 @@ public interface IBaseProviderInfoService
 
     public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo);
 
+    /**
+     *供应商信息查询接口
+     */
+    public List<ProductSupplierInfo> selectSupplier(ProductInfo productInfo);
 }

@@ -1,5 +1,7 @@
 package com.paic.ehis.base.service.impl;
 
+import com.paic.ehis.base.domain.ProductInfo;
+import com.paic.ehis.base.domain.ProductSupplierInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
@@ -599,5 +601,10 @@ public  String getPinYinHeadChar(String str) {
     @Override
     public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo){
         return baseProviderInfoMapper.getHospitalInfo1(addressInfo);
+    }
+
+    @Override
+    public List<ProductSupplierInfo> selectSupplier(ProductInfo productInfo){
+        return baseProviderInfoMapper.selectSupplier(productInfo);
     }
 }

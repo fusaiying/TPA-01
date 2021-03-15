@@ -10,21 +10,21 @@ export function updateDiss(data) {
   })
 }
 
-//查询 问题件工作池  (待处理)
-export function PendingData(query) {
+//查询 协谈工作池  (待处理)
+export function PendingData(data) {
   return request({
     url: '/claimflow/discussion/selectCaseDisListUnder',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 
-//查询 问题件工作池  (已处理)
-export function processedData(query) {
+//查询 协谈工作池  (已处理)
+export function processedData(data) {
   return request({
     url: '/claimflow/discussion/selectCaseDisListOver',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: data
   })
 }
 

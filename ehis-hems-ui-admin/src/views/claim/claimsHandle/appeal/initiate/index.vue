@@ -68,7 +68,7 @@
       <div slot="header" class="clearfix">
         <span>案件工作池</span>
       </div>
-      <claimTable :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
+      <claimTable  @initAppealData="initAppealData" :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
       <pagination
         v-show="claimTotal>0"
         :total="claimTotal"
@@ -111,7 +111,7 @@
     <!-- 申诉工作池  end  -->
 
     <!-- 发起/处理  start  -->
-    <deal :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
+    <deal   @initAppealData="initAppealData" :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
     <!-- 发起/处理  end  -->
   </div>
 </template>
@@ -246,6 +246,10 @@ export default {
       // this.completedTotal = 0;
       // this.getPendingData();
       // this.getProcessedData();
+    },
+    initAppealData(){
+      this.getPendingData();
+      this.getProcessedData();
     },
     // 查询处理中
     getPendingData() {

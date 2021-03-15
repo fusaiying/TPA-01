@@ -35,6 +35,7 @@
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="callCenterId" column="call_center_id"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
@@ -524,11 +525,12 @@ FROM
 
 
     <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.AcceptDTO" resultMap="DemandAcceptVoResult">
-        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type
+        select t1.work_order_no,t2.channel_code,t2.item_code,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.modify_time,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type,d.remark
         from collaborative_from t3
         left join  accept_detail_info t2  on t3.work_order_no=t2.work_order_no
         left join  work_order_accept t1 on t1.work_order_no=t3.work_order_no
         left join person_info c on t1.insured_no=c.person_id
+        left join work_handle_info d on t3.work_order_no=d.work_order_no
         where  t1.business_type in("01","03")
         and t1.status='02'
         and t3.status='01'

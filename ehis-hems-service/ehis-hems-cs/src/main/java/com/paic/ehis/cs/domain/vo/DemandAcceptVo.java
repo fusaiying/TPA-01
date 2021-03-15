@@ -220,4 +220,7 @@ public class DemandAcceptVo extends BaseEntity {
     private int isRedWord;
 
 
+    /** 处理说明 */
+    private String remark;
+
 }

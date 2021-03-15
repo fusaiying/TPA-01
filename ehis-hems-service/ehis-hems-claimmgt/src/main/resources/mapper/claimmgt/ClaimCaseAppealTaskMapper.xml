@@ -212,4 +212,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getTaskId"  resultType="Long">
         select lpad((select ifnull(max(CAST(task_id AS SIGNED)),0) + 1 from claim_case_appeal_task ), 11, 0);
     </select>
+
+    <select id="getAppealNewRptNo" parameterType="String" resultType="String">
+        select new_rpt_no from   claim_case_appeal_task where task_id = (select max(task_id) from claim_case_appeal_task where status = 'Y' and appeal_rpt_no = #{appealRptNo} and appeal_status = '03')
+    </select>
 </mapper>

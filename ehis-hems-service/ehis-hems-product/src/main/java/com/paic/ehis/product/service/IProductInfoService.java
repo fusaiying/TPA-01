@@ -119,10 +119,10 @@ public interface IProductInfoService
     /**
      *供应商信息查询接口
      */
-    public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo);
+    public int insertSupplier(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
 
     /**
      *已经配置的供应商信息置为失效
      */
-    public int updateSupplierStatus(ProductSupplierInfoVo productSupplierInfoVo);
+    public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
 }

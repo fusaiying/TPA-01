@@ -91,7 +91,7 @@ public interface ProductInfoMapper
 
     public List<ProductSupplierInfo> selectProductSupplier(ProductInfo productInfo);
 
-    public int updatesupplierInfo(ProductSupplierInfoVo productSupplierInfoVo);
+    public int updatesupplierInfo(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
 
-    public int insertSupplier(List<ProductSupplierInfo> productSupplierInfo);
+    public int insertSupplier(List<com.paic.ehis.system.api.domain.ProductSupplierInfo> productSupplierInfo);
 }

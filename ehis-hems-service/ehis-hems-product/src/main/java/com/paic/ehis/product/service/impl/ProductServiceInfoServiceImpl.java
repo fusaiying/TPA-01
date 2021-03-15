@@ -70,7 +70,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         int count = 0;
         String productCode = productServiceInfoVo.getProductCode();
         //修改目前已有数据的状态
-        productServiceInfoMapper.updateStaus(productCode);
+
         if(!productServiceInfoVo.getProductServiceInfos().isEmpty()){
             List<ProductServiceInfo> productServiceInfos= new ArrayList<ProductServiceInfo>();
             for(ProductServiceInfo productServiceInfo:productServiceInfoVo.getProductServiceInfos()){
@@ -86,6 +86,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         }else{
             count = 1;
         }
+        productServiceInfoMapper.updateStaus(productCode);
         return count;
     }
 

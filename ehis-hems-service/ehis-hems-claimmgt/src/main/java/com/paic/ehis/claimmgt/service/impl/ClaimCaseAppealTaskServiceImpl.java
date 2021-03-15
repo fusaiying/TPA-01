@@ -204,8 +204,12 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         return result;
     }
 
+    /**
+     * 获取申诉成功后的报案号
+     * @author: hjw
+     * @time : 2021-3-15
+     */
     private String getNewRptNo(String appealRptNo){
-
         String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo);
         if(StringUtils.isBlank(appealNewRptNo)){
             appealRptNo +="-1" ;

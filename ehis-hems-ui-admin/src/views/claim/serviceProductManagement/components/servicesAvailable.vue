@@ -498,7 +498,7 @@ export default {
         await new Promise((resolve, reject) => {
           this.loading = true
           selectSupplier(this.formSearch).then(res => {
-            this.supplierInfo.supplierData = res.data;
+            this.supplierInfo.supplierData = res.data.data;
             this.supplierInfo.supplierData.map((item, index) => {
               item.index = index
             })

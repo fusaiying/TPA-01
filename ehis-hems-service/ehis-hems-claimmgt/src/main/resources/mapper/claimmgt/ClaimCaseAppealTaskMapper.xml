@@ -204,4 +204,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
 
     </select>
+
+    <select id="getTaskId"  resultType="Long">
+        select lpad((select ifnull(max(CAST(task_id AS SIGNED)),0) + 1 from claim_case_appeal_task ), 11, 0);
+    </select>
 </mapper>

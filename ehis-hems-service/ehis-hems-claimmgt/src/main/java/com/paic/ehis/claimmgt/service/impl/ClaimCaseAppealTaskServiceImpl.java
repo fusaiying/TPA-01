@@ -1,11 +1,13 @@
 package com.paic.ehis.claimmgt.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealTaskMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.DateUtils;
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,14 +50,22 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     /**
      * 新增案件申诉任务
      * 
-     * @param claimCaseAppealTask 案件申诉任务
+     * @param bean 案件申诉任务
      * @return 结果
      */
     @Override
-    public int insertClaimCaseAppealTask(ClaimCaseAppealTask claimCaseAppealTask)
+    public int insertClaimCaseAppealTask(ClaimCaseAppealTask bean)
     {
-        claimCaseAppealTask.setCreateTime(DateUtils.getNowDate());
-        return claimCaseAppealTaskMapper.insertClaimCaseAppealTask(claimCaseAppealTask);
+        Date nowDate = DateUtils.getNowDate();
+        String username = SecurityUtils.getUsername();
+        bean.setCreateTime(nowDate);
+        bean.setCreateBy(username);
+        bean.setUpdateTime(nowDate);
+        bean.setUpdateBy(username);
+        bean.setStatus("Y");
+        bean.setAppealStatus("01");
+        bean.setApplyOperator(username);
+        return claimCaseAppealTaskMapper.insertClaimCaseAppealTask(bean);
     }
 
     /**

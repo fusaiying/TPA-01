@@ -89,4 +89,6 @@ public interface GetProviderInfoService
     @PostMapping("/supplier/batchTimeBaseSupplierContract")
     public AjaxResult batchTimeBaseSupplierContract(@RequestBody BaseSupplierContract baseSupplierContract);
 
+    @PostMapping("/org/selectSupplier")
+    public AjaxResult selectSupplier(@RequestBody ProductInfo productInfo);
 }

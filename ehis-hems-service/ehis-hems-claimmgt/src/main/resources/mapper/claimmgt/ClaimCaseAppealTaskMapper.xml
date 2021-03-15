@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where task_id = #{taskId}
     </select>
         
-    <insert id="insertClaimCaseAppealTask" parameterType="ClaimCaseAppealTask" useGeneratedKeys="true" keyProperty="taskId">
+    <insert id="insertClaimCaseAppealTask" parameterType="ClaimCaseAppealTask">
         insert into claim_case_appeal_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="appealRptNo != null and appealRptNo != ''">appeal_rpt_no,</if>

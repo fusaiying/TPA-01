@@ -73,6 +73,11 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
             //合约到期后，每天晚上12:00，通过批处理的方式将合约的状态修改为失效
             @Override
             public AjaxResult batchTimeBaseSupplierContract(@RequestBody BaseSupplierContract baseSupplierContract){return null;}
+
+            @Override
+            public AjaxResult selectSupplier(@RequestBody ProductInfo productInfo){
+                return null;
+            }
         };
     }
 }

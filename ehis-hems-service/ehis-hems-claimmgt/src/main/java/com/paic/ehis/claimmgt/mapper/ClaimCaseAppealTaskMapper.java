@@ -70,4 +70,7 @@ public interface ClaimCaseAppealTaskMapper
      */
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo);
 
+    public Long getTaskId();
+
+
 }

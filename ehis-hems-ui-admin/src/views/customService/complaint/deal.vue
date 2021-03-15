@@ -276,13 +276,19 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投诉人性别：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width" size="mini" readonly/>
+            <el-form-item label="投诉人性别：" prop="complainantPerson.sex">
+              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width"  >
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width" size="mini" readonly/>
+              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width"  >
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">

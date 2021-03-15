@@ -264,13 +264,13 @@ export default {
       const params = {};
       params.pageNum = this.pendPageInfo.pageNum;
       params.pageSize = this.pendPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
       params.appealStatus = '01';
       appealList(params).then(res => {
         if (res.code == '200') {

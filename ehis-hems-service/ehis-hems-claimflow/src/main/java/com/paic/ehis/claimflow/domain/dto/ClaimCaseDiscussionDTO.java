@@ -1,10 +1,11 @@
 package com.paic.ehis.claimflow.domain.dto;
 
 import com.paic.ehis.common.core.annotation.Excel;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 
 import java.io.Serializable;
 
-public class ClaimCaseDiscussionDTO implements Serializable {
+public class ClaimCaseDiscussionDTO extends BaseEntity {
 
     private String createStartTime;
 

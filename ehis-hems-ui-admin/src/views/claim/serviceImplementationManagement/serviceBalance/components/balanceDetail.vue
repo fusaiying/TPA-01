@@ -5,6 +5,9 @@
         <template slot="title">
           <span style="font-size:16px;color:black">结算明细列表{{ listTitle }}</span>
           <span v-show="!activeNames.length" style="font-size: 12px;color: #409EFF;position: absolute;right: 40px;">展开</span>
+          <span v-show="activeNames.length && node" style="font-size: 12px;color: #409EFF;position: absolute;right: 40px;">
+              <el-button type="primary" size="mini" @click.native.stop="listExport">清单导出</el-button>
+          </span>
         </template>
         <el-table
           ref="balanceDetailTable"
@@ -69,6 +72,7 @@
 
 import {listBalanceDetail_1, listBalanceDetail_2} from "@/api/claim/serviceBalance";
 import {getAllBaseSupplierInfo, getContractServerList} from "@/api/contractManage/contractManagement";
+import {getICDList} from "@/api/baseInfo/ICDcodeMaintenan";
 
 export default {
   name: "balanceDetailTable",
@@ -106,6 +110,11 @@ export default {
       default: function () {
         return []
       }
+    },
+    //
+    node: {
+      type:Boolean,
+      default: false
     }
   },
   watch: {
@@ -153,6 +162,29 @@ export default {
 
   },
   methods: {
+    //清单导出
+    listExport(){
+      listBalanceDetail_2(this.queryParams).then(res => {
+        if (res != null && res.rows.length>0){
+          this.download('order/balanceDetail/export2', {
+            ...query}, `invoice_${new Date().getTime()}.xlsx`).catch(res=>{
+            this.$message({
+              message: res,
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          })
+        }else {
+          return this.$message.warning(
+            "没有查询到能导出的数据！"
+          )
+        }
+      }).catch(res => {
+      })
+
+    },
+
     //初始化
     init() {
       if (this.queryParams.isShow) {

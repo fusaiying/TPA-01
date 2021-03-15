@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="evaluationContent != null  and evaluationContent != ''"> and oei.evaluation_content = #{evaluationContent}</if>
             <if test="idType != null  and idType != ''"> and ci.id_type = #{idType}</if>
             <if test="idCode != null  and idCode != ''"> and ci.id_code = #{idCode}</if>
-            <if test="name != null  and name != ''"> and ci.name = #{name}</if>
+            <if test="name != null  and name != ''"> and ci.name like concat('%', #{name}, '%')</if>
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
              and oei.status = 'Y'
         </where>

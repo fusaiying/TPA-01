@@ -310,16 +310,28 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="5">
-            <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="contactsCountry">
+          <el-col :span="3">
+            <el-form-item label="联系人固定电话：" style="white-space: nowrap;" :inline="true" prop="contactsCountry">
               国家区号:+
-              <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 75px"/>
+              <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 60px"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsQuhao">
               区号
               <el-input v-model="ruleForm.contactsQuhao" class="item-width" size="mini" style="width: 145px"
                         maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsNumber">
               号码
               <el-input v-model="ruleForm.contactsNumber" class="item-width" size="mini" style="width: 145px"
                         maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsSecondNumber">
               分机号
               <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 145px"
                         maxlength="50"/>
@@ -502,6 +514,41 @@ export default {
           message: "只可录入数字",
           pattern: /^\d*$/,//可以写正则表达式呦呦呦,
           trigger: "blur"},
+      ],
+      contactsCountry: [
+        {required: false,
+          message: "国家区号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsQuhao: [
+        {required: false,
+          message: "区号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsNumber: [
+        {required: false,
+          message: "号码只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsSecondNumber: [
+        {required: false,
+          message: "分机号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      email: [
+        {required: false,
+          message: "邮箱格式不正确",
+          pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          trigger: ["blur","change"]
+        }
       ],
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}

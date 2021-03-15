@@ -1045,11 +1045,11 @@ export default {
         if (res != null && res.code === 200) {
           this.HCSPoolData = res.rows
           this.HCSTotal = res.total
-          if (res.rows.length <= 0) {
+          /*if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
             )
-          }
+          }*/
         }
       }).catch(res => {
 

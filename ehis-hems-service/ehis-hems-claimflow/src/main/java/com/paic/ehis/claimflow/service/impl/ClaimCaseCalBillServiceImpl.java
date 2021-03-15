@@ -88,13 +88,12 @@ public class ClaimCaseCalBillServiceImpl implements IClaimCaseCalBillService
     @Override
     public List<CaseCalBillVo> selectCaseCalInformationList(ClaimCaseCalBill claimCaseCalBill)
     {
-
         claimCaseCalBill.setStatus("Y");
         List<CaseCalBillVo> caseCalBillVos = claimCaseCalBillMapper.selectCaseCalInformationList(claimCaseCalBill);
         SyncExchangeRate exchangeRate = new SyncExchangeRate();
         ClaimCaseBill claimCaseBill = claimCaseBillMapper.selectEarliestTreatmentBillByRptNo(claimCaseCalBill.getRptNo());
         for (CaseCalBillVo caseCalBillVo : caseCalBillVos) {
-            if (!"CNY".equals(caseCalBillVo.getBillCurrency())){
+            if (StringUtils.isNotEmpty(caseCalBillVo.getBillCurrency()) && !"CNY".equals(caseCalBillVo.getBillCurrency())){
                 //获取汇率
                 exchangeRate.setBeforeMoney(caseCalBillVo.getBillCurrency());
                 exchangeRate.setAfterMoney("CNY");

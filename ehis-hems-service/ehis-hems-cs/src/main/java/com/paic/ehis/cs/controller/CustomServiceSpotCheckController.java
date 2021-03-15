@@ -11,10 +11,12 @@ import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
+import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +45,6 @@ public class CustomServiceSpotCheckController extends BaseController {
     private IAttachmentInfoService attachmentInfoService;
     @Autowired
     private IDemandAcceptVoService iDemandAcceptVoService;
-
-    @Autowired
-    private ICommonService iCommonService;
 
     /**
      * 发送质检工作池：数据来源
@@ -260,52 +259,41 @@ public class CustomServiceSpotCheckController extends BaseController {
     /**
      *质检差错确认工作池查询
      */
-@GetMapping("/internal/selectHandle")
-public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
-{
-    List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
-    return getDataTable(list);
-}
-//************************************************************************************
-    /**
-     *工单查询
-     */
-    @GetMapping("/internal/selectWorkOrder")
-    public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
-        //1.分页处理
-        startPage();
-        logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
-        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-        logger.debug("工单查询工作池结果:{}", list);
+    @GetMapping("/internal/selectHandle")
+    public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
+    {
+        List<AcceptVo> list = qualityInspectionHandleService.selectHandle(workOrderQueryDTO);
         return getDataTable(list);
-
     }
+    //************************************************************************************
+        /**
+         *工单查询
+         */
+        @GetMapping("/internal/selectWorkOrder")
+        public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
+            //1.分页处理
+            startPage();
+            logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
+            List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
+            logger.debug("工单查询工作池结果:{}", list);
+            return getDataTable(list);
 
-    //************************************************
-    /*
-    质检查询
-     */
-@GetMapping("/internal/selectQualityVo")
-public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
-{
-    startPage();
-    List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
-    return getDataTable(list);
-}
-
-
-    @GetMapping("/internal/otherUseing")
-    public AjaxResult otherUseing(@RequestBody WorkOrderQueryDTO workOrderQueryDTO){
-        workOrderQueryDTO.setUpdateBy(SecurityUtils.getUsername());
-        List<AcceptVo> acceptVoList=iCommonService.getWorkOrderCountByUserId(workOrderQueryDTO);
-        int isExit=0;
-        if(acceptVoList!=null){
-            for (int i = 0; i < acceptVoList.size(); i++) {
-//                if(acceptVoList.get(i).getUpdateBy().equals())
-            }
         }
-
-        return null;
+    //************************************************
+        /*
+        质检查询
+         */
+    @GetMapping("/internal/selectQualityVo")
+    public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
+    {
+        startPage();
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+        return getDataTable(list);
     }
-
+    @GetMapping("/internal/selectQualityFlagVO")
+    public TableDataInfo selectQualityFlagVo(QualityFlagDTO qualityFlagDTO){
+        startPage();
+        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
+        return getDataTable(list);
+    }
 }

@@ -32,8 +32,8 @@ export function historicalProblem(query) {
 export function PendingData(query) {
   return request({
     url: '/claimflow/problem/list2',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -41,8 +41,8 @@ export function PendingData(query) {
 export function processedData(query) {
   return request({
     url: '/claimflow/problem/list1',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

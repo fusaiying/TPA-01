@@ -3,9 +3,11 @@ package com.paic.ehis.cs.mapper;
 import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.QualityInspectionAccept;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
+import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityFlagVO;
 import com.paic.ehis.cs.domain.vo.QualityVo;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +29,9 @@ public interface QualityInspectionAcceptMapper {
      * @param qualityDTO
      * @return
      */
-        public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
+     public List<QualityAcceptVo> selectQualityVo(QualityDTO qualityDTO);
+
+     List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO);
     /**
      * 质检受理工作池查询
      */

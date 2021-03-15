@@ -159,7 +159,32 @@ WHERE
         where 1=1
         <if test="workOrderNo !=null and workOrderNo!=''">and adi.work_order_no = #{workOrderNo}</if>
     </select>
-<!--    批量发起质检数据-->
+    <select id="selectQualityFlagVO" resultType="com.paic.ehis.cs.domain.vo.QualityFlagVO">
+        select
+        c.work_order_no workOrderNo,
+        b.item_code itemCode,
+        a.modify_by modifyBy,
+        c.updated_by updatedBy,
+        a.business_type businessType
+        from quality_inspection_accept c
+        left join accept_detail_info b on c.work_order_no = b.work_order_no
+        left join work_order_accept a on a.work_order_no = c.work_order_no
+        <where>
+            <if test="firstEndCaseStartTime != null and firstEndCaseStartTime != ''">
+                and end_date <![CDATA[>=]]> #{firstEndCaseStartTime}
+            </if>
+            <if test="firstEndCaseEndTime != null and firstEndCaseEndTime != ''">
+                and end_date <![CDATA[<=]]> #{firstEndCaseEndTime}
+            </if>
+            <if test="workOrderNo != null and workOrderNo != ''">
+                and c.work_order_no = #{workOrderNo}
+            </if>
+            <if test="serviceItemCode != null and serviceItemCode != ''">
+                and b.item_code = #{serviceItemCode}
+            </if>
+        </where>
+    </select>
+    <!--    批量发起质检数据-->
     <insert id="insertAcceptBatch" parameterType="java.util.List">
         INSERT INTO quality_inspection_accept
         (work_order_no, `result`, status, created_by, created_time, updated_by, updated_time)

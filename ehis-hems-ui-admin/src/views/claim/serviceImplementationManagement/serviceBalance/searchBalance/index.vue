@@ -60,7 +60,7 @@
     </el-card>
 
     <!-- 结算明细列表 START-->
-    <balance-detail ref="balanceDetailTable" :queryParams="queryDetailParams" :dictList="dictList"/>
+    <balance-detail ref="balanceDetailTable" :queryParams="queryDetailParams" :dictList="dictList" :node="node"/>
     <!-- 结算明细列表 END-->
 
   </div>
@@ -122,7 +122,8 @@ export default {
       //供应商服务项目
       serviceOptions: [],
       //结算业务状态
-      balanceStatusOptions: []
+      balanceStatusOptions: [],
+      node:true
     };
   },
   created() {

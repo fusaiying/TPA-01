@@ -18,6 +18,14 @@ export function inspectionListAndPublicPool(query) {
     params: query
   })
 }
+//质检差错确认首页查询
+export function selectQualityFlagVO(params){
+  return request({
+    url: '/cs/spotCheck/internal/selectQualityFlagVO',
+    method: 'get',
+    params: params
+  })
+}
 
 //# 查询处理中的质检数据
 export function inspectionListAndPersonalPool(query) {

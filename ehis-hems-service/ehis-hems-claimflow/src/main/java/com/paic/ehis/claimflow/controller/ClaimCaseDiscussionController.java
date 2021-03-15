@@ -116,10 +116,10 @@ public class ClaimCaseDiscussionController extends BaseController
      * 查询案件未处理协谈工作池
      */
    // @PreAuthorize("@ss.hasPermi('system:case:selectCaseDisListUnder')")
-    @GetMapping("/selectCaseDisListUnder")
-    public TableDataInfo selectCaseDisListUnder(ClaimCaseDiscussionDTO claimCaseDiscussionDTO)
+    @PostMapping("/selectCaseDisListUnder")
+    public TableDataInfo selectCaseDisListUnder(@RequestBody ClaimCaseDiscussionDTO claimCaseDiscussionDTO)
     {
-        startPage();
+        startPage(claimCaseDiscussionDTO);
         List<ClaimCaseDiscussionVO> list = claimCaseDiscussionService.selectCaseDisListUnder(claimCaseDiscussionDTO);
         return getDataTable(list);
     }
@@ -129,10 +129,10 @@ public class ClaimCaseDiscussionController extends BaseController
      * 查询案件已处理协谈工作池
      */
    // @PreAuthorize("@ss.hasPermi('system:case:selectCaseDisListOver')")
-    @GetMapping("/selectCaseDisListOver")
-    public TableDataInfo selectCaseDisListOver(ClaimCaseDiscussionDTO claimCaseDiscussionDTO)
+    @PostMapping("/selectCaseDisListOver")
+    public TableDataInfo selectCaseDisListOver(@RequestBody ClaimCaseDiscussionDTO claimCaseDiscussionDTO)
     {
-        startPage();
+        startPage(claimCaseDiscussionDTO);
         List<ClaimCaseDiscussionVO> list = claimCaseDiscussionService.selectCaseDisListOver(claimCaseDiscussionDTO);
         return getDataTable(list);
     }

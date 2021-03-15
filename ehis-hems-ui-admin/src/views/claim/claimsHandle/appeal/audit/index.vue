@@ -106,8 +106,7 @@
 
 import appealTable from '../components/appealTable'
 import deal from '../components/deal'
-import { PendingData,processedData } from '@/api/negotiation/api'
-import { claimInfoList } from '@/api/appeal/api'
+import { appealList } from '@/api/appeal/api'
 
 import moment from "moment";
 
@@ -227,15 +226,16 @@ export default {
       const params = {};
       params.pageNum = this.pendPageInfo.page;
       params.pageSize = this.pendPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '02';
 
-      PendingData(params).then(res => {
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
@@ -256,14 +256,15 @@ export default {
       const params = {};
       params.pageNum = this.completePageInfo.page;
       params.pageSize = this.completePageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
-      processedData(params).then(res => {
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '04';
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;

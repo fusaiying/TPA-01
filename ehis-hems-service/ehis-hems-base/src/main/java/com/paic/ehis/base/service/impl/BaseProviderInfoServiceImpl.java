@@ -1,17 +1,21 @@
 package com.paic.ehis.base.service.impl;
 
+import com.paic.ehis.base.domain.*;
+import com.paic.ehis.base.domain.BaseProviderInfo;
+import com.paic.ehis.base.domain.ProductInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
-import com.paic.ehis.base.domain.BaseCheckInfo;
-import com.paic.ehis.base.domain.BaseProviderInfo;
 import com.paic.ehis.base.domain.vo.*;
 import com.paic.ehis.base.mapper.BaseProviderInfoMapper;
 import com.paic.ehis.base.service.*;
 import com.paic.ehis.base.service.IBaseProviderInfoService;
 import com.paic.ehis.system.api.domain.*;
+import com.paic.ehis.system.api.domain.BaseServiceInfo;
+import com.paic.ehis.system.api.domain.ProductSupplierInfo;
+import com.paic.ehis.system.api.domain.ProductSupplierInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -599,5 +603,21 @@ public  String getPinYinHeadChar(String str) {
     @Override
     public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo){
         return baseProviderInfoMapper.getHospitalInfo1(addressInfo);
+    }
+
+    @Override
+    public List<ProductSupplierInfo> selectSupplier(ProductInfo productInfo){
+        return baseProviderInfoMapper.selectSupplier(productInfo);
+    }
+
+    @Override
+    public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo){
+        List<ProductSupplierInfo> productSupplierInfos = productSupplierInfoVo.getProductSupplierInfos();
+        //清空服务已知的供应商优先级
+        baseProviderInfoMapper.updateSupplier1(productSupplierInfoVo);
+        for(ProductSupplierInfo productSupplierInfo : productSupplierInfos){
+            baseProviderInfoMapper.updateSupplier(productSupplierInfo);
+        }
+        return 1;
     }
 }

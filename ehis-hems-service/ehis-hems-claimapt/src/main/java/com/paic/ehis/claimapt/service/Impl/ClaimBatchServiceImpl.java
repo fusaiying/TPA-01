@@ -299,9 +299,18 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
             claimBatchRecord.setOperation(ClaimStatus.BATCHREVIEW.getCode());
             claimBatchRecordMapper.updateClaimBatchRecordByReview(claimBatchRecord);
             //生成对应的案件信息数据（报案号）
+            String organcode = claimBatch.getOrgancode();
+            String substring1="";
+            if (organcode.length()==2){
+                substring1 = "00";
+            }else if (organcode.length()==3){
+                substring1 = organcode.substring(2, 3)+"0";
+            }else if (organcode.length()>3){
+                substring1 = organcode.substring(2, 4);
+            }
             for (int i = 0; i < claimBatch.getCasenum(); i++) {
                 //新增案件信息数据
-                String rptNo = "96" + "JGH0X" + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);//报案号
+                String rptNo = "96" + substring1 + PubFun.createMySqlMaxNoUseCache("RPTCODE", 10, 10);//报案号
                 claimCase.setBatchNo(claimBatch.getBatchno());
                 claimCase.setRptNo(rptNo);
                 claimCase.setFilingNo("JGHDQQW" + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 10));//归档号
@@ -396,7 +405,12 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         //获取机构交单编码
         String organcode = standingAndBatck.getClaimBatch().getOrgancode();
         //批次号-取前三位
-        String substring = organcode.substring(0, 3);
+        String substring;
+        if (organcode.length()==2){
+            substring = organcode.substring(0, 2)+"0";//机构编码不满3位补0
+        }else {
+            substring = organcode.substring(0, 3);
+        }
 
         String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);
@@ -448,7 +462,13 @@ public class ClaimBatchServiceImpl extends BaseController implements IClaimBatch
         //获取机构交单编码
         String organcode = claimBatch.getOrgancode();
         //批次号-取前三位
-        String substring = organcode.substring(0, 3);
+        String substring;
+        if (organcode.length()==2){
+             substring = organcode.substring(0, 2)+"0";//机构编码不满3位补0
+        }else {
+            substring = organcode.substring(0, 3);
+        }
+
 
         String str1 = substring + DateUtils.dateTimeNow("yyyy") + "X" + PubFun.createMySqlMaxNoUseCache("FILINGCODE", 10, 8);
         claimBatch.setBatchno(str1);

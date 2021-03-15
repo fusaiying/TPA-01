@@ -2,8 +2,8 @@ package com.paic.ehis.base.mapper;
 
 import com.paic.ehis.base.domain.BaseCheckInfo;
 import com.paic.ehis.base.domain.BaseProviderInfo;
+import com.paic.ehis.base.domain.ProductInfo;
 import com.paic.ehis.base.domain.vo.AddressInfo;
-import com.paic.ehis.base.domain.vo.ProviderInfoVo;
 import com.paic.ehis.base.domain.vo.Sn_base_addressDO;
 import com.paic.ehis.system.api.domain.*;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -193,4 +193,10 @@ public interface BaseProviderInfoMapper
     public List<SecondDeptInfoVo> getSecondDeptInfo();
 
     public List<HospitalInfoVo> getHospitalInfo1(com.paic.ehis.system.api.domain.AddressInfo addressInfo);
+
+    public List<ProductSupplierInfo> selectSupplier(ProductInfo productInfo);
+
+    public int updateSupplier(ProductSupplierInfo productSupplierInfo);
+
+    public int updateSupplier1(ProductSupplierInfoVo productSupplierInfoVo);
 }

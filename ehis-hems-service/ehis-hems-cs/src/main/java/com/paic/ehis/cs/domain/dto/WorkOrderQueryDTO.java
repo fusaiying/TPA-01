@@ -82,6 +82,11 @@ public class WorkOrderQueryDTO extends BaseEntity
     /** 结案结束日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endCaseEndTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date firstEndCaseStartTime;
+    /** 结案结束日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date firstEndCaseEndTime;
 
     /** 查询多状态 */
     private List<String> acceptStatusList;

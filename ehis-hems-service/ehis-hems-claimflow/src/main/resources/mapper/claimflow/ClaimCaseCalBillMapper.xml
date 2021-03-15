@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ifnull(ccb.unable_amount,0)unable_amount,
         ccb.bill_currency,
         ifnull(cccb.dedu_used,0)dedu_used,
-        cccb.pay_amount,
+        ifnull(cccb.pay_amount,0)pay_amount,
         ifnull(cccb.cal_amount,0)cal_amount,
         ifnull(cccb.refused_amount,0)refused_amount,
         cccb.remark,

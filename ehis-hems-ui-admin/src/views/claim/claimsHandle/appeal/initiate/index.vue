@@ -111,7 +111,7 @@
     <!-- 申诉工作池  end  -->
 
     <!-- 发起/处理  start  -->
-    <deal   @initAppealData="initAppealData" :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
+    <deal @initAppealData="initAppealData" :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
     <!-- 发起/处理  end  -->
   </div>
 </template>
@@ -234,20 +234,19 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      this.claimPageInfo.pageNum  = 1;
+      this.claimPageInfo.pageNum = 1;
       this.claimPageInfo.pageSize = 10;
+      this.pendPageInfo.pageNum = 1;
+      this.pendPageInfo.pageSize = 10;
+      this.completePageInfo.pageNum = 1;
+      this.completePageInfo.pageSize = 10;
+
       this.initClaimData();
-      // this.searchBtn = true;
-      // this.pendPageInfo.pageNum = 1;
-      // this.pendPageInfo.pageSize = 10;
-      // this.completePageInfo.pageNum = 1;
-      // this.completePageInfo.pageSize = 10;
-      // this.pendingTotal = 0;
-      // this.completedTotal = 0;
-      // this.getPendingData();
-      // this.getProcessedData();
+      this.getPendingData();
+      this.getProcessedData();
     },
     initAppealData(){
+      this.initClaimData();
       this.getPendingData();
       this.getProcessedData();
     },
@@ -271,7 +270,7 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
-      params.appealStatus = '01';
+      params.pageType = '01';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -300,7 +299,7 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
-      params.appealStatus = '02';
+      params.pageType = '02';
       appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
@@ -319,7 +318,7 @@ export default {
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;
       params.pageSize = this.claimPageInfo.pageSize;
-      params.appealRptNo = this.formSearch.rptNo;
+      params.rptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;

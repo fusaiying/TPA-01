@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="deptCode"    column="dept_code"    />
         <result property="conclusionRemark"    column="conclusion_remark"    />
+        <result property="batchNo"    column="batch_no"    />
     </resultMap>
 
     <sql id="selectClaimCaseAppealTaskVo">
@@ -176,7 +177,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             t.create_time ,
             t.create_by,
             t.update_time,
-            t.update_by
+            t.update_by,
+            t2.batch_no
         from claim_case_appeal_task t
         left JOIN claim_case t1    on t1.rpt_no = t.appeal_rpt_no
         LEFT JOIN claim_batch t2        ON t1.batch_no = t2.batch_no
@@ -196,11 +198,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
         <if test="name != null  and name != ''"> and t3.name = #{name}</if>
         <if test="auditor != null  and auditor != ''"> and t.auditor = #{auditor}</if>
+        <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
+        <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>
         <if test="createStartTime != null and createStartTime != ''">
-            <![CDATA[AND t1.update_time >= #{createStartTime} ]]>
+            <![CDATA[AND t.update_time >= #{createStartTime} ]]>
         </if>
         <if test="createEndTime != null and createEndTime != ''">
-            <![CDATA[AND t1.update_time <= #{createEndTime}]]>
+            <![CDATA[AND t.update_time <= #{createEndTime}]]>
         </if>
 
     </select>

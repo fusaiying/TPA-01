@@ -199,6 +199,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
               <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" readonly/>
             </el-form-item>

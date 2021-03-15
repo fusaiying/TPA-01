@@ -288,20 +288,20 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
-              国家区号:+
+              国家区号+
               <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly
                         style="width: 75px"/>
               区号
               <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+                        style="width: 75px" maxlength="50"/>
               号码
               <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+                        style="width: 120px" maxlength="50"/>
               分机号
               <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+                        style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>

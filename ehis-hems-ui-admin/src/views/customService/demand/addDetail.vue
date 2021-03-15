@@ -310,18 +310,18 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="contactsCountry">
-              国家区号:+
+              国家区号+
               <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 75px"/>
               区号
-              <el-input v-model="ruleForm.contactsQuhao" class="item-width" size="mini" style="width: 145px"
+              <el-input v-model="ruleForm.contactsQuhao" class="item-width" size="mini" style="width: 75px"
                         maxlength="50"/>
               号码
-              <el-input v-model="ruleForm.contactsNumber" class="item-width" size="mini" style="width: 145px"
+              <el-input v-model="ruleForm.contactsNumber" class="item-width" size="mini" style="width: 120px"
                         maxlength="50"/>
               分机号
-              <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 145px"
+              <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 75px"
                         maxlength="50"/>
             </el-form-item>
           </el-col>

@@ -288,20 +288,20 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
-              国家区号:+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly
+              国家区号+
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini"
+                        style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -742,20 +742,6 @@ export default {
       isinit: 'Y',
       totalCount: 0,
       changeSerchData: {},
-      states: [],
-      serves: [{
-        value: '1',
-        label: '服务1'
-      }, {
-        value: '2',
-        label: '服务2'
-      }, {
-        value: '3',
-        label: '服务3'
-      }, {
-        value: '4',
-        label: '服务4'
-      }],
       dictList: [],
       cs_order_state: [],//状态
       cs_action_type: [],//操作类型
@@ -789,8 +775,6 @@ export default {
     this.getDicts("cs_order_state").then(response => {
       this.cs_order_state = response.data;
     });
-
-
   },
   async mounted() {
     // 字典数据统一获取

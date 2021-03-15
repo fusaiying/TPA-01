@@ -8,15 +8,15 @@
           <!--v-model双向绑定 v-model的值为当前被选中的el-option的 value 属性值-->
           <el-col :span="8">
             <el-form-item label="服务项目：" prop="itemCode">
-              <el-select v-model="sendForm.itemCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
+              <el-select v-model="sendForm.itemCode" class="item-width" clearable="true" placeholder="请选择">
+                <el-option v-for="item in cs_demand_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="channelCode">
-              <el-select v-model="sendForm.channelCode" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.channelCode" class="item-width" clearable="true" placeholder="请选择">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -24,15 +24,16 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="受理人：" prop="acceptBy">
-              <el-input v-model="sendForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.acceptBy" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理日期：" prop="acceptorTime">
               <el-date-picker
-                v-model="timeArray.acceptorTime"
+                v-model="sendForm.acceptorTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -43,14 +44,15 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理人：" prop="modifyBy">
-              <el-input v-model="sendForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.modifyBy" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="处理日期：" prop="HandlerTime">
               <el-date-picker
-                v-model="timeArray.handlerTime"
+                v-model="sendForm.handlerTime"
                 class="item-width"
+                clearable="true"
                 type="daterange"
                 range-separator="~"
                 start-placeholder="开始日期"
@@ -59,49 +61,52 @@
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="工单号：" prop="workOrderNo">
-              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.workOrderNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="保单号：" prop="policyNo">
-              <el-input v-model="sendForm.policyNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.policyNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分单号：" prop="policyItemNo">
-              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.policyItemNo" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="投保人姓名：" prop="holderName">
-              <el-input v-model="sendForm.holderName" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.holderName" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="被保人姓名：" prop="insuredName">
-              <el-input v-model="sendForm.insuredName" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.insuredName" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
-              <el-input v-model="sendForm.idNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.idNumber" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人电话：" prop="mobilePhone">
-              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="sendForm.mobilePhone" class="item-width" clearable="true" size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
-              <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.organCode" class="item-width" clearable="true" placeholder="请选择">
                 <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -110,8 +115,8 @@
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="appointmentTime">
               <el-date-picker
-                disabled=""
-                v-model="timeArray.appointmentTime"
+                :disabled="true"
+                v-model="sendForm.appointmentTime"
                 class="item-width"
                 type="daterange"
                 range-separator="~"
@@ -121,10 +126,11 @@
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
-              <el-select v-model="sendForm.priorityLevel" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.priorityLevel" class="item-width" clearable="true" placeholder="请选择">
                 <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -132,7 +138,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="VIP标识：" prop="vipFlag">
-              <el-select v-model="sendForm.vipFlag" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.vipFlag" class="item-width" clearable="true" placeholder="请选择">
                 <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -140,15 +146,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="状态：" prop="status">
-              <el-select v-model="sendForm.status" class="item-width" placeholder="请选择">
+              <el-select v-model="sendForm.status" class="item-width" clearable="true" placeholder="请选择">
                 <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
-
-
         </el-row>
+
         <div style="text-align: right; margin-right: 1px;">
           <el-button
             size="mini"
@@ -158,7 +163,7 @@
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>
-      <!--<el-divider/>-->
+
     </el-card>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
@@ -184,23 +189,23 @@
           v-if="isShow"
         >
           <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip>
+          <el-table-column prop="workOrderNo" align="center" width="140" label="工单号" show-overflow-tooltip>
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="workOrderButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="channelCode" label="受理渠道" show-overflow-tooltip>
+          <el-table-column prop="channelCode" align="center" label="受理渠道" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.channelCode">
               <span>{{selectDictLabel(cs_channel, scope.row.channelCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="140" prop="businessService" label="服务项目" show-overflow-tooltip>
+          <el-table-column prop="businessService" align="center" width="140" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
               <span>{{selectDictLabel(cs_business_type, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(cs_service_item, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="140" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" width="140"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="policyNo" align="center" width="140" label="保单号" show-overflow-tooltip/>
+          <el-table-column prop="policyItemNo" align="center" width="140" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
@@ -227,7 +232,7 @@
               <span>{{selectDictLabel(cs_priority, scope.row.priorityLevel)}}</span>
             </template>
           </el-table-column>
-          <el-table-column width="140" prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+          <el-table-column prop="organCode" align="center" width="140" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
               <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
@@ -247,7 +252,6 @@
             </template>
           </el-table-column>
         </el-table>
-
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
@@ -258,12 +262,14 @@
         />
       </div>
     </el-card>
+
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span style="color: blue">处理中（{{ totalPersonCount }}）</span>
         <el-divider/>
         <!--：data赋值的地方，下面prop对应好就自己遍历赋值了-->
         <el-table
+          v-loading="personLoading"
           :header-cell-style="{color:'black',background:'#f8f8ff'}"
           :data="workPersonPoolData"
           size="small"
@@ -273,18 +279,18 @@
           @selection-change="handleSelectionChange"
           :row-class-name="setRowStyle"
         >
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+          <el-table-column prop="workOrderNo" align="center" width="150" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
+              <el-link :underline="false" @click="dealButton(scope.row)">{{ scope.row.workOrderNo }}</el-link>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="140" prop="businessService" label="服务项目" show-overflow-tooltip>
+          <el-table-column prop="businessService" align="center" width="140" label="服务项目" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.businessService">
               <span>{{selectDictLabel(cs_business_type, scope.row.businessService.split('-')[0])+'-'+selectDictLabel(cs_service_item, scope.row.businessService.split('-')[1])}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" width="140" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center" width="140"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="policyNo" align="center" width="140" label="保单号" show-overflow-tooltip/>
+          <el-table-column prop="policyItemNo" align="center" width="140" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="center" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
@@ -293,26 +299,26 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.vipFlag">
               <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="acceptBy" align="center" label="受理人" show-overflow-tooltip/>
-          <el-table-column prop="modifyBy" align="center" label="处理人" show-overflow-tooltip/>
+          <el-table-column prop="updateBy" align="center" label="处理人" show-overflow-tooltip/>
           <el-table-column prop="modifyTime" label="响应时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
-          <el-table-column prop="organCode" width="140" align="center" label="出单机构" show-overflow-tooltip>
+          <el-table-column prop="organCode" align="center" width="140" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
               <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
@@ -329,17 +335,15 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
               <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
               <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
             </template>
           </el-table-column>
         </el-table>
-
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
           :page.sync="pageNumPerson"
           :limit.sync="pageSizePerson"
-          @pagination="searchHandle1"
+          @pagination="searchHandlePerson"
         />
       </div>
     </el-card>
@@ -353,7 +357,16 @@ import {demandListAndPublicPool,demandListAndPersonalPool,demandObtain,demandObt
 import secondPhone from "../common/modul/secondPhone";
 import {selectCallAgain} from '@/api/customService/demand'
 
-
+let dictss = [
+  {dictType: 'cs_demand_item'},
+  {dictType: 'cs_service_item'},
+  {dictType: 'cs_channel'},
+  {dictType: 'cs_organization'},
+  {dictType: 'cs_priority'},
+  {dictType: 'cs_vip_flag'},
+  {dictType: 'cs_order_state'},
+  {dictType: 'cs_business_type'},
+]
 export default {
   components:{secondPhone},
   filters: {
@@ -370,26 +383,22 @@ export default {
       ids:[],//多选框
       open:"",//是否弹出
       title:"",//弹出框名称
-      cs_business_type:[],//服务项目
+      dictList:[],//总的码表
+      cs_demand_item:[],//信息需求服务项目
       cs_service_item:[],//服务项目
       cs_channel:[],//渠道
       cs_organization:[],//出单机构
       cs_priority:[],//优先级
       cs_vip_flag:[],// vip标识
-      cs_order_state:[],// 状态：
+      cs_order_state:[],// 状态
+      cs_business_type:[],//服务项目
+
       secondPhone:[],
-      riskCodes:[],
       dialogFormVisible: false,
-      updateBy: undefined,
-      timeArray:{
-        acceptorTime:[],//受理时间数组
-        appointmentTime:[],//预约时间数组
-        handlerTime:[],//处理时间数组
-      },
       sendForm: {//传值给后台
-        acceptorTime:[],//受理时间数组
-        appointmentTime:[],//预约时间数组
-        handlerTime:[],//处理时间数组
+        acceptorTime:undefined,//受理时间数组
+        appointmentTime:undefined,//预约时间数组
+        handlerTime:undefined,//处理时间数组
         pageNum: 1,
         pageSize: 10,
         itemCode: "",//服务信息
@@ -407,70 +416,57 @@ export default {
         vipFlag:"",//VIP标识
         mobilePhone:"",//移动电话
         status:"",//状态
-        // acceptTimeStart:"",//开始受理时间
-        // acceptTimeEnd:"",//结束受理时间
-        // modifyTimeStart:"",//开始修改时间
-        // modifyTimeEnd:"",//结束修改时间
-        // complaintTimeStart:"",//开始预约时间
-        // complaintTimeEnd:""//结束预约时间
-
       },
-      caseNumber: false,//查询条件（报案号）是否显示
       loading: true,
       workPoolData: [],//公共池
       pageNum: 1,
       pageSize: 10,
-      workPersonPoolData:[],
+      totalCount: 0,
+      personLoading: true,
+      workPersonPoolData:[],//个人池
       pageNumPerson: 1,
       pageSizePerson: 10,
-      isinit: 'Y',
-      totalCount: 0,
       totalPersonCount: 0,
       changeSerchData: {},
-      serves: [{
-        value: '1',
-        label: '服务1'
-      }, {
-        value: '2',
-        label: '服务2'
-      }, {
-        value: '3',
-        label: '服务3'
-      }, {
-        value: '4',
-        label: '服务4'
-      }],
-      sysUserOptions: [],
+      isRemind:true,
     }
   },
   created() {
+    this.isRemind=false
     this.searchSecondHandle();
-    this.initSearchHandle()
-    //this.searchHandles();
-    this.getDicts("cs_business_type").then(response => {
-      this.cs_business_type = response.data;
-    });
-    this.getDicts("cs_service_item").then(response => {
-      this.cs_service_item = response.data;
-    });
-    this.getDicts("cs_organization").then(response => {
-      this.cs_organization = response.data;
-    });
-    this.getDicts("cs_priority").then(response => {
-      this.cs_priority = response.data;
-    });
-    this.getDicts("cs_vip_flag").then(response => {
-      this.cs_vip_flag = response.data;
-    });
-    this.getDicts("cs_order_state").then(response => {
-      this.cs_order_state = response.data;
-    });
-    this.getDicts("cs_channel").then(response => {
-      this.cs_channel = response.data;
-    });
-
+    this.searchHandles();
   },
-
+  async mounted() {
+    // 字典数据统一获取
+    await this.getDictsList(dictss).then(response => {
+      this.dictList = response.data
+    })
+    // 下拉项赋值
+    this.cs_demand_item = this.dictList.find(item => {
+      return item.dictType === 'cs_demand_item'
+    }).dictDate
+    this.cs_service_item = this.dictList.find(item => {
+      return item.dictType === 'cs_service_item'
+    }).dictDate
+    this.cs_channel = this.dictList.find(item => {
+      return item.dictType === 'cs_channel'
+    }).dictDate
+    this.cs_organization = this.dictList.find(item => {
+      return item.dictType === 'cs_organization'
+    }).dictDate
+    this.cs_priority = this.dictList.find(item => {
+      return item.dictType === 'cs_priority'
+    }).dictDate
+    this.cs_vip_flag = this.dictList.find(item => {
+      return item.dictType === 'cs_vip_flag'
+    }).dictDate
+    this.cs_order_state = this.dictList.find(item => {
+      return item.dictType === 'cs_order_state'
+    }).dictDate
+    this.cs_business_type = this.dictList.find(item => {
+      return item.dictType === 'cs_business_type'
+    }).dictDate
+  },
   methods: {
     //给行的字体加颜色 talbe:row-class-name
     setRowStyle({ row, rowIndex }) {
@@ -482,7 +478,6 @@ export default {
       }
       return '';
     },
-
     //修改按钮
     modifyButton(s){
       this.$router.push({
@@ -516,20 +511,23 @@ export default {
           let workOrderNo=s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
+              return this.$message.success(
+                "获取工单成功！");
             }
           }).catch(res => {
-
+            return this.$message.error(
+              "获取工单失败！")
           })
-
-
         }else {
           const workOrderNos=this.ids
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-
+              return this.$message.success(
+                "获取工单成功！");
             }
           }).catch(res => {
-
+            return this.$message.error(
+              "获取工单失败！")
           })
         }
         this.searchHandles()
@@ -584,113 +582,80 @@ export default {
     },
     resetForm() {
       this.$refs.sendForm.resetFields()
-      this.timeArray.acceptorTime=""
-      this.timeArray.appointmentTime=""
-      this.timeArray.handlerTime=""
-      /*this.searchHandle()*/
     },
-    //初始化查询
-    initSearchHandle(){
-      let queryParams= {
-        pageNum:1,
-        pageSize:10
+    //查询按钮及页面初始化工作池查询
+    searchHandles() {
+      //公共池
+      this.searchHandle();
+      //个人池
+      this.searchHandlePerson();
+    },
+    //待处理查询
+    searchHandle() {
+      let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      if (this.sendForm.acceptorTime) {
+        queryParams.acceptTimeStart=this.sendForm.acceptorTime[0]
+        queryParams.acceptTimeEnd=this.sendForm.acceptorTime[1]
       }
+      if (this.sendForm.handlerTime) {
+        queryParams.acceptTimeStart=this.sendForm.handlerTime[0]
+        queryParams.acceptTimeEnd=this.sendForm.handlerTime[1]
+      }
+      if (this.sendForm.appointmentTime) {
+        queryParams.acceptTimeStart=this.sendForm.appointmentTime[0]
+        queryParams.acceptTimeEnd=this.sendForm.appointmentTime[1]
+      }
+      queryParams.pageNum = this.pageNum;
+      queryParams.pageSize = this.pageSize;
       demandListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
             this.totalCount = res.total
-
-          }
-        demandListAndPersonalPool(queryParams).then(res => {
-          if (res != null && res.code === 200) {
-            this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
-            console.log("geren",this.workPersonPoolData)
-              if(this.totalPersonCount+this.totalPersonCount==0){
-                return this.$message.warning(
-                  "未查询到数据！"
-                )
-              }
-          }
-        }).catch(res => {
-
-        })
-        }
-
-      ).catch(res => {
-
-      })
-
-
-
-
-
-    },
-
-    //待处理查询
-    searchHandle() {
-      let queryParams;
-      if (this.timeArray.acceptorTime !==null&&this.timeArray.acceptorTime!=="") {
-        queryParams = JSON.parse(JSON.stringify(this.sendForm));
-        queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
-        queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
-      } else {
-        queryParams = this.sendForm;
-      }
-
-      queryParams.pageNum = this.pageNum;
-      queryParams.pageSize = this.pageSize;
-      demandListAndPublicPool(queryParams).then(res => {
-        if (res != null && res.code === 200) {
-          this.workPoolData = res.rows
-          this.totalCount = res.total
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "待处理未查询到数据！"
-            )
+            if (res.rows.length <= 0) {
+              this.isRemind=true;
+              console.info("信息需求公共池没有满足条件的数据！")
+            }
           }
         }
-      }
-
       ).catch(res => {
-
+        console.error("信息需求公共池数据加载异常！");
       })
     },
     //处理中查询
-    searchHandle1() {
-      let queryParams;
-      if (this.timeArray.acceptorTime !==null&&this.timeArray.acceptorTime!=="") {
-        queryParams = JSON.parse(JSON.stringify(this.sendForm));
-        queryParams.acceptTimeStart=this.timeArray.acceptorTime[0]
-        queryParams.acceptTimeEnd=this.timeArray.acceptorTime[1]
-        console.log(queryParams,"dsd")
-      } else {
-        queryParams = this.sendForm;
+    searchHandlePerson() {
+      this.personLoading=true;
+      let queryParams = JSON.parse(JSON.stringify(this.sendForm));
+      if (this.sendForm.acceptorTime) {
+        queryParams.acceptStartDate=this.sendForm.acceptorTime[0];
+        queryParams.acceptEndDate=this.sendForm.acceptorTime[1];
       }
-
+      if (this.sendForm.handlerTime) {
+        queryParams.modifyStartDate=this.sendForm.handlerTime[0];
+        queryParams.modifyEndDate=this.sendForm.handlerTime[1];
+      }
+      if (this.sendForm.appointmentTime) {
+        queryParams.appointmentStartDate=this.sendForm.appointmentTime[0];
+        queryParams.appointmentEndDate=this.sendForm.appointmentTime[1];
+      }
       queryParams.pageNum = this.pageNumPerson;
       queryParams.pageSize = this.pageSizePerson;
       demandListAndPersonalPool(queryParams).then(res => {
         if (res != null && res.code === 200) {
-          this.workPersonPoolData = res.rows
-          this.totalPersonCount = res.total
-          console.log("geren",this.workPersonPoolData)
-          if (res.rows.length <= 0) {
+          this.workPersonPoolData = res.rows;
+          this.totalPersonCount = res.total;
+          this.personLoading=false;
+          if (res.total <= 0 && this.isRemind) {
             return this.$message.warning(
-              "个人池未查询到数据！"
-            )
+              "未查询到数据！"
+            );
           }
         }
       }).catch(res => {
-
+        this.personLoading=false;
+        console.error("信息需求个人池数据加载异常！");
       })
     },
 
-    //查询按钮
-    searchHandles() {
-      this.searchHandle()
-      this.searchHandle1()
-    },
     //二次来电查询
     searchSecondHandle() {
       const query ={
@@ -703,13 +668,11 @@ export default {
             this.$refs.secondPhone.open()
           }
           if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "没有再次来电到数据！"
-            )
+            console.info("没有再次来电数据！");
           }
         }
       }).catch(res => {
-
+        console.error("信息需求再次来电数据加载异常！");
       })
     },
   }

@@ -40,7 +40,7 @@ export function selectSysUser() {
 export function selectConfirmationQuery(query) {
   return request({
     //后台接口调用地址
-    url: '/cs/spotCheck/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/inspectionPublicData',
     method: 'get',
     params: query
   })

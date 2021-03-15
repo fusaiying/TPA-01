@@ -126,8 +126,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+            <el-form-item label="出单机构:"  prop="organCode">
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -200,7 +203,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="callCenterNo">
-              <el-input v-model="ruleForm.callName" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-select v-model="ruleForm.channelCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -211,7 +217,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priorityLevel">
               <el-select v-model="ruleForm.priorityLevel" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -250,7 +256,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人性别：" prop="beInsuredName">
-              <el-input v-model="sendForm.beInsuredName" class="item-width" readonly size="mini" placeholder="请输入"/>
+              <el-select v-model="sendForm.contactsPerson.sex" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -259,7 +268,7 @@
           <el-col :span="8">
             <el-form-item label="联系人语言：" prop="ContactsLanguage">
               <el-select v-model="ruleForm.contactsLanguage" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_communication_language" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -290,14 +299,12 @@
           <el-col :span="8">
             <el-form-item label="出单机构：" prop="organCode">
               <el-select v-model="sendForm.organCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in serves" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-
-
         <el-row>
           <el-col :span="8">
             <el-form-item label="预约日期：" prop="email">
@@ -407,8 +414,16 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
@@ -483,7 +498,12 @@
   import coOrganizer from "../common/modul/coOrganizer";
   import modifyDetails from "../common/modul/modifyDetails";
 
-  let dictss = [{dictType: 'product_status'}]
+  let dictss = [
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_communication_language'},
+    {dictType: 'cs_organization'},
+  ]
   export default {
     components: { transfer ,
       upLoad,
@@ -604,11 +624,6 @@
       this.searchHandle()
       this.searchFlowLog()
       this.searchHCS()
-      // this.getDicts("sys_oper_type").then(response => {
-      //   this.states = response.data;
-      //   console.log("response:",response)
-      // });
-
     },
 
     methods: {

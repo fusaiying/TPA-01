@@ -179,7 +179,7 @@
 
 <script>
 import workOrderTable from '../common/components/workOrderTable'
-import {selectAcceptQuery,selectWorkOrder} from '@/api/customService/acceptQuery'
+import {selectWorkOrder} from '@/api/customService/acceptQuery'
 import moment from "moment";
 
 let dictss = [{dictType: 'cs_service_item'}

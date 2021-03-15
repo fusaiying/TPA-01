@@ -286,12 +286,12 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:query')")
     @PostMapping("/selectSupplier")
-    public AjaxResult selectSupplier(@RequestBody ProductInfo productInfo)
+    public AjaxResult selectSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductInfo productInfo)
     {
         /*startPage();
         List<ProductSupplierInfo> list = productInfoService.selectSupplier(productInfo);
         return getDataTable(list);*/
-        return AjaxResult.success(productInfoService.selectSupplier(productInfo));
+        return AjaxResult.success(getProviderInfoService.selectSupplier(productInfo));
     }
 
 
@@ -300,9 +300,9 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @PostMapping("/insertSupplier")
-    public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo)
+    public AjaxResult insertSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
-        return toAjax(productInfoService.insertSupplier(productSupplierInfoVo));
+        return getProviderInfoService.insertSupplier(productSupplierInfoVo);
     }
 
 

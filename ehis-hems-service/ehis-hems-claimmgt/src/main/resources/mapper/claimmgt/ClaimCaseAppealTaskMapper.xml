@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseAppealTaskMapper">
+    
+    <resultMap type="ClaimCaseAppealTask" id="ClaimCaseAppealTaskResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="appealRptNo"    column="appeal_rpt_no"    />
+        <result property="newRptNo"    column="new_rpt_no"    />
+        <result property="appealStatus"    column="appeal_status"    />
+        <result property="appealType"    column="appeal_type"    />
+        <result property="appealReason"    column="appeal_reason"    />
+        <result property="appealSubReason"    column="appeal_sub_reason"    />
+        <result property="appealRemark"    column="appeal_remark"    />
+        <result property="applyOperator"    column="apply_operator"    />
+        <result property="auditor"    column="auditor"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+    </resultMap>
+
+    <resultMap type="com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo" id="ClaimCaseAppealTaskVo">
+        <result property="taskId"    column="task_id"    />
+        <result property="appealRptNo"    column="appeal_rpt_no"    />
+        <result property="newRptNo"    column="new_rpt_no"    />
+        <result property="source"    column="source"    />
+        <result property="name"    column="name"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="claimType" column="claim_type"  />
+        <result property="companyCode"    column="company_code"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="appealStatus"    column="appeal_status"    />
+        <result property="appealType"    column="appeal_type"    />
+        <result property="appealReason"    column="appeal_reason"    />
+        <result property="appealSubReason"    column="appeal_sub_reason"    />
+        <result property="appealRemark"    column="appeal_remark"    />
+        <result property="applyOperator"    column="apply_operator"    />
+        <result property="auditor"    column="auditor"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptCode"    column="dept_code"    />
+        <result property="conclusionRemark"    column="conclusion_remark"    />
+    </resultMap>
+
+    <sql id="selectClaimCaseAppealTaskVo">
+        select task_id, appeal_rpt_no, new_rpt_no, appeal_status, appeal_type, appeal_reason, appeal_sub_reason, appeal_remark, apply_operator, auditor, status, create_by, create_time, update_by, update_time, dept_code from claim_case_appeal_task
+    </sql>
+
+    <select id="selectClaimCaseAppealTaskList" parameterType="ClaimCaseAppealTask" resultMap="ClaimCaseAppealTaskResult">
+        <include refid="selectClaimCaseAppealTaskVo"/>
+        <where>  
+            <if test="appealRptNo != null  and appealRptNo != ''"> and appeal_rpt_no = #{appealRptNo}</if>
+            <if test="newRptNo != null  and newRptNo != ''"> and new_rpt_no = #{newRptNo}</if>
+            <if test="appealStatus != null  and appealStatus != ''"> and appeal_status = #{appealStatus}</if>
+            <if test="appealType != null  and appealType != ''"> and appeal_type = #{appealType}</if>
+            <if test="appealReason != null  and appealReason != ''"> and appeal_reason = #{appealReason}</if>
+            <if test="appealSubReason != null  and appealSubReason != ''"> and appeal_sub_reason = #{appealSubReason}</if>
+            <if test="appealRemark != null  and appealRemark != ''"> and appeal_remark = #{appealRemark}</if>
+            <if test="applyOperator != null  and applyOperator != ''"> and apply_operator = #{applyOperator}</if>
+            <if test="auditor != null  and auditor != ''"> and auditor = #{auditor}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deptCode != null  and deptCode != ''"> and dept_code = #{deptCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectClaimCaseAppealTaskById" parameterType="Long" resultMap="ClaimCaseAppealTaskResult">
+        <include refid="selectClaimCaseAppealTaskVo"/>
+        where task_id = #{taskId}
+    </select>
+        
+    <insert id="insertClaimCaseAppealTask" parameterType="ClaimCaseAppealTask">
+        insert into claim_case_appeal_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appealRptNo != null and appealRptNo != ''">appeal_rpt_no,</if>
+            <if test="newRptNo != null">new_rpt_no,</if>
+            <if test="appealStatus != null and appealStatus != ''">appeal_status,</if>
+            <if test="appealType != null and appealType != ''">appeal_type,</if>
+            <if test="appealReason != null and appealReason != ''">appeal_reason,</if>
+            <if test="appealSubReason != null and appealSubReason != ''">appeal_sub_reason,</if>
+            <if test="appealRemark != null and appealRemark != ''">appeal_remark,</if>
+            <if test="applyOperator != null and applyOperator != ''">apply_operator,</if>
+            <if test="auditor != null">auditor,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptCode != null and deptCode != ''">dept_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appealRptNo != null and appealRptNo != ''">#{appealRptNo},</if>
+            <if test="newRptNo != null">#{newRptNo},</if>
+            <if test="appealStatus != null and appealStatus != ''">#{appealStatus},</if>
+            <if test="appealType != null and appealType != ''">#{appealType},</if>
+            <if test="appealReason != null and appealReason != ''">#{appealReason},</if>
+            <if test="appealSubReason != null and appealSubReason != ''">#{appealSubReason},</if>
+            <if test="appealRemark != null and appealRemark != ''">#{appealRemark},</if>
+            <if test="applyOperator != null and applyOperator != ''">#{applyOperator},</if>
+            <if test="auditor != null">#{auditor},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClaimCaseAppealTask" parameterType="ClaimCaseAppealTask">
+        update claim_case_appeal_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appealRptNo != null and appealRptNo != ''">appeal_rpt_no = #{appealRptNo},</if>
+            <if test="newRptNo != null">new_rpt_no = #{newRptNo},</if>
+            <if test="appealStatus != null and appealStatus != ''">appeal_status = #{appealStatus},</if>
+            <if test="appealType != null and appealType != ''">appeal_type = #{appealType},</if>
+            <if test="appealReason != null and appealReason != ''">appeal_reason = #{appealReason},</if>
+            <if test="appealSubReason != null and appealSubReason != ''">appeal_sub_reason = #{appealSubReason},</if>
+            <if test="appealRemark != null and appealRemark != ''">appeal_remark = #{appealRemark},</if>
+            <if test="applyOperator != null and applyOperator != ''">apply_operator = #{applyOperator},</if>
+            <if test="auditor != null">auditor = #{auditor},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+            <if test="conclusionRemark != null and conclusionRemark != ''">conclusion_remark = #{conclusionRemark},</if>
+        </trim>
+        where task_id = #{taskId}
+    </update>
+
+    <delete id="deleteClaimCaseAppealTaskById" parameterType="Long">
+        delete from claim_case_appeal_task where task_id = #{taskId}
+    </delete>
+
+    <delete id="deleteClaimCaseAppealTaskByIds" parameterType="String">
+        delete from claim_case_appeal_task where task_id in 
+        <foreach item="taskId" collection="array" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </delete>
+
+
+    <select id="getAppealList"  parameterType="com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo" resultMap="ClaimCaseAppealTaskVo">
+        SELECT
+            DISTINCT
+            t.task_id,
+            t.appeal_rpt_no,
+            t2.source,
+            t3.name,
+            t3.id_no,
+            t2.claim_type,
+            t4.company_code,
+            t4.company_name,
+            t4.policy_manage_com,
+            t5.pay_amount,
+            t.appeal_status,
+            t.appeal_type,
+            t.appeal_reason,
+            t.appeal_sub_reason,
+            t.appeal_remark ,
+            t.conclusion_remark ,
+            t.apply_operator ,
+            t.auditor ,
+            t.status ,
+            t.dept_code ,
+            t.create_time ,
+            t.create_by,
+            t.update_time,
+            t.update_by
+        from claim_case_appeal_task t
+        left JOIN claim_case t1    on t1.rpt_no = t.appeal_rpt_no
+        LEFT JOIN claim_batch t2        ON t1.batch_no = t2.batch_no
+        LEFT JOIN claim_case_insured t3 ON t1.rpt_no = t3.rpt_no
+        LEFT JOIN claim_case_policy t4  ON  t3.rpt_no = t4.rpt_no
+        LEFT JOIN claim_case_cal t5     ON t4.rpt_no = t5.rpt_no
+        WHERE 1 = 1
+        AND t.status = 'Y'
+        AND t1.status = 'Y'
+        AND t2.status = 'Y'
+        AND t2.status = 'Y'
+        AND t4.status = 'Y'
+        AND t5.status = 'Y'
+        <if test="appealStatus != null  and appealStatus != ''"> and t.appeal_status = #{appealStatus}</if>
+        <if test="appealRptNo != null  and appealRptNo != ''"> and t.appeal_rpt_no = #{appealRptNo}</if>
+        <if test="source != null  and source != ''"> and t2.source = #{source}</if>
+        <if test="idNo != null  and idNo != ''"> and t3.id_no = #{idNo}</if>
+        <if test="name != null  and name != ''"> and t3.name = #{name}</if>
+        <if test="auditor != null  and auditor != ''"> and t.auditor = #{auditor}</if>
+        <if test="createStartTime != null and createStartTime != ''">
+            <![CDATA[AND t1.update_time >= #{createStartTime} ]]>
+        </if>
+        <if test="createEndTime != null and createEndTime != ''">
+            <![CDATA[AND t1.update_time <= #{createEndTime}]]>
+        </if>
+
+    </select>
+</mapper>

@@ -298,8 +298,9 @@ public class ClaimProductServiceImpl implements IClaimProductService
      */
     @Transactional
     @Override
-    public int obtainClaimProduct(String[] riskCodes) {
+    public ArrayList<String> obtainClaimProduct(String[] riskCodes) {
         ClaimProduct claimProduct = new ClaimProduct();
+        ArrayList<String> riskCodeList = new ArrayList<>();
         int i = 0;
         for (String riskCode : riskCodes) {
             claimProduct.setRiskStatus("02");
@@ -310,25 +311,32 @@ public class ClaimProductServiceImpl implements IClaimProductService
             ClaimProductTaskLog claimProductTaskLog = new ClaimProductTaskLog();
             claimProductTaskLog.setRiskCode(riskCode);
             claimProductTaskLog.setIsHistory("N");
+            claimProductTaskLog.setRiskStatus("01");
             ClaimProductTaskLog productTaskLog = claimProductTaskLogMapper.selectClaimProductTaskLogByCondition(claimProductTaskLog);
             if (StringUtils.isNotNull(productTaskLog)) {
                 productTaskLog.setIsHistory("Y");
                 productTaskLog.setUpdateBy(SecurityUtils.getUsername());
                 productTaskLog.setUpdateTime(DateUtils.getNowDate());
                 claimProductTaskLogMapper.updateClaimProductTaskLog(productTaskLog);
+                claimProductTaskLog.setRiskLogNo(PubFun.createMySqlMaxNoUseCache("riskLogNo",10,20));
+                claimProductTaskLog.setIsHistory("N");
+                claimProductTaskLog.setRiskStatus("02");
+                claimProductTaskLog.setCreateTime(DateUtils.getNowDate());
+                claimProductTaskLog.setCreateBy(SecurityUtils.getUsername());
+                claimProductTaskLog.setStatus("Y");
+                claimProductTaskLog.setUpdateBy(claimProductTaskLog.getCreateBy());
+                claimProductTaskLog.setUpdateTime(claimProductTaskLog.getCreateTime());
+                claimProductTaskLogMapper.insertClaimProductTaskLog(claimProductTaskLog);
+                i = claimProductMapper.updateClaimProduct(claimProduct);
+            }else {
+                riskCodeList.add(riskCode);
             }
-            claimProductTaskLog.setRiskLogNo(PubFun.createMySqlMaxNoUseCache("riskLogNo",10,20));
-            claimProductTaskLog.setIsHistory("N");
-            claimProductTaskLog.setRiskStatus("02");
-            claimProductTaskLog.setCreateTime(DateUtils.getNowDate());
-            claimProductTaskLog.setCreateBy(SecurityUtils.getUsername());
-            claimProductTaskLog.setStatus("Y");
-            claimProductTaskLog.setUpdateBy(claimProductTaskLog.getCreateBy());
-            claimProductTaskLog.setUpdateTime(claimProductTaskLog.getCreateTime());
-            claimProductTaskLogMapper.insertClaimProductTaskLog(claimProductTaskLog);
-            i = claimProductMapper.updateClaimProduct(claimProduct);
+
+
+
+
         }
-        return i;
+        return riskCodeList;
     }
 
     /**

@@ -646,7 +646,7 @@ export default {
       ],
       costsIncurred: [
         {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"},
-        {min: 0, max: 2000, message: '长度2000 个字符以内'}
+        {min: 0, max: 500, message: '长度500 个字符以内'}
 
       ],
 
@@ -1045,11 +1045,11 @@ export default {
         if (res != null && res.code === 200) {
           this.HCSPoolData = res.rows
           this.HCSTotal = res.total
-          if (res.rows.length <= 0) {
+          /*if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
             )
-          }
+          }*/
         }
       }).catch(res => {
 

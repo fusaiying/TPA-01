@@ -117,6 +117,7 @@
           and claim_case_policy.rpt_no = #{rptno}
           and claim_case_policy.status = 'Y'
           and claim_case_standing.status = 'Y'
+          limit 1
     </select>
 
     <select id="selectClaimCaseStandingById" parameterType="String" resultMap="ClaimCaseStandingResult">

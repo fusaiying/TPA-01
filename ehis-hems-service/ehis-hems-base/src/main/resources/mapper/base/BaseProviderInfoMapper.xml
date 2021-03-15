@@ -115,6 +115,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+    <resultMap type="ProductSupplierInfo" id="ProductSupplierResult">
+        <result property="serialNo"    column="serial_no"    />
+        <result property="serviceCode"    column="service_code"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="supplierCode"    column="supplier_code"    />
+        <result property="priority"    column="priority"    />
+        <result property="chname"    column="chname"    />
+        <result property="addressdetail"    column="addressdetail"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="maxPrice"    column="max_price"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
     <resultMap type="BaseCheckInfo" id="BaseCheckInfoResult">
         <result property="serialNo"    column="serial_no"    />
         <result property="providerCode"    column="provider_code"    />
@@ -1072,9 +1090,9 @@ WHERE
         service_code,
         service_name,
         category_code,
-        category_name,
+        (select distinct category from base_service_category_kind where codeI = base_service_info.category_code) category_name,
         servertype_code,
-        servertype_name,
+        (select variety from base_service_category_kind where codeII = base_service_info.servertype_code) servertype_name,
         concat_ws('-',service_code,service_name) serviceCodeName,
         concat_ws('-',category_code,category_name) categoryCodeName,
         concat_ws('-',servertype_code,servertype_name) typeCodeName
@@ -1111,4 +1129,79 @@ WHERE
             and so.status = 'Y' and pi.update_flag ='0'
         </where>
     </select>
+
+    <select id="selectSupplier" parameterType="ProductInfo" resultMap="ProductSupplierResult">
+        SELECT
+        bcs.supplier_code,
+        bcs.contract_no,
+        bcs.service_code,
+        bsi.chname,
+        concat_ws(
+        '-',
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = bsi.province
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = bsi.city
+        ),
+        (
+        SELECT DISTINCT
+        placename
+        FROM
+        sn_base_address
+        WHERE
+        placecode = bsi.district
+        )
+        ) addressdetail,
+        bcs.min_price,
+        bcs.max_price,
+        bsc.end_date,
+        bcs.priority
+        FROM
+        base_contract_service bcs
+        LEFT JOIN base_supplier_info bsi ON bsi.serial_no = bcs.supplier_code
+        LEFT JOIN base_supplier_contract bsc ON bsc.contract_no = bcs.contract_no
+        <!--LEFT JOIN product_supplier_info psi ON psi.service_code = bcs.service_code and
+      psi.supplier_code = bcs.supplier_code
+      AND psi.product_code = #{productCode}
+        and psi.status ='Y' -->
+        WHERE
+        bcs.serial_no IN (
+        SELECT DISTINCT
+        max(serial_no)
+        FROM
+        base_contract_service
+        WHERE
+        service_code = #{serviceCode}
+        AND STATUS = 'Y'
+        GROUP BY
+        supplier_code,
+        service_code
+        ) order by -bcs.priority desc
+    </select>
+
+    <update id ="updateSupplier" parameterType="ProductSupplierInfo" >
+        UPDATE base_contract_service
+        SET priority = #{priority}
+        WHERE
+            service_code = #{serviceCode}
+        AND supplier_code = #{supplierCode}
+    </update>
+
+    <update id ="updateSupplier1" parameterType="ProductSupplierInfoVo" >
+        UPDATE base_contract_service
+        SET priority = null
+        WHERE
+            service_code = #{serviceCode}
+    </update>
 </mapper>

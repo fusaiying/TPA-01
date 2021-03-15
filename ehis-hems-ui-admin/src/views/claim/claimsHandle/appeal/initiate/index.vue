@@ -68,7 +68,7 @@
       <div slot="header" class="clearfix">
         <span>案件工作池</span>
       </div>
-      <claimTable :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
+      <claimTable  @initAppealData="initAppealData" :payStatus="payStatus" :claimStatus="claimStatus" :claimTypes="claimTypes" :deliverySource="deliverySource"  :table-data="claimTableData"/>
       <pagination
         v-show="claimTotal>0"
         :total="claimTotal"
@@ -111,7 +111,7 @@
     <!-- 申诉工作池  end  -->
 
     <!-- 发起/处理  start  -->
-    <deal :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
+    <deal   @initAppealData="initAppealData" :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
     <!-- 发起/处理  end  -->
   </div>
 </template>
@@ -121,10 +121,10 @@ import appealTable from '../components/appealTable'
 import claimTable from '../components/claimTable'
 import deal from '../components/deal'
 
-import { PendingData,processedData } from '@/api/negotiation/api'
-import { claimInfoList } from '@/api/appeal/api'
+import { claimInfoList,appealList } from '@/api/appeal/api'
 
 import moment from "moment";
+import {caseFilingList} from "@/api/placeCase/api";
 
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
@@ -172,6 +172,7 @@ export default {
       payStatus:[],
       searchBtn:false,
       fixInfo:{},
+      orgId:'',
     }
   },
   async mounted(){
@@ -220,6 +221,7 @@ export default {
     }
   },
   methods: {
+
     openDialog(data){
       this.fixInfo = data;
       this.dialogVisible = true
@@ -245,6 +247,10 @@ export default {
       // this.getPendingData();
       // this.getProcessedData();
     },
+    initAppealData(){
+      this.getPendingData();
+      this.getProcessedData();
+    },
     // 查询处理中
     getPendingData() {
       this.searchLoad = true;
@@ -265,8 +271,8 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.updateBy = this.formSearch.updateBy;
-
-      PendingData(params).then(res => {
+      params.appealStatus = '01';
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
@@ -287,14 +293,15 @@ export default {
       const params = {};
       params.pageNum = this.completePageInfo.pageNum;
       params.pageSize = this.completePageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
-      processedData(params).then(res => {
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '02';
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;
@@ -312,13 +319,13 @@ export default {
       const params = {};
       params.pageNum = this.claimPageInfo.pageNum;
       params.pageSize = this.claimPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
       params.pageType = '01';
       claimInfoList(params).then(res => {
         if (res.code == '200') {

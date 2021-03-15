@@ -28,6 +28,12 @@
 
 <script>
 
+import {addAppeal} from "@/api/appeal/api";
+
+import {getUserInfo} from '@/api/claim/standingBookSearch'
+
+
+
 export default {
   props: {
     tableData: {
@@ -70,8 +76,11 @@ export default {
   data() {
     return {
       loading:true,
-      radio:false,
+      orgId:'',
     }
+  },
+  created() {
+    this.getLoginInfo();
   },
   methods: {
     // 获取案件
@@ -85,9 +94,41 @@ export default {
        该案件还未支付，请在支付环节进行回退操作，请核实
        */
       if(row.payStatus !== '03') {
-        this.$message({ type: 'info',  message: '该案件还未支付，请在支付环节进行回退操作，请核实。'});
-        return false;
+        // this.$message({ type: 'info',  message: '该案件还未支付，请在支付环节进行回退操作，请核实。'});
+        // return false;
       }
+
+      const params = {};
+      params.appealRptNo = row.rptNo;
+      params.deptCode = this.orgId;
+
+      addAppeal(params).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            message: '获取成功！',
+            type: 'success',
+            center: true,
+            showClose: true
+          });
+          this.$emit('initAppealData');
+        }else {
+          this.$message({
+            message: '获取失败！',
+            type: 'error',
+            center: true,
+            showClose: true
+          });
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    },
+    getLoginInfo(){
+      getUserInfo().then(response => {
+        if(response.data) {
+          this.orgId = response.data.organCode.toString();
+        }
+      })
     },
     getDeliverySourceName(row,col) {
       return this.selectDictLabel(this.deliverySource, row.source)

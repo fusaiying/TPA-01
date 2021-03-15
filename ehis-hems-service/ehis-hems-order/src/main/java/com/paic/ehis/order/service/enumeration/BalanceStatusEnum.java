@@ -5,11 +5,11 @@ package com.paic.ehis.order.service.enumeration;
  */
 public enum BalanceStatusEnum {
     // 业务状态
-    WAIT_CONFIRM("01","发起"),
-    ALREADY_CONFIRM("02","确认"),
-    WAIT_CONFIRM_BACK("03","发起（退回）"),
-    ALREADY_EXAMINE("04","审核"),
-    ALREADY_WRITE("05","核销"),
+    WAIT_CONFIRM("01","发起"),//待确认
+    ALREADY_CONFIRM("02","确认"),//待审核
+    WAIT_CONFIRM_BACK("03","发起（退回）"),//待确认+退回原因
+    ALREADY_EXAMINE("04","审核"),//待核销
+    ALREADY_WRITE("05","核销"),//已结算
 
     //流程状态
     TYPE_DELETE("DEL","删除"),

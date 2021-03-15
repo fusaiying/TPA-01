@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deptCode"    column="dept_code"    />
+        <result property="conclusionRemark"    column="conclusion_remark"    />
     </resultMap>
 
     <sql id="selectClaimCaseAppealTaskVo">
@@ -132,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+            <if test="conclusionRemark != null and conclusionRemark != ''">conclusion_remark = #{conclusionRemark},</if>
         </trim>
         where task_id = #{taskId}
     </update>
@@ -166,6 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             t.appeal_reason,
             t.appeal_sub_reason,
             t.appeal_remark ,
+            t.conclusion_remark ,
             t.apply_operator ,
             t.auditor ,
             t.status ,

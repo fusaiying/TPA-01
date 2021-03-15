@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
@@ -340,52 +340,7 @@
 
         </el-row>
         <el-row>
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="E-MAIL：" prop="email">-->
-<!--              <el-input v-model="ruleForm.email" class="item-width" clearable size="mini" placeholder="请输入"/>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="出单机构：" prop="organCode">-->
-<!--              <el-select v-model="ruleForm.organCode" class="item-width" placeholder="请选择">-->
-<!--                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"-->
-<!--                           :value="item.dictValue"/>-->
-<!--              </el-select>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="是否涉及银行转账" prop="bankTransfer">-->
-<!--              <el-radio-group v-model="ruleForm.bankTransfer" @change="bankChange(ruleForm.bankTransfer)">-->
-<!--                <el-radio label="1">是</el-radio>-->
-<!--                <el-radio label="2">否</el-radio>-->
-
-<!--              </el-radio-group>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
         </el-row>
-<!--        <el-row>-->
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="开户行：" v-show="ruleForm.bankTransfer=='1'" prop="bankName">-->
-<!--              <el-input size="mini" v-model="ruleForm.bankName"></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="开户地：" v-show="ruleForm.bankTransfer=='1'" prop="bankLocation">-->
-<!--              <el-input size="mini" v-model="ruleForm.bankLocation"></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="账号：" v-show="ruleForm.bankTransfer=='1'" prop="accountNumber">-->
-<!--              <el-input size="mini" v-model="ruleForm.accountNumber"></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-
-<!--          <el-col :span="8">-->
-<!--            <el-form-item label="户名：" v-show="ruleForm.bankTransfer=='1'" prop="bankHolder">-->
-<!--              <el-input size="mini" v-model="ruleForm.bankHolder"></el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
         <el-row>
           <el-col :span="16">
             <el-form-item label="业务内容：" prop="content">
@@ -398,7 +353,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
     </el-card>
 

@@ -3,9 +3,11 @@ package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.dto.QualityDTO;
+import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.QualityAcceptVo;
+import com.paic.ehis.cs.domain.vo.QualityFlagVO;
 import com.paic.ehis.cs.domain.vo.QualityVo;
 
 import java.util.List;
@@ -75,5 +77,5 @@ public interface IQualityInspectionAcceptService
 //     * @return
 //     */
 //    public List<AttachmentInfo> getAttachmentList(WorkOrderQueryDTO workOrderQueryDTO);
-
+    List<QualityFlagVO> selectQualityFlagVO(QualityFlagDTO qualityFlagDTO);
 }

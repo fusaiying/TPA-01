@@ -27,3 +27,13 @@ export function addAppeal(data) {
     data: data
   })
 }
+
+
+//更新申诉
+export function updateAppeal(data) {
+  return request({
+    url: '/claimmgt/claimAppeal',
+    method: 'put',
+    data: data
+  })
+}

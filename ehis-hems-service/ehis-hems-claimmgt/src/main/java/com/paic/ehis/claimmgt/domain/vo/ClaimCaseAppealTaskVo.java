@@ -71,6 +71,9 @@ public class ClaimCaseAppealTaskVo extends BaseEntity {
     /**根据 pageType 查询固定的数据*/
     private String pageType;
 
+    /**处理意见*/
+    private String conclusionRemark;
+
     private String createStartTime;
 
     private String  createEndTime;

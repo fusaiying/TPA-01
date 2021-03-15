@@ -168,7 +168,7 @@
 <script>
 import moment from 'moment'
 import {
-  inspectionListAndPublicPool,
+  // inspectionListAndPublicPool,
   inspectionListAndPersonalPool,
   inspectionGetByIds
 } from '@/api/customService/spotCheck'
@@ -259,23 +259,23 @@ export default {
         query.endCaseStartTime = this.poolQueryForm.endCaseTime[0]
         query.endCaseEndTime = this.poolQueryForm.endCaseTime[1]
       }
-      console.log('query: ', query)
-      inspectionListAndPublicPool(query).then(res => {
-        console.log('------------: ', res)
-        if (res != null && res.code === 200) {
-          this.inspectionPublicPoolData = res.rows
-          this.publicTotalCount = res.total
-          this.publicLoading=false;
-          if (res.rows.length <= 0 && this.isRemind) {
-            return this.$message.warning(
-              "未查询到待质检数据！"
-            )
-          }
-        }
-      }).catch(res => {
-      }).finally(() => {
-        this.publicLoading=false;
-      }),
+      // console.log('query: ', query)
+      // inspectionListAndPublicPool(query).then(res => {
+      //   console.log('------------: ', res)
+      //   if (res != null && res.code === 200) {
+      //     this.inspectionPublicPoolData = res.rows
+      //     this.publicTotalCount = res.total
+      //     this.publicLoading=false;
+      //     if (res.rows.length <= 0 && this.isRemind) {
+      //       return this.$message.warning(
+      //         "未查询到待质检数据！"
+      //       )
+      //     }
+      //   }
+      // }).catch(res => {
+      // }).finally(() => {
+      //   this.publicLoading=false;
+      // }),
       inspectionListAndPersonalPool(query).then(res => {
         console.log('------------: ', res)
         if (res != null && res.code === 200) {

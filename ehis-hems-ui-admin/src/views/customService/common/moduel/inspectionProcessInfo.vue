@@ -8,7 +8,7 @@
         <el-table-column  label="质检项目" show-overflow-tooltip align="center" disabled="true">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemKey'" >
-              <el-input v-model.trim="scope.row.itemKey" v-show="scope.row.show" clearable size="mini" />
+              <el-input v-model.trim="scope.row.itemKey" v-show="scope.row.show" size="mini" />
               <span v-show="!scope.row.show">{{scope.row.itemKey}}</span>
             </el-form-item>
           </template>
@@ -16,7 +16,7 @@
         <el-table-column  label="是否存在差错" show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.value'" >
-              <el-select v-model="scope.row.value"  clearable size="mini" placeholder="请选择">
+              <el-select v-model="scope.row.value"   size="mini" placeholder="请选择">
                 <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
                 </el-option>
               </el-select>
@@ -133,13 +133,9 @@ created() {
 
     },
 async mounted() {
-  // this.$nextTick(() => {
-  //   this.$refs[inspectionProcessInfo].resetFields();
-  // })
     await this.getDictsList(dictss).then(response => {
       this.dictList = response.data
     })
-    console.log(this.dictList,"85646568569");
     this.valueOptions = this.dictList.find(item => {
       return item.dictType === 'cs_whether_flag'
     }).dictDate

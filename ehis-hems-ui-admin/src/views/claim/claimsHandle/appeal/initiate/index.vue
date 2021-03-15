@@ -121,10 +121,10 @@ import appealTable from '../components/appealTable'
 import claimTable from '../components/claimTable'
 import deal from '../components/deal'
 
-import { PendingData,processedData } from '@/api/negotiation/api'
-import { claimInfoList } from '@/api/appeal/api'
+import { claimInfoList,appealList } from '@/api/appeal/api'
 
 import moment from "moment";
+import {caseFilingList} from "@/api/placeCase/api";
 
 let dictss = [{dictType: 'delivery_source'},{dictType: 'claimType'} , {dictType: 'claim_status'},{dictType: 'case_pay_status'}]
 
@@ -172,6 +172,7 @@ export default {
       payStatus:[],
       searchBtn:false,
       fixInfo:{},
+      orgId:'',
     }
   },
   async mounted(){
@@ -220,6 +221,7 @@ export default {
     }
   },
   methods: {
+
     openDialog(data){
       this.fixInfo = data;
       this.dialogVisible = true
@@ -266,7 +268,7 @@ export default {
       params.createEndTime = endTime;
       params.updateBy = this.formSearch.updateBy;
 
-      PendingData(params).then(res => {
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
@@ -294,7 +296,7 @@ export default {
       params.createStartTime = startTime;
       params.createEndTime = endTime;
       params.updateBy = this.formSearch.updateBy;
-      processedData(params).then(res => {
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;

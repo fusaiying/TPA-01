@@ -29,7 +29,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-03-15
  */
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/claimAppeal")
 public class ClaimCaseAppealTaskController extends BaseController
 {
     @Autowired
@@ -38,11 +38,10 @@ public class ClaimCaseAppealTaskController extends BaseController
     /**
      * 查询案件申诉任务列表
      */
-    //@PreAuthorize(hasPermi = "system:task:list")
-    @GetMapping("/list")
-    public TableDataInfo list(ClaimCaseAppealTask claimCaseAppealTask)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody ClaimCaseAppealTask claimCaseAppealTask)
     {
-        startPage();
+        startPage(claimCaseAppealTask);
         List<ClaimCaseAppealTask> list = claimCaseAppealTaskService.selectClaimCaseAppealTaskList(claimCaseAppealTask);
         return getDataTable(list);
     }

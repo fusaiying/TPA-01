@@ -176,7 +176,7 @@
             <if test="updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where risk_code = #{riskCode} and update_by is null
+        where risk_code = #{riskCode}
     </update>
 
     <update id="updateClaimProductReset" parameterType="com.paic.ehis.claimcal.domain.ClaimProduct">

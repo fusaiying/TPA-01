@@ -58,7 +58,7 @@
 
     <!--审核日志-->
 
-    <audit :productCode="productCode" :status="status"></audit>
+    <audit :productCode="productCode" :status="status" v-if="this.showFlag"></audit>
 
 
   </div>
@@ -82,6 +82,7 @@ export default {
   },
   data() {
     return {
+      showFlag:true,
       status: '',
       disabledFlag: false,
       parProductChname: '',
@@ -108,6 +109,12 @@ export default {
         else if(this.$route.query.status == 'management'){
           this.status = 'management'
         }
+       if(this.$route.query.node){
+         this.showFlag = false
+       }else {
+         this.showFlag = true
+       }
+
         this.disabledFlag = true
         this.productCode = this.$route.query.productCode
         //调用查询供应商的接口

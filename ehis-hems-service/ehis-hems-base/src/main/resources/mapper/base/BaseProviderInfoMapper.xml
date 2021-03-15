@@ -1138,6 +1138,7 @@ WHERE
             ) typeCodeName
         FROM
             base_service_info
+        where state='Y' and status='02'
     </select>
 
     <select id="getSupplierInfo"  resultMap="SupplierInfoResult">

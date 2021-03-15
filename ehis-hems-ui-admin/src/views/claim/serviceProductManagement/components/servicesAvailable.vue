@@ -548,7 +548,7 @@ export default {
     getData(query) {
       this.loading = true
       selectSupplier(query).then(res => {
-        this.supplierInfo.supplierData = res.data;
+        this.supplierInfo.supplierData = res.data.data;
         this.supplierInfo.supplierData.map((item, index) => {
           item.index = index
         })

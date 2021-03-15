@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
+import com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,10 @@ public class ClaimCaseAppealTaskController extends BaseController
      * 查询案件申诉任务列表
      */
     @PostMapping("/list")
-    public TableDataInfo list(@RequestBody ClaimCaseAppealTask claimCaseAppealTask)
+    public TableDataInfo list(@RequestBody ClaimCaseAppealTaskVo vo)
     {
-        startPage(claimCaseAppealTask);
-        List<ClaimCaseAppealTask> list = claimCaseAppealTaskService.selectClaimCaseAppealTaskList(claimCaseAppealTask);
+        startPage(vo);
+        List<ClaimCaseAppealTaskVo> list = claimCaseAppealTaskService.getAppealList(vo);
         return getDataTable(list);
     }
 

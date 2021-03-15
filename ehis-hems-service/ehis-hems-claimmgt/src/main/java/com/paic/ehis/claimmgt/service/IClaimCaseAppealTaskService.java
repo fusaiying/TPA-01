@@ -1,6 +1,7 @@
 package com.paic.ehis.claimmgt.service;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
+import com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo;
 
 import java.util.List;
 
@@ -59,4 +60,12 @@ public interface IClaimCaseAppealTaskService
      * @return 结果
      */
     public int deleteClaimCaseAppealTaskById(Long taskId);
+
+    /**
+     * 查询案件申诉任务列表
+     *
+     * @param vo 案件申诉任务
+     * @return 案件申诉任务集合
+     */
+    public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo);
 }

@@ -224,7 +224,7 @@ export default {
         let currentDate = new  Date();
         dNow1   = (this.dateformat('yyyy-MM-dd',currentDate))  +" 23:59:59";
         currentDate.setMonth(currentDate.getMonth() - 1);
-        dBefore1 = this.dateformat('yyyy-MM-dd',currentDate);
+        dBefore1 = this.dateformat('yyyy-MM-dd',currentDate)+ ' ' + '00:00:00';
       }
 
 

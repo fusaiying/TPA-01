@@ -66,6 +66,16 @@ public class ProductInfoController extends BaseController
     }
 
 
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/listNull")
+    public TableDataInfo list() throws Exception
+    {
+        startPage();
+        List<ProductInfo> list = productInfoService.selectProductInfoListNull() ;
+        return getDataTable(list);
+    }
+
+
     /**
      * 导出base_product_info(服务产品)列表
      */
@@ -255,6 +265,19 @@ public class ProductInfoController extends BaseController
     {
         startPage();
         List<ProductInfo> list = productInfoService.mangerList(productInfo) ;
+        return getDataTable(list);
+    }
+
+    /**
+     * 查询base_product_info(服务产品)列表待审核状态 无参
+     * @return
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/mangerListNull")
+    public TableDataInfo mangerList()  throws Exception
+    {
+        startPage();
+        List<ProductInfo> list = productInfoService.mangerListNull() ;
         return getDataTable(list);
     }
 

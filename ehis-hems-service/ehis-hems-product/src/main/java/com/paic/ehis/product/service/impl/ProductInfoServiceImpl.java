@@ -59,16 +59,22 @@ public class ProductInfoServiceImpl implements IProductInfoService
     @Override
     public List<ProductInfo> selectProductInfoList(ProductInfo productInfo) throws Exception
     {
-        if(productInfo != null){
             return productInfoMapper.selectProductInfoList(productInfo);
+    }
 
-        }else{
-            Map map = Dateutils.getCurrontTime1();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
-            productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
-            return productInfoMapper.selectDefaultListist(productInfo);
-        }
+    /**
+     * 默认查询base_product_info(服务产品)列表
+     * @return base_product_info(服务产品)
+     * @throws Exception
+     */
+    @Override
+    public List<ProductInfo> selectProductInfoListNull() throws Exception {
+        Map map = Dateutils.getCurrontTime1();
+        ProductInfo productInfo = new ProductInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
+        productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return productInfoMapper.selectDefaultListist(productInfo);
     }
 
 
@@ -266,6 +272,20 @@ public class ProductInfoServiceImpl implements IProductInfoService
     public List<ProductInfo> mangerList(ProductInfo productInfo)
     {
         return productInfoMapper.mangerList(productInfo);
+    }
+
+    /**
+     *产品审核列表查询
+     */
+    @Override
+    public List<ProductInfo> mangerListNull() throws Exception
+    {
+        Map map = Dateutils.getCurrontTime1();
+        ProductInfo productInfo = new ProductInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
+        productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return productInfoMapper.selectMangerListNull(productInfo);
     }
 
 

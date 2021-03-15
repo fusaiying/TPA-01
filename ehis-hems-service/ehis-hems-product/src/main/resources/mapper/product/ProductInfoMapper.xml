@@ -245,6 +245,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectMangerListNull" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+            <if test="beforeDate != null   and nowDate != null ">
+                and(create_time between  #{beforeDate} and  #{nowDate})
+            </if>
+            and status = 'Y' and bussiness_status in ('03','04') order by create_time desc
+        </where>
+    </select>
+
     <select id="checkField" parameterType="ProductInfo" resultMap="ProductInfoResult">
         <include refid="selectProductInfoVo"/>
         <where>

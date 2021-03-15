@@ -94,4 +94,6 @@ public interface ProductInfoMapper
     public int updatesupplierInfo(ProductSupplierInfoVo productSupplierInfoVo);
 
     public int insertSupplier(List<ProductSupplierInfo> productSupplierInfo);
+
+    public List<ProductInfo> selectMangerListNull(ProductInfo productInfo);
 }

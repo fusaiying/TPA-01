@@ -267,7 +267,7 @@ export default {
         this.getData()
       }
       else {
-        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
+        this.$message({message: '至少录入一个查询条件', type: 'warning', showClose: true, center: true})
       }
 
     },

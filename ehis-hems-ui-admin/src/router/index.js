@@ -146,7 +146,15 @@ export const constantRoutes = [
         meta: { title: '医生信息新增/编辑', noCache: true }
       }
     ]
-  }
+  },
+  // 理算详情
+  {
+    path: '/calculateDetail',
+    component: () => import('../../src/views/claim/claimsHandle/common/com-deal.vue'),
+    hidden: true,
+    name: 'calculateDetail',
+    meta: { title: '理算详情', noCache: true },
+  },
 
 ]
 

@@ -593,4 +593,17 @@ public class BaseProviderInfoController extends BaseController {
     public List<HospitalInfoVo> getHospitalInfo1(@RequestBody com.paic.ehis.system.api.domain.AddressInfo addressInfo){
         return baseProviderInfoService.getHospitalInfo1(addressInfo);
     }
+
+    /**
+     * 供应商信息查询接口
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:query')")
+    @PostMapping("/selectSupplier")
+    public AjaxResult selectSupplier(@RequestBody ProductInfo productInfo)
+    {
+        /*startPage();
+        List<ProductSupplierInfo> list = productInfoService.selectSupplier(productInfo);
+        return getDataTable(list);*/
+        return AjaxResult.success(baseProviderInfoService.selectSupplier(productInfo));
+    }
 }

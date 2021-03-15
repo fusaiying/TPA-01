@@ -24,5 +24,4 @@ public interface ICommonService
      */
     public List<AcceptVo> getWorkOrderCountByUserId(WorkOrderQueryDTO workOrderQueryDTO);
 
-
 }

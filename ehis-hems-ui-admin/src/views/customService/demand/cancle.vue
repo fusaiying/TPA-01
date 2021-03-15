@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>

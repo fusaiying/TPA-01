@@ -1187,6 +1187,21 @@ WHERE
         GROUP BY
         supplier_code,
         service_code
-        ) order by if(isnull(bcs.priority),1,0) asc
+        ) order by -bcs.priority desc
     </select>
+
+    <update id ="updateSupplier" parameterType="ProductSupplierInfo" >
+        UPDATE base_contract_service
+        SET priority = #{priority}
+        WHERE
+            service_code = #{serviceCode}
+        AND supplier_code = #{supplierCode}
+    </update>
+
+    <update id ="updateSupplier1" parameterType="ProductSupplierInfoVo" >
+        UPDATE base_contract_service
+        SET priority = null
+        WHERE
+            service_code = #{serviceCode}
+    </update>
 </mapper>

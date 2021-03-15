@@ -247,6 +247,17 @@ public class ServiceBalanceDetailController extends BaseController
     }
 
     /**
+     * 查询service_balance_detail(服务结算明细信息)列表导出
+     */
+    @Log(title = "service_balance_detail(服务结算明细信息)", businessType = BusinessType.EXPORT)
+    @PostMapping("/export2")
+    public void export2(HttpServletResponse response, ServiceBalanceDetail serviceBalanceDetail) throws IOException
+    { List<ServiceBalanceDetail> list = serviceBalanceDetailService.selectServiceBalanceDetailList2(serviceBalanceDetail);
+        ExcelUtil<ServiceBalanceDetail> util = new ExcelUtil<ServiceBalanceDetail>(ServiceBalanceDetail.class);
+        util.exportExcel(response, list, "服务结算明细信息");
+    }
+
+    /**
      * 查询service_balance_detail(服务结算明细信息)列表
      */
     @PostMapping("/list2")

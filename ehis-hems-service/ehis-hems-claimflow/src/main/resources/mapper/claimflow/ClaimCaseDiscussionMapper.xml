@@ -40,6 +40,7 @@
         <result property="disView"    column="dis_view"    />
         <result property="discId"    column="disc_id"    />
         <result property="isHistory"    column="is_history"    />
+        <result property="batchNo"    column="batch_no"    />
     </resultMap>
 
     <sql id="selectClaimCaseDiscussionVo">
@@ -158,6 +159,7 @@
     claim_case_discussion.disc_type,/*协谈类型*/
     claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
     claim_case.case_status,/*案件状态*/
+    claim_case.batch_no,
     claim_case_discussion.disc_id
     from
     claim_case_discussion,
@@ -191,6 +193,7 @@
         claim_case_discussion.disc_type,/*协谈类型*/
         claim_case_discussion.create_by,/*提交用户,流程节点操作人*/
         claim_case.case_status,/*案件状态*/
+        claim_case.batch_no,
         claim_case_discussion.disc_id
         from
         claim_case_discussion,

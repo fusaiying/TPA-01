@@ -509,10 +509,10 @@ export default {
           trigger: "blur"},
       ],
       callMobilePhone: [
-        {required: true, message: "联系电话不能为空", trigger: "blur"},
-        {required: true,
-          message: "目前只支持中国大陆的手机号码",
-          pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+        // {required: true, message: "联系电话不能为空", trigger: "blur"},
+        {required: false,
+          message: "只可录入数字",
+          pattern: /^\d*$/,//可以写正则表达式呦呦呦,
           trigger: "blur"},
       ],
       contactsCountry: [

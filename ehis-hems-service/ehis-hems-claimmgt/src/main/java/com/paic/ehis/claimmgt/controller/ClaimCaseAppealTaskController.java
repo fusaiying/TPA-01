@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
+import com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import com.paic.ehis.common.core.web.page.TableDataInfo;
  * @date 2021-03-15
  */
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/claimAppeal")
 public class ClaimCaseAppealTaskController extends BaseController
 {
     @Autowired
@@ -38,12 +39,11 @@ public class ClaimCaseAppealTaskController extends BaseController
     /**
      * 查询案件申诉任务列表
      */
-    //@PreAuthorize(hasPermi = "system:task:list")
-    @GetMapping("/list")
-    public TableDataInfo list(ClaimCaseAppealTask claimCaseAppealTask)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody ClaimCaseAppealTaskVo vo)
     {
-        startPage();
-        List<ClaimCaseAppealTask> list = claimCaseAppealTaskService.selectClaimCaseAppealTaskList(claimCaseAppealTask);
+        startPage(vo);
+        List<ClaimCaseAppealTaskVo> list = claimCaseAppealTaskService.getAppealList(vo);
         return getDataTable(list);
     }
 

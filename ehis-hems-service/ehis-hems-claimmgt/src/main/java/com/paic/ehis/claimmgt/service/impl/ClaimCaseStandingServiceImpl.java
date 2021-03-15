@@ -84,7 +84,10 @@ public class ClaimCaseStandingServiceImpl implements IClaimCaseStandingService
         List<ClaimCaseStandingVo1> claimCaseStandingVos = claimCaseStandingMapper.selectClaimCaseStandingListNew(claimCaseStandingDTO);
        if(!claimCaseStandingVos.isEmpty()){
            for(ClaimCaseStandingVo1 claimCaseStandingVo1 :claimCaseStandingVos){
-               claimCaseStandingVo1.setCompanyName(claimCaseStandingMapper.selectCompanyName(claimCaseStandingVo1.getRptno()));
+               if(StringUtils.isNotBlank(claimCaseStandingVo1.getRptno()) ){
+                   claimCaseStandingVo1.setCompanyName(claimCaseStandingMapper.selectCompanyName(claimCaseStandingVo1.getRptno()));
+               }
+
                claimCaseStandingVo1.setClaimmaterialList(Arrays.asList((claimCaseStandingVo1.getClaimmaterials().split(","))));
            }
        }

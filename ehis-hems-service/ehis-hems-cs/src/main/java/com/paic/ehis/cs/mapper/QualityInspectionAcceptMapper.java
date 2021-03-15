@@ -54,4 +54,6 @@ public interface QualityInspectionAcceptMapper {
     public AcceptVo getAcceptInfo(WorkOrderQueryDTO workOrderQueryDTO);
 
     public AcceptDetailInfo getAcceptDetailInfo(WorkOrderQueryDTO workOrderQueryDTO);
+
+    public List<AcceptVo> getWorkOrderCountByUserId(WorkOrderQueryDTO workOrderQueryDTO);
 }

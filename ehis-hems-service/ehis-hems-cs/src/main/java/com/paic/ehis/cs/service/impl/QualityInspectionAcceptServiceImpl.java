@@ -76,7 +76,7 @@ public class QualityInspectionAcceptServiceImpl implements IQualityInspectionAcc
                         list.get(i).setAcceptUser(setAcceptUser);
                     }
                 }
-                //处理人
+                //原处理人
                 String getModifyUserId= list.get(i).getModifyUserId();
                 if(StringUtils.isNotEmpty(getModifyUserId)){
                     UserInfo setModifyUser=userInfoMapper.selectUserInfoById(getModifyUserId);

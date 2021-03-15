@@ -127,7 +127,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -349,8 +352,16 @@
           highlight-current-row
           tooltip-effect="dark"
           style=" width: 100%;">
-          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip/>
+          <el-table-column align="center" width="140" prop="status" label="状态" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.status">
+              <span>{{ selectDictLabel(cs_order_state, scope.row.status) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="operateCode" label="操作" show-overflow-tooltip>
+            <template slot-scope="scope" v-if="scope.row.operateCode">
+              <span>{{ selectDictLabel(cs_action_type, scope.row.operateCode) }}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="makeBy" label="受/处理人" show-overflow-tooltip/>
           <el-table-column align="center" prop="umNum" label="UM账号" show-overflow-tooltip/>
           <el-table-column prop="makeTime" label="时间" align="center" show-overflow-tooltip>
@@ -537,11 +548,7 @@
 <!--          </el-form-item>-->
 <!--        </el-row>-->
 <!--      </el-form>-->
-
-
 <!--    </el-card>-->
-
-
 
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
@@ -595,6 +602,8 @@
     {dictType: 'cs_whether_flag'},
     {dictType: 'cs_organization'},
     {dictType: 'cs_relation'},
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_action_type'},
     ]
   export default {
     components: {
@@ -710,6 +719,8 @@
         cs_whether_flag: [],
         cs_organization: [],
         cs_relation: [],
+        cs_order_state: [],
+        cs_action_type: [],
         attachmentInfoData: [],
       }
     },
@@ -767,6 +778,12 @@
       }).dictDate
       this.cs_relation = this.dictList.find(item => {
         return item.dictType === 'cs_relation'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_action_type = this.dictList.find(item => {
+        return item.dictType === 'cs_action_type'
       }).dictDate
     },
     methods: {

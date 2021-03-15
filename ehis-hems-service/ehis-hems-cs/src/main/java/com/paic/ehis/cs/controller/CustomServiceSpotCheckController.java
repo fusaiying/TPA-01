@@ -269,13 +269,16 @@ public class CustomServiceSpotCheckController extends BaseController {
         /**
          *工单查询
          */
-    @GetMapping("/internal/selectWorkOrder")
-    public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
-    {
-        startPage();
-        List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
-        return getDataTable(list);
-    }
+        @GetMapping("/internal/selectWorkOrder")
+        public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
+            //1.分页处理
+            startPage();
+            logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
+            List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
+            logger.debug("工单查询工作池结果:{}", list);
+            return getDataTable(list);
+
+        }
     //************************************************
         /*
         质检查询

@@ -178,7 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
             where  work_order_no = #{workOrderNo}
     </update>
-    <select id="selectHangFlag" parameterType="WorkOrderAccept" resultMap="WorkOrderAcceptResult">
+    <select id="selectHangFlag" parameterType="com.paic.ehis.cs.domain.WorkOrderAccept" resultMap="WorkOrderAcceptResult">
         select work_order_no,hang_flag,hang_reason from work_order_accept
             where work_order_no=#{workOrderNo}
     </select>

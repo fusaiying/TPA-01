@@ -44,6 +44,9 @@ public class CustomServiceSpotCheckController extends BaseController {
     @Autowired
     private IDemandAcceptVoService iDemandAcceptVoService;
 
+    @Autowired
+    private ICommonService iCommonService;
+
     /**
      * 发送质检工作池：数据来源
      * @param workOrderQueryDTO
@@ -267,14 +270,18 @@ public TableDataInfo selectHandle(WorkOrderQueryDTO workOrderQueryDTO)
     /**
      *工单查询
      */
-@GetMapping("/internal/selectWorkOrder")
-public TableDataInfo selectWorkOrder(AcceptDTO acceptDTO)
-{
-    startPage();
-    List<WorkOrderVo> list = iDemandAcceptVoService.selectWorkOrder(acceptDTO);
-    return getDataTable(list);
-}
-//************************************************
+    @GetMapping("/internal/selectWorkOrder")
+    public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
+        //1.分页处理
+        startPage();
+        logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
+        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
+        logger.debug("工单查询工作池结果:{}", list);
+        return getDataTable(list);
+
+    }
+
+    //************************************************
     /*
     质检查询
      */
@@ -285,4 +292,20 @@ public TableDataInfo selectQualityVo(QualityDTO qualityDTO)
     List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
     return getDataTable(list);
 }
+
+
+    @GetMapping("/internal/otherUseing")
+    public AjaxResult otherUseing(@RequestBody WorkOrderQueryDTO workOrderQueryDTO){
+        workOrderQueryDTO.setUpdateBy(SecurityUtils.getUsername());
+        List<AcceptVo> acceptVoList=iCommonService.getWorkOrderCountByUserId(workOrderQueryDTO);
+        int isExit=0;
+        if(acceptVoList!=null){
+            for (int i = 0; i < acceptVoList.size(); i++) {
+//                if(acceptVoList.get(i).getUpdateBy().equals())
+            }
+        }
+
+        return null;
+    }
+
 }

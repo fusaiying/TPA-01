@@ -383,7 +383,6 @@
 </template>
 
 <script>
-  import {getUserInfo} from '@/api/claim/standingBookSearch'
   import {
     selectCaseDispatchList
     , getDspatchUser
@@ -393,7 +392,7 @@
     , selectWorkflow
   } from '@/api/dispatch/api'
   import moment from "moment";
-
+  import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
   export default {
     components: {
     },
@@ -566,14 +565,36 @@
         });
       },
       getDspatchUserData() {
-        const params = {
-          pageNum: 1,
-          pageSize: 1000,
-          status: '0',
-          delFlag: 0,
-          xtype: 'getDspatchUser'
-        };
-        getDspatchUser(params).then(response => {
+        getUserInfo().then(res => {
+          if (res != null && res.code === 200) {
+            let option = {
+              organCode: res.data.organCode,
+              pageNum: 1,
+              pageSize: 200,
+            }
+                getUsersByOrganCode(option).then(response => {
+                  if (res != null && res.code === 200) {
+                    console.log("res.rows")
+                    console.log(response.rows);
+                   // this.operatorSelect = response.rows
+
+                    for (let i = 0; i < response.rows.length; i++) {
+                      let obj = new Object();
+                      let userName = response.rows[i].userName;
+                      obj.dictLabel = response.rows[i].userName;
+                      obj.dictValue = response.rows[i].userName;
+                      this.operatorSelect.push(obj);
+                      //根据用户名称映射用户角色
+                      this.userIdName[userName] = response.rows[i].roles[0].roleName;
+                    }
+                    console.log("this.userIdName")
+                    console.log(this.userIdName)
+                  }
+                })
+          }
+        })
+
+        /*getDspatchUser(params).then(response => {
           if (response.rows != null) {
             for (let i = 0; i < response.rows.length; i++) {
               let obj = new Object();
@@ -586,10 +607,14 @@
           }
         }).catch(error => {
           console.log(error);
-        });
+        });*/
       },
       getCaseStatusName(row, col) {
-        return this.selectDictLabel(this.caseStatusSelect, row.caseStatus)
+        let resultStatus = this.selectDictLabel(this.caseStatusSelect, row.caseStatus);
+        if(row.caseStatus === '30' || row.caseStatus === '31' || row.caseStatus === '32') {
+          return "挂起 | " + resultStatus;
+        }
+        return resultStatus;
       },
       getClaimTypeName(row, col) {
         return this.selectDictLabel(this.claimTypeSelect, row.claimType)
@@ -788,7 +813,6 @@
         this.dialogVisibleStream = false;
       },
       checkPermit() {
-
         if (this.operatorForm.operator == '') {
           return false;
         }
@@ -798,78 +822,63 @@
         if (this.userNameValue == '') {
           return false;
         }
-        roleInfo(this.userNameValue).then(response => {
-          if (response.code == '200') {
-            this.checkRoleName = response.data.roles[0].roleName;
-
-            // 判断是否有权限
-            for (let i = 0; i < this.checkSelection.length; i++) {
-              let caseStatus = this.checkSelection[i].caseStatus;
-              if (this.logRoleName.indexOf("管理员") < 0) {
-                let permit = this.getPermit(caseStatus, 1);
-                if (permit) {
-                  this.checkArra.push(this.checkSelection[i].rptNo)
-                } else {
-                  this.uncheckArra.push(this.checkSelection[i].rptNo)
-                }
-              } else {
-                this.checkArra.push(this.checkSelection[i].rptNo)
-              }
-              if (this.checkRoleName.indexOf("管理员") < 0) {
-                let permit = this.getPermit(caseStatus, 2);
-                if (permit) {
-                  if (!this.arrayContain(this.checkArra, this.checkSelection[i].rptNo)) {
-                    this.checkArra.push(this.checkSelection[i].rptNo)
-                    this.remove(this.uncheckArra, this.checkSelection[i].rptNo)
-                  }
-                } else {
-                  if (this.arrayContain(this.checkArra, this.checkSelection[i].rptNo)) {
-                    this.remove(this.checkArra, this.checkSelection[i].rptNo)
-                    this.uncheckArra.push(this.checkSelection[i].rptNo)
-                  }
-                }
-              }
-            }
-            // console.log("******************************")
-            // console.log(this.uncheckArra);
-            // console.log("******************************")
-            // console.log("+++++++++++++++++++++++++++++++++++++")
-            // console.log(this.checkArra);
-            // console.log("+++++++++++++++++++++++++++++++++++++")
-            // console.log(this.uncheckArra);
-            // console.log(this.checkArra);
-            if (this.uncheckArra.length > 0) {
-
-              let confirmText = this.uncheckArra.toString().split(",")
-              let h = this.$createElement
-              let newDatas = []
-              newDatas.push(h('p', null, "以下案件操作人无处理权限，请重新分配"))
-              newDatas.push(h('p', null, ""))
-              for (const i in confirmText) {
-                newDatas.push(h('p', null, confirmText[i]))
-              }
-
-              this.$confirm('提示', {
-                title: '提示',
-                message: h('div', null, newDatas),
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'info'
-              }).then(() => {
-                this.updateOperator()
-              }).catch(() => {
-
-              })
+        this.checkRoleName = this.userNameValue;
+        console.log(this.checkRoleName)
+        console.log(this.logRoleName)
+        // 判断是否有权限
+        for (let i = 0; i < this.checkSelection.length; i++) {
+          let caseStatus = this.checkSelection[i].caseStatus;
+          if (this.logRoleName.indexOf("管理员") < 0) {
+            let permit = this.getPermit(caseStatus, 1);
+            if (permit) {
+              this.checkArra.push(this.checkSelection[i].rptNo)
             } else {
-              this.updateOperator()
+              this.uncheckArra.push(this.checkSelection[i].rptNo)
             }
-
           } else {
-            console.log(response);
+            this.checkArra.push(this.checkSelection[i].rptNo)
           }
-        }).catch(error => {
-          console.log(error);
-        });
+          if (this.checkRoleName.indexOf("管理员") < 0) {
+            let permit = this.getPermit(caseStatus, 2);
+            if (permit) {
+              if (!this.arrayContain(this.checkArra, this.checkSelection[i].rptNo)) {
+                this.checkArra.push(this.checkSelection[i].rptNo)
+                this.remove(this.uncheckArra, this.checkSelection[i].rptNo)
+              }
+            } else {
+              if (this.arrayContain(this.checkArra, this.checkSelection[i].rptNo)) {
+                this.remove(this.checkArra, this.checkSelection[i].rptNo)
+                this.uncheckArra.push(this.checkSelection[i].rptNo)
+              }
+            }
+          }
+        }
+
+        if (this.uncheckArra.length > 0) {
+
+          let confirmText = this.uncheckArra.toString().split(",")
+          let h = this.$createElement
+          let newDatas = []
+          newDatas.push(h('p', null, "以下案件操作人无处理权限，请重新分配"))
+          newDatas.push(h('p', null, ""))
+          for (const i in confirmText) {
+            newDatas.push(h('p', null, confirmText[i]))
+          }
+
+          this.$confirm('提示', {
+            title: '提示',
+            message: h('div', null, newDatas),
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'info'
+          }).then(() => {
+            this.updateOperator()
+          }).catch(() => {
+
+          })
+        } else {
+          this.updateOperator()
+        }
       },
       updateOperator() {
         if(this.checkArra.length === 0) {

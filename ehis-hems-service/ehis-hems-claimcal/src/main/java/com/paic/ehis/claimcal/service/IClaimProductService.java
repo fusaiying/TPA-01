@@ -9,6 +9,7 @@ import com.paic.ehis.claimcal.domain.dto.ClaimProductDTO;
 import com.paic.ehis.claimcal.domain.dto.ProcessedProductDTO;
 import com.paic.ehis.claimcal.domain.dto.UpdateClaimProductDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -111,7 +112,7 @@ public interface IClaimProductService
      * @param riskCodes 产品信息
      * @return 结果
      */
-    public int obtainClaimProduct(String[] riskCodes);
+    public ArrayList<String> obtainClaimProduct(String[] riskCodes);
 
     /**
      * 批量删除产品信息

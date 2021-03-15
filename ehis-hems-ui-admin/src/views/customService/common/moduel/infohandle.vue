@@ -8,14 +8,14 @@
         <el-col :span="22">
           <el-form-item label="业务处理情况：">
             <el-row>
-              <el-input  type="text" v-model="infoForm.status"/>
+              <el-input  type="text" v-model="infoForm.businessProcess"/>
             </el-row>
           </el-form-item>
         </el-col>
         <el-col :span="22">
           <el-form-item label="处理说明：" >
             <el-row>
-              <el-input type="textarea" :row="2" v-model="infoForm.discription"/>
+              <el-input type="textarea" :row="2" v-model="infoForm.remark"/>
             </el-row>
           </el-form-item>
         </el-col>
@@ -27,13 +27,31 @@
 export default {
   name: "infohandle",
   props: {
-    infohandle: Object
+    isDisabled: {
+      type:Boolean,
+      default:false
+    },
+    acceptInfo: {
+      type: Object,
+      default: function (){
+        return {}
+      }
+    },
+  },
+  watch: {
+    acceptInfo: function (newValue){
+      this.acceptData = newValue
+      console.log("infohandleValue");
+      console.info(newValue);
+      this.infoForm.businessProcess= this.acceptData.businessProcess,
+      this.infoForm.remark= this.acceptData.remark
+    }
   },
   data(){
     return {
       infoForm:{
-        status:'',
-        discription:'',
+        businessProcess:'',
+        remark:'',
       },
 
     }

@@ -164,7 +164,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="邮编：" prop="zipcode">
-                    <el-input v-model="baseForm.zipcode" class="item-width" clearable size="mini" placeholder="请输入"/>
+                    <el-input v-model="baseForm.zipcode" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -183,7 +183,7 @@
 
                 <el-col :span="8">
                   <el-form-item label="传真：" prop="portraiture">
-                    <el-input v-model="baseForm.portraiture" class="item-width" clearable size="mini"
+                    <el-input v-model="baseForm.portraiture" class="item-width" clearable size="mini" maxlength="20"
                               placeholder="请输入"/>
                   </el-form-item>
                 </el-col>
@@ -270,12 +270,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="经度：" prop="longitude">
-                    <el-input v-model="baseForm.longitude" class="item-width" clearable size="mini" placeholder="请输入" />
+                    <el-input v-model="baseForm.longitude" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="纬度：" prop="latitude">
-                    <el-input v-model="baseForm.latitude" class="item-width" clearable size="mini" placeholder="请输入" />
+                    <el-input v-model="baseForm.latitude" class="item-width" clearable size="mini" placeholder="请输入" maxlength="10"/>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -714,6 +714,7 @@ export default {
     }
 
     return {
+      initBussinessStatus: '',
       statusChange: true,
 
       type2Info:'',
@@ -1147,6 +1148,7 @@ export default {
           else {
             this.secondAttributeOptions=this.second_attribute_bOptions
           }
+          this.initBussinessStatus=this.baseForm.bussinessStatus
 
           if(this.baseForm.type=='03'){
             this.typeShow=true
@@ -1436,6 +1438,8 @@ export default {
           subFormSearch.orgFlag = this.activeName
           //存在调用基本信息保存的接口
           if (this.providerCode) {
+            //
+            subFormSearch.bussinessStatus=this.initBussinessStatus
             updateInfo(subFormSearch).then(res => {
               if (res.code == '200') {
                 this.$message({
@@ -1508,97 +1512,104 @@ export default {
 
     //  重置
     resetForm() {
-      this.$refs.baseForm.resetFields()
-      this.baseForm.areacode=''
+      this.$confirm('是否确认重置', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$refs.baseForm.resetFields()
+        this.baseForm.areacode = ''
 //  重置以后  调用查询方法
-      this.$refs['departmentInfo'].resetForm();
-      this.$refs['serviceInfo'].resetForm();
-      this.$refs['reserveInfo'].resetForm();
-      this.$refs['contactInfo'].resetForm();
-      this.$refs['closingInfo'].resetForm();
-      if(this.providerCode) {
-        let queryData ={
-          providerCode: this.providerCode,
-          orgFlag:'01'
+        this.$refs['departmentInfo'].resetForm();
+        this.$refs['serviceInfo'].resetForm();
+        this.$refs['reserveInfo'].resetForm();
+        this.$refs['contactInfo'].resetForm();
+        this.$refs['closingInfo'].resetForm();
+        if (this.providerCode) {
+          let queryData = {
+            providerCode: this.providerCode,
+            orgFlag: '01'
+          }
+          //调用服务机构基本信息查询
+          getInfo(queryData).then(res => {
+            this.baseForm = res.data
+            this.baseForm.address = []
+            if (res.data.province) {
+              this.baseForm.address[0] = res.data.province
+            }
+            if (res.data.city) {
+              this.baseForm.address[1] = res.data.city
+            }
+            if (res.data.district) {
+              this.baseForm.address[2] = res.data.district
+            }
+            if (this.baseForm.firstAttribute == '01') {
+              this.secondAttributeOptions = this.second_attribute_aOptions
+            } else {
+              this.secondAttributeOptions = this.second_attribute_bOptions
+            }
+
+            if (this.baseForm.type == '03') {
+              this.typeShow = true
+
+            }
+
+
+          }).catch(res => {
+          })
+          //调用科室信息查询
+          getdepInfo(queryData).then(res => {
+            if (res.data != null && res.data.length > 0) {
+              this.departmentForm.form = res.data
+              this.departmentForm.form.map((data, index) => {
+                data.id = index + 1
+                data.isSet = false
+              })
+            }
+          }).catch(res => {
+          })
+
+          getserviceInfo(queryData).then(res => {
+            if (res.data != null && res.data != '') {
+              this.serviceForm = res.data
+            }
+          }).catch(res => {
+          })
+
+          getapplyInfo(queryData).then(res => {
+            if (res.data != null && res.data != '') {
+              this.reserveInfoForm = res.data
+            }
+            this.flag = true
+          }).catch(res => {
+          })
+
+          getcontactsInfo(queryData).then(res => {
+            if (res.data != null && res.data.length > 0) {
+              this.contactInfoForm.contacts = res.data
+              this.contactInfoForm.contacts.map((data, index) => {
+                data.id = index + 1
+                data.isSet = false
+              })
+            }
+          }).catch(res => {
+          })
+          getbankInfo(queryData).then(res => {
+            if (res.data.baseProviderSettle != null && res.data.baseProviderSettle != '') {
+              this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
+            }
+            if (res.data.baseBankVo != null && res.data.baseBankVo.length > 0) {
+              this.closingFrom.baseBankVo = res.data.baseBankVo
+              this.closingFrom.baseBankVo.map((data, index) => {
+                data.id = index + 1
+                data.isSet = false
+              })
+            }
+          }).catch(res => {
+          })
         }
-        //调用服务机构基本信息查询
-        getInfo(queryData).then(res => {
-          this.baseForm = res.data
-          this.baseForm.address = []
-          if(res.data.province) {
-            this.baseForm.address[0] = res.data.province
-          }
-          if(res.data.city) {
-            this.baseForm.address[1] = res.data.city
-          }
-          if(res.data.district) {
-            this.baseForm.address[2] = res.data.district
-          }
-          if (this.baseForm.firstAttribute == '01') {
-            this.secondAttributeOptions = this.second_attribute_aOptions
-          } else {
-            this.secondAttributeOptions = this.second_attribute_bOptions
-          }
-
-          if (this.baseForm.type == '03') {
-            this.typeShow = true
-
-          }
-
-
-        }).catch(res => {
-        })
-        //调用科室信息查询
-        getdepInfo(queryData).then(res => {
-          if (res.data != null && res.data.length > 0) {
-            this.departmentForm.form = res.data
-            this.departmentForm.form.map((data, index) => {
-              data.id = index + 1
-              data.isSet = false
-            })
-          }
-        }).catch(res => {
-        })
-
-        getserviceInfo(queryData).then(res => {
-          if (res.data != null && res.data != '') {
-            this.serviceForm = res.data
-          }
-        }).catch(res => {
-        })
-
-        getapplyInfo(queryData).then(res => {
-          if (res.data != null && res.data != '') {
-            this.reserveInfoForm = res.data
-          }
-          this.flag = true
-        }).catch(res => {
-        })
-
-        getcontactsInfo(queryData).then(res => {
-          if (res.data != null && res.data.length > 0) {
-            this.contactInfoForm.contacts = res.data
-            this.contactInfoForm.contacts.map((data, index) => {
-              data.id = index + 1
-              data.isSet = false
-            })
-          }
-        }).catch(res => {
-        })
-        getbankInfo(queryData).then(res => {
-          if (res.data.baseProviderSettle != null && res.data.baseProviderSettle != '') {
-            this.closingFrom.baseProviderSettle = res.data.baseProviderSettle
-          }
-          if (res.data.baseBankVo != null && res.data.baseBankVo.length > 0) {
-            this.closingFrom.baseBankVo = res.data.baseBankVo
-            this.closingFrom.baseBankVo.map((data, index) => {
-              data.id = index + 1
-              data.isSet = false
-            })
-          }
-        }).catch(res => {
-        })
-      }
+      }).catch(() => {
+      })
 
     },
     changeAnnexFlag() {
@@ -1817,81 +1828,89 @@ export default {
     },
     //其他机构重置
     otherResetForm() {
-      this.$refs['otherBaseInfo'].resetForm();
-      this.$refs['otherServiceInfo'].resetForm();
-      this.$refs['otherReserveInfo'].resetForm();
-      this.$refs['otherClosingInfo'].resetForm();
-      this.$refs['otherContactInfo'].resetForm();
+      this.$confirm('是否确认重置', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
 
-      if(this.otherProviderCode) {
-        //调用基本信息查询的方法
-        let queryData={
-          providerCode: this.otherProviderCode,
-          orgFlag: '02'
+        this.$refs['otherBaseInfo'].resetForm();
+        this.$refs['otherServiceInfo'].resetForm();
+        this.$refs['otherReserveInfo'].resetForm();
+        this.$refs['otherClosingInfo'].resetForm();
+        this.$refs['otherContactInfo'].resetForm();
+
+        if (this.otherProviderCode) {
+          //调用基本信息查询的方法
+          let queryData = {
+            providerCode: this.otherProviderCode,
+            orgFlag: '02'
+          }
+          getInfo(queryData).then(res => {
+            this.otherBaseForm = res.data
+            this.otherBaseForm.address = []
+            if (res.data.province) {
+              this.otherBaseForm.address[0] = res.data.province
+            }
+            if (res.data.city) {
+              this.otherBaseForm.address[1] = res.data.city
+            }
+            if (res.data.district) {
+              this.otherBaseForm.address[2] = res.data.district
+            }
+
+
+          }).catch(res => {
+          })
+          //调用服务信息的方法
+
+          getserviceInfo(queryData).then(res => {
+            if (res.data != null && res.data != '') {
+              this.otherServiceForm = res.data
+            }
+
+          }).catch(res => {
+          })
+          //预约信息
+          getapplyInfo(queryData).then(res => {
+            if (res.data != null && res.data != '') {
+              this.otherReserveInfoForm = res.data
+            }
+            this.otherReserveInfoShow = true
+          }).catch(res => {
+          })
+
+          //联系信息
+          getcontactsInfo(queryData).then(res => {
+            if (res.data != null && res.data.length > 0) {
+              this.otherContactInfoForm.contacts = res.data
+              this.otherContactInfoForm.contacts.map((data, index) => {
+                data.id = index + 1
+                data.isSet = false
+              })
+            }
+          }).catch(res => {
+          })
+
+          //调用结算信息查询的方法
+          getbankInfo(queryData).then(res => {
+            if (res.data.baseProviderSettle != null && res.data.baseProviderSettle != '') {
+              this.otherClosingFrom.baseProviderSettle = res.data.baseProviderSettle
+            }
+            if (res.data.baseBankVo != null && res.data.baseBankVo.length > 0) {
+              this.otherClosingFrom.baseBankVo = res.data.baseBankVo
+              this.otherClosingFrom.baseBankVo.map((data, index) => {
+                data.id = index + 1
+                data.isSet = false
+              })
+            }
+
+          }).catch(res => {
+          })
+
         }
-        getInfo(queryData).then(res => {
-          this.otherBaseForm = res.data
-          this.otherBaseForm.address=[]
-          if(res.data.province) {
-            this.otherBaseForm.address[0] = res.data.province
-          }
-          if(res.data.city) {
-            this.otherBaseForm.address[1] = res.data.city
-          }
-          if(res.data.district) {
-            this.otherBaseForm.address[2] = res.data.district
-          }
-
-
-        }).catch(res => {
-        })
-        //调用服务信息的方法
-
-        getserviceInfo(queryData).then(res => {
-          if(res.data!=null && res.data!='') {
-            this.otherServiceForm = res.data
-          }
-
-        }).catch(res => {
-        })
-        //预约信息
-        getapplyInfo(queryData).then(res => {
-          if(res.data!=null && res.data!='') {
-            this.otherReserveInfoForm = res.data
-          }
-          this.otherReserveInfoShow=true
-        }).catch(res => {
-        })
-
-        //联系信息
-        getcontactsInfo(queryData).then(res => {
-          if(res.data!=null && res.data.length>0) {
-            this.otherContactInfoForm.contacts = res.data
-            this.otherContactInfoForm.contacts.map((data, index) => {
-              data.id = index + 1
-              data.isSet = false
-            })
-          }
-        }).catch(res => {
-        })
-
-        //调用结算信息查询的方法
-        getbankInfo(queryData).then(res => {
-          if(res.data.baseProviderSettle!=null && res.data.baseProviderSettle!='') {
-            this.otherClosingFrom.baseProviderSettle = res.data.baseProviderSettle
-          }
-          if(res.data.baseBankVo!=null && res.data.baseBankVo.length>0) {
-            this.otherClosingFrom.baseBankVo = res.data.baseBankVo
-            this.otherClosingFrom.baseBankVo.map((data, index) => {
-              data.id = index + 1
-              data.isSet = false
-            })
-          }
-
-        }).catch(res => {
-        })
-
-      }
+      }).catch(() => {
+      })
     },
     async otherSaveHandle() {
       //调用保存的接口 基本信息

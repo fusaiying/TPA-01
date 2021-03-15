@@ -10,7 +10,6 @@ import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
-import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -193,12 +193,26 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
 
     @Override
     public int updateStatus(String workOrderNo) {
-        return demandAcceptVoMapper.updateStatus(workOrderNo);
+        WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(workOrderNo);
+        workOrderAccept.setStatus("02");
+        workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+        workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+        return workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
     }
 
     @Override
     public int updateStatusM(String[] workOrderNos) {
-        return demandAcceptVoMapper.updateStatusM(workOrderNos);
+        List list= CollectionUtils.arrayToList(workOrderNos);
+        int count=0;
+        for (int i=0;i< list.size();i++){
+            WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(String.valueOf(list.get(i)));
+            workOrderAccept.setStatus("02");
+            workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
+            workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+            count ++;
+        }
+        return count;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)

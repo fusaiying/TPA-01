@@ -67,11 +67,11 @@ export function inspectionGetByIds(getIds) {
 
 //# 查询客户基本信息
 export function getPersonInfoData(params) {
-  // return request({
-  //   url: '/cs/spotCheck/getIds',
-  //   method: 'put',
-  //   data: params
-  // })
+   // return request({
+   //   url: '/cs/spotCheck/getIds',
+   //   method: 'put',
+   //   data: params
+   // })
 }
 
 //# 通过工单号查询工单详情

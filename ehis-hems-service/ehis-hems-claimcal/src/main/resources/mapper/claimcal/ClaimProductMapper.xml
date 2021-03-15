@@ -176,7 +176,7 @@
             <if test="updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where risk_code = #{riskCode} and update_by is null
+        where risk_code = #{riskCode}
     </update>
 
     <update id="updateClaimProductReset" parameterType="com.paic.ehis.claimcal.domain.ClaimProduct">
@@ -207,13 +207,28 @@
                act.synchronize_time, act.examine_conclusion, act.conclusion_explanation,
                act.status, act.create_by, act.create_time, act.update_by, act.update_time
         from (
-        select product.risk_code, product.risk_name, product.risk_nature,
-        product.risk_type, product.risk_class, product.risk_status,
-        product.synchronize_time, product.examine_conclusion, product.conclusion_explanation,
-        product.status, product.create_by, product.create_time, log.create_by as update_by, log.create_time as update_time
-        from claim_product product
-        inner join claim_product_task_log log on log.risk_code = product.risk_code
-        and log.risk_status ='03' and log.is_history = 'N' and product.status = 'Y' and log.update_by = '' or null) act order by update_time desc
+                 SELECT
+                     product.risk_code,
+                     product.risk_name,
+                     product.risk_nature,
+                     product.risk_type,
+                     product.risk_class,
+                     product.risk_status,
+                     product.synchronize_time,
+                     product.examine_conclusion,
+                     product.conclusion_explanation,
+                     product.STATUS,
+                     product.create_by,
+                     product.create_time,
+                     log.create_by AS update_by,
+                     log.create_time AS update_time
+                 FROM
+                     claim_product product
+                         INNER JOIN claim_product_task_log log ON log.risk_code = product.risk_code
+                         AND log.risk_status = '03'
+                         AND log.is_history = 'N'
+                         AND product.STATUS = 'Y'
+                         AND length(ifnull(log.update_by,'')) = 0) act order by act.update_time desc
     </select>
 
     <resultMap type="com.paic.ehis.claimcal.domain.ClaimProduct" id="ClaimProductResultTwo">

@@ -75,7 +75,7 @@ public class ClaimRuleController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ClaimRuleInfo claimRuleInfo)
     {
-//        claimRuleInfo.setCreateBy(SecurityUtils.getUsername());
+        claimRuleInfo.setCreateBy(SecurityUtils.getUsername());
         return toAjax(claimRuleService.insertClaimRuleInfo(claimRuleInfo));
     }
 

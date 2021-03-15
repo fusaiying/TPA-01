@@ -130,9 +130,9 @@ export default {
       this.manuaInfoForm.form.splice(index,1)
     },
     downHandle(index,row){
-      this.download('system/user/export', {
+     /* this.download('system/user/export', {
         ...this.manuaInfoForm.form[index]
-      }, `annex_${new Date().getTime()}.xlsx`)
+      }, `annex_${new Date().getTime()}.xlsx`)*/
     },
 
     handleSuccess(){

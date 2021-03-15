@@ -33,7 +33,7 @@ export function editCaseCheckBack(data) {
 //抽检完毕按钮，修改案件状态
 export function editCaseCheck(data) {
   return request({
-    url: '/system/case/editCaseCheck',
+    url: '/claimflow/case/editCaseCheck',
     method: 'post',
     data: data
   })

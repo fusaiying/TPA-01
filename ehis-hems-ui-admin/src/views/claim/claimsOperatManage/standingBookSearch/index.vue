@@ -222,7 +222,7 @@
           receiveDate: [],
           receiveStartDate: '',
           receiveEndDate: '',
-          organcode: undefined,//机构
+          organcode: '',//机构
           createBy: ''//操作人
         },
         totalCount: 0,
@@ -240,19 +240,10 @@
       this.claim_materialOptions = this.dictList.find(item => {
         return item.dictType === 'claim_material'
       }).dictDate
-      listFirst(this.searchForm).then(res => {
-        if (res != null && res.code === 200) {
-          this.standingForm.tableData = res.rows
-          this.standingForm.tableData.forEach(item => {
-            item.isEdit = true
-          })
-          this.totalCount = res.total
-        }
-      }).catch(res => {
-      })
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
           this.organCode=res.data.organCode
+          this.searchForm.organcode=res.data.organCode
           this.queryOrganCode = res.data.organCode
           this.queryUser = res.data.userName
           let item = {
@@ -264,6 +255,16 @@
             item.organCode = res.data.organCode
             this.searchForm.createBy = res.data.userName
           }
+          listFirst(this.searchForm).then(res => {
+            if (res != null && res.code === 200) {
+              this.standingForm.tableData = res.rows
+              this.standingForm.tableData.forEach(item => {
+                item.isEdit = true
+              })
+              this.totalCount = res.total
+            }
+          }).catch(res => {
+          })
           getOrganList(item).then(response => {
             if (response != null && response.code === 200) {
               this.deptOptions = response.rows
@@ -332,7 +333,7 @@
                   item.isEdit = true
                 })
                 this.totalCount = res.total
-                if (res.rows.length <= 0) {
+                if (!res.rows || res.rows.length <= 0) {
                   return this.$message.warning(
                     "未查询到数据！"
                   )
@@ -354,7 +355,7 @@
                 item.isEdit = true
               })
               this.totalCount = res.total
-              if (res.rows.length <= 0) {
+              if (!res.rows || res.rows.length <= 0) {
                 return this.$message.warning(
                   "未查询到数据！"
                 )
@@ -371,7 +372,7 @@
         this.searchForm.receiveEndDate = this.searchForm.receiveDate ? this.searchForm.receiveDate[1] : ''
         listNew(this.searchForm).then(res => {
 
-          if (res.rows.length > 0) {
+          if (res.rows && res.rows.length > 0) {
             this.isListExport = true
             /* let subDate = ''
              if (this.searchForm.receiveDate.length > 0) {

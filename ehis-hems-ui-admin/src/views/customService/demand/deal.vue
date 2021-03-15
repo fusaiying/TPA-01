@@ -527,13 +527,12 @@
             <el-input
               type="textarea"
               :rows="2"
-              placeholder="不超过500字符："
+              placeholder="请输入："
               v-model="ruleForm.costsIncurred"
             >
             </el-input>
           </el-form-item>
         </el-row>
-
       </el-form>
 
 
@@ -636,7 +635,7 @@ export default {
       ],
       remark: [
         {required: true, message: "处理说明不能为空", trigger: "blur"},
-        {min: 3, max: 100, message: '长度在 3 到 100 个字符'}
+        {min: 0, max: 2000, message: '长度2000 个字符'}
 
       ],
       customerFeedback: [
@@ -647,7 +646,7 @@ export default {
       ],
       costsIncurred: [
         {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"},
-        {min: 3, max: 100, message: '长度在 3 到 100 个字符'}
+        {min: 0, max: 2000, message: '长度2000 个字符以内'}
 
       ],
 
@@ -886,11 +885,11 @@ export default {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows[0]
           this.totalCount = res.total
-          if (res.rows.length <= 0) {
+         /* if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
             )
-          }
+          }*/
         }
       }).catch(res => {
 
@@ -904,11 +903,11 @@ export default {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
           this.ruleForm = res.data;
-          if (res.rows.length <= 0) {
+          /*if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
             )
-          }
+          }*/
         }
       }).catch(res => {
 

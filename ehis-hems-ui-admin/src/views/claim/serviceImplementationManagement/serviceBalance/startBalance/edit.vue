@@ -45,7 +45,7 @@
         </el-col>
 
         <el-col :span="8">
-          <el-form-item label="发票类型：" prop="balanceInvoiceType">
+          <el-form-item label="是否有发票：" prop="balanceInvoiceType">
             <el-select v-model="queryParams.balanceInvoiceType" class="item-width" size="mini" placeholder="请选择" >
               <el-option v-for="item in balanceInvoiceTypeOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue" />
             </el-select>

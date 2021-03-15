@@ -77,9 +77,6 @@ public class ClaimCaseStandingController extends BaseController
     @GetMapping("/listFirst")
     public TableDataInfo listFirst(ClaimCaseStandingDTO claimCaseStandingDTO)
     {
-        String name = SecurityUtils.getUsername();
-        int deptId = userMapper.selectDept(name);
-        claimCaseStandingDTO.setOrgancode(String.valueOf(deptId));
         startPage();
         List<ClaimCaseStandingVo1> list = claimCaseStandingService.selectClaimCaseStandingListFirst(claimCaseStandingDTO);
         return getDataTable(list);

@@ -194,9 +194,9 @@ public class ClaimProductController extends BaseController
 //    @PreAuthorize("@ss.hasPermi('system:product:edit')")
     @Log(title = "获取产品信息至个人池", businessType = BusinessType.UPDATE)
     @PutMapping(value = "/riskCodes")
-    public AjaxResult obtainProduct(@RequestBody String[] riskCodes)
+    public TableDataInfo obtainProduct(@RequestBody String[] riskCodes)
     {
-        return toAjax(claimProductService.obtainClaimProduct(riskCodes));
+        return getDataTable(claimProductService.obtainClaimProduct(riskCodes));
     }
 
     /**

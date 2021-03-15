@@ -7,10 +7,10 @@
 
 <!--    受理信息 -->
     <div id="#anchor-21" v-if="this.params.businessType=='01'" class="personInfo_class" style="margin-top: 5px;">
-      <demandAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled" />
+      <demandAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled" />
     </div>
     <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
-      <complaintAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled"/>
+      <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
     </div>
 <!--    流转信息-->
 <!--    <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">-->
@@ -18,31 +18,34 @@
 <!--    </div>-->
 <!--    附件信息-->
     <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
-      <attachmentList :attachmentInfoData="attachmentInfoData"/>
+      <attachmentList :attachmentInfoData="allList.attachmentInfoData"/>
     </div>
 <!--    处理信息-->
   <!--    信息需求-->
-    <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;">
-      <infohandle :acceptInfo="acceptInfo"  />
+    <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
+      <infohandle :acceptInfo="allList.acceptInfo"  />
     </div>
   <!--    投诉-->
-    <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;">
-      <complaintHandle :form="form"  />
+    <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
+      <complaintHandle :form="allList.form"  />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
-    <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;">
-      <inspectionProcessInfo :acceptInfo="acceptInfo"/>
+    <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
+      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo"/>
     </div>
   <!--    投诉-->
-    <div id="#anchor-62">
-<!--      <complaintProcessInfo :acceptInfo="acceptInfo"/>-->
+    <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
+      <complaintProcessInfo :acceptInfo="allList.acceptInfo"/>
     </div>
-
-      <el-row :gutter=20 style="float: right" >
-        <el-button @click="submit()" >结案</el-button>
-        <el-button @click="submit()">案件复核</el-button>
+    <div class="personInfo_class" style="margin-top: 5px;">
+      <el-row :gutter=20 style="float: right"  >
+        <el-button type="primary" @click="submit()" v-if="this.params.businessType=='01'">结案</el-button>
+        <el-button type="primary" @click="submit()" v-if="this.params.businessType=='01'">案件复核</el-button>
+        <el-button type="primary" @click="submit()" v-if="this.params.businessType=='03'">结案</el-button>
+        <el-button type="primary" @click="submit()" v-if="this.params.businessType=='03'">退回修改</el-button>
       </el-row>
+    </div>
   </div>
 </template>
 <script>
@@ -59,6 +62,7 @@ import {
   getAcceptInfoByTypeOrId,
   getAttachmentListById,
   getComplaintHandleInfo,
+  insertItem,
 } from '@/api/customService/spotCheck';
 
 import {mapGetters} from 'vuex'
@@ -93,32 +97,82 @@ export default {
       isSave: false,
       btnArr: [],
       //定义子页面对象
-      acceptInfo: {},
-      form: {
-        level1: '',
-        level2: '',
-        pieceworkFlag: '',
-        complaintStatus: '',
-        faseReason: '',
-        repeatedComplaint: '',
-        reason1: '',
-        reason2: '',
-        reason3: '',
-        complaintLink: '',
-        complaintQuestion: '',
-        outsideState: '',
-        riskType: '',
-        marketChannel: '',
-        complaintCategory: '',
-        customerFeedback: '',
-        rootImprovement: '',
-        actPromptly: '',
-        rootDepartment: '',
-        actionCause: '',
-        treatmentResult: '',
+      itemList:[],
+      type:'',
+
+      allList:{
+        attachmentInfoData: [],
+        acceptInfo:{},
+        form: {
+          level1: '',
+          level2: '',
+          pieceworkFlag: '',
+          complaintStatus: '',
+          faseReason: '',
+          repeatedComplaint: '',
+          reason1: '',
+          reason2: '',
+          reason3: '',
+          complaintLink: '',
+          complaintQuestion: '',
+          outsideState: '',
+          riskType: '',
+          marketChannel: '',
+          complaintCategory: '',
+          customerFeedback: '',
+          rootImprovement: '',
+          actPromptly: '',
+          rootDepartment: '',
+          actionCause: '',
+          treatmentResult: '',
+        },
+        inspection:{
+          appeal :[
+            {
+              appealName: '是否申诉',
+              appealFlag : '',
+              appealReason: '',
+            }
+          ],
+          items:[
+            {
+              itemKey:'是否时效内响应客户',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否符合短信结案规则',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否电话通知客户',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否满足客户诉求',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否及时升级投诉',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否规范记录',
+              value:'',
+              remark:'',
+            },
+            {
+              itemKey:'是否有其他错误',
+              value:'',
+              remark:'',
+            },
+          ]
+        },
       },
-      infoForm:{},
-      attachmentInfoData: [],
       //接收的参数对象
       params: {},
       isDisabled:true,
@@ -127,10 +181,6 @@ export default {
       dictList: [],
       delivery_sourceOption: [],
       applicantData: {},
-
-
-
-
     }
 
   },
@@ -146,7 +196,7 @@ export default {
       getAcceptInfoByTypeOrId(query).then(res => {
         if (res != null && res.code === 200) {
           console.info(res.data);
-          this.acceptInfo=res.data;
+          this.allList.acceptInfo=res.data;
         }
       }).catch(res => {
       })
@@ -154,16 +204,17 @@ export default {
       getAttachmentListById(query).then(res => {
         if (res != null && res.code === 200) {
           console.info(res.data);
-          this.attachmentInfoData=res.data;
+          this.allList.attachmentInfoData=res.data;
         }
       }).catch(res => {
       })
       getComplaintHandleInfo(query).then(res => {
         if (res !== null && res.code === 200) {
-          this.form = res.data;
+          this.allList.form = res.data;
         }
       }).catch( res => {
       });
+
     }
   },
   async mounted() {
@@ -204,7 +255,55 @@ export default {
 
   methods: {
     submit(){
-      insertItem(this.inspection)
+      let data=this.$refs.inspectionProcessInfo.inspection
+
+      const value1=[];
+
+      for(var i=0;i<data.appeal.length;i++ ){
+          value1[i]=data.appeal[i].appealFlag;
+      }
+      console.log(value1,"59451")
+      this.allList.inspection.items=[]
+      for (let i = 0; i < data.items.length; i++) {
+        this.allList.inspection.items.push({
+          itemKey: data.items[i].itemKey,
+          value: data.items[i].value,
+          itemRemark: data.items[i].itemRemark,
+        });
+      }
+      this.allList.inspection.appeal=[]
+      for (let i = 0; i < data.appeal.length; i++) {
+        this.allList.inspection.appeal.push({
+          appealName: data.appeal[i].appealName,
+          appealFlag: data.appeal[i].appealFlag,
+          appealReason: data.appeal[i].appealReason,
+        });
+      }
+      if(value1.includes('01')){
+        const save={
+            itemList: this.allList,
+            type: this.allList.acceptInfo.businessType
+        }
+        console.log(save,"ssssssssssss")
+        insertItem(save).then(response => {
+          if (response.code === 200) {
+            this.$message.success('保存成功!');
+          }
+        })
+      }else{
+        const save={
+            itemList: this.allList.inspection,
+            type: this.allList.acceptInfo.businessType
+        }
+        console.log(save,"+++++++++++++????")
+        insertItem(save).then(response => {
+          if (response.code === 200) {
+            this.$message.success('保存成功!');
+          }
+        })
+      }
+
+
     },
     changeSaveFlag() {
       this.isSave = true

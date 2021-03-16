@@ -331,7 +331,7 @@
             <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsSecondNumber">
               分机号
               <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 145px"
-                        maxlength="50"/>
+                        maxlength="4"/>
             </el-form-item>
           </el-col>
 

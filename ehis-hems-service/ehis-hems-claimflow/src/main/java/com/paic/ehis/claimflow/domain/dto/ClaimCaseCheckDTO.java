@@ -50,4 +50,8 @@ public class ClaimCaseCheckDTO extends BaseEntity {
     /** 案件状态 */
     @Excel(name = "案件状态")
     private String caseStatus;
+
+    /** 追讨金额 */
+    @Excel(name = "追讨金额")
+    private BigDecimal debtAmount;
 }

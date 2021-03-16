@@ -481,22 +481,6 @@ export default {
               this.changeAllotDialogVisable()
 
               this.loading = true
-
-              this.params= {
-                pageNum: 1,
-                  pageSize: 10,
-                  supplierCode:'',
-                  productCode:'',
-                  applyStartTime: '',
-                  applyEndTime: '',
-                  name:'',
-                  idCode:'',
-                  phone:'',
-                  policyNo:'',
-                  policyCertificateNo:'',
-                  bussinessStatus:'',
-                  orderCode:''
-              },
               //调用查询接口
               getList(this.params).then(res => {
                 this.tableData = res.rows;

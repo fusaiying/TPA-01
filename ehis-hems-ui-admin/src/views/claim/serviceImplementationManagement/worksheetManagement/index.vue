@@ -381,14 +381,11 @@ export default {
     searchHandle() {
       const values = Object.values(this.formSearch)
       let flag= values.some(item => {return  item!=null && item !='' })
-      if(flag){
+
         this.params.pageSize=10
         this.params.pageNum=1
         this.getData()
-      }
-      else {
-        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
-      }
+
     },
     getData() {
       this.params.supplierCode= this.formSearch.supplierCode
@@ -481,6 +478,22 @@ export default {
                 center: true,
                 showClose: true
               })
+              this.changeAllotDialogVisable()
+
+              this.loading = true
+              let query={
+                pageNum: 1,
+                pageSize:10
+              }
+              //调用查询接口
+              getList(query).then(res => {
+                this.tableData = res.rows;
+                this.totalCount = res.total;
+                this.loading = false;
+              }).catch(res => {
+                this.loading = false
+              })
+
             } else {
               this.$message({
                 message: '分配失败!',

@@ -94,6 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="insuredName != null  and insuredName != ''"> and woa.insured_name = #{insuredName}</if>
         <if test="idNumber != null  and idNumber != ''"> and pi.id_number = #{idNumber}</if>
         <if test="mobilePhone != null  and mobilePhone != ''"> and pi.mobile_phone = #{mobilePhone}</if>
+        <if test="organCode != null  and organCode != ''"> and woa.organ_code = #{organCode}</if>
         <if test="appointmentStartDate != null ">
             and DATE_FORMAT(adi.prop18,'%Y-%m-%d') <![CDATA[>=]]> #{appointmentStartDate}
         </if>
@@ -117,25 +118,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     <select id="selectQualityVo" parameterType="com.paic.ehis.cs.domain.dto.QualityDTO" resultMap="QualityResult">
     SELECT DISTINCT
-	qia.work_order_no,
-	qia.updated_by,
-	qia.updated_time,
-	qia.result,
-	woa.organ_code,
-	woa.end_date,
-	adi.item_code,
-	qii.item_type
-FROM
-	quality_inspection_accept qia,
-	work_order_accept woa,
-	accept_detail_info adi,
-	quality_inspection_item qii,
-	quality_inspection_handle qih
-WHERE
-	qia.work_order_no = qih.work_order_id
-	AND qih.inspection_id = qii.inspection_id
-	AND qia.work_order_no = woa.work_order_no
-	AND qia.work_order_no = adi.work_order_no
+        qia.work_order_no,
+        qia.updated_by,
+        qia.updated_time,
+        qia.result,
+        woa.organ_code,
+        woa.end_date,
+        adi.item_code,
+        qii.item_type
+    FROM
+        quality_inspection_accept qia,
+        work_order_accept woa,
+        accept_detail_info adi,
+        quality_inspection_item qii,
+        quality_inspection_handle qih
+    WHERE
+        qia.work_order_no = qih.work_order_id
+        AND qih.inspection_id = qii.inspection_id
+        AND qia.work_order_no = woa.work_order_no
+        AND qia.work_order_no = adi.work_order_no
 	<where>
         <if test="endDate != null and endDate != ''"> and woa.end_date = #{endDate}</if>
         <if test="updatedTime != null and updatedTime != ''"> and qia.updated_time = #{updatedTime}</if>

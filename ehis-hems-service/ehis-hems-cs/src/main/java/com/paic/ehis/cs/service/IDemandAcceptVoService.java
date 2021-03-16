@@ -2,6 +2,7 @@ package com.paic.ehis.cs.service;
 
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 
@@ -9,9 +10,19 @@ import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import java.util.List;
 
 public interface IDemandAcceptVoService {
-    public List<DemandAcceptVo> selectDemandAcceptList(AcceptDTO acceptDTO);
+    /**
+     * 信息需求公共池
+     * @param workOrderQueryDTO
+     * @return
+     */
+    public List<DemandAcceptVo> selectDemandAcceptList(WorkOrderQueryDTO workOrderQueryDTO);
 
-    public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO);
+    /**
+     * 信息需求个人池
+     * @param workOrderQueryDTO
+     * @return
+     */
+    public List<DemandAcceptVo> selectDemandAcceptList2(WorkOrderQueryDTO workOrderQueryDTO);
 
     public DemandAcceptVo selectDemandAcceptVo(String workOrderNo);
 
@@ -25,10 +36,10 @@ public interface IDemandAcceptVoService {
 
     /**
      * 协办工作池
-     * @param acceptDTO
+     * @param workOrderQueryDTO
      * @return
      */
-    List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO);
+    List<DemandAcceptVo> selectAssist(WorkOrderQueryDTO workOrderQueryDTO);
 
     /**
      * 工单查询

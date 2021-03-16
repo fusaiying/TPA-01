@@ -9,6 +9,7 @@ import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.*;
@@ -42,10 +43,14 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Autowired
     private HcsModificationMapper hcsModificationMapper;
 
-
+    /**
+     * 信息需求公共池实现
+     * @param workOrderQueryDTO
+     * @return
+     */
     @Override
-    public List<DemandAcceptVo> selectDemandAcceptList(AcceptDTO acceptDTO) {
-        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptList(WorkOrderQueryDTO workOrderQueryDTO) {
+        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList(workOrderQueryDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";
         List<FieldMap> KVMap = fieldMapMapper.selectKVMap(targetTableName, sourceName);
@@ -90,10 +95,15 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return demandAcceptVos;
     }
 
+    /**
+     * 信息需求个人池实现
+     * @param workOrderQueryDTO
+     * @return
+     */
     @Override
-    public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO) {
-        acceptDTO.setUpdateBy(SecurityUtils.getUsername());
-        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptList2(WorkOrderQueryDTO workOrderQueryDTO) {
+
+        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(workOrderQueryDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";
         List<FieldMap> KVMap = fieldMapMapper.selectKVMap(targetTableName, sourceName);
@@ -659,12 +669,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     /**
      * 协办工作池查询
      *
-     * @param acceptDTO
+     * @param workOrderQueryDTO
      * @return
      */
     @Override
-    public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO) {
-        return demandAcceptVoMapper.selectAssist(acceptDTO);
+    public List<DemandAcceptVo> selectAssist(WorkOrderQueryDTO workOrderQueryDTO) {
+        return demandAcceptVoMapper.selectAssist(workOrderQueryDTO);
     }
 
 

@@ -70,4 +70,18 @@ public interface ClaimCaseAppealTaskMapper
      */
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo);
 
+    /**
+     * 获取taskId
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    public Long getTaskId();
+
+    /**
+     * 获取申诉成功后的报案号
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    public String getAppealNewRptNo(String appealRptNo);
+
 }

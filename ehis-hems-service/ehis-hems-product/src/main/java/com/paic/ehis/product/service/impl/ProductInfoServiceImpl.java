@@ -11,6 +11,7 @@ import com.paic.ehis.product.domain.*;
 import com.paic.ehis.product.mapper.ProductCheckInfoMapper;
 import com.paic.ehis.product.mapper.ProductManagerLogMapper;
 import com.paic.ehis.product.utils.Dateutils;
+import com.paic.ehis.system.api.GetProviderInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.product.mapper.ProductInfoMapper;
@@ -37,6 +38,9 @@ public class ProductInfoServiceImpl implements IProductInfoService
     @Autowired
     private ProductCheckInfoMapper productCheckInfoMapper;
 
+    @Autowired
+    private GetProviderInfoService getProviderInfoService;
+
 
     /**
      * 查询base_product_info(服务产品)
@@ -59,16 +63,22 @@ public class ProductInfoServiceImpl implements IProductInfoService
     @Override
     public List<ProductInfo> selectProductInfoList(ProductInfo productInfo) throws Exception
     {
-        if(productInfo != null){
             return productInfoMapper.selectProductInfoList(productInfo);
+    }
 
-        }else{
-            Map map = Dateutils.getCurrontTime1();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
-            productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
-            return productInfoMapper.selectDefaultListist(productInfo);
-        }
+    /**
+     * 默认查询base_product_info(服务产品)列表
+     * @return base_product_info(服务产品)
+     * @throws Exception
+     */
+    @Override
+    public List<ProductInfo> selectProductInfoListNull() throws Exception {
+        Map map = Dateutils.getCurrontTime1();
+        ProductInfo productInfo = new ProductInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
+        productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return productInfoMapper.selectDefaultListist(productInfo);
     }
 
 
@@ -268,6 +278,20 @@ public class ProductInfoServiceImpl implements IProductInfoService
         return productInfoMapper.mangerList(productInfo);
     }
 
+    /**
+     *产品审核列表查询
+     */
+    @Override
+    public List<ProductInfo> mangerListNull() throws Exception
+    {
+        Map map = Dateutils.getCurrontTime1();
+        ProductInfo productInfo = new ProductInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        productInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//一个月前
+        productInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return productInfoMapper.selectMangerListNull(productInfo);
+    }
+
 
     /**
      *产品下线
@@ -311,12 +335,13 @@ public class ProductInfoServiceImpl implements IProductInfoService
 
 
     @Override
-    public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo){
+    public int insertSupplier(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo){
         //将之前的数据置失效
         int count = 0;
+        getProviderInfoService.insertSupplier(productSupplierInfoVo);
         productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
         if(!productSupplierInfoVo.getProductSupplierInfos().isEmpty()){
-            for(ProductSupplierInfo productSupplierInfo:productSupplierInfoVo.getProductSupplierInfos()){
+            for(com.paic.ehis.system.api.domain.ProductSupplierInfo productSupplierInfo:productSupplierInfoVo.getProductSupplierInfos()){
                 productSupplierInfo.setCreateTime(DateUtils.getNowDate());
                 productSupplierInfo.setCreateBy(SecurityUtils.getUsername());
                 productSupplierInfo.setUpdateBy(SecurityUtils.getUsername());
@@ -333,7 +358,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
     }
 
     @Override
-    public int updateSupplierStatus(ProductSupplierInfoVo productSupplierInfoVo){
+    public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo){
         int count = productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
         if(count <= 0){
             count =1;

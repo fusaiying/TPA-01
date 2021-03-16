@@ -75,8 +75,10 @@
           </el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">编辑</el-button>
+              <el-button v-if="scope.row.bussinessStatus =='01' || scope.row.bussinessStatus =='05' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="updateHandle(scope.row)">编辑</el-button>
               <el-button v-if="scope.row.bussinessStatus =='01' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="delHandle(scope.$index,scope.row)">删除</el-button>
+              <el-button v-if="scope.row.bussinessStatus =='03' || scope.row.bussinessStatus =='04' ? true:false" type="text" size="mini" style="color: #1890ff;" @click="viewHandle(scope.$index,scope.row)">查看</el-button>
+
             </template>
           </el-table-column>
         </el-table>
@@ -107,7 +109,7 @@
 </template>
 
 <script>
-import {deleteProductInfo,getList} from '@/api/productManage/serviceProductManagement'
+import {deleteProductInfo,getList,listNull} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -156,8 +158,12 @@ export default {
   methods: {
     init(){
       this.loading = true
-      //调用查询接口
-      getList(this.params).then(res => {
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      listNull(query).then(res => {
         this.tableData = res.rows;
         this.totalCount = res.total;
         this.loading = false;
@@ -236,7 +242,7 @@ export default {
         this.getData()
       }
       else {
-        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
+        this.$message({message: '至少录入一个查询条件', type: 'warning', showClose: true, center: true})
       }
 
     },
@@ -263,6 +269,22 @@ export default {
     resetForm() {
       this.$refs.searchForm.resetFields()
       this.formSearch={}
+
+      this.loading = true
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      listNull(query).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+
+
     },
 
     addHandle(row) {
@@ -280,6 +302,16 @@ export default {
         query: {productCode: row.productCode,
           status: 'edit'
 
+        }
+      })
+    },
+    //查看
+    viewHandle(index,row){
+      this.$router.push({
+        path: '/service-product/productReview/edit',
+        query: {productCode: row.productCode,
+          status: 'review',
+          node:'view'
         }
       })
     }

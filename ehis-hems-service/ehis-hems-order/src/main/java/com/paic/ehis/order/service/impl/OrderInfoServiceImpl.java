@@ -110,6 +110,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService
         orderInfo.setInpatientArea(StringUtils.join(orderInfo.getInpatientAreaList(), ","));
         orderInfo.setExpectedArea(StringUtils.join(orderInfo.getExpectedAreaList(), ","));
         orderInfo.setCity(StringUtils.join(orderInfo.getCityList(), ","));
+        orderInfo.setSupplierCode(orderInfo.getSupplierCode());
         return orderInfoMapper.updateOrderInfo(orderInfo);
     }
 

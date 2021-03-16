@@ -191,6 +191,24 @@ export default {
     resetForm() {
       this.$refs.searchForm.resetFields()
       this.formSearch={}
+      this.params={
+          pageNum: 1,
+          pageSize: 10,
+          productCode: '',
+          productChname: '',
+          productType: '',
+          bussinessStatus: ''
+      },
+
+      this.loading = true
+      //调用查询接口
+      checkList(this.params).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
     },
 
 

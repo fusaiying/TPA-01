@@ -66,6 +66,16 @@ public class ProductInfoController extends BaseController
     }
 
 
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/listNull")
+    public TableDataInfo list() throws Exception
+    {
+        startPage();
+        List<ProductInfo> list = productInfoService.selectProductInfoListNull() ;
+        return getDataTable(list);
+    }
+
+
     /**
      * 导出base_product_info(服务产品)列表
      */
@@ -259,6 +269,19 @@ public class ProductInfoController extends BaseController
     }
 
     /**
+     * 查询base_product_info(服务产品)列表待审核状态 无参
+     * @return
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @GetMapping("/mangerListNull")
+    public TableDataInfo mangerList()  throws Exception
+    {
+        startPage();
+        List<ProductInfo> list = productInfoService.mangerListNull() ;
+        return getDataTable(list);
+    }
+
+    /**
      * 产品下线
      */
    // @PreAuthorize("@ss.hasPermi('system:info:add')")
@@ -302,7 +325,7 @@ public class ProductInfoController extends BaseController
     @PostMapping("/insertSupplier")
     public AjaxResult insertSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
-        return getProviderInfoService.insertSupplier(productSupplierInfoVo);
+        return toAjax(productInfoService.insertSupplier(productSupplierInfoVo));
     }
 
 
@@ -311,7 +334,7 @@ public class ProductInfoController extends BaseController
      */
     //@PreAuthorize("@ss.hasPermi('system:info:add')")
     @PostMapping("/updateSupplierStatus")
-    public AjaxResult updateSupplierStatus(@RequestBody ProductSupplierInfoVo productSupplierInfoVo)
+    public AjaxResult updateSupplierStatus(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
     {
         return toAjax(productInfoService.updateSupplierStatus(productSupplierInfoVo));
     }

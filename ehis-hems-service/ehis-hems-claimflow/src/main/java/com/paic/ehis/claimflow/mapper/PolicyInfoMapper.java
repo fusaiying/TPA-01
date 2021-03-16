@@ -3,10 +3,13 @@ package com.paic.ehis.claimflow.mapper;
 import com.paic.ehis.claimflow.domain.ClaimCaseShuntClass;
 import com.paic.ehis.claimflow.domain.CustomerInfoMap;
 import com.paic.ehis.claimflow.domain.PolicyInfo;
+import com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO;
 import com.paic.ehis.claimflow.domain.dto.PolicyDTO;
 import com.paic.ehis.claimflow.domain.interfaceclass.InsuredNoAndName;
 import com.paic.ehis.claimflow.domain.vo.DutyVo;
+import com.paic.ehis.claimflow.domain.vo.PolicyListVo;
 import com.paic.ehis.claimflow.domain.vo.PolicyVo;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  * @author sino
  * @date 2021-01-09
  */
+@Mapper
 public interface PolicyInfoMapper 
 {
     /**
@@ -86,4 +90,7 @@ public interface PolicyInfoMapper
     List<PolicyInfo> selectPolicyInfoByInsuredNo(ClaimCaseShuntClass claimCaseShuntClass);
 
     List<PolicyInfo> selectPolicyInfoListByinsuredNo(InsuredNoAndName claimCaseShuntClass);
+
+    List<PolicyListVo> selectPolicyList(ClaimFlowDTO claimFlowDTO);
+
 }

@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
@@ -205,12 +205,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人姓名：" prop="callCenterId">
-              <el-input v-model="workPoolData.contactsPerson.name" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -225,12 +225,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人地址：" prop="address">
-              <el-input v-model="workPoolData.contactsPerson.address" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.address" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户号：" prop="phone">
-              <el-input v-model="workPoolData.insuredNo" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.insuredNo" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -245,19 +245,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="E-MAIL：" prop="phone">
-              <el-input v-model="workPoolData.email" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.email" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人移动电话：" prop="mobilePhone">
-              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -270,14 +270,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人姓名：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.name" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.complainantPerson.name" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="投诉人性别：" prop="complainantPerson.sex">
-              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width"  >
+            <el-form-item label="投诉人性别：" prop="phone">
+              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width" placeholder="">
                 <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -285,7 +285,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width"  >
+              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width" placeholder="">
                 <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -293,14 +293,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="家庭电话：" prop="phone">
-              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -919,9 +919,6 @@ export default {
     this.cs_question_circ = this.dictList.find(item => {
       return item.dictType === 'cs_question_circ'
     }).dictDate
-
-
-
   },
   methods: {
     //

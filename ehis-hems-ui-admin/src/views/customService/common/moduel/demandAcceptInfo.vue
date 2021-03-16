@@ -110,10 +110,10 @@
       <el-row>
         <el-col :span="16">
           <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-            国家区号:+<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable style="width: 75px"/>
-            区号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
-            号码<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
-            分机号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
+            国家区号+<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable style="width: 75px"/>
+            区号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 75px" maxlength="50"/>
+            号码<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 120px" maxlength="50"/>
+            分机号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 75px" maxlength="50"/>
           </el-form-item>
         </el-col>
       </el-row>

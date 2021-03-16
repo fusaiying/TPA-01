@@ -6,6 +6,7 @@
     <resultMap type="com.paic.ehis.cs.domain.vo.ComplaintAcceptVo" id="ComplaintAcceptVoResult">
         <result property="workOrderNo" column="work_order_no"/>
         <result property="businessType" column="business_type"/>
+        <result property="businessService" column="business_service"/>
         <result property="policyNo" column="policy_no"/>
         <result property="policyItemNo" column="policy_item_no"/>
         <result property="riskCode" column="risk_code"/>
@@ -149,6 +150,7 @@
     <select id="selectComplaintAcceptVo" parameterType="string" resultMap="ComplaintAcceptVoResult">
 SELECT
 	a.work_order_no,
+    concat( b.business_type, '-', a.item_code ) AS business_service,
 	a.channel_code,
     a.item_code,
 	a.call_center_id,

@@ -1086,17 +1086,59 @@ WHERE
 
     <select id="getServiceInfo" resultMap="BaseServiceInfoResult">
         SELECT
-        serial_no,
-        service_code,
-        service_name,
-        category_code,
-        (select distinct category from base_service_category_kind where codeI = base_service_info.category_code) category_name,
-        servertype_code,
-        (select variety from base_service_category_kind where codeII = base_service_info.servertype_code) servertype_name,
-        concat_ws('-',service_code,service_name) serviceCodeName,
-        concat_ws('-',category_code,category_name) categoryCodeName,
-        concat_ws('-',servertype_code,servertype_name) typeCodeName
-        FROM base_service_info
+            serial_no,
+            service_code,
+            service_name,
+            category_code,
+            (
+                SELECT DISTINCT
+                    category
+                FROM
+                    base_service_category_kind
+                WHERE
+                    codeI = base_service_info.category_code
+            ) category_name,
+            servertype_code,
+            (
+                SELECT
+                    variety
+                FROM
+                    base_service_category_kind
+                WHERE
+                    codeII = base_service_info.servertype_code
+            ) servertype_name,
+            concat_ws(
+                '-',
+                service_code,
+                service_name
+            ) serviceCodeName,
+            concat_ws(
+                '-',
+                category_code,
+                (
+                    SELECT DISTINCT
+                        category
+                    FROM
+                        base_service_category_kind
+                    WHERE
+                        codeI = base_service_info.category_code
+                )
+            ) categoryCodeName,
+            concat_ws(
+                '-',
+                servertype_code,
+                (
+                    SELECT
+                        variety
+                    FROM
+                        base_service_category_kind
+                    WHERE
+                        codeII = base_service_info.servertype_code
+                )
+            ) typeCodeName
+        FROM
+            base_service_info
+        where state='Y' and status='02'
     </select>
 
     <select id="getSupplierInfo"  resultMap="SupplierInfoResult">

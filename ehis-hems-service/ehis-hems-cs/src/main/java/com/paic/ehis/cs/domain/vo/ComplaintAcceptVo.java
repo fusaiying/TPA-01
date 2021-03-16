@@ -9,7 +9,6 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-
 public class ComplaintAcceptVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -23,6 +22,8 @@ public class ComplaintAcceptVo extends BaseEntity {
     /** 业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义； */
     @Excel(name = "业务类型 业务类型：区分信息需求，投诉，预约等类型；码值待定义；")
     private String businessType;
+
+    private String businessService;
 
     @Excel(name = "受理渠道 信息需求受理渠道")
     private String channelCode;

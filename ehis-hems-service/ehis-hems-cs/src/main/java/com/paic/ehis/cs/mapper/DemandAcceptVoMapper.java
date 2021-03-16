@@ -6,15 +6,16 @@ import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.PersonInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 
 import java.util.List;
 
 public interface DemandAcceptVoMapper {
-    public List<DemandAcceptVo> selectDemandAcceptVoList(AcceptDTO acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptVoList(WorkOrderQueryDTO workOrderQueryDTO);
 
-    public List<DemandAcceptVo> selectDemandAcceptVoList2(AcceptDTO acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptVoList2(WorkOrderQueryDTO workOrderQueryDTO);
 
     public List<WorkOrderVo> selectWorkOrder(AcceptDTO acceptDTO);
 
@@ -22,10 +23,10 @@ public interface DemandAcceptVoMapper {
 
     /**
      * 查询协办工作池
-     * @param acceptDTO
+     * @param workOrderQueryDTO
      * @return
      */
-    public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO);
+    public List<DemandAcceptVo> selectAssist(WorkOrderQueryDTO workOrderQueryDTO);
 
     public DemandAcceptVo selectDemandAcceptVoById(String workOrderNo);
 

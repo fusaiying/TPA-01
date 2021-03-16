@@ -650,7 +650,7 @@
                   <el-option
                     v-for="dict in currencys"
                     :key="dict.dictValue"
-                    :label="dict.dictValue+' - '+dict.dictLabel"
+                    :label="dict.dictLabel"
                     :value="dict.dictValue"
                   />
                 </el-select>
@@ -1527,7 +1527,7 @@
       this.getDicts("contract_limit_type").then(response => {
         this.contractLimitTypes = response.data;
       });
-      this.getDicts("claim_currency").then(response => {
+      this.getDicts("currency").then(response => {
         this.currencys = response.data;
       });
       this.getDicts("clearing_form").then(response => {

@@ -193,7 +193,7 @@
           listConditionsForTheAdjustmentOverNew(this.searchForm).then(res => {
             if (res.rows.length>0){
               this.isListExport=true
-              this.download('system/case/exportcaseCheckOver', {
+              this.download('claimflow/case/exportcaseCheckOver', {
                 ...this.searchForm
               }, `sportCheck_${new Date().getTime()}.xlsx`)
             }else {

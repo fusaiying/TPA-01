@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
@@ -295,20 +295,20 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
-              国家区号:+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly
+              国家区号+
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini"
+                        style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -327,49 +327,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--        <el-row>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="出单机构：" prop="priority">-->
-        <!--              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>-->
-        <!--                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"-->
-        <!--                           :value="item.dictValue"/>-->
-        <!--              </el-select>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="是否涉及银行转账" prop="bank" >-->
-        <!--              <el-radio-group v-model="workPoolData.bankTransfer" disabled>-->
-        <!--                <el-radio   label="01">是</el-radio>-->
-        <!--                <el-radio   label="02">否</el-radio>-->
-
-        <!--              </el-radio-group>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
-        <!--        <el-row>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
         <el-row>
           <el-col :span="16">
             <el-form-item label="业务内容：" prop="textarea">
@@ -749,20 +706,6 @@ export default {
       isinit: 'Y',
       totalCount: 0,
       changeSerchData: {},
-      states: [],
-      serves: [{
-        value: '1',
-        label: '服务1'
-      }, {
-        value: '2',
-        label: '服务2'
-      }, {
-        value: '3',
-        label: '服务3'
-      }, {
-        value: '4',
-        label: '服务4'
-      }],
       dictList: [],
       cs_order_state: [],//状态
       cs_action_type: [],//操作类型
@@ -796,8 +739,6 @@ export default {
     this.getDicts("cs_order_state").then(response => {
       this.cs_order_state = response.data;
     });
-
-
   },
   async mounted() {
     // 字典数据统一获取
@@ -910,11 +851,10 @@ export default {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
           this.ruleForm = res.data;
-          /*if (res.rows.length <= 0) {
+          if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
             )
-          }*/
+          }
         }
       }).catch(res => {
 

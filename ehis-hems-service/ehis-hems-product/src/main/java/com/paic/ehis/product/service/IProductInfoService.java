@@ -30,6 +30,12 @@ public interface IProductInfoService
     public List<ProductInfo> selectProductInfoList(ProductInfo productInfo) throws Exception;
 
     /**
+     *查询base_product_info(服务产品)列表(无参)
+     * @return base_product_info(服务产品)集合
+     */
+    public List<ProductInfo> selectProductInfoListNull() throws Exception;
+
+    /**
      * 新增base_product_info(服务产品)
      * 
      * @param productInfo base_product_info(服务产品)
@@ -92,6 +98,11 @@ public interface IProductInfoService
      */
     public List<ProductInfo> mangerList(ProductInfo productInfo);
 
+    /**
+     *
+     * @return
+     */
+    public List<ProductInfo> mangerListNull() throws Exception;
 
     /**
      *产品下线
@@ -119,10 +130,10 @@ public interface IProductInfoService
     /**
      *供应商信息查询接口
      */
-    public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo);
+    public int insertSupplier(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
 
     /**
      *已经配置的供应商信息置为失效
      */
-    public int updateSupplierStatus(ProductSupplierInfoVo productSupplierInfoVo);
+    public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo);
 }

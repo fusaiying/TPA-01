@@ -26,8 +26,6 @@
             <el-form-item :prop="'items.' + scope.$index + '.value'" >
               <el-select v-model="scope.row.value" size="mini" placeholder="请选择">
                 <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
-                  <span style="float: left">{{ item.dictValue }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -47,7 +45,7 @@
           <el-input v-model="complaintProcess.score"/>
         </el-form-item>
       </el-row>
-      <el-table :data="complaintProcess.appeal" >
+      <el-table :data="complaintProcess.appeal" v-show="false">
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
@@ -88,6 +86,7 @@ export default {
 data(){
    return {
      dictList: [],
+     complaintProcessList: [],
      valueOptions: [],
      appealFlagOptions: [],
      complaintProcess: {
@@ -225,7 +224,30 @@ data(){
    }
 },
 created() {
+  this.params = JSON.parse(decodeURI(this.$route.query.data))
+  //获取受理信息
+  let query = {
+    workOrderNo: this.params.workOrderNo,
+    businessType: this.params.businessType,
+  }
+  if(this.complaintProcessList!==null){
+    this.data=this.complaintProcess;
+  }
+  getHandleInfoList(query).then(res => {
+    if(query.businessType === '01'){
+      if (res !== null && res.code === 200) {
+        this.inspectionList = res.rows;
+        console.log(this.inspectionList,'+++++++++5555555');
+      }
+    }else if(query.businessType === '03'){
+      if (res !== null && res.code === 200) {
+        this.complaintProcessList = res.rows;
+        console.log(this.allList.complaintProcess)
+      }
+    }
 
+  }).catch( res => {
+  });
 },
 async mounted() {
   await this.getDictsList(dictss).then(response => {

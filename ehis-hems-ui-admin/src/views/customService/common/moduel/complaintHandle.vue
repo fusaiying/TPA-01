@@ -4,7 +4,7 @@
       <span>投诉处理</span>
     </div>
     <el-form ref="ruleForm" :model="form" style="padding-bottom: 30px;" label-width="200px"
-             label-position="right" size="mini" disabled="true">
+             label-position="right" size="mini" :disabled="true">
       <el-row>
         <el-col :span="8">
           <el-form-item label="一级投诉分类：" prop="priority">

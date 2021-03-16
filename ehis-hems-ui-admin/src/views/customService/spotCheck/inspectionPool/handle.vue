@@ -13,9 +13,9 @@
       <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
     </div>
 <!--    流转信息-->
-<!--    <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">-->
-<!--      <complaintAcceptInfo :acceptInfo="acceptInfo" :isDisabled="isDisabled"/>-->
-<!--    </div>-->
+    <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">
+      <flowLogInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+    </div>
 <!--    附件信息-->
     <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
       <attachmentList :attachmentInfoData="allList.attachmentInfoData"/>
@@ -23,20 +23,20 @@
 <!--    处理信息-->
   <!--    信息需求-->
     <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <infohandle :acceptInfo="allList.acceptInfo"  />
+      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
     </div>
   <!--    投诉-->
     <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintHandle :form="allList.form"  />
+      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
     <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo" v-model="handleInfoList"/>
+      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo" :data="inspectionList"/>
     </div>
   <!--    投诉-->
     <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo" v-model="handleInfoList"/>
+      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"  :data="complaintProcessList"/>
     </div>
     <div class="personInfo_class" style="margin-top: 5px;">
       <el-row :gutter=20 style="float: right"  >
@@ -58,6 +58,7 @@ import complaintHandle from "@/views/customService/common/moduel/complaintHandle
 import infohandle from "@/views/customService/common/moduel/infohandle";//服务处理
 import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";//投诉处理信息
 import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";//质检处理信息
+import flowLogInfo from "@/views/customService/common/moduel/flowLogInfo";
 import {
   getAcceptInfoByTypeOrId,
   getAttachmentListById,
@@ -104,6 +105,9 @@ export default {
       appealReason : '',
       workOrderNo: '',
       score: '',
+      acceptInfoForm: {},
+      attachmentInfoForm: {},
+      formForm: {},
       allList:{
         attachmentInfoData: [],
         acceptInfo:{},
@@ -309,7 +313,8 @@ export default {
           ]
         }
       },
-      handleInfoList: [],
+      complaintProcessList: [],
+      inspectionList: [],
       //接收的参数对象
       params: {},
       isDisabled:true,
@@ -353,10 +358,18 @@ export default {
       });
 
       getHandleInfoList(query).then(res => {
+        if(query.businessType === '01'){
           if (res !== null && res.code === 200) {
-            this.handleInfoList = res.rows;
-
+            this.inspectionList = res.rows;
+            console.log(this.inspectionList,'+++++++++5555555');
+          }
+        }else if(query.businessType === '03'){
+          if (res !== null && res.code === 200) {
+            this.complaintProcessList = res.rows;
+            console.log(this.allList.complaintProcess)
+          }
         }
+
       }).catch( res => {
       });
 
@@ -404,7 +417,6 @@ export default {
       const value2=[];
       let data1={};
       let data2={};
-      console.log(data2,"????????????????")
       //判断类型为信息需求时是否申诉
       if(this.params.businessType=='01'){
         data1 = this.$refs.inspectionProcessInfo.inspection;
@@ -436,7 +448,6 @@ export default {
         for(var i=0;i<data2.appeal.length;i++ ){
           value2[i]=data2.appeal[i].appealFlag;
         }
-        console.log(value2,"59451")
         //获取投诉的所有分类，项目，值和说明
         this.allList.complaintProcess.items=[]
         for (let i = 0; i < data2.items.length; i++) {
@@ -457,11 +468,37 @@ export default {
           });
         }
       }
+      if (value1.includes('01')||value2.includes('01')) {
+          this.isDisabled=false;
+      }
       //如果是否存在差错存在是，那么上面的card可修改，并保存
-      if(value1.includes('01')){
-        const save={
-            itemList: this.allList,
-            businessType: this.allList.acceptInfo.businessType
+      if(value1.includes('01')||value2.includes('01')){
+        let save={}
+        if(this.allList.acceptInfo.businessType==='01'){
+          save={
+            itemList: this.allList.inspection.items,
+            appealFlag: data1.appeal[0].appealFlag,
+            appealReason: data1.appeal[0].appealReason,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+            attachmentInfoForm: this.allList.attachmentInfoData,
+            acceptInfoForm: this.allList.acceptInfo,
+
+          }
+          //当类型为03时数据保存
+        }else if(this.allList.acceptInfo.businessType==='03'){
+          save={
+            itemList: this.allList.complaintProcess.items,
+            appealFlag: data2.appeal[0].appealFlag,
+            appealReason: data2.appeal[0].appealReason,
+            score: data2.score,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+            formForm: this.allList.form,
+            acceptInfoForm: this.allList.acceptInfo,
+            attachmentInfoForm: this.allList.attachmentInfoData,
+
+          }
         }
         insertItem(save).then(response => {
           if (response.code === 200) {

@@ -11,6 +11,7 @@ import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealTaskMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,6 +102,16 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         if(bean.getDealType().equalsIgnoreCase("audit")) {
            if(bean.getIsAgree().equals("01")) {
                bean.setAppealStatus("03");
+               /**
+                * TODO:
+                初审决定选择同意，点击初审确认后，
+                此时申诉案件报案号为原报案号-1（流水），
+                并且流转至理赔审核岗原审核人工作池，
+                同时将原案件的批次信息、就诊人信息、申请人信息、收款人信息、受理信息、账单信息、赔付明细（重新匹配理算）、
+                赔付备注（类型为申诉案件）带入申诉案件中，需要重新进行赔付计算，重新下发赔付结论。
+                */
+               String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
+               bean.setNewRptNo(newRptNo);
            } else {
                bean.setAppealStatus("04");
            }
@@ -191,5 +202,23 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
             claimCaseAppealRecordMapper.updateClaimCaseAppealRecord(upDto);
         }
         return result;
+    }
+
+    /**
+     * 获取申诉成功后的报案号
+     * @author: hjw
+     * @time : 2021-3-15
+     */
+    private String getNewRptNo(String appealRptNo){
+        String appealNewRptNo = claimCaseAppealTaskMapper.getAppealNewRptNo(appealRptNo);
+        if(StringUtils.isBlank(appealNewRptNo)){
+            appealRptNo +="-1" ;
+        } else {
+            String[] rptArr = appealNewRptNo.split("-");
+            int endNo = Integer.valueOf(rptArr[1]) + 1;
+            appealRptNo += "-" + endNo;
+        }
+        return appealRptNo;
+
     }
 }

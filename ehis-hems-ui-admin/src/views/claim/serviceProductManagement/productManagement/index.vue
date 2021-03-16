@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import {mangerList,insertMangerInfo} from '@/api/productManage/serviceProductManagement'
+import {mangerList,insertMangerInfo,mangerListNull} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -131,7 +131,13 @@ export default {
         reason: ''
       },
       dialogVisable: false,
-      formSearch: {},
+      formSearch: {
+        productCode: '',
+        productChname: '',
+        productType: '',
+        bussinessStatus: ''
+
+      },
       checkIndex: '',
       params: {
         pageNum: 1,
@@ -169,8 +175,12 @@ export default {
   methods: {
     init(){
       this.loading = true
-      //调用查询接口
-      mangerList(this.params).then(res => {
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      mangerListNull(query).then(res => {
         this.tableData = res.rows;
         this.totalCount = res.total;
         this.loading = false;
@@ -294,6 +304,20 @@ export default {
     resetForm() {
       this.$refs.searchForm.resetFields()
       this.formSearch={}
+      this.loading = true
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      mangerListNull(query).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+
     },
 
 

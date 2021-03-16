@@ -115,7 +115,6 @@ export default {
     },
     // 处理跳转
     viewHandle(row, status) {
-      alert(row.batchNo)
       let data = encodeURI(
         JSON.stringify({
           batchNo: row.batchNo,

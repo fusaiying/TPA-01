@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import {deleteProductInfo,getList} from '@/api/productManage/serviceProductManagement'
+import {deleteProductInfo,getList,listNull} from '@/api/productManage/serviceProductManagement'
 
 
 export default {
@@ -158,8 +158,12 @@ export default {
   methods: {
     init(){
       this.loading = true
-      //调用查询接口
-      getList(this.params).then(res => {
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      listNull(query).then(res => {
         this.tableData = res.rows;
         this.totalCount = res.total;
         this.loading = false;
@@ -266,6 +270,21 @@ export default {
       this.$refs.searchForm.resetFields()
       this.formSearch={}
 
+      this.loading = true
+      //调用默认查询接口
+      let query={
+        pageNum: 1,
+        pageSize: 10
+      }
+      listNull(query).then(res => {
+        this.tableData = res.rows;
+        this.totalCount = res.total;
+        this.loading = false;
+      }).catch(res => {
+        this.loading = false
+      })
+
+
     },
 
     addHandle(row) {
@@ -289,8 +308,9 @@ export default {
     //查看
     viewHandle(index,row){
       this.$router.push({
-        path: '/service-product/productReview/edit',
-        query: {productCode: row.productCode,
+        path: '/service-product/productReview/view',
+        query: {
+          productCode: row.productCode,
           status: 'review',
           node:'view'
         }

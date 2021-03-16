@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="beforeDate != null   and nowDate != null ">
                 and (create_time between  #{beforeDate} and  #{nowDate})
             </if>
-            and status = 'Y' order by create_time desc
+            and status = 'Y' and bussiness_status in ('01','03','04','05') order by create_time desc
         </where>
     </select>
     

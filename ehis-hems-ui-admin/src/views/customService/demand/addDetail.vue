@@ -510,40 +510,40 @@ export default {
       historicalProblemData: Array,//上传附件用
       updateBy: undefined,
       baseInfo: {
-        policyNo: "",
-        policyItemNo: "",
-        appName: "",
+        policyNo: undefined,
+        policyItemNo: undefined,
+        appName: undefined,
         validStartDate: "",
         orgPolicyItemNo: "",
         validEndDate: "",
         policyRiskType: "",
         policyStatus: "",
         specialAgreement: "",
-        companyName: "",
-        companyCode: "",
+        companyName: undefined,
+        companyCode: undefined,
         policyType: "",
         planCode: "",
         orgPolicyNo: "",
         ssFlag: "",
         policyManageCom: "",
-        riskCodesStr: "",
-        insuredNo: "",
-        name: "",
-        idType: "",
-        idNo: "",
-        birthday: "",
+        riskCodesStr: undefined,
+        insuredNo: undefined,
+        name: undefined,
+        idType: undefined,
+        idNo: undefined,
+        birthday: undefined,
         occupation: "",
         nationality: "",
         idStartDate: "",
         idEndDate: "",
-        mobile: "",
-        email: "",
-        phone: "",
-        province: "",
-        city: "",
-        district: "",
-        address: "",
-        orgInsuredNo: "",
+        mobile: undefined,
+        email: undefined,
+        phone: undefined,
+        province: undefined,
+        city: undefined,
+        district: undefined,
+        address: undefined,
+        orgInsuredNo: undefined,
       },
       workPoolData: [],
     }
@@ -606,10 +606,19 @@ export default {
     submit() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          let insert = this.ruleForm
+          let insert = this.ruleForm;
+          if(this.baseInfo.policyNo){
+            this.$set(insert,'policyNo',this.baseInfo.policyNo);
+          }
+          if(this.baseInfo.policyItemNo){
+            this.$set(insert,'policyItemNo',this.baseInfo.policyItemNo);
+          }
+          if(this.baseInfo.companyCode){
+            insert.organCode=this.baseInfo.companyCode;
+          }
           addInsert(insert).then(res => {
             if (res != null && res.code === 200) {
-              this.$message.success("插入成功")
+              this.$message.success("工单受理成功!")
               this.ruleForm.workOrderNo=res.msg;
               if (res.rows.length <= 0) {
                 return this.$message.warning(

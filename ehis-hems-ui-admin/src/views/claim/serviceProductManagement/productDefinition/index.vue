@@ -308,8 +308,9 @@ export default {
     //查看
     viewHandle(index,row){
       this.$router.push({
-        path: '/service-product/productReview/edit',
-        query: {productCode: row.productCode,
+        path: '/service-product/productReview/view',
+        query: {
+          productCode: row.productCode,
           status: 'review',
           node:'view'
         }

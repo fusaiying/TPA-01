@@ -432,7 +432,7 @@ export default {
     }
   },
   created() {
-    this.isRemind=false
+    this.isRemind=false;
     this.searchSecondHandle();
     this.searchHandles();
   },

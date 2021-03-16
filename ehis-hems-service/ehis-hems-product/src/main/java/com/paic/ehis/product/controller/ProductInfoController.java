@@ -314,7 +314,7 @@ public class ProductInfoController extends BaseController
         /*startPage();
         List<ProductSupplierInfo> list = productInfoService.selectSupplier(productInfo);
         return getDataTable(list);*/
-        return AjaxResult.success(getProviderInfoService.selectSupplier(productInfo));
+        return getProviderInfoService.selectSupplier(productInfo);
     }
 
 

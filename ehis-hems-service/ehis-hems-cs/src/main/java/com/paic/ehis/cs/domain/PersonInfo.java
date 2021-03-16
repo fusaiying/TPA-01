@@ -82,6 +82,15 @@ public class PersonInfo extends BaseEntity
     @Excel(name = "出生日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date birthday;
 
+    /** 国家 */
+    private String country;
+    /** 省 */
+    private String province;
+    /** 市 */
+    private String city;
+    /** 区 */
+    private String district;
+
     /** 联系地址 */
     @Excel(name = "联系地址")
     private String address;

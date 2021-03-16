@@ -27,7 +27,11 @@
       </template>
     </el-table-column>
     <el-table-column align="center" prop="updateBy" label="操作人" show-overflow-tooltip/>
-    <el-table-column align="center"  v-if="status === '02'" prop="newRptNo" label="修正理赔号" show-overflow-tooltip/>-->
+    <el-table-column min-width="150" align="center"  v-if="status === '02' || status === '04'" prop="newRptNo" label="修正理赔号" show-overflow-tooltip>
+      <template slot-scope="scope">
+        <span>{{ scope.row.newRptNo}}</span>
+      </template>
+    </el-table-column>
     <el-table-column   v-if="status === '01' || status === '03'" align="center" label="操作">
       <template slot-scope="scope">
         <el-button  v-if="status === '01'" size="mini"  type="text" @click="handleFun(scope.row,'initiate')">发起 </el-button>

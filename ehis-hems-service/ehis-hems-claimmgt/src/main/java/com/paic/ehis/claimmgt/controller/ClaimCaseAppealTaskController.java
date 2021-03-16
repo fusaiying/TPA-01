@@ -89,7 +89,13 @@ public class ClaimCaseAppealTaskController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ClaimCaseAppealTask claimCaseAppealTask)
     {
-        return toAjax(claimCaseAppealTaskService.updateClaimCaseAppealTask(claimCaseAppealTask));
+        claimCaseAppealTask = claimCaseAppealTaskService.updateClaimCaseAppealTask(claimCaseAppealTask);
+        if(claimCaseAppealTask.getDealType().equalsIgnoreCase("audit")) {
+            if (claimCaseAppealTask.getIsAgree().equals("01")) {
+                claimCaseAppealTaskService.updateClaimCaseAppealBill(claimCaseAppealTask);
+            }
+        }
+        return AjaxResult.success(claimCaseAppealTask);
     }
 
     /**

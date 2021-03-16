@@ -64,6 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierCode"    column="supplierCode"    />
         <result property="contactName"    column="contactName"    />
         <result property="phone"    column="phone"    />
+        <result property="mobile"    column="mobile"    />
+
     </resultMap>
 
     <resultMap type="ProductInfo" id="ProductInfoResult">
@@ -390,7 +392,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getContractInfo"  resultMap="ContractInfosResult">
-        select supplier_code as supplierCode, name as contactName ,phone as phone from base_contacts where status ='Y'
+        select supplier_code as supplierCode, name as contactName ,phone as phone ,mobile as mobile from base_contacts where status ='Y'
     </select>
 
     <select id="getProductInfo"  resultMap="ProductInfoResult">
@@ -453,7 +455,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND bsi.status = 'Y'
             WHERE
                 psi.service_code = #{serviceCode}
-            AND psi.product_code = #{productCode}
+            <!--AND psi.product_code = #{productCode}-->
             AND psi.status = 'Y'
     </select>
 

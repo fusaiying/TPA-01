@@ -19,16 +19,15 @@
     </el-table-column>
     <!-- table中下拉属性转换 -->
     <el-table-column align="center" prop="channel" min-width="120" label="受理渠道" show-overflow-tooltip>
-      <template slot-scope="scope" v-if="scope.row.channel">
-        <span>{{selectDictLabel(channelOptions, scope.row.channel)}}</span>
+      <template slot-scope="scope" v-if="scope.row.channelCode">
+        <span>{{selectDictLabel(cs_channel, scope.row.channelCode)}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="businessService" label="服务项目" min-width="160" align="center"show-overflow-tooltip>
       <template slot-scope="scope" v-if="scope.row.businessService">
-        <span>{{scope.row.businessService.split('-')[0]+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
+        <span>{{selectDictLabel(cs_service_item, scope.row.businessService.split('-')[1])}}</span>
       </template>
     </el-table-column>
-<!--    <el-table-column v-if="show" prop="policyNo" label="保单号" min-width="160" align="center"/>-->
     <el-table-column prop="policyNo" label="保单号" min-width="160" align="center"/>
     <el-table-column prop="policyItemNo" label="分单号" min-width="160" align="center"/>
     <el-table-column prop="riskCode" label="险种代码" min-width="80" align="center"/>
@@ -44,22 +43,22 @@
         <span>{{parseTime(scope.row.modifyTime, '{y}-{m}-{d} {h}:{i}:{s}')}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="acceptUser.umCode" label="受理人" min-width="120" align="center"/>
+    <el-table-column prop="acceptUserId" label="受理人" min-width="120" align="center"/>
     <el-table-column prop="modifyUser.umCode" label="处理人" min-width="120" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center" show-overflow-tooltip>
       <template slot-scope="scope" v-if="scope.row.vipFlag">
-        <span>{{selectDictLabel(cs_vip_flagOptions, scope.row.vipFlag)}}</span>
+        <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="priorityLevel" label="优先级" align="center"  show-overflow-tooltip>
       <template slot-scope="scope" v-if="scope.row.priorityLevel">
-        <span>{{selectDictLabel(cs_priorityOptions, scope.row.priorityLevel)}}</span>
+        <span>{{selectDictLabel(cs_priority, scope.row.priorityLevel)}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="organization" label="出单机构" min-width="160" align="center"  show-overflow-tooltip>
     <!--      如果没有配置字典数据会异常-->
       <template slot-scope="scope" v-if="scope.row.organCode">
-        <span>{{selectDictLabel(cs_organizationOptions, scope.row.organCode)}}</span>
+        <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" label="操作" min-width="94" fixed="right">
@@ -73,11 +72,14 @@
 
 <script>
 // 定义table中需要的字典类型，必须存在，否则在赋值的时候异常
+import {getHospitalInfo} from "@/api/claim/handleCom";
+
 let dictss = [{dictType: 'cs_channel'}
 ,{dictType: 'cs_service_item'}
 ,{dictType: 'cs_vip_flag'}
 ,{dictType: 'cs_priority'}
 ,{dictType: 'cs_organization'}
+,{dictType: 'cs_business_type'}
 ]
 export default {
   props: {
@@ -94,39 +96,41 @@ export default {
       loading:true,
       show:false,//列隐藏
       dictList: [],
-      channelOptions: [],
-      service_itemOptions: [],
-      cs_vip_flagOptions: [],
-      cs_priorityOptions: [],
-      cs_organizationOptions: [],
+      cs_channel: [],
+      cs_service_item: [],
+      cs_vip_flag: [],
+      cs_priority: [],
+      cs_organization: [],
+      cs_business_type: [],
     }
   },
   async mounted() {
     await this.getDictsList(dictss).then(response => {
       this.dictList = response.data
     })
-    this.channelOptions = this.dictList.find(item => {
+    this.cs_channel = this.dictList.find(item => {
       return item.dictType === 'cs_channel'
     }).dictDate
-    this.service_itemOptions = this.dictList.find(item => {
+    this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-    this.cs_vip_flagOptions = this.dictList.find(item => {
+    this.cs_vip_flag = this.dictList.find(item => {
       return item.dictType === 'cs_vip_flag'
     }).dictDate
-    this.cs_priorityOptions = this.dictList.find(item => {
+    this.cs_priority = this.dictList.find(item => {
       return item.dictType === 'cs_priority'
     }).dictDate
-    this.cs_organizationOptions = this.dictList.find(item => {
+    this.cs_organization = this.dictList.find(item => {
       return item.dictType === 'cs_organization'
+    }).dictDate
+    this.cs_business_type = this.dictList.find(item => {
+      return item.dictType === 'cs_business_type'
     }).dictDate
 
   },
   methods: {
     //给行的字体加颜色 talbe:row-class-name
     setRowStyle({ row, rowIndex }) {
-      console.info(row);
-      console.info(rowIndex);
       if (row.isRedWord == true) {
         //指定样式
         return 'info-row'
@@ -142,7 +146,6 @@ export default {
     },
     // 处理跳转
     subSendInspection(row) {
-      console.info(row);
       let workOrderNos=[row.workOrderNo]
       //调用父页面处理方法 并在父页面中引用处@定义
       this.$emit('postHandle', workOrderNos)

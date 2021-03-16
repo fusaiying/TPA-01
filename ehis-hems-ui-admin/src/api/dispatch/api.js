@@ -4,8 +4,8 @@ import request from '@/utils/request'
 export function selectCaseDispatchList(query) {
   return request({
     url: '/claimflow/case/selectCaseDispatchList',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
@@ -55,6 +55,13 @@ export function logInfo() {
 export function selectWorkflow(data) {
   return request({
     url: '/claimflow/caseRecord/selectWorkflow',
+    method: 'post',
+    data
+  })
+}// 工作流查看
+export function selectWorkflowByRptNo(data) {
+  return request({
+    url: '/claimflow/caseRecord/selectWorkflowByRptNo',
     method: 'post',
     data
   })

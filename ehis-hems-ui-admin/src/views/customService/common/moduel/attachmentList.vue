@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>附件信息</span>
+      <span style="color: blue">附件信息</span>
     </div>
     <el-table
       :header-cell-style="{color:'black',background:'#f8f8ff'}"

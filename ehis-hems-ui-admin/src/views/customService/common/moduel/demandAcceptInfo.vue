@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>{{selectDictLabel(businessTypeOptions, divTitle.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, divTitle.split('-')[1])}}</span>
+      <span style="color: blue">{{selectDictLabel(businessTypeOptions, divTitle.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, divTitle.split('-')[1])}}</span>
     </div>
     <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled"
              label-position="right" size="mini">

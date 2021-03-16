@@ -174,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         dict_value = pi.bussiness_status
         AND dict_type = 'product_bussiness_status'
         )
-        END datailStatus,
+        END detailStatus,
         pi.create_by,
         pi.create_time,
         pi.update_by,

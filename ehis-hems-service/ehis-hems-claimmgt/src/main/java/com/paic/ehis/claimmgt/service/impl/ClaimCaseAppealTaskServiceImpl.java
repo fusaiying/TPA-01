@@ -3,15 +3,18 @@ package com.paic.ehis.claimmgt.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail;
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealRecord;
 import com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask;
 import com.paic.ehis.claimmgt.domain.vo.ClaimCaseAppealTaskVo;
+import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealBillDetailMapper;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealRecordMapper;
 import com.paic.ehis.claimmgt.mapper.ClaimCaseAppealTaskMapper;
 import com.paic.ehis.claimmgt.service.IClaimCaseAppealTaskService;
 import com.paic.ehis.common.core.utils.DateUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +31,10 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     private ClaimCaseAppealTaskMapper claimCaseAppealTaskMapper;
 
     @Autowired
-
     private ClaimCaseAppealRecordMapper claimCaseAppealRecordMapper;
+
+    @Autowired
+    private ClaimCaseAppealBillDetailMapper claimCaseAppealBillDetailMapper;
 
     /**
      * 查询案件申诉任务
@@ -87,7 +92,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
      * @return 结果
      */
     @Override
-    public int updateClaimCaseAppealTask(ClaimCaseAppealTask bean)
+    public ClaimCaseAppealTask updateClaimCaseAppealTask(ClaimCaseAppealTask bean)
     {
         Date nowDate = DateUtils.getNowDate();
         String username = SecurityUtils.getUsername();
@@ -119,7 +124,8 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         }
         Long orgRecordId = this.updateHistoryFlag(bean);
         this.insertRecordLog(bean,orgRecordId);
-        return claimCaseAppealTaskMapper.updateClaimCaseAppealTask(bean);
+        claimCaseAppealTaskMapper.updateClaimCaseAppealTask(bean);
+        return bean;
     }
 
     /**
@@ -156,6 +162,28 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo) {
         return claimCaseAppealTaskMapper.getAppealList(vo);
     }
+
+    @Override
+    public int updateClaimCaseAppealBill(ClaimCaseAppealTask bean) {
+        int result = 0;
+
+        ClaimCaseAppealBillDetail paramBean = new ClaimCaseAppealBillDetail();
+        paramBean.setRptNo(bean.getNewRptNo());
+        List<ClaimCaseAppealBillDetail> list = claimCaseAppealBillDetailMapper.claimCaseAppealBillDetailList(paramBean);
+
+        ClaimCaseAppealBillDetail detail = new ClaimCaseAppealBillDetail();
+
+        for(ClaimCaseAppealBillDetail detailInfo : list) {
+            detail.setOldBillId(Long.valueOf(detailInfo.getUpdateBy()));
+            detail.setRptNo(detailInfo.getRptNo());
+            detail.setBillId(detailInfo.getBillId());
+            result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDetail(detail);
+            result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDiagnosis(detail);
+            result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBill(detail);
+        }
+        return result;
+    }
+
 
     /**
      * 添加节点记录

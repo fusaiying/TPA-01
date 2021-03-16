@@ -1,10 +1,10 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>质检处理信息</span>
+      <span style="color: blue">质检处理信息</span>
     </div>
     <el-form ref="ruleForm" :model="inspection" style="padding-bottom: 30px;" label-width="100px">
-      <el-table :data="inspection.items"  >
+      <el-table :data="inspection.items"  :header-cell-style="{color:'black',background:'#f8f8ff'}">
         <el-table-column  label="质检项目" show-overflow-tooltip align="center" disabled="true">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemKey'" >

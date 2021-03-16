@@ -152,7 +152,8 @@
           <el-button
             size="mini"
             type="success"
-            icon="el-icon-search" @click="searchHandles">查询</el-button>
+            icon="el-icon-search" @click="searchHandles">查询
+          </el-button>
           <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
         </div>
       </el-form>
@@ -361,8 +362,8 @@ export default {
   },
   data() {
     return {
-      showClass:"el-icon-arrow-right",//图表样式
-      isShow:false,//控制是否显示个人池
+      showClass: "el-icon-arrow-right",//图表样式
+      isShow: false,//控制是否显示个人池
       ids: [],//多选框
       open: "",//是否弹出
       title: "",//弹出框名称
@@ -454,7 +455,6 @@ export default {
     //查询是否存在未处理的call_again记录，并显示
 
 
-
   },
 
   methods: {
@@ -539,13 +539,13 @@ export default {
       this.ids = selection.map(item => item.workOrderNo);
 
     },
-    show(){
-      if (this.isShow==false){
-        this.isShow=true
-        this.showClass="el-icon-arrow-down"
-      }else {
-        this.isShow=false
-        this.showClass="el-icon-arrow-right"
+    show() {
+      if (this.isShow == false) {
+        this.isShow = true
+        this.showClass = "el-icon-arrow-down"
+      } else {
+        this.isShow = false
+        this.showClass = "el-icon-arrow-right"
 
       }
     },
@@ -613,31 +613,29 @@ export default {
       })
     },
 
-      //查询按钮
-      searchHandles() {
-        this.searchHandle()
-        this.searchHandle1()
-      },
-      //二次来电查询
-      searchSecondHandle() {
-        selectCallAgain().then(res => {
-          if (res != null && res.code === 200) {
-            if (res.rows.length>=1){
-              this.$refs.secondPhone.workPoolData=res.rows
-              this.$refs.secondPhone.open()
-            }
-            if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "没有再次来电到数据！"
-              )
-            }
+    //查询按钮
+    searchHandles() {
+      this.searchHandle();
+      this.searchHandle1();
+    },
+    //二次来电查询
+    searchSecondHandle() {
+      selectCallAgain().then(res => {
+        if (res != null && res.code === 200) {
+          if (res.rows.length >= 1) {
+            this.$refs.secondPhone.workPoolData = res.rows
+            this.$refs.secondPhone.open()
           }
-        }).catch(res => {
+          if (res.rows.length <= 0) {
+            console.info("没有再次来电数据！");
+          }
+        }
+      }).catch(res => {
 
-        })
-      },
-    }
+      })
+    },
   }
+}
 </script>
 
 <style scoped>

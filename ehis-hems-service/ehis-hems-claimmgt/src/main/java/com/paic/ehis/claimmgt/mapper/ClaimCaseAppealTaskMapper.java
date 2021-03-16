@@ -84,6 +84,18 @@ public interface ClaimCaseAppealTaskMapper
      * */
     public String getAppealNewRptNo(String appealRptNo);
 
+    /**
+     * 清空案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    public void clearClaimTableData(ClaimCaseAppealTask bean);
+
+    /**
+     * 初始化案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
     public void insertClaimTableData(ClaimCaseAppealTask bean);
 
 

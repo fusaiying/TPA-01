@@ -218,7 +218,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select new_rpt_no from   claim_case_appeal_task where task_id = (select max(task_id) from claim_case_appeal_task where status = 'Y' and appeal_rpt_no = #{appealRptNo} and appeal_status = '03')
     </select>
 
+    <delete id="clearClaimTableData" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
+        call clearClaimTableDataProcedure(#{newRptNo})
+    </delete>
+
     <insert id="insertClaimTableData" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealTask">
         call claimTableDataProcedure(#{newRptNo}, #{appealRptNo})
     </insert>
+
+
 </mapper>

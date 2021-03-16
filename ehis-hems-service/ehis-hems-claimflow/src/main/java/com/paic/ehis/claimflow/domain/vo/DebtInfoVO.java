@@ -42,7 +42,7 @@ public class DebtInfoVO implements Serializable {
     /** 就诊日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "就诊日期",dateFormat = "yyyy-MM-dd")
-    private String treatmentEndDate;
+    private Date treatmentEndDate;
 
     /** 投保人 */
     @Excel(name = "投保人")

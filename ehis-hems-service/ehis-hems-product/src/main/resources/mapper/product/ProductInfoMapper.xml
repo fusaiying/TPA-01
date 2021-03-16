@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="beforeDate"    column="beforeDate"    />
         <result property="nowDate"    column="nowDate"    />
+        <result property="detailStatus"    column="detailStatus"    />
     </resultMap>
 
     <resultMap type="BaseServiceInfo" id="BaseServiceInfoResult">
@@ -67,30 +68,134 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectProductInfoList" parameterType="ProductInfo" resultMap="ProductInfoResult">
-        <include refid="selectProductInfoVo"/>
+        SELECT
+        pi.serial_no,
+        pi.product_code,
+        product_chname,
+        product_enname,
+        out_product_chname,
+        out_product_enname,
+        product_type,
+        product_time_info,
+        product_time_time,
+        steward,
+        bussiness_status,
+        CASE
+        WHEN pi.bussiness_status = '05' THEN
+        concat_ws(
+        '+',
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = pi.bussiness_status
+        AND dict_type = 'product_bussiness_status'
+        ),
+        pci.check_advice
+        )
+        ELSE
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = pi.bussiness_status
+        AND dict_type = 'product_bussiness_status'
+        )
+        END detailStatus,
+        pi.create_by,
+        pi.create_time,
+        pi.update_by,
+        pi.update_time
+        FROM
+        product_info pi
+        LEFT JOIN product_check_info pci ON pci.serial_no = (
+        SELECT
+        max(serial_no)
+        FROM
+        product_check_info
+        WHERE
+        product_check_info.product_code = pi.product_code
+        AND product_check_info. STATUS = 'Y'
+        )
         <where>  
-            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
-            <if test="productChname != null  and productChname != ''"> and product_chname like concat('%', #{productChname}, '%')</if>
-            <if test="productEnname != null  and productEnname != ''"> and product_enname like concat('%', #{productEnname}, '%')</if>
-            <if test="outProductChname != null  and outProductChname != ''"> and out_product_chname like concat('%', #{outProductChname}, '%')</if>
-            <if test="outProductEnname != null  and outProductEnname != ''"> and out_product_enname like concat('%', #{outProductEnname}, '%')</if>
-            <if test="productType != null  and productType != ''"> and product_type = #{productType}</if>
-            <if test="productTimeInfo != null  and productTimeInfo != ''"> and product_time_info = #{productTimeInfo}</if>
-            <if test="productTimeTime != null "> and product_time_time = #{productTimeTime}</if>
-            <if test="steward != null  and steward != ''"> and steward = #{steward}</if>
-            <if test="bussinessStatus != null  and bussinessStatus != ''"> and bussiness_status = #{bussinessStatus}</if>
-            and status = 'Y' and bussiness_status in ('01','03','04','05') order by create_time desc
+            <if test="productCode != null  and productCode != ''"> and pi.product_code = #{productCode}</if>
+            <if test="productChname != null  and productChname != ''"> and pi.product_chname like concat('%', #{productChname}, '%')</if>
+            <if test="productEnname != null  and productEnname != ''"> and pi.product_enname like concat('%', #{productEnname}, '%')</if>
+            <if test="outProductChname != null  and outProductChname != ''"> and pi.out_product_chname like concat('%', #{outProductChname}, '%')</if>
+            <if test="outProductEnname != null  and outProductEnname != ''"> and pi.out_product_enname like concat('%', #{outProductEnname}, '%')</if>
+            <if test="productType != null  and productType != ''"> and pi.product_type = #{productType}</if>
+            <if test="productTimeInfo != null  and productTimeInfo != ''"> and pi.product_time_info = #{productTimeInfo}</if>
+            <if test="productTimeTime != null "> and pi.product_time_time = #{productTimeTime}</if>
+            <if test="steward != null  and steward != ''"> and pi.steward = #{steward}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and pi.bussiness_status = #{bussinessStatus}</if>
+            and pi.status = 'Y' and pi.bussiness_status in ('01','03','04','05') order by pi.create_time desc
         </where>
     </select>
 
     <select id="selectDefaultListist" parameterType="ProductInfo" resultMap="ProductInfoResult">
-        <include refid="selectProductInfoVo"/>
+        SELECT
+        pi.serial_no,
+        pi.product_code,
+        product_chname,
+        product_enname,
+        out_product_chname,
+        out_product_enname,
+        product_type,
+        product_time_info,
+        product_time_time,
+        steward,
+        bussiness_status,
+        CASE
+        WHEN pi.bussiness_status = '05' THEN
+        concat_ws(
+        '+',
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = pi.bussiness_status
+        AND dict_type = 'product_bussiness_status'
+        ),
+        pci.check_advice
+        )
+        ELSE
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = pi.bussiness_status
+        AND dict_type = 'product_bussiness_status'
+        )
+        END detailStatus,
+        pi.create_by,
+        pi.create_time,
+        pi.update_by,
+        pi.update_time
+        FROM
+        product_info pi
+        LEFT JOIN product_check_info pci ON pci.serial_no = (
+        SELECT
+        max(serial_no)
+        FROM
+        product_check_info
+        WHERE
+        product_check_info.product_code = pi.product_code
+        AND product_check_info. STATUS = 'Y'
+        )
         <where>
             1=1
             <if test="beforeDate != null   and nowDate != null ">
-                and (create_time between  #{beforeDate} and  #{nowDate})
+                and (pi.create_time between  #{beforeDate} and  #{nowDate})
             </if>
-            and status = 'Y' and bussiness_status in ('01','03','04','05') order by create_time desc
+            and pi.status = 'Y' and pi.bussiness_status in ('01','03','04','05') order by pi.create_time desc
         </where>
     </select>
     
@@ -208,7 +313,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="updateProStatus3" parameterType="ProductManagerLog">
-        update product_info set bussiness_status = #{bussinessStatus}
+        update product_info set bussiness_status = #{bussinessStatus},update_time = #{updateTime},update_by = #{updateBy}
         where product_code = #{productCode} and status = 'Y'
     </update>
 

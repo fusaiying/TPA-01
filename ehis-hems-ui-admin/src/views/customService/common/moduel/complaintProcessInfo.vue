@@ -1,10 +1,10 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>投诉质检处理</span>
+      <span style="color: blue">投诉质检处理</span>
     </div>
     <el-form  ref="ruleForm" :model="complaintProcess" style="padding-bottom: 30px;" label-width="100px">
-      <el-table :data="complaintProcess.items" >
+      <el-table :data="complaintProcess.items" :header-cell-style="{color:'black',background:'#f8f8ff'}">
         <el-table-column  label="质检分类" show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemType'" >
@@ -47,7 +47,7 @@
           <el-input v-model="complaintProcess.score"/>
         </el-form-item>
       </el-row>
-      <el-table :data="complaintProcess.appeal" >
+      <el-table :data="complaintProcess.appeal" v-show="false">
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
@@ -88,6 +88,7 @@ export default {
 data(){
    return {
      dictList: [],
+     complaintProcessList: [],
      valueOptions: [],
      appealFlagOptions: [],
      complaintProcess: {
@@ -225,7 +226,30 @@ data(){
    }
 },
 created() {
+  this.params = JSON.parse(decodeURI(this.$route.query.data))
+  //获取受理信息
+  let query = {
+    workOrderNo: this.params.workOrderNo,
+    businessType: this.params.businessType,
+  }
+  if(this.complaintProcessList!==null){
+    this.data=this.complaintProcess;
+  }
+  getHandleInfoList(query).then(res => {
+    if(query.businessType === '01'){
+      if (res !== null && res.code === 200) {
+        this.inspectionList = res.rows;
+        console.log(this.inspectionList,'+++++++++5555555');
+      }
+    }else if(query.businessType === '03'){
+      if (res !== null && res.code === 200) {
+        this.complaintProcessList = res.rows;
+        console.log(this.allList.complaintProcess)
+      }
+    }
 
+  }).catch( res => {
+  });
 },
 async mounted() {
   await this.getDictsList(dictss).then(response => {

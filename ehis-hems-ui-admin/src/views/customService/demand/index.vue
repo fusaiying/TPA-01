@@ -214,7 +214,7 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
@@ -317,7 +317,7 @@
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
+          <el-table-column prop="remark" align="center" label="响应内容" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" width="140" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
@@ -416,6 +416,8 @@ export default {
         vipFlag:"",//VIP标识
         mobilePhone:"",//移动电话
         status:"",//状态
+        modifyTime:"",
+        updateTime:""
       },
       loading: true,
       workPoolData: [],//公共池

@@ -96,7 +96,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
         productInfo.setCreateTime(DateUtils.getNowDate());
         productInfo.setUpdateTime(DateUtils.getNowDate());
         productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
+        productInfo.setUpdateBy(SecurityUtils.getUsername());
         productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
         if(StringUtils.isBlank(productInfo.getProductCode())){
             productInfo.setProductCode("PD"+PubFun.createMySqlMaxNoUseCache("productCodeSer", 10, 8));
@@ -111,7 +111,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setBussinessStatus("01");//新建状态
             productManagerLog.setStatus("Y");
             productManagerLogMapper.insertProductManagerLog(productManagerLog);
@@ -142,7 +142,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
         productInfo.setCreateTime(DateUtils.getNowDate());
         productInfo.setUpdateTime(DateUtils.getNowDate());
         productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
+        productInfo.setUpdateBy(SecurityUtils.getUsername());
         productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
         productInfo.setStatus("Y");
         productInfo.setBussinessStatus("01");//新建状态
@@ -155,7 +155,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setProductCode(productInfo.getProductCode());
             productManagerLog.setBussinessStatus("01");//新建状态
@@ -251,7 +251,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productCheckInfo.setCreateTime(DateUtils.getNowDate());
             productCheckInfo.setUpdateTime(DateUtils.getNowDate());
             productCheckInfo.setCreateBy(SecurityUtils.getUsername());
-            productCheckInfo.setCreateBy(SecurityUtils.getUsername());
+            productCheckInfo.setUpdateBy(SecurityUtils.getUsername());
             productCheckInfo.setStatus("Y");
             productCheckInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productCheckSer", 12, 12));
             productCheckInfoMapper.insertProductCheckInfo(productCheckInfo);
@@ -259,7 +259,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setProductCode(productCheckInfo.getProductCode());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setStatus("Y");
@@ -300,6 +300,8 @@ public class ProductInfoServiceImpl implements IProductInfoService
     public int insertMangerInfo(ProductManagerLog productManagerLog)
     {
         //修改产品表状态为下线
+        productManagerLog.setUpdateBy(SecurityUtils.getUsername());
+        productManagerLog.setUpdateTime(DateUtils.getNowDate());
         int count = productInfoMapper.updateProStatus3(productManagerLog);
 
         if(count >0){

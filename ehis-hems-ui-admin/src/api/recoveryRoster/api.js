@@ -5,8 +5,8 @@ import request from '@/utils/request'
 export function listInfo(query) {
   return request({
     url: '/claimflow/whitelist/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

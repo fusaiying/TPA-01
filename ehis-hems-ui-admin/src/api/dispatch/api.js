@@ -3,9 +3,9 @@ import request from '@/utils/request'
 //查询案件调度工作池
 export function selectCaseDispatchList(query) {
   return request({
-    url: '/claimflow/case/selectCaseDispatchList',
-    method: 'get',
-    params: query
+    url: '/claimflow/mcase/selectCaseDispatchList',
+    method: 'post',
+    data: query
   })
 }
 

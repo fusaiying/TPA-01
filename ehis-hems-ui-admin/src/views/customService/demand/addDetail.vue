@@ -225,7 +225,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="callMobilePhone">
-              <el-input v-model="ruleForm.callMobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callMobilePhone" class="item-width" maxlength="15" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -307,21 +307,34 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="16">
-            <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="contactsCountry">
-              国家区号+
-              <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 75px"/>
+          <el-col :span="3">
+            <el-form-item label="联系人固定电话：" style="white-space: nowrap;" :inline="true" prop="contactsCountry">
+              国家区号:+
+              <el-input v-model="ruleForm.contactsCountry" class="item-width" style="width: 60px" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsQuhao">
               区号
-              <el-input v-model="ruleForm.contactsQuhao" class="item-width" size="mini" style="width: 75px"
-                        maxlength="50"/>
-              号码
-              <el-input v-model="ruleForm.contactsNumber" class="item-width" size="mini" style="width: 120px"
-                        maxlength="50"/>
-              分机号
-              <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 75px"
+              <el-input v-model="ruleForm.contactsQuhao" class="item-width" size="mini" style="width: 145px"
                         maxlength="50"/>
             </el-form-item>
           </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsNumber">
+              号码
+              <el-input v-model="ruleForm.contactsNumber" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsSecondNumber">
+              分机号
+              <el-input v-model="ruleForm.contactsSecondNumber" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
+            </el-form-item>
+          </el-col>
+
         </el-row>
 
         <el-row>
@@ -457,12 +470,54 @@ export default {
           pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
           trigger: "blur"},
       ],
-      callMobilePhone: [
-        {required: true, message: "联系电话不能为空", trigger: "blur"},
+      'E-MAIL': [
+        {required: true, message: "Email不能为空", trigger: "blur"},
         {required: true,
-          message: "目前只支持中国大陆的手机号码",
-          pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
+          message: "请输入正确的格式",
+          pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
           trigger: "blur"},
+      ],
+      callMobilePhone: [
+        //{required: false, message: "联系电话不能为空", trigger: "blur"},
+        {required: false,
+          message: "目前只支持录入数字",
+          pattern: /^\d+$/,//可以写正则表达式呦呦呦,
+          trigger: ['blur','change']},
+      ],
+      contactsCountry: [
+        {required: false,
+          message: "国家区号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsQuhao: [
+        {required: false,
+          message: "区号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsNumber: [
+        {required: false,
+          message: "号码只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      contactsSecondNumber: [
+        {required: false,
+          message: "分机号只能录入数字",
+          pattern: /^\d*$/,
+          trigger: ['change','blur']
+        }
+      ],
+      email: [
+        {required: false,
+          message: "邮箱格式不正确",
+          pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          trigger: ["blur","change"]
+        }
       ],
       organCode: [
         {required: true, message: "出单机构不能为空", trigger: "blur"}
@@ -495,7 +550,7 @@ export default {
         contactsName: "",//联系人
         contactsSex: "",//联系人性别
         contactsRelationBy: "",//联系人与别抱人关系
-        contactsLanguage: "",//联系人语言
+        contactsLanguage: "01",//联系人语言
         contactsMobilePhone: "",//联系人电话
         email: "",//邮件
         organCode: "",//出单机构
@@ -642,13 +697,15 @@ export default {
         policyNo: this.baseInfo.policyNo,
         policyItemNo: this.baseInfo.policyItemNo,
       }
-      policyInfoData(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.baseInfo = res.data;
-        }
-      }).catch(res => {
+      if(this.baseInfo.policyNo != null && this.baseInfo.policyNo !=""){
+        policyInfoData(query).then(res => {
+          if (res != null && res.code === 200) {
+            this.baseInfo = res.data;
+          }
+        }).catch(res => {
 
-      })
+        })
+      }
     },
     //关闭按钮
     hiddenShow: function () {

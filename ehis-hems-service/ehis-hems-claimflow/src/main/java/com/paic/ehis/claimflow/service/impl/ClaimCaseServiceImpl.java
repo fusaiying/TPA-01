@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,6 +89,9 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
 
     @Autowired
     private ClaimCaseProblemMapper claimCaseProblemMapper;
+
+    @Autowired
+    private ClaimCaseDebtMapper claimCaseDebtMapper;
 
 
     /**
@@ -1438,6 +1442,16 @@ public class ClaimCaseServiceImpl implements IClaimCaseService {
             claimCase.setUpdateTime(DateUtils.getNowDate());
             claimCase.setEndCaseTime(DateUtils.getNowDate());
             claimCase.setRptNo(claimCaseCheckDTO.getRptNo());
+
+            if (claimCaseCheckDTO.getDebtAmount().compareTo(new BigDecimal(String.valueOf(0))) != 0){
+                ClaimCaseDebt claimCaseDebt = new ClaimCaseDebt();
+                claimCaseDebt.setStatus("Y");
+                claimCaseDebt.setCreateBy(SecurityUtils.getUsername());
+                claimCaseDebt.setCreateTime(DateUtils.getNowDate());
+                claimCaseDebt.setUpdateBy(SecurityUtils.getUsername());
+                claimCaseDebt.setUpdateTime(DateUtils.getNowDate());
+                return claimCaseDebtMapper.insertClaimCaseDebt(claimCaseDebt);
+            }
             return claimCaseMapper.updateClaimCaseNew(claimCase);
         }
         claimCaseCheckDTO1.setUpdateBy(SecurityUtils.getUsername());

@@ -247,8 +247,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="pageNum"
-          :limit.sync="pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
           v-if="isShow"
         />
@@ -307,7 +307,7 @@
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
+          <el-table-column prop="remark" align="center" label="响应内容" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" width="120" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
@@ -328,6 +328,7 @@
             </template>
           </el-table-column>
         </el-table>
+
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
@@ -339,6 +340,7 @@
     </el-card>
   </div>
 </template>
+
 <script>
   import moment from 'moment'
   import {complaintListAndPublicPool,complaintListAndPersonalPool,complaintObtain,complaintObtainMany} from '@/api/customService/complaint'

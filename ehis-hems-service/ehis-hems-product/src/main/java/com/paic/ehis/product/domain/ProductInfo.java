@@ -83,4 +83,10 @@ public class ProductInfo extends BaseEntity
     @Excel(name = "数据状态")
     private String status;
 
+    /** 数据状态 */
+    @Excel(name = "数据状态")
+    private String flag;
+
+    private String detailStatus;
+
 }

@@ -82,7 +82,7 @@
 
         <el-table-column prop="number" align="center" header-align="center" label="配置供应商" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id "
+            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id || status=='review'"
                           :rules="serviceProFormRules.number" style="display: inline-flex !important;">
               <a style="color: #3CB4E5;text-decoration: underline"
                  @click="opendialogVisible(scope.$index,scope.row)">{{ scope.row.number | getNumber }}</a>
@@ -291,7 +291,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         productCode: '',
-        serviceCode: ''
+        serviceCode: '',
+
 
       },
       supplierInfo: {
@@ -487,46 +488,57 @@ export default {
 
     //供应商弹出框
     async opendialogVisible(index, row) {
-      this.serviceTableIndex = index
+      if(this.status!='review') {
 
-      //调用查询供应商接口
-      /*      let query={
+        this.serviceTableIndex = index
+
+        //调用查询供应商接口
+        /*      let query={
               productCode: this.productCode,
               serviceCode: row.serviceCode
             }*/
-      this.formSearch.productCode = this.productCode
-      this.formSearch.serviceCode = row.serviceCode
-      if (this.formSearch.serviceCode != null && this.formSearch.serviceCode != '') {
-        this.supplierDialogVisible = true
-        //供应商查询页面
-        await new Promise((resolve, reject) => {
-          this.loading = true
-          selectSupplier(this.formSearch).then(res => {
-            this.supplierInfo.supplierData = res.data.data;
-            this.supplierInfo.supplierData.map((item, index) => {
-              item.index = index
+        this.formSearch.productCode = this.productCode
+        this.formSearch.serviceCode = row.serviceCode
+        if (this.formSearch.serviceCode != null && this.formSearch.serviceCode != '') {
+          this.supplierDialogVisible = true
+          //供应商查询页面
+          await new Promise((resolve, reject) => {
+            this.loading = true
+            selectSupplier(this.formSearch).then(res => {
+              this.supplierInfo.supplierData = res.data;
+              this.supplierInfo.supplierData.map((item, index) => {
+                item.index = index
+              })
+              this.loading = false
+              this.totalCount = res.total;
+              resolve(this.supplierInfo.supplierData)
             })
-            this.loading = false
-            this.totalCount = res.total;
-            resolve(this.supplierInfo.supplierData)
-          })
-        }).then(res => {
-          //找到有数据的优先次序
-          let rows = this.supplierInfo.supplierData.filter(item => {
-            return item.priority != null && item.priority != ''
+          }).then(res => {
+            //找到有数据的优先次序
+            let rows = this.supplierInfo.supplierData.filter(item => {
+              return item.priority != null && item.priority != ''
+            })
+
+            this.multipleSelection = rows
+            this.indexList = []
+            this.multipleSelection.forEach(item => {
+              this.indexList.push(item.index)
+            })
+            this.checkSelection()
           })
 
-          this.multipleSelection = rows
-          this.indexList = []
-          this.multipleSelection.forEach(item => {
-            this.indexList.push(item.index)
-          })
-          this.checkSelection()
-        })
 
+        } else {
+          this.$message.warning('请先选择服务项目名称')
+        }
+      }
+      else {
+        let  data={
+          productCode : this.productCode,
+         serviceCode : row.serviceCode
+        }
 
-      } else {
-        this.$message.warning('请先选择服务项目名称')
+        this.$emit('changeSupplierInfo',data)
       }
 
 
@@ -552,7 +564,7 @@ export default {
     getData(query) {
       this.loading = true
       selectSupplier(query).then(res => {
-        this.supplierInfo.supplierData = res.data.data;
+        this.supplierInfo.supplierData = res.data;
         this.supplierInfo.supplierData.map((item, index) => {
           item.index = index
         })

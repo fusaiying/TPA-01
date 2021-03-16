@@ -82,6 +82,6 @@ public class ProductInfo extends BaseEntity
     private String status;
 
     /** 审核界面去除null */
-    private boolean flag;
+    private String flag;
 
 }

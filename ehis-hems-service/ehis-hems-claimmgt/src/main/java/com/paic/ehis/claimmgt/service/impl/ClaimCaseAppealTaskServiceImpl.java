@@ -118,6 +118,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                 */
                String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
                bean.setNewRptNo(newRptNo);
+               this.clearClaimTableData(bean);
                this.insertTableData(bean);
            } else {
                bean.setAppealStatus("04");
@@ -252,8 +253,21 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         return appealRptNo;
     }
 
-    private void  insertTableData(ClaimCaseAppealTask bean){
+    /**
+     * 清空案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    private void clearClaimTableData(ClaimCaseAppealTask bean){
+        claimCaseAppealTaskMapper.clearClaimTableData(bean);
+    }
 
+    /**
+     * 初始化案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    private void insertTableData(ClaimCaseAppealTask bean){
         // select * from claim_case ;   -- cp  07
         //select * from claim_case_accept ; -- cp 案件受理信息表
         //select * from claim_case_apply_type ; -- cp  案件受理信息表 申请原因
@@ -266,8 +280,6 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         //select * from claim_case_remark ; -- cp  案件备注表
         //SELECT * FROM claim_case_policy ; -- cp  案件保单关联表
         // SELECT * FROM claim_case_cal_bill -- cp 案件赔付账单明细表
-
-
         claimCaseAppealTaskMapper.insertClaimTableData(bean);
     }
 }

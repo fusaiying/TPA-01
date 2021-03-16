@@ -346,24 +346,24 @@ export default {
       }
       //日期区间拆分
       if (this.sendQueryForm.acceptorTime) {
-        query.acceptStartDate = this.sendQueryForm.acceptorTime[0]
-        query.acceptEndDate = this.sendQueryForm.acceptorTime[1]
+        query.acceptStartDate = this.sendQueryForm.acceptorTime[0];
+        query.acceptEndDate = this.sendQueryForm.acceptorTime[1];
       }
       if (this.sendQueryForm.handlerTime) {
-        query.updateStartDate = this.sendQueryForm.handlerTime[0]
-        query.updateEndDate = this.sendQueryForm.handlerTime[1]
+        query.updateStartDate = this.sendQueryForm.handlerTime[0];
+        query.updateEndDate = this.sendQueryForm.handlerTime[1];
       }
       if (this.sendQueryForm.complaintTime) {
-        query.appointmentStartDate = this.sendQueryForm.complaintTime[0]
-        query.appointmentEndDate = this.sendQueryForm.complaintTime[1]
+        query.appointmentStartDate = this.sendQueryForm.complaintTime[0];
+        query.appointmentEndDate = this.sendQueryForm.complaintTime[1];
       }
       // API 方法名称
       inspectionQueryBy(query).then(res => {
         if (res != null && res.code === 200) {
           //初始化列表参数数据赋值
-          this.workPoolData = res.rows
+          this.workPoolData = res.rows;
           //初始化参数进行赋值
-          this.totalCount = res.total
+          this.totalCount = res.total;
           //清除table加载状态
           this.inspectionsSendTableLading=false;
           if (res.rows.length <= 0) {

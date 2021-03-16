@@ -18,4 +18,6 @@ public class ContractInfos extends BaseEntity
     /** 联系电话 */
     @Excel(name = "联系电话")
     private String phone;
+
+    private String mobile;
 }

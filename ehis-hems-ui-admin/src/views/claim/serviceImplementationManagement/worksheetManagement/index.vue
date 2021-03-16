@@ -481,12 +481,24 @@ export default {
               this.changeAllotDialogVisable()
 
               this.loading = true
-              let query={
+
+              this.params= {
                 pageNum: 1,
-                pageSize:10
-              }
+                  pageSize: 10,
+                  supplierCode:'',
+                  productCode:'',
+                  applyStartTime: '',
+                  applyEndTime: '',
+                  name:'',
+                  idCode:'',
+                  phone:'',
+                  policyNo:'',
+                  policyCertificateNo:'',
+                  bussinessStatus:'',
+                  orderCode:''
+              },
               //调用查询接口
-              getList(query).then(res => {
+              getList(this.params).then(res => {
                 this.tableData = res.rows;
                 this.totalCount = res.total;
                 this.loading = false;

@@ -295,7 +295,8 @@ export default {
         vipFlag: undefined,//VIP标识
         mobilePhone: undefined,//移动电话
         modifyTime:"",
-        updateTime:""
+        updateTime:"",
+        remark:""
       },
       loading: true,
       workPersonPoolData: [],

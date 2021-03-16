@@ -525,6 +525,9 @@
             {required: true, message: "业务内容不能为空", trigger: "blur"},
             { min: 0, max: 2000, message: '长度不超过2000个字符' }
           ],
+          'contactsPerson.address': [
+            { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
           'E-MAIL': [
             {required: true, message: "Email不能为空", trigger: "blur"},
             {required: true,

@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.dto.ConsultationDTO;
 import com.paic.ehis.cs.domain.vo.ComplaintDealVo;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
@@ -57,6 +58,7 @@ public class CollaborativeFromController extends BaseController
     public TableDataInfo list(ConsultationDTO consultationDTO)
     {
         startPage();
+        consultationDTO.setOperation(SecurityUtils.getUsername());
         List<CollaborativeFrom> list = collaborativeFromService.selectCollaborativeFromListNew(consultationDTO);
         return getDataTable(list);
     }

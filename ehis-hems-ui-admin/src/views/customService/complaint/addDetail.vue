@@ -439,7 +439,7 @@
         cs_handle_state:[],// 状态：
         //需要填入数据的部分
         ruleForm:{
-          channelCode:"",//受理渠道
+          channelCode:"03",//受理渠道
           itemCode:"",//服务项目
           callPerson:{
             mobilePhone:"",//来电人电话
@@ -524,6 +524,13 @@
           content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"},
             { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
+          'E-MAIL': [
+            {required: true, message: "Email不能为空", trigger: "blur"},
+            {required: true,
+              message: "请输入正确的格式",
+              pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
+              trigger: "blur"},
           ],
         },
         readonly: true,

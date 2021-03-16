@@ -212,7 +212,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService
                 List<ContractInfos> contractInfoList = new ArrayList<>();
                 for(ContractInfos ContractInfo:contractInfos){
                     if(ContractInfo.getSupplierCode().equals(supplierInfoVo.getSupplierCode())){
-                        if(ContractInfo.getPhone() ==null ||ContractInfo.getPhone() ==""){
+                        if( "".equals(ContractInfo.getPhone()) || ContractInfo.getPhone() ==null){
                             ContractInfo.setPhone(ContractInfo.getMobile());
                         }
                         contractInfoList.add(ContractInfo);

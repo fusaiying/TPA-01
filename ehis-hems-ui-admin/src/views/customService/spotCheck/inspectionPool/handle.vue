@@ -32,11 +32,11 @@
 <!--    质检处理-->
   <!--    信息需求-->
     <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo"/>
+      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo" v-model="handleInfoList"/>
     </div>
   <!--    投诉-->
     <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintProcessInfo :acceptInfo="allList.acceptInfo"/>
+      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo" v-model="handleInfoList"/>
     </div>
     <div class="personInfo_class" style="margin-top: 5px;">
       <el-row :gutter=20 style="float: right"  >
@@ -62,6 +62,7 @@ import {
   getAcceptInfoByTypeOrId,
   getAttachmentListById,
   getComplaintHandleInfo,
+  getHandleInfoList,
   insertItem,
 } from '@/api/customService/spotCheck';
 
@@ -308,6 +309,7 @@ export default {
           ]
         }
       },
+      handleInfoList: [],
       //接收的参数对象
       params: {},
       isDisabled:true,
@@ -321,8 +323,8 @@ export default {
   },
   created() {
     if (this.$route.query) {
+
       this.params = JSON.parse(decodeURI(this.$route.query.data))
-      console.info(this.params);
       //获取受理信息
       let query = {
         workOrderNo: this.params.workOrderNo,
@@ -346,6 +348,14 @@ export default {
       getComplaintHandleInfo(query).then(res => {
         if (res !== null && res.code === 200) {
           this.allList.form = res.data;
+        }
+      }).catch( res => {
+      });
+
+      getHandleInfoList(query).then(res => {
+          if (res !== null && res.code === 200) {
+            this.handleInfoList = res.rows;
+
         }
       }).catch( res => {
       });
@@ -451,9 +461,8 @@ export default {
       if(value1.includes('01')){
         const save={
             itemList: this.allList,
-            type: this.allList.acceptInfo.businessType
+            businessType: this.allList.acceptInfo.businessType
         }
-        console.log(save,"ssssssssssss")
         insertItem(save).then(response => {
           if (response.code === 200) {
             this.$message.success('保存成功!');
@@ -465,7 +474,6 @@ export default {
         let save={};
           //当类型为01时数据保存
           if(this.allList.acceptInfo.businessType==='01'){
-            console.log(data1,"+++++++++---------")
             save={
               itemList: this.allList.inspection.items,
               appealFlag: data1.appeal[0].appealFlag,
@@ -475,7 +483,6 @@ export default {
             }
             //当类型为03时数据保存
           }else if(this.allList.acceptInfo.businessType==='03'){
-            console.log(data2,"---------+++++++++")
             save={
               itemList: this.allList.complaintProcess.items,
               appealFlag: data2.appeal[0].appealFlag,

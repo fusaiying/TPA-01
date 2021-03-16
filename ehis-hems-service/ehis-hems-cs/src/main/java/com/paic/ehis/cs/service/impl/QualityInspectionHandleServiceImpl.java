@@ -2,14 +2,17 @@ package com.paic.ehis.cs.service.impl;
 
 import java.util.List;
 
+import com.paic.ehis.cs.domain.AcceptDetailInfo;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
+import com.paic.ehis.cs.domain.dto.HandleDTO;
+import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
-import com.paic.ehis.cs.domain.vo.AcceptVo;
+import com.paic.ehis.cs.domain.vo.*;
+import com.paic.ehis.cs.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.QualityInspectionHandleMapper;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
-import com.paic.ehis.cs.service.IQualityInspectionHandleService;
 
 /**
  * 质检处理 Service业务层处理
@@ -22,7 +25,16 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
 {
     @Autowired
     private QualityInspectionHandleMapper qualityInspectionHandleMapper;
-
+    @Autowired
+    private IDemandAcceptVoService iDemandAcceptVoService;
+    @Autowired
+    private IComplaintAcceptVoService iComplaintAcceptVoService;
+    @Autowired
+    private IAcceptDetailInfoService iAcceptDetailInfoService;
+    @Autowired
+    private IAttachmentInfoService iAttachmentInfoService;
+    @Autowired
+    private IQualityInspectionItemService iQualityInspectionItemService;
     /**
      * 查询质检处理 
      * 
@@ -130,5 +142,19 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
     public List<AcceptVo> selectHandle(WorkOrderQueryDTO workOrderQueryDTO) {
 
         return qualityInspectionHandleMapper.selectHandle(workOrderQueryDTO);
+    }
+
+    @Override
+    public List<HandleProcessInfoVO> getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO) {
+        return qualityInspectionHandleMapper.getHandleInfoList(handleProcessInfoDTO);
+    }
+
+    @Override
+    public int insertHandleInfo(HandleDTO handleDTO) {
+        iDemandAcceptVoService.insertServiceInfo(handleDTO.getDemandAcceptVo());
+        iComplaintAcceptVoService.complaintSaveHandling(handleDTO.getComplaintDealVo());
+        iAttachmentInfoService.insertAttachmentInfo(handleDTO.getAttachmentInfo());
+        iQualityInspectionItemService.insertItem(handleDTO.getQualityVo());
+        return 1;
     }
 }

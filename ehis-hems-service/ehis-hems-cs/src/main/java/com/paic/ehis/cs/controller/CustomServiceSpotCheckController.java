@@ -9,10 +9,7 @@ import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.cs.domain.AttachmentInfo;
 import com.paic.ehis.cs.domain.QualityInspectionHandle;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
-import com.paic.ehis.cs.domain.dto.AcceptDTO;
-import com.paic.ehis.cs.domain.dto.QualityDTO;
-import com.paic.ehis.cs.domain.dto.QualityFlagDTO;
-import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
+import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
@@ -290,10 +287,22 @@ public class CustomServiceSpotCheckController extends BaseController {
         List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
         return getDataTable(list);
     }
+    //获取质检处理信息
     @GetMapping("/internal/selectQualityFlagVO")
     public TableDataInfo selectQualityFlagVo(QualityFlagDTO qualityFlagDTO){
         startPage();
         List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
         return getDataTable(list);
+    }
+    //反显质检处理信息，申诉信息
+    @GetMapping("/internal/getHandleInfoList")
+    public TableDataInfo getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO) {
+        List<HandleProcessInfoVO> list = qualityInspectionHandleService.getHandleInfoList(handleProcessInfoDTO);
+        return getDataTable(list);
+    }
+    //保存质检处理详情页全部信息
+    @PostMapping("/internal/insertHandleInfo")
+    public AjaxResult insertHandleInfo(HandleDTO handleDTO) {
+        return AjaxResult.success(qualityInspectionHandleService.insertHandleInfo(handleDTO));
     }
 }

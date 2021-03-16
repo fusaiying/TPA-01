@@ -98,6 +98,13 @@ export function getComplaintHandleInfo(params){
     params: params
   })
 }
+export function getHandleInfoList(query){
+  return request({
+    url: '/cs/spotCheck/internal/getHandleInfoList' ,
+    method: 'get',
+    params: query,
+  })
+}
 export function insertItem(form){
   return request({
     url: '/cs/spotCheck/insertItem',

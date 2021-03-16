@@ -609,6 +609,13 @@ export default {
         organCode: [
           {required: true, message: "出单机构不能为空", trigger: "blur"}
         ],
+        'E-MAIL': [
+          {required: true, message: "Email不能为空", trigger: "blur"},
+          {required: true,
+            message: "请输入正确的格式",
+            pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
+            trigger: "blur"},
+        ],
       },
       readonly: true,
       dialogVisable: "",//上传附件用

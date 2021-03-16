@@ -216,7 +216,7 @@
           </el-table-column>
           <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 

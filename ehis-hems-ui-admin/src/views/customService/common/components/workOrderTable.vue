@@ -212,9 +212,9 @@ export default {
     },
     cancleBytton(row) {
       let url='/customService/cancle';
-      if(row.serviceItem==''){
+      if(row.businessType=='02'){
         url='/customService/complaint/cancle';
-      }else if(row.serviceItem==''){
+      }else if(row.businessType=='03'){
         url='/customService/reservation/cancle';
       }
       this.$router.push({

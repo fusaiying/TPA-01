@@ -390,6 +390,7 @@
     , getIssuingcompanyList
     , roleInfo
     , selectWorkflow
+    , selectWorkflowByRptNo
   } from '@/api/dispatch/api'
   import moment from "moment";
   import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
@@ -526,7 +527,7 @@
         }
       },
       getRole(value) {
-        this.userNameValue = this.userIdName[value];
+        this.userNameValue =value;
         if (value == '') {
           return false;
         }
@@ -692,59 +693,68 @@
           orderByColumn: 'create_time',
           isAsc: 'asc'
         };
+        const params1 = {
+          rptNo: row.rptNo,
+        };
 
-        selectWorkflow(params).then(response => {
-          if(response.code === 200 && response.data) {
-            for(let i=0; i<response.data.length; i++) {
-              let result = response.data[i];
-              let caseStatus= result.operation;
+        selectWorkflowByRptNo(params1).then(res => {
+          if(res.code === 200 && res.data) {
+            if(res.data.length>0){
+              let result = res.data[0];
+              this.caseInfo04List.push(result);
+            }
+            selectWorkflow(params).then(response => {
+              if(response.code === 200 && response.data) {
+                for(let i=0; i<response.data.length; i++) {
+                  let result = response.data[i];
+                  let caseStatus= result.operation;
 
-              switch (caseStatus) {
-                case '04':
-                  this.caseInfo04List.push(result);
-                  break;
-                case '05':
-                  this.caseInfo05List.push(result);
-                  break;
-                case '06':
-                  this.caseInfo06List.push(result);
-                  break;
-                case '07':
-                  this.caseInfo07List.push(result);
-                  break;
-                case '08':
-                  this.caseInfo08List.push(result);
-                  break;
-                case '99':
-                  this.caseInfo99List.push(result);
-                  break;
-                default:
-                  break;
+                  switch (caseStatus) {
+                    case '05':
+                      this.caseInfo05List.push(result);
+                      break;
+                    case '06':
+                      this.caseInfo06List.push(result);
+                      break;
+                    case '07':
+                      this.caseInfo07List.push(result);
+                      break;
+                    case '08':
+                      this.caseInfo08List.push(result);
+                      break;
+                    case '99':
+                      this.caseInfo99List.push(result);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+
+                if(this.caseInfo04List.length == 0 ) {
+                  this.caseInfo04List.push(this.defaultCaseInfo);
+                }
+                if(this.caseInfo05List.length == 0 ) {
+                  this.caseInfo05List.push(this.defaultCaseInfo);
+                }
+                if(this.caseInfo06List.length == 0 ) {
+                  this.caseInfo06List.push(this.defaultCaseInfo);
+                }
+                if(this.caseInfo07List.length == 0 ) {
+                  this.caseInfo07List.push(this.defaultCaseInfo);
+                }
+                if(this.caseInfo08List.length == 0 ) {
+                  this.caseInfo08List.push(this.defaultCaseInfo);
+                }
+                if(this.caseInfo99List.length == 0 ) {
+                  this.caseInfo99List.push(this.defaultCaseInfo);
+                }
               }
-            }
-
-            if(this.caseInfo04List.length == 0 ) {
-              this.caseInfo04List.push(this.defaultCaseInfo);
-            }
-            if(this.caseInfo05List.length == 0 ) {
-              this.caseInfo05List.push(this.defaultCaseInfo);
-            }
-            if(this.caseInfo06List.length == 0 ) {
-              this.caseInfo06List.push(this.defaultCaseInfo);
-            }
-            if(this.caseInfo07List.length == 0 ) {
-              this.caseInfo07List.push(this.defaultCaseInfo);
-            }
-            if(this.caseInfo08List.length == 0 ) {
-              this.caseInfo08List.push(this.defaultCaseInfo);
-            }
-            if(this.caseInfo99List.length == 0 ) {
-              this.caseInfo99List.push(this.defaultCaseInfo);
-            }
+            }).catch(error => {
+              console.log(error);
+            });
           }
-        }).catch(error => {
-          console.log(error);
-        });
+        })
+
 
         this.dialogVisibleStream = true;
       },

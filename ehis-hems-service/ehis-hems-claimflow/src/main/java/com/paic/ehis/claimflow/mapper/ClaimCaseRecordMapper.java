@@ -215,5 +215,12 @@ public interface ClaimCaseRecordMapper
      */
     public List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord);
 
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    public List<ClaimCaseRecord> selectWorkflowByRptNo(ClaimCaseRecord claimCaseRecord);
+
 
 }

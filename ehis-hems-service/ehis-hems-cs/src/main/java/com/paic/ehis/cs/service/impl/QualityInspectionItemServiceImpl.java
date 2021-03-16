@@ -133,6 +133,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         List<QualityInspectionItem> itemList =qualityVo.getItemList();
         if (!itemList.isEmpty()) {
             qualityVo.getItemList().forEach( item ->{
+                item.setStatus("03");
                 item.setInspectionId(inspectionId);
                 item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
                 item.setCreatedBy(username);
@@ -142,6 +143,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             });
             qualityInspectionItemMapper.insertExtDocList(itemList);
         }
+        qualityVo.setStatus("03");
         qualityVo.setInspectionId(inspectionId);
         qualityVo.setCreatedBy(username);
         qualityVo.setCreatedTime(time);

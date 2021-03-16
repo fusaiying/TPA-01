@@ -93,4 +93,11 @@ public interface IClaimCaseRecordService
      * @return
      */
     List<ClaimCaseRecord> selectWorkflow(ClaimCaseRecord claimCaseRecord);
+
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    List<ClaimCaseRecord> selectWorkflowByRptNo(ClaimCaseRecord claimCaseRecord);
 }

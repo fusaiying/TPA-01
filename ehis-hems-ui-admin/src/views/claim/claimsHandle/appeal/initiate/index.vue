@@ -271,6 +271,7 @@ export default {
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
       params.pageType = '01';
+      params.r = new Date().getTime()
       appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
@@ -300,6 +301,7 @@ export default {
       params.createEndTime = endTime;
       params.auditor = this.formSearch.updateBy;
       params.pageType = '02';
+      params.r = new Date().getTime()
       appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;

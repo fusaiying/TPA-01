@@ -37,7 +37,7 @@
               </el-select>
             </el-form-item>
             <el-form-item prop="appealSubReason">
-              <el-select :disabled="!initiateBtn" v-model="appealForm.appealSubReason" class="item-width" size="mini" placeholder="核保原因">
+              <el-select :disabled="!initiateBtn" v-model="appealForm.appealSubReason" class="item-width" size="mini" placeholder="申诉原因">
                 <el-option v-for="dict in appealSubReasons" :key="dict.dictValue" :label="dict.dictLabel"  :value="dict.dictValue" />
               </el-select>
             </el-form-item>

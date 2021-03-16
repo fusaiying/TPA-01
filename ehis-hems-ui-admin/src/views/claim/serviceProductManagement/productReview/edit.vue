@@ -132,21 +132,18 @@ export default {
              this.serviceProForm = res.rows
              resolve()
            }
-           console.log(1)
          }).catch(error => {
            reject(error)
          })
        }).then(res=>{
          //调用查询供应商的接口
-         console.log(this.serviceProForm)
          let query={
             pageNum: 1,
            pageSize: 10,
            productCode: this.serviceProForm[0].productCode,
            serviceCode: this.serviceProForm[0].serviceCode,
-           flag:0
+           flag:'0'
        }
-       console.log(query)
          selectSupplier(query).then(res => {
            this.supplierInfo.supplierData = res.data;
          })
@@ -174,10 +171,10 @@ export default {
         pageSize: 10,
         productCode: val.productCode,
         serviceCode: val.serviceCode,
-        flag:0
+        flag:'0'
 
       }
-      console.log(query)
+
       selectSupplier(query).then(res => {
         this.supplierInfo.supplierData = res.data;
       })

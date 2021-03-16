@@ -548,7 +548,7 @@ export default {
 //默认选中
     checkSelection() {
       this.$nextTick(() => {
-
+        this.$refs.supplierInfo.clearValidate();
         if (this.multipleSelection.length > 0) {
           this.multipleSelection.forEach(row => {
             this.$refs.medicalRecordTable.toggleRowSelection(row, true);

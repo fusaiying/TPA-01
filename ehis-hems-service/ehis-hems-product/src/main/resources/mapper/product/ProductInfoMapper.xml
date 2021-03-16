@@ -208,7 +208,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="updateProStatus3" parameterType="ProductManagerLog">
-        update product_info set bussiness_status = #{bussinessStatus}
+        update product_info set bussiness_status = #{bussinessStatus},update_time = #{updateTime},update_by = #{updateBy}
         where product_code = #{productCode} and status = 'Y'
     </update>
 

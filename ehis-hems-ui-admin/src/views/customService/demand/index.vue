@@ -416,6 +416,7 @@ export default {
         vipFlag:"",//VIP标识
         mobilePhone:"",//移动电话
         status:"",//状态
+        modifyTime:""
       },
       loading: true,
       workPoolData: [],//公共池

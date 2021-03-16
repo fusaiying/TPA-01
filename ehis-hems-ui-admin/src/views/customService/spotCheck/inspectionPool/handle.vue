@@ -40,10 +40,10 @@
     </div>
     <div class="personInfo_class" style="margin-top: 5px;">
       <el-row :gutter=20 style="float: right"  >
-        <el-button style="margin-right: 20px" type="primary" @click="submit()" v-if="this.params.businessType=='01'" size="mini">结案</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit()" v-if="this.params.businessType=='01'" size="mini">案件复核</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit()" v-if="this.params.businessType=='03'" size="mini">结案</el-button>
-        <el-button style="margin-right: 20px" type="primary" @click="submit()" v-if="this.params.businessType=='03'" size="mini">退回修改</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='01'" size="mini">结案</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='01'" size="mini">案件复核</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="submit1()" v-if="this.params.businessType=='03'" size="mini">结案</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='03'" size="mini">退回修改</el-button>
       </el-row>
     </div>
   </div>
@@ -82,6 +82,7 @@ export default {
     complaintHandle,
     inspectionProcessInfo,
     infohandle,
+    flowLogInfo,
   },
   computed: {
     disabled() {
@@ -109,6 +110,7 @@ export default {
       attachmentInfoForm: {},
       formForm: {},
       allList:{
+        flowLogData: [],
         attachmentInfoData: [],
         acceptInfo:{},
         form: {
@@ -412,7 +414,7 @@ export default {
   },
 
   methods: {
-    submit(){
+    submit1(){
       const value1=[];//判断是否申诉
       const value2=[];
       let data1={};
@@ -537,8 +539,130 @@ export default {
           }
         })
       }
-
-
+    },
+    submit2() {
+      const value1 = [];//判断是否申诉
+      const value2 = [];
+      let data1 = {};
+      let data2 = {};
+      //判断类型为信息需求时是否申诉
+      if (this.params.businessType == '01') {
+        data1 = this.$refs.inspectionProcessInfo.inspection;
+        for (var i = 0; i < data1.appeal.length; i++) {
+          value1[i] = data1.appeal[i].appealFlag;
+        }
+        console.log(value1, "59451")
+        //获取信息需求所有的项目，值，说明
+        this.allList.inspection.items = []
+        for (let i = 0; i < data1.items.length; i++) {
+          this.allList.inspection.items.push({
+            itemKey: data1.items[i].itemKey,
+            value: data1.items[i].value,
+            itemRemark: data1.items[i].itemRemark,
+          });
+        }
+        //获取信息需求是否申诉
+        this.allList.inspection.appeal = []
+        for (let i = 0; i < data1.appeal.length; i++) {
+          this.allList.inspection.appeal.push({
+            appealName: data1.appeal[i].appealName,
+            appealFlag: data1.appeal[i].appealFlag,
+            appealReason: data1.appeal[i].appealReason,
+          });
+        }
+        //判断类型为投诉时是否申诉
+      } else if (this.params.businessType == '03') {
+        data2 = this.$refs.complaintProcessInfo.complaintProcess;
+        for (var i = 0; i < data2.appeal.length; i++) {
+          value2[i] = data2.appeal[i].appealFlag;
+        }
+        //获取投诉的所有分类，项目，值和说明
+        this.allList.complaintProcess.items = []
+        for (let i = 0; i < data2.items.length; i++) {
+          this.allList.complaintProcess.items.push({
+            itemType: data2.items[i].itemType,
+            itemKey: data2.items[i].itemKey,
+            value: data2.items[i].value,
+            itemRemark: data2.items[i].itemRemark,
+          });
+        }
+        //获取投诉处理的是否申诉
+        this.allList.complaintProcess.appeal = []
+        for (let i = 0; i < data2.appeal.length; i++) {
+          this.allList.complaintProcess.appeal.push({
+            appealName: data2.appeal[i].appealName,
+            appealFlag: data2.appeal[i].appealFlag,
+            appealReason: data2.appeal[i].appealReason,
+          });
+        }
+      }
+      if (value1.includes('01') || value2.includes('01')) {
+        this.isDisabled = false;
+      }
+      //如果是否存在差错存在是，那么上面的card可修改，并保存
+      if (value1.includes('01') || value2.includes('01')) {
+        let save = {}
+        if (this.allList.acceptInfo.businessType === '01') {
+          save = {
+            itemList: this.allList.inspection.items,
+            appealFlag: data1.appeal[0].appealFlag,
+            appealReason: data1.appeal[0].appealReason,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+            attachmentInfoForm: this.allList.attachmentInfoData,
+            acceptInfoForm: this.allList.acceptInfo,
+          }
+          //当类型为03时数据保存
+        } else if (this.allList.acceptInfo.businessType === '03') {
+          save = {
+            itemList: this.allList.complaintProcess.items,
+            appealFlag: data2.appeal[0].appealFlag,
+            appealReason: data2.appeal[0].appealReason,
+            score: data2.score,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+            formForm: this.allList.form,
+            acceptInfoForm: this.allList.acceptInfo,
+            attachmentInfoForm: this.allList.attachmentInfoData,
+          }
+        }
+        insertItem(save).then(response => {
+          if (response.code === 200) {
+            this.$message.success('保存成功!');
+          }
+        })
+        //如果是否存在差错全是否，那么只保存此card信息
+      } else {
+        //提取数据并给参数赋值
+        let save = {};
+        //当类型为01时数据保存
+        if (this.allList.acceptInfo.businessType === '01') {
+          save = {
+            itemList: this.allList.inspection.items,
+            appealFlag: data1.appeal[0].appealFlag,
+            appealReason: data1.appeal[0].appealReason,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+          }
+          //当类型为03时数据保存
+        } else if (this.allList.acceptInfo.businessType === '03') {
+          save = {
+            itemList: this.allList.complaintProcess.items,
+            appealFlag: data2.appeal[0].appealFlag,
+            appealReason: data2.appeal[0].appealReason,
+            score: data2.score,
+            businessType: this.allList.acceptInfo.businessType,
+            workOrderNo: this.allList.acceptInfo.workOrderNo,
+          }
+        }
+        console.log(save, "+++++++++++++????")
+        //保存数据
+        insertItem(save).then(response => {
+          if (response.code === 200) {
+            this.$message.success('保存成功!');
+          }
+        })
+      }
     },
     changeSaveFlag() {
       this.isSave = true

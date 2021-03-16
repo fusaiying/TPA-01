@@ -11,13 +11,12 @@ import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
-import com.paic.ehis.common.log.annotation.Log;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.paic.ehis.common.log.annotation.Log;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -321,9 +320,9 @@ public class ClaimCaseController extends BaseController {
         return getDataTable(list);
     }*/
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/selectCaseDispatchList")
-    public TableDataInfo selectCaseDispatchList(DispatchDTO dispatchDTO) {
-        startPage();
+    @PostMapping("/selectCaseDispatchList")
+    public TableDataInfo selectCaseDispatchList(@RequestBody DispatchDTO dispatchDTO) {
+        startPage(dispatchDTO);
         List<CaseDispatchVO> list = claimCaseService.selectCaseDispatchList(dispatchDTO);
         return getDataTable(list);
     }
@@ -495,7 +494,7 @@ public class ClaimCaseController extends BaseController {
 
     //抽检工作池接口-导出已处理清单
 //    @PreAuthorize("@ss.hasPermi('system:case:export')")
-    @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
+    @Log(title = "已处理理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportcaseCheckOver")
     public void exportcaseCheckOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
         String utf8Name = new String(auditWorkPoolDTO.getName().getBytes("UTF-8"));

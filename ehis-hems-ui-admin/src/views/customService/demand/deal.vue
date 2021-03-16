@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"disabled/>
             </el-form-item>
           </el-col>
@@ -199,6 +199,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
               <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" readonly/>
             </el-form-item>
@@ -288,20 +295,20 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
-              国家区号:+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width" readonly
+              国家区号+
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini"
+                        style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" readonly size="mini"
-                        style="width: 145px" maxlength="50"/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini"
+                        style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -320,49 +327,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--        <el-row>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="出单机构：" prop="priority">-->
-        <!--              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>-->
-        <!--                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"-->
-        <!--                           :value="item.dictValue"/>-->
-        <!--              </el-select>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="是否涉及银行转账" prop="bank" >-->
-        <!--              <el-radio-group v-model="workPoolData.bankTransfer" disabled>-->
-        <!--                <el-radio   label="01">是</el-radio>-->
-        <!--                <el-radio   label="02">否</el-radio>-->
-
-        <!--              </el-radio-group>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
-        <!--        <el-row>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
         <el-row>
           <el-col :span="16">
             <el-form-item label="业务内容：" prop="textarea">
@@ -566,15 +530,15 @@
         <modify-details ref="modifyDetails"></modify-details>
         <transfer ref="transfer"></transfer>
         <up-load ref="upload"></up-load>
-        <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="transfer" :disabled="ruleForm.businessProcess=='02'">转办
+        <co-organizer ref="coOrganizer" @checkButton="checkButton"></co-organizer>
+        <el-button type="primary" size="mini" @click="transfer" :disabled="checkButtonFlag.transferFlag">转办
         </el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="ruleForm.businessProcess=='02'">协办
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="checkButtonFlag.coOrganizerFlag">协办
         </el-button>
         <el-button type="primary" size="mini" @click="upload" disabled>保单信息查询</el-button>
-        <el-button type="primary" size="mini" @click="temporary" :disabled="ruleForm.businessProcess=='02'">暂存
+        <el-button type="primary" size="mini" @click="temporary" :disabled="checkButtonFlag.temporaryFlag">暂存
         </el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="checkButtonFlag.submitFlag">提交</el-button>
       </div>
     </el-card>
 
@@ -705,6 +669,37 @@ export default {
         sign: ""
       },
 
+      checkButtonFlag: {
+        transferFlag: false,//协办
+        coOrganizerFlag: false,//转办
+        temporaryFlag: false,//暂存
+        submitFlag: false//提交
+      },
+      checkButtonFrom: {//传值给后台
+        acceptorTime:undefined,//受理时间数组
+        appointmentTime:undefined,//预约时间数组
+        handlerTime:undefined,//处理时间数组
+        pageNum: 1,
+        pageSize: 10,
+        itemCode: "",//服务信息
+        channelCode: "",//受理渠道
+        acceptBy: "",//受理人
+        modifyBy: "",//处理人
+        workOrderNo: "",//工单编号
+        policyNo: "",//保单号
+        policyItemNo: "",//分单号
+        holderName: "",//投保人
+        insuredName: "",//被保人
+        idNumber: "",//证件号
+        organCode: "",//出单机构
+        priorityLevel:"",//优先级
+        vipFlag:"",//VIP标识
+        mobilePhone:"",//移动电话
+        status:"",//状态
+        modifyTime:"",
+        updateTime:""
+      },
+
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -742,20 +737,6 @@ export default {
       isinit: 'Y',
       totalCount: 0,
       changeSerchData: {},
-      states: [],
-      serves: [{
-        value: '1',
-        label: '服务1'
-      }, {
-        value: '2',
-        label: '服务2'
-      }, {
-        value: '3',
-        label: '服务3'
-      }, {
-        value: '4',
-        label: '服务4'
-      }],
       dictList: [],
       cs_order_state: [],//状态
       cs_action_type: [],//操作类型
@@ -789,8 +770,6 @@ export default {
     this.getDicts("cs_order_state").then(response => {
       this.cs_order_state = response.data;
     });
-
-
   },
   async mounted() {
     // 字典数据统一获取
@@ -834,6 +813,9 @@ export default {
     this.cs_business_type = this.dictList.find(item => {
       return item.dictType === 'cs_business_type'
     }).dictDate
+
+    //初始化按钮状态
+    this.checkButton();
   },
   methods: {
     //是否响应
@@ -845,7 +827,44 @@ export default {
         this.$refs.ruleForm.clearValidate()
       }
 
+      //更新按钮状态
+      this.checkButton();
+
     },
+
+    //设置按钮状态
+    checkButton(){
+      this.checkButtonFlag.transferFlag = false;//协办
+      this.checkButtonFlag.coOrganizerFlag = false;//转办
+      this.checkButtonFlag.temporaryFlag = false;//暂存
+      this.checkButtonFlag.submitFlag = false;//提交
+
+      //选择响应后  除【提交按钮外其余都置灰】
+      if(this.ruleForm.businessProcess == '02'){
+        this.checkButtonFlag.transferFlag = true;//协办
+        this.checkButtonFlag.coOrganizerFlag = true;//转办
+        this.checkButtonFlag.temporaryFlag = true;//暂存
+      }
+
+      //存在协办 转办后  默认都置灰
+      let queryParams = JSON.parse(JSON.stringify(this.checkButtonFrom));
+      queryParams.workOrderNo = this.$route.query.workOrderNo;
+      demandListAndPersonalPool(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.total <= 0) {
+            //未查询到数据
+            this.checkButtonFlag.transferFlag = true;//协办
+            this.checkButtonFlag.coOrganizerFlag = true;//转办
+            this.checkButtonFlag.temporaryFlag = true;//暂存
+            this.checkButtonFlag.submitFlag = true;//提交
+          }
+        }
+      }).catch(res => {
+        console.log('error submit!!');
+      })
+
+    },
+
     //结案类型是否正常
     isCloseType(s) {
       if (this.ruleForm.businessProcess == '01') {
@@ -903,11 +922,10 @@ export default {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
           this.ruleForm = res.data;
-          /*if (res.rows.length <= 0) {
+          if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
             )
-          }*/
+          }
         }
       }).catch(res => {
 

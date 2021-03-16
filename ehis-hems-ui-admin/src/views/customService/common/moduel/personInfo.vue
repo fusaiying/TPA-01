@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span>客户基本信息</span>
+      <span style="color: blue">客户基本信息</span>
     </div>
     <el-form ref="personInfo" :model="personInfo" label-width="100px"
              label-position="right" size="mini">

@@ -20,6 +20,7 @@ CREATE TABLE claim_case_cal_core
     pay_amount           DECIMAL(16, 2) COMMENT '支付金额',
     exchange_rate        DECIMAL(16, 10) COMMENT '汇率',
     pay_amount_foreign   DECIMAL(16, 2) COMMENT '外币支付金额',
+    pay_currency        VARCHAR(5)     NOT NULL COMMENT '汇率计算时的支付币种',
     request_id           varchar(32) COMMENT '请求ID',
     response_id          varchar(32) COMMENT '响应ID',
     old_response_id      varchar(32) COMMENT '原响应ID',

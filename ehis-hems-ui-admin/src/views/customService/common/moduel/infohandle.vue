@@ -1,10 +1,10 @@
 <template>
     <el-card class="box-card" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
-        <span>服务处理</span>
+        <span style="color: blue">服务处理</span>
       </div>
       <el-form ref="ruleForm" :model="infoForm" style="padding-bottom: 30px;" label-width="160px" :disabled="true"
-               label-position="right" size="mini">
+               label-position="right" size="mini" >
         <el-col :span="22">
           <el-form-item label="业务处理情况：">
             <el-row>

@@ -97,7 +97,7 @@
     <!-- 申诉工作池  end  -->
 
     <!-- 发起/处理  start  -->
-    <deal :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
+    <deal @initAppealData="initAppealData" :fixInfo="fixInfo" :value="dialogVisible" @closeDialog="closeDialog" />
     <!-- 发起/处理  end  -->
   </div>
 </template>
@@ -106,8 +106,7 @@
 
 import appealTable from '../components/appealTable'
 import deal from '../components/deal'
-import { PendingData,processedData } from '@/api/negotiation/api'
-import { claimInfoList } from '@/api/appeal/api'
+import { appealList } from '@/api/appeal/api'
 
 import moment from "moment";
 
@@ -204,15 +203,18 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     searchHandle() {
-      // this.searchBtn = true;
-      // this.pendPageInfo.pageNum = 1;
-      // this.pendPageInfo.pageSize = 10;
-      // this.completePageInfo.pageNum = 1;
-      // this.completePageInfo.pageSize = 10;
-      // this.pendingTotal = 0;
-      // this.completedTotal = 0;
-      // this.getPendingData();
-      // this.getProcessedData();
+
+      this.pendPageInfo.pageNum = 1;
+      this.pendPageInfo.pageSize = 10;
+      this.completePageInfo.pageNum = 1;
+      this.completePageInfo.pageSize = 10;
+
+      this.getPendingData();
+      this.getProcessedData();
+    },
+    initAppealData(){
+      this.getPendingData();
+      this.getProcessedData();
     },
     // 查询处理中
     getPendingData() {
@@ -225,17 +227,18 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.pendPageInfo.page;
+      params.pageNum = this.pendPageInfo.pageNum;
       params.pageSize = this.pendPageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '02';
 
-      PendingData(params).then(res => {
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.pendingTotal = res.total;
           this.pendingTableData = res.rows;
@@ -254,16 +257,17 @@ export default {
         endTime = operateDate[1];
       }
       const params = {};
-      params.pageNum = this.completePageInfo.page;
+      params.pageNum = this.completePageInfo.pageNum;
       params.pageSize = this.completePageInfo.pageSize;
-      params.rptNo = this.formSearch.rptNo;
+      params.appealRptNo = this.formSearch.rptNo;
       params.source = this.formSearch.source;
       params.idNo = this.formSearch.idNo;
       params.name = this.formSearch.name;
       params.createStartTime = startTime;
       params.createEndTime = endTime;
-      params.updateBy = this.formSearch.updateBy;
-      processedData(params).then(res => {
+      params.auditor = this.formSearch.updateBy;
+      params.appealStatus = '03';
+      appealList(params).then(res => {
         if (res.code == '200') {
           this.completedTotal = res.total;
           this.completedTableData = res.rows;

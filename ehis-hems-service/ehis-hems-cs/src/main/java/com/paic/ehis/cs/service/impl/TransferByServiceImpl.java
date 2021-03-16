@@ -105,9 +105,12 @@ public class TransferByServiceImpl implements ITransferByService
 
         FlowLog flowLog=new FlowLog();
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20,20));
+        flowLog.setToDepartment("研发部门");
         flowLog.setToReason(demandAcceptVo.getReason());
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        flowLog.setStatus("Y");
+        flowLog.setMakeTime(DateUtils.parseDate(DateUtils.getTime()));
+        flowLog.setMakeBy(SecurityUtils.getUsername());
+        flowLog.setStatus(workOrderAccept.getStatus());
         flowLog.setOperateCode("10");
         flowLog.setCreatedBy(SecurityUtils.getUsername());
         flowLog.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

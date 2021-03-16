@@ -28,10 +28,61 @@
         </span>
         <el-form style="float: right; padding: 3px 0">
           <span>
-            <el-button type="primary" v-if="querys.node==='calculateReview'" size="mini"
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openAppealInfo">申述信息</el-button>
             <el-button type="primary" size="mini" @click="">影像查看</el-button>
+            <el-button type="primary" v-if="(querys.node==='calculateReview' || querys.node==='sport') && showHistoryClaim" size="mini"
+                       @click="openHistoryClaim">历史理赔</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
+                       @click="openGuaranteee">保障查看</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
+                       @click="openHistorySurvey">调查({{historySurCount}})</el-button>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
+                       @click="openHistoryDiscussion">协谈({{historyDisCount}})</el-button>
+            <el-button type="primary" v-if="querys.node==='accept'" size="mini"
+                       @click="selectHistoricalProblem">问题件({{historicalProblemDataTotal}})</el-button>
+            <el-button type="primary" v-if="querys.node==='accept' || querys.node==='calculateReview'"
+                       :disabled="querys.status==='show'" size="mini" @click="openRemoveDialog">撤件</el-button>
+            <el-button type="primary" v-if="querys.node==='accept'" :disabled="querys.status==='show'" size="mini"
+                       @click="acceptOver">受理完毕</el-button>
+            <el-button type="primary" v-if="querys.node==='input'" :disabled="querys.status==='show'" size="mini"
+                       @click="changeBillStatus">录入完毕</el-button>
+            <el-button size="mini" @click="goBack">返回</el-button>
+          </span>
+        </el-form>
+      </el-card>
+    </div>
+    <div v-if="navFlag === false"
+         :class="{'opened-adapt1': sidebar.opened, 'close-adapt1': !sidebar.opened, 'top-instance1': this.$store.state.settings.tagsView }"
+         class="nav-bar1">
+      <div class="nav-flex-box ">
+        <div v-for="(item, i) in btnArr" :key="i" :name="item.name"
+             class="flex-item-btn"
+             :class="{'active':activeNav===item.name}"
+             @click="goAnchor(item.name)">
+          <span>{{ item.label }}</span>
+        </div>
+      </div>
+      <el-card class="top-card">
+        <span style="margin-right: 10px">
+          <span style="color:#409EFF; font-size: 12px;">报案号：{{ fixInfo.rptNo }}　</span>
+        </span>
+        <span style="margin-right: 10px">
+          <span style="color:#409EFF;font-size:12px">批次号：{{ fixInfo.batchNo }}　</span>
+        </span>
+        <!--<span style="margin-right: 10px">
+          <span style="color:#409EFF;font-size:12px">归档号：{{ fixInfo.filingNo }}　</span>
+        </span>-->
+        <span style="margin-right: 10px">
+          <span
+            style="color:#409eff;font-size:12px">申请来源：{{ selectDictLabel(delivery_sourceOption, fixInfo.source)  }}　</span>
+        </span>
+        <el-form style="float: right; padding: 3px 0">
+          <span>
+            <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
+                       @click="openAppealInfo">申述信息</el-button>
+            <el-button type="primary" size="mini" @click="">影像查看</el-button>
+            <el-button type="primary" v-if="(querys.node==='calculateReview' || querys.node==='sport') && showHistoryClaim" size="mini"
                        @click="openHistoryClaim">历史理赔</el-button>
             <el-button type="primary" v-if="querys.node==='calculateReview' || querys.node==='sport'" size="mini"
                        @click="openGuaranteee">保障查看</el-button>
@@ -131,7 +182,7 @@
     <appeal-info :value="appealDialog" :fixInfo="fixInfo" @closeAppealDialog="closeAppealDialog"/>
     <!-- 历史理赔 -->
     <history-claim :value="historyClaimDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
-                   @closeHistoryClaimDialog="closeHistoryClaimDialog"/>
+                   @closeHistoryClaimDialog="closeHistoryClaimDialog" :querys="querys" />
 
     <!-- 保障查看 -->
     <guarantee :value="guaranteeDialog" :insuredNo="insuredNo" :fixInfo="fixInfo"
@@ -224,6 +275,11 @@
         'sidebar'
       ])
     },
+    watch:{
+      $route (to, from) {
+        this.$router.go(0)
+      }
+    },
     data() {
       return {
         historySurCount: 0,// 历史调查个数
@@ -251,6 +307,7 @@
         historyDiscussionDialog: false,
         historySurveyDialog: false,
         isSave: false,
+        isNavBar: true,
         btnArr: [],
         fixInfo: {
           batchNo: undefined,
@@ -262,6 +319,7 @@
         insuredData: undefined,
         batchInfo: {},//批次信息
         querys: {},
+        showHistoryClaim: true,
         navFlag: true,
         // 受理锚点
         acceptArr: [
@@ -317,6 +375,10 @@
 
       if (this.$route.query) {
         this.querys = JSON.parse(decodeURI(this.$route.query.data))
+        if (this.querys.flag=='01'){
+          this.showHistoryClaim=false
+          this.navFlag=false
+        }
         getCase(this.querys).then(res => {
           if (res != null && res.code === 200) {
             this.fixInfo = res.data
@@ -791,13 +853,14 @@
 
 
         }
-      }
-
-
-      ,
+      },
       goBack() {
         this.$store.dispatch("tagsView/delView", this.$route);
-        this.$router.go(-1)
+        if (this.querys.flag=='01'){
+          window.close();
+        }else {
+          this.$router.go(-1)
+        }
       },
       openAppealInfo() {
         this.appealDialog = true
@@ -859,7 +922,7 @@
             }
           })
         }
-      }
+      },
     }
   }
 </script>
@@ -909,6 +972,14 @@
     transition: width 0.28s !important;
   }
 
+  .nav-bar1 {
+    position: fixed;
+    top: 0;
+    right: 20px;
+    z-index: 9;
+    width: calc(100% - 40px) !important;
+  }
+
   .hideSidebar .nav-bar {
     width: calc(100% - 94px) !important;
     transition: width 0.28s !important;
@@ -916,6 +987,10 @@
 
   .top-instance {
     top: 84px;
+  }
+
+  .top-instance1 {
+    top: 10px;
   }
 
   .nav-bar ::v-deep .el-tabs--border-card > .el-tabs__content {
@@ -971,7 +1046,7 @@
   }
 
   .navFalgClass {
-    margin-top: 10px !important;
+    margin-top: 100px !important;
   }
 </style>
 <style>

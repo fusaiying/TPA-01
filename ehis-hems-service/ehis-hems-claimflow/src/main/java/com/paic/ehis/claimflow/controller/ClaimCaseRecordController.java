@@ -112,4 +112,14 @@ public class ClaimCaseRecordController extends BaseController
     {
         return AjaxResult.success(claimCaseRecordService.selectWorkflow(claimCaseRecord));
     }
+    /**
+     * 工作流查看
+     * @param claimCaseRecord
+     * @return
+     */
+    @PostMapping("/selectWorkflowByRptNo")
+    public AjaxResult selectWorkflowByRptNo(@RequestBody ClaimCaseRecord claimCaseRecord)
+    {
+        return AjaxResult.success(claimCaseRecordService.selectWorkflowByRptNo(claimCaseRecord));
+    }
 }

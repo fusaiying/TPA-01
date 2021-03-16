@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:"  prop="Acceptor">
+            <el-form-item label="保益生效日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:"  prop="Acceptor">
+            <el-form-item label="保益满期日:"  prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
             </el-form-item>
           </el-col>
@@ -127,7 +127,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="出单机构:"  prop="Acceptor">
-              <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini" />
+              <el-select v-model="sendForm.organCode" class="item-width" clearable placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -303,7 +306,7 @@
         <el-row>
           <el-col :span="5">
             <el-form-item label="家庭电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
+              国家区号+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
               区号<el-input v-model="ruleForm.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               号码<el-input v-model="ruleForm.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               分机号<el-input v-model="ruleForm.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -312,9 +315,9 @@
 
         </el-row>
         <el-row>
-          <el-col :span="5">
+          <el-col :span="16">
             <el-form-item label="办公电话："  style="white-space: nowrap" prop="phone">
-              国家区号:+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
+              国家区号+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
               区号<el-input v-model="ruleForm.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               号码<el-input v-model="ruleForm.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
               分机号<el-input v-model="ruleForm.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
@@ -424,6 +427,14 @@
       }
     },
     data() {
+      const checkComplaintTime= (rule, value, callback) => {
+        let tDate = new Date();
+        if(tDate > value){
+          callback(new Error("预约时间不能早于当前日期"));
+        }else{
+          callback();
+        }
+      }
 
       return {
         cs_channel: [],//
@@ -436,7 +447,7 @@
         cs_handle_state:[],// 状态：
         //需要填入数据的部分
         ruleForm:{
-          channelCode:"",//受理渠道
+          channelCode:"03",//受理渠道
           itemCode:"",//服务项目
           callPerson:{
             mobilePhone:"",//来电人电话
@@ -506,7 +517,8 @@
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           complaintTime: [
-            {required: true, message: "预约时间不能为空", trigger: "blur"}
+            {required: true, message: "预约时间不能为空", trigger: "blur"},
+            {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
           'callPerson.mobilePhone': [
             {required: true, message: "来电号码不能为空", trigger: "blur"},
@@ -521,6 +533,16 @@
           content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"},
             { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
+          'contactsPerson.address': [
+            { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
+          'E-MAIL': [
+            {required: true, message: "Email不能为空", trigger: "blur"},
+            {required: true,
+              message: "请输入正确的格式",
+              pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
+              trigger: "blur"},
           ],
         },
         readonly: true,

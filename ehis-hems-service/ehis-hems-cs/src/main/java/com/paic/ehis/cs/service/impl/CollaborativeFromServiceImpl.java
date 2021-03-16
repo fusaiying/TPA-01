@@ -169,12 +169,13 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //征求意见处理完毕后  将协办表中状态改为02   增加处理意见
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
+        collaborativeFrom.setHandleState("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
         collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
-        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+//        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return collaborativeFromMapper.updateConsultationDemand(collaborativeFrom);
@@ -205,14 +206,16 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //征求意见处理完毕后  将协办表中状态改为02   增加投诉不成立理由 投诉是否成立  处理方案  处理依据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
+        collaborativeFrom.setHandleState("02");
         collaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(complaintDealVo.getCollaborativeId());
         collaborativeFrom.setValidFlag(complaintDealVo.getValidFlag());
         collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
         collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
         collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
-        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        //征求意见处理提交禁止修改案件发起人，案件发起时间
+        //collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+        //collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);

@@ -78,6 +78,11 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
             public AjaxResult selectSupplier(@RequestBody ProductInfo productInfo){
                 return null;
             }
+
+            @Override
+            public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo){
+                return null;
+            }
         };
     }
 }

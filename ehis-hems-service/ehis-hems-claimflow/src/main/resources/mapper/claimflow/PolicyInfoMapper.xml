@@ -244,4 +244,73 @@ SELECT a.policy_manage_com,a.policy_no,a.insured_no,b.birthday,b.occupation FROM
         where insured_no = #{insuredNo} AND name = #{name}
     </select>
 
+    <resultMap id="PolicyListResult" type="com.paic.ehis.claimflow.domain.vo.PolicyListVo">
+        <result property="policyId"    column="policy_id"    />
+        <result property="policyNo"    column="policy_no"    />
+        <result property="policyItemNo"    column="policy_item_no"    />
+        <result property="appName"    column="app_name"    />
+        <result property="validStartDate"    column="valid_start_date"    />
+        <result property="orgPolicyItemNo"    column="org_policy_item_no"    />
+        <result property="validEndDate"    column="valid_end_date"    />
+        <result property="policyRiskType"    column="policy_risk_type"    />
+        <result property="policyStatus"    column="policy_status"    />
+        <result property="specialAgreement"    column="special_agreement"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="companyCode"    column="company_code"    />
+        <result property="policyType"    column="policy_type"    />
+        <result property="planCode"    column="plan_code"    />
+        <result property="orgPolicyNo"    column="org_policy_no"    />
+        <result property="ssFlag"    column="ss_flag"    />
+        <result property="policyManageCom"    column="policy_manage_com"    />
+        <result property="riskCodesStr"    column="risk_codes"    />
+        <result property="insuredNo"    column="insured_no"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="idType"    column="id_type"    />
+        <result property="idNo"    column="id_no"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="occupation"    column="occupation"    />
+        <result property="nationality"    column="nationality"    />
+        <result property="idStartDate"    column="id_start_date"    />
+        <result property="idEndDate"    column="id_end_date"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="address"    column="address"    />
+        <result property="orgInsuredNo"    column="org_insured_no"    />
+        <collection property="policyRiskRelations" ofType="com.paic.ehis.claimflow.domain.PolicyRiskRelation" column="policy_no"
+                    select="com.paic.ehis.claimflow.mapper.PolicyRiskRelationMapper.selectRiskNameInsuredList"/>
+    </resultMap>
+    <select id="selectPolicyList" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimFlowDTO" resultMap="PolicyListResult">
+        select distinct
+            pi.policy_no,pi.policy_item_no,pi.app_name,pi.valid_start_date,
+            pi.valid_end_date,pi.policy_risk_type,pi.policy_status,pi.special_agreement,pi.company_code,
+            pi.company_name,pi.policy_manage_com,pi.policy_type,pi.plan_code,pi.prem,pi.org_policy_no,
+            pi.org_policy_item_no,pi.ss_flag,pi.settle_flag,(select GROUP_CONCAT(prr.risk_code) from policy_risk_relation prr where prr.policy_no=pi.policy_no) as risk_codes,
+            pi.insured_no,
+            pi2.name, pi2.sex, pi2.id_type, pi2.id_no, pi2.birthday, pi2.occupation, pi2.nationality, pi2.id_start_date,
+            pi2.id_end_date, pi2.mobile, pi2.email, pi2.phone, pi2.province, pi2.city, pi2.district, pi2.address,
+            pi2.org_insured_no
+        from policy_info pi,policy_insured pi2
+        where pi.insured_no=pi2.insured_no and pi.status='Y' and pi2.status='Y'
+        <if test="policyNo != null  and policyNo != ''">
+          and pi.policy_no = #{policyNo}
+        </if>
+        <if test="policyItemNo != null  and policyItemNo != ''">
+            and pi.policy_item_no = #{policyItemNo}
+        </if>
+        <if test="name != null  and name != ''">
+            and pi2.name = like concat('%', #{name}, '%')
+        </if>
+        <if test="idNo != null  and idNo != ''">
+            and pi2.id_no = #{idNo}
+        </if>
+        <if test="birthday != null  and birthday != ''">
+            and pi2.birthday = #{birthday}
+        </if>
+    </select>
+
 </mapper>

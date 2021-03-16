@@ -1,10 +1,10 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>{{selectDictLabel(businessTypeOptions, acceptForm.businessService.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, acceptForm.businessService.split('-')[1])}}</span>
+      <span style="color: blue">{{selectDictLabel(businessTypeOptions, acceptForm.businessService.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, acceptForm.businessService.split('-')[1])}}</span>
     </div>
     <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="100px" :disabled="isDisabled"
-             label-position="right" size="mini">
+             label-position="right" size="mini" >
       <el-row>
         <el-form-item label="受理渠道：" prop="channelCode" class=".to_right">
           <el-radio-group v-model="acceptForm.channelCode">

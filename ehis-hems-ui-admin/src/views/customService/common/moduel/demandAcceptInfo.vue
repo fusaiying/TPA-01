@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>{{selectDictLabel(businessTypeOptions, divTitle.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, divTitle.split('-')[1])}}</span>
+      <span style="color: blue">{{selectDictLabel(businessTypeOptions, divTitle.split('-')[0])+'-'+selectDictLabel(serviceItemOptions, divTitle.split('-')[1])}}</span>
     </div>
     <el-form ref="ruleForm" :model="acceptForm" style="padding-bottom: 30px;" label-width="160px" :disabled="isDisabled"
              label-position="right" size="mini">
@@ -110,10 +110,10 @@
       <el-row>
         <el-col :span="16">
           <el-form-item label="联系人固定电话："  style="white-space: nowrap" prop="phone">
-            国家区号:+<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable style="width: 75px"/>
-            区号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
-            号码<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
-            分机号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 145px" maxlength="50"/>
+            国家区号+<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable style="width: 75px"/>
+            区号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 75px" maxlength="50"/>
+            号码<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 120px" maxlength="50"/>
+            分机号<el-input v-model="acceptForm.contactsPerson.homePhone" class="item-width" clearable size="mini" style="width: 75px" maxlength="50"/>
           </el-form-item>
         </el-col>
       </el-row>

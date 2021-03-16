@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="confirmationQueryForm" :model="confirmationQueryForm" style="padding-bottom: 30px;" label-width="100px"
+      <el-form ref="confirmationQueryForm" :model="confirmationQueryForm" style="padding-bottom: 30px;" label-width="150px"
                label-position="right" size="mini">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="8" >
             <el-form-item label="案件首次结案日期：" prop="firstEndCaseTime">
               <el-date-picker
                 v-model="confirmationQueryForm.firstEndCaseTime"
@@ -61,20 +61,17 @@
           size="small"
           highlight-current-row
           tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="riskCode" label="工单号" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip/>
-          <el-table-column align="center" prop="riskNature" label="服务项目" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="结案日期" align="center" show-overflow-tooltip>
+          style=" width: 100%;">
+
+          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip >
             <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
+              <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="updateBy" align="center" label="质检分组" show-overflow-tooltip/>
+          <el-table-column align="center" prop="serviceItem" label="服务项目" show-overflow-tooltip/>
+          <el-table-column prop="modifyBy" align="center" label="结案处理人" show-overflow-tooltip/>
           <el-table-column prop="updateBy" align="center" label="质检人" show-overflow-tooltip/>
-          <el-table-column prop="updateBy" align="center" label="质检结果" show-overflow-tooltip/>
+
         </el-table>
 
         <pagination
@@ -92,11 +89,17 @@
 <script>
 
 import moment from 'moment'
-import {selectConfirmationQuery} from '@/api/customService/spotCheck'
+import {selectQualityFlagVO} from '@/api/customService/spotCheck'
 
 let dictss = [{dictType: 'cs_service_item'}]
 export default {
-  components: {
+  components: {},
+  filters: {
+    changeDate: function (value) {
+      if (value !== null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    }
   },
   data() {
     return {
@@ -105,24 +108,29 @@ export default {
       confirmationQueryForm: {
         firstEndCaseTime: undefined,
         serviceItem: undefined,
-        workOrderNo: undefined
+        workOrderNo: undefined,
       },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
       },
       loading: true,
-      workPoolData: [],
+      inspectionPublicPoolData: [],
       isinit: 'Y',
       page: 1,
       totalCount: 0,
       finishPageSize: 10,
       changeSerchData: {},
       dictList: [],
+
       service_itemOptions: [],
+      inspection_statusOptions: [],
+      inspection_resultOptions: [],
     }
   },
   created() {
+    this.searchHandle()
+
   },
   async mounted() {
     // 字典数据赋值
@@ -133,30 +141,60 @@ export default {
     this.service_itemOptions = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
+    this.inspection_statusOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_inspection_status'
+    }).dictDate
+    this.inspection_resultOptions = this.dictList.find(item => {
+      return item.dictType === 'cs_inspection_result'
+    }).dictDate
     this.searchHandle()
   },
   methods: {
     resetForm() {
       this.$refs.confirmationQueryForm.resetFields()
     },
+    dealButton(row){
+      this.$message({
+        message: '将要处理工单【'+row.workOrderNo+"】....",
+        type: 'success',
+        center: true,
+        showClose: true
+      })
+      let data = encodeURI(
+        JSON.stringify({
+          workOrderNo: row.workOrderNo, //批次号
+          policyNo: row.policyNo, //保单号
+          policyItemNo: row.policyItemNo, //分单号
+          businessType: row.businessType
+        })
+      )
+      console.info("handleOne:"+data)
+      this.$router.push({
+        path: '/workOrder/inspectionConfirmationConfirm',
+        query: {
+          data
+        }
+      })
+    },
     searchHandle() {
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
-
         firstEndCaseStartTime: undefined,
         firstEndCaseEndTime: undefined,
+        workOrderNo :this.confirmationQueryForm.workOrderNo,
         serviceItemCode: this.confirmationQueryForm.serviceItem,
-        workOrderNo: this.confirmationQueryForm.workOrderNo
+
       }
       if (this.confirmationQueryForm.firstEndCaseTime) {
         query.firstEndCaseStartTime = this.confirmationQueryForm.firstEndCaseTime[0]
         query.firstEndCaseEndTime = this.confirmationQueryForm.firstEndCaseTime[1]
       }
-      selectConfirmationQuery(query).then(res => {
+
+      selectQualityFlagVO(query).then(res => {
         if (res != null && res.code === 200) {
-          this.workPoolData = res.rows
-          this.totalCount = res.total
+          this.inspectionPublicPoolData = res.rows;
+          this.totalCount = res.total;
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "未查询到数据！"
@@ -164,9 +202,9 @@ export default {
           }
         }
       }).catch(res => {
-
       })
     },
+
     send() {
 
     }

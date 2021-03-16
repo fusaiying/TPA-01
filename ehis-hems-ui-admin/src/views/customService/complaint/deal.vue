@@ -85,12 +85,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢生效日:" prop="Acceptor">
+            <el-form-item label="保益生效日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="保溢满期日:" prop="Acceptor">
+            <el-form-item label="保益满期日:" prop="Acceptor">
               <el-input v-model="sendForm.acceptor" class="item-width" readonly size="mini"/>
             </el-form-item>
           </el-col>
@@ -205,12 +205,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="callCenterId">
-              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人姓名：" prop="callCenterId">
-              <el-input v-model="workPoolData.contactsPerson.name" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.name" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -225,12 +225,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系人地址：" prop="address">
-              <el-input v-model="workPoolData.contactsPerson.address" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.address" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户号：" prop="phone">
-              <el-input v-model="workPoolData.insuredNo" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.insuredNo" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -245,19 +245,19 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="phone">
-              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.callPerson.mobilePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="E-MAIL：" prop="phone">
-              <el-input v-model="workPoolData.email" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.email" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人移动电话：" prop="mobilePhone">
-              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.mobilePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -270,31 +270,37 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人姓名：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.name" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.complainantPerson.name" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="投诉人性别：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.sex" class="item-width" size="mini" readonly/>
+              <el-select v-model="workPoolData.complainantPerson.sex" class="item-width" placeholder="">
+                <el-option v-for="item in cs_sex" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉人身份：" prop="phone">
-              <el-input v-model="workPoolData.complainantPerson.identity" class="item-width" size="mini" readonly/>
+              <el-select v-model="workPoolData.complainantPerson.identity" class="item-width" placeholder="">
+                <el-option v-for="item in cs_identity" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="家庭电话：" prop="phone">
-              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.homePhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="办公电话：" prop="phone">
-              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" readonly/>
+              <el-input v-model="workPoolData.contactsPerson.workPhone" class="item-width" size="mini" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -380,13 +386,13 @@
     </el-card>
 
     <el-card>
-      <el-form ref="sendForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="一级投诉分类：" prop="priority">
+            <el-form-item label="一级投诉分类：" prop="level1">
               <el-select v-model="sendForm.level1" class="item-width" @change="classTwo('1')">
                 <el-option v-for="item in cs_classify_level1" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -394,7 +400,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="二级投诉分类：" prop="priority">
+            <el-form-item label="二级投诉分类：" prop="level2">
               <el-select v-model="sendForm.level2" class="item-width">
                 <el-option v-for="item in cs_classify_level2" :key="item.code" :label="item.codeName"
                            :value="item.code"/>
@@ -413,7 +419,7 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="撤诉状态：" prop="priority">
+            <el-form-item label="撤诉状态：" prop="complaintStatus">
               <el-select v-model="sendForm.complaintStatus" class="item-width">
                 <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -728,6 +734,66 @@ export default {
         orderNum: [
           {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
         ],
+        level1: [
+          {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
+        ],
+        level2: [
+          {required: true, message: "二级投诉分类不能为空", trigger: "blur"}
+        ],
+        pieceworkFlag: [
+          {required: true, message: "是否计件不能为空", trigger: "blur"}
+        ],
+        complaintStatus: [
+          {required: true, message: "撤诉状态不能为空", trigger: "blur"}
+        ],
+        complaintTenable: [
+          {required: true, message: "投诉是否成立不能为空", trigger: "blur"}
+        ],
+        repeatedComplaint: [
+          {required: true, message: "重复投诉不能为空", trigger: "blur"}
+        ],
+        reason1: [
+          {required: true, message: "一级投诉原因不能为空", trigger: "blur"}
+        ],
+        reason2: [
+          {required: true, message: "二级投诉原因不能为空", trigger: "blur"}
+        ],
+        reason3: [
+          {required: true, message: "三级投诉原因不能为空", trigger: "blur"}
+        ],
+        complaintLink: [
+          {required: true, message: "投保问题（报保监）不能为空", trigger: "blur"}
+        ],
+        outsideState: [
+          {required: true, message: "行协调解或外部鉴不能为空", trigger: "blur"}
+        ],
+        riskType: [
+          {required: true, message: "险种类型不能为空", trigger: "blur"}
+        ],
+        marketChannel: [
+          {required: true, message: "营销渠道不能为空", trigger: "blur"}
+        ],
+        complaintCategory: [
+          {required: true, message: "投诉业务类别不能为空", trigger: "blur"}
+        ],
+        rootDepartment: [
+          {required: true, message: "投诉根因部门不能为空", trigger: "blur"}
+        ],
+        actionCause: [
+          {required: true, message: "致诉根因不能为空", trigger: "blur"}
+        ],
+        treatmentProgress: [
+          {required: true, message: "处理进展不能为空", trigger: "blur"}
+        ],
+        customerFeedback: [
+          {required: true, message: "客户反馈不能为空", trigger: "blur"}
+        ],
+        treatmentResult: [
+          {required: true, message: "处理结果不能为空", trigger: "blur"}
+        ],
+        actPromptly: [
+          {required: true, message: "投诉损失不能为空", trigger: "blur"}
+        ],
 
       },
       readonly: true,
@@ -913,9 +979,6 @@ export default {
     this.cs_question_circ = this.dictList.find(item => {
       return item.dictType === 'cs_question_circ'
     }).dictDate
-
-
-
   },
   methods: {
     //

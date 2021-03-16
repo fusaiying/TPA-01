@@ -110,6 +110,8 @@ public class OrderInfoServiceImpl implements IOrderInfoService
         orderInfo.setInpatientArea(StringUtils.join(orderInfo.getInpatientAreaList(), ","));
         orderInfo.setExpectedArea(StringUtils.join(orderInfo.getExpectedAreaList(), ","));
         orderInfo.setCity(StringUtils.join(orderInfo.getCityList(), ","));
+        orderInfo.setSupplierCode(orderInfo.getSupplierCode());
+        orderInfo.setChname(orderInfo.getChname());
         return orderInfoMapper.updateOrderInfo(orderInfo);
     }
 
@@ -210,6 +212,9 @@ public class OrderInfoServiceImpl implements IOrderInfoService
                 List<ContractInfos> contractInfoList = new ArrayList<>();
                 for(ContractInfos ContractInfo:contractInfos){
                     if(ContractInfo.getSupplierCode().equals(supplierInfoVo.getSupplierCode())){
+                        if( "".equals(ContractInfo.getPhone()) || ContractInfo.getPhone() ==null){
+                            ContractInfo.setPhone(ContractInfo.getMobile());
+                        }
                         contractInfoList.add(ContractInfo);
                     }
                     supplierInfoVo.setContractInfo(contractInfoList);

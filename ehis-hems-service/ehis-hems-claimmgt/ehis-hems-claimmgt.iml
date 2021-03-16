@@ -20,6 +20,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="ehis-hems-common-security" />
+    <orderEntry type="module" module-name="ehis-hems-common-datascope" />
+    <orderEntry type="module" module-name="ehis-hems-common-log" />
+    <orderEntry type="module" module-name="ehis-hems-common-swagger" />
+    <orderEntry type="module" module-name="ehis-hems-common-redis" />
+    <orderEntry type="module" module-name="ehis-hems-common-core" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.nacos:nacos-client:1.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.nacos:nacos-common:1.3.0" level="project" />

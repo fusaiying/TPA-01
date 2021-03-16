@@ -61,6 +61,14 @@ public class ClaimCaseAppealTask extends BaseEntity
     @Excel(name = "登录机构编码")
     private String deptCode;
 
+    /**处理意见*/
+    private String conclusionRemark;
+
+    private String isAgree;
+
+    private String dealType;
+
+
     public void setTaskId(Long taskId) 
     {
         this.taskId = taskId;
@@ -168,6 +176,30 @@ public class ClaimCaseAppealTask extends BaseEntity
     public String getDeptCode() 
     {
         return deptCode;
+    }
+
+    public String getConclusionRemark() {
+        return conclusionRemark;
+    }
+
+    public void setConclusionRemark(String conclusionRemark) {
+        this.conclusionRemark = conclusionRemark;
+    }
+
+    public String getIsAgree() {
+        return isAgree;
+    }
+
+    public void setIsAgree(String isAgree) {
+        this.isAgree = isAgree;
+    }
+
+    public String getDealType() {
+        return dealType;
+    }
+
+    public void setDealType(String dealType) {
+        this.dealType = dealType;
     }
 
     @Override

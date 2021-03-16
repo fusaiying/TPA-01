@@ -152,6 +152,7 @@ export default {
             if(servicesAvailableFlag=='01' || servicesAvailableFlag=='03') {
               let productInfoData = this.$refs.productInfoForm.baseForm
               let servicesAvailableData = this.$refs.servicesAvailableForm.serviceProForm
+
               let allData = {
                 productInfoData: productInfoData,
                 servicesAvailableData: servicesAvailableData

@@ -18,6 +18,14 @@ export function inspectionListAndPublicPool(query) {
     params: query
   })
 }
+//质检差错确认首页查询
+export function selectQualityFlagVO(params){
+  return request({
+    url: '/cs/spotCheck/internal/selectQualityFlagVO',
+    method: 'get',
+    params: params
+  })
+}
 
 //# 查询处理中的质检数据
 export function inspectionListAndPersonalPool(query) {
@@ -40,7 +48,7 @@ export function selectSysUser() {
 export function selectConfirmationQuery(query) {
   return request({
     //后台接口调用地址
-    url: '/cs/spotCheck/internal/listAndPublicPool',
+    url: '/cs/spotCheck/internal/inspectionPublicData',
     method: 'get',
     params: query
   })
@@ -90,6 +98,13 @@ export function getComplaintHandleInfo(params){
     params: params
   })
 }
+export function getHandleInfoList(query){
+  return request({
+    url: '/cs/spotCheck/internal/getHandleInfoList' ,
+    method: 'get',
+    params: query,
+  })
+}
 export function insertItem(form){
   return request({
     url: '/cs/spotCheck/insertItem',
@@ -97,7 +112,13 @@ export function insertItem(form){
     data: form
   })
 }
-
+export function insertHandleInfo(form){
+  return request({
+    url: '/cs/spotCheck/internal/insertHandleInfo',
+    method: 'post',
+    data: form
+  })
+}
 
 //# 通过工单号查询附件信息
 export function getAttachmentListById(params) {

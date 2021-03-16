@@ -7,13 +7,19 @@ import com.paic.ehis.common.core.utils.PubFun;
 
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.common.core.utils.StringUtils;
+import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.cs.domain.*;
 import com.paic.ehis.cs.domain.dto.AcceptDTO;
+import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
+import com.paic.ehis.cs.domain.vo.PolicyListVo;
 import com.paic.ehis.cs.domain.vo.WorkOrderVo;
 import com.paic.ehis.cs.mapper.*;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
+import com.paic.ehis.cs.utils.CodeEnum;
 import com.paic.ehis.cs.utils.VoUtils;
+import com.paic.ehis.system.api.ClaimFlowService;
+import com.paic.ehis.system.api.domain.dto.ClaimFlowDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,10 +48,17 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     @Autowired
     private HcsModificationMapper hcsModificationMapper;
 
+    @Autowired
+    private ClaimFlowService claimFlowService;
 
+    /**
+     * 信息需求公共池实现
+     * @param workOrderQueryDTO
+     * @return
+     */
     @Override
-    public List<DemandAcceptVo> selectDemandAcceptList(AcceptDTO acceptDTO) {
-        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList(acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptList(WorkOrderQueryDTO workOrderQueryDTO) {
+        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList(workOrderQueryDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";
         List<FieldMap> KVMap = fieldMapMapper.selectKVMap(targetTableName, sourceName);
@@ -90,10 +103,15 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         return demandAcceptVos;
     }
 
+    /**
+     * 信息需求个人池实现
+     * @param workOrderQueryDTO
+     * @return
+     */
     @Override
-    public List<DemandAcceptVo> selectDemandAcceptList2(AcceptDTO acceptDTO) {
-        acceptDTO.setUpdateBy(SecurityUtils.getUsername());
-        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(acceptDTO);
+    public List<DemandAcceptVo> selectDemandAcceptList2(WorkOrderQueryDTO workOrderQueryDTO) {
+
+        List<DemandAcceptVo> demandAcceptVos = demandAcceptVoMapper.selectDemandAcceptVoList2(workOrderQueryDTO);
         String sourceName = "DemandAcceptVo";
         String targetTableName = "accept_detail_info";
         List<FieldMap> KVMap = fieldMapMapper.selectKVMap(targetTableName, sourceName);
@@ -223,21 +241,46 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         PersonInfo personInfo2 = new PersonInfo();
         FlowLog flowLog = new FlowLog();
         WorkOrderAccept workOrderAccept = new WorkOrderAccept();
+        if(StringUtils.isNotEmpty(demandAcceptVo.getPolicyItemNo()) && StringUtils.isNotEmpty(demandAcceptVo.getPolicyNo())){
+            ClaimFlowDTO claimFlowDTO=new ClaimFlowDTO();
+            claimFlowDTO.setPolicyNo(demandAcceptVo.getPolicyNo());
+            claimFlowDTO.setPolicyItemNo(demandAcceptVo.getPolicyItemNo());
+            AjaxResult policyInfoBy = claimFlowService.getPolicyInfoBy(claimFlowDTO);
+            PolicyListVo policyListVo = (PolicyListVo) policyInfoBy.get("data");
+            if(policyListVo!=null){
+                workOrderAccept.setPolicyNo(demandAcceptVo.getPolicyNo());
+                workOrderAccept.setPolicyItemNo(demandAcceptVo.getPolicyItemNo());
+                workOrderAccept.setRiskCode(policyListVo.getRiskCodesStr());
+                workOrderAccept.setInsuredName(policyListVo.getName());
+                workOrderAccept.setHolderName(policyListVo.getAppName());
+                //被保人信息保存
+                String insuredId = PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6);
+                PersonInfo insuredPerson=new PersonInfo();
+                insuredPerson.setPersonId(insuredId);
+                insuredPerson.setName(policyListVo.getName());
+                insuredPerson.setEmail(policyListVo.getEmail());
+                insuredPerson.setBirthday(policyListVo.getBirthday());
+                insuredPerson.setAddress(policyListVo.getAddress());
+                insuredPerson.setIdType(policyListVo.getIdType());
+                insuredPerson.setIdNumber(policyListVo.getIdNo());
+                insuredPerson.setSex(policyListVo.getSex());
+                insuredPerson.setLinePhone(policyListVo.getPhone());
+                insuredPerson.setOtherCustomerNo(policyListVo.getInsuredNo());
+                personInfoMapper.insertPersonInfo(insuredPerson);
+            }
+        }
         //工单表插入
-        workOrderAccept.setStatus("01");
-
-        workOrderAccept.setHolderName(demandAcceptVo.getHolderName());
+        workOrderAccept.setStatus(CodeEnum.ORDER_STATE_01.getCode());
         workOrderAccept.setOrganCode(demandAcceptVo.getOrganCode());
+        workOrderAccept.setAcceptBy(SecurityUtils.getUsername());
         workOrderAccept.setAcceptTime(DateUtils.parseDate(DateUtils.getTime()));
-        workOrderAccept.setModifyTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setCreateBy(SecurityUtils.getUsername());
+        workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setUpdateBy(SecurityUtils.getUsername());
         workOrderAccept.setUpdateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
-        workOrderAccept.setCreateTime(DateUtils.parseDate(DateUtils.getTime()));
         workOrderAccept.setBusinessType(demandAcceptVo.getBusinessType());
         demandAcceptVoMapper.insertWorkOrderAccept(workOrderAccept);
-
 
         acceptDetailInfo.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         acceptDetailInfo.setCallCenterId(demandAcceptVo.getCallCenterId());
@@ -275,7 +318,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo1.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo1.setUpdatedBy(SecurityUtils.getUsername());
         personInfo1.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        demandAcceptVoMapper.insertPersonInfo(personInfo1);
+        personInfoMapper.insertPersonInfo(personInfo1);
         //插入联系人
         personInfo2.setPersonId(acceptDetailInfo.getContactsPersonId());
         personInfo2.setSex(demandAcceptVo.getContactsSex());
@@ -289,7 +332,7 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
         personInfo2.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         personInfo2.setUpdatedBy(SecurityUtils.getUsername());
         personInfo2.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        demandAcceptVoMapper.insertPersonInfo(personInfo2);
+        personInfoMapper.insertPersonInfo(personInfo2);
 
         //轨迹表插入
         flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id", 20, 20));
@@ -659,12 +702,12 @@ public class DemandAcceptVoServiceimpl implements IDemandAcceptVoService {
     /**
      * 协办工作池查询
      *
-     * @param acceptDTO
+     * @param workOrderQueryDTO
      * @return
      */
     @Override
-    public List<DemandAcceptVo> selectAssist(AcceptDTO acceptDTO) {
-        return demandAcceptVoMapper.selectAssist(acceptDTO);
+    public List<DemandAcceptVo> selectAssist(WorkOrderQueryDTO workOrderQueryDTO) {
+        return demandAcceptVoMapper.selectAssist(workOrderQueryDTO);
     }
 
 

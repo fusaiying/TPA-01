@@ -68,8 +68,14 @@ public class ClaimCaseAppealTaskVo extends BaseEntity {
     /** 登录机构编码 */
     private String deptCode;
 
+    /** 批次号 */
+    private String batchNo;
+
     /**根据 pageType 查询固定的数据*/
     private String pageType;
+
+    /**处理意见*/
+    private String conclusionRemark;
 
     private String createStartTime;
 

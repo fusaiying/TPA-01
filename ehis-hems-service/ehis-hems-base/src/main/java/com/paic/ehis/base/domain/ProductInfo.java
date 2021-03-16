@@ -81,4 +81,7 @@ public class ProductInfo extends BaseEntity
     @Excel(name = "数据状态")
     private String status;
 
+    /** 审核界面去除null */
+    private String flag;
+
 }

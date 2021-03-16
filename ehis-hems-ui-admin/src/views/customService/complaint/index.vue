@@ -205,9 +205,9 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
@@ -247,8 +247,8 @@
         <pagination
           v-show="totalCount>0"
           :total="totalCount"
-          :page.sync="pageNum"
-          :limit.sync="pageSize"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle"
           v-if="isShow"
         />
@@ -269,7 +269,7 @@
           @selection-change="handleSelectionChange"
         >
 <!--          <el-table-column type="selection" align="center" name/> sd-->
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-toolti>
+          <el-table-column prop="workOrderNo" align="center" width="140" label="工单号" show-overflow-toolti>
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="dealButton(scope.row)">{{scope.row.workOrderNo}}</el-button>
             </template>
@@ -279,8 +279,8 @@
               <span>{{selectDictLabel(cs_complaint_item, scope.row.itemCode)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="policyNo" label="保单号" show-overflow-tooltip/>
-          <el-table-column align="center"  prop="policyItemNo" label="分单号" show-overflow-tooltip/>
+          <el-table-column prop="policyNo" align="center" width="140" label="保单号" show-overflow-tooltip/>
+          <el-table-column prop="policyItemNo" align="center" width="140" label="分单号" show-overflow-tooltip/>
           <el-table-column prop="riskCode" align="riskCode" label="险种代码" show-overflow-tooltip/>
           <el-table-column prop="insuredName" align="center" label="被保人" show-overflow-tooltip/>
           <el-table-column prop="holderName" align="center" label="投保人" show-overflow-tooltip/>
@@ -289,9 +289,9 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
@@ -307,8 +307,8 @@
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
-          <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
+          <el-table-column prop="remark" align="center" label="响应内容" show-overflow-tooltip/>
+          <el-table-column prop="organCode" align="center" width="120" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">
               <span>{{selectDictLabel(cs_organization, scope.row.organCode)}}</span>
@@ -325,7 +325,6 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
               <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
               <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
             </template>
           </el-table-column>
         </el-table>
@@ -333,20 +332,26 @@
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
-          :page.sync="pageNumPerson"
-          :limit.sync="pageSizePerson"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle1"
         />
       </div>
     </el-card>
-
   </div>
 </template>
 
 <script>
   import moment from 'moment'
   import {complaintListAndPublicPool,complaintListAndPersonalPool,complaintObtain,complaintObtainMany} from '@/api/customService/complaint'
-
+  let dictss = [
+    {dictType: 'cs_channel'},
+    {dictType: 'cs_organization'},
+    {dictType: 'cs_priority'},
+    {dictType: 'cs_order_state'},
+    {dictType: 'cs_complaint_item'},
+    {dictType: 'cs_vip_flag'},
+  ]
   export default {
     filters: {
       changeDate: function (value) {
@@ -362,16 +367,15 @@
         ids:[],//多选框
         open:"",//是否弹出
         title:"",//弹出框名称
-        cs_complaint_item:[],//服务项目
+        dictList:[],
         cs_channel:[],//渠道
         cs_organization:[],//出单机构
         cs_priority:[],//优先级
+        cs_complaint_item:[],//服务项目
         cs_vip_flag:[],// vip标识
         cs_order_state:[],// 状态：
-        riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
-
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -393,13 +397,6 @@
           vipFlag:"",//VIP标识
           mobilePhone:"",//移动电话
           status:"",//状态
-          // acceptTimeStart:"",//开始受理时间
-          // acceptTimeEnd:"",//结束受理时间
-          // modifyTimeStart:"",//开始修改时间
-          // modifyTimeEnd:"",//结束修改时间
-          // complaintTimeStart:"",//开始预约时间
-          // complaintTimeEnd:""//结束预约时间
-
         },
         caseNumber: false,//查询条件（报案号）是否显示
         loading: true,
@@ -413,47 +410,38 @@
         totalCount: 0,
         totalPersonCount: 0,
         changeSerchData: {},
-        serves: [{
-          value: '1',
-          label: '服务1'
-        }, {
-          value: '2',
-          label: '服务2'
-        }, {
-          value: '3',
-          label: '服务3'
-        }, {
-          value: '4',
-          label: '服务4'
-        }],
-        sysUserOptions: [],
+        isRemind:true,
       }
     },
     created() {
-      this.searchHandles()
-      this.getDicts("cs_channel").then(response => {
-        this.cs_channel = response.data;
-      });
-      this.getDicts("cs_organization").then(response => {
-        this.cs_organization = response.data;
-      });
-      this.getDicts("cs_priority").then(response => {
-        this.cs_priority = response.data;
-      });
-      this.getDicts("cs_vip_flag").then(response => {
-        this.cs_vip_flag = response.data;
-      });
-      this.getDicts("cs_order_state").then(response => {
-        this.cs_order_state = response.data;
-      });
-      this.getDicts("cs_complaint_item").then(response => {
-        this.cs_complaint_item = response.data;
-      });
-
-
-
+      this.isRemind=false;
+      this.searchHandles();
     },
-
+    async mounted() {
+      // 字典数据统一获取
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
+      })
+      // 下拉项赋值
+      this.cs_channel = this.dictList.find(item => {
+        return item.dictType === 'cs_channel'
+      }).dictDate
+      this.cs_organization = this.dictList.find(item => {
+        return item.dictType === 'cs_organization'
+      }).dictDate
+      this.cs_priority = this.dictList.find(item => {
+        return item.dictType === 'cs_priority'
+      }).dictDate
+      this.cs_order_state = this.dictList.find(item => {
+        return item.dictType === 'cs_order_state'
+      }).dictDate
+      this.cs_complaint_item = this.dictList.find(item => {
+        return item.dictType === 'cs_complaint_item'
+      }).dictDate
+      this.cs_vip_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_vip_flag'
+      }).dictDate
+    },
     methods: {
       //修改按钮
       modifyButton(s){
@@ -491,19 +479,18 @@
             if (res != null && res.code === 200) {
             }
           }).catch(res => {
-
           })
         }else {
            const workOrderNos=this.ids
           complaintObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("批量获取成功")
+              this.searchHandles()
             }
           }).catch(res => {
-
           })
         }
-          this.searchHandles()
+
       }
         },
       //工单页面超链接
@@ -525,10 +512,8 @@
         }else {
           this.isShow=false
           this.showClass="el-icon-arrow-right"
-
         }
       },
-
       //处理按钮
       dealButton(s){
         if(s.itemCode=="B00034"){
@@ -553,16 +538,13 @@
               businessType:s.businessType
             }
           })
-
         }
-
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.ids = selection.map(item => item.workOrderNo);
 
       },
-
       //增加按钮
       add(row) {
         this.$router.push({
@@ -583,16 +565,14 @@
         } else {
           queryParams = this.sendForm;
         }
-        queryParams.pageNum = this.pageNum;
-        queryParams.pageSize = this.pageSize;
+       /* queryParams.pageNum = this.pageNum;
+        queryParams.pageSize = this.pageSize;*/
         complaintListAndPublicPool(queryParams).then(res => {
           if (res != null && res.code === 200) {
-            this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.workPoolData = res.rows;
+            this.totalCount = res.total;
             if (res.rows.length <= 0) {
-              return this.$message.warning(
-                "公共池未查询到数据！"
-              )
+              this.isRemind=true;
             }
           }
         }).catch(res => {
@@ -609,33 +589,31 @@
         } else {
           queryParams = this.sendForm;
         }
-        queryParams.pageNum = this.pageNumPerson;
-        queryParams.pageSize = this.pageSizePerson;
+        /*queryParams.pageNum = this.pageNumPerson;
+        queryParams.pageSize = this.pageSizePerson;*/
         complaintListAndPersonalPool(this.sendForm).then(res => {
+          console.log('个人池：', res.rows)
           if (res != null && res.code === 200) {
-            this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
-            console.log("dasd",res.rows)
-            if (res.rows.length <= 0) {
+            this.workPersonPoolData = res.rows;
+            this.totalPersonCount = res.total;
+            if (res.rows.length <= 0 && this.isRemind) {
               return this.$message.warning(
-                "个人池未查询到数据！"
-              )
+                "未查询到数据！"
+              );
             }
           }
         }).catch(res => {
 
         })
       },
-
       //查询按钮
       searchHandles() {
-        this.searchHandle()
-        this.searchHandle1()
+        this.searchHandle();
+        this.searchHandle1();
       },
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 220px;

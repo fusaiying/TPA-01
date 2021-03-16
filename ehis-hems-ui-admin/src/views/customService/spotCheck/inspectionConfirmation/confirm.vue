@@ -1,378 +1,874 @@
 <template>
   <div class="app-container">
-    <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="poolQueryForm" :model="poolQueryForm" style="padding-bottom: 30px;" label-width="100px"
-               label-position="right" size="mini">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="结案日期：" prop="endCaseTime">
-              <el-date-picker
-                v-model="poolQueryForm.endCaseTime"
-                style="width:220px;"
-                size="mini"
-                type="daterange"
-                value-format="yyyy-MM-dd"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                placeholder="选择日期"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="poolQueryForm.organization" class="item-width" placeholder="请选择">
-                <el-option v-for="item in organizationOptions" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="处理人：" prop="updateBy">
-              <el-input v-model="poolQueryForm.updateBy" class="item-width" clearable size="mini" placeholder="请输入"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="服务项目：" prop="serviceItem">
-              <el-select v-model="poolQueryForm.serviceItem" class="item-width" placeholder="请选择">
-                <el-option v-for="item in service_itemOptions" :key="item.dictValue" :label="item.dictLabel"
-                           :value="item.dictValue"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
+    <!--    客户基本信息 -->
+    <div id="#anchor-1" class="personInfo_class" style="margin-top: 5px;">
+      <personInfo ref="personForm" :policyNo="this.params.policyNo" :policyItemNo="this.params.policyItemNo" />
+    </div>
 
-        <div style="text-align: right; margin-right: 1px;">
-          <el-button
-            size="mini"
-            type="success"
-            icon="el-icon-search"
-            @click="
-              isinit='N',
-              page=1,
-              finishPage=1,
-              searchHandle()
-            "
-          >查询
-          </el-button>
-          <el-button size="mini" type="primary" @click="resetForm">重置</el-button>
-        </div>
-      </el-form>
+    <!--    受理信息 -->
+    <div id="#anchor-21" v-if="this.params.businessType=='01'" class="personInfo_class" style="margin-top: 5px;">
+      <demandAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled" />
+    </div>
+    <div id="#anchor-22" v-if="this.params.businessType=='03'" class="personInfo_class" style="margin-top: 5px;">
+      <complaintAcceptInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+    </div>
+    <!--    流转信息-->
+    <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">
+      <flowLogInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+    </div>
+    <!--    附件信息-->
+    <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
+      <attachmentList :attachmentInfoData="allList.attachmentInfoData"/>
+    </div>
+    <!--    处理信息-->
+    <!--    信息需求-->
+    <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
+      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
+    </div>
+    <!--    投诉-->
+    <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
+      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
+    </div>
+    <!--    质检处理-->
+    <!--    信息需求-->
+    <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
+      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo" :data="inspectionList"/>
+    </div>
+    <!--    投诉-->
+    <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
+      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"  :data="complaintProcessList"/>
+    </div>
+    <div class="personInfo_class" style="margin-top: 5px;">
+      <el-row :gutter=20 style="float: right"  >
+        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='01'" size="mini">提交</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="goBack()" v-if="this.params.businessType=='01'" size="mini">关闭</el-button>
 
+        <el-button style="margin-right: 20px" type="primary" @click="submit2()" v-if="this.params.businessType=='03'" size="mini">提交</el-button>
+        <el-button style="margin-right: 20px" type="primary" @click="goBack()" v-if="this.params.businessType=='03'" size="mini">关闭</el-button>
 
-    </el-card>
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span>待质检（{{ publicTotalCount }}）</span>
-        <span style="float: right;">
-           <el-button :loading="getLoading" type="primary" size="mini" @click="getMore">获取</el-button>
-        </span>
-        <el-divider/>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="inspectionPublicPoolData"
-          size="small"
-          v-loading = "publicLoading"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" align="center" content="全选"/>
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
-          <el-table-column prop="businessService" label="服务项目" min-width="160" align="center"show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.businessService">
-              <span>{{scope.row.businessService.split('-')[0]+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="organization" label="出单机构" min-width="160" align="center"  show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.organCode">
-              <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="结案日期" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="updateBy" align="center" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" label="操作" width="140">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="getOne(scope.row)">获取</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <pagination
-          v-show="publicTotalCount>0"
-          :total="publicTotalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchForm"
-        />
-      </div>
-    </el-card>
-    <el-card class="box-card" style="margin-top: 10px;">
-      <div slot="header" class="clearfix">
-        <span>质检中（{{ personTotalCount }}）</span>
-        <el-divider/>
-        <el-table
-          :header-cell-style="{color:'black',background:'#f8f8ff'}"
-          :data="inspectionPersonalPoolData"
-          size="small"
-          v-loading = "personLoading"
-          highlight-current-row
-          tooltip-effect="dark"
-          style=" width: 100%;"
-          @selection-change="handleSelectionChange">
-          <el-table-column align="center" width="140" prop="workOrderNo" label="工单号" show-overflow-tooltip/>
-          <el-table-column prop="businessService" label="服务项目" min-width="160" align="center"show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.businessService">
-              <span>{{scope.row.businessService.split('-')[0]+'-'+selectDictLabel(service_itemOptions, scope.row.businessService.split('-')[1])}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="organization" label="出单机构" min-width="160" align="center"  show-overflow-tooltip>
-            <template slot-scope="scope" v-if="scope.row.organCode">
-              <span>{{selectDictLabel(organizationOptions, scope.row.organCode)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="modifyUser.umCode" align="center" label="处理人" show-overflow-tooltip/>
-          <el-table-column prop="updateTime" label="结案日期" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.updateTime | changeDate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="status" align="center" label="状态" show-overflow-tooltip/>
-          <el-table-column align="center" label="操作" width="140">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleOne(scope.row)">处理</el-button>
-            </template>
-          </el-table-column>
-
-        </el-table>
-
-        <pagination
-          v-show="personTotalCount>0"
-          :total="personTotalCount"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="searchForm"
-        />
-      </div>
-    </el-card>
-
+      </el-row>
+    </div>
   </div>
 </template>
-
 <script>
-import moment from 'moment'
-import {
-  inspectionListAndPublicPool,
-  inspectionListAndPersonalPool,
-  inspectionGetByIds
-} from '@/api/customService/spotCheck'
+  import personInfo from '@/views/customService/common/moduel/personInfo'; //客户基本信息
+  import demandAcceptInfo from "@/views/customService/common/moduel/demandAcceptInfo";//信息需求
+  import complaintAcceptInfo from "@/views/customService/common/moduel/complaintAcceptInfo";//投诉
+  import flowLogList from "@/views/customService/common/moduel/attachmentList";//流转记录列表
+  import attachmentList from "@/views/customService/common/moduel/attachmentList"; //附件列表
+  import complaintHandle from "@/views/customService/common/moduel/complaintHandle";//投诉处理
+  import infohandle from "@/views/customService/common/moduel/infohandle";//服务处理
+  import complaintProcessInfo from "@/views/customService/common/moduel/complaintProcessInfo";//投诉处理信息
+  import inspectionProcessInfo from "@/views/customService/common/moduel/inspectionProcessInfo";//质检处理信息
+  import flowLogInfo from "@/views/customService/common/moduel/flowLogInfo";
+  import {
+    getAcceptInfoByTypeOrId,
+    getAttachmentListById,
+    getComplaintHandleInfo,
+    getHandleInfoList,
+    insertItem,
+  } from '@/api/customService/spotCheck';
 
-let dictss = [{dictType: 'cs_service_item'}
-  ,{dictType: 'cs_organization'}
-]
-export default {
-  filters: {
-    changeDate: function (value) {
-      if (value !== null) {
-        return moment(value).format('YYYY-MM-DD')
-      }
-    }
-  },
-  data() {
-    return {
-      dialogFormVisible: false,
-      updateBy: undefined,
-      poolQueryForm: {
-        endCaseTime: undefined,
-        organization: undefined,
-        updateBy: undefined,
-        serviceItem: undefined,
-      },
-      caseNumber: false,//查询条件（报案号）是否显示
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-      },
-      publicLoading: false,
-      personLoading: false,
-      inspectionPublicPoolData: [],
-      inspectionPersonalPoolData: [],
-      isinit: 'Y',
-      publicTotalCount: 0,
-      personTotalCount: 0,
-      getLoading: false,
-      dataonLineListSelections: [],
+  import {mapGetters} from 'vuex'
 
-      dictList: [],
-      service_itemOptions:[],
-      organizationOptions:[],
-      //是否提示
-      isRemind:true,
-    }
-  },
-  // mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
-  async mounted() {
 
-    await this.getDictsList(dictss).then(response => {
-      console.log('response: ', dictss, response)
-      this.dictList = response.data
-    })
-    this.service_itemOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_service_item'
-    }).dictDate
-    this.organizationOptions = this.dictList.find(item => {
-      return item.dictType === 'cs_organization'
-    }).dictDate
-    this.isRemind=false
-    this.searchHandle()
-  },
-  methods: {
-    resetForm() {
-      this.$refs.poolQueryForm.resetFields()
-      this.isRemind=false
-      this.searchHandle()
+  let dictss = [{dictType: 'delivery_source'},]
+
+  export default {
+    name: "confirm",
+    components: {
+      personInfo,
+      demandAcceptInfo,
+      complaintAcceptInfo,
+      attachmentList,
+      complaintProcessInfo,
+      complaintHandle,
+      inspectionProcessInfo,
+      infohandle,
+      flowLogInfo,
     },
-    searchForm() {
-      this.isRemind=true
-      this.searchHandle()
+    computed: {
+      disabled() {
+        return this.status === 'show'
+      },
+      ...mapGetters([
+        'sidebar'
+      ])
     },
-    searchHandle() {
-      this.publicLoading=true;
-      this.personLoading=true;
-      let query = {
-        pageNum: this.queryParams.pageNum,
-        pageSize: this.queryParams.pageSize,
-        serviceItemCode: this.poolQueryForm.serviceItem,
-        organCode: this.poolQueryForm.organization,
-        acceptorName: this.poolQueryForm.acceptorName,
-        endCaseStartTime: undefined,
-        endCaseEndTime: undefined
-      }
-      if (this.poolQueryForm.endCaseTime) {
-        query.endCaseStartTime = this.poolQueryForm.endCaseTime[0]
-        query.endCaseEndTime = this.poolQueryForm.endCaseTime[1]
-      }
-      console.log('query: ', query)
-      inspectionListAndPublicPool(query).then(res => {
-        console.log('------------: ', res)
-        if (res != null && res.code === 200) {
-          this.inspectionPublicPoolData = res.rows
-          this.publicTotalCount = res.total
-          this.publicLoading=false;
-          if (res.rows.length <= 0 && this.isRemind) {
-            return this.$message.warning(
-              "未查询到待质检数据！"
-            )
+    data() {
+      return {
+        historicalProblemData: [],
+        historicalProblemDialog: false,
+        removeDialog: false,
+        isSave: false,
+        btnArr: [],
+        //定义子页面对象
+        itemList:[],
+        businessType:'',
+        appealFlag: '',
+        appealReason : '',
+        workOrderNo: '',
+        score: '',
+        acceptInfoForm: {},
+        attachmentInfoForm: {},
+        formForm: {},
+        allList:{
+          flowLogData: [],
+          attachmentInfoData: [],
+          acceptInfo:{},
+          form: {
+            level1: '',
+            level2: '',
+            pieceworkFlag: '',
+            complaintStatus: '',
+            faseReason: '',
+            repeatedComplaint: '',
+            reason1: '',
+            reason2: '',
+            reason3: '',
+            complaintLink: '',
+            complaintQuestion: '',
+            outsideState: '',
+            riskType: '',
+            marketChannel: '',
+            complaintCategory: '',
+            customerFeedback: '',
+            rootImprovement: '',
+            actPromptly: '',
+            rootDepartment: '',
+            actionCause: '',
+            treatmentResult: '',
+          },
+          inspection:{
+            appeal :[
+              {
+                appealName: '是否申诉',
+                appealFlag : '',
+                appealReason: '',
+              }
+            ],
+            items:[
+              {
+                itemKey:'是否时效内响应客户',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否符合短信结案规则',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否电话通知客户',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否满足客户诉求',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否及时升级投诉',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否规范记录',
+                value:'',
+                remark:'',
+              },
+              {
+                itemKey:'是否有其他错误',
+                value:'',
+                remark:'',
+              },
+            ]
+          },
+          complaintProcess: {
+            appeal:[
+              {
+                appealName : '是否申诉',
+                appealFlag: '',
+                appealReason: '',
+              }
+            ],
+            score:'',
+            items: [
+              {
+                itemType:'时效性',
+                itemKey:'投诉件录入时效',
+                value:'',
+                itemRemark: '',
+              },
+              {
+                itemType:'时效性',
+                itemKey: '响应时间',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'时效性',
+                itemKey: '根因改善闭环时效',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '受理渠道',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '投诉分类',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '监管计件',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '监管撤诉状态',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '投诉原因',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '客户反馈',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '投诉损失',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '投诉是否成立',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '投诉根因部门',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '根因改善',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '致诉根因',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '处理结果',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '附件完整性',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '征求处理意见',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '处理意见',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'准确性',
+                itemKey: '行协调解或外部鉴定状态',
+                value: '',
+                itemRemark: '',
+              },
+              {
+                itemType:'真实性',
+                itemKey: '案件真实性',
+                value: '',
+                itemRemark: '',
+              },
+            ]
           }
+        },
+        complaintProcessList: [],
+        inspectionList: [],
+        //接收的参数对象
+        params: {},
+        isDisabled:true,
+        navFlag: true,
+        reportData: [],
+        dictList: [],
+        delivery_sourceOption: [],
+        applicantData: {},
+      }
+
+    },
+    created() {
+      if (this.$route.query) {
+
+        this.params = JSON.parse(decodeURI(this.$route.query.data))
+        //获取受理信息
+        let query = {
+          workOrderNo: this.params.workOrderNo,
+          businessType: this.params.businessType,
         }
-      }).catch(res => {
-      }).finally(() => {
-        this.publicLoading=false;
-      }),
-      inspectionListAndPersonalPool(query).then(res => {
-        console.log('------------: ', res)
-        if (res != null && res.code === 200) {
-          this.inspectionPersonalPoolData = res.rows
-          this.personTotalCount = res.total
-          this.personLoading=false;
-          if (res.rows.length <= 0 && this.isRemind) {
-            return this.$message.warning(
-              "未查询到质检中数据！"
-            )
+        getAcceptInfoByTypeOrId(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.info(res.data);
+            this.allList.acceptInfo=res.data;
           }
-        }
-      }).catch(res => {
-      }).finally(() => {
-        this.personLoading=false;
+        }).catch(res => {
+        })
+        //获取附件列表信息
+        getAttachmentListById(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.info(res.data);
+            this.allList.attachmentInfoData=res.data;
+          }
+        }).catch(res => {
+        })
+        getComplaintHandleInfo(query).then(res => {
+          if (res !== null && res.code === 200) {
+            this.allList.form = res.data;
+          }
+        }).catch( res => {
+        });
+
+        getHandleInfoList(query).then(res => {
+          if(query.businessType === '01'){
+            if (res !== null && res.code === 200) {
+              this.inspectionList = res.rows;
+              console.log(this.inspectionList,'+++++++++5555555');
+            }
+          }else if(query.businessType === '03'){
+            if (res !== null && res.code === 200) {
+              this.complaintProcessList = res.rows;
+              console.log(this.allList.complaintProcess)
+            }
+          }
+
+        }).catch( res => {
+        });
+
+      }
+    },
+    async mounted() {
+      await this.getDictsList(dictss).then(response => {
+        this.dictList = response.data
       })
-    },
-    handleSelectionChange(val) {
-      this.dataonLineListSelections = val
-    },
-    getMore(){
-      this.getLoading = true
-      if (this.dataonLineListSelections.length < 1) {
-        this.$message({ message: '请选择待质检的记录，进行批量获取操作', type: 'warning' })
-        this.getLoading = false
-        return
+      this.delivery_sourceOption = this.dictList.find(item => {
+        return item.dictType === 'delivery_source'
+      }).dictDate
+
+      if (this.$route.query) {
+        // this.querys = JSON.parse(decodeURI(this.$route.query.data))
+        // getCase(this.querys).then(res => {
+        //   if (res != null && res.code === 200) {
+        //     this.fixInfo = res.data
+        //   }
+        // }).catch(res => {
+        // })
+        // getBatch(this.querys.batchNo).then(res => {
+        //   if (res != null && res.code === 200) {
+        //     this.batchInfo = res.data
+        //   }
+        // }).catch(res => {
+        // })
+        // getListRemark(this.querys.rptNo).then(res => {
+        //   if (res != null && res.code === 200) {
+        //     this.reportData = res.data
+        //   }
+        // }).catch(res => {
+        // })
+        // selectHistoricalProblem(this.querys.rptNo).then(res => {
+        //   if (res!=null && res.code===200){
+        //     this.historicalProblemData=res.rows
+        //   }
+        // })
       }
-      //后台请求参数处理
-      let workOrderNos=[]
-      for (let i = 0; i < this.dataonLineListSelections.length; i++) {
-        workOrderNos.push(this.dataonLineListSelections[i].workOrderNo)
-      }
-      console.log(workOrderNos);
-      if (workOrderNos.length<1){
-        this.getLoading = false
-        return this.$message.warning(
-          "请选择待质检的记录，进行批量获取操作"
-        )
-      }else {
-        //后台方法调用及返回结果处理
-        this.getHandle(workOrderNos)
-      }
     },
-    //获取
-    getOne(row){
-      let workOrderNos=[row.workOrderNo]
-      //后台方法调用及返回结果处理
-      this.getHandle(workOrderNos)
-    },
-    getHandle(ids){
-      inspectionGetByIds(ids).then(res=>{
-        if (res!=null && res.code===200){
-          //数据重新加载
-          this.isRemind=false
-          this.searchHandle();
-          this.$message({
-            message: '获取质检成功！',
-            type: 'success',
-            center: true,
-            showClose: true
+
+    methods: {
+      submit1(){
+        const value1=[];//判断是否申诉
+        const value2=[];
+        let data1={};
+        let data2={};
+        //判断类型为信息需求时是否申诉
+        if(this.params.businessType=='01'){
+          data1 = this.$refs.inspectionProcessInfo.inspection;
+          for(var i=0;i<data1.appeal.length;i++ ){
+            value1[i]=data1.appeal[i].appealFlag;
+          }
+          console.log(value1,"59451")
+          //获取信息需求所有的项目，值，说明
+          this.allList.inspection.items=[]
+          for (let i = 0; i < data1.items.length; i++) {
+            this.allList.inspection.items.push({
+              itemKey: data1.items[i].itemKey,
+              value: data1.items[i].value,
+              itemRemark: data1.items[i].itemRemark,
+            });
+          }
+          //获取信息需求是否申诉
+          this.allList.inspection.appeal=[]
+          for (let i = 0; i < data1.appeal.length; i++) {
+            this.allList.inspection.appeal.push({
+              appealName: data1.appeal[i].appealName,
+              appealFlag: data1.appeal[i].appealFlag,
+              appealReason: data1.appeal[i].appealReason,
+            });
+          }
+          //判断类型为投诉时是否申诉
+        }else if(this.params.businessType=='03'){
+          data2=this.$refs.complaintProcessInfo.complaintProcess;
+          for(var i=0;i<data2.appeal.length;i++ ){
+            value2[i]=data2.appeal[i].appealFlag;
+          }
+          //获取投诉的所有分类，项目，值和说明
+          this.allList.complaintProcess.items=[]
+          for (let i = 0; i < data2.items.length; i++) {
+            this.allList.complaintProcess.items.push({
+              itemType: data2.items[i].itemType,
+              itemKey: data2.items[i].itemKey,
+              value: data2.items[i].value,
+              itemRemark: data2.items[i].itemRemark,
+            });
+          }
+          //获取投诉处理的是否申诉
+          this.allList.complaintProcess.appeal=[]
+          for (let i = 0; i < data2.appeal.length; i++) {
+            this.allList.complaintProcess.appeal.push({
+              appealName: data2.appeal[i].appealName,
+              appealFlag: data2.appeal[i].appealFlag,
+              appealReason: data2.appeal[i].appealReason,
+            });
+          }
+        }
+        if (value1.includes('01')||value2.includes('01')) {
+          this.isDisabled=false;
+        }
+        //如果是否存在差错存在是，那么上面的card可修改，并保存
+        if(value1.includes('01')||value2.includes('01')){
+          let save={}
+          if(this.allList.acceptInfo.businessType==='01'){
+            save={
+              itemList: this.allList.inspection.items,
+              appealFlag: data1.appeal[0].appealFlag,
+              appealReason: data1.appeal[0].appealReason,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+              attachmentInfoForm: this.allList.attachmentInfoData,
+              acceptInfoForm: this.allList.acceptInfo,
+
+            }
+            //当类型为03时数据保存
+          }else if(this.allList.acceptInfo.businessType==='03'){
+            save={
+              itemList: this.allList.complaintProcess.items,
+              appealFlag: data2.appeal[0].appealFlag,
+              appealReason: data2.appeal[0].appealReason,
+              score: data2.score,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+              formForm: this.allList.form,
+              acceptInfoForm: this.allList.acceptInfo,
+              attachmentInfoForm: this.allList.attachmentInfoData,
+
+            }
+          }
+          insertItem(save).then(response => {
+            if (response.code === 200) {
+              this.$message.success('保存成功!');
+            }
+          })
+          //如果是否存在差错全是否，那么只保存此card信息
+        }else{
+          //提取数据并给参数赋值
+          let save={};
+          //当类型为01时数据保存
+          if(this.allList.acceptInfo.businessType==='01'){
+            save={
+              itemList: this.allList.inspection.items,
+              appealFlag: data1.appeal[0].appealFlag,
+              appealReason: data1.appeal[0].appealReason,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+            }
+            //当类型为03时数据保存
+          }else if(this.allList.acceptInfo.businessType==='03'){
+            save={
+              itemList: this.allList.complaintProcess.items,
+              appealFlag: data2.appeal[0].appealFlag,
+              appealReason: data2.appeal[0].appealReason,
+              score: data2.score,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+            }
+          }
+          console.log(save,"+++++++++++++????")
+          //保存数据
+          insertItem(save).then(response => {
+            if (response.code === 200) {
+              this.$message.success('保存成功!');
+            }
           })
         }
-        this.getLoading = false
-
-      }).catch(res => {
-        this.$message.error('获取质检失败！')
-        this.getLoading = false
-      })
-    },
-    //处理
-    handleOne(row){
-      this.$message({
-        message: '将要处理工单【'+row.workOrderNo+"】....",
-        type: 'success',
-        center: true,
-        showClose: true
-      })
-      let data = encodeURI(
-        JSON.stringify({
-          workOrderNo: row.workOrderNo, //批次号
-          policyNo: row.policyNo, //保单号
-          policyItemNo: row.policyItemNo //分单号
-        })
-      )
-      this.$router.push({
-        path: '/claims-handle/presenting-edit',
-        query: {
-          data
+      },
+      submit2() {
+        const value1 = [];//判断是否申诉
+        const value2 = [];
+        let data1 = {};
+        let data2 = {};
+        //判断类型为信息需求时是否申诉
+        if (this.params.businessType == '01') {
+          data1 = this.$refs.inspectionProcessInfo.inspection;
+          for (var i = 0; i < data1.appeal.length; i++) {
+            value1[i] = data1.appeal[i].appealFlag;
+          }
+          console.log(value1, "59451")
+          //获取信息需求所有的项目，值，说明
+          this.allList.inspection.items = []
+          for (let i = 0; i < data1.items.length; i++) {
+            this.allList.inspection.items.push({
+              itemKey: data1.items[i].itemKey,
+              value: data1.items[i].value,
+              itemRemark: data1.items[i].itemRemark,
+            });
+          }
+          //获取信息需求是否申诉
+          this.allList.inspection.appeal = []
+          for (let i = 0; i < data1.appeal.length; i++) {
+            this.allList.inspection.appeal.push({
+              appealName: data1.appeal[i].appealName,
+              appealFlag: data1.appeal[i].appealFlag,
+              appealReason: data1.appeal[i].appealReason,
+            });
+          }
+          //判断类型为投诉时是否申诉
+        } else if (this.params.businessType == '03') {
+          data2 = this.$refs.complaintProcessInfo.complaintProcess;
+          for (var i = 0; i < data2.appeal.length; i++) {
+            value2[i] = data2.appeal[i].appealFlag;
+          }
+          //获取投诉的所有分类，项目，值和说明
+          this.allList.complaintProcess.items = []
+          for (let i = 0; i < data2.items.length; i++) {
+            this.allList.complaintProcess.items.push({
+              itemType: data2.items[i].itemType,
+              itemKey: data2.items[i].itemKey,
+              value: data2.items[i].value,
+              itemRemark: data2.items[i].itemRemark,
+            });
+          }
+          //获取投诉处理的是否申诉
+          this.allList.complaintProcess.appeal = []
+          for (let i = 0; i < data2.appeal.length; i++) {
+            this.allList.complaintProcess.appeal.push({
+              appealName: data2.appeal[i].appealName,
+              appealFlag: data2.appeal[i].appealFlag,
+              appealReason: data2.appeal[i].appealReason,
+            });
+          }
         }
-      })
+        if (value1.includes('01') || value2.includes('01')) {
+          this.isDisabled = false;
+        }
+        //如果是否存在差错存在是，那么上面的card可修改，并保存
+        if (value1.includes('01') || value2.includes('01')) {
+          let save = {}
+          if (this.allList.acceptInfo.businessType === '01') {
+            save = {
+              itemList: this.allList.inspection.items,
+              appealFlag: data1.appeal[0].appealFlag,
+              appealReason: data1.appeal[0].appealReason,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+              attachmentInfoForm: this.allList.attachmentInfoData,
+              acceptInfoForm: this.allList.acceptInfo,
+            }
+            //当类型为03时数据保存
+          } else if (this.allList.acceptInfo.businessType === '03') {
+            save = {
+              itemList: this.allList.complaintProcess.items,
+              appealFlag: data2.appeal[0].appealFlag,
+              appealReason: data2.appeal[0].appealReason,
+              score: data2.score,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+              formForm: this.allList.form,
+              acceptInfoForm: this.allList.acceptInfo,
+              attachmentInfoForm: this.allList.attachmentInfoData,
+            }
+          }
+          insertItem(save).then(response => {
+            if (response.code === 200) {
+              this.$message.success('保存成功!');
+            }
+          })
+          //如果是否存在差错全是否，那么只保存此card信息
+        } else {
+          //提取数据并给参数赋值
+          let save = {};
+          //当类型为01时数据保存
+          if (this.allList.acceptInfo.businessType === '01') {
+            save = {
+              itemList: this.allList.inspection.items,
+              appealFlag: data1.appeal[0].appealFlag,
+              appealReason: data1.appeal[0].appealReason,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+            }
+            //当类型为03时数据保存
+          } else if (this.allList.acceptInfo.businessType === '03') {
+            save = {
+              itemList: this.allList.complaintProcess.items,
+              appealFlag: data2.appeal[0].appealFlag,
+              appealReason: data2.appeal[0].appealReason,
+              score: data2.score,
+              businessType: this.allList.acceptInfo.businessType,
+              workOrderNo: this.allList.acceptInfo.workOrderNo,
+            }
+          }
+          console.log(save, "+++++++++++++????")
+          //保存数据
+          insertItem(save).then(response => {
+            if (response.code === 200) {
+              this.$message.success('保存成功!');
+            }
+          })
+        }
+      },
+      changeSaveFlag() {
+        this.isSave = true
+      },
+      acceptOver(){
+        //this.$refs.headerChild.属性insuredForm applicantCom acceptInfo
+
+        //被保人信息是否保存，否则阻断提示：“请保存被保人信息。”，同时字段框红高亮显示；
+        //申请人信息是否保存，否则阻断提示：“请保存申请人信息。”，同时字段框红高亮显示；
+        //申请信息是否保存，否则阻断提示：“请保存申请信息”，同时字段框红高亮显示；
+        //若选择的该被保人的保单不存在TPA保单也不存在健康险保单时，阻断提示：“该被保人不存在保单信息，请撤件”；
+        // let isInsuredSave = this.$refs.insuredForm.isInsuredSave
+        // let isApplicantSave=this.$refs.applicantInfoForm.isApplicantSave
+        // let isAcceptInfoSave=this.$refs.acceptInfoForm.isAcceptInfoSave
+        // if (isInsuredSave && isApplicantSave && isAcceptInfoSave){
+        //   let data = {
+        //     rptNo:this.querys.rptNo
+        //   }
+        //   editCaseAndRecordInfoSuspend(data).then(res=>{
+        //     if(res!=null && res.code===200){
+        //       this.$message({
+        //         message: '提交成功！',
+        //         type: 'success',
+        //         center: true,
+        //         showClose: true
+        //       })
+        //       this.changeDialogVisable()
+        //     }
+        //   }).catch(res=>{
+        //     this.$message({
+        //       message: '提交失败!',
+        //       type: 'error',
+        //       center: true,
+        //       showClose: true
+        //     })
+        //   })
+        // }else {
+        //   if (!isInsuredSave){
+        //     return this.$message.warning(
+        //       "请保存被保人信息！"
+        //     )
+        //   }else if (!isApplicantSave){
+        //     return this.$message.warning(
+        //       "请保存申请人信息！"
+        //     )
+        //   }else if (!isAcceptInfoSave){
+        //     return this.$message.warning(
+        //       "请保存申请信息！"
+        //     )
+        //   }
+        // }
+
+      },
+      goBack() {
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.go(-1)
+      },
+      // selectHistoricalProblem() {
+      //   this.historicalProblemDialog = true
+      // },
+      // closeHistoricalProblem() {
+      //   this.historicalProblemDialog = false
+      // },
+      // openRemoveDialog() {
+      //   this.removeDialog = true
+      // },
+      // closeRemoveDialog() {
+      //   this.removeDialog = false
+      // },
+
     }
   }
-}
 </script>
+<style lang='scss' scoped>
+  .active {
+    color: #67c23a;
+    background: #fff;
+  }
 
-<style scoped>
-.item-width {
-  width: 220px;
-}
+  .nav-flex-box {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: #409eff;
+    justify-content: center;
+    background: #f8f8f8;
+    z-index: 99999;
+  }
+
+  .flex-item-btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 0 3px;
+    border: 1px solid #eee;
+    border-right: none;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  .flex-item-btn:last-child {
+    border-right: 1px solid #eee;
+  }
+
+  .flex-item-btn > span {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    right: 20px;
+    z-index: 9;
+    width: calc(100% - 240px) !important;
+    transition: width 0.28s !important;
+  }
+
+  .hideSidebar .nav-bar {
+    width: calc(100% - 94px) !important;
+    transition: width 0.28s !important;
+  }
+
+  .top-instance {
+    top: 84px;
+  }
+
+  //.nav-bar /deep/ .el-tabs--border-card > .el-tabs__content {
+  //  padding: 0
+  //}
+  //
+  //.el-tabs /deep/ .el-tabs__item {
+  //  width: auto;
+  //  font-size: 12px;
+  //  padding: 0 12px;
+  //}
+  //
+  //.nav-bar /deep/ .el-card__body,
+  //.top-card /deep/ .el-card__body {
+  //  padding: 10px 20px;
+  //}
+  //
+  //.basic-box /deep/ .el-form-item__label {
+  //  font-size: 12px;
+  //}
+  //
+  //.el-col-7 /deep/ .el-form-item {
+  //  margin-bottom: 10px;
+  //}
+  //
+  //.el-col-12 /deep/ .el-form-item {
+  //  margin-bottom: 4px;
+  //}
+  //
+  //.el-col-7 /deep/ .el-form-item__label,
+  //.form-item-span {
+  //  font-size: 12px;
+  //}
+  //
+  //.card-title {
+  //  margin-top: 0;
+  //}
+  //
+  //.opened-adapt {
+  //  width: 97.2%;
+  //  // width: calc(100% - 233px);
+  //  transition: .5s;
+  //}
+  //
+  //.close-adapt {
+  //  width: 97.2%;
+  //  // width: calc(100% - 78px);
+  //  transition: .5s;
+  //}
+  //
+  //.startjump {
+  //  margin-top: 90px;
+  //}
+  //
+  //.navFalgClass {
+  //  margin-top: 10px !important;
+  //}
+</style>
+<style>
+  .batchInfo_class .el-tag--small {
+    margin-right: 10px !important;
+  }
+
+  .el-autocomplete-suggestion li {
+    width: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    height: auto;
+    line-height: 18px;
+    padding: 0 5px;
+  }
+
+  .el-collapse-item__wrap {
+    border: none !important;
+  }
+
+  .el-collapse {
+    border: none;
+  }
 </style>

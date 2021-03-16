@@ -70,14 +70,14 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         int count = 0;
         String productCode = productServiceInfoVo.getProductCode();
         //修改目前已有数据的状态
-        productServiceInfoMapper.updateStaus(productCode);
+
         if(!productServiceInfoVo.getProductServiceInfos().isEmpty()){
             List<ProductServiceInfo> productServiceInfos= new ArrayList<ProductServiceInfo>();
             for(ProductServiceInfo productServiceInfo:productServiceInfoVo.getProductServiceInfos()){
                 productServiceInfo.setCreateTime(DateUtils.getNowDate());
                 productServiceInfo.setUpdateTime(DateUtils.getNowDate());
                 productServiceInfo.setCreateBy(SecurityUtils.getUsername());
-                productServiceInfo.setCreateBy(SecurityUtils.getUsername());
+                productServiceInfo.setUpdateBy(SecurityUtils.getUsername());
                 productServiceInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productServiceInfoSer", 12, 12));
                 productServiceInfo.setStatus("Y");
                 productServiceInfos.add(productServiceInfo);
@@ -86,6 +86,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         }else{
             count = 1;
         }
+        productServiceInfoMapper.updateStaus(productCode);
         return count;
     }
 
@@ -105,7 +106,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         productInfo.setCreateTime(DateUtils.getNowDate());
         productInfo.setUpdateTime(DateUtils.getNowDate());
         productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
+        productInfo.setUpdateBy(SecurityUtils.getUsername());
         productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
         productInfo.setStatus("Y");
         productInfo.setBussinessStatus("01");//新建状态
@@ -117,7 +118,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
                 productServiceInfo.setCreateTime(DateUtils.getNowDate());
                 productServiceInfo.setUpdateTime(DateUtils.getNowDate());
                 productServiceInfo.setCreateBy(SecurityUtils.getUsername());
-                productServiceInfo.setCreateBy(SecurityUtils.getUsername());
+                productServiceInfo.setUpdateBy(SecurityUtils.getUsername());
                 productServiceInfo.setProductCode(productInfo.getProductCode());
                 productServiceInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productServiceInfoSer", 12, 12));
                 productServiceInfo.setStatus("Y");
@@ -132,7 +133,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setProductCode(productInfo.getProductCode());
             productManagerLog.setBussinessStatus("01");//新建状态
@@ -159,7 +160,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
         productInfo.setCreateTime(DateUtils.getNowDate());
         productInfo.setUpdateTime(DateUtils.getNowDate());
         productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
+        productInfo.setUpdateBy(SecurityUtils.getUsername());
         productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
         productInfo.setStatus("Y");
         productInfo.setBussinessStatus("02");//审核状态
@@ -171,7 +172,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
                 productServiceInfo.setCreateTime(DateUtils.getNowDate());
                 productServiceInfo.setUpdateTime(DateUtils.getNowDate());
                 productServiceInfo.setCreateBy(SecurityUtils.getUsername());
-                productServiceInfo.setCreateBy(SecurityUtils.getUsername());
+                productServiceInfo.setUpdateBy(SecurityUtils.getUsername());
                 productServiceInfo.setProductCode(productInfo.getProductCode());
                 productServiceInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productServiceInfoSer", 12, 12));
                 productServiceInfo.setStatus("Y");
@@ -186,7 +187,7 @@ public class ProductServiceInfoServiceImpl implements IProductServiceInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setProductCode(productInfo.getProductCode());
             productManagerLog.setBussinessStatus("02");//审核状态

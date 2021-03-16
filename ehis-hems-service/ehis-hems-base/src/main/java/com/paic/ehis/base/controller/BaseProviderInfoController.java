@@ -606,4 +606,15 @@ public class BaseProviderInfoController extends BaseController {
         return getDataTable(list);*/
         return AjaxResult.success(baseProviderInfoService.selectSupplier(productInfo));
     }
+
+
+    /**
+     * 配置供应商信息
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:add')")
+    @PostMapping("/insertSupplier")
+    public AjaxResult insertSupplier(@RequestBody com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo)
+    {
+        return toAjax(baseProviderInfoService.insertSupplier(productSupplierInfoVo));
+    }
 }

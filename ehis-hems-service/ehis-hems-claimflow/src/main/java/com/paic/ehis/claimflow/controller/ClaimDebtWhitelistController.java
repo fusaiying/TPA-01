@@ -32,8 +32,8 @@ public class ClaimDebtWhitelistController extends BaseController
      * 查询案件追讨白名单列表
      */
     //@PreAuthorize("@ss.hasPermi('system:whitelist:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(ClaimDebtWhitelist claimDebtWhitelist)
+    @PostMapping("/list")
+    public TableDataInfo list(@RequestBody ClaimDebtWhitelist claimDebtWhitelist)
     {
         startPage(claimDebtWhitelist);
         List<ClaimDebtWhitelist> list = claimDebtWhitelistService.selectClaimDebtWhitelistList(claimDebtWhitelist);

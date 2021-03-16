@@ -5,24 +5,24 @@
                label-position="right" size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="服务项目：" prop="serviceItem">
-              <el-select v-model="sendQueryForm.serviceItem" class="item-width" placeholder="请选择">
-                <el-option v-for="item in service_itemOptions" :key="item.dictValue" :label="item.dictLabel"
+            <el-form-item label="服务项目：" prop="itemCode">
+              <el-select v-model="sendQueryForm.itemCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理渠道：" prop="channel">
-              <el-select v-model="sendQueryForm.channel" class="item-width" placeholder="请选择">
-                <el-option v-for="item in channelOptions" :key="item.dictValue" :label="item.dictLabel"
+            <el-form-item label="受理渠道：" prop="channelCode">
+              <el-select v-model="sendQueryForm.channelCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="受理人：" prop="acceptorName">
-              <el-input v-model="sendQueryForm.acceptorName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="受理人：" prop="acceptBy">
+              <el-input v-model="sendQueryForm.acceptBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,8 +40,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理人：" prop="handlerName">
-              <el-input v-model="sendQueryForm.handlerName" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="处理人：" prop="updateBy">
+              <el-input v-model="sendQueryForm.updateBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -86,21 +86,21 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="insuredIdNumber">
-              <el-input v-model="sendQueryForm.insuredIdNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item style="white-space: nowrap" label="被保人证件号：" prop="idNumber">
+              <el-input v-model="sendQueryForm.idNumber" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="联系人电话：" prop="phone">
-              <el-input v-model="sendQueryForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="联系人电话：" prop="mobilePhone">
+              <el-input v-model="sendQueryForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出单机构：" prop="organization">
-              <el-select v-model="sendQueryForm.organization" class="item-width" placeholder="请选择">
-                <el-option v-for="item in organizationOptions" :key="item.dictValue" :label="item.dictLabel"
+            <el-form-item label="出单机构：" prop="organCode">
+              <el-select v-model="sendQueryForm.organCode" class="item-width" placeholder="请选择">
+                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -122,7 +122,7 @@
           <el-col :span="8">
             <el-form-item label="优先级：" prop="priority">
               <el-select v-model="sendQueryForm.priority" class="item-width" placeholder="请选择">
-                <el-option v-for="item in priorityOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_priority" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -130,7 +130,7 @@
           <el-col :span="8">
             <el-form-item label="VIP标识：" prop="vipFlag">
               <el-select v-model="sendQueryForm.vipFlag" class="item-width" placeholder="请选择">
-                <el-option v-for="item in vip_flagOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -138,7 +138,7 @@
           <el-col :span="8">
             <el-form-item label="状态：" prop="status">
               <el-select v-model="sendQueryForm.status" class="item-width" placeholder="请选择">
-                <el-option v-for="item in statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -217,20 +217,20 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询表单参数定义
       sendQueryForm: {
-        serviceItem: undefined,
-        channel: undefined,
-        acceptorName: undefined,
+        itemCode: undefined,
+        channelCode: undefined,
+        acceptBy: undefined,
         acceptorTime: undefined,
-        handlerName: undefined,
+        updateBy: undefined,
         handlerTime: undefined,
         workOrderNo: undefined,
         policyNo: undefined,
         policyItemNo: undefined,
         holderName: undefined,
         insuredName: undefined,
-        insuredIdNumber: undefined,
-        phone: undefined,
-        organization: undefined,
+        idNumber: undefined,
+        mobilePhone: undefined,
+        organCode: undefined,
         complaintTime: undefined,
         priority: undefined,
         vipFlag: undefined,
@@ -256,12 +256,12 @@ export default {
       //下拉框字典数据返回对象
       dictList: [],
       //下拉框字典数据返回对象
-      service_itemOptions:[],
-      channelOptions:[],
-      organizationOptions:[],
-      priorityOptions:[],
-      vip_flagOptions:[],
-      statusOptions:[],
+      cs_service_item:[],
+      cs_channel:[],
+      cs_organization:[],
+      cs_priority:[],
+      cs_vip_flag:[],
+      cs_order_state:[],
       //质检按钮加载状态
       sendLoading: false,
       //table选中集合
@@ -286,22 +286,22 @@ export default {
       this.dictList = response.data
     })
     // 下拉项赋值
-    this.service_itemOptions = this.dictList.find(item => {
+    this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-    this.channelOptions = this.dictList.find(item => {
+    this.cs_channel = this.dictList.find(item => {
       return item.dictType === 'cs_channel'
     }).dictDate
-    this.organizationOptions = this.dictList.find(item => {
+    this.cs_organization = this.dictList.find(item => {
       return item.dictType === 'cs_organization'
     }).dictDate
-    this.priorityOptions = this.dictList.find(item => {
+    this.cs_priority = this.dictList.find(item => {
       return item.dictType === 'cs_priority'
     }).dictDate
-    this.vip_flagOptions = this.dictList.find(item => {
+    this.cs_vip_flag = this.dictList.find(item => {
       return item.dictType === 'cs_vip_flag'
     }).dictDate
-    this.statusOptions = this.dictList.find(item => {
+    this.cs_order_state = this.dictList.find(item => {
       return item.dictType === 'cs_order_state'
     }).dictDate
 
@@ -322,41 +322,40 @@ export default {
       let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
-
-        serviceItemCode: this.sendQueryForm.serviceItem,
-        channelCode: this.sendQueryForm.channel,
-        acceptorName: this.sendQueryForm.acceptorName,
-        acceptorStartTime: undefined,
-        acceptorEndTime: undefined,
-        handlerName: this.sendQueryForm.handlerName,
-        handlerStartTime: undefined,
-        handlerEndTime: undefined,
+        itemCode: this.sendQueryForm.itemCode,
+        channelCode: this.sendQueryForm.channelCode,
+        acceptBy: this.sendQueryForm.acceptBy,
+        acceptStartDate: undefined,
+        acceptEndDate: undefined,
+        updateBy: this.sendQueryForm.updateBy,
+        updateStartDate: undefined,
+        updateEndDate: undefined,
         workOrderNo: this.sendQueryForm.workOrderNo,
         policyNo: this.sendQueryForm.policyNo,
         policyItemNo: this.sendQueryForm.policyItemNo,
         holderName: this.sendQueryForm.holderName,
         insuredName: this.sendQueryForm.insuredName,
-        insuredIdNumber: this.sendQueryForm.insuredIdNumber,
-        phone: this.sendQueryForm.phone,
-        organCode: this.sendQueryForm.organization,
-        complaintStartTime: undefined,
-        complaintEndTime: undefined,
-        priorityCode: this.sendQueryForm.priority,
+        idNumber: this.sendQueryForm.idNumber,
+        mobilePhone: this.sendQueryForm.mobilePhone,
+        organCode: this.sendQueryForm.organCode,
+        appointmentStartDate: undefined,
+        appointmentEndDate: undefined,
+        priorityLevel: this.sendQueryForm.priority,
         vipFlag: this.sendQueryForm.vipFlag,
         status: this.sendQueryForm.status
       }
       //日期区间拆分
       if (this.sendQueryForm.acceptorTime) {
-        query.acceptorStartTime = this.sendQueryForm.acceptorTime[0]
-        query.acceptorEndTime = this.sendQueryForm.acceptorTime[1]
+        query.acceptStartDate = this.sendQueryForm.acceptorTime[0]
+        query.acceptEndDate = this.sendQueryForm.acceptorTime[1]
       }
       if (this.sendQueryForm.handlerTime) {
-        query.handlerStartTime = this.sendQueryForm.handlerTime[0]
-        query.handlerEndTime = this.sendQueryForm.handlerTime[1]
+        query.updateStartDate = this.sendQueryForm.handlerTime[0]
+        query.updateEndDate = this.sendQueryForm.handlerTime[1]
       }
       if (this.sendQueryForm.complaintTime) {
-        query.complaintStartTime = this.sendQueryForm.complaintTime[0]
-        query.complaintEndTime = this.sendQueryForm.complaintTime[1]
+        query.appointmentStartDate = this.sendQueryForm.complaintTime[0]
+        query.appointmentEndDate = this.sendQueryForm.complaintTime[1]
       }
       // API 方法名称
       inspectionQueryBy(query).then(res => {

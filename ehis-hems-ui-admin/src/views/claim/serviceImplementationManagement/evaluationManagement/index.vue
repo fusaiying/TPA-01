@@ -84,7 +84,7 @@
           highlight-current-row
           tooltip-effect="dark"
           style="width: 100%;">
-          <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>
+<!--          <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>-->
           <el-table-column label="产品名称" prop="productName" align="center" show-overflow-tooltip/>
           <el-table-column label="服务项目名称" prop="serviceName" align="center" show-overflow-tooltip/>
           <el-table-column label="供应商名称" prop="supplierName"  align="center"

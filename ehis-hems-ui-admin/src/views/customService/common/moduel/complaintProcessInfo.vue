@@ -1,10 +1,10 @@
 <template>
   <el-card class="box-card" style="margin-top: 10px;">
     <div slot="header" class="clearfix">
-      <span>投诉质检处理</span>
+      <span style="color: blue">投诉质检处理</span>
     </div>
     <el-form  ref="ruleForm" :model="complaintProcess" style="padding-bottom: 30px;" label-width="100px">
-      <el-table :data="complaintProcess.items" >
+      <el-table :data="complaintProcess.items" :header-cell-style="{color:'black',background:'#f8f8ff'}">
         <el-table-column  label="质检分类" show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemType'" >
@@ -26,6 +26,8 @@
             <el-form-item :prop="'items.' + scope.$index + '.value'" >
               <el-select v-model="scope.row.value" size="mini" placeholder="请选择">
                 <el-option v-for="item in valueOptions" :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue">
+                  <span style="float: left">{{ item.dictValue }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dictLabel }}</span>
                 </el-option>
               </el-select>
             </el-form-item>

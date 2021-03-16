@@ -43,7 +43,7 @@ public interface IClaimCaseAppealTaskService
      * @param claimCaseAppealTask 案件申诉任务
      * @return 结果
      */
-    public int updateClaimCaseAppealTask(ClaimCaseAppealTask claimCaseAppealTask);
+    public ClaimCaseAppealTask updateClaimCaseAppealTask(ClaimCaseAppealTask claimCaseAppealTask);
 
     /**
      * 批量删除案件申诉任务
@@ -68,4 +68,12 @@ public interface IClaimCaseAppealTaskService
      * @return 案件申诉任务集合
      */
     public List<ClaimCaseAppealTaskVo> getAppealList(ClaimCaseAppealTaskVo vo);
+
+
+    /**
+     * 更新案件修正账单号
+     *
+     * @param claimCaseAppealTask 案件申诉任务
+     */
+    public int updateClaimCaseAppealBill(ClaimCaseAppealTask claimCaseAppealTask);
 }

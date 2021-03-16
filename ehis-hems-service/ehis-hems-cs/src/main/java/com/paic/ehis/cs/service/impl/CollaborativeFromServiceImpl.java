@@ -211,8 +211,9 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         collaborativeFrom.setNonReason(complaintDealVo.getNonReason());
         collaborativeFrom.setTreatmentBasis(complaintDealVo.getTreatmentBasis());
         collaborativeFrom.setTreatmentPlan(complaintDealVo.getTreatmentPlan());
-        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+        //征求意见处理提交禁止修改案件发起人，案件发起时间
+        //collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+        //collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
         return collaborativeFromMapper.updateConsultationDemandOne(collaborativeFrom);

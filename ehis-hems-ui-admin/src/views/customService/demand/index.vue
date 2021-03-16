@@ -214,7 +214,7 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
               <span>{{ scope.row.modifyTime | changeDate}}</span>
             </template>
@@ -416,6 +416,8 @@ export default {
         vipFlag:"",//VIP标识
         mobilePhone:"",//移动电话
         status:"",//状态
+        modifyTime:"",
+        updateTime:""
       },
       loading: true,
       workPoolData: [],//公共池

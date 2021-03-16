@@ -198,6 +198,8 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       acceptQueryForm: {
+        pageNum: 1,
+        pageSize: 10,
         itemCode: "",//服务信息
         channelCode: "",//受理渠道
         acceptBy: "",//受理人
@@ -273,7 +275,7 @@ export default {
       this.$refs.acceptQueryForm.resetFields()
     },
     searchHandle() {
-      let query = {
+      /*let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
         itemCode: this.acceptQueryForm.itemCode,
@@ -297,8 +299,9 @@ export default {
         priorityLevel: this.acceptQueryForm.priorityLevel,
         vipFlag: this.acceptQueryForm.vipFlag,
         status: this.acceptQueryForm.status
-      }
-      if (this.acceptQueryForm.acceptorTime) {
+      }*/
+
+      /*if (this.acceptQueryForm.acceptorTime) {
         query.acceptorStartTime = this.acceptQueryForm.acceptorTime[0]
         query.acceptorEndTime = this.acceptQueryForm.acceptorTime[1]
       }
@@ -309,9 +312,16 @@ export default {
       if (this.acceptQueryForm.complaintTime) {
         query.complaintStartTime = this.acceptQueryForm.complaintTime[0]
         query.complaintEndTime = this.acceptQueryForm.complaintTime[1]
+      }*/
+      let queryParams;
+      if (this.acceptQueryForm.acceptorTime.length > 0) {
+        queryParams = JSON.parse(JSON.stringify(this.acceptQueryForm));
+        queryParams.acceptTimeStart=acceptorTime[0]
+        queryParams.acceptTimeEnd=acceptorTime[1]
+      } else {
+        queryParams = this.acceptQueryForm;
       }
-
-      selectWorkOrder(query).then(res => {
+      selectWorkOrder(queryParams).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total

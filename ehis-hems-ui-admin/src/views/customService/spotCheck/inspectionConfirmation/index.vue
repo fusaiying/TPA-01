@@ -153,30 +153,28 @@ export default {
     resetForm() {
       this.$refs.confirmationQueryForm.resetFields()
     },
-    dealButton(row) {
-        if(typeof (this.inspectionPublicPoolData.row.workOrderNo !==null && this.inspectionPublicPoolData.row.workOrderNo !=='')){
-        this.$message({
-          message: '将要处理工单【'+row.workOrderNo+"】....",
-          type: 'success',
-          center: true,
-          showClose: true
+    dealButton(row){
+      this.$message({
+        message: '将要处理工单【'+row.workOrderNo+"】....",
+        type: 'success',
+        center: true,
+        showClose: true
+      })
+      let data = encodeURI(
+        JSON.stringify({
+          workOrderNo: row.workOrderNo, //批次号
+          policyNo: row.policyNo, //保单号
+          policyItemNo: row.policyItemNo, //分单号
+          businessType: row.businessType
         })
-        let data = encodeURI(
-          JSON.stringify({
-            workOrderNo: row.workOrderNo, //批次号
-            policyNo: row.policyNo, //保单号
-            policyItemNo: row.policyItemNo, //分单号
-            businessType: row.businessType
-          })
-        )
-        console.log(row.businessType,"95628525+2")
-        this.$router.push({
-          path: '/workOrder/inspectionHandle',
-          query: {
-            data
-          }
-        })
-      }
+      )
+      console.info("handleOne:"+data)
+      this.$router.push({
+        path: '/workOrder/inspectionConfirmationConfirm',
+        query: {
+          data
+        }
+      })
     },
     searchHandle() {
       let query = {

@@ -50,5 +50,8 @@ public class ConsultationDTO implements Serializable {
     @Excel(name = "服务项目")
     private String itemCode;
 
+    /** 当前操作人 */
+    @Excel(name = "当前操作人")
+    private String operation ;
 }
 

@@ -82,12 +82,16 @@
 
         <el-table-column prop="number" align="center" header-align="center" label="配置供应商" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id"
+            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id "
                           :rules="serviceProFormRules.number" style="display: inline-flex !important;">
               <a style="color: #3CB4E5;text-decoration: underline"
                  @click="opendialogVisible(scope.$index,scope.row)">{{ scope.row.number | getNumber }}</a>
             </el-form-item>
             <span v-else>{{ scope.row.number | getNumber }}</span>
+
+
+
+
 
 
           </template>

@@ -2,13 +2,14 @@ package com.paic.ehis.claimflow.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.paic.ehis.common.core.annotation.Excel;
+import com.paic.ehis.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class DispatchDTO implements Serializable {
+public class DispatchDTO extends BaseEntity {
     /** 交单日期 */
 
     @JsonFormat(pattern = "yyyy-MM-dd")

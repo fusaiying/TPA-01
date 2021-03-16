@@ -13,11 +13,10 @@ import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
 import com.paic.ehis.common.log.enums.BusinessType;
 import com.paic.ehis.common.security.annotation.PreAuthorize;
-import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.paic.ehis.common.log.annotation.Log;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -321,9 +320,9 @@ public class ClaimCaseController extends BaseController {
         return getDataTable(list);
     }*/
     @PreAuthorize(hasAnyPermi = "@ss.hasPermi('system:case:list')")
-    @GetMapping("/selectCaseDispatchList")
-    public TableDataInfo selectCaseDispatchList(DispatchDTO dispatchDTO) {
-        startPage();
+    @PostMapping("/selectCaseDispatchList")
+    public TableDataInfo selectCaseDispatchList(@RequestBody DispatchDTO dispatchDTO) {
+        startPage(dispatchDTO);
         List<CaseDispatchVO> list = claimCaseService.selectCaseDispatchList(dispatchDTO);
         return getDataTable(list);
     }

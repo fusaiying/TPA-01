@@ -656,11 +656,6 @@ export default {
       })
     },
 
-    //查询按钮
-    searchHandles() {
-      this.searchHandle()
-      this.searchHandle1()
-    },
     //二次来电查询
     searchSecondHandle() {
       const query ={

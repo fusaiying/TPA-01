@@ -35,7 +35,6 @@
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="callCenterId" column="call_center_id"/>
-        <result property="remark" column="remark"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"

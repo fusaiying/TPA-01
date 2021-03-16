@@ -207,7 +207,7 @@
               <span>{{ scope.row.modifyTime | changeDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="remark" align="center" label="响应内容" show-overflow-tooltip/>
+          <el-table-column prop="priorityLevel" align="center" label="响应内容" show-overflow-tooltip/>
           <el-table-column prop="organCode" align="center" label="出单机构" show-overflow-tooltip>
             <!--      如果没有配置字典数据会异常-->
             <template slot-scope="scope" v-if="scope.row.organCode">

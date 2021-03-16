@@ -181,9 +181,9 @@ export default {
     //修改
     modifyButton(row) {
       let url='/customService/modify';
-      if(row.serviceItem==''){
+      if(row.businessType=='02'){
         url='/customService/complaint/modify';
-      }else if(row.serviceItem==''){
+      }else if(row.businessType=='03'){
         url='/customService/reservation/modify';
       }
       this.$router.push({

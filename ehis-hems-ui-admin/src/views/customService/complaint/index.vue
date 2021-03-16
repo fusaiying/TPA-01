@@ -485,11 +485,12 @@
           complaintObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("批量获取成功")
+              this.searchHandles()
             }
           }).catch(res => {
           })
         }
-          this.searchHandles()
+
       }
         },
       //工单页面超链接

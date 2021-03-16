@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paic.ehis.claimmgt.mapper.ClaimCaseAppealBillDetailMapper">
+
+    <resultMap type="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail" id="ClaimCaseBillDetailResult">
+        <result property="detailId"    column="detail_id"    />
+        <result property="billId"    column="bill_id"    />
+        <result property="rptNo"    column="rpt_no"    />
+        <result property="feeItemCode"    column="fee_item_code"    />
+        <result property="feeItemName"    column="fee_item_name"    />
+        <result property="billDetailAmount"    column="bill_detail_amount"    />
+        <result property="selfAmount"    column="self_amount"    />
+        <result property="partSelfAmount"    column="part_self_amount"    />
+        <result property="advancePayment"    column="advance_payment"    />
+        <result property="billDetailCopay"    column="bill_detail_copay"    />
+        <result property="hosDiscountAmount"    column="hos_discount_amount"    />
+        <result property="unableAmount"    column="unable_amount"    />
+        <result property="visNumber"    column="vis_number"    />
+        <result property="remark"    column="remark"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <select id="claimCaseAppealBillDetailList" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail" resultMap="ClaimCaseBillDetailResult">
+        select
+            `bill_id`,
+            `rpt_no`,
+            `hospital_code`,
+            `department`,
+            `is_des_hospital`,
+            `acc_type`,
+            `bill_currency`,
+            `bill_amount`,
+            `vis_number`,
+            `treatment_type`,
+            `treatment_start_date`,
+            `treatment_end_date`,
+            `treatment_Days`,
+            `invoice_no`,
+            `bill_no`,
+            `bill_type`,
+            `ss_advance_payment`,
+            `tp_advance_payment`,
+            `is_share_ap`,
+            `trans_serial_no`,
+            `trans_Serial_copay`,
+            `copay`,
+            `is_share_copay`,
+            `hos_discount_amount`,
+            `is_share_dis_amount`,
+            `self_amount`,
+            `part_self_amount`,
+            `unable_amount`,
+            `clinical_diagnosis`,
+            `status`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`
+        from claim_case_bill
+        WHERE status = 'Y' and rpt_no = #{rptNo}
+    </select>
+
+    <update id="updateClaimCaseAppealBillDetail" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail">
+        update claim_case_bill_detail set bill_id = #{billId} where  bill_id = #{oldBillId} and rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
+    <update id="updateClaimCaseAppealBillDiagnosis" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail">
+        update claim_case_bill_diagnosis set bill_id = #{billId} where  bill_id = #{oldBillId} and rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
+    <update id="updateClaimCaseAppealBill" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail">
+        update claim_case_bill set update_by = null where  update_by = CAST(#{oldBillId} AS CHAR) and rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
+
+</mapper>

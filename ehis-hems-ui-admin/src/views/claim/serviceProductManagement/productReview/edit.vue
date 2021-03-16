@@ -10,7 +10,7 @@
     </div>
     <!--服务项目-->
     <div>
-      <services-available ref="servicesAvailableForm" :productCode="productCode" :disabledFlag="disabledFlag"
+      <services-available ref="servicesAvailableForm" :productCode="productCode" :disabledFlag="disabledFlag" @changeSupplierInfo="changeSupplierInfo"
                           :status="status"></services-available>
     </div>
     <!--供应商信息-->
@@ -66,7 +66,11 @@
 </template>
 
 <script>
-import {selectProductSupplier} from '@/api/productManage/serviceProductManagement'
+import {
+  getProductServiceList,
+  selectProductSupplier,
+  selectSupplier
+} from '@/api/productManage/serviceProductManagement'
 import productInfo from './../components/productInfo'
 import servicesAvailable from './../components/servicesAvailable'
 import serviceManualList from './../components/serviceManualList'
@@ -93,6 +97,7 @@ export default {
       supplierInfo: {
         supplierData: []
       },
+      serviceProForm:[]
 
 
     }
@@ -117,16 +122,63 @@ export default {
 
         this.disabledFlag = true
         this.productCode = this.$route.query.productCode
-        //调用查询供应商的接口
-        let query = {
+        //获取服务项目第一个供应商
+        let queryData = {
+          productCode: this.$route.query.productCode
+        }
+       new Promise((resolve, reject) => {
+         getProductServiceList(queryData).then(res => {
+           if (res.code == '200' && res.rows.length > 0) {
+             this.serviceProForm = res.rows
+             resolve()
+           }
+         }).catch(error => {
+           reject(error)
+         })
+       }).then(res=>{
+         //调用查询供应商的接口
+         let query={
+            pageNum: 1,
+           pageSize: 10,
+           productCode: this.serviceProForm[0].productCode,
+           serviceCode: this.serviceProForm[0].serviceCode,
+           flag:'0'
+       }
+         selectSupplier(query).then(res => {
+           this.supplierInfo.supplierData = res.data;
+         })
+
+
+
+       })
+
+      /*  let query = {
           productCode: this.$route.query.productCode
         }
         selectProductSupplier(query).then(res => {
           this.supplierInfo.supplierData = res.data;
-        })
+        })*/
+
+
       }
 
     },
+    //供应商信息改变
+    changeSupplierInfo(val){
+
+      let query={
+        pageNum: 1,
+        pageSize: 10,
+        productCode: val.productCode,
+        serviceCode: val.serviceCode,
+        flag:'0'
+
+      }
+
+      selectSupplier(query).then(res => {
+        this.supplierInfo.supplierData = res.data;
+      })
+    }
 
 
   }

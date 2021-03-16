@@ -112,7 +112,13 @@ export function insertItem(form){
     data: form
   })
 }
-
+export function insertHandleInfo(form){
+  return request({
+    url: '/cs/spotCheck/internal/insertHandleInfo',
+    method: 'post',
+    data: form
+  })
+}
 
 //# 通过工单号查询附件信息
 export function getAttachmentListById(params) {

@@ -242,7 +242,17 @@ export default {
         this.getData()
       }
       else {
-        this.$message({message: '至少录入一个查询条件', type: 'warning', showClose: true, center: true})
+        let query={
+          pageNum: 1,
+          pageSize: 10
+        }
+        listNull(query).then(res => {
+          this.tableData = res.rows;
+          this.totalCount = res.total;
+          this.loading = false;
+        }).catch(res => {
+          this.loading = false
+        })
       }
 
     },

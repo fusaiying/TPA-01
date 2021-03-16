@@ -1225,7 +1225,7 @@ WHERE
         base_contract_service
         WHERE
         service_code = #{serviceCode}
-        <if test="flag == '0'"> and bcs.priority is not null</if>
+        <if test="flag == 0"> and bcs.priority is not null </if>
         AND STATUS = 'Y'
         GROUP BY
         supplier_code,

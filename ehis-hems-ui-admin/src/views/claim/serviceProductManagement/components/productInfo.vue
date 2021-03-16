@@ -226,7 +226,7 @@ export default {
     const checkProductDeadline = (rules, value, callback) => {
       let reg = /^(\d+|\d+\.)$/
       if(this.baseForm.productTimeInfo){
-        if (this.baseForm.productTimeInfo < 0) {
+        if (this.baseForm.productTimeInfo <= 0) {
           callback(new Error("请输入正整数"));
         } else if (!reg.test(this.baseForm.productTimeInfo)) {
           callback(new Error("请输入正整数"));

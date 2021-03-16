@@ -82,7 +82,7 @@
 
         <el-table-column prop="number" align="center" header-align="center" label="配置供应商" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id || status=='review'"
+            <el-form-item :prop="'form.'+scope.$index +'.number'" v-if="!scope.row.id || status=='review' || status=='management'"
                           :rules="serviceProFormRules.number" style="display: inline-flex !important;">
               <a style="color: #3CB4E5;text-decoration: underline"
                  @click="opendialogVisible(scope.$index,scope.row)">{{ scope.row.number | getNumber }}</a>
@@ -488,7 +488,7 @@ export default {
 
     //供应商弹出框
     async opendialogVisible(index, row) {
-      if(this.status!='review') {
+      if(this.status!='review' && this.status!='management') {
 
         this.serviceTableIndex = index
 

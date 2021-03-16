@@ -81,6 +81,7 @@
 
 <script>
 import {coOrganizerSubmit} from "../../../../api/customService/demand";
+import {getUserInfo} from '@/api/claim/standingBookSearch';
 
 export default {
   name: 'upLoad',
@@ -118,6 +119,7 @@ export default {
     }
   },
   mounted() {
+    this.getLoginUserInfo();
   },
   methods: {
     removeDomain(item) {
@@ -125,6 +127,11 @@ export default {
       if (index !== -1) {
         this.dynamicValidateForm.umCode.splice(index, 1)
       }
+    },
+    getLoginUserInfo(){
+      getUserInfo().then(response => {
+        this.loginName = response.data.userName;
+      })
     },
     addDomain() {
       this.dynamicValidateForm.umCode.push({
@@ -139,7 +146,20 @@ export default {
     submitButton(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let insert = this.dynamicValidateForm
+          let sub = true;
+          let insert = this.dynamicValidateForm;
+          for(let i=0; i<insert.umCode.length; i++){
+            let umcode = insert.umCode[i].value
+            if(umcode === this.loginName) {
+              sub = false;
+              break;
+            }
+          }
+          if(!sub) {
+            this.$message.warning('协办方UM账号不能与当前登陆人相同');
+            return false;
+          }
+
           coOrganizerSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("协办成功")

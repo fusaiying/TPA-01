@@ -697,13 +697,15 @@ export default {
         policyNo: this.baseInfo.policyNo,
         policyItemNo: this.baseInfo.policyItemNo,
       }
-      policyInfoData(query).then(res => {
-        if (res != null && res.code === 200) {
-          this.baseInfo = res.data;
-        }
-      }).catch(res => {
+      if(this.baseInfo.policyNo != null && this.baseInfo.policyNo !=""){
+        policyInfoData(query).then(res => {
+          if (res != null && res.code === 200) {
+            this.baseInfo = res.data;
+          }
+        }).catch(res => {
 
-      })
+        })
+      }
     },
     //关闭按钮
     hiddenShow: function () {

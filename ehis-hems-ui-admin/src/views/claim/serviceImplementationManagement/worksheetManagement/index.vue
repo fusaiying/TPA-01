@@ -12,7 +12,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="productCode">
               <el-select v-model="formSearch.productCode" class="item-width"  clearable filterable>
@@ -104,7 +103,7 @@
       <el-divider/>
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span>工单信息列表</span>
+          <span>工单信息列表（{{ totalCount }}）</span>
         </div>
         <el-table
           v-loading="loading"
@@ -468,8 +467,12 @@ export default {
           let obj= this.supplierProductList.find(item=>{
             return item.supplierCode==this.allotForm.supplierCode
           })
+          //给供应商名称赋值
+          this.serviceInfo.chname=obj.supplierName
+
           this.serviceInfo.phone=obj.contractInfo[0].phone
           this.serviceInfo.contactName=obj.contractInfo[0].contactName
+
           allocation(this.serviceInfo).then(res=>{
             if (res !=null && res.code == '200') {
               this.$message({

@@ -111,7 +111,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setBussinessStatus("01");//新建状态
             productManagerLog.setStatus("Y");
             productManagerLogMapper.insertProductManagerLog(productManagerLog);
@@ -142,7 +142,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
         productInfo.setCreateTime(DateUtils.getNowDate());
         productInfo.setUpdateTime(DateUtils.getNowDate());
         productInfo.setCreateBy(SecurityUtils.getUsername());
-        productInfo.setCreateBy(SecurityUtils.getUsername());
+        productInfo.setUpdateBy(SecurityUtils.getUsername());
         productInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productInfoSer", 12, 12));
         productInfo.setStatus("Y");
         productInfo.setBussinessStatus("01");//新建状态

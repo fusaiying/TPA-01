@@ -427,6 +427,14 @@
       }
     },
     data() {
+      const checkComplaintTime= (rule, value, callback) => {
+        let tDate = new Date();
+        if(tDate > value){
+          callback(new Error("预约时间不能早于当前日期"));
+        }else{
+          callback();
+        }
+      }
 
       return {
         cs_channel: [],//
@@ -509,7 +517,8 @@
             {required: true, message: "投诉人性别不能为空", trigger: "blur"}
           ],
           complaintTime: [
-            {required: true, message: "预约时间不能为空", trigger: "blur"}
+            {required: true, message: "预约时间不能为空", trigger: "blur"},
+            {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
           'callPerson.mobilePhone': [
             {required: true, message: "来电号码不能为空", trigger: "blur"},
@@ -523,6 +532,9 @@
           ],
           content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"},
+            { min: 0, max: 2000, message: '长度不超过2000个字符' }
+          ],
+          'contactsPerson.address': [
             { min: 0, max: 2000, message: '长度不超过2000个字符' }
           ],
           'E-MAIL': [

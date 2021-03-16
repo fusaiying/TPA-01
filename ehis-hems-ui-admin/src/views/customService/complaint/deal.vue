@@ -386,7 +386,7 @@
     </el-card>
 
     <el-card>
-      <el-form ref="sendForm" :model="sendForm"  style="padding-bottom: 30px;" label-width="180px"
+      <el-form ref="sendForm" :model="sendForm" :rules="rules" style="padding-bottom: 30px;" label-width="180px"
                label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
@@ -733,6 +733,9 @@ export default {
         ],
         orderNum: [
           {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
+        ],
+        treatmentResult: [
+          {required: true, message: "处理结果不能为空", trigger: "blur"}
         ],
 
       },

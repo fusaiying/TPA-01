@@ -155,7 +155,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setProductCode(productInfo.getProductCode());
             productManagerLog.setBussinessStatus("01");//新建状态
@@ -251,7 +251,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productCheckInfo.setCreateTime(DateUtils.getNowDate());
             productCheckInfo.setUpdateTime(DateUtils.getNowDate());
             productCheckInfo.setCreateBy(SecurityUtils.getUsername());
-            productCheckInfo.setCreateBy(SecurityUtils.getUsername());
+            productCheckInfo.setUpdateBy(SecurityUtils.getUsername());
             productCheckInfo.setStatus("Y");
             productCheckInfo.setSerialNo(PubFun.createMySqlMaxNoUseCache("productCheckSer", 12, 12));
             productCheckInfoMapper.insertProductCheckInfo(productCheckInfo);
@@ -259,7 +259,7 @@ public class ProductInfoServiceImpl implements IProductInfoService
             productManagerLog.setCreateTime(DateUtils.getNowDate());
             productManagerLog.setUpdateTime(DateUtils.getNowDate());
             productManagerLog.setCreateBy(SecurityUtils.getUsername());
-            productManagerLog.setCreateBy(SecurityUtils.getUsername());
+            productManagerLog.setUpdateBy(SecurityUtils.getUsername());
             productManagerLog.setProductCode(productCheckInfo.getProductCode());
             productManagerLog.setSerialNo(PubFun.createMySqlMaxNoUseCache("productManagerSer", 12, 12));
             productManagerLog.setStatus("Y");

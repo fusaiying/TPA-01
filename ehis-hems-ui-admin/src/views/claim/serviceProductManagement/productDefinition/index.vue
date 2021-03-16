@@ -229,7 +229,7 @@ export default {
       return row.productTimeInfo +'/'+this.selectDictLabel(this.productTimeTimeOptions, row.productTimeTime)
     },
     getBussinessStatus(row){
-      return this.selectDictLabel(this.product_bussiness_statusOptions, row.bussinessStatus)
+      return row.detailStatus
     },
 
     //查询

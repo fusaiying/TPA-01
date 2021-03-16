@@ -455,7 +455,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND bsi.status = 'Y'
             WHERE
                 psi.service_code = #{serviceCode}
-            AND psi.product_code = #{productCode}
+            <!--AND psi.product_code = #{productCode}-->
             AND psi.status = 'Y'
     </select>
 

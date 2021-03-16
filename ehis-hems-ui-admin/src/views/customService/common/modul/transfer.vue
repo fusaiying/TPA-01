@@ -62,6 +62,7 @@
 
 <script>
 import {transferSubmit} from "../../../../api/customService/demand";
+import {getUserInfo} from '@/api/claim/standingBookSearch'
 
 export default {
   name: 'upLoad',
@@ -78,6 +79,7 @@ export default {
       serves: [],
       cs_service_item: [],
       dialogVisable: false,
+      loginName:'',
     }
   },
 
@@ -86,13 +88,23 @@ export default {
     this.getDicts("cs_service_item").then(response => {
       this.cs_service_item = response.data;
     });
+    this.getLoginUserInfo();
   },
+  // created:{
+  //   this.getLog
+  // },
   methods: {
     removeDomain(item) {
       const index = this.dynamicValidateForm.umCode.indexOf(item);
       if (index !== -1) {
         this.dynamicValidateForm.umCode.splice(index, 1)
       }
+    },
+    getLoginUserInfo(){
+      getUserInfo().then(response => {
+        //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXX",response)
+        this.loginName = response.data.userName;
+      })
     },
     addDomain() {
       this.dynamicValidateForm.umCode.push({
@@ -107,7 +119,20 @@ export default {
     submitButton(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          let sub = true;
           let insert = this.dynamicValidateForm
+          for(let i=0; i<insert.umCode.length; i++){
+            let umcode = insert.umCode[i].value
+            if(umcode === this.loginName) {
+              sub = false;
+              break;
+            }
+          }
+          if(!sub) {
+            this.$message.warning('转办方UM账号不能与当前登陆人相同');
+            return false;
+          }
+
           transferSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("转办成功")

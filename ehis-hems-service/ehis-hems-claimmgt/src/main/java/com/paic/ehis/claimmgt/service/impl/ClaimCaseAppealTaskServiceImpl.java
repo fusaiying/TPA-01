@@ -102,7 +102,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         if(bean.getDealType().equalsIgnoreCase("audit")) {
            if(bean.getIsAgree().equals("01")) {
                bean.setAppealStatus("03");
-               /**
+               /**apply_type
                 * TODO:
                 初审决定选择同意，点击初审确认后，
                 此时申诉案件报案号为原报案号-1（流水），
@@ -112,6 +112,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                 */
                String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
                bean.setNewRptNo(newRptNo);
+               this.insertTableData(bean);
            } else {
                bean.setAppealStatus("04");
            }
@@ -219,6 +220,22 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
             appealRptNo += "-" + endNo;
         }
         return appealRptNo;
+    }
 
+    private void  insertTableData(ClaimCaseAppealTask bean){
+
+        // select * from claim_case ;   -- cp  07
+        //select * from claim_case_accept ; -- cp 案件受理信息表
+        //select * from claim_case_apply_type ; -- cp  案件受理信息表 申请原因
+        //select * from claim_case_bill  -- cp  案件账单明细表
+        //select * from claim_case_bill_detail; -- cp  案件账单费用项明细表
+        //SELECT * FROM claim_case_bill_diagnosis ; -- CP  案件账单诊断信息表
+        //SELECT * FROM claim_case_insured ; -- cp  案件被保人信息表
+        //SELECT * FROM claim_case_payee ; -- cp  案件领款人信息表
+        //SELECT * FROM claim_case_register ; -- cp  案件申请人信息表
+        //select * from claim_case_remark ; -- cp  案件备注表
+        //SELECT * FROM claim_case_policy ; -- cp  案件保单关联表
+
+        claimCaseAppealTaskMapper.insertClaimTableData(bean);
     }
 }

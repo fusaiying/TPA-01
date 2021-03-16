@@ -84,4 +84,8 @@ public interface ClaimCaseAppealTaskMapper
      * */
     public String getAppealNewRptNo(String appealRptNo);
 
+    public void insertClaimTableData(ClaimCaseAppealTask bean);
+
+
+
 }

@@ -830,7 +830,7 @@
         this.checkArra = [];
 
         if (this.userNameValue == '') {
-          return false;
+          return this.$message.warning('请选择操作人！');;
         }
         this.checkRoleName = this.userNameValue;
         console.log(this.checkRoleName)

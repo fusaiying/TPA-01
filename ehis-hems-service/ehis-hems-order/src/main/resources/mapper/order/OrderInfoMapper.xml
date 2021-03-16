@@ -226,6 +226,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.product_code,
             pi.product_chname,
             oi.service_code,
+            oi.service_name,
             oi.supplier_code,
             oi.customer_no,
             oi.contact_name,
@@ -345,6 +346,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
             <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
             <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="chname != null and chname != ''">chname = #{chname},</if>
             <if test="customerNo != null and customerNo != ''">customer_no = #{customerNo},</if>
             <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
             <if test="phone != null and phone != ''">phone = #{phone},</if>

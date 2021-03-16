@@ -31,20 +31,20 @@
     <el-table-column prop="policyNo" label="保单号" min-width="160" align="center"/>
     <el-table-column prop="policyItemNo" label="分单号" min-width="160" align="center"/>
     <el-table-column prop="riskCode" label="险种代码" min-width="80" align="center"/>
-    <el-table-column prop="insuredPerson.name" label="被保人" align="center"/>
+    <el-table-column prop="is" label="被保人" align="center"/>
     <el-table-column prop="holderPerson.name" label="投保人" align="center"/>
     <el-table-column align="center" prop="acceptTime" min-width="160" label="受理时间" show-overflow-tooltip>
       <template slot-scope="scope">
         <span>{{parseTime(scope.row.acceptTime, '{y}-{m}-{d} {h}:{i}:{s}')}}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" prop="modifyTime" min-width="160" label="修改时间" show-overflow-tooltip>
+    <el-table-column align="center" prop="updateTime" min-width="160" label="修改时间" show-overflow-tooltip>
       <template slot-scope="scope">
-        <span>{{parseTime(scope.row.modifyTime, '{y}-{m}-{d} {h}:{i}:{s}')}}</span>
+        <span>{{parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}')}}</span>
       </template>
     </el-table-column>
     <el-table-column prop="acceptUserId" label="受理人" min-width="120" align="center"/>
-    <el-table-column prop="modifyUser.umCode" label="处理人" min-width="120" align="center"/>
+    <el-table-column prop="updateBy" label="处理人" min-width="120" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center" show-overflow-tooltip>
       <template slot-scope="scope" v-if="scope.row.vipFlag">
         <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>

@@ -494,7 +494,7 @@ public class ClaimCaseController extends BaseController {
 
     //抽检工作池接口-导出已处理清单
 //    @PreAuthorize("@ss.hasPermi('system:case:export')")
-    @Log(title = "处理中理算案件信息 ", businessType = BusinessType.EXPORT)
+    @Log(title = "已处理理算案件信息 ", businessType = BusinessType.EXPORT)
     @PostMapping("/exportcaseCheckOver")
     public void exportcaseCheckOver(HttpServletResponse response, AuditWorkPoolDTO auditWorkPoolDTO) throws IOException {
         String utf8Name = new String(auditWorkPoolDTO.getName().getBytes("UTF-8"));

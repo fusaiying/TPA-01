@@ -98,6 +98,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         String username = SecurityUtils.getUsername();
         bean.setUpdateTime(nowDate);
         bean.setUpdateBy(username);
+        bean.setAuditor(username);
 
         // 进入申诉初审状态
         if(bean.getDealType().equalsIgnoreCase("initiate")) {

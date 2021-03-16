@@ -179,6 +179,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
             detail.setRptNo(detailInfo.getRptNo());
             detail.setBillId(detailInfo.getBillId());
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDetail(detail);
+            result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealCalBill(detail);
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDiagnosis(detail);
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBill(detail);
         }
@@ -264,6 +265,8 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         //SELECT * FROM claim_case_register ; -- cp  案件申请人信息表
         //select * from claim_case_remark ; -- cp  案件备注表
         //SELECT * FROM claim_case_policy ; -- cp  案件保单关联表
+        // SELECT * FROM claim_case_cal_bill -- cp 案件赔付账单明细表
+
 
         claimCaseAppealTaskMapper.insertClaimTableData(bean);
     }

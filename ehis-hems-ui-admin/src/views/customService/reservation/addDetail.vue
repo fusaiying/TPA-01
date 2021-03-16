@@ -508,7 +508,7 @@ export default {
         workOrderNo:"",
         complaintTime:"",
         hospitalWorkCall:"",
-        channelCode:"",//受理渠道
+        channelCode:"03",//受理渠道
         callCenterId:"",//中心
 
         callPerson:{

@@ -201,15 +201,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="pageType != null  and pageType != '' and pageType == '01'"> and t.appeal_status in ('01','04')</if>
         <if test="pageType != null  and pageType != '' and pageType == '02'"> and t.appeal_status in ('02','03')</if>
         <if test="createStartTime != null and createStartTime != ''">
-            <![CDATA[AND t1.update_time >= #{createStartTime} ]]>
+            <![CDATA[AND t.update_time >= #{createStartTime} ]]>
         </if>
         <if test="createEndTime != null and createEndTime != ''">
-            <![CDATA[AND t1.update_time <= #{createEndTime}]]>
+            <![CDATA[AND t.update_time <= #{createEndTime}]]>
         </if>
 
     </select>
 
     <select id="getTaskId"  resultType="Long">
         select lpad((select ifnull(max(CAST(task_id AS SIGNED)),0) + 1 from claim_case_appeal_task ), 11, 0);
+    </select>
+
+    <select id="getAppealNewRptNo" parameterType="String" resultType="String">
+        select new_rpt_no from   claim_case_appeal_task where task_id = (select max(task_id) from claim_case_appeal_task where status = 'Y' and appeal_rpt_no = #{appealRptNo} and appeal_status = '03')
     </select>
 </mapper>

@@ -325,24 +325,20 @@
               <el-button size="mini" type="text" @click="dealButton(scope.row)">处理</el-button>
               <el-button size="mini" type="text" @click="modifyButton(scope.row)">修改</el-button>
               <el-button size="mini" type="text" @click="cancleBytton(scope.row)">取消</el-button>
-
             </template>
           </el-table-column>
         </el-table>
-
         <pagination
           v-show="totalCount>0"
           :total="totalPersonCount"
-          :page.sync="pageNumPerson"
-          :limit.sync="pageSizePerson"
+          :page.sync="sendForm.pageNum"
+          :limit.sync="sendForm.pageSize"
           @pagination="searchHandle1"
         />
       </div>
     </el-card>
-
   </div>
 </template>
-
 <script>
   import moment from 'moment'
   import {complaintListAndPublicPool,complaintListAndPersonalPool,complaintObtain,complaintObtainMany} from '@/api/customService/complaint'
@@ -371,7 +367,6 @@
         riskCodes:[],
         dialogFormVisible: false,
         updateBy: undefined,
-
         sendForm: {//传值给后台
           pageNum: 1,
           pageSize: 10,
@@ -393,13 +388,6 @@
           vipFlag:"",//VIP标识
           mobilePhone:"",//移动电话
           status:"",//状态
-          // acceptTimeStart:"",//开始受理时间
-          // acceptTimeEnd:"",//结束受理时间
-          // modifyTimeStart:"",//开始修改时间
-          // modifyTimeEnd:"",//结束修改时间
-          // complaintTimeStart:"",//开始预约时间
-          // complaintTimeEnd:""//结束预约时间
-
         },
         caseNumber: false,//查询条件（报案号）是否显示
         loading: true,
@@ -449,11 +437,7 @@
       this.getDicts("cs_complaint_item").then(response => {
         this.cs_complaint_item = response.data;
       });
-
-
-
     },
-
     methods: {
       //修改按钮
       modifyButton(s){
@@ -491,7 +475,6 @@
             if (res != null && res.code === 200) {
             }
           }).catch(res => {
-
           })
         }else {
            const workOrderNos=this.ids
@@ -500,7 +483,6 @@
               this.$message.success("批量获取成功")
             }
           }).catch(res => {
-
           })
         }
           this.searchHandles()
@@ -525,10 +507,8 @@
         }else {
           this.isShow=false
           this.showClass="el-icon-arrow-right"
-
         }
       },
-
       //处理按钮
       dealButton(s){
         if(s.itemCode=="B00034"){
@@ -553,16 +533,13 @@
               businessType:s.businessType
             }
           })
-
         }
-
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.ids = selection.map(item => item.workOrderNo);
 
       },
-
       //增加按钮
       add(row) {
         this.$router.push({
@@ -583,12 +560,14 @@
         } else {
           queryParams = this.sendForm;
         }
-        queryParams.pageNum = this.pageNum;
-        queryParams.pageSize = this.pageSize;
+       /* queryParams.pageNum = this.pageNum;
+        queryParams.pageSize = this.pageSize;*/
         complaintListAndPublicPool(queryParams).then(res => {
+          console.log('共公池', res.rows)
           if (res != null && res.code === 200) {
             this.workPoolData = res.rows
-            this.totalCount = res.total
+            this.totalCount = res.rows.length
+            console.log('response', res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "公共池未查询到数据！"
@@ -596,7 +575,6 @@
             }
           }
         }).catch(res => {
-
         })
       },
       //处理中查询
@@ -609,13 +587,14 @@
         } else {
           queryParams = this.sendForm;
         }
-        queryParams.pageNum = this.pageNumPerson;
-        queryParams.pageSize = this.pageSizePerson;
+        /*queryParams.pageNum = this.pageNumPerson;
+        queryParams.pageSize = this.pageSizePerson;*/
         complaintListAndPersonalPool(this.sendForm).then(res => {
+          console.log('个人池：', res.rows)
           if (res != null && res.code === 200) {
             this.workPersonPoolData = res.rows
-            this.totalPersonCount = res.total
-            console.log("dasd",res.rows)
+            this.totalPersonCount = res.rows.length
+            console.log('response', res.total)
             if (res.rows.length <= 0) {
               return this.$message.warning(
                 "个人池未查询到数据！"
@@ -623,10 +602,8 @@
             }
           }
         }).catch(res => {
-
         })
       },
-
       //查询按钮
       searchHandles() {
         this.searchHandle()
@@ -635,7 +612,6 @@
     }
   }
 </script>
-
 <style scoped>
   .item-width {
     width: 220px;

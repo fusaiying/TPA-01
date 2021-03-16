@@ -22,7 +22,11 @@
           class="receive_table"
           :header-cell-style="{color:'black',background:'#f8f8ff'}">
           <el-table-column prop="batchNo" label="批次号" width="150%" align="center" show-overflow-tooltip />
-          <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip />
+          <el-table-column prop="rptNo" label="报案号" width="150%" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-button width="160" size="small" type="text" @click="viewHandle(scope.row,'show')">{{ scope.row.rptNo }}</el-button>
+            </template>
+          </el-table-column>
           <el-table-column prop="caseStatus" :formatter="getClaimStatusName" label="案件状态" align="center"  show-overflow-tooltip />
           <el-table-column prop="name" label="被保险人"  align="center" show-overflow-tooltip />
           <el-table-column prop="idNo" label="证件号码"  align="center" show-overflow-tooltip />
@@ -73,6 +77,7 @@
     },
     data() {
       return {
+        querys:Object,
         fixInfoData : '',
         rptNo :'',
         paramInsuredNo:'',
@@ -145,6 +150,27 @@
       },
       getInvestigationName(row, col){
         return row.investigation == '01' ? '是' : '否'  ;
+      },
+      // 处理跳转
+      viewHandle(row, status) {
+
+        let data = encodeURI(
+          JSON.stringify({
+            batchNo: row.batchNo,
+            claimType: row.claimType,
+            rptNo: row.rptNo,
+            flag:'01',
+            status,
+            node: 'calculateReview',
+            styleFlag: 'list',
+          })
+        )
+        const newpage = this.$router.resolve({
+          name: 'calculateDetail',
+          params:{},
+          query: {data}
+        })
+        window.open(newpage.href, '_blank');
       },
     }
   }

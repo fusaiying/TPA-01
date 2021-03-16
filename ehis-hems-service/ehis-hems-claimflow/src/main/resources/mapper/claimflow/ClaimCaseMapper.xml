@@ -769,6 +769,7 @@
         <result property="policyItemNo"    column="policy_item_no"    />
         <result property="payConclusion"    column="pay_conclusion"    />
         <result property="paymentAmount"    column="payment_amount"    />
+        <result property="appealClaim"    column="appeal_claim"    />
     </resultMap>
     <select id="selectClaimInformation" parameterType="com.paic.ehis.claimflow.domain.dto.ClaimInformationDTO" resultMap="ClaimInformationVo">
         SELECT
@@ -896,13 +897,20 @@
                 t1.case_status,
                 t1.pay_status,
                 t1.end_case_time,
-                t1.update_time
-          FROM claim_case t1
+                t1.update_time,
+                (select count(1) from claim_case_appeal_task task where task.status = 'Y' and task.appeal_rpt_no = t1.rpt_no and task.appeal_status != '03') appeal_claim
+        FROM claim_case t1
      LEFT JOIN claim_batch t2        ON t1.batch_no = t2.batch_no
      LEFT JOIN claim_case_insured t3 ON t1.rpt_no = t3.rpt_no
      LEFT JOIN claim_case_policy t4  ON  t3.rpt_no = t4.rpt_no
      LEFT JOIN claim_case_cal t5     ON t4.rpt_no = t5.rpt_no
-     LEFT JOIN (SELECT rpt_no,operation,update_by FROM claim_case_record WHERE operation = '07' AND status = 'Y' AND history_flag = 'Y'  GROUP BY rpt_no) t6 ON t5.rpt_no = t6.rpt_no
+     LEFT JOIN (SELECT
+                    rpt_no,
+                    operation,
+                    update_by
+                 FROM claim_case_record
+            WHERE record_id in (SELECT MAX(record_id) FROM claim_case_record WHERE operation = '07'  AND STATUS = 'Y' AND history_flag = 'Y' GROUP BY rpt_no)
+         ) t6 ON t5.rpt_no = t6.rpt_no
          WHERE 1 = 1
            AND t1.status = 'Y'
            AND t2.status = 'Y'

@@ -215,6 +215,7 @@ let dictss = [{dictType: 'appeal_type'}, {dictType: 'appeal_reason'}, {dictType:
       },
       updateAppeal(params) {
         params.taskId = this.appealInfo.row.taskId;
+        params.appealRptNo = this.appealInfo.row.appealRptNo;
         updateAppeal(params).then(response => {
           if (response.code == '200') {
             this.$message({

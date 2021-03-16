@@ -47,12 +47,7 @@ public interface DemandAcceptVoMapper {
     public int insertWorkOrderAccept(WorkOrderAccept WorkOrderAccept);
     //插入详细表
     public int insertAcceptDetailInfo(AcceptDetailInfo acceptDetailInfo);
-    //插入人的表
-    public int insertPersonInfo(PersonInfo personInfo);
     //插入轨迹表
     public int insertFlowLog(FlowLog flowLog);
-
-
-
 
 }

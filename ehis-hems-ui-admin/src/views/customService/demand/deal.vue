@@ -199,6 +199,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="电话中心业务流水号：" prop="phoneNumber">
               <el-input v-model="workPoolData.callCenterId" class="item-width" size="mini" readonly/>
             </el-form-item>
@@ -320,49 +327,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--        <el-row>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="出单机构：" prop="priority">-->
-        <!--              <el-select v-model="workPoolData.organCode" class="item-width" placeholder="请选择" disabled>-->
-        <!--                <el-option v-for="item in cs_organization" :key="item.dictValue" :label="item.dictLabel"-->
-        <!--                           :value="item.dictValue"/>-->
-        <!--              </el-select>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="是否涉及银行转账" prop="bank" >-->
-        <!--              <el-radio-group v-model="workPoolData.bankTransfer" disabled>-->
-        <!--                <el-radio   label="01">是</el-radio>-->
-        <!--                <el-radio   label="02">否</el-radio>-->
-
-        <!--              </el-radio-group>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
-        <!--        <el-row>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户行：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankName" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="开户地：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankLocation" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="账号：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.accountNumber" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-
-        <!--          <el-col :span="8">-->
-        <!--            <el-form-item label="户名：" v-show="workPoolData.bankTransfer=='01'" >-->
-        <!--              <el-input size="mini" v-model="workPoolData.bankHolder" readonly></el-input>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
         <el-row>
           <el-col :span="16">
             <el-form-item label="业务内容：" prop="textarea">
@@ -887,11 +851,10 @@ export default {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
           this.ruleForm = res.data;
-          /*if (res.rows.length <= 0) {
+          if (res.rows.length <= 0) {
             return this.$message.warning(
-              "未查询到数据！"
             )
-          }*/
+          }
         }
       }).catch(res => {
 

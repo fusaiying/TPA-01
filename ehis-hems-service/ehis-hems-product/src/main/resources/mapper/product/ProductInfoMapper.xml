@@ -86,8 +86,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectDefaultListist" parameterType="ProductInfo" resultMap="ProductInfoResult">
         <include refid="selectProductInfoVo"/>
         <where>
+            1=1
             <if test="beforeDate != null   and nowDate != null ">
-                and(create_time between  #{beforeDate} and  #{nowDate})
+                and (create_time between  #{beforeDate} and  #{nowDate})
             </if>
             and status = 'Y' order by create_time desc
         </where>
@@ -245,6 +246,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectMangerListNull" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>
+                1=1
+            <if test="beforeDate != null   and nowDate != null ">
+                and (create_time between  #{beforeDate} and  #{nowDate})
+            </if>
+            and status = 'Y' and bussiness_status in ('03','04') order by create_time desc
+        </where>
+    </select>
+
     <select id="checkField" parameterType="ProductInfo" resultMap="ProductInfoResult">
         <include refid="selectProductInfoVo"/>
         <where>
@@ -383,7 +395,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <delete id="updatesupplierInfo" parameterType="ProductSupplierInfoVo">
         delete from product_supplier_info
-        where product_code =#{productCode}
+        where service_code =#{serviceCode}
         <!--and product_code = #{productCode}  -->
     </delete>
 

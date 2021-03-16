@@ -19,7 +19,9 @@ import com.paic.ehis.cs.service.ICollaborativeFromService;
 import com.paic.ehis.cs.service.IDemandAcceptVoService;
 import com.paic.ehis.cs.service.IEditInfoService;
 import com.paic.ehis.cs.service.IWorkHandleInfoService;
+import com.paic.ehis.cs.utils.CodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -98,13 +100,14 @@ public class CustomServiceDemandController extends BaseController {
     //    @PreAuthorize("@ss.hasPermi('system:customService::edit')")
     @Log(title = "增加 ", businessType = BusinessType.INSERT)
     @PutMapping("/serviceAdd")
+    @Transactional
     public AjaxResult serviceAdd(@Validated @RequestBody DemandAcceptVo demandAcceptVo) {
         demandAcceptVo.setContactsPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6));
         demandAcceptVo.setCallPersonId(PubFun.createMySqlMaxNoUseCache("cs_person_id", 10, 6));
-        demandAcceptVo.setBusinessType("01");
+        demandAcceptVo.setBusinessType(CodeEnum.BUSINESS_TYPE_01.getCode());
         String workOrderNo = "9900000000" + PubFun.createMySqlMaxNoUseCache("cs_work_order_no", 10, 6);
         demandAcceptVo.setWorkOrderNo(workOrderNo);
-        return iDemandAcceptVoService.insertServiceInfo(demandAcceptVo) > 0 ? AjaxResult.success(workOrderNo) : AjaxResult.error();
+        return iDemandAcceptVoService.insertServiceInfo(demandAcceptVo) > 0 ?  AjaxResult.success(workOrderNo) : AjaxResult.error();
     }
 
 

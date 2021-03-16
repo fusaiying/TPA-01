@@ -23,6 +23,30 @@ export function getList(data) {
 }
 
 /**
+ * 服务产品定义列表默认查询
+ */
+export function listNull(data) {
+  return request({
+    url: 'product/info/listNull',
+    method: 'get',
+    params:data
+  })
+}
+/**
+ * 服务产品管理列表默认查询
+ */
+export function mangerListNull(data) {
+  return request({
+    url: 'product/info/mangerListNull',
+    method: 'get',
+    params:data
+  })
+}
+
+
+
+
+/**
  * 服务产品基本信息重复校验
  */
 export function checkField(data) {

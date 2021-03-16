@@ -95,4 +95,8 @@ public class ClaimInformationVo extends BaseEntity {
     /** 被保人客户号 */
     private String insuredNo;
 
+
+    /** 是否存在申诉案件 */
+    private String appealClaim;
+
 }

@@ -512,26 +512,24 @@ export default {
           let workOrderNo=s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }else {
           const workOrderNos=this.ids
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }
-        this.searchHandles()
+
       }
     },
     //工单页面超链接

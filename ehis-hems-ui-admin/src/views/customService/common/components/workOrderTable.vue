@@ -38,8 +38,8 @@
     <el-table-column prop="acceptUserId" label="受理人" align="center"/>
     <el-table-column prop="updateBy" label="处理人" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center">
-      <template slot-scope="scope" v-if="scope.row.priorityLevel">
-        <span>{{ selectDictLabel(cs_vip_flag, scope.row.priorityLevel) }}</span>
+      <template slot-scope="scope" v-if="scope.row.vipFlag">
+        <span>{{ selectDictLabel(cs_vip_flag, scope.row.vipFlag) }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="priorityLevel" label="优先级" align="center">

@@ -573,25 +573,20 @@
               pageNum: 1,
               pageSize: 200,
             }
-                getUsersByOrganCode(option).then(response => {
-                  if (res != null && res.code === 200) {
-                    console.log("res.rows")
-                    console.log(response.rows);
-                   // this.operatorSelect = response.rows
-
-                    for (let i = 0; i < response.rows.length; i++) {
-                      let obj = new Object();
-                      let userName = response.rows[i].userName;
-                      obj.dictLabel = response.rows[i].userName;
-                      obj.dictValue = response.rows[i].userName;
-                      this.operatorSelect.push(obj);
-                      //根据用户名称映射用户角色
-                      this.userIdName[userName] = response.rows[i].roles[0].roleName;
-                    }
-                    console.log("this.userIdName")
-                    console.log(this.userIdName)
-                  }
-                })
+            getUsersByOrganCode(option).then(response => {
+              if (res != null && res.code === 200) {
+               // this.operatorSelect = response.rows
+                for (let i = 0; i < response.rows.length; i++) {
+                  let obj = new Object();
+                  let userName = response.rows[i].userName;
+                  obj.dictLabel = response.rows[i].userName;
+                  obj.dictValue = response.rows[i].userName;
+                  this.operatorSelect.push(obj);
+                  //根据用户名称映射用户角色
+                  this.userIdName[userName] = response.rows[i].roles[0].roleName;
+                }
+              }
+            })
           }
         })
 

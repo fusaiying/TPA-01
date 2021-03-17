@@ -520,11 +520,12 @@
 
     <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="DemandAcceptVoResult">
         select distinct t1.work_order_no,t2.channel_code,t2.item_code,concat( t1.business_type, '-', t2.item_code ) AS
-        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type
+        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type,t1.modify_time,whi.remark
         from collaborative_from t3
         left join accept_detail_info t2 on t3.work_order_no=t2.work_order_no
         left join work_order_accept t1 on t1.work_order_no=t3.work_order_no
         left join person_info t0 on t1.insured_no=t0.person_id
+        left join work_handle_info whi on  whi.work_order_no = t2.work_order_no
         where t1.business_type in ('01','03')
         and t1.status='02'
         and t3.status='01'

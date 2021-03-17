@@ -23,6 +23,14 @@ public interface FinancePayInfoMapper
     public FinancePayInfo selectFinancePayInfoById(Long payId);
 
     /**
+     * 查询支付信息
+     *
+     * @param batchNo 批次号
+     * @return 支付信息
+     */
+    public FinancePayInfo selectFinancePayInfoByBatchNo(String batchNo);
+
+    /**
      * 查询支付信息列表
      * 
      * @param financePayInfo 支付信息

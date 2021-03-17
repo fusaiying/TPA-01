@@ -14,6 +14,7 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -218,7 +219,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/insertItem2")
     public AjaxResult insertItem2(@RequestBody QualityVo qualityVo)
     {
-        return toAjax(qualityInspectionItemService.insertItem(qualityVo));
+        return toAjax(qualityInspectionItemService.insertItem2(qualityVo));
     }
     //************************************************************************************
     /**
@@ -233,6 +234,10 @@ public class CustomServiceSpotCheckController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/selectHandleStatus")
+    public AjaxResult selectHandleStatus(QualityVo qualityVo){
+        return AjaxResult.success(qualityInspectionHandleService.selectHandleStatus(qualityVo));
+    }
 
     //************************************************************************************
     //质检差错提交接口
@@ -296,6 +301,33 @@ public class CustomServiceSpotCheckController extends BaseController {
         ExcelUtil<AcceptVo> util = new ExcelUtil<AcceptVo>(AcceptVo.class);
         util.exportExcel(response, list, "WorkOrder");
     }
+
+    //************************************************
+        /*
+        质检查询清单导出
+         */
+    @Log(title = "质检查询清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOne")
+    public void exportOne(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+        ExcelUtil<QualityAcceptVo> util = new ExcelUtil<QualityAcceptVo>(QualityAcceptVo.class);
+        util.exportExcel(response, list, "WorkOrderOne");
+    }
+
+    //************************************************
+        /*
+        质检差错清单导出
+         */
+    @Log(title = "质检差错清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportTwo")
+    public void exportTwo(HttpServletResponse response, QualityFlagDTO qualityFlagDTO) throws IOException
+    {
+        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
+        ExcelUtil<QualityFlagVO> util = new ExcelUtil<QualityFlagVO>(QualityFlagVO.class);
+        util.exportExcel(response, list, "WorkOrderTwo");
+    }
+
 
     //************************************************
         /*

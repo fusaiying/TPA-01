@@ -33,7 +33,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-table :data="inspection.appeal"  v-show="false" >
+      <el-table :data="inspection.appeal"  v-show="isshow" >
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
@@ -78,10 +78,12 @@ export default {
 
 data(){
       return {
+        status:'',
         inspectionList: [],
         dictList: [],
         valueOptions: [],
         appealFlagOptions: [],
+        isshow:false,
         inspection:{
           appeal:[
             {
@@ -138,24 +140,7 @@ created() {
     workOrderNo: this.params.workOrderNo,
     businessType: this.params.businessType,
   }
-  if(this.inspectionList!==null){
-    this.data=this.inspection;
-  }
-  getHandleInfoList(query).then(res => {
-    if(query.businessType === '01'){
-      if (res !== null && res.code === 200) {
-        this.inspectionList = res.rows;
-        console.log(this.inspectionList,'+++++++++5555555');
-      }
-    }else if(query.businessType === '03'){
-      if (res !== null && res.code === 200) {
-        this.complaintProcessList = res.rows;
-        console.log(this.complaintProcess)
-      }
-    }
-
-  }).catch( res => {
-  });
+  this.selectAppealStatus()
 },
 async mounted() {
     await this.getDictsList(dictss).then(response => {
@@ -169,7 +154,12 @@ async mounted() {
     }).dictDate
 },
 methods: {
-
+    selectAppealStatus() {
+      this.$emit('searchHandleStatus');
+      if(this.status!==null){
+        this.isshow = true;
+      }
+    }
 
 }
 }

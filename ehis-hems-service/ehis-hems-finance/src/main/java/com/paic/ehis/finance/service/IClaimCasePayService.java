@@ -18,7 +18,7 @@ public interface IClaimCasePayService {
      *
      * @return
      */
-    public List<Map<String,Object>> selectInitList();
+    public List<Map<String,Object>> selectInitList(String organCode);
 
     /**
      * 查询对公支付的批次信息
@@ -50,7 +50,7 @@ public interface IClaimCasePayService {
      * @param claimCasePayVO
      * @return
      */
-    public AjaxResult confirmPayment(ClaimCaseForeignPayVO claimCasePayVO);
+    public int confirmPayment(ClaimCaseForeignPayVO claimCasePayVO);
 
     /**
      * 对公支付-案件借款按钮
@@ -58,14 +58,14 @@ public interface IClaimCasePayService {
      * @param claimCasePayVO
      * @return
      */
-    public AjaxResult borrowingCase(ClaimCaseForeignPayVO claimCasePayVO);
+    public int borrowingCase(ClaimCaseForeignPayVO claimCasePayVO);
 
     /**
      * 对公外币支付-页面初始化（外币、不全为已支付状态）
      *
      * @return
      */
-    public List<Map<String,Object>> selectInitForeignList();
+    public List<Map<String,Object>> selectInitForeignList(String organCode);
 
     /**
      * 对公外币支付-查询

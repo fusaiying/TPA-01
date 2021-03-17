@@ -150,4 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select a.appeal_flag appealFlag,a.appeal_reason appealReason,a.score,b.item_type itemType,b.item_key itemKey,b.value,b.item_remark itemRemark from quality_inspection_handle a
         left join quality_inspection_item b on a.inspection_id = b.inspection_id where a.work_order_id = #{workOrderNo}
     </select>
+    <select id="selectHandleStatus" resultType="java.lang.String">
+        select status from quality_inspection_handle where work_order_id = #{workOrderNo}
+    </select>
 </mapper>

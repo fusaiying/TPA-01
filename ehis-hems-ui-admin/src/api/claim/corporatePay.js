@@ -38,9 +38,8 @@ export function startPay(batchNo) {
 // 回退
 export function rollback(rptNo) {
   return request({
-    url: 'finance/pay/rollback',
+    url: 'finance/pay/rollback?rptNo='+rptNo,
     method: 'get',
-    params: rptNo
   })
 }
 // 案件借款

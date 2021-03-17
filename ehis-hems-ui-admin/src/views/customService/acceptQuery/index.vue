@@ -160,7 +160,7 @@
       <div slot="header" class="clearfix">
         <span>查询结果（{{ totalCount }}）</span>
         <span style="float: right;">
-            <el-button type="primary" size="mini" @click="sendMany">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="exportData">清单导出</el-button>
         </span>
         <el-divider/>
 
@@ -325,8 +325,31 @@ export default {
 
       })
     },
-    sendMany(){
-
+    exportData() {
+      const params = {
+        itemCode: this.acceptQueryForm.itemCode,
+        channelCode: this.acceptQueryForm.channelCode,
+        acceptBy: this.acceptQueryForm.acceptBy,
+        acceptStartDate: undefined,
+        acceptEndDate: undefined,
+        updateBy: this.acceptQueryForm.updateBy,
+        updateStartDate: undefined,
+        updateEndDate: undefined,
+        workOrderNo: this.acceptQueryForm.workOrderNo,
+        policyNo: this.acceptQueryForm.policyNo,
+        policyItemNo: this.acceptQueryForm.policyItemNo,
+        holderName: this.acceptQueryForm.holderName,
+        insuredName: this.acceptQueryForm.insuredName,
+        insuredIdNumber: this.acceptQueryForm.insuredIdNumber,
+        mobilePhone: this.acceptQueryForm.mobilePhone,
+        organCode: this.acceptQueryForm.organCode,
+        appointmentStartDate: undefined,
+        appointmentEndDate: undefined,
+        priorityLevel: this.acceptQueryForm.priorityLevel,
+        vipFlag: this.acceptQueryForm.vipFlag,
+        status: this.acceptQueryForm.status
+      };
+      this.download('cs/spotCheck/internal/selectWorkOrder/export', params, `工单查询_${new Date().getTime()}.xlsx`);
     },
     send() {
 

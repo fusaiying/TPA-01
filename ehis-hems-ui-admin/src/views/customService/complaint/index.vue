@@ -205,9 +205,9 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
@@ -289,9 +289,9 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="createBy" align="center" label="原处理人" show-overflow-tooltip/>
@@ -485,11 +485,12 @@
           complaintObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
               this.$message.success("批量获取成功")
+              this.searchHandles()
             }
           }).catch(res => {
           })
         }
-          this.searchHandles()
+
       }
         },
       //工单页面超链接

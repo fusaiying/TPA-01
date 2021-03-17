@@ -1,0 +1,1 @@
+alter table accident_info modify acci_desc varchar(4000) null comment '案件描述';

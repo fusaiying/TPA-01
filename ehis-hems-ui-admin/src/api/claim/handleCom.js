@@ -102,8 +102,8 @@ export function addInsuredAndPolicy(data) {
 export function selectRecognizee(data) {
   return request({
     url: '/claimflow/policyInsured/selectRecognizee',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 

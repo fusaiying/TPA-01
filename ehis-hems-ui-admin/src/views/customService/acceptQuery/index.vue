@@ -7,7 +7,7 @@
           <el-col :span="8">
             <el-form-item label="服务项目：" prop="itemCode">
               <el-select v-model="acceptQueryForm.itemCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in service_itemOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_service_item" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -15,7 +15,7 @@
           <el-col :span="8">
             <el-form-item label="受理渠道：" prop="channelCode">
               <el-select v-model="acceptQueryForm.channelCode" class="item-width" placeholder="请选择">
-                <el-option v-for="item in channelOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -40,8 +40,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="处理人：" prop="modifyBy">
-              <el-input v-model="acceptQueryForm.modifyBy" class="item-width" clearable size="mini" placeholder="请输入"/>
+            <el-form-item label="处理人：" prop="updateBy">
+              <el-input v-model="acceptQueryForm.updateBy" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -94,7 +94,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="联系人电话：" prop="mobilePhone">
-              <el-input v-model="acceptQueryForm.phone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="acceptQueryForm.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -130,7 +130,7 @@
           <el-col :span="8">
             <el-form-item label="VIP标识：" prop="vipFlag">
               <el-select v-model="acceptQueryForm.vipFlag" class="item-width" placeholder="请选择">
-                <el-option v-for="item in vip_flagOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_vip_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -138,7 +138,7 @@
           <el-col :span="8">
             <el-form-item label="状态：" prop="status" placeholder="请选择">
               <el-select v-model="acceptQueryForm.status" class="item-width" placeholder="请选择">
-                <el-option v-for="item in statusOptions" :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in cs_order_state" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
@@ -198,12 +198,10 @@ export default {
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       acceptQueryForm: {
-        pageNum: 1,
-        pageSize: 10,
         itemCode: "",//服务信息
         channelCode: "",//受理渠道
         acceptBy: "",//受理人
-        modifyBy: "",//处理人
+        updateBy: "",//处理人
         acceptorTime:[],//受理时间数组
         appointmentTime:[],//预约时间数组
         handlerTime:[],//处理时间数组
@@ -233,12 +231,12 @@ export default {
       //字典数据对象
       dictList:[],
       //下拉数据对象
-      service_itemOptions:[],
-      channelOptions:[],
+      cs_service_item:[],
+      cs_channel:[],
       organizationOptions:[],
       priorityOptions:[],
-      vip_flagOptions:[],
-      statusOptions:[]
+      cs_vip_flag:[],
+      cs_order_state:[]
     }
   },
   created() {
@@ -250,10 +248,10 @@ export default {
       this.dictList = response.data
     })
     // 下拉项赋值
-    this.service_itemOptions = this.dictList.find(item => {
+    this.cs_service_item = this.dictList.find(item => {
       return item.dictType === 'cs_service_item'
     }).dictDate
-    this.channelOptions = this.dictList.find(item => {
+    this.cs_channel = this.dictList.find(item => {
       return item.dictType === 'cs_channel'
     }).dictDate
     this.organizationOptions = this.dictList.find(item => {
@@ -262,10 +260,10 @@ export default {
     this.priorityOptions = this.dictList.find(item => {
       return item.dictType === 'cs_priority'
     }).dictDate
-    this.vip_flagOptions = this.dictList.find(item => {
+    this.cs_vip_flag = this.dictList.find(item => {
       return item.dictType === 'cs_vip_flag'
     }).dictDate
-    this.statusOptions = this.dictList.find(item => {
+    this.cs_order_state = this.dictList.find(item => {
       return item.dictType === 'cs_order_state'
     }).dictDate
     // this.searchHandle()
@@ -275,53 +273,45 @@ export default {
       this.$refs.acceptQueryForm.resetFields()
     },
     searchHandle() {
-      /*let query = {
+      let query = {
         pageNum: this.queryParams.pageNum,
         pageSize: this.queryParams.pageSize,
         itemCode: this.acceptQueryForm.itemCode,
         channelCode: this.acceptQueryForm.channelCode,
         acceptBy: this.acceptQueryForm.acceptBy,
-        acceptorStartTime: undefined,
-        acceptorEndTime: undefined,
-        modifyBy: this.acceptQueryForm.modifyBy,
-        handlerStartTime: undefined,
-        handlerEndTime: undefined,
+        acceptStartDate: undefined,
+        acceptEndDate: undefined,
+        updateBy: this.acceptQueryForm.updateBy,
+        updateStartDate: undefined,
+        updateEndDate: undefined,
         workOrderNo: this.acceptQueryForm.workOrderNo,
         policyNo: this.acceptQueryForm.policyNo,
         policyItemNo: this.acceptQueryForm.policyItemNo,
         holderName: this.acceptQueryForm.holderName,
         insuredName: this.acceptQueryForm.insuredName,
         insuredIdNumber: this.acceptQueryForm.insuredIdNumber,
-        phone: this.acceptQueryForm.phone,
+        mobilePhone: this.acceptQueryForm.mobilePhone,
         organCode: this.acceptQueryForm.organCode,
-        complaintStartTime: undefined,
-        complaintEndTime: undefined,
+        appointmentStartDate: undefined,
+        appointmentEndDate: undefined,
         priorityLevel: this.acceptQueryForm.priorityLevel,
         vipFlag: this.acceptQueryForm.vipFlag,
         status: this.acceptQueryForm.status
-      }*/
-
-      /*if (this.acceptQueryForm.acceptorTime) {
-        query.acceptorStartTime = this.acceptQueryForm.acceptorTime[0]
-        query.acceptorEndTime = this.acceptQueryForm.acceptorTime[1]
+      }
+      if (this.acceptQueryForm.acceptorTime) {
+        query.acceptStartDate = this.acceptQueryForm.acceptorTime[0]
+        query.acceptEndDate = this.acceptQueryForm.acceptorTime[1]
       }
       if (this.acceptQueryForm.handlerTime) {
-        query.handlerStartTime = this.acceptQueryForm.handlerTime[0]
-        query.handlerEndTime = this.acceptQueryForm.handlerTime[1]
+        query.updateStartDate = this.acceptQueryForm.handlerTime[0]
+        query.updateEndDate = this.acceptQueryForm.handlerTime[1]
       }
       if (this.acceptQueryForm.complaintTime) {
-        query.complaintStartTime = this.acceptQueryForm.complaintTime[0]
-        query.complaintEndTime = this.acceptQueryForm.complaintTime[1]
-      }*/
-      let queryParams;
-      if (this.acceptQueryForm.acceptorTime.length > 0) {
-        queryParams = JSON.parse(JSON.stringify(this.acceptQueryForm));
-        queryParams.acceptTimeStart=acceptorTime[0]
-        queryParams.acceptTimeEnd=acceptorTime[1]
-      } else {
-        queryParams = this.acceptQueryForm;
+        query.appointmentStartDate = this.acceptQueryForm.complaintTime[0]
+        query.appointmentEndDate = this.acceptQueryForm.complaintTime[1]
       }
-      selectWorkOrder(queryParams).then(res => {
+
+      selectWorkOrder(query).then(res => {
         if (res != null && res.code === 200) {
           this.workPoolData = res.rows
           this.totalCount = res.total

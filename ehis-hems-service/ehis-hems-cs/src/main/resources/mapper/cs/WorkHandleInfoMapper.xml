@@ -387,8 +387,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectWorkHandleInfoByNo" parameterType="string" resultMap="WorkHandleInfoResult">
-        select * from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
-    </select>
+    select * from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
+</select>
     <select id="selectWorkComplaintByNo" parameterType="string" resultType="com.paic.ehis.cs.domain.WorkHandleInfo">
         select * from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
     </select>
@@ -400,8 +400,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select handle_id, handle_type, work_order_no, status, created_by, created_time, updated_by, updated_time from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
     </select>
     <select id="selectDemandDealVoByNo" parameterType="string" resultType="com.paic.ehis.cs.domain.vo.ServiceProcessingVo">
-    select handle_id, handle_type, work_order_no, flag, status, created_by, created_time, updated_by, updated_time, remark from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
-    </select>
+select handle_id, handle_type, work_order_no, flag, status, created_by, created_time, updated_by, updated_time, remark from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
+</select>
     <select id="selectReservationDealVoByNo" parameterType="string" resultType="com.paic.ehis.cs.domain.vo.ReservationDealVo">
     select handle_id, handle_type, work_order_no, flag, status, created_by, created_time, updated_by, updated_time, remark from work_handle_info where work_order_no = #{workOrderNo} and status = 'Y'
     </select>

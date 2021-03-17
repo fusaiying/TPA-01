@@ -215,7 +215,11 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
             //将其余状态置为N
 
             //修改主表状态为已处理
+
             WorkOrderAccept workOrderAccept=new WorkOrderAccept();
+            if ("02".equals(serviceProcessingVo.getBusinessProcess())){
+            workOrderAccept.setModifyTime(DateUtils.getNowDate());
+            }
             workOrderAccept.setWorkOrderNo(serviceProcessingVo.getWorkOrderNo());
             if(serviceProcessingVo.getBusinessProcess().equals("01")){
                     workOrderAccept.setStatus("04");/*已完成*/
@@ -698,19 +702,19 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
     public ServiceProcessingVo selectServiceProcessingVo(String workOrderNo) {
         WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(workOrderNo);
         if(workHandleInfo!=null){
-        ServiceProcessingVo serviceProcessingVo=workHandleInfoMapper.selectDemandDealVoByNo(workOrderNo);
-        String sourceName="ServiceProcessingVo";
-        String targetTableName="work_handle_info";
-        List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-        for (FieldMap fieldMap:KVMap){
-            fieldMap.getTargetColumnName();
-            fieldMap.getSourceFiledName();
-            Map map=new HashMap<String,String>();
-            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
-            VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
-            serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
-        }
-        return serviceProcessingVo;}
+            ServiceProcessingVo serviceProcessingVo=workHandleInfoMapper.selectDemandDealVoByNo(workOrderNo);
+            String sourceName="ServiceProcessingVo";
+            String targetTableName="work_handle_info";
+            List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+                VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
+                serviceProcessingVo= (ServiceProcessingVo) voUtils.fromVoToVo(serviceProcessingVo,map,workHandleInfo);
+            }
+            return serviceProcessingVo;}
         else{
             return new ServiceProcessingVo();
         }

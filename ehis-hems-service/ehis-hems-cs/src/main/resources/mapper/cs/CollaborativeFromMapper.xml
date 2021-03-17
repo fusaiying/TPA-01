@@ -79,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
+        <if test="operation != null and operation !=''"> and ((a.created_by = #{operation} and a.status != '01') or  a.um_code = #{operation})</if>
     </select>
     
     <select id="selectCollaborativeFromById" parameterType="Long" resultMap="CollaborativeFromResult">

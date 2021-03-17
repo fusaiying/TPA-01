@@ -100,8 +100,8 @@ public class PolicyInsuredController extends BaseController
      * 被保人查询页面
      */
     // @PreAuthorize("@ss.hasPermi('system:insured:list')")
-    @GetMapping("/selectRecognizee")
-    public AjaxResult selectRecognizee(PolicyInsured policyInsured)
+    @PostMapping("/selectRecognizee")
+    public AjaxResult selectRecognizee(@RequestBody PolicyInsured policyInsured)
     {
 
         // List<PolicyInsured> list = policyInsuredService.selectRecognizee(policyInsured);

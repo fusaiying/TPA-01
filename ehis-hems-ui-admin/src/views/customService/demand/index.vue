@@ -214,9 +214,9 @@
               <span>{{ scope.row.acceptTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyTime" label="修改时间" align="center" show-overflow-tooltip width="140">
+          <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
@@ -416,7 +416,8 @@ export default {
         vipFlag:"",//VIP标识
         mobilePhone:"",//移动电话
         status:"",//状态
-        modifyTime:""
+        modifyTime:"",
+        updateTime:""
       },
       loading: true,
       workPoolData: [],//公共池
@@ -512,26 +513,24 @@ export default {
           let workOrderNo=s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }else {
           const workOrderNos=this.ids
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }
-        this.searchHandles()
+
       }
     },
     //工单页面超链接

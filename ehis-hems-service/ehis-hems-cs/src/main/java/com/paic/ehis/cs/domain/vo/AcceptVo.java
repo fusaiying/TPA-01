@@ -37,9 +37,11 @@ public class AcceptVo extends BaseEntity
     private String riskCode;
     /** 被保险人信息 */
     private String insuredPersonId;
+    private String insuredName;
     private PersonInfo insuredPerson=new PersonInfo();
     /** 投保人信息 */
     private String holderPersonId;
+    private String holderName;
     private PersonInfo holderPerson=new PersonInfo();
     /** 受理人信息 */
     private String acceptUserId;

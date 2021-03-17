@@ -38,8 +38,8 @@
     <el-table-column prop="acceptUserId" label="受理人" align="center"/>
     <el-table-column prop="updateBy" label="处理人" align="center"/>
     <el-table-column prop="vipFlag" label="VIP标识" align="center">
-      <template slot-scope="scope" v-if="scope.row.priorityLevel">
-        <span>{{ selectDictLabel(cs_vip_flag, scope.row.priorityLevel) }}</span>
+      <template slot-scope="scope" v-if="scope.row.vipFlag">
+        <span>{{ selectDictLabel(cs_vip_flag, scope.row.vipFlag) }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="priorityLevel" label="优先级" align="center">
@@ -181,9 +181,9 @@ export default {
     //修改
     modifyButton(row) {
       let url='/customService/modify';
-      if(row.serviceItem==''){
+      if(row.businessType=='02'){
         url='/customService/complaint/modify';
-      }else if(row.serviceItem==''){
+      }else if(row.businessType=='03'){
         url='/customService/reservation/modify';
       }
       this.$router.push({
@@ -212,9 +212,9 @@ export default {
     },
     cancleBytton(row) {
       let url='/customService/cancle';
-      if(row.serviceItem==''){
+      if(row.businessType=='02'){
         url='/customService/complaint/cancle';
-      }else if(row.serviceItem==''){
+      }else if(row.businessType=='03'){
         url='/customService/reservation/cancle';
       }
       this.$router.push({

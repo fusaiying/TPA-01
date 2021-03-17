@@ -39,13 +39,14 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     /**
      * 查询案件申诉任务
      * 
-     * @param taskId 案件申诉任务ID
+     * @param param 案件申诉任务
      * @return 案件申诉任务
      */
     @Override
-    public ClaimCaseAppealTask selectClaimCaseAppealTaskById(Long taskId)
+    public ClaimCaseAppealTask selectClaimCaseAppealTaskByParam(ClaimCaseAppealTask param)
     {
-        return claimCaseAppealTaskMapper.selectClaimCaseAppealTaskById(taskId);
+        param.setStatus("Y");
+        return claimCaseAppealTaskMapper.selectClaimCaseAppealTaskByParam(param);
     }
 
     /**
@@ -80,7 +81,6 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         bean.setUpdateBy(username);
         bean.setStatus("Y");
         bean.setAppealStatus("01");
-        bean.setApplyOperator(username);
         this.insertRecordLog(bean,null);
         return claimCaseAppealTaskMapper.insertClaimCaseAppealTask(bean);
     }
@@ -101,14 +101,15 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
 
         // 进入申诉初审状态
         if(bean.getDealType().equalsIgnoreCase("initiate")) {
+            bean.setApplyOperator(username);
             bean.setAppealStatus("02");
         }
         //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
         if(bean.getDealType().equalsIgnoreCase("audit")) {
+            bean.setAuditor(username);
            if(bean.getIsAgree().equals("01")) {
                bean.setAppealStatus("03");
-               /**apply_type
-                * TODO:
+               /**
                 初审决定选择同意，点击初审确认后，
                 此时申诉案件报案号为原报案号-1（流水），
                 并且流转至理赔审核岗原审核人工作池，
@@ -117,6 +118,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
                 */
                String newRptNo = this.getNewRptNo(bean.getAppealRptNo());
                bean.setNewRptNo(newRptNo);
+               this.clearClaimTableData(bean);
                this.insertTableData(bean);
            } else {
                bean.setAppealStatus("04");
@@ -178,6 +180,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
             detail.setRptNo(detailInfo.getRptNo());
             detail.setBillId(detailInfo.getBillId());
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDetail(detail);
+            result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealCalBill(detail);
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBillDiagnosis(detail);
             result += claimCaseAppealBillDetailMapper.updateClaimCaseAppealBill(detail);
         }
@@ -250,8 +253,21 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         return appealRptNo;
     }
 
-    private void  insertTableData(ClaimCaseAppealTask bean){
+    /**
+     * 清空案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    private void clearClaimTableData(ClaimCaseAppealTask bean){
+        claimCaseAppealTaskMapper.clearClaimTableData(bean);
+    }
 
+    /**
+     * 初始化案件修正新RPT_NO 数据
+     * @auhtor: hjw
+     * @time:2021-03-15
+     * */
+    private void insertTableData(ClaimCaseAppealTask bean){
         // select * from claim_case ;   -- cp  07
         //select * from claim_case_accept ; -- cp 案件受理信息表
         //select * from claim_case_apply_type ; -- cp  案件受理信息表 申请原因
@@ -263,7 +279,7 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         //SELECT * FROM claim_case_register ; -- cp  案件申请人信息表
         //select * from claim_case_remark ; -- cp  案件备注表
         //SELECT * FROM claim_case_policy ; -- cp  案件保单关联表
-
+        // SELECT * FROM claim_case_cal_bill -- cp 案件赔付账单明细表
         claimCaseAppealTaskMapper.insertClaimTableData(bean);
     }
 }

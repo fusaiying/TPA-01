@@ -148,10 +148,10 @@
         a.vip_flag,
         a.organ_code,
         a.STATUS,
-        a.create_by create_by1,
-        a.create_time create_time1,
-        a.update_by update_by1,
-        a.update_time update_time1,
+        a.create_by,
+        a.create_time,
+        a.update_by,
+        a.update_time,
         b.channel_code,
         b.item_code,
         b.call_person_id,
@@ -168,6 +168,7 @@
         b.create_time create_time2,
         b.update_by update_by2,
         b.update_time update_time2,
+        whi.remark,
         CASE
         WHEN (
         a.STATUS = '02'
@@ -185,6 +186,7 @@
         LEFT JOIN person_info c ON a.insured_no = c.person_id
         LEFT JOIN ( SELECT DISTINCT work_order_no AS nnn FROM hcs_modification WHERE call_serial_num IS NOT NULL AND
         STATUS = 'Y' ) hm ON b.work_order_no = hm.nnn
+        left join work_handle_info whi on  whi.work_order_no = a.work_order_no
         WHERE
         a.work_order_no NOT IN ( SELECT cf.work_order_no FROM collaborative_from cf WHERE cf.STATUS = '01' )
         AND a.business_type = '01'

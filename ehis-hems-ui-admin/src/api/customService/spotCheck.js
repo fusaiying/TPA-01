@@ -35,6 +35,21 @@ export function inspectionListAndPersonalPool(query) {
     params: query
   })
 }
+export function selectItemInspectionById(query) {
+  return request({
+    url: '/cs/spotCheck/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function selectHandleStatus(query) {
+  return request({
+    url: '/cs/spotCheck/selectHandleStatus',
+    method: 'get',
+    params: query
+  })
+}
 
 //# 任务改派查询改派操作人接口
 export function selectSysUser() {

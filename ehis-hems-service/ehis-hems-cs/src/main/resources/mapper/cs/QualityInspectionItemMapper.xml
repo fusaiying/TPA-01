@@ -113,18 +113,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="qualityInspectionHandle" index="index" collection="list" open="" separator=";" close="">
             update quality_inspection_item
             <set>
-                item_id = #{qualityInspectionHandle.itemId},
-                item_type = #{qualityInspectionHandle.itemType},
-                item_key = #{qualityInspectionHandle.itemKey},
-                value = #{qualityInspectionHandle.value},
-                item_remark = #{qualityInspectionHandle.itemRemark},
-                status = #{qualityInspectionHandle.status},
-                created_by = #{qualityInspectionHandle.createdBy},
-                created_time = now(),
-                updated_by = #{qualityInspectionHandle.updatedBy},
-                updated_time = #{qualityInspectionHandle.updatedTime},
+                <if test="qualityInspectionHandle.itemId != null and qualityInspectionHandle.itemId != ''">
+                    item_id = #{qualityInspectionHandle.itemId},
+                </if>
+                <if test="qualityInspectionHandle.itemType != null and qualityInspectionHandle.itemType != ''">
+                    item_type = #{qualityInspectionHandle.itemType},
+                </if>
+                <if test="qualityInspectionHandle.itemKey != null and qualityInspectionHandle.itemKey != ''">
+                    item_key = #{qualityInspectionHandle.itemKey},
+                </if>
+                <if test="qualityInspectionHandle.value != null and qualityInspectionHandle.value != ''">
+                    value = #{qualityInspectionHandle.value},
+                </if>
+                <if test="qualityInspectionHandle.itemRemark != null and qualityInspectionHandle.itemRemark != ''">
+                    item_remark = #{qualityInspectionHandle.itemRemark},
+                </if>
+                <if test="qualityInspectionHandle.status != null and qualityInspectionHandle.status != ''">
+                    status = #{qualityInspectionHandle.status},
+                </if>
+                <if test="qualityInspectionHandle.updatedBy != null and qualityInspectionHandle.updatedBy != ''">
+                    updated_by = #{qualityInspectionHandle.updatedBy},
+                </if>
+                <if test="qualityInspectionHandle.updatedTime != null and qualityInspectionHandle.updatedTime != ''">
+                    updated_time = #{qualityInspectionHandle.updatedTime},
+                </if>
             </set>
-            where inspection_id = #{qualityInspectionHandle.inspectionId}
+                where inspection_id=#{qualityInspectionHandle.inspectionId}
         </foreach>
     </update>
 
@@ -136,6 +150,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectItemInspectionById" parameterType="String" resultMap="QualityInspectionItemResult">
         <include refid="selectQualityInspectionItemVo"/>
         where inspection_id = #{inspectionId}
+    </select>
+    <select id="selectHandleInspectionId" resultMap="QualityInspectionItemResult" >
+        select inspection_id from quality_inspection_handle where work_order_id = #{workOrderNo}
     </select>
 
     <update id="updateQualityVO">

@@ -30,6 +30,12 @@ public interface IOrderInfoService
     public List<OrderInfo> selectOrderInfoList(OrderInfo orderInfo);
 
     /**
+     * 查询order_info(工单信息)列表(近三个月)
+     * @return order_info(工单信息)集合
+     */
+    public List<OrderInfo> selectOrderInfoList3Months() throws Exception;
+
+    /**
      * 新增order_info(工单信息)
      * 
      * @param orderInfo order_info(工单信息)
@@ -90,5 +96,6 @@ public interface IOrderInfoService
 
     /*审核特药通过*/
     public int checkPass(OrderInfo orderInfo);
+
 
 }

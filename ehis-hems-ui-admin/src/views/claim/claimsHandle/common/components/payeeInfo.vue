@@ -652,7 +652,7 @@
             )
           }else {
             let query = {
-              customerNo: this.insuredFormData.caseInsuredData.insuredNo,
+              insno: this.insuredFormData.caseInsuredData.insuredNo,
               certno: ''
             }
             let policyItemNoStr=''
@@ -662,9 +662,9 @@
             policyItemNoStr = policyItemNoStr+this.insuredFormData.policyInfoData[this.insuredFormData.policyInfoData.length-1].policyItemNo
             query.certno=policyItemNoStr
             getCustomerAccount(query).then(res=>{
-              if (res!=null && res.status=='00'){
-                if (res.bankInfoList.length>0){
-                  this.tkTableData=res.bankInfoList
+              if (res!=null && res.code=='200'){
+                if (res.data.length>0){
+                  this.tkTableData=res.data
                   this.isTkTableShow = true
                 }else {
                   return this.$message.warning(

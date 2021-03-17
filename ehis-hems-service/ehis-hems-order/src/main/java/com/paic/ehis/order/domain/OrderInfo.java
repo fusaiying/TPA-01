@@ -287,6 +287,33 @@ public class OrderInfo extends BaseEntity
 
     private String detailInfo;
 
+    /** 当前日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "当前时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date nowDate;
+
+
+    public Date getNowDate() {
+        return nowDate;
+    }
+
+    public void setNowDate(Date nowDate) {
+        this.nowDate = nowDate;
+    }
+
+    public Date getBeforeDate() {
+        return beforeDate;
+    }
+
+    public void setBeforeDate(Date beforeDate) {
+        this.beforeDate = beforeDate;
+    }
+
+    /** 三个月前日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "三个月前日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date beforeDate;
+
 
     public void setSerialNo(String serialNo) 
     {

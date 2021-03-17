@@ -5,6 +5,7 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.order.domain.*;
+import com.paic.ehis.order.utils.Dateutils;
 import com.paic.ehis.system.api.domain.HospitalInfoVo;
 import com.paic.ehis.system.api.domain.FirstDeptInfoVo;
 import com.paic.ehis.system.api.domain.SecondDeptInfoVo;
@@ -15,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * order_info(工单信息)Service业务层处理
@@ -71,7 +74,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService
 
     /**
      * 查询order_info(工单信息)列表
-     * 
+     *
      * @param orderInfo order_info(工单信息)
      * @return order_info(工单信息)
      */
@@ -80,6 +83,21 @@ public class OrderInfoServiceImpl implements IOrderInfoService
     {
         List<OrderInfo> orderInfos = orderInfoMapper.selectOrderInfoListNew(orderInfo);
         return orderInfos;
+    }
+
+    /**
+     * 查询order_info(工单信息)列表(近三个月)
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<OrderInfo> selectOrderInfoList3Months() throws Exception {
+        Map map = Dateutils.getCurrontTime3();
+        OrderInfo orderInfo = new OrderInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        orderInfo.setBeforeDate(sdf.parse(String.valueOf(map.get("defaultStartDate"))));//3个月前
+        orderInfo.setNowDate(sdf.parse(String.valueOf(map.get("defaultEndDate")))); //当前时间
+        return orderInfoMapper.selectOrderInfoListNew3Months(orderInfo);
     }
 
     /**
@@ -316,4 +334,6 @@ public class OrderInfoServiceImpl implements IOrderInfoService
     public int checkPass(OrderInfo orderInfo){
         return orderInfoMapper.checkPass(orderInfo);
     }
+
+
 }

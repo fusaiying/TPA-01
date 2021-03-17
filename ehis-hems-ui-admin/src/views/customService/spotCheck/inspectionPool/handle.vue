@@ -23,20 +23,22 @@
 <!--    处理信息-->
   <!--    信息需求-->
     <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <infohandle :acceptInfo="allList.acceptInfo"  :disabled="true" />
+      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
     </div>
   <!--    投诉-->
     <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintHandle :form="allList.form" :disabled="true" />
+      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
     <div id="#anchor-61" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo" :data="inspectionList"/>
+      <inspectionProcessInfo :inspection="allList.inspection" ref="inspectionProcessInfo"
+                             @selectHandleStatus="searchHandleStatus" :isDisable="disableFlag" @getHandleInfoList="searchHandleList"/>
     </div>
   <!--    投诉-->
     <div id="#anchor-62" v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"  :data="complaintProcessList"/>
+      <complaintProcessInfo :acceptInfo="allList.acceptInfo" ref="complaintProcessInfo"
+                            @selectHandleStatus="searchHandleStatus" :isDisable="disableFlag" @getHandleInfoList="searchHandleList"/>
     </div>
     <div class="personInfo_class" style="margin-top: 5px;">
       <el-row :gutter=20 style="float: right"  >
@@ -66,6 +68,7 @@ import {
   getHandleInfoList,
   insertItem,
   insertItem2,
+  selectHandleStatus,
 } from '@/api/customService/spotCheck';
 
 import {mapGetters} from 'vuex'
@@ -106,6 +109,8 @@ export default {
       appealFlag: '',
       appealReason : '',
       workOrderNo: '',
+      status: '',
+      disableFlag: true,
       score: '',
       acceptInfoForm: {},
       attachmentInfoForm: {},
@@ -359,22 +364,9 @@ export default {
         }
       }).catch( res => {
       });
+      this.searchHandleStatus();
+      this.searchHandleList();
 
-      getHandleInfoList(query).then(res => {
-        if(query.businessType === '01'){
-          if (res !== null && res.code === 200) {
-            this.inspectionList = res.rows;
-            console.log(this.inspectionList,'+++++++++5555555');
-          }
-        }else if(query.businessType === '03'){
-          if (res !== null && res.code === 200) {
-            this.complaintProcessList = res.rows;
-            console.log(this.allList.complaintProcess)
-          }
-        }
-
-      }).catch( res => {
-      });
 
     }
   },
@@ -415,6 +407,30 @@ export default {
   },
 
   methods: {
+    searchHandleStatus(){
+      selectHandleStatus(query).then(res =>{
+        if (res !== null && res.code === 200) {
+          this.status = res.data;
+        }
+      })
+    },
+    searchHandleList(){
+      getHandleInfoList(query).then(res => {
+        if(query.businessType === '01'){
+          if (res !== null && res.code === 200) {
+            this.inspectionList = res.rows;
+            console.log(this.inspectionList,'+++++++++5555555');
+          }
+        }else if(query.businessType === '03'){
+          if (res !== null && res.code === 200) {
+            this.complaintProcessList = res.rows;
+            console.log(this.allList.complaintProcess)
+          }
+        }
+
+      }).catch( res => {
+      });
+    },
     submit1(){
       const value1=[];//判断是否申诉
       const value2=[];
@@ -471,9 +487,9 @@ export default {
           });
         }
       }
-
-      if (value1.includes('01')||(value2.includes('01')&&  value2 !=='' )) {
-          this.isDisabled=false;
+      // if()
+      if (value1.includes('01')||value2.includes('01')) {
+          this.disableFlag = false;
       }
       //如果是否存在差错存在是，那么上面的card可修改，并保存
       if(value1.includes('01')||value2.includes('01')){

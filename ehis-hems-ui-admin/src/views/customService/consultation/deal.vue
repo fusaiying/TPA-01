@@ -427,8 +427,8 @@
       <modify-details ref="modifyDetails"></modify-details>
       <div style="text-align: right; margin-right: 1px;">
         <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="coOrganizer">协办</el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="collaborativeFrom.status == '02'">协办</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="collaborativeFrom.status == '02'">提交</el-button>
         <el-button type="primary" size="mini" @click="close">关闭</el-button>
       </div>
     </el-card>
@@ -441,6 +441,7 @@
 import moment from 'moment'
 import {dealAdd, FlowLogSearch} from '@/api/customService/demand'
 import {dealSubmit, demandAccept} from '@/api/customService/consultation'
+import {getCollaborativeInfo} from '@/api/customService/collaborative'
 
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
@@ -511,6 +512,14 @@ export default {
         callPerson: {},
 
       },
+      collaborativeFrom: {
+        workOrderNo: "",
+        umCode: "",
+        solicitOpinion: "",
+        handleState: "",
+        status: "",
+        opinion: "",
+      },
       caseNumber: false,//查询条件（报案号）是否显示
       // 查询参数
       queryParams: {
@@ -562,6 +571,7 @@ export default {
     this.queryParams.status = this.$route.query.status;
     this.searchHandle();
     this.searchFlowLog();
+    this.getCollaborative();
 
   },
   async mounted() {
@@ -657,7 +667,8 @@ export default {
       dealSubmit(insert).then(res => {
         if (res != null && res.code === 200) {
           console.log("insert", insert)
-          this.$message.success("保存成功")
+          this.$message.success("保存成功");
+          this.collaborativeFrom.status = "02";
           if (res.rows.length <= 0) {
             return this.$message.warning(
               "失败！"
@@ -701,6 +712,19 @@ export default {
       })
 
     },
+
+    getCollaborative() {
+      getCollaborativeInfo(this.$route.query.collaborativeId).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("getCollaborative", res.data)
+          this.collaborativeFrom = res.data;
+          this.submitForm.opinion = this.collaborativeFrom.opinion;
+        }
+      }).catch(res => {
+
+      })
+    },
+
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.workOrderNo);

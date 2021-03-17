@@ -316,4 +316,20 @@
     -->
        SELECT *  FROM claim_case_record WHERE rpt_no = #{rptNo} and operation in ('04','05','06','07','08','99') order by create_time asc
     </select>
+
+    <select id="selectWorkflowByRptNo" parameterType="ClaimCaseRecord" resultMap="ClaimCaseRecordResult">
+    SELECT
+	cbr.create_by,
+	cbr.create_time,
+	cbr.update_by,
+	cbr.update_time,
+	cbr.operation,
+	case when (select count(1) from claim_case_record t where t.rpt_no = cc.rpt_no) > 0 then 'Y' else 'N' end history_flag
+FROM
+	claim_batch_record cbr
+	LEFT JOIN claim_case cc ON cbr.batch_no = cc.batch_no
+WHERE
+	cc.rpt_no = #{rptNo}
+	AND cbr.operation = '01'
+    </select>
 </mapper>

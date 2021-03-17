@@ -95,4 +95,11 @@ public interface GetProviderInfoService
     @PostMapping("/org/insertSupplier")
     public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo);
 
+
+    @PostMapping("/org/updateIssue")
+    public void updateIssue(@RequestBody List<String> serviceCodes);
+
+    @PostMapping("/org/updateIssue1")
+    public void updateIssue1(@RequestBody List<String> serviceCodes);
+
 }

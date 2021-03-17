@@ -90,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where item_id = #{itemId}
     </update>
 
+
     <delete id="deleteQualityInspectionItemById" parameterType="String">
         delete from quality_inspection_item where item_id = #{itemId}
     </delete>
@@ -108,21 +109,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (#{qualityInspectionHandle.itemId},#{qualityInspectionHandle.inspectionId},#{qualityInspectionHandle.itemType},#{qualityInspectionHandle.itemKey},#{qualityInspectionHandle.value},#{qualityInspectionHandle.itemRemark},#{qualityInspectionHandle.status},#{qualityInspectionHandle.createdBy},now(),#{qualityInspectionHandle.updatedBy},#{qualityInspectionHandle.updatedTime})
         </foreach>
     </insert>
-
-    <insert id="updateExtDocList" parameterType="java.util.List">
-        update quality_inspection_item set
-        (item_id,inspection_id,item_type,item_key,value,item_remark,status,created_by,created_time,updated_by,updated_time)
-        VALUES
-        <foreach collection="list" item="qualityInspectionHandle" index="index" separator=","> <!--  list 为传来的集合数据 -->
-            (#{qualityInspectionHandle.itemId},#{qualityInspectionHandle.inspectionId},#{qualityInspectionHandle.itemType},#{qualityInspectionHandle.itemKey},#{qualityInspectionHandle.value},#{qualityInspectionHandle.itemRemark},#{qualityInspectionHandle.status},#{qualityInspectionHandle.createdBy},now(),#{qualityInspectionHandle.updatedBy},#{qualityInspectionHandle.updatedTime})
+    <update id="updateExtDocList" parameterType="java.util.List">
+        <foreach item="qualityInspectionHandle" index="index" collection="list" open="" separator=";" close="">
+            update quality_inspection_item
+            <set>
+                item_id = #{qualityInspectionHandle.itemId},
+                item_type = #{qualityInspectionHandle.itemType},
+                item_key = #{qualityInspectionHandle.itemKey},
+                value = #{qualityInspectionHandle.value},
+                item_remark = #{qualityInspectionHandle.itemRemark},
+                status = #{qualityInspectionHandle.status},
+                created_by = #{qualityInspectionHandle.createdBy},
+                created_time = now(),
+                updated_by = #{qualityInspectionHandle.updatedBy},
+                updated_time = #{qualityInspectionHandle.updatedTime},
+            </set>
+            where inspection_id = #{qualityInspectionHandle.inspectionId}
         </foreach>
-    </insert>
+    </update>
 
+    <update id="updateInspectionAccept">
+        update quality_inspection_accept set
+        inspection_id = #{inspectionId},status = #{status},updated_by = #{updatedBy},updated_time = #{updatedTime}
+         where work_order_no = #{workOrderNo}
+    </update>
     <select id="selectItemInspectionById" parameterType="String" resultMap="QualityInspectionItemResult">
         <include refid="selectQualityInspectionItemVo"/>
         where inspection_id = #{inspectionId}
     </select>
 
+    <update id="updateQualityVO">
+        update quality_inspection_handle set
+        inspection_id=#{inspectionId},score=#{score},appeal_flag=#{appealFlag},appeal_reason=#{appealReason},status=#{status}
+        ,updated_by=#{updatedBy},updated_time=#{updatedTime}
+         where work_order_id = #{workOrderNo}
+    </update>
     <insert id="insertQualityVO">
         insert into quality_inspection_handle
         (inspection_id,work_order_id,score,appeal_flag,appeal_reason,status,created_by,created_time,updated_by,updated_time)

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //查询案件调度工作池
 export function selectCaseDispatchList(query) {
   return request({
-    url: '/claimflow/mcase/selectCaseDispatchList',
+    url: '/claimflow/case/selectCaseDispatchList',
     method: 'post',
     data: query
   })
@@ -55,6 +55,13 @@ export function logInfo() {
 export function selectWorkflow(data) {
   return request({
     url: '/claimflow/caseRecord/selectWorkflow',
+    method: 'post',
+    data
+  })
+}// 工作流查看
+export function selectWorkflowByRptNo(data) {
+  return request({
+    url: '/claimflow/caseRecord/selectWorkflowByRptNo',
     method: 'post',
     data
   })

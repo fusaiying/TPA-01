@@ -164,20 +164,40 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         flowLog.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         flowLogMapper.insertFlowLog(flowLog);
 
-
-
         //征求意见处理完毕后  将协办表中状态改为02   增加处理意见
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
+        collaborativeFrom.setHandleState("02");
         collaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(demandAcceptVo.getCollaborativeId());
         collaborativeFrom.setOpinion(demandAcceptVo.getOpinion());
         collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
-        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
-        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
+//        collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
+//        collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
         collaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
         collaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
-        return collaborativeFromMapper.updateConsultationDemand(collaborativeFrom);
+        int a = collaborativeFromMapper.updateConsultationDemand(collaborativeFrom);
+
+        //征求意见【提交】了之后，其他协办人手下的征求意见信息也都要变成“处理完毕”
+        //通过工单号查询对应协办信息
+        CollaborativeFrom tCollaborativeFrom = new CollaborativeFrom();
+        tCollaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+        List<CollaborativeFrom> tCollaborativeFromList = collaborativeFromMapper.selectCollaborativeFromList(tCollaborativeFrom);
+        for(int i=0; i<tCollaborativeFromList.size(); i++){
+            //如果协办流水号 不为 当前页面传递过来的流水号 则通过for修改状态
+            if(!tCollaborativeFromList.get(i).getCollaborativeId().equals(demandAcceptVo.getCollaborativeId())){
+                CollaborativeFrom uptCollaborativeFrom = new CollaborativeFrom();
+                uptCollaborativeFrom.setStatus("02");
+                uptCollaborativeFrom.setHandleState("02");
+                uptCollaborativeFrom.setWorkOrderNo(demandAcceptVo.getWorkOrderNo());
+                uptCollaborativeFrom.setCollaborativeId(tCollaborativeFromList.get(i).getCollaborativeId());
+                uptCollaborativeFrom.setUpdatedBy(SecurityUtils.getUsername());
+                uptCollaborativeFrom.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+                collaborativeFromMapper.updateConsultationDemand(uptCollaborativeFrom);
+            }
+        }
+
+        return a;
     }
     /**
      * 征求意见 投诉  服务处理 意见
@@ -205,6 +225,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
         //征求意见处理完毕后  将协办表中状态改为02   增加投诉不成立理由 投诉是否成立  处理方案  处理依据
         CollaborativeFrom collaborativeFrom=new CollaborativeFrom();
         collaborativeFrom.setStatus("02");
+        collaborativeFrom.setHandleState("02");
         collaborativeFrom.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
         collaborativeFrom.setCollaborativeId(complaintDealVo.getCollaborativeId());
         collaborativeFrom.setValidFlag(complaintDealVo.getValidFlag());

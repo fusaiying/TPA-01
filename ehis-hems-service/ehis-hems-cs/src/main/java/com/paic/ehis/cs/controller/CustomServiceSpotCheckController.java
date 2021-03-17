@@ -214,7 +214,12 @@ public class CustomServiceSpotCheckController extends BaseController {
     {
         return toAjax(qualityInspectionItemService.insertItem(qualityVo));
     }
-
+    @Log(title = "质检处理 ", businessType = BusinessType.INSERT)
+    @PostMapping("/insertItem2")
+    public AjaxResult insertItem2(@RequestBody QualityVo qualityVo)
+    {
+        return toAjax(qualityInspectionItemService.insertItem(qualityVo));
+    }
     //************************************************************************************
     /**
      * 质检差错查询反显数据
@@ -269,16 +274,16 @@ public class CustomServiceSpotCheckController extends BaseController {
         /**
          *工单查询
          */
-        @GetMapping("/internal/selectWorkOrder")
-        public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
-            //1.分页处理
-            startPage();
-            logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
-            List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
-            logger.debug("工单查询工作池结果:{}", list);
-            return getDataTable(list);
+    @GetMapping("/internal/selectWorkOrder")
+    public TableDataInfo selectWorkOrder(WorkOrderQueryDTO workOrderQueryDTO) {
+        //1.分页处理
+        startPage();
+        logger.debug("工单查询工作池入参: {}", workOrderQueryDTO);
+        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
+        logger.debug("工单查询工作池结果:{}", list);
+        return getDataTable(list);
 
-        }
+    }
     //************************************************
         /*
         工单查询清单导出
@@ -303,14 +308,14 @@ public class CustomServiceSpotCheckController extends BaseController {
         List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
         return getDataTable(list);
     }
-    //获取质检处理信息
+    //获取质检确认池
     @GetMapping("/internal/selectQualityFlagVO")
     public TableDataInfo selectQualityFlagVo(QualityFlagDTO qualityFlagDTO){
         startPage();
         List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
         return getDataTable(list);
     }
-    //反显质检处理信息，申诉信息
+    //查询质检处理信息，申诉信息
     @GetMapping("/internal/getHandleInfoList")
     public TableDataInfo getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO) {
         List<HandleProcessInfoVO> list = qualityInspectionHandleService.getHandleInfoList(handleProcessInfoDTO);

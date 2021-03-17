@@ -48,6 +48,14 @@ export function  coSearch(query) {
   })
 }
 
+/*获取协办信息 详细信息*/
+export function  getCollaborativeInfo(collaborativeId) {
+  return request({
+    url: '/cs/from/'+collaborativeId,
+    method: 'get'
+
+  })
+}
 
 //# 查询信息需求页面数据
 export function demandAccept(workOrderNo) {

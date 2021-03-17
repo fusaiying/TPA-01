@@ -179,7 +179,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            batch_no = #{batchNo}
+            <if test="batchNo != null">batch_no = #{batchNo},</if>
         </trim>
         where case_box_no = #{caseBoxNo}
     </update>

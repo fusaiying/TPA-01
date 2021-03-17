@@ -63,6 +63,7 @@
 <script>
 import {transferSubmit} from "../../../../api/customService/demand";
 import {getUserInfo} from '@/api/claim/standingBookSearch'
+import {demandListAndPersonalPool} from '@/api/customService/demand'
 
 export default {
   name: 'upLoad',
@@ -135,7 +136,9 @@ export default {
 
           transferSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
+              this.$emit('checkButton');
               this.$message.success("转办成功")
+              this.changeDialogVisable();
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"

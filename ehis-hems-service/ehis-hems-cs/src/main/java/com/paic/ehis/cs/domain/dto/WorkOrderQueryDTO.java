@@ -37,24 +37,24 @@ public class WorkOrderQueryDTO extends BaseEntity
     private String acceptBy;
     /** 受理开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date acceptStartDate;
+    private String acceptStartDate;
     /** 受理结束日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date acceptEndDate;
+    private String acceptEndDate;
     private String updateBy;
     /** 处理开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date updateStartDate;
+    private String updateStartDate;
     /** 处理结束日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date updateEndDate;
+    private String updateEndDate;
     private String modifyBy;
     /** 处理开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date modifyStartDate;
     /** 处理结束日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date modifyEndDate;
+    private String modifyEndDate;
     /** 投保人 */
     private String holderName;
     /** 被保人 */
@@ -65,10 +65,10 @@ public class WorkOrderQueryDTO extends BaseEntity
     private String mobilePhone;
     /** 预约开始日期  */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date appointmentStartDate;
+    private String appointmentStartDate;
     /** 预约结束日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date appointmentEndDate;
+    private String appointmentEndDate;
     /** 优先级 */
     private String priorityLevel;
     /** VIP */
@@ -78,15 +78,15 @@ public class WorkOrderQueryDTO extends BaseEntity
     private String status;
     /** 结案开始日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endCaseStartTime;
+    private String endCaseStartTime;
     /** 结案结束日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endCaseEndTime;
+    private String endCaseEndTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date firstEndCaseStartTime;
+    private String firstEndCaseStartTime;
     /** 结案结束日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date firstEndCaseEndTime;
+    private String firstEndCaseEndTime;
 
     /** 查询多状态 */
     private List<String> acceptStatusList;

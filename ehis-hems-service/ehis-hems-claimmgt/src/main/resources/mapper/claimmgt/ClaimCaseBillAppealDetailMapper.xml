@@ -78,5 +78,9 @@
         update claim_case_bill set update_by = null where  update_by = CAST(#{oldBillId} AS CHAR) and rpt_no = #{rptNo} and status = 'Y'
     </update>
 
+    <update id="updateClaimCaseAppealCalBill" parameterType="com.paic.ehis.claimmgt.domain.ClaimCaseAppealBillDetail">
+        update claim_case_cal_bill set bill_id = #{billId} where  bill_id = #{oldBillId} and rpt_no = #{rptNo} and status = 'Y'
+    </update>
+
 
 </mapper>

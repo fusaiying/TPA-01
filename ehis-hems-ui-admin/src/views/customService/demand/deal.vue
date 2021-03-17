@@ -528,17 +528,17 @@
       </div>
       <div style="text-align: right; margin-right: 1px;">
         <modify-details ref="modifyDetails"></modify-details>
-        <transfer ref="transfer"></transfer>
+        <transfer ref="transfer" @checkButton="checkButton"></transfer>
         <up-load ref="upload"></up-load>
-        <co-organizer ref="coOrganizer"></co-organizer>
-        <el-button type="primary" size="mini" @click="transfer" :disabled="ruleForm.businessProcess=='02'">转办
+        <co-organizer ref="coOrganizer" @checkButton="checkButton"></co-organizer>
+        <el-button type="primary" size="mini" @click="transfer" :disabled="checkButtonFlag.transferFlag">转办
         </el-button>
-        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="ruleForm.businessProcess=='02'">协办
+        <el-button type="primary" size="mini" @click="coOrganizer" :disabled="checkButtonFlag.coOrganizerFlag">协办
         </el-button>
         <el-button type="primary" size="mini" @click="upload" disabled>保单信息查询</el-button>
-        <el-button type="primary" size="mini" @click="temporary" :disabled="ruleForm.businessProcess=='02'">暂存
+        <el-button type="primary" size="mini" @click="temporary" :disabled="checkButtonFlag.temporaryFlag">暂存
         </el-button>
-        <el-button type="primary" size="mini" @click="submit">提交</el-button>
+        <el-button type="primary" size="mini" @click="submit" :disabled="checkButtonFlag.submitFlag">提交</el-button>
       </div>
     </el-card>
 
@@ -669,6 +669,37 @@ export default {
         sign: ""
       },
 
+      checkButtonFlag: {
+        transferFlag: false,//协办
+        coOrganizerFlag: false,//转办
+        temporaryFlag: false,//暂存
+        submitFlag: false//提交
+      },
+      checkButtonFrom: {//传值给后台
+        acceptorTime:undefined,//受理时间数组
+        appointmentTime:undefined,//预约时间数组
+        handlerTime:undefined,//处理时间数组
+        pageNum: 1,
+        pageSize: 10,
+        itemCode: "",//服务信息
+        channelCode: "",//受理渠道
+        acceptBy: "",//受理人
+        modifyBy: "",//处理人
+        workOrderNo: "",//工单编号
+        policyNo: "",//保单号
+        policyItemNo: "",//分单号
+        holderName: "",//投保人
+        insuredName: "",//被保人
+        idNumber: "",//证件号
+        organCode: "",//出单机构
+        priorityLevel:"",//优先级
+        vipFlag:"",//VIP标识
+        mobilePhone:"",//移动电话
+        status:"",//状态
+        modifyTime:"",
+        updateTime:""
+      },
+
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -782,6 +813,9 @@ export default {
     this.cs_business_type = this.dictList.find(item => {
       return item.dictType === 'cs_business_type'
     }).dictDate
+
+    //初始化按钮状态
+    this.checkButton();
   },
   methods: {
     //是否响应
@@ -793,7 +827,44 @@ export default {
         this.$refs.ruleForm.clearValidate()
       }
 
+      //更新按钮状态
+      this.checkButton();
+
     },
+
+    //设置按钮状态
+    checkButton(){
+      this.checkButtonFlag.transferFlag = false;//协办
+      this.checkButtonFlag.coOrganizerFlag = false;//转办
+      this.checkButtonFlag.temporaryFlag = false;//暂存
+      this.checkButtonFlag.submitFlag = false;//提交
+
+      //选择响应后  除【提交按钮外其余都置灰】
+      if(this.ruleForm.businessProcess == '02'){
+        this.checkButtonFlag.transferFlag = true;//协办
+        this.checkButtonFlag.coOrganizerFlag = true;//转办
+        this.checkButtonFlag.temporaryFlag = true;//暂存
+      }
+
+      //存在协办 转办后  默认都置灰
+      let queryParams = JSON.parse(JSON.stringify(this.checkButtonFrom));
+      queryParams.workOrderNo = this.$route.query.workOrderNo;
+      demandListAndPersonalPool(queryParams).then(res => {
+        if (res != null && res.code === 200) {
+          if (res.total <= 0) {
+            //未查询到数据
+            this.checkButtonFlag.transferFlag = true;//协办
+            this.checkButtonFlag.coOrganizerFlag = true;//转办
+            this.checkButtonFlag.temporaryFlag = true;//暂存
+            this.checkButtonFlag.submitFlag = true;//提交
+          }
+        }
+      }).catch(res => {
+        console.log('error submit!!');
+      })
+
+    },
+
     //结案类型是否正常
     isCloseType(s) {
       if (this.ruleForm.businessProcess == '01') {

@@ -83,6 +83,14 @@ public class GetProviderInfoFallbackFactory implements FallbackFactory<GetProvid
             public AjaxResult insertSupplier(@RequestBody ProductSupplierInfoVo productSupplierInfoVo){
                 return null;
             }
+
+            @Override
+            public void updateIssue(@RequestBody List<String> serviceCodes){
+            }
+
+            @Override
+            public void updateIssue1(@RequestBody List<String> serviceCodes){
+            }
         };
     }
 }

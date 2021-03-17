@@ -182,3 +182,13 @@ export function exchangeRate(query) {
     params: query
   })
 }
+
+
+// 获取申诉信息
+export function getAppealInfo(query) {
+  return request({
+    url: '/claimmgt/claimAppeal/getInfo',
+    method: 'get',
+    params: query
+  })
+}

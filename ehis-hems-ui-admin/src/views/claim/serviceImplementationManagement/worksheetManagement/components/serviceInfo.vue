@@ -58,8 +58,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="服务类型：" prop="serviceType">
-            <el-select v-model="baseForm.serviceType" class="item-width"  filterable @change="changeSupplier">
+          <el-form-item label="服务项目：" prop="serviceType">
+            <el-select v-model="baseForm.serviceCode" class="item-width"  filterable @change="changeSupplier">
               <el-option v-for="item in serviceInfo" :label="item.serviceName" :value="item.serviceCode"
                          :key="item.serviceCode"/>
             </el-select>
@@ -130,7 +130,7 @@
           <el-form-item label="期望科室：" >
             <!--            <el-input v-model="baseForm.firstDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
             <el-select v-model="baseForm.firstDept" class="item-width" clearable  size="mini" style="width: 100px" @change="changeSecondDept">
-              <el-option v-for="item in firstDeptList" :label="item.firstDeptName" :value="item.firstDeptName"
+              <el-option v-for="item in firstDeptList" :label="item.deptName" :value="item.deptName"
                          :key="item.index"/>
             </el-select>
             <!--            <el-input v-model="baseForm.secondDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
@@ -244,17 +244,18 @@ export default {
       secondDeptList:[],
 
       productTypeOptions: [],
+      supplierList: []
 
     }
   },
   created() {
-    this.getDicts("productType").then(response => {
+    /*this.getDicts("productType").then(response => {
       this.productTypeOptions = response.data;
-    });
+    });*/
 
     this.getAddressData()
 
-    this.getServiceInfoList()
+    //this.getServiceInfoList()
     this.init()
 
 
@@ -274,6 +275,7 @@ export default {
           let queryData = {
             orderCode: this.orderCode,
           }
+          //查询服务信息
           queryinfo(queryData).then(res => {
             if (res.code == '200') {
               this.baseForm = res.data
@@ -292,11 +294,10 @@ export default {
             serviceCode: this.serviceCode,
             productCode: this.productCode
           }
-
+//获取该产品下选中服务项目的所有供应商
           getAllProSuppInfo(queryData).then(res => {
             if (res.code == '200') {
               this.productTypeOptions = res.data
-
             }
             //初始化供应商的 联系人 联系电话下拉列表
             if(this.baseForm.supplierCode){
@@ -304,11 +305,14 @@ export default {
               let obj=this.productTypeOptions.find(item=>{
                 return item.supplierCode==this.baseForm.supplierCode
               })
+
+
               if(obj!=null && obj!=null) {
                 obj.contractInfo.map((data,index)=>{
                   data.index=index
                 })
                 this.contactNameList = obj.contractInfo
+                this.baseForm.chname=obj.supplierName
               }
 
             }
@@ -332,11 +336,13 @@ export default {
             }
             if(this.baseForm.firstDept){
 
+
               //找到一级科室
               let firstObj=this.hospObj.firstdeptInfos.find(item =>{
-                return item.firstDeptName==this.baseForm.firstDept
+                return item.deptName==this.baseForm.firstDept
               })
               this.secondDeptInfos=[]
+
               //找到二级科室
               firstObj.secondDeptInfos.map((data,index) =>{
                 data.index=index+1
@@ -345,6 +351,25 @@ export default {
 
             }
           })
+
+
+            let query = {
+              productCode: this.productCode,
+            }
+            //获取该产品下的所有服务项目
+            getProductServiceList(query).then(res => {
+              if (res.code == '200' && res.rows.length > 0) {
+                this.serviceInfo = res.rows
+                let obj=this.serviceInfo.find(item =>{
+                  return item.serviceCode==this.baseForm.serviceCode
+                })
+                if(obj==null){
+                  this.baseForm.serviceCode=''
+                }
+              }
+
+            })
+
 
 
 
@@ -416,7 +441,7 @@ export default {
 
         //找到一级科室
         let firstObj=this.hospObj.firstdeptInfos.find(item =>{
-          return item.firstDeptName==this.baseForm.firstDept
+          return item.deptName==this.baseForm.firstDept
         })
         //找到二级科室
         firstObj.secondDeptInfos.map((data,index) =>{
@@ -476,6 +501,9 @@ export default {
     },
     //更改联系人 联系电话
     changeSupplierName(){
+
+      this.baseForm.chname=''
+
       this.baseForm.phone=''
       this.baseForm.contactName=''
       //找到所选供应商对象
@@ -486,6 +514,8 @@ export default {
         obj.contractInfo.map((data,index)=>{
           data.index=index
         })
+        //给供应商名称赋值
+        this.baseForm.chname=obj.supplierName
         this.contactNameList = obj.contractInfo
         this.$set(this.baseForm,'phone',this.contactNameList[0].phone)
         this.$set(this.baseForm,'contactName',this.contactNameList[0].contactName)
@@ -498,22 +528,42 @@ export default {
         serviceCode: this.serviceCode,
         productCode: this.baseForm.serviceType
       }
-      this.productTypeOptions=[]
+
+
+      /*this.productTypeOptions=[]
       this.contactNameList=[]
       this.baseForm.supplierCode=''
       this.baseForm.phone=''
-      this.baseForm.contactName=''
+      this.baseForm.contactName=''*/
+      //供应商有该服务不重新赋值
+
       getAllProSuppInfo(queryData).then(res => {
         if (res.code == '200') {
-          this.productTypeOptions = res.data
-          if(this.productTypeOptions!=null && this.productTypeOptions.length>0){
-            this.baseForm.supplierCode=this.productTypeOptions[0].supplierCode
-            //初始化供应商的 联系人 联系电话下拉列表
-            this.contactNameList=this.productTypeOptions[0].contractInfo
-            //初始化联系人 联系电话
-            this.$set(this.baseForm,'phone',this.contactNameList[0].phone)
-            this.$set(this.baseForm,'contactName',this.contactNameList[0].contactName)
+          this.supplierList = res.data
+          let fltList=this.supplierList.filter(item=>{
+            return item.supplierCode==this.baseForm.supplierCode
+          })
+          if(fltList.length<1){
+            this.productTypeOptions=[]
+
+            this.contactNameList=[]
+            this.baseForm.supplierCode=''
+            this.baseForm.phone=''
+            this.baseForm.contactName=''
+            this.productTypeOptions=this.supplierList
+
+            if(this.supplierList!=null && this.supplierList.length>0){
+              this.baseForm.supplierCode=this.supplierList[0].supplierCode
+              //初始化供应商的 联系人 联系电话下拉列表
+              this.contactNameList=this.supplierList[0].contractInfo
+              //初始化联系人 联系电话
+              this.$set(this.baseForm,'phone',this.contactNameList[0].phone)
+              this.$set(this.baseForm,'contactName',this.contactNameList[0].contactName)
+            }
           }
+
+
+
         }
       })
 

@@ -285,6 +285,8 @@ public class OrderInfo extends BaseEntity
 
     private String role;
 
+    private String detailInfo;
+
 
     public void setSerialNo(String serialNo) 
     {

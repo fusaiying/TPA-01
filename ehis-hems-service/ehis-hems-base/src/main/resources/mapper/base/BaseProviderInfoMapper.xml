@@ -121,6 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="productCode"    column="product_code"    />
         <result property="supplierCode"    column="supplier_code"    />
         <result property="priority"    column="priority"    />
+        <result property="issue"    column="issue"    />
         <result property="chname"    column="chname"    />
         <result property="addressdetail"    column="addressdetail"    />
         <result property="minPrice"    column="min_price"    />
@@ -1208,6 +1209,7 @@ WHERE
         bcs.min_price,
         bcs.max_price,
         bsc.end_date,
+        bcs.issue,
         bcs.priority
         FROM
         base_contract_service bcs
@@ -1246,5 +1248,27 @@ WHERE
         SET priority = null
         WHERE
             service_code = #{serviceCode}
+    </update>
+
+    <update id ="updateIssue" parameterType="String" >
+        UPDATE base_contract_service
+        SET issue = '03'
+        WHERE
+            service_code in
+        <foreach item="serviceCode" collection="list" open="(" separator="," close=")">
+            #{serviceCode}
+        </foreach>
+        AND STATUS = 'Y'
+    </update>
+
+    <update id ="updateIssue1" parameterType="String" >
+        UPDATE base_contract_service
+        SET issue = '04'
+        WHERE
+        service_code in
+        <foreach item="serviceCode" collection="list" open="(" separator="," close=")">
+            #{serviceCode}
+        </foreach>
+        AND STATUS = 'Y'
     </update>
 </mapper>

@@ -52,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="director"    column="director"    />
         <result property="forNum"    column="for_num"    />
         <result property="millisecond"    column="millisecond"    />
+        <result property="detailInfo"    column="detailInfo"    />
     </resultMap>
 
 
@@ -64,6 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierCode"    column="supplierCode"    />
         <result property="contactName"    column="contactName"    />
         <result property="phone"    column="phone"    />
+        <result property="mobile"    column="mobile"    />
+
     </resultMap>
 
     <resultMap type="ProductInfo" id="ProductInfoResult">
@@ -141,6 +144,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         policy_certificate_no,
         oi.product_code,
         oi.bussiness_status,
+        CASE
+        WHEN oi.bussiness_status = '04' THEN
+        concat_ws(
+        '+',
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        ),
+        oi.reason
+        )
+        ELSE
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        )
+        END detailInfo,
         oi.service_code,
         oi.apply_time,
         ci.name,
@@ -224,6 +253,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             oi.product_code,
             pi.product_chname,
             oi.service_code,
+            oi.service_name,
             oi.supplier_code,
             oi.customer_no,
             oi.contact_name,
@@ -343,6 +373,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productCode != null and productCode != ''">product_code = #{productCode},</if>
             <if test="serviceCode != null and serviceCode != ''">service_code = #{serviceCode},</if>
             <if test="supplierCode != null and supplierCode != ''">supplier_code = #{supplierCode},</if>
+            <if test="chname != null and chname != ''">supplier_name = #{chname},</if>
             <if test="customerNo != null and customerNo != ''">customer_no = #{customerNo},</if>
             <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
             <if test="phone != null and phone != ''">phone = #{phone},</if>
@@ -390,7 +421,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getContractInfo"  resultMap="ContractInfosResult">
-        select supplier_code as supplierCode, name as contactName ,phone as phone from base_contacts where status ='Y'
+        select supplier_code as supplierCode, name as contactName ,phone as phone ,mobile as mobile from base_contacts where status ='Y'
     </select>
 
     <select id="getProductInfo"  resultMap="ProductInfoResult">
@@ -453,7 +484,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND bsi.status = 'Y'
             WHERE
                 psi.service_code = #{serviceCode}
-            AND psi.product_code = #{productCode}
+            <!--AND psi.product_code = #{productCode}-->
             AND psi.status = 'Y'
     </select>
 

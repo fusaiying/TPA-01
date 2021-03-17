@@ -12,7 +12,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
           <el-col :span="8">
             <el-form-item label="产品名称：" prop="productCode">
               <el-select v-model="formSearch.productCode" class="item-width"  clearable filterable>
@@ -104,7 +103,7 @@
       <el-divider/>
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
-          <span>工单信息列表</span>
+          <span>工单信息列表（{{ totalCount }}）</span>
         </div>
         <el-table
           v-loading="loading"
@@ -285,7 +284,7 @@ export default {
     this.getDicts("worksheetBussinessStatus").then(response => {
       this.worksheetBussinessStatusOptions = response.data;
     });
-    this.getDicts("cs_sex").then(response => {
+    this.getDicts("sys_user_sex").then(response => {
       this.cs_sexOptions = response.data;
     });
     this.getDicts("card_type").then(response => {
@@ -366,7 +365,7 @@ export default {
 
 
     getBussinessStatusOptions(row){
-      return this.selectDictLabel(this.worksheetBussinessStatusOptions, row.bussinessStatus)
+      return row.detailInfo;
     },
     getCsSex(row){
       return this.selectDictLabel(this.cs_sexOptions, row.sex)
@@ -382,14 +381,11 @@ export default {
     searchHandle() {
       const values = Object.values(this.formSearch)
       let flag= values.some(item => {return  item!=null && item !='' })
-      if(flag){
+
         this.params.pageSize=10
         this.params.pageNum=1
         this.getData()
-      }
-      else {
-        this.$message({message: '至少输入一个查询条件', type: 'warning', showClose: true, center: true})
-      }
+
     },
     getData() {
       this.params.supplierCode= this.formSearch.supplierCode
@@ -468,8 +464,12 @@ export default {
           let obj= this.supplierProductList.find(item=>{
             return item.supplierCode==this.allotForm.supplierCode
           })
+          //给供应商名称赋值
+          this.serviceInfo.chname=obj.supplierName
+
           this.serviceInfo.phone=obj.contractInfo[0].phone
           this.serviceInfo.contactName=obj.contractInfo[0].contactName
+
           allocation(this.serviceInfo).then(res=>{
             if (res !=null && res.code == '200') {
               this.$message({
@@ -478,6 +478,18 @@ export default {
                 center: true,
                 showClose: true
               })
+              this.changeAllotDialogVisable()
+
+              this.loading = true
+              //调用查询接口
+              getList(this.params).then(res => {
+                this.tableData = res.rows;
+                this.totalCount = res.total;
+                this.loading = false;
+              }).catch(res => {
+                this.loading = false
+              })
+
             } else {
               this.$message({
                 message: '分配失败!',

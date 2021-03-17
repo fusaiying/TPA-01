@@ -72,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCode != null  and idCode != ''"> and ci.id_code = #{idCode}</if>
             <if test="name != null  and name != ''"> and ci.name like concat('%', #{name}, '%')</if>
             <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
+            <if test="policyNo != null  and policyNo != ''"> and oei.policy_no = #{policyNo}</if>
              and oei.status = 'Y'
         </where>
     </select>

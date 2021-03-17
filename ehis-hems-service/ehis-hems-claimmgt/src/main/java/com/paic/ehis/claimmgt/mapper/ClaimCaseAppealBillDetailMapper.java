@@ -33,9 +33,16 @@ public interface ClaimCaseAppealBillDetailMapper
     /**
      * @ahthor:hjw
      * @time:2021-03-16
-     * 案件修正同步原账单后，同步 claim_case_bill_diagnosis 的billId claim_case_bill_diagnosis
+     * 案件修正同步原账单后，同步 claim_case_bill_diagnosis 的billId
      */
     public int updateClaimCaseAppealBillDiagnosis(ClaimCaseAppealBillDetail detail);
+
+    /**
+     * @ahthor:hjw
+     * @time:2021-03-16
+     * 案件修正同步原账单后，同步 claim_case_cal_bill 的billId
+     */
+    public int updateClaimCaseAppealCalBill(ClaimCaseAppealBillDetail detail);
 
     /**
      * @ahthor:hjw
@@ -43,5 +50,6 @@ public interface ClaimCaseAppealBillDetailMapper
      * 案件修正同步原账单后，同步 claim_case_bill update_by 清空
      */
     public int updateClaimCaseAppealBill(ClaimCaseAppealBillDetail detail);
+
 
 }

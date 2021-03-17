@@ -216,7 +216,7 @@
           </el-table-column>
           <el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip width="140">
             <template slot-scope="scope">
-              <span>{{ scope.row.modifyTime | changeDate}}</span>
+              <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
 
@@ -304,7 +304,7 @@
               <span>{{ scope.row.updateTime | changeDate}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="modifyBy" align="center" label="原处理人" show-overflow-tooltip/>
+          <el-table-column prop="oldmodifyBy" align="center" label="原处理人" show-overflow-tooltip/>
           <el-table-column prop="vipFlag" align="center" label="VIP标识" show-overflow-tooltip>
             <template slot-scope="scope" v-if="scope.row.vipFlag">
               <span>{{selectDictLabel(cs_vip_flag, scope.row.vipFlag)}}</span>
@@ -513,26 +513,24 @@ export default {
           let workOrderNo=s.workOrderNo
           demandObtain(workOrderNo).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }else {
           const workOrderNos=this.ids
           demandObtainMany(workOrderNos).then(res => {
             if (res != null && res.code === 200) {
-              return this.$message.success(
-                "获取工单成功！");
+              this.searchHandles();
+              return this.$message.success("获取工单成功！");
             }
           }).catch(res => {
-            return this.$message.error(
-              "获取工单失败！")
+            return this.$message.error("获取工单失败！")
           })
         }
-        this.searchHandles()
+
       }
     },
     //工单页面超链接

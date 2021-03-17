@@ -52,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="director"    column="director"    />
         <result property="forNum"    column="for_num"    />
         <result property="millisecond"    column="millisecond"    />
+        <result property="detailInfo"    column="detailInfo"    />
     </resultMap>
 
 
@@ -143,6 +144,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         policy_certificate_no,
         oi.product_code,
         oi.bussiness_status,
+        CASE
+        WHEN oi.bussiness_status = '04' THEN
+        concat_ws(
+        '+',
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        ),
+        oi.reason
+        )
+        ELSE
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        )
+        END detailInfo,
         oi.service_code,
         oi.apply_time,
         ci.name,

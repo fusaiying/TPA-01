@@ -244,13 +244,28 @@ public class SysUserController extends BaseController
 
     @GetMapping("/getUserInfo")
     public AjaxResult getUserInfo(){
-        return AjaxResult.success(userService.selectUserByUserName(SecurityUtils.getUsername()));
+        SysUser sysUser = userService.selectUserByUserName(SecurityUtils.getUsername());
+        if(StringUtils.isNotNull(sysUser)) {
+            List<SysRole> roles = roleService.selectRoleAll();
+            List<Integer> roleIdList = roleService.selectRoleListByUserId(sysUser.getUserId());
+            List<SysRole> thisRole = roles.stream().filter(r -> r.getRoleId() == Long.valueOf(roleIdList.get(0))).collect(Collectors.toList());
+            sysUser.setRoles(thisRole);
+        }
+        return AjaxResult.success(sysUser);
     }
 
     @PostMapping("/getUsersByOrganCode")
     public TableDataInfo getUsersByOrganCode(@RequestBody SysUserByOrganCodeDTO sysUserByOrganCodeDTO){
         startPage(sysUserByOrganCodeDTO);
+        List<SysRole> roles = roleService.selectRoleAll();
         List<SysUser> list = userService.getUsersByOrganCode(sysUserByOrganCodeDTO);
+        for (SysUser user : list) {
+            List<Integer> roleIdList = roleService.selectRoleListByUserId(user.getUserId());
+            if(!roleIdList.isEmpty()) {
+                List<SysRole> thisRole = roles.stream().filter(r -> r.getRoleId() == Long.valueOf(roleIdList.get(0))).collect(Collectors.toList());
+                user.setRoles(thisRole);
+            }
+        }
         return getDataTable(list);
     }
 }

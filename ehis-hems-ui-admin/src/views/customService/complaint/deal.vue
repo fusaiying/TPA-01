@@ -196,6 +196,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
               <el-select v-model="workPoolData.channelCode" class="item-width" placeholder="">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"

@@ -136,7 +136,7 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-form ref="supplierInfo" :rules="supplierInfoRules" :model="supplierInfo" size="small" :disabled="false">
+      <el-form ref="supplierInfo" :rules="supplierInfoRules" :model="supplierInfo" size="small" :disabled="showDisabled">
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span style="font-size: 20px">供应商信息</span>
         </div>
@@ -282,6 +282,7 @@ export default {
     }
 
     return {
+      showDisabled: false,
       keyValue:1,
       loading: false,
       serviceProForm: {
@@ -518,6 +519,17 @@ export default {
             let rows = this.supplierInfo.supplierData.filter(item => {
               return item.priority != null && item.priority != ''
             })
+            if(this.supplierInfo.supplierData.length>0){
+              if(this.supplierInfo.supplierData[0].issue=='03'){
+
+                this.showDisabled=true
+              }else{
+                this.showDisabled=false
+              }
+            }
+            else {
+              this.showDisabled=false
+            }
 
             this.multipleSelection = rows
             this.indexList = []

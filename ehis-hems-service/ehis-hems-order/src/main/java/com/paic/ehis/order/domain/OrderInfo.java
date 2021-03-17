@@ -28,121 +28,20 @@ public class OrderInfo extends BaseEntity
     @Excel(name = "工单编码")
     private String orderCode;
 
-    /** 保单号 */
-    @Excel(name = "保单号")
-    private String policyNo;
+    /** 产品名称 */
+    @Excel(name = "产品名称")
+    private String productChname;
 
-    /** 分单号 */
-    @Excel(name = "分单号")
-    private String policyCertificateNo;
+    /** 服务名称 */
+    @Excel(name = "服务项目")
+    private String serviceName;
 
-    /** 产品编码 */
-    @Excel(name = "产品编码")
-    private String productCode;
-
-    /** 服务项目编码 */
-    @Excel(name = "服务项目编码")
-    private String serviceCode;
-
-    /** 供应商编码 */
-    @Excel(name = "供应商编码")
-    private String supplierCode;
-
-    /** 客户号 */
-    @Excel(name = "客户号")
-    private String customerNo;
-
-    /** 联系人 */
-    @Excel(name = "联系人")
-    private String contactName;
-
-    /** 联系电话 */
-    @Excel(name = "联系电话")
-    private String phone;
-
-    /** 住院地区 */
-    @Excel(name = "住院地区")
-    private String inpatientArea;
-
-    /** 住院地区 */
-    @Excel(name = "住院地区")
-    private List<String> inpatientAreaList;
-
-    /** 期望地区 */
-    @Excel(name = "期望地区")
-    private String expectedArea;
-
-    /** 期望地区 */
-    @Excel(name = "期望地区")
-    private List<String> expectedAreaList;
-
-    /** 就诊地区 */
-    @Excel(name = "就诊地区")
-    private String visitingArea;
-
-    /** 就诊地区 */
-    @Excel(name = "就诊地区")
-    private List<String> visitingAreaList;
-
-    /** 所在城市 */
-    @Excel(name = "所在城市")
-    private String city;
-
-    /** 所在城市 */
-    @Excel(name = "所在城市")
-    private List<String> cityList;
-
-    /** 服务类型 */
-    @Excel(name = "服务类型")
-    private String serviceType;
-
-    /** 服务预约时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "服务预约时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date applyTime;
-
-    /** 期望医院 */
-    @Excel(name = "期望医院")
-    private String expectationHospital;
-
-    /** 期望科室 */
-    @Excel(name = "期望科室")
-    private String expectedDepartment;
-
-    /** 重疾名称 */
-    @Excel(name = "重疾名称")
-    private String seriousDisease;
-
-    /** 手术名称 */
-    @Excel(name = "手术名称")
-    private String operation;
-
-    /** 出院诊断 */
-    @Excel(name = "出院诊断")
-    private String finalDiagnosis;
-
-    /** 症状描述 */
-    @Excel(name = "症状描述")
-    private String symptomDescription;
-
-    /** 原因 */
-    @Excel(name = "原因")
-    private String reason;
-
-    /** 节点状态 */
-    @Excel(name = "节点状态")
-    private String nodeStatus;
-
-    /** 业务状态 */
-    @Excel(name = "业务状态")
-    private String bussinessStatus;
-
-    /** 数据状态 */
-    @Excel(name = "数据状态")
-    private String status;
+    /** 供应商名称 */
+    @Excel(name = "供应商名称")
+    private String chname;
 
     /** 姓名 */
-    @Excel(name = "姓名")
+    @Excel(name = "客户姓名")
     private String name;
 
     /** 性别 */
@@ -150,53 +49,125 @@ public class OrderInfo extends BaseEntity
     private String sex;
 
     /** 证件 */
-    @Excel(name = "证件")
-    private String idCode;
-
-    /** 证件类型 */
     @Excel(name = "证件类型")
     private String idType;
 
+    /** 证件类型 */
+    @Excel(name = "证件号码")
+    private String idCode;
+
+    @Excel(name = "手机号码")
+    private String phone;
+
+    /** 服务预约时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "申请日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date applyTime;
+
+
+    /** 业务状态 */
+    @Excel(name = "工单状态")
+    private String bussinessStatus;
+
     /** 生日 */
-    @Excel(name = "生日")
     private String birthday;
 
     /** 年龄 */
-    @Excel(name = "年龄")
     private String age;
 
-    /** 产品名称 */
-    @Excel(name = "产品名称")
-    private String productChname;
+    /** 保单号 */
+    private String policyNo;
 
-    /** 服务名称 */
-    @Excel(name = "服务名称")
-    private String serviceName;
+    /** 分单号 */
+    private String policyCertificateNo;
 
-    /** 供应商名称 */
-    @Excel(name = "供应商名称")
-    private String chname;
+    /** 产品编码 */
+    private String productCode;
+
+    /** 服务项目编码 */
+    private String serviceCode;
+
+    /** 供应商编码 */
+    private String supplierCode;
+
+    /** 客户号 */
+    private String customerNo;
+
+    /** 联系人 */
+    private String contactName;
+
+    /** 住院地区 */
+    private String inpatientArea;
+
+    /** 住院地区 */
+    private List<String> inpatientAreaList;
+
+    /** 期望地区 */
+    private String expectedArea;
+
+    /** 期望地区 */
+    private List<String> expectedAreaList;
+
+    /** 就诊地区 */
+    private String visitingArea;
+
+    /** 就诊地区 */
+    private List<String> visitingAreaList;
+
+    /** 所在城市 */
+    private String city;
+
+    /** 所在城市 */
+    private List<String> cityList;
+
+    /** 服务类型 */
+    private String serviceType;
+
+
+
+    /** 期望医院 */
+    private String expectationHospital;
+
+    /** 期望科室 */
+    private String expectedDepartment;
+
+    /** 重疾名称 */
+    private String seriousDisease;
+
+    /** 手术名称 */
+    private String operation;
+
+    /** 出院诊断 */
+    private String finalDiagnosis;
+
+    /** 症状描述 */
+    private String symptomDescription;
+
+    /** 原因 */
+    private String reason;
+
+    /** 节点状态 */
+    private String nodeStatus;
+
+
+    /** 数据状态 */
+    private String status;
 
     /** 变更标志 */
-    @Excel(name = "变更标志")
     private String updateFlag;
 
     /** 一级科室 */
-    @Excel(name = "一级科室")
     private String firstDept;
 
     /** 二级科室 */
-    @Excel(name = "二级科室")
     private String secondDept;
 
     /** 服务预约时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "服务预约开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applyStartTime;
 
     /** 服务预约时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "服务预约截止时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applyEndTime;
 
     /** 住院时间 */
@@ -204,7 +175,6 @@ public class OrderInfo extends BaseEntity
     private Date inpatientTime;
 
     /** 主任 */
-    @Excel(name = "主任")
     private String director;
 
     /** 取消时间 */
@@ -216,62 +186,48 @@ public class OrderInfo extends BaseEntity
     private Date receivingTime;
 
     /** 预约成功/失败时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyResultTime;
 
     /** 订单完成时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderCompleteTime;
 
     /** 医生会诊意见 */
-    @Excel(name = "医生会诊意见")
     private String consultation;
 
     /** 会诊医生介绍 */
-    @Excel(name = "会诊医生介绍")
     private String consultant;
 
     /** 取消原因 */
-    @Excel(name = "取消原因")
     private String cancelReason;
 
     /** B端具体状态 */
-    @Excel(name = "B端具体状态")
     private String detailStatus;
 
     /** 住院医院 */
-    @Excel(name = "住院医院")
     private String inpatientHospital;
 
     /** 住院地址 */
-    @Excel(name = "住院地址")
     private String inpatientAddress;
 
     /** 预约失败原因 */
-    @Excel(name = "预约失败原因")
     private String failureReason;
 
     /** 未到诊原因 */
-    @Excel(name = "未到诊原因")
     private String noVisitReason;
 
     /** 结算价格 */
-    @Excel(name = "结算价格")
     private String settlePrice;
 
     /** 寄送方式 */
-    @Excel(name = "寄送方式")
     private String dealingMethod;
 
     /** 寄送说明 */
     private String dealingShow;
 
     /** 不通过原因 */
-    @Excel(name = "不通过原因")
     private String refuseReason;
 
     /** 循环次数 */
-    @Excel(name = "循环次数")
     private int forNum;
 
     /** 毫秒数 */

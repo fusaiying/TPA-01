@@ -219,5 +219,7 @@ public class DemandAcceptVo extends BaseEntity {
     /** 是否再次来电提醒记录 */
     private int isRedWord;
 
-
+    /** 原处理人 */
+    @Excel(name = "原处理人")
+    private String oldmodifyBy;
 }

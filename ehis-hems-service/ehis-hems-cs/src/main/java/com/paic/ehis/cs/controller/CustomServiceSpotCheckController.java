@@ -13,6 +13,7 @@ import com.paic.ehis.cs.domain.dto.*;
 import com.paic.ehis.cs.domain.vo.*;
 import com.paic.ehis.cs.service.*;
 import com.paic.ehis.cs.utils.CodeEnum;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -215,7 +216,7 @@ public class CustomServiceSpotCheckController extends BaseController {
     @PostMapping("/insertItem2")
     public AjaxResult insertItem2(@RequestBody QualityVo qualityVo)
     {
-        return toAjax(qualityInspectionItemService.insertItem(qualityVo));
+        return toAjax(qualityInspectionItemService.insertItem2(qualityVo));
     }
     //************************************************************************************
     /**
@@ -230,6 +231,10 @@ public class CustomServiceSpotCheckController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/selectHandleStatus")
+    public AjaxResult selectHandleStatus(QualityVo qualityVo){
+        return AjaxResult.success(qualityInspectionHandleService.selectHandleStatus(qualityVo));
+    }
 
     //************************************************************************************
     //质检差错提交接口

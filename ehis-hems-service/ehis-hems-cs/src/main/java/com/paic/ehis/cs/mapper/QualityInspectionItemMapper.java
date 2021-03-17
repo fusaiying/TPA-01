@@ -89,4 +89,6 @@ public interface QualityInspectionItemMapper
     public int deleteQualityInspectionItemByIds(String[] itemIds);
 
     int updateInspectionAccept(QualityVo qualityVo);
+
+   QualityInspectionItem selectHandleInspectionId(QualityVo qualityVo);
 }

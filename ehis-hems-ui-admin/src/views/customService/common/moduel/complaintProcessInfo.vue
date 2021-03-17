@@ -9,7 +9,7 @@
           <template slot-scope="scope">
             <el-form-item :prop="'items.' + scope.$index + '.itemType'" >
               <el-input v-model.trim="scope.row.itemType" v-show="scope.row.show" size="mini" />
-              <span v-show="!scope.row.show">{{scope.row.itemType}}</span>
+              <span v-show="scope.$index === 0 || scope.$index === 3 || scope.$index === 19">{{scope.row.itemType }} </span>
             </el-form-item>
           </template>
         </el-table-column>
@@ -47,7 +47,7 @@
           <el-input v-model="complaintProcess.score"/>
         </el-form-item>
       </el-row>
-      <el-table :data="complaintProcess.appeal" v-show="false">
+      <el-table :data="complaintProcess.appeal" v-show="isshow">
         <el-table-column   show-overflow-tooltip align="center">
           <template slot-scope="scope">
             <el-form-item :prop="'appeal.' + scope.$index + '.appealName'" >
@@ -91,6 +91,7 @@ data(){
      complaintProcessList: [],
      valueOptions: [],
      appealFlagOptions: [],
+     isshow:true,
      complaintProcess: {
        appeal:[
          {
@@ -250,6 +251,7 @@ created() {
 
   }).catch( res => {
   });
+  this.selectAppealStatus();
 },
 async mounted() {
   await this.getDictsList(dictss).then(response => {
@@ -263,7 +265,11 @@ async mounted() {
   }).dictDate
 },
 methods: {
-
+  selectAppealStatus(){
+    if(this.$emit('selectHandleStatus')!==null){
+      this.isshow = false;
+    }
+  }
 }
 }
 </script>

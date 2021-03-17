@@ -109,6 +109,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
      * @param
      * @return
      */
+    //质检项目新增
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertItem(QualityVo qualityVo) {
@@ -133,18 +134,32 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         Date time = DateUtils.getNowDate();
         String inspectionId = PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10);
         List<QualityInspectionItem> itemList =qualityVo.getItemList();
+        QualityInspectionItem qualityInspectionItem = qualityInspectionItemMapper.selectHandleInspectionId(qualityVo);
         if (!itemList.isEmpty()) {
-            qualityVo.getItemList().forEach( item ->{
-                item.setStatus("02");
-                item.setInspectionId(inspectionId);
-                item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
-                item.setCreatedBy(username);
-                item.setUpdatedBy(username);
-                item.setUpdatedTime(time);
-                item.setCreatedTime(time);
-            });
-            qualityInspectionItemMapper.insertExtDocList(itemList);
+            //如果库里根据工单号找不到inspectionId就新增找到了就修改
+            if(qualityInspectionItem.getInspectionId() == null){
+                qualityVo.getItemList().forEach( item ->{
+                    item.setStatus("02");
+                    item.setInspectionId(inspectionId);
+                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
+                    item.setCreatedBy(username);
+                    item.setUpdatedBy(username);
+                    item.setUpdatedTime(time);
+                    item.setCreatedTime(time);
+                });
+                qualityInspectionItemMapper.insertExtDocList(itemList);
+            }else {
+                qualityVo.getItemList().forEach( item ->{
+                    item.setStatus("03");
+                    item.setInspectionId(qualityInspectionItem.getInspectionId());
+                    item.setUpdatedBy(username);
+                    item.setUpdatedTime(time);
+                    qualityInspectionItemMapper.updateQualityInspectionItem(item);
+                });
+
+            }
         }
+        //如果
         if (qualityVo.getStatus()==null) {
             qualityVo.setStatus("01");
             qualityVo.setInspectionId(inspectionId);
@@ -155,11 +170,12 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             qualityInspectionItemMapper.insertQualityVO(qualityVo);
         }else{
             qualityVo.setStatus("02");
+            qualityVo.setInspectionId(qualityInspectionItem.getInspectionId());
             qualityVo.setUpdatedBy(username);
             qualityVo.setUpdatedTime(time);
             qualityInspectionItemMapper.updateQualityVO(qualityVo);
         }
-        qualityVo.setInspectionId(inspectionId);
+        qualityVo.setInspectionId(qualityInspectionItem.getInspectionId());
         qualityVo.setStatus("03");
         qualityVo.setUpdatedBy(username);
         qualityVo.setUpdatedTime(time);
@@ -192,19 +208,32 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         Date time = DateUtils.getNowDate();
         String inspectionId = PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10);
         List<QualityInspectionItem> itemList =qualityVo.getItemList();
+        QualityInspectionItem qualityInspectionItem = qualityInspectionItemMapper.selectHandleInspectionId(qualityVo);
         if (!itemList.isEmpty()) {
-            qualityVo.getItemList().forEach( item ->{
-                item.setStatus("02");
-                item.setInspectionId(inspectionId);
-                item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
-                item.setCreatedBy(username);
-                item.setUpdatedBy(username);
-                item.setUpdatedTime(time);
-                item.setCreatedTime(time);
-            });
-            qualityInspectionItemMapper.insertExtDocList(itemList);
+            //如果库里根据工单号找不到inspectionId就新增找到了就修改
+            if(qualityInspectionItem == null){
+                qualityVo.getItemList().forEach( item ->{
+                    item.setStatus("02");
+                    item.setInspectionId(inspectionId);
+                    item.setItemId(PubFun.createMySqlMaxNoUseCache("item_id", 10, 10));
+                    item.setCreatedBy(username);
+                    item.setUpdatedBy(username);
+                    item.setUpdatedTime(time);
+                    item.setCreatedTime(time);
+                });
+                qualityInspectionItemMapper.insertExtDocList(itemList);
+            }else {
+                qualityVo.getItemList().forEach( item ->{
+                    item.setStatus("03");
+                    item.setInspectionId(qualityInspectionItem.getInspectionId());
+                    item.setUpdatedBy(username);
+                    item.setUpdatedTime(time);
+                    qualityInspectionItemMapper.updateQualityInspectionItem(item);
+                });
+            }
         }
-        if (qualityVo.getStatus()==null) {
+        //如果
+        if (qualityInspectionItem.getInspectionId()==null) {
             qualityVo.setStatus("01");
             qualityVo.setInspectionId(inspectionId);
             qualityVo.setCreatedBy(username);
@@ -214,11 +243,12 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             qualityInspectionItemMapper.insertQualityVO(qualityVo);
         }else{
             qualityVo.setStatus("02");
+            qualityVo.setInspectionId(qualityInspectionItem.getInspectionId());
             qualityVo.setUpdatedBy(username);
             qualityVo.setUpdatedTime(time);
             qualityInspectionItemMapper.updateQualityVO(qualityVo);
         }
-        qualityVo.setInspectionId(inspectionId);
+        qualityVo.setInspectionId(qualityInspectionItem.getInspectionId());
         qualityVo.setStatus("02");
         qualityVo.setUpdatedBy(username);
         qualityVo.setUpdatedTime(time);

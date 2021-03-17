@@ -6,6 +6,7 @@ import com.paic.ehis.cs.domain.dto.HandleProcessInfoDTO;
 import com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO;
 import com.paic.ehis.cs.domain.vo.AcceptVo;
 import com.paic.ehis.cs.domain.vo.HandleProcessInfoVO;
+import com.paic.ehis.cs.domain.vo.QualityVo;
 
 /**
  * 质检处理 Mapper接口
@@ -66,4 +67,6 @@ public interface QualityInspectionHandleMapper
     public List<AcceptVo> selectHandle(WorkOrderQueryDTO workOrderQueryDTO);
 
     List<HandleProcessInfoVO> getHandleInfoList(HandleProcessInfoDTO handleProcessInfoDTO);
+
+    String selectHandleStatus(QualityVo qualityVo);
 }

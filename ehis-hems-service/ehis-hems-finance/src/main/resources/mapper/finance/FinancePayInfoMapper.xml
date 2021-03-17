@@ -25,11 +25,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deptCode"    column="dept_code"    />
+        <result property="transactionCode"    column="transaction_code"    />
+        <result property="internationalCompletedBy"    column="international_completed_by"    />
+        <result property="internationalCompletedPhone"    column="international_completed_phone"    />
+        <result property="transactionPostscript"    column="transaction_postscript"    />
     </resultMap>
 
 
     <sql id="selectFinancePayInfoVo">
-        select pay_id, pay_batch_no, batch_no, pay_currency, sum_pay_amount, sum_pay_amount_foreign, sum_claim_amount, payee_bank, acc_no, acc_name, pay_status, pay_date, pay_fail_date, pay_fail_reason, status, create_by, create_time, update_by, update_time, dept_code from finance_pay_info
+        select pay_id, pay_batch_no, batch_no, pay_currency, sum_pay_amount, sum_pay_amount_foreign, sum_claim_amount, payee_bank, acc_no, acc_name, pay_status, pay_date, pay_fail_date, pay_fail_reason, status, create_by, create_time, update_by, update_time, dept_code,transaction_code,international_completed_by,international_completed_phone,transaction_postscript from finance_pay_info
     </sql>
 
     <select id="selectFinancePayInfoList" parameterType="com.paic.ehis.finance.domain.FinancePayInfo" resultMap="FinancePayInfoResult">
@@ -80,6 +84,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="deptCode != null and deptCode != ''">dept_code,</if>
+            <if test="transactionCode != null and transactionCode != ''">transaction_code,</if>
+            <if test="internationalCompletedBy != null and internationalCompletedBy != ''">international_completed_by,</if>
+            <if test="internationalCompletedPhone != null and internationalCompletedPhone != ''">international_completed_phone,</if>
+            <if test="transactionPostscript != null and transactionPostscript != ''">transaction_postscript,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="payBatchNo != null and payBatchNo != ''">#{payBatchNo},</if>
@@ -101,6 +109,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+            <if test="transactionCode != null and transactionCode != ''">#{transactionCode},</if>
+            <if test="internationalCompletedBy != null and internationalCompletedBy != ''">#{internationalCompletedBy},</if>
+            <if test="internationalCompletedPhone != null and internationalCompletedPhone != ''">#{internationalCompletedPhone},</if>
+            <if test="transactionPostscript != null and transactionPostscript != ''">#{transactionPostscript},</if>
          </trim>
     </insert>
 
@@ -186,4 +198,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        </where>
     </select>
 
+
+    <select id="selectFinancePayInfoByBatchNo" parameterType="String" resultMap="FinancePayInfoResult">
+        <include refid="selectFinancePayInfoVo"/>
+       where batch_no=#{batchNo} and status='Y'   ORDER BY create_time desc limit 1
+    </select>
 </mapper>

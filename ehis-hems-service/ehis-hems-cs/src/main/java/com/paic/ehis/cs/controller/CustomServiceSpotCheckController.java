@@ -1,6 +1,7 @@
 package com.paic.ehis.cs.controller;
 
 import com.paic.ehis.common.core.utils.SecurityUtils;
+import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
 import com.paic.ehis.common.core.web.page.TableDataInfo;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -286,6 +289,19 @@ public class CustomServiceSpotCheckController extends BaseController {
         return getDataTable(list);
 
     }
+    //************************************************
+        /*
+        工单查询清单导出
+         */
+    @Log(title = "工单信息清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/export")
+    public void export(HttpServletResponse response, WorkOrderQueryDTO workOrderQueryDTO) throws IOException
+    {
+        List<AcceptVo> list = qualityInspectionAcceptService.selectSendPoolData(workOrderQueryDTO);
+        ExcelUtil<AcceptVo> util = new ExcelUtil<AcceptVo>(AcceptVo.class);
+        util.exportExcel(response, list, "WorkOrder");
+    }
+
     //************************************************
         /*
         质检查询

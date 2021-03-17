@@ -145,6 +145,13 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
                 map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
                 VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
+
+            WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(serviceProcessingVo.getWorkOrderNo());
+            if ("02".equals(serviceProcessingVo.getBusinessProcess())){
+                workOrderAccept.setModifyTime(DateUtils.getNowDate());
+            }
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
             return workHandleInfoMapper.insertServiceProcessing(workHandleInfo);
         }else {
             //将所有状态置为N
@@ -167,6 +174,13 @@ public class WorkHandleInfoServiceImpl implements IWorkHandleInfoService
                 map.put(fieldMap.getTargetColumnName(),fieldMap.getSourceFiledName());
                 VoUtils voUtils=new VoUtils<ServiceProcessingVo>();
                 workHandleInfo= (WorkHandleInfo) voUtils.fromVoToVo(workHandleInfo,map,serviceProcessingVo);}
+
+            WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(serviceProcessingVo.getWorkOrderNo());
+            if ("02".equals(serviceProcessingVo.getBusinessProcess())){
+                workOrderAccept.setModifyTime(DateUtils.getNowDate());
+            }
+            workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
             return workHandleInfoMapper.updateServiceProcessing(workHandleInfo);
 
         }

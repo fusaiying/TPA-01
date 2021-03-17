@@ -92,7 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="selectFinanceBorrowInfoByRptNo" parameterType="string" resultType="com.paic.ehis.finance.domain.FinanceBorrowInfo">
-        <include refid="selectFinanceBorrowInfoVo"/>
+       select borrow_id borrowId,batch_no batchNo,rpt_no rptNo, borrow_amount borrowAmount, status, create_by createBy, create_time createTime,
+        update_by updateBy, update_time updateTime, dept_code deptCode from finance_borrow_info
         where rpt_no = #{rptNo} and status = 'Y'
     </select>
     

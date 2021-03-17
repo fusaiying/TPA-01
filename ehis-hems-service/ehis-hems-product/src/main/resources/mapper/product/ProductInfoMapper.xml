@@ -515,4 +515,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
 
     </insert>
+
+    <select id="getServiceCode" parameterType="String" resultType="String">
+        SELECT
+            service_code
+        FROM
+            product_service_info
+        WHERE
+            product_code = #{productCode}
+        AND STATUS = 'Y'
+    </select>
 </mapper>

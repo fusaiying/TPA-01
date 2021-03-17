@@ -43,6 +43,14 @@ public interface OrderInfoMapper
     public List<OrderInfo> selectOrderInfoListNew(OrderInfo orderInfo);
 
     /**
+     * 查询order_info(工单信息)列表(近三个月)
+     *
+     * @param orderInfo order_info(工单信息)
+     * @return order_info(工单信息)集合
+     */
+    public List<OrderInfo> selectOrderInfoListNew3Months(OrderInfo orderInfo);
+
+    /**
      * 新增order_info(工单信息)
      * 
      * @param orderInfo order_info(工单信息)

@@ -23,18 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * 对公支付
  */
 @Service
-public class ClaimCasePayServiceImpl implements IClaimCasePayService
-{
+public class ClaimCasePayServiceImpl implements IClaimCasePayService {
 
     @Autowired
     private ClaimBatchMapper claimBatchMapper;
@@ -60,8 +58,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     private RemoteUserService userService;
 
     /*
-    * 财务appId
-    **/
+     * 财务appId
+     **/
 
 //    @Value("${esg.financeid}")
 //    private String financeid;
@@ -72,24 +70,38 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectInitList() {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-        // 获取用户的所属机构
+    public List<Map<String, Object>> selectInitList(String organCode) {
         String deptId = "";
-        if (null != info){
-            deptId = info.getOrganCode();
+        if (null != organCode) {
+            deptId = organCode;
         }
 
-        List<Map<String,Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
-        for (Map<String,Object> map : initList){
+        List<Map<String, Object>> initList = claimBatchMapper.selectPayBatchInit(deptId);
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        for (Map<String, Object> map : initList) {
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
             baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
             // 调用微服务获取医院名称
             R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-            if (R.FAIL == result.getCode())
-            {
+            baseProviderSettle.setProviderCode(map.get("hospitalCode").toString());
+            baseProviderSettle.setOrgFlag("02");
+            List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+            if (baseProviderSettles.size()>0){
+                String noticeDay = baseProviderSettles.get(0).getNoticeDay();
+                int days=0;
+                try {
+                    days = daysBetween( new SimpleDateFormat("yyyy-MM-dd").parse(map.get("submitDate").toString()), new Date());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (days>Integer.parseInt(noticeDay)){
+                    map.put("flag", "N");//飘红显示
+                }else {
+                    map.put("flag", "Y");//正常显示
+                }
+
+            }
+            if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
             }
             if (result.getData().size() > 0) {
@@ -108,25 +120,36 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectBatchList(ClaimCasePayDTO claimCasePayDTO) {
-        if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            ObjectMapper objectMapper = new ObjectMapper();
-            SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-            String organCode = "";
-            if (null != info){
-                organCode = info.getOrganCode();
-            }
-            // 获取用户的所属机构
-            claimCasePayDTO.setOrganCode(organCode);
-        }
         List<Map<String, Object>> batchList = claimBatchMapper.selectPayBatchList(claimCasePayDTO);
         // 调用微服务获取医院中文名称
-        for (Map<String,Object> map : batchList){
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        for (Map<String, Object> map : batchList) {
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
             baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
             // 调用微服务获取医院名称
             R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-            if (R.FAIL == result.getCode())
-            {
+            baseProviderSettle.setProviderCode(map.get("hospitalCode").toString());
+            baseProviderSettle.setOrgFlag("02");
+            List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+            if (baseProviderSettles.size()>0){
+                String noticeDay = baseProviderSettles.get(0).getNoticeDay();
+                int days=0;
+                try {
+                    days = daysBetween( new SimpleDateFormat("yyyy-MM-dd").parse(map.get("submitDate").toString()), new Date());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (StringUtils.isNotNull(noticeDay)){
+                    if (days>Integer.parseInt(noticeDay)){
+                        map.put("flag", "N");//飘红显示
+                    }else {
+                        map.put("flag", "Y");//正常显示
+                    }
+                }
+
+
+            }
+            if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
             }
             if (result.getData().size() > 0) {
@@ -147,10 +170,18 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     public ClaimCasePayVO getCaseInfo(String batchNo) {
         String username = SecurityUtils.getUsername();
         ClaimCasePayVO claimCasePayVO = new ClaimCasePayVO();
+        String payFlag="true";
+        String borrowFlag="false";
         // 获取案件信息
         List<ClaimCasePayInfoVO> payInfoList = claimCasePayMapper.selectPayInfoList(batchNo);
         // 获取出单公司、借款金额
         for (ClaimCasePayInfoVO payInfo : payInfoList) {
+            if(!"01".equals(payInfo.getPayStatus())){
+                payFlag="false";
+            }
+            if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
+                borrowFlag="true";
+            }
             List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(payInfo.getRptNo());
             // 去重
             List<String> companyList = policyList.stream().map(ClaimCasePolicy::getCompanyName).collect(Collectors.toList());
@@ -162,7 +193,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
 
             // 获取借款金额
             FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(payInfo.getRptNo());
-            if (null != financeBorrowInfo){
+            if (StringUtils.isNotNull(financeBorrowInfo)) {
                 payInfo.setBorrowAmount(financeBorrowInfo.getBorrowAmount());
             } else {
                 payInfo.setBorrowAmount(new BigDecimal("0"));
@@ -183,45 +214,51 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         BigDecimal calAmount = new BigDecimal("0.00");
         for (ClaimCasePayInfoVO payInfoVO : payInfoList) {
             // 1、判断案件是可支付状态
-            if ("01".equals(payInfoVO.getPayStatus())){
-                // 获取支付金额 理赔金额
-                ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
-                payAmount = payAmount.add(claimCaseCal.getPayAmount());
+            // 理赔金额
+            ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
+            if (StringUtils.isNotNull(claimCaseCal)) {
                 calAmount = calAmount.add(claimCaseCal.getCalAmount());
-                // 是否已存在轨迹为“支付环节” 
-                ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
-                claimCaseRecord.setOperation("09");
-                claimCaseRecord.setRptNo(payInfoVO.getRptNo());
-                claimCaseRecord.setHistoryFlag("N");
-                claimCaseRecord.setStatus("Y");
-                List<ClaimCaseRecord> recordList = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
-                if (recordList.size() <= 0){
-                    // 2、结案轨迹置成历史轨迹
-                    claimCaseRecord.setOperator(username);
-                    claimCaseRecord.setHistoryFlag("Y");
-                    claimCaseRecord.setUpdateBy(username);
-                    claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
-                    claimCaseRecord.setOperation("99");
-                    claimCaseRecordMapper.updateClaimCaseRecordByRptNoAndOperator(claimCaseRecord);
-                    // 3、新增“支付环节”轨迹
-                    ClaimCaseRecord record = new ClaimCaseRecord();
-                    record.setOperation("09");
-                    record.setRptNo(payInfoVO.getRptNo());
-                    record.setHistoryFlag("N");
-                    record.setStatus("Y");
-                    record.setCreateBy(username);
-                    record.setCreateTime(DateUtils.getNowDate());
-                    claimCaseRecordMapper.insertClaimCaseRecord(record);
-                }
+                if ("01".equals(payInfoVO.getPayStatus())) {
+                    // 获取支付金额 理赔金额
+                    payAmount = payAmount.add(claimCaseCal.getPayAmount());
+                    // 是否已存在轨迹为“支付环节”
+                    ClaimCaseRecord claimCaseRecord = new ClaimCaseRecord();
+                    claimCaseRecord.setOperation("09");
+                    claimCaseRecord.setRptNo(payInfoVO.getRptNo());
+                    claimCaseRecord.setHistoryFlag("N");
+                    claimCaseRecord.setStatus("Y");
+                    List<ClaimCaseRecord> recordList = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
+                    if (recordList.size() <= 0) {
+                        // 2、结案轨迹置成历史轨迹
+                        claimCaseRecord.setOperator(username);
+                        claimCaseRecord.setHistoryFlag("Y");
+                        claimCaseRecord.setUpdateBy(username);
+                        claimCaseRecord.setUpdateTime(DateUtils.getNowDate());
+                        claimCaseRecord.setOperation("99");
+                        claimCaseRecordMapper.updateClaimCaseRecordByRptNoAndOperator(claimCaseRecord);
+                        // 3、新增“支付环节”轨迹
+                        ClaimCaseRecord record = new ClaimCaseRecord();
+                        record.setOperation("09");
+                        record.setRptNo(payInfoVO.getRptNo());
+                        record.setHistoryFlag("N");
+                        record.setStatus("Y");
+                        record.setCreateBy(username);
+                        record.setCreateTime(DateUtils.getNowDate());
+                        claimCaseRecordMapper.insertClaimCaseRecord(record);
+                    }
 
+                }
             }
+
         }
         // 获取支付信息
         ClaimCasePaymentVO claimCasePaymentVO = new ClaimCasePaymentVO();
         // 封装支付总金额、理赔总金额
         claimCasePaymentVO.setPayAmount(payAmount);
         claimCasePaymentVO.setCalAmount(calAmount);
-
+        if (payAmount.compareTo(new BigDecimal("0.00"))<=0){
+            payFlag="false";
+        }
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
         // 封装支付币种
         claimCasePaymentVO.setCurrency(claimBatch.getCurrency());
@@ -230,8 +267,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
         //调用医院接口
         R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-        if (R.FAIL == result.getCode())
-        {
+        if (R.FAIL == result.getCode()) {
             throw new BaseException(result.getMsg());
         }
         if (result.getData().size() > 0) {
@@ -245,11 +281,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
-        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+        baseProviderSettle.setOrgFlag("02");
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size() > 0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
         }
         claimCasePayVO.setPayment(claimCasePaymentVO);
+        claimCasePayVO.setPayFlag(payFlag);
+        claimCasePayVO.setBorrowFlag(borrowFlag);
         return claimCasePayVO;
     }
 
@@ -266,7 +305,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 案件状态为撤件98、撤件可申诉97，或支付状态为支付中02、已支付03则阻断提示：“当前案件不允许进行回退，请核实”
         String caseStatus = claimCase.getCaseStatus();
         String isAppeal = claimCase.getIsAppeal();
-        if ("97".equals(caseStatus) || "98".equals(caseStatus) || "02".equals(isAppeal) || "03".equals(isAppeal)){
+        if ("97".equals(caseStatus) || "98".equals(caseStatus) || "02".equals(isAppeal) || "03".equals(isAppeal)) {
             return AjaxResult.error("当前案件不允许进行回退，请核实");
         }
         // TODO:区分是TPA还是核心案件
@@ -308,20 +347,12 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      * @return
      */
     @Override
-    public AjaxResult confirmPayment(ClaimCaseForeignPayVO claimCasePayVO) {
-        // 获取当前登录用户信息
-        ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-        // 获取当前用户所属机构
-        String organCode = "";
-        if (null != info) {
-            organCode = info.getOrganCode();
-        }
+    public int confirmPayment(ClaimCaseForeignPayVO claimCasePayVO) {
         String username = SecurityUtils.getUsername();
         // 批次号
         String batchNo = claimCasePayVO.getBatchNo();
         // 外币 判断该批次下所有案件审核岗赔付结论中的账单币种是否一致
-        if (!"CNY".equals(claimCasePayVO.getPayment().getCurrency())){
+        if (!"CNY".equals(claimCasePayVO.getPayment().getCurrency())) {
 //            List<ClaimCaseCal> calList = claimCaseCalMapper.selectClaimCaseCalByBatchNo(batchNo);
 //            // 去重
 //            List<String> billCurrList = calList.stream().map(ClaimCaseCal::getBillCurrency).collect(Collectors.toList());
@@ -333,8 +364,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
 //                return AjaxResult.error("批次下案件币种不统一，请核实");
 //            }
             boolean currFlag = claimCasePayVO.getCaseInfoList().stream().anyMatch(m -> "N".equals(m.getFlag()));
-            if (currFlag){
-                return AjaxResult.success("批次下案件币种不统一，请核实",3);
+            if (currFlag) {
+                // return AjaxResult.success("批次下案件币种不统一，请核实",3);
+                return 3;
             }
         }
         ClaimCase financeCase = new ClaimCase();
@@ -342,8 +374,9 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         financeCase.setIsFinanceBack("Y");
         financeCase.setStatus("Y");
         List<ClaimCase> finanBackList = claimCaseMapper.selectClaimCaseList(financeCase);
-        if (finanBackList.size() > 0){
-            return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
+        if (finanBackList.size() > 0) {
+            //return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
+            return 2;
         } else {
             // 支付信息
             ClaimCasePaymentVO payment = claimCasePayVO.getPayment();
@@ -365,7 +398,11 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             financePayInfo.setStatus("Y");
             financePayInfo.setCreateBy(username);
             financePayInfo.setCreateTime(DateUtils.getNowDate());
-            financePayInfo.setDeptCode(organCode);
+            financePayInfo.setDeptCode(claimCasePayVO.getOrganCode());
+            financePayInfo.setTransactionCode(payment.getTransactionCode());
+            financePayInfo.setInternationalCompletedBy(payment.getInternationalCompletedBy());
+            financePayInfo.setInternationalCompletedPhone(payment.getInternationalCompletedPhone());
+            financePayInfo.setTransactionPostscript(payment.getTransactionPostscript());
             // 01-非全赔 02-全赔
             String claimFlag = payment.getClaimFlag();
 
@@ -386,7 +423,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                     financePayDetailInfo.setStatus("Y");
                     financePayDetailInfo.setCreateBy(username);
                     financePayDetailInfo.setCreateTime(DateUtils.getNowDate());
-                    financePayDetailInfo.setDeptCode(organCode);
+                    financePayDetailInfo.setDeptCode(claimCasePayVO.getOrganCode());
                     financePayDetailInfoMapper.insertFinancePayDetailInfo(financePayDetailInfo);
                     // 修改案件信息支付状态为‘支付中’
                     ClaimCase claimCase = new ClaimCase();
@@ -426,7 +463,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
             //--------------调用财务应付接口
 
 
-            return AjaxResult.success("确认支付成功！",1);
+            //return AjaxResult.success("确认支付成功！",1);
+            return 1;
         }
     }
 
@@ -437,22 +475,16 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      * @return
      */
     @Override
-    public AjaxResult borrowingCase(ClaimCaseForeignPayVO claimCasePayVO) {
-        // 获取当前登录用户信息
-        ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-        String organCode = "";
-        if (null != info){
-            organCode = info.getOrganCode();
-        }
+    public int borrowingCase(ClaimCaseForeignPayVO claimCasePayVO) {
+
         String username = SecurityUtils.getUsername();
         // 批次号
         String batchNo = claimCasePayVO.getBatchNo();
         // 外币 判断该批次下所有案件审核岗赔付结论中的账单币种是否一致
-        if (!"CNY".equals(claimCasePayVO.getPayment().getCurrency())){
+        if (!"CNY".equals(claimCasePayVO.getPayment().getCurrency())) {
             boolean currFlag = claimCasePayVO.getCaseInfoList().stream().anyMatch(m -> "N".equals(m.getFlag()));
-            if (currFlag){
-                return AjaxResult.success("批次下案件币种不统一，请核实",3);
+            if (currFlag) {
+                return 3;
             }
         }
         ClaimCase financeCase = new ClaimCase();
@@ -460,8 +492,8 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         financeCase.setIsFinanceBack("Y");
         financeCase.setStatus("Y");
         List<ClaimCase> finanBackList = claimCaseMapper.selectClaimCaseList(financeCase);
-        if (finanBackList.size() > 0){
-            return AjaxResult.success("此批次存在回退案件，请结案后进行支付",2);
+        if (finanBackList.size() > 0) {
+            return 2;
         } else {
             List<ClaimCaseForeignPayInfoVO> caseInfoList = claimCasePayVO.getCaseInfoList();
             for (ClaimCaseForeignPayInfoVO caseInfo : caseInfoList) {
@@ -471,17 +503,26 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 claimCase.setPayStatus("01");
                 claimCaseMapper.updateClaimCase(claimCase);
                 // 借款表生成数据
-                FinanceBorrowInfo financeBorrowInfo = new FinanceBorrowInfo();
-                financeBorrowInfo.setBatchNo(claimCasePayVO.getBatchNo());
-                financeBorrowInfo.setRptNo(caseInfo.getRptNo());
-                financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
-                financeBorrowInfo.setStatus("Y");
-                financeBorrowInfo.setCreateBy(username);
-                financeBorrowInfo.setCreateTime(DateUtils.getNowDate());
-                financeBorrowInfo.setDeptCode(organCode);
-                financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo);
-        }
-            return AjaxResult.success("借款成功！",1);
+                FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(caseInfo.getRptNo());
+                if (StringUtils.isNull(financeBorrowInfo)){
+                    FinanceBorrowInfo financeBorrowInfo1 = new FinanceBorrowInfo();
+                    financeBorrowInfo1.setBatchNo(claimCasePayVO.getBatchNo());
+                    financeBorrowInfo1.setRptNo(caseInfo.getRptNo());
+                    financeBorrowInfo1.setBorrowAmount(caseInfo.getDiscountedAmount());
+                    financeBorrowInfo1.setStatus("Y");
+                    financeBorrowInfo1.setCreateBy(username);
+                    financeBorrowInfo1.setCreateTime(DateUtils.getNowDate());
+                    financeBorrowInfo1.setDeptCode(claimCasePayVO.getOrganCode());
+                    financeBorrowInfoMapper.insertFinanceBorrowInfo(financeBorrowInfo1);
+                }else {
+                    financeBorrowInfo.setBorrowAmount(caseInfo.getDiscountedAmount());
+                    financeBorrowInfo.setUpdateBy(username);
+                    financeBorrowInfo.setUpdateTime(DateUtils.getNowDate());
+                    financeBorrowInfoMapper.updateFinanceBorrowInfo(financeBorrowInfo);
+                }
+
+            }
+            return 1;
         }
     }
 
@@ -491,22 +532,37 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      * @return
      */
     @Override
-    public List<Map<String, Object>> selectInitForeignList() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-        // 获取用户的所属机构
+    public List<Map<String, Object>> selectInitForeignList(String organCode) {
         String deptId = "";
-        if (null != info) {
-            deptId = info.getOrganCode();
+        if (null != organCode) {
+            deptId = organCode;
         }
-        List<Map<String,Object>> initList = claimBatchMapper.selectPayForeignBatchInit(deptId);
-        for (Map<String,Object> map : initList){
+        List<Map<String, Object>> initList = claimBatchMapper.selectPayForeignBatchInit(deptId);
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        for (Map<String, Object> map : initList) {
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
             baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
             // 调用微服务获取医院名称
             R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-            if (R.FAIL == result.getCode())
-            {
+            baseProviderSettle.setProviderCode(map.get("hospitalCode").toString());
+            baseProviderSettle.setOrgFlag("02");
+            List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+            if (baseProviderSettles.size()>0){
+                String noticeDay = baseProviderSettles.get(0).getNoticeDay();
+                int days=0;
+                try {
+                    days = daysBetween( new SimpleDateFormat("yyyy-MM-dd").parse(map.get("submitDate").toString()), new Date());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (days>Integer.parseInt(noticeDay)){
+                    map.put("flag", "N");//飘红显示
+                }else {
+                    map.put("flag", "Y");//正常显示
+                }
+
+            }
+            if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
             }
             if (result.getData().size() > 0) {
@@ -525,20 +581,32 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
      */
     @Override
     public List<Map<String, Object>> selectForeignBatchList(ClaimCasePayDTO claimCasePayDTO) {
-        if (ObjectNullUtil.objectIsNull(claimCasePayDTO)){
-            ObjectMapper objectMapper = new ObjectMapper();
-            SysUser info = objectMapper.convertValue(userService.userInfo().get("data"),SysUser.class);
-            // 获取用户的所属机构
-            claimCasePayDTO.setOrganCode(null == info ? "" : info.getOrganCode());
-        }
         List<Map<String, Object>> batchList = claimBatchMapper.selectPayForeignBatchList(claimCasePayDTO);
-        for (Map<String,Object> map : batchList){
+        BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
+        for (Map<String, Object> map : batchList) {
             BaseProviderInfo baseProviderInfo = new BaseProviderInfo();
             baseProviderInfo.setProviderCode(map.get("hospitalCode").toString());
             // 调用微服务获取医院名称
             R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);
-            if (R.FAIL == result.getCode())
-            {
+            baseProviderSettle.setProviderCode(map.get("hospitalCode").toString());
+            baseProviderSettle.setOrgFlag("02");
+            List<BaseProviderSettle> baseProviderSettles = getProviderInfoService.selectsettleInfoNew(baseProviderSettle);
+            if (baseProviderSettles.size()>0){
+                String noticeDay = baseProviderSettles.get(0).getNoticeDay();
+                int days=0;
+                try {
+                    days = daysBetween( new SimpleDateFormat("yyyy-MM-dd").parse(map.get("submitDate").toString()), new Date());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (days>Integer.parseInt(noticeDay)){
+                    map.put("flag", "N");//飘红显示
+                }else {
+                    map.put("flag", "Y");//正常显示
+                }
+
+            }
+            if (R.FAIL == result.getCode()) {
                 throw new BaseException(result.getMsg());
             }
             if (result.getData().size() > 0) {
@@ -559,12 +627,20 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
     public ClaimCaseForeignPayVO getForeignCase(String batchNo) {
         String username = SecurityUtils.getUsername();
         ClaimCaseForeignPayVO claimCaseForeignPayVO = new ClaimCaseForeignPayVO();
+        String payFlag="true";
+        String borrowFlag="false";
         // 获取案件信息
         List<ClaimCaseForeignPayInfoVO> payInfoList = claimCasePayMapper.selectForeignPayInfoList(batchNo);
         // 获取批次账单币种
         String batchCurrency = claimBatchMapper.selectClaimBatchById(batchNo).getCurrency();
         // 获取出单公司、借款金额
         for (ClaimCaseForeignPayInfoVO payInfo : payInfoList) {
+            if(!"01".equals(payInfo.getPayStatus())){
+                payFlag="false";
+            }
+            if (payInfo.getCaseStatus()!="99" || payInfo.getPayStatus()=="01"){
+                borrowFlag="true";
+            }
             List<ClaimCasePolicy> policyList = claimCasePolicyMapper.selectClaimCasePolicyByRptNo(payInfo.getRptNo());
             // 去重
             List<String> companyList = policyList.stream().map(ClaimCasePolicy::getCompanyName).collect(Collectors.toList());
@@ -576,14 +652,14 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
 
             // 获取借款金额
             FinanceBorrowInfo financeBorrowInfo = financeBorrowInfoMapper.selectFinanceBorrowInfoByRptNo(payInfo.getRptNo());
-            if (null != financeBorrowInfo){
+            if (null != financeBorrowInfo) {
                 payInfo.setBorrowAmount(financeBorrowInfo.getBorrowAmount());
             } else {
                 payInfo.setBorrowAmount(new BigDecimal("0"));
             }
 
             // 判断账单币种与批次币种是否一致
-            if (batchCurrency.equals(payInfo.getBillCurrency())){
+            if (batchCurrency.equals(payInfo.getBillCurrency())) {
                 payInfo.setFlag("Y");
             } else {
                 payInfo.setFlag("N");
@@ -597,7 +673,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         BigDecimal foreignPayAmount = new BigDecimal("0.00");
         for (ClaimCaseForeignPayInfoVO payInfoVO : payInfoList) {
             // 1、判断案件是可支付状态
-            if ("01".equals(payInfoVO.getPayStatus())){
+            if ("01".equals(payInfoVO.getPayStatus())) {
                 // 获取支付金额 理赔金额 外币支付总金额
                 ClaimCaseCal claimCaseCal = claimCaseCalMapper.selectClaimCaseCalByRptNo(payInfoVO.getRptNo());
                 payAmount = payAmount.add(claimCaseCal.getPayAmount());
@@ -610,7 +686,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
                 claimCaseRecord.setHistoryFlag("N");
                 claimCaseRecord.setStatus("Y");
                 List<ClaimCaseRecord> recordList = claimCaseRecordMapper.selectClaimCaseRecordList(claimCaseRecord);
-                if (recordList.size() < 0){
+                if (recordList.size() < 0) {
                     // 2、结案轨迹置成历史轨迹
                     claimCaseRecord.setOperator(username);
                     claimCaseRecord.setHistoryFlag("Y");
@@ -633,17 +709,29 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         }
         // 获取支付信息
         ClaimCasePaymentVO claimCasePaymentVO = new ClaimCasePaymentVO();
+        //通过批次号查询finance_pay_info表最近一次的数据
+        FinancePayInfo financePayInfo = financePayInfoMapper.selectFinancePayInfoByBatchNo(batchNo);
+        if (StringUtils.isNotNull(financePayInfo)){
+            claimCasePaymentVO.setTransactionCode(financePayInfo.getTransactionCode());
+            claimCasePaymentVO.setInternationalCompletedBy(financePayInfo.getInternationalCompletedBy());
+            claimCasePaymentVO.setInternationalCompletedPhone(financePayInfo.getInternationalCompletedPhone());
+            claimCasePaymentVO.setTransactionPostscript(financePayInfo.getTransactionPostscript());
+        }
         // 封装支付总金额、理赔总金额、外币支付总金额
         claimCasePaymentVO.setPayAmount(payAmount);
         claimCasePaymentVO.setCalAmount(calAmount);
-
+        if (payAmount.compareTo(new BigDecimal("0.00"))<=0){
+            payFlag="false";
+        }
         ClaimBatch claimBatch = claimBatchMapper.selectClaimBatchById(batchNo);
         // 该批次下所有账单币种是否一致，不一致时支付币种与外币支付总金额为空
         boolean currFlag = payInfoList.stream().anyMatch(m -> "N".equals(m.getFlag()));
-        if (!currFlag){
+        if (!currFlag) {
             // 封装支付币种
             claimCasePaymentVO.setCurrency(claimBatch.getCurrency());
             claimCasePaymentVO.setForeignPayAmount(foreignPayAmount);
+        }else {//币种不一致
+            borrowFlag="false";
         }
 
         // 调用微服务获取医院信息
@@ -651,8 +739,7 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         baseProviderInfo.setProviderCode(claimBatch.getHospitalcode());
         //调用医院接口
         R<List<BaseProviderInfo>> result = getProviderInfoService.selectOrgInfo(baseProviderInfo);//调用医院插叙接口
-        if (R.FAIL == result.getCode())
-        {
+        if (R.FAIL == result.getCode()) {
             throw new BaseException(result.getMsg());
         }
         if (result.getData().size() > 0) {
@@ -664,12 +751,35 @@ public class ClaimCasePayServiceImpl implements IClaimCasePayService
         // 获取‘是否仅结算理赔责任’ 是01-非全赔 否02-全赔
         BaseProviderSettle baseProviderSettle = new BaseProviderSettle();
         baseProviderSettle.setProviderCode(claimBatch.getHospitalcode());
-        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size()>0) {
+        baseProviderSettle.setOrgFlag("02");
+        if (getProviderInfoService.selectsettleInfoNew(baseProviderSettle).size() > 0) {
             BaseProviderSettle settle = getProviderInfoService.selectsettleInfoNew(baseProviderSettle).get(0);
             claimCasePaymentVO.setClaimFlag(settle.getClaimFlag());
         }
         claimCaseForeignPayVO.setPayment(claimCasePaymentVO);
+        claimCaseForeignPayVO.setPayFlag(payFlag);
+        claimCaseForeignPayVO.setBorrowFlag(borrowFlag);
         return claimCaseForeignPayVO;
+    }
+    /**
+     * 计算两个日期之间相差的天数
+     * @param smdate 较小的时间
+     * @param bdate  较大的时间
+     * @return 相差天数
+     * @throws ParseException
+     */
+    public static int daysBetween(Date smdate, Date bdate) throws  ParseException {
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        smdate=sdf.parse(sdf.format(smdate));
+        bdate=sdf.parse(sdf.format(bdate));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(smdate);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(bdate);
+        long time2 = cal.getTimeInMillis();
+        long between_days=(time2-time1)/(1000*3600*24);
+
+        return Integer.parseInt(String.valueOf(between_days));
     }
 
 }

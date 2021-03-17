@@ -1,5 +1,6 @@
 package com.paic.ehis.finance.controller;
 
+import com.paic.ehis.common.core.utils.StringUtils;
 import com.paic.ehis.common.core.utils.poi.ExcelUtil;
 import com.paic.ehis.common.core.web.controller.BaseController;
 import com.paic.ehis.common.core.web.domain.AjaxResult;
@@ -36,10 +37,10 @@ public class ClaimCasePayController extends BaseController {
      * @return
      */
     @GetMapping("/initList")
-    public TableDataInfo initBatchList(){
-        startPage();
+    public TableDataInfo initBatchList(ClaimCasePayDTO claimCasePayDTO){
+        startPage(claimCasePayDTO);
         // 查询 该机构下批次案件状态不全部为已支付的
-        List<Map<String,Object>> initList = claimCasePayService.selectInitList();
+        List<Map<String,Object>> initList = claimCasePayService.selectInitList(claimCasePayDTO.getOrganCode());
         return getDataTable(initList);
     }
 
@@ -51,6 +52,11 @@ public class ClaimCasePayController extends BaseController {
      */
     @PostMapping("/list")
     public TableDataInfo getBatchList(@RequestBody ClaimCasePayDTO claimCasePayDTO){
+        if (claimCasePayDTO.getOrderByColumn() != null && !claimCasePayDTO.getOrderByColumn().equals("")) {
+        } else {
+            claimCasePayDTO.setOrderByColumn("submitDate");
+            claimCasePayDTO.setIsAsc("desc");
+        }
         startPage(claimCasePayDTO);
         List<Map<String,Object>> batchList = claimCasePayService.selectBatchList(claimCasePayDTO);
         return getDataTable(batchList);
@@ -122,10 +128,10 @@ public class ClaimCasePayController extends BaseController {
      * @return
      */
     @GetMapping("/initForeignList")
-    public TableDataInfo initForeignList(){
-        startPage();
+    public TableDataInfo initForeignList(ClaimCasePayDTO claimCasePayDTO){
+        startPage(claimCasePayDTO);
         // 查询 该机构下批次案件状态不全部为已支付的
-        List<Map<String,Object>> initList = claimCasePayService.selectInitForeignList();
+        List<Map<String,Object>> initList = claimCasePayService.selectInitForeignList(claimCasePayDTO.getOrganCode());
         return getDataTable(initList);
     }
 
@@ -136,6 +142,11 @@ public class ClaimCasePayController extends BaseController {
      */
     @PostMapping("/foreignList")
     public TableDataInfo foreignList(@RequestBody ClaimCasePayDTO claimCasePayDTO){
+        if (claimCasePayDTO.getOrderByColumn() != null && !claimCasePayDTO.getOrderByColumn().equals("")) {
+        } else {
+            claimCasePayDTO.setOrderByColumn("submitDate");
+            claimCasePayDTO.setIsAsc("desc");
+        }
         startPage(claimCasePayDTO);
         List<Map<String,Object>> batchList = claimCasePayService.selectForeignBatchList(claimCasePayDTO);
         return getDataTable(batchList);

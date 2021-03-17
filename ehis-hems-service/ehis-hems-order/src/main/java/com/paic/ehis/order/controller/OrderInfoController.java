@@ -55,6 +55,17 @@ public class OrderInfoController extends BaseController
     }
 
     /**
+     * 查询order_info(工单信息)列表(近三个月)
+     */
+    //@PreAuthorize("@ss.hasPermi('system:info:list')")
+    @PostMapping("/list3Months")
+    public TableDataInfo list3Months() throws Exception
+    {
+        List<OrderInfo> list = orderInfoService.selectOrderInfoList3Months();
+        return getDataTable(list);
+    }
+
+    /**
      * 导出order_info(工单信息)列表
      */
     //@PreAuthorize("@ss.hasPermi('system:info:export')")

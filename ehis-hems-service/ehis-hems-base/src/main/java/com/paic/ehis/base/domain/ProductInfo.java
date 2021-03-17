@@ -83,5 +83,4 @@ public class ProductInfo extends BaseEntity
 
     /** 审核界面去除null */
     private String flag;
-
 }

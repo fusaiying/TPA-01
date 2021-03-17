@@ -7,6 +7,7 @@ import com.paic.ehis.base.domain.vo.AddressInfo;
 import com.paic.ehis.base.domain.vo.Sn_base_addressDO;
 import com.paic.ehis.system.api.domain.*;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -199,4 +200,8 @@ public interface BaseProviderInfoMapper
     public int updateSupplier(ProductSupplierInfo productSupplierInfo);
 
     public int updateSupplier1(ProductSupplierInfoVo productSupplierInfoVo);
+
+    public void updateIssue(@RequestBody List<String> serviceCodes);
+
+    public void updateIssue1(@RequestBody List<String> serviceCodes);
 }

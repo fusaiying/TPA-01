@@ -229,7 +229,7 @@
         </el-col>
           <el-col :span="8">
             <el-form-item label="来电号码：" prop="callPerson.mobilePhone">
-              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" clearable size="mini" placeholder="请输入"/>
+              <el-input v-model="ruleForm.callPerson.mobilePhone" class="item-width" maxlength="15" clearable size="mini" placeholder="请输入"/>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -304,26 +304,62 @@
         </el-row>
 
         <el-row>
-          <el-col :span="5">
-            <el-form-item label="家庭电话："  style="white-space: nowrap" prop="phone">
-              国家区号+<el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="ruleForm.contactsPerson.homePhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="ruleForm.contactsPerson.homePhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="ruleForm.contactsPerson.homePhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-            </el-form-item>
-          </el-col>
-
+          <el-col :span="3">
+              <el-form-item label="家庭电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[0]">
+                国家区号:+
+                <el-input v-model="ruleForm.contactsPerson.homePhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[1]">
+                区号
+                <el-input v-model="ruleForm.contactsPerson.homePhone1[1]" class="item-width" size="mini" style="width: 145px"
+                          maxlength="50"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[2]">
+                号码
+                <el-input v-model="ruleForm.contactsPerson.homePhone1[2]" class="item-width" size="mini" style="width: 145px"
+                          maxlength="50"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.homePhone1[3]">
+                分机号
+                <el-input v-model="ruleForm.contactsPerson.homePhone1[3]" class="item-width" size="mini" style="width: 145px"
+                          maxlength="4"/>
+              </el-form-item>
+            </el-col>
         </el-row>
         <el-row>
-          <el-col :span="16">
-            <el-form-item label="办公电话："  style="white-space: nowrap" prop="phone">
-              国家区号+<el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width"  style="width: 75px"/>
-              区号<el-input v-model="ruleForm.contactsPerson.workPhone1[1]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              号码<el-input v-model="ruleForm.contactsPerson.workPhone1[2]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
-              分机号<el-input v-model="ruleForm.contactsPerson.workPhone1[3]" class="item-width"  size="mini" style="width: 145px" maxlength="50"/>
+          <el-col :span="3">
+            <el-form-item label="办公电话：" style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[0]">
+              国家区号:+
+              <el-input v-model="ruleForm.contactsPerson.workPhone1[0]" class="item-width" style="width: 60px" maxlength="50"/>
             </el-form-item>
           </el-col>
-
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[1]">
+              区号
+              <el-input v-model="ruleForm.contactsPerson.workPhone1[1]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[2]">
+              号码
+              <el-input v-model="ruleForm.contactsPerson.workPhone1[2]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="50"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item style="white-space: nowrap;" :inline="true" prop="contactsPerson.workPhone1[3]">
+              分机号
+              <el-input v-model="ruleForm.contactsPerson.workPhone1[3]" class="item-width" size="mini" style="width: 145px"
+                        maxlength="4"/>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-form-item label="联系地址：" maxlength="2000" style="white-space: nowrap" prop="contactsPerson.address">
@@ -460,7 +496,7 @@
             address:"",
             workPhone1:[],
             homePhone1:[],
-
+            language: "01",
 
           },
           complainantPerson:{
@@ -521,14 +557,14 @@
             {required: true, validator: checkComplaintTime, trigger: "blur"}
           ],
           'callPerson.mobilePhone': [
-            {required: true, message: "来电号码不能为空", trigger: "blur"},
-            {required: true,
-              message: "目前只支持中国大陆的手机号码",
-              pattern: /^1[34578]\d{9}$/,//可以写正则表达式呦呦呦,
-              trigger: "blur"},
+            //{required: true, message: "来电号码不能为空", trigger: "blur"},
+            {required: false,
+              message: "目前只支持录入数字",
+              pattern: /^\d+$/,//可以写正则表达式呦呦呦,
+              trigger: ['blur','change']},
           ],
           organCode:  [
-        {required: true, message: "出单机构不能为空", trigger: "blur"}
+            {required: true, message: "出单机构不能为空", trigger: "blur"}
           ],
           content: [
             {required: true, message: "业务内容不能为空", trigger: "blur"},
@@ -537,12 +573,75 @@
           'contactsPerson.address': [
             { min: 0, max: 2000, message: '长度不超过2000个字符' }
           ],
+          'contactsPerson.homePhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.homePhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[0]': [
+            {required: false,
+              message: "国家区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[1]': [
+            {required: false,
+              message: "区号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[2]': [
+            {required: false,
+              message: "号码只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
+          'contactsPerson.workPhone1[3]': [
+            {required: false,
+              message: "分机号只能录入数字",
+              pattern: /^\d*$/,
+              trigger: ['change','blur']
+            }
+          ],
           'E-MAIL': [
             {required: true, message: "Email不能为空", trigger: "blur"},
             {required: true,
               message: "请输入正确的格式",
               pattern:  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,//可以写正则表达式呦呦呦,
               trigger: "blur"},
+          ],
+          email: [
+            {required: false,
+              message: "邮箱格式不正确",
+              pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              trigger: ["blur","change"]
+            }
           ],
         },
         readonly: true,

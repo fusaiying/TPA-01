@@ -136,8 +136,9 @@ export default {
 
           transferSubmit(insert).then(res => {
             if (res != null && res.code === 200) {
+              this.$emit('checkButton');
               this.$message.success("转办成功")
-              this.checkButton();
+              this.changeDialogVisable();
               if (res.rows.length <= 0) {
                 return this.$message.warning(
                   "失败！"

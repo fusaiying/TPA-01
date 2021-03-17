@@ -35,6 +35,7 @@
         <result property="organCode" column="organ_code"/>
         <result property="complaintPersonId" column="complaint_person_id"/>
         <result property="callCenterId" column="call_center_id"/>
+        <result property="oldmodifyBy" column="oldmodify_by"/>
     </resultMap>
 <!--    信息需求公共池数据查询-->
     <select id="selectDemandAcceptVoList" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO"
@@ -168,7 +169,7 @@
         b.create_time create_time2,
         b.update_by update_by2,
         b.update_time update_time2,
-        whi.remark,
+        case when whi.handle_prop1='02'  then whi.remark  else null end  as  remark,
         CASE
         WHEN (
         a.STATUS = '02'
@@ -179,7 +180,8 @@
         CASE
         WHEN hm.nnn IS NOT NULL THEN
         1 ELSE 0
-        END AS isRedWord
+        END AS isRedWord,
+        (case when (select 1 from transfer_by where work_order_no = b.work_order_no limit 1)=1 then b.create_by else '' end) oldmodify_by
         FROM
         accept_detail_info b
         LEFT JOIN work_order_accept a ON b.work_order_no = a.work_order_no
@@ -520,11 +522,13 @@
 
     <select id="selectAssist" parameterType="com.paic.ehis.cs.domain.dto.WorkOrderQueryDTO" resultMap="DemandAcceptVoResult">
         select distinct t1.work_order_no,t2.channel_code,t2.item_code,concat( t1.business_type, '-', t2.item_code ) AS
-        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type
+        business_service,t1.policy_no,t1.policy_item_no,t1.risk_code,t1.insured_name,t1.holder_name,t1.accept_time,t1.accept_by,t1.update_time,t1.modify_by,t1.vip_flag,t2.priority_level,t2.organ_code,t3.status,t1.business_type,t1.modify_time,
+        case when whi.handle_prop1='02'  then whi.remark  else null end  as  remark
         from collaborative_from t3
         left join accept_detail_info t2 on t3.work_order_no=t2.work_order_no
         left join work_order_accept t1 on t1.work_order_no=t3.work_order_no
         left join person_info t0 on t1.insured_no=t0.person_id
+        left join work_handle_info whi on  whi.work_order_no = t2.work_order_no
         where t1.business_type in ('01','03')
         and t1.status='02'
         and t3.status='01'

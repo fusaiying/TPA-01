@@ -104,6 +104,9 @@
       <div>
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>工单信息列表（{{ totalCount }}）</span>
+          <span style="float: right;">
+            <el-button type="primary" size="mini" @click="listExport"  >清单导出</el-button>
+          </span>
         </div>
         <el-table
           v-loading="loading"
@@ -284,7 +287,7 @@ export default {
     this.getDicts("worksheetBussinessStatus").then(response => {
       this.worksheetBussinessStatusOptions = response.data;
     });
-    this.getDicts("cs_sex").then(response => {
+    this.getDicts("sys_user_sex").then(response => {
       this.cs_sexOptions = response.data;
     });
     this.getDicts("card_type").then(response => {
@@ -299,6 +302,7 @@ export default {
 
   },
   methods: {
+
     init(){
       this.loading = true
       //调用查询接口
@@ -365,7 +369,7 @@ export default {
 
 
     getBussinessStatusOptions(row){
-      return this.selectDictLabel(this.worksheetBussinessStatusOptions, row.bussinessStatus)
+      return row.detailInfo;
     },
     getCsSex(row){
       return this.selectDictLabel(this.cs_sexOptions, row.sex)
@@ -387,6 +391,7 @@ export default {
         this.getData()
 
     },
+
     getData() {
       this.params.supplierCode= this.formSearch.supplierCode
       this.params.productCode= this.formSearch.productCode
@@ -521,6 +526,45 @@ export default {
           productCode: row.productCode
 
         }
+      })
+    },
+    //工单导出
+    listExport(){
+      this.params.pageSize=10
+      this.params.pageNum=1
+      this.params.supplierCode= this.formSearch.supplierCode
+      this.params.productCode= this.formSearch.productCode
+      this.params.name= this.formSearch.name
+      this.params.idCode= this.formSearch.idCode
+      this.params.phone= this.formSearch.phone
+      this.params.policyNo= this.formSearch.policyNo
+      this.params.policyCertificateNo= this.formSearch.policyCertificateNo
+      this.params.bussinessStatus= this.formSearch.bussinessStatus
+      this.params.orderCode= this.formSearch.orderCode
+      this.params.applyStartTime= ''
+      this.params.applyEndTime= ''
+      if(this.formSearch.daterangeArr!=null && this.formSearch.daterangeArr.length==2){
+        this.params.applyStartTime= this.formSearch.daterangeArr[0]
+        this.params.applyEndTime= this.formSearch.daterangeArr[1]
+      }
+      getList(this.params).then(res => {
+        if (res.rows.length>0){
+          this.download('order/info/export', {
+            ...query}, `order_${new Date().getTime()}.xlsx`).catch(res=>{
+            this.$message({
+              message: res,
+              type: 'error',
+              center: true,
+              showClose: true
+            })
+          })
+        }else {
+          return this.$message.warning(
+            "没有查询到能导出的数据！"
+          )
+        }
+      }).catch(res => {
+
       })
     }
   }

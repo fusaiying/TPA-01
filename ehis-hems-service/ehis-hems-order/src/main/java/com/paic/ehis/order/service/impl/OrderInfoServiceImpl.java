@@ -188,7 +188,7 @@ public class OrderInfoServiceImpl implements IOrderInfoService
                     }
                     List<SecondDeptInfoVo> secondDeptInfoList = new ArrayList();
                     for(SecondDeptInfoVo SecondDeptInfo :secondDeptInfos ){
-                        if(SecondDeptInfo.getFirstDeptName().equals(firstDeptInfo.getFirstDeptName())){
+                        if(SecondDeptInfo.getFirstDeptName().equals(firstDeptInfo.getDeptName())){
                             secondDeptInfoList.add(SecondDeptInfo);
                         }
                         firstDeptInfo.setSecondDeptInfos(secondDeptInfoList);

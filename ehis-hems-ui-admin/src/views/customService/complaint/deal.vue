@@ -728,6 +728,7 @@ export default {
 
       },
 
+
       readonly: true,
       dialogFormVisible: false,
       updateBy: undefined,
@@ -1161,22 +1162,27 @@ export default {
 
     //提交
     submit() {
-      let insert = this.sendForm
-      insert.sign = "02"
-      insert.workOrderNo = this.$route.query.workOrderNo
-      complaintDealSubmit(insert).then(res => {
-        if (res != null && res.code === 200) {
-          this.$message.success("保存成功")
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
+      this.$refs.sendForm.validate((valid) => {
+        if (valid) {
+          let insert = this.sendForm
+          insert.sign = "02"
+          insert.workOrderNo = this.$route.query.workOrderNo
+          complaintDealSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+        }else {
+          return false
         }
-      }).catch(res => {
-
       })
-
     },
     //暂存
     temporary() {

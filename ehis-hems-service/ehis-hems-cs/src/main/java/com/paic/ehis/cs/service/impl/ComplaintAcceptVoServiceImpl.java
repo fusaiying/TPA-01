@@ -674,6 +674,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
             for (FieldMap fieldMap : KVMap) {

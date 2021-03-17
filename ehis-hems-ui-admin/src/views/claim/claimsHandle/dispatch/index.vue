@@ -385,15 +385,13 @@
 <script>
   import {
     selectCaseDispatchList
-    , getDspatchUser
     , dispatchUpdate
     , getIssuingcompanyList
-    , roleInfo
     , selectWorkflow
     , selectWorkflowByRptNo
   } from '@/api/dispatch/api'
   import moment from "moment";
-  import {getUserInfo, getOrganList, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
+  import {getUserInfo, getUsersByOrganCode} from '@/api/claim/standingBookSearch'
   export default {
     components: {
     },
@@ -534,8 +532,7 @@
       },
       getLogRole() {
         getUserInfo().then(response => {
-          if (response.code == '200' && response.data) {
-            //console.log(response)
+          if (response.code == '200' && response.data && response.data.roles) {
             this.logRoleName = response.data.roles[0].roleName;
           }
         }).catch(error => {
@@ -583,7 +580,9 @@
                   obj.dictValue = response.rows[i].userName;
                   this.operatorSelect.push(obj);
                   //根据用户名称映射用户角色
-                  this.userIdName[userName] = response.rows[i].roles[0].roleName;
+                  if(response.rows[i].roles) {
+                    this.userIdName[userName] = response.rows[i].roles[0].roleName;
+                  }
                 }
               }
             })

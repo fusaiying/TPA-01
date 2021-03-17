@@ -250,7 +250,6 @@ public class SysUserController extends BaseController
     @PostMapping("/getUsersByOrganCode")
     public TableDataInfo getUsersByOrganCode(@RequestBody SysUserByOrganCodeDTO sysUserByOrganCodeDTO){
         startPage(sysUserByOrganCodeDTO);
-        List<SysUser> list = userService.getUsersByOrganCode(sysUserByOrganCodeDTO);
-        return getDataTable(list);
+        return getDataTable(userService.getUsersByOrganCode(sysUserByOrganCodeDTO));
     }
 }

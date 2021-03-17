@@ -204,7 +204,82 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              and oi.status = 'Y' and oi.bussiness_status in ('01','03','04')
         </where>
     </select>
-    
+
+    <select id="selectOrderInfoListNew3Months" parameterType="OrderInfo" resultMap="OrderInfoResult">
+        SELECT
+        order_code,
+        policy_no,
+        pi.product_chname,
+        oi.supplier_name chname,
+        oi.service_name,
+        oi.supplier_code,
+        policy_certificate_no,
+        oi.product_code,
+        oi.bussiness_status,
+        CASE
+        WHEN oi.bussiness_status = '04' THEN
+        concat_ws(
+        '+',
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        ),
+        oi.reason
+        )
+        ELSE
+        (
+        SELECT
+        dict_label
+        FROM
+        sys_dict_data
+        WHERE
+        dict_value = oi.bussiness_status
+        AND dict_type = 'worksheetBussinessStatus'
+        )
+        END detailInfo,
+        oi.service_code,
+        oi.apply_time,
+        ci.name,
+        ci.sex,
+        ci.phone,
+        ci.id_code,
+        ci.id_type,
+        oi.customer_no
+        FROM
+        order_info oi
+        LEFT JOIN customer_info ci ON ci.customer_no = oi.customer_no
+        <!--LEFT JOIN product_supplier_info psi ON psi.service_code = oi.service_code
+        AND psi.priority = (SELECT min(priority) FROM product_supplier_info)
+        AND psi.product_code = oi.product_code AND psi.status ='Y'-->
+        LEFT JOIN product_info pi ON pi.product_code = oi.product_code
+        AND pi.STATUS = 'Y'
+        <!--LEFT JOIN base_supplier_info bsi ON bsi.serial_no = oi.supplier_code and bsi.status ='Y'
+        LEFT JOIN base_service_info bso ON bso.service_code =oi.service_code -->
+        <where>
+            <if test="orderCode != null  and orderCode != ''"> and oi.order_code = #{orderCode}</if>
+            <if test="policyNo != null  and policyNo != ''"> and oi.policy_no = #{policyNo}</if>
+            <if test="policyCertificateNo != null  and policyCertificateNo != ''"> and oi.policy_certificate_no = #{policyCertificateNo}</if>
+            <if test="productCode != null  and productCode != ''"> and oi.product_code = #{productCode}</if>
+            <if test="supplierCode != null  and supplierCode != ''"> and oi.supplier_code = #{supplierCode}</if>
+            <if test="name != null  and name != ''"> and ci.name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and ci.sex = #{sex}</if>
+            <if test="idType != null  and idType != ''"> and ci.id_type = #{idType}</if>
+            <if test="idCode != null  and idCode != ''"> and ci.id_code = #{idCode}</if>
+            <if test="phone != null  and phone != ''"> and ci.phone = #{phone}</if>
+            <if test="bussinessStatus != null  and bussinessStatus != ''"> and oi.bussiness_status = #{bussinessStatus}</if>
+            <if test="applyStartTime != null  and applyEndTime != null">  and (oi.apply_time between  #{applyStartTime} and  #{applyEndTime})</if>
+            and oi.status = 'Y' and oi.bussiness_status in ('01','03','04')
+            <if test="beforeDate != null   and nowDate != null ">
+            and (oi.apply_time between  #{beforeDate} and  #{nowDate})
+            </if>
+        </where>
+    </select>
+
     <select id="selectOrderInfoById" parameterType="String" resultMap="OrderInfoResult">
         SELECT
             order_code,

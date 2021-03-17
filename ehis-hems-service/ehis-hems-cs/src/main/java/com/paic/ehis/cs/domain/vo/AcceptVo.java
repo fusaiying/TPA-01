@@ -56,11 +56,11 @@ public class AcceptVo extends BaseEntity
     private PersonInfo holderPerson=new PersonInfo();
     /** 受理时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "受理时间")
+    @Excel(name = "受理时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date acceptTime;
     /** 处理时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "修改时间")
+    @Excel(name = "修改时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
     /** 受理人信息 */
     @Excel(name = "受理人")
@@ -74,13 +74,13 @@ public class AcceptVo extends BaseEntity
     private UserInfo modifyUser=new UserInfo();
 
     /** 是否VIP */
-    @Excel(name = "VIP标识")
+    @Excel(name = "VIP标识",readConverterExp = "01=是,02=否")
     private String vipFlag;
     /** 优先级 */
     @Excel(name = "优先级",readConverterExp = "01=加急,02=普通")
     private String priorityLevel;
     /** 出单机构 */
-    @Excel(name = "出单机构")
+    @Excel(name = "出单机构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
     private String organCode;
 
     /** 流程状态 */

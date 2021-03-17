@@ -5,7 +5,7 @@
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span>案件信息列表</span>
           <span style="float: right;">
-            <el-button type="primary" size="mini"   @click="listExport">清单导出</el-button>
+            <el-button type="primary" size="mini" @click="listExport">清单导出</el-button>
           </span>
         </div>
         <el-table
@@ -50,8 +50,10 @@
               <span>{{scope.row.debtAmount}} {{scope.row.currency}}</span>
             </template>
           </el-table-column>
-          <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate" label="汇率" show-overflow-tooltip/>
-          <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign" label="外币支付金额" width="110" show-overflow-tooltip>
+          <el-table-column key="1" v-if="querys.status === 'publicForeign'" align="center" prop="exchangeRate"
+                           label="汇率" show-overflow-tooltip/>
+          <el-table-column key="2" v-if="querys.status === 'publicForeign'" align="center" prop="payAmountForeign"
+                           label="外币支付金额" width="110" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{scope.row.payAmountForeign}} {{scope.row.currency}}</span>
             </template>
@@ -77,41 +79,82 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-form ref="caseForm" style="padding-bottom: 30px;margin-top:60px;" label-width="150px"
+        <el-form ref="baseForm" :rules="baseFormRule" :model="baseForm" style="padding-bottom: 30px;margin-top:60px;"
+                 label-width="200px"
                  label-position="right" size="mini">
           <el-row>
             <el-col :span="8">
-              <span class="info_span_col to_right">支付币种：</span><span class="info_span">{{ baseForm.currency }}</span>
+              <el-form-item label="支付币种：" prop="currency">
+                <span class="size">{{ baseForm.currency }}</span>
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">支付总金额：</span><span class="info_span">{{ baseForm.payAmount }} {{baseForm.currency}}</span>
+              <el-form-item label="支付总金额：" prop="payAmount">
+                <span class="size">{{ baseForm.payAmount }} {{baseForm.currency}}</span>
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">理赔总金额：</span><span class="info_span">{{ baseForm.calAmount }} {{baseForm.currency}}</span>
+              <el-form-item label="理赔总金额：" prop="calAmount">
+                <span class="size">{{ baseForm.calAmount }} {{baseForm.currency}}</span>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col v-if="querys.status==='public'" :span="8">
-              <span class="info_span_col to_right">开户行：</span><span class="info_span">{{ baseForm.bank }}</span>
+              <el-form-item label="开户行：" prop="bank">
+                <span class="size">{{ baseForm.bank }}</span>
+              </el-form-item>
             </el-col>
             <el-col v-if="querys.status==='publicForeign'" :span="8">
-              <span class="info_span_col to_right">外币支付总金额：</span><span class="info_span">{{ baseForm.foreignPayAmount }} {{baseForm.currency}}</span>
+              <el-form-item label="外币支付总金额：" prop="foreignPayAmount">
+                <span class="size">{{ baseForm.foreignPayAmount }} {{baseForm.currency}}</span>
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">账户名：</span><span class="info_span">{{ baseForm.bankName }}</span>
+              <el-form-item label="账户名：" prop="bankName">
+                <span class="size">{{ baseForm.bankName }}</span>
+              </el-form-item>
             </el-col>
             <el-col :span="8">
-              <span class="info_span_col to_right">账户号：</span><span class="info_span">{{ baseForm.bankNumber }}</span>
+              <el-form-item label="账户号：" prop="bankNumber">
+                <span class="size">{{ baseForm.bankNumber }}</span>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col v-if="querys.status==='publicForeign'" :span="8">
-              <span class="info_span_col to_right">开户行：</span><span class="info_span">{{ baseForm.bank }}</span>
+              <el-form-item label="开户行：" prop="bank">
+                <span class="size">{{ baseForm.bank }}</span>
+              </el-form-item>
+            </el-col>
+            <el-col v-if="querys.status==='publicForeign'" :span="8">
+              <el-form-item label="交易编码：" prop="transactionCode">
+                <span class="size">422000</span>
+              </el-form-item>
+            </el-col>
+            <el-col v-if="querys.status==='publicForeign'" :span="8">
+              <el-form-item label="国际收支填报人：" prop="internationalCompletedBy">
+                <el-input v-model="baseForm.internationalCompletedBy" class="item-width" maxlength="20" clearable
+                          size="mini" placeholder="请输入"/>
+              </el-form-item>
             </el-col>
           </el-row>
-
+          <el-row>
+            <el-col v-if="querys.status==='publicForeign'" :span="8">
+              <el-form-item label="国际收支填报人电话：" prop="internationalCompletedPhone">
+                <el-input v-model="baseForm.internationalCompletedPhone" class="item-width" maxlength="12" clearable
+                          size="mini" placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+            <el-col v-if="querys.status==='publicForeign'" :span="8">
+              <el-form-item label="交易附言：" prop="transactionPostscript">
+                <el-input v-model="baseForm.transactionPostscript" class="item-width" maxlength="1000" clearable
+                          size="mini" placeholder="请输入"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <div style="float: right;margin-top: 50px;margin-bottom: 10px">
-            <el-button v-if="querys.status==='publicForeign'" type="primary" size="mini" @click="">保存</el-button>
+            <!--<el-button v-if="querys.status==='publicForeign'" type="primary" size="mini" @click="aab">保存</el-button>-->
             <el-button type="primary" :disabled="isConfirmPayShow" size="mini" @click="confirmPay">确认支付</el-button>
             <el-button type="primary" :disabled="isBorrowShow" size="mini" @click="caseBorrow">案件借款
             </el-button>
@@ -124,15 +167,22 @@
 
 <script>
   import {startPay, confirmPayment, rollback, borrowingCase, startForeignPay} from '@/api/claim/corporatePay'
+  import {getUserInfo} from '@/api/claim/standingBookSearch'
 
   let dictss = [{dictType: 'case_pay_status'}, {dictType: 'claim_status'},]
   export default {
     data() {
       return {
-        isConfirmPayShow:false,
-        isBorrowShow:false,
+        isConfirmPayShow: false,
+        isBorrowShow: false,
+        organCode: '',
         querys: {},
         tableData: [],
+        baseFormRule: {
+          internationalCompletedBy: {required: true, message: '国际收支填报人不能为空', trigger: 'blur'},
+          internationalCompletedPhone: {required: true, message: '国际收支填报人电话不能为空', trigger: 'blur'},
+          transactionPostscript: {required: true, message: '交易附言不能为空', trigger: 'blur'},
+        },
         baseForm: {
           batchNo: undefined,
           currency: undefined,
@@ -143,6 +193,10 @@
           bankNumber: undefined,//账户号
           claimFlag: undefined,//是否仅结算理赔责任
           foreignPayAmount: undefined,//外币支付总金额
+          transactionCode: '',//交易编码
+          internationalCompletedBy: '',// 国际收支填报人
+          internationalCompletedPhone: '',// 国际收支填报人电话
+          transactionPostscript: '',// 交易附言
         },
         isListExport: false,
         dictList: [],
@@ -167,6 +221,16 @@
             if (res != null && res.code === 200) {
               this.tableData = res.data.caseInfoList
               this.baseForm = res.data.payment
+              if (res.data.payFlag == 'false') {
+                this.isConfirmPayShow = true
+              } else {
+                this.isConfirmPayShow = false
+              }
+              if (res.data.borrowFlag == 'false') {
+                this.isBorrowShow = true
+              } else {
+                this.isBorrowShow = false
+              }
             }
           })
         } else if (this.querys.status === 'publicForeign') {//对公外币支付
@@ -174,10 +238,26 @@
             if (res != null && res.code === 200) {
               this.tableData = res.data.caseInfoList
               this.baseForm = res.data.payment
+              this.baseForm.transactionCode = '422000'
+              if (res.data.payFlag == 'false') {
+                this.isConfirmPayShow = true
+              } else {
+                this.isConfirmPayShow = false
+              }
+              if (res.data.borrowFlag == 'false') {
+                this.isBorrowShow = true
+              } else {
+                this.isBorrowShow = false
+              }
             }
           })
         }
       }
+      getUserInfo().then(res => {
+        if (res != null && res.code === 200) {
+          this.organCode = res.data.organCode
+        }
+      })
     },
     methods: {
       search() {
@@ -186,6 +266,16 @@
             if (res != null && res.code === 200) {
               this.tableData = res.data.caseInfoList
               this.baseForm = res.data.payment
+              if (res.data.payFlag == 'false') {
+                this.isConfirmPayShow = true
+              } else {
+                this.isConfirmPayShow = false
+              }
+              if (res.data.borrowFlag == 'false') {
+                this.isBorrowShow = true
+              } else {
+                this.isBorrowShow = false
+              }
             }
           })
         } else if (this.querys.status === 'publicForeign') {//对公外币支付
@@ -193,82 +283,97 @@
             if (res != null && res.code === 200) {
               this.tableData = res.data.caseInfoList
               this.baseForm = res.data.payment
+              this.baseForm.transactionCode = '422000'
+              if (res.data.payFlag == 'false') {
+                this.isConfirmPayShow = true
+              } else {
+                this.isConfirmPayShow = false
+              }
+              if (res.data.borrowFlag == 'false') {
+                this.isBorrowShow = true
+              } else {
+                this.isBorrowShow = false
+              }
             }
           })
         }
       },
       confirmPay() {//确认支付
-        if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount != this.querys.batchTotal) {
-          this.$confirm(`支付总金额与批次总金额不符，请核实!`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let data={
-              batchNo: this.querys.batchNo,
-              caseInfoList:this.tableData,
-              payment:this.baseForm
-            }
-            confirmPayment(data).then(res => {
-              if (res != null && res.data === 1) {
-                this.$message({
-                  message: '提交成功！',
-                  type: 'success',
-                  center: true,
-                  showClose: true
+        this.$refs.baseForm.validate((valid) => {
+          if (valid) {
+            if (this.baseForm.claimFlag === '02' && this.baseForm.payAmount != this.querys.batchTotal) {
+              this.$confirm(`支付总金额与批次总金额不符，请核实!`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                let data = {
+                  batchNo: this.querys.batchNo,
+                  organCode: this.organCode,
+                  caseInfoList: this.tableData,
+                  payment: this.baseForm
+                }
+                confirmPayment(data).then(res => {
+                  if (res != null && res.data === 1) {
+                    this.$message({
+                      message: '提交成功！',
+                      type: 'success',
+                      center: true,
+                      showClose: true
+                    })
+                    this.$store.dispatch("tagsView/delView", this.$route);
+                    this.$router.go(-1)
+                  } else if (res != null && res.data === 2) {
+                    return this.$message.warning(
+                      "此批次存在回退案件，请结案后进行支付！"
+                    )
+                  } else if (res != null && res.data === 3) {
+                    return this.$message.warning(
+                      "批次下案件币种不统一，请核实！"
+                    )
+                  }
                 })
-                this.$store.dispatch("tagsView/delView", this.$route);
-                this.$router.go(-1)
-              } else if (res != null && res.data === 2) {
-                return this.$message.warning(
-                  "此批次存在回退案件，请结案后进行支付！"
-                )
-              } else if (res != null && res.data === 3) {
-                return this.$message.warning(
-                  "批次下案件币种不统一，请核实！"
-                )
-              }
-            })
-            this.search()
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消！'
-            })
-          })
-        } else {
-          let data={
-            batchNo: this.querys.batchNo,
-            caseInfoList:this.tableData,
-            payment:this.baseForm
-          }
-          confirmPayment(data).then(res => {
-            if (res != null && res.data === 1) {
-              this.$message({
-                message: '提交成功！',
-                type: 'success',
-                center: true,
-                showClose: true
+                this.search()
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消！'
+                })
               })
-              this.$store.dispatch("tagsView/delView", this.$route);
-              this.$router.go(-1)
-            } else if (res != null && res.data === 2) {
-              return this.$message.warning(
-                "此批次存在回退案件，请结案后进行支付！"
-              )
-            } else if (res != null && res.data === 3) {
-              return this.$message.warning(
-                "批次下案件币种不统一，请核实！"
-              )
+            } else {
+              let data = {
+                batchNo: this.querys.batchNo,
+                caseInfoList: this.tableData,
+                payment: this.baseForm
+              }
+              confirmPayment(data).then(res => {
+                if (res != null && res.data === 1) {
+                  this.$message({
+                    message: '提交成功！',
+                    type: 'success',
+                    center: true,
+                    showClose: true
+                  })
+                  this.$store.dispatch("tagsView/delView", this.$route);
+                  this.$router.go(-1)
+                } else if (res != null && res.data === 2) {
+                  return this.$message.warning(
+                    "此批次存在回退案件，请结案后进行支付！"
+                  )
+                } else if (res != null && res.data === 3) {
+                  return this.$message.warning(
+                    "批次下案件币种不统一，请核实！"
+                  )
+                }
+              })
+              this.search()
             }
-          })
-          this.search()
-        }
-
-
+          }
+        })
       },
       backspace(row) {//回退
-        if (row.caseStatus === '97' || row.caseStatus === '98' || row.payStatus === '02' || row.payStatus === '03') {
+        if (row.caseStatus === '97' || row.caseStatus === '98' || row.payStatus === '02' || row.payStatus === '03' ||
+          row.caseStatus === '05' || row.caseStatus === '06' || row.caseStatus === '07') {
           return this.$message.warning(
             " 当前案件不允许进行回退，请核实！"
           )
@@ -296,7 +401,9 @@
       caseBorrow() {//案件借款
         if (this.baseForm.claimFlag === '01') {//非全陪
           //按钮置灰
-          this.isBorrowShow=true
+          return this.$message.warning(
+            "批次医院为非全赔医院，不可借款！"
+          )
         } else {
           if (this.baseForm.payAmount != this.querys.batchTotal) {
             this.$confirm(`支付总金额与批次总金额不符，请核实!`, '提示', {
@@ -306,8 +413,9 @@
             }).then(() => {
               let data = {
                 batchNo: this.querys.batchNo,
-                caseInfoList:this.tableData,
-                payment:this.baseForm
+                organCode: this.organCode,
+                caseInfoList: this.tableData,
+                payment: this.baseForm
               }
               borrowingCase(data).then(res => {
                 if (res != null && res.data === 1) {
@@ -337,8 +445,8 @@
           } else {
             let data = {
               batchNo: this.querys.batchNo,
-              caseInfoList:this.tableData,
-              payment:this.baseForm
+              caseInfoList: this.tableData,
+              payment: this.baseForm
             }
             borrowingCase(data).then(res => {
               if (res != null && res.data === 1) {
@@ -365,11 +473,12 @@
 
       },
       listExport() {
+        let data={
+          batchNo:this.querys.batchNo
+        }
         if (this.querys.status === 'public') {
           this.isListExport = true
-          this.download('finance/pay/export', {
-
-          }, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
+          this.download('finance/pay/export', data, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -379,9 +488,7 @@
           })
         } else if (this.querys.status === 'publicForeign') {
           this.isListExport = true
-          this.download('finance/pay/exportForeign', {
-
-          }, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
+          this.download('finance/pay/exportForeign',data, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -391,17 +498,17 @@
           })
         }
       },
-      changeCellStyle (rows, column, rowIndex, columnIndex) {
-        if(this.querys.status==='public'){
+      changeCellStyle(rows, column, rowIndex, columnIndex) {
+        if (this.querys.status === 'public') {
           /*if (){//当系统日期-该批次的交单日期>=网络医院维护的该医院的付款期限，该笔批次在对公支付查询页面飘红显示
             return 'color: red'  // 修改的样式
           } else{
             return ''
           }*/
-        }else if(this.querys.status==='publicForeign'){
-          if (rows.row.flag==='N'){
+        } else if (this.querys.status === 'publicForeign') {
+          if (rows.row.flag === 'N') {
             return 'color: red'  // 修改的样式
-          } else{
+          } else {
             return ''
           }
         }
@@ -433,7 +540,7 @@
   }
 
   ::v-deep.to_right {
-    width: 130px;
+    width: 170px;
     text-align: right;
   }
 </style>

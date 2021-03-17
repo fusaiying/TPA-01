@@ -76,10 +76,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createdTimeStart != null   and createdTimeEnd != null ">
             and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
         <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
+        <if test="handleState == null  or handleState == ''"> and a.handle_state != '01' </if>
         <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
         <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
         <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
-        <if test="operation != null and operation !=''"> and ((a.created_by = #{operation} and a.status != '01') or  a.um_code = #{operation})</if>
+        <if test="operation != null and operation !=''"> and a.created_by = #{operation}</if>
+     union
+        SELECT
+        a.work_order_no,
+        a.collaborative_id,
+        a.created_by,
+        a.created_time,
+        a.updated_time,
+        a.handle_state,
+        a.status,
+        b.item_code,
+        b.organ_code,
+        c.business_type
+        FROM
+        collaborative_from a,
+        accept_detail_info b,
+        work_order_accept c
+        WHERE
+        a.work_order_no = b.work_order_no
+        AND a.work_order_no = c.work_order_no
+        <if test="workOrderNo != null  and workOrderNo != ''"> and a.work_order_no = #{workOrderNo}</if>
+        <if test="collaborativeId != null  and collaborativeId != ''"> and a.collaborative_id = #{collaborativeId}</if>
+        <if test="createdTimeStart != null   and createdTimeEnd != null ">
+            and(a.create_time between  #{createdTimeStart} and  #{createdTimeEnd})</if>
+        <if test="handleState != null  and handleState != ''"> and a.handle_state = #{handleState}</if>
+        <if test="itemCode != null  and itemCode != ''"> and b.item_code = #{itemCode}</if>
+        <if test="policyNo != null  and policyNo != ''"> and c.policy_no = #{policyNo}</if>
+        <if test="policyItemNo != null  and policyItemNo != ''"> and c.policy_item_no = #{policyItemNo}</if>
+        <if test="operation != null and operation !=''"> and a.um_code = #{operation}</if>
     </select>
     
     <select id="selectCollaborativeFromById" parameterType="Long" resultMap="CollaborativeFromResult">

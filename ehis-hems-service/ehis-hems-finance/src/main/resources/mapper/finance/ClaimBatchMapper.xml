@@ -43,136 +43,229 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectPayBatchInit" parameterType="string" resultType="java.util.HashMap">
 select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName from (
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND c.rpt_no = b.rpt_no
-            AND a.organ_code = #{deptId}
-            AND b.pay_status != '03'
-            AND a.currency = 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-        GROUP BY
-            a.batch_no
-        ) d
-      left join sys_organ_info soi on d.organCode=soi.organ_code and soi.status='Y'
+select distinct
+    a.batch_no "batchNo",
+    a.hospital_code "hospitalCode",
+    a.caseload "caseload",
+    a.batch_total "batchTotal",
+ (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+    a.organ_code "organCode",
+    a.submit_date "submitDate",
+    c.cal_amount "calAmount"
+FROM
+    (
+SELECT
+ DISTINCT
+	cb.*
+FROM
+	claimmain.claim_batch cb
+	LEFT JOIN claimmain.claim_case cc ON cb.batch_no = cc.batch_no
+	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
+WHERE
+	cb.claim_flag = '01'
+	AND cc.case_status IN ( '97','98','99' )
+	and t1.batch_no is null
+union
+SELECT
+ DISTINCT
+	cb.*
+FROM
+	claimmain.claim_batch cb
+	LEFT JOIN claimmain.claim_case cc ON cb.batch_no = cc.batch_no
+	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
+WHERE
+	cb.claim_flag = '02'
+	AND cc.case_status IN ( '07', '08', '97', '98', '99' )
+	and t1.batch_no is null
+    ) a,
+    claimmain.claim_case b,
+    (
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) c
+    ,(
+ select aa.batch_no from
+ (
+  select cc.batch_no ,ccc.bill_currency
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) aa
+ group by aa.batch_no having count(*)=1
+ ) d
+where 1=1
+ and d.batch_no=a.batch_no
+    AND b.batch_no = a.batch_no
+    AND c.batch_no = d.batch_no
+    AND a.organ_code = #{organCode}
+    AND b.pay_status != '03'
+    AND c.bill_currency = 'CNY'
+		 ) h
+      left join sys_organ_info soi on h.organCode=soi.organ_code and soi.status='Y'
         ORDER BY
-            d.submitDate desc
+            h.submitDate desc
     </select>
 
     <select id="selectPayBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
-        select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName  from (
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND b.rpt_no = c.rpt_no
-            AND a.currency = 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
-            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y')  </if>
-            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
-        GROUP BY
-            a.batch_no ) d
-        left join sys_organ_info soi on d.organCode=soi.organ_code and soi.status='Y'
-        ORDER BY
-        d.submitDate desc
+       select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName from (
+select distinct
+    a.batch_no "batchNo",
+    a.hospital_code "hospitalCode",
+    a.caseload "caseload",
+    a.batch_total "batchTotal",
+ (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+    a.organ_code "organCode",
+    a.submit_date "submitDate",
+    c.cal_amount "calAmount"
+FROM
+     claimmain.claim_batch a,
+    claimmain.claim_case b,
+    (
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) c
+    ,(
+ select aa.batch_no from
+ (
+  select cc.batch_no ,ccc.bill_currency
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) aa
+ group by aa.batch_no having count(*)=1
+ ) d
+where 1=1
+ and d.batch_no=a.batch_no
+    AND b.batch_no = a.batch_no
+    AND c.batch_no = d.batch_no
+    AND a.organ_code = #{organCode}
+    AND c.bill_currency = 'CNY'
+		 ) h
+      left join sys_organ_info soi on h.organCode=soi.organ_code and soi.status='Y'
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batchNo = #{batchNo}</if>
+            <if test="hospitalCode != null  and hospitalCode != ''"> and hospitalCode = #{hospitalCode}</if>
+             <if test="complainStatus != null  and complainStatus != ''"> and isAppeal = #{complainStatus}</if>
+            <if test="startDate != null and endDate != null "> and submitDate between #{startDate} and #{endDate}</if>
+             <if test="organCode != null  and organCode != ''"> and organCode = #{organCode}</if>
+        </where>
     </select>
 
     <select id="selectPayForeignBatchInit" parameterType="string" resultType="java.util.HashMap">
         select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName  from (
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND c.rpt_no = b.rpt_no
-            AND a.organ_code = #{deptId}
-            AND b.pay_status != '03'
-            AND a.currency != 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-        GROUP BY
-            a.batch_no ) d
-        left join sys_organ_info soi on d.organCode=soi.organ_code and soi.status='Y'
+select distinct
+    a.batch_no "batchNo",
+    a.hospital_code "hospitalCode",
+    a.caseload "caseload",
+    a.batch_total "batchTotal",
+ (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+    a.organ_code "organCode",
+    a.submit_date "submitDate",
+    c.cal_amount "calAmount"
+FROM
+    (
+SELECT
+ DISTINCT
+	cb.*
+FROM
+	claimmain.claim_batch cb
+	LEFT JOIN claimmain.claim_case cc ON cb.batch_no = cc.batch_no
+	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
+WHERE
+	cb.claim_flag = '01'
+	AND cc.case_status IN ( '97','98','99' )
+	and t1.batch_no is null
+union
+SELECT
+ DISTINCT
+	cb.*
+FROM
+	claimmain.claim_batch cb
+	LEFT JOIN claimmain.claim_case cc ON cb.batch_no = cc.batch_no
+	LEFT JOIN (select rpt_no,batch_no from claim_case t where t.case_status not in ('07', '08', '97', '98', '99' )) t1 on cc.batch_no = t1.batch_no
+WHERE
+	cb.claim_flag = '02'
+	AND cc.case_status IN ( '07', '08', '97', '98', '99' )
+	and t1.batch_no is null
+    ) a,
+    claimmain.claim_case b,
+    (
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) c
+    ,(
+ select aa.batch_no from
+ (
+  select cc.batch_no ,ccc.bill_currency
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) aa
+ group by aa.batch_no having count(*)=1
+ ) d
+where 1=1
+ and d.batch_no=a.batch_no
+    AND b.batch_no = a.batch_no
+    AND c.batch_no = d.batch_no
+    AND a.organ_code = #{organCode}
+    AND b.pay_status != '03'
+    AND c.bill_currency != 'CNY'
+		 ) h
+      left join sys_organ_info soi on h.organCode=soi.organ_code and soi.status='Y'
         ORDER BY
-        d.submitDate desc
+            h.submitDate desc
     </select>
 
     <select id="selectPayForeignBatchList" parameterType="com.paic.ehis.finance.domain.dto.ClaimCasePayDTO" resultType="java.util.HashMap">
-        select batchNo ,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,calAmount,soi.organ_name organName  from (
-        SELECT
-            a.batch_no "batchNo",
-            a.hospital_code "hospitalCode",
-            a.caseload "caseload",
-            a.batch_total "batchTotal",
-            (select case when count(1) > 0 then '01' else '02' end from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
-            a.organ_code "organCode",
-            a.submit_date "submitDate",
-            SUM( c.cal_amount ) "calAmount"
-        FROM
-            claim_batch a,
-            claim_case b,
-            claim_case_cal c
-        WHERE
-            b.batch_no = a.batch_no
-            AND b.rpt_no = c.rpt_no
-            AND a.currency != 'CNY'
-            AND a.STATUS = 'Y'
-            AND b.STATUS = 'Y'
-            AND c.STATUS = 'Y'
-            <if test="batchNo != null  and batchNo != ''"> and a.batch_no = #{batchNo}</if>
-            <if test="complainStatus == '01'"> and (select count(1) > 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
-            <if test="complainStatus == '02'"> and (select count(1) = 0 from claim_case bb where bb.batch_no = b.batch_no and bb.is_appeal = '02' and bb.status = 'Y') </if>
-            <if test="startDate != null"> and a.submit_date BETWEEN #{startDate} AND #{endDate} </if>
-            <if test="organCode != null  and organCode != ''"> and a.organ_code = #{organCode}</if>
-            <if test="hospitalCode != null and hospitalCode != ''">and a.hospital_code = #{hospitalCode}</if>
-        GROUP BY
-            a.batch_no
-        ) d
-        left join sys_organ_info soi on d.organCode=soi.organ_code and soi.status='Y'
-        ORDER BY
-        d.submitDate desc
+        select batchNo ,batchNo batch_no,hospitalCode,caseload,batchTotal,isAppeal,organCode,submitDate,submitDate submit_date,calAmount,soi.organ_name organName from (
+select distinct
+    a.batch_no "batchNo",
+    a.hospital_code "hospitalCode",
+    a.caseload "caseload",
+    a.batch_total "batchTotal",
+ (select case when count(1) > 0 then '01' else '02' end from claimmain.claim_case bb where bb.batch_no = a.batch_no and bb.is_appeal = '02' and bb.status = 'Y') "isAppeal",
+    a.organ_code "organCode",
+    a.submit_date "submitDate",
+    c.cal_amount "calAmount"
+FROM
+     claimmain.claim_batch a,
+    claimmain.claim_case b,
+    (
+  select cc.batch_no ,ccc.bill_currency,sum(ccc.cal_amount) cal_amount
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) c
+    ,(
+ select aa.batch_no from
+ (
+  select cc.batch_no ,ccc.bill_currency
+  from claimmain.claim_case_cal ccc left join claimmain.claim_case cc on ccc.rpt_no=cc.rpt_no
+  where ccc.STATUS = 'Y' AND cc.STATUS = 'Y'
+  group by ccc.bill_currency,cc.batch_no
+ ) aa
+ group by aa.batch_no having count(*)=1
+ ) d
+where 1=1
+ and d.batch_no=a.batch_no
+    AND b.batch_no = a.batch_no
+    AND c.batch_no = d.batch_no
+    AND a.organ_code = #{organCode}
+    AND c.bill_currency != 'CNY'
+		 ) h
+      left join sys_organ_info soi on h.organCode=soi.organ_code and soi.status='Y'
+        <where>
+            <if test="batchNo != null  and batchNo != ''"> and batchNo = #{batchNo}</if>
+            <if test="hospitalCode != null  and hospitalCode != ''"> and hospitalCode = #{hospitalCode}</if>
+            <if test="startDate != null and endDate != null "> and submitDate between #{startDate} and #{endDate}</if>
+            <if test="complainStatus != null  and complainStatus != ''"> and isAppeal = #{complainStatus}</if>
+        </where>
     </select>
 
 </mapper>

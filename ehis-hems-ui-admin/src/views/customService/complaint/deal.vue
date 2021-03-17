@@ -196,6 +196,13 @@
         <el-divider/>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="工单号：">
+              <el-input v-model="workPoolData.workOrderNo" class="item-width" clearable size="mini" disabled />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="受理渠道：" prop="phone">
               <el-select v-model="workPoolData.channelCode" class="item-width" placeholder="">
                 <el-option v-for="item in cs_channel" :key="item.dictValue" :label="item.dictLabel"
@@ -420,7 +427,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="撤诉状态：" prop="complaintStatus">
-              <el-select v-model="sendForm.complaintStatus" class="item-width">
+              <el-select v-model="sendForm.complaintStatus" class="item-width" >
                 <el-option v-for="item in cs_drop_status" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -428,17 +435,18 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="投诉是否成立：" prop="complaintTenable">
-              <el-select v-model="sendForm.complaintTenable" class="item-width" @change="changeReasonShow">
+              <el-select v-model="sendForm.complaintTenable" class="item-width">
                 <el-option v-for="item in cs_whether_flag" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉不成立理由：" prop="faseReason" v-if="this.showFlag">
+            <el-form-item label="投诉不成立理由：" prop="faseReason" >
               <el-input v-model="sendForm.faseReason"
                         class="item-width"
                         clearable size="mini"
+                        :disabled="sendForm.complaintTenable!='02'"
                          />
             </el-form-item>
           </el-col>
@@ -672,7 +680,7 @@ export default {
   data() {
 
     return {
-      showFlag: false,
+
       personInfo:{
         policyNo:undefined,
         policyHolder: {},
@@ -719,20 +727,44 @@ export default {
         sign: ""
 
       },
+
+
+      readonly: true,
+      dialogFormVisible: false,
+      updateBy: undefined,
+      //新增的数据传输
+      sendForm: {
+        sign: "",//控制暂存还是提交用
+        level1: "",
+        level2: "",
+        pieceworkFlag: "",
+        complaintStatus: "",
+        complaintTenable: "",
+        faseReason: "",
+        repeatedComplaint: "",
+        reason1: "",
+        reason2: "",
+        reason3: "",
+        complaintLink: "",
+        complaintQuestion: "",
+        outsideState: "",
+        riskType: "",
+        marketChannel: "",
+        complaintCategory: "",
+        rootDepartment: "",
+        actionCause: "",
+        treatmentProgress: "",
+        treatmentResult: "",
+        customerFeedback: "",
+        rootImprovement: "",
+        actPromptly: "",
+        improvementMeasures: "",
+        businessProcess: "",
+        workOrderNo: '',
+
+      },
       // 表单校验
       rules: {
-        Service: [
-          {required: true, message: "服务项目不能为空", trigger: "blur"}
-        ],
-        priority: [
-          {required: true, message: "优先级不能为空", trigger: "blur"}
-        ],
-        lxperson: [
-          {required: true, message: "联系人不能为空", trigger: "blur"}
-        ],
-        orderNum: [
-          {required: true, message: "联系人移动电话不能为空", trigger: "blur"}
-        ],
         level1: [
           {required: true, message: "一级投诉分类不能为空", trigger: "blur"}
         ],
@@ -793,40 +825,9 @@ export default {
         actPromptly: [
           {required: true, message: "投诉损失不能为空", trigger: "blur"}
         ],
-
-      },
-      readonly: true,
-      dialogFormVisible: false,
-      updateBy: undefined,
-      //新增的数据传输
-      sendForm: {
-        sign: "",//控制暂存还是提交用
-        level1: "",
-        level2: "",
-        pieceworkFlag: "",
-        complaintStatus: "",
-        complaintTenable: "",
-        faseReason: "",
-        repeatedComplaint: "",
-        reason1: "",
-        reason2: "",
-        reason3: "",
-        complaintLink: "",
-        complaintQuestion: "",
-        outsideState: "",
-        riskType: "",
-        marketChannel: "",
-        complaintCategory: "",
-        rootDepartment: "",
-        actionCause: "",
-        treatmentProgress: "",
-        treatmentResult: "",
-        customerFeedback: "",
-        rootImprovement: "",
-        actPromptly: "",
-        improvementMeasures: "",
-        businessProcess: "",
-        workOrderNo: '',
+        complaintTenable: [
+          {required: true, message: "投诉不成立理由不能为空", trigger: "blur"}
+        ],
 
       },
       caseNumber: false,//查询条件（报案号）是否显示
@@ -981,14 +982,14 @@ export default {
   },
   methods: {
     //
-    changeReasonShow(){
+   /* changeReasonShow(){
       if(this.sendForm.complaintTenable==='02'){
         this.showFlag=true
       }
       else{
         this.showFlag=false
       }
-    },
+    },*/
     reasonTwo(flag) {
       const query = {}
       query.parentCode = this.sendForm.reason1;
@@ -1104,6 +1105,9 @@ export default {
     upload() {
       this.$refs.upload.open();
     },
+    resetForm() {
+      this.$refs.sendForm.resetFields()
+    },
     //下载
     download() {
     },
@@ -1158,22 +1162,27 @@ export default {
 
     //提交
     submit() {
-      let insert = this.sendForm
-      insert.sign = "02"
-      insert.workOrderNo = this.$route.query.workOrderNo
-      complaintDealSubmit(insert).then(res => {
-        if (res != null && res.code === 200) {
-          this.$message.success("保存成功")
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
+      this.$refs.sendForm.validate((valid) => {
+        if (valid) {
+          let insert = this.sendForm
+          insert.sign = "02"
+          insert.workOrderNo = this.$route.query.workOrderNo
+          complaintDealSubmit(insert).then(res => {
+            if (res != null && res.code === 200) {
+              this.$message.success("保存成功")
+              if (res.rows.length <= 0) {
+                return this.$message.warning(
+                  "失败！"
+                )
+              }
+            }
+          }).catch(res => {
+
+          })
+        }else {
+          return false
         }
-      }).catch(res => {
-
       })
-
     },
     //暂存
     temporary() {

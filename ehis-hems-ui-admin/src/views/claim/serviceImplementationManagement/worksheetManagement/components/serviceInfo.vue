@@ -59,7 +59,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="服务项目：" prop="serviceType">
-            <el-select v-model="baseForm.serviceCode" class="item-width"  filterable @change="changeSupplier">
+            <el-select v-model="baseForm.serviceCode" class="item-width"  filterable @change="changeSupplier" disabled>
               <el-option v-for="item in serviceInfo" :label="item.serviceName" :value="item.serviceCode"
                          :key="item.serviceCode"/>
             </el-select>
@@ -70,7 +70,7 @@
         <el-col :span="8">
           <el-form-item label="服务预约时间：" prop="applyTime">
             <!--            <el-input v-model="baseForm.applyTime" class="item-width" clearable size="mini"/>-->
-            <el-date-picker v-model="baseForm.applyTime" type="date" placeholder="选择服务预约时间" size="mini"   style="width: 200px"/>
+            <el-date-picker v-model="baseForm.applyTime" type="date" placeholder="选择服务预约时间" size="mini"  disabled  style="width: 200px"/>
           </el-form-item>
         </el-col>
 
@@ -114,6 +114,7 @@
                          :props="{ checkStrictly: true }"
                          :options="regions"
                          class="item-width"
+                         disabled
 
             />
           </el-form-item>
@@ -127,7 +128,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="期望科室：" >
+          <el-form-item label="期望科室：" prop="expectationDept">
             <!--            <el-input v-model="baseForm.firstDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
             <el-select v-model="baseForm.firstDept" class="item-width" clearable  size="mini" style="width: 100px" @change="changeSecondDept">
               <el-option v-for="item in firstDeptList" :label="item.deptName" :value="item.deptName"
@@ -143,39 +144,39 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="主任：" prop="director">
-            <el-input v-model="baseForm.director" class="item-width" clearable size="mini"  placeholder="请输入"
+            <el-input v-model="baseForm.director" class="item-width" clearable size="mini"  placeholder="请输入" maxlength="20"
             />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="重疾名称：" prop="seriousDisease">
-            <el-input v-model="baseForm.seriousDisease" class="item-width" clearable size="mini"  placeholder="请输入"
+            <el-input v-model="baseForm.seriousDisease" class="item-width" clearable size="mini"  placeholder="请输入" disabled
             />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="手术名称：" prop="operation">
-            <el-input v-model="baseForm.operation" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-input v-model="baseForm.operation" class="item-width" clearable size="mini" placeholder="请输入"  disabled
             />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="出院诊断：" prop="finalDiagnosis">
-            <el-input v-model="baseForm.finalDiagnosis" class="item-width" clearable size="mini" placeholder="请输入"
+            <el-input v-model="baseForm.finalDiagnosis" class="item-width" clearable size="mini" placeholder="请输入"  disabled
             />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-form-item label="症状描述：" prop="symptomDescription">
-          <el-input type="textarea" v-model="baseForm.symptomDescription" clearable size="mini" placeholder="请输入"
+          <el-input type="textarea" v-model="baseForm.symptomDescription" clearable size="mini" placeholder="请输入" disabled
 
           />
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item label="备注：" prop="remark">
-          <el-input type="textarea" v-model="baseForm.remark" clearable size="mini" placeholder="请输入"
+          <el-input type="textarea" v-model="baseForm.remark" clearable size="mini" placeholder="请输入" disabled
           />
         </el-form-item>
       </el-row>
@@ -219,6 +220,14 @@ export default {
 
 
   data() {
+    const checkExpectationDept = (rules, value, callback) => {
+      if(this.baseForm.firstDept){
+        callback()
+      }else{
+        callback(new Error("期望科室不能为空"))
+      }
+
+    }
 
     return {
       regions: [],
@@ -235,6 +244,14 @@ export default {
         serviceType: [{required: true, message: '服务类型不能为空', trigger: 'change'}],
         applyTime: [{required: true, message: '服务预约时间不能为空', trigger: 'blur'}],
         symptomDescription: [{required: true, message: '症状描述不能为空', trigger: 'blur'}],
+
+
+        inpatientAreaList: [{required: true, message: '住院地区不能为空', trigger: 'change'}],
+        expectedAreaList: [{required: true, message: '期望地区不能为空', trigger: 'change'}],
+        visitingAreaList: [{required: true, message: '就诊地区不能为空', trigger: 'change'}],
+        expectationHospital: [{required: true, message: '期望医院不能为空', trigger: 'change'}],
+        expectationDept: [{required: true,validator: checkExpectationDept, trigger: 'change'}],
+        director: [{required: true, message: '主任不能为空', trigger: 'blur'}]
       },
       hospList: [],
       firstDeptList:[],
@@ -525,16 +542,12 @@ export default {
     changeSupplier(){
       //查询能提供服务的供应商
       let queryData = {
-        serviceCode: this.serviceCode,
-        productCode: this.baseForm.serviceType
+        serviceCode: this.baseForm.serviceCode,
+        productCode: this.serviceCode
       }
 
 
-      /*this.productTypeOptions=[]
-      this.contactNameList=[]
-      this.baseForm.supplierCode=''
-      this.baseForm.phone=''
-      this.baseForm.contactName=''*/
+
       //供应商有该服务不重新赋值
 
       getAllProSuppInfo(queryData).then(res => {
@@ -543,15 +556,16 @@ export default {
           let fltList=this.supplierList.filter(item=>{
             return item.supplierCode==this.baseForm.supplierCode
           })
+          this.productTypeOptions=[]
+          this.productTypeOptions=this.supplierList
           if(fltList.length<1){
-            this.productTypeOptions=[]
+            //this.productTypeOptions=[]
 
             this.contactNameList=[]
             this.baseForm.supplierCode=''
             this.baseForm.phone=''
             this.baseForm.contactName=''
-            this.productTypeOptions=this.supplierList
-
+            //this.productTypeOptions=this.supplierList
             if(this.supplierList!=null && this.supplierList.length>0){
               this.baseForm.supplierCode=this.supplierList[0].supplierCode
               //初始化供应商的 联系人 联系电话下拉列表

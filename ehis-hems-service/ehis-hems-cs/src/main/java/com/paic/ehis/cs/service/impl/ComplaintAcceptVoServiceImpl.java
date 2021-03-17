@@ -657,7 +657,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
 
         //将所有状态置为N
         //WorkHandleInfo workHandleInfo = new WorkHandleInfo();
-        if (complaintDealVo.getRootImprovement().isEmpty()) {
+        if (complaintDealVo.getRootImprovement()==null) {
             //将所有数据置为n
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             workHandleInfoMapper.updateStatus(workHandleInfo);
@@ -674,6 +674,7 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
             workHandleInfo.setCreatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedBy(SecurityUtils.getUsername());
             workHandleInfo.setUpdatedTime(DateUtils.parseDate(DateUtils.getTime()));
+            workHandleInfo.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));
             workHandleInfo.setWorkOrderNo(complaintDealVo.getWorkOrderNo());
             List<FieldMap> KVMap = fieldMapMapper.selectKVMap("work_handle_info", "ComplaintDealVo");
             for (FieldMap fieldMap : KVMap) {

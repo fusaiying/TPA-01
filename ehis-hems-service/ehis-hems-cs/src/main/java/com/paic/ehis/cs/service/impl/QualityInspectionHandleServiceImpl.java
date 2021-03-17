@@ -157,4 +157,9 @@ public class QualityInspectionHandleServiceImpl implements IQualityInspectionHan
         iQualityInspectionItemService.insertItem(handleDTO.getQualityVo());
         return 1;
     }
+
+    @Override
+    public String selectHandleStatus(QualityVo qualityVo) {
+        return qualityInspectionHandleMapper.selectHandleStatus(qualityVo);
+    }
 }

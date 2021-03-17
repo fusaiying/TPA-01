@@ -82,6 +82,7 @@
           highlight-current-row
           tooltip-effect="dark"
           @sort-change="onSortChange"
+          :cell-style="changeCellStyle"
           style=" width: 100%;">
           <el-table-column sortable="custom" :sort-orders="['ascending','descending',null]" align="center"
                            prop="batchNo" label="批次号" show-overflow-tooltip/>
@@ -102,11 +103,7 @@
               <span>{{selectDictLabel( sys_yes_noOptions, scope.row.isAppeal)}}</span>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="organCode" label="交单机构" width="100" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{getDeptName( deptListOptions, scope.row.organCode)}}</span>
-            </template>
-          </el-table-column>
+          <el-table-column align="center" prop="organName" label="交单机构" width="100" show-overflow-tooltip/>
           <el-table-column align="center" prop="submitDate" label="交单日期" show-overflow-tooltip/>
           <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
@@ -136,6 +133,7 @@
     data() {
       return {
         isListExport: false,
+        organCode: '',
         queryParams: {
           pageNum: 1,
           pageSize: 10,
@@ -149,9 +147,9 @@
           hospitalCode: '',
           complainStatus: '',
           caseDate: [],
-          startDate: undefined,
-          endDate: undefined,
-          organCode: undefined,
+          startDate: '',
+          endDate: '',
+          organCode: '',
           orderByColumn: '',
           isAsc: '',
         },
@@ -171,6 +169,7 @@
       }).dictDate
       getUserInfo().then(res => {
         if (res != null && res.code === 200) {
+          this.organCode=res.data.organCode
           let item = {
             organCode: '',
             pageNum: 1,
@@ -185,12 +184,17 @@
             }
           }).catch(res => {
           })
-        }
-      })
-      initForeignList(this.queryParams).then(res => {
-        if (res != null && res.code === 200) {
-          this.tableData = res.rows
-          this.totalCount = res.total
+          let query={
+            pageNum: 1,
+            pageSize: 10,
+            organCode:res.data.organCode
+          }
+          initForeignList(query).then(res => {
+            if (res != null && res.code === 200) {
+              this.tableData = res.rows
+              this.totalCount = res.total
+            }
+          })
         }
       })
       let data = {
@@ -205,8 +209,13 @@
       resetForm() {
         this.$refs.searchForm.resetFields()
         this.searchForm.caseDate=[]
+        this.searchForm.startDate=''
+        this.searchForm.endDate=''
       },
       search(status) {
+        if (this.searchForm.organCode=='' || this.searchForm.organCode==null){
+          this.searchForm.organCode=this.organCode
+        }
         if (this.searchForm.caseDate != null && this.searchForm.caseDate.length > 0) {
           this.searchForm.startDate = this.searchForm.caseDate[0]
           this.searchForm.endDate = this.searchForm.caseDate[1]
@@ -257,16 +266,6 @@
           })
         }
       },
-      getDeptName(datas, value) {
-        var actions = [];
-        Object.keys(datas).some((key) => {
-          if (datas[key].organCode == value) {
-            actions.push(datas[key].organName);
-            return true;
-          }
-        })
-        return actions.join('');
-      },
       onSortChange({prop, order}) {
         this.searchForm.orderByColumn = prop
         if (order === 'ascending') {
@@ -279,6 +278,14 @@
         }
         this.search()
       },
+      changeCellStyle(rows, column, rowIndex, columnIndex) {
+        if (rows.row.flag === 'N') {
+          return 'color: red'  // 修改的样式
+        } else {
+          return ''
+        }
+
+      }
     }
   }
 </script>

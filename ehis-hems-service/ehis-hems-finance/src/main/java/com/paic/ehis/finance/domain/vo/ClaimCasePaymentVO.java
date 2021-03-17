@@ -34,4 +34,16 @@ public class ClaimCasePaymentVO implements Serializable {
 
     /** 外币支付总金额 */
     private BigDecimal foreignPayAmount;
+
+    /** 交易编码 */
+    private String transactionCode;
+
+    /** 国际收支填报人 */
+    private String internationalCompletedBy;
+
+    /** 国际收支填报人电话 */
+    private String internationalCompletedPhone;
+
+    /** 交易附言 */
+    private String transactionPostscript;
 }

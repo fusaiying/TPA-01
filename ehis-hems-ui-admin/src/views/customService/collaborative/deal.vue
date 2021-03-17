@@ -399,7 +399,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="业务处理情况" prop="businessProcess">
-              <el-radio-group v-model="sendForm.businessProcess">
+              <el-radio-group v-model="ruleForm.businessProcess" @change="isBusinessProcess(ruleForm.businessProcess)">
                 <el-radio :label="1">成功</el-radio>
                 <el-radio :label="2">响应</el-radio>
               </el-radio-group>
@@ -412,16 +412,19 @@
               type="textarea"
               :rows="2"
               placeholder="请输入内容"
-              v-model="sendForm.remark">
+              v-model="ruleForm.remark">
             </el-input>
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="客户反馈：" prop="customerFeedback">
-            <el-radio-group v-model="sendForm.customerFeedback">
-              <el-radio :label="1">满意</el-radio>
-              <el-radio :label="2">接受</el-radio>
-              <el-radio :label="3">不接受</el-radio>
+            <el-radio-group v-model="ruleForm.customerFeedback">
+              <el-radio
+                v-for="dict in cs_feedback_type"
+                :key="dict.dictValue"
+                :label="dict.dictValue"
+              >{{ dict.dictLabel }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -429,8 +432,8 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="结案类型：" prop="closeType">
-              <el-select v-model="sendForm.closeType" class="item-width" placeholder="请选择" controls-position="right"
-                         :min="0">
+              <el-select v-model="ruleForm.closeType" class="item-width" placeholder="请选择" controls-position="right"
+                         :min="0" @change="isCloseType(ruleForm.closeType)">
                 <el-option v-for="item in cs_end_case" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
               </el-select>
@@ -474,9 +477,9 @@
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer"></co-organizer>
         <el-button type="primary" size="mini" @click="temporary">暂存</el-button>
-        <el-button type="primary" size="mini" @click="transfer" v-if="this.colStatus!='03'">转办</el-button>
-        <el-button type="primary" size="mini" @click="urge" disabled>催办</el-button>
-        <el-button type="primary" size="mini" @click="coCancel" v-if="this.colStatus!='03'">撤销</el-button>
+        <el-button type="primary" size="mini" @click="transfer" >协办</el-button>
+        <el-button type="primary" size="mini" @click="urge" >催办</el-button>
+        <el-button type="primary" size="mini" @click="coCancel" >撤销</el-button>
       </div>
     </el-card>
   </div>
@@ -484,14 +487,24 @@
 
 <script>
 import moment from 'moment'
-import {dealAdd, FlowLogSearch, dealADD} from '@/api/customService/demand'
+import { FlowLogSearch, dealADD} from '@/api/customService/demand'
 import {coCancel, demandAccept, selectAssist} from '@/api/customService/collaborative'
 
 import transfer from "../common/modul/transfer";
 import upLoad from "../common/modul/upload";
 import coOrganizer from "../common/modul/coOrganizer";
 import modifyDetails from "../common/modul/modifyDetails";
-
+import {complainSearchServer} from '@/api/customService/complaint';
+/*
+import {
+  demandListAndPublicPool,
+  demandListAndPersonalPool,
+  dealAdd,
+  FlowLogSearch,
+  HMSSearch,
+  dealADD
+} from '@/api/customService/demand'
+*/
 let dictss = [
   {dictType: 'cs_channel'},
   {dictType: 'cs_priority'},
@@ -555,6 +568,15 @@ export default {
         sign: "",//控制暂存还是提交用
         workOrderNo: '',
         businessProcess: '',
+      },
+      ruleForm: {
+        workOrderNo: "",
+        businessProcess: "01",
+        remark: "",
+        customerFeedback: "01",
+        closeType: "01",
+        costsIncurred: "",
+        sign: ""
       },
       // 查询参数
       queryParams: {
@@ -622,6 +644,7 @@ export default {
     this.searchHandle();
     this.searchFlowLog();
     this.coSearch();
+    this.searchHandleServer();
   },
   async mounted() {
     // 字典数据统一获取
@@ -689,6 +712,39 @@ export default {
       }).catch(res => {
 
       })
+    },//反显暂存信息
+    searchHandleServer() {
+      let insert = this.queryParams
+      insert.businessType = "01"
+      complainSearchServer(insert).then(res => {
+        if (res != null && res.code === 200) {
+          console.log("信息需求页面server反显数据",res.data)
+          this.sendForm = res.data;
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
+    },
+    temporary() {
+      let insert = this.ruleForm
+      insert.sign = "01"
+      insert.workOrderNo = this.$route.query.workOrderNo
+      dealADD(insert).then(res => {
+        if (res != null && res.code === 200) {
+          this.$message.success("暂存成功")
+          if (res.rows.length <= 0) {
+            return this.$message.warning(
+              "失败！"
+            )
+          }
+        }
+      }).catch(res => {
+
+      })
     },
 
     //上传附件
@@ -718,25 +774,7 @@ export default {
     resetForm() {
       this.$refs.sendForm.resetFields()
     },
-    //暂存
-    temporary() {
-      let insert = this.ruleForm
-      insert.sign = "01"
-      insert.workOrderNo = this.$route.query.workOrderNo
-      dealADD(insert).then(res => {
-        if (res != null && res.code === 200) {
-          this.$message.success("暂存成功")
-          if (res.rows.length <= 0) {
-            return this.$message.warning(
-              "失败！"
-            )
-          }
-        }
-      }).catch(res => {
 
-      })
-
-    },
 
     //查询轨迹表
     searchFlowLog() {

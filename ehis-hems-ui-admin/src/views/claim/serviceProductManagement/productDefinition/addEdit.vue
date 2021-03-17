@@ -149,7 +149,7 @@ export default {
           let servicesAvailableFlag=this.$refs['servicesAvailableForm'].validateForm()
           if(res){
 
-            if(servicesAvailableFlag=='01' || servicesAvailableFlag=='03') {
+            if(servicesAvailableFlag=='01') {
               let productInfoData = this.$refs.productInfoForm.baseForm
               let servicesAvailableData = this.$refs.servicesAvailableForm.serviceProForm
 
@@ -185,9 +185,9 @@ export default {
             else if (servicesAvailableFlag=='02'){
               this.$message.warning('至少添加一条服务项目信息')
             }
-            /*      else if (servicesAvailableFlag=='03'){
+                  else if (servicesAvailableFlag=='03'){
                     this.$message.warning('未选择供应商')
-                  }*/
+                  }
             else if (servicesAvailableFlag=='04'){
               this.$message.warning('服务项目必录项未必录')
             }

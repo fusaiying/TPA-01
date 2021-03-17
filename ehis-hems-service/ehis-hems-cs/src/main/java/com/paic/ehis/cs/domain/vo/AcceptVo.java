@@ -20,51 +20,69 @@ public class AcceptVo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 工单号 */
+    @Excel(name = "工单号")
     private String workOrderNo;
     private String workOrderNos;
     private String workOrderId;
     /** 业务类型 */
     private String businessType;
-    /** 服务项目 */
-    private String serviceItem;
+
     /** 拼接显示 业务-服务项目 */
     private String businessService;
+    /** 受理渠道 */
+    @Excel(name = "受理渠道",readConverterExp = "01=电话中心,02=在线客服,03=邮箱,04=网站,05=柜面,06=寿险,07=微信,08=监管,09=媒体,10=APP")
+    private String channelCode;
+    /** 服务项目 */
+    @Excel(name = "服务项目",readConverterExp = "01=增值服务类,02=理赔类,03=其他,04=VIP门诊预约,05=特殊门诊直接结算服务,06=门诊直接结算,07=住院直接结算,08=门诊中医治疗直接结算,B00006=投诉,B00034=根因改善")
+    private String serviceItem;
     /** 保单号 */
+    @Excel(name = "保单号")
     private String policyNo;
     /** 分单号 */
+    @Excel(name = "分单号")
     private String policyItemNo;
     /** 险种号 */
+    @Excel(name = "险种代码")
     private String riskCode;
     /** 被保险人信息 */
     private String insuredPersonId;
+    @Excel(name = "被保人")
     private String insuredName;
     private PersonInfo insuredPerson=new PersonInfo();
     /** 投保人信息 */
     private String holderPersonId;
+    @Excel(name = "投保人")
     private String holderName;
     private PersonInfo holderPerson=new PersonInfo();
+    /** 受理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "受理时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date acceptTime;
+    /** 处理时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "修改时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
     /** 受理人信息 */
+    @Excel(name = "受理人")
     private String acceptUserId;
     /** 目前用不上,受理人信息以登录名称显示 */
     private UserInfo acceptUser=new UserInfo();
     /** 处理人信息 */
+    @Excel(name = "处理人")
     private String modifyUserId;
     /** 目前用不上,处理人信息以登录名称显示 */
     private UserInfo modifyUser=new UserInfo();
-    /** 受理时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date acceptTime;
-    /** 处理时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
+
     /** 是否VIP */
+    @Excel(name = "VIP标识",readConverterExp = "01=是,02=否")
     private String vipFlag;
     /** 优先级 */
+    @Excel(name = "优先级",readConverterExp = "01=加急,02=普通")
     private String priorityLevel;
     /** 出单机构 */
+    @Excel(name = "出单机构",readConverterExp = "0000001=上海分公司本部,00000011=上海分公司")
     private String organCode;
-    /** 受理渠道 */
-    private String channelCode;
+
     /** 流程状态 */
     private String status;
     /** 工单个数 */

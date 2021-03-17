@@ -94,7 +94,7 @@ public class ClaimCaseForeignPayInfoVO implements Serializable {
     private BigDecimal borrowAmount;
 
     /** 支付状态 */
-    @Excel(name = "支付状态")
+    @Excel(name = "支付状态 01-可支付 02-支付中 03-已支付 04-转账失败 05-退票")
     private String payStatus;
 
     /** 理算-账单币种 */

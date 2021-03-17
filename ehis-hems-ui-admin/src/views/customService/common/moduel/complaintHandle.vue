@@ -175,7 +175,16 @@
 
 </template>
 <script>
-  let dictss = [{dictType: 'cs_classify_level1'}
+  import moment from "moment";
+
+  import { reasonThree, reasonTwo, classTwo, complainSearchServer} from '@/api/customService/complaint'
+  import {complainSearch, } from '@/api/customService/consultation'
+
+
+
+
+  let dictss =
+    [{dictType: 'cs_classify_level1'}
     ,{dictType: 'cs_classify_level2'}
     ,{dictType: 'cs_whether_flag'}
     ,{dictType: 'cs_drop_status'}
@@ -191,7 +200,6 @@
   ]
 
   export default {
-
     props: {
       isDisabled: {
         type:Boolean,
@@ -204,12 +212,29 @@
         }
       }
     },
+    filters: {
+      changeDate: function (value) {
+        if (value !== null) {
+          return moment(value).format('YYYY-MM-DD HH:mm:ss')
+        }
+      }
+    },
+
 
     data() {
       return {
+        dictList:[],
         queryParams:{
           workOrderNo:'',
           businessType:'03',
+        },
+        workPoolData: {
+          contactsPerson: {
+            homePhone1: []
+          },
+          callPerson: {},
+          complainantPerson: {},
+          insurer: {},
         },
         form:{
           level1: '',
@@ -234,44 +259,204 @@
           actionCause: '',
           treatmentResult: '',
         },
-
+        cs_classify_level1:[],
+        cs_classify_level2:[],
+        cs_whether_flag:[],
+        cs_drop_status:[],
+        cs_reason_level1:[],
+        cs_reason_level2:[],
+        cs_reason_level3:[],
+        cs_link_circ:[],
+        cs_question_circ:[],
+        cs_mediation_appraisal:[],
+        cs_risk_type:[],
+        serves:[],
+        cs_feedback_type:[],
       }
     },
     created() {
-
+      this.queryParams.workOrderNo = this.$route.query.workOrderNo;
+      this.queryParams.policyNo = this.$route.query.policyNo;
+      this.queryParams.policyItemNo = this.$route.query.policyItemNo;
+      this.queryParams.status = this.$route.query.status;
+      //window.aaa = this;
+      this.searchHandle();
+      this.searchHandle1();
+      this.searchHandleServer();
     },
     async mounted() {
       await this.getDictsList(dictss).then(response => {
         this.dictList = response.data
       })
-      this.serviceItemOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_demand_item'
+      this.cs_classify_level1 = this.dictList.find(item => {
+        return item.dictType === 'cs_classify_level1'
       }).dictDate
-      this.channelOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_channel'
+      this.cs_classify_level2 = this.dictList.find(item => {
+        return item.dictType === 'cs_classify_level2'
       }).dictDate
-      this.priorityOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_priority'
+      this.cs_whether_flag = this.dictList.find(item => {
+        return item.dictType === 'cs_whether_flag'
       }).dictDate
-      this.sexOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_sex'
+      this.cs_drop_status = this.dictList.find(item => {
+        return item.dictType === 'cs_drop_status'
       }).dictDate
-      this.communicationLanguageOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_communication_language'
+      this.cs_reason_level1 = this.dictList.find(item => {
+        return item.dictType === 'cs_reason_level1'
       }).dictDate
-      this.organizationOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_organization'
+      this.cs_reason_level2 = this.dictList.find(item => {
+        return item.dictType === 'cs_reason_level2'
       }).dictDate
-      this.relationOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_relation'
+      this.cs_reason_level3 = this.dictList.find(item => {
+        return item.dictType === 'cs_reason_level3'
       }).dictDate
-      this.businessTypeOptions = this.dictList.find(item => {
-        return item.dictType === 'cs_business_type'
+      this.cs_link_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_link_circ'
       }).dictDate
-      this.getInfo();
+      this.cs_question_circ = this.dictList.find(item => {
+        return item.dictType === 'cs_question_circ'
+      }).dictDate
+      this.cs_mediation_appraisal = this.dictList.find(item => {
+        return item.dictType === 'cs_mediation_appraisal'
+      }).dictDate
+      this.cs_risk_type = this.dictList.find(item => {
+        return item.dictType === 'cs_risk_type'
+      }).dictDate
+      this.serves = this.dictList.find(item => {
+        return item.dictType === 'serves'
+      }).dictDate
+      this.cs_feedback_type = this.dictList.find(item => {
+        return item.dictType === 'cs_feedback_type'
+      }).dictDate
+
     },
     methods: {
+      reasonTwo(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.reason1;
+        if(flag=='1'){
+          this.sendForm.reason2 = '';
+          this.sendForm.reason3 = '';
+        }
+        reasonTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2", res.data)
+            this.cs_reason_level2 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
 
+        })
+
+      },
+      reasonThree(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.reason2
+        if(flag=='1'){
+          this.sendForm.reason3 = '';
+        }
+        reasonThree(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("cs_reason_level2", res.data)
+            this.cs_reason_level3 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      classTwo(flag) {
+        const query = {}
+        query.parentCode = this.sendForm.level1;
+        if(flag=='1'){
+          this.sendForm.level2 = '';
+        }
+        classTwo(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("二级分类", res.data)
+            this.cs_classify_level2 = res.data
+            if (res.rows.length <= 0) {
+              return false
+            }
+          }
+        }).catch(res => {
+
+        })
+
+      },
+      searchHandle() {
+        let workOrderNo = this.queryParams.workOrderNo
+        complainSearch(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("投诉页面反显数据", res.data)
+            this.workPoolData = res.data
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+      //反显信息需求
+      searchHandleServer() {
+        let query=this.queryParams
+        complainSearchServer(query).then(res => {
+          if (res != null && res.code === 200) {
+            console.log("投诉页面server反显数据",res.data)
+            this.sendForm = res.data;
+            this.reasonTwo('0');
+            this.reasonThree('0');
+            this.classTwo('0');
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
+      //客户信息匹配
+      matching() {
+        this.$router.push({
+          path: '/customService/complaint/search',
+          query: {
+            workOrderNo: this.queryParams.workOrderNo,
+            policyNo: this.queryParams.policyNo,
+            policyItemNo: this.queryParams.policyItemNo,
+            status: this.queryParams.status
+          }
+        })
+      },
+      searchHandle1() {
+        let workOrderNo=this.queryParams.workOrderNo
+        complainSearch(workOrderNo).then(res => {
+          if (res != null && res.code === 200) {
+            const workPoolData=res.data
+            let editInfo = {
+              editReason: "",
+              editRemark: ""
+            }
+            workPoolData.editInfo=editInfo
+            this.workPoolData=workPoolData
+            if (res.rows.length <= 0) {
+              return this.$message.warning(
+                "未查询到数据！"
+              )
+            }
+          }
+        }).catch(res => {
+
+        })
+      },
     }
   }
 </script>

@@ -60,62 +60,63 @@ public class ComplaintAcceptVoServiceImpl implements IComplaintAcceptVoService {
         String sourceName="ComplaintAcceptVo";
         String targetTableName="accept_detail_info";
         List<FieldMap> KVMap=fieldMapMapper.selectKVMap(targetTableName,sourceName);
-
-        PersonInfo personInfo = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
-        if (personInfo != null) {
-            complaintAcceptVo.setCallPerson(personInfo);
-        } else {
-            complaintAcceptVo.setCallPerson(new PersonInfo());
-        }
-
-        PersonInfo personInfo2 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
-        if (personInfo2 != null) {
-            String linePhone=personInfo2.getLinePhone();
-            if (linePhone!=null){
-                String[] linePhone1=linePhone.split("\\-");
-                personInfo2.setLinePhone1(linePhone1);
-            }else{
-                personInfo2.setLinePhone1(new String[4]);
+        if(complaintAcceptVo!=null){
+            PersonInfo personInfo = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getCallPersonId());
+            if (personInfo != null) {
+                complaintAcceptVo.setCallPerson(personInfo);
+            } else {
+                complaintAcceptVo.setCallPerson(new PersonInfo());
             }
-            String homePhone=personInfo2.getHomePhone();
-            if (homePhone!=null){
-                String[] homePhone1=homePhone.split("\\-");
-                personInfo2.setHomePhone1(homePhone1);
-            }else {
-                personInfo2.setHomePhone1(new String[4]);
-            }
-            String workPhone=personInfo2.getWorkPhone();
-            if (workPhone!=null){
-                String[] workPhone1=workPhone.split("\\-");
-                personInfo2.setWorkPhone1(workPhone1);
-            }else{
-                personInfo2.setWorkPhone1(new String[4]);
-            }
-            complaintAcceptVo.setContactsPerson(personInfo2);
-        } else {
-            complaintAcceptVo.setContactsPerson(new PersonInfo());
-        }
 
-        PersonInfo personInfo3 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
-        if (personInfo3 != null) {
-            complaintAcceptVo.setComplainantPerson(personInfo3);
-        } else {
-            complaintAcceptVo.setComplainantPerson(new PersonInfo());
-        }
-        PersonInfo personInfo4 =  personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo());
-        if (personInfo4 != null) {
-            complaintAcceptVo.setInsurer(personInfo4);
-        } else {
-            complaintAcceptVo.setInsurer(new PersonInfo());
-        }
-        AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
-        for (FieldMap fieldMap:KVMap){
-            fieldMap.getTargetColumnName();
-            fieldMap.getSourceFiledName();
-            Map map=new HashMap<String,String>();
-            map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
-            VoUtils voUtils=new VoUtils<DemandAcceptVo>();
-            complaintAcceptVo= (ComplaintAcceptVo) voUtils.fromVoToVo(complaintAcceptVo,map,acceptDetailInfo);
+            PersonInfo personInfo2 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getContactsPersonId());
+            if (personInfo2 != null) {
+                String linePhone=personInfo2.getLinePhone();
+                if (linePhone!=null){
+                    String[] linePhone1=linePhone.split("\\-");
+                    personInfo2.setLinePhone1(linePhone1);
+                }else{
+                    personInfo2.setLinePhone1(new String[4]);
+                }
+                String homePhone=personInfo2.getHomePhone();
+                if (homePhone!=null){
+                    String[] homePhone1=homePhone.split("\\-");
+                    personInfo2.setHomePhone1(homePhone1);
+                }else {
+                    personInfo2.setHomePhone1(new String[4]);
+                }
+                String workPhone=personInfo2.getWorkPhone();
+                if (workPhone!=null){
+                    String[] workPhone1=workPhone.split("\\-");
+                    personInfo2.setWorkPhone1(workPhone1);
+                }else{
+                    personInfo2.setWorkPhone1(new String[4]);
+                }
+                complaintAcceptVo.setContactsPerson(personInfo2);
+            } else {
+                complaintAcceptVo.setContactsPerson(new PersonInfo());
+            }
+
+            PersonInfo personInfo3 = personInfoMapper.selectPersonInfoById(complaintAcceptVo.getComplaintPersonId());
+            if (personInfo3 != null) {
+                complaintAcceptVo.setComplainantPerson(personInfo3);
+            } else {
+                complaintAcceptVo.setComplainantPerson(new PersonInfo());
+            }
+            PersonInfo personInfo4 =  personInfoMapper.selectPersonInfoById(complaintAcceptVo.getInsuredNo());
+            if (personInfo4 != null) {
+                complaintAcceptVo.setInsurer(personInfo4);
+            } else {
+                complaintAcceptVo.setInsurer(new PersonInfo());
+            }
+            AcceptDetailInfo acceptDetailInfo=acceptDetailInfoMapper.selectAcceptDetailInfoById(complaintAcceptVo.getWorkOrderNo());
+            for (FieldMap fieldMap:KVMap){
+                fieldMap.getTargetColumnName();
+                fieldMap.getSourceFiledName();
+                Map map=new HashMap<String,String>();
+                map.put(fieldMap.getSourceFiledName(),fieldMap.getTargetColumnName());
+                VoUtils voUtils=new VoUtils<DemandAcceptVo>();
+                complaintAcceptVo= (ComplaintAcceptVo) voUtils.fromVoToVo(complaintAcceptVo,map,acceptDetailInfo);
+            }
         }
         return complaintAcceptVo;
     }

@@ -550,7 +550,7 @@ export default {
       getList(this.params).then(res => {
         if (res.rows.length>0){
           this.download('order/info/export', {
-            ...query}, `order_${new Date().getTime()}.xlsx`).catch(res=>{
+            ...this.params}, `order_${new Date().getTime()}.xlsx`).catch(res=>{
             this.$message({
               message: res,
               type: 'error',

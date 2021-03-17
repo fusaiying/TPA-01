@@ -136,7 +136,7 @@
       :close-on-click-modal="false"
       title=""
       width="70%">
-      <el-form ref="supplierInfo" :rules="supplierInfoRules" :model="supplierInfo" size="small" :disabled="showDisabled">
+      <el-form ref="supplierInfo" :rules="supplierInfoRules" :model="supplierInfo" size="small" :disabled="false">
         <div style="line-height: 50px; margin-bottom: 20px; border-bottom: 1px solid #e6ebf5;color: #303133;">
           <span style="font-size: 20px">供应商信息</span>
         </div>

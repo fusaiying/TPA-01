@@ -473,9 +473,12 @@
 
       },
       listExport() {
+        let data={
+          batchNo:this.querys.batchNo
+        }
         if (this.querys.status === 'public') {
           this.isListExport = true
-          this.download('finance/pay/export', {}, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
+          this.download('finance/pay/export', data, `caseMessage_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',
@@ -485,7 +488,7 @@
           })
         } else if (this.querys.status === 'publicForeign') {
           this.isListExport = true
-          this.download('finance/pay/exportForeign', {}, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
+          this.download('finance/pay/exportForeign',data, `caseMessageForeign_${new Date().getTime()}.xlsx`).catch(res => {
             this.$message({
               message: res,
               type: 'error',

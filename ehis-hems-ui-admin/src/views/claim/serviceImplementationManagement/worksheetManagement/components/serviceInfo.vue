@@ -250,7 +250,7 @@ export default {
         expectedAreaList: [{required: true, message: '期望地区不能为空', trigger: 'change'}],
         visitingAreaList: [{required: true, message: '就诊地区不能为空', trigger: 'change'}],
         expectationHospital: [{required: true, message: '期望医院不能为空', trigger: 'change'}],
-        expectationDept: [{required: true,validator: checkExpectationDept, trigger: 'change'}],
+        expectationDept: [{required: true,validator: checkExpectationDept, trigger: ['change','blur']}],
         director: [{required: true, message: '主任不能为空', trigger: 'blur'}]
       },
       hospList: [],

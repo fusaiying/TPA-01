@@ -304,6 +304,33 @@ public class CustomServiceSpotCheckController extends BaseController {
 
     //************************************************
         /*
+        质检查询清单导出
+         */
+    @Log(title = "质检查询清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportOne")
+    public void exportOne(HttpServletResponse response, QualityDTO qualityDTO) throws IOException
+    {
+        List<QualityAcceptVo> list = qualityInspectionAcceptService.selectQualityVo(qualityDTO);
+        ExcelUtil<QualityAcceptVo> util = new ExcelUtil<QualityAcceptVo>(QualityAcceptVo.class);
+        util.exportExcel(response, list, "WorkOrderOne");
+    }
+
+    //************************************************
+        /*
+        质检差错清单导出
+         */
+    @Log(title = "质检差错清单导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/internal/selectWorkOrder/exportTwo")
+    public void exportTwo(HttpServletResponse response, QualityFlagDTO qualityFlagDTO) throws IOException
+    {
+        List<QualityFlagVO> list = qualityInspectionAcceptService.selectQualityFlagVO(qualityFlagDTO);
+        ExcelUtil<QualityFlagVO> util = new ExcelUtil<QualityFlagVO>(QualityFlagVO.class);
+        util.exportExcel(response, list, "WorkOrderTwo");
+    }
+
+
+    //************************************************
+        /*
         质检查询
          */
     @GetMapping("/internal/selectQualityVo")

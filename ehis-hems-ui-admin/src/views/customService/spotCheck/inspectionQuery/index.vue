@@ -164,6 +164,11 @@ export default {
         inspectionStatus: undefined,
         inspectionResult: undefined
       },
+      confirmationQueryForm: {
+        firstEndCaseTime: undefined,
+        serviceItem: undefined,
+        workOrderNo: undefined,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -275,9 +280,26 @@ export default {
       this.ids = selection.map(item => item.workOrderNo);
 
     }, sendMany(){
-
+      const params = {
+        endCaseStartTime: undefined,
+        endCaseEndTime: undefined,
+        inspectionStartTime: undefined,
+        inspectionEndTime: undefined,
+        organCode: this.inspectionQueryForm.organization,
+        inspectionName: this.inspectionQueryForm.inspectionName,
+        serviceItemCode: this.inspectionQueryForm.serviceItem,
+        inspectionStatus: this.inspectionQueryForm.inspectionStatus,
+        inspectionResult: this.inspectionQueryForm.inspectionResult
+      };
+      this.download('cs/spotCheck/internal/selectWorkOrder/exportOne', params, `质检查询_${new Date().getTime()}.xlsx`);
     }, sendMany1(){
-
+      const params = {
+        firstEndCaseStartTime: undefined,
+        firstEndCaseEndTime: undefined,
+        workOrderNo :this.confirmationQueryForm.workOrderNo,
+        serviceItemCode: this.confirmationQueryForm.serviceItem,
+      };
+      this.download('cs/spotCheck/internal/selectWorkOrder/exportTwo', params, `质检差错_${new Date().getTime()}.xlsx`);
     },
     send() {
 

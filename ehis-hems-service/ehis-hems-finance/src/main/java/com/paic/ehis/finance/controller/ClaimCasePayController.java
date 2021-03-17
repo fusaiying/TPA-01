@@ -172,7 +172,7 @@ public class ClaimCasePayController extends BaseController {
      */
     @Log(title = "对公外币支付-案件信息", businessType = BusinessType.EXPORT)
     @PostMapping("/exportForeign")
-    public void exportForeign(HttpServletResponse response, ClaimCasePayDTO claimCasePayDTO) throws IOException
+    public void exportForeign(HttpServletResponse response,ClaimCasePayDTO claimCasePayDTO) throws IOException
     {
         List<ClaimCaseForeignPayInfoVO> list = claimCasePayService.getForeignCase(claimCasePayDTO.getBatchNo()).getCaseInfoList();
         ExcelUtil<ClaimCaseForeignPayInfoVO> util = new ExcelUtil<ClaimCaseForeignPayInfoVO>(ClaimCaseForeignPayInfoVO.class);

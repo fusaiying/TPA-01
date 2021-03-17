@@ -7,11 +7,13 @@ import com.paic.ehis.common.core.utils.PubFun;
 import com.paic.ehis.common.core.utils.SecurityUtils;
 import com.paic.ehis.cs.domain.FlowLog;
 import com.paic.ehis.cs.domain.TransferBy;
+import com.paic.ehis.cs.domain.WorkHandleInfo;
 import com.paic.ehis.cs.domain.WorkOrderAccept;
 import com.paic.ehis.cs.domain.vo.DemandAcceptVo;
 import com.paic.ehis.cs.domain.vo.UmCode;
 import com.paic.ehis.cs.mapper.FlowLogMapper;
 import com.paic.ehis.cs.mapper.TransferByMapper;
+import com.paic.ehis.cs.mapper.WorkHandleInfoMapper;
 import com.paic.ehis.cs.mapper.WorkOrderAcceptMapper;
 import com.paic.ehis.cs.service.ITransferByService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class TransferByServiceImpl implements ITransferByService
 
     @Autowired
     private WorkOrderAcceptMapper workOrderAcceptMapper;
+
+    @Autowired
+    private WorkHandleInfoMapper workHandleInfoMapper;
 
     @Autowired
     private FlowLogMapper flowLogMapper;
@@ -86,7 +91,15 @@ public class TransferByServiceImpl implements ITransferByService
         WorkOrderAccept workOrderAccept=workOrderAcceptMapper.selectWorkOrderAcceptById(demandAcceptVo.getWorkOrderNo());
         workOrderAccept.setUpdateBy(list.get(0).getValue());
         workOrderAccept.setUpdateTime(DateUtils.getNowDate());
+        //转办后更新处理人信息（因为没有正式保存服务信息  所以受理时间不变）
+        workOrderAccept.setModifyBy(list.get(0).getValue());
         workOrderAcceptMapper.updateWorkOrderAccept(workOrderAccept);
+
+        //清除原服务处理信息
+        WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(demandAcceptVo.getWorkOrderNo());//获取handleId
+        if(workHandleInfo != null && workHandleInfo.getHandleId() != null && workHandleInfo.getHandleId()!=0){
+            workHandleInfoMapper.deleteWorkHandleInfoById(workHandleInfo.getHandleId());
+        }
 
         for (int i=1;i< list.size();i++){
             //获得工单号

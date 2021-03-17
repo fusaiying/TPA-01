@@ -112,6 +112,13 @@ export function insertItem(form){
     data: form
   })
 }
+export function insertItem2(form){
+  return request({
+    url: '/cs/spotCheck/insertItem2',
+    method: 'post',
+    data: form
+  })
+}
 export function insertHandleInfo(form){
   return request({
     url: '/cs/spotCheck/internal/insertHandleInfo',

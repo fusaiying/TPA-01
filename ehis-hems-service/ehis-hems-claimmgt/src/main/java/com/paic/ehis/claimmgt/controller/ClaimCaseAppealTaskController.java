@@ -64,10 +64,10 @@ public class ClaimCaseAppealTaskController extends BaseController
      * 获取案件申诉任务详细信息
      */
     //@PreAuthorize(hasPermi = "system:task:query")
-    @GetMapping(value = "/{taskId}")
-    public AjaxResult getInfo(@PathVariable("taskId") Long taskId)
+    @GetMapping(value = "/getInfo")
+    public AjaxResult getInfo(ClaimCaseAppealTask param)
     {
-        return AjaxResult.success(claimCaseAppealTaskService.selectClaimCaseAppealTaskById(taskId));
+        return AjaxResult.success(claimCaseAppealTaskService.selectClaimCaseAppealTaskByParam(param));
     }
 
     /**

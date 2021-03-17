@@ -77,6 +77,9 @@ public class OrderEvaluateInfo extends BaseEntity
     @Excel(name = "证件号码")
     private String idCode;
 
+    //保单号
+    private String policyNo;
+
 
     public void setSerialNo(String serialNo) 
     {

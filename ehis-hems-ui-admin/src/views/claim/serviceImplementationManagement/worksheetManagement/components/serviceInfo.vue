@@ -244,6 +244,7 @@ export default {
       secondDeptList:[],
 
       productTypeOptions: [],
+      supplierList: []
 
     }
   },
@@ -254,7 +255,7 @@ export default {
 
     this.getAddressData()
 
-    this.getServiceInfoList()
+    //this.getServiceInfoList()
     this.init()
 
 
@@ -293,7 +294,7 @@ export default {
             serviceCode: this.serviceCode,
             productCode: this.productCode
           }
-//
+//获取该产品下选中服务项目的所有供应商
           getAllProSuppInfo(queryData).then(res => {
             if (res.code == '200') {
               this.productTypeOptions = res.data
@@ -350,6 +351,25 @@ export default {
 
             }
           })
+
+
+            let query = {
+              productCode: this.productCode,
+            }
+            //获取该产品下的所有服务项目
+            getProductServiceList(query).then(res => {
+              if (res.code == '200' && res.rows.length > 0) {
+                this.serviceInfo = res.rows
+                let obj=this.serviceInfo.find(item =>{
+                  return item.serviceCode==this.baseForm.serviceCode
+                })
+                if(obj==null){
+                  this.baseForm.serviceCode=''
+                }
+              }
+
+            })
+
 
 
 
@@ -508,22 +528,42 @@ export default {
         serviceCode: this.serviceCode,
         productCode: this.baseForm.serviceType
       }
-      this.productTypeOptions=[]
+
+
+      /*this.productTypeOptions=[]
       this.contactNameList=[]
       this.baseForm.supplierCode=''
       this.baseForm.phone=''
-      this.baseForm.contactName=''
+      this.baseForm.contactName=''*/
+      //供应商有该服务不重新赋值
+
       getAllProSuppInfo(queryData).then(res => {
         if (res.code == '200') {
-          this.productTypeOptions = res.data
-          if(this.productTypeOptions!=null && this.productTypeOptions.length>0){
-            this.baseForm.supplierCode=this.productTypeOptions[0].supplierCode
-            //初始化供应商的 联系人 联系电话下拉列表
-            this.contactNameList=this.productTypeOptions[0].contractInfo
-            //初始化联系人 联系电话
-            this.$set(this.baseForm,'phone',this.contactNameList[0].phone)
-            this.$set(this.baseForm,'contactName',this.contactNameList[0].contactName)
+          this.supplierList = res.data
+          let fltList=this.supplierList.filter(item=>{
+            return item.supplierCode==this.baseForm.supplierCode
+          })
+          if(fltList.length<1){
+            this.productTypeOptions=[]
+
+            this.contactNameList=[]
+            this.baseForm.supplierCode=''
+            this.baseForm.phone=''
+            this.baseForm.contactName=''
+            this.productTypeOptions=this.supplierList
+
+            if(this.supplierList!=null && this.supplierList.length>0){
+              this.baseForm.supplierCode=this.supplierList[0].supplierCode
+              //初始化供应商的 联系人 联系电话下拉列表
+              this.contactNameList=this.supplierList[0].contractInfo
+              //初始化联系人 联系电话
+              this.$set(this.baseForm,'phone',this.contactNameList[0].phone)
+              this.$set(this.baseForm,'contactName',this.contactNameList[0].contactName)
+            }
           }
+
+
+
         }
       })
 

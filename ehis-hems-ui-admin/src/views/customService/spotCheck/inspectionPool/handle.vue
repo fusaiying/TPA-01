@@ -14,7 +14,7 @@
     </div>
 <!--    流转信息-->
     <div id="#anchor-3" class="personInfo_class" style="margin-top: 5px;">
-      <flowLogInfo :acceptInfo="allList.acceptInfo" :isDisabled="isDisabled"/>
+      <flowLogInfo :acceptInfo="allList.acceptInfo" :disabled="true"/>
     </div>
 <!--    附件信息-->
     <div id="#anchor-4" class="personInfo_class" style="margin-top: 5px;">
@@ -23,11 +23,11 @@
 <!--    处理信息-->
   <!--    信息需求-->
     <div id="#anchor-51" v-if="this.params.businessType=='01'"  style="margin-top: 5px;" class="personInfo_class">
-      <infohandle :acceptInfo="allList.acceptInfo"  :isDisabled="isDisabled" />
+      <infohandle :acceptInfo="allList.acceptInfo"  :disabled="true" />
     </div>
   <!--    投诉-->
     <div id="#anchor-52"  v-if="this.params.businessType=='03'"  style="margin-top: 5px;" class="personInfo_class">
-      <complaintHandle :form="allList.form" :isDisabled="isDisabled" />
+      <complaintHandle :form="allList.form" :disabled="true" />
     </div>
 <!--    质检处理-->
   <!--    信息需求-->
@@ -65,6 +65,7 @@ import {
   getComplaintHandleInfo,
   getHandleInfoList,
   insertItem,
+  insertItem2,
 } from '@/api/customService/spotCheck';
 
 import {mapGetters} from 'vuex'
@@ -470,7 +471,8 @@ export default {
           });
         }
       }
-      if (value1.includes('01')||value2.includes('01')) {
+
+      if (value1.includes('01')||(value2.includes('01')&&  value2 !=='' )) {
           this.isDisabled=false;
       }
       //如果是否存在差错存在是，那么上面的card可修改，并保存
@@ -596,6 +598,8 @@ export default {
           });
         }
       }
+      //如果有是放开上面的输入
+
       if (value1.includes('01') || value2.includes('01')) {
         this.isDisabled = false;
       }
@@ -626,7 +630,7 @@ export default {
             attachmentInfoForm: this.allList.attachmentInfoData,
           }
         }
-        insertItem(save).then(response => {
+        insertItem2(save).then(response => {
           if (response.code === 200) {
             this.$message.success('保存成功!');
           }
@@ -636,7 +640,7 @@ export default {
         //提取数据并给参数赋值
         let save = {};
         //当类型为01时数据保存
-        if (this.allList.acceptInfo.businessType === '01') {
+        if (this.allList.acceptInfo.businessType === '01'&& value1 !=='') {
           save = {
             itemList: this.allList.inspection.items,
             appealFlag: data1.appeal[0].appealFlag,
@@ -645,7 +649,7 @@ export default {
             workOrderNo: this.allList.acceptInfo.workOrderNo,
           }
           //当类型为03时数据保存
-        } else if (this.allList.acceptInfo.businessType === '03') {
+        } else if (this.allList.acceptInfo.businessType === '03'&& value2 !=='') {
           save = {
             itemList: this.allList.complaintProcess.items,
             appealFlag: data2.appeal[0].appealFlag,
@@ -657,7 +661,7 @@ export default {
         }
         console.log(save, "+++++++++++++????")
         //保存数据
-        insertItem(save).then(response => {
+        insertItem2(save).then(response => {
           if (response.code === 200) {
             this.$message.success('保存成功!');
           }

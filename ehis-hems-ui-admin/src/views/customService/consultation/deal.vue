@@ -384,11 +384,11 @@
     </el-card>
 
     <el-card>
-      <el-form :model="submitForm" style="padding-bottom: 30px;" label-width="100px" label-position="right" size="mini">
+      <el-form :model="submitForm" style="padding-bottom: 30px;" :rules="rules" label-width="100px" label-position="right" size="mini">
         <span style="color: blue">服务处理</span>
         <el-divider/>
         <el-row>
-          <el-form-item label="处理说明：">
+          <el-form-item label="处理意见：" prop="opinion">
             <el-input
               type="textarea"
               :rows="2"
@@ -548,6 +548,11 @@ export default {
       cs_service_item: [],
       cs_business_type: [],
       cs_attachment_type: [],
+      rules: {
+        opinion: [
+          {required: true, message: "处理意见不能为空", trigger: "blur"}
+        ]
+      }
     }
   },
   created() {

@@ -481,7 +481,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="投诉环节(报保监)：" prop="complaintLink">
+            <el-form-item label="投保问题（报保监）：" prop="complaintLink">
               <el-select v-model="sendForm.complaintLink" class="item-width">
                 <el-option v-for="item in cs_link_circ" :key="item.dictValue" :label="item.dictLabel"
                            :value="item.dictValue"/>
@@ -497,7 +497,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="8">
             <el-form-item label="行协调解或外部鉴定状态：" prop="outsideState">

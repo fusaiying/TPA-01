@@ -128,7 +128,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="期望科室：" >
+          <el-form-item label="期望科室：" prop="expectationDept">
             <!--            <el-input v-model="baseForm.firstDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
             <el-select v-model="baseForm.firstDept" class="item-width" clearable  size="mini" style="width: 100px" @change="changeSecondDept">
               <el-option v-for="item in firstDeptList" :label="item.deptName" :value="item.deptName"
@@ -144,7 +144,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="主任：" prop="director">
-            <el-input v-model="baseForm.director" class="item-width" clearable size="mini"  placeholder="请输入"
+            <el-input v-model="baseForm.director" class="item-width" clearable size="mini"  placeholder="请输入" maxlength="20"
             />
           </el-form-item>
         </el-col>
@@ -220,6 +220,14 @@ export default {
 
 
   data() {
+    const checkExpectationDept = (rules, value, callback) => {
+      if(this.baseForm.firstDept){
+        callback()
+      }else{
+        callback(new Error("期望科室不能为空"))
+      }
+
+    }
 
     return {
       regions: [],
@@ -236,6 +244,14 @@ export default {
         serviceType: [{required: true, message: '服务类型不能为空', trigger: 'change'}],
         applyTime: [{required: true, message: '服务预约时间不能为空', trigger: 'blur'}],
         symptomDescription: [{required: true, message: '症状描述不能为空', trigger: 'blur'}],
+
+
+        inpatientAreaList: [{required: true, message: '住院地区不能为空', trigger: 'change'}],
+        expectedAreaList: [{required: true, message: '期望地区不能为空', trigger: 'change'}],
+        visitingAreaList: [{required: true, message: '就诊地区不能为空', trigger: 'change'}],
+        expectationHospital: [{required: true, message: '期望医院不能为空', trigger: 'change'}],
+        expectationDept: [{required: true,validator: checkExpectationDept, trigger: 'change'}],
+        director: [{required: true, message: '主任不能为空', trigger: 'blur'}]
       },
       hospList: [],
       firstDeptList:[],

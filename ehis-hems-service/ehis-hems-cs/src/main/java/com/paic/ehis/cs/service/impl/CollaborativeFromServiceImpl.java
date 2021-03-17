@@ -135,6 +135,7 @@ public class CollaborativeFromServiceImpl implements ICollaborativeFromService
             //collaborativeFrom.setFromUserId(demandAcceptVo.getCallPersonId());//接收用户id
             //collaborativeFrom.setUmCode(demandAcceptVo.getUmCode());
             collaborativeFrom.setStatus("01");
+            collaborativeFrom.setHandleState("01");
             collaborativeFrom.setSolicitOpinion(demandAcceptVo.getSolicitOpinion());
             collaborativeFrom.setCreatedBy(SecurityUtils.getUsername());
             collaborativeFrom.setCreatedTime(DateUtils.parseDate(DateUtils.getTime()));

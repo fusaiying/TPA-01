@@ -369,10 +369,10 @@ public class ProductInfoServiceImpl implements IProductInfoService
 
     @Override
     public int updateSupplierStatus(com.paic.ehis.system.api.domain.ProductSupplierInfoVo productSupplierInfoVo){
-        int count = productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
+        /*int count = productInfoMapper.updatesupplierInfo(productSupplierInfoVo);
         if(count <= 0){
             count =1;
-        }
-        return count;
+        }*/
+        return 1;
     }
 }

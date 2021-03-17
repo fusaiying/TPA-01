@@ -84,7 +84,51 @@ public class FinancePayInfo extends BaseEntity
     @Excel(name = "登录机构编码")
     private String deptCode;
 
-    public void setPayId(Long payId) 
+    /** 交易编码 */
+    private String transactionCode;
+
+    /** 国际收支填报人 */
+    private String internationalCompletedBy;
+
+    /** 国际收支填报人电话 */
+    private String internationalCompletedPhone;
+
+    /** 交易附言 */
+    private String transactionPostscript;
+
+    public String getTransactionCode() {
+        return transactionCode;
+    }
+
+    public void setTransactionCode(String transactionCode) {
+        this.transactionCode = transactionCode;
+    }
+
+    public String getInternationalCompletedBy() {
+        return internationalCompletedBy;
+    }
+
+    public void setInternationalCompletedBy(String internationalCompletedBy) {
+        this.internationalCompletedBy = internationalCompletedBy;
+    }
+
+    public String getInternationalCompletedPhone() {
+        return internationalCompletedPhone;
+    }
+
+    public void setInternationalCompletedPhone(String internationalCompletedPhone) {
+        this.internationalCompletedPhone = internationalCompletedPhone;
+    }
+
+    public String getTransactionPostscript() {
+        return transactionPostscript;
+    }
+
+    public void setTransactionPostscript(String transactionPostscript) {
+        this.transactionPostscript = transactionPostscript;
+    }
+
+    public void setPayId(Long payId)
     {
         this.payId = payId;
     }
@@ -252,6 +296,10 @@ public class FinancePayInfo extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("deptCode", getDeptCode())
+            .append("transactionCode", getTransactionCode())
+            .append("internationalCompletedBy", getInternationalCompletedBy())
+            .append("internationalCompletedPhone", getInternationalCompletedPhone())
+            .append("transactionPostscript", getTransactionPostscript())
             .toString();
     }
 }

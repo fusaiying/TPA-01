@@ -46,29 +46,27 @@
             c.insured_no,
             c.name,
             sum( b.bill_amount ) bill_amount,
-            (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,
-            sum( b.tp_advance_payment + b.ss_advance_payment ) advance_payment,
-            sum( b.copay ) copay,
-            d.cal_amount pay_amount,
-            d.debt_amount,
+            (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
+            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.copay,0)) copay,
+            ifNUll(d.cal_amount,0) pay_amount,
+            ifNUll(d.debt_amount,0) debt_amount,
             a.case_status,
             a.pay_status
         FROM
             claim_case a
-            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no
-            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no
-            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no
+            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no  AND b.`status` = 'Y'
+            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no  AND c.`status` = 'Y'
+            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no  AND d.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
             AND a.STATUS = 'Y'
-            AND b.`status` = 'Y'
-            AND c.`status` = 'Y'
-            AND d.`status` = 'Y'
         GROUP BY
             a.rpt_no,
             c.`name`,
             d.cal_amount,
-            d.debt_amount
+            d.debt_amount,
+            c.insured_no
 		ORDER BY
 			a.rpt_no
     </select>
@@ -78,28 +76,25 @@
             a.rpt_no,
             min( b.treatment_start_date ) treatment_date,
             c.`name`,
-            sum( b.bill_amount ) bill_amount,
-            (sum( b.bill_amount ) - sum( b.hos_discount_amount )) discounted_amount,
-            sum( b.tp_advance_payment + b.ss_advance_payment ) advance_payment,
-            sum( b.copay ) copay,
-            d.cal_amount pay_amount,
-            d.debt_amount,
+            sum( ifNUll(b.bill_amount,0) ) bill_amount,
+            (sum( ifNUll(b.bill_amount,0) ) - sum( ifNUll(b.hos_discount_amount,0) )) discounted_amount,
+            sum( ifNUll(b.tp_advance_payment + b.ss_advance_payment,0) ) advance_payment,
+            sum( ifNUll(b.copay,0) ) copay,
+            ifNUll(d.cal_amount,0) pay_amount,
+            ifNUll(d.debt_amount,0) debt_amount,
 			d.exchange_rate,
-			d.pay_amount_foreign,
+			ifNUll(d.pay_amount_foreign,0) pay_amount_foreign,
             a.case_status,
             a.pay_status,
 			d.bill_currency
         FROM
             claim_case a
-            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no
-            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no
-            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no
+            LEFT JOIN claim_case_bill b ON a.rpt_no = b.rpt_no AND b.`status` = 'Y'
+            LEFT JOIN claim_case_insured c ON a.rpt_no = c.rpt_no AND c.`status` = 'Y'
+            LEFT JOIN claim_case_cal d ON a.rpt_no = d.rpt_no AND d.`status` = 'Y'
         WHERE
             a.batch_no = #{batchNo}
             AND a.STATUS = 'Y'
-            AND b.`status` = 'Y'
-            AND c.`status` = 'Y'
-            AND d.`status` = 'Y'
         GROUP BY
             a.rpt_no,
             c.`name`,

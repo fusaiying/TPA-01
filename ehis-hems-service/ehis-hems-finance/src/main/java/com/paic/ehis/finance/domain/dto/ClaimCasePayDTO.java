@@ -31,4 +31,5 @@ public class ClaimCasePayDTO extends BaseEntity {
 
     /** 交单机构 */
     private String organCode;
+
 }

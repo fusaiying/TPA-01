@@ -16,4 +16,10 @@ public class ClaimCasePayVO implements Serializable {
 
     /** 支付信息 */
     private ClaimCasePaymentVO payment;
+
+    /** 确认支付 */
+    private String payFlag;
+
+    /** 案件借款 */
+    private String borrowFlag;
 }

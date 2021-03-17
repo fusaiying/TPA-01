@@ -65,7 +65,7 @@ public class ClaimCaseAppealTaskController extends BaseController
      */
     //@PreAuthorize(hasPermi = "system:task:query")
     @GetMapping(value = "/getInfo")
-    public AjaxResult getInfo(@RequestBody ClaimCaseAppealTask param)
+    public AjaxResult getInfo(ClaimCaseAppealTask param)
     {
         return AjaxResult.success(claimCaseAppealTaskService.selectClaimCaseAppealTaskByParam(param));
     }

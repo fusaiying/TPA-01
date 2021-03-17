@@ -21,6 +21,7 @@ import net.sourceforge.pinyin4j.PinyinHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -619,5 +620,16 @@ public  String getPinYinHeadChar(String str) {
             baseProviderInfoMapper.updateSupplier(productSupplierInfo);
         }
         return 1;
+    }
+
+    @Override
+    public void updateIssue(@RequestBody List<String> serviceCodes){
+        baseProviderInfoMapper.updateIssue(serviceCodes);
+    }
+
+
+    @Override
+    public void updateIssue1(@RequestBody List<String> serviceCodes){
+        baseProviderInfoMapper.updateIssue1(serviceCodes);
     }
 }

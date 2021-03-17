@@ -73,9 +73,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectClaimCaseAppealTaskById" parameterType="Long" resultMap="ClaimCaseAppealTaskResult">
-        <include refid="selectClaimCaseAppealTaskVo"/>
-        where task_id = #{taskId}
+    <select id="selectClaimCaseAppealTaskByParam" parameterType="ClaimCaseAppealTask" resultMap="ClaimCaseAppealTaskResult">
+        SELECT
+            t.task_id,
+            t.appeal_rpt_no,
+            t.new_rpt_no,
+            t.appeal_status,
+            t.appeal_type,
+            t.appeal_reason,
+            t.appeal_sub_reason,
+            t.conclusion_remark,
+            t.apply_operator,
+            t.auditor,
+            t.status,
+            t.create_by,
+            t.create_time,
+            t.update_by,
+            t.update_time,
+            t.dept_code
+        FROM  claim_case_appeal_task t
+        <where>
+            <if test="appealRptNo != null  and appealRptNo != ''"> and t.task_id = ( SELECT MAX(task_id) FROM claim_case_appeal_task WHERE appeal_rpt_no = #{appealRptNo} ) </if>
+            <if test="newRptNo != null  and newRptNo != ''"> and t.new_rpt_no = #{newRptNo}</if>
+            <if test="taskId != null  and taskId != ''"> and t.task_id = #{taskId}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+        </where>
     </select>
         
     <insert id="insertClaimCaseAppealTask" parameterType="ClaimCaseAppealTask">

@@ -617,4 +617,21 @@ public class BaseProviderInfoController extends BaseController {
     {
         return toAjax(baseProviderInfoService.insertSupplier(productSupplierInfoVo));
     }
+
+    /**
+     * 修改服务项目是否发布(上线)
+     */
+    @PostMapping("/updateIssue")
+    public void updateIssue(@RequestBody List<String> serviceCodes){
+        baseProviderInfoService.updateIssue(serviceCodes);
+    }
+
+
+    /**
+     * 修改服务项目是否发布（下线）
+     */
+    @PostMapping("/updateIssue1")
+    public void updateIssue1(@RequestBody List<String> serviceCodes){
+        baseProviderInfoService.updateIssue(serviceCodes);
+    }
 }

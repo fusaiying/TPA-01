@@ -234,6 +234,10 @@ public class ProductInfoServiceImpl implements IProductInfoService
             }else{
                 count =productInfoMapper.updateProStatus1(productCheckInfo.getProductCode());
             }
+            //根据产品获取服务信息
+            List<String> serviceCodes = productInfoMapper.getServiceCode(productCheckInfo.getProductCode());
+            //将服务项目状态改为发布状态
+            getProviderInfoService.updateIssue(serviceCodes);
             //审核同意，变更产品状态为发布
             productManagerLog.setBussinessStatus("03");//发布
         }else if("02".equals(productCheckInfo.getCheckResult())){
@@ -299,6 +303,10 @@ public class ProductInfoServiceImpl implements IProductInfoService
     @Override
     public int insertMangerInfo(ProductManagerLog productManagerLog)
     {
+        //根据产品获取服务信息
+        List<String> serviceCodes = productInfoMapper.getServiceCode(productManagerLog.getProductCode());
+        //将服务项目状态改为发布状态
+        getProviderInfoService.updateIssue1(serviceCodes);
         //修改产品表状态为下线
         productManagerLog.setUpdateBy(SecurityUtils.getUsername());
         productManagerLog.setUpdateTime(DateUtils.getNowDate());

@@ -193,4 +193,8 @@ public interface IBaseProviderInfoService
 
     //设置供应商优先级顺序
     public int insertSupplier(ProductSupplierInfoVo productSupplierInfoVo);
+
+    public void updateIssue(@RequestBody List<String> serviceCodes);
+
+    public void updateIssue1(@RequestBody List<String> serviceCodes);
 }

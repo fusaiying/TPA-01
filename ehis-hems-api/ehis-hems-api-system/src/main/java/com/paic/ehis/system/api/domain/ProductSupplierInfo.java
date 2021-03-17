@@ -59,4 +59,6 @@ public class ProductSupplierInfo extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
+    //是否发布
+    private String issue;
 }

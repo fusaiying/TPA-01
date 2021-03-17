@@ -96,4 +96,6 @@ public interface ProductInfoMapper
     public List<ProductInfo> selectMangerListNull(ProductInfo productInfo);
 
     public int insertSupplier(List<com.paic.ehis.system.api.domain.ProductSupplierInfo> productSupplierInfo);
+
+    public List<String> getServiceCode(String productCode);
 }

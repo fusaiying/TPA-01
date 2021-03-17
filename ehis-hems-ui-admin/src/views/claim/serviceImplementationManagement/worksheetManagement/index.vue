@@ -500,15 +500,7 @@ export default {
               })
               this.changeAllotDialogVisable()
 
-              this.loading = true
-              //调用查询接口
-              getList(this.params).then(res => {
-                this.tableData = res.rows;
-                this.totalCount = res.total;
-                this.loading = false;
-              }).catch(res => {
-                this.loading = false
-              })
+              this.getData()
 
             } else {
               this.$message({

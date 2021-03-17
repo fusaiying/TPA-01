@@ -97,7 +97,9 @@ public class TransferByServiceImpl implements ITransferByService
 
         //清除原服务处理信息
         WorkHandleInfo workHandleInfo=workHandleInfoMapper.selectWorkHandleInfoByNo(demandAcceptVo.getWorkOrderNo());//获取handleId
-        workHandleInfoMapper.deleteWorkHandleInfoById(workHandleInfo.getHandleId());
+        if(workHandleInfo != null && workHandleInfo.getHandleId() != null && workHandleInfo.getHandleId()!=0){
+            workHandleInfoMapper.deleteWorkHandleInfoById(workHandleInfo.getHandleId());
+        }
 
         for (int i=1;i< list.size();i++){
             //获得工单号

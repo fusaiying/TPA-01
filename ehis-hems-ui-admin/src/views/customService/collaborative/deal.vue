@@ -194,7 +194,7 @@
 
 
     <el-card class="box-card" style="margin-top: 10px;">
-      <el-form ref="workPoolData" :model="workPoolData" style="padding-bottom: 30px;" label-width="180px" disabled="isDisabled"
+      <el-form ref="workPoolData" :model="workPoolData" style="padding-bottom: 30px;" label-width="180px" disabled
                label-position="right" size="mini">
         <span
           style="color: blue">{{
@@ -398,12 +398,12 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="业务处理情况" prop="businessProcess">
-              <el-radio-group v-model="ruleForm.businessProcess" @change="isBusinessProcess(ruleForm.businessProcess)">
-                <el-radio :label="1">成功</el-radio>
-                <el-radio :label="2">响应</el-radio>
-              </el-radio-group>
-            </el-form-item>
+          <el-form-item label="业务处理情况：" prop="businessProcess">
+            <el-radio-group v-model="ruleForm.businessProcess" @change="isBusinessProcess(ruleForm.businessProcess)">
+              <el-radio label="01">成功</el-radio>
+              <el-radio label="02">响应</el-radio>
+            </el-radio-group>
+          </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -537,24 +537,65 @@ export default {
     }
   },
   data() {
+    // 表单校验
+    const isRule = {
+      businessProcess: [
+        {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+      ],
+      remark: [
+        {required: true, message: "处理说明不能为空", trigger: "blur"},
+        {min: 0, max: 2000, message: '长度2000 个字符'}
+
+      ],
+      customerFeedback: [
+        {required: true, message: "客户反馈不能为空", trigger: "blur"}
+      ],
+      closeType: [
+        {required: true, message: "结案类型不能为空", trigger: "blur"}
+      ],
+      costsIncurred: [
+        {required: true, message: "安抚或通融发生费用成本不能为空", trigger: "blur"},
+        {min: 0, max: 500, message: '长度500 个字符以内'}
+
+      ],
+
+    };
+    const isCloseType = {
+      businessProcess: [
+        {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+      ],
+      remark: [
+        {required: true, message: "处理说明不能为空", trigger: "blur"},
+        {min: 3, max: 100, message: '长度在 3 到 100 个字符'}
+
+      ],
+      customerFeedback: [
+        {required: true, message: "客户反馈不能为空", trigger: "blur"}
+      ],
+      closeType: [
+        {required: true, message: "结案类型不能为空", trigger: "blur"}
+      ],
+    };
+    // 表单校验
+    const noRules = {
+      businessProcess: [
+        {required: true, message: "业务处理情况不能为空", trigger: "blur"}
+      ],
+    };
     return {
       isDisabled: true,
+      rules1: isRule,
+      rules2: noRules,
+      rules3: isCloseType,
+      changeForm: {
+        rules: isRule
+      },
       ids: [],//多选框
       //流转用
       colStatus: "03",//是否协办
       flowLogData: [],
       flowLogCount: 0,
       //信息需求反显数组
-      //需要填入数据的部分
-      ruleForm: {
-        workOrderNo: "",
-        businessProcess: "",
-        remark: "",
-        customerFeedback: "",
-        closeType: "",
-        costsIncurred: "",
-        sign: ""
-      },
       // 表单校验
       rules: {
         Service: [
@@ -578,6 +619,7 @@ export default {
         costsIncurred: "",
         sign: ""
       },
+
       // 查询参数
       queryParams: {
         workOrderNo: "",
@@ -719,7 +761,7 @@ export default {
       complainSearchServer(insert).then(res => {
         if (res != null && res.code === 200) {
           console.log("信息需求页面server反显数据",res.data)
-          this.sendForm = res.data;
+          this.ruleForm = res.data;
           if (res.rows.length <= 0) {
             return this.$message.warning(
             )
@@ -746,7 +788,19 @@ export default {
 
       })
     },
+//是否响应
+    isBusinessProcess(s) {
+      if (s == "01") {
+        this.changeForm.rules = this.rules1
+      } else {
+        this.changeForm.rules = this.rules2
+        this.$refs.ruleForm.clearValidate()
+      }
 
+      //更新按钮状态
+      this.checkButton();
+
+    },
     //上传附件
     upload() {
       this.$refs.upload.open();
@@ -774,7 +828,18 @@ export default {
     resetForm() {
       this.$refs.sendForm.resetFields()
     },
+//结案类型是否正常
+    isCloseType(s) {
+      if (this.ruleForm.businessProcess == '01') {
+        if (s == "01") {
+          this.changeForm.rules = this.rules3
+        } else {
+          this.changeForm.rules = this.rules1
+          this.$refs.ruleForm.clearValidate()
+        }
+      }
 
+    },
 
     //查询轨迹表
     searchFlowLog() {

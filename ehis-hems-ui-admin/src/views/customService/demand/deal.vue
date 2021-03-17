@@ -528,7 +528,7 @@
       </div>
       <div style="text-align: right; margin-right: 1px;">
         <modify-details ref="modifyDetails"></modify-details>
-        <transfer ref="transfer"></transfer>
+        <transfer ref="transfer" @checkButton="checkButton"></transfer>
         <up-load ref="upload"></up-load>
         <co-organizer ref="coOrganizer" @checkButton="checkButton"></co-organizer>
         <el-button type="primary" size="mini" @click="transfer" :disabled="checkButtonFlag.transferFlag">转办

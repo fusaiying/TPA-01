@@ -28,6 +28,17 @@ export function getList(data) {
     data: data
   })
 }
+
+/**
+ * 首页列表默认查询
+ */
+export function list3Months(data) {
+  return request({
+    url: '/order/info/list3Months',
+    method: 'get',
+    params: data
+  })
+}
 /**
  * 工单详细信息查询
  */

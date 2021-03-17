@@ -211,7 +211,7 @@ import {
   getList,
   getProductInfo,
   getAllProSuppInfo,
-  queryinfo,allocation,cancalOrder
+  queryinfo,allocation,cancalOrder,list3Months
 } from '@/api/serviceProductManage/serviceImplManage'
 
 
@@ -305,8 +305,9 @@ export default {
 
     init(){
       this.loading = true
-      //调用查询接口
-      getList(this.params).then(res => {
+        /*/order/info/list3Months*/
+      //调用默认查询接口
+      list3Months(this.params).then(res => {
         this.tableData = res.rows;
         this.totalCount = res.total;
         this.loading = false;
@@ -409,17 +410,31 @@ export default {
         this.params.applyEndTime= this.formSearch.daterangeArr[1]
       }
       this.loading = true
-      //调用查询接口
-      getList(this.params).then(res => {
-        this.tableData = res.rows;
-        this.totalCount = res.total;
-        if(this.totalCount===0){
-          this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
-        }
-        this.loading = false;
-      }).catch(res => {
-        this.loading = false
-      })
+      const values = Object.values(this.formSearch)
+      let flag= values.some(item => {return  item!=null && item !='' })
+      if(flag) {
+        //调用查询接口
+        getList(this.params).then(res => {
+          this.tableData = res.rows;
+          this.totalCount = res.total;
+          if (this.totalCount === 0) {
+            this.$message({message: '未找到符合条件的查询结果', type: 'warning', showClose: true, center: true})
+          }
+          this.loading = false;
+        }).catch(res => {
+          this.loading = false
+        })
+      }
+      else{
+        //调用默认查询的接口
+        list3Months(this.params).then(res => {
+          this.tableData = res.rows;
+          this.totalCount = res.total;
+          this.loading = false;
+        }).catch(res => {
+          this.loading = false
+        })
+      }
 
     },
     // 重置

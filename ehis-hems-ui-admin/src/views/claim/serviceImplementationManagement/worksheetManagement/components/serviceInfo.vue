@@ -136,7 +136,7 @@
             </el-select>
             <!--            <el-input v-model="baseForm.secondDept" class="item-width" clearable size="mini" style="width: 100px"/>-->
             <el-select v-model="baseForm.secondDept" class="item-width" clearable  size="mini" style="width: 100px" >
-              <el-option v-for="item in secondDeptList" :label="item.secondDeptName" :value="item.secondDeptName"
+              <el-option v-for="item in secondDeptList" :label="item.deptName" :value="item.deptName"
                          :key="item.index"/>
             </el-select>
 

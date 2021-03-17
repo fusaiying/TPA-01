@@ -210,6 +210,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serviceItemCode != null and serviceItemCode != ''">
                 and b.item_code = #{serviceItemCode}
             </if>
+                and c.status = '02'
         </where>
     </select>
     <!--    批量发起质检数据-->

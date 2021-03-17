@@ -39,13 +39,14 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
     /**
      * 查询案件申诉任务
      * 
-     * @param taskId 案件申诉任务ID
+     * @param param 案件申诉任务
      * @return 案件申诉任务
      */
     @Override
-    public ClaimCaseAppealTask selectClaimCaseAppealTaskById(Long taskId)
+    public ClaimCaseAppealTask selectClaimCaseAppealTaskByParam(ClaimCaseAppealTask param)
     {
-        return claimCaseAppealTaskMapper.selectClaimCaseAppealTaskById(taskId);
+        param.setStatus("Y");
+        return claimCaseAppealTaskMapper.selectClaimCaseAppealTaskByParam(param);
     }
 
     /**
@@ -80,7 +81,6 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         bean.setUpdateBy(username);
         bean.setStatus("Y");
         bean.setAppealStatus("01");
-        bean.setApplyOperator(username);
         this.insertRecordLog(bean,null);
         return claimCaseAppealTaskMapper.insertClaimCaseAppealTask(bean);
     }
@@ -98,18 +98,18 @@ public class ClaimCaseAppealTaskServiceImpl implements IClaimCaseAppealTaskServi
         String username = SecurityUtils.getUsername();
         bean.setUpdateTime(nowDate);
         bean.setUpdateBy(username);
-        bean.setAuditor(username);
 
         // 进入申诉初审状态
         if(bean.getDealType().equalsIgnoreCase("initiate")) {
+            bean.setApplyOperator(username);
             bean.setAppealStatus("02");
         }
         //初审确认  同意 / 不同意  （申诉完成 / 申诉退回）
         if(bean.getDealType().equalsIgnoreCase("audit")) {
+            bean.setAuditor(username);
            if(bean.getIsAgree().equals("01")) {
                bean.setAppealStatus("03");
-               /**apply_type
-                * TODO:
+               /**
                 初审决定选择同意，点击初审确认后，
                 此时申诉案件报案号为原报案号-1（流水），
                 并且流转至理赔审核岗原审核人工作池，

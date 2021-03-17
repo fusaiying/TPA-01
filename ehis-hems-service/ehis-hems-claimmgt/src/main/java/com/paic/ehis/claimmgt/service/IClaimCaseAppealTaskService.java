@@ -16,10 +16,10 @@ public interface IClaimCaseAppealTaskService
     /**
      * 查询案件申诉任务
      * 
-     * @param taskId 案件申诉任务ID
+     * @param param 案件申诉实体类
      * @return 案件申诉任务
      */
-    public ClaimCaseAppealTask selectClaimCaseAppealTaskById(Long taskId);
+    public ClaimCaseAppealTask selectClaimCaseAppealTaskByParam(ClaimCaseAppealTask param);
 
     /**
      * 查询案件申诉任务列表

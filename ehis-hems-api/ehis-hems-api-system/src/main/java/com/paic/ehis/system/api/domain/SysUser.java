@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户对象 sys_user
@@ -92,6 +93,9 @@ public class SysUser extends BaseEntity
     /** 角色对象 */
     private List<SysRole> roles;
 
+    /** 角色对象 */
+    private Set<String> rolePermission;
+
     public void setOrganCode(String organCode) {
         this.organCode = organCode;
     }
@@ -110,6 +114,8 @@ public class SysUser extends BaseEntity
 
     /** 角色组 */
     private Long[] roleIds;
+
+
 
     /** 岗位组 */
     private Long[] postIds;
@@ -320,7 +326,15 @@ public class SysUser extends BaseEntity
     {
         this.postIds = postIds;
     }
-    
+
+    public Set<String> getRolePermission() {
+        return rolePermission;
+    }
+
+    public void setRolePermission(Set<String> rolePermission) {
+        this.rolePermission = rolePermission;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

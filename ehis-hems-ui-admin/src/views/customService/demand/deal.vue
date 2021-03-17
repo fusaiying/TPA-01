@@ -298,16 +298,16 @@
           <el-col :span="16">
             <el-form-item label="联系人固定电话：" style="white-space: nowrap" prop="phone">
               国家区号+
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[0]" class="item-width"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[0]" class="item-width"
                         style="width: 75px"/>
               区号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[1]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[1]" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
               号码
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[2]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[2]" class="item-width" size="mini"
                         style="width: 120px" maxlength="50"/>
               分机号
-              <el-input v-model="workPoolData.contactsPerson.homePhone1[3]" class="item-width" size="mini"
+              <el-input v-model="workPoolData.contactsPerson.linePhone1[3]" class="item-width" size="mini"
                         style="width: 75px" maxlength="50"/>
             </el-form-item>
           </el-col>

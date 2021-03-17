@@ -532,7 +532,7 @@
       },
       getLogRole() {
         getUserInfo().then(response => {
-          if (response.code == '200' && response.data && response.data.roles) {
+          if (response.code === 200 && response.data) {
             this.logRoleName = response.data.rolePermission[0];
           }
         }).catch(error => {

@@ -1,5 +1,6 @@
 package com.paic.ehis.cs.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.paic.ehis.common.core.utils.DateUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.paic.ehis.cs.mapper.QualityInspectionItemMapper;
 import com.paic.ehis.cs.domain.QualityInspectionItem;
 import com.paic.ehis.cs.service.IQualityInspectionItemService;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -107,7 +109,7 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
      * @param
      * @return
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public int insertItem(QualityVo qualityVo) {
         //从前端获取质检编号
@@ -128,12 +130,12 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
         //记录操作轨迹
         flowLogMapper.insertFlowLog(flowLog);
         String username = SecurityUtils.getUsername();
-        Date time = new Date();
+        Date time = DateUtils.getNowDate();
         String inspectionId = PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10);
         List<QualityInspectionItem> itemList =qualityVo.getItemList();
         if (!itemList.isEmpty()) {
             qualityVo.getItemList().forEach( item ->{
-                item.setStatus("03");
+                item.setStatus("02");
                 item.setInspectionId(inspectionId);
                 item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
                 item.setCreatedBy(username);
@@ -143,14 +145,84 @@ public class QualityInspectionItemServiceImpl implements IQualityInspectionItemS
             });
             qualityInspectionItemMapper.insertExtDocList(itemList);
         }
-        qualityVo.setStatus("03");
+        if (qualityVo.getStatus()==null) {
+            qualityVo.setStatus("01");
+            qualityVo.setInspectionId(inspectionId);
+            qualityVo.setCreatedBy(username);
+            qualityVo.setCreatedTime(time);
+            qualityVo.setUpdatedBy(username);
+            qualityVo.setUpdatedTime(time);
+            qualityInspectionItemMapper.insertQualityVO(qualityVo);
+        }else{
+            qualityVo.setStatus("02");
+            qualityVo.setUpdatedBy(username);
+            qualityVo.setUpdatedTime(time);
+            qualityInspectionItemMapper.updateQualityVO(qualityVo);
+        }
         qualityVo.setInspectionId(inspectionId);
-        qualityVo.setCreatedBy(username);
-        qualityVo.setCreatedTime(time);
+        qualityVo.setStatus("03");
         qualityVo.setUpdatedBy(username);
         qualityVo.setUpdatedTime(time);
-        qualityInspectionItemMapper.insertQualityVO(qualityVo);
+        qualityInspectionItemMapper.updateInspectionAccept(qualityVo);
+        return 1 ;
+    }
+    //提交案件退回，修改
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
 
+    public int insertItem2(QualityVo qualityVo) {
+        //从前端获取质检编号
+        Map<String,String> param=new HashMap<>();
+        //操作前主流程状态
+        param.put("linkCode", CodeEnum.LINK_CODE_09.getCode());
+        //操作按钮代码
+        param.put("operateCode",CodeEnum.OPERATE_CODE_19.getCode());
+        FlowLog flowLog=new FlowLog();
+        //流转记录添加
+        flowLog.setFlowId(PubFun.createMySqlMaxNoUseCache("cs_flow_id",20,20));
+        flowLog.setCreatedBy(String.valueOf(SecurityUtils.getUsername()));
+        flowLog.setCreatedTime(DateUtils.getNowDate());
+        flowLog.setUpdatedBy(String.valueOf(SecurityUtils.getUsername()));
+        flowLog.setUpdatedTime(DateUtils.getNowDate());
+        flowLog.setLinkCode(param.get("linkCode"));
+        flowLog.setOperateCode(param.get("operateCode"));
+        //记录操作轨迹
+        flowLogMapper.insertFlowLog(flowLog);
+        String username = SecurityUtils.getUsername();
+        Date time = DateUtils.getNowDate();
+        String inspectionId = PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10);
+        List<QualityInspectionItem> itemList =qualityVo.getItemList();
+        if (!itemList.isEmpty()) {
+            qualityVo.getItemList().forEach( item ->{
+                item.setStatus("02");
+                item.setInspectionId(inspectionId);
+                item.setItemId(PubFun.createMySqlMaxNoUseCache("inspection_id", 10, 10));
+                item.setCreatedBy(username);
+                item.setUpdatedBy(username);
+                item.setUpdatedTime(time);
+                item.setCreatedTime(time);
+            });
+            qualityInspectionItemMapper.insertExtDocList(itemList);
+        }
+        if (qualityVo.getStatus()==null) {
+            qualityVo.setStatus("01");
+            qualityVo.setInspectionId(inspectionId);
+            qualityVo.setCreatedBy(username);
+            qualityVo.setCreatedTime(time);
+            qualityVo.setUpdatedBy(username);
+            qualityVo.setUpdatedTime(time);
+            qualityInspectionItemMapper.insertQualityVO(qualityVo);
+        }else{
+            qualityVo.setStatus("02");
+            qualityVo.setUpdatedBy(username);
+            qualityVo.setUpdatedTime(time);
+            qualityInspectionItemMapper.updateQualityVO(qualityVo);
+        }
+        qualityVo.setInspectionId(inspectionId);
+        qualityVo.setStatus("02");
+        qualityVo.setUpdatedBy(username);
+        qualityVo.setUpdatedTime(time);
+        qualityInspectionItemMapper.updateInspectionAccept(qualityVo);
         return 1 ;
     }
 

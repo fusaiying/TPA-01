@@ -52,7 +52,9 @@ public interface QualityInspectionItemMapper
      * @return
      */
     public int insertExtDocList(List<QualityInspectionItem> itemList);
-
+    //qualityhandle表修改
+    int updateQualityVO(QualityVo qualityVo);
+    //qualityhandle表新增
     int insertQualityVO(QualityVo qualityVo);
 
     /**
@@ -85,4 +87,6 @@ public interface QualityInspectionItemMapper
      * @return 结果
      */
     public int deleteQualityInspectionItemByIds(String[] itemIds);
+
+    int updateInspectionAccept(QualityVo qualityVo);
 }

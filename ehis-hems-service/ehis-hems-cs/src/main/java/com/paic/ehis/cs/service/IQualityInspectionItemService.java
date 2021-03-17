@@ -67,7 +67,7 @@ public interface IQualityInspectionItemService
      * @return
      */
     int insertItem(QualityVo qualityVo);
-
+    int insertItem2(QualityVo qualityVo);
     /**
      * 质检差错查询反显数据
      * @param qualityInspectionItem

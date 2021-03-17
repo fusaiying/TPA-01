@@ -365,7 +365,7 @@ export default {
 
 
     getBussinessStatusOptions(row){
-      return this.selectDictLabel(this.worksheetBussinessStatusOptions, row.bussinessStatus)
+      return row.detailInfo;
     },
     getCsSex(row){
       return this.selectDictLabel(this.cs_sexOptions, row.sex)

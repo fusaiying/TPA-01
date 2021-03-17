@@ -87,7 +87,7 @@
 <!--          <el-table-column align="center" min-width="50" type="selection" width="120px"></el-table-column>-->
           <el-table-column label="产品名称" prop="productName" align="center" show-overflow-tooltip/>
           <el-table-column label="服务项目名称" prop="serviceName" align="center" show-overflow-tooltip/>
-          <el-table-column label="供应商名称" prop="supplierName"  align="center"
+          <el-table-column label="供应商名称" prop="supplierName"  align="center"  :formatter="getSupplierName"
                            show-overflow-tooltip/>
           <el-table-column label="客户姓名" prop="name" align="center" show-overflow-tooltip/>
           <el-table-column label="手机号" prop="phone" align="center" show-overflow-tooltip/>
@@ -222,6 +222,10 @@ export default {
 
   },
   methods: {
+    //格式化表格供应商名称
+    getSupplierName(row){
+     return row.supplierCode+'+'+row.supplierName
+    },
     //供应商名称
     getSupplierList(){
       getSupplierInfo().then(res=>{
